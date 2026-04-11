@@ -48,6 +48,8 @@ const ExhibitorCard: React.FC<ExhibitorCardProps> = memo(({
   index = 0,
   onViewDetails,
   onScheduleAppointment,
+  onMessage,
+  canChat = false,
   getCategoryLabel,
   getCategoryColor,
   t

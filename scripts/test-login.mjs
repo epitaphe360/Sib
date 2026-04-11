@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Configuration Supabase - clé correcte depuis .env
-const supabaseUrl = 'https://eqjoqgpbxhsfgcovipgu.supabase.co';
+const supabaseUrl = 'https://sbyizudifmqakzxjlndr.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTczNjIyNDcsImV4cCI6MjA3MjkzODI0N30.W8NfGyGQRBvVPAeS-EYq5TLjMBRTASLf5AgHES3aieE';
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);

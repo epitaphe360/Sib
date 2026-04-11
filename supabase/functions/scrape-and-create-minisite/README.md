@@ -22,7 +22,7 @@ supabase login
 
 ### 2. Lier le projet
 ```bash
-supabase link --project-ref eqjoqgpbxhsfgcovipgu
+supabase link --project-ref sbyizudifmqakzxjlndr
 ```
 
 ### 3. Déployer la fonction
@@ -50,7 +50,7 @@ const { data, error } = await supabase.functions.invoke('scrape-and-create-minis
 ### Test avec curl
 ```bash
 curl -X POST \
-  https://eqjoqgpbxhsfgcovipgu.supabase.co/functions/v1/scrape-and-create-minisite \
+  https://sbyizudifmqakzxjlndr.supabase.co/functions/v1/scrape-and-create-minisite \
   -H "Authorization: Bearer YOUR_ANON_KEY" \
   -H "Content-Type: application/json" \
   -d '{

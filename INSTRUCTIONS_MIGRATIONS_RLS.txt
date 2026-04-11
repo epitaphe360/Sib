@@ -6,7 +6,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. Allez sur Supabase SQL Editor:
-   👉 https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu/sql/new
+   👉 https://supabase.com/dashboard/project/sbyizudifmqakzxjlndr/sql/new
 
 2. Collez et executez cette requete:
    
@@ -41,7 +41,7 @@ MIGRATION 1 : PARTENAIRES
 2. Copiez TOUT le contenu du fichier (Ctrl+A puis Ctrl+C)
 
 3. Allez sur Supabase SQL Editor:
-   👉 https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu/sql/new
+   👉 https://supabase.com/dashboard/project/sbyizudifmqakzxjlndr/sql/new
 
 4. Collez le SQL (Ctrl+V)
 
@@ -119,7 +119,7 @@ R: Verifiez que vous avez bien applique LES DEUX migrations (partner ET exhibito
    - 'exhibitor-logos' (PAS 'exhibitors')
 
 Q: Ou trouver l'URL Supabase?
-R: https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu/sql/new
+R: https://supabase.com/dashboard/project/sbyizudifmqakzxjlndr/sql/new
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

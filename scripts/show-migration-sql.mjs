@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = 'https://eqjoqgpbxhsfgcovipgu.supabase.co';
+const SUPABASE_URL = 'https://sbyizudifmqakzxjlndr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -30,7 +30,7 @@ console.log('====================================================');
 console.log('MIGRATION SQL À EXÉCUTER DANS SUPABASE SQL EDITOR');
 console.log('====================================================');
 console.log('\n1. Ouvrez https://supabase.com/dashboard');
-console.log('2. Sélectionnez votre projet: eqjoqgpbxhsfgcovipgu');
+console.log('2. Sélectionnez votre projet: sbyizudifmqakzxjlndr');
 console.log('3. Allez dans SQL Editor (icône terminal à gauche)');
 console.log('4. Collez et exécutez le SQL suivant:\n');
 console.log('----------------------------------------------------');

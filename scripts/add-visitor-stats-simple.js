@@ -4,7 +4,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://eqjoqgpbxhsfgcovipgu.supabase.co';
+const supabaseUrl = 'https://sbyizudifmqakzxjlndr.supabase.co';
 const supabaseKey = process.argv[2] || process.env.SUPABASE_KEY;
 
 if (!supabaseKey) {

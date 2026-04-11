@@ -95,7 +95,7 @@ migrations/COMPLETE_TRANSLATIONS_PART3.sql
 
 ### Étape 3: Ouvrir Supabase SQL Editor
 ```
-https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu/sql/new
+https://supabase.com/dashboard/project/sbyizudifmqakzxjlndr/sql/new
 ```
 
 ### Étape 4: Exécuter

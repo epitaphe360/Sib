@@ -114,7 +114,7 @@ async function executeSQL() {
   } catch (error) {
     console.error('\n❌ Erreur critique:', error.message);
     console.error('\n💡 Solution alternative: Exécuter le SQL manuellement dans Supabase Dashboard');
-    console.error('   https://app.supabase.com/project/eqjoqgpbxhsfgcovipgu/sql/new\n');
+    console.error('   https://app.supabase.com/project/sbyizudifmqakzxjlndr/sql/new\n');
     process.exit(1);
   }
 }

@@ -6,7 +6,7 @@ Pour que les emails fonctionnent, vous devez ajouter ces variables d'environneme
 
 ### Étapes :
 
-1. Allez sur [Supabase Dashboard](https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu)
+1. Allez sur [Supabase Dashboard](https://supabase.com/dashboard/project/sbyizudifmqakzxjlndr)
 2. Cliquez sur **Settings** (⚙️) dans le menu latéral gauche
 3. Cliquez sur **Edge Functions**
 4. Faites défiler jusqu'à **Manage secrets**

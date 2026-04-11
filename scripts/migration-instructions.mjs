@@ -5,7 +5,7 @@
 
 import https from 'https';
 
-const SUPABASE_URL = 'https://eqjoqgpbxhsfgcovipgu.supabase.co';
+const SUPABASE_URL = 'https://sbyizudifmqakzxjlndr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo';
 
 // Les colonnes à ajouter
@@ -33,7 +33,7 @@ console.log('MIGRATION MANUELLE REQUISE');
 console.log('='.repeat(60));
 console.log('\nLes colonnes doivent être ajoutées manuellement via Supabase Dashboard.\n');
 console.log('ÉTAPES:');
-console.log('1. Ouvrez: https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu/sql/new');
+console.log('1. Ouvrez: https://supabase.com/dashboard/project/sbyizudifmqakzxjlndr/sql/new');
 console.log('2. Copiez et exécutez le SQL ci-dessous:\n');
 console.log('-'.repeat(60));
 

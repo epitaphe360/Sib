@@ -71,7 +71,6 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 9323,
     hmr: {
-      port: 9323,
       overlay: false
     },
     allowedHosts: true,

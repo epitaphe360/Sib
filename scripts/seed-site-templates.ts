@@ -7,7 +7,7 @@ import { createClient } from '@supabase/supabase-js';
 import { siteTemplates } from '../src/data/siteTemplates';
 
 // Configuration Supabase
-const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://eqjoqgpbxhsfgcovipgu.supabase.co';
+const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://sbyizudifmqakzxjlndr.supabase.co';
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseServiceKey) {

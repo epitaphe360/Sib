@@ -9,7 +9,7 @@
  * Cela porte le total à 29/32. Restent SANS données: AMDL, CDD, Web Tech.
  */
 
-const SUPABASE_URL = 'https://eqjoqgpbxhsfgcovipgu.supabase.co';
+const SUPABASE_URL = 'https://sbyizudifmqakzxjlndr.supabase.co';
 const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo';
 const headers = {
   'apikey': SERVICE_KEY,

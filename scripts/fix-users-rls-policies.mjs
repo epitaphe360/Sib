@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://eqjoqgpbxhsfgcovipgu.supabase.co';
+const supabaseUrl = 'https://sbyizudifmqakzxjlndr.supabase.co';
 const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
@@ -105,7 +105,7 @@ async function main() {
       console.log('─'.repeat(60) + '\n');
       
       console.log('\n📋 INSTRUCTIONS:');
-      console.log('1. Ouvrez https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu/sql');
+      console.log('1. Ouvrez https://supabase.com/dashboard/project/sbyizudifmqakzxjlndr/sql');
       console.log('2. Copiez-collez les 3 requêtes SQL ci-dessus');
       console.log('3. Cliquez sur "Run"');
       console.log('4. Rechargez la page du networking dans l\'application');

@@ -2,7 +2,7 @@
 // Remplace les favicons Google 128px par des logos directs trouvés sur les sites web
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://eqjoqgpbxhsfgcovipgu.supabase.co';
+const supabaseUrl = 'https://sbyizudifmqakzxjlndr.supabase.co';
 const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);

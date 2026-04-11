@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "siports-2026",
+  "name": "sib-2026",
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
@@ -9,17 +9,9 @@
   "build": {
     "env": {
       "NODE_VERSION": "18",
-      "VITE_SUPABASE_URL": "https://eqjoqgpbxhsfgcovipgu.supabase.co",
-      "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTczNjIyNDcsImV4cCI6MjA3MjkzODI0N30.W8NfGyGQRBvVPAeS-EYq5TLjMBRTASLf5AgHES3aieE",
-      "VITE_SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo",
-      "VITE_SHOW_DEMO_LOGINS": "true",
-      "VITE_EXHIBITORS_SERVER_URL": "http://localhost:4002",
-      "VITE_FIREBASE_API_KEY": "your_firebase_api_key_here",
-      "VITE_FIREBASE_PROJECT_ID": "your_project_id",
-      "VITE_FIREBASE_STORAGE_BUCKET": "your-project-id.appspot.com",
-      "VITE_FIREBASE_MESSAGING_SENDER_ID": "your_sender_id_here",
-      "VITE_FIREBASE_AUTH_DOMAIN": "your-project-id.firebaseapp.com",
-      "VITE_FIREBASE_APP_ID": "your_firebase_app_id_here"
+      "VITE_SUPABASE_URL": "https://sbyizudifmqakzxjlndr.supabase.co",
+      "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieWl6dWRpZm1xYWt6eGpsbmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MTg3MDEsImV4cCI6MjA5MTQ5NDcwMX0.yyD0fROU_oSkfgkiRbWXwyoZm3YthCCQSj7pM7HHSVg",
+      "VITE_SHOW_DEMO_LOGINS": "true"
     }
   },
   "rewrites": [

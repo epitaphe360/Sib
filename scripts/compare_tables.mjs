@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import fs from 'fs';
 
-const SUPABASE_URL = 'https://eqjoqgpbxhsfgcovipgu.supabase.co';
+const SUPABASE_URL = 'https://sbyizudifmqakzxjlndr.supabase.co';
 const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTczNjIyNDcsImV4cCI6MjA3MjkzODI0N30.W8NfGyGQRBvVPAeS-EYq5TLjMBRTASLf5AgHES3aieE';
 
 async function run() {

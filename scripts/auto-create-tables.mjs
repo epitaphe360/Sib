@@ -9,7 +9,7 @@ import 'dotenv/config';
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
-const PROJECT_REF = 'eqjoqgpbxhsfgcovipgu';
+const PROJECT_REF = 'sbyizudifmqakzxjlndr';
 
 const headers = {
   'apikey': SERVICE_ROLE_KEY,

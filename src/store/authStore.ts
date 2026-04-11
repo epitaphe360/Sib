@@ -432,7 +432,7 @@ const useAuthStore = create<AuthState>()(
     // CRITICAL: Nettoyage complet du localStorage et sessionStorage
     try {
       localStorage.removeItem('sib-auth-storage');
-      localStorage.removeItem('sb-eqjoqgpbxhsfgcovipgu-auth-token');
+      localStorage.removeItem('sb-sbyizudifmqakzxjlndr-auth-token');
       sessionStorage.clear();
       console.log('✅ LocalStorage et sessionStorage nettoyés');
     } catch (error) {

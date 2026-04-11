@@ -10,7 +10,7 @@ function cleanupAuth() {
   // Supprimer toutes les clés d'auth
   const keysToRemove = [
     'sib-auth-storage',
-    'sb-eqjoqgpbxhsfgcovipgu-auth-token',
+    'sb-sbyizudifmqakzxjlndr-auth-token',
     'supabase.auth.token',
     'supabase.auth.refreshToken'
   ];
@@ -64,7 +64,7 @@ function checkAuthStatus() {
   }
   
   // Vérifier Supabase
-  const supabaseToken = localStorage.getItem('sb-eqjoqgpbxhsfgcovipgu-auth-token');
+  const supabaseToken = localStorage.getItem('sb-sbyizudifmqakzxjlndr-auth-token');
   if (supabaseToken) {
     console.log('\n🔐 Token Supabase présent');
   } else {

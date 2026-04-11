@@ -189,7 +189,7 @@ SELECT 'Tables créées avec succès!' as status;
   
   console.log('\n=== Instructions ===');
   console.log('1. Allez sur https://supabase.com/dashboard');
-  console.log('2. Sélectionnez le projet: eqjoqgpbxhsfgcovipgu');
+  console.log('2. Sélectionnez le projet: sbyizudifmqakzxjlndr');
   console.log('3. Cliquez sur "SQL Editor" dans le menu de gauche');
   console.log('4. Collez le SQL ci-dessus et cliquez sur "Run"');
 })();
