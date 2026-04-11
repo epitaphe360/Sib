@@ -108,7 +108,7 @@ export default function VisitorProfileSettings() {
   };
 
   const availableSectors = [
-    'Port Operations',
+    'Bâtiment Operations',
     'Digital Transformation',
     'Sustainability',
     'Building Technology',

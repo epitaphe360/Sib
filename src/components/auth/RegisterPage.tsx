@@ -249,21 +249,21 @@ export default function RegisterPage() {
       title: 'Exposant',
       description: 'Entreprise ou organisation exposante',
       icon: Building2,
-      color: 'bg-blue-50 text-siports-primary border-siports-primary'
+      color: 'bg-blue-50 text-sib-primary border-sib-primary'
     },
     {
       value: 'partner',
       title: 'Partenaire',
       description: 'Sponsor ou partenaire officiel',
       icon: Globe,
-      color: 'bg-amber-50 text-siports-gold border-siports-gold'
+      color: 'bg-amber-50 text-sib-gold border-sib-gold'
     },
     {
       value: 'visitor',
       title: 'Visiteur',
       description: 'Professionnel ou particulier visitant le salon',
       icon: User,
-      color: 'bg-cyan-50 text-siports-secondary border-siports-secondary'
+      color: 'bg-cyan-50 text-sib-secondary border-sib-secondary'
     }
   ];
 
@@ -686,7 +686,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-siports-primary via-siports-secondary to-siports-accent py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-sib-primary via-sib-secondary to-sib-accent py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background Pattern */}
       <MoroccanPattern className="opacity-10" color="white" scale={1.5} />
       
@@ -702,11 +702,11 @@ export default function RegisterPage() {
         >
           <div className="flex items-center justify-center space-x-2 mb-4">
             <div className="bg-white p-3 rounded-lg shadow-lg">
-              <Anchor className="h-8 w-8 text-siports-primary" />
+              <Anchor className="h-8 w-8 text-sib-primary" />
             </div>
             <div>
               <span className="text-2xl font-bold text-white">SIB</span>
-              <span className="text-sm text-siports-gold block leading-none font-medium">2026</span>
+              <span className="text-sm text-sib-gold block leading-none font-medium">2026</span>
             </div>
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
@@ -729,7 +729,7 @@ export default function RegisterPage() {
               <div key={step.id} className="flex items-center">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors duration-300 ${
                   currentStep >= step.id 
-                    ? 'bg-siports-gold text-white border-siports-gold shadow-lg shadow-siports-gold/30' 
+                    ? 'bg-sib-gold text-white border-sib-gold shadow-lg shadow-sib-gold/30' 
                     : 'bg-transparent text-white border-white/30'
                 }`}>
                   {currentStep > step.id ? (
@@ -740,7 +740,7 @@ export default function RegisterPage() {
                 </div>
                 <div className="ml-3 hidden sm:block">
                   <p className={`text-sm font-medium ${
-                    currentStep >= step.id ? 'text-siports-gold' : 'text-white/60'
+                    currentStep >= step.id ? 'text-sib-gold' : 'text-white/60'
                   }`}>
                     {step.title}
                   </p>
@@ -748,7 +748,7 @@ export default function RegisterPage() {
                 </div>
                 {index < steps.length - 1 && (
                   <div className={`w-12 h-0.5 mx-4 ${
-                    currentStep > step.id ? 'bg-siports-gold' : 'bg-white/30'
+                    currentStep > step.id ? 'bg-sib-gold' : 'bg-white/30'
                   }`} />
                 )}
               </div>
@@ -763,7 +763,7 @@ export default function RegisterPage() {
           transition={{ delay: 0.2 }}
           className="relative z-[60]"
         >
-          <Card className="p-8 border-t-4 border-t-siports-gold shadow-2xl backdrop-blur-sm bg-white/95">
+          <Card className="p-8 border-t-4 border-t-sib-gold shadow-2xl backdrop-blur-sm bg-white/95">
             <div>
               {/* Step 1: Account Type */}
               {currentStep === 1 && (

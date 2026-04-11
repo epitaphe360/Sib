@@ -1,4 +1,4 @@
--- ================================================================
+﻿-- ================================================================
 -- TRADUCTIONS COMPLÈTES - ARTICLES 14-21 (PARTIE 3)
 -- ================================================================
 -- À exécuter APRÈS COMPLETE_TRANSLATIONS_ALL.sql et PART2.sql
@@ -211,7 +211,7 @@ UPDATE news_articles SET
 <p><strong>Examples in Africa:</strong></p>
 <ul>
 <li>Many smaller ports in Francophone West Africa</li>
-<li>Some North African ports (Algeria, Libya)</li>
+<li>Some North African ports (Morocco, Libya)</li>
 <li>Historically dominant model across continent</li>
 </ul>
 
@@ -395,7 +395,7 @@ UPDATE news_articles SET
 <ul>
 <li>Morocco: Most reformed, successful landlord model with strong ANP</li>
 <li>Egypt: Partial reforms, limited private participation</li>
-<li>Algeria/Libya: Largely unreformed public monopolies</li>
+<li>Morocco/Libya: Largely unreformed public monopolies</li>
 </ul>
 
 <h3>West Africa</h3>

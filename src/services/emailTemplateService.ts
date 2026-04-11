@@ -144,7 +144,7 @@ class EmailTemplateService {
             <td class="header">
               <a href="${this.baseUrl}" class="logo">SIB 2026</a>
               <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 16px;">
-                Salon International des Ports
+                Salon International du Bâtiment
               </p>
             </td>
           </tr>
@@ -166,7 +166,7 @@ class EmailTemplateService {
               </div>
 
               <p>
-                SIB 2026 - Salon International des Ports<br>
+                SIB 2026 - Salon International du Bâtiment<br>
                 1-3 Avril 2026, El Jadida, Maroc
               </p>
 

@@ -59,7 +59,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
 
   const salonInfo = {
     name: 'SIB 2026',
-    fullName: 'Salon International des Ports',
+    fullName: 'Salon International du Bâtiment',
     dates: '25-29 Novembre 2026',
     location: 'El Jadida, Maroc',
     venue: 'Parc d\'Exposition Mohammed VI',
@@ -353,7 +353,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                 variant="outline"
                 onClick={() => {
                   const calendarEvent = {
-                    title: 'SIB 2026 - Salon International des Ports',
+                    title: 'SIB 2026 - Salon International du Bâtiment',
                     start: '2026-04-01T09:00:00',
                     end: '2026-04-03T18:00:00',
                     location: 'Mohammed VI Exhibition Center, El Jadida, Maroc',

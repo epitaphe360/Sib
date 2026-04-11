@@ -198,7 +198,7 @@ export default function RegistrationRequests() {
 
       {isLoading ? (
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-siports-primary mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sib-primary mx-auto"></div>
           <p className="text-gray-600 mt-4">Chargement des demandes...</p>
         </div>
       ) : requests.length === 0 ? (
@@ -243,7 +243,7 @@ export default function RegistrationRequests() {
                         )}
                         <div className="flex items-center gap-2">
                           <Mail className="w-4 h-4" />
-                          <a href={`mailto:${request.email}`} className="text-siports-primary hover:underline">
+                          <a href={`mailto:${request.email}`} className="text-sib-primary hover:underline">
                             {request.email}
                           </a>
                         </div>
@@ -315,7 +315,7 @@ export default function RegistrationRequests() {
               Veuillez indiquer la raison du rejet :
             </p>
             <textarea
-              className="w-full border border-gray-300 rounded-lg p-3 min-h-[120px] focus:ring-2 focus:ring-siports-primary focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg p-3 min-h-[120px] focus:ring-2 focus:ring-sib-primary focus:border-transparent"
               placeholder="Raison du rejet..."
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}

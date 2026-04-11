@@ -246,7 +246,7 @@ class TemplateLibraryService {
         type: 'about',
         content: {
           title: 'Notre Expertise',
-          description: 'Avec plus de 25 ans d\'expérience, nous accompagnons les ports du monde entier dans leur transformation digitale et leur modernisation.',
+          description: 'Avec plus de 25 ans d\'expérience, nous accompagnons les bâtiments du monde entier dans leur transformation digitale et leur modernisation.',
           image: ''
         },
         order: 1,
@@ -298,7 +298,7 @@ class TemplateLibraryService {
         type: 'about',
         content: {
           title: 'Notre Mission',
-          description: 'Révolutionner l\'industrie du bâtiment avec l\'IA et l\'IoT pour créer des ports plus efficaces et durables.',
+          description: 'Révolutionner l\'industrie du bâtiment avec l\'IA et l\'IoT pour créer des bâtiments plus efficaces et durables.',
           image: ''
         },
         order: 1,
@@ -414,7 +414,7 @@ class TemplateLibraryService {
         id: 'hero-1',
         type: 'hero',
         content: {
-          title: 'Transformez Votre Port en Hub Intelligent',
+          title: 'Transformez Votre Bâtiment en Hub Intelligent',
           subtitle: 'Augmentez l\'efficacité de 40% dès le premier mois',
           backgroundImage: '',
           ctaText: 'Demander une démo gratuite',

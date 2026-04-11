@@ -22,7 +22,7 @@ interface ChatState {
   setOnlineUsers: (users: string[]) => void;
 }
 
-const BOT_ID = 'siports-bot';
+const BOT_ID = 'sib-bot';
 
 const mockChatBot: ChatBot = {
   id: BOT_ID,

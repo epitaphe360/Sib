@@ -218,8 +218,8 @@ const ExhibitorCard: React.FC<ExhibitorCardProps> = memo(({
           <div className="mb-6 flex flex-wrap gap-2">
             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
               exhibitor.category === 'institutional' ? 'border-purple-100 bg-purple-50 text-purple-600' :
-              exhibitor.category === 'port-industry' ? 'border-blue-100 bg-blue-50 text-blue-600' :
-              exhibitor.category === 'port-operations' ? 'border-emerald-100 bg-emerald-50 text-emerald-600' :
+              exhibitor.category === 'bâtiment-industry' ? 'border-blue-100 bg-blue-50 text-blue-600' :
+              exhibitor.category === 'bâtiment-operations' ? 'border-emerald-100 bg-emerald-50 text-emerald-600' :
               'border-amber-100 bg-amber-50 text-amber-600'
             }`}>
               {getCategoryLabel(exhibitor.category)}

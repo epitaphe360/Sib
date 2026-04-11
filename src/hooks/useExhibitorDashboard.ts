@@ -354,7 +354,7 @@ export function useExhibitorDashboard() {
                 { key: activity.id, className: 'flex items-start space-x-3 p-4 bg-gray-50 rounded-lg border' },
                 React.createElement(
                   'div',
-                  { className: 'flex-shrink-0 w-10 h-10 bg-siports-primary text-white rounded-full flex items-center justify-center text-sm font-medium' },
+                  { className: 'flex-shrink-0 w-10 h-10 bg-sib-primary text-white rounded-full flex items-center justify-center text-sm font-medium' },
                   activity.type === 'profile_view' ? '👁️' :
                   activity.type === 'message' ? '💬' :
                   activity.type === 'appointment' ? '📅' :

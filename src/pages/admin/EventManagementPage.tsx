@@ -352,7 +352,7 @@ function InfoPanel() {
         <div className="space-y-3">
           {[
             { key: 'eventTitle', label: 'Titre', placeholder: 'SIB — 1ère Édition' },
-            { key: 'eventTheme', label: 'Thème', placeholder: 'Les ports au cœur…' },
+            { key: 'eventTheme', label: 'Thème', placeholder: 'Les bâtiments au cœur…' },
             { key: 'eventDates', label: 'Dates', placeholder: '1er au 3 avril 2026' },
             { key: 'eventLocation', label: 'Lieu', placeholder: 'Parc des Expositions…' },
           ].map(f => (

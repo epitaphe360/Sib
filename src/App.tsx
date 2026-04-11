@@ -10,6 +10,9 @@ import { ScrollToTop } from './components/common/ScrollToTop';
 
 // Lazy load pages
 const HomePage = lazyRetry(() => import('./pages/HomePage'));
+const HomeConceptA = lazyRetry(() => import('./pages/concepts/HomeConceptA'));
+const HomeConceptB = lazyRetry(() => import('./pages/concepts/HomeConceptB'));
+const HomeConceptC = lazyRetry(() => import('./pages/concepts/HomeConceptC'));
 const ExhibitorsPage = lazyRetry(() => import('./pages/ExhibitorsPage'));
 const NetworkingPage = lazyRetry(() => import('./pages/NetworkingPage'));
 const InteractionHistoryPage = lazyRetry(() => import('./pages/networking/InteractionHistoryPage'));
@@ -260,6 +263,9 @@ const App = () => {
           }>
             <Routes>
             <Route path={ROUTES.HOME} element={<HomePage />} />
+            <Route path={ROUTES.CONCEPT_A} element={<HomeConceptA />} />
+            <Route path={ROUTES.CONCEPT_B} element={<HomeConceptB />} />
+            <Route path={ROUTES.CONCEPT_C} element={<HomeConceptC />} />
             <Route path={ROUTES.EXHIBITORS} element={<ExhibitorsPage />} />
             <Route path={ROUTES.EXHIBITOR_DETAIL} element={<ExhibitorDetailPage />} />
             <Route path={ROUTES.PARTNERS} element={<PartnersPage />} />

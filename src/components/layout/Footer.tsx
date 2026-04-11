@@ -36,7 +36,7 @@ export const Footer: React.FC = memo(() => {
             <Link to={ROUTES.HOME} className="inline-flex items-center mb-8">
               <img
                 src="/logo-sib2026.png"
-                alt="SIB - Salon International des Ports"
+                alt="SIB - Salon International du Bâtiment"
                 className="h-16 w-auto object-contain"
               />
             </Link>

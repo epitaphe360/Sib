@@ -87,7 +87,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
   const { fetchExhibitors } = useExhibitorStore();
   const [formData, setFormData] = useState<NewExhibitorForm>({
     companyName: exhibitorToEdit?.companyName || '',
-    category: exhibitorToEdit?.category || 'port-industry',
+    category: exhibitorToEdit?.category || 'bâtiment-industry',
     sector: exhibitorToEdit?.sector || '',
     country: exhibitorToEdit?.contactInfo?.country || '',
     website: exhibitorToEdit?.website || '',
@@ -503,7 +503,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="port-industry">Industrie bâtiment</option>
+                    <option value="bâtiment-industry">Industrie bâtiment</option>
                     <option value="construction-services">Services BTP</option>
                     <option value="logistics">Logistique</option>
                     <option value="technology">Technologie</option>
@@ -527,7 +527,6 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                     >
                       <option value="">Sélectionnez un pays</option>
                       <optgroup label="Afrique du Nord & Moyen-Orient">
-                        <option value="Algérie">???? Algérie</option>
                         <option value="Maroc">???? Maroc</option>
                         <option value="Tunisie">???? Tunisie</option>
                         <option value="Égypte">???? Égypte</option>

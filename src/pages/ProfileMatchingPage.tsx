@@ -101,7 +101,6 @@ const AVAILABLE_COLLABORATION_TYPES = [
 const AVAILABLE_COUNTRIES = [
   'France',
   'Maroc',
-  'Algérie',
   'Tunisie',
   'Espagne',
   'Portugal',

@@ -131,8 +131,8 @@ export interface ContactInfo {
 
 export type ExhibitorCategory = 
   | 'institutional' 
-  | 'port-industry' 
-  | 'port-operations' 
+  | 'bâtiment-industry' 
+  | 'bâtiment-operations' 
   | 'academic';
 
 export interface Product {

@@ -233,7 +233,7 @@ export default function BadgePage() {
                   SIB 2026
                 </div>
                 <div className="text-xs text-gray-500 mt-1 uppercase tracking-wider">
-                  Salon International des Ports et de leurs Écosystème
+                  Salon International du Bâtiment et de leurs Écosystème
                 </div>
               </div>
 

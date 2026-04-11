@@ -198,7 +198,7 @@ export function VisitorNetworkingHub({
                     <Award className="h-16 w-16 text-indigo-400/40 mx-auto mb-6" />
                     <h4 className="text-2xl font-bold text-white mb-2">{t('visitor.premium_feature')}</h4>
                     <p className="max-w-md mx-auto text-indigo-100/60 mb-8">{t('visitor.b2b_reserved_message')}</p>
-                    <Button className="bg-gradient-to-r from-siports-gold to-yellow-600 text-white font-black px-8 py-4 rounded-xl">{t('visitor.upgrade_level')}</Button>
+                    <Button className="bg-gradient-to-r from-sib-gold to-yellow-600 text-white font-black px-8 py-4 rounded-xl">{t('visitor.upgrade_level')}</Button>
                   </div>
                 ) : isAppointmentsLoading ? (
                   <div className="text-center py-20">

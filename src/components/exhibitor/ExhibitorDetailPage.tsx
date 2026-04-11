@@ -726,7 +726,7 @@ export default function ExhibitorDetailPage() {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">Adresse</p>
-                      <p className="text-gray-600">123 Port Avenue, Amsterdam, Netherlands</p>
+                      <p className="text-gray-600">123 Bâtiment Avenue, Amsterdam, Netherlands</p>
                     </div>
                   </div>
                 </div>
@@ -889,7 +889,7 @@ export default function ExhibitorDetailPage() {
               Prêt à transformer vos opérations BTP ?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Rejoignez plus de 500 ports dans le monde qui font confiance à nos solutions
+              Rejoignez plus de 500 bâtiments dans le monde qui font confiance à nos solutions
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50"

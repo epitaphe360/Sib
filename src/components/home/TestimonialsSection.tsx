@@ -31,7 +31,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
   return (
     <motion.div
       whileHover={{ y: -8 }}
-      className="relative bg-white/90 backdrop-blur-md rounded-2xl p-8 border-l-4 border-siports-gold shadow-lg hover:shadow-xl transition-all h-full"
+      className="relative bg-white/90 backdrop-blur-md rounded-2xl p-8 border-l-4 border-sib-gold shadow-lg hover:shadow-xl transition-all h-full"
     >
       {/* Pattern Zellige en arrière-plan */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
@@ -40,7 +40,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 
       <div className="relative z-10">
         {/* Quote icon décoratif */}
-        <div className="absolute -top-4 -right-4 text-6xl text-siports-gold/10 font-serif">
+        <div className="absolute -top-4 -right-4 text-6xl text-sib-gold/10 font-serif">
           <Quote className="w-16 h-16" />
         </div>
 
@@ -51,7 +51,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
               <Star
                 key={i}
                 className={`w-4 h-4 ${
-                  i < rating ? 'text-siports-gold fill-siports-gold' : 'text-slate-300'
+                  i < rating ? 'text-sib-gold fill-sib-gold' : 'text-slate-300'
                 }`}
               />
             ))}
@@ -68,13 +68,13 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
           <img
             src={photo_url || defaultAvatar}
             alt={name}
-            className="w-16 h-16 rounded-full border-4 border-siports-gold object-cover"
+            className="w-16 h-16 rounded-full border-4 border-sib-gold object-cover"
             onError={(e) => {
               e.currentTarget.src = defaultAvatar;
             }}
           />
           <div className="flex-1 min-w-0">
-            <div className="font-bold text-siports-primary text-lg truncate">
+            <div className="font-bold text-sib-primary text-lg truncate">
               {name}
             </div>
             {position && (
@@ -89,7 +89,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         {/* Décoration carrés marocains */}
         <div className="absolute bottom-4 right-4 flex gap-1">
           <div className="w-2 h-2 bg-red-600 rotate-45" />
-          <div className="w-2 h-2 bg-siports-gold rotate-45" />
+          <div className="w-2 h-2 bg-sib-gold rotate-45" />
           <div className="w-2 h-2 bg-green-600 rotate-45" />
         </div>
       </div>
@@ -101,7 +101,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 const defaultTestimonials: TestimonialCardProps[] = [
   {
     name: 'Mohamed Al-Fassi',
-    company: 'Tanger Med Port Authority',
+    company: 'Tanger Med Bâtiment Authority',
     position: 'Directeur Général',
     quote: 'SIB a été un catalyseur exceptionnel pour le développement de nos partenariats stratégiques en Afrique. Un événement incontournable.',
     rating: 5
@@ -117,7 +117,7 @@ const defaultTestimonials: TestimonialCardProps[] = [
     name: 'Ahmed Benkirane',
     company: 'Marsa Maroc',
     position: 'Directeur Innovation',
-    quote: 'SIB nous a permis de découvrir les dernières technologies Smart Port et d\'établir des connexions précieuses avec des leaders mondiaux.',
+    quote: 'SIB nous a permis de découvrir les dernières technologies Smart Bâtiment et d\'établir des connexions précieuses avec des leaders mondiaux.',
     rating: 5
   }
 ];
@@ -129,7 +129,7 @@ export const TestimonialsSection: React.FC = () => {
   const testimonials = supabaseTestimonials?.length > 0 ? supabaseTestimonials : defaultTestimonials;
 
   return (
-    <section className="py-20 bg-gradient-to-br from-siports-primary via-siports-secondary to-siports-accent relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-br from-sib-primary via-sib-secondary to-sib-accent relative overflow-hidden">
       {/* Pattern Zellige lumineux */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -147,7 +147,7 @@ export const TestimonialsSection: React.FC = () => {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg mb-6">
-            <Quote className="w-6 h-6 text-siports-gold" />
+            <Quote className="w-6 h-6 text-sib-gold" />
             <span className="text-sm font-bold text-white uppercase tracking-wider">
               Témoignages
             </span>

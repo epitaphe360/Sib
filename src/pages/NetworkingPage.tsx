@@ -479,7 +479,7 @@ export default function NetworkingPage() {
         {/* Section opportunités style sombre */}
         <div className="bg-[#0a192f] border-t border-white/5 py-20 px-4">
           <div className="max-w-7xl mx-auto">
-            <h3 className="text-3xl font-bold text-white mb-12 text-center">L'écosystème SIB à votre portée</h3>
+            <h3 className="text-3xl font-bold text-white mb-12 text-center">L'écosystème SIB à votre bâtimentée</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 { icon: Handshake, label: "Espace B2B pré-programmé", desc: "Rencontres ciblées avec des décideurs" },
@@ -502,7 +502,7 @@ export default function NetworkingPage() {
         {/* Footer simplifié© */}
         <footer className="bg-[#050c1a] text-white/40 py-12 border-t border-white/5 text-center text-sm">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="mb-6">© 2026 - SIB : Salon International des Ports et de leur Écosystème — Tous droits réservés.</div>
+            <div className="mb-6">© 2026 - SIB : Salon International du Bâtiment et de leur Écosystème — Tous droits réservés.</div>
             <div className="flex justify-center gap-8 mb-6">
               <a href="https://sibevent.com/conditions-generales-2/" className="hover:text-white transition-colors">Conditions Générales</a>
               <a href="https://sibevent.com/politique-de-confidentialite/" className="hover:text-white transition-colors">Confidentialité©</a>

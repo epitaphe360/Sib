@@ -786,11 +786,11 @@ const resources = {
             meeting: 'Rendez-vous'
           },
           connection_established: 'Nouvelle connexion établie',
-          connected_with: 'Vous êtes maintenant connecté avec Port Solutions Inc.',
+          connected_with: 'Vous êtes maintenant connecté avec Bâtiment Solutions Inc.',
           new_message: 'Nouveau message reçu',
           message_from: 'TechMarine Solutions vous a envoyé un message',
           event_participation: 'Participation à un événement',
-          participated_in: 'Vous avez participé à la conférence "Digital Transformation in Ports"',
+          participated_in: 'Vous avez participé à la conférence "Digital Transformation in Bâtiments"',
           sponsoring_activated: 'Sponsoring activé',
           logo_displayed: "Votre logo est maintenant affiché sur la page d'accueil",
           profile_viewed: 'Profil consulté',
@@ -835,9 +835,9 @@ const resources = {
           partnership: 'Partenariat'
         },
         info: {
-          email: 'contact@sibs.dz',
-          phone: '+213 XXX XXX XXX',
-          address: 'Alger, Algérie'
+          email: 'contact@sib.ma',
+          phone: '+212 XXX XXX XXX',
+          address: 'El Jadida, Maroc'
         }
       },
       venue: {
@@ -1096,11 +1096,11 @@ const resources = {
         default_on_quote: 'Sur devis',
         default_new_section: 'Nouvelle section',
         // Example data
-        example_company_name: 'Port Solutions Inc.',
-        example_company_subtitle: 'Leading provider of integrated port management solutions',
+        example_company_name: 'Bâtiment Solutions Inc.',
+        example_company_subtitle: 'Leading provider of integrated bâtiment management solutions',
         example_discover_solutions: 'Découvrir nos solutions',
         example_our_expertise: 'Notre expertise',
-        example_expertise_desc: 'Avec plus de 20 ans d\'expérience dans le secteur du bâtiment, nous accompagnons les ports du monde entier dans leur transformation digitale.',
+        example_expertise_desc: 'Avec plus de 20 ans d\'expérience dans le secteur du bâtiment, nous accompagnons les bâtiments du monde entier dans leur transformation digitale.',
         example_innovative_solutions: 'Solutions innovantes',
         example_recognized_expertise: 'Expertise reconnue',
         example_support_24_7: 'Support 24/7',
@@ -1123,7 +1123,7 @@ const resources = {
         example_product_3_feat_3: 'Formation personnalisée',
         example_price_from: 'À partir de 15 000€',
         example_price_monthly: '2 500€/mois',
-        example_address: '123 Port Avenue, Casablanca, Maroc',
+        example_address: '123 Bâtiment Avenue, Casablanca, Maroc',
         example_hours: 'Lun-Ven: 8h-18h',
         // Actions & buttons
         add_section: 'Ajouter une section',
@@ -1217,7 +1217,7 @@ const resources = {
         company_example: 'Tanger Med Logistics',
         country_example: 'Maroc',
         website_placeholder: 'https://votre-site.com',
-        description_example: 'Partenaire logistique premium du port de Tanger Med, offrant des services de stockage et de distribution internationaux.'
+        description_example: 'Partenaire logistique premium du bâtiment de Tanger Med, offrant des services de stockage et de distribution internationaux.'
       },
       admin_media: {
         manager_title: 'Gestionnaire de médias administrateur',
@@ -1318,7 +1318,7 @@ const resources = {
           enterDescription: 'Rédigez le contenu complet...',
           enterSummary: 'Résumé de l\'article qui apparaîtra dans la liste...',
           enterTitle: 'Titre accrocheur de votre article',
-          enterSubtitle: 'ex: Solutions innovantes pour les ports',
+          enterSubtitle: 'ex: Solutions innovantes pour les bâtiments',
           enterWebsite: 'https://www.exemple.com',
           enterExpertise: 'ex: Innovation, IA, Logistique',
           expertiseExample: 'Ex: IA, Blockchain, Logistique',
@@ -1494,7 +1494,7 @@ const resources = {
         reminder_set: 'Rappel programmé : notification 24h avant ouverture, rappel mobile et email configurés, itinéraire inclus.',
         share_countdown: 'Partager le Compte à Rebours',
         share_title: 'SIB 2026 - Compte à Rebours',
-        share_text: '🚢 SIB 2026 - Salon International des Ports\n📅 {{dates}}\n📍 {{location}}\n\n⏰ Plus que {{days}} jours, {{hours}} heures !\n\n🌐 https://sib.ma',
+        share_text: '🚢 SIB 2026 - Salon International du Bâtiment\n📅 {{dates}}\n📍 {{location}}\n\n⏰ Plus que {{days}} jours, {{hours}} heures !\n\n🌐 https://sib.ma',
         copied_clipboard: '🔗 Compte à rebours copié dans le presse-papiers !',
         copy_failed: 'Impossible de copier',
         add_to_calendar: 'Ajouter au Calendrier',
@@ -2259,11 +2259,11 @@ const resources = {
             meeting: 'Meeting'
           },
           connection_established: 'New connection established',
-          connected_with: 'You are now connected with Port Solutions Inc.',
+          connected_with: 'You are now connected with Bâtiment Solutions Inc.',
           new_message: 'New message received',
           message_from: 'TechMarine Solutions sent you a message',
           event_participation: 'Event participation',
-          participated_in: 'You participated in the conference "Digital Transformation in Ports"',
+          participated_in: 'You participated in the conference "Digital Transformation in Bâtiments"',
           sponsoring_activated: 'Sponsorship activated',
           logo_displayed: 'Your logo is now displayed on the homepage',
           profile_viewed: 'Profile viewed',
@@ -2308,9 +2308,9 @@ const resources = {
           partnership: 'Partnership'
         },
         info: {
-          email: 'contact@sibs.dz',
-          phone: '+213 XXX XXX XXX',
-          address: 'Algiers, Algeria'
+          email: 'contact@sib.ma',
+          phone: '+212 XXX XXX XXX',
+          address: 'El Jadida, Morocco'
         }
       },
       venue: {
@@ -2569,23 +2569,23 @@ const resources = {
         default_on_quote: 'On quote',
         default_new_section: 'New section',
         // Example data (keep French for now as they're example company data)
-        example_company_name: 'Port Solutions Inc.',
-        example_company_subtitle: 'Leading provider of integrated port management solutions',
+        example_company_name: 'Bâtiment Solutions Inc.',
+        example_company_subtitle: 'Leading provider of integrated bâtiment management solutions',
         example_discover_solutions: 'Discover our solutions',
         example_our_expertise: 'Our expertise',
-        example_expertise_desc: 'With over 20 years of experience in the port sector, we support ports worldwide in their digital transformation.',
+        example_expertise_desc: 'With over 20 years of experience in the bâtiment sector, we support bâtiments worldwide in their digital transformation.',
         example_innovative_solutions: 'Innovative solutions',
         example_recognized_expertise: 'Recognized expertise',
         example_support_24_7: '24/7 Support',
         example_international_presence: 'International presence',
         example_our_solutions: 'Our solutions',
         example_product_1_name: 'Bâtiment AI System',
-        example_product_1_desc: 'Intelligent platform for optimizing port operations with predictive AI',
+        example_product_1_desc: 'Intelligent platform for optimizing bâtiment operations with predictive AI',
         example_product_1_feat_1: 'Real-time predictive analytics',
         example_product_1_feat_2: 'AI automation',
         example_product_1_feat_3: 'Complete API integration',
         example_product_2_name: 'Connected IoT Platform',
-        example_product_2_desc: 'IoT solution for supervision and monitoring of port equipment',
+        example_product_2_desc: 'IoT solution for supervision and monitoring of bâtiment equipment',
         example_product_2_feat_1: 'Smart sensors',
         example_product_2_feat_2: 'Predictive maintenance',
         example_product_2_feat_3: 'Instant alerts',
@@ -2596,7 +2596,7 @@ const resources = {
         example_product_3_feat_3: 'Personalized training',
         example_price_from: 'From €15,000',
         example_price_monthly: '€2,500/month',
-        example_address: '123 Port Avenue, Casablanca, Morocco',
+        example_address: '123 Bâtiment Avenue, Casablanca, Morocco',
         example_hours: 'Mon-Fri: 8am-6pm',
         // Actions & buttons
         add_section: 'Add section',
@@ -2690,11 +2690,11 @@ const resources = {
         company_example: 'Tanger Med Logistics',
         country_example: 'Morocco',
         website_placeholder: 'https://your-website.com',
-        description_example: 'Premium logistics partner of Tanger Med port, offering international storage and distribution services.'
+        description_example: 'Premium logistics partner of Tanger Med bâtiment, offering international storage and distribution services.'
       },
       admin_media: {
         manager_title: 'Admin Media Manager',
-        create_title_example: 'Ex: Webinar - Port Innovation 2026',
+        create_title_example: 'Ex: Webinar - Bâtiment Innovation 2026',
         create_description_placeholder: 'Detailed content description...',
         url_placeholder: 'https://...',
         duration_example: 'Ex: 3600',
@@ -2791,7 +2791,7 @@ const resources = {
           enterDescription: 'Write the full content...',
           enterSummary: 'Article summary that will appear in the list...',
           enterTitle: 'Catchy title for your article',
-          enterSubtitle: 'ex: Innovative solutions for ports',
+          enterSubtitle: 'ex: Innovative solutions for bâtiments',
           enterWebsite: 'https://www.example.com',
           enterExpertise: 'ex: Innovation, AI, Logistics',
           expertiseExample: 'Ex: AI, Blockchain, Logistics',
@@ -2928,7 +2928,7 @@ const resources = {
         event_started: 'The event has started!',
         event_welcome: 'SIB 2026 is now open. Welcome!',
         opening_in: 'Opening in:',
-        opening_description: 'Only a few {{period}} left before the opening of the largest international port exhibition',
+        opening_description: 'Only a few {{period}} left before the opening of the largest international bâtiment exhibition',
         day: 'Day',
         days: 'Days',
         days_plural: 'days',
@@ -2967,11 +2967,11 @@ const resources = {
         reminder_set: 'Reminder scheduled: notification 24h before opening, mobile and email reminders configured, directions included.',
         share_countdown: 'Share the Countdown',
         share_title: 'SIB 2026 - Countdown',
-        share_text: '🚢 SIB 2026 - International Port Exhibition\n📅 {{dates}}\n📍 {{location}}\n\n⏰ Only {{days}} days, {{hours}} hours left!\n\n🌐 https://sib.ma',
+        share_text: '🚢 SIB 2026 - International Bâtiment Exhibition\n📅 {{dates}}\n📍 {{location}}\n\n⏰ Only {{days}} days, {{hours}} hours left!\n\n🌐 https://sib.ma',
         copied_clipboard: '🔗 Countdown copied to clipboard!',
         copy_failed: 'Unable to copy',
         add_to_calendar: 'Add to Calendar',
-        calendar_description: 'The largest international port exhibition - 300+ exhibitors, 6,000+ visitors from 40 countries',
+        calendar_description: 'The largest international bâtiment exhibition - 300+ exhibitors, 6,000+ visitors from 40 countries',
         calendar_added: '📅 Event added to your calendar: SIB 2026, automatic reminders and directions included.',
         practical_info: 'Practical Information',
         info_registration: 'Free registration for visitors',
@@ -3190,7 +3190,7 @@ const resources = {
       },
       partnership: {
         title: 'SIB 2026 Partnerships',
-        desc: 'Join the international port ecosystem and gain exceptional visibility with industry decision-makers',
+        desc: 'Join the international bâtiment ecosystem and gain exceptional visibility with industry decision-makers',
         premium_partner: 'Premium Partner',
         technical_partner: 'Technical Partner',
         media_partner: 'Media Partner',

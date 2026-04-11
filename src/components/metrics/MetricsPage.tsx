@@ -238,7 +238,7 @@ export default function MetricsPage() {
       color: 'bg-orange-500'
     },
     {
-      name: 'Musée des Ports',
+      name: 'Musée des Bâtiments',
       exhibitors: loading ? 0 : Math.round(pavilionData.totalExhibitors * 0.10),
       visitors: loading ? 0 : Math.round(pavilionData.totalVisitors * 0.10),
       conferences: loading ? 0 : Math.round(pavilionData.totalConferences * 0.15),

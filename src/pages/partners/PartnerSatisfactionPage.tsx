@@ -61,7 +61,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
       {
         id: '1',
         name: 'Marie Dubois',
-        company: 'Port Solutions Inc.',
+        company: 'Bâtiment Solutions Inc.',
         rating: 5,
         comment: 'Partenaire exceptionnel, toujours à l\'écoute et très réactif. La qualité des événements est remarquable.',
         date: '2024-01-15'
@@ -93,7 +93,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
       {
         id: '5',
         name: 'Claire Leroy',
-        company: 'Port Innovation',
+        company: 'Bâtiment Innovation',
         rating: 4,
         comment: 'Très satisfait du partenariat. Quelques améliorations possibles sur la communication mais globalement excellent.',
         date: '2024-01-05'

@@ -314,7 +314,7 @@ export default function AddDemoProgramPage() {
                     value={programData.company}
                     onChange={(e) => handleChange('company', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Ex: Port Tech Institute"
+                    placeholder="Ex: Bâtiment Tech Institute"
                   />
                 </div>
               </div>

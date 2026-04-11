@@ -171,7 +171,7 @@ export default function ProfilePage() {
   };
 
   const availableInterests = [
-    'Port Operations',
+    'Bâtiment Operations',
     'Digital Transformation',
     'Sustainability',
     'Building Technology',

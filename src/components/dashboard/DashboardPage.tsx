@@ -15,7 +15,7 @@ export default memo(function DashboardPage() {
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center px-6 bg-transparent">
-        <div className="text-center max-w-xl rounded-2xl border border-slate-200/70 bg-white/90 backdrop-blur-sm p-8 shadow-siports-lg">
+        <div className="text-center max-w-xl rounded-2xl border border-slate-200/70 bg-white/90 backdrop-blur-sm p-8 shadow-sib-lg">
           <h1 className="text-2xl font-bold text-slate-900 mb-2">
             {t('common.error_401')}
           </h1>
@@ -43,7 +43,7 @@ export default memo(function DashboardPage() {
     default:
       return (
         <div className="min-h-screen flex items-center justify-center px-6 bg-transparent">
-          <div className="text-center max-w-xl rounded-2xl border border-slate-200/70 bg-white/90 backdrop-blur-sm p-8 shadow-siports-lg">
+          <div className="text-center max-w-xl rounded-2xl border border-slate-200/70 bg-white/90 backdrop-blur-sm p-8 shadow-sib-lg">
             <h1 className="text-2xl font-bold text-slate-900 mb-2">
               {t('errors.unknown_user_type', { type: user.type })}
             </h1>

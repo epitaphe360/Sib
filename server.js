@@ -324,8 +324,8 @@ app.post('/api/send-visitor-welcome-email', async (req, res) => {
           <!-- Event Details -->
           <div style="background: #eff6ff; border-radius: 8px; padding: 20px; margin: 20px 0;">
             <h3 style="color: #1e40af; margin: 0 0 10px;">📅 Informations du salon</h3>
-            <p style="color: #1e3a5f; margin: 5px 0;"><strong>Dates :</strong> 24 - 27 Mai 2026</p>
-            <p style="color: #1e3a5f; margin: 5px 0;"><strong>Lieu :</strong> Centre des Conventions d'Oran, Algérie</p>
+            <p style="color: #1e3a5f; margin: 5px 0;"><strong>Dates :</strong> 25 - 29 Novembre 2026</p>
+            <p style="color: #1e3a5f; margin: 5px 0;"><strong>Lieu :</strong> Parc d'Exposition Mohammed VI, El Jadida, Maroc</p>
             <p style="color: #1e3a5f; margin: 5px 0;"><strong>Horaires :</strong> 09h00 - 18h00</p>
           </div>
 
@@ -361,7 +361,7 @@ app.post('/api/send-visitor-welcome-email', async (req, res) => {
         ? '🎫 SIPORT 2026 - Inscription VIP confirmée'
         : '🎉 SIPORT 2026 - Inscription visiteur confirmée',
       html,
-      text: `Bienvenue au SIPORT 2026, ${name} !\n\nVotre inscription en tant que Visiteur ${levelLabel} a été confirmée.\n\nDates : 24-27 Mai 2026\nLieu : Centre des Conventions d'Oran, Algérie\n\nAccédez à votre tableau de bord : https://siportevent.com/visitor/dashboard\n\nCordialement,\nL'équipe SIPORT 2026`,
+      text: `Bienvenue au SIB 2026, ${name} !\n\nVotre inscription en tant que Visiteur ${levelLabel} a été confirmée.\n\nDates : 25-29 Novembre 2026\nLieu : Parc d'Exposition Mohammed VI, El Jadida, Maroc\n\nAccédez à votre tableau de bord : https://siportevent.com/visitor/dashboard\n\nCordialement,\nL'équipe SIB 2026`,
     };
 
     const info = await transporter.sendMail(mailOptions);

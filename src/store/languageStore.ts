@@ -37,7 +37,7 @@ interface LanguageState {
   translateText: (key: string, fallback?: string) => string;
 }
 
-const LANGUAGE_STORAGE_KEY = 'siports-language-storage';
+const LANGUAGE_STORAGE_KEY = 'sib-language-storage';
 const LEGACY_LANGUAGE_STORAGE_KEY = 'sibs-language-storage';
 
 migratePersistedStorage(LANGUAGE_STORAGE_KEY, LEGACY_LANGUAGE_STORAGE_KEY);

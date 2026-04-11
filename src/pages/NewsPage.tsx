@@ -386,7 +386,7 @@ export default function NewsPage() {
               <div className="flex flex-wrap gap-2">
                 {[
                   'Digitalisation bâtiment',
-                  'Ports durables',
+                  'Bâtiments durables',
                   'Intelligence artificielle',
                   'Automatisation',
                   'BIM & PropTech',

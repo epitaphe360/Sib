@@ -2317,7 +2317,7 @@ DO $$
 DECLARE
   i INTEGER;
   v_user_id UUID;
-  v_countries TEXT[] := ARRAY['France', 'Belgique', 'Suisse', 'Canada', 'Maroc', 'Sénégal', 'Côte d''Ivoire', 'Tunisie', 'Algérie', 'Luxembourg', 'Monaco', 'Liban', 'Vietnam', 'Maurice', 'Madagascar', 'Gabon', 'Congo', 'Togo', 'Bénin', 'Guinée', 'Mali', 'Niger', 'Burkina Faso', 'Tchad', 'Centrafrique', 'Djibouti', 'Comores', 'Seychelles', 'Vanuatu', 'Haïti', 'Sainte-Lucie', 'Dominique', 'Grenade', 'Saint-Vincent', 'Antigua', 'Saint-Kitts', 'Maurice', 'Seychelles', 'Vanuatu', 'Haïti'];
+  v_countries TEXT[] := ARRAY['France', 'Belgique', 'Suisse', 'Canada', 'Maroc', 'Sénégal', 'Côte d''Ivoire', 'Tunisie', 'Luxembourg', 'Monaco', 'Liban', 'Vietnam', 'Maurice', 'Madagascar', 'Gabon', 'Congo', 'Togo', 'Bénin', 'Guinée', 'Mali', 'Niger', 'Burkina Faso', 'Tchad', 'Centrafrique', 'Djibouti', 'Comores', 'Seychelles', 'Vanuatu', 'Haïti', 'Sainte-Lucie', 'Dominique', 'Grenade', 'Saint-Vincent', 'Antigua', 'Saint-Kitts', 'Maurice', 'Seychelles', 'Vanuatu', 'Haïti'];
   v_categories TEXT[] := ARRAY['institutional', 'port-industry', 'port-operations', 'academic'];
 BEGIN
   -- Insert 300 Exhibitors

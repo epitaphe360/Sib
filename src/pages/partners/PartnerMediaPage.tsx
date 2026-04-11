@@ -303,7 +303,7 @@ export const PartnerMediaPage: React.FC = () => {
                     {item.headline && <h5 className="font-medium text-gray-900 mb-2">{item.headline}</h5>}
                     {item.excerpt && <p className="text-gray-600 text-sm mb-3">{item.excerpt}</p>}
                     <div className="flex items-center justify-between">
-                      {item.reach && <span className="text-sm text-gray-500">Portée estimée: {item.reach}</span>}
+                      {item.reach && <span className="text-sm text-gray-500">Bâtimentée estimée: {item.reach}</span>}
                       {item.url && <a href={item.url} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-4 w-4 text-gray-400 hover:text-gray-600" /></a>}
                     </div>
                   </div>

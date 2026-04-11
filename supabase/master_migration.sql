@@ -1,4 +1,4 @@
--- SIB 2026 - Master Migration (91 fichiers)
+﻿-- SIB 2026 - Master Migration (91 fichiers)
 -- Appliquer dans Supabase SQL Editor
 
 
@@ -9873,8 +9873,8 @@ CREATE TABLE IF NOT EXISTS salon_config (
   description text DEFAULT 'Salon International des Ports',
   logo_url text,
   banner_url text,
-  website_url text DEFAULT 'https://siports.dz',
-  contact_email text DEFAULT 'contact@siports.dz',
+  website_url text DEFAULT 'https://siportevent.com',
+  contact_email text DEFAULT 'contact@siportevent.com',
   contact_phone text,
   social_links jsonb DEFAULT '{}',
   features jsonb DEFAULT '{"networking": true, "appointments": true, "chat": true, "events": true}',
@@ -13108,7 +13108,7 @@ DO $$
 DECLARE
   i INTEGER;
   v_user_id UUID;
-  v_countries TEXT[] := ARRAY['France', 'Belgique', 'Suisse', 'Canada', 'Maroc', 'Sénégal', 'Côte d''Ivoire', 'Tunisie', 'Algérie', 'Luxembourg', 'Monaco', 'Liban', 'Vietnam', 'Maurice', 'Madagascar', 'Gabon', 'Congo', 'Togo', 'Bénin', 'Guinée', 'Mali', 'Niger', 'Burkina Faso', 'Tchad', 'Centrafrique', 'Djibouti', 'Comores', 'Seychelles', 'Vanuatu', 'Haïti', 'Sainte-Lucie', 'Dominique', 'Grenade', 'Saint-Vincent', 'Antigua', 'Saint-Kitts', 'Maurice', 'Seychelles', 'Vanuatu', 'Haïti'];
+  v_countries TEXT[] := ARRAY['France', 'Belgique', 'Suisse', 'Canada', 'Maroc', 'Sénégal', 'Côte d''Ivoire', 'Tunisie', 'Maroc', 'Luxembourg', 'Monaco', 'Liban', 'Vietnam', 'Maurice', 'Madagascar', 'Gabon', 'Congo', 'Togo', 'Bénin', 'Guinée', 'Mali', 'Niger', 'Burkina Faso', 'Tchad', 'Centrafrique', 'Djibouti', 'Comores', 'Seychelles', 'Vanuatu', 'Haïti', 'Sainte-Lucie', 'Dominique', 'Grenade', 'Saint-Vincent', 'Antigua', 'Saint-Kitts', 'Maurice', 'Seychelles', 'Vanuatu', 'Haïti'];
   v_categories TEXT[] := ARRAY['institutional', 'port-industry', 'port-operations', 'academic'];
 BEGIN
   -- Insert 300 Exhibitors

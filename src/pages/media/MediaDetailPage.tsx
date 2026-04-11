@@ -220,7 +220,7 @@ export default function MediaDetailPage() {
                 <Badge variant="outline" className="border-blue-200 text-blue-700">Bêta</Badge>
               </div>
               <p className="text-blue-800/80 italic">
-                "La transformation digitale des ports marocains s'accélère avec l'adoption massive de l'IA et de la 5G. Ce webinaire explore comment ces technologies optimisent la chaîne logistique et renforcent la compétitivité du secteur de la construction national..."
+                "La transformation digitale des bâtiments marocains s'accélère avec l'adoption massive de l'IA et de la 5G. Ce webinaire explore comment ces technologies optimisent la chaîne logistique et renforcent la compétitivité du secteur de la construction national..."
               </p>
               <Button 
                 variant="link" 

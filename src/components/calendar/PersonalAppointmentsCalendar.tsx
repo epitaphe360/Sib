@@ -228,7 +228,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                 <h4 className="text-sm font-black text-blue-900 uppercase tracking-tighter">
                   Planning Événementiel
                 </h4>
-                <p className="text-[10px] font-bold text-blue-600/70">1-3 Avril 2026 • Port de Tanger Med</p>
+                <p className="text-[10px] font-bold text-blue-600/70">1-3 Avril 2026 • Bâtiment de Tanger Med</p>
              </div>
           </div>
         </div>

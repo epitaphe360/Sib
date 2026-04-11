@@ -45,8 +45,8 @@ const salonEvents: EventAccess[] = [
     requiresQR: true,
   },
   {
-    eventId: 'port-digitalization',
-    eventName: 'Digitalisation des Ports : Enjeux et Opportunités',
+    eventId: 'bâtiment-digitalization',
+    eventName: 'Digitalisation des Bâtiments : Enjeux et Opportunités',
     eventType: 'premium',
     requiredLevel: 'premium',
     description: 'Conférence exclusive sur les technologies émergentes et leur impact sur l\'efficacité bâtiment.',

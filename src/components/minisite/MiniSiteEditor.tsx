@@ -88,8 +88,8 @@ export default function MiniSiteEditor() {
       type: 'hero',
       title: 'Section Hero',
       content: {
-        title: 'Port Solutions Inc.',
-        subtitle: 'Leading provider of integrated port management solutions',
+        title: 'Bâtiment Solutions Inc.',
+        subtitle: 'Leading provider of integrated bâtiment management solutions',
         backgroundImage: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200',
         ctaText: 'Découvrir nos solutions',
         ctaLink: '#products'
@@ -103,7 +103,7 @@ export default function MiniSiteEditor() {
       title: 'À propos',
       content: {
         title: 'Notre expertise',
-        description: 'Avec plus de 20 ans d\'expérience dans le secteur du bâtiment, nous accompagnons les ports du monde entier dans leur transformation digitale.',
+        description: 'Avec plus de 20 ans d\'expérience dans le secteur du bâtiment, nous accompagnons les bâtiments du monde entier dans leur transformation digitale.',
         features: [
           'Solutions innovantes',
           'Expertise reconnue',
@@ -159,7 +159,7 @@ export default function MiniSiteEditor() {
       title: 'Contact',
       content: {
         title: 'Contactez-nous',
-        address: '123 Port Avenue, Casablanca, Maroc',
+        address: '123 Bâtiment Avenue, Casablanca, Maroc',
         phone: '',
         email: 'contact@portsolutions.com',
         website: 'https://portsolutions.com',
@@ -812,7 +812,7 @@ export default function MiniSiteEditor() {
                           <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                         </div>
                         <div className="flex-1 bg-white rounded px-3 py-1 text-xs text-gray-500">
-                          sibs.com/exhibitor/port-solutions-inc
+                          sibs.com/exhibitor/bâtiment-solutions-inc
                         </div>
                       </div>
                     </div>

@@ -25,9 +25,9 @@ const CardComponent: React.FC<CardProps> = ({
   return (
     <div
       className={clsx(
-        'bg-white/92 dark:bg-slate-800/92 backdrop-blur-sm rounded-2xl border border-slate-200/75 dark:border-slate-700 shadow-siports',
+        'bg-white/92 dark:bg-slate-800/92 backdrop-blur-sm rounded-2xl border border-slate-200/75 dark:border-slate-700 shadow-sib',
         paddingClasses[padding],
-        hover && 'hover:shadow-siports-xl transition-all duration-300 hover:-translate-y-1',
+        hover && 'hover:shadow-sib-xl transition-all duration-300 hover:-translate-y-1',
         className
       )}
       {...props}

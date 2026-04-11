@@ -73,7 +73,7 @@ export const EnhancedChatInterface: React.FC = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isTyping, setIsTyping] = useState<Record<string, boolean>>({});
   const [enhancedFeatures, setEnhancedFeatures] = useState<Record<string, { isPinned: boolean; isArchived: boolean; priority: string }>>({});
-  const isBotId = (participantId: string) => participantId === 'siports-bot';
+  const isBotId = (participantId: string) => participantId === 'sib-bot';
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

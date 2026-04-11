@@ -1,5 +1,8 @@
 ﻿export const ROUTES = {
   HOME: '/',
+  CONCEPT_A: '/concept-a',
+  CONCEPT_B: '/concept-b',
+  CONCEPT_C: '/concept-c',
   EXHIBITORS: '/exhibitors',
   EXHIBITOR_DETAIL: '/exhibitors/:id',
   PARTNERS: '/partners',

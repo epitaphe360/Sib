@@ -62,7 +62,7 @@ export const LanguageSelector: React.FC = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         disabled={isLoading}
-        className="flex items-center space-x-2 p-2 text-siports-gray-600 hover:text-siports-primary transition-colors rounded-lg hover:bg-siports-gray-100 disabled:opacity-50"
+        className="flex items-center space-x-2 p-2 text-sib-gray-600 hover:text-sib-primary transition-colors rounded-lg hover:bg-sib-gray-100 disabled:opacity-50"
         title={`Langue actuelle: ${currentLang.nativeName}`}
       >
         {isLoading ? (
@@ -88,13 +88,13 @@ export const LanguageSelector: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-siports-gray-200 py-2 z-50"
+            className="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-sib-gray-200 py-2 z-50"
           >
-            <div className="px-4 py-2 border-b border-siports-gray-100">
-              <h3 className="text-sm font-semibold text-siports-gray-900">
+            <div className="px-4 py-2 border-b border-sib-gray-100">
+              <h3 className="text-sm font-semibold text-sib-gray-900">
                 Choisir la langue
               </h3>
-              <p className="text-xs text-siports-gray-500 mt-1">
+              <p className="text-xs text-sib-gray-500 mt-1">
                 Sélectionnez votre langue préférée
               </p>
             </div>
@@ -108,32 +108,32 @@ export const LanguageSelector: React.FC = () => {
                     key={language.code}
                     onClick={() => handleLanguageChange(language.code)}
                     disabled={isLoading}
-                    className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-siports-gray-50 transition-colors disabled:opacity-50 ${
-                      isSelected ? 'bg-siports-primary/5 text-siports-primary' : 'text-siports-gray-700'
+                    className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-sib-gray-50 transition-colors disabled:opacity-50 ${
+                      isSelected ? 'bg-sib-primary/5 text-sib-primary' : 'text-sib-gray-700'
                     }`}
                   >
                     <div className="flex items-center space-x-3">
                       <span className="text-xl">{language.flag}</span>
                       <div>
-                        <div className={`font-medium ${isSelected ? 'text-siports-primary' : 'text-siports-gray-900'}`}>
+                        <div className={`font-medium ${isSelected ? 'text-sib-primary' : 'text-sib-gray-900'}`}>
                           {language.nativeName}
                         </div>
-                        <div className="text-xs text-siports-gray-500">
+                        <div className="text-xs text-sib-gray-500">
                           {language.name}
                         </div>
                       </div>
                     </div>
                     
                     {isSelected && (
-                      <Check className="h-4 w-4 text-siports-primary" />
+                      <Check className="h-4 w-4 text-sib-primary" />
                     )}
                   </button>
                 );
               })}
             </div>
             
-            <div className="px-4 py-2 border-t border-siports-gray-100">
-              <p className="text-xs text-siports-gray-500">
+            <div className="px-4 py-2 border-t border-sib-gray-100">
+              <p className="text-xs text-sib-gray-500">
                 💡 Les traductions sont appliquées instantanément
               </p>
             </div>

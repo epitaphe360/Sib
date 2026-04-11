@@ -308,7 +308,7 @@ export default function ProductEditForm({
                     className="w-full h-48 object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = '/siports-logo.jpg';
+                      target.src = '/sib-logo.jpg';
                     }}
                   />
                 ) : (

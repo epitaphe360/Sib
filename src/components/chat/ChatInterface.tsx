@@ -47,8 +47,8 @@ export default function ChatInterface() {
   const [userSearch, setUserSearch] = useState('');
   const [userList, setUserList] = useState<Array<{id: string, name: string, type: string}>>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
-  const isBotParticipant = (participants: string[]) => participants.includes('siports-bot');
-  const isBotSender = (senderId: string) => senderId === 'siports-bot';
+  const isBotParticipant = (participants: string[]) => participants.includes('sib-bot');
+  const isBotSender = (senderId: string) => senderId === 'sib-bot';
 
   useEffect(() => {
     fetchConversations();

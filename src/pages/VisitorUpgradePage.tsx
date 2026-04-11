@@ -53,7 +53,7 @@ export default function VisitorUpgradePage() {
   const testimonials = [
     {
       name: 'Ahmed Benali',
-      role: 'Directeur Logistique, Port de Casablanca',
+      role: 'Directeur Logistique, Bâtiment de Casablanca',
       content: t('upgrade.testimonial1.content'),
       avatar: '👤'
     },

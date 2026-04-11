@@ -119,8 +119,8 @@ export const ExhibitorsPageOptimized: React.FC = () => {
       type: 'select' as const,
       options: [
         { value: 'institutional', label: 'Institutionnel' },
-        { value: 'port-industry', label: 'Industrie du Bâtiment' },
-        { value: 'port-operations', label: 'Opérations du Bâtiment' },
+        { value: 'bâtiment-industry', label: 'Industrie du Bâtiment' },
+        { value: 'bâtiment-operations', label: 'Opérations du Bâtiment' },
         { value: 'academic', label: 'Académique' },
       ],
     },

@@ -34,7 +34,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
       className="relative group cursor-pointer"
     >
       {/* Bordure colorée marocaine */}
-      <div className="absolute inset-0 bg-gradient-to-br from-red-600 via-siports-gold to-green-600 rounded-2xl rotate-1 group-hover:rotate-2 transition-transform" />
+      <div className="absolute inset-0 bg-gradient-to-br from-red-600 via-sib-gold to-green-600 rounded-2xl rotate-1 group-hover:rotate-2 transition-transform" />
       
       <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg">
         {/* Image avec overlay */}
@@ -47,17 +47,17 @@ const NewsCard: React.FC<NewsCardProps> = ({
               e.currentTarget.src = defaultImage;
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-siports-primary/90 via-siports-primary/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-sib-primary/90 via-sib-primary/50 to-transparent" />
           
           {/* Badge catégorie */}
-          <span className="absolute top-4 left-4 bg-siports-gold text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
+          <span className="absolute top-4 left-4 bg-sib-gold text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
             {category || 'Actualité'}
           </span>
         </div>
         
         {/* Contenu */}
         <div className="p-6">
-          <h3 className="font-bold text-xl mb-3 text-siports-primary group-hover:text-siports-gold transition-colors line-clamp-2">
+          <h3 className="font-bold text-xl mb-3 text-sib-primary group-hover:text-sib-gold transition-colors line-clamp-2">
             {title}
           </h3>
           
@@ -75,7 +75,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
             {/* Motifs marocains */}
             <div className="flex gap-1">
               <div className="w-2 h-2 bg-red-600 rotate-45" />
-              <div className="w-2 h-2 bg-siports-gold rotate-45" />
+              <div className="w-2 h-2 bg-sib-gold rotate-45" />
               <div className="w-2 h-2 bg-green-600 rotate-45" />
             </div>
           </div>
@@ -99,7 +99,7 @@ export const LatestNewsSection: React.FC = () => {
       <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-siports-primary mx-auto" />
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sib-primary mx-auto" />
             <p className="mt-4 text-slate-600">Chargement des actualités...</p>
           </div>
         </div>
@@ -130,20 +130,20 @@ export const LatestNewsSection: React.FC = () => {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg mb-6">
-            <Newspaper className="w-6 h-6 text-siports-gold" />
+            <Newspaper className="w-6 h-6 text-sib-gold" />
             <span className="text-sm font-bold text-slate-600 uppercase tracking-wider">
               Actualités SIB
             </span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-siports-primary via-siports-gold to-green-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-sib-primary via-sib-gold to-green-600 bg-clip-text text-transparent">
               Dernières Actualités
             </span>
           </h2>
           
           <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-            Restez informé des dernières nouvelles du Salon International des Ports
+            Restez informé des dernières nouvelles du Salon International du Bâtiment
           </p>
         </motion.div>
 
@@ -180,7 +180,7 @@ export const LatestNewsSection: React.FC = () => {
         >
           <Link
             to="/news"
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-siports-primary to-siports-accent text-white px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-sib-primary to-sib-accent text-white px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
           >
             <span>Voir toutes les actualités</span>
             <ArrowRight className="w-5 h-5" />

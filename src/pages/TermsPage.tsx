@@ -29,7 +29,7 @@ export default function TermsPage() {
               SIB 2026 est une plateforme digitale qui facilite les connexions professionnelles entre :
             </p>
             <ul className="list-disc pl-6 text-gray-700 mb-6">
-              <li>Exposants et visiteurs du Salon International des Ports</li>
+              <li>Exposants et visiteurs du Salon International du Bâtiment</li>
               <li>Professionnels du secteur du bâtiment et de la construction</li>
               <li>Partenaires et prestataires de services</li>
             </ul>

@@ -465,12 +465,12 @@ export default function SubscriptionPage() {
       {/* ═══════════════════════════════════════════════════════════════
           SECTION 1 : HERO WORDPRESS
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative bg-gradient-to-br from-siports-primary via-blue-800 to-indigo-900 text-white overflow-hidden">
+      <section className="relative bg-gradient-to-br from-sib-primary via-blue-800 to-indigo-900 text-white overflow-hidden">
         <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
         <div className="absolute inset-0 opacity-[0.08]">
-          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-siports-gold rounded-full" />
+          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-sib-gold rounded-full" />
           <div className="absolute top-20 right-20 w-24 h-24 border-4 border-white rotate-45 transform" />
-          <div className="absolute bottom-20 left-1/4 w-40 h-40 border-4 border-siports-gold" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
+          <div className="absolute bottom-20 left-1/4 w-40 h-40 border-4 border-sib-gold" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
@@ -481,16 +481,16 @@ export default function SubscriptionPage() {
               transition={{ duration: 0.7 }}
             >
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
-                <Anchor className="w-4 h-4 text-siports-gold" />
-                <span className="text-sm font-semibold text-siports-gold uppercase tracking-wider">
+                <Anchor className="w-4 h-4 text-sib-gold" />
+                <span className="text-sm font-semibold text-sib-gold uppercase tracking-wider">
                   {t('sub.hero.badge')}
                 </span>
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 {t('sub.hero.title1')}{' '}
-                <span className="text-siports-gold">{t('sub.hero.titleHighlight1')}</span> {t('sub.hero.title2')}{' '}
-                <span className="text-siports-gold">{t('sub.hero.titleHighlight2')}</span>
+                <span className="text-sib-gold">{t('sub.hero.titleHighlight1')}</span> {t('sub.hero.title2')}{' '}
+                <span className="text-sib-gold">{t('sub.hero.titleHighlight2')}</span>
               </h1>
 
               <p className="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed">
@@ -501,7 +501,7 @@ export default function SubscriptionPage() {
                 <Button
                   size="lg"
                   onClick={() => handleSubscribe('visitor-free')}
-                  className="bg-siports-gold text-siports-primary hover:bg-yellow-400 font-bold text-lg px-8"
+                  className="bg-sib-gold text-sib-primary hover:bg-yellow-400 font-bold text-lg px-8"
                 >
                   <Ticket className="mr-2 h-5 w-5" />
                   {t('sub.hero.badgeBtn')}
@@ -533,7 +533,7 @@ export default function SubscriptionPage() {
                   transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                   className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center hover:bg-white/15 transition-all"
                 >
-                  <div className="text-3xl md:text-4xl font-bold text-siports-gold mb-2">{stat.number}</div>
+                  <div className="text-3xl md:text-4xl font-bold text-sib-gold mb-2">{stat.number}</div>
                   <div className="text-sm text-blue-200">{stat.label}</div>
                 </motion.div>
               ))}
@@ -546,7 +546,7 @@ export default function SubscriptionPage() {
           SECTION 2 : POURQUOI VISITER SIB ? (WordPress)
           ═══════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-        <MoroccanPattern className="opacity-[0.03] text-siports-primary" scale={1.5} />
+        <MoroccanPattern className="opacity-[0.03] text-sib-primary" scale={1.5} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
@@ -557,13 +557,13 @@ export default function SubscriptionPage() {
             className="text-center mb-12"
           >
             <div className="flex items-center justify-center gap-2 mb-4">
-              <div className="bg-siports-primary p-2 rounded-lg">
+              <div className="bg-sib-primary p-2 rounded-lg">
                 <Lightbulb className="h-6 w-6 text-white" />
               </div>
-              <span className="text-siports-primary font-semibold">{t('sub.whySection.label')}</span>
+              <span className="text-sib-primary font-semibold">{t('sub.whySection.label')}</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {t('sub.whySection.title1')} <span className="text-siports-primary">SIB</span> {t('sub.whySection.title2')}
+              {t('sub.whySection.title1')} <span className="text-sib-primary">SIB</span> {t('sub.whySection.title2')}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Une expérience immersive au cœur de l'écosystème bâtiment international
@@ -588,8 +588,8 @@ export default function SubscriptionPage() {
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                     className="flex gap-4 items-start bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all"
                   >
-                    <div className="bg-siports-primary/10 p-2 rounded-lg flex-shrink-0">
-                      <Check className="h-5 w-5 text-siports-primary" />
+                    <div className="bg-sib-primary/10 p-2 rounded-lg flex-shrink-0">
+                      <Check className="h-5 w-5 text-sib-primary" />
                     </div>
                     <p className="text-gray-700 leading-relaxed">{reason}</p>
                   </motion.div>
@@ -606,7 +606,7 @@ export default function SubscriptionPage() {
             >
               <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 p-8">
                 <div className="text-center mb-6">
-                  <div className="bg-siports-primary p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                  <div className="bg-sib-primary p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                     <Globe className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -627,7 +627,7 @@ export default function SubscriptionPage() {
                       transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                       className="text-center p-4 bg-white rounded-lg shadow-sm"
                     >
-                      <div className="text-2xl font-bold text-siports-primary mb-1">{stat.number}</div>
+                      <div className="text-2xl font-bold text-sib-primary mb-1">{stat.number}</div>
                       <div className="text-xs text-gray-600">{stat.label}</div>
                     </motion.div>
                   ))}
@@ -660,7 +660,7 @@ export default function SubscriptionPage() {
           ═══════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50 via-white to-sky-50 relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.05]">
-          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-siports-gold rounded-full" />
+          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-sib-gold rounded-full" />
           <div className="absolute bottom-20 right-20 w-24 h-24 border-4 border-green-600 rotate-45 transform" />
         </div>
 
@@ -673,13 +673,13 @@ export default function SubscriptionPage() {
             className="text-center mb-12"
           >
             <div className="flex items-center justify-center gap-2 mb-4">
-              <div className="bg-siports-primary p-2 rounded-lg">
+              <div className="bg-sib-primary p-2 rounded-lg">
                 <Building2 className="h-6 w-6 text-white" />
               </div>
-              <span className="text-siports-primary font-semibold">{t('sub.pavSection.label')}</span>
+              <span className="text-sib-primary font-semibold">{t('sub.pavSection.label')}</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {t('sub.pavSection.title1')} <span className="text-siports-primary">{t('sub.pavSection.titleHighlight')}</span>
+              {t('sub.pavSection.title1')} <span className="text-sib-primary">{t('sub.pavSection.titleHighlight')}</span>
             </h2>
           </motion.div>
 
@@ -713,7 +713,7 @@ export default function SubscriptionPage() {
       {/* ═══════════════════════════════════════════════════════════════
           SECTION 4 : BESOIN D'INFORMATIONS ? (WordPress)
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="py-12 bg-gradient-to-r from-siports-primary to-indigo-600">
+      <section className="py-12 bg-gradient-to-r from-sib-primary to-indigo-600">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -725,7 +725,7 @@ export default function SubscriptionPage() {
               {t('sub.needInfo')}
             </h2>
             <Link to={ROUTES.CONTACT}>
-              <Button size="lg" className="bg-white text-siports-primary hover:bg-blue-50 font-bold">
+              <Button size="lg" className="bg-white text-sib-primary hover:bg-blue-50 font-bold">
                 <Mail className="mr-2 h-5 w-5" />
                 {t('sub.contactUs')}
               </Button>
@@ -813,7 +813,7 @@ export default function SubscriptionPage() {
                 <p className="text-sm text-gray-600 mb-4">{tier.description}</p>
                 <div className="flex items-baseline gap-2">
                   {tier.currency === 'Sur devis' ? (
-                    <span className="text-4xl font-bold text-siports-primary">{t('sub.plans.onQuote')}</span>
+                    <span className="text-4xl font-bold text-sib-primary">{t('sub.plans.onQuote')}</span>
                   ) : tier.price === 0 ? (
                     <span className="text-4xl font-bold text-green-600">{t('sub.plans.free')}</span>
                   ) : (
@@ -875,13 +875,13 @@ export default function SubscriptionPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mt-12 text-center bg-gradient-to-r from-siports-primary to-indigo-600 rounded-2xl p-8 text-white"
+          className="mt-12 text-center bg-gradient-to-r from-sib-primary to-indigo-600 rounded-2xl p-8 text-white"
         >
           <h3 className="text-2xl font-bold mb-4">
             {t('sub.plans.customPlan')}
           </h3>
           <Link to={ROUTES.CONTACT}>
-            <Button size="lg" className="bg-white text-siports-primary hover:bg-blue-50 font-bold">
+            <Button size="lg" className="bg-white text-sib-primary hover:bg-blue-50 font-bold">
               <Users className="mr-2 h-5 w-5" />
               {t('sub.plans.customPlanDesc')}
             </Button>
@@ -894,7 +894,7 @@ export default function SubscriptionPage() {
           SECTION 6 : ORGANISEZ VOTRE VISITE - INFOS PRATIQUES (WordPress)
           ═══════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50 via-white to-sky-50 relative overflow-hidden">
-        <MoroccanPattern className="opacity-[0.03] text-siports-primary" scale={1.5} />
+        <MoroccanPattern className="opacity-[0.03] text-sib-primary" scale={1.5} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -906,13 +906,13 @@ export default function SubscriptionPage() {
               transition={{ duration: 0.6 }}
             >
               <div className="flex items-center gap-2 mb-4">
-                <div className="bg-siports-primary p-2 rounded-lg">
+                <div className="bg-sib-primary p-2 rounded-lg">
                   <MapPin className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-siports-primary font-semibold">{t('sub.info.label')}</span>
+                <span className="text-sib-primary font-semibold">{t('sub.info.label')}</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
-                {t('sub.info.title1')} <span className="text-siports-primary">{t('sub.info.titleHighlight')}</span>
+                {t('sub.info.title1')} <span className="text-sib-primary">{t('sub.info.titleHighlight')}</span>
               </h2>
 
               <div className="space-y-6">
@@ -967,7 +967,7 @@ export default function SubscriptionPage() {
             >
               <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 p-8">
                 <div className="text-center mb-6">
-                  <div className="bg-siports-primary p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                  <div className="bg-sib-primary p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                     <Phone className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -980,18 +980,18 @@ export default function SubscriptionPage() {
 
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
-                    <MapPin className="h-5 w-5 text-siports-primary flex-shrink-0" />
+                    <MapPin className="h-5 w-5 text-sib-primary flex-shrink-0" />
                     <p className="text-sm text-gray-700">{t('sub.info.contactAddr')}</p>
                   </div>
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
-                    <Mail className="h-5 w-5 text-siports-primary flex-shrink-0" />
-                    <a href="mailto:contact@sibevent.com" className="text-sm text-siports-primary hover:underline font-medium">
+                    <Mail className="h-5 w-5 text-sib-primary flex-shrink-0" />
+                    <a href="mailto:contact@sibevent.com" className="text-sm text-sib-primary hover:underline font-medium">
                       contact@sibevent.com
                     </a>
                   </div>
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
-                    <Phone className="h-5 w-5 text-siports-primary flex-shrink-0" />
-                    <a href="tel:+212668385228" className="text-sm text-siports-primary hover:underline font-medium">
+                    <Phone className="h-5 w-5 text-sib-primary flex-shrink-0" />
+                    <a href="tel:+212668385228" className="text-sm text-sib-primary hover:underline font-medium">
                       +212 6 68 38 52 28
                     </a>
                   </div>
@@ -999,7 +999,7 @@ export default function SubscriptionPage() {
 
                 <div className="mt-6">
                   <Link to={ROUTES.CONTACT}>
-                    <Button className="w-full bg-siports-primary text-white hover:bg-blue-700">
+                    <Button className="w-full bg-sib-primary text-white hover:bg-blue-700">
                       <MessageCircle className="mr-2 h-5 w-5" />
                       {t('sub.info.contactBtn')}
                     </Button>

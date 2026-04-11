@@ -156,8 +156,8 @@ export default function ExhibitorDetailPage() {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'institutional': return Crown;
-      case 'port-industry': return Building2;
-      case 'port-operations': return Target;
+      case 'bâtiment-industry': return Building2;
+      case 'bâtiment-operations': return Target;
       case 'academic': return Award;
       default: return Building2;
     }
@@ -166,8 +166,8 @@ export default function ExhibitorDetailPage() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'institutional': return 'bg-purple-100 text-purple-600';
-      case 'port-industry': return 'bg-blue-100 text-blue-600';
-      case 'port-operations': return 'bg-green-100 text-green-600';
+      case 'bâtiment-industry': return 'bg-blue-100 text-blue-600';
+      case 'bâtiment-operations': return 'bg-green-100 text-green-600';
       case 'academic': return 'bg-orange-100 text-orange-600';
       default: return 'bg-gray-100 text-gray-600';
     }
@@ -176,8 +176,8 @@ export default function ExhibitorDetailPage() {
   const getCategoryLabel = (category: string) => {
     switch (category) {
       case 'institutional': return 'Institutionnel';
-      case 'port-industry': return 'Industrie du Bâtiment';
-      case 'port-operations': return 'Exploitation & Gestion';
+      case 'bâtiment-industry': return 'Industrie du Bâtiment';
+      case 'bâtiment-operations': return 'Exploitation & Gestion';
       case 'academic': return 'Académique & Formation';
       default: return category;
     }

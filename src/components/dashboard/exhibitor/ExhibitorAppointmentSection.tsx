@@ -58,7 +58,7 @@ export function ExhibitorAppointmentSection({
 
   return (
     <div id="appointments-section">
-      <Card className="siports-glass-card overflow-hidden mb-8">
+      <Card className="sib-glass-card overflow-hidden mb-8">
         <div className="p-6 bg-gradient-to-br from-white via-purple-50/20 to-pink-50/20">
           {/* Section header */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">

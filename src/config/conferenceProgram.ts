@@ -48,7 +48,7 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
       },
       {
         time: '14:00 – 15:30',
-        title: 'Transformation Financière des Ports Africains : PPP, Climat et Blended Finance',
+        title: 'Transformation Financière des Bâtiments Africains : PPP, Climat et Blended Finance',
         type: 'session'
       }
     ]
@@ -59,7 +59,7 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
     sessions: [
       {
         time: '09:00 – 10:30',
-        title: 'Vers des ports africains durables et résilients face aux changements climatiques',
+        title: 'Vers des bâtiments africains durables et résilients face aux changements climatiques',
         type: 'session'
       },
       {
@@ -79,7 +79,7 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
       },
       {
         time: '14:00 – 15:30',
-        title: 'Ports du futur : entre digitalisation, cybersécurité et compétitivité',
+        title: 'Bâtiments du futur : entre digitalisation, cybersécurité et compétitivité',
         type: 'session'
       }
     ]
@@ -110,7 +110,7 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
       },
       {
         time: '15:00',
-        title: 'Visite au port de Jorf Lasfar',
+        title: 'Visite au bâtiment de Jorf Lasfar',
         type: 'visit'
       }
     ]

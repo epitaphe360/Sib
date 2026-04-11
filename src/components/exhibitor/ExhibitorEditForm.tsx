@@ -35,7 +35,7 @@ const exhibitorEditSchema = z.object({
   description: z.string()
     .min(10, 'La description doit contenir au moins 10 caractères')
     .max(2000, 'La description ne doit pas dépasser 2000 caractères'),
-  category: z.enum(['port-industry', 'port-operations', 'institutional', 'academic'] as const, {
+  category: z.enum(['bâtiment-industry', 'bâtiment-operations', 'institutional', 'academic'] as const, {
     required_error: 'La catégorie est requise'
   }),
   sector: z.string()
@@ -123,7 +123,7 @@ export default function ExhibitorEditForm() {
     defaultValues: {
       companyName: '',
       description: '',
-      category: 'port-industry',
+      category: 'bâtiment-industry',
       sector: '',
       website: '',
       contactInfo: {
@@ -165,7 +165,7 @@ export default function ExhibitorEditForm() {
       reset({
         companyName: selectedExhibitor.companyName || '',
         description: selectedExhibitor.description || '',
-        category: selectedExhibitor.category || 'port-industry',
+        category: selectedExhibitor.category || 'bâtiment-industry',
         sector: selectedExhibitor.sector || '',
         website: selectedExhibitor.website || '',
         contactInfo: {
@@ -357,8 +357,8 @@ export default function ExhibitorEditForm() {
                         {...register('category')}
                         className={`w-full px-3 py-2 border ${errors.category ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 ${errors.category ? 'focus:ring-red-500' : 'focus:ring-blue-500'}`}
                       >
-                        <option value="port-industry">Industrie du Bâtiment</option>
-                        <option value="port-operations">Opérations du Bâtiment</option>
+                        <option value="bâtiment-industry">Industrie du Bâtiment</option>
+                        <option value="bâtiment-operations">Opérations du Bâtiment</option>
                         <option value="institutional">Institutionnel</option>
                         <option value="academic">Académique</option>
                       </select>
@@ -674,7 +674,7 @@ export default function ExhibitorEditForm() {
                         className="h-16 w-16 object-cover rounded-lg"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = '/siports-logo.jpg';
+                          target.src = '/sib-logo.jpg';
                         }}
                       />
                     ) : (
@@ -697,8 +697,8 @@ export default function ExhibitorEditForm() {
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-                        {formValues.category === 'port-industry' ? 'Industrie du Bâtiment' :
-                         formValues.category === 'port-operations' ? 'Opérations du Bâtiment' :
+                        {formValues.category === 'bâtiment-industry' ? 'Industrie du Bâtiment' :
+                         formValues.category === 'bâtiment-operations' ? 'Opérations du Bâtiment' :
                          formValues.category === 'institutional' ? 'Institutionnel' :
                          formValues.category === 'academic' ? 'Académique' :
                          'Catégorie'}

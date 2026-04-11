@@ -215,7 +215,7 @@ export default function PartnerProfileCreationModal({
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Partenaire logistique premium du port de Tanger Med, offrant des services de stockage et de distribution internationaux."
+                  placeholder="Partenaire logistique premium du bâtiment de Tanger Med, offrant des services de stockage et de distribution internationaux."
                   rows={4}
                   required
                 />

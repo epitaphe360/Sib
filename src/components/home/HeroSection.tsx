@@ -82,7 +82,7 @@ export const HeroSection: React.FC = () => {
       {/* Decorative Moroccan Arches */}
       <div className="absolute top-0 left-0 w-full h-24 opacity-20">
         <svg viewBox="0 0 1200 100" className="w-full h-full" preserveAspectRatio="none">
-          <path d="M0,0 Q150,80 300,0 Q450,80 600,0 Q750,80 900,0 Q1050,80 1200,0 L1200,100 L0,100 Z" fill="currentColor" className="text-siports-gold" />
+          <path d="M0,0 Q150,80 300,0 Q450,80 600,0 Q750,80 900,0 Q1050,80 1200,0 L1200,100 L0,100 Z" fill="currentColor" className="text-sib-gold" />
         </svg>
       </div>
       
@@ -130,9 +130,9 @@ export const HeroSection: React.FC = () => {
                 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-siports-gold to-amber-600 rounded-2xl transform rotate-2 group-hover:rotate-3 transition-transform"></div>
-                    <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-4 shadow-2xl text-center border-2 border-siports-gold">
-                      <div className="text-3xl font-bold text-siports-gold mb-1">
+                    <div className="absolute inset-0 bg-gradient-to-br from-sib-gold to-amber-600 rounded-2xl transform rotate-2 group-hover:rotate-3 transition-transform"></div>
+                    <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-4 shadow-2xl text-center border-2 border-sib-gold">
+                      <div className="text-3xl font-bold text-sib-gold mb-1">
                         {formatNumber(timeLeft.days)}
                       </div>
                       <div className="text-amber-200 text-xs font-medium uppercase tracking-wide">
@@ -154,8 +154,8 @@ export const HeroSection: React.FC = () => {
                   </div>
 
                   <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-siports-gold to-amber-600 rounded-2xl transform -rotate-2 group-hover:-rotate-3 transition-transform"></div>
-                    <div className="relative bg-white rounded-2xl p-4 shadow-2xl text-center border-2 border-siports-gold">
+                    <div className="absolute inset-0 bg-gradient-to-br from-sib-gold to-amber-600 rounded-2xl transform -rotate-2 group-hover:-rotate-3 transition-transform"></div>
+                    <div className="relative bg-white rounded-2xl p-4 shadow-2xl text-center border-2 border-sib-gold">
                       <div className="text-3xl font-bold text-amber-700 mb-1">
                         {formatNumber(timeLeft.minutes)}
                       </div>
@@ -192,8 +192,8 @@ export const HeroSection: React.FC = () => {
             {/* Event Info */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
               <div className="flex items-center space-x-3 bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="bg-siports-gold/20 p-2 rounded-lg">
-                  <MapPin className="h-5 w-5 text-siports-gold" />
+                <div className="bg-sib-gold/20 p-2 rounded-lg">
+                  <MapPin className="h-5 w-5 text-sib-gold" />
                 </div>
                 <div>
                   <p className="font-semibold text-white">{t('hero.stats.location')}</p>
@@ -201,8 +201,8 @@ export const HeroSection: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3 bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="bg-siports-gold/20 p-2 rounded-lg">
-                  <Users className="h-5 w-5 text-siports-gold" />
+                <div className="bg-sib-gold/20 p-2 rounded-lg">
+                  <Users className="h-5 w-5 text-sib-gold" />
                 </div>
                 <div>
                   <p className="font-semibold text-white">Networking</p>
@@ -210,8 +210,8 @@ export const HeroSection: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3 bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="bg-siports-gold/20 p-2 rounded-lg">
-                  <Building2 className="h-5 w-5 text-siports-gold" />
+                <div className="bg-sib-gold/20 p-2 rounded-lg">
+                  <Building2 className="h-5 w-5 text-sib-gold" />
                 </div>
                 <div>
                   <p className="font-semibold text-white">Format</p>
@@ -223,13 +223,13 @@ export const HeroSection: React.FC = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to={ROUTES.REGISTER_EXHIBITOR}>
-                <Button size="lg" className="bg-siports-gold text-white hover:bg-siports-gold/90 border-none w-full sm:w-auto shadow-lg shadow-siports-gold/20">
+                <Button size="lg" className="bg-sib-gold text-white hover:bg-sib-gold/90 border-none w-full sm:w-auto shadow-lg shadow-sib-gold/20">
                   {t('hero.cta.exhibitor')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link to={ROUTES.EXHIBITORS}>
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-siports-primary w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-sib-primary w-full sm:w-auto">
                   {t('hero.cta.discover')}
                 </Button>
               </Link>
@@ -244,18 +244,18 @@ export const HeroSection: React.FC = () => {
             className="relative block"
           >
             <div className="relative z-10">
-              <div className="absolute -inset-4 bg-siports-gold/20 rounded-t-[10rem] rounded-b-2xl blur-xl" />
+              <div className="absolute -inset-4 bg-sib-gold/20 rounded-t-[10rem] rounded-b-2xl blur-xl" />
               <div className="relative rounded-t-[10rem] rounded-b-2xl overflow-hidden border-4 border-white/20 shadow-2xl aspect-[4/3]">
                 <img
                   src="https://images.pexels.com/photos/906982/pexels-photo-906982.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Port construction moderne"
+                  alt="Bâtiment construction moderne"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-siports-primary/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-sib-primary/60 to-transparent" />
               </div>
               
               {/* Decorative Elements */}
-              <div className="hidden lg:block absolute -top-12 -right-12 text-siports-gold/20 animate-spin-slow">
+              <div className="hidden lg:block absolute -top-12 -right-12 text-sib-gold/20 animate-spin-slow">
                 <MoroccanPattern className="w-48 h-48" />
               </div>
 
@@ -264,15 +264,15 @@ export const HeroSection: React.FC = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="hidden lg:block absolute bottom-8 -left-12 bg-white p-4 rounded-xl shadow-xl border-l-4 border-siports-gold"
+                className="hidden lg:block absolute bottom-8 -left-12 bg-white p-4 rounded-xl shadow-xl border-l-4 border-sib-gold"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="bg-siports-primary/5 p-3 rounded-lg">
-                    <Users className="h-6 w-6 text-siports-primary" />
+                  <div className="bg-sib-primary/5 p-3 rounded-lg">
+                    <Users className="h-6 w-6 text-sib-primary" />
                   </div>
                   <div>
-                    <p className="text-lg font-bold text-siports-primary">Innovation</p>
-                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Smart Port</p>
+                    <p className="text-lg font-bold text-sib-primary">Innovation</p>
+                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Smart Bâtiment</p>
                   </div>
                 </div>
               </motion.div>
@@ -281,14 +281,14 @@ export const HeroSection: React.FC = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="hidden lg:block absolute top-24 -right-8 bg-white p-4 rounded-xl shadow-xl border-l-4 border-siports-gold"
+                className="hidden lg:block absolute top-24 -right-8 bg-white p-4 rounded-xl shadow-xl border-l-4 border-sib-gold"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="bg-siports-primary/5 p-3 rounded-lg">
-                    <Calendar className="h-6 w-6 text-siports-primary" />
+                  <div className="bg-sib-primary/5 p-3 rounded-lg">
+                    <Calendar className="h-6 w-6 text-sib-primary" />
                   </div>
                   <div>
-                    <p className="text-lg font-bold text-siports-primary">Conférences</p>
+                    <p className="text-lg font-bold text-sib-primary">Conférences</p>
                     <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">High Level</p>
                   </div>
                 </div>

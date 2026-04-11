@@ -9,7 +9,6 @@ export const COUNTRIES = [
   { code: 'BE', name: 'Belgique' },
   { code: 'NL', name: 'Pays-Bas' },
   { code: 'PT', name: 'Portugal' },
-  { code: 'DZ', name: 'Algérie' },
   { code: 'TN', name: 'Tunisie' },
   { code: 'SN', name: 'Sénégal' },
   { code: 'CI', name: 'Côte d\'Ivoire' },

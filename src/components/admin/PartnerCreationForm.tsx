@@ -428,7 +428,6 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                     >
                       <option value="">Sélectionnez un pays</option>
                       <optgroup label="Afrique du Nord & Moyen-Orient">
-                        <option value="Algérie">???? Algérie</option>
                         <option value="Maroc">???? Maroc</option>
                         <option value="Tunisie">???? Tunisie</option>
                         <option value="Égypte">???? Égypte</option>

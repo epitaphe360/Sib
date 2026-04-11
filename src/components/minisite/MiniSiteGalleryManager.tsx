@@ -217,7 +217,7 @@ export default function MiniSiteGalleryManager({
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = '/siports-logo.jpg';
+                    target.src = '/sib-logo.jpg';
                   }}
                 />
                 <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">

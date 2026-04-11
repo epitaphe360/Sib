@@ -638,7 +638,7 @@ export class SupabaseService {
           id: profileData.id,
           userId: profileData.user_id,
           companyName: profileData.company_name || 'Exposant',
-          category: (profileData.category || 'port-industry') as ExhibitorCategory,
+          category: (profileData.category || 'bâtiment-industry') as ExhibitorCategory,
           sector: profileData.sector || '',
           description: profileData.description || '',
           logo: profileData.logo_url,
@@ -3268,7 +3268,7 @@ export class SupabaseService {
                 sector: user.profile?.sector || 'Bâtiment Services',
                 description: 'Profil créé automatiquement',
                 contact_info: { email: user.email, name: userName },
-                category: 'port-industry',
+                category: 'bâtiment-industry',
                 verified: false,
                 featured: false
               })

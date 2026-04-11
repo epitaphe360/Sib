@@ -88,8 +88,8 @@ export default function MiniSiteBuilder() {
       type: 'hero',
       title: 'Section Hero',
       content: {
-        title: 'Port Solutions Inc.',
-        subtitle: 'Leading provider of integrated port management solutions',
+        title: 'Bâtiment Solutions Inc.',
+        subtitle: 'Leading provider of integrated bâtiment management solutions',
         backgroundImage:
           'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200',
         ctaText: 'Découvrir nos solutions',
@@ -105,7 +105,7 @@ export default function MiniSiteBuilder() {
       content: {
         title: 'Notre expertise',
         description:
-          "Avec plus de 20 ans d'expérience dans le secteur du bâtiment, nous accompagnons les ports du monde entier dans leur transformation digitale.",
+          "Avec plus de 20 ans d'expérience dans le secteur du bâtiment, nous accompagnons les bâtiments du monde entier dans leur transformation digitale.",
         features: ['Solutions innovantes', 'Expertise reconnue', 'Support 24/7', 'Présence internationale']
       },
       visible: true,
@@ -480,7 +480,7 @@ export default function MiniSiteBuilder() {
                         <div className="flex space-x-1">
                           <Save className="h-4 w-4 mr-2" /> Sauvegarder
                         </div>
-                        <div className="flex-1 bg-white rounded px-3 py-1 text-xs text-gray-500">SIB.com/exhibitor/port-solutions-inc</div>
+                        <div className="flex-1 bg-white rounded px-3 py-1 text-xs text-gray-500">SIB.com/exhibitor/bâtiment-solutions-inc</div>
                       </div>
                     </div>
 

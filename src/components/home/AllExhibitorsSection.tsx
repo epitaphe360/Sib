@@ -27,8 +27,8 @@ export function AllExhibitorsSection() {
   const getCategoryLabel = useCallback((category: string) => {
     const labels = {
       'institutional': t('pages.exhibitors.category_institutional'),
-      'port-industry': t('pages.exhibitors.category_port_industry'),
-      'port-operations': t('pages.exhibitors.category_operations'),
+      'bâtiment-industry': t('pages.exhibitors.category_port_industry'),
+      'bâtiment-operations': t('pages.exhibitors.category_operations'),
       'academic': t('pages.exhibitors.category_academic')
     };
     return labels[category as keyof typeof labels] || category;
@@ -37,8 +37,8 @@ export function AllExhibitorsSection() {
   const getCategoryColor = useCallback((category: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {
     const colors: Record<string, 'default' | 'success' | 'warning' | 'error' | 'info'> = {
       'institutional': 'success',
-      'port-industry': 'error',
-      'port-operations': 'info',
+      'bâtiment-industry': 'error',
+      'bâtiment-operations': 'info',
       'academic': 'warning'
     };
     return colors[category] || 'default';

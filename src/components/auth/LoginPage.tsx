@@ -188,7 +188,7 @@ export default function LoginPage() {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-siports-primary via-siports-secondary to-siports-accent flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-sib-primary via-sib-secondary to-sib-accent flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background Pattern */}
       <MoroccanPattern className="opacity-10" color="white" scale={1.5} />
       
@@ -201,7 +201,7 @@ export default function LoginPage() {
         transition={{ duration: 0.6 }}
         className="max-w-md w-full relative z-10"
       >
-        <Card className="p-8 border-t-4 border-t-siports-gold shadow-2xl backdrop-blur-sm bg-white/95">
+        <Card className="p-8 border-t-4 border-t-sib-gold shadow-2xl backdrop-blur-sm bg-white/95">
           {/* Logo and Title */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">

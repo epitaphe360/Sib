@@ -170,7 +170,7 @@ export class EmailService {
         </div>
         
         <div style="background: #f9fafb; padding: 30px; text-align: center; color: #6b7280; font-size: 14px;">
-          <p style="margin: 0;">SIB 2026 - Salon International des Ports</p>
+          <p style="margin: 0;">SIB 2026 - Salon International du Bâtiment</p>
         </div>
       </div>
     `;
@@ -216,7 +216,7 @@ export class EmailService {
         </div>
         
         <div style="background: #f9fafb; padding: 30px; text-align: center; color: #6b7280; font-size: 14px;">
-          <p style="margin: 0;">SIB 2026 - Salon International des Ports</p>
+          <p style="margin: 0;">SIB 2026 - Salon International du Bâtiment</p>
         </div>
       </div>
     `;
@@ -261,7 +261,7 @@ export class EmailService {
         </div>
         
         <div style="background: #f9fafb; padding: 30px; text-align: center; color: #6b7280; font-size: 14px;">
-          <p style="margin: 0;">SIB 2026 - Salon International des Ports</p>
+          <p style="margin: 0;">SIB 2026 - Salon International du Bâtiment</p>
         </div>
       </div>
     `;
@@ -307,7 +307,7 @@ export class EmailService {
         </div>
         
         <div style="background: #f9fafb; padding: 30px; text-align: center; color: #6b7280; font-size: 14px;">
-          <p style="margin: 0;">SIB 2026 - Salon International des Ports</p>
+          <p style="margin: 0;">SIB 2026 - Salon International du Bâtiment</p>
         </div>
       </div>
     `;

@@ -174,7 +174,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
     maxBookings: 12,
     currentBookings: 4,
     available: true,
-    location: 'Table ronde - Digitalisation des Ports'
+    location: 'Table ronde - Digitalisation des Bâtiments'
   },
 
   // === JOUR 3: 3 Avril 2026 ===

@@ -848,7 +848,7 @@ export default function PartnerDetailPage() {
                       if (lowerTitle.includes('routière') || lowerTitle.includes('routes') || lowerTitle.includes('route')) {
                         return "Planification, construction et entretien du réseau routier national incluant routes nationales, régionales et provinciales pour une connectivité territoriale optimale.";
                       }
-                      if (lowerTitle.includes('port') && (lowerTitle.includes('construction') || lowerTitle.includes('infrastructure'))) {
+                      if (lowerTitle.includes('bâtiment') && (lowerTitle.includes('construction') || lowerTitle.includes('infrastructure'))) {
                         return "Développement, modernisation et gestion des infrastructures BTP stratégiques pour renforcer la compétitivité construction et le commerce international du Maroc.";
                       }
                       if (lowerTitle.includes('eau') || lowerTitle.includes('ressources en eau') || lowerTitle.includes('hydraulique')) {
@@ -896,7 +896,7 @@ export default function PartnerDetailPage() {
                         return "Développement et maintenance des infrastructures de navigation intérieure et côtière pour un transport fluvial et construction sûr et efficace.";
                       }
                       if (lowerTitle.includes('bâtiment') && !lowerTitle.includes('construction')) {
-                        return "Gestion et développement des infrastructures BTP pour améliorer la compétitivité des ports et faciliter les échanges commerciaux.";
+                        return "Gestion et développement des infrastructures BTP pour améliorer la compétitivité des bâtiments et faciliter les échanges commerciaux.";
                       }
                       if (lowerTitle.includes('waterborne') || lowerTitle.includes('inland') || lowerTitle.includes('fluvial')) {
                         return "Infrastructure et opérations de transport par voies navigables intérieures et BTP pour une mobilité durable et économique.";
@@ -929,7 +929,7 @@ export default function PartnerDetailPage() {
                         return "Activités de recherche scientifique et d'innovation technologique pour développer de nouvelles solutions adaptées aux enjeux du secteur.";
                       }
                       if (lowerTitle.includes('naval') || lowerTitle.includes('marine')) {
-                        return "Ingénierie et expertise navale couvrant la conception, la construction et la maintenance des navires et systèmes BTP.";
+                        return "Ingénierie et expertise navale couvrant la conception, la construction et la maintenance des chantiers et systèmes BTP.";
                       }
                       if (lowerTitle.includes('vts') || lowerTitle.includes('trafic') || lowerTitle.includes('surveillance')) {
                         return "Systèmes de surveillance et de gestion du trafic construction pour la sécurité de la navigation et la protection de l'environnement côtier.";

@@ -89,12 +89,12 @@ export const matchingTranslations = {
     'matching.score': 'Compatibility score',
     
     // Sectors
-    'matching.sector.port_operations': 'Port Operations',
+    'matching.sector.port_operations': 'Bâtiment Operations',
     'matching.sector.construction_tech': 'Bâtiment Technologies',
     'matching.sector.digital_transformation': 'Digital Transformation',
     'matching.sector.logistics': 'Logistics and Supply Chain',
-    'matching.sector.equipment': 'Port Equipment',
-    'matching.sector.security': 'Port Security',
+    'matching.sector.equipment': 'Bâtiment Equipment',
+    'matching.sector.security': 'Bâtiment Security',
     'matching.sector.environment': 'Environment and Sustainability',
     'matching.sector.training': 'Training and Education',
     'matching.sector.consulting': 'Consulting and Services',
@@ -114,7 +114,7 @@ export const matchingTranslations = {
     'matching.interest.blockchain': 'Blockchain',
     'matching.interest.iot': 'Internet of Things (IoT)',
     'matching.interest.cybersecurity': 'Cybersecurity',
-    'matching.interest.smart_ports': 'Smart Ports',
+    'matching.interest.smart_ports': 'Smart Bâtiments',
     'matching.interest.green_tech': 'Green Technologies',
     
     // Networking goals

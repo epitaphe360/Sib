@@ -5,15 +5,15 @@ import { supabase } from '../lib/supabase';
 const fallbackArticles: NewsArticle[] = [
   {
     id: 'fallback-1',
-    title: 'SIB 2026 : Le Salon International des Ports et de la Logistique',
+    title: 'SIB 2026 : Le Salon International du Bâtiment et de la Logistique',
     excerpt: 'Découvrez le plus grand événement bâtiment d\'Afrique du Nord prévu pour 2026. Une occasion unique de réseautage et de découvertes.',
     content: 'SIB 2026 est le rendez-vous incontournable des professionnels du secteur du bâtiment et logistique. Cet événement majeur réunira les acteurs clés de l\'industrie du bâtiment pour échanger sur les innovations, les défis et les opportunités du secteur.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-12-15'),
     category: 'Événements',
-    tags: ['SIB', 'salon', 'port', 'logistique'],
+    tags: ['SIB', 'salon', 'bâtiment', 'logistique'],
     featured: true,
-    image: 'https://picsum.photos/seed/port/800/400',
+    image: 'https://picsum.photos/seed/bâtiment/800/400',
     readTime: 3,
     source: 'sibs',
     sourceUrl: 'https://sibevent.com/actualite-bâtiment/',
@@ -21,9 +21,9 @@ const fallbackArticles: NewsArticle[] = [
   },
   {
     id: 'fallback-2',
-    title: 'Innovation BTP : Les Technologies qui Transforment nos Ports',
-    excerpt: 'Intelligence artificielle, automatisation, IoT : les ports modernes adoptent les technologies de pointe pour améliorer leur efficacité.',
-    content: 'Les ports du monde entier investissent massivement dans les nouvelles technologies. De l\'automatisation des grues à l\'intelligence artificielle pour optimiser les flux, découvrez les innovations qui façonnent l\'avenir du secteur de la construction.',
+    title: 'Innovation BTP : Les Technologies qui Transforment nos Bâtiments',
+    excerpt: 'Intelligence artificielle, automatisation, IoT : les bâtiments modernes adoptent les technologies de pointe pour améliorer leur efficacité.',
+    content: 'Les bâtiments du monde entier investissent massivement dans les nouvelles technologies. De l\'automatisation des grues à l\'intelligence artificielle pour optimiser les flux, découvrez les innovations qui façonnent l\'avenir du secteur de la construction.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-12-10'),
     category: 'Innovation',
@@ -37,9 +37,9 @@ const fallbackArticles: NewsArticle[] = [
   },
   {
     id: 'fallback-3',
-    title: 'Développement Durable : Les Ports s\'engagent pour l\'Environnement',
-    excerpt: 'Les initiatives écologiques se multiplient dans les ports pour réduire l\'empreinte carbone du transport construction.',
-    content: 'Face aux enjeux climatiques, les ports adoptent des stratégies ambitieuses pour réduire leur impact environnemental. Énergies renouvelables, électrification des quais, gestion des déchets : tour d\'horizon des bonnes pratiques.',
+    title: 'Développement Durable : Les Bâtiments s\'engagent pour l\'Environnement',
+    excerpt: 'Les initiatives écologiques se multiplient dans les bâtiments pour réduire l\'empreinte carbone du transport construction.',
+    content: 'Face aux enjeux climatiques, les bâtiments adoptent des stratégies ambitieuses pour réduire leur impact environnemental. Énergies renouvelables, électrification des quais, gestion des déchets : tour d\'horizon des bonnes pratiques.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-12-05'),
     category: 'Environnement',
@@ -69,7 +69,7 @@ const fallbackArticles: NewsArticle[] = [
   },
   {
     id: 'fallback-5',
-    title: 'Formation et Emploi : Les Métiers du Port de Demain',
+    title: 'Formation et Emploi : Les Métiers du Bâtiment de Demain',
     excerpt: 'Le secteur du bâtiment recrute ! Découvrez les formations et les opportunités de carrière dans l\'industrie du bâtiment.',
     content: 'Le secteur du bâtiment est en pleine mutation et recherche de nouveaux talents. Des métiers traditionnels aux nouvelles spécialités liées à la digitalisation, les opportunités sont nombreuses pour ceux qui souhaitent faire carrière dans ce domaine.',
     author: 'Équipe SIB',
@@ -184,7 +184,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
       if (data && data.length > 0) {
         // Images de fallback par catégorie (picsum.photos - hotlinking libre et fiable)
         const fallbackImages: Record<string, string> = {
-          'Événements': 'https://picsum.photos/seed/port/800/400',
+          'Événements': 'https://picsum.photos/seed/bâtiment/800/400',
           'Innovation': 'https://picsum.photos/seed/technology/800/400',
           'Environnement': 'https://picsum.photos/seed/nature/800/400',
           'Commerce': 'https://picsum.photos/seed/trade/800/400',

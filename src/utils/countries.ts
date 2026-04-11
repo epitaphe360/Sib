@@ -2,7 +2,6 @@ export const countries = [
   { code: 'AF', name: 'Afghanistan', dial: '+93' },
   { code: 'ZA', name: 'Afrique du Sud', dial: '+27' },
   { code: 'AL', name: 'Albanie', dial: '+355' },
-  { code: 'DZ', name: 'Algérie', dial: '+213' },
   { code: 'DE', name: 'Allemagne', dial: '+49' },
   { code: 'AD', name: 'Andorre', dial: '+376' },
   { code: 'AO', name: 'Angola', dial: '+244' },

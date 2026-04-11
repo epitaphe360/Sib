@@ -85,8 +85,8 @@ export default function MiniSiteHeroEditor({
               value={formData.title}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="ex: Solutions innovantes pour les ports"
-             aria-label="ex: Solutions innovantes pour les ports" />
+              placeholder="ex: Solutions innovantes pour les bâtiments"
+             aria-label="ex: Solutions innovantes pour les bâtiments" />
           </div>
           
           <div>

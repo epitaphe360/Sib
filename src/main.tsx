@@ -26,8 +26,8 @@ if ('serviceWorker' in navigator) {
 
 // Trouve le conteneur de montage
 const findMount = () =>
-  document.getElementById('siports-networking-app') ||
-  document.getElementById('siports-exhibitor-dashboard-app') ||
+  document.getElementById('sib-networking-app') ||
+  document.getElementById('sib-exhibitor-dashboard-app') ||
   document.getElementById('root');
 
 // Track si déjà monté pour éviter les doubles montages
