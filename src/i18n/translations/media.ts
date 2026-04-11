@@ -37,15 +37,15 @@ export const mediaTranslations = {
     
     // Podcasts
     'media.podcast.title': 'Podcasts',
-    'media.podcast.subtitle': 'sib Talks - Épisodes audio',
+    'media.podcast.subtitle': 'SIB Talks - Épisodes audio',
     'media.podcast.episode': 'Épisode {{number}}',
     'media.podcast.season': 'Saison {{number}}',
     'media.podcast.listen': 'Écouter',
     'media.podcast.subscribe': 'S\'abonner',
     
     // Podcast specific NEW
-    'media.podcast.page_title': 'sib Talks',
-    'media.podcast.page_subtitle': 'Écoutez les voix qui façonnent l\'industrie du bâtiment et de la construction',
+    'media.podcast.page_title': 'SIB Talks',
+    'media.podcast.page_subtitle': 'Écoutez les voix qui façonnent l\'industrie du bâtiment',
     'media.podcast.featured_episode': 'Épisode en vedette',
     'media.podcast.search_placeholder': 'Rechercher un épisode...',
     'media.podcast.no_results': 'Aucun podcast trouvé',
@@ -61,7 +61,7 @@ export const mediaTranslations = {
     
     // Capsules Inside
     'media.capsule.title': 'Capsules Inside',
-    'media.capsule.subtitle': 'Capsules vidéo Inside sib',
+    'media.capsule.subtitle': 'Capsules vidéo Inside SIB',
     'media.capsule.featured': 'En vedette',
     'media.capsule.not_found': 'Capsule introuvable',
     'media.capsule.saved': 'Enregistré',
@@ -208,15 +208,15 @@ export const mediaTranslations = {
     
     // Podcasts
     'media.podcast.title': 'Podcasts',
-    'media.podcast.subtitle': 'sib Talks - Audio episodes',
+    'media.podcast.subtitle': 'SIB Talks - Audio episodes',
     'media.podcast.episode': 'Episode {{number}}',
     'media.podcast.season': 'Season {{number}}',
     'media.podcast.listen': 'Listen',
     'media.podcast.subscribe': 'Subscribe',
     
     // Podcast specific NEW
-    'media.podcast.page_title': 'sib Talks',
-    'media.podcast.page_subtitle': 'Listen to the voices shaping the port industry',
+    'media.podcast.page_title': 'SIB Talks',
+    'media.podcast.page_subtitle': 'Listen to the voices shaping the construction industry',
     'media.podcast.featured_episode': 'Featured Episode',
     'media.podcast.search_placeholder': 'Search for an episode...',
     'media.podcast.no_results': 'No podcasts found',
@@ -238,7 +238,7 @@ export const mediaTranslations = {
     'media.capsule.link_copied': 'Link copied to clipboard',
     // Inside Capsules
     'media.capsule.title': 'Inside Capsules',
-    'media.capsule.subtitle': 'Inside sib video capsules',
+    'media.capsule.subtitle': 'Inside SIB video capsules',
     'media.capsule.featured': 'Featured',
     
     // Live Studio

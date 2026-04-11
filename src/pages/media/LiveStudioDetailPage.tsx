@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ï»¿import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Radio, Calendar, Clock, Share2, Bell, MessageCircle, Users } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
@@ -63,8 +63,8 @@ export const LiveStudioDetailPage: React.FC = () => {
     setIsNotified(!isNotified);
     toast.success(
       isNotified 
-        ? 'Notification désactivée' 
-        : 'Vous serez notifié au début du live'
+        ? 'Notification dÃ©sactivÃ©e' 
+        : 'Vous serez notifiÃ© au dÃ©but du live'
     );
   };
 
@@ -77,7 +77,7 @@ export const LiveStudioDetailPage: React.FC = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      toast.success('Lien copié dans le presse-papier');
+      toast.success('Lien copiÃ© dans le presse-papier');
     }
   };
 
@@ -146,21 +146,21 @@ export const LiveStudioDetailPage: React.FC = () => {
                   variant="destructive" 
                   className="absolute top-4 left-4 z-10 animate-pulse"
                 >
-                  ?? EN DIRECT
+                  ðŸ”´ EN DIRECT
                 </Badge>
               ) : isUpcoming ? (
                 <Badge 
                   variant="default" 
                   className="absolute top-4 left-4 z-10"
                 >
-                  ?? À VENIR
+                  ðŸ“… Ã€ VENIR
                 </Badge>
               ) : (
                 <Badge 
                   variant="secondary" 
                   className="absolute top-4 left-4 z-10"
                 >
-                  ?? REPLAY
+                  ðŸŽ¬ REPLAY
                 </Badge>
               )}
               
@@ -183,7 +183,7 @@ export const LiveStudioDetailPage: React.FC = () => {
                   <div className="text-center text-white p-8">
                     <Radio className="h-16 w-16 mx-auto mb-4 opacity-80" />
                     <h3 className="text-2xl font-bold mb-2">
-                      {isUpcoming ? 'Live à venir' : 'Live terminé'}
+                      {isUpcoming ? 'Live Ã  venir' : 'Live terminÃ©'}
                     </h3>
                     {liveStudio.scheduled_date && (
                       <p className="text-lg opacity-90">
@@ -218,7 +218,7 @@ export const LiveStudioDetailPage: React.FC = () => {
                     onClick={handleNotify}
                   >
                     <Bell className="h-4 w-4 mr-2" />
-                    {isNotified ? 'Notification activée' : 'Me notifier'}
+                    {isNotified ? 'Notification activÃ©e' : 'Me notifier'}
                   </Button>
                 )}
                 <Button variant="outline" size="sm" onClick={handleShare}>
@@ -261,7 +261,7 @@ export const LiveStudioDetailPage: React.FC = () => {
             {/* Description */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                À propos de cette interview
+                Ã€ propos de cette interview
               </h2>
               <div className="prose prose-blue max-w-none">
                 <p className="text-gray-700 whitespace-pre-wrap">
@@ -274,7 +274,7 @@ export const LiveStudioDetailPage: React.FC = () => {
             {liveStudio.guest_name && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Invité
+                  InvitÃ©
                 </h2>
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
@@ -334,9 +334,9 @@ export const LiveStudioDetailPage: React.FC = () => {
             {/* Schedule Info */}
             {isUpcoming && liveStudio.scheduled_date && (
               <div className="bg-gradient-to-br from-red-600 to-orange-600 rounded-lg shadow-lg p-6 text-white">
-                <div className="text-4xl mb-3">??</div>
+                <div className="text-4xl mb-3">ðŸ“…</div>
                 <h3 className="text-lg font-semibold mb-2">
-                  Live prévu le
+                  Live prÃ©vu le
                 </h3>
                 <p className="text-sm text-red-100 mb-4">
                   {formatDate(liveStudio.scheduled_date)}
@@ -358,7 +358,7 @@ export const LiveStudioDetailPage: React.FC = () => {
                 Live Studio SIB
               </h3>
               <p className="text-sm text-gray-600">
-                Des interviews exclusives avec les acteurs clés du sport business, en direct de notre studio.
+                Des interviews exclusives avec les acteurs clÃ©s du sport business, en direct de notre studio.
               </p>
             </div>
 
@@ -368,7 +368,7 @@ export const LiveStudioDetailPage: React.FC = () => {
                 Tous les Lives
               </h3>
               <p className="text-sm text-blue-100 mb-4">
-                Découvrez tous nos Lives Studios et replays
+                DÃ©couvrez tous nos Lives Studios et replays
               </p>
               <Button variant="secondary" className="w-full" asChild>
                 <Link to="/media/live-studio">

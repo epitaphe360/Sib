@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+Ôªøimport React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Globe, Zap, FileText, ArrowRight, Clock } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -51,26 +51,26 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
       // Check if API key is configured
       if (!import.meta.env.VITE_OPENAI_API_KEY) {
         toast.info(
-          '?? Configuration requise : La clÈ API OpenAI doit Ítre ajoutÈe dans le fichier .env',
+          '‚öôÔ∏è Configuration requise : La cl√© API OpenAI doit √™tre ajout√©e dans le fichier .env',
           { duration: 5000 }
         );
-        console.warn('?? VITE_OPENAI_API_KEY not configured');
+        console.warn('‚ö†Ô∏è VITE_OPENAI_API_KEY not configured');
         setMode('manual');
         setIsLoading(false);
         return;
       }
 
       // Use AI Scrapper Service directly
-      toast.loading('?? Analyse de votre site web en cours...', { id: 'scraping' });
+      toast.loading('üîç Analyse de votre site web en cours...', { id: 'scraping' });
       
       const scrapResult = await aiScrapperService.scrapExhibitorMiniSite(websiteUrl);
 
       if (!scrapResult.success) {
-        throw new Error(scrapResult.error || '…chec du scraping');
+        throw new Error(scrapResult.error || '√âchec du scraping');
       }
 
       toast.dismiss('scraping');
-      toast.loading('?? CrÈation de votre mini-site...', { id: 'creating' });
+      toast.loading('üíæ Cr√©ation de votre mini-site...', { id: 'creating' });
 
       // Get current user data
       const { data: userData, error: userError } = await supabase
@@ -100,7 +100,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
         .eq('id', userId);
 
       // Save to localStorage as a redundant safety measure
-      localStorage.setItem(`SIB_minisite_skipped_${userId}`, 'true');
+      localStorage.setItem(`sibs_minisite_skipped_${userId}`, 'true');
 
       // Create products if found
       if (scrapResult.data.products && scrapResult.data.products.length > 0) {
@@ -127,7 +127,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
       }
 
       toast.dismiss('creating');
-      toast.success('?? Mini-site crÈÈ automatiquement avec succËs !', { duration: 5000 });
+      toast.success('üéâ Mini-site cr√©√© automatiquement avec succ√®s !', { duration: 5000 });
       onClose();
 
       // Redirect to mini-site editor
@@ -140,17 +140,17 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
       // Handle specific errors
       if (error?.message?.includes('API key')) {
         toast.error(
-          '?? Configuration requise : Veuillez ajouter la clÈ API OpenAI.',
+          '‚öôÔ∏è Configuration requise : Veuillez ajouter la cl√© API OpenAI.',
           { duration: 6000 }
         );
       } else if (error?.message?.includes('CORS') || error?.message?.includes('Failed to fetch')) {
         toast.error(
-          '?? Impossible d\'accÈder au site web. VÈrifiez l\'URL ou utilisez la crÈation manuelle.',
+          '‚ö†Ô∏è Impossible d\'acc√©der au site web. V√©rifiez l\'URL ou utilisez la cr√©ation manuelle.',
           { duration: 6000 }
         );
       } else {
         toast.error(
-          'Impossible de crÈer le mini-site automatiquement. Essayez la crÈation manuelle.',
+          'Impossible de cr√©er le mini-site automatiquement. Essayez la cr√©ation manuelle.',
           { duration: 5000 }
         );
       }
@@ -171,9 +171,9 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
         .update({ minisite_created: true })
         .eq('id', userId);
 
-      localStorage.setItem(`SIB_minisite_skipped_${userId}`, 'true');
+      localStorage.setItem(`sibs_minisite_skipped_${userId}`, 'true');
 
-      toast.success('Vous allez Ítre redirigÈ vers l\'Èditeur de mini-site');
+      toast.success('Vous allez √™tre redirig√© vers l\'√©diteur de mini-site');
       onClose();
 
       // Redirect to mini-site wizard
@@ -189,21 +189,21 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
   // Handle skip (remind later)
   const handleSkip = async () => {
     try {
-      // ? CORRECTION: Marquer minisite_created = true pour ne plus afficher la popup
-      // L'utilisateur pourra toujours crÈer son mini-site depuis le dashboard
+      // ‚úÖ CORRECTION: Marquer minisite_created = true pour ne plus afficher la popup
+      // L'utilisateur pourra toujours cr√©er son mini-site depuis le dashboard
       await supabase
         .from('users')
         .update({ minisite_created: true })
         .eq('id', userId);
 
-      localStorage.setItem(`SIB_minisite_skipped_${userId}`, 'true');
+      localStorage.setItem(`sibs_minisite_skipped_${userId}`, 'true');
 
-      toast.success('Vous pourrez crÈer votre mini-site plus tard depuis votre tableau de bord');
+      toast.success('Vous pourrez cr√©er votre mini-site plus tard depuis votre tableau de bord');
       onClose();
     } catch (error) {
       console.error('Error marking minisite as skipped:', error);
-      // Fermer quand mÍme la popup mÍme si l'update Èchoue
-      localStorage.setItem(`SIB_minisite_skipped_${userId}`, 'true');
+      // Fermer quand m√™me la popup m√™me si l'update √©choue
+      localStorage.setItem(`sibs_minisite_skipped_${userId}`, 'true');
       onClose();
     }
   };
@@ -250,10 +250,10 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold mb-2">
-                      ?? Bienvenue sur SIB 2026 !
+                      üéâ Bienvenue sur SIB 2026 !
                     </h2>
                     <p className="text-blue-100">
-                      Votre compte exposant a ÈtÈ activÈ avec succËs
+                      Votre compte exposant a √©t√© activ√© avec succ√®s
                     </p>
                   </div>
                 </div>
@@ -269,10 +269,10 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                   >
                     <div className="text-center mb-6">
                       <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                        CrÈez votre Mini-Site Exposant
+                        Cr√©ez votre Mini-Site Exposant
                       </h3>
                       <p className="text-gray-600">
-                        Choisissez comment vous souhaitez crÈer votre mini-site professionnel
+                        Choisissez comment vous souhaitez cr√©er votre mini-site professionnel
                       </p>
                     </div>
 
@@ -288,14 +288,14 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h4 className="text-xl font-bold text-gray-900">
-                              CrÈation Automatique (RecommandÈ)
+                              Cr√©ation Automatique (Recommand√©)
                             </h4>
                             <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
                               IA
                             </span>
                           </div>
                           <p className="text-gray-600 mb-3">
-                            Notre systËme scrape votre site web officiel et remplit automatiquement
+                            Notre syst√®me scrape votre site web officiel et remplit automatiquement
                             votre mini-site avec vos informations, produits, et images.
                           </p>
                           <div className="flex items-center gap-2 text-sm text-green-600">
@@ -317,11 +317,11 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                         </div>
                         <div className="flex-1">
                           <h4 className="text-xl font-bold text-gray-900 mb-2">
-                            CrÈation Manuelle
+                            Cr√©ation Manuelle
                           </h4>
                           <p className="text-gray-600 mb-3">
-                            Remplissez votre mini-site Ètape par Ètape avec notre Èditeur guidÈ.
-                            Vous avez le contrÙle total sur chaque ÈlÈment.
+                            Remplissez votre mini-site √©tape par √©tape avec notre √©diteur guid√©.
+                            Vous avez le contr√¥le total sur chaque √©l√©ment.
                           </p>
                           <div className="flex items-center gap-2 text-sm text-gray-600">
                             <Clock className="h-4 w-4" />
@@ -337,7 +337,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                         onClick={handleSkip}
                         className="text-gray-500 hover:text-gray-700 text-sm font-medium transition-colors"
                       >
-                        Je crÈerai mon mini-site plus tard
+                        Je cr√©erai mon mini-site plus tard
                       </button>
                     </div>
                   </motion.div>
@@ -354,14 +354,14 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                         onClick={() => setMode('choice')}
                         className="text-blue-600 hover:text-blue-700 text-sm font-medium mb-4"
                       >
-                        ? Retour aux options
+                        ‚Üê Retour aux options
                       </button>
 
                       <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                        CrÈation Automatique par IA
+                        Cr√©ation Automatique par IA
                       </h3>
                       <p className="text-gray-600 mb-6">
-                        Entrez l'URL de votre site web officiel. Notre systËme va analyser
+                        Entrez l'URL de votre site web officiel. Notre syst√®me va analyser
                         et extraire automatiquement vos informations.
                       </p>
                     </div>
@@ -387,7 +387,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                       )}
                       {isValidUrl && (
                         <p className="text-green-600 text-sm mt-1 flex items-center gap-1">
-                          <span>?</span> URL valide
+                          <span>‚úì</span> URL valide
                         </p>
                       )}
                     </div>
@@ -395,32 +395,32 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                     {/* What will be extracted */}
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <h4 className="font-semibold text-blue-900 mb-3">
-                        ?? Ce qui sera extrait automatiquement :
+                        ü§ñ Ce qui sera extrait automatiquement :
                       </h4>
                       <ul className="space-y-2 text-sm text-blue-800">
                         <li className="flex items-center gap-2">
-                          <span className="text-blue-600">ï</span>
+                          <span className="text-blue-600">‚Ä¢</span>
                           Nom de l'entreprise et logo
                         </li>
                         <li className="flex items-center gap-2">
-                          <span className="text-blue-600">ï</span>
-                          Description et prÈsentation
+                          <span className="text-blue-600">‚Ä¢</span>
+                          Description et pr√©sentation
                         </li>
                         <li className="flex items-center gap-2">
-                          <span className="text-blue-600">ï</span>
+                          <span className="text-blue-600">‚Ä¢</span>
                           Produits et services
                         </li>
                         <li className="flex items-center gap-2">
-                          <span className="text-blue-600">ï</span>
+                          <span className="text-blue-600">‚Ä¢</span>
                           Images et galerie photos
                         </li>
                         <li className="flex items-center gap-2">
-                          <span className="text-blue-600">ï</span>
-                          Liens rÈseaux sociaux
+                          <span className="text-blue-600">‚Ä¢</span>
+                          Liens r√©seaux sociaux
                         </li>
                         <li className="flex items-center gap-2">
-                          <span className="text-blue-600">ï</span>
-                          CoordonnÈes de contact
+                          <span className="text-blue-600">‚Ä¢</span>
+                          Coordonn√©es de contact
                         </li>
                       </ul>
                     </div>
@@ -436,12 +436,12 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                         {isLoading ? (
                           <>
                             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
-                            CrÈation en cours...
+                            Cr√©ation en cours...
                           </>
                         ) : (
                           <>
                             <Sparkles className="mr-2 h-5 w-5" />
-                            CrÈer Automatiquement
+                            Cr√©er Automatiquement
                             <ArrowRight className="ml-2 h-5 w-5" />
                           </>
                         )}
@@ -461,21 +461,21 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                         onClick={() => setMode('choice')}
                         className="text-blue-600 hover:text-blue-700 text-sm font-medium mb-4"
                       >
-                        ? Retour aux options
+                        ‚Üê Retour aux options
                       </button>
 
                       <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                        CrÈation Manuelle
+                        Cr√©ation Manuelle
                       </h3>
                       <p className="text-gray-600 mb-6">
-                        Vous allez Ítre redirigÈ vers notre Èditeur guidÈ pour crÈer
-                        votre mini-site Ètape par Ètape.
+                        Vous allez √™tre redirig√© vers notre √©diteur guid√© pour cr√©er
+                        votre mini-site √©tape par √©tape.
                       </p>
                     </div>
 
                     <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                       <h4 className="font-semibold text-gray-900 mb-3">
-                        ?? …tapes de crÈation :
+                        üìù √âtapes de cr√©ation :
                       </h4>
                       <ol className="space-y-2 text-sm text-gray-700">
                         <li className="flex gap-3">
@@ -484,7 +484,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                         </li>
                         <li className="flex gap-3">
                           <span className="font-bold text-blue-600">2.</span>
-                          <span>Personnalisation du thËme (couleurs, polices)</span>
+                          <span>Personnalisation du th√®me (couleurs, polices)</span>
                         </li>
                         <li className="flex gap-3">
                           <span className="font-bold text-blue-600">3.</span>
@@ -492,11 +492,11 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                         </li>
                         <li className="flex gap-3">
                           <span className="font-bold text-blue-600">4.</span>
-                          <span>Upload d'images et mÈdias</span>
+                          <span>Upload d'images et m√©dias</span>
                         </li>
                         <li className="flex gap-3">
                           <span className="font-bold text-blue-600">5.</span>
-                          <span>PrÈvisualisation et publication</span>
+                          <span>Pr√©visualisation et publication</span>
                         </li>
                       </ol>
                     </div>
@@ -515,7 +515,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
                           </>
                         ) : (
                           <>
-                            Commencer la CrÈation
+                            Commencer la Cr√©ation
                             <ArrowRight className="ml-2 h-5 w-5" />
                           </>
                         )}

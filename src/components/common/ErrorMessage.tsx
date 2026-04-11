@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { AlertCircle, X } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 
@@ -88,3 +88,4 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     </div>
   );
 };
+

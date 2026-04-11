@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Hook pour gérer la traduction des articles
  * Version optimisée: Utilise les colonnes title_en/excerpt_en/content_en de Supabase
  */
@@ -41,3 +41,4 @@ export function useArticleTranslation(article: any): TranslatedArticle {
     };
   }, [article, currentLanguage]);
 }
+

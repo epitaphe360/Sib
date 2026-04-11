@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+ï»¿import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -93,7 +93,7 @@ export default function ExhibitorSignUpPage() {
   // Debug: Log validation errors quand ils changent
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
-      console.log('?? Erreurs de validation:', errors);
+      console.log('ðŸ”´ Erreurs de validation:', errors);
     }
   }, [errors]);
 
@@ -111,14 +111,14 @@ export default function ExhibitorSignUpPage() {
   // Email validation
   const { suggestion: emailSuggestion } = useEmailValidation(watchedFields.email || '');
 
-  // Options pour les secteurs d'activité
+  // Options pour les secteurs d'activitÃ©
   const sectorsOptions = [
     { value: 'technologie', label: 'Technologie' },
     { value: 'logistique', label: 'Logistique' },
-    { value: 'media', label: 'Média' },
+    { value: 'media', label: 'MÃ©dia' },
     { value: 'finance', label: 'Finance' },
-    { value: 'sante', label: 'Santé' },
-    { value: 'education', label: 'Éducation' },
+    { value: 'sante', label: 'SantÃ©' },
+    { value: 'education', label: 'Ã‰ducation' },
     { value: 'tourisme', label: 'Tourisme' },
     { value: 'agriculture', label: 'Agriculture' },
     { value: 'industrie', label: 'Industrie' },
@@ -131,7 +131,7 @@ export default function ExhibitorSignUpPage() {
   useEffect(() => {
     const draft = loadFromLocalStorage();
     if (draft && Object.keys(draft).length > 0) {
-      const loadDraft = window.confirm('Un brouillon a été trouvé. Voulez-vous le restaurer ?');
+      const loadDraft = window.confirm('Un brouillon a Ã©tÃ© trouvÃ©. Voulez-vous le restaurer ?');
       if (loadDraft) {
         Object.entries(draft).forEach(([key, value]) => {
           setValue(key as keyof ExhibitorSignUpFormValues, value);
@@ -142,7 +142,7 @@ export default function ExhibitorSignUpPage() {
     }
   }, [loadFromLocalStorage, clearLocalStorage, setValue]);
 
-  // Fonction pour calculer les étapes de progression
+  // Fonction pour calculer les Ã©tapes de progression
   const getProgressSteps = () => {
     const steps = [
       {
@@ -167,7 +167,7 @@ export default function ExhibitorSignUpPage() {
       },
       {
         id: '5',
-        label: 'Sécurité',
+        label: 'SÃ©curitÃ©',
         completed: !!(watchedFields.password && watchedFields.confirmPassword && watchedFields.password === watchedFields.confirmPassword),
       },
       {
@@ -184,19 +184,19 @@ export default function ExhibitorSignUpPage() {
   };
 
   const handlePreviewSubmit = () => {
-    console.log('?? handlePreviewSubmit: Ouverture preview modal');
+    console.log('ðŸŸ¡ handlePreviewSubmit: Ouverture preview modal');
     setShowPreview(true);
   };
 
   const onSubmit: SubmitHandler<ExhibitorSignUpFormValues> = async (data) => {
-    console.log('?? onSubmit APPELÉ! Données:', { email: data.email, firstName: data.firstName, company: data.companyName });
+    console.log('ðŸŸ¢ onSubmit APPELÃ‰! DonnÃ©es:', { email: data.email, firstName: data.firstName, company: data.companyName });
     setIsLoading(true);
     const { email, password, confirmPassword, acceptTerms, acceptPrivacy, sectors, standArea, subscriptionLevel, subscriptionPrice, ...profileData } = data;
 
     const finalProfileData = {
       ...profileData,
-      sectors: sectors,         // Tableau JSON — permet filtrage et édition
-      sector: sectors.join(', '), // Chaîne lisible pour affichage rétrocompatible
+      sectors: sectors,         // Tableau JSON â€” permet filtrage et Ã©dition
+      sector: sectors.join(', '), // ChaÃ®ne lisible pour affichage rÃ©trocompatible
       role: 'exhibitor' as const,
       status: 'pending' as const,
       standArea, // Ajouter la surface du stand
@@ -210,9 +210,9 @@ export default function ExhibitorSignUpPage() {
         throw error;
       }
 
-      //  Créer la demande de paiement
+      //  CrÃ©er la demande de paiement
       if (userData?.user?.id) {
-        // Générer référence de paiement unique
+        // GÃ©nÃ©rer rÃ©fÃ©rence de paiement unique
         const paymentReference = `EXH-2026-${userData.user.id.substring(0, 8).toUpperCase()}`;
 
         const { error: paymentError } = await supabase
@@ -224,18 +224,18 @@ export default function ExhibitorSignUpPage() {
             status: 'pending',
             payment_method: 'bank_transfer',
             reference: paymentReference,
-            description: `Abonnement Exposant SIB 2026 - ${subscriptionLevel} (${standArea}mÂ²)`,
+            description: `Abonnement Exposant SIB 2026 - ${subscriptionLevel} (${standArea}mÃ‚Â²)`,
             metadata: {
               subscriptionLevel,
               standArea,
               eventName: 'SIB 2026',
-              eventDates: '5-7 Février 2026'
+              eventDates: '5-7 FÃ©vrier 2026'
             }
           });
 
         if (paymentError) {
-          console.error('Erreur création demande paiement:', paymentError);
-          // Ne pas bloquer l'inscription si la création de paiement échoue
+          console.error('Erreur crÃ©ation demande paiement:', paymentError);
+          // Ne pas bloquer l'inscription si la crÃ©ation de paiement Ã©choue
         }
 
         //  Envoyer email avec instructions de paiement
@@ -254,15 +254,15 @@ export default function ExhibitorSignUpPage() {
           });
 
           if (emailError) {
-            console.warn('âš ï¸ Email de paiement non envoyé:', emailError);
-            // Ne pas bloquer si l'email échoue
+            console.warn('Ã¢Å¡Â Ã¯Â¸Â Email de paiement non envoyÃ©:', emailError);
+            // Ne pas bloquer si l'email Ã©choue
           }
         } catch (emailError) {
-          console.warn('âš ï¸ Edge function email non disponible:', emailError);
+          console.warn('Ã¢Å¡Â Ã¯Â¸Â Edge function email non disponible:', emailError);
         }
       }
 
-      // Supprimer le brouillon après succès
+      // Supprimer le brouillon aprÃ¨s succÃ¨s
       clearLocalStorage();
 
       toast.success(
@@ -276,7 +276,7 @@ export default function ExhibitorSignUpPage() {
       let errorMessage = t.toastSignUpError;
       if (error instanceof Error) {
         if (error.message.includes('already registered') || error.message.includes('already exists')) {
-          errorMessage = 'Cette adresse email est déjà utilisée. Veuillez vous connecter ou utiliser une autre adresse.';
+          errorMessage = 'Cette adresse email est dÃ©jÃ  utilisÃ©e. Veuillez vous connecter ou utiliser une autre adresse.';
         } else {
           errorMessage = error.message;
         }
@@ -296,7 +296,7 @@ export default function ExhibitorSignUpPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Sélecteur de langue */}
+        {/* SÃ©lecteur de langue */}
         <div className="flex justify-end gap-2">
           {(['fr', 'en'] as Language[]).map((lang) => (
             <button
@@ -320,7 +320,7 @@ export default function ExhibitorSignUpPage() {
             Inscription Exposant SIB 2026
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Rejoignez notre écosystème et présentez vos produits et services.
+            Rejoignez notre Ã©cosystÃ¨me et prÃ©sentez vos produits et services.
           </p>
         </div>
 
@@ -331,7 +331,7 @@ export default function ExhibitorSignUpPage() {
 
         <Card className="p-8">
           <form onSubmit={handleSubmit(handlePreviewSubmit)} className="space-y-8">
-            {/* Section 0: Sélection d'abonnement */}
+            {/* Section 0: SÃ©lection d'abonnement */}
             <div className="space-y-6">
               <SubscriptionSelector
                 selectedLevel={watchedFields.subscriptionLevel as ExhibitorLevel}
@@ -371,13 +371,13 @@ export default function ExhibitorSignUpPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="sectors">Secteur(s) d'activité *</Label>
+                  <Label htmlFor="sectors">Secteur(s) d'activitÃ© *</Label>
                   <MultiSelect
-                    label="Secteurs d'activité"
+                    label="Secteurs d'activitÃ©"
                     options={sectorsOptions}
                     selectedValues={watchedFields.sectors || []}
                     onChange={(values) => setValue('sectors', values)}
-                    placeholder="Sélectionnez vos secteurs d'activité"
+                    placeholder="SÃ©lectionnez vos secteurs d'activitÃ©"
                     maxSelections={3}
                   />
                   {errors.sectors && <p className="text-red-500 text-xs mt-1">{errors.sectors.message}</p>}
@@ -391,7 +391,7 @@ export default function ExhibitorSignUpPage() {
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10 pointer-events-none" />
                     <Select onValueChange={(value: string) => setValue('country', value)} defaultValue="">
                       <SelectTrigger id="country" className="pl-10">
-                        <SelectValue placeholder="Sélectionnez votre pays" />
+                        <SelectValue placeholder="SÃ©lectionnez votre pays" />
                       </SelectTrigger>
                       <SelectContent>
                         {countries.map((country) => (
@@ -429,11 +429,11 @@ export default function ExhibitorSignUpPage() {
                   {...register('companyDescription')} 
                   rows={4}
                   maxLength={MAX_DESCRIPTION_LENGTH}
-                  placeholder="Décrivez votre organisation, vos activités et vos objectifs pour SIB 2026." 
+                  placeholder="DÃ©crivez votre organisation, vos activitÃ©s et vos objectifs pour SIB 2026." 
                 />
                 {errors.companyDescription && <p className="text-red-500 text-xs mt-1">{errors.companyDescription.message}</p>}
                 <p className="text-xs text-gray-500 mt-1">
-                  {watchedFields.companyDescription?.length || 0} / {MAX_DESCRIPTION_LENGTH} caractères
+                  {watchedFields.companyDescription?.length || 0} / {MAX_DESCRIPTION_LENGTH} caractÃ¨res
                 </p>
               </div>
             </div>
@@ -446,11 +446,11 @@ export default function ExhibitorSignUpPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <Label htmlFor="firstName">Prénom *</Label>
+                  <Label htmlFor="firstName">PrÃ©nom *</Label>
                   <Input 
                     id="firstName" 
                     {...register('firstName')} 
-                    placeholder="Votre prénom"
+                    placeholder="Votre prÃ©nom"
                     autoComplete="given-name"
                   />
                   {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName.message}</p>}
@@ -482,10 +482,10 @@ export default function ExhibitorSignUpPage() {
               </div>
             </div>
 
-            {/* Section 3: Coordonnées de contact */}
+            {/* Section 3: CoordonnÃ©es de contact */}
             <div className="space-y-6 border-t pt-6">
               <h3 className="text-xl font-semibold text-gray-900 pb-3">
-                Coordonnées de contact
+                CoordonnÃ©es de contact
               </h3>
 
               <div>
@@ -526,7 +526,7 @@ export default function ExhibitorSignUpPage() {
               </div>
 
               <div>
-                <Label htmlFor="phone">Téléphone professionnel *</Label>
+                <Label htmlFor="phone">TÃ©lÃ©phone professionnel *</Label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <Input 
@@ -542,10 +542,10 @@ export default function ExhibitorSignUpPage() {
               </div>
             </div>
 
-            {/* Section 4: Sécurité */}
+            {/* Section 4: SÃ©curitÃ© */}
             <div className="space-y-6 border-t pt-6">
               <h3 className="text-xl font-semibold text-gray-900 pb-3">
-                Informations de sécurité
+                Informations de sÃ©curitÃ©
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -557,7 +557,7 @@ export default function ExhibitorSignUpPage() {
                       id="password" 
                       type="password" 
                       {...register('password')} 
-                      placeholder="Créez un mot de passe sécurisé" 
+                      placeholder="CrÃ©ez un mot de passe sÃ©curisÃ©" 
                       className="pl-10"
                       autoComplete="new-password"
                     />
@@ -585,7 +585,7 @@ export default function ExhibitorSignUpPage() {
 
             {/* CGU et RGPD */}
             <div className="space-y-4 border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900">Conditions Générales</h3>
+              <h3 className="text-lg font-medium text-gray-900">Conditions GÃ©nÃ©rales</h3>
               
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
@@ -599,7 +599,7 @@ export default function ExhibitorSignUpPage() {
                     <label htmlFor="acceptTerms" className="text-sm text-gray-700 cursor-pointer">
                       J'accepte les{' '}
                       <Link to={ROUTES.TERMS} target="_blank" className="text-primary-600 hover:text-primary-700 underline">
-                        Conditions Générales d'Utilisation
+                        Conditions GÃ©nÃ©rales d'Utilisation
                       </Link>
                       {' '}de SIB 2026 *
                     </label>
@@ -618,9 +618,9 @@ export default function ExhibitorSignUpPage() {
                     <label htmlFor="acceptPrivacy" className="text-sm text-gray-700 cursor-pointer">
                       J'accepte la{' '}
                       <Link to={ROUTES.PRIVACY} target="_blank" className="text-primary-600 hover:text-primary-700 underline">
-                        Politique de Confidentialité
+                        Politique de ConfidentialitÃ©
                       </Link>
-                      {' '}et consent au traitement de mes données personnelles conformément au RGPD *
+                      {' '}et consent au traitement de mes donnÃ©es personnelles conformÃ©ment au RGPD *
                     </label>
                     {errors.acceptPrivacy && <p className="text-red-500 text-xs mt-1">{errors.acceptPrivacy.message}</p>}
                   </div>
@@ -629,7 +629,7 @@ export default function ExhibitorSignUpPage() {
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-xs text-blue-900">
-                  <strong>Protection de vos données :</strong> Vos informations personnelles sont sécurisées et ne seront jamais partagées avec des tiers sans votre consentement. Vous pouvez exercer vos droits d'accès, de rectification et de suppression à tout moment.
+                  <strong>Protection de vos donnÃ©es :</strong> Vos informations personnelles sont sÃ©curisÃ©es et ne seront jamais partagÃ©es avec des tiers sans votre consentement. Vous pouvez exercer vos droits d'accÃ¨s, de rectification et de suppression Ã  tout moment.
                 </p>
               </div>
             </div>
@@ -641,13 +641,13 @@ export default function ExhibitorSignUpPage() {
                 disabled={isLoading}
                 variant="default"
               >
-                {isLoading ? 'Envoi en cours...' : "Prévisualiser et soumettre"}
+                {isLoading ? 'Envoi en cours...' : "PrÃ©visualiser et soumettre"}
               </Button>
               
               {watchedFields && Object.keys(watchedFields).length > 0 && (
                 <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
                   <Save className="h-3 w-3" />
-                  <span>Brouillon enregistré automatiquement</span>
+                  <span>Brouillon enregistrÃ© automatiquement</span>
                 </div>
               )}
 
@@ -657,7 +657,7 @@ export default function ExhibitorSignUpPage() {
             </div>
           </form>
 
-          {/* Modal de prévisualisation */}
+          {/* Modal de prÃ©visualisation */}
           <PreviewModal
             isOpen={showPreview}
             onClose={() => setShowPreview(false)}
@@ -666,10 +666,10 @@ export default function ExhibitorSignUpPage() {
           />
         </Card>
 
-        {/* Séparateur "OU" */}
+        {/* SÃ©parateur "OU" */}
         <div className="text-center">
           <p className="text-sm text-gray-600">
-            Déjà un compte ?{' '}
+            DÃ©jÃ  un compte ?{' '}
             <Link to={ROUTES.LOGIN} className="font-medium text-primary-600 hover:text-primary-700 underline">
               Connectez-vous
             </Link>

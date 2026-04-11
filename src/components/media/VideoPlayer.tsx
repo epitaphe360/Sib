@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Composant VideoPlayer personnalisé
  * Pour webinaires, capsules vidéo, live studio, etc.
  */
@@ -310,3 +310,4 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 };
 
 export default VideoPlayer;
+

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Hook personnalisé pour récupérer du contenu depuis Supabase
  * Remplace progressivement WordPress comme source de contenu
  */
@@ -154,3 +154,4 @@ export function useSupabasePage(slug: string) {
     refetch
   };
 }
+

@@ -1,5 +1,5 @@
 /**
- * Page des Webinaires sib
+ * Page des Webinaires SIB
  * Affiche tous les webinaires sponsorisés disponibles en replay
  */
 

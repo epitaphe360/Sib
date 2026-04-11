@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { MultiImageUploader } from '../../ui/upload';
 
 interface MiniSiteGalleryEditorProps {
@@ -115,3 +115,4 @@ const MiniSiteGalleryEditor: React.FC<MiniSiteGalleryEditorProps> = ({
 };
 
 export default MiniSiteGalleryEditor;
+

@@ -14,13 +14,13 @@ export const BANK_TRANSFER_INFO = {
   // Montants
   amounts: {
     premium: {
-      amount: 7000.00,
-      currency: 'MAD',
+      amount: 700.00,
+      currency: 'EUR',
       description: 'Pass Premium VIP - Accès 3 jours All Inclusive'
     },
     free: {
       amount: 0.00,
-      currency: 'MAD',
+      currency: 'EUR',
       description: 'Pass Gratuit - Inscription immédiate sans paiement'
     }
   },
@@ -31,14 +31,14 @@ export const BANK_TRANSFER_INFO = {
       title: 'Instructions de virement bancaire',
       steps: [
         'Effectuez le virement depuis votre banque en ligne ou en agence',
-        'Montant exact: 7 000,00 MAD',
+        'Montant exact: 700,00 EUR',
         'Référence obligatoire: Votre ID de demande (fourni après soumission)',
         'Délai de traitement: 2-3 jours ouvrés',
         'Après validation par l\'administrateur, votre compte sera automatiquement mis à niveau'
       ],
       important: [
         '⚠️ Assurez-vous d\'indiquer la référence de paiement dans le virement',
-        '⚠️ Le montant doit être exact (7 000,00 MAD)',
+        '⚠️ Le montant doit être exact (700,00 EUR)',
         '⚠️ Conservez votre preuve de virement (screenshot ou PDF)',
         '⚠️ Vous pourrez suivre l\'état de votre demande dans votre profil'
       ]
@@ -47,7 +47,7 @@ export const BANK_TRANSFER_INFO = {
       title: 'Bank Transfer Instructions',
       steps: [
         'Make the transfer from your online banking or at your bank branch',
-        'Exact amount: 7,000.00 MAD',
+        'Exact amount: 700.00 EUR',
         'Mandatory reference: Your request ID (provided after submission)',
         'Processing time: 2-3 business days',
         'After admin validation, your account will be automatically upgraded'
@@ -71,19 +71,19 @@ export const BANK_TRANSFER_INFO = {
 
 /**
  * Générer la référence de paiement pour un utilisateur
- * Format: sib-{USER_ID_SHORT}-{TIMESTAMP}
+ * Format: SIB-{USER_ID_SHORT}-{TIMESTAMP}
  */
 export function generatePaymentReference(userId: string, requestId: string): string {
   const userShort = userId.substring(0, 8).toUpperCase();
   const requestShort = requestId.substring(0, 8).toUpperCase();
   const timestamp = Date.now().toString().substring(-6);
-  return `sib-${userShort}-${requestShort}-${timestamp}`;
+  return `SIB-${userShort}-${requestShort}-${timestamp}`;
 }
 
 /**
  * Valider le format d'une référence de paiement
  */
 export function validatePaymentReference(reference: string): boolean {
-  const pattern = /^sib-[A-F0-9]{8}-[A-F0-9]{8}-\d{6}$/;
+  const pattern = /^SIB-[A-F0-9]{8}-[A-F0-9]{8}-\d{6}$/;
   return pattern.test(reference);
 }

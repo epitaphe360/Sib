@@ -56,6 +56,11 @@ interface PartnerUI {
   enrichedData?: Record<string, unknown>;
 }
 
+interface PartnersPageResult {
+  items: PartnerUI[];
+  total: number;
+}
+
 interface ProductDB {
   id: string;
   exhibitor_id: string;
@@ -114,6 +119,11 @@ interface ExhibitorDB {
   user?: { profile: { standNumber?: string } }; // Ajout du champ user pour le standNumber
 }
 
+interface ExhibitorsPageResult {
+  items: Exhibitor[];
+  total: number;
+}
+
 interface MiniSiteDB {
   id: string;
   exhibitor_id: string;
@@ -123,6 +133,11 @@ interface MiniSiteDB {
   published: boolean;
   views: number;
   last_updated: string;
+}
+
+interface EventsPageResult {
+  items: Event[];
+  total: number;
 }
 
 interface AnalyticsData {
@@ -456,6 +471,62 @@ export class SupabaseService {
   }
 
   // ==================== EXHIBITORS ====================
+  static async getExhibitorsPaginated(options?: {
+    limit?: number;
+    offset?: number;
+  }): Promise<ExhibitorsPageResult> {
+    if (!this.checkSupabaseConnection()) {
+      console.warn('⚠️ Supabase non configuré - aucun exposant disponible');
+      return { items: [], total: 0 };
+    }
+
+    const safeSupabase = supabase!;
+    const limit = options?.limit ?? 24;
+    const offset = options?.offset ?? 0;
+
+    try {
+      const { data: exhibitorsData, error: exhibitorsError, count } = await safeSupabase
+        .from('exhibitors')
+        .select(
+          `
+          id,
+          user_id,
+          company_name,
+          category,
+          sector,
+          description,
+          logo_url,
+          website,
+          verified,
+          featured,
+          stand_number,
+          contact_info,
+          mini_site:mini_sites!mini_sites_exhibitor_id_fkey(published)
+        `,
+          { count: 'exact' }
+        )
+        .order('company_name', { ascending: true })
+        .range(offset, offset + limit - 1);
+
+      if (exhibitorsError) {
+        console.error('❌ Erreur chargement exposants (paginé):', exhibitorsError.message);
+        return { items: [], total: 0 };
+      }
+
+      const items = (exhibitorsData || []).map((e: object) => {
+        return this.transformExhibitorDBToExhibitor(e as ExhibitorDB);
+      });
+
+      return {
+        items,
+        total: count ?? 0,
+      };
+    } catch (error) {
+      console.error('❌ Erreur critique getExhibitorsPaginated:', error);
+      return { items: [], total: 0 };
+    }
+  }
+
   static async getExhibitors(): Promise<Exhibitor[]> {
     if (!this.checkSupabaseConnection()) {
       console.warn('⚠️ Supabase non configuré - aucun exposant disponible');
@@ -600,6 +671,76 @@ export class SupabaseService {
   }
 
   // ==================== PARTNERS ====================
+  static async getPartnersPaginated(options?: {
+    limit?: number;
+    offset?: number;
+  }): Promise<PartnersPageResult> {
+    if (!this.checkSupabaseConnection()) {
+      console.warn('⚠️ Supabase non configuré - aucun partenaire disponible');
+      return { items: [], total: 0 };
+    }
+
+    const safeSupabase = supabase!;
+    const limit = options?.limit ?? 24;
+    const offset = options?.offset ?? 0;
+
+    try {
+      const { data, error, count } = await safeSupabase
+        .from('partners')
+        .select(
+          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, benefits, contact_info, views, created_at`,
+          { count: 'exact' }
+        )
+        .eq('is_published', true)
+        .order('partner_type')
+        .range(offset, offset + limit - 1);
+
+      if (error) throw error;
+
+      const items = (data || []).map((partner: PartnerDB) => ({
+        id: partner.id,
+        name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
+        partner_tier: (typeof partner.partnership_level === 'object' && partner.partnership_level !== null)
+          ? ((partner.partnership_level as any).level || (partner.partnership_level as any).name || 'silver')
+          : (typeof partner.partnership_level === 'string' ? partner.partnership_level : (typeof partner.partner_type === 'string' ? partner.partner_type : 'silver')),
+        category: (typeof partner.partner_type === 'object') ? 'Partenaire' : partner.partner_type,
+        sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
+        description: typeof partner.description === 'string' ? partner.description : '',
+        logo: partner.logo_url,
+        website: partner.website,
+        country: partner.contact_info?.country || '',
+        verified: partner.verified,
+        featured: partner.featured,
+        views: partner.views || 0,
+        contributions: Array.isArray(partner.benefits)
+          ? partner.benefits.map((benefit: any) =>
+              typeof benefit === 'object' && benefit !== null
+                ? (benefit.name || benefit.description || String(benefit))
+                : String(benefit)
+            )
+          : [],
+        establishedYear: 2024,
+        employees: '1-10',
+        createdAt: new Date(partner.created_at),
+        updatedAt: new Date(partner.created_at)
+      }));
+
+      return { items, total: count ?? 0 };
+    } catch (error) {
+      try {
+        const errorInfo = error as ErrorInfo & { hint?: string };
+        console.error('Erreur lors de la récupération paginée des partenaires:', {
+          message: errorInfo?.message || String(error),
+          details: errorInfo?.details || errorInfo?.hint || null,
+          raw: JSON.stringify(error)
+        });
+      } catch (e) {
+        console.error('Erreur lors de la récupération paginée des partenaires (raw):', error);
+      }
+      return { items: [], total: 0 };
+    }
+  }
+
   static async getPartners(): Promise<PartnerUI[]> {
     if (!this.checkSupabaseConnection()) {
       console.warn('⚠️ Supabase non configuré - aucun partenaire disponible');
@@ -723,7 +864,7 @@ export class SupabaseService {
           ? ((data.partnership_level as any).level || (data.partnership_level as any).name || 'silver')
           : (typeof data.partnership_level === 'string' ? data.partnership_level : (typeof data.partner_type === 'string' ? data.partner_type : 'silver')),
         category: (typeof data.partner_type === 'object') ? 'Partenaire' : data.partner_type,
-        sector: typeof data.sector === 'string' ? data.sector : 'Maritime',
+        sector: typeof data.sector === 'string' ? data.sector : 'Bâtiment',
         description: typeof data.description === 'string' ? data.description : '',
         longDescription: typeof data.description === 'string' ? data.description : fallbackData.longDescription,
         logo: data.logo_url,
@@ -1499,6 +1640,37 @@ export class SupabaseService {
         console.error('Erreur récupération événements:', error);
       }
       return [];
+    }
+  }
+
+  static async getEventsPaginated(options?: {
+    limit?: number;
+    offset?: number;
+  }): Promise<EventsPageResult> {
+    if (!this.checkSupabaseConnection()) return { items: [], total: 0 };
+
+    const safeSupabase = supabase!;
+    const limit = options?.limit ?? 20;
+    const offset = options?.offset ?? 0;
+
+    try {
+      const { data, error, count } = await safeSupabase
+        .from('events')
+        .select('*', { count: 'exact' })
+        .order('event_date', { ascending: true })
+        .range(offset, offset + limit - 1);
+
+      if (error) throw error;
+
+      return {
+        items: (data || []).map((event: EventDB) => this.transformEventDBToEvent(event)),
+        total: count ?? 0,
+      };
+    } catch (error) {
+      if (error instanceof Error && !error.message.includes('Failed to fetch')) {
+        console.error('Erreur récupération événements paginés:', error);
+      }
+      return { items: [], total: 0 };
     }
   }
 
@@ -3093,7 +3265,7 @@ export class SupabaseService {
               .insert({
                 user_id: userId,
                 company_name: companyName,
-                sector: user.profile?.sector || 'Maritime Services',
+                sector: user.profile?.sector || 'Bâtiment Services',
                 description: 'Profil créé automatiquement',
                 contact_info: { email: user.email, name: userName },
                 category: 'port-industry',

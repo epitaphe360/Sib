@@ -47,10 +47,13 @@ export default function NewsPage() {
     articles,
     featuredArticles,
     categories,
+    totalArticles,
+    hasMore,
     isLoading,
     selectedCategory,
     searchTerm,
     fetchNews,
+    loadMoreNews,
     fetchFromOfficialSite,
     setCategory,
     setSearchTerm,
@@ -60,7 +63,7 @@ export default function NewsPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    fetchNews();
+    fetchNews(true);
   }, [fetchNews]);
 
   const filteredArticles = getFilteredArticles().map(a => getTranslatedArticle(a, t));
@@ -81,10 +84,10 @@ export default function NewsPage() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      '…vÈnement': 'bg-blue-100 text-blue-800',
+      '√âv√©nement': 'bg-blue-100 text-blue-800',
       'Innovation': 'bg-purple-100 text-purple-800',
       'Partenariat': 'bg-green-100 text-green-800',
-      'DurabilitÈ': 'bg-emerald-100 text-emerald-800',
+      'Durabilit√©': 'bg-emerald-100 text-emerald-800',
       'Formation': 'bg-orange-100 text-orange-800',
       'Commerce': 'bg-indigo-100 text-indigo-800'
     };
@@ -99,7 +102,7 @@ export default function NewsPage() {
       if (result && result.success) {
         const { inserted, updated, total } = result.stats;
         toast.success(
-          `? ${inserted} ${t('common.new')}, ${updated} ${t('common.updated')} / ${total}`,
+          `‚úÖ ${inserted} ${t('common.new')}, ${updated} ${t('common.updated')} / ${total}`,
           { id: 'sync-articles', duration: 5000 }
         );
       } else {
@@ -125,10 +128,10 @@ export default function NewsPage() {
             className="text-center mb-8"
           >
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              ActualitÈs Portuaires SIB
+              Actualit√©s du B√¢timent SIB
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Restez informÈ des derniËres nouvelles du secteur portuaire et des actualitÈs SIB 2026
+              Restez inform√© des derni√®res nouvelles du secteur du b√¢timent et des actualit√©s SIB 2026
             </p>
           </motion.div>
 
@@ -138,7 +141,7 @@ export default function NewsPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher dans les actualitÈs..."
+                placeholder="Rechercher dans les actualit√©s..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -186,7 +189,7 @@ export default function NewsPage() {
                       : 'bg-white text-gray-600 hover:bg-gray-100'
                   }`}
                 >
-                  Toutes les catÈgories
+                  Toutes les cat√©gories
                 </button>
                 {categories.map((category) => (
                   <button
@@ -213,7 +216,7 @@ export default function NewsPage() {
         {featuredArticles.length > 0 && !selectedCategory && !searchTerm && (
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              ¿ la Une
+              √Ä la Une
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {featuredArticles.slice(0, 2).map((article, index) => (
@@ -235,8 +238,8 @@ export default function NewsPage() {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900">
-              {selectedCategory || searchTerm ? 'RÈsultats' : 'Toutes les ActualitÈs'} 
-              ({filteredArticles.length})
+              {selectedCategory || searchTerm ? 'R√©sultats' : 'Toutes les Actualit√©s'} 
+              ({filteredArticles.length}/{totalArticles || filteredArticles.length})
             </h2>
             
             {(selectedCategory || searchTerm) && (
@@ -248,7 +251,7 @@ export default function NewsPage() {
                   setSearchTerm(CONFIG.defaults.searchTerm);
                 }}
               >
-                RÈinitialiser les filtres
+                R√©initialiser les filtres
               </Button>
             )}
           </div>
@@ -274,31 +277,40 @@ export default function NewsPage() {
                 <Search className="h-12 w-12 text-gray-400" />
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Aucune actualitÈ trouvÈe
+                Aucune actualit√© trouv√©e
               </h3>
               <p className="text-gray-600 mb-4">
-                Essayez de modifier vos critËres de recherche
+                Essayez de modifier vos crit√®res de recherche
               </p>
               <Button variant="default" onClick={() => {
                 setCategory(CONFIG.defaults.category);
                 setSearchTerm(CONFIG.defaults.searchTerm);
               }}>
-                Voir toutes les actualitÈs
+                Voir toutes les actualit√©s
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredArticles.map((article, index) => (
-                <ArticleCard
-                  key={article.id}
-                  article={article}
-                  featured={false}
-                  index={index}
-                  getCategoryColor={getCategoryColor}
-                  formatDate={formatDate}
-                  formatReadTime={formatReadTime}
-                />
-              ))}
+            <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredArticles.map((article, index) => (
+                  <ArticleCard
+                    key={article.id}
+                    article={article}
+                    featured={false}
+                    index={index}
+                    getCategoryColor={getCategoryColor}
+                    formatDate={formatDate}
+                    formatReadTime={formatReadTime}
+                  />
+                ))}
+              </div>
+              {hasMore && !selectedCategory && !searchTerm && (
+                <div className="mt-8 flex justify-center">
+                  <Button onClick={loadMoreNews} disabled={isLoading}>
+                    {isLoading ? 'Chargement...' : 'Charger plus'}
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -313,11 +325,11 @@ export default function NewsPage() {
           <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
             <div className="p-8 text-center">
               <h3 className="text-2xl font-bold mb-4">
-                Restez informÈ des actualitÈs SIB
+                Restez inform√© des actualit√©s SIB
               </h3>
               <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-                Recevez les derniËres nouvelles du secteur portuaire et les actualitÈs 
-                exclusives de SIB 2026 directement dans votre boÓte mail
+                Recevez les derni√®res nouvelles du secteur du b√¢timent et les actualit√©s 
+                exclusives de SIB 2026 directement dans votre bo√Æte mail
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
@@ -342,7 +354,7 @@ export default function NewsPage() {
                       toast.error('Veuillez saisir une adresse email valide');
                       return;
                     }
-                    toast.success(`Inscription newsletter rÈussie !\nEmail: ${email}`);
+                    toast.success(`Inscription newsletter r√©ussie !\nEmail: ${email}`);
                     emailInput.value = '';
                   }}
                 >
@@ -351,7 +363,7 @@ export default function NewsPage() {
               </div>
               
               <p className="text-xs text-blue-200 mt-4">
-                Newsletter hebdomadaire ï DÈsabonnement facile ï DonnÈes protÈgÈes
+                Newsletter hebdomadaire ‚Ä¢ D√©sabonnement facile ‚Ä¢ Donn√©es prot√©g√©es
               </p>
             </div>
           </Card>
@@ -373,13 +385,13 @@ export default function NewsPage() {
               
               <div className="flex flex-wrap gap-2">
                 {[
-                  'Digitalisation portuaire',
+                  'Digitalisation b√¢timent',
                   'Ports durables',
                   'Intelligence artificielle',
                   'Automatisation',
-                  'Blockchain maritime',
-                  '…nergies renouvelables',
-                  'Formation maritime',
+                  'BIM & PropTech',
+                  '√ânergies renouvelables',
+                  'Formation BTP',
                   'Partenariats internationaux'
                 ].map((topic) => (
                   <button
@@ -430,7 +442,7 @@ export default function NewsPage() {
               <div className="text-2xl font-bold text-gray-900 mb-1">
                 {categories.length}
               </div>
-              <div className="text-sm text-gray-600">CatÈgories</div>
+              <div className="text-sm text-gray-600">Cat√©gories</div>
             </Card>
 
             <Card className="text-center p-6">
@@ -438,7 +450,7 @@ export default function NewsPage() {
                 <Globe className="h-6 w-6 text-orange-600" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">
-                {articles.filter(a => a.source === 'SIB').length}
+                {articles.filter(a => a.source === 'sibs').length}
               </div>
               <div className="text-sm text-gray-600">Sources Officielles</div>
             </Card>

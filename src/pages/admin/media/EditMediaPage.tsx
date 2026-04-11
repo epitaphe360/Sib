@@ -45,8 +45,8 @@ export const EditMediaPage: React.FC = () => {
 
   const mediaTypes = [
     { value: 'webinar', label: 'Webinaire', icon: Video, color: 'blue' },
-    { value: 'podcast', label: 'Podcast sib Talks', icon: Mic, color: 'purple' },
-    { value: 'capsule_inside', label: 'Capsule Inside sib', icon: Film, color: 'green' },
+    { value: 'podcast', label: 'Podcast SIB Talks', icon: Mic, color: 'purple' },
+    { value: 'capsule_inside', label: 'Capsule Inside SIB', icon: Film, color: 'green' },
     { value: 'live_studio', label: 'Live Studio - Meet The Leaders', icon: Radio, color: 'red' },
     { value: 'best_moments', label: 'Best Moments', icon: Star, color: 'yellow' },
     { value: 'testimonial', label: 'Témoignage', icon: MessageCircle, color: 'pink' }

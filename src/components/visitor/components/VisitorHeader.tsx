@@ -47,6 +47,11 @@ export function VisitorHeader({
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+            <Link to={ROUTES.VISITOR_VISA_LETTER}>
+              <Button variant="outline" size="md" className="border-white/40 text-white hover:bg-white/10 hover:border-white/60 backdrop-blur-sm">
+                ✈️ Lettre de Visa
+              </Button>
+            </Link>
             <Link to={ROUTES.BADGE}>
               <Button variant="outline" size="md" className="border-white/40 text-white hover:bg-white/10 hover:border-white/60 backdrop-blur-sm">
                 🎫 {t('visitor.my_virtual_badge')}

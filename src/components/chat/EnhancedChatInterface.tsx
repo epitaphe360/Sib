@@ -73,6 +73,7 @@ export const EnhancedChatInterface: React.FC = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isTyping, setIsTyping] = useState<Record<string, boolean>>({});
   const [enhancedFeatures, setEnhancedFeatures] = useState<Record<string, { isPinned: boolean; isArchived: boolean; priority: string }>>({});
+  const isBotId = (participantId: string) => participantId === 'siports-bot';
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -186,13 +187,13 @@ export const EnhancedChatInterface: React.FC = () => {
       const isOnline = onlineUsers.includes(participantId);
       return {
         id: participantId,
-        name: participantId === 'SIB-bot' ? 'Assistant SIB' : 
+          name: isBotId(participantId) ? 'Assistant SIB' : 
               participantId === 'user2' ? 'Contact Professionnel' : 
               `Utilisateur ${participantId.substring(0, 8)}`,
-        avatar: participantId === 'SIB-bot' ? 
+          avatar: isBotId(participantId) ? 
                'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=100' :
                undefined,
-        type: participantId === 'SIB-bot' ? 'bot' : 
+          type: isBotId(participantId) ? 'bot' : 
               participantId === 'user2' ? 'partner' : 'visitor',
         online: isOnline
       };

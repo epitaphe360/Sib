@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Index centralisé de toutes les traductions
  * Importe et combine tous les modules de traductions
  */
@@ -84,3 +84,4 @@ export function getTranslation(
 ): string {
   return allTranslations[lang]?.[key] || fallback || key;
 }
+

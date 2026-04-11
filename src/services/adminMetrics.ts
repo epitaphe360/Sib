@@ -54,7 +54,6 @@ const defaultMetrics: AdminMetrics = {
 };
 
 const METRICS_SERVER_URL = (import.meta.env.VITE_METRICS_SERVER_URL as string) || (import.meta.env.DEV ? 'http://localhost:4001/metrics' : '');
-const METRICS_SECRET = (import.meta.env.VITE_METRICS_SECRET as string) || undefined;
 
 export class AdminMetricsService {
 
@@ -66,7 +65,6 @@ export class AdminMetricsService {
     if (supabase == null && typeof window !== 'undefined') {
       try {
         const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-        if (METRICS_SECRET) headers['x-metrics-secret'] = METRICS_SECRET;
 
         if (!METRICS_SERVER_URL) throw new Error('No metrics server URL configured');
         const resp = await fetch(METRICS_SERVER_URL, { method: 'GET', headers });

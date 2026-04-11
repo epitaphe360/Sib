@@ -86,14 +86,14 @@ export default function PavillonsPage() {
         const staticPavilions: Pavilion[] = [
           {
             id: '1',
-            name: 'Digitalisation Portuaire',
+            name: 'Digitalisation Bâtiment',
             subtitle: 'Automatisation et Numérisation',
-            shortDescription: "Technologies numériques transformant l'écosystème portuaire",
+            shortDescription: "Technologies numériques transformant l'écosystème bâtiment",
             theme: 'digitalization',
             description: 'Découvrez les dernières innovations en matière de transformation numérique pour les ports.',
             objectives: ['Améliorer l\'efficacité opérationnelle', 'Réduire les temps d\'attente', 'Optimiser la gestion des ressources'],
-            features: ['Solutions IoT portuaires', 'Systèmes de gestion automatisée', 'Intégration des systèmes d\'information'],
-            targetAudience: ['Autorités Portuaires', 'Opérateurs de Terminaux', 'Développeurs de Solutions'],
+            features: ['Solutions IoT BTP', 'Systèmes de gestion automatisée', 'Intégration des systèmes d\'information'],
+            targetAudience: ['Autorités du Bâtiment', 'Opérateurs de Terminaux', 'Développeurs de Solutions'],
             exhibitors: 8,
             visitors: 450,
             conferences: 3,
@@ -105,11 +105,11 @@ export default function PavillonsPage() {
           },
           {
             id: '2',
-            name: 'Développement Durable Portuaire',
+            name: 'Développement Durable Bâtiment',
             subtitle: 'Solutions Écologiques et Durables',
-            shortDescription: 'Innovations vertes pour une industrie portuaire responsable',
+            shortDescription: 'Innovations vertes pour une industrie du bâtiment responsable',
             theme: 'sustainability',
-            description: 'Solutions écologiques et durables pour l\'industrie portuaire.',
+            description: 'Solutions écologiques et durables pour l\'industrie du bâtiment.',
             objectives: ['Réduire l\'empreinte carbone', 'Promouvoir les énergies renouvelables', 'Optimiser la gestion des déchets'],
             features: ['Énergies renouvelables', 'Systèmes de recyclage', 'Monitoring environnemental'],
             targetAudience: ['Gestionnaires de Ports', 'Experts Environnementaux', 'Régulateurs'],
@@ -124,14 +124,14 @@ export default function PavillonsPage() {
           },
           {
             id: '3',
-            name: 'Sécurité Portuaire',
+            name: 'Sécurité Chantier',
             subtitle: 'Surveillance et Contrôle Avancés',
-            shortDescription: 'Technologies de sécurité avancées pour les infrastructures portuaires',
+            shortDescription: 'Technologies de sécurité avancées pour les infrastructures BTP',
             theme: 'security',
             description: 'Technologies de sécurité avancées pour les ports et terminaux.',
             objectives: ['Renforcer la sécurité des infrastructures', 'Prévenir les incidents', 'Améliorer la surveillance'],
             features: ['Vidéosurveillance intelligente', 'Contrôle d\'accès biométrique', 'Systèmes d\'alerte précoce'],
-            targetAudience: ['Responsables Sécurité', 'Autorités Portuaires', 'Forces de l\'Ordre'],
+            targetAudience: ['Responsables Sécurité', 'Autorités du Bâtiment', 'Forces de l\'Ordre'],
             exhibitors: 5,
             visitors: 280,
             conferences: 2,
@@ -148,8 +148,8 @@ export default function PavillonsPage() {
             shortDescription: 'Les technologies de demain pour les ports d\'aujourd\'hui',
             theme: 'innovation',
             description: 'Les technologies de demain pour les ports d\'aujourd\'hui.',
-            objectives: ['Promouvoir la R&D portuaire', 'Encourager les startups', 'Accélérer l\'innovation'],
-            features: ['Intelligence Artificielle', 'Blockchain portuaire', 'Robotique et automatisation'],
+            objectives: ['Promouvoir la R&D bâtiment', 'Encourager les startups', 'Accélérer l\'innovation'],
+            features: ['Intelligence Artificielle', 'Blockchain bâtiment', 'Robotique et automatisation'],
             targetAudience: ['Chercheurs', 'Startups Tech', 'Investisseurs'],
             exhibitors: 10,
             visitors: 520,
@@ -737,7 +737,7 @@ export default function PavillonsPage() {
                   value={(editingPavilion.features || []).join('\n')}
                   onChange={(e) => setEditingPavilion({ ...editingPavilion, features: e.target.value.split('\n').filter(s => s.trim()) })}
                   rows={3}
-                  placeholder="Solutions IoT portuaires\nSystèmes de gestion automatisée"
+                  placeholder="Solutions IoT BTP\nSystèmes de gestion automatisée"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -749,7 +749,7 @@ export default function PavillonsPage() {
                   value={(editingPavilion.targetAudience || []).join('\n')}
                   onChange={(e) => setEditingPavilion({ ...editingPavilion, targetAudience: e.target.value.split('\n').filter(s => s.trim()) })}
                   rows={3}
-                  placeholder="Autorités Portuaires\nOpérateurs de Terminaux"
+                  placeholder="Autorités du Bâtiment\nOpérateurs de Terminaux"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>

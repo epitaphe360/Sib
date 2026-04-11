@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, memo } from 'react';
+﻿import React, { useEffect, useCallback, memo } from 'react';
 import { useNetworkingStore } from '@/store/networkingStore';
 import { Card } from '@/components/ui/Card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
@@ -103,3 +103,4 @@ const RecommendationList: React.FC = memo(() => {
 });
 
 export default RecommendationList;
+

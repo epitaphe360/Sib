@@ -140,13 +140,21 @@ interface MiniSiteScrapResult {
 class AIScrapperService {
   private apiKey: string;
   private apiUrl = 'https://api.openai.com/v1/chat/completions';
+  private allowClientAI: boolean;
 
   constructor() {
-    // ⚠️ IMPORTANT: Stocker la clé API dans les variables d'environnement
-    this.apiKey = import.meta.env.VITE_OPENAI_API_KEY || '';
+    // SECURITY: Client-side OpenAI key usage is disabled by default.
+    // Enable only for local development troubleshooting.
+    this.allowClientAI = import.meta.env.DEV && import.meta.env.VITE_ENABLE_CLIENT_AI === 'true';
+    this.apiKey = this.allowClientAI ? (import.meta.env.VITE_OPENAI_API_KEY || '') : '';
+
+    if (!this.allowClientAI) {
+      console.warn('⚠️ AI scrapper client direct is disabled. Use Edge Function scrape-and-create-minisite.');
+      return;
+    }
 
     if (!this.apiKey) {
-      console.error('⚠️ VITE_OPENAI_API_KEY non définie dans .env');
+      console.error('⚠️ VITE_OPENAI_API_KEY non définie dans .env (mode client AI activé)');
     }
   }
 
@@ -213,7 +221,7 @@ TÂCHE: Extrais les informations suivantes au format JSON strict (pas de markdow
 {
   "companyName": "Nom de l'entreprise",
   "description": "Description courte de l'entreprise (200 caractères max)",
-  "sector": "Secteur d'activité (maritime, logistique, technologie, etc.)",
+  "sector": "Secteur d'activité (construction, logistique, technologie, etc.)",
   "services": ["Service 1", "Service 2", "Service 3"],
   "logoUrl": "URL du logo si trouvé, sinon null",
   "contactEmail": "Email de contact si trouvé",
@@ -233,7 +241,7 @@ RÈGLES:
 - Si une info n'est pas trouvée, mets null
 - La description doit être professionnelle et concise
 - Les services doivent être les principaux services offerts
-- Le secteur doit être choisi parmi: maritime, logistique, technologie, finance, industrie, services, autre`;
+- Le secteur doit être choisi parmi: construction, logistique, technologie, finance, industrie, services, autre`;
 
       const response = await fetch(this.apiUrl, {
         method: 'POST',

@@ -970,17 +970,13 @@ ON CONFLICT (id) DO NOTHING;
 -- =====================================================
 -- 6. INSERT EVENTS
 -- =====================================================
-INSERT INTO events (id, title, description, type, category, event_date, start_time, end_time, start_date, end_date, location, pavilion_id, organizer_id, capacity, registered, is_featured, created_at)
+INSERT INTO events (id, title, description, event_type, start_date, end_date, location, pavilion_id, organizer_id, capacity, registered, is_featured, created_at)
 VALUES
   (
     '00000000-0000-0000-0000-000000000301',
     'Conférence Innovation 2025',
     'Les dernières tendances en matière d''innovation technologique et digitale. Intervenants internationaux et sessions de networking.',
     'conference',
-    'Innovation',
-    CURRENT_DATE + INTERVAL '2 days',
-    '09:00:00',
-    '13:00:00',
     NOW() + INTERVAL '2 days',
     NOW() + INTERVAL '2 days' + INTERVAL '4 hours',
     'Salle Plenière A',
@@ -996,10 +992,6 @@ VALUES
     'Atelier Agriculture Durable',
     'Workshop pratique sur les techniques d''agriculture de précision et l''utilisation de l''IoT dans les exploitations.',
     'conference',
-    'Agriculture',
-    CURRENT_DATE + INTERVAL '3 days',
-    '14:00:00',
-    '17:00:00',
     NOW() + INTERVAL '3 days',
     NOW() + INTERVAL '3 days' + INTERVAL '3 hours',
     'Salle Workshop B1',
@@ -1015,10 +1007,6 @@ VALUES
     'Défilé Mode & Innovation',
     'Présentation exclusive des collections 2025 avec intégration de technologies wearables.',
     'conference',
-    'Mode',
-    CURRENT_DATE + INTERVAL '5 days',
-    '10:00:00',
-    '12:00:00',
     NOW() + INTERVAL '5 days',
     NOW() + INTERVAL '5 days' + INTERVAL '2 hours',
     'Podium Principal',
@@ -1034,10 +1022,6 @@ VALUES
     'Networking Business Leaders',
     'Session de networking exclusif pour dirigeants et décideurs. Cocktail et échanges professionnels.',
     'conference',
-    'Business',
-    CURRENT_DATE + INTERVAL '4 days',
-    '18:00:00',
-    '21:00:00',
     NOW() + INTERVAL '4 days',
     NOW() + INTERVAL '4 days' + INTERVAL '3 hours',
     'Salon VIP',
@@ -2363,8 +2347,8 @@ BEGIN
 
   -- Insert 30 Events
   FOR i IN 1..30 LOOP
-    INSERT INTO public.events (id, title, description, event_type, type, category, event_date, start_time, end_time, start_date, end_date, location, created_at)
-    VALUES (gen_random_uuid(), 'Conférence ' || i, 'Description de la conférence ' || i, 'conference', 'conference', 'Innovation', NOW() + (i || ' hours')::interval, '09:00:00', '10:00:00', NOW() + (i || ' hours')::interval, NOW() + (i + 1 || ' hours')::interval, 'Salle ' || (i % 5 + 1), NOW());
+    INSERT INTO public.events (id, title, description, event_type, start_date, end_date, location, created_at)
+    VALUES (gen_random_uuid(), 'Conférence ' || i, 'Description de la conférence ' || i, 'conference', NOW() + (i || ' hours')::interval, NOW() + (i + 1 || ' hours')::interval, 'Salle ' || (i % 5 + 1), NOW());
   END LOOP;
 END $$;
 

@@ -1,4 +1,4 @@
-import { Appointment } from '../types';
+﻿import { Appointment } from '../types';
 
 /**
  * Utilitaires pour gérer l'affichage des informations des visiteurs
@@ -36,3 +36,4 @@ export const getVisitorFullName = (appointment: Appointment): string => {
   
   return `Visiteur #${appointment.visitorId}`;
 };
+

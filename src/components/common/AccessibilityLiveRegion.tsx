@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+﻿import React, { useEffect, useRef } from 'react';
 
 interface AccessibilityLiveRegionProps {
   message: string;
@@ -39,3 +39,4 @@ export function AccessibilityLiveRegion({
 }
 
 export default AccessibilityLiveRegion;
+

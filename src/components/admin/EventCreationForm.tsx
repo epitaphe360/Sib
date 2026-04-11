@@ -262,7 +262,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
     'Networking',
     'Sustainability',
     'Data Management',
-    'Maritime Transport'
+    'Bâtiment Transport'
   ];
 
   return (
@@ -494,7 +494,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                   id="tags"
                   type="text"
                   {...register('tags')}
-                  placeholder="Ex: logistique, innovation, IA, portuaire"
+                  placeholder="Ex: logistique, innovation, IA, bâtiment"
                   className={errors.tags ? 'border-red-500' : ''}
                 />
                 <p className="mt-1 text-xs text-gray-500">Séparer les mots-clés par des virgules.</p>

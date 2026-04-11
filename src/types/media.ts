@@ -5,8 +5,8 @@
 
 export type MediaType = 
   | 'webinar'           // Webinaires sponsorisés
-  | 'capsule_inside'    // Capsules "Inside sib"
-  | 'podcast'           // Podcast "sib Talks"
+  | 'capsule_inside'    // Capsules "Inside SIB"
+  | 'podcast'           // Podcast "SIB Talks"
   | 'live_studio'       // Interview Live Studio "Meet The Leaders"
   | 'best_moments'      // Capsules "Best Moments"
   | 'testimonial';      // Testimonials vidéo
@@ -161,8 +161,8 @@ export interface CreateLiveEventRequest {
 // Helper types
 export const MEDIA_TYPE_LABELS: Record<MediaType, string> = {
   webinar: 'Webinaire',
-  capsule_inside: 'Capsule Inside sib',
-  podcast: 'Podcast sib Talks',
+  capsule_inside: 'Capsule Inside SIB',
+  podcast: 'Podcast SIB Talks',
   live_studio: 'Live Studio Interview',
   best_moments: 'Best Moments',
   testimonial: 'Testimonial'

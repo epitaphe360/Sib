@@ -1,4 +1,4 @@
-import { toast } from 'react-hot-toast';
+﻿import { toast } from 'react-hot-toast';
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -211,3 +211,4 @@ class ApiClient {
 }
 
 export const apiClient = new ApiClient();
+

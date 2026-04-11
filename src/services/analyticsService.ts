@@ -380,7 +380,7 @@ class AnalyticsService {
     const lines: string[] = [];
 
     // Header
-    lines.push('Rapport Analytics sib 2026');
+    lines.push('Rapport Analytics SIB 2026');
     lines.push(`Période: ${report.period_start} - ${report.period_end}`);
     lines.push('');
 

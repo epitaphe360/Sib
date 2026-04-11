@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+﻿import { useState, useCallback } from 'react';
 import { StorageService } from '../../services/storage/storageService';
 
 interface UseStorageOptions {
@@ -67,10 +67,10 @@ export const useStorage = (options: UseStorageOptions = {}): UseStorageReturn =>
     try {
       // Note: Les buckets sont créés via les migrations SQL
 
-      // Simuler la progression
+      // Simuler la progression par incréments fixes
       const interval = setInterval(() => {
         setProgress(prev => {
-          const newProgress = prev + (Math.random() * 15);
+          const newProgress = prev + 10;
           return newProgress > 90 ? 90 : newProgress;
         });
       }, 300);
@@ -188,3 +188,4 @@ export const useStorage = (options: UseStorageOptions = {}): UseStorageReturn =>
 };
 
 export default useStorage;
+

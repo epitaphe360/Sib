@@ -1,7 +1,7 @@
-/* stylelint-disable */
+﻿/* stylelint-disable */
 /* Autogénéré pour TailwindCSS - désactivé stylelint */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
 @import './styles/darkmode.css';
 
 @tailwind base;
@@ -10,7 +10,12 @@
 
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Open Sans', system-ui, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
     /* Force light mode - prevents iOS Safari automatic dark mode */
     color-scheme: light;
     --background: 0 0% 100%;
@@ -58,17 +63,35 @@
   }
   
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Open Sans', system-ui, sans-serif;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+    font-family: 'Big Shoulders Display', 'Open Sans', system-ui, sans-serif;
+    letter-spacing: 0.01em;
   }
   
   body {
-    @apply text-gray-900 bg-gradient-to-br from-siports-light via-siports-secondary to-siports-primary;
+    @apply text-gray-900;
+    background:
+      radial-gradient(1200px 540px at -8% -10%, rgba(212, 175, 55, 0.18), transparent 65%),
+      radial-gradient(960px 500px at 110% 8%, rgba(0, 109, 119, 0.16), transparent 60%),
+      linear-gradient(160deg, #f7fbff 0%, #eef5fb 42%, #ddebf6 100%);
     min-height: 100vh;
     overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.25;
+    background-image:
+      linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.35) 35%, transparent 70%),
+      radial-gradient(circle at 1px 1px, rgba(14, 44, 72, 0.08) 1px, transparent 0);
+    background-size: 100% 100%, 20px 20px;
   }
 
   html {
@@ -82,7 +105,10 @@
   
   html.dark body {
     color: rgb(243, 244, 246);
-    background-color: rgb(17, 24, 39);
+    background:
+      radial-gradient(900px 420px at -5% -10%, rgba(212, 175, 55, 0.11), transparent 68%),
+      radial-gradient(880px 420px at 108% 10%, rgba(74, 144, 164, 0.15), transparent 62%),
+      linear-gradient(165deg, rgb(10, 18, 31) 0%, rgb(15, 23, 42) 100%);
   }
   
   html.dark h1,
@@ -106,6 +132,16 @@
   html.dark textarea::placeholder {
     color: rgb(107, 114, 128);
   }
+
+  a,
+  button {
+    transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 220ms ease;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(27, 54, 93, 0.55);
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
@@ -121,7 +157,7 @@
   }
   
   .siports-card-hover {
-    @apply hover:shadow-siports-lg hover:-translate-y-1 transition-all duration-300;
+    @apply hover:shadow-siports-xl hover:-translate-y-1 transition-all duration-300;
   }
   
   .siports-btn-primary {
@@ -145,6 +181,7 @@
   /* Style pour les cartes avec effet de verre */
   .siports-glass-card {
     @apply bg-white/90 backdrop-blur-md border border-white/30 shadow-xl;
+    box-shadow: 0 14px 32px -16px rgba(7, 28, 48, 0.45);
   }
   
   .dark .siports-glass-card {
@@ -169,3 +206,13 @@
     border-color: rgb(75, 85, 99);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

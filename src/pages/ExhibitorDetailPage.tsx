@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+Ôªøimport { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
 import {
@@ -66,7 +66,7 @@ export default function ExhibitorDetailPage() {
     loadExhibitor();
   }, [id]);
 
-  // Fonction pour gÈrer le clic sur le bouton RDV
+  // Fonction pour g√©rer le clic sur le bouton RDV
   const handleAppointmentClick = () => {
     if (!isAuthenticated) {
       navigate(`/login?redirect=/appointments?exhibitor=${exhibitor?.id}`);
@@ -75,7 +75,7 @@ export default function ExhibitorDetailPage() {
     }
   };
 
-  // Fonction pour gÈrer le clic sur le bouton Message
+  // Fonction pour g√©rer le clic sur le bouton Message
   const handleMessageClick = () => {
     if (!isAuthenticated) {
       navigate(`/login?redirect=/messages?userId=${exhibitor?.id}`);
@@ -94,7 +94,7 @@ export default function ExhibitorDetailPage() {
 
   const handleShare = () => {
     const shareData = {
-      title: `DÈcouvrez ${exhibitor?.companyName}`,
+      title: `D√©couvrez ${exhibitor?.companyName}`,
       text: exhibitor?.description,
       url: window.location.href
     };
@@ -103,7 +103,7 @@ export default function ExhibitorDetailPage() {
       navigator.share(shareData).catch(() => {});
     } else {
       navigator.clipboard.writeText(shareData.url)
-        .then(() => toast.success('Lien copiÈ dans le presse-papiers !'))
+        .then(() => toast.success('Lien copi√© dans le presse-papiers !'))
         .catch(() => toast.error('Impossible de copier le lien'));
     }
   };
@@ -124,7 +124,7 @@ export default function ExhibitorDetailPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toast.success('TÈlÈchargement de la brochure dÈmarrÈ');
+    toast.success('T√©l√©chargement de la brochure d√©marr√©');
   };
 
   if (isLoading) {
@@ -176,9 +176,9 @@ export default function ExhibitorDetailPage() {
   const getCategoryLabel = (category: string) => {
     switch (category) {
       case 'institutional': return 'Institutionnel';
-      case 'port-industry': return 'Industrie Portuaire';
+      case 'port-industry': return 'Industrie du B√¢timent';
       case 'port-operations': return 'Exploitation & Gestion';
-      case 'academic': return 'AcadÈmique & Formation';
+      case 'academic': return 'Acad√©mique & Formation';
       default: return category;
     }
   };
@@ -187,13 +187,13 @@ export default function ExhibitorDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      {/* Banner de validation pour les profils non publiÈs */}
+      {/* Banner de validation pour les profils non publi√©s */}
       {exhibitor.isPublished === false && (
         <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 px-4 shadow-lg">
           <div className="max-w-7xl mx-auto flex items-center justify-center space-x-3">
             <AlertCircle className="h-6 w-6 flex-shrink-0" />
             <p className="text-base font-semibold text-center">
-              ?? Fiche en cours de validation - Ce profil n'est pas encore visible publiquement
+              ‚ö†Ô∏è Fiche en cours de validation - Ce profil n'est pas encore visible publiquement
             </p>
           </div>
         </div>
@@ -201,7 +201,7 @@ export default function ExhibitorDetailPage() {
 
       {/* Hero Banner Ultra-Premium */}
       <div className="relative min-h-[600px] flex items-center pt-20 pb-32 overflow-hidden">
-        {/* Background SophistiquÈ */}
+        {/* Background Sophistiqu√© */}
         <div className="absolute inset-0 bg-slate-950">
           <div 
             className="absolute inset-0 opacity-40 mix-blend-overlay scale-110"
@@ -213,7 +213,7 @@ export default function ExhibitorDetailPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/80 to-[#f8fafc]" />
           
-          {/* Cercles de LumiËre & Patterns */}
+          {/* Cercles de Lumi√®re & Patterns */}
           <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[150px] translate-y-1/2 -translate-x-1/2" />
           
@@ -410,7 +410,7 @@ export default function ExhibitorDetailPage() {
                       {[
                         { id: 'overview', label: 'Vue d\'ensemble' },
                         { id: 'projects', label: 'Produits' },
-                        { id: 'impact', label: '¿ propos' },
+                        { id: 'impact', label: '√Ä propos' },
                         { id: 'contact', label: 'Contact' },
                         { id: 'minisite', label: 'Mini-site' }
                       ].map((tab) => (

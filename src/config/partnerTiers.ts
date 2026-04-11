@@ -13,7 +13,7 @@ export interface PartnerTierConfig {
   id: PartnerTier;
   name: string;
   displayName: string;
-  price: number; // en MAD
+  price: number; // en USD
   color: string;
   icon: string;
 
@@ -135,7 +135,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
       'Section "Top Innovations"',
       'Présence newsletters',
       'Capsules vidéo sponsorisées',
-      'Podcast sib Talks',
+      'Podcast SIB Talks',
       'Interview Live Studio',
       'Testimonial vidéo (1 min)',
       'Stand exposition premium',
@@ -155,7 +155,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
       'Logo visible en 3ème ligne prioritaire',
       'Présence dans toutes les newsletters',
       'Mini-site avec actualités complètes',
-      'Capsules vidéo "Inside sib"',
+      'Capsules vidéo "Inside SIB"',
       'Interview audio dans le Podcast',
       'Interview Live Studio "Meet The Leaders"',
       'Vidéo testimonial diffusée',
@@ -195,7 +195,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
       'Section "Top Innovations"',
       'Newsletter en 2ème ligne',
       'Capsules vidéo sponsorisées',
-      'Podcast sib Talks',
+      'Podcast SIB Talks',
       'Interview Live Studio',
       'Testimonial vidéo (2 min)',
       'Support prioritaire',
@@ -216,7 +216,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     exclusivePerks: [
       'Logo visible en 2ème ligne prioritaire',
       'Tous les canaux web & email',
-      'Mini-site "sib Premium Exposure"',
+      'Mini-site "SIB Premium Exposure"',
       'Capsules vidéo & brand awareness',
       'Interview audio Podcast',
       'Interview Live Studio prioritaire',
@@ -261,8 +261,8 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
       'Section "Top Innovations"',
       'Newsletters en 1ère ligne',
       'Webinaires sponsorisés',
-      'Capsules vidéo "Inside sib"',
-      'Podcast sib Talks',
+      'Capsules vidéo "Inside SIB"',
+      'Podcast SIB Talks',
       'Interview Live Studio prioritaire',
       'Testimonial vidéo (3 min)',
       'Support VIP 24/7',

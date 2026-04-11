@@ -83,7 +83,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
 
       newFiles.push({
         file,
-        id: Math.random().toString(36).substring(7),
+        id: crypto.randomUUID(),
         progress: 0,
         status: 'pending'
       });
@@ -108,28 +108,15 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
           : f
       ));
 
-      // Simulate upload progress
-      const uploadPromises = filesToUpload.map(async (uploadFile) => {
-        // Simulate progress
-        for (let i = 0; i <= 100; i += 10) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-          setFiles(prev => prev.map(f => 
-            f.id === uploadFile.id ? { ...f, progress: i } : f
-          ));
-        }
-
-        // Mark as success
-        setFiles(prev => prev.map(f => 
-          f.id === uploadFile.id 
-            ? { ...f, status: 'success' as const, progress: 100, url: URL.createObjectURL(f.file) }
-            : f
-        ));
-      });
-
-      await Promise.all(uploadPromises);
-      
       // Call onUpload callback
       await onUpload(filesToUpload.map(f => f.file));
+
+      // Mark as success when callback resolves
+      setFiles(prev => prev.map(f =>
+        filesToUpload.find(u => u.id === f.id)
+          ? { ...f, status: 'success' as const, progress: 100, url: URL.createObjectURL(f.file) }
+          : f
+      ));
       
       toast.success('Fichiers uploadés avec succès !');
       

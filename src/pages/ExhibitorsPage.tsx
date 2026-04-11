@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
+﻿import { useEffect, useState, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -24,9 +24,12 @@ export default function ExhibitorsPage() {
   const { isAuthenticated, user } = useAuthStore();
   const { 
     filteredExhibitors, 
+    totalExhibitors,
+    hasMore,
     filters, 
     isLoading, 
     fetchExhibitors, 
+    loadMoreExhibitors,
     setFilters 
   } = useExhibitorStore();
   
@@ -34,10 +37,10 @@ export default function ExhibitorsPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    fetchExhibitors();
+    fetchExhibitors(true);
   }, [fetchExhibitors]);
 
-  // ? OPTIMIS�: M�moriser les cat�gories pour �viter la recr�ation � chaque render
+  // ⚡ OPTIMISÉ: Mémoriser les catégories pour éviter la recréation à chaque render
   const categories = useMemo(() => [
     { value: '', label: t('pages.exhibitors.all_categories') },
     { value: 'institutional', label: t('pages.exhibitors.category_institutional') },
@@ -46,26 +49,26 @@ export default function ExhibitorsPage() {
     { value: 'academic', label: t('pages.exhibitors.category_academic') }
   ], [t]);
 
-  // ? OPTIMIS�: M�moriser les secteurs pour le filtre (correspondant aux donn�es r�elles)
+  // ⚡ OPTIMISÉ: Mémoriser les secteurs pour le filtre (correspondant aux données réelles)
   const sectors = useMemo(() => [
     { value: '', label: t('exhibitors.all_sectors') },
-    { value: 'Exploitation Portuaire', label: 'Exploitation Portuaire' },
-    { value: 'R�gulation Portuaire', label: 'R�gulation Portuaire' },
+    { value: 'Exploitation Bâtiment', label: 'Exploitation Bâtiment' },
+    { value: 'Régulation Bâtiment', label: 'Régulation Bâtiment' },
     { value: 'Hub Logistique', label: 'Hub Logistique' },
     { value: 'Industrie & Export', label: 'Industrie & Export' },
-    { value: 'Technologies Portuaires', label: 'Technologies Portuaires' },
-    { value: 'Technologie Maritime', label: 'Technologie Maritime' },
-    { value: 'Culture & Heritage Maritime', label: 'Culture & Heritage Maritime' },
-    { value: 'construction et BTP', label: 'construction et BTP' },
-    { value: 'Services Portuaires Premium', label: 'Services Portuaires Premium' },
-    { value: 'Conseil Portuaire', label: 'Conseil Portuaire' },
-    { value: 'Patrimoine Maritime', label: 'Patrimoine Maritime' },
-    { value: 'Armement Maritime', label: 'Armement Maritime' },
-    { value: 'Gestion Portuaire', label: 'Gestion Portuaire' },
+    { value: 'Technologies du Bâtiment', label: 'Technologies du Bâtiment' },
+    { value: 'Technologie Bâtiment', label: 'Technologie Bâtiment' },
+    { value: 'Culture & Heritage Bâtiment', label: 'Culture & Heritage Bâtiment' },
+    { value: 'Logistique Bâtiment', label: 'Logistique Bâtiment' },
+    { value: 'Services du Bâtiment Premium', label: 'Services du Bâtiment Premium' },
+    { value: 'Conseil Bâtiment', label: 'Conseil Bâtiment' },
+    { value: 'Patrimoine Bâtiment', label: 'Patrimoine Bâtiment' },
+    { value: 'Armement Bâtiment', label: 'Armement Bâtiment' },
+    { value: 'Gestion Bâtiment', label: 'Gestion Bâtiment' },
     { value: 'Logistique Mondiale', label: 'Logistique Mondiale' }
   ], []);
 
-  // ? OPTIMIS�: useCallback pour �viter de recr�er ces fonctions � chaque render
+  // ⚡ OPTIMISÉ: useCallback pour éviter de recréer ces fonctions à chaque render
   const getCategoryLabel = useCallback((category: string) => {
     const labels = {
       'institutional': t('pages.exhibitors.category_institutional'),
@@ -86,13 +89,13 @@ export default function ExhibitorsPage() {
     return colors[category] || 'default';
   }, []);
 
-  // ? OPTIMIS�: useCallback pour les handlers
+  // ⚡ OPTIMISÉ: useCallback pour les handlers
   const handleViewDetails = useCallback((exhibitorId: string) => {
     navigate(`${ROUTES.EXHIBITORS}/${exhibitorId}`);
   }, [navigate]);
 
   const handleScheduleAppointment = useCallback((exhibitorId: string) => {
-    // R�cup�rer l'�tat actuel du store directement
+    // Récupérer l'état actuel du store directement
     const currentAuthState = useAuthStore.getState();
 
     if (!currentAuthState.isAuthenticated || !currentAuthState.user) {
@@ -113,7 +116,7 @@ export default function ExhibitorsPage() {
 
   const handleExhibitorMessage = useCallback((exhibitorId: string) => {
     if (!canChat) {
-      toast.error('La messagerie est r�serv�e aux exposants, partenaires et visiteurs VIP');
+      toast.error('La messagerie est réservée aux exposants, partenaires et visiteurs VIP');
       return;
     }
     navigate(`/messages?exhibitorId=${exhibitorId}`);
@@ -154,7 +157,7 @@ export default function ExhibitorsPage() {
             transition={{ delay: 0.1 }}
             className="text-blue-100/60 text-xl font-medium max-w-2xl mx-auto italic mb-12"
           >
-            {t('pages.exhibitors.description')} � <span className="text-white font-black">{filteredExhibitors.length} {t('exhibitors.leaders_count')}</span>
+            {t('pages.exhibitors.description')} • <span className="text-white font-black">{filteredExhibitors.length} {t('exhibitors.leaders_count')}</span>
           </motion.p>
           
           {/* Barre de Recherche Premium */}
@@ -260,7 +263,7 @@ export default function ExhibitorsPage() {
         </div>
       </div>
 
-      {/* Logo Showcase Section - Bande d�filante des logos exposants */}
+      {/* Logo Showcase Section - Bande défilante des logos exposants */}
       <div className="relative z-30">
         <LogoShowcaseSection type="exhibitors" />
       </div>
@@ -307,25 +310,42 @@ export default function ExhibitorsPage() {
             </div>
           </motion.div>
         ) : (
-          <div data-testid="exhibitors-list" className={viewMode === CONFIG.viewModes.grid
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10'
-            : 'space-y-8 md:space-y-10'
-          }>
-            {filteredExhibitors.map((exhibitor, index) => (
-              <ExhibitorCard
-                key={exhibitor.id}
-                exhibitor={exhibitor}
-                viewMode={viewMode}
-                index={index}
-                onViewDetails={handleViewDetails}
-                onScheduleAppointment={handleScheduleAppointment}
-                onMessage={handleExhibitorMessage}
-                canChat={canChat}
-                getCategoryLabel={getCategoryLabel}
-                getCategoryColor={getCategoryColor}
-                t={t}
-              />
-            ))}
+          <div>
+            <div data-testid="exhibitors-list" className={viewMode === CONFIG.viewModes.grid
+              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10'
+              : 'space-y-8 md:space-y-10'
+            }>
+              {filteredExhibitors.map((exhibitor, index) => (
+                <ExhibitorCard
+                  key={exhibitor.id}
+                  exhibitor={exhibitor}
+                  viewMode={viewMode}
+                  index={index}
+                  onViewDetails={handleViewDetails}
+                  onScheduleAppointment={handleScheduleAppointment}
+                  onMessage={handleExhibitorMessage}
+                  canChat={canChat}
+                  getCategoryLabel={getCategoryLabel}
+                  getCategoryColor={getCategoryColor}
+                  t={t}
+                />
+              ))}
+            </div>
+
+            <div className="mt-10 flex flex-col items-center gap-4">
+              <p className="text-sm text-slate-500 font-semibold">
+                {filteredExhibitors.length} affichés sur {totalExhibitors} exposants
+              </p>
+              {hasMore && (
+                <Button
+                  onClick={loadMoreExhibitors}
+                  disabled={isLoading}
+                  className="px-8 py-3 bg-slate-900 hover:bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs"
+                >
+                  {isLoading ? 'Chargement...' : 'Charger plus'}
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </div>

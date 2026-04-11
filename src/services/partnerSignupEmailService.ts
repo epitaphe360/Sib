@@ -51,7 +51,7 @@ export async function sendPartnerPaymentInstructions(
     }
 
     // Générer la référence de paiement
-    const paymentReference = `sib-PARTNER-${defaultTier.toUpperCase()}-${userId.substring(0, 8)}-${paymentRequest.id.substring(0, 8)}`;
+    const paymentReference = `SIB-PARTNER-${defaultTier.toUpperCase()}-${userId.substring(0, 8)}-${paymentRequest.id.substring(0, 8)}`;
 
     // Appeler la fonction Edge pour envoyer l'email
     try {

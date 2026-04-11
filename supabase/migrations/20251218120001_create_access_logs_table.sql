@@ -277,14 +277,14 @@ ALTER PUBLICATION supabase_realtime ADD TABLE access_logs;
 -- COMMENTS
 -- ========================================
 
-COMMENT ON TABLE access_logs IS 'Logs de tous les accès physiques au salon (accordés et refusés)';
-COMMENT ON COLUMN access_logs.zone IS 'Zone d\'accès demandée (public, vip_lounge, backstage, etc.)';
-COMMENT ON COLUMN access_logs.status IS 'Statut: granted (accès accordé) ou denied (accès refusé)';
-COMMENT ON COLUMN access_logs.scanned_by IS 'Agent de sécurité qui a scanné le QR code';
+COMMENT ON TABLE access_logs IS 'Logs de tous les acces physiques au salon (accordes et refuses)';
+COMMENT ON COLUMN access_logs.zone IS 'Zone d''acces demandee (public, vip_lounge, backstage, etc.)';
+COMMENT ON COLUMN access_logs.status IS 'Statut: granted (acces accorde) ou denied (acces refuse)';
+COMMENT ON COLUMN access_logs.scanned_by IS 'Agent de securite qui a scanne le QR code';
 
-COMMENT ON FUNCTION get_access_stats IS 'Obtenir les statistiques d\'accès agrégées';
-COMMENT ON FUNCTION get_recent_access_logs IS 'Obtenir les derniers logs d\'accès en temps réel';
-COMMENT ON FUNCTION detect_suspicious_access IS 'Détecter les tentatives d\'accès suspectes (multiples refus)';
+COMMENT ON FUNCTION get_access_stats IS 'Obtenir les statistiques d''acces agregees';
+COMMENT ON FUNCTION get_recent_access_logs IS 'Obtenir les derniers logs d''acces en temps reel';
+COMMENT ON FUNCTION detect_suspicious_access IS 'Detecter les tentatives d''acces suspectes (multiples refus)';
 
 -- ========================================
 -- END OF MIGRATION

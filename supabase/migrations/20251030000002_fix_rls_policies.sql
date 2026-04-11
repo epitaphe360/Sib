@@ -14,7 +14,7 @@ CREATE POLICY "Public can read published news only"
 ON news_articles
 FOR SELECT
 TO public
-USING (published = true);
+USING (is_published = true);
 
 -- ====================
 -- EXHIBITORS POLICIES
@@ -98,8 +98,8 @@ ON events
 FOR SELECT
 TO public
 USING (
-  featured = true
-  OR (start_time > NOW() AND capacity > registered)
+  is_featured = true
+  OR (start_date > NOW() AND capacity > registered)
 );
 
 -- ====================

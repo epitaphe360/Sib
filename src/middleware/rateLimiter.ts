@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Rate Limiter Middleware
  * Protection contre abus API
  */
@@ -225,3 +225,4 @@ export async function withRateLimit<T>(
 }
 
 export default rateLimiter;
+

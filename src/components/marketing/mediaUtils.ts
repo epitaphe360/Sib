@@ -1,4 +1,4 @@
-import { Video, Mic, Image } from 'lucide-react';
+﻿import { Video, Mic, Image } from 'lucide-react';
 import type { MediaType } from './types';
 
 /**
@@ -60,3 +60,4 @@ export function getMediaThumbnailGradient(type: MediaType): string {
       return 'from-gray-500 to-gray-700';
   }
 }
+

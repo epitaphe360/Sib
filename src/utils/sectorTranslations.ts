@@ -9,8 +9,8 @@ export const getSectorTranslationKey = (sector: string | undefined): string => {
   const sectorMap: Record<string, string> = {
     'Technology': 'sector.technology',
     'technology': 'sector.technology',
-    'Port Industry': 'sector.port_industry',
-    'port industry': 'sector.port_industry',
+    'Construction Industry': 'sector.port_industry',
+    'construction industry': 'sector.port_industry',
     'Automation': 'sector.automation',
     'automation': 'sector.automation',
     'Equipment': 'sector.equipment',

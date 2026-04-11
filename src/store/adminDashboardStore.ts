@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { AdminMetrics, AdminMetricsService } from '../services/adminMetrics';
 
 interface AdminDashboardState {
@@ -65,3 +65,4 @@ export const useAdminDashboardStore = create<AdminDashboardState>((set, get) => 
     set({ error: null });
   }
 }));
+

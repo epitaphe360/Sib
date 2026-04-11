@@ -59,13 +59,13 @@ export default function VisitorUpgradePage() {
     },
     {
       name: 'Fatima El Amrani',
-      role: 'CEO, Maritime Solutions',
+      role: 'CEO, Building Solutions',
       content: t('upgrade.testimonial2.content'),
       avatar: '👤'
     },
     {
       name: 'Jean-Pierre Dubois',
-      role: 'Consultant Maritime',
+      role: 'Consultant BTP',
       content: t('upgrade.testimonial3.content'),
       avatar: '👤'
     }
@@ -310,5 +310,6 @@ export default function VisitorUpgradePage() {
     </div>
   );
 }
+
 
 

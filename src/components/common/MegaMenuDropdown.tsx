@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
 import type { MenuSection } from './MegaMenu';
@@ -79,3 +79,4 @@ export const MegaMenuDropdown: React.FC<MegaMenuDropdownProps> = ({
     </motion.div>
   );
 };
+

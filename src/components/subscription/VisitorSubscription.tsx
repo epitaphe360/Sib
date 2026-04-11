@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -73,3 +73,4 @@ export default function VisitorSubscription({ currentLevel, onUpgrade }: Visitor
     </div>
   );
 }
+

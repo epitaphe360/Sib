@@ -1,4 +1,4 @@
-import { supabase, isSupabaseReady } from '../lib/supabase';
+﻿import { supabase, isSupabaseReady } from '../lib/supabase';
 
 export interface PavilionMetrics {
   totalExhibitors: number;
@@ -71,3 +71,4 @@ export class PavilionMetricsService {
     return this.getMetrics();
   }
 }
+

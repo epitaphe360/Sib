@@ -103,7 +103,7 @@ export default function MiniSiteEditor() {
       title: 'À propos',
       content: {
         title: 'Notre expertise',
-        description: 'Avec plus de 20 ans d\'expérience dans le secteur portuaire, nous accompagnons les ports du monde entier dans leur transformation digitale.',
+        description: 'Avec plus de 20 ans d\'expérience dans le secteur du bâtiment, nous accompagnons les ports du monde entier dans leur transformation digitale.',
         features: [
           'Solutions innovantes',
           'Expertise reconnue',
@@ -123,8 +123,8 @@ export default function MiniSiteEditor() {
         products: [
           {
             id: '1',
-            name: 'Système IA Maritime',
-            description: 'Plateforme intelligente d\'optimisation des opérations portuaires avec IA prédictive',
+            name: 'Système IA Bâtiment',
+            description: 'Plateforme intelligente d\'optimisation des opérations BTP avec IA prédictive',
             image: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=400',
             features: ['Analytics prédictifs en temps réel', 'Automatisation IA', 'Intégration API complète'],
             price: 'Sur devis',
@@ -133,7 +133,7 @@ export default function MiniSiteEditor() {
           {
             id: '2',
             name: 'Plateforme IoT Connectée',
-            description: 'Solution IoT de supervision et monitoring des équipements portuaires',
+            description: 'Solution IoT de supervision et monitoring des équipements BTP',
             image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400',
             features: ['Capteurs intelligents', 'Maintenance prédictive', 'Alertes instantanées'],
             price: 'À partir de 15 000€',
@@ -812,7 +812,7 @@ export default function MiniSiteEditor() {
                           <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                         </div>
                         <div className="flex-1 bg-white rounded px-3 py-1 text-xs text-gray-500">
-                          SIB.com/exhibitor/port-solutions-inc
+                          sibs.com/exhibitor/port-solutions-inc
                         </div>
                       </div>
                     </div>

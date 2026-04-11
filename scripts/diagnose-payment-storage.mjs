@@ -158,7 +158,7 @@ try {
     requested_level: 'premium',
     amount: 0.01, // Minimal amount for testing
     currency: 'MAD',
-    payment_method: 'stripe',
+    payment_method: 'bank_transfer',
     status: 'pending'
   };
 

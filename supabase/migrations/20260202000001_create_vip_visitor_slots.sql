@@ -36,7 +36,7 @@ CREATE POLICY "VIP visitors can manage their own slots"
     OR EXISTS (
       SELECT 1 FROM users 
       WHERE id = auth.uid() 
-      AND user_type = 'admin'
+      AND type = 'admin'
     )
   );
 
@@ -47,6 +47,6 @@ CREATE POLICY "Admins can manage all VIP visitor slots"
     EXISTS (
       SELECT 1 FROM users 
       WHERE id = auth.uid() 
-      AND user_type = 'admin'
+      AND type = 'admin'
     )
   );

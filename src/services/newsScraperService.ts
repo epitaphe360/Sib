@@ -12,8 +12,8 @@ export interface ScrapedArticle {
 }
 
 export class NewsScraperService {
-  private static readonly BASE_URL = 'https://sib2026.ma';
-  private static readonly NEWS_URL = 'https://sib2026.ma/actualite-portuaire/';
+  private static readonly BASE_URL = 'https://sibevent.com';
+  private static readonly NEWS_URL = 'https://sibevent.com/actualite-bâtiment/';
 
   /**
    * Scrape all news articles from the official SIB website
@@ -196,7 +196,7 @@ export class NewsScraperService {
 
       // Extract category
       const categorySelectors = ['.category', '.cat', '.post-category', '[class*="cat"]'];
-      let category = 'Actualités Portuaires';
+      let category = 'Actualités du Bâtiment';
       for (const selector of categorySelectors) {
         const categoryElement = element.querySelector(selector);
         if (categoryElement?.textContent?.trim()) {
@@ -216,7 +216,7 @@ export class NewsScraperService {
         author: 'SIB',
         publishedAt,
         category,
-        tags: ['portuaire', 'SIB', category.toLowerCase()],
+        tags: ['bâtiment', 'SIB', category.toLowerCase()],
         image: image || undefined,
         sourceUrl: sourceUrl || this.NEWS_URL,
         readTime

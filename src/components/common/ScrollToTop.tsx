@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 /**
@@ -19,3 +19,4 @@ export const ScrollToTop = () => {
 
   return null;
 };
+

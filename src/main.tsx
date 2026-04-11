@@ -24,12 +24,10 @@ if ('serviceWorker' in navigator) {
 
 // Version check
 
-// Supporte les deux shortcodes: [SIB_networking] et [SIB_exhibitor_dashboard]
-
-// Trouve le conteneur pour WordPress OU le root local
+// Trouve le conteneur de montage
 const findMount = () =>
-  document.getElementById('SIB-networking-app') ||
-  document.getElementById('SIB-exhibitor-dashboard-app') ||
+  document.getElementById('siports-networking-app') ||
+  document.getElementById('siports-exhibitor-dashboard-app') ||
   document.getElementById('root');
 
 // Track si déjà monté pour éviter les doubles montages

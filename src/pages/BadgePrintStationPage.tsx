@@ -66,7 +66,7 @@ export default function BadgePrintStationPage() {
   const { user, logout } = useAuthStore();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const isServiceMode = user?.type === 'security' || user?.email === 'service-clientele@SIB.com';
+  const isServiceMode = user?.type === 'security' || user?.email === 'service-clientele@sibs.com';
 
   const handleLogout = async () => {
     await stopScanning();
@@ -353,7 +353,7 @@ export default function BadgePrintStationPage() {
 <body>
   <div class="badge">
     <div class="badge-header">
-      <span class="event-name">sib 2026</span>
+      <span class="event-name">SIB 2026</span>
       <span class="access-label">${accessLabel}</span>
     </div>
     <div class="badge-body">
@@ -374,7 +374,7 @@ export default function BadgePrintStationPage() {
       </div>
       ${!isCard ? `
         <div class="footer">
-          <div>1 - 3 Avril 2026 • Casablanca, Maroc</div>
+          <div>1 - 3 Avril 2026 • El Jadida, Maroc</div>
           <div style="margin-top: 0.5mm">
             Valide du ${new Date(badge.validFrom).toLocaleDateString('fr-FR')} au ${new Date(badge.validUntil).toLocaleDateString('fr-FR')}
           </div>
@@ -482,7 +482,7 @@ export default function BadgePrintStationPage() {
                 {isServiceMode && user?.name
                   ? `Opérateur: ${user.name} — `
                   : 'Service Clientèle — '}
-                sib 2026 • Station: {stationId}
+                SIB 2026 • Station: {stationId}
               </p>
             </div>
           </div>

@@ -588,7 +588,7 @@ export default function PaymentValidationPage() {
                         <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Méthode de paiement</p>
                         <p className="font-semibold text-gray-900">
                           {request.payment_method === 'bank_transfer' ? '🏦 Virement bancaire' :
-                           request.payment_method === 'stripe' ? '💳 Carte bancaire (Stripe)' :
+                          request.payment_method === 'stripe' ? '💳 Carte bancaire' :
                            request.payment_method === 'paypal' ? '💰 PayPal' :
                            request.payment_method || 'Non spécifié'}
                         </p>

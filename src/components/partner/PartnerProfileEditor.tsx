@@ -210,7 +210,7 @@ export default function PartnerProfileEditor({ partnerId, onSave }: PartnerProfi
                 className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Sélectionner...</option>
-                <option value="maritime">Maritime</option>
+                <option value="construction">Bâtiment</option>
                 <option value="logistique">Logistique</option>
                 <option value="technologie">Technologie</option>
                 <option value="finance">Finance</option>

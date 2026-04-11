@@ -1,4 +1,4 @@
-import { toast } from 'sonner';
+Ôªøimport { toast } from 'sonner';
 import { useTranslation } from '../hooks/useTranslation';
 import { useArticleTranslation } from '../hooks/useArticleTranslation';
 import { getArticleTranslationKeys } from '../utils/newsTranslations';
@@ -62,7 +62,7 @@ export default function ArticleDetailPage() {
           .slice(0, 3);
         setRelatedArticles(related);
 
-        // Scroll vers le haut pour voir le dÈbut de l'article
+        // Scroll vers le haut pour voir le d√©but de l'article
         setTimeout(() => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }, 100);
@@ -70,7 +70,7 @@ export default function ArticleDetailPage() {
     }
   }, [id, articles]);
 
-  // Suivi du progrËs de lecture
+  // Suivi du progr√®s de lecture
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -111,10 +111,10 @@ export default function ArticleDetailPage() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      '…vÈnement': 'bg-blue-100 text-blue-800',
+      '√âv√©nement': 'bg-blue-100 text-blue-800',
       'Innovation': 'bg-purple-100 text-purple-800',
       'Partenariat': 'bg-green-100 text-green-800',
-      'DurabilitÈ': 'bg-emerald-100 text-emerald-800',
+      'Durabilit√©': 'bg-emerald-100 text-emerald-800',
       'Formation': 'bg-orange-100 text-orange-800',
       'Commerce': 'bg-indigo-100 text-indigo-800'
     };
@@ -209,7 +209,7 @@ export default function ArticleDetailPage() {
             </div>
           </div>
 
-          {/* MÈtadonnÈes Article */}
+          {/* M√©tadonn√©es Article */}
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
             <Badge className={getCategoryColor(article.category)} size="sm">
               {article.category}
@@ -419,7 +419,7 @@ export default function ArticleDetailPage() {
                   {article.author}
                 </h4>
                 <p className="text-gray-600 mb-3">
-                  Expert en dÈveloppement portuaire et innovation maritime. Contributeur rÈgulier aux publications spÈcialisÈes du secteur.
+                  Expert en d√©veloppement b√¢timent et innovation construction. Contributeur r√©gulier aux publications sp√©cialis√©es du secteur.
                 </p>
                 <div className="flex items-center space-x-4 text-sm text-gray-500">
                   <span>{article.author.toLowerCase().replace(' ', '.')}@sib2026.ma</span>
@@ -550,5 +550,6 @@ export default function ArticleDetailPage() {
     </div>
   );
 };
+
 
 

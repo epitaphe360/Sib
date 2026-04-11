@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ï»¿import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Users, Clock, Download, Share2, BookmarkPlus, Play } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
@@ -60,7 +60,7 @@ export const WebinarDetailPage: React.FC = () => {
 
   const handleSave = () => {
     setIsSaved(!isSaved);
-    toast.success(isSaved ? 'Retiré des favoris' : 'Ajouté aux favoris');
+    toast.success(isSaved ? 'RetirÃ© des favoris' : 'AjoutÃ© aux favoris');
   };
 
   const handleShare = () => {
@@ -72,7 +72,7 @@ export const WebinarDetailPage: React.FC = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      toast.success('Lien copié dans le presse-papier');
+      toast.success('Lien copiÃ© dans le presse-papier');
     }
   };
 
@@ -141,7 +141,7 @@ export const WebinarDetailPage: React.FC = () => {
               <div className="bg-gray-100 rounded-lg aspect-video flex items-center justify-center">
                 <div className="text-center">
                   <Play className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">Vidéo non disponible</p>
+                  <p className="text-gray-600">VidÃ©o non disponible</p>
                 </div>
               </div>
             )}
@@ -166,7 +166,7 @@ export const WebinarDetailPage: React.FC = () => {
                   onClick={handleSave}
                 >
                   <BookmarkPlus className="h-4 w-4 mr-2" />
-                  {isSaved ? 'Enregistré' : 'Enregistrer'}
+                  {isSaved ? 'EnregistrÃ©' : 'Enregistrer'}
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleShare}>
                   <Share2 className="h-4 w-4 mr-2" />
@@ -176,7 +176,7 @@ export const WebinarDetailPage: React.FC = () => {
                   <Button variant="outline" size="sm" asChild>
                     <a href={webinar.video_url} download>
                       <Download className="h-4 w-4 mr-2" />
-                      Télécharger
+                      TÃ©lÃ©charger
                     </a>
                   </Button>
                 )}
@@ -208,7 +208,7 @@ export const WebinarDetailPage: React.FC = () => {
             {/* Description */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                À propos de ce webinaire
+                Ã€ propos de ce webinaire
               </h2>
               <div className="prose prose-blue max-w-none">
                 <p className="text-gray-700 whitespace-pre-wrap">
@@ -223,7 +223,7 @@ export const WebinarDetailPage: React.FC = () => {
                 Webinaires similaires
               </h2>
               <p className="text-gray-600 text-sm">
-                Découvrez d'autres webinaires dans la même catégorie...
+                DÃ©couvrez d'autres webinaires dans la mÃªme catÃ©gorie...
               </p>
             </div>
           </div>
@@ -267,7 +267,7 @@ export const WebinarDetailPage: React.FC = () => {
             {/* Event Details */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Détails
+                DÃ©tails
               </h3>
               <div className="space-y-3">
                 {webinar.scheduled_date && (
@@ -285,7 +285,7 @@ export const WebinarDetailPage: React.FC = () => {
                   <div className="flex items-start">
                     <Clock className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">Durée</p>
+                      <p className="text-sm font-medium text-gray-900">DurÃ©e</p>
                       <p className="text-sm text-gray-600">
                         {formatDuration(webinar.duration)}
                       </p>
@@ -298,10 +298,10 @@ export const WebinarDetailPage: React.FC = () => {
             {/* CTA Card */}
             <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg shadow-lg p-6 text-white">
               <h3 className="text-lg font-semibold mb-2">
-                Inscrivez-vous à SIB 2026
+                Inscrivez-vous Ã  SIB 2026
               </h3>
               <p className="text-sm text-blue-100 mb-4">
-                Participez à nos webinaires en direct et accédez à tous les replays
+                Participez Ã  nos webinaires en direct et accÃ©dez Ã  tous les replays
               </p>
               <Button variant="secondary" className="w-full" asChild>
                 <Link to="/register">

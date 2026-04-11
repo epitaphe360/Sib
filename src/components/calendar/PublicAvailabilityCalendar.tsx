@@ -295,7 +295,7 @@ export default function PublicAvailabilityCalendar({
                       Gestion des Disponibilités
                     </h2>
                     <p className="text-blue-100 text-lg">
-                      Créez et gérez vos créneaux de rendez-vous pour sib 2026
+                      Créez et gérez vos créneaux de rendez-vous pour SIB 2026
                     </p>
                   </div>
                 </div>
@@ -688,7 +688,7 @@ export default function PublicAvailabilityCalendar({
             Aucune disponibilité configurée
           </h4>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">
-            Commencez par ajouter vos créneaux de disponibilité pour permettre aux visiteurs de prendre rendez-vous avec vous pendant sib 2026.
+            Commencez par ajouter vos créneaux de disponibilité pour permettre aux visiteurs de prendre rendez-vous avec vous pendant SIB 2026.
           </p>
           {isEditable && (
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">

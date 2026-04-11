@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link, useSearchParams } from 'react-router-dom';
 import { Product } from '../types';
 import { useTranslation } from '../hooks/useTranslation';
 import { ProductService } from '../services/products/productService';
@@ -14,7 +14,9 @@ import { toast } from 'sonner';
 import { getEmbedUrl } from '../utils/videoUtils';
 
 export default function ProductDetailPage() {
-  const { exhibitorId, productId } = useParams<{ exhibitorId: string; productId: string }>();
+  const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const exhibitorFromQuery = searchParams.get('exhibitor');
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
   const { t } = useTranslation();
@@ -24,10 +26,10 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     const load = async () => {
-      if (!productId) { setError('Produit introuvable'); setLoading(false); return; }
+      if (!id) { setError('Produit introuvable'); setLoading(false); return; }
       try {
         setLoading(true);
-        const p = await ProductService.getProductById(productId);
+        const p = await ProductService.getProductById(id);
         setProduct(p);
       } catch (e) {
         console.error(e);
@@ -37,9 +39,10 @@ export default function ProductDetailPage() {
       }
     };
     load();
-  }, [productId]);
+  }, [id]);
 
   const bookRdv = () => {
+    const exhibitorId = exhibitorFromQuery || product?.exhibitorId;
     if (!exhibitorId) return;
     const target = `${ROUTES.APPOINTMENTS}?exhibitor=${exhibitorId}`;
     if (!isAuthenticated) navigate(`${ROUTES.LOGIN}?redirect=${encodeURIComponent(target)}`);
@@ -49,6 +52,7 @@ export default function ProductDetailPage() {
   const contactExhibitor = () => {
     // Optionally this page could receive exhibitor email via location state; fallback toast
     toast.info("Contactez l'exposant depuis sa page détaillée");
+    const exhibitorId = exhibitorFromQuery || product?.exhibitorId;
     if (exhibitorId) navigate(`/exhibitors/${exhibitorId}`);
   };
 
@@ -62,8 +66,8 @@ export default function ProductDetailPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-6">
         <p className="text-red-600 mb-4">{error || 'Produit non trouvé'}</p>
-        {exhibitorId && (
-          <Link to={`/exhibitors/${exhibitorId}`} className="text-blue-600 underline">Retour à l'exposant</Link>
+        {(exhibitorFromQuery || product?.exhibitorId) && (
+          <Link to={`/exhibitors/${exhibitorFromQuery || product?.exhibitorId}`} className="text-blue-600 underline">Retour à l'exposant</Link>
         )}
       </div>
     );
@@ -73,7 +77,7 @@ export default function ProductDetailPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
-          <Button variant="ghost" size="sm" onClick={() => exhibitorId ? navigate(`/exhibitors/${exhibitorId}`) : navigate(-1)}>
+          <Button variant="ghost" size="sm" onClick={() => (exhibitorFromQuery || product?.exhibitorId) ? navigate(`/exhibitors/${exhibitorFromQuery || product?.exhibitorId}`) : navigate(-1)}>
             <ArrowLeft className="h-4 w-4 mr-2" /> Retour
           </Button>
         </div>

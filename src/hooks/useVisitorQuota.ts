@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import useAuthStore from '../store/authStore';
 import { useAppointmentStore } from '../store/appointmentStore';
 import { getVisitorQuota, calculateRemainingQuota } from '../config/quotas';
@@ -40,3 +40,4 @@ export const useVisitorQuota = (): VisitorQuotaInfo => {
     };
   }, [user?.id, user?.visitor_level, appointments]);
 };
+

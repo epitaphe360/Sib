@@ -82,7 +82,7 @@ export const PartnerActivityPage: React.FC = () => {
       id: '6',
       type: 'content',
       title: t('partner.activity.content_shared', 'Contenu partagé'),
-      description: t('partner.activity.article_shared', 'Votre article "Innovation in Maritime Technology" a été partagé'),
+      description: t('partner.activity.article_shared', 'Votre article "Innovation in Building Technology" a été partagé'),
       timestamp: new Date(Date.now() - 21600000),
       icon: FileText,
       color: 'text-orange-600',

@@ -68,7 +68,7 @@ export function VisitorNetworkingHub({
           <div className="max-w-2xl">
             <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white/5 rounded-full border border-white/10 mb-6">
               <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
-              <span className="text-[10px] font-black text-indigo-200 uppercase tracking-[0.2em]">sib • Visitor Experience</span>
+              <span className="text-[10px] font-black text-indigo-200 uppercase tracking-[0.2em]">SIB • Visitor Experience</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
               {t('visitor.personal')} <span className="text-indigo-400">{t('visitor.networking_hub')}</span>
@@ -198,7 +198,7 @@ export function VisitorNetworkingHub({
                     <Award className="h-16 w-16 text-indigo-400/40 mx-auto mb-6" />
                     <h4 className="text-2xl font-bold text-white mb-2">{t('visitor.premium_feature')}</h4>
                     <p className="max-w-md mx-auto text-indigo-100/60 mb-8">{t('visitor.b2b_reserved_message')}</p>
-                    <Button className="bg-gradient-to-r from-SIB-gold to-yellow-600 text-white font-black px-8 py-4 rounded-xl">{t('visitor.upgrade_level')}</Button>
+                    <Button className="bg-gradient-to-r from-siports-gold to-yellow-600 text-white font-black px-8 py-4 rounded-xl">{t('visitor.upgrade_level')}</Button>
                   </div>
                 ) : isAppointmentsLoading ? (
                   <div className="text-center py-20">

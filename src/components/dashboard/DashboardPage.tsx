@@ -1,4 +1,4 @@
-import { memo } from 'react';
+﻿import { memo } from 'react';
 import useAuthStore from '../../store/authStore';
 import AdminDashboard from './AdminDashboard';
 import ExhibitorDashboard from './ExhibitorDashboard';
@@ -14,12 +14,12 @@ export default memo(function DashboardPage() {
   // Vérification de l'authentification
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+      <div className="min-h-screen flex items-center justify-center px-6 bg-transparent">
+        <div className="text-center max-w-xl rounded-2xl border border-slate-200/70 bg-white/90 backdrop-blur-sm p-8 shadow-siports-lg">
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">
             {t('common.error_401')}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-slate-600">
             {t('common.error_401_desc')}
           </p>
         </div>
@@ -42,12 +42,12 @@ export default memo(function DashboardPage() {
       return <VisitorDashboard />;
     default:
       return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="min-h-screen flex items-center justify-center px-6 bg-transparent">
+          <div className="text-center max-w-xl rounded-2xl border border-slate-200/70 bg-white/90 backdrop-blur-sm p-8 shadow-siports-lg">
+            <h1 className="text-2xl font-bold text-slate-900 mb-2">
               {t('errors.unknown_user_type', { type: user.type })}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-slate-600">
               {t('errors.contact_support_resolve', { email: user.email })}
             </p>
           </div>

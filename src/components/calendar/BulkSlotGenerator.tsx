@@ -20,9 +20,11 @@ export const BulkSlotGenerator: React.FC<BulkSlotGeneratorProps> = ({ userId, on
 
   // Hardcoded salon dates based on requirements
   const salonDays = [
-    { date: '2026-04-01', label: 'Mercredi 1 Avril 2026' },
-    { date: '2026-04-02', label: 'Jeudi 2 Avril 2026' },
-    { date: '2026-04-03', label: 'Vendredi 3 Avril 2026' },
+    { date: '2026-11-25', label: 'Mercredi 25 Novembre 2026' },
+    { date: '2026-11-26', label: 'Jeudi 26 Novembre 2026' },
+    { date: '2026-11-27', label: 'Vendredi 27 Novembre 2026' },
+    { date: '2026-11-28', label: 'Samedi 28 Novembre 2026' },
+    { date: '2026-11-29', label: 'Dimanche 29 Novembre 2026' },
   ];
 
   const handleDateToggle = (date: string) => {

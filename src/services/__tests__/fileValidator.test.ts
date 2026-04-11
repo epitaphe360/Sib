@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tests unitaires pour fileValidator
  * Exemple de tests à 80%+ coverage
  */
@@ -141,3 +141,4 @@ describe('fileValidator', () => {
  * - Magic bytes mismatch
  * - Noms de fichiers dangereux
  */
+

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+ï»¿import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useTranslation } from '../hooks/useTranslation';
@@ -134,7 +134,7 @@ interface Partner {
   gallery?: string[];
 }
 
-// Les données du partenaire sont maintenant chargées depuis Supabase
+// Les donnÃ©es du partenaire sont maintenant chargÃ©es depuis Supabase
 
 export default function PartnerDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -164,12 +164,12 @@ export default function PartnerDetailPage() {
         const data = await SupabaseService.getPartnerById(id);
         if (data) {
           setPartner(data);
-          // Incrémenter les vues
+          // IncrÃ©menter les vues
           SupabaseService.incrementPartnerViews(id).catch(err => 
-            console.error("Erreur incrémentation vues partenaire:", err)
+            console.error("Erreur incrÃ©mentation vues partenaire:", err)
           );
         } else {
-          setError("Partenaire non trouvé");
+          setError("Partenaire non trouvÃ©");
         }
       } catch (err) {
         console.error("Erreur chargement partenaire:", err);
@@ -206,9 +206,9 @@ export default function PartnerDetailPage() {
             {t('partner.notFound', 'Partenaire non disponible')}
           </h2>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            {error === "Partenaire non trouvé" 
-              ? t('partner.notFoundDesc', "Ce partenaire n'a pas encore complété son profil ou n'est pas encore visible publiquement. Revenez bientôt pour découvrir notre réseau de partenaires !")
-              : error || t('partner.notFoundGeneric', "Le partenaire que vous recherchez n'existe pas ou a été supprimé.")}
+            {error === "Partenaire non trouvÃ©" 
+              ? t('partner.notFoundDesc', "Ce partenaire n'a pas encore complÃ©tÃ© son profil ou n'est pas encore visible publiquement. Revenez bientÃ´t pour dÃ©couvrir notre rÃ©seau de partenaires !")
+              : error || t('partner.notFoundGeneric', "Le partenaire que vous recherchez n'existe pas ou a Ã©tÃ© supprimÃ©.")}
           </p>
           
           {/* Actions */}
@@ -222,7 +222,7 @@ export default function PartnerDetailPage() {
             <Link to={ROUTES.HOME}>
               <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 w-full sm:w-auto">
                 <Crown className="h-4 w-4 mr-2" />
-                {t('partner.discoverSIB', 'Découvrir SIB 2026')}
+                {t('partner.discoverSIB', 'DÃ©couvrir SIB 2026')}
               </Button>
             </Link>
           </div>
@@ -230,9 +230,9 @@ export default function PartnerDetailPage() {
           {/* Message informatif */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
-              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous êtes partenaire ?')}</span>
+              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous Ãªtes partenaire ?')}</span>
               <br />
-              {t('partner.completeProfile', 'Complétez votre profil depuis votre tableau de bord pour apparaître dans notre annuaire des partenaires.')}
+              {t('partner.completeProfile', 'ComplÃ©tez votre profil depuis votre tableau de bord pour apparaÃ®tre dans notre annuaire des partenaires.')}
             </p>
           </div>
         </Card>
@@ -288,9 +288,9 @@ export default function PartnerDetailPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed': return 'Terminé';
+      case 'completed': return 'TerminÃ©';
       case 'active': return 'En cours';
-      case 'planned': return 'Planifié';
+      case 'planned': return 'PlanifiÃ©';
       default: return status;
     }
   };
@@ -303,7 +303,7 @@ export default function PartnerDetailPage() {
   const handleShare = () => {
     const shareData = {
       title: partner.name,
-      text: `Découvrez ${partner.name} - ${partner.description}`,
+      text: `DÃ©couvrez ${partner.name} - ${partner.description}`,
       url: window.location.href
     };
 
@@ -312,14 +312,14 @@ export default function PartnerDetailPage() {
     } else {
       // Fallback: copier le lien dans le presse-papiers
       navigator.clipboard.writeText(shareData.url)
-        .then(() => toast.success('Lien copié dans le presse-papiers !'))
+        .then(() => toast.success('Lien copiÃ© dans le presse-papiers !'))
         .catch(() => toast.error('Impossible de copier le lien'));
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Banner de validation pour les profils non publiés */}
+      {/* Banner de validation pour les profils non publiÃ©s */}
       {partner.is_published === false && (
         <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 px-4 shadow-lg">
           <div className="max-w-7xl mx-auto flex items-center justify-center space-x-3">
@@ -407,7 +407,7 @@ export default function PartnerDetailPage() {
                 </Button>
               </div>
               
-              {/* Réseaux sociaux */}
+              {/* RÃ©seaux sociaux */}
               {partner.socialMedia && (
                 <div className="flex items-center space-x-3 mt-4">
                   {partner.socialMedia.linkedin && (
@@ -448,11 +448,11 @@ export default function PartnerDetailPage() {
           <nav className="flex space-x-2 md:space-x-4 min-w-max pb-2">
             {[
               { id: 'overview', label: 'Vue d\'ensemble', icon: Eye },
-              { id: 'about', label: 'À propos', icon: Building2 },
+              { id: 'about', label: 'Ã€ propos', icon: Building2 },
               { id: 'expertise', label: 'Expertise', icon: Lightbulb },
               { id: 'projects', label: 'Projets', icon: Target },
               { id: 'gallery', label: 'Galerie', icon: ImageIcon },
-              { id: 'news', label: 'Actualités', icon: BookOpen },
+              { id: 'news', label: 'ActualitÃ©s', icon: BookOpen },
               { id: 'contact', label: 'Contact', icon: MessageCircle }
             ].map((tab) => (
               <button
@@ -478,7 +478,7 @@ export default function PartnerDetailPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-8"
           >
-            {/* Hero Stats avec chiffres clés */}
+            {/* Hero Stats avec chiffres clÃ©s */}
             {Array.isArray(partner.keyFigures) && partner.keyFigures.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {partner.keyFigures.map((stat, index) => (
@@ -513,11 +513,11 @@ export default function PartnerDetailPage() {
             ) : (
               <Card className="p-8 text-center bg-gradient-to-br from-blue-50 to-indigo-50">
                 <BarChart3 className="h-12 w-12 mx-auto mb-3 text-blue-300" />
-                <p className="text-gray-600 font-medium">Les chiffres clés seront disponibles bientôt</p>
+                <p className="text-gray-600 font-medium">Les chiffres clÃ©s seront disponibles bientÃ´t</p>
               </Card>
             )}
 
-            {/* Description longue avec vidéo */}
+            {/* Description longue avec vidÃ©o */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <Card className="lg:col-span-2 p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
@@ -551,7 +551,7 @@ export default function PartnerDetailPage() {
                 </div>
               </Card>
 
-              {/* Vidéo de présentation */}
+              {/* VidÃ©o de prÃ©sentation */}
               <Card className="p-0 overflow-hidden">
                 {partner.videoUrl ? (
                   <div className="relative aspect-video bg-gray-900 rounded-xl overflow-hidden">
@@ -568,8 +568,8 @@ export default function PartnerDetailPage() {
                         <Play className="h-8 w-8 text-blue-600 ml-1" />
                       </div>
                       <div className="absolute bottom-4 left-4 right-4 text-white">
-                        <p className="font-medium">Découvrez {partner.name}</p>
-                        <p className="text-sm text-white/80">Vidéo de présentation</p>
+                        <p className="font-medium">DÃ©couvrez {partner.name}</p>
+                        <p className="text-sm text-white/80">VidÃ©o de prÃ©sentation</p>
                       </div>
                     </button>
                   </div>
@@ -577,7 +577,7 @@ export default function PartnerDetailPage() {
                   <div className="aspect-video bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
                     <div className="text-center text-white p-6">
                       <Sparkles className="h-12 w-12 mx-auto mb-3 opacity-80" />
-                      <p className="font-semibold">Vidéo bientôt disponible</p>
+                      <p className="font-semibold">VidÃ©o bientÃ´t disponible</p>
                     </div>
                   </div>
                 )}
@@ -614,11 +614,11 @@ export default function PartnerDetailPage() {
             ) : (
               <Card className="p-6 text-center">
                 <Heart className="h-10 w-10 mx-auto mb-3 text-red-200" />
-                <p className="text-gray-500 font-medium">Les valeurs de l'organisation seront disponibles bientôt</p>
+                <p className="text-gray-500 font-medium">Les valeurs de l'organisation seront disponibles bientÃ´t</p>
               </Card>
             )}
 
-            {/* Certifications & Récompenses */}
+            {/* Certifications & RÃ©compenses */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Certifications */}
               {partner.certifications && partner.certifications.length > 0 ? (
@@ -642,16 +642,16 @@ export default function PartnerDetailPage() {
               ) : (
                 <Card className="p-6 text-center">
                   <Shield className="h-10 w-10 mx-auto mb-3 text-green-200" />
-                  <p className="text-gray-500 font-medium">Les certifications seront disponibles bientôt</p>
+                  <p className="text-gray-500 font-medium">Les certifications seront disponibles bientÃ´t</p>
                 </Card>
               )}
 
-              {/* Récompenses */}
+              {/* RÃ©compenses */}
               {partner.awards && partner.awards.length > 0 ? (
                 <Card className="p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
                     <Award className="h-5 w-5 mr-2 text-yellow-600" />
-                    Récompenses
+                    RÃ©compenses
                   </h3>
                   <div className="space-y-3">
                     {partner.awards.map((award, idx) => {
@@ -663,7 +663,7 @@ export default function PartnerDetailPage() {
                         <Star className="h-5 w-5 text-yellow-600 mr-3 flex-shrink-0 mt-0.5" />
                         <div>
                           <p className="font-medium text-yellow-900">{awardName}</p>
-                          {(awardIssuer || awardYear) && <p className="text-xs text-yellow-700">{awardIssuer}{awardIssuer && awardYear ? ' • ' : ''}{awardYear}</p>}
+                          {(awardIssuer || awardYear) && <p className="text-xs text-yellow-700">{awardIssuer}{awardIssuer && awardYear ? ' â€¢ ' : ''}{awardYear}</p>}
                         </div>
                       </div>
                       );
@@ -673,12 +673,12 @@ export default function PartnerDetailPage() {
               ) : (
                 <Card className="p-6 text-center">
                   <Award className="h-10 w-10 mx-auto mb-3 text-yellow-200" />
-                  <p className="text-gray-500 font-medium">Les récompenses seront disponibles bientôt</p>
+                  <p className="text-gray-500 font-medium">Les rÃ©compenses seront disponibles bientÃ´t</p>
                 </Card>
               )}
             </div>
 
-            {/* Témoignages */}
+            {/* TÃ©moignages */}
             {partner.testimonials && partner.testimonials.length > 0 ? (
               <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
@@ -716,7 +716,7 @@ export default function PartnerDetailPage() {
             ) : (
               <Card className="p-6 text-center bg-gradient-to-br from-blue-50 to-indigo-50">
                 <Quote className="h-10 w-10 mx-auto mb-3 text-blue-200" />
-                <p className="text-gray-500 font-medium">Les témoignages seront disponibles bientôt</p>
+                <p className="text-gray-500 font-medium">Les tÃ©moignages seront disponibles bientÃ´t</p>
               </Card>
             )}
 
@@ -749,14 +749,14 @@ export default function PartnerDetailPage() {
               ) : (
                 <div className="text-center py-6 text-gray-500">
                   <Zap className="h-10 w-10 mx-auto mb-3 text-indigo-200" />
-                  <p className="font-medium">Les contributions seront disponibles bientôt</p>
+                  <p className="font-medium">Les contributions seront disponibles bientÃ´t</p>
                 </div>
               )}
             </Card>
           </motion.div>
         )}
 
-        {/* Onglet À propos */}
+        {/* Onglet Ã€ propos */}
         {activeTab === 'about' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -764,7 +764,7 @@ export default function PartnerDetailPage() {
             className="space-y-8"
           >
             <Card className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">À propos de {partner.name}</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Ã€ propos de {partner.name}</h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-6">{partner.longDescription || partner.description}</p>
                 
@@ -792,11 +792,11 @@ export default function PartnerDetailPage() {
               </h3>
               <div className="text-center py-8">
                 <Clock className="h-10 w-10 mx-auto mb-3 text-blue-200" />
-                <p className="text-gray-500 font-medium">L'historique détaillé sera disponible bientôt</p>
+                <p className="text-gray-500 font-medium">L'historique dÃ©taillÃ© sera disponible bientÃ´t</p>
               </div>
             </Card>
 
-            {/* Clients référents */}
+            {/* Clients rÃ©fÃ©rents */}
             {partner.clients && partner.clients.length > 0 ? (
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
@@ -817,7 +817,7 @@ export default function PartnerDetailPage() {
             ) : (
               <Card className="p-6 text-center">
                 <Briefcase className="h-10 w-10 mx-auto mb-3 text-green-200" />
-                <p className="text-gray-500 font-medium">La liste des clients sera disponible bientôt</p>
+                <p className="text-gray-500 font-medium">La liste des clients sera disponible bientÃ´t</p>
               </Card>
             )}
           </motion.div>
@@ -841,152 +841,152 @@ export default function PartnerDetailPage() {
                   {(partner.expertise || []).length > 0 ? (partner.expertise || []).map((exp, index) => {
                     const isExpanded = expandedExpertise[index] || false;
                     
-                    // Descriptions génériques basées sur les domaines courants
+                    // Descriptions gÃ©nÃ©riques basÃ©es sur les domaines courants
                     const getExpertiseDescription = (title: string) => {
                       const lowerTitle = title.toLowerCase();
-                      // Infrastructure & Équipement
-                      if (lowerTitle.includes('routière') || lowerTitle.includes('routes') || lowerTitle.includes('route')) {
-                        return "Planification, construction et entretien du réseau routier national incluant routes nationales, régionales et provinciales pour une connectivité territoriale optimale.";
+                      // Infrastructure & Ã‰quipement
+                      if (lowerTitle.includes('routiÃ¨re') || lowerTitle.includes('routes') || lowerTitle.includes('route')) {
+                        return "Planification, construction et entretien du rÃ©seau routier national incluant routes nationales, rÃ©gionales et provinciales pour une connectivitÃ© territoriale optimale.";
                       }
-                      if (lowerTitle.includes('port') && (lowerTitle.includes('maritime') || lowerTitle.includes('infrastructure'))) {
-                        return "Développement, modernisation et gestion des infrastructures portuaires stratégiques pour renforcer la compétitivité maritime et le commerce international du Maroc.";
+                      if (lowerTitle.includes('port') && (lowerTitle.includes('construction') || lowerTitle.includes('infrastructure'))) {
+                        return "DÃ©veloppement, modernisation et gestion des infrastructures BTP stratÃ©giques pour renforcer la compÃ©titivitÃ© construction et le commerce international du Maroc.";
                       }
                       if (lowerTitle.includes('eau') || lowerTitle.includes('ressources en eau') || lowerTitle.includes('hydraulique')) {
-                        return "Gestion intégrée des ressources hydriques du pays : mobilisation, distribution, assainissement et préservation des ressources en eau face aux défis du changement climatique.";
+                        return "Gestion intÃ©grÃ©e des ressources hydriques du pays : mobilisation, distribution, assainissement et prÃ©servation des ressources en eau face aux dÃ©fis du changement climatique.";
                       }
-                      if (lowerTitle.includes('aéroport') || lowerTitle.includes('aérien') || lowerTitle.includes('aviation')) {
-                        return "Conception, construction et supervision des infrastructures aéroportuaires assurant la connectivité aérienne nationale et internationale du Maroc.";
+                      if (lowerTitle.includes('aÃ©roport') || lowerTitle.includes('aÃ©rien') || lowerTitle.includes('aviation')) {
+                        return "Conception, construction et supervision des infrastructures aÃ©roBTP assurant la connectivitÃ© aÃ©rienne nationale et internationale du Maroc.";
                       }
                       if (lowerTitle.includes('autoroute') || lowerTitle.includes('voies express')) {
-                        return "Planification et déploiement du réseau autoroutier et des voies express pour désenclaver les régions et fluidifier les échanges économiques à l'échelle nationale.";
+                        return "Planification et dÃ©ploiement du rÃ©seau autoroutier et des voies express pour dÃ©senclaver les rÃ©gions et fluidifier les Ã©changes Ã©conomiques Ã  l'Ã©chelle nationale.";
                       }
                       if (lowerTitle.includes('barrage') || lowerTitle.includes('ouvrage')) {
-                        return "Construction et exploitation de grands barrages et ouvrages hydrauliques pour la régulation des eaux, l'irrigation agricole et la production d'énergie hydroélectrique.";
+                        return "Construction et exploitation de grands barrages et ouvrages hydrauliques pour la rÃ©gulation des eaux, l'irrigation agricole et la production d'Ã©nergie hydroÃ©lectrique.";
                       }
-                      if (lowerTitle.includes('météo') || lowerTitle.includes('climatol')) {
-                        return "Service de prévision météorologique, surveillance climatique et alerte précoce pour la protection des personnes, des biens et le soutien aux secteurs économiques sensibles.";
+                      if (lowerTitle.includes('mÃ©tÃ©o') || lowerTitle.includes('climatol')) {
+                        return "Service de prÃ©vision mÃ©tÃ©orologique, surveillance climatique et alerte prÃ©coce pour la protection des personnes, des biens et le soutien aux secteurs Ã©conomiques sensibles.";
                       }
-                      if (lowerTitle.includes('aménagement') || lowerTitle.includes('territoire')) {
-                        return "Élaboration des schémas d'aménagement du territoire et coordination des politiques de développement spatial pour un équilibre régional durable.";
+                      if (lowerTitle.includes('amÃ©nagement') || lowerTitle.includes('territoire')) {
+                        return "Ã‰laboration des schÃ©mas d'amÃ©nagement du territoire et coordination des politiques de dÃ©veloppement spatial pour un Ã©quilibre rÃ©gional durable.";
                       }
                       // Transport & Logistique
                       if (lowerTitle.includes('transport routier')) {
-                        return "Régulation et développement du transport routier de personnes et de marchandises, incluant la sécurité routière et la modernisation du parc véhicules.";
+                        return "RÃ©gulation et dÃ©veloppement du transport routier de personnes et de marchandises, incluant la sÃ©curitÃ© routiÃ¨re et la modernisation du parc vÃ©hicules.";
                       }
-                      if (lowerTitle.includes('transport maritime') || lowerTitle.includes('marine marchande')) {
-                        return "Encadrement et développement du transport maritime et de la marine marchande, incluant la réglementation, la sécurité et la compétitivité de la flotte nationale.";
+                      if (lowerTitle.includes('transport construction') || lowerTitle.includes('marine marchande')) {
+                        return "Encadrement et dÃ©veloppement du transport construction et de la marine marchande, incluant la rÃ©glementation, la sÃ©curitÃ© et la compÃ©titivitÃ© de la flotte nationale.";
                       }
-                      if (lowerTitle.includes('transport aérien')) {
-                        return "Supervision du transport aérien civil, promotion de la connectivité aérienne et développement des accords de ciel ouvert pour renforcer l'attractivité du Maroc.";
+                      if (lowerTitle.includes('transport aÃ©rien')) {
+                        return "Supervision du transport aÃ©rien civil, promotion de la connectivitÃ© aÃ©rienne et dÃ©veloppement des accords de ciel ouvert pour renforcer l'attractivitÃ© du Maroc.";
                       }
                       if (lowerTitle.includes('ferroviaire') || lowerTitle.includes('train') || lowerTitle.includes('lgv')) {
-                        return "Planification et développement du réseau ferroviaire incluant les lignes à grande vitesse et les services de transport de passagers et de fret.";
+                        return "Planification et dÃ©veloppement du rÃ©seau ferroviaire incluant les lignes Ã  grande vitesse et les services de transport de passagers et de fret.";
                       }
-                      if (lowerTitle.includes('logistique') || lowerTitle.includes('supply') || lowerTitle.includes('chaîne')) {
-                        return "Mise en œuvre de la stratégie nationale logistique visant à réduire les coûts, développer les zones logistiques et optimiser les flux de marchandises.";
+                      if (lowerTitle.includes('logistique') || lowerTitle.includes('supply') || lowerTitle.includes('chaÃ®ne')) {
+                        return "Mise en Å“uvre de la stratÃ©gie nationale logistique visant Ã  rÃ©duire les coÃ»ts, dÃ©velopper les zones logistiques et optimiser les flux de marchandises.";
                       }
-                      if (lowerTitle.includes('sécurité routière')) {
-                        return "Politique nationale de sécurité routière : prévention des accidents, sensibilisation, contrôle technique et amélioration des infrastructures de sécurité.";
+                      if (lowerTitle.includes('sÃ©curitÃ© routiÃ¨re')) {
+                        return "Politique nationale de sÃ©curitÃ© routiÃ¨re : prÃ©vention des accidents, sensibilisation, contrÃ´le technique et amÃ©lioration des infrastructures de sÃ©curitÃ©.";
                       }
-                      if (lowerTitle.includes('réglementation')) {
-                        return "Élaboration du cadre juridique et réglementaire régissant les activités de transport, de logistique et de mobilité au niveau national.";
+                      if (lowerTitle.includes('rÃ©glementation')) {
+                        return "Ã‰laboration du cadre juridique et rÃ©glementaire rÃ©gissant les activitÃ©s de transport, de logistique et de mobilitÃ© au niveau national.";
                       }
-                      // Maritime & Portuaire
+                      // BTP & BTP
                       if (lowerTitle.includes('navigation') || lowerTitle.includes('voies navigable')) {
-                        return "Développement et maintenance des infrastructures de navigation intérieure et côtière pour un transport fluvial et maritime sûr et efficace.";
+                        return "DÃ©veloppement et maintenance des infrastructures de navigation intÃ©rieure et cÃ´tiÃ¨re pour un transport fluvial et construction sÃ»r et efficace.";
                       }
-                      if (lowerTitle.includes('portuaire') && !lowerTitle.includes('maritime')) {
-                        return "Gestion et développement des infrastructures portuaires pour améliorer la compétitivité des ports et faciliter les échanges commerciaux.";
+                      if (lowerTitle.includes('bÃ¢timent') && !lowerTitle.includes('construction')) {
+                        return "Gestion et dÃ©veloppement des infrastructures BTP pour amÃ©liorer la compÃ©titivitÃ© des ports et faciliter les Ã©changes commerciaux.";
                       }
                       if (lowerTitle.includes('waterborne') || lowerTitle.includes('inland') || lowerTitle.includes('fluvial')) {
-                        return "Infrastructure et opérations de transport par voies navigables intérieures et maritimes pour une mobilité durable et économique.";
+                        return "Infrastructure et opÃ©rations de transport par voies navigables intÃ©rieures et BTP pour une mobilitÃ© durable et Ã©conomique.";
                       }
-                      // Industrie & Économie
-                      if (lowerTitle.includes('métallurg') || lowerTitle.includes('sidérurg') || lowerTitle.includes('acier')) {
-                        return "Développement et structuration des industries métallurgiques et sidérurgiques pour une production compétitive et conforme aux normes internationales.";
+                      // Industrie & Ã‰conomie
+                      if (lowerTitle.includes('mÃ©tallurg') || lowerTitle.includes('sidÃ©rurg') || lowerTitle.includes('acier')) {
+                        return "DÃ©veloppement et structuration des industries mÃ©tallurgiques et sidÃ©rurgiques pour une production compÃ©titive et conforme aux normes internationales.";
                       }
-                      if (lowerTitle.includes('mécanique') || lowerTitle.includes('électromécanique')) {
-                        return "Promotion et accompagnement des industries mécaniques et électromécaniques dans leur montée en compétence et leur intégration aux chaînes de valeur mondiales.";
+                      if (lowerTitle.includes('mÃ©canique') || lowerTitle.includes('Ã©lectromÃ©canique')) {
+                        return "Promotion et accompagnement des industries mÃ©caniques et Ã©lectromÃ©caniques dans leur montÃ©e en compÃ©tence et leur intÃ©gration aux chaÃ®nes de valeur mondiales.";
                       }
                       if (lowerTitle.includes('industriel') || lowerTitle.includes('industrie')) {
-                        return "Soutien au tissu industriel national par l'accompagnement stratégique, la veille sectorielle et la facilitation de l'accès aux marchés.";
+                        return "Soutien au tissu industriel national par l'accompagnement stratÃ©gique, la veille sectorielle et la facilitation de l'accÃ¨s aux marchÃ©s.";
                       }
                       // Culture & Patrimoine
-                      if (lowerTitle.includes('art') || lowerTitle.includes('artistique') || lowerTitle.includes('création')) {
-                        return "Promotion de la création artistique contemporaine et soutien aux artistes à travers des expositions, résidences et programmes de médiation culturelle.";
+                      if (lowerTitle.includes('art') || lowerTitle.includes('artistique') || lowerTitle.includes('crÃ©ation')) {
+                        return "Promotion de la crÃ©ation artistique contemporaine et soutien aux artistes Ã  travers des expositions, rÃ©sidences et programmes de mÃ©diation culturelle.";
                       }
-                      if (lowerTitle.includes('patrimoine') || lowerTitle.includes('héritage')) {
-                        return "Préservation, valorisation et diffusion du patrimoine culturel matériel et immatériel pour les générations futures.";
+                      if (lowerTitle.includes('patrimoine') || lowerTitle.includes('hÃ©ritage')) {
+                        return "PrÃ©servation, valorisation et diffusion du patrimoine culturel matÃ©riel et immatÃ©riel pour les gÃ©nÃ©rations futures.";
                       }
-                      if (lowerTitle.includes('musée') || lowerTitle.includes('muséo') || lowerTitle.includes('exposition')) {
-                        return "Développement et gestion d'espaces muséaux et d'expositions pour la découverte et l'éducation du public autour de l'art et de l'histoire.";
+                      if (lowerTitle.includes('musÃ©e') || lowerTitle.includes('musÃ©o') || lowerTitle.includes('exposition')) {
+                        return "DÃ©veloppement et gestion d'espaces musÃ©aux et d'expositions pour la dÃ©couverte et l'Ã©ducation du public autour de l'art et de l'histoire.";
                       }
-                      // Académique & Formation
-                      if (lowerTitle.includes('formation') || lowerTitle.includes('enseignement') || lowerTitle.includes('pédagogie')) {
-                        return "Programmes de formation spécialisée alliant théorie et pratique pour préparer les professionnels aux défis des secteurs maritime et portuaire.";
+                      // AcadÃ©mique & Formation
+                      if (lowerTitle.includes('formation') || lowerTitle.includes('enseignement') || lowerTitle.includes('pÃ©dagogie')) {
+                        return "Programmes de formation spÃ©cialisÃ©e alliant thÃ©orie et pratique pour prÃ©parer les professionnels aux dÃ©fis des secteurs construction et bÃ¢timent.";
                       }
                       if (lowerTitle.includes('recherche') || lowerTitle.includes('r&d') || lowerTitle.includes('innovation')) {
-                        return "Activités de recherche scientifique et d'innovation technologique pour développer de nouvelles solutions adaptées aux enjeux du secteur.";
+                        return "ActivitÃ©s de recherche scientifique et d'innovation technologique pour dÃ©velopper de nouvelles solutions adaptÃ©es aux enjeux du secteur.";
                       }
                       if (lowerTitle.includes('naval') || lowerTitle.includes('marine')) {
-                        return "Ingénierie et expertise navale couvrant la conception, la construction et la maintenance des navires et systèmes maritimes.";
+                        return "IngÃ©nierie et expertise navale couvrant la conception, la construction et la maintenance des navires et systÃ¨mes BTP.";
                       }
                       if (lowerTitle.includes('vts') || lowerTitle.includes('trafic') || lowerTitle.includes('surveillance')) {
-                        return "Systèmes de surveillance et de gestion du trafic maritime pour la sécurité de la navigation et la protection de l'environnement côtier.";
+                        return "SystÃ¨mes de surveillance et de gestion du trafic construction pour la sÃ©curitÃ© de la navigation et la protection de l'environnement cÃ´tier.";
                       }
-                      // Sécurité & Défense
-                      if (lowerTitle.includes('sécurité publique') || lowerTitle.includes('sûreté') || lowerTitle.includes('ordre public')) {
+                      // SÃ©curitÃ© & DÃ©fense
+                      if (lowerTitle.includes('sÃ©curitÃ© publique') || lowerTitle.includes('sÃ»retÃ©') || lowerTitle.includes('ordre public')) {
                         return "Maintien de l'ordre public et protection des personnes et des biens sur l'ensemble du territoire national.";
                       }
                       if (lowerTitle.includes('police') || lowerTitle.includes('judiciaire') || lowerTitle.includes('gendarmerie')) {
-                        return "Missions de police judiciaire et administrative au service de la justice et de la sécurité des citoyens.";
+                        return "Missions de police judiciaire et administrative au service de la justice et de la sÃ©curitÃ© des citoyens.";
                       }
-                      // Réseaux & Coopération
-                      if (lowerTitle.includes('coopération') || lowerTitle.includes('international')) {
-                        return "Développement de partenariats internationaux et échanges d'expertise pour promouvoir les meilleures pratiques et renforcer les capacités.";
+                      // RÃ©seaux & CoopÃ©ration
+                      if (lowerTitle.includes('coopÃ©ration') || lowerTitle.includes('international')) {
+                        return "DÃ©veloppement de partenariats internationaux et Ã©changes d'expertise pour promouvoir les meilleures pratiques et renforcer les capacitÃ©s.";
                       }
-                      if (lowerTitle.includes('réseau') || lowerTitle.includes('networking')) {
-                        return "Animation d'un réseau professionnel dynamique favorisant les échanges, le mentorat et les opportunités de collaboration.";
+                      if (lowerTitle.includes('rÃ©seau') || lowerTitle.includes('networking')) {
+                        return "Animation d'un rÃ©seau professionnel dynamique favorisant les Ã©changes, le mentorat et les opportunitÃ©s de collaboration.";
                       }
                       if (lowerTitle.includes('plaidoyer') || lowerTitle.includes('advocacy') || lowerTitle.includes('promotion')) {
-                        return "Actions de plaidoyer et de sensibilisation pour promouvoir l'inclusion, la diversité et l'égalité des chances dans le secteur.";
+                        return "Actions de plaidoyer et de sensibilisation pour promouvoir l'inclusion, la diversitÃ© et l'Ã©galitÃ© des chances dans le secteur.";
                       }
                       // Digital & Tech
                       if (lowerTitle.includes('transformation') || lowerTitle.includes('digital')) {
-                        return "Accompagnement complet dans la digitalisation de vos processus et infrastructures pour optimiser votre compétitivité.";
+                        return "Accompagnement complet dans la digitalisation de vos processus et infrastructures pour optimiser votre compÃ©titivitÃ©.";
                       }
-                      if (lowerTitle.includes('cyber') || lowerTitle.includes('sécurité informatique')) {
-                        return "Protection avancée de vos systèmes et données contre les menaces cybernétiques avec des solutions de pointe.";
+                      if (lowerTitle.includes('cyber') || lowerTitle.includes('sÃ©curitÃ© informatique')) {
+                        return "Protection avancÃ©e de vos systÃ¨mes et donnÃ©es contre les menaces cybernÃ©tiques avec des solutions de pointe.";
                       }
-                      if (lowerTitle.includes('big data') || lowerTitle.includes('analytics') || lowerTitle.includes('données')) {
-                        return "Exploitation intelligente de vos données massives pour des décisions stratégiques éclairées et prédictives.";
+                      if (lowerTitle.includes('big data') || lowerTitle.includes('analytics') || lowerTitle.includes('donnÃ©es')) {
+                        return "Exploitation intelligente de vos donnÃ©es massives pour des dÃ©cisions stratÃ©giques Ã©clairÃ©es et prÃ©dictives.";
                       }
                       if (lowerTitle.includes('intelligence artificielle') || lowerTitle.includes('ia') || lowerTitle.includes('ai')) {
-                        return "Intégration d'algorithmes d'apprentissage automatique pour automatiser et optimiser vos opérations.";
+                        return "IntÃ©gration d'algorithmes d'apprentissage automatique pour automatiser et optimiser vos opÃ©rations.";
                       }
                       if (lowerTitle.includes('cloud')) {
-                        return "Infrastructure cloud évolutive et sécurisée pour une flexibilité maximale et une réduction des coûts.";
+                        return "Infrastructure cloud Ã©volutive et sÃ©curisÃ©e pour une flexibilitÃ© maximale et une rÃ©duction des coÃ»ts.";
                       }
                       if (lowerTitle.includes('blockchain')) {
-                        return "Technologie blockchain pour une traçabilité transparente et des transactions sécurisées et décentralisées.";
+                        return "Technologie blockchain pour une traÃ§abilitÃ© transparente et des transactions sÃ©curisÃ©es et dÃ©centralisÃ©es.";
                       }
-                      if (lowerTitle.includes('iot') || lowerTitle.includes('objets connectés')) {
-                        return "Solutions IoT innovantes pour connecter, surveiller et optimiser vos équipements et infrastructures en temps réel.";
+                      if (lowerTitle.includes('iot') || lowerTitle.includes('objets connectÃ©s')) {
+                        return "Solutions IoT innovantes pour connecter, surveiller et optimiser vos Ã©quipements et infrastructures en temps rÃ©el.";
                       }
-                      if (lowerTitle.includes('durable') || lowerTitle.includes('environnement') || lowerTitle.includes('écologi')) {
-                        return "Stratégies de développement durable intégrant réduction d'empreinte carbone, efficacité énergétique et préservation des écosystèmes.";
+                      if (lowerTitle.includes('durable') || lowerTitle.includes('environnement') || lowerTitle.includes('Ã©cologi')) {
+                        return "StratÃ©gies de dÃ©veloppement durable intÃ©grant rÃ©duction d'empreinte carbone, efficacitÃ© Ã©nergÃ©tique et prÃ©servation des Ã©cosystÃ¨mes.";
                       }
                       // Normalisation & Standards
                       if (lowerTitle.includes('normalisation') || lowerTitle.includes('norme') || lowerTitle.includes('standard')) {
-                        return "Élaboration et diffusion de normes et standards techniques pour garantir la qualité, la sécurité et l'interopérabilité.";
+                        return "Ã‰laboration et diffusion de normes et standards techniques pour garantir la qualitÃ©, la sÃ©curitÃ© et l'interopÃ©rabilitÃ©.";
                       }
-                      if (lowerTitle.includes('veille') || lowerTitle.includes('intelligence économique')) {
-                        return "Activités de veille stratégique et technologique pour anticiper les évolutions du marché et orienter les décisions.";
+                      if (lowerTitle.includes('veille') || lowerTitle.includes('intelligence Ã©conomique')) {
+                        return "ActivitÃ©s de veille stratÃ©gique et technologique pour anticiper les Ã©volutions du marchÃ© et orienter les dÃ©cisions.";
                       }
-                      if (lowerTitle.includes('compétitivité') || lowerTitle.includes('export') || lowerTitle.includes('marché')) {
-                        return "Accompagnement des entreprises dans leur développement commercial, à l'export et sur les marchés internationaux.";
+                      if (lowerTitle.includes('compÃ©titivitÃ©') || lowerTitle.includes('export') || lowerTitle.includes('marchÃ©')) {
+                        return "Accompagnement des entreprises dans leur dÃ©veloppement commercial, Ã  l'export et sur les marchÃ©s internationaux.";
                       }
-                      // Fallback intelligent basé sur le contexte du partenaire
+                      // Fallback intelligent basÃ© sur le contexte du partenaire
                       return `Expertise reconnue en ${title.toLowerCase()} au service de l'excellence et de l'innovation dans le secteur.`;
                     };
                     
@@ -1021,12 +1021,12 @@ export default function PartnerDetailPage() {
                   }) : (
                     <div className="text-center py-6">
                       <Layers className="h-10 w-10 mx-auto mb-3 text-blue-200" />
-                      <p className="text-gray-500 font-medium">Les domaines d'expertise seront disponibles bientôt</p>
+                      <p className="text-gray-500 font-medium">Les domaines d'expertise seront disponibles bientÃ´t</p>
                     </div>
                   )}
                 </div>
               </Card>
-              {/* Expertise - Utiliser les vraies données de la DB */}
+              {/* Expertise - Utiliser les vraies donnÃ©es de la DB */}
               {partner.expertise && partner.expertise.length > 0 && (
                 <Card className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
@@ -1052,7 +1052,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <GraduationCap className="h-5 w-5 mr-2 text-green-600" />
-                  Certifications & Accréditations
+                  Certifications & AccrÃ©ditations
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {partner.certifications.map((cert, idx) => {
@@ -1069,7 +1069,7 @@ export default function PartnerDetailPage() {
             ) : (
               <Card className="p-6 text-center">
                 <GraduationCap className="h-10 w-10 mx-auto mb-3 text-green-200" />
-                <p className="text-gray-500 font-medium">Les certifications seront disponibles bientôt</p>
+                <p className="text-gray-500 font-medium">Les certifications seront disponibles bientÃ´t</p>
               </Card>
             )}
           </motion.div>
@@ -1115,20 +1115,20 @@ export default function PartnerDetailPage() {
             ) : (
               <div className="text-center py-12 text-gray-500">
                 <Camera className="h-12 w-12 mx-auto mb-4 text-blue-200" />
-                <p className="text-gray-600 font-medium">La galerie photo sera disponible bientôt</p>
+                <p className="text-gray-600 font-medium">La galerie photo sera disponible bientÃ´t</p>
               </div>
             )}
           </motion.div>
         )}
 
-        {/* Onglet Actualités */}
+        {/* Onglet ActualitÃ©s */}
         {activeTab === 'news' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Dernières Actualités</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">DerniÃ¨res ActualitÃ©s</h2>
             
             {partner.news && partner.news.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1172,7 +1172,7 @@ export default function PartnerDetailPage() {
             ) : (
               <div className="text-center py-12 text-gray-500">
                 <Newspaper className="h-12 w-12 mx-auto mb-4 text-blue-200" />
-                <p className="text-gray-600 font-medium">Les actualités seront disponibles bientôt</p>
+                <p className="text-gray-600 font-medium">Les actualitÃ©s seront disponibles bientÃ´t</p>
               </div>
             )}
           </motion.div>
@@ -1249,7 +1249,7 @@ export default function PartnerDetailPage() {
                         onClick={() => handleViewProjectDetails(project)}
                       >
                         <Eye className="h-4 w-4 mr-2" />
-                        Voir les détails
+                        Voir les dÃ©tails
                       </Button>
                     </div>
                   </Card>
@@ -1259,7 +1259,7 @@ export default function PartnerDetailPage() {
             ) : (
               <Card className="p-8 text-center">
                 <Target className="h-12 w-12 mx-auto mb-3 text-blue-200" />
-                <p className="text-gray-600 font-medium">Les projets seront disponibles bientôt</p>
+                <p className="text-gray-600 font-medium">Les projets seront disponibles bientÃ´t</p>
               </Card>
             )}
           </motion.div>
@@ -1278,7 +1278,7 @@ export default function PartnerDetailPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                  <h4 className="font-semibold text-gray-900 text-lg">Coordonnées</h4>
+                  <h4 className="font-semibold text-gray-900 text-lg">CoordonnÃ©es</h4>
                   
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
@@ -1306,7 +1306,7 @@ export default function PartnerDetailPage() {
                         <Phone className="h-5 w-5 text-purple-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Téléphone</p>
+                        <p className="text-sm text-gray-500">TÃ©lÃ©phone</p>
                         <p className="font-medium text-gray-900">+212 5 22 XX XX XX</p>
                       </div>
                     </div>
@@ -1376,7 +1376,7 @@ export default function PartnerDetailPage() {
         )}
       </div>
 
-      {/* Modal Vidéo */}
+      {/* Modal VidÃ©o */}
       {showVideoModal && partner.videoUrl && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setShowVideoModal(false)}>
           <motion.div
@@ -1463,34 +1463,34 @@ export default function PartnerDetailPage() {
                   {selectedNews.excerpt}
                 </p>
                 
-                {/* Contenu étendu généré */}
+                {/* Contenu Ã©tendu gÃ©nÃ©rÃ© */}
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Cette actualité témoigne de l'engagement continu de {partner.name} dans l'innovation et le développement du secteur portuaire. 
-                  Notre équipe travaille sans relâche pour apporter des solutions innovantes qui répondent aux défis actuels du secteur maritime.
+                  Cette actualitÃ© tÃ©moigne de l'engagement continu de {partner.name} dans l'innovation et le dÃ©veloppement du secteur du bÃ¢timent. 
+                  Notre Ã©quipe travaille sans relÃ¢che pour apporter des solutions innovantes qui rÃ©pondent aux dÃ©fis actuels du secteur de la construction.
                 </p>
                 
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Ce projet s'inscrit dans notre stratégie globale de transformation digitale et de développement durable, 
+                  Ce projet s'inscrit dans notre stratÃ©gie globale de transformation digitale et de dÃ©veloppement durable, 
                   en ligne avec notre mission : "{partner.mission?.substring(0, 100)}..."
                 </p>
                 
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mt-6">
                   <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
                     <Sparkles className="h-4 w-4 mr-2 text-blue-600" />
-                    Points clés
+                    Points clÃ©s
                   </h4>
                   <ul className="space-y-2 text-sm text-gray-700">
                     <li className="flex items-start">
                       <CheckCircle className="h-4 w-4 mr-2 text-green-500 mt-0.5 flex-shrink-0" />
-                      Innovation technologique au service du secteur portuaire
+                      Innovation technologique au service du secteur du bÃ¢timent
                     </li>
                     <li className="flex items-start">
                       <CheckCircle className="h-4 w-4 mr-2 text-green-500 mt-0.5 flex-shrink-0" />
-                      Engagement pour le développement durable
+                      Engagement pour le dÃ©veloppement durable
                     </li>
                     <li className="flex items-start">
                       <CheckCircle className="h-4 w-4 mr-2 text-green-500 mt-0.5 flex-shrink-0" />
-                      Partenariats stratégiques renforcés
+                      Partenariats stratÃ©giques renforcÃ©s
                     </li>
                   </ul>
                 </div>
@@ -1541,7 +1541,7 @@ export default function PartnerDetailPage() {
         </div>
       )}
 
-      {/* Modal Détails Projet */}
+      {/* Modal DÃ©tails Projet */}
       {showProjectModal && selectedProject && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <motion.div
@@ -1603,10 +1603,10 @@ export default function PartnerDetailPage() {
                 </p>
               </div>
 
-              {/* Détails Techniques */}
+              {/* DÃ©tails Techniques */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">Détails Techniques</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">DÃ©tails Techniques</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Statut:</span>
@@ -1615,12 +1615,12 @@ export default function PartnerDetailPage() {
                       </Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Début:</span>
+                      <span className="text-gray-600">DÃ©but:</span>
                       <span className="font-medium">{formatDate(selectedProject.startDate)}</span>
                     </div>
                     {selectedProject.endDate && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Fin prévue:</span>
+                        <span className="text-gray-600">Fin prÃ©vue:</span>
                         <span className="font-medium">{formatDate(selectedProject.endDate)}</span>
                       </div>
                     )}
@@ -1629,7 +1629,7 @@ export default function PartnerDetailPage() {
                       <span className="font-bold text-green-600">{selectedProject.budget}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Équipe:</span>
+                      <span className="text-gray-600">Ã‰quipe:</span>
                       <span className="font-medium">
                         {selectedProject.status === 'completed' ? '45 experts' : 
                          selectedProject.status === 'active' ? '32 experts' : '15 experts'}
@@ -1683,9 +1683,9 @@ export default function PartnerDetailPage() {
                 </div>
               </div>
 
-              {/* Technologies Utilisées */}
+              {/* Technologies UtilisÃ©es */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Technologies Utilisées</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Technologies UtilisÃ©es</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.technologies.map((tech: string) => (
                     <Badge key={tech} variant="info" size="sm">
@@ -1769,7 +1769,7 @@ export default function PartnerDetailPage() {
               <div className="flex space-x-4">
                 <Button variant="default" className="flex-1" onClick={handleContact}>
                   <MessageCircle className="h-4 w-4 mr-2" />
-                  Contacter l'Équipe Projet
+                  Contacter l'Ã‰quipe Projet
                 </Button>
                 <Button variant="default" onClick={handleShare}>
                   <Share2 className="h-4 w-4 mr-2" />
@@ -1779,7 +1779,7 @@ export default function PartnerDetailPage() {
                   variant="default"
                   onClick={() => {
                     if (selectedProject) {
-                      // Créer un rapport complet
+                      // CrÃ©er un rapport complet
                       const report = `
 ==============================================
 RAPPORT DE PROJET COMPLET
@@ -1788,12 +1788,12 @@ RAPPORT DE PROJET COMPLET
 Projet: ${selectedProject.name}
 Client: ${selectedProject.client}
 Statut: ${getStatusLabel(selectedProject.status)}
-Période: ${formatDate(new Date(selectedProject.startDate))} - ${formatDate(new Date(selectedProject.endDate))}
+PÃ©riode: ${formatDate(new Date(selectedProject.startDate))} - ${formatDate(new Date(selectedProject.endDate))}
 
 DESCRIPTION
 ${selectedProject.description}
 
-INDICATEURS CLÉS (KPIs)
+INDICATEURS CLÃ‰S (KPIs)
 - Avancement: ${selectedProject.kpis.progress}%
 - Satisfaction: ${selectedProject.kpis.satisfaction}%
 - ROI: ${selectedProject.kpis.roi}%
@@ -1804,28 +1804,28 @@ ${selectedProject.budget}
 TECHNOLOGIES
 ${selectedProject.technologies.join(', ')}
 
-ÉQUIPE
+Ã‰QUIPE
 ${selectedProject.team.map(m => `- ${m.name} (${m.role})`).join('\n')}
 
 JALONS PRINCIPAUX
-${selectedProject.milestones.map(m => `- ${m.title} (${m.date}) ${m.completed ? '? Complété' : '? En cours'}`).join('\n')}
+${selectedProject.milestones.map(m => `- ${m.title} (${m.date}) ${m.completed ? '? ComplÃ©tÃ©' : '? En cours'}`).join('\n')}
 
-DÉFIS ET SOLUTIONS
+DÃ‰FIS ET SOLUTIONS
 ${selectedProject.challenges.map(c => `
-Défi: ${c.challenge}
+DÃ©fi: ${c.challenge}
 Solution: ${c.solution}
 `).join('\n')}
 
-TÉMOIGNAGE CLIENT
+TÃ‰MOIGNAGE CLIENT
 "${selectedProject.testimonial.text}"
 - ${selectedProject.testimonial.author}, ${selectedProject.testimonial.role}
 
 ==============================================
-Rapport généré le ${new Date().toLocaleDateString('fr-FR')}
+Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleDateString('fr-FR')}
 ==============================================
                       `;
                       
-                      // Créer et télécharger le fichier
+                      // CrÃ©er et tÃ©lÃ©charger le fichier
                       const blob = new Blob([report], { type: 'text/plain' });
                       const url = URL.createObjectURL(blob);
                       const link = document.createElement('a');
@@ -1836,7 +1836,7 @@ Rapport généré le ${new Date().toLocaleDateString('fr-FR')}
                       document.body.removeChild(link);
                       URL.revokeObjectURL(url);
                       
-                      toast.success('Rapport téléchargé avec succès');
+                      toast.success('Rapport tÃ©lÃ©chargÃ© avec succÃ¨s');
                     }
                   }}
                 >
@@ -1924,7 +1924,7 @@ Rapport généré le ${new Date().toLocaleDateString('fr-FR')}
                     variant="default"
                     className="flex-1"
                     onClick={() => {
-                      toast.success('Message envoyé avec succès !');
+                      toast.success('Message envoyÃ© avec succÃ¨s !');
                       setShowContactModal(false);
                     }}
                   >
@@ -1939,4 +1939,6 @@ Rapport généré le ${new Date().toLocaleDateString('fr-FR')}
     </div>
   );
 };
+
+
 

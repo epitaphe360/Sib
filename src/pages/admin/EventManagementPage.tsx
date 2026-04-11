@@ -278,7 +278,7 @@ function DayModal({
                 value={form.theme}
                 onChange={e => setForm({ ...form, theme: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Ouverture & Intégration Portuaire"
+                placeholder="Ouverture & Intégration Bâtiment"
               />
             </div>
             <div className="flex gap-3 pt-2">

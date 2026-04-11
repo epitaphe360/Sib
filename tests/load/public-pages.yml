@@ -1,0 +1,28 @@
+config:
+  target: "http://localhost:9323"
+  phases:
+    - duration: 60
+      arrivalRate: 20
+      name: warmup
+    - duration: 120
+      arrivalRate: 80
+      name: sustained
+  defaults:
+    headers:
+      Accept: "text/html,application/json"
+  plugins:
+    metrics-by-endpoint: {}
+
+scenarios:
+  - name: public-pages-browse
+    flow:
+      - get:
+          url: "/"
+      - get:
+          url: "/exhibitors"
+      - get:
+          url: "/partners"
+      - get:
+          url: "/news"
+      - get:
+          url: "/networking"

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useTranslation } from '../../hooks/useTranslation';
 import {
@@ -22,6 +23,8 @@ import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { motion } from 'framer-motion';
 import { PavilionMetricsService, PavilionMetrics } from '../../services/pavilionMetrics';
+import { ROUTES } from '../../lib/routes';
+import { supabase } from '../../lib/supabase';
 
 interface Pavilion {
   id: string;
@@ -59,15 +62,15 @@ interface DemoProgram {
 const pavilions: Pavilion[] = [
   {
     id: 'digitalization',
-    name: 'Digitalisation Portuaire',
+    name: 'Digitalisation Bâtiment',
     title: 'Automatisation et Numérisation',
-    description: "Technologies numériques transformant l'écosystème portuaire",
+    description: "Technologies numériques transformant l'écosystème bâtiment",
     icon: Building2,
     color: 'text-blue-600',
     bgColor: 'bg-blue-100',
     objectives: ['Améliorer l\'efficacité opérationnelle', 'Réduire les temps d\'attente', 'Optimiser la gestion des ressources'],
-    features: ['Solutions IoT portuaires', 'Systèmes de gestion automatisée', 'Intégration des systèmes d\'information'],
-    targetAudience: ['Autorités Portuaires', 'Opérateurs de Terminaux', 'Développeurs de Solutions'],
+    features: ['Solutions IoT BTP', 'Systèmes de gestion automatisée', 'Intégration des systèmes d\'information'],
+    targetAudience: ['Autorités du Bâtiment', 'Opérateurs de Terminaux', 'Développeurs de Solutions'],
     exhibitors: 8,
     visitors: 450,
     conferences: 3,
@@ -75,7 +78,7 @@ const pavilions: Pavilion[] = [
       {
         id: 'digital-1',
         title: 'Démonstration IoT en Temps Réel',
-        description: 'Présentation d\'un système IoT complet pour la surveillance et l\'optimisation des opérations portuaires avec capteurs intelligents et analyse prédictive.',
+        description: 'Présentation d\'un système IoT complet pour la surveillance et l\'optimisation des opérations BTP avec capteurs intelligents et analyse prédictive.',
         date: '2026-02-05',
         time: '10:00',
         duration: '45 min',
@@ -90,7 +93,7 @@ const pavilions: Pavilion[] = [
       {
         id: 'digital-2',
         title: 'Atelier Automatisation des Processus',
-        description: 'Workshop pratique sur l\'automatisation des processus logistiques portuaires avec démonstration de solutions RPA et IA.',
+        description: 'Workshop pratique sur l\'automatisation des processus logistiques BTP avec démonstration de solutions RPA et IA.',
         date: '2026-02-05',
         time: '14:30',
         duration: '90 min',
@@ -105,7 +108,7 @@ const pavilions: Pavilion[] = [
       {
         id: 'digital-3',
         title: 'Présentation Système de Gestion Intégré',
-        description: 'Démonstration d\'une plateforme unifiée de gestion portuaire intégrant tous les systèmes d\'information et de contrôle.',
+        description: 'Démonstration d\'une plateforme unifiée de gestion bâtiment intégrant tous les systèmes d\'information et de contrôle.',
         date: '2026-02-06',
         time: '11:00',
         duration: '60 min',
@@ -121,7 +124,7 @@ const pavilions: Pavilion[] = [
   },
   {
     id: 'sustainability',
-    name: 'Durabilité Portuaire',
+    name: 'Durabilité Bâtiment',
     title: 'Écologie et Énergies Renouvelables',
     description: "Initiatives environnementales pour des ports durables",
     icon: Globe,
@@ -129,7 +132,7 @@ const pavilions: Pavilion[] = [
     bgColor: 'bg-green-100',
     objectives: ['Réduire l\'empreinte carbone', 'Développer les énergies renouvelables', 'Améliorer la qualité de l\'eau et de l\'air'],
     features: ['Électrification des quais', 'Solutions d\'énergie renouvelable', 'Gestion des déchets et économie circulaire'],
-    targetAudience: ['Experts Environnementaux', 'Fournisseurs d\'Énergie', 'Autorités Portuaires'],
+    targetAudience: ['Experts Environnementaux', 'Fournisseurs d\'Énergie', 'Autorités du Bâtiment'],
     exhibitors: 6,
     visitors: 380,
     conferences: 2,
@@ -167,7 +170,7 @@ const pavilions: Pavilion[] = [
       {
         id: 'sustain-3',
         title: 'Présentation Solutions Hydroliennes',
-        description: 'Démonstration de technologies hydroliennes portuaires pour la production d\'énergie renouvelable à partir des courants marins.',
+        description: 'Démonstration de technologies hydroliennes BTP pour la production d\'énergie renouvelable à partir des courants marins.',
         date: '2026-02-07',
         time: '10:30',
         duration: '45 min',
@@ -190,7 +193,7 @@ const pavilions: Pavilion[] = [
     color: 'text-red-600',
     bgColor: 'bg-red-100',
     objectives: ['Renforcer la cybersécurité', 'Améliorer la sûreté des opérations', 'Gérer les risques et crises'],
-    features: ['Systèmes de surveillance intelligents', 'Solutions de cybersécurité maritime', 'Gestion des identités et accès'],
+    features: ['Systèmes de surveillance intelligents', 'Solutions de cybersécurité construction', 'Gestion des identités et accès'],
     targetAudience: ['Responsables Sécurité', 'Experts Cybersécurité', 'Autorités Douanières'],
     exhibitors: 5,
     visitors: 320,
@@ -198,23 +201,23 @@ const pavilions: Pavilion[] = [
     demoPrograms: [
       {
         id: 'security-1',
-        title: 'Démonstration Cybersécurité Maritime',
-        description: 'Présentation interactive des menaces cybernétiques dans le secteur maritime et démonstration de solutions de protection avancées.',
+        title: 'Démonstration Cybersécurité Bâtiment',
+        description: 'Présentation interactive des menaces cybernétiques dans le secteur de la construction et démonstration de solutions de protection avancées.',
         date: '2026-02-05',
         time: '16:00',
         duration: '60 min',
         speaker: 'Colonel Marc Dubois',
-        company: 'SecureMaritime Systems',
+        company: 'SecureBâtiment Systems',
         type: 'demo',
         capacity: 35,
         registered: 28,
         location: 'Salle Sécurité A',
-        tags: ['Cybersécurité', 'Maritime', 'Protection']
+        tags: ['Cybersécurité', 'Bâtiment', 'Protection']
       },
       {
         id: 'security-2',
         title: 'Atelier Gestion des Crises',
-        description: 'Simulation de crise portuaire avec démonstration des protocoles de réponse et des outils de coordination en temps réel.',
+        description: 'Simulation de crise bâtiment avec démonstration des protocoles de réponse et des outils de coordination en temps réel.',
         date: '2026-02-06',
         time: '13:30',
         duration: '90 min',
@@ -245,14 +248,14 @@ const pavilions: Pavilion[] = [
   },
   {
     id: 'innovation',
-    name: 'Innovation Portuaire',
+    name: 'Innovation BTP',
     title: 'R&D et Startups',
-    description: "Nouvelles technologies et modèles économiques portuaires",
+    description: "Nouvelles technologies et modèles économiques BTP",
     icon: Calendar,
     color: 'text-purple-600',
     bgColor: 'bg-purple-100',
     objectives: ['Favoriser l\'innovation ouverte', 'Développer les partenariats', 'Accélérer la transformation numérique'],
-    features: ['Zone de démonstration startups', 'Hackathon portuaire', 'Présentations de projets innovants'],
+    features: ['Zone de démonstration startups', 'Hackathon bâtiment', 'Présentations de projets innovants'],
     targetAudience: ['Startups', 'Incubateurs', 'Investisseurs'],
     exhibitors: 12,
     visitors: 550,
@@ -260,8 +263,8 @@ const pavilions: Pavilion[] = [
     demoPrograms: [
       {
         id: 'innovation-1',
-        title: 'Pitch Startup : Drones Portuaires',
-        description: 'Présentation de startups innovantes développant des solutions de drones pour l\'inspection et la surveillance portuaire automatisée.',
+        title: 'Pitch Startup : Drones du Bâtiment',
+        description: 'Présentation de startups innovantes développant des solutions de drones pour l\'inspection et la surveillance bâtiment automatisée.',
         date: '2026-02-05',
         time: '12:00',
         duration: '30 min',
@@ -275,8 +278,8 @@ const pavilions: Pavilion[] = [
       },
       {
         id: 'innovation-2',
-        title: 'Hackathon Portuaire - Finale',
-        description: 'Présentation des projets développés pendant le hackathon de 48h sur des défis portuaires réels avec démonstration des solutions gagnantes.',
+        title: 'Hackathon Bâtiment - Finale',
+        description: 'Présentation des projets développés pendant le hackathon de 48h sur des défis BTP réels avec démonstration des solutions gagnantes.',
         date: '2026-02-06',
         time: '16:30',
         duration: '120 min',
@@ -291,7 +294,7 @@ const pavilions: Pavilion[] = [
       {
         id: 'innovation-3',
         title: 'Networking Startups & Investisseurs',
-        description: 'Session de réseautage dédiée entre startups portuaires et investisseurs avec démonstration de produits et pitchs rapides.',
+        description: 'Session de réseautage dédiée entre startups BTP et investisseurs avec démonstration de produits et pitchs rapides.',
         date: '2026-02-07',
         time: '11:30',
         duration: '180 min',
@@ -306,7 +309,7 @@ const pavilions: Pavilion[] = [
       {
         id: 'innovation-4',
         title: 'Atelier Blockchain & Supply Chain',
-        description: 'Workshop pratique sur l\'application de la blockchain pour la traçabilité et l\'optimisation des chaînes logistiques portuaires.',
+        description: 'Workshop pratique sur l\'application de la blockchain pour la traçabilité et l\'optimisation des chaînes logistiques BTP.',
         date: '2026-02-07',
         time: '15:30',
         duration: '90 min',
@@ -324,22 +327,23 @@ const pavilions: Pavilion[] = [
 
 export default function PavillonsPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   
   // Handler functions for pavilion actions
   const handleVirtualTour = (pavilion: Pavilion) => {
-    // TODO: Implement real virtual tour navigation or modal
-    toast.info(`Visite virtuelle lancée pour le pavillon ${pavilion.name}`);
+    navigate(`${ROUTES.HALL_MAP}?pavilion=${encodeURIComponent(pavilion.id)}`);
   };
   const handleNetworking = (pavilion: Pavilion) => {
-    // TODO: Implement real networking navigation or modal
-    toast.info(`Networking ouvert pour le pavillon ${pavilion.name}`);
+    toast.info(`Redirection networking pour ${pavilion.name}`);
+    navigate(`${ROUTES.NETWORKING}?pavilion=${encodeURIComponent(pavilion.id)}`);
   };
   const handleShowProgram = (pavilion: Pavilion) => {
-    // TODO: Implement real program navigation or modal
-    toast.info(`Programme du pavillon ${pavilion.name} affiché`);
+    toast.info(`Programme filtré pour ${pavilion.name}`);
+    navigate(`${ROUTES.EVENTS}?pavilion=${encodeURIComponent(pavilion.id)}`);
   };
 
   const [selectedPavilion, setSelectedPavilion] = useState<string | null>(null);
+  const [pavilionList, setPavilionList] = useState<Pavilion[]>(pavilions);
   const [metrics, setMetrics] = useState<PavilionMetrics>({
     totalExhibitors: 24,
     totalVisitors: 1200,
@@ -364,6 +368,49 @@ export default function PavillonsPage() {
     };
 
     loadMetrics();
+  }, []);
+
+  // Charger des compteurs exposants réels par pavillon depuis Supabase
+  useEffect(() => {
+    const loadPavilionExhibitorCounts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('exhibitors')
+          .select('sector')
+          .eq('verified', true);
+
+        if (error || !data) return;
+
+        const countByPavilion: Record<string, number> = {
+          digitalization: 0,
+          sustainability: 0,
+          security: 0,
+          innovation: 0,
+        };
+
+        data.forEach((row: any) => {
+          const sector = String(row.sector || '').toLowerCase();
+          if (sector.includes('digit') || sector.includes('bim') || sector.includes('iot') || sector.includes('smart')) {
+            countByPavilion.digitalization += 1;
+          } else if (sector.includes('durab') || sector.includes('green') || sector.includes('ener') || sector.includes('environ')) {
+            countByPavilion.sustainability += 1;
+          } else if (sector.includes('secur') || sector.includes('cyber') || sector.includes('safe')) {
+            countByPavilion.security += 1;
+          } else {
+            countByPavilion.innovation += 1;
+          }
+        });
+
+        setPavilionList(prev => prev.map(p => ({
+          ...p,
+          exhibitors: countByPavilion[p.id] || p.exhibitors,
+        })));
+      } catch (err) {
+        console.warn('Impossible de charger les compteurs exposants par pavillon:', err);
+      }
+    };
+
+    loadPavilionExhibitorCounts();
   }, []);
 
   const getDemoTypeIcon = (type: string) => {
@@ -411,7 +458,14 @@ export default function PavillonsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
             <h1 className="text-4xl font-bold mb-4">Pavillons Thématiques SIB 2026</h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">Hub central pour le développement, l'innovation et la connectivité mondiale de l'écosystème portuaire international</p>
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto">Hub central pour le développement, l'innovation et la connectivité mondiale de l'écosystème bâtiment international</p>
+            <div className="mt-6">
+              <Link to={ROUTES.HALL_MAP}>
+                <Button className="bg-white text-blue-900 hover:bg-blue-50 font-semibold">
+                  Voir le plan interactif des halls
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -478,7 +532,7 @@ export default function PavillonsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-          {pavilions.map((pavilion, index) => {
+          {pavilionList.map((pavilion, index) => {
             const Icon = pavilion.icon;
             const isSelected = selectedPavilion === pavilion.id;
             return (

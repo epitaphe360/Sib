@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Card } from '../ui/Card';
@@ -251,3 +251,4 @@ export const MiniSitePreviewModal: React.FC<MiniSitePreviewModalProps> = ({
     </div>
   );
 };
+

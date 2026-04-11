@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SkipLink - WCAG 2.1 Requirement
  * Permet aux utilisateurs clavier de sauter la navigation
  */
@@ -35,3 +35,4 @@ export const SkipLinks: React.FC = () => {
     </div>
   );
 };
+

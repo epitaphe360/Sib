@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+Ôªøimport React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, Share2, BookmarkPlus, Eye, Star, Trophy } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
@@ -60,12 +60,12 @@ export const BestMomentsDetailPage: React.FC = () => {
 
   const handleSave = () => {
     setIsSaved(!isSaved);
-    toast.success(isSaved ? 'RetirÈ des favoris' : 'AjoutÈ aux favoris');
+    toast.success(isSaved ? 'Retir√© des favoris' : 'Ajout√© aux favoris');
   };
 
   const handleLike = () => {
     setIsLiked(!isLiked);
-    toast.success(isLiked ? 'Like retirÈ' : 'Merci pour votre like !');
+    toast.success(isLiked ? 'Like retir√©' : 'Merci pour votre like !');
   };
 
   const handleShare = () => {
@@ -77,7 +77,7 @@ export const BestMomentsDetailPage: React.FC = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      toast.success('Lien copiÈ dans le presse-papier');
+      toast.success('Lien copi√© dans le presse-papier');
     }
   };
 
@@ -98,11 +98,11 @@ export const BestMomentsDetailPage: React.FC = () => {
 
   const getHighlightIcon = (type?: string) => {
     switch (type) {
-      case 'keynote': return '??';
-      case 'award': return '??';
-      case 'performance': return '?';
-      case 'announcement': return '??';
-      default: return '?';
+      case 'keynote': return 'üé§';
+      case 'award': return 'üèÜ';
+      case 'performance': return '‚≠ê';
+      case 'announcement': return 'üì¢';
+      default: return '‚ú®';
     }
   };
 
@@ -193,7 +193,7 @@ export const BestMomentsDetailPage: React.FC = () => {
                   className={isLiked ? 'bg-red-600 hover:bg-red-700' : ''}
                 >
                   <Star className={`h-4 w-4 mr-2 ${isLiked ? 'fill-current' : ''}`} />
-                  {isLiked ? 'AimÈ' : 'J\'aime'}
+                  {isLiked ? 'Aim√©' : 'J\'aime'}
                   {moment.likes_count && ` (${moment.likes_count})`}
                 </Button>
                 <Button
@@ -202,7 +202,7 @@ export const BestMomentsDetailPage: React.FC = () => {
                   onClick={handleSave}
                 >
                   <BookmarkPlus className="h-4 w-4 mr-2" />
-                  {isSaved ? 'EnregistrÈ' : 'Enregistrer'}
+                  {isSaved ? 'Enregistr√©' : 'Enregistrer'}
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleShare}>
                   <Share2 className="h-4 w-4 mr-2" />
@@ -242,7 +242,7 @@ export const BestMomentsDetailPage: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">
-                      …vÈnement: {moment.event_name}
+                      √âv√©nement: {moment.event_name}
                     </h3>
                     {moment.event_date && (
                       <p className="text-sm text-gray-600">
@@ -257,7 +257,7 @@ export const BestMomentsDetailPage: React.FC = () => {
             {/* Description */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                ¿ propos de ce moment
+                √Ä propos de ce moment
               </h2>
               <div className="prose prose-blue max-w-none">
                 <p className="text-gray-700 whitespace-pre-wrap">
@@ -269,20 +269,20 @@ export const BestMomentsDetailPage: React.FC = () => {
             {/* Context & Highlights */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Points clÈs
+                Points cl√©s
               </h2>
               <ul className="space-y-2 text-gray-700">
                 <li className="flex items-start">
-                  <span className="text-yellow-600 mr-2">?</span>
+                  <span className="text-yellow-600 mr-2">‚ú®</span>
                   <span>Un moment marquant de {moment.event_name || 'SIB'}</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-yellow-600 mr-2">?</span>
-                  <span>Revivre l'ambiance et l'Ènergie de l'ÈvÈnement</span>
+                  <span className="text-yellow-600 mr-2">‚ú®</span>
+                  <span>Revivre l'ambiance et l'√©nergie de l'√©v√©nement</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-yellow-600 mr-2">?</span>
-                  <span>Les temps forts ‡ ne pas manquer</span>
+                  <span className="text-yellow-600 mr-2">‚ú®</span>
+                  <span>Les temps forts √† ne pas manquer</span>
                 </li>
               </ul>
             </div>
@@ -293,7 +293,7 @@ export const BestMomentsDetailPage: React.FC = () => {
                 Autres moments phares
               </h2>
               <p className="text-gray-600 text-sm">
-                DÈcouvrez d'autres moments exceptionnels...
+                D√©couvrez d'autres moments exceptionnels...
               </p>
             </div>
           </div>
@@ -314,7 +314,7 @@ export const BestMomentsDetailPage: React.FC = () => {
                 </div>
                 {moment.event_name && (
                   <div>
-                    <p className="text-sm font-medium text-gray-900">…vÈnement</p>
+                    <p className="text-sm font-medium text-gray-900">√âv√©nement</p>
                     <p className="text-sm text-gray-600">{moment.event_name}</p>
                   </div>
                 )}
@@ -326,7 +326,7 @@ export const BestMomentsDetailPage: React.FC = () => {
                 )}
                 {moment.duration && (
                   <div>
-                    <p className="text-sm font-medium text-gray-900">DurÈe</p>
+                    <p className="text-sm font-medium text-gray-900">Dur√©e</p>
                     <p className="text-sm text-gray-600">{formatDuration(moment.duration)}</p>
                   </div>
                 )}
@@ -335,12 +335,12 @@ export const BestMomentsDetailPage: React.FC = () => {
 
             {/* Stats Card */}
             <div className="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg shadow-lg p-6 text-white">
-              <div className="text-4xl mb-3">??</div>
+              <div className="text-4xl mb-3">üèÜ</div>
               <h3 className="text-lg font-semibold mb-2">
                 Best Moments
               </h3>
               <p className="text-sm text-yellow-100 mb-4">
-                Les moments les plus mÈmorables de SIB, sÈlectionnÈs spÈcialement pour vous.
+                Les moments les plus m√©morables de SIB, s√©lectionn√©s sp√©cialement pour vous.
               </p>
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div className="bg-white/20 rounded-lg p-3">
@@ -379,7 +379,7 @@ export const BestMomentsDetailPage: React.FC = () => {
               </p>
               <Button variant="secondary" className="w-full" asChild>
                 <Link to="/register">
-                  S'inscrire ‡ SIB
+                  S'inscrire √† SIB
                 </Link>
               </Button>
             </div>

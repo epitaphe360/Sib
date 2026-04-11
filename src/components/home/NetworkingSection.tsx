@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { 
@@ -163,10 +163,10 @@ export const NetworkingSection: React.FC = () => {
                   <Users className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Réseau Portuaire Mondial
+                  Réseau BTP International
                 </h3>
                 <p className="text-gray-600">
-                  Rejoignez la plus grande communauté de professionnels portuaires
+                  Rejoignez une grande communauté de professionnels du bâtiment
                 </p>
               </div>
 

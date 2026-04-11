@@ -64,17 +64,20 @@ export default function NewsPageOptimized() {
     articles,
     featuredArticles,
     categories,
+    totalArticles,
+    hasMore,
     isLoading,
     selectedCategory,
     setCategory,
     fetchNews,
+    loadMoreNews,
     fetchFromOfficialSite,
   } = useNewsStore();
 
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    fetchNews();
+    fetchNews(true);
   }, [fetchNews]);
 
   // Translate articles
@@ -124,10 +127,10 @@ export default function NewsPageOptimized() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      '…vÈnement': 'bg-blue-100 text-blue-800',
+      '√âv√©nement': 'bg-blue-100 text-blue-800',
       'Innovation': 'bg-purple-100 text-purple-800',
       'Partenariat': 'bg-green-100 text-green-800',
-      'DurabilitÈ': 'bg-emerald-100 text-emerald-800',
+      'Durabilit√©': 'bg-emerald-100 text-emerald-800',
       'Formation': 'bg-orange-100 text-orange-800',
       'Commerce': 'bg-indigo-100 text-indigo-800'
     };
@@ -142,12 +145,12 @@ export default function NewsPageOptimized() {
       if (result && result.success) {
         const { inserted, updated, total } = result.stats;
         toast.success(
-          `? Synchronisation rÈussie ! ${inserted} nouveaux articles, ${updated} mis ‡ jour sur ${total} trouvÈs`,
+          `‚úÖ Synchronisation r√©ussie ! ${inserted} nouveaux articles, ${updated} mis √† jour sur ${total} trouv√©s`,
           { id: 'sync-articles', duration: 5000 }
         );
         logger.info('Articles synced from official site', { inserted, updated, total });
       } else {
-        toast.success('Articles actualisÈs', { id: 'sync-articles' });
+        toast.success('Articles actualis√©s', { id: 'sync-articles' });
       }
     } catch (error: unknown) {
       logger.error('Error syncing articles', error as Error);
@@ -178,10 +181,10 @@ export default function NewsPageOptimized() {
             className="text-center mb-8"
           >
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              ActualitÈs Portuaires SIB
+              Actualit√©s du B√¢timent SIB
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Restez informÈ des derniËres nouvelles du secteur portuaire et des actualitÈs SIB 2026
+              Restez inform√© des derni√®res nouvelles du secteur du b√¢timent et des actualit√©s SIB 2026
             </p>
           </motion.div>
 
@@ -191,7 +194,7 @@ export default function NewsPageOptimized() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher dans les actualitÈs..."
+                placeholder="Rechercher dans les actualit√©s..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -239,7 +242,7 @@ export default function NewsPageOptimized() {
                       : 'bg-white text-gray-700 hover:bg-gray-100'
                   }`}
                 >
-                  Toutes les catÈgories
+                  Toutes les cat√©gories
                 </button>
                 {categories.map(cat => (
                   <button
@@ -266,7 +269,7 @@ export default function NewsPageOptimized() {
                   <span className="text-sm text-gray-700">Articles en vedette uniquement</span>
                 </label>
                 <Button variant="ghost" size="sm" onClick={clearFilters}>
-                  RÈinitialiser
+                  R√©initialiser
                 </Button>
               </div>
             </motion.div>
@@ -283,7 +286,7 @@ export default function NewsPageOptimized() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Total Articles</p>
-                  <p className="text-3xl font-bold text-gray-900">{totalItems}</p>
+                  <p className="text-3xl font-bold text-gray-900">{totalArticles || totalItems}</p>
                 </div>
                 <BookOpen className="h-8 w-8 text-blue-600" />
               </div>
@@ -329,23 +332,24 @@ export default function NewsPageOptimized() {
           <div className="text-center py-12">
             <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Aucun article trouvÈ
+              Aucun article trouv√©
             </h3>
             <p className="text-gray-600">
-              Essayez de modifier vos critËres de recherche
+              Essayez de modifier vos crit√®res de recherche
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedItems.map((article, index) => (
-              <motion.div
-                key={article.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link to={`/news/${article.id}`}>
-                  <Card hover className="h-full">
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedItems.map((article, index) => (
+                <motion.div
+                  key={article.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link to={`/news/${article.id}`}>
+                    <Card hover className="h-full">
                     {article.imageUrl && (
                       <div className="relative h-48 overflow-hidden">
                         <img
@@ -399,10 +403,19 @@ export default function NewsPageOptimized() {
                         </div>
                       </div>
                     </div>
-                  </Card>
-                </Link>
-              </motion.div>
-            ))}
+                    </Card>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            {hasMore && !searchQuery && !filters.category && (
+              <div className="mt-8 flex justify-center">
+                <Button onClick={loadMoreNews} disabled={isLoading}>
+                  {isLoading ? 'Chargement...' : 'Charger plus'}
+                </Button>
+              </div>
+            )}
           </div>
         )}
 

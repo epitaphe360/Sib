@@ -5,9 +5,9 @@ import { supabase } from '../lib/supabase';
 const fallbackArticles: NewsArticle[] = [
   {
     id: 'fallback-1',
-    title: 'SIB 2026 : Le Salon International du B�timent et de la Logistique',
-    excerpt: 'Découvrez le plus grand événement portuaire d\'Afrique du Nord prévu pour 2026. Une occasion unique de réseautage et de découvertes.',
-    content: 'SIB 2026 est le rendez-vous incontournable des professionnels du secteur portuaire et logistique. Cet événement majeur réunira les acteurs clés de l\'industrie maritime pour échanger sur les innovations, les défis et les opportunités du secteur.',
+    title: 'SIB 2026 : Le Salon International des Ports et de la Logistique',
+    excerpt: 'Découvrez le plus grand événement bâtiment d\'Afrique du Nord prévu pour 2026. Une occasion unique de réseautage et de découvertes.',
+    content: 'SIB 2026 est le rendez-vous incontournable des professionnels du secteur du bâtiment et logistique. Cet événement majeur réunira les acteurs clés de l\'industrie du bâtiment pour échanger sur les innovations, les défis et les opportunités du secteur.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-12-15'),
     category: 'Événements',
@@ -15,15 +15,15 @@ const fallbackArticles: NewsArticle[] = [
     featured: true,
     image: 'https://picsum.photos/seed/port/800/400',
     readTime: 3,
-    source: 'SIB',
-    sourceUrl: 'https://sib2026.ma/actualite-portuaire/',
+    source: 'sibs',
+    sourceUrl: 'https://sibevent.com/actualite-bâtiment/',
     views: 1250
   },
   {
     id: 'fallback-2',
-    title: 'Innovation Portuaire : Les Technologies qui Transforment nos Ports',
+    title: 'Innovation BTP : Les Technologies qui Transforment nos Ports',
     excerpt: 'Intelligence artificielle, automatisation, IoT : les ports modernes adoptent les technologies de pointe pour améliorer leur efficacité.',
-    content: 'Les ports du monde entier investissent massivement dans les nouvelles technologies. De l\'automatisation des grues à l\'intelligence artificielle pour optimiser les flux, découvrez les innovations qui façonnent l\'avenir du secteur maritime.',
+    content: 'Les ports du monde entier investissent massivement dans les nouvelles technologies. De l\'automatisation des grues à l\'intelligence artificielle pour optimiser les flux, découvrez les innovations qui façonnent l\'avenir du secteur de la construction.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-12-10'),
     category: 'Innovation',
@@ -31,14 +31,14 @@ const fallbackArticles: NewsArticle[] = [
     featured: true,
     image: 'https://picsum.photos/seed/technology/800/400',
     readTime: 5,
-    source: 'SIB',
-    sourceUrl: 'https://sib2026.ma/actualite-portuaire/',
+    source: 'sibs',
+    sourceUrl: 'https://sibevent.com/actualite-bâtiment/',
     views: 890
   },
   {
     id: 'fallback-3',
     title: 'Développement Durable : Les Ports s\'engagent pour l\'Environnement',
-    excerpt: 'Les initiatives écologiques se multiplient dans les ports pour réduire l\'empreinte carbone du transport maritime.',
+    excerpt: 'Les initiatives écologiques se multiplient dans les ports pour réduire l\'empreinte carbone du transport construction.',
     content: 'Face aux enjeux climatiques, les ports adoptent des stratégies ambitieuses pour réduire leur impact environnemental. Énergies renouvelables, électrification des quais, gestion des déchets : tour d\'horizon des bonnes pratiques.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-12-05'),
@@ -47,14 +47,14 @@ const fallbackArticles: NewsArticle[] = [
     featured: true,
     image: 'https://picsum.photos/seed/nature/800/400',
     readTime: 4,
-    source: 'SIB',
-    sourceUrl: 'https://sib2026.ma/actualite-portuaire/',
+    source: 'sibs',
+    sourceUrl: 'https://sibevent.com/actualite-bâtiment/',
     views: 756
   },
   {
     id: 'fallback-4',
-    title: 'Le Commerce Maritime en Méditerranée : Perspectives 2026',
-    excerpt: 'Analyse des tendances du commerce maritime méditerranéen et des opportunités pour les acteurs du secteur.',
+    title: 'Le Commerce Bâtiment en Méditerranée : Perspectives 2026',
+    excerpt: 'Analyse des tendances du commerce construction méditerranéen et des opportunités pour les acteurs du secteur.',
     content: 'La Méditerranée reste un carrefour stratégique pour le commerce mondial. Avec l\'évolution des routes commerciales et les nouveaux accords, le bassin méditerranéen offre de nombreuses opportunités de croissance.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-11-28'),
@@ -63,15 +63,15 @@ const fallbackArticles: NewsArticle[] = [
     featured: false,
     image: 'https://picsum.photos/seed/trade/800/400',
     readTime: 6,
-    source: 'SIB',
-    sourceUrl: 'https://sib2026.ma/actualite-portuaire/',
+    source: 'sibs',
+    sourceUrl: 'https://sibevent.com/actualite-bâtiment/',
     views: 620
   },
   {
     id: 'fallback-5',
     title: 'Formation et Emploi : Les Métiers du Port de Demain',
-    excerpt: 'Le secteur portuaire recrute ! Découvrez les formations et les opportunités de carrière dans l\'industrie maritime.',
-    content: 'Le secteur portuaire est en pleine mutation et recherche de nouveaux talents. Des métiers traditionnels aux nouvelles spécialités liées à la digitalisation, les opportunités sont nombreuses pour ceux qui souhaitent faire carrière dans ce domaine.',
+    excerpt: 'Le secteur du bâtiment recrute ! Découvrez les formations et les opportunités de carrière dans l\'industrie du bâtiment.',
+    content: 'Le secteur du bâtiment est en pleine mutation et recherche de nouveaux talents. Des métiers traditionnels aux nouvelles spécialités liées à la digitalisation, les opportunités sont nombreuses pour ceux qui souhaitent faire carrière dans ce domaine.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-11-20'),
     category: 'Emploi',
@@ -79,15 +79,15 @@ const fallbackArticles: NewsArticle[] = [
     featured: false,
     image: 'https://picsum.photos/seed/career/800/400',
     readTime: 4,
-    source: 'SIB',
-    sourceUrl: 'https://sib2026.ma/actualite-portuaire/',
+    source: 'sibs',
+    sourceUrl: 'https://sibevent.com/actualite-bâtiment/',
     views: 543
   },
   {
     id: 'fallback-6',
-    title: 'Sécurité Portuaire : Les Nouvelles Normes Internationales',
-    excerpt: 'Les standards de sécurité évoluent pour répondre aux nouveaux défis du transport maritime mondial.',
-    content: 'La sécurité reste une priorité absolue dans les installations portuaires. Cybersécurité, contrôle des accès, prévention des risques : découvrez les dernières réglementations et innovations en matière de sécurité portuaire.',
+    title: 'Sécurité Chantier : Les Nouvelles Normes Internationales',
+    excerpt: 'Les standards de sécurité évoluent pour répondre aux nouveaux défis du transport construction mondial.',
+    content: 'La sécurité reste une priorité absolue dans les installations BTP. Cybersécurité, contrôle des accès, prévention des risques : découvrez les dernières réglementations et innovations en matière de sécurité bâtiment.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-11-15'),
     category: 'Sécurité',
@@ -95,8 +95,8 @@ const fallbackArticles: NewsArticle[] = [
     featured: false,
     image: 'https://picsum.photos/seed/security/800/400',
     readTime: 5,
-    source: 'SIB',
-    sourceUrl: 'https://sib2026.ma/actualite-portuaire/',
+    source: 'sibs',
+    sourceUrl: 'https://sibevent.com/actualite-bâtiment/',
     views: 412
   }
 ];
@@ -116,7 +116,7 @@ export interface NewsArticle {
   featured: boolean;
   image: string; // Image toujours définie avec fallback
   readTime: number;
-  source: 'SIB' | 'external';
+  source: 'sibs' | 'external';
   sourceUrl?: string;
   views: number;
 }
@@ -125,12 +125,17 @@ interface NewsState {
   articles: NewsArticle[];
   featuredArticles: NewsArticle[];
   categories: string[];
+  totalArticles: number;
+  currentPage: number;
+  pageSize: number;
+  hasMore: boolean;
   isLoading: boolean;
   selectedCategory: string;
   searchTerm: string;
   
   // Actions
-  fetchNews: () => Promise<void>;
+  fetchNews: (reset?: boolean) => Promise<void>;
+  loadMoreNews: () => Promise<void>;
   fetchFromOfficialSite: () => Promise<void>;
   getArticleById: (id: string) => NewsArticle | null;
   setCategory: (category: string) => void;
@@ -146,26 +151,35 @@ export const useNewsStore = create<NewsState>((set, get) => ({
   articles: [],
   featuredArticles: [],
   categories: [],
+  totalArticles: 0,
+  currentPage: 0,
+  pageSize: 12,
+  hasMore: true,
   isLoading: false,
   selectedCategory: '',
   searchTerm: '',
 
-  fetchNews: async () => {
+  fetchNews: async (reset = true) => {
     set({ isLoading: true });
     try {
+      const state = get();
+      const nextPage = reset ? 0 : state.currentPage;
+      const offset = nextPage * state.pageSize;
+
       // Essayer de charger depuis Supabase
-      const { data, error } = await supabase
+      const { data, error, count } = await supabase
         .from('news_articles')
-        .select('id, title, content, excerpt, category, featured_image, is_published, published_at, views, slug, title_en, excerpt_en, content_en')
+        .select('id, title, content, excerpt, category, featured_image, is_published, published_at, views, slug, title_en, excerpt_en, content_en', { count: 'exact' })
         .eq('is_published', true)
-        .order('published_at', { ascending: false });
+        .order('published_at', { ascending: false })
+        .range(offset, offset + state.pageSize - 1);
 
       if (error) {
         console.warn('⚠️ Erreur Supabase, utilisation du fallback:', error);
         throw error;
       }
 
-      let articles: NewsArticle[] = [];
+      let pageArticles: NewsArticle[] = [];
 
       if (data && data.length > 0) {
         // Images de fallback par catégorie (picsum.photos - hotlinking libre et fiable)
@@ -180,7 +194,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
         };
 
         // Articles depuis la base de données
-        articles = data.map((article: any, index: number) => ({
+        pageArticles = data.map((article: any, index: number) => ({
           id: article.id,
           title: article.title,
           excerpt: article.excerpt ? article.excerpt.replace(/<[^>]*>/g, '').trim() : '',
@@ -192,7 +206,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
           publishedAt: new Date(article.published_at || ''),
           category: article.category || 'Actualité',
           tags: [],
-          featured: index < 3,
+          featured: reset ? index < 3 : false,
           image: (() => {
             const img = article.featured_image;
             if (!img) return fallbackImages[article.category || 'Actualité'] || fallbackImages['Actualité'];
@@ -202,23 +216,31 @@ export const useNewsStore = create<NewsState>((set, get) => ({
             return `${supabaseUrl}/storage/v1/object/public/${img}`;
           })(),
           readTime: Math.ceil((article.content || '').replace(/<[^>]*>/g, '').split(' ').length / 200),
-          source: 'SIB' as const,
+          source: 'sibs' as const,
           views: article.views || 0
         }));
-        console.log(`✅ ${articles.length} articles chargés depuis Supabase`);
+        console.log(`✅ ${pageArticles.length} articles chargés depuis Supabase (page)`);
       } else {
         // Utiliser les articles de fallback
-        articles = fallbackArticles;
+        pageArticles = fallbackArticles;
         console.log('📰 Utilisation des articles de fallback');
       }
 
-      const featuredArticles = articles.filter(a => a.featured).slice(0, 3);
-      const categories = [...new Set(articles.map(article => article.category))];
+      const mergedArticles = reset
+        ? pageArticles
+        : [...state.articles, ...pageArticles.filter(article => !state.articles.some(existing => existing.id === article.id))];
+
+      const featuredArticles = mergedArticles.filter(a => a.featured).slice(0, 3);
+      const categories = [...new Set(mergedArticles.map(article => article.category))];
+      const resolvedTotal = count ?? mergedArticles.length;
 
       set({
-        articles,
-        featuredArticles: featuredArticles.length > 0 ? featuredArticles : articles.slice(0, 3),
+        articles: mergedArticles,
+        featuredArticles: featuredArticles.length > 0 ? featuredArticles : mergedArticles.slice(0, 3),
         categories,
+        totalArticles: resolvedTotal,
+        currentPage: reset ? 1 : nextPage + 1,
+        hasMore: mergedArticles.length < resolvedTotal,
         isLoading: false
       });
     } catch (_error) {
@@ -229,9 +251,18 @@ export const useNewsStore = create<NewsState>((set, get) => ({
         articles: fallbackArticles,
         featuredArticles: fallbackArticles.filter(a => a.featured).slice(0, 3),
         categories,
+        totalArticles: fallbackArticles.length,
+        currentPage: 1,
+        hasMore: false,
         isLoading: false 
       });
     }
+  },
+
+  loadMoreNews: async () => {
+    const { isLoading, hasMore } = get();
+    if (isLoading || !hasMore) return;
+    await get().fetchNews(false);
   },
 
   fetchFromOfficialSite: async () => {
@@ -250,7 +281,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
 
 
       // Recharger les articles depuis la base de données
-      await get().fetchNews();
+      await get().fetchNews(true);
 
       return data;
     } catch (error) {
@@ -320,7 +351,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
 
 
       // Recharger les articles
-      await get().fetchNews();
+      await get().fetchNews(true);
 
       set({ isLoading: false });
     } catch (_error) {
@@ -353,7 +384,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
 
 
       // Recharger les articles
-      await get().fetchNews();
+      await get().fetchNews(true);
     } catch (_error) {
       console.error('❌ Erreur mise à jour article:', _error);
       throw _error;
@@ -376,7 +407,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
 
 
       // Recharger les articles
-      await get().fetchNews();
+      await get().fetchNews(true);
     } catch (_error) {
       console.error('❌ Erreur suppression article:', _error);
       throw _error;

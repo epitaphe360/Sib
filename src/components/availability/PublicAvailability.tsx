@@ -1,4 +1,4 @@
-
+﻿
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -125,3 +125,4 @@ const PublicAvailability = ({ userId }: PublicAvailabilityProps) => {
 };
 
 export default PublicAvailability;
+

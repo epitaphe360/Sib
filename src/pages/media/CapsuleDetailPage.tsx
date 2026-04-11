@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ï»¿import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, Share2, BookmarkPlus, Eye } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
@@ -134,7 +134,7 @@ export const CapsuleDetailPage: React.FC = () => {
                 variant="default" 
                 className="absolute top-4 left-4 z-10 bg-blue-600"
               >
-                ?? Inside SIB
+                ðŸŽ¬ Inside SIB
               </Badge>
               <VideoStreamPlayer
                 src={capsule.content_url}
@@ -200,7 +200,7 @@ export const CapsuleDetailPage: React.FC = () => {
             {/* Description */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                À propos de cette capsule
+                Ã€ propos de cette capsule
               </h2>
               <div className="prose prose-blue max-w-none">
                 <p className="text-gray-700 whitespace-pre-wrap">
@@ -237,7 +237,7 @@ export const CapsuleDetailPage: React.FC = () => {
                 Autres capsules Inside SIB
               </h2>
               <p className="text-gray-600 text-sm">
-                Découvrez d'autres contenus exclusifs...
+                DÃ©couvrez d'autres contenus exclusifs...
               </p>
             </div>
           </div>
@@ -251,14 +251,14 @@ export const CapsuleDetailPage: React.FC = () => {
               </h3>
               <div className="space-y-3">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Durée</p>
+                  <p className="text-sm font-medium text-gray-900">DurÃ©e</p>
                   <p className="text-sm text-gray-600">
                     {formatDuration(capsule.duration)}
                   </p>
                 </div>
                 {capsule.published_date && (
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Publié le</p>
+                    <p className="text-sm font-medium text-gray-900">PubliÃ© le</p>
                     <p className="text-sm text-gray-600">
                       {formatDate(capsule.published_date)}
                     </p>
@@ -266,7 +266,7 @@ export const CapsuleDetailPage: React.FC = () => {
                 )}
                 {capsule.category && (
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Catégorie</p>
+                    <p className="text-sm font-medium text-gray-900">CatÃ©gorie</p>
                     <p className="text-sm text-gray-600">{capsule.category}</p>
                   </div>
                 )}
@@ -275,12 +275,12 @@ export const CapsuleDetailPage: React.FC = () => {
 
             {/* What is Inside SIB */}
             <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-lg shadow-lg p-6 text-white">
-              <div className="text-4xl mb-3">??</div>
+              <div className="text-4xl mb-3">ðŸŽ¬</div>
               <h3 className="text-lg font-semibold mb-2">
                 Inside SIB
               </h3>
               <p className="text-sm text-blue-100 mb-4">
-                Des capsules vidéo exclusives pour découvrir les coulisses du salon et les acteurs clés du sport business.
+                Des capsules vidÃ©o exclusives pour dÃ©couvrir les coulisses du salon et les acteurs clÃ©s du sport business.
               </p>
               <Button variant="secondary" className="w-full" asChild>
                 <Link to="/media/capsules">
@@ -292,10 +292,10 @@ export const CapsuleDetailPage: React.FC = () => {
             {/* Newsletter CTA */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Restez informé
+                Restez informÃ©
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Recevez les nouvelles capsules directement dans votre boîte mail
+                Recevez les nouvelles capsules directement dans votre boÃ®te mail
               </p>
               <input
                 type="email"

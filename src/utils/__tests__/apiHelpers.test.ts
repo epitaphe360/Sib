@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tests for API helper functions
  * Coverage: Timeout, retry logic, rate limiting
  */
@@ -287,3 +287,4 @@ describe('apiHelpers', () => {
     });
   });
 });
+

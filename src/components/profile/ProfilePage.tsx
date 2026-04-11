@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -97,12 +97,12 @@ export default function ProfilePage() {
     setPasswordLoading(true);
     try {
       if (!isSupabaseReady() || !supabase) {
-        setPasswordError('Supabase non configuré');
+        setPasswordError('Supabase non configurÃ©');
         setPasswordLoading(false);
         return;
       }
 
-      // Vérifier le mot de passe actuel en re-signant
+      // VÃ©rifier le mot de passe actuel en re-signant
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: user?.email || '',
         password: passwordData.current
@@ -113,7 +113,7 @@ export default function ProfilePage() {
         return;
       }
 
-      // Mettre à jour le mot de passe
+      // Mettre Ã  jour le mot de passe
       const { error: updateError } = await supabase.auth.updateUser({
         password: passwordData.newPassword
       });
@@ -174,7 +174,7 @@ export default function ProfilePage() {
     'Port Operations',
     'Digital Transformation',
     'Sustainability',
-    'Maritime Technology',
+    'Building Technology',
     'Logistics',
     'Infrastructure',
     'Innovation',
@@ -196,10 +196,10 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Accès non autorisé
+            AccÃ¨s non autorisÃ©
           </h3>
           <p className="text-gray-600">
-            Veuillez vous connecter pour accéder à votre profil
+            Veuillez vous connecter pour accÃ©der Ã  votre profil
           </p>
         </div>
       </div>
@@ -229,7 +229,7 @@ export default function ProfilePage() {
               Mon Profil
             </h1>
             <p className="text-gray-600">
-              Gérez vos informations personnelles et professionnelles
+              GÃ©rez vos informations personnelles et professionnelles
             </p>
           </motion.div>
         </div>
@@ -258,7 +258,7 @@ export default function ProfilePage() {
                         onChange={(e) => {
                           const file = (e.target as HTMLInputElement).files?.[0];
                           if (file) {
-                            toast.success(`Photo sélectionnée : ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
+                            toast.success(`Photo sÃ©lectionnÃ©e : ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
                           }
                         }}
                       />
@@ -353,7 +353,7 @@ export default function ProfilePage() {
                   <h3 className="font-semibold text-purple-900">Matching IA</h3>
                 </div>
                 <p className="text-sm text-purple-700 mb-4">
-                  Complétez votre profil de matching pour obtenir des recommandations personnalisées
+                  ComplÃ©tez votre profil de matching pour obtenir des recommandations personnalisÃ©es
                 </p>
                 <Link to={ROUTES.PROFILE_MATCHING}>
                   <Button 
@@ -417,7 +417,7 @@ export default function ProfilePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Prénom
+                      PrÃ©nom
                     </label>
                     {isEditing ? (
                       <input
@@ -459,7 +459,7 @@ export default function ProfilePage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Téléphone
+                      TÃ©lÃ©phone
                     </label>
                     {isEditing ? (
                       <input
@@ -535,7 +535,7 @@ export default function ProfilePage() {
                     ) : (
                       <div className="flex items-center space-x-2">
                         <Linkedin className="h-4 w-4 text-gray-400" />
-                        <p className="text-gray-900">{user.profile.linkedin || 'Non renseigné'}</p>
+                        <p className="text-gray-900">{user.profile.linkedin || 'Non renseignÃ©'}</p>
                       </div>
                     )}
                   </div>
@@ -554,7 +554,7 @@ export default function ProfilePage() {
                       placeholder={t('profile.about_placeholder')}
                     />
                   ) : (
-                    <p className="text-gray-900">{user.profile.bio || 'Aucune biographie renseignée'}</p>
+                    <p className="text-gray-900">{user.profile.bio || 'Aucune biographie renseignÃ©e'}</p>
                   )}
                 </div>
               </div>
@@ -565,7 +565,7 @@ export default function ProfilePage() {
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   <Target className="h-5 w-5 inline mr-2" />
-                  Centres d'intérêt
+                  Centres d'intÃ©rÃªt
                 </h3>
                 
                 {isEditing ? (
@@ -602,7 +602,7 @@ export default function ProfilePage() {
                       </Badge>
                     ))}
                     {(!user?.profile?.interests || user.profile.interests.length === 0) && (
-                      <p className="text-gray-500 text-sm">Aucun centre d'intérêt renseigné</p>
+                      <p className="text-gray-500 text-sm">Aucun centre d'intÃ©rÃªt renseignÃ©</p>
                     )}
                   </div>
                 )}
@@ -652,7 +652,7 @@ export default function ProfilePage() {
                       </div>
                     ))}
                     {(!user?.profile?.objectives || user.profile.objectives.length === 0) && (
-                      <p className="text-gray-500 text-sm">Aucun objectif renseigné</p>
+                      <p className="text-gray-500 text-sm">Aucun objectif renseignÃ©</p>
                     )}
                   </div>
                 )}
@@ -693,7 +693,7 @@ export default function ProfilePage() {
                       value={passwordData.current}
                       onChange={(e) => { setPasswordData({ ...passwordData, current: e.target.value }); setPasswordError(null); setPasswordSuccess(false); }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="••••••••"
+                      placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                     />
                   </div>
 
@@ -772,7 +772,7 @@ export default function ProfilePage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Dernière mise à jour
+                      DerniÃ¨re mise Ã  jour
                     </label>
                     <p className="text-gray-900">
                       {new Date(user.updatedAt).toLocaleDateString('fr-FR', {
@@ -797,7 +797,7 @@ export default function ProfilePage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Statut
                     </label>
-                    <Badge variant="success">Compte validé</Badge>
+                    <Badge variant="success">Compte validÃ©</Badge>
                   </div>
                 </div>
               </div>

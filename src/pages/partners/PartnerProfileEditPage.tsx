@@ -298,7 +298,7 @@ export const PartnerProfileEditPage: React.FC = () => {
                       Nom de l'entreprise <span className="text-red-500">*</span>
                     </label>
                     <input type="text" value={formData.companyName} onChange={(e) => handleInputChange('companyName', e.target.value)}
-                      placeholder="Royal Maritime Group" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="Royal Bâtiment Group" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                   </div>
 
                   <div>
@@ -330,7 +330,7 @@ export const PartnerProfileEditPage: React.FC = () => {
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                     <textarea value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} rows={4}
-                      placeholder="Groupe maritime d'excellence, leader dans le transport maritime..." 
+                      placeholder="Groupe construction d'excellence, leader dans le transport construction..." 
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                   </div>
                 </div>
@@ -432,7 +432,7 @@ export const PartnerProfileEditPage: React.FC = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">Secteurs d'activité</label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {['Transport Maritime', 'Technologie', 'Logistique', 'Environnement', 'Sécurité', 'Formation'].map(s => (
+                      {['Transport & mobilité', 'Technologie', 'Logistique', 'Environnement', 'Sécurité', 'Formation'].map(s => (
                         <label key={s} className="flex items-center">
                           <input type="checkbox" checked={formData.sectors.includes(s)}
                             onChange={(e) => handleInputChange('sectors', e.target.checked ? [...formData.sectors, s] : formData.sectors.filter(x => x !== s))}
@@ -446,7 +446,7 @@ export const PartnerProfileEditPage: React.FC = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Certifications</label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {['ISO 9001', 'ISO 14001', 'ISO 27001', 'OHSAS 18001', 'Maritime Security'].map(c => (
+                      {['ISO 9001', 'ISO 14001', 'ISO 27001', 'OHSAS 18001', 'Bâtiment Security'].map(c => (
                         <label key={c} className="flex items-center">
                           <input type="checkbox" checked={formData.certifications.includes(c)}
                             onChange={(e) => handleInputChange('certifications', e.target.checked ? [...formData.certifications, c] : formData.certifications.filter(x => x !== c))}

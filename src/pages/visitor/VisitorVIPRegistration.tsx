@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * Formulaire d'inscription Visiteur VIP PREMIUM
  * Workflow complet avec photo, mot de passe et paiement obligatoire
  */
@@ -19,23 +19,23 @@ import { COUNTRIES } from '../../data/countries';
 import useAuthStore from '../../store/authStore';
 
 const vipVisitorSchema = z.object({
-  firstName: z.string().min(2, 'Prénom requis'),
+  firstName: z.string().min(2, 'PrÃ©nom requis'),
   lastName: z.string().min(2, 'Nom requis'),
   email: z.string().email('Email invalide'),
   password: z.string()
-    .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
-    .max(72, 'Le mot de passe ne doit pas dépasser 72 caractères') // Limite bcrypt Supabase
+    .min(8, 'Le mot de passe doit contenir au moins 8 caractÃ¨res')
+    .max(72, 'Le mot de passe ne doit pas dÃ©passer 72 caractÃ¨res') // Limite bcrypt Supabase
     .regex(/[A-Z]/, 'Doit contenir une majuscule')
     .regex(/[a-z]/, 'Doit contenir une minuscule')
     .regex(/[0-9]/, 'Doit contenir un chiffre')
-    .regex(/[!@#$%^&*]/, 'Doit contenir un caractère spécial'),
+    .regex(/[!@#$%^&*]/, 'Doit contenir un caractÃ¨re spÃ©cial'),
   confirmPassword: z.string(),
-  phone: z.string().min(8, 'Téléphone requis'),
+  phone: z.string().min(8, 'TÃ©lÃ©phone requis'),
   country: z.string().min(2, 'Pays requis'),
   sector: z.string().min(2, 'Secteur requis'),
   position: z.string().min(2, 'Fonction requise'),
   company: z.string().min(2, 'Entreprise requise'),
-  photo: z.any().optional() // Photo optionnelle - peut être ajoutée plus tard
+  photo: z.any().optional() // Photo optionnelle - peut Ãªtre ajoutÃ©e plus tard
 }).refine((data) => data.password === data.confirmPassword, {
   message: 'Les mots de passe ne correspondent pas',
   path: ['confirmPassword']
@@ -44,13 +44,13 @@ const vipVisitorSchema = z.object({
 type VIPVisitorForm = z.infer<typeof vipVisitorSchema>;
 
 const sectors = [
-  'Autorité Portuaire',
-  'Transport Maritime',
+  'AutoritÃ© urbaine',
+  'Transport & mobilitÃ©',
   'Logistique',
   'Consulting',
   'Technologie',
   'Finance',
-  'Média/Presse',
+  'MÃ©dia/Presse',
   'Institutionnel',
   'Autre'
 ];
@@ -89,13 +89,13 @@ export default function VisitorVIPRegistration() {
     if (file) {
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        toast.error('Veuillez sélectionner une image');
+        toast.error('Veuillez sÃ©lectionner une image');
         return;
       }
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        toast.error('La photo ne doit pas dépasser 5MB');
+        toast.error('La photo ne doit pas dÃ©passer 5MB');
         return;
       }
 
@@ -112,7 +112,7 @@ export default function VisitorVIPRegistration() {
   };
 
   const onSubmit = async (data: VIPVisitorForm) => {
-    console.log('?? onSubmit APPELÉ avec données:', JSON.stringify(data, null, 2));
+    console.log('?? onSubmit APPELÃ‰ avec donnÃ©es:', JSON.stringify(data, null, 2));
     setIsSubmitting(true);
 
     try {
@@ -138,27 +138,27 @@ export default function VisitorVIPRegistration() {
             });
 
           if (uploadError) {
-            console.warn('?? Photo upload échoué (non bloquant):', uploadError);
+            console.warn('?? Photo upload Ã©chouÃ© (non bloquant):', uploadError);
             console.warn('   Code:', uploadError.message);
-            toast.warning('Photo non uploadée (non bloquant)');
+            toast.warning('Photo non uploadÃ©e (non bloquant)');
           } else {
-            console.log('   ? Upload réussi:', uploadData);
+            console.log('   ? Upload rÃ©ussi:', uploadData);
             const { data: urlData } = supabase.storage
               .from('visitor-photos')
               .getPublicUrl(filePath);
             photoUrl = urlData.publicUrl;
-            console.log('? Photo uploadée:', photoUrl);
+            console.log('? Photo uploadÃ©e:', photoUrl);
           }
         } catch (photoErr) {
           console.warn('?? Erreur photo (non bloquant):', photoErr);
-          toast.warning('Photo non uploadée (non bloquant)');
+          toast.warning('Photo non uploadÃ©e (non bloquant)');
         }
       } else {
-        console.log('?? Pas de photo sélectionnée');
+        console.log('?? Pas de photo sÃ©lectionnÃ©e');
       }
 
-      // 2. Vérification préalable : L'email existe-t-il déjà ?
-      console.log('?? [VIP INSCRIPTION] Vérification si email existe déjà...');
+      // 2. VÃ©rification prÃ©alable : L'email existe-t-il dÃ©jÃ  ?
+      console.log('?? [VIP INSCRIPTION] VÃ©rification si email existe dÃ©jÃ ...');
       const emailToCheck = data.email.toLowerCase().trim();
       
       const { data: existingUser, error: checkError } = await supabase
@@ -168,14 +168,14 @@ export default function VisitorVIPRegistration() {
         .maybeSingle();
       
       if (checkError && checkError.code !== 'PGRST116') {
-        console.error('? [VIP INSCRIPTION] Erreur lors de la vérification:', checkError);
-        toast.error('Erreur lors de la vérification de l\'email. Veuillez réessayer.');
+        console.error('? [VIP INSCRIPTION] Erreur lors de la vÃ©rification:', checkError);
+        toast.error('Erreur lors de la vÃ©rification de l\'email. Veuillez rÃ©essayer.');
         setIsSubmitting(false);
         return;
       }
       
       if (existingUser) {
-        console.warn('?? [VIP INSCRIPTION] Email déjà existant:', existingUser);
+        console.warn('?? [VIP INSCRIPTION] Email dÃ©jÃ  existant:', existingUser);
         let accountType = 'visiteur';
         if (existingUser.type === 'exhibitor') {
           accountType = 'exposant';
@@ -187,10 +187,10 @@ export default function VisitorVIPRegistration() {
           accountType = `visiteur ${level}`;
         }
         
-        toast.error(`?? Cet email est déjà enregistré en tant que ${accountType}. Connectez-vous pour accéder à votre compte.`);
+        toast.error(`?? Cet email est dÃ©jÃ  enregistrÃ© en tant que ${accountType}. Connectez-vous pour accÃ©der Ã  votre compte.`);
         
         setTimeout(() => {
-          if (window.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
+          if (window.confirm('Voulez-vous Ãªtre redirigÃ© vers la page de connexion ?')) {
             navigate(ROUTES.LOGIN);
           }
         }, 2000);
@@ -205,7 +205,7 @@ export default function VisitorVIPRegistration() {
       let userId = currentUser?.id;
       
       if (!userId) {
-        console.log('?? Création compte auth...');
+        console.log('?? CrÃ©ation compte auth...');
         console.log('   ?? Email:', data.email);
         console.log('   ?? Password length:', data.password.length);
         console.log('   ?? Name:', fullName);
@@ -229,7 +229,7 @@ export default function VisitorVIPRegistration() {
           
           // Messages d'erreur plus clairs
           if (authError.message?.includes('User already registered')) {
-            toast.error('Cet email est déjà utilisé');
+            toast.error('Cet email est dÃ©jÃ  utilisÃ©');
           } else if (authError.message?.includes('Password')) {
             toast.error('Le mot de passe ne respecte pas les exigences');
           } else {
@@ -238,17 +238,17 @@ export default function VisitorVIPRegistration() {
           throw authError;
         }
         if (!authData.user) {
-          console.error('? Pas de user créé');
-          throw new Error('Échec création utilisateur');
+          console.error('? Pas de user crÃ©Ã©');
+          throw new Error('Ã‰chec crÃ©ation utilisateur');
         }
         userId = authData.user.id;
-        console.log('? Auth user créé:', userId);
+        console.log('? Auth user crÃ©Ã©:', userId);
       } else {
-        console.log('?? Utilisateur déjà connecté, on passe la création Auth:', userId);
+        console.log('?? Utilisateur dÃ©jÃ  connectÃ©, on passe la crÃ©ation Auth:', userId);
       }
 
       // 4. Update or Create user profile
-      console.log('?? Mise à jour profil utilisateur...');
+      console.log('?? Mise Ã  jour profil utilisateur...');
       const { error: userError } = await supabase
         .from('users')
         .upsert([{
@@ -276,7 +276,7 @@ export default function VisitorVIPRegistration() {
         console.error('? Erreur profil (UPSERT):', userError);
         throw userError;
       }
-      console.log('? Profil utilisateur synchronisé');
+      console.log('? Profil utilisateur synchronisÃ©');
 
       // 5. CRITICAL: Update local auth store
       const localUser = {
@@ -284,7 +284,7 @@ export default function VisitorVIPRegistration() {
         email: data.email,
         name: fullName,
         type: 'visitor' as const,
-        visitor_level: 'premium' as const, // ? FIX P0-1: Cohérent avec DB ligne 229
+        visitor_level: 'premium' as const, // ? FIX P0-1: CohÃ©rent avec DB ligne 229
         status: 'pending_payment' as const,
         profile: {
           firstName: data.firstName,
@@ -333,7 +333,7 @@ export default function VisitorVIPRegistration() {
           console.warn('?? Erreur payment_request (non bloquant):', paymentError);
         } else {
           paymentRequestId = prData?.id || null;
-          console.log('? Payment request créé:', paymentRequestId);
+          console.log('? Payment request crÃ©Ã©:', paymentRequestId);
         }
       } catch (e) {
         console.warn('?? Erreur payment_request (non bloquant):', e);
@@ -360,17 +360,17 @@ export default function VisitorVIPRegistration() {
         clearTimeout(emailTimeout);
         const emailResult = await emailResponse.json();
         if (emailResult.success) {
-          console.log('? Email VIP envoyé:', emailResult.messageId);
+          console.log('? Email VIP envoyÃ©:', emailResult.messageId);
         } else {
-          console.warn('?? Email non envoyé:', emailResult.error);
+          console.warn('?? Email non envoyÃ©:', emailResult.error);
         }
       } catch (e) {
         console.warn('?? Erreur email (non bloquant):', e);
       }
 
       // 8. Success - Redirect DIRECTLY to bank transfer page (skip VisitorPaymentPage)
-      console.log('?? [VIP] SUCCÈS COMPLET - Redirection vers coordonnées bancaires...');
-      toast.success('Compte créé ! Redirection vers les instructions de paiement...');
+      console.log('?? [VIP] SUCCÃˆS COMPLET - Redirection vers coordonnÃ©es bancaires...');
+      toast.success('Compte crÃ©Ã© ! Redirection vers les instructions de paiement...');
 
       await new Promise(resolve => setTimeout(resolve, 100));
       
@@ -388,17 +388,17 @@ export default function VisitorVIPRegistration() {
       console.error('   Code:', error.code);
       console.error('   Status:', error.status);
       
-      // Message d'erreur plus spécifique selon le type
+      // Message d'erreur plus spÃ©cifique selon le type
       let errorMessage = 'Erreur lors de l\'inscription';
       
       if (error.message?.includes('already registered')) {
-        errorMessage = 'Cet email est déjà utilisé. Connectez-vous ou utilisez un autre email.';
+        errorMessage = 'Cet email est dÃ©jÃ  utilisÃ©. Connectez-vous ou utilisez un autre email.';
       } else if (error.message?.includes('Password')) {
-        errorMessage = 'Le mot de passe ne respecte pas les exigences de sécurité.';
+        errorMessage = 'Le mot de passe ne respecte pas les exigences de sÃ©curitÃ©.';
       } else if (error.message?.includes('Invalid')) {
-        errorMessage = 'Données invalides. Vérifiez vos informations.';
+        errorMessage = 'DonnÃ©es invalides. VÃ©rifiez vos informations.';
       } else if (error.status === 422) {
-        errorMessage = 'Erreur de validation. Vérifiez votre email et mot de passe.';
+        errorMessage = 'Erreur de validation. VÃ©rifiez votre email et mot de passe.';
       } else if (error.message) {
         errorMessage = error.message;
       }
@@ -431,13 +431,13 @@ export default function VisitorVIPRegistration() {
             Inscription Pass Premium VIP
           </h1>
           <p className="text-yellow-100 text-lg">
-            Accès complet au salon avec badge photo sécurisé
+            AccÃ¨s complet au salon avec badge photo sÃ©curisÃ©
           </p>
           <div className="mt-4 inline-flex items-center space-x-3 bg-yellow-800 px-6 py-3 rounded-full">
-            <span className="text-yellow-100 font-semibold">?? RDV B2B Illimités</span>
-            <span className="text-yellow-200">•</span>
+            <span className="text-yellow-100 font-semibold">?? RDV B2B IllimitÃ©s</span>
+            <span className="text-yellow-200">â€¢</span>
             <span className="text-yellow-100 font-semibold">?? Gala exclusif</span>
-            <span className="text-yellow-200">•</span>
+            <span className="text-yellow-200">â€¢</span>
             <span className="text-yellow-100 font-semibold">?? Networking premium</span>
           </div>
         </motion.div>
@@ -465,7 +465,7 @@ export default function VisitorVIPRegistration() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                    Prénom *
+                    PrÃ©nom *
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -474,7 +474,7 @@ export default function VisitorVIPRegistration() {
                       type="text"
                       {...register('firstName')}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                      placeholder="Votre prénom"
+                      placeholder="Votre prÃ©nom"
                     />
                   </div>
                   {errors.firstName && (
@@ -543,7 +543,7 @@ export default function VisitorVIPRegistration() {
                       type="password"
                       {...register('password')}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                      placeholder="Minimum 8 caractères"
+                      placeholder="Minimum 8 caractÃ¨res"
                     />
                   </div>
                   {errors.password && (
@@ -575,7 +575,7 @@ export default function VisitorVIPRegistration() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                    Téléphone *
+                    TÃ©lÃ©phone *
                   </label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -602,7 +602,7 @@ export default function VisitorVIPRegistration() {
                       {...register('country')}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 appearance-none bg-white"
                     >
-                      <option value="">Sélectionnez</option>
+                      <option value="">SÃ©lectionnez</option>
                       {COUNTRIES.map((country) => (
                         <option key={country.code} value={country.code}>
                           {country.name}
@@ -620,14 +620,14 @@ export default function VisitorVIPRegistration() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="sector" className="block text-sm font-medium text-gray-700 mb-2">
-                    Secteur d'activité *
+                    Secteur d'activitÃ© *
                   </label>
                   <select
                     id="sector"
                     {...register('sector')}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   >
-                    <option value="">Sélectionnez</option>
+                    <option value="">SÃ©lectionnez</option>
                     {sectors.map((sector) => (
                       <option key={sector} value={sector}>{sector}</option>
                     ))}
@@ -682,23 +682,23 @@ export default function VisitorVIPRegistration() {
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li className="flex items-start">
                     <span className="text-yellow-600 mr-2">?</span>
-                    <span><strong>Rendez-vous B2B ILLIMITÉS</strong> - Planifiez autant de meetings que souhaité</span>
+                    <span><strong>Rendez-vous B2B ILLIMITÃ‰S</strong> - Planifiez autant de meetings que souhaitÃ©</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-yellow-600 mr-2">?</span>
-                    <span><strong>Badge ultra-sécurisé avec photo</strong> - QR code JWT rotatif</span>
+                    <span><strong>Badge ultra-sÃ©curisÃ© avec photo</strong> - QR code JWT rotatif</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-yellow-600 mr-2">?</span>
-                    <span><strong>Accès zones VIP</strong> - Salons premium, networking area</span>
+                    <span><strong>AccÃ¨s zones VIP</strong> - Salons premium, networking area</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-yellow-600 mr-2">?</span>
-                    <span><strong>Gala de clôture exclusif</strong> - Événement réseau premium</span>
+                    <span><strong>Gala de clÃ´ture exclusif</strong> - Ã‰vÃ©nement rÃ©seau premium</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-yellow-600 mr-2">?</span>
-                    <span><strong>Ateliers et conférences VIP</strong> - Contenus exclusifs</span>
+                    <span><strong>Ateliers et confÃ©rences VIP</strong> - Contenus exclusifs</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-yellow-600 mr-2">?</span>
@@ -710,7 +710,7 @@ export default function VisitorVIPRegistration() {
               {/* Payment Info */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-900">
-                  <strong>?? Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page de paiement sécurisé (700 EUR). Votre accès VIP sera activé immédiatement après validation du paiement.
+                  <strong>?? Paiement requis</strong> : AprÃ¨s crÃ©ation du compte, vous serez redirigÃ© vers la page de paiement sÃ©curisÃ© (700 EUR). Votre accÃ¨s VIP sera activÃ© immÃ©diatement aprÃ¨s validation du paiement.
                 </p>
               </div>
 
@@ -723,12 +723,12 @@ export default function VisitorVIPRegistration() {
                 {isSubmitting ? (
                   <>
                     <Loader className="animate-spin h-5 w-5 mr-2" />
-                    Création du compte VIP...
+                    CrÃ©ation du compte VIP...
                   </>
                 ) : (
                   <>
                     <Crown className="h-5 w-5 mr-2" />
-                    Créer mon compte VIP et payer
+                    CrÃ©er mon compte VIP et payer
                   </>
                 )}
               </Button>
@@ -736,7 +736,7 @@ export default function VisitorVIPRegistration() {
               {/* Free Pass Link */}
               <div className="text-center pt-4 border-t">
                 <p className="text-sm text-gray-600 mb-2">
-                  Vous cherchez un accès gratuit au salon ?
+                  Vous cherchez un accÃ¨s gratuit au salon ?
                 </p>
                 <Button
                   type="button"
@@ -754,6 +754,7 @@ export default function VisitorVIPRegistration() {
     </div>
   );
 }
+
 
 
 

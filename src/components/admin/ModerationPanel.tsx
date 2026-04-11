@@ -40,53 +40,64 @@ interface PendingContent {
   priority: 'low' | 'medium' | 'high';
 }
 
-const mockPendingContent: PendingContent[] = [
-  {
-    id: 'content-1',
-    exhibitorId: 'exhibitor-1',
-    exhibitorName: 'Ocean Tech Solutions',
-    sectionType: 'about',
-    sectionTitle: 'Section À propos',
-    content: {
-      title: 'Notre expertise IoT maritime',
-      description: 'Avec plus de 15 ans d\'expérience dans l\'IoT maritime, nous développons des solutions innovantes...',
-      features: ['Solutions IoT innovantes', 'Expertise maritime reconnue']
-    },
-    submittedAt: new Date(Date.now() - 3600000),
-    status: 'pending',
-    changes: ['Mise à jour description', 'Ajout nouvelles fonctionnalités'],
-    priority: 'medium'
-  },
-  {
-    id: 'content-2',
-    exhibitorId: 'exhibitor-2',
-    exhibitorName: 'African Ports Development',
-    sectionType: 'products',
-    sectionTitle: 'Catalogue Produits',
-    content: {
-      title: 'Nos services de consulting',
-      products: [
-        {
-          name: 'Port Development Consulting',
-          description: 'Conseil stratégique pour le développement portuaire'
-        }
-      ]
-    },
-    submittedAt: new Date(Date.now() - 7200000),
-    status: 'pending',
-    changes: ['Nouveau produit ajouté', 'Prix mis à jour'],
-    priority: 'high'
-  }
-];
+const mockPendingContent: PendingContent[] = [];
 
 export default function ModerationPanel() {
   const navigate = useNavigate();
-  const [pendingContent, setPendingContent] = useState<PendingContent[]>(mockPendingContent);
+  const [pendingContent, setPendingContent] = useState<PendingContent[]>([]);
   const [selectedContent, setSelectedContent] = useState<PendingContent | null>(null);
   const [showModerationModal, setShowModerationModal] = useState(false);
   const [moderationComment, setModerationComment] = useState('');
   const [moderatingContent, setModeratingContent] = useState<string[]>([]);
   const [approvedToday, setApprovedToday] = useState(0);
+  const [isLoadingContent, setIsLoadingContent] = useState(true);
+
+  useEffect(() => {
+    const loadPendingContent = async () => {
+      if (!isSupabaseReady() || !supabase) {
+        setIsLoadingContent(false);
+        return;
+      }
+      try {
+        const { data, error } = await supabase
+          .from('pending_partner_media')
+          .select('*')
+          .eq('status', 'pending')
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        const items: PendingContent[] = (data || []).map((row: any) => ({
+          id: row.id,
+          exhibitorId: row.created_by_id || '',
+          exhibitorName: row.partner_company || row.creator_name || 'Partenaire inconnu',
+          sectionType: row.type || 'media',
+          sectionTitle: row.title || 'Contenu média',
+          content: {
+            title: row.title,
+            description: row.description || undefined,
+          },
+          submittedAt: new Date(row.created_at),
+          status: (row.status || 'pending') as 'pending' | 'approved' | 'rejected',
+          moderatorComment: row.rejection_reason || undefined,
+          changes: row.category ? [`Catégorie: ${row.category}`] : [],
+          priority: (new Date().getTime() - new Date(row.created_at).getTime() > 86400000 * 2
+            ? 'high'
+            : new Date().getTime() - new Date(row.created_at).getTime() > 86400000
+            ? 'medium'
+            : 'low') as 'low' | 'medium' | 'high',
+        }));
+
+        setPendingContent(items);
+      } catch (err) {
+        console.error('Erreur chargement contenus en attente:', err);
+      } finally {
+        setIsLoadingContent(false);
+      }
+    };
+
+    loadPendingContent();
+  }, []);
 
   useEffect(() => {
     const loadApprovedToday = async () => {
@@ -107,47 +118,57 @@ export default function ModerationPanel() {
   }, []);
 
   const handleApproveContent = async (content: PendingContent) => {
+    if (!isSupabaseReady() || !supabase) return;
     setModeratingContent(prev => [...prev, content.id]);
-    
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-  // Simulation de l'approbation
-  toast.success(`✅ Contenu approuvé - ${content.exhibitorName} — ${content.sectionTitle}`);
-      
-      // Retirer de la liste des contenus en attente
+      const { error } = await supabase
+        .from('pending_partner_media')
+        .update({ status: 'approved', reviewed_by: (await supabase.auth.getUser()).data.user?.id, reviewed_at: new Date().toISOString() })
+        .eq('id', content.id);
+
+      if (error) throw error;
+
+      toast.success(`✅ Contenu approuvé - ${content.exhibitorName} — ${content.sectionTitle}`);
       setPendingContent(prev => prev.filter(c => c.id !== content.id));
-      setModeratingContent(prev => prev.filter(id => id !== content.id));
-      
+      setApprovedToday(n => n + 1);
     } catch {
-      setModeratingContent(prev => prev.filter(id => id !== content.id));
       toast.error('Erreur lors de l\'approbation');
+    } finally {
+      setModeratingContent(prev => prev.filter(id => id !== content.id));
     }
   };
 
   const handleRejectContent = async (content: PendingContent, comment: string) => {
+    if (!isSupabaseReady() || !supabase) return;
     setModeratingContent(prev => [...prev, content.id]);
-    
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-  toast.error(`❌ Contenu refusé - ${content.exhibitorName} — ${content.sectionTitle}: ${comment}`);
-      
-      // Mettre à jour le statut
-      setPendingContent(prev => prev.map(c => 
-        c.id === content.id 
+      const { error } = await supabase
+        .from('pending_partner_media')
+        .update({
+          status: 'rejected',
+          rejection_reason: comment,
+          reviewed_by: (await supabase.auth.getUser()).data.user?.id,
+          reviewed_at: new Date().toISOString(),
+        })
+        .eq('id', content.id);
+
+      if (error) throw error;
+
+      toast.error(`❌ Contenu refusé - ${content.exhibitorName} — ${content.sectionTitle}: ${comment}`);
+      setPendingContent(prev => prev.map(c =>
+        c.id === content.id
           ? { ...c, status: 'rejected', moderatorComment: comment }
           : c
       ));
-      
-      setModeratingContent(prev => prev.filter(id => id !== content.id));
       setShowModerationModal(false);
       setSelectedContent(null);
       setModerationComment('');
-      
     } catch {
-      setModeratingContent(prev => prev.filter(id => id !== content.id));
       toast.error('Erreur lors du refus');
+    } finally {
+      setModeratingContent(prev => prev.filter(id => id !== content.id));
     }
   };
 

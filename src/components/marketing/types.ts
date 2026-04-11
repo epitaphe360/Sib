@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Types partagés pour le module Marketing Dashboard
  */
 
@@ -70,3 +70,4 @@ export interface UploadFormData {
   url: string;
   category: string;
 }
+

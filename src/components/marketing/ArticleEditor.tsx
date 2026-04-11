@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import DOMPurify from 'dompurify';
 import {
   Save,
   X,
@@ -57,30 +56,11 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Quill modules configuration
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
-      ['link', 'image', 'video'],
-      ['blockquote', 'code-block'],
-      ['clean']
-    ],
-  };
-
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'indent',
-    'color', 'background',
-    'align',
-    'link', 'image', 'video',
-    'blockquote', 'code-block'
-  ];
+  const sanitizeRichHtml = (html: string) => DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+    FORBID_TAGS: ['script', 'iframe', 'object', 'embed'],
+    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus']
+  });
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -174,6 +154,7 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
     try {
       const articleData = {
         ...formData,
+        content: sanitizeRichHtml(formData.content),
         published: publish,
         published_at: publish ? new Date().toISOString() : null,
         updated_at: new Date().toISOString()
@@ -224,6 +205,7 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
     try {
       const articleData = {
         ...formData,
+        content: sanitizeRichHtml(formData.content),
         published: false,
         scheduled_at: formData.scheduled_at,
         updated_at: new Date().toISOString()
@@ -410,22 +392,21 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
               </p>
             </div>
 
-            {/* WYSIWYG Editor */}
+            {/* HTML Editor */}
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">
                 Article Content
               </label>
-              <div className="border-2 border-gray-300 rounded-lg overflow-hidden">
-                <ReactQuill
-                  theme="snow"
-                  value={formData.content}
-                  onChange={(content) => setFormData({ ...formData, content })}
-                  modules={modules}
-                  formats={formats}
-                  placeholder="Write your article here..."
-                  className="h-96"
-                />
-              </div>
+              <textarea
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                placeholder="Write your article here (HTML supported)..."
+                rows={16}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                HTML autorisé. Le contenu est automatiquement nettoyé avant sauvegarde.
+              </p>
             </div>
 
             {/* Tags */}
@@ -556,7 +537,7 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
                     <span>{formData.category}</span>
                   </div>
                   <p className="text-xl text-gray-600 italic mb-8">{formData.excerpt}</p>
-                  <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                  <div dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(formData.content) }} />
                   <div className="flex flex-wrap gap-2 mt-8">
                     {formData.tags.map((tag, index) => (
                       <Badge key={index} className="bg-blue-100 text-blue-700">

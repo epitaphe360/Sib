@@ -1,4 +1,4 @@
-import { Video, Mic, Eye, EyeOff, Plus } from 'lucide-react';
+﻿import { Video, Mic, Eye, EyeOff, Plus } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -105,3 +105,4 @@ export default function MediaFilters({
     </Card>
   );
 }
+

@@ -44,11 +44,11 @@
 │                                                                     │
 │  /visitor/payment                                                   │
 │  ↓                                                                  │
-│  Choix méthode: Stripe | PayPal | CMI (Maroc)                      │
+│  Choix méthode: PayPal | CMI (Maroc) | Virement bancaire            │
 │  ↓                                                                  │
-│  [Stripe] → Redirect checkout Stripe → Webhook confirmation         │
 │  [PayPal] → PayPal buttons → Capture order                         │
 │  [CMI]    → Redirect gateway CMI → Callback                        │
+│  [Virement] → Validation manuelle admin                             │
 │  ↓                                                                  │
 │  /visitor/payment-success                                           │
 │  ↓                                                                  │

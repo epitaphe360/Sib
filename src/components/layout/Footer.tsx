@@ -35,8 +35,8 @@ export const Footer: React.FC = memo(() => {
           <div className="lg:col-span-4">
             <Link to={ROUTES.HOME} className="inline-flex items-center mb-8">
               <img
-                src="/logo-fond-bleu.jpg"
-                alt="SIB - Salon International du Bâtiment"
+                src="/logo-sib2026.png"
+                alt="SIB - Salon International des Ports"
                 className="h-16 w-auto object-contain"
               />
             </Link>
@@ -119,8 +119,8 @@ export const Footer: React.FC = memo(() => {
                 <div className="h-10 w-10 shrink-0 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center">
                   <Mail className="h-5 w-5 text-emerald-400" />
                 </div>
-                <a href="mailto:contact@sib2026.ma" className="text-sm font-bold text-slate-300 hover:text-white hover:underline transition-all">
-                  contact@sib2026.ma
+                <a href="mailto:contact@sibevent.com" className="text-sm font-bold text-slate-300 hover:text-white hover:underline transition-all">
+                  contact@sibevent.com
                 </a>
               </div>
 

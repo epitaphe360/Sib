@@ -1,6 +1,6 @@
-/**
+ï»¿/**
  * Formulaire d'inscription Visiteur GRATUIT
- * Workflow simplifié sans mot de passe ni dashboard
+ * Workflow simplifiÃ© sans mot de passe ni dashboard
  */
 import { useState, useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -17,7 +17,7 @@ import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
 import { COUNTRIES } from '../../data/countries';
 
-// Schema défini au niveau module pour éviter les problèmes de hooks
+// Schema dÃ©fini au niveau module pour Ã©viter les problÃ¨mes de hooks
 const createFreeVisitorSchema = (t: (key: string) => string) => z.object({
   firstName: z.string().min(2, t('visitor.validation.firstname_required')),
   lastName: z.string().min(2, t('visitor.validation.lastname_required')),
@@ -29,7 +29,7 @@ const createFreeVisitorSchema = (t: (key: string) => string) => z.object({
   company: z.string().optional(),
   password: z.string()
     .min(8, t('visitor.validation.password_length'))
-    .max(72, 'Le mot de passe ne doit pas dépasser 72 caractères')
+    .max(72, 'Le mot de passe ne doit pas dÃ©passer 72 caractÃ¨res')
     .regex(/[A-Z]/, t('visitor.validation.password_requirements'))
     .regex(/[a-z]/, t('visitor.validation.password_requirements'))
     .regex(/[0-9]/, t('visitor.validation.password_requirements'))
@@ -51,13 +51,13 @@ export default function VisitorFreeRegistration() {
   const navigate = useNavigate();
 
   const sectors = [
-    { value: 'Autorité Portuaire', label: t('visitor.sector.authority') },
-    { value: 'Transport Maritime', label: t('visitor.sector.transport') },
+    { value: 'AutoritÃ© urbaine', label: t('visitor.sector.authority') },
+    { value: 'Transport & mobilitÃ©', label: t('visitor.sector.transport') },
     { value: 'Logistique', label: t('visitor.sector.logistics') },
     { value: 'Consulting', label: t('visitor.sector.consulting') },
     { value: 'Technologie', label: t('visitor.sector.technology') },
-    { value: 'Étudiant', label: t('visitor.sector.student') },
-    { value: 'Média/Presse', label: t('visitor.sector.media') },
+    { value: 'Ã‰tudiant', label: t('visitor.sector.student') },
+    { value: 'MÃ©dia/Presse', label: t('visitor.sector.media') },
     { value: 'Institutionnel', label: t('visitor.sector.institutional') },
     { value: 'Autre', label: t('visitor.sector.other') }
   ];
@@ -81,8 +81,8 @@ export default function VisitorFreeRegistration() {
     try {
       const fullName = `${data.firstName} ${data.lastName}`.trim();
 
-      // 1. Vérification préalable : L'email existe-t-il déjà ?
-      console.log('?? [FREE VISITOR] Vérification si email existe déjà...');
+      // 1. VÃ©rification prÃ©alable : L'email existe-t-il dÃ©jÃ  ?
+      console.log('?? [FREE VISITOR] VÃ©rification si email existe dÃ©jÃ ...');
       const emailToCheck = data.email.toLowerCase().trim();
       
       const { data: existingUser, error: checkError } = await supabase
@@ -92,14 +92,14 @@ export default function VisitorFreeRegistration() {
         .maybeSingle();
       
       if (checkError && checkError.code !== 'PGRST116') {
-        console.error('? [FREE VISITOR] Erreur lors de la vérification:', checkError);
-        toast.error(t('visitor.message.email_check_error', 'Erreur lors de la vérification de l\'email. Veuillez réessayer.'));
+        console.error('? [FREE VISITOR] Erreur lors de la vÃ©rification:', checkError);
+        toast.error(t('visitor.message.email_check_error', 'Erreur lors de la vÃ©rification de l\'email. Veuillez rÃ©essayer.'));
         setIsSubmitting(false);
         return;
       }
       
       if (existingUser) {
-        console.warn('?? [FREE VISITOR] Email déjà existant:', existingUser);
+        console.warn('?? [FREE VISITOR] Email dÃ©jÃ  existant:', existingUser);
         let accountType = 'visiteur';
         if (existingUser.type === 'exhibitor') {
           accountType = 'exposant';
@@ -127,7 +127,7 @@ export default function VisitorFreeRegistration() {
       
       console.log('? [FREE VISITOR] Email disponible');
 
-      // 2. Créer l'utilisateur Supabase Auth avec le mot de passe de l'utilisateur
+      // 2. CrÃ©er l'utilisateur Supabase Auth avec le mot de passe de l'utilisateur
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -141,7 +141,7 @@ export default function VisitorFreeRegistration() {
       });
 
       if (authError) {
-        // Gérer le cas spécifique où l'utilisateur existe dans Auth mais pas dans public.users
+        // GÃ©rer le cas spÃ©cifique oÃ¹ l'utilisateur existe dans Auth mais pas dans public.users
         if (authError.message === 'User already registered') {
             console.warn('?? [FREE VISITOR] Email existe dans Auth mais pas dans users (compte orphelin).');
             
@@ -152,11 +152,11 @@ export default function VisitorFreeRegistration() {
             );
             
             // Proposer les deux options
-            if (window.confirm('Voulez-vous aller à la page de connexion ?\n\nCliquez "OK" pour vous connecter\nCliquez "Annuler" pour réinitialiser votre mot de passe')) {
+            if (window.confirm('Voulez-vous aller Ã  la page de connexion ?\n\nCliquez "OK" pour vous connecter\nCliquez "Annuler" pour rÃ©initialiser votre mot de passe')) {
               // Rediriger vers login
               navigate(ROUTES.LOGIN);
             } else {
-              // Rediriger vers mot de passe oublié
+              // Rediriger vers mot de passe oubliÃ©
               navigate(ROUTES.FORGOT_PASSWORD);
             }
             
@@ -165,9 +165,9 @@ export default function VisitorFreeRegistration() {
         }
         throw authError; // Autres erreurs
       }
-      if (!authData.user) throw new Error('Échec création utilisateur');
+      if (!authData.user) throw new Error('Ã‰chec crÃ©ation utilisateur');
 
-      // 3. Créer l'entrée dans la table users
+      // 3. CrÃ©er l'entrÃ©e dans la table users
       const { error: userError } = await supabase
         .from('users')
         .insert([{
@@ -176,7 +176,7 @@ export default function VisitorFreeRegistration() {
           name: fullName,
           type: 'visitor',
           visitor_level: 'free', // ? EXPLICITE
-          status: 'active', // ? Visiteur FREE actif immédiatement (pas de validation nécessaire)
+          status: 'active', // ? Visiteur FREE actif immÃ©diatement (pas de validation nÃ©cessaire)
           profile: {
             firstName: data.firstName,
             lastName: data.lastName,
@@ -185,13 +185,13 @@ export default function VisitorFreeRegistration() {
             businessSector: data.sector,
             position: data.position || '',
             company: data.company || '',
-            hasPassword: true // Compte FREE avec mot de passe défini
+            hasPassword: true // Compte FREE avec mot de passe dÃ©fini
           }
         }]);
 
       if (userError) throw userError;
 
-      // 4. Générer badge QR automatiquement (optionnel - Edge Function peut ne pas être déployée)
+      // 4. GÃ©nÃ©rer badge QR automatiquement (optionnel - Edge Function peut ne pas Ãªtre dÃ©ployÃ©e)
       try {
         const { error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
           body: {
@@ -204,13 +204,13 @@ export default function VisitorFreeRegistration() {
         });
         
         if (badgeError) {
-          console.error('? Erreur génération badge:', badgeError);
+          console.error('? Erreur gÃ©nÃ©ration badge:', badgeError);
         } else {
-          console.log('? Badge QR généré avec succès');
+          console.log('? Badge QR gÃ©nÃ©rÃ© avec succÃ¨s');
         }
       } catch (badgeError) {
-        // Non bloquant - la fonction Edge peut ne pas être déployée en dev
-        console.warn('?? Edge Function generate-visitor-badge non déployée');
+        // Non bloquant - la fonction Edge peut ne pas Ãªtre dÃ©ployÃ©e en dev
+        console.warn('?? Edge Function generate-visitor-badge non dÃ©ployÃ©e');
       }
 
       // 5. Envoyer email de bienvenue via le serveur Node.js (SMTP)
@@ -236,26 +236,26 @@ export default function VisitorFreeRegistration() {
         
         if (!emailResponse.ok || !emailResult.success) {
           console.error('? Erreur envoi email:', emailResult.error);
-          toast.info('?? L\'email de bienvenue n\'a pas pu être envoyé. Vérifiez votre boîte de réception plus tard.', {
+          toast.info('?? L\'email de bienvenue n\'a pas pu Ãªtre envoyÃ©. VÃ©rifiez votre boÃ®te de rÃ©ception plus tard.', {
             duration: 4000
           });
         } else {
-          console.log('? Email de bienvenue envoyé avec succès:', emailResult.messageId);
+          console.log('? Email de bienvenue envoyÃ© avec succÃ¨s:', emailResult.messageId);
           toast.success(`?? ${t('visitor.message.email_sent')}`, { duration: 3000 });
         }
       } catch (emailError) {
-        // Non bloquant - le serveur peut ne pas être accessible en dev
+        // Non bloquant - le serveur peut ne pas Ãªtre accessible en dev
         console.warn('?? Erreur envoi email (non bloquant):', emailError);
       }
 
-      // NE PAS envoyer d'email de réinitialisation de mot de passe car l'utilisateur l'a déjà défini
-      // NE PAS déconnecter l'utilisateur (Allow login)
+      // NE PAS envoyer d'email de rÃ©initialisation de mot de passe car l'utilisateur l'a dÃ©jÃ  dÃ©fini
+      // NE PAS dÃ©connecter l'utilisateur (Allow login)
 
-      // Succès !
-      console.log('? [FREE VISITOR] Inscription réussie ! Affichage du modal de succès.');
+      // SuccÃ¨s !
+      console.log('? [FREE VISITOR] Inscription rÃ©ussie ! Affichage du modal de succÃ¨s.');
       setShowSuccess(true);
       
-      // Toast de succès immédiat
+      // Toast de succÃ¨s immÃ©diat
       toast.success(
         `?? ${t('visitor.message.success_title')}\n\n${t('visitor.message.success_desc')}\n\n${t('visitor.message.redirect')}`, 
         { duration: 6000 }
@@ -300,9 +300,9 @@ export default function VisitorFreeRegistration() {
           </p>
           <div className="mt-4 inline-flex items-center space-x-2 bg-green-800 px-4 py-2 rounded-full">
             <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_access')}</span>
-            <span className="text-green-200">•</span>
+            <span className="text-green-200">â€¢</span>
             <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_qr')}</span>
-            <span className="text-green-200">•</span>
+            <span className="text-green-200">â€¢</span>
             <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_free')}</span>
           </div>
         </motion.div>
@@ -316,13 +316,13 @@ export default function VisitorFreeRegistration() {
           <Card className="p-8">
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error('? [FREE VISITOR] Erreurs validation:', errors);
-              toast.error(t('visitor.validation.check_errors', 'Veuillez corriger les erreurs surlignées en rouge'));
+              toast.error(t('visitor.validation.check_errors', 'Veuillez corriger les erreurs surlignÃ©es en rouge'));
               const firstError = Object.values(errors)[0];
               if (firstError?.message) {
                 toast.error(firstError.message as string);
               }
             })} className="space-y-6">
-              {/* Nom et Prénom */}
+              {/* Nom et PrÃ©nom */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -390,11 +390,11 @@ export default function VisitorFreeRegistration() {
                   </p>
                 )}
                 <p className="text-xs text-gray-500 mt-1">
-                   Utilisé pour votre connexion
+                   UtilisÃ© pour votre connexion
                 </p>
               </div>
 
-              {/* Téléphone et Pays */}
+              {/* TÃ©lÃ©phone et Pays */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
@@ -426,7 +426,7 @@ export default function VisitorFreeRegistration() {
                       {...register('country')}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none bg-white"
                     >
-                      <option value="">Sélectionnez</option>
+                      <option value="">SÃ©lectionnez</option>
                       {COUNTRIES.map((country) => (
                         <option key={country.code} value={country.code}>
                           {country.name}
@@ -450,7 +450,7 @@ export default function VisitorFreeRegistration() {
                   {...register('sector')}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
-                  <option value="">Sélectionnez</option>
+                  <option value="">SÃ©lectionnez</option>
                   {sectors.map((sector) => (
                     <option key={sector.value} value={sector.value}>{sector.label}</option>
                   ))}
@@ -473,7 +473,7 @@ export default function VisitorFreeRegistration() {
                       type="text"
                       {...register('position')}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                      placeholder="Ex: Ingénieur"
+                      placeholder="Ex: IngÃ©nieur"
                     />
                   </div>
                 </div>
@@ -504,7 +504,7 @@ export default function VisitorFreeRegistration() {
                       type={showPassword ? "text" : "password"}
                       {...register('password')}
                       className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                      placeholder="••••••••"
+                      placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                     />
                     <button
                       type="button"
@@ -529,7 +529,7 @@ export default function VisitorFreeRegistration() {
                       type={showConfirmPassword ? "text" : "password"}
                       {...register('confirmPassword')}
                       className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                      placeholder="••••••••"
+                      placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                     />
                     <button
                       type="button"
@@ -562,13 +562,13 @@ export default function VisitorFreeRegistration() {
                   <h4 className="font-semibold text-red-900 mb-2">? Erreurs de validation :</h4>
                   <ul className="text-sm text-red-700 space-y-1">
                     {Object.entries(errors).map(([field, error]) => (
-                      <li key={field}>• {field}: {error?.message}</li>
+                      <li key={field}>â€¢ {field}: {error?.message}</li>
                     ))}
                   </ul>
                 </div>
               )}
 
-              {/* Submit - Bouton HTML natif pour éviter problème pointer-events */}
+              {/* Submit - Bouton HTML natif pour Ã©viter problÃ¨me pointer-events */}
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -643,19 +643,19 @@ export default function VisitorFreeRegistration() {
                   </p>
 
                   <div className="bg-white border-2 border-green-500 p-5 rounded-xl mb-6 text-left shadow-lg">
-                    <p className="font-bold text-green-800 mb-3 text-center">? Compte créé avec succès !</p>
+                    <p className="font-bold text-green-800 mb-3 text-center">? Compte crÃ©Ã© avec succÃ¨s !</p>
                     <div className="text-gray-700 text-sm space-y-2">
                       <div className="flex items-start">
                         <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                        <span>Compte enregistré : <strong>{watch('email')}</strong></span>
+                        <span>Compte enregistrÃ© : <strong>{watch('email')}</strong></span>
                       </div>
                       <div className="flex items-start">
                         <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                        <span>Vous êtes maintenant connecté</span>
+                        <span>Vous Ãªtes maintenant connectÃ©</span>
                       </div>
                       <div className="flex items-start">
                         <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                        <span>Accès immédiat à votre espace visiteur</span>
+                        <span>AccÃ¨s immÃ©diat Ã  votre espace visiteur</span>
                       </div>
                     </div>
                   </div>
@@ -683,6 +683,7 @@ export default function VisitorFreeRegistration() {
     </div>
   );
 }
+
 
 
 

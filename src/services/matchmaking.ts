@@ -1,4 +1,4 @@
-// Advanced Matchmaking Algorithm Service
+﻿// Advanced Matchmaking Algorithm Service
 // Implements AI-powered matchmaking with scoring and recommendations
 
 import { supabase } from '../lib/supabase';
@@ -62,7 +62,10 @@ export class MatchmakingService {
       ['CEO', 'Investisseur'],
       ['Marketing', 'Communication'],
       ['Développeur', 'Product Manager'],
-      ['Designer', 'Développeur']
+      ['Designer', 'Développeur'],
+      ['Maître d\'ouvrage', 'Entreprise générale'],
+      ['Bureau d\'études', 'Entreprise de construction'],
+      ['Architecte', 'Bureau d\'études structure'],
     ];
     
     for (const [role1, role2] of strategicPairs) {
@@ -71,6 +74,86 @@ export class MatchmakingService {
         score += 10;
         reasons.push('Rôles stratégiquement complémentaires');
         break;
+      }
+    }
+
+    // ── BTP Sectorial Scoring (SIB 2026 specific) ───────────────────────────
+
+    // 6. BTP Lot Matching (20 points max)
+    // Users working on the same construction lots have strong synergy
+    const user1Lots: string[] = (user1 as any).btpLots || [];
+    const user2Lots: string[] = (user2 as any).btpLots || [];
+    if (user1Lots.length > 0 && user2Lots.length > 0) {
+      const commonLots = user1Lots.filter(lot => user2Lots.includes(lot));
+      const lotScore = Math.min(20, commonLots.length * 7);
+      score += lotScore;
+      if (commonLots.length > 0) {
+        reasons.push(`Lots BTP communs: ${commonLots.slice(0, 2).join(', ')}`);
+      }
+    }
+
+    // 7. BTP Phase Compatibility (15 points)
+    // Matching phases: conception → études → exécution → réception
+    const user1Phases: string[] = (user1 as any).btpPhases || [];
+    const user2Phases: string[] = (user2 as any).btpPhases || [];
+    if (user1Phases.length > 0 && user2Phases.length > 0) {
+      const commonPhases = user1Phases.filter(p => user2Phases.includes(p));
+      // Also reward consecutive phases (e.g. conception + exécution = 8 pts)
+      const ALL_PHASES = ['Conception / Études', 'Construction / Exécution', 'Réception / Livraison', 'Maintenance'];
+      let consecutiveBonus = 0;
+      for (const p1 of user1Phases) {
+        const idx1 = ALL_PHASES.indexOf(p1);
+        for (const p2 of user2Phases) {
+          const idx2 = ALL_PHASES.indexOf(p2);
+          if (Math.abs(idx1 - idx2) === 1) consecutiveBonus = Math.max(consecutiveBonus, 8);
+        }
+      }
+      const phaseScore = Math.min(15, commonPhases.length * 5 + consecutiveBonus);
+      score += phaseScore;
+      if (commonPhases.length > 0) {
+        reasons.push(`Phases chantier communes: ${commonPhases.join(', ')}`);
+      } else if (consecutiveBonus > 0) {
+        reasons.push('Phases chantier complémentaires (succession logique)');
+      }
+    }
+
+    // 8. Budget Range Overlap (15 points)
+    const u1Min = (user1 as any).budgetRangeMin ?? null;
+    const u1Max = (user1 as any).budgetRangeMax ?? null;
+    const u2Min = (user2 as any).budgetRangeMin ?? null;
+    const u2Max = (user2 as any).budgetRangeMax ?? null;
+    if (u1Min !== null && u1Max !== null && u2Min !== null && u2Max !== null) {
+      const rangeOverlap = Math.max(0, Math.min(u1Max, u2Max) - Math.max(u1Min, u2Min));
+      if (rangeOverlap > 0) {
+        score += 15;
+        reasons.push('Budgets projets compatibles');
+      }
+    }
+
+    // 9. Certifications Match (10 points max)
+    const user1Certs: string[] = (user1 as any).certifications || [];
+    const user2Certs: string[] = (user2 as any).certifications || [];
+    if (user1Certs.length > 0 && user2Certs.length > 0) {
+      const commonCerts = user1Certs.filter(c => user2Certs.includes(c));
+      const certScore = Math.min(10, commonCerts.length * 5);
+      score += certScore;
+      if (commonCerts.length > 0) {
+        reasons.push(`Certifications communes: ${commonCerts.join(', ')}`);
+      }
+    }
+
+    // 10. Region Proximity BTP (10 points)
+    // More granular than plain location — check region of operation
+    const user1Regions: string[] = (user1 as any).btpRegions || [];
+    const user2Regions: string[] = (user2 as any).btpRegions || [];
+    if (user1Regions.includes('National') || user2Regions.includes('National')) {
+      score += 5;
+      reasons.push('Couverture nationale');
+    } else if (user1Regions.length > 0 && user2Regions.length > 0) {
+      const commonRegions = user1Regions.filter(r => user2Regions.includes(r));
+      if (commonRegions.length > 0) {
+        score += 10;
+        reasons.push(`Région commune: ${commonRegions[0]}`);
       }
     }
 
@@ -373,3 +456,4 @@ export class MatchmakingService {
     }
   }
 }
+

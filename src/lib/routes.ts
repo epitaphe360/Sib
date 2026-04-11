@@ -1,4 +1,4 @@
-export const ROUTES = {
+﻿export const ROUTES = {
   HOME: '/',
   EXHIBITORS: '/exhibitors',
   EXHIBITOR_DETAIL: '/exhibitors/:id',
@@ -22,6 +22,7 @@ export const ROUTES = {
   PROFILE: '/profile',
   PROFILE_DETAILED: '/profile/detailed',
   PROFILE_MATCHING: '/profile/matching',
+  ADVANCED_MATCHING: '/matching/advanced',
   DASHBOARD: '/dashboard',
   EXHIBITOR_PROFILE: '/exhibitor/profile',
   EXHIBITOR_DASHBOARD: '/exhibitor/dashboard',
@@ -171,6 +172,14 @@ export const ROUTES = {
   PRODUCT_DETAIL: '/products/:id',
   EXHIBITOR_PROFILE_EDIT: '/exhibitor/profile/edit',
   DEV_TEST_FLOW: '/dev/test-flow',
+  VISITOR_VISA_LETTER: '/visitor/visa-letter',
+  PRESS_ACCREDITATION: '/press/accreditation',
+  HALL_MAP: '/map',
+  CATALOG: '/catalog',
+  ADMIN_PRESS_ACCREDITATIONS: '/admin/press-accreditations',
+  SPEAKERS: '/speakers',
+  ADMIN_SPEAKERS: '/admin/speakers',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
+

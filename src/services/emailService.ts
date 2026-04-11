@@ -34,9 +34,9 @@ export interface AppointmentEmailData {
 }
 
 export class EmailService {
-  private static readonly FROM_EMAIL = import.meta.env.VITE_EMAIL_FROM_ADDRESS || 'noreply@sib2026.ma';
-  private static readonly SUPPORT_EMAIL = 'support@sib2026.ma';
-  private static readonly APP_URL = import.meta.env.VITE_APP_URL || 'https://sib2026.ma';
+  private static readonly FROM_EMAIL = import.meta.env.VITE_EMAIL_FROM_ADDRESS || 'noreply@sibevent.com';
+  private static readonly SUPPORT_EMAIL = 'support@sibevent.com';
+  private static readonly APP_URL = import.meta.env.VITE_APP_URL || 'https://sibevent.com';
   // Use relative URL so it works in both dev (proxied) and production (same server)
   private static readonly API_BASE_URL = '';
 
@@ -142,7 +142,7 @@ export class EmailService {
     const html = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%); padding: 40px; text-align: center; color: white;">
-          <h1 style="margin: 0; font-size: 32px;">sib 2026</h1>
+          <h1 style="margin: 0; font-size: 32px;">SIB 2026</h1>
         </div>
         
         <div style="padding: 40px; background: white;">
@@ -166,11 +166,11 @@ export class EmailService {
             <a href="${this.APP_URL}/dashboard/appointments" style="display: inline-block; padding: 14px 28px; background: #3B82F6; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">Voir mes rendez-vous</a>
           </div>
           
-          <p style="margin-top: 30px;">À bientôt,<br><strong>L'équipe sib 2026</strong></p>
+          <p style="margin-top: 30px;">À bientôt,<br><strong>L'équipe SIB 2026</strong></p>
         </div>
         
         <div style="background: #f9fafb; padding: 30px; text-align: center; color: #6b7280; font-size: 14px;">
-          <p style="margin: 0;">sib 2026 - Salon International du B�timent</p>
+          <p style="margin: 0;">SIB 2026 - Salon International des Ports</p>
         </div>
       </div>
     `;
@@ -190,7 +190,7 @@ export class EmailService {
     const html = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%); padding: 40px; text-align: center; color: white;">
-          <h1 style="margin: 0; font-size: 32px;">sib 2026</h1>
+          <h1 style="margin: 0; font-size: 32px;">SIB 2026</h1>
         </div>
         
         <div style="padding: 40px; background: white;">
@@ -212,11 +212,11 @@ export class EmailService {
             <a href="${this.APP_URL}/dashboard/appointments" style="display: inline-block; padding: 14px 28px; background: #3B82F6; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">Voir mes rendez-vous</a>
           </div>
           
-          <p style="margin-top: 30px;">À bientôt,<br><strong>L'équipe sib 2026</strong></p>
+          <p style="margin-top: 30px;">À bientôt,<br><strong>L'équipe SIB 2026</strong></p>
         </div>
         
         <div style="background: #f9fafb; padding: 30px; text-align: center; color: #6b7280; font-size: 14px;">
-          <p style="margin: 0;">sib 2026 - Salon International du B�timent</p>
+          <p style="margin: 0;">SIB 2026 - Salon International des Ports</p>
         </div>
       </div>
     `;
@@ -235,7 +235,7 @@ export class EmailService {
     const html = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%); padding: 40px; text-align: center; color: white;">
-          <h1 style="margin: 0; font-size: 32px;">sib 2026</h1>
+          <h1 style="margin: 0; font-size: 32px;">SIB 2026</h1>
         </div>
         
         <div style="padding: 40px; background: white;">
@@ -257,11 +257,11 @@ export class EmailService {
             <a href="${this.APP_URL}/exhibitors/${data.exhibitorName.replace(/\s+/g, '-')}" style="display: inline-block; padding: 14px 28px; background: #3B82F6; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">Proposer un autre créneau</a>
           </div>
           
-          <p style="margin-top: 30px;">Cordialement,<br><strong>L'équipe sib 2026</strong></p>
+          <p style="margin-top: 30px;">Cordialement,<br><strong>L'équipe SIB 2026</strong></p>
         </div>
         
         <div style="background: #f9fafb; padding: 30px; text-align: center; color: #6b7280; font-size: 14px;">
-          <p style="margin: 0;">sib 2026 - Salon International du B�timent</p>
+          <p style="margin: 0;">SIB 2026 - Salon International des Ports</p>
         </div>
       </div>
     `;
@@ -280,7 +280,7 @@ export class EmailService {
     const html = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%); padding: 40px; text-align: center; color: white;">
-          <h1 style="margin: 0; font-size: 32px;">sib 2026</h1>
+          <h1 style="margin: 0; font-size: 32px;">SIB 2026</h1>
         </div>
         
         <div style="padding: 40px; background: white;">
@@ -303,11 +303,11 @@ export class EmailService {
             <a href="${this.APP_URL}/dashboard/appointments" style="display: inline-block; padding: 14px 28px; background: #3B82F6; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">Gérer mes demandes</a>
           </div>
           
-          <p style="margin-top: 30px;">Cordialement,<br><strong>L'équipe sib 2026</strong></p>
+          <p style="margin-top: 30px;">Cordialement,<br><strong>L'équipe SIB 2026</strong></p>
         </div>
         
         <div style="background: #f9fafb; padding: 30px; text-align: center; color: #6b7280; font-size: 14px;">
-          <p style="margin: 0;">sib 2026 - Salon International du B�timent</p>
+          <p style="margin: 0;">SIB 2026 - Salon International des Ports</p>
         </div>
       </div>
     `;

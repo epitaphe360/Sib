@@ -5,6 +5,7 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { TimeSlot, User } from '../../types';
 import { toast } from 'sonner';
+import { supabase, isSupabaseReady } from '../../lib/supabase';
 
 interface AvailabilityCalendarProps {
   user: User;
@@ -17,59 +18,57 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
   const [selectedDate, setSelectedDate] = useState<Date>(new Date('2026-04-01T00:00:00'));
   const [isLoading, setIsLoading] = useState(false);
 
-  // Mock data - in real app, this would come from API based on user ID
   useEffect(() => {
-    const mockTimeSlots: TimeSlot[] = [
-      {
-        id: '1',
-        date: new Date('2026-04-01T00:00:00'),
-        startTime: '09:00',
-        endTime: '10:00',
-        duration: 60,
-        type: 'in-person',
-        maxBookings: 3,
-        currentBookings: 1,
-        available: true,
-        location: 'Stand A-12'
-      },
-      {
-        id: '2',
-        date: new Date('2026-04-01T00:00:00'),
-        startTime: '14:00',
-        endTime: '15:00',
-        duration: 60,
-        type: 'virtual',
-        maxBookings: 5,
-        currentBookings: 2,
-        available: true,
-        location: 'Zoom Meeting'
-      },
-      {
-        id: '3',
-        date: new Date('2026-04-02T00:00:00'),
-        startTime: '10:00',
-        endTime: '11:00',
-        duration: 60,
-        type: 'hybrid',
-        maxBookings: 4,
-        currentBookings: 4,
-        available: false,
-        location: 'Stand A-12 + Zoom'
-      },
-      {
-        id: '4',
-        date: new Date('2026-04-03T00:00:00'),
-        startTime: '15:00',
-        endTime: '16:00',
-        duration: 60,
-        type: 'in-person',
-        maxBookings: 3,
-        currentBookings: 0,
-        available: true,
-        location: 'Stand A-12'
+    const loadTimeSlots = async () => {
+      if (!isSupabaseReady() || !supabase) return;
+      setIsLoading(true);
+      try {
+        // Trouver le profil exposant associé à cet utilisateur
+        const { data: exhibitorData, error: exhibitorError } = await supabase
+          .from('exhibitors')
+          .select('id')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (exhibitorError || !exhibitorData) {
+          setTimeSlots([]);
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from('time_slots')
+          .select('*')
+          .eq('exhibitor_id', exhibitorData.id)
+          .order('slot_date', { ascending: true })
+          .order('start_time', { ascending: true });
+
+        if (error) throw error;
+
+        const slots: TimeSlot[] = (data || []).map((row: any) => ({
+          id: row.id,
+          exhibitorId: row.exhibitor_id,
+          date: new Date(row.slot_date + 'T00:00:00'),
+          startTime: String(row.start_time).substring(0, 5),
+          endTime: String(row.end_time).substring(0, 5),
+          duration: row.duration,
+          type: row.type as 'in-person' | 'virtual' | 'hybrid',
+          maxBookings: row.max_bookings,
+          currentBookings: row.current_bookings,
+          available: row.available,
+          location: row.location || undefined,
+        }));
+
+        setTimeSlots(slots);
+        if (slots.length > 0) setSelectedDate(slots[0].date);
+      } catch (err) {
+        console.error('Erreur lors du chargement des créneaux:', err);
+        setTimeSlots([]);
+      } finally {
+        setIsLoading(false);
       }
-    ];
-    setTimeSlots(mockTimeSlots);
+    };
+
+    loadTimeSlots();
   }, [user.id]);
 
   const formatDate = (date: Date): string => {
@@ -119,8 +118,29 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
 
     setIsLoading(true);
     try {
-      // Mock booking process
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      let bookingDoneInDb = false;
+
+      if (isSupabaseReady() && supabase && slot.exhibitorId) {
+        const authRes = await supabase.auth.getUser();
+        const visitorId = authRes.data.user?.id;
+
+        if (visitorId) {
+          const { data, error } = await supabase.rpc('book_appointment_atomic', {
+            p_time_slot_id: slot.id,
+            p_visitor_id: visitorId,
+            p_exhibitor_id: slot.exhibitorId,
+            p_message: '',
+            p_meeting_type: slot.type || 'in-person',
+          });
+
+          if (error) throw error;
+          if (data && (data as any).success === false) {
+            throw new Error((data as any).error || 'Réservation impossible');
+          }
+
+          bookingDoneInDb = true;
+        }
+      }
 
       // Update slot bookings
       setTimeSlots(prevSlots =>
@@ -131,7 +151,11 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
         )
       );
 
-      toast.success(`Rendez-vous réservé avec ${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''} le ${formatDate(slot.date)} à ${slot.startTime}`);
+      toast.success(
+        bookingDoneInDb
+          ? `Rendez-vous réservé avec ${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''} le ${formatDate(slot.date)} à ${slot.startTime}`
+          : `Créneau réservé localement avec ${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''} le ${formatDate(slot.date)} à ${slot.startTime}`
+      );
       onBookSlot?.(slot);
     } catch {
       toast.error('Erreur lors de la réservation');

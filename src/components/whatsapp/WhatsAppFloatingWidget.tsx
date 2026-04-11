@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { MessageCircle, X } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { openWhatsApp, SUPPORT_CONFIG } from '../../config/supportConfig';
@@ -123,3 +123,4 @@ export function WhatsAppFloatingWidget({
     </div>
   );
 }
+

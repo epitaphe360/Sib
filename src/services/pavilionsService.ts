@@ -1,4 +1,4 @@
-import { supabase, isSupabaseReady } from '../lib/supabase';
+﻿import { supabase, isSupabaseReady } from '../lib/supabase';
 
 export interface PavilionProgram {
   id: string;

@@ -1,10 +1,18 @@
 /**
  * usePushNotifications Hook
- * Push notifications via Web Push API (Firebase supprimé)
+ * 
+ * Initializes Firebase Cloud Messaging and registers service worker for push notifications
+ * Called on app startup to set up push notification support
+ * 
+ * Features:
+ * - Registers service worker
+ * - Requests notification permission
+ * - Initializes Firebase messaging
+ * - Listens for foreground notifications
+ * - Handles notification clicks
  */
 
 import { useEffect, useRef } from 'react';
-import PushNotificationService from '../services/pushNotificationService';
 import { useAuthStore } from '../store/authStore';
 
 export function usePushNotifications() {
@@ -21,6 +29,8 @@ export function usePushNotifications() {
 
     async function initializePushNotifications() {
       try {
+        const { default: PushNotificationService } = await import('../services/pushNotificationService');
+
         // Check if browser supports push notifications
         if (!PushNotificationService.isNotificationSupported()) {
           console.info('ℹ️ Push notifications not supported on this browser');

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+ï»¿import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import {
   Layout,
@@ -92,7 +92,7 @@ export default function MiniSiteBuilder() {
         subtitle: 'Leading provider of integrated port management solutions',
         backgroundImage:
           'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200',
-        ctaText: 'Découvrir nos solutions',
+        ctaText: 'DÃ©couvrir nos solutions',
         ctaLink: '#products'
       },
       visible: true,
@@ -101,12 +101,12 @@ export default function MiniSiteBuilder() {
     {
       id: '2',
       type: 'about',
-      title: 'À propos',
+      title: 'Ã€ propos',
       content: {
         title: 'Notre expertise',
         description:
-          "Avec plus de 20 ans d'expérience dans le secteur portuaire, nous accompagnons les ports du monde entier dans leur transformation digitale.",
-        features: ['Solutions innovantes', 'Expertise reconnue', 'Support 24/7', 'Présence internationale']
+          "Avec plus de 20 ans d'expÃ©rience dans le secteur du bÃ¢timent, nous accompagnons les ports du monde entier dans leur transformation digitale.",
+        features: ['Solutions innovantes', 'Expertise reconnue', 'Support 24/7', 'PrÃ©sence internationale']
       },
       visible: true,
       order: 1
@@ -119,30 +119,30 @@ export default function MiniSiteBuilder() {
         title: 'Nos solutions',
         products: [
           {
-            name: 'Système IA Maritime',
-            description: 'Plateforme intelligente d\'optimisation des opérations portuaires avec IA prédictive',
+            name: 'SystÃ¨me IA BTP',
+            description: 'Plateforme intelligente d\'optimisation des opÃ©rations BTP avec IA prÃ©dictive',
             image:
               'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=400',
-            features: ['Analytics prédictifs en temps réel', 'Automatisation IA', 'Intégration API complète'],
+            features: ['Analytics prÃ©dictifs en temps rÃ©el', 'Automatisation IA', 'IntÃ©gration API complÃ¨te'],
             price: 'Sur devis',
             inStock: true
           },
           {
-            name: 'Plateforme IoT Connectée',
-            description: 'Solution IoT de supervision et monitoring des équipements portuaires',
+            name: 'Plateforme IoT ConnectÃ©e',
+            description: 'Solution IoT de supervision et monitoring des Ã©quipements BTP',
             image:
               'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400',
-            features: ['Capteurs intelligents', 'Maintenance prédictive', 'Alertes instantanées'],
-            price: 'À partir de 15 000€',
+            features: ['Capteurs intelligents', 'Maintenance prÃ©dictive', 'Alertes instantanÃ©es'],
+            price: 'Ã€ partir de 15 000â‚¬',
             inStock: true
           },
           {
             name: 'Support Premium 24/7',
-            description: 'Assistance technique dédiée et formation continue de vos équipes',
+            description: 'Assistance technique dÃ©diÃ©e et formation continue de vos Ã©quipes',
             image:
               'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400',
-            features: ['Équipe dédiée multilingue', 'Intervention sous 2h', 'Formation personnalisée'],
-            price: '2 500€/mois',
+            features: ['Ã‰quipe dÃ©diÃ©e multilingue', 'Intervention sous 2h', 'Formation personnalisÃ©e'],
+            price: '2 500â‚¬/mois',
             inStock: true
           }
         ]
@@ -157,15 +157,15 @@ export default function MiniSiteBuilder() {
     secondaryColor: '#3b82f6',
     accentColor: '#60a5fa',
     fontFamily: 'Inter',
-    logoUrl: '' // Sera remplacé par le vrai logo de l'entreprise
+    logoUrl: '' // Sera remplacÃ© par le vrai logo de l'entreprise
   });
 
-  // Charger le vrai logo de l'entreprise depuis la base de données
+  // Charger le vrai logo de l'entreprise depuis la base de donnÃ©es
   useEffect(() => {
     const loadExhibitorLogo = async () => {
       if (!user?.id) return;
       try {
-        // Récupérer les données de l'exposant
+        // RÃ©cupÃ©rer les donnÃ©es de l'exposant
         const exhibitor = await SupabaseService.getExhibitorByUserId(user.id);
         if (exhibitor?.logo_url) {
           setRealLogoUrl(exhibitor.logo_url);
@@ -179,11 +179,11 @@ export default function MiniSiteBuilder() {
   }, [user?.id]);
 
   const sectionTypes: { type: Section['type']; title: string; icon: React.ComponentType<{ className?: string }>; description: string }[] = [
-    { type: 'hero', title: 'Section Hero', icon: Layout, description: "Bannière d'accueil avec titre et CTA" },
-    { type: 'about', title: 'À propos', icon: FileText, description: 'Présentation de votre entreprise' },
+    { type: 'hero', title: 'Section Hero', icon: Layout, description: "BanniÃ¨re d'accueil avec titre et CTA" },
+    { type: 'about', title: 'Ã€ propos', icon: FileText, description: 'PrÃ©sentation de votre entreprise' },
     { type: 'products', title: 'Produits', icon: Image, description: 'Catalogue de vos produits et services' },
-    { type: 'gallery', title: 'Galerie', icon: Image, description: 'Photos et vidéos de votre entreprise' },
-    { type: 'news', title: 'Actualités', icon: FileText, description: 'Dernières nouvelles et annonces' }
+    { type: 'gallery', title: 'Galerie', icon: Image, description: 'Photos et vidÃ©os de votre entreprise' },
+    { type: 'news', title: 'ActualitÃ©s', icon: FileText, description: 'DerniÃ¨res nouvelles et annonces' }
   ];
 
   const addSection = (type: Section['type']) => {
@@ -196,7 +196,7 @@ export default function MiniSiteBuilder() {
       order: sections.length
     };
     setSections((prev) => [...prev, newSection]);
-    toast.success('Section ajoutée');
+    toast.success('Section ajoutÃ©e');
   };
 
   const getDefaultContent = (type: Section['type']) => {
@@ -204,13 +204,13 @@ export default function MiniSiteBuilder() {
       case 'hero':
         return { title: 'Votre titre', subtitle: 'Votre sous-titre', backgroundImage: '', ctaText: 'En savoir plus', ctaLink: '#' };
       case 'about':
-        return { title: 'À propos de nous', description: 'Décrivez votre entreprise ici...', features: [] };
+        return { title: 'Ã€ propos de nous', description: 'DÃ©crivez votre entreprise ici...', features: [] };
       case 'products':
         return { title: 'Nos produits', products: [] };
       case 'gallery':
         return { title: 'Galerie', images: [] };
       case 'news':
-        return { title: 'Actualités', articles: [] };
+        return { title: 'ActualitÃ©s', articles: [] };
       default:
         return {};
     }
@@ -218,14 +218,14 @@ export default function MiniSiteBuilder() {
 
   const removeSection = (id: string) => {
     setSections((prev) => prev.filter((s) => s.id !== id));
-    toast.success('Section supprimée');
+    toast.success('Section supprimÃ©e');
   };
 
   const toggleSectionVisibility = (id: string) => {
     setSections((prev) => prev.map((s) => (s.id === id ? { ...s, visible: !s.visible } : s)));
   };
 
-  // updateSectionContent kept out — implement when inline editors are added
+  // updateSectionContent kept out â€” implement when inline editors are added
 
   const getPreviewWidth = () => {
     switch (previewMode) {
@@ -256,15 +256,15 @@ export default function MiniSiteBuilder() {
     if (previewWindow) {
       previewWindow.document.write(`
         <html>
-          <head><title>Prévisualisation Mini-Site</title></head>
+          <head><title>PrÃ©visualisation Mini-Site</title></head>
           <body style="margin:0;padding:20px;font-family:${siteSettings.fontFamily}">
-            <h1 style="color:${siteSettings.primaryColor}">Prévisualisation Mini-Site</h1>
+            <h1 style="color:${siteSettings.primaryColor}">PrÃ©visualisation Mini-Site</h1>
             <p>Sections visibles: ${previewData.sections}</p>
-            <p>Thème: ${previewData.theme}</p>
+            <p>ThÃ¨me: ${previewData.theme}</p>
             <p>Couleur principale: ${previewData.colors}</p>
             <div style="background:${siteSettings.primaryColor};color:white;padding:20px;margin:20px 0;">
-              <h2>Aperçu du design</h2>
-              <p>Votre mini-site avec les couleurs personnalisées</p>
+              <h2>AperÃ§u du design</h2>
+              <p>Votre mini-site avec les couleurs personnalisÃ©es</p>
             </div>
           </body>
         </html>
@@ -272,7 +272,7 @@ export default function MiniSiteBuilder() {
       previewWindow.document.close();
     }
 
-    toast.success('Prévisualisation générée et ouverte dans un nouvel onglet.');
+    toast.success('PrÃ©visualisation gÃ©nÃ©rÃ©e et ouverte dans un nouvel onglet.');
   };
 
   const handleSave = () => {
@@ -286,7 +286,7 @@ export default function MiniSiteBuilder() {
 
     // Simulate save
     setTimeout(() => {
-      toast.success(`Mini-site sauvegardé (${saveData.lastSaved})`);
+      toast.success(`Mini-site sauvegardÃ© (${saveData.lastSaved})`);
     }, 400);
   };
 
@@ -304,7 +304,7 @@ export default function MiniSiteBuilder() {
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Créateur de Mini-Site</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">CrÃ©ateur de Mini-Site</h1>
             <p className="text-gray-600">Personnalisez votre vitrine digitale pour SIB 2026</p>
           </div>
 
@@ -332,7 +332,7 @@ export default function MiniSiteBuilder() {
 
             <Button variant="outline" onClick={handlePreview}>
               <Eye className="h-4 w-4 mr-2" />
-              Prévisualiser
+              PrÃ©visualiser
             </Button>
 
             <Button variant="default" onClick={handleSave}>
@@ -347,7 +347,7 @@ export default function MiniSiteBuilder() {
             <Card>
               <div className="p-4">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <Settings className="h-4 w-4 mr-2" /> Paramètres du site
+                  <Settings className="h-4 w-4 mr-2" /> ParamÃ¨tres du site
                 </h3>
 
                 <div className="space-y-4">
@@ -459,7 +459,7 @@ export default function MiniSiteBuilder() {
                         </Badge>
                         <div className="flex items-center space-x-2">
                           <Button size="sm" variant="ghost" onClick={() => setActiveSection(section.id)}>
-                            <Eye className="h-4 w-4 mr-2" /> Prévisualiser
+                            <Eye className="h-4 w-4 mr-2" /> PrÃ©visualiser
                           </Button>
                         </div>
                       </div>
@@ -566,7 +566,7 @@ export default function MiniSiteBuilder() {
                         <div className="flex items-center justify-center h-64 text-gray-500">
                           <div className="text-center">
                             <Layout className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                            <p>Ajoutez des sections pour commencer à créer votre mini-site</p>
+                            <p>Ajoutez des sections pour commencer Ã  crÃ©er votre mini-site</p>
                           </div>
                         </div>
                       )}
@@ -581,3 +581,4 @@ export default function MiniSiteBuilder() {
     </div>
   );
 };
+

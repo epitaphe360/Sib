@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Utilitaires pour gérer la taille des stands
  */
 
@@ -31,3 +31,4 @@ export const getSizeFromArea = (area: number): string => {
   if (area >= 18) return '18m²';
   return '9m²';
 };
+

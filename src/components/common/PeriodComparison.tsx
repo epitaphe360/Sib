@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { Card } from '../ui/Card';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
@@ -125,3 +125,4 @@ export const PeriodComparisonGrid: React.FC<PeriodComparisonGridProps> = ({ comp
     ))}
   </div>
 );
+

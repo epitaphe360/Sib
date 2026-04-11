@@ -59,7 +59,7 @@ const generateAIInsights = async (userId: string): Promise<AIInsights> => {
       .map(([sector]) => sector);
 
     // Générer les données pour le graphique radar
-    const allSectors = ['Portuaire', 'Logistique', 'Technologie', 'Finance', 'Formation', 'Institutionnel'];
+    const allSectors = ['Bâtiment', 'Logistique', 'Technologie', 'Finance', 'Formation', 'Institutionnel'];
     const sectorData: SectorData[] = allSectors.map(sector => ({
       subject: sector,
       A: sectorCounts[sector] || 0,
@@ -123,7 +123,7 @@ const generateAIInsights = async (userId: string): Promise<AIInsights> => {
       suggestions: ["Explorez les profils d'exposants", "Ajoutez des contacts en favoris", "Participez aux événements du salon"],
       topKeywords: ["Networking", "Connections", "Opportunités"],
       sectorData: [
-        { subject: 'Portuaire', A: 0, fullMark: 10 },
+        { subject: 'Bâtiment', A: 0, fullMark: 10 },
         { subject: 'Logistique', A: 0, fullMark: 10 },
         { subject: 'Technologie', A: 0, fullMark: 10 },
         { subject: 'Finance', A: 0, fullMark: 10 },

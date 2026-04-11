@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * EventsPageOptimized - Admin Events Management with Pagination
  *
  * Features:
@@ -140,11 +140,11 @@ export default function EventsPageOptimized() {
   });
 
   const eventTypes = [
-    { value: 'conference', label: 'Conférence' },
+    { value: 'conference', label: 'ConfÃ©rence' },
     { value: 'workshop', label: 'Atelier' },
     { value: 'roundtable', label: 'Table ronde' },
-    { value: 'networking', label: 'Réseautage' },
-    { value: 'demo', label: 'Démonstration' },
+    { value: 'networking', label: 'RÃ©seautage' },
+    { value: 'demo', label: 'DÃ©monstration' },
     { value: 'keynote', label: 'Keynote' }
   ];
 
@@ -159,11 +159,11 @@ export default function EventsPageOptimized() {
 
   const getEventTypeLabel = (type: string) => {
     switch (type) {
-      case 'conference': return 'Conférence';
+      case 'conference': return 'ConfÃ©rence';
       case 'workshop': return 'Atelier';
       case 'roundtable': return 'Table ronde';
-      case 'networking': return 'Réseautage';
-      case 'demo': return 'Démonstration';
+      case 'networking': return 'RÃ©seautage';
+      case 'demo': return 'DÃ©monstration';
       case 'keynote': return 'Keynote';
       default: return type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
@@ -172,13 +172,13 @@ export default function EventsPageOptimized() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'confirmed':
-        return <Badge variant="success"><CheckCircle className="h-3 w-3 mr-1" />Confirmé</Badge>;
+        return <Badge variant="success"><CheckCircle className="h-3 w-3 mr-1" />ConfirmÃ©</Badge>;
       case 'pending':
         return <Badge variant="warning"><AlertTriangle className="h-3 w-3 mr-1" />En attente</Badge>;
       case 'cancelled':
-        return <Badge variant="error"><XCircle className="h-3 w-3 mr-1" />Annulé</Badge>;
+        return <Badge variant="error"><XCircle className="h-3 w-3 mr-1" />AnnulÃ©</Badge>;
       case 'completed':
-        return <Badge variant="info">Terminé</Badge>;
+        return <Badge variant="info">TerminÃ©</Badge>;
       default:
         return <Badge variant="info">{status}</Badge>;
     }
@@ -186,7 +186,7 @@ export default function EventsPageOptimized() {
 
   const handleExport = async (format: 'csv' | 'excel' | 'pdf') => {
     if (!checkLimit()) {
-      toast.error('Limite d\'export atteinte. Veuillez réessayer plus tard.');
+      toast.error('Limite d\'export atteinte. Veuillez rÃ©essayer plus tard.');
       return;
     }
 
@@ -197,7 +197,7 @@ export default function EventsPageOptimized() {
         'Date': formatDate(event.date),
         'Heure': `${event.startTime} - ${event.endTime}`,
         'Lieu': event.location,
-        'Capacité': event.capacity,
+        'CapacitÃ©': event.capacity,
         'Inscrits': event.registered,
         'Statut': event.status,
         'Virtuel': event.virtual ? 'Oui' : 'Non',
@@ -209,7 +209,7 @@ export default function EventsPageOptimized() {
       logger.info('Events exported', { format, count: exportData.length });
     } catch (error) {
       logger.error('Export failed', error as Error);
-      toast.error('Erreur lors de l\'export. Veuillez réessayer.');
+      toast.error('Erreur lors de l\'export. Veuillez rÃ©essayer.');
     }
   };
 
@@ -227,7 +227,7 @@ export default function EventsPageOptimized() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <RefreshCw className="h-12 w-12 text-blue-500 animate-spin mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900">Chargement des événements...</h3>
+          <h3 className="text-lg font-medium text-gray-900">Chargement des Ã©vÃ©nements...</h3>
         </div>
       </div>
     );
@@ -242,7 +242,7 @@ export default function EventsPageOptimized() {
           <p className="text-gray-600">{error}</p>
           <Button onClick={loadEvents} className="mt-4">
             <RefreshCw className="h-4 w-4 mr-2" />
-            Réessayer
+            RÃ©essayer
           </Button>
         </div>
       </div>
@@ -256,15 +256,15 @@ export default function EventsPageOptimized() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Gestion des Événements</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Gestion des Ã‰vÃ©nements</h1>
               <p className="text-gray-600 mt-2">
-                Administration et organisation des événements SIB 2026
+                Administration et organisation des Ã©vÃ©nements SIB 2026
               </p>
             </div>
             <Link to="/admin/content">
               <Button variant="default">
                 <Plus className="h-4 w-4 mr-2" />
-                Créer Événement
+                CrÃ©er Ã‰vÃ©nement
               </Button>
             </Link>
           </div>
@@ -276,7 +276,7 @@ export default function EventsPageOptimized() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Événements</p>
+                  <p className="text-sm font-medium text-gray-600">Total Ã‰vÃ©nements</p>
                   <p className="text-3xl font-bold text-gray-900">{events.length}</p>
                 </div>
                 <Calendar className="h-8 w-8 text-blue-600" />
@@ -288,7 +288,7 @@ export default function EventsPageOptimized() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Confirmés</p>
+                  <p className="text-sm font-medium text-gray-600">ConfirmÃ©s</p>
                   <p className="text-3xl font-bold text-green-600">
                     {events.filter(e => e.status === 'confirmed').length}
                   </p>
@@ -362,10 +362,10 @@ export default function EventsPageOptimized() {
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Tous les statuts</option>
-                <option value="confirmed">Confirmé</option>
+                <option value="confirmed">ConfirmÃ©</option>
                 <option value="pending">En attente</option>
-                <option value="completed">Terminé</option>
-                <option value="cancelled">Annulé</option>
+                <option value="completed">TerminÃ©</option>
+                <option value="cancelled">AnnulÃ©</option>
               </select>
 
               <select
@@ -380,14 +380,14 @@ export default function EventsPageOptimized() {
 
               <Button variant="outline" onClick={clearFilters}>
                 <Filter className="h-4 w-4 mr-2" />
-                Réinitialiser
+                RÃ©initialiser
               </Button>
             </div>
 
             {/* Export Actions */}
             <div className="flex items-center justify-between border-t pt-4">
               <p className="text-sm text-gray-600">
-                Affichage {((currentPage - 1) * 12) + 1}-{Math.min(currentPage * 12, totalItems)} sur {totalItems} événements
+                Affichage {((currentPage - 1) * 12) + 1}-{Math.min(currentPage * 12, totalItems)} sur {totalItems} Ã©vÃ©nements
               </p>
               <div className="flex items-center space-x-2">
                 <Button variant="outline" size="sm" onClick={() => handleExport('csv')}>
@@ -484,10 +484,10 @@ export default function EventsPageOptimized() {
           <div className="text-center py-12">
             <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Aucun événement trouvé
+              Aucun Ã©vÃ©nement trouvÃ©
             </h3>
             <p className="text-gray-600">
-              Essayez de modifier vos critères de recherche
+              Essayez de modifier vos critÃ¨res de recherche
             </p>
           </div>
         )}

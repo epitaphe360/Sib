@@ -1,4 +1,4 @@
-/**
+﻿/**
  * FocusTrap - Piège le focus dans un élément (pour modals)
  * WCAG 2.1 - Accessible modals
  */
@@ -94,3 +94,4 @@ export const FocusTrap: React.FC<FocusTrapProps> = ({
     </div>
   );
 };
+

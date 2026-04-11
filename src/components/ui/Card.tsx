@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { clsx } from 'clsx';
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,9 +25,9 @@ const CardComponent: React.FC<CardProps> = ({
   return (
     <div
       className={clsx(
-        'bg-white dark:bg-gray-800 rounded-2xl border border-SIB-gray-200 dark:border-gray-700 shadow-SIB dark:shadow-lg',
+        'bg-white/92 dark:bg-slate-800/92 backdrop-blur-sm rounded-2xl border border-slate-200/75 dark:border-slate-700 shadow-siports',
         paddingClasses[padding],
-        hover && 'hover:shadow-SIB-lg dark:hover:shadow-2xl transition-all duration-300 hover:-translate-y-1',
+        hover && 'hover:shadow-siports-xl transition-all duration-300 hover:-translate-y-1',
         className
       )}
       {...props}
@@ -57,7 +57,7 @@ const CardTitle = React.forwardRef<
   <h3
     ref={ref}
     className={clsx(
-      "text-2xl font-semibold leading-none tracking-tight",
+      "text-2xl font-semibold leading-none tracking-tight text-slate-900 dark:text-slate-100",
       className
     )}
     {...props}
@@ -71,7 +71,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={clsx("text-sm text-muted-foreground text-gray-600", className)}
+    className={clsx("text-sm text-muted-foreground text-slate-600 dark:text-slate-300", className)}
     {...props}
   />
 ));
@@ -100,3 +100,4 @@ CardFooter.displayName = "CardFooter";
 // Export principal
 export { CardComponent as Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };
 export default CardComponent;
+

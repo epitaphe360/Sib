@@ -108,8 +108,8 @@ async function executeSQL() {
     }
 
     console.log('\n✅ Configuration Supabase terminée!\n');
-    console.log('💡 Prochaine étape: Exécuter la migration WordPress');
-    console.log('   node scripts/migrate-wordpress-to-supabase.mjs\n');
+    console.log('💡 Prochaine étape: vérifier les données puis lancer l\'application');
+    console.log('   npm run dev\n');
 
   } catch (error) {
     console.error('\n❌ Erreur critique:', error.message);

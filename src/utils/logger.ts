@@ -1,5 +1,5 @@
 /**
- * Logger centralisé pour l'application sib v3
+ * Logger centralisé pour l'application SIB v3
  *
  * SÉCURITÉ: En production, les logs sensibles sont désactivés
  * pour éviter les fuites d'informations (IDs utilisateurs, tokens, etc.)

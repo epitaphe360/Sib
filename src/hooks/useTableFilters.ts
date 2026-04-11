@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+﻿import { useState, useMemo } from 'react';
 
 interface TableFiltersOptions<T> {
   data: T[];
@@ -94,4 +94,5 @@ export function useTableFilters<T>(options: TableFiltersOptions<T>) {
     hasActiveFilters: searchTerm !== '' || Object.values(filters).some(v => v !== '')
   };
 }
+
 

@@ -24,11 +24,6 @@ e2e/
 playwright-report/
 test-results/
 
-# WordPress (déjà buildé séparément)
-wordpress-plugin/
-wordpress-integration/
-wordpress-pages/
-
 # Scripts de développement (sauf inject-build-version.js requis pour le build)
 # scripts/
 

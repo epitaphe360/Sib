@@ -36,7 +36,7 @@ export const SEOEditor: React.FC<SEOEditorProps> = ({ config, onSave, onClose })
 
   const previewTitle = localConfig.title || 'Titre de la page';
   const previewDescription = localConfig.description || 'Description de la page qui apparaîtra dans les résultats de recherche...';
-  const previewUrl = localConfig.slug ? `SIB.com/${localConfig.slug}` : 'SIB.com/votre-page';
+  const previewUrl = localConfig.slug ? `sibs.com/${localConfig.slug}` : 'sibs.com/votre-page';
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -102,7 +102,7 @@ export const SEOEditor: React.FC<SEOEditorProps> = ({ config, onSave, onClose })
                   URL (slug)
                 </label>
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500">SIB.com/</span>
+                  <span className="text-gray-500">sibs.com/</span>
                   <input
                     type="text"
                     value={localConfig.slug}

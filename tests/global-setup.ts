@@ -8,9 +8,15 @@ import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+dotenv.config({ path: '.env.local', override: false });
 
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
-const SERVICE_ROLE_KEY = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || '';
+const SERVICE_ROLE_KEY =
+  process.env.SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+  '';
+const ENABLE_E2E_AUTH_SETUP = process.env.ENABLE_E2E_AUTH_SETUP === 'true';
 const DEFAULT_TEST_PASSWORD = 'Test@123456';
 
 // ─── Comptes à provisionner ────────────────────────────────────────────────────
@@ -60,6 +66,11 @@ function buildPublicProfile(authId: string, account: typeof TEST_ACCOUNTS[0]) {
 }
 
 export default async function globalSetup() {
+  if (!ENABLE_E2E_AUTH_SETUP) {
+    console.warn('⚠️  [globalSetup] ENABLE_E2E_AUTH_SETUP!=true → mode "skip auth"');
+    return;
+  }
+
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
     console.warn('⚠️  [globalSetup] SUPABASE_URL ou SERVICE_ROLE_KEY manquant → tests en mode "skip auth"');
     return;
@@ -108,7 +119,9 @@ export default async function globalSetup() {
         }
       } else {
         created++;
-        if (data.user) authIdMap[account.email] = data.user.id;
+        if (data.user) {
+          authIdMap[account.email] = data.user.id;
+        }
         console.log(`  🆕 Créé : ${account.email} (id: ${data.user?.id})`);
       }
     } catch (err: any) {

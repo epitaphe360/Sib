@@ -265,11 +265,6 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=123456789012
 VITE_FIREBASE_APP_ID=1:123456789012:web:xxxxxxxxxxxx
 
 # ============================================
-# STRIPE (Si vous utilisez paiements)
-# ============================================
-VITE_STRIPE_PUBLISHABLE_KEY=pk_live_XXXXXXXXXXXXXXXXXXXXX
-
-# ============================================
 # SECRETS API (Générez avec openssl)
 # ============================================
 EXHIBITORS_SECRET=générez_avec_openssl_rand_hex_32

@@ -40,8 +40,8 @@ BEGIN
     SELECT
       CASE
         WHEN array_length(c.participants, 1) = 2 THEN
-          (SELECT unnest(c.participants)
-           WHERE unnest(c.participants) != m.sender_id
+          (SELECT p FROM unnest(c.participants) AS p
+           WHERE p != m.sender_id
            LIMIT 1)
         ELSE NULL
       END

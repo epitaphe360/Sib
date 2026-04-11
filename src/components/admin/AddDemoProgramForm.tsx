@@ -13,6 +13,8 @@ import {
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
+import { supabase } from '../../lib/supabase';
+import { toast } from 'sonner';
 
 export default function AddDemoProgramPage() {
   const navigate = useNavigate();
@@ -68,15 +70,43 @@ export default function AddDemoProgramPage() {
     setIsLoading(true);
 
     try {
-      // Ici vous pouvez implémenter la logique de sauvegarde
+      if (!pavilionId) {
+        throw new Error('Pavillon non spécifié');
+      }
 
-      // Simulation d'une requête API
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const timeLabel = programData.date && programData.time
+        ? `${programData.date} ${programData.time} (${programData.duration})`
+        : `${programData.time} (${programData.duration})`;
+
+      const descriptionParts = [
+        programData.description,
+        `Type: ${programData.type}`,
+        `Capacité: ${programData.capacity}`,
+        `Lieu: ${programData.location}`,
+        programData.company ? `Entreprise: ${programData.company}` : null,
+        programData.tags.length > 0 ? `Tags: ${programData.tags.join(', ')}` : null,
+      ].filter(Boolean);
+
+      const { error } = await supabase
+        .from('pavilion_programs')
+        .insert({
+          pavilion_id: pavilionId,
+          title: programData.title,
+          time: timeLabel,
+          speaker: programData.speaker,
+          description: descriptionParts.join('\n'),
+          order_index: 0,
+        });
+
+      if (error) throw error;
+
+      toast.success('Programme ajouté avec succès');
 
       // Redirection vers la liste des pavillons
-  navigate(ROUTES.ADMIN_PAVILIONS);
+      navigate(ROUTES.ADMIN_PAVILIONS);
     } catch (error) {
       console.error('Erreur lors de l\'ajout du programme:', error);
+      toast.error('Erreur lors de l\'ajout du programme');
     } finally {
       setIsLoading(false);
     }
@@ -124,7 +154,7 @@ export default function AddDemoProgramPage() {
                     value={programData.title}
                     onChange={(e) => handleChange('title', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Ex: Démonstration IA Portuaire"
+                    placeholder="Ex: Démonstration IA Bâtiment"
                   />
                 </div>
 

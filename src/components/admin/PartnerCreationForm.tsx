@@ -1,4 +1,4 @@
-import { useState } from 'react';
+ï»¿import { useState } from 'react';
 import { toast } from 'sonner';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -49,7 +49,7 @@ interface NewPartnerForm {
   employees: string;
   logo: string;
   
-  // Contrôles admin
+  // ContrÃ´les admin
   verified: boolean;
   featured: boolean;
   isPublished: boolean;
@@ -89,11 +89,11 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
   });
 
   const steps = [
-    { id: 1, title: 'Organisation', description: 'Informations générales' },
+    { id: 1, title: 'Organisation', description: 'Informations gÃ©nÃ©rales' },
     { id: 2, title: 'Contact', description: 'Personne responsable' },
     { id: 3, title: 'Partenariat', description: 'Type et contributions' },
-    { id: 4, title: 'Admin', description: 'Contrôles administrateur' },
-    { id: 5, title: 'Validation', description: 'Vérification finale' }
+    { id: 4, title: 'Admin', description: 'ContrÃ´les administrateur' },
+    { id: 5, title: 'Validation', description: 'VÃ©rification finale' }
   ];
 
   const partnerTypes = [
@@ -107,56 +107,56 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
     {
       type: 'platinum',
       name: 'Partenaire Platine',
-      description: 'Partenaire stratégique majeur',
-      price: '150,000€+',
+      description: 'Partenaire stratÃ©gique majeur',
+      price: '150,000â‚¬+',
       color: 'bg-gray-100 text-gray-800'
     },
     {
       type: 'gold',
       name: 'Partenaire Or',
-      description: 'Partenaire premium avec visibilité élevée',
-      price: '75,000€+',
+      description: 'Partenaire premium avec visibilitÃ© Ã©levÃ©e',
+      price: '75,000â‚¬+',
       color: 'bg-yellow-100 text-yellow-600'
     },
     {
       type: 'silver',
       name: 'Partenaire Argent',
       description: 'Partenaire officiel avec avantages',
-      price: '35,000€+',
+      price: '35,000â‚¬+',
       color: 'bg-gray-100 text-gray-600'
     },
     {
       type: 'bronze',
       name: 'Partenaire Bronze',
-      description: 'Partenaire associé',
-      price: '15,000€+',
+      description: 'Partenaire associÃ©',
+      price: '15,000â‚¬+',
       color: 'bg-indigo-100 text-indigo-600'
     }
   ];
 
   const sectors = [
-    'Autorité Portuaire',
-    'Transport Maritime',
-    'Équipements Portuaires',
+    'AutoritÃ© urbaine',
+    'Transport & mobilitÃ©',
+    'Ã‰quipements BTP',
     'Logistique',
-    'Consulting Maritime',
-    'Technologies Maritimes',
-    'Formation & Éducation',
+    'Conseil BTP',
+    'Technologies BTP',
+    'Formation & Ã‰ducation',
     'Gouvernement',
     'Association Professionnelle',
-    'Média Spécialisé'
+    'MÃ©dia SpÃ©cialisÃ©'
   ];
 
   const availableContributions = [
     'Financement principal',
     'Expertise technique',
-    'Réseau international',
-    'Conférences techniques',
+    'RÃ©seau international',
+    'ConfÃ©rences techniques',
     'Networking premium',
     'Innovation showcase',
     'Formation professionnelle',
-    'Recherche appliquée',
-    'Médiatisation',
+    'Recherche appliquÃ©e',
+    'MÃ©diatisation',
     'Support logistique'
   ];
 
@@ -177,15 +177,15 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
     
     try {
       if (!user) {
-        throw new Error('Utilisateur non connecté');
+        throw new Error('Utilisateur non connectÃ©');
       }
 
       let userId = partnerToEdit?.user_id;
 
-      // En mode édition, ne jamais recréer l'utilisateur.
-      // En mode création uniquement, créer un user associé.
+      // En mode Ã©dition, ne jamais recrÃ©er l'utilisateur.
+      // En mode crÃ©ation uniquement, crÃ©er un user associÃ©.
       if (!editMode) {
-          // Vérifier si un utilisateur avec cet email existe déjà
+          // VÃ©rifier si un utilisateur avec cet email existe dÃ©jÃ 
           let existingUser: any = null;
           try {
             const allUsers = await SupabaseService.getUsers();
@@ -195,7 +195,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
           if (existingUser) {
             userId = existingUser.id;
           } else {
-          // Créer l'utilisateur pour le partenaire
+          // CrÃ©er l'utilisateur pour le partenaire
           const userData = {
             email: formData.email,
             name: formData.contactName,
@@ -222,13 +222,13 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
             } as UserProfile
           };
 
-          // Créer l'utilisateur
+          // CrÃ©er l'utilisateur
           const newUser = await SupabaseService.createUser(userData);
           userId = newUser.id;
           }
       }
 
-      // Créer l'entité Partner
+      // CrÃ©er l'entitÃ© Partner
       const partnerData = {
         userId: userId,
         organizationName: formData.organizationName,
@@ -253,14 +253,14 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
       };
 
       if (editMode && partnerToEdit) {
-        // Mode édition - mise à jour uniquement
+        // Mode Ã©dition - mise Ã  jour uniquement
         await SupabaseService.updatePartner(partnerToEdit.id, partnerData);
-        toast.success(`Partenaire modifié : ${formData.organizationName}`);
+        toast.success(`Partenaire modifiÃ© : ${formData.organizationName}`);
         navigate(ROUTES.ADMIN_PARTNERS_MANAGE);
       } else {
-        // Mode création
+        // Mode crÃ©ation
         await SupabaseService.createPartner(partnerData);
-        toast.success(`Partenaire créé : ${formData.organizationName} (${formData.contactName})`);
+        toast.success(`Partenaire crÃ©Ã© : ${formData.organizationName} (${formData.contactName})`);
 
         // Reset form et redirection
         setFormData({
@@ -291,9 +291,9 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
       setIsSubmitting(false);
       
     } catch (error) {
-      console.error(`Erreur ${editMode ? 'modification' : 'création'} partenaire:`, error);
+      console.error(`Erreur ${editMode ? 'modification' : 'crÃ©ation'} partenaire:`, error);
       setIsSubmitting(false);
-      toast.error(`Erreur ${editMode ? 'modification' : 'création'} : ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
+      toast.error(`Erreur ${editMode ? 'modification' : 'crÃ©ation'} : ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
     }
   };
 
@@ -316,10 +316,10 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {editMode ? 'Modifier le Partenaire' : 'Créer un Nouveau Partenaire'}
+              {editMode ? 'Modifier le Partenaire' : 'CrÃ©er un Nouveau Partenaire'}
             </h1>
             <p className="text-gray-600">
-              {editMode ? 'Mettre à jour les informations du partenaire officiel' : 'Enregistrer un nouveau partenaire officiel SIB 2026'}
+              {editMode ? 'Mettre Ã  jour les informations du partenaire officiel' : 'Enregistrer un nouveau partenaire officiel SIB 2026'}
             </p>
           </motion.div>
         </div>
@@ -377,7 +377,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   Informations sur l'organisation
                 </h2>
                 <p className="text-gray-600">
-                  Renseignez les informations générales du partenaire
+                  Renseignez les informations gÃ©nÃ©rales du partenaire
                 </p>
               </div>
 
@@ -401,14 +401,14 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Secteur d'activité {editMode ? '' : '*'}
+                    Secteur d'activitÃ© {editMode ? '' : '*'}
                   </label>
                   <select
                     value={formData.sector}
                     onChange={(e) => setFormData({ ...formData, sector: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
-                    <option value="">Sélectionnez un secteur</option>
+                    <option value="">SÃ©lectionnez un secteur</option>
                     {sectors.map((sector) => (
                       <option key={sector} value={sector}>{sector}</option>
                     ))}
@@ -426,26 +426,26 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none bg-white cursor-pointer"
                     >
-                      <option value="">Sélectionnez un pays</option>
+                      <option value="">SÃ©lectionnez un pays</option>
                       <optgroup label="Afrique du Nord & Moyen-Orient">
-                        <option value="Algérie">???? Algérie</option>
+                        <option value="AlgÃ©rie">???? AlgÃ©rie</option>
                         <option value="Maroc">???? Maroc</option>
                         <option value="Tunisie">???? Tunisie</option>
-                        <option value="Égypte">???? Égypte</option>
+                        <option value="Ã‰gypte">???? Ã‰gypte</option>
                         <option value="Libye">???? Libye</option>
                         <option value="Mauritanie">???? Mauritanie</option>
                         <option value="Arabie Saoudite">???? Arabie Saoudite</option>
-                        <option value="Émirats Arabes Unis">???? Émirats Arabes Unis</option>
+                        <option value="Ã‰mirats Arabes Unis">???? Ã‰mirats Arabes Unis</option>
                         <option value="Qatar">???? Qatar</option>
-                        <option value="Koweït">???? Koweït</option>
-                        <option value="Bahreïn">???? Bahreïn</option>
+                        <option value="KoweÃ¯t">???? KoweÃ¯t</option>
+                        <option value="BahreÃ¯n">???? BahreÃ¯n</option>
                         <option value="Oman">???? Oman</option>
                         <option value="Jordanie">???? Jordanie</option>
                         <option value="Liban">???? Liban</option>
                         <option value="Irak">???? Irak</option>
                         <option value="Syrie">???? Syrie</option>
                         <option value="Palestine">???? Palestine</option>
-                        <option value="Yémen">???? Yémen</option>
+                        <option value="YÃ©men">???? YÃ©men</option>
                       </optgroup>
                       <optgroup label="Europe">
                         <option value="France">???? France</option>
@@ -457,26 +457,26 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                         <option value="Pays-Bas">???? Pays-Bas</option>
                         <option value="Suisse">???? Suisse</option>
                         <option value="Portugal">???? Portugal</option>
-                        <option value="Grèce">???? Grèce</option>
+                        <option value="GrÃ¨ce">???? GrÃ¨ce</option>
                         <option value="Turquie">???? Turquie</option>
                         <option value="Pologne">???? Pologne</option>
                         <option value="Autriche">???? Autriche</option>
-                        <option value="Suède">???? Suède</option>
-                        <option value="Norvège">???? Norvège</option>
+                        <option value="SuÃ¨de">???? SuÃ¨de</option>
+                        <option value="NorvÃ¨ge">???? NorvÃ¨ge</option>
                         <option value="Danemark">???? Danemark</option>
                         <option value="Finlande">???? Finlande</option>
                         <option value="Irlande">???? Irlande</option>
                         <option value="Russie">???? Russie</option>
                       </optgroup>
                       <optgroup label="Afrique Subsaharienne">
-                        <option value="Sénégal">???? Sénégal</option>
-                        <option value="Côte d'Ivoire">???? Côte d'Ivoire</option>
+                        <option value="SÃ©nÃ©gal">???? SÃ©nÃ©gal</option>
+                        <option value="CÃ´te d'Ivoire">???? CÃ´te d'Ivoire</option>
                         <option value="Nigeria">???? Nigeria</option>
                         <option value="Ghana">???? Ghana</option>
                         <option value="Cameroun">???? Cameroun</option>
                         <option value="Kenya">???? Kenya</option>
                         <option value="Afrique du Sud">???? Afrique du Sud</option>
-                        <option value="Éthiopie">???? Éthiopie</option>
+                        <option value="Ã‰thiopie">???? Ã‰thiopie</option>
                         <option value="Tanzanie">???? Tanzanie</option>
                         <option value="Mali">???? Mali</option>
                         <option value="Burkina Faso">???? Burkina Faso</option>
@@ -490,33 +490,33 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       <optgroup label="Asie">
                         <option value="Chine">???? Chine</option>
                         <option value="Japon">???? Japon</option>
-                        <option value="Corée du Sud">???? Corée du Sud</option>
+                        <option value="CorÃ©e du Sud">???? CorÃ©e du Sud</option>
                         <option value="Inde">???? Inde</option>
                         <option value="Singapour">???? Singapour</option>
                         <option value="Malaisie">???? Malaisie</option>
-                        <option value="Indonésie">???? Indonésie</option>
-                        <option value="Thaïlande">???? Thaïlande</option>
+                        <option value="IndonÃ©sie">???? IndonÃ©sie</option>
+                        <option value="ThaÃ¯lande">???? ThaÃ¯lande</option>
                         <option value="Vietnam">???? Vietnam</option>
                         <option value="Philippines">???? Philippines</option>
                         <option value="Pakistan">???? Pakistan</option>
                         <option value="Bangladesh">???? Bangladesh</option>
                         <option value="Iran">???? Iran</option>
                       </optgroup>
-                      <optgroup label="Amériques">
-                        <option value="États-Unis">???? États-Unis</option>
+                      <optgroup label="AmÃ©riques">
+                        <option value="Ã‰tats-Unis">???? Ã‰tats-Unis</option>
                         <option value="Canada">???? Canada</option>
                         <option value="Mexique">???? Mexique</option>
-                        <option value="Brésil">???? Brésil</option>
+                        <option value="BrÃ©sil">???? BrÃ©sil</option>
                         <option value="Argentine">???? Argentine</option>
                         <option value="Chili">???? Chili</option>
                         <option value="Colombie">???? Colombie</option>
-                        <option value="Pérou">???? Pérou</option>
+                        <option value="PÃ©rou">???? PÃ©rou</option>
                         <option value="Venezuela">???? Venezuela</option>
                         <option value="Cuba">???? Cuba</option>
                       </optgroup>
-                      <optgroup label="Océanie">
+                      <optgroup label="OcÃ©anie">
                         <option value="Australie">???? Australie</option>
-                        <option value="Nouvelle-Zélande">???? Nouvelle-Zélande</option>
+                        <option value="Nouvelle-ZÃ©lande">???? Nouvelle-ZÃ©lande</option>
                       </optgroup>
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
@@ -542,7 +542,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Année de création
+                    AnnÃ©e de crÃ©ation
                   </label>
                   <input
                     type="number"
@@ -550,26 +550,26 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                     max={new Date().getFullYear()}
                     value={formData.establishedYear}
                     onChange={(e) => setFormData({ ...formData, establishedYear: parseInt(e.target.value) })}
-                    aria-label="Année de création"
+                    aria-label="AnnÃ©e de crÃ©ation"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nombre d'employés
+                    Nombre d'employÃ©s
                   </label>
                   <select
                     value={formData.employees}
                     onChange={(e) => setFormData({ ...formData, employees: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
-                    <option value="">Sélectionnez une taille</option>
-                    <option value="1-10">1-10 employés</option>
-                    <option value="11-50">11-50 employés</option>
-                    <option value="51-200">51-200 employés</option>
-                    <option value="201-1000">201-1000 employés</option>
-                    <option value="1000+">1000+ employés</option>
+                    <option value="">SÃ©lectionnez une taille</option>
+                    <option value="1-10">1-10 employÃ©s</option>
+                    <option value="11-50">11-50 employÃ©s</option>
+                    <option value="51-200">51-200 employÃ©s</option>
+                    <option value="201-1000">201-1000 employÃ©s</option>
+                    <option value="1000+">1000+ employÃ©s</option>
                   </select>
                 </div>
               </div>
@@ -581,7 +581,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   Logo de l'organisation
                 </label>
                 <p className="text-sm text-gray-500 mb-3">
-                  Téléchargez le logo du partenaire (format recommandé: PNG ou JPG, max 5MB)
+                  TÃ©lÃ©chargez le logo du partenaire (format recommandÃ©: PNG ou JPG, max 5MB)
                 </p>
                 <ImageUploader
                   initialImageUrl={formData.logo}
@@ -602,7 +602,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={4}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="Décrivez l'activité principale de l'organisation, son expertise et sa mission..."
+                  placeholder="DÃ©crivez l'activitÃ© principale de l'organisation, son expertise et sa mission..."
                 />
               </div>
             </motion.div>
@@ -637,7 +637,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
                       aria-label="Nom complet du contact"
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="Prénom et nom du contact"
+                      placeholder="PrÃ©nom et nom du contact"
                     />
                   </div>
                 </div>
@@ -675,7 +675,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Téléphone {editMode ? '' : '*'}
+                    TÃ©lÃ©phone {editMode ? '' : '*'}
                   </label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -683,7 +683,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      aria-label="Téléphone"
+                      aria-label="TÃ©lÃ©phone"
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                       placeholder="+33 1 23 45 67 89"
                     />
@@ -705,7 +705,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   Type de partenariat
                 </h2>
                 <p className="text-gray-600">
-                  Choisissez le niveau de partenariat adapté
+                  Choisissez le niveau de partenariat adaptÃ©
                 </p>
               </div>
 
@@ -761,7 +761,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   Contributions au salon {editMode ? '' : '*'}
                 </label>
                 <p className="text-sm text-gray-500 mb-3">
-                  Sélectionnez les contributions que ce partenaire apportera
+                  SÃ©lectionnez les contributions que ce partenaire apportera
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {availableContributions.map((contribution) => (
@@ -792,7 +792,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
                     />
                     <Crown className={`h-4 w-4 ${formData.featured ? 'text-yellow-500' : 'text-gray-400'}`} />
-                    <span className="text-sm font-medium text-gray-700">Mettre à la une</span>
+                    <span className="text-sm font-medium text-gray-700">Mettre Ã  la une</span>
                   </label>
                   
                   <label className="flex items-center space-x-2 cursor-pointer bg-white p-3 border rounded-lg hover:bg-gray-50 border-gray-200 transition-colors">
@@ -803,14 +803,14 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                     />
                     <CheckCircle className={`h-4 w-4 ${formData.verified ? 'text-blue-500' : 'text-gray-400'}`} />
-                    <span className="text-sm font-medium text-gray-700">Partenaire Vérifié</span>
+                    <span className="text-sm font-medium text-gray-700">Partenaire VÃ©rifiÃ©</span>
                   </label>
                 </div>
               </div>
             </motion.div>
           )}
 
-          {/* Step 4: Contrôles Admin */}
+          {/* Step 4: ContrÃ´les Admin */}
           {currentStep === 4 && (
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -819,19 +819,19 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
             >
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  Contrôles administrateur
+                  ContrÃ´les administrateur
                 </h2>
                 <p className="text-gray-600">
-                  Statuts de visibilité et mise en avant
+                  Statuts de visibilitÃ© et mise en avant
                 </p>
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg">
                   <div>
-                    <h3 className="font-medium text-gray-900">Partenaire vérifié</h3>
+                    <h3 className="font-medium text-gray-900">Partenaire vÃ©rifiÃ©</h3>
                     <p className="text-sm text-gray-600">
-                      Marque le partenaire comme vérifié par l'administration
+                      Marque le partenaire comme vÃ©rifiÃ© par l'administration
                     </p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -865,7 +865,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
 
                 <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg">
                   <div>
-                    <h3 className="font-medium text-gray-900">Profil publié</h3>
+                    <h3 className="font-medium text-gray-900">Profil publiÃ©</h3>
                     <p className="text-sm text-gray-600">
                       Rend le profil visible publiquement sur la plateforme
                     </p>
@@ -896,11 +896,11 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   Validation du partenariat
                 </h2>
                 <p className="text-gray-600">
-                  Vérifiez les informations avant création
+                  VÃ©rifiez les informations avant crÃ©ation
                 </p>
               </div>
 
-              {/* Récapitulatif */}
+              {/* RÃ©capitulatif */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="p-4">
                   <h4 className="font-semibold text-gray-900 mb-3">Organisation</h4>
@@ -915,8 +915,8 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                         <img src={formData.logo} alt="Logo" className="h-8 mt-1 object-contain" onError={(e) => (e.currentTarget.style.display = 'none')} />
                       </div>
                     )}
-                    <div><strong>Fondée en :</strong> {formData.establishedYear}</div>
-                    <div><strong>Employés :</strong> {formData.employees}</div>
+                    <div><strong>FondÃ©e en :</strong> {formData.establishedYear}</div>
+                    <div><strong>EmployÃ©s :</strong> {formData.employees}</div>
                   </div>
                 </Card>
 
@@ -926,7 +926,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                     <div><strong>Nom :</strong> {formData.contactName}</div>
                     <div><strong>Poste :</strong> {formData.position}</div>
                     <div><strong>Email :</strong> {formData.email}</div>
-                    <div><strong>Téléphone :</strong> {formData.phone}</div>
+                    <div><strong>TÃ©lÃ©phone :</strong> {formData.phone}</div>
                   </div>
                 </Card>
 
@@ -937,16 +937,16 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       <div><strong>Type :</strong> {partnerTypes.find(p => p.type === formData.partnerType)?.name}</div>
                       <div><strong>Valeur :</strong> {formData.contractValue}</div>
                       <div className="mt-2 flex gap-2">
-                        {formData.verified && <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">Vérifié</span>}
-                        {formData.featured && <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">À la une</span>}
-                        {formData.isPublished && <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Publié</span>}
+                        {formData.verified && <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">VÃ©rifiÃ©</span>}
+                        {formData.featured && <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">Ã€ la une</span>}
+                        {formData.isPublished && <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">PubliÃ©</span>}
                       </div>
                     </div>
                     <div>
                       <div><strong>Contributions :</strong></div>
                       <ul className="mt-1 space-y-1">
                         {formData.contributions.map((contrib) => (
-                          <li key={contrib} className="text-gray-600">• {contrib}</li>
+                          <li key={contrib} className="text-gray-600">â€¢ {contrib}</li>
                         ))}
                       </ul>
                     </div>
@@ -957,8 +957,8 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
               <div className="bg-purple-50 p-4 rounded-lg">
                 <h4 className="font-medium text-purple-900 mb-2">Activation du partenariat</h4>
                 <p className="text-sm text-purple-700">
-                  Le partenaire recevra un email avec ses identifiants de connexion et l'accès 
-                  à son espace partenaire sera activé immédiatement.
+                  Le partenaire recevra un email avec ses identifiants de connexion et l'accÃ¨s 
+                  Ã  son espace partenaire sera activÃ© immÃ©diatement.
                 </p>
               </div>
             </motion.div>
@@ -972,7 +972,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   variant="outline"
                   onClick={handlePrevStep}
                 >
-                  Précédent
+                  PrÃ©cÃ©dent
                 </Button>
               )}
             </div>
@@ -1003,12 +1003,12 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   {isSubmitting ? (
                     <>
                       <Loader className="animate-spin h-4 w-4 mr-2" />
-                      {editMode ? 'Enregistrement...' : 'Création en cours...'}
+                      {editMode ? 'Enregistrement...' : 'CrÃ©ation en cours...'}
                     </>
                   ) : (
                     <>
                       <CheckCircle className="h-4 w-4 mr-2" />
-                      {editMode ? 'Enregistrer les modifications' : 'Créer le Partenaire'}
+                      {editMode ? 'Enregistrer les modifications' : 'CrÃ©er le Partenaire'}
                     </>
                   )}
                 </Button>

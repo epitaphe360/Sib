@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour l'authentification
  */
 
@@ -132,3 +132,4 @@ export const authTranslations = {
     'auth.status.suspended': 'Suspended',
   },
 };
+

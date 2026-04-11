@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour les formulaires
  */
 
@@ -222,3 +222,4 @@ export const formsTranslations = {
     'form.helper.remaining': '{{count}} remaining',
   },
 };
+

@@ -1,6 +1,6 @@
 /**
  * Service de paiement pour les upgrades de niveau partenaire
- * Gère Stripe, PayPal, et CMI pour les paiements partenaires
+ * Gère PayPal, CMI et virement pour les paiements partenaires
  *
  * ✅ FIX P0-3: Import des montants depuis Single Source of Truth
  */
@@ -8,7 +8,7 @@
 import { PartnerTier, getPartnerTierConfig } from '../config/partnerTiers';
 import { PARTNER_BILLING } from '../config/partnerBilling';
 
-// ✅ Constantes de prix (en centimes pour Stripe) - Import depuis SSOT
+// ✅ Constantes de prix (base de calcul) - Import depuis SSOT
 const TIER_PRICES = {
   museum: PARTNER_BILLING.museum.amount * 100,    // Convert USD to cents
   silver: PARTNER_BILLING.silver.amount * 100,    // Convert USD to cents
@@ -36,7 +36,7 @@ export function convertUSDtoMAD(amountUSD: number): number {
 }
 
 /**
- * STRIPE: Crée une session de paiement Stripe pour upgrade partenaire
+ * Stripe désactivé: conserver la signature pour compatibilité
  */
 export async function createStripePartnerCheckout(
   userId: string,
@@ -44,70 +44,19 @@ export async function createStripePartnerCheckout(
   targetTier: PartnerTier,
   currentTier?: PartnerTier
 ): Promise<{ sessionId: string }> {
-  try {
-    const tierConfig = getPartnerTierConfig(targetTier);
-    const amount = TIER_PRICES[targetTier];
-
-    // Si upgrade, calculer la différence
-    let finalAmount = amount;
-    if (currentTier && currentTier !== targetTier) {
-      const currentAmount = TIER_PRICES[currentTier];
-      finalAmount = Math.max(0, amount - currentAmount);
-    }
-
-    const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-stripe-checkout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-      },
-      body: JSON.stringify({
-        userId,
-        userEmail,
-        amount: finalAmount,
-        currency: 'usd',
-        productName: `sib 2026 - ${tierConfig.displayName}`,
-        productDescription: `Upgrade vers le niveau ${tierConfig.displayName}`,
-        metadata: {
-          userId,
-          partnerTier: targetTier,
-          currentTier: currentTier || 'none',
-          upgradeType: currentTier ? 'upgrade' : 'initial'
-        },
-        successUrl: `${window.location.origin}/partner/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${window.location.origin}/partner/upgrade`
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error('Erreur création session Stripe');
-    }
-
-    const data = await response.json();
-    return { sessionId: data.sessionId };
-  } catch (error) {
-    console.error('Erreur createStripePartnerCheckout:', error);
-    throw error;
-  }
+  void userId;
+  void userEmail;
+  void targetTier;
+  void currentTier;
+  throw new Error('Stripe est désactivé. Utilisez PayPal, CMI ou virement bancaire.');
 }
 
 /**
- * STRIPE: Redirige vers Stripe Checkout
+ * Stripe désactivé
  */
 export async function redirectToStripeCheckout(sessionId: string): Promise<void> {
-  const stripe = await import('@stripe/stripe-js').then(m =>
-    m.loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
-  );
-
-  if (!stripe) {
-    throw new Error('Stripe non disponible');
-  }
-
-  const { error } = await stripe.redirectToCheckout({ sessionId });
-
-  if (error) {
-    throw error;
-  }
+  void sessionId;
+  throw new Error('Stripe est désactivé.');
 }
 
 /**
@@ -140,7 +89,7 @@ export async function createPayPalPartnerOrder(
         userId,
         amount: finalAmount.toFixed(2),
         currency: 'USD',
-        description: `sib 2026 - ${tierConfig.displayName}`,
+        description: `SIB 2026 - ${tierConfig.displayName}`,
         customId: `${userId}:${targetTier}:${currentTier || 'none'}`,
         metadata: {
           partnerTier: targetTier,
@@ -230,7 +179,7 @@ export async function createCMIPartnerPayment(
         userEmail,
         amount: amountMAD,
         currency: 'MAD',
-        description: `sib 2026 - ${tierConfig.displayName}`,
+        description: `SIB 2026 - ${tierConfig.displayName}`,
         metadata: {
           partnerTier: targetTier,
           currentTier: currentTier || 'none',

@@ -1,4 +1,4 @@
-import { Appointment } from '../types';
+﻿import { Appointment } from '../types';
 
 /**
  * Utilitaires pour gérer l'affichage des informations des exposants
@@ -45,3 +45,4 @@ export const getExhibitorFullName = (appointment: Appointment): string => {
   }
   return `Exposant #${appointment.exhibitorId}`;
 };
+

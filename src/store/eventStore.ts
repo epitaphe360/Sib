@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { Event, Speaker, EventRegistration } from '../types';
 import useAuthStore from './authStore';
 import { SupabaseService } from '../services/supabaseService';
@@ -6,13 +6,18 @@ import { SupabaseService } from '../services/supabaseService';
 interface EventState {
   events: Event[];
   featuredEvents: Event[];
+  totalEvents: number;
+  currentPage: number;
+  pageSize: number;
+  hasMore: boolean;
   registeredEvents: string[];
   userEventRegistrations: EventRegistration[];
   isLoading: boolean;
   error: string | null;
 
   // Actions
-  fetchEvents: () => Promise<void>;
+  fetchEvents: (reset?: boolean) => Promise<void>;
+  loadMoreEvents: () => Promise<void>;
   registerForEvent: (eventId: string) => Promise<void>;
   unregisterFromEvent: (eventId: string) => Promise<void>;
   getEventsByCategory: (category: string) => Event[];
@@ -23,27 +28,45 @@ interface EventState {
 export const useEventStore = create<EventState>((set, get) => ({
   events: [],
   featuredEvents: [],
+  totalEvents: 0,
+  currentPage: 0,
+  pageSize: 20,
+  hasMore: true,
   registeredEvents: [],
   userEventRegistrations: [],
   isLoading: false,
   error: null,
 
-  fetchEvents: async () => {
+  fetchEvents: async (reset = true) => {
     set({ isLoading: true, error: null });
     try {
-      // Charger les événements depuis Supabase
-      const events = await SupabaseService.getEvents();
+      const state = get();
+      const nextPage = reset ? 0 : state.currentPage;
+      const offset = nextPage * state.pageSize;
+
+      const { items, total } = await SupabaseService.getEventsPaginated({
+        limit: state.pageSize,
+        offset,
+      });
       
       // Assurer que la date est un objet Date pour le tri et l'affichage
-      const processedEvents = events.map(event => ({
+      const processedPageEvents = items.map(event => ({
         ...event,
         date: new Date(event.date),
       }));
+
+      const processedEvents = reset
+        ? processedPageEvents
+        : [...state.events, ...processedPageEvents.filter(event => !state.events.some(existing => existing.id === event.id))];
+
       const featuredEvents = processedEvents.filter(event => event.featured);
       
       set({ 
         events: processedEvents,
         featuredEvents,
+        totalEvents: total,
+        currentPage: reset ? 1 : nextPage + 1,
+        hasMore: processedEvents.length < total,
         isLoading: false 
       });
     } catch (error) {
@@ -55,10 +78,19 @@ export const useEventStore = create<EventState>((set, get) => ({
       set({
         events: [],
         featuredEvents: [],
+        totalEvents: 0,
+        currentPage: 0,
+        hasMore: false,
         isLoading: false,
         error: null // Ne pas stocker l'erreur pour éviter les logs répétés
       });
     }
+  },
+
+  loadMoreEvents: async () => {
+    const { isLoading, hasMore } = get();
+    if (isLoading || !hasMore) return;
+    await get().fetchEvents(false);
   },
 
   registerForEvent: async (eventId: string) => {
@@ -153,3 +185,4 @@ export const useEventStore = create<EventState>((set, get) => ({
     }
   }
 }));
+

@@ -68,7 +68,7 @@ export const PartnerNetworkingPage: React.FC = () => {
           id: u.id,
           name: u.name || u.profile?.companyName || 'Participant',
           type: u.type,
-          sector: u.profile?.sector || u.profile?.sectors?.[0] || 'Maritime',
+          sector: u.profile?.sector || u.profile?.sectors?.[0] || 'BTP',
           company: u.profile?.companyName || u.name || '',
           title: u.profile?.jobTitle || u.profile?.title || '',
           location: u.profile?.country || u.profile?.location || '',
@@ -141,7 +141,7 @@ export const PartnerNetworkingPage: React.FC = () => {
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">Networking Privilégié</h1>
           <p className="text-gray-600 mt-2">
-            Découvrez et connectez-vous avec les décideurs de l'industrie maritime
+            Découvrez et connectez-vous avec les décideurs de l'industrie du bâtiment
           </p>
         </div>
 
@@ -373,3 +373,5 @@ export const PartnerNetworkingPage: React.FC = () => {
 };
 
 export default PartnerNetworkingPage;
+
+

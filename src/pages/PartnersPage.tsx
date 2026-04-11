@@ -34,7 +34,7 @@ interface Partner {
   employees: string;
 }
 
-// Les partenaires sont maintenant charg�s depuis Supabase
+// Les partenaires sont maintenant chargés depuis Supabase
 // Composant wrapper pour gérer la traduction de chaque partenaire
 interface PartnerCardWrapperProps {
   partner: Partner;
@@ -81,6 +81,10 @@ export default function PartnersPage() {
   const [viewMode, setViewMode] = useState<keyof typeof CONFIG.viewModes>(CONFIG.viewModes.grid);
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [totalPartners, setTotalPartners] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 24;
+  const [hasMore, setHasMore] = useState(true);
   const [partnerStats, setPartnerStats] = useState({
     egide: 0,
     strategic: 0,
@@ -94,33 +98,50 @@ export default function PartnersPage() {
     total: 0
   });
 
-  useEffect(() => {
-    const loadPartners = async () => {
+  const recomputePartnerStats = useCallback((data: Partner[]) => {
+    const stats = {
+      egide: data.filter(p => p.partner_tier === 'egide').length,
+      strategic: data.filter(p => p.partner_tier === 'strategic').length,
+      platinum: data.filter(p => p.partner_tier === 'platinum').length,
+      gold: data.filter(p => p.partner_tier === 'gold').length,
+      silver: data.filter(p => p.partner_tier === 'silver').length,
+      support: data.filter(p => p.partner_tier === 'support').length,
+      cultural: data.filter(p => p.partner_tier === 'cultural').length,
+      academic: data.filter(p => p.partner_tier === 'academic').length,
+      museum: data.filter(p => p.partner_tier === 'museum').length,
+      total: data.length
+    };
+    setPartnerStats(stats);
+  }, []);
+
+  const loadPartners = useCallback(async (reset = false) => {
       setIsLoading(true);
       try {
-        const data = await SupabaseService.getPartners();
-        setPartners(data);
-        setFilteredPartners(data);
+        const nextPage = reset ? 0 : currentPage;
+        const offset = nextPage * pageSize;
+        const { items, total } = await SupabaseService.getPartnersPaginated({
+          limit: pageSize,
+          offset,
+        });
 
-        // Calculer les statistiques par tier
-        const stats = {
-          egide: data.filter(p => p.partner_tier === 'egide').length,
-          strategic: data.filter(p => p.partner_tier === 'strategic').length,
-          platinum: data.filter(p => p.partner_tier === 'platinum').length,
-          gold: data.filter(p => p.partner_tier === 'gold').length,
-          silver: data.filter(p => p.partner_tier === 'silver').length,
-          support: data.filter(p => p.partner_tier === 'support').length,
-          cultural: data.filter(p => p.partner_tier === 'cultural').length,
-          academic: data.filter(p => p.partner_tier === 'academic').length,
-          museum: data.filter(p => p.partner_tier === 'museum').length,
-          total: data.length
-        };
-        setPartnerStats(stats);
+        const merged = reset
+          ? items
+          : [...partners, ...items.filter(p => !partners.some(existing => existing.id === p.id))];
+
+        setPartners(merged);
+        setFilteredPartners(merged);
+        setTotalPartners(total);
+        setCurrentPage(reset ? 1 : nextPage + 1);
+        setHasMore(merged.length < total);
+        recomputePartnerStats(merged);
       } catch (error) {
         console.error('Erreur lors du chargement des partenaires:', error);
         setPartners([]);
         setFilteredPartners([]);
-        // Statistiques par d�faut
+        setTotalPartners(0);
+        setCurrentPage(0);
+        setHasMore(false);
+        // Statistiques par défaut
         setPartnerStats({
           egide: 0,
           strategic: 0,
@@ -136,10 +157,16 @@ export default function PartnersPage() {
       } finally {
         setIsLoading(false);
       }
-    };
+    }, [currentPage, pageSize, partners, recomputePartnerStats]);
 
-    loadPartners();
+  useEffect(() => {
+    loadPartners(true);
   }, []);
+
+  const handleLoadMore = async () => {
+    if (isLoading || !hasMore) return;
+    await loadPartners(false);
+  };
 
   useEffect(() => {
     const filtered = partners.filter(partner => {
@@ -167,7 +194,7 @@ export default function PartnersPage() {
     setFilteredPartners(filtered);
   }, [partners, searchTerm, selectedTier, selectedCountry]);
 
-  // ? OPTIMIS�: M�moriser les tiers pour �viter recr�ation
+  // ? OPTIMISÉ: Mémoriser les tiers pour éviter recréation
   const partnerTiers = useMemo(() => [
     { value: '', label: t('pages.partners.filter_tier') },
     { value: 'egide', label: 'Égide' },
@@ -181,14 +208,14 @@ export default function PartnersPage() {
     { value: 'museum', label: 'Museum' }
   ], [t]);
 
-  // ? OPTIMIS�: M�moriser les pays
+  // ? OPTIMISÉ: Mémoriser les pays
   const countries = useMemo(() => {
     const partnerCountries = [...new Set(partners.map(p => p.country).filter(Boolean))];
     const allCountryNames = COUNTRIES.map(c => c.name);
     return [...new Set([...allCountryNames, ...partnerCountries])].sort();
   }, [partners]);
 
-  // ? OPTIMIS�: useCallback pour les handlers
+  // ? OPTIMISÉ: useCallback pour les handlers
   const handleViewDetails = useCallback((partnerId: string) => {
     navigate(`/partners/${partnerId}`);
   }, [navigate]);
@@ -488,6 +515,17 @@ export default function PartnersPage() {
                   </div>
                 </motion.section>
               ))}
+
+            <div className="pt-4 flex flex-col items-center gap-3">
+              <p className="text-sm text-gray-500">
+                {partners.length} affichés sur {totalPartners} partenaires
+              </p>
+              {hasMore && (
+                <Button onClick={handleLoadMore} disabled={isLoading}>
+                  {isLoading ? 'Chargement...' : 'Charger plus'}
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </div>

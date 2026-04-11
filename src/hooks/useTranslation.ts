@@ -1,4 +1,4 @@
-import { useLanguageStore, supportedLanguages } from '../store/languageStore';
+﻿import { useLanguageStore, supportedLanguages } from '../store/languageStore';
 import { useCallback, useMemo } from 'react';
 
 export const useTranslation = () => {

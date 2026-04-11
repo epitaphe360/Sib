@@ -82,7 +82,7 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
         ? accessibleEvents.find(e => e.eventId === selectedEventId)?.eventName || 'événement'
         : 'accès-général';
       
-      link.download = `qr-SIB-${eventName.toLowerCase().replace(/\s+/g, '-')}.png`;
+      link.download = `qr-siports-${eventName.toLowerCase().replace(/\s+/g, '-')}.png`;
       link.href = canvas.toDataURL();
       link.click();
       

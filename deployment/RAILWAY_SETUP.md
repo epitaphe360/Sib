@@ -12,7 +12,6 @@ Ce guide vous accompagne pas à pas pour déployer SIPORTV3 sur Railway.app.
 - Compte GitHub
 - Projet Supabase configuré
 - Projet Firebase configuré
-- (Optionnel) Compte Stripe pour les paiements
 
 ---
 
@@ -124,27 +123,6 @@ ALLOWED_ORIGINS=https://your-app.railway.app,https://www.yourdomain.com
 
 ---
 
-### **Stripe (Paiements) - OPTIONNEL**
-
-Si vous utilisez les paiements Stripe :
-
-```bash
-VITE_STRIPE_PUBLISHABLE_KEY=pk_live_your_stripe_publishable_key_here
-STRIPE_SECRET_KEY=sk_live_your_stripe_secret_key_here
-STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
-```
-
-**Où trouver ces valeurs ?**
-1. Allez sur [dashboard.stripe.com](https://dashboard.stripe.com)
-2. Developers → API keys
-3. Copiez **Publishable key** et **Secret key**
-4. Pour webhook secret: Developers → Webhooks → Add endpoint
-
-⚠️ **ATTENTION**:
-- Utilisez les clés **TEST** pour le développement (pk_test_, sk_test_)
-- Utilisez les clés **LIVE** pour la production (pk_live_, sk_live_)
-
----
 
 ## 🔄 Workflow de Déploiement
 
@@ -198,7 +176,7 @@ Testez les fonctionnalités critiques :
 - [ ] Tableau de bord utilisateur
 - [ ] Affichage des exposants
 - [ ] Chat (si applicable)
-- [ ] Paiements (si Stripe configuré)
+- [ ] Paiements PayPal/CMI/virement testés
 
 ---
 
@@ -282,7 +260,7 @@ Filtres utiles :
 - [ ] Configurer CORS correctement (`ALLOWED_ORIGINS`)
 - [ ] Utiliser HTTPS uniquement (Railway le fait automatiquement)
 - [ ] Rotation régulière des secrets (tous les 3-6 mois)
-- [ ] Activer 2FA sur Supabase, Firebase, Stripe
+- [ ] Activer 2FA sur Supabase, Firebase
 - [ ] Monitorer les logs pour activité suspecte
 
 ### Rotation des Secrets

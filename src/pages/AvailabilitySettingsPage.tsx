@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { Card } from '@/components/ui/Card';
 import { useTranslation } from '../hooks/useTranslation';
 import useAuthStore from '@/store/authStore';
@@ -42,17 +42,27 @@ export default function AvailabilitySettingsPage() {
   const pendingPercent = totalApps > 0 ? ((pendingApps / totalApps) * 100).toFixed(1) : '0.0';
   const completedPercent = totalApps > 0 ? ((completedApps / totalApps) * 100).toFixed(1) : '0.0';
 
-  // Données d'engagement hebdomadaire - remplacées par 0 car nécessite une table d'analytics
-  // TODO: Créer une table 'weekly_analytics' pour stocker les visites et interactions par jour
-  const engagementData = [
-    { name: 'Lun', visits: 0, interactions: 0 },
-    { name: 'Mar', visits: 0, interactions: 0 },
-    { name: 'Mer', visits: 0, interactions: 0 },
-    { name: 'Jeu', visits: 0, interactions: 0 },
-    { name: 'Ven', visits: 0, interactions: 0 },
-    { name: 'Sam', visits: 0, interactions: 0 },
-    { name: 'Dim', visits: 0, interactions: 0 },
-  ];
+  // Données d'engagement hebdomadaire — calculées depuis les vrais rendez-vous
+  const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+  const weekDayCounts = [0, 0, 0, 0, 0, 0, 0];
+  const weekDayInteractions = [0, 0, 0, 0, 0, 0, 0];
+  appointments.forEach((a) => {
+    const d = a.scheduled_at || a.date || a.created_at;
+    if (d) {
+      const dayIndex = new Date(d).getDay(); // 0=Sunday
+      weekDayCounts[dayIndex] += 1;
+      if (a.status === 'confirmed' || a.status === 'completed') {
+        weekDayInteractions[dayIndex] += 1;
+      }
+    }
+  });
+  // Reorder: Mon-Sun (start from index 1)
+  const order = [1, 2, 3, 4, 5, 6, 0];
+  const engagementData = order.map((i) => ({
+    name: dayNames[i],
+    visits: weekDayCounts[i],
+    interactions: weekDayInteractions[i],
+  }));
 
   // Utiliser les vraies données dynamiques
   const statusData = [
@@ -62,10 +72,10 @@ export default function AvailabilitySettingsPage() {
   ];
 
   const activityData = [
-    { name: 'Vues Mini-Site', value: 0.8 },
-    { name: 'Téléchargements', value: 0.4 },
-    { name: 'Messages', value: 0.6 },
-    { name: 'Connexions', value: 0.3 },
+    { name: 'RDV Confirmés', value: totalApps > 0 ? confirmedApps / totalApps : 0 },
+    { name: 'RDV Terminés', value: totalApps > 0 ? completedApps / totalApps : 0 },
+    { name: 'En attente', value: totalApps > 0 ? pendingApps / totalApps : 0 },
+    { name: 'Annulés', value: totalApps > 0 ? cancelledApps / totalApps : 0 },
   ];
 
   return (
@@ -249,3 +259,4 @@ export default function AvailabilitySettingsPage() {
     </div>
   );
 }
+

@@ -17,7 +17,7 @@ export const VISITOR_BANK_TRANSFER_INFO = {
     amount: 700,
     currency: 'EUR',
     displayName: 'Pass Premium VIP',
-    description: 'Accès complet à sib 2026 (15-17 avril)',
+    description: 'Accès complet à SIB 2026 (15-17 avril)',
     features: [
       'Badge Premium avec photo et QR code',
       'Accès complet 3 jours',
@@ -51,7 +51,7 @@ export const VISITOR_BANK_TRANSFER_INFO = {
         'Pour les virements internationaux, des frais bancaires peuvent s\'appliquer',
         'Les virements SEPA (Europe) sont généralement traités en 1-2 jours',
         'Les virements SWIFT internationaux peuvent prendre 3-5 jours',
-        'En cas de question, contactez-nous: contact@siport2026.com'
+        'En cas de question, contactez-nous: contact@sib2026.com'
       ]
     },
     en: {
@@ -74,7 +74,7 @@ export const VISITOR_BANK_TRANSFER_INFO = {
         'International transfers may incur bank fees',
         'SEPA transfers (Europe) are typically processed in 1-2 days',
         'SWIFT international transfers may take 3-5 days',
-        'For questions, contact us: contact@siport2026.com'
+        'For questions, contact us: contact@sib2026.com'
       ]
     },
     ar: {
@@ -97,7 +97,7 @@ export const VISITOR_BANK_TRANSFER_INFO = {
         'قد تنطبق رسوم مصرفية على التحويلات الدولية',
         'عادةً ما تتم معالجة تحويلات SEPA (أوروبا) في 1-2 أيام',
         'قد تستغرق تحويلات SWIFT الدولية 3-5 أيام',
-        'للاستفسارات، اتصل بنا: contact@siport2026.com'
+        'للاستفسارات، اتصل بنا: contact@sib2026.com'
       ]
     }
   }

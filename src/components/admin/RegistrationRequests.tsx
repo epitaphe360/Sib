@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+Ôªøimport React, { useEffect, useState } from 'react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -57,14 +57,14 @@ export default function RegistrationRequests() {
     if (!user) return;
 
     try {
-      // 1. Mettre ‡ jour le statut de la demande
+      // 1. Mettre √† jour le statut de la demande
       await SupabaseService.updateRegistrationRequestStatus(
         request.id,
         'approved',
         user.id
       );
 
-      // 2. Envoyer l'email de validation ‡ l'utilisateur (ne pas bloquer si Èchec)
+      // 2. Envoyer l'email de validation √† l'utilisateur (ne pas bloquer si √©chec)
       try {
         await SupabaseService.sendValidationEmail({
           email: request.email,
@@ -73,10 +73,10 @@ export default function RegistrationRequests() {
           companyName: request.company_name || '',
           status: 'approved'
         });
-        toast.success(`Demande approuvÈe et email envoyÈ ‡ ${request.first_name} ${request.last_name}`);
+        toast.success(`Demande approuv√©e et email envoy√© √† ${request.first_name} ${request.last_name}`);
       } catch (emailError) {
-        console.warn('?? Email non envoyÈ:', emailError);
-        toast.success(`Demande approuvÈe pour ${request.first_name} ${request.last_name} (email non envoyÈ)`);
+        console.warn('‚ö†Ô∏è Email non envoy√©:', emailError);
+        toast.success(`Demande approuv√©e pour ${request.first_name} ${request.last_name} (email non envoy√©)`);
       }
 
       fetchRequests();
@@ -94,7 +94,7 @@ export default function RegistrationRequests() {
     }
 
     try {
-      // 1. Mettre ‡ jour le statut de la demande
+      // 1. Mettre √† jour le statut de la demande
       await SupabaseService.updateRegistrationRequestStatus(
         request.id,
         'rejected',
@@ -102,7 +102,7 @@ export default function RegistrationRequests() {
         rejectionReason
       );
 
-      // 2. Envoyer l'email de rejet ‡ l'utilisateur (ne pas bloquer si Èchec)
+      // 2. Envoyer l'email de rejet √† l'utilisateur (ne pas bloquer si √©chec)
       try {
         await SupabaseService.sendValidationEmail({
           email: request.email,
@@ -111,10 +111,10 @@ export default function RegistrationRequests() {
           companyName: request.company_name || '',
           status: 'rejected'
         });
-        toast.success(`Demande rejetÈe et email envoyÈ ‡ ${request.first_name} ${request.last_name}`);
+        toast.success(`Demande rejet√©e et email envoy√© √† ${request.first_name} ${request.last_name}`);
       } catch (emailError) {
-        console.warn('?? Email non envoyÈ:', emailError);
-        toast.success(`Demande rejetÈe pour ${request.first_name} ${request.last_name} (email non envoyÈ)`);
+        console.warn('‚ö†Ô∏è Email non envoy√©:', emailError);
+        toast.success(`Demande rejet√©e pour ${request.first_name} ${request.last_name} (email non envoy√©)`);
       }
 
       fetchRequests();
@@ -131,9 +131,9 @@ export default function RegistrationRequests() {
       case 'pending':
         return <Badge variant="warning" className="flex items-center gap-1"><Clock className="w-3 h-3" /> En attente</Badge>;
       case 'approved':
-        return <Badge variant="success" className="flex items-center gap-1"><CheckCircle className="w-3 h-3" /> ApprouvÈ</Badge>;
+        return <Badge variant="success" className="flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Approuv√©</Badge>;
       case 'rejected':
-        return <Badge variant="destructive" className="flex items-center gap-1"><XCircle className="w-3 h-3" /> RejetÈ</Badge>;
+        return <Badge variant="destructive" className="flex items-center gap-1"><XCircle className="w-3 h-3" /> Rejet√©</Badge>;
       default:
         return null;
     }
@@ -156,7 +156,7 @@ export default function RegistrationRequests() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Demandes d'Inscription</h2>
           <p className="text-gray-600 mt-1">
-            GÈrez les demandes d'inscription des exposants et partenaires
+            G√©rez les demandes d'inscription des exposants et partenaires
           </p>
         </div>
         {pendingCount > 0 && (
@@ -185,26 +185,26 @@ export default function RegistrationRequests() {
           onClick={() => setFilter('approved')}
         >
           <CheckCircle className="w-4 h-4 mr-2" />
-          ApprouvÈes
+          Approuv√©es
         </Button>
         <Button
           variant={filter === 'rejected' ? 'default' : 'outline'}
           onClick={() => setFilter('rejected')}
         >
           <XCircle className="w-4 h-4 mr-2" />
-          RejetÈes
+          Rejet√©es
         </Button>
       </div>
 
       {isLoading ? (
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-SIB-primary mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-siports-primary mx-auto"></div>
           <p className="text-gray-600 mt-4">Chargement des demandes...</p>
         </div>
       ) : requests.length === 0 ? (
         <Card className="p-12 text-center">
           <FileText className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-          <p className="text-gray-600 text-lg">Aucune demande d'inscription trouvÈe</p>
+          <p className="text-gray-600 text-lg">Aucune demande d'inscription trouv√©e</p>
         </Card>
       ) : (
         <div className="grid grid-cols-1 gap-4">
@@ -243,7 +243,7 @@ export default function RegistrationRequests() {
                         )}
                         <div className="flex items-center gap-2">
                           <Mail className="w-4 h-4" />
-                          <a href={`mailto:${request.email}`} className="text-SIB-primary hover:underline">
+                          <a href={`mailto:${request.email}`} className="text-siports-primary hover:underline">
                             {request.email}
                           </a>
                         </div>
@@ -315,7 +315,7 @@ export default function RegistrationRequests() {
               Veuillez indiquer la raison du rejet :
             </p>
             <textarea
-              className="w-full border border-gray-300 rounded-lg p-3 min-h-[120px] focus:ring-2 focus:ring-SIB-primary focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg p-3 min-h-[120px] focus:ring-2 focus:ring-siports-primary focus:border-transparent"
               placeholder="Raison du rejet..."
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}

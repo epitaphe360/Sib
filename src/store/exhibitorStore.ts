@@ -5,6 +5,10 @@ import { SupabaseService } from '../services/supabaseService';
 interface ExhibitorState {
   exhibitors: Exhibitor[];
   filteredExhibitors: Exhibitor[];
+  totalExhibitors: number;
+  currentPage: number;
+  pageSize: number;
+  hasMore: boolean;
   selectedExhibitor: Exhibitor | null;
   filters: {
     category: string;
@@ -15,7 +19,8 @@ interface ExhibitorState {
   isLoading: boolean;
   isUpdating: string | null; // ID of the exhibitor being updated
   error: string | null;
-  fetchExhibitors: () => Promise<void>;
+  fetchExhibitors: (reset?: boolean) => Promise<void>;
+  loadMoreExhibitors: () => Promise<void>;
   setFilters: (filters: Partial<ExhibitorState['filters']>) => void;
   selectExhibitor: (id: string) => void;
   updateAvailability: (exhibitorId: string, slots: TimeSlot[]) => void;
@@ -27,6 +32,10 @@ interface ExhibitorState {
 export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
   exhibitors: [],
   filteredExhibitors: [],
+  totalExhibitors: 0,
+  currentPage: 0,
+  pageSize: 24,
+  hasMore: true,
   selectedExhibitor: null,
   filters: {
     category: '',
@@ -38,14 +47,44 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
   isUpdating: null,
   error: null,
 
-  fetchExhibitors: async () => {
+  fetchExhibitors: async (reset = true) => {
     set({ isLoading: true, error: null });
     try {
-      // Requête Supabase avec relation explicite
-      const exhibitors = await SupabaseService.getExhibitors();
+      const state = get();
+      const nextPage = reset ? 0 : state.currentPage;
+      const offset = nextPage * state.pageSize;
+
+      const { items, total } = await SupabaseService.getExhibitorsPaginated({
+        limit: state.pageSize,
+        offset,
+      });
+
+      const exhibitors = reset
+        ? items
+        : [...state.exhibitors, ...items.filter(item => !state.exhibitors.some(existing => existing.id === item.id))];
+
+      const filters = reset ? state.filters : get().filters;
+      const filteredExhibitors = exhibitors.filter(exhibitor => {
+        const sector = exhibitor.sector || '';
+        const companyName = exhibitor.companyName || '';
+        const description = exhibitor.description || '';
+        const search = filters.search.toLowerCase();
+
+        const matchesCategory = !filters.category || exhibitor.category === filters.category;
+        const matchesSector = !filters.sector || sector === filters.sector;
+        const matchesSearch = !filters.search ||
+          companyName.toLowerCase().includes(search) ||
+          description.toLowerCase().includes(search);
+
+        return exhibitor.verified && exhibitor.miniSite?.published === true && matchesCategory && matchesSector && matchesSearch;
+      });
+
       set({ 
-        exhibitors, 
-        filteredExhibitors: exhibitors.filter(e => e.verified && e.miniSite?.published === true),
+        exhibitors,
+        filteredExhibitors,
+        totalExhibitors: total,
+        currentPage: reset ? 1 : nextPage + 1,
+        hasMore: exhibitors.length < total,
         isLoading: false 
       });
     } catch (error: unknown) {
@@ -57,10 +96,19 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
       set({ 
         exhibitors: [],
         filteredExhibitors: [],
+        totalExhibitors: 0,
+        currentPage: 0,
+        hasMore: false,
         isLoading: false,
         error: null  // Don't show error to user when Supabase is not configured
       });
     }
+  },
+
+  loadMoreExhibitors: async () => {
+    const { isLoading, hasMore } = get();
+    if (isLoading || !hasMore) return;
+    await get().fetchExhibitors(false);
   },
 
 	  updateExhibitorStatus: async (exhibitorId, newStatus) => {
@@ -84,7 +132,7 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
 	      // 3. Envoyer l'email de validation/rejet (ne pas bloquer si échec)
 	      try {
 	        await SupabaseService.sendValidationEmail({
-	          email: exhibitorToUpdate.contactInfo?.email || 'contact@SIB.com',
+	          email: exhibitorToUpdate.contactInfo?.email || 'contact@sibs.com',
 	          firstName: 'Admin',
 	          lastName: 'Admin',
 	          companyName: exhibitorToUpdate.companyName,

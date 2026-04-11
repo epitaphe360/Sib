@@ -224,24 +224,21 @@ export default function MediaManager() {
     setUploadProgress(0);
 
     try {
-      // Simuler une progression
-      const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          const newProgress = prev + Math.floor(Math.random() * 10);
-          return newProgress > 90 ? 90 : newProgress;
-        });
-      }, 200);
+      let completed = 0;
+      const total = Array.from(files).length;
 
-      const uploadPromises = Array.from(files).map(file => {
+      const uploadPromises = Array.from(files).map(async file => {
         const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-        return supabase!.storage.from(selectedBucket).upload(fileName, file);
+        const fileName = `${crypto.randomUUID()}.${fileExt}`;
+        const result = await supabase!.storage.from(selectedBucket).upload(fileName, file);
+        completed++;
+        setUploadProgress(Math.round((completed / total) * 95));
+        return result;
       });
 
       const results = await Promise.all(uploadPromises);
       const errors = results.filter(r => r.error).map(r => r.error);
 
-      clearInterval(progressInterval);
       setUploadProgress(100);
 
       if (errors.length > 0) {

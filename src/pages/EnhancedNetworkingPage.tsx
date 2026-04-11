@@ -111,19 +111,19 @@ const EnhancedNetworkingPage: React.FC = () => {
             </div>
             
             <h2 className="text-2xl font-bold text-gray-900 mb-3">
-              Réseautage Premium
+              RÃ©seautage Premium
             </h2>
             
             <p className="text-gray-600 mb-6">
               {user.type === 'visitor' && user.profile.passType === 'free'
-                ? "Le réseautage n'est pas disponible avec le forfait gratuit. Mettez à niveau pour accéder aux fonctionnalités de networking professionnel."
-                : "Votre niveau d'accès actuel ne permet pas d'utiliser toutes les fonctionnalités de réseautage."}
+                ? "Le rÃ©seautage n'est pas disponible avec le forfait gratuit. Mettez Ã  niveau pour accÃ©der aux fonctionnalitÃ©s de networking professionnel."
+                : "Votre niveau d'accÃ¨s actuel ne permet pas d'utiliser toutes les fonctionnalitÃ©s de rÃ©seautage."}
             </p>
 
             <div className="space-y-3 mb-6">
               <div className="flex items-center text-sm text-gray-700">
                 <CheckCircle className="h-4 w-4 text-green-500 mr-3" />
-                Recommandations IA personnalisées
+                Recommandations IA personnalisÃ©es
               </div>
               <div className="flex items-center text-sm text-gray-700">
                 <CheckCircle className="h-4 w-4 text-green-500 mr-3" />
@@ -135,17 +135,17 @@ const EnhancedNetworkingPage: React.FC = () => {
               </div>
               <div className="flex items-center text-sm text-gray-700">
                 <CheckCircle className="h-4 w-4 text-green-500 mr-3" />
-                Accès aux événements exclusifs
+                AccÃ¨s aux Ã©vÃ©nements exclusifs
               </div>
             </div>
 
             <div className="space-y-3">
               <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                 <Crown className="h-4 w-4 mr-2" />
-                Mettre à Niveau Mon Forfait
+                Mettre Ã  Niveau Mon Forfait
               </Button>
               <Button variant="ghost" onClick={() => setShowPermissionUpgrade(false)}>
-                Continuer en Mode Limité
+                Continuer en Mode LimitÃ©
               </Button>
             </div>
           </Card>
@@ -161,7 +161,7 @@ const EnhancedNetworkingPage: React.FC = () => {
           <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Connexion Requise</h2>
           <p className="text-gray-600 mb-4">
-            Vous devez être connecté pour accéder aux fonctionnalités de réseautage.
+            Vous devez Ãªtre connectÃ© pour accÃ©der aux fonctionnalitÃ©s de rÃ©seautage.
           </p>
           <Button variant="default">Se Connecter</Button>
         </Card>
@@ -178,10 +178,10 @@ const EnhancedNetworkingPage: React.FC = () => {
             <div className="mb-6 lg:mb-0">
               <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center">
                 <Network className="h-8 w-8 mr-3 text-blue-600" />
-                Réseautage SIB 2026
+                RÃ©seautage SIB 2026
               </h1>
               <p className="text-lg text-gray-600">
-                Connectez-vous avec {recommendations.length} professionnels du secteur portuaire
+                Connectez-vous avec {recommendations.length} professionnels du secteur du bÃ¢timent
               </p>
             </div>
 
@@ -209,7 +209,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                       </div>
                       {permissions?.priorityLevel && (
                         <Badge variant="success" className="text-xs">
-                          Priorité {permissions.priorityLevel}
+                          PrioritÃ© {permissions.priorityLevel}
                         </Badge>
                       )}
                     </div>
@@ -219,7 +219,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                       <div className="flex items-center justify-between text-xs">
                         <span className="text-gray-600">Connexions</span>
                         <span className="font-medium">
-                          {dailyUsage.connections}/{permissions?.maxConnectionsPerDay === -1 ? 'âˆž' : permissions?.maxConnectionsPerDay}
+                          {dailyUsage.connections}/{permissions?.maxConnectionsPerDay === -1 ? 'Ã¢Ë†Å¾' : permissions?.maxConnectionsPerDay}
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1">
@@ -232,7 +232,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                       <div className="flex items-center justify-between text-xs">
                         <span className="text-gray-600">Messages</span>
                         <span className="font-medium">
-                          {dailyUsage.messages}/{permissions?.maxMessagesPerDay === -1 ? 'âˆž' : permissions?.maxMessagesPerDay}
+                          {dailyUsage.messages}/{permissions?.maxMessagesPerDay === -1 ? 'Ã¢Ë†Å¾' : permissions?.maxMessagesPerDay}
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1">
@@ -245,7 +245,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                       <div className="flex items-center justify-between text-xs">
                         <span className="text-gray-600">Rendez-vous</span>
                         <span className="font-medium">
-                          {dailyUsage.meetings}/{permissions?.maxMeetingsPerDay === -1 ? 'âˆž' : permissions?.maxMeetingsPerDay}
+                          {dailyUsage.meetings}/{permissions?.maxMeetingsPerDay === -1 ? 'Ã¢Ë†Å¾' : permissions?.maxMeetingsPerDay}
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1">
@@ -270,7 +270,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                 { id: 'recommendations', label: 'Recommandations IA', icon: Brain, count: recommendations.length },
                 { id: 'connections', label: 'Mes Connexions', icon: Users, count: connections.length },
                 { id: 'messages', label: 'Messages', icon: MessageCircle, count: 3 },
-                { id: 'qr-access', label: 'QR & Événements', icon: QrCode },
+                { id: 'qr-access', label: 'QR & Ã‰vÃ©nements', icon: QrCode },
                 { id: 'analytics', label: 'Analytics', icon: BarChart3 },
               ].map((tab) => (
                 <button
@@ -312,7 +312,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                         <Sparkles className="h-5 w-5 mr-2 text-purple-600" />
-                        Insights IA Personnalisés
+                        Insights IA PersonnalisÃ©s
                       </h3>
                       <Button size="sm" onClick={loadAIInsights} disabled={isLoading}>
                         <Brain className="h-4 w-4 mr-2" />
@@ -336,7 +336,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                             </ul>
                           </div>
                           <div>
-                            <h4 className="font-medium text-gray-900 mb-2">Mots-clés Tendance</h4>
+                            <h4 className="font-medium text-gray-900 mb-2">Mots-clÃ©s Tendance</h4>
                             <div className="flex flex-wrap gap-2">
                               {aiInsights.topKeywords.map((keyword) => (
                                 <Badge key={keyword} variant="success" className="text-xs">
@@ -351,7 +351,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                       <div className="text-center py-4">
                         <Button onClick={loadAIInsights} disabled={isLoading}>
                           <Brain className="h-4 w-4 mr-2" />
-                          Générer des Insights IA
+                          GÃ©nÃ©rer des Insights IA
                         </Button>
                       </div>
                     )}
@@ -394,7 +394,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                         </Avatar>
                         <div className="flex-1">
                           <h4 className="font-medium text-gray-900">Utilisateur {connectionId}</h4>
-                          <p className="text-sm text-gray-600">Connecté</p>
+                          <p className="text-sm text-gray-600">ConnectÃ©</p>
                         </div>
                         <Button size="sm" variant="ghost">
                           <MessageCircle className="h-4 w-4" />
@@ -418,7 +418,7 @@ const EnhancedNetworkingPage: React.FC = () => {
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                   <BarChart3 className="h-5 w-5 mr-2 text-green-600" />
-                  Analytics de Réseautage
+                  Analytics de RÃ©seautage
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -436,7 +436,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                     <div className="flex items-center">
                       <MessageCircle className="h-8 w-8 text-green-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600">Messages Envoyés</p>
+                        <p className="text-sm font-medium text-gray-600">Messages EnvoyÃ©s</p>
                         <p className="text-2xl font-bold text-gray-900">{dailyUsage.messages}</p>
                       </div>
                     </div>
@@ -446,7 +446,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                     <div className="flex items-center">
                       <Calendar className="h-8 w-8 text-purple-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600">RDV Programmés</p>
+                        <p className="text-sm font-medium text-gray-600">RDV ProgrammÃ©s</p>
                         <p className="text-2xl font-bold text-gray-900">{dailyUsage.meetings}</p>
                       </div>
                     </div>
@@ -456,7 +456,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                     <div className="flex items-center">
                       <TrendingUp className="h-8 w-8 text-orange-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600">Score Réseau</p>
+                        <p className="text-sm font-medium text-gray-600">Score RÃ©seau</p>
                         <p className="text-2xl font-bold text-gray-900">92%</p>
                       </div>
                     </div>
@@ -465,11 +465,11 @@ const EnhancedNetworkingPage: React.FC = () => {
 
                 {/* Analytics Chart Placeholder */}
                 <Card className="p-6">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Activité de Réseautage</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">ActivitÃ© de RÃ©seautage</h4>
                   <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
                     <div className="text-center">
                       <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                      <p className="text-gray-600">Graphiques d'analytics à venir</p>
+                      <p className="text-gray-600">Graphiques d'analytics Ã  venir</p>
                     </div>
                   </div>
                 </Card>

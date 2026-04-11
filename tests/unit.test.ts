@@ -24,16 +24,16 @@ describe('📅 Configuration Dates Événement', () => {
     expect(DEFAULT_SALON_CONFIG.dates.end).toBe('3 Avril 2026');
   });
 
-  it('Le nom de l\'événement doit être SIPORTS 2026', async () => {
+  it('Le nom de l\'événement doit être SIB 2026', async () => {
     const { DEFAULT_SALON_CONFIG } = await import('../src/config/salonInfo');
 
-    expect(DEFAULT_SALON_CONFIG.name).toBe('SIPORTS 2026');
+    expect(DEFAULT_SALON_CONFIG.name).toBe('SIB 2026');
   });
 
-  it('Le lieu doit être El Jadida, Maroc', async () => {
+  it('Le lieu doit être Casablanca, Maroc', async () => {
     const { DEFAULT_SALON_CONFIG } = await import('../src/config/salonInfo');
 
-    expect(DEFAULT_SALON_CONFIG.location.city).toBe('El Jadida');
+    expect(DEFAULT_SALON_CONFIG.location.city).toBe('Casablanca');
     expect(DEFAULT_SALON_CONFIG.location.country).toBe('Maroc');
   });
 });
@@ -859,7 +859,7 @@ describe('🔗 Intégration & Cohérence Globale', () => {
     const { VISITOR_QUOTAS } = await import('../src/config/quotas');
 
     // L'événement existe
-    expect(DEFAULT_SALON_CONFIG.name).toBe('SIPORTS 2026');
+    expect(DEFAULT_SALON_CONFIG.name).toBe('SIB 2026');
 
     // Les quotas sont définis
     expect(Object.keys(VISITOR_QUOTAS).length).toBeGreaterThan(0);

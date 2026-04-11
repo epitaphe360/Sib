@@ -34,8 +34,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Montserrat', 'Inter', 'sans-serif']
+        sans: ['"Open Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        heading: ['"Big Shoulders Display"', '"Open Sans"', 'sans-serif']
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],
@@ -61,7 +61,8 @@ export default {
       },
       boxShadow: {
         'siports': '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
-        'siports-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)'
+        'siports-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)',
+        'siports-xl': '0 18px 38px -18px rgba(7, 32, 57, 0.45), 0 12px 22px -16px rgba(7, 32, 57, 0.32)'
       },
       animation: {
         'blob': 'blob 7s infinite',

@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+﻿import React, { memo, useCallback } from 'react';
 import { Plus, Eye, Trash2, Move, Layout, FileText, Image, Mail } from 'lucide-react';
 import { Card } from '../../ui/Card';
 import { Button } from '../../ui/Button';
@@ -143,3 +143,4 @@ export const SectionsList: React.FC<SectionsListProps> = memo(({
 });
 
 SectionsList.displayName = 'SectionsList';
+

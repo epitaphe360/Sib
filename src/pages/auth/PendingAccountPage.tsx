@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+Ôªøimport { useState, useEffect, useCallback } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -32,7 +32,7 @@ interface PaymentRequest {
   updated_at: string;
 }
 
-// Informations bancaires SIB (‡ configurer selon vos besoins)
+// Informations bancaires SIB (√† configurer selon vos besoins)
 const BANK_INFO = {
   bankName: 'Banque Internationale du Commerce',
   accountHolder: 'SIB EVENEMENTS SARL',
@@ -176,8 +176,8 @@ export default function PendingAccountPage() {
         color: 'text-amber-600',
         bgColor: 'bg-amber-50',
         borderColor: 'border-amber-200',
-        title: 'Inscription enregistrÈe ó en attente de validation',
-        description: 'Votre demande d\'inscription a bien ÈtÈ reÁue. Notre Èquipe examine votre dossier et vous enverra les instructions de paiement par email sous 24 ‡ 48h ouvrÈes.'
+        title: 'Inscription enregistr√©e ‚Äî en attente de validation',
+        description: 'Votre demande d\'inscription a bien √©t√© re√ßue. Notre √©quipe examine votre dossier et vous enverra les instructions de paiement par email sous 24 √† 48h ouvr√©es.'
       };
     }
 
@@ -197,8 +197,8 @@ export default function PendingAccountPage() {
           color: 'text-blue-600',
           bgColor: 'bg-blue-50',
           borderColor: 'border-blue-200',
-          title: 'Preuve envoyÈe ó Validation en cours',
-          description: 'Votre preuve de paiement est en cours de vÈrification par notre Èquipe. DÈlai habituel : 24 ‡ 48h ouvrÈes.'
+          title: 'Preuve envoy√©e ‚Äî Validation en cours',
+          description: 'Votre preuve de paiement est en cours de v√©rification par notre √©quipe. D√©lai habituel : 24 √† 48h ouvr√©es.'
         };
       case 'approved':
         return {
@@ -206,8 +206,8 @@ export default function PendingAccountPage() {
           color: 'text-green-600',
           bgColor: 'bg-green-50',
           borderColor: 'border-green-200',
-          title: 'Paiement validÈ !',
-          description: 'Votre compte est activÈ ! Vous allez Ítre redirigÈ vers votre espace exposant.'
+          title: 'Paiement valid√© !',
+          description: 'Votre compte est activ√© ! Vous allez √™tre redirig√© vers votre espace exposant.'
         };
       case 'rejected':
         return {
@@ -215,7 +215,7 @@ export default function PendingAccountPage() {
           color: 'text-red-600',
           bgColor: 'bg-red-50',
           borderColor: 'border-red-200',
-          title: 'Paiement refusÈ',
+          title: 'Paiement refus√©',
           description: 'Veuillez nous contacter ou soumettre une nouvelle preuve de paiement.'
         };
       default:
@@ -224,8 +224,8 @@ export default function PendingAccountPage() {
           color: 'text-amber-600',
           bgColor: 'bg-amber-50',
           borderColor: 'border-amber-200',
-          title: 'Inscription enregistrÈe ó en attente de validation',
-          description: 'Votre demande d\'inscription a bien ÈtÈ reÁue. Notre Èquipe examine votre dossier et vous enverra les instructions de paiement par email sous 24 ‡ 48h ouvrÈes.'
+          title: 'Inscription enregistr√©e ‚Äî en attente de validation',
+          description: 'Votre demande d\'inscription a bien √©t√© re√ßue. Notre √©quipe examine votre dossier et vous enverra les instructions de paiement par email sous 24 √† 48h ouvr√©es.'
         };
     }
   };
@@ -259,7 +259,7 @@ export default function PendingAccountPage() {
               : paymentRequest?.status === 'proof_uploaded'
               ? 'Votre dossier est en cours de traitement'
               : paymentRequest?.status === 'approved'
-              ? 'Votre espace exposant est prÍt !'
+              ? 'Votre espace exposant est pr√™t !'
               : 'Votre demande d\'inscription est en cours de traitement'
             }
           </p>
@@ -289,7 +289,7 @@ export default function PendingAccountPage() {
               <div className="mt-4">
                 <div className="flex justify-between text-sm mb-2">
                   <span className="text-green-600 font-medium">
-                    1. Inscription ?
+                    1. Inscription ‚úì
                   </span>
                   <span className={
                     !paymentRequest ? 'text-gray-400' :
@@ -297,10 +297,10 @@ export default function PendingAccountPage() {
                     ['proof_uploaded', 'approved'].includes(paymentRequest.status) ? 'text-green-600 font-medium' :
                     'text-gray-400'
                   }>
-                    2. Paiement {!paymentRequest ? '' : paymentRequest.status === 'pending' ? '...' : ['proof_uploaded', 'approved'].includes(paymentRequest.status) ? '?' : ''}
+                    2. Paiement {!paymentRequest ? '' : paymentRequest.status === 'pending' ? '...' : ['proof_uploaded', 'approved'].includes(paymentRequest.status) ? '‚úì' : ''}
                   </span>
                   <span className={paymentRequest?.status === 'approved' ? 'text-green-600 font-medium' : 'text-gray-400'}>
-                    3. Activation {paymentRequest?.status === 'approved' ? '?' : ''}
+                    3. Activation {paymentRequest?.status === 'approved' ? '‚úì' : ''}
                   </span>
                 </div>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -335,20 +335,20 @@ export default function PendingAccountPage() {
                 <div className="space-y-3 text-amber-900">
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-7 h-7 bg-amber-200 rounded-full flex items-center justify-center text-sm font-bold">1</span>
-                    <p className="text-sm"><strong>Validation de votre dossier</strong> ó Notre Èquipe vÈrifie vos informations d'inscription (entreprise, secteur, surface du stand).</p>
+                    <p className="text-sm"><strong>Validation de votre dossier</strong> ‚Äî Notre √©quipe v√©rifie vos informations d'inscription (entreprise, secteur, surface du stand).</p>
                   </div>
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-7 h-7 bg-amber-200 rounded-full flex items-center justify-center text-sm font-bold">2</span>
-                    <p className="text-sm"><strong>RÈception des instructions de paiement</strong> ó Vous recevrez un email avec le montant exact et les coordonnÈes bancaires pour effectuer votre virement.</p>
+                    <p className="text-sm"><strong>R√©ception des instructions de paiement</strong> ‚Äî Vous recevrez un email avec le montant exact et les coordonn√©es bancaires pour effectuer votre virement.</p>
                   </div>
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-7 h-7 bg-amber-200 rounded-full flex items-center justify-center text-sm font-bold">3</span>
-                    <p className="text-sm"><strong>Activation de votre espace</strong> ó DËs rÈception de votre paiement, votre espace exposant sera activÈ et vous y aurez pleinement accËs.</p>
+                    <p className="text-sm"><strong>Activation de votre espace</strong> ‚Äî D√®s r√©ception de votre paiement, votre espace exposant sera activ√© et vous y aurez pleinement acc√®s.</p>
                   </div>
                 </div>
                 <div className="mt-4 p-3 bg-white/60 rounded-lg border border-amber-200">
                   <p className="text-sm text-amber-800">
-                    ? <strong>DÈlai estimÈ :</strong> 24 ‡ 48 heures ouvrÈes. VÈrifiez vos emails (y compris les spams).
+                    ‚è± <strong>D√©lai estim√© :</strong> 24 √† 48 heures ouvr√©es. V√©rifiez vos emails (y compris les spams).
                   </p>
                 </div>
                 <div className="mt-3">
@@ -594,13 +594,13 @@ export default function PendingAccountPage() {
               
               <div className="grid md:grid-cols-3 gap-4">
                 <a 
-                  href="mailto:exposants@SIB.com"
+                  href="mailto:exposants@sibs.com"
                   className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                 >
                   <Mail className="h-5 w-5 text-blue-600" />
                   <div>
                     <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-medium">exposants@SIB.com</p>
+                    <p className="font-medium">exposants@sibs.com</p>
                   </div>
                 </a>
 

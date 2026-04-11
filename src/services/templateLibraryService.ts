@@ -232,8 +232,8 @@ class TemplateLibraryService {
         id: 'hero-1',
         type: 'hero',
         content: {
-          title: 'Solutions d\'Excellence pour l\'Industrie Maritime',
-          subtitle: 'Leader mondial en technologie portuaire depuis 1995',
+          title: 'Solutions d\'Excellence pour l\'Industrie Bâtiment',
+          subtitle: 'Leader mondial en technologie bâtiment depuis 1995',
           backgroundImage: '',
           ctaText: 'Découvrir nos solutions',
           ctaLink: '#products'
@@ -284,8 +284,8 @@ class TemplateLibraryService {
         id: 'hero-1',
         type: 'hero',
         content: {
-          title: 'Innovation Maritime 🚀',
-          subtitle: 'La prochaine génération de solutions portuaires intelligentes',
+          title: 'Innovation Bâtiment 🚀',
+          subtitle: 'La prochaine génération de solutions BTP intelligentes',
           backgroundImage: '',
           ctaText: 'Rejoignez la révolution',
           ctaLink: '#about'
@@ -298,7 +298,7 @@ class TemplateLibraryService {
         type: 'about',
         content: {
           title: 'Notre Mission',
-          description: 'Révolutionner l\'industrie maritime avec l\'IA et l\'IoT pour créer des ports plus efficaces et durables.',
+          description: 'Révolutionner l\'industrie du bâtiment avec l\'IA et l\'IoT pour créer des ports plus efficaces et durables.',
           image: ''
         },
         order: 1,
@@ -324,7 +324,7 @@ class TemplateLibraryService {
         id: 'hero-1',
         type: 'hero',
         content: {
-          title: 'Équipements Maritimes Premium',
+          title: 'Équipements du Bâtiment Premium',
           subtitle: 'Livraison mondiale • Garantie 5 ans • Support 24/7',
           backgroundImage: '',
           ctaText: 'Voir le catalogue',
@@ -456,7 +456,7 @@ class TemplateLibraryService {
         id: 'hero-1',
         type: 'hero',
         content: {
-          title: 'Excellence Maritime',
+          title: 'Excellence Bâtiment',
           subtitle: 'Solutions simples, résultats extraordinaires',
           backgroundImage: '',
           ctaText: 'En savoir plus',

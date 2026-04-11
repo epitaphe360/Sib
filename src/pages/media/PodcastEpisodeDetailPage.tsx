@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ï»¿import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, Download, Share2, BookmarkPlus, Play, Headphones } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
@@ -53,7 +53,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
       setEpisode(data);
     } catch (error) {
       console.error('Error loading podcast episode:', error);
-      toast.error('Erreur lors du chargement de l\'épisode');
+      toast.error('Erreur lors du chargement de l\'Ã©pisode');
     } finally {
       setLoading(false);
     }
@@ -61,7 +61,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
 
   const handleSave = () => {
     setIsSaved(!isSaved);
-    toast.success(isSaved ? 'Retiré des favoris' : 'Ajouté aux favoris');
+    toast.success(isSaved ? 'RetirÃ© des favoris' : 'AjoutÃ© aux favoris');
   };
 
   const handleShare = () => {
@@ -73,7 +73,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      toast.success('Lien copié dans le presse-papier');
+      toast.success('Lien copiÃ© dans le presse-papier');
     }
   };
 
@@ -104,7 +104,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Épisode introuvable</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ã‰pisode introuvable</h2>
           <Button onClick={() => navigate(-1)}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour
@@ -144,7 +144,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                 <Headphones className="h-5 w-5 text-blue-600" />
                 {episode.season_number && episode.episode_number && (
                   <span className="text-sm text-gray-600">
-                    Saison {episode.season_number} • Épisode {episode.episode_number}
+                    Saison {episode.season_number} â€¢ Ã‰pisode {episode.episode_number}
                   </span>
                 )}
               </div>
@@ -164,7 +164,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                   onClick={handleSave}
                 >
                   <BookmarkPlus className="h-4 w-4 mr-2" />
-                  {isSaved ? 'Enregistré' : 'Enregistrer'}
+                  {isSaved ? 'EnregistrÃ©' : 'Enregistrer'}
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleShare}>
                   <Share2 className="h-4 w-4 mr-2" />
@@ -173,7 +173,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                 <Button variant="outline" size="sm" asChild>
                   <a href={episode.content_url} download>
                     <Download className="h-4 w-4 mr-2" />
-                    Télécharger
+                    TÃ©lÃ©charger
                   </a>
                 </Button>
               </div>
@@ -183,7 +183,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                 {episode.views_count && (
                   <div className="flex items-center">
                     <Play className="h-4 w-4 mr-1" />
-                    {episode.views_count.toLocaleString()} écoutes
+                    {episode.views_count.toLocaleString()} Ã©coutes
                   </div>
                 )}
                 {episode.duration && (
@@ -204,7 +204,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
             {/* Description */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Description de l'épisode
+                Description de l'Ã©pisode
               </h2>
               <div className="prose prose-blue max-w-none">
                 <p className="text-gray-700 whitespace-pre-wrap">
@@ -217,7 +217,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
             {episode.guest_name && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Invité de cet épisode
+                  InvitÃ© de cet Ã©pisode
                 </h2>
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
@@ -227,7 +227,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{episode.guest_name}</h3>
-                    <p className="text-sm text-gray-600">Invité spécial</p>
+                    <p className="text-sm text-gray-600">InvitÃ© spÃ©cial</p>
                   </div>
                 </div>
               </div>
@@ -236,10 +236,10 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
             {/* Related Episodes */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Autres épisodes
+                Autres Ã©pisodes
               </h2>
               <p className="text-gray-600 text-sm">
-                Découvrez d'autres épisodes de ce podcast...
+                DÃ©couvrez d'autres Ã©pisodes de ce podcast...
               </p>
             </div>
           </div>
@@ -279,14 +279,14 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
             {/* Episode Details */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Détails de l'épisode
+                DÃ©tails de l'Ã©pisode
               </h3>
               <div className="space-y-3">
                 {episode.published_date && (
                   <div className="flex items-start">
                     <Calendar className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">Publié le</p>
+                      <p className="text-sm font-medium text-gray-900">PubliÃ© le</p>
                       <p className="text-sm text-gray-600">
                         {formatDate(episode.published_date)}
                       </p>
@@ -297,7 +297,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                   <div className="flex items-start">
                     <Clock className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">Durée</p>
+                      <p className="text-sm font-medium text-gray-900">DurÃ©e</p>
                       <p className="text-sm text-gray-600">
                         {formatDuration(episode.duration)}
                       </p>
@@ -313,7 +313,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                 Abonnez-vous au podcast
               </h3>
               <p className="text-sm text-purple-100 mb-4">
-                Ne manquez aucun épisode de nos podcasts SIB
+                Ne manquez aucun Ã©pisode de nos podcasts SIB
               </p>
               <div className="flex space-x-2">
                 <Button variant="secondary" size="sm" className="flex-1">

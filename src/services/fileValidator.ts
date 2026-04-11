@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Service de validation robuste pour les fichiers uploadés
  * Prévient : DoS, malware, spoofing d'extension
  */
@@ -315,3 +315,4 @@ export default {
   validateVideo,
   FileValidationError
 };
+

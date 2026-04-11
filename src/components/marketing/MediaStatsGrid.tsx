@@ -1,4 +1,4 @@
-import { Video, Mic, Globe, Eye, EyeOff } from 'lucide-react';
+﻿import { Video, Mic, Globe, Eye, EyeOff } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Card } from '../ui/Card';
 import type { MediaStats as MediaStatsType } from './types';
@@ -41,3 +41,4 @@ export default function MediaStats({ stats }: MediaStatsProps) {
     </div>
   );
 }
+

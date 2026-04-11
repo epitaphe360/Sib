@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { StorageService } from '../../services/storageService';
 import { X, Plus, AlertCircle, Loader2 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -164,3 +164,4 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
 };
 
 export default MultiImageUploader;
+

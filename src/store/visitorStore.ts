@@ -564,7 +564,29 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
 
         if (error) throw error;
 
-        // TODO: Récupérer les détails de la session et l'ajouter à registeredSessions
+        // Récupérer les détails de la session et l'ajouter à registeredSessions
+        const { data: sessionData } = await supabaseClient
+          .from('events')
+          .select('id, title, description, start_date, end_date, location, registered, capacity, event_type')
+          .eq('id', sessionId)
+          .maybeSingle();
+
+        if (sessionData) {
+          const session: Session = {
+            id: sessionData.id,
+            title: sessionData.title || '',
+            description: sessionData.description || '',
+            date: new Date(sessionData.start_date || new Date()),
+            startTime: sessionData.start_date ? new Date(sessionData.start_date).toTimeString().substring(0, 5) : '00:00',
+            endTime: sessionData.end_date ? new Date(sessionData.end_date).toTimeString().substring(0, 5) : '00:00',
+            location: sessionData.location || '',
+            speaker: '',
+            category: sessionData.event_type || '',
+            capacity: sessionData.capacity || 0,
+            registered: sessionData.registered || 0,
+          };
+          set({ registeredSessions: [...get().registeredSessions, session] });
+        }
       }
     } catch (error) {
       console.error('Erreur lors de l\'inscription à la session:', error);
@@ -601,19 +623,68 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
     const { visitorProfile } = get();
     if (!visitorProfile) throw new Error('Utilisateur non connecté');
 
-    // Cette fonctionnalité devrait utiliser le système de rendez-vous existant
-    // via appointmentStore plutôt que visitorStore
-    console.warn('Utiliser appointmentStore.bookAppointment() à la place');
+    const supabaseClient = getSupabaseClient();
+    if (!supabaseClient) throw new Error('Supabase non disponible');
+
+    try {
+      const { error } = await supabaseClient
+        .from('appointments')
+        .insert({
+          exhibitor_id: exhibitorId,
+          visitor_id: visitorProfile.id,
+          status: 'pending',
+          message,
+          notes: `Date préférée: ${preferredDate.toISOString()}`,
+          meeting_type: 'in-person'
+        });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Erreur lors de la demande de rendez-vous:', error);
+      throw error;
+    }
   },
 
   acceptMeetingRequest: async (requestId: string) => {
-    // Cette fonctionnalité devrait utiliser appointmentStore
-    console.warn('Utiliser appointmentStore.updateAppointmentStatus() à la place');
+    const { visitorProfile } = get();
+    if (!visitorProfile) throw new Error('Utilisateur non connecté');
+
+    const supabaseClient = getSupabaseClient();
+    if (!supabaseClient) throw new Error('Supabase non disponible');
+
+    try {
+      const { error } = await supabaseClient
+        .from('appointments')
+        .update({ status: 'confirmed' })
+        .eq('id', requestId)
+        .eq('visitor_id', visitorProfile.id);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Erreur lors de l\'acceptation de la demande:', error);
+      throw error;
+    }
   },
 
   rejectMeetingRequest: async (requestId: string) => {
-    // Cette fonctionnalité devrait utiliser appointmentStore
-    console.warn('Utiliser appointmentStore.cancelAppointment() à la place');
+    const { visitorProfile } = get();
+    if (!visitorProfile) throw new Error('Utilisateur non connecté');
+
+    const supabaseClient = getSupabaseClient();
+    if (!supabaseClient) throw new Error('Supabase non disponible');
+
+    try {
+      const { error } = await supabaseClient
+        .from('appointments')
+        .update({ status: 'cancelled' })
+        .eq('id', requestId)
+        .eq('visitor_id', visitorProfile.id);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Erreur lors du refus de la demande:', error);
+      throw error;
+    }
   },
 
   sendMessage: async (recipientId: string, message: string) => {

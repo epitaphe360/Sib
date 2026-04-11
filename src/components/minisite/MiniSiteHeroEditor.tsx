@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Card } from '../ui/Card';
 import { 
   Info,
@@ -98,7 +98,7 @@ export default function MiniSiteHeroEditor({
               value={formData.subtitle}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="ex: Leader dans l'optimisation des opérations portuaires"
+              placeholder="ex: Leader dans l'optimisation des opérations BTP"
              aria-label="ex: Leader dans l" />
           </div>
           
@@ -234,3 +234,5 @@ export default function MiniSiteHeroEditor({
     </Card>
   );
 }
+
+

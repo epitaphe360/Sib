@@ -26,18 +26,6 @@ npm run build:vercel
 - ✅ Analytics intégrés
 - ✅ Edge Functions support
 
-### ✅ **WordPress** - Intégration Plugin Complet
-```bash
-# Génération du plugin WordPress
-npm run build:wordpress
-```
-**Fonctionnalités WordPress :**
-- ✅ Plugin complet avec shortcodes
-- ✅ Interface d'administration dédiée
-- ✅ Base de données WordPress intégrée
-- ✅ Shortcodes : `[siports_exhibitors]`, `[siports_events]`, `[siports_networking]`
-- ✅ API REST pour intégration personnalisée
-
 ### ✅ **App Stores** - Applications Mobiles Natives
 
 #### **📱 iOS App Store**
@@ -122,13 +110,6 @@ npm run mobile:open-android
 - ✅ Stockage local pour mode offline
 - ✅ Deep linking vers contenus
 
-### **🔌 WordPress**
-- ✅ Plugin complet avec interface admin
-- ✅ Shortcodes pour intégration facile
-- ✅ API REST pour développements personnalisés
-- ✅ Base de données WordPress native
-- ✅ Gestion des utilisateurs WordPress
-
 ## 📊 **Métriques de Performance**
 
 ### **⚡ Optimisations**
@@ -153,9 +134,6 @@ npm run mobile:open-android
 npm run build:railway    # Pour Railway
 npm run build:vercel     # Pour Vercel
 
-# 🔌 Plugin WordPress
-npm run build:wordpress  # Génère le plugin complet
-
 # 📱 Applications Mobiles
 npm run mobile:init      # Initialisation Capacitor
 npm run build:mobile     # Build pour app stores
@@ -173,7 +151,6 @@ npm run lint             # Vérification code
 |------------|--------|-----------------|-------------|
 | **Railway** | ✅ Prêt | Complètes | Excellent |
 | **Vercel** | ✅ Prêt | Complètes | Excellent |
-| **WordPress** | ✅ Prêt | Plugin complet | Très bon |
 | **iOS App Store** | ✅ Prêt | Natives | Excellent |
 | **Google Play** | ✅ Prêt | Natives | Excellent |
 

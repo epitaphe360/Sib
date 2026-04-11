@@ -34,10 +34,10 @@ export const DemoAccountsPage: React.FC = () => {
     { email: 'contact@bollore-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - Bolloré', type: 'partner', color: '#F59E0B' },
     { email: 'contact@msc-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - MSC Maroc', type: 'partner', color: '#D97706' },
     { email: 'contact@cma-cgm.ma', password: 'TestPassword123!', label: '🤝 Partenaire - CMA CGM', type: 'partner', color: '#EAB308' },
-    { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🏛️ Musée Maritime', type: 'partner', color: '#9CA3AF' },
+    { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🏛️ Musée Bâtiment', type: 'partner', color: '#9CA3AF' },
     
     // Admin
-    { email: 'admin.SIB@SIB.com', password: 'TestPassword123!', label: '⚙️ Administrateur', type: 'admin', color: '#EF4444' },
+    { email: 'admin.sibs@sibs.com', password: 'TestPassword123!', label: '⚙️ Administrateur', type: 'admin', color: '#EF4444' },
   ];
 
   const handleLogin = async (account: QuickAccount) => {

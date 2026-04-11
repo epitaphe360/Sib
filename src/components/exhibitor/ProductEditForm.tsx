@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,20 +19,20 @@ import MultiImageUploader from '../ui/MultiImageUploader';
 // Zod validation schema
 const productEditSchema = z.object({
   name: z.string()
-    .min(2, 'Le nom du produit doit contenir au moins 2 caractères')
-    .max(200, 'Le nom ne doit pas dépasser 200 caractères'),
+    .min(2, 'Le nom du produit doit contenir au moins 2 caractÃ¨res')
+    .max(200, 'Le nom ne doit pas dÃ©passer 200 caractÃ¨res'),
   description: z.string()
-    .max(1000, 'La description ne doit pas dépasser 1000 caractères')
+    .max(1000, 'La description ne doit pas dÃ©passer 1000 caractÃ¨res')
     .optional()
     .or(z.literal('')),
   category: z.string()
-    .min(1, 'La catégorie est requise')
-    .max(100, 'La catégorie ne doit pas dépasser 100 caractères'),
+    .min(1, 'La catÃ©gorie est requise')
+    .max(100, 'La catÃ©gorie ne doit pas dÃ©passer 100 caractÃ¨res'),
   price: z.number()
-    .min(0, 'Le prix doit être positif')
+    .min(0, 'Le prix doit Ãªtre positif')
     .optional(),
   specifications: z.string()
-    .max(1000, 'Les spécifications ne doivent pas dépasser 1000 caractères')
+    .max(1000, 'Les spÃ©cifications ne doivent pas dÃ©passer 1000 caractÃ¨res')
     .optional()
     .or(z.literal('')),
   featured: z.boolean().optional()
@@ -80,7 +80,7 @@ export default function ProductEditForm({
   // Watch form values for preview
   const formValues = watch();
 
-  // Remplir le formulaire avec les données du produit existant
+  // Remplir le formulaire avec les donnÃ©es du produit existant
   useEffect(() => {
     if (product) {
       reset({
@@ -103,7 +103,7 @@ export default function ProductEditForm({
     setIsLoading(true);
 
     try {
-      // Préparer les données pour l'envoi
+      // PrÃ©parer les donnÃ©es pour l'envoi
       const productData = {
         exhibitorId,
         name: data.name,
@@ -116,19 +116,19 @@ export default function ProductEditForm({
       };
 
       if (productId) {
-        // Mise à jour d'un produit existant
+        // Mise Ã  jour d'un produit existant
         await SupabaseService.updateProduct(productId, productData);
-        toast.success('Produit mis à jour avec succès !');
+        toast.success('Produit mis Ã  jour avec succÃ¨s !');
       } else {
-        // Création d'un nouveau produit
+        // CrÃ©ation d'un nouveau produit
         await SupabaseService.createProduct(productData);
-        toast.success('Produit créé avec succès !');
+        toast.success('Produit crÃ©Ã© avec succÃ¨s !');
       }
 
       onSave();
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement:', error);
-      toast.error('Erreur lors de l\'enregistrement. Veuillez réessayer.');
+      toast.error('Erreur lors de l\'enregistrement. Veuillez rÃ©essayer.');
     } finally {
       setIsLoading(false);
     }
@@ -205,13 +205,13 @@ export default function ProductEditForm({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Catégorie *
+                      CatÃ©gorie *
                     </label>
                     <input
                       type="text"
                       {...register('category')}
                       className={`w-full px-3 py-2 border ${errors.category ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                      placeholder="ex: Logiciels, Équipements..."
+                      placeholder="ex: Logiciels, Ã‰quipements..."
                     />
                     {errors.category && (
                       <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
@@ -220,7 +220,7 @@ export default function ProductEditForm({
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Prix (€)
+                      Prix (â‚¬)
                     </label>
                     <div className="flex items-center">
                       <div className="bg-gray-100 px-3 py-2 rounded-l-lg border border-gray-300 border-r-0">
@@ -243,13 +243,13 @@ export default function ProductEditForm({
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Spécifications techniques
+                    SpÃ©cifications techniques
                   </label>
                   <textarea
                     {...register('specifications')}
                     rows={3}
                     className={`w-full px-3 py-2 border ${errors.specifications ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                    placeholder="Dimensions, matériaux, caractéristiques techniques..."
+                    placeholder="Dimensions, matÃ©riaux, caractÃ©ristiques techniques..."
                   />
                   {errors.specifications && (
                     <p className="text-red-500 text-sm mt-1">{errors.specifications.message}</p>
@@ -290,14 +290,14 @@ export default function ProductEditForm({
               
               <div className="mt-4 flex items-start space-x-2 text-sm text-gray-500">
                 <Info className="h-4 w-4 mt-0.5" />
-                <p>Les images seront affichées dans l'ordre de téléchargement. La première image sera l'image principale du produit.</p>
+                <p>Les images seront affichÃ©es dans l'ordre de tÃ©lÃ©chargement. La premiÃ¨re image sera l'image principale du produit.</p>
               </div>
             </Card>
             
-            {/* Aperçu du produit */}
+            {/* AperÃ§u du produit */}
             <Card className="p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Aperçu
+                AperÃ§u
               </h3>
               
               <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
@@ -308,7 +308,7 @@ export default function ProductEditForm({
                     className="w-full h-48 object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = '/SIB-logo.jpg';
+                      target.src = '/siports-logo.jpg';
                     }}
                   />
                 ) : (
@@ -320,7 +320,7 @@ export default function ProductEditForm({
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-                      {formValues.category || 'Catégorie'}
+                      {formValues.category || 'CatÃ©gorie'}
                     </span>
                     {formValues.featured && (
                       <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">

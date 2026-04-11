@@ -2,6 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs';
+import dotenv from 'dotenv';
+
+// Load local env files so process.env contains values during Vite config evaluation
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
 // ============================================
 // Railway/Nixpacks: Map Railway env vars to VITE_ prefixed .env file
@@ -12,7 +17,6 @@ const envMappings: Record<string, string[]> = {
   'VITE_SUPABASE_URL': ['VITE_SUPABASE_URL', 'SUPABASE_URL'],
   'VITE_SUPABASE_ANON_KEY': ['VITE_SUPABASE_ANON_KEY', 'SUPABASE_ANON_KEY'],
   'VITE_SUPABASE_SERVICE_ROLE_KEY': ['VITE_SUPABASE_SERVICE_ROLE_KEY', 'SUPABASE_SERVICE_ROLE_KEY'],
-  'VITE_STRIPE_PUBLISHABLE_KEY': ['VITE_STRIPE_PUBLISHABLE_KEY', 'STRIPE_PUBLISHABLE_KEY'],
   'VITE_FIREBASE_API_KEY': ['VITE_FIREBASE_API_KEY', 'FIREBASE_API_KEY'],
   'VITE_FIREBASE_AUTH_DOMAIN': ['VITE_FIREBASE_AUTH_DOMAIN', 'FIREBASE_AUTH_DOMAIN'],
   'VITE_FIREBASE_PROJECT_ID': ['VITE_FIREBASE_PROJECT_ID', 'FIREBASE_PROJECT_ID'],
@@ -43,10 +47,18 @@ for (const [viteKey, candidates] of Object.entries(envMappings)) {
   }
 }
 
-if (envLines.length > 0) {
+const isRailwayRuntime = Boolean(
+  process.env.RAILWAY_ENVIRONMENT ||
+  process.env.RAILWAY_PROJECT_ID ||
+  process.env.NIXPACKS
+);
+
+if (envLines.length > 0 && isRailwayRuntime) {
   const envPath = path.resolve(__dirname, '.env');
   fs.writeFileSync(envPath, envLines.join('\n') + '\n', 'utf8');
-  console.log(`\n📝 Wrote ${envLines.length} VITE_ variables to .env`);
+  console.log(`\n📝 Wrote ${envLines.length} VITE_ variables to .env (Railway runtime)`);
+} else if (envLines.length > 0) {
+  console.log(`\n📝 Loaded ${envLines.length} variables from local env files (.env/.env.local)`);
 } else {
   console.log('⚠️  No VITE_ variables found in process.env! Check Railway Dashboard → Variables');
 }

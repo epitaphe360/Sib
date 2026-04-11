@@ -34,7 +34,15 @@ CREATE POLICY "Users can delete own favorites" ON favorites
   FOR DELETE USING (auth.uid() = visitor_id);
 
 CREATE INDEX IF NOT EXISTS idx_favorites_visitor_id ON favorites(visitor_id);
-CREATE INDEX IF NOT EXISTS idx_favorites_exhibitor_id ON favorites(exhibitor_id);
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'favorites' AND column_name = 'exhibitor_id'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_favorites_exhibitor_id ON favorites(exhibitor_id);
+  END IF;
+END $$;
 
 -- =====================================================
 -- 2. SALON_CONFIG TABLE (global salon configuration)
@@ -223,7 +231,7 @@ ALTER TABLE profile_views ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Users can view profile views" ON profile_views;
 CREATE POLICY "Users can view profile views" ON profile_views
-  FOR SELECT USING (auth.uid() = viewer_id OR auth.uid() = viewed_id);
+  FOR SELECT USING (auth.uid() = viewer_id OR auth.uid() = viewed_user_id);
 
 DROP POLICY IF EXISTS "Users can insert profile views" ON profile_views;
 CREATE POLICY "Users can insert profile views" ON profile_views
@@ -234,7 +242,7 @@ CREATE POLICY "Users can update profile views" ON profile_views
   FOR UPDATE USING (auth.uid() = viewer_id);
 
 CREATE INDEX IF NOT EXISTS idx_profile_views_viewer_id ON profile_views(viewer_id);
-CREATE INDEX IF NOT EXISTS idx_profile_views_viewed_id ON profile_views(viewed_id);
+CREATE INDEX IF NOT EXISTS idx_profile_views_viewed_user_id ON profile_views(viewed_user_id);
 
 -- =====================================================
 -- 8. MINISITE_VIEWS TABLE
@@ -261,8 +269,24 @@ DROP POLICY IF EXISTS "Anyone can insert minisite views" ON minisite_views;
 CREATE POLICY "Anyone can insert minisite views" ON minisite_views
   FOR INSERT WITH CHECK (true);
 
-CREATE INDEX IF NOT EXISTS idx_minisite_views_exhibitor_id ON minisite_views(exhibitor_id);
-CREATE INDEX IF NOT EXISTS idx_minisite_views_view_date ON minisite_views(view_date);
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'minisite_views' AND column_name = 'exhibitor_id'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_minisite_views_exhibitor_id ON minisite_views(exhibitor_id);
+  END IF;
+END $$;
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'minisite_views' AND column_name = 'view_date'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_minisite_views_view_date ON minisite_views(view_date);
+  END IF;
+END $$;
 
 -- =====================================================
 -- 9. QUOTA_USAGE TABLE
@@ -318,14 +342,22 @@ ALTER TABLE mini_sites ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Anyone can view published minisites" ON mini_sites;
 CREATE POLICY "Anyone can view published minisites" ON mini_sites
-  FOR SELECT USING (is_published = true OR auth.uid() = exhibitor_id);
+  FOR SELECT USING (published = true OR auth.uid() = exhibitor_id);
 
 DROP POLICY IF EXISTS "Exhibitors can manage own minisite" ON mini_sites;
 CREATE POLICY "Exhibitors can manage own minisite" ON mini_sites
   FOR ALL USING (auth.uid() = exhibitor_id);
 
 CREATE INDEX IF NOT EXISTS idx_mini_sites_exhibitor_id ON mini_sites(exhibitor_id);
-CREATE INDEX IF NOT EXISTS idx_mini_sites_slug ON mini_sites(slug);
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'mini_sites' AND column_name = 'slug'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_mini_sites_slug ON mini_sites(slug);
+  END IF;
+END $$;
 
 -- =====================================================
 -- 11. LEADS TABLE (business leads for exhibitors)
@@ -353,16 +385,40 @@ CREATE TABLE IF NOT EXISTS leads (
 ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Exhibitors can view own leads" ON leads;
-CREATE POLICY "Exhibitors can view own leads" ON leads
-  FOR SELECT USING (auth.uid() = exhibitor_id);
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'leads' AND column_name = 'exhibitor_id'
+  ) THEN
+    CREATE POLICY "Exhibitors can view own leads" ON leads
+      FOR SELECT USING (auth.uid() = exhibitor_id);
+  END IF;
+END $$;
 
 DROP POLICY IF EXISTS "Exhibitors can manage own leads" ON leads;
-CREATE POLICY "Exhibitors can manage own leads" ON leads
-  FOR ALL USING (auth.uid() = exhibitor_id);
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'leads' AND column_name = 'exhibitor_id'
+  ) THEN
+    CREATE POLICY "Exhibitors can manage own leads" ON leads
+      FOR ALL USING (auth.uid() = exhibitor_id);
+  END IF;
+END $$;
 
 DROP POLICY IF EXISTS "System can insert leads" ON leads;
 CREATE POLICY "System can insert leads" ON leads
   FOR INSERT WITH CHECK (true);
 
-CREATE INDEX IF NOT EXISTS idx_leads_exhibitor_id ON leads(exhibitor_id);
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'leads' AND column_name = 'exhibitor_id'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_leads_exhibitor_id ON leads(exhibitor_id);
+  END IF;
+END $$;
 CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);

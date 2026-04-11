@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Configuration centralisée des informations du salon SIB
  * Ces informations peuvent être surchargées par les données de la table salon_config
  */
@@ -24,12 +24,12 @@ export interface SalonConfig {
 export const DEFAULT_SALON_CONFIG: SalonConfig = {
   name: 'SIB 2026',
   dates: {
-    start: '1 Avril 2026',
-    end: '3 Avril 2026'
+    start: '25 Novembre 2026',
+    end: '29 Novembre 2026'
   },
   location: {
-    venue: 'Mohammed VI Exhibition Center',
-    city: 'Casablanca',
+    venue: 'Parc d\'Exposition Mohammed VI',
+    city: 'El Jadida',
     country: 'Maroc'
   },
   hours: {
@@ -43,12 +43,12 @@ export const DEFAULT_SALON_CONFIG: SalonConfig = {
  * Dates du salon en format Date pour les validations
  */
 export const SALON_DATE_RANGE = {
-  start: new Date(2026, 3, 1), // 1 avril 2026 (mois 0-indexé)
-  end: new Date(2026, 3, 3),   // 3 avril 2026
+  start: new Date(2026, 10, 25), // 25 novembre 2026 (mois 0-indexé)
+  end: new Date(2026, 10, 29),   // 29 novembre 2026
   year: 2026,
-  month: 3, // Avril (0-indexé)
-  startDay: 1,
-  endDay: 3
+  month: 10, // Novembre (0-indexé)
+  startDay: 25,
+  endDay: 29
 };
 
 /**
@@ -71,18 +71,18 @@ export const isDateInSalonRange = (date: Date): boolean => {
  * Retourne les dates valides du salon sous forme de chaîne ISO (YYYY-MM-DD)
  */
 export const getSalonDateStrings = (): string[] => {
-  return ['2026-04-01', '2026-04-02', '2026-04-03'];
+  return ['2026-11-25', '2026-11-26', '2026-11-27', '2026-11-28', '2026-11-29'];
 };
 
 /**
  * Retourne la date minimum pour le sélecteur de date
  */
-export const getMinSlotDate = (): string => '2026-04-01';
+export const getMinSlotDate = (): string => '2026-11-25';
 
 /**
  * Retourne la date maximum pour le sélecteur de date
  */
-export const getMaxSlotDate = (): string => '2026-04-03';
+export const getMaxSlotDate = (): string => '2026-11-29';
 
 /**
  * Formate les dates du salon pour l'affichage
@@ -104,3 +104,4 @@ export const formatSalonLocation = (config: SalonConfig): string => {
 export const formatSalonHours = (config: SalonConfig): string => {
   return `Tous les jours de ${config.hours.opening} à ${config.hours.closing}`;
 };
+

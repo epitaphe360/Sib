@@ -43,9 +43,9 @@ export default function LoginPage() {
       return;
     }
 
-    if (user?.type === 'security' || user?.email === 'service-clientele@SIB.com') {
+    if (user?.type === 'security' || user?.email === 'service-clientele@sibs.com') {
       navigate(ROUTES.BADGE_PRINT_STATION);
-    } else if (user?.email === 'marketing@SIB.com') {
+    } else if (user?.email === 'marketing@sibs.com') {
       // Le compte marketing redirige vers son dashboard dédié
       navigate(ROUTES.MARKETING_DASHBOARD);
     } else if (user?.type === 'admin') {
@@ -188,7 +188,7 @@ export default function LoginPage() {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-SIB-primary via-SIB-secondary to-SIB-accent flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-siports-primary via-siports-secondary to-siports-accent flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background Pattern */}
       <MoroccanPattern className="opacity-10" color="white" scale={1.5} />
       
@@ -201,12 +201,12 @@ export default function LoginPage() {
         transition={{ duration: 0.6 }}
         className="max-w-md w-full relative z-10"
       >
-        <Card className="p-8 border-t-4 border-t-SIB-gold shadow-2xl backdrop-blur-sm bg-white/95">
+        <Card className="p-8 border-t-4 border-t-siports-gold shadow-2xl backdrop-blur-sm bg-white/95">
           {/* Logo and Title */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
               <img 
-                src="/logo-fond-bleu.jpg" 
+                src="/logo-sib2026.png" 
                 alt="SIB Logo" 
                 className="h-20 w-auto object-contain"
                 onError={(e) => {

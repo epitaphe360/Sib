@@ -70,7 +70,7 @@ export default function PartnerPaymentSelectionPage() {
   }
 
   const handleOnlinePayment = () => {
-    // Rediriger vers la page de paiement en ligne avec Stripe/PayPal/CMI
+    // Rediriger vers la page de paiement en ligne avec PayPal/CMI
     navigate(`/partner/payment-online?tier=${tier}`);
   };
 

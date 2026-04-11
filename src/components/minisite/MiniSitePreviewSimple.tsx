@@ -404,7 +404,7 @@ export default function MiniSitePreviewSimple() {
             transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl mb-10 text-white/90 max-w-3xl mx-auto"
           >
-            {heroSection?.content?.subtitle || heroSection?.content?.description || exhibitorData.description || 'Solutions innovantes pour l\'industrie maritime'}
+            {heroSection?.content?.subtitle || heroSection?.content?.description || exhibitorData.description || 'Solutions innovantes pour l\'industrie du bâtiment'}
           </motion.p>
 
           {/* Boutons */}
@@ -553,7 +553,7 @@ export default function MiniSitePreviewSimple() {
             ) : (
               // Valeurs par défaut avec icônes spécifiques
               [
-                { title: 'Intelligence Artificielle Maritime', icon: Sparkles },
+                { title: 'Intelligence Artificielle Bâtiment', icon: Sparkles },
                 { title: 'Plateforme IoT intégrée', icon: Star },
                 { title: 'Support technique 24/7', icon: Users },
                 { title: 'Déploiement international', icon: Globe }

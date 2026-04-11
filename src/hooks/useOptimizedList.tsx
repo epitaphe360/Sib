@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Hook optimisé pour listes avec pagination, search, sort, filter
  * Utilisé pour remplacer les listes non-paginées
  */
@@ -199,3 +199,4 @@ export function useOptimizedList<T extends Record<string, any>>({
     isLoading,
   };
 }
+

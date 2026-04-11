@@ -38,6 +38,7 @@ const PavillonsPage = lazyRetry(() => import('./components/pavilions/PavillonsPa
 const MetricsPage = lazyRetry(() => import('./components/metrics/MetricsPage'));
 const DetailedProfilePage = lazyRetry(() => import('./components/profile/DetailedProfilePage'));
 const ProfileMatchingPage = lazyRetry(() => import('./pages/ProfileMatchingPage'));
+const AdvancedMatchingPage = lazyRetry(() => import('./pages/AdvancedMatchingPage'));
 const VisitorDashboard = lazyRetry(() => import('./components/visitor/VisitorDashboard'));
 
 const VisitorProfileSettings = lazyRetry(() => import('./components/visitor/VisitorProfileSettings'));
@@ -129,6 +130,16 @@ const VIPVisitorsPage = lazyRetry(() => import('./pages/admin/VIPVisitorsPage'))
 const UnauthorizedPage = lazyRetry(() => import('./pages/UnauthorizedPage'));
 const ForbiddenPage = lazyRetry(() => import('./pages/ForbiddenPage'));
 
+// Visitor new pages
+const VisaLetterPage = lazyRetry(() => import('./pages/visitor/VisaLetterPage'));
+const PressAccreditationPage = lazyRetry(() => import('./pages/press/PressAccreditationPage'));
+const SpeakersPage = lazyRetry(() => import('./pages/public/SpeakersPage'));
+const AdminPressAccreditationsPage = lazyRetry(() => import('./pages/admin/PressAccreditationsPage'));
+const AdminSpeakersPage = lazyRetry(() => import('./pages/admin/SpeakersManagementPage'));
+const HallMapPage = lazyRetry(() => import('./pages/HallMapPage'));
+const CatalogPage = lazyRetry(() => import('./pages/CatalogPage'));
+const ProductDetailPage = lazyRetry(() => import('./pages/ProductDetailPage'));
+
 // Media pages
 const WebinarsPage = lazyRetry(() => import('./pages/media/WebinarsPage'));
 const PodcastsPage = lazyRetry(() => import('./pages/media/PodcastsPage'));
@@ -148,16 +159,17 @@ const EditMediaPage = lazyRetry(() => import('./pages/admin/media/EditMediaPage'
 const PartnerMediaUploadPage = lazyRetry(() => import('./pages/partners/PartnerMediaUploadPage'));
 const PartnerMediaAnalyticsPage = lazyRetry(() => import('./pages/partners/PartnerMediaAnalyticsPage'));
 const PartnerMediaLibraryPage = lazyRetry(() => import('./pages/partners/PartnerMediaLibraryPage'));
-
-import { ChatBot } from './components/chatbot/ChatBot';
-import { ChatBotToggle } from './components/chatbot/ChatBotToggle';
-import { WhatsAppFloatingWidget } from './components/whatsapp/WhatsAppFloatingWidget';
+const MatchmakingDashboard = lazyRetry(() => import('./components/networking/MatchmakingDashboard').then((m) => ({ default: m.MatchmakingDashboard })));
+const LiveEventManager = lazyRetry(() => import('./pages/admin/media/LiveEventManager').then((m) => ({ default: m.LiveEventManager })));
+const ChatBot = lazyRetry(() => import('./components/chatbot/ChatBot').then((m) => ({ default: m.ChatBot })));
+const ChatBotToggle = lazyRetry(() => import('./components/chatbot/ChatBotToggle').then((m) => ({ default: m.ChatBotToggle })));
+const WhatsAppFloatingWidget = lazyRetry(() => import('./components/whatsapp/WhatsAppFloatingWidget').then((m) => ({ default: m.WhatsAppFloatingWidget })));
+const DevSubscriptionSwitcher = lazyRetry(() => import('./components/dev/DevSubscriptionSwitcher'));
 import { useLanguageStore } from './store/languageStore';
 import { ROUTES } from './lib/routes';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { initializeAuth } from './lib/initAuth';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import DevSubscriptionSwitcher from './components/dev/DevSubscriptionSwitcher';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { useAuthStore } from './store/authStore';
 
@@ -227,7 +239,7 @@ const App = () => {
   // Appliquer la direction du texte selon la langue
   React.useEffect(() => {
     const currentLang = useLanguageStore.getState().getCurrentLanguage();
-    document.documentElement.dir = 'ltr';
+    document.documentElement.dir = currentLang.code === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = currentLang.code;
   }, [currentLanguage]);
 
@@ -279,9 +291,11 @@ const App = () => {
             <Route path={ROUTES.PROFILE} element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             <Route path={ROUTES.PROFILE_DETAILED} element={<ProtectedRoute><DetailedProfilePage /></ProtectedRoute>} />
             <Route path={ROUTES.PROFILE_MATCHING} element={<ProtectedRoute><ProfileMatchingPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADVANCED_MATCHING} element={<ProtectedRoute><AdvancedMatchingPage /></ProtectedRoute>} />
             <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_PROFILE} element={<ProtectedRoute requiredRole="exhibitor"><ProfilePage /></ProtectedRoute>} />
             <Route path={`${ROUTES.EXHIBITOR_PROFILE}/edit`} element={<ProtectedRoute requiredRole="exhibitor"><ProfileEdit /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_PROFILE_EDIT} element={<ProtectedRoute requiredRole="exhibitor"><ProfileEdit /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_DASHBOARD} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_DASHBOARD} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><VisitorDashboard /></ProtectedRoute>} />
             {/* Partner routes - NEW */}
@@ -312,6 +326,7 @@ const App = () => {
             <Route path={ROUTES.VISITOR_BANK_TRANSFER} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><VisitorBankTransferPage /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_PAYMENT_SUCCESS} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><PaymentSuccessPage /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_PAYMENT_INSTRUCTIONS} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><PaymentInstructionsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.VISITOR_VISA_LETTER} element={<ProtectedRoute requiredRole="visitor"><VisaLetterPage /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE} element={<ProtectedRoute><BadgePage /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_DIGITAL} element={<ProtectedRoute><DigitalBadge /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_SCANNER} element={<ProtectedRoute><BadgeScannerPage /></ProtectedRoute>} />
@@ -326,10 +341,13 @@ const App = () => {
             <Route path={ROUTES.APPOINTMENTS} element={<ProtectedRoute><AppointmentCalendar /></ProtectedRoute>} />
             <Route path={ROUTES.CALENDAR} element={<ProtectedRoute><AppointmentCalendar /></ProtectedRoute>} />
             <Route path={ROUTES.MINISITE_CREATION} element={<ProtectedRoute requiredRole="exhibitor"><MiniSiteCreationPage /></ProtectedRoute>} />
+            <Route path={ROUTES.CREATE_MINI_SITE} element={<ProtectedRoute requiredRole="exhibitor"><MiniSiteCreationPage /></ProtectedRoute>} />
             <Route path={ROUTES.MINISITE_EDITOR} element={<ProtectedRoute requiredRole="exhibitor"><MiniSiteEditor /></ProtectedRoute>} />
+            <Route path={ROUTES.EDIT_MINI_SITE} element={<ProtectedRoute requiredRole="exhibitor"><MiniSiteEditor /></ProtectedRoute>} />
             <Route path={ROUTES.MINISITE} element={<MiniSiteListPage />} />
             <Route path={ROUTES.MINISITE_DIRECTORY} element={<MiniSiteDirectory />} />
             <Route path={ROUTES.MINISITE_PREVIEW} element={<MiniSitePreview />} />
+            <Route path={ROUTES.MINI_SITE_VIEW} element={<MiniSitePreview />} />
             <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
 
             {/* Admin routes - require admin role */}
@@ -356,9 +374,12 @@ const App = () => {
             <Route path={ROUTES.ADMIN_CONTENT} element={<ProtectedRoute requiredRole="admin"><ContentManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_NEWS} element={<ProtectedRoute requiredRole="admin"><NewsManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_EXHIBITORS} element={<ProtectedRoute requiredRole="admin"><ExhibitorManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_EXHIBITORS_LIST} element={<ProtectedRoute requiredRole="admin"><ExhibitorManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PARTNERS_MANAGE} element={<ProtectedRoute requiredRole="admin"><PartnerManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.MARKETING_DASHBOARD} element={<ProtectedRoute requiredRole="admin"><MarketingDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PUBLICATION_CONTROL} element={<ProtectedRoute requiredRole="admin"><PublicationControlPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_MEDIA} element={<ProtectedRoute requiredRole="admin"><MediaManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_USERS_LIST} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
 
             {/* New routes for footer links */}
             <Route path={ROUTES.CONTACT} element={<ContactPage />} />
@@ -387,6 +408,7 @@ const App = () => {
             <Route path={ROUTES.TESTIMONIALS} element={<TestimonialsPage />} />
             <Route path={ROUTES.TESTIMONIAL_DETAIL} element={<MediaDetailPage />} />
             <Route path={ROUTES.MEDIA_LIBRARY} element={<MediaLibraryPage />} />
+            <Route path={ROUTES.MEDIA_DETAIL} element={<MediaDetailPage />} />
 
             {/* Partner Media routes - protected */}
             <Route path={ROUTES.PARTNER_MEDIA_UPLOAD} element={<ProtectedRoute requiredRole="partner"><PartnerMediaUploadPage /></ProtectedRoute>} />
@@ -398,6 +420,25 @@ const App = () => {
             <Route path={ROUTES.ADMIN_MEDIA_CREATE} element={<ProtectedRoute requiredRole="admin"><CreateMediaPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_MEDIA_EDIT} element={<ProtectedRoute requiredRole="admin"><EditMediaPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PARTNER_MEDIA_APPROVAL} element={<ProtectedRoute requiredRole="admin"><PartnerMediaApprovalPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_LIVE_EVENTS} element={<ProtectedRoute requiredRole="admin"><LiveEventManager /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_LIVE_EVENT_CREATE} element={<ProtectedRoute requiredRole="admin"><LiveEventManager /></ProtectedRoute>} />
+
+            {/* Speakers & Press routes */}
+            <Route path={ROUTES.SPEAKERS} element={<SpeakersPage />} />
+            <Route path={ROUTES.PRESS_ACCREDITATION} element={<PressAccreditationPage />} />
+            <Route path={ROUTES.HALL_MAP} element={<HallMapPage />} />
+            <Route path={ROUTES.CATALOG} element={<CatalogPage />} />
+            <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
+            <Route path={ROUTES.NETWORKING_MATCHMAKING} element={<ProtectedRoute><MatchmakingDashboard /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SPEAKERS} element={<ProtectedRoute requiredRole="admin"><AdminSpeakersPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_PRESS_ACCREDITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminPressAccreditationsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.NOT_FOUND} element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
+              <p className="text-xl text-gray-600 mb-8">Page non trouvée</p>
+              <Link to={ROUTES.HOME} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700" aria-label="Retour à l'accueil">
+                Retour à l'accueil
+              </Link>
+            </div>} />
 
             {/* 404 catch-all route - must be last */}
             <Route path="*" element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -412,30 +453,32 @@ const App = () => {
       </main>
       <Footer />
 
-      {/* ChatBot */}
-      <ChatBot
-        isOpen={isChatBotOpen}
-        onToggle={() => setIsChatBotOpen(!isChatBotOpen)}
-      />
-
-      {/* ChatBot Toggle Button */}
-      {!isChatBotOpen && (
-        <ChatBotToggle
-          onClick={() => setIsChatBotOpen(true)}
-          hasUnreadMessages={false}
+      <Suspense fallback={null}>
+        {/* ChatBot */}
+        <ChatBot
+          isOpen={isChatBotOpen}
+          onToggle={() => setIsChatBotOpen(!isChatBotOpen)}
         />
-      )}
 
-      {/* WhatsApp Floating Widget */}
-      <WhatsAppFloatingWidget 
-        position="bottom-right"
-        offsetBottom={100}
-        offsetSide={24}
-        defaultVisible={true}
-      />
+        {/* ChatBot Toggle Button */}
+        {!isChatBotOpen && (
+          <ChatBotToggle
+            onClick={() => setIsChatBotOpen(true)}
+            hasUnreadMessages={false}
+          />
+        )}
 
-      {/* Dev Tools - Subscription Switcher (Development Only) */}
-      {import.meta.env.DEV && <DevSubscriptionSwitcher />}
+        {/* WhatsApp Floating Widget */}
+        <WhatsAppFloatingWidget
+          position="bottom-right"
+          offsetBottom={100}
+          offsetSide={24}
+          defaultVisible={true}
+        />
+
+        {/* Dev Tools - Subscription Switcher (Development Only) */}
+        {import.meta.env.DEV && <DevSubscriptionSwitcher />}
+      </Suspense>
 
       <Toaster position="top-right" />
     </div>

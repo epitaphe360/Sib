@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import PartnerCreationForm from '../../components/admin/PartnerCreationForm';
@@ -65,3 +65,4 @@ export default function PartnerCreationPage() {
     </>
   );
 }
+

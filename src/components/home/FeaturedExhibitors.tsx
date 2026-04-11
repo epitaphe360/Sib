@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ï»¿import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -20,7 +20,7 @@ export const FeaturedExhibitors: React.FC = () => {
   const { exhibitors, fetchExhibitors, isLoading } = useExhibitorStore();
   const { t } = useTranslation();
   
-  // Afficher uniquement les exposants vérifiés et avec mini-site publié
+  // Afficher uniquement les exposants vÃ©rifiÃ©s et avec mini-site publiÃ©
   const verifiedPublished = exhibitors.filter(e => e.verified && e.miniSite?.published === true);
   const featuredExhibitors = verifiedPublished.filter(e => e.featured).slice(0, 3).length > 0
     ? verifiedPublished.filter(e => e.featured).slice(0, 3)
@@ -50,7 +50,7 @@ export const FeaturedExhibitors: React.FC = () => {
     });
   }, [featuredExhibitors.length]);
 
-  // Fonction pour gérer le clic sur le bouton RDV
+  // Fonction pour gÃ©rer le clic sur le bouton RDV
   const handleAppointmentClick = (exhibitorId: string) => {
     if (!isAuthenticated) {
       // Rediriger vers la page de connexion avec redirection vers les RDV
@@ -120,7 +120,7 @@ export const FeaturedExhibitors: React.FC = () => {
           backgroundPosition: '0 0, 40px 40px, 20px 60px'
         }} />
       </div>
-      <MoroccanPattern className="opacity-[0.03] text-SIB-primary" scale={2} />
+      <MoroccanPattern className="opacity-[0.03] text-siports-primary" scale={2} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Premium Header */}
@@ -135,7 +135,7 @@ export const FeaturedExhibitors: React.FC = () => {
             {t('home.featured_exhibitors_badge', 'Exposants Officiels')}
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            {t('home.featured_exhibitors_title', 'Exposants à la Une')}
+            {t('home.featured_exhibitors_title', 'Exposants Ã  la Une')}
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
             {t('home.featured_exhibitors_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
@@ -149,7 +149,7 @@ export const FeaturedExhibitors: React.FC = () => {
 
         {featuredExhibitors.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
-            <p className="text-lg">{t('home.no_exhibitors_yet', 'Les exposants seront bientôt disponibles.')}</p>
+            <p className="text-lg">{t('home.no_exhibitors_yet', 'Les exposants seront bientÃ´t disponibles.')}</p>
           </div>
         ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -163,7 +163,7 @@ export const FeaturedExhibitors: React.FC = () => {
             >
               <Card hover className="h-full relative">
                 <div className="flex flex-col h-full p-8">
-                  {/* Badge vérifié en haut à droite */}
+                  {/* Badge vÃ©rifiÃ© en haut Ã  droite */}
                   {exhibitor.verified && (
                     <Badge variant="success" size="sm" className="absolute top-4 right-4 flex items-center">
                       <CheckCircle className="h-3 w-3 mr-1" />
@@ -171,7 +171,7 @@ export const FeaturedExhibitors: React.FC = () => {
                     </Badge>
                   )}
 
-                  {/* Logo centré */}
+                  {/* Logo centrÃ© */}
                   <div className="flex justify-center mb-6">
                     <LogoWithFallback
                       src={exhibitor.logo}
@@ -180,7 +180,7 @@ export const FeaturedExhibitors: React.FC = () => {
                     />
                   </div>
 
-                  {/* Nom et secteur centrés */}
+                  {/* Nom et secteur centrÃ©s */}
                   <div className="text-center mb-4">
                     <h3 className="font-bold text-gray-900 text-xl mb-2 leading-tight px-2">
                       {exhibitor.companyName}
@@ -267,7 +267,7 @@ export const FeaturedExhibitors: React.FC = () => {
         >
           <Link to={ROUTES.EXHIBITORS}>
             <Button size="lg">
-              {t('home.discover_all_exhibitors', 'Découvrez tous les exposants')}
+              {t('home.discover_all_exhibitors', 'DÃ©couvrez tous les exposants')}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>

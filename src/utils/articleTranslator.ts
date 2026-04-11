@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traducteur automatique pour articles
  * Utilise MyMemory API gratuite avec gestion de cache et division des textes longs
  */
@@ -258,3 +258,4 @@ export function clearTranslationCache(): void {
     console.warn('[Translation] Cache clear error:', error);
   }
 }
+

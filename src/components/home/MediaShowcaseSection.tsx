@@ -36,7 +36,7 @@ const Lightbox: React.FC<LightboxProps> = ({ image, title, onClose }) => {
     >
       <button
         onClick={onClose}
-        className="absolute top-6 right-6 text-white hover:text-SIB-gold transition-colors"
+        className="absolute top-6 right-6 text-white hover:text-siports-gold transition-colors"
       >
         <X className="w-8 h-8" />
       </button>
@@ -88,15 +88,15 @@ export const MediaShowcaseSection: React.FC = () => {
     },
     {
       id: 3,
-      title: 'Terminal portuaire',
+      title: 'Terminal bâtiment',
       url: 'https://images.pexels.com/photos/906982/pexels-photo-906982.jpeg?w=800',
-      alt: 'Terminal portuaire'
+      alt: 'Terminal bâtiment'
     },
     {
       id: 4,
-      title: 'construction et BTP',
+      title: 'Logistique construction',
       url: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=800',
-      alt: 'construction et BTP'
+      alt: 'Logistique construction'
     },
     {
       id: 5,
@@ -118,9 +118,9 @@ export const MediaShowcaseSection: React.FC = () => {
     },
     {
       id: 8,
-      title: 'Maritime technology',
+      title: 'Bâtiment technology',
       url: 'https://images.unsplash.com/photo-1534313916812-f0b8a3d19e7a?w=800',
-      alt: 'Maritime technology'
+      alt: 'Bâtiment technology'
     }
   ];
 
@@ -128,7 +128,7 @@ export const MediaShowcaseSection: React.FC = () => {
 
   return (
     <>
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-SIB-primary to-blue-900 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-siports-primary to-blue-900 relative overflow-hidden">
         {/* Pattern lumineux */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
@@ -146,7 +146,7 @@ export const MediaShowcaseSection: React.FC = () => {
             className="text-center mb-16"
           >
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg mb-6">
-              <ImageIcon className="w-6 h-6 text-SIB-gold" />
+              <ImageIcon className="w-6 h-6 text-siports-gold" />
               <span className="text-sm font-bold text-white uppercase tracking-wider">
                 {t('media.gallery_badge')}
               </span>
@@ -191,7 +191,7 @@ export const MediaShowcaseSection: React.FC = () => {
                   />
                   
                   {/* Overlay au survol */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-SIB-primary via-SIB-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                  <div className="absolute inset-0 bg-gradient-to-t from-siports-primary via-siports-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                     <p className="text-white text-sm font-semibold truncate">
                       {item.title}
                     </p>
@@ -215,7 +215,7 @@ export const MediaShowcaseSection: React.FC = () => {
           >
             <Link
               to="/media-library"
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-SIB-gold to-amber-600 text-white px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-siports-gold to-amber-600 text-white px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
             >
               <span>{t('media.view_gallery')}</span>
               <ArrowRight className="w-5 h-5" />

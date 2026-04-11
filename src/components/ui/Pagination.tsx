@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 export interface PaginationProps {
@@ -229,3 +229,4 @@ export const usePagination = (totalItems: number, itemsPerPage: number = 20) => 
     hasPrevPage: currentPage > 1,
   };
 };
+

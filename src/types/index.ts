@@ -1,4 +1,4 @@
-export interface PartnerProject {
+﻿export interface PartnerProject {
   id: string;
   partner_id: string;
   title: string;

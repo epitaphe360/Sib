@@ -168,7 +168,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                 </h1>
                 <p className="text-blue-100/60 text-lg font-medium max-w-xl italic">
                   {userType === 'visitor' 
-                    ? '🎯 Gérez vos rencontres stratégiques avec les leaders de l\'industrie portuaire'
+                    ? '🎯 Gérez vos rencontres stratégiques avec les leaders de l\'industrie du bâtiment'
                     : '📩 Optimisez votre réseau et validez vos opportunités d\'affaires'}
                 </p>
               </div>
@@ -415,7 +415,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
             
             <p className="relative z-10 text-slate-500 text-lg font-medium max-w-xl mx-auto italic">
               {userType === 'visitor' 
-                ? '🔍 Votre agenda B2B est prêt. Explorez le catalogue des exposants pour initier des connexions transformatrices pour sib 2026.'
+                ? '🔍 Votre agenda B2B est prêt. Explorez le catalogue des exposants pour initier des connexions transformatrices pour SIB 2026.'
                 : '⏰ Patience. Votre visibilité est maximale. Les demandes de rendez-vous apparaîtront ici dès validation par les visiteurs.'}
             </p>
 

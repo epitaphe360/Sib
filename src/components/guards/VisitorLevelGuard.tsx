@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import useAuthStore from '../../store/authStore';
@@ -75,3 +75,4 @@ export function useIsVipVisitor(): boolean {
   const { user } = useAuthStore();
   return user?.type === 'visitor' && (user.visitor_level === 'premium' || user.visitor_level === 'vip');
 }
+

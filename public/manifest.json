@@ -1,7 +1,7 @@
 {
-  "name": "SIPORTS 2026",
-  "short_name": "SIPORTS",
-  "description": "Plateforme de gestion événementielle SIPORTS 2026",
+  "name": "SIB 2026",
+  "short_name": "SIB 2026",
+  "description": "Plateforme officielle du Salon International du Bâtiment SIB 2026",
   "theme_color": "#1e40af",
   "background_color": "#ffffff",
   "display": "standalone",
@@ -26,6 +26,20 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/home-mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ],
   "categories": ["business", "productivity", "events"],

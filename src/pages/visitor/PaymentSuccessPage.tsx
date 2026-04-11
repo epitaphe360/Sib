@@ -108,14 +108,6 @@ export default function PaymentSuccessPage() {
         console.warn('Payment records check failed:', paymentError);
       }
 
-      // If we got here and user status is still active (from simulation), consider it success
-      if (userData?.status === 'active') {
-        setIsUpgraded(true);
-        await refreshUserData();
-        toast.success(t('payment.success.welcomeVip'));
-        return;
-      }
-
       setError(t('payment.error.verificationFailed'));
     } catch (err: any) {
       console.error('Error verifying payment:', err);

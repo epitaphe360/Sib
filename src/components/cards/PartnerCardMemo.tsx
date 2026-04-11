@@ -1,4 +1,4 @@
-/**
+﻿/**
  * PartnerCard optimisé avec React.memo
  */
 
@@ -120,3 +120,4 @@ export const PartnerCard = React.memo(
 );
 
 PartnerCard.displayName = 'PartnerCard';
+

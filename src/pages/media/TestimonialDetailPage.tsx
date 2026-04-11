@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+Ôªøimport React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Share2, BookmarkPlus, Quote, ThumbsUp, Building2, User } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
@@ -53,7 +53,7 @@ export const TestimonialDetailPage: React.FC = () => {
       setTestimonial(data);
     } catch (error) {
       console.error('Error loading testimonial:', error);
-      toast.error('Erreur lors du chargement du tÈmoignage');
+      toast.error('Erreur lors du chargement du t√©moignage');
     } finally {
       setLoading(false);
     }
@@ -61,7 +61,7 @@ export const TestimonialDetailPage: React.FC = () => {
 
   const handleSave = () => {
     setIsSaved(!isSaved);
-    toast.success(isSaved ? 'RetirÈ des favoris' : 'AjoutÈ aux favoris');
+    toast.success(isSaved ? 'Retir√© des favoris' : 'Ajout√© aux favoris');
   };
 
   const handleHelpful = () => {
@@ -78,7 +78,7 @@ export const TestimonialDetailPage: React.FC = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      toast.success('Lien copiÈ dans le presse-papier');
+      toast.success('Lien copi√© dans le presse-papier');
     }
   };
 
@@ -101,7 +101,7 @@ export const TestimonialDetailPage: React.FC = () => {
               star <= rating ? 'text-yellow-400' : 'text-gray-300'
             }`}
           >
-            ?
+            ‚≠ê
           </span>
         ))}
       </div>
@@ -120,7 +120,7 @@ export const TestimonialDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">TÈmoignage introuvable</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">T√©moignage introuvable</h2>
           <Button onClick={() => navigate(-1)}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour
@@ -153,7 +153,7 @@ export const TestimonialDetailPage: React.FC = () => {
                   variant="default" 
                   className="absolute top-4 left-4 z-10 bg-green-600"
                 >
-                  ?? TÈmoignage VidÈo
+                  üí¨ T√©moignage Vid√©o
                 </Badge>
                 <VideoStreamPlayer
                   src={testimonial.content_url}
@@ -210,7 +210,7 @@ export const TestimonialDetailPage: React.FC = () => {
             <div>
               <div className="flex items-center space-x-2 mb-3">
                 <Quote className="h-5 w-5 text-green-600" />
-                <span className="text-sm font-medium text-gray-600 uppercase">TÈmoignage</span>
+                <span className="text-sm font-medium text-gray-600 uppercase">T√©moignage</span>
               </div>
               
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
@@ -237,7 +237,7 @@ export const TestimonialDetailPage: React.FC = () => {
                   onClick={handleSave}
                 >
                   <BookmarkPlus className="h-4 w-4 mr-2" />
-                  {isSaved ? 'EnregistrÈ' : 'Enregistrer'}
+                  {isSaved ? 'Enregistr√©' : 'Enregistrer'}
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleShare}>
                   <Share2 className="h-4 w-4 mr-2" />
@@ -249,7 +249,7 @@ export const TestimonialDetailPage: React.FC = () => {
               {testimonial.published_date && (
                 <div className="flex items-center text-sm text-gray-600">
                   <Calendar className="h-4 w-4 mr-1" />
-                  PubliÈ le {formatDate(testimonial.published_date)}
+                  Publi√© le {formatDate(testimonial.published_date)}
                 </div>
               )}
             </div>
@@ -257,7 +257,7 @@ export const TestimonialDetailPage: React.FC = () => {
             {/* Full Testimonial */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                TÈmoignage complet
+                T√©moignage complet
               </h2>
               <div className="prose prose-blue max-w-none">
                 <p className="text-gray-700 whitespace-pre-wrap">
@@ -269,7 +269,7 @@ export const TestimonialDetailPage: React.FC = () => {
             {/* About the Person */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                ¿ propos de {testimonial.speaker_name}
+                √Ä propos de {testimonial.speaker_name}
               </h2>
               <div className="flex items-start space-x-4">
                 {testimonial.speaker_avatar ? (
@@ -303,10 +303,10 @@ export const TestimonialDetailPage: React.FC = () => {
             {/* Related Testimonials */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Autres tÈmoignages
+                Autres t√©moignages
               </h2>
               <p className="text-gray-600 text-sm">
-                DÈcouvrez ce que disent les autres participants...
+                D√©couvrez ce que disent les autres participants...
               </p>
             </div>
           </div>
@@ -357,7 +357,7 @@ export const TestimonialDetailPage: React.FC = () => {
                 </div>
                 <div className="mb-3">{renderStars(testimonial.rating)}</div>
                 <p className="text-sm text-green-100">
-                  Note attribuÈe par le participant
+                  Note attribu√©e par le participant
                 </p>
               </div>
             )}
@@ -365,25 +365,25 @@ export const TestimonialDetailPage: React.FC = () => {
             {/* Testimonials Info */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                TÈmoignages SIB
+                T√©moignages SIB
               </h3>
               <p className="text-sm text-gray-600">
-                DÈcouvrez les retours d'expÈrience authentiques de nos participants et exposants.
+                D√©couvrez les retours d'exp√©rience authentiques de nos participants et exposants.
               </p>
             </div>
 
             {/* CTA */}
             <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg shadow-lg p-6 text-white">
-              <div className="text-4xl mb-3">??</div>
+              <div className="text-4xl mb-3">üé§</div>
               <h3 className="text-lg font-semibold mb-2">
-                Partagez votre expÈrience
+                Partagez votre exp√©rience
               </h3>
               <p className="text-sm text-blue-100 mb-4">
-                Vous aussi, racontez votre expÈrience SIB et inspirez la communautÈ
+                Vous aussi, racontez votre exp√©rience SIB et inspirez la communaut√©
               </p>
               <Button variant="secondary" className="w-full" asChild>
                 <Link to="/testimonials/submit">
-                  Laisser un tÈmoignage
+                  Laisser un t√©moignage
                 </Link>
               </Button>
             </div>
@@ -391,14 +391,14 @@ export const TestimonialDetailPage: React.FC = () => {
             {/* Browse More */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Plus de tÈmoignages
+                Plus de t√©moignages
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Explorez tous les tÈmoignages
+                Explorez tous les t√©moignages
               </p>
               <Button variant="outline" className="w-full" asChild>
                 <Link to="/media/testimonials">
-                  Voir tous les tÈmoignages
+                  Voir tous les t√©moignages
                 </Link>
               </Button>
             </div>

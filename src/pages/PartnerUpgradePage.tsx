@@ -1,4 +1,4 @@
-import { useState } from 'react';
+Ôªøimport { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../hooks/useTranslation';
@@ -58,11 +58,11 @@ export default function PartnerUpgradePage() {
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              DÈveloppez votre visibilitÈ
+              D√©veloppez votre visibilit√©
             </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Choisissez le niveau partenaire qui correspond ‡ vos ambitions et
-              maximisez votre prÈsence au sib 2026
+              Choisissez le niveau partenaire qui correspond √† vos ambitions et
+              maximisez votre pr√©sence au SIB 2026
             </p>
           </motion.div>
         </div>
@@ -124,14 +124,14 @@ export default function PartnerUpgradePage() {
                           Rendez-vous B2B
                         </span>
                         <span className="font-semibold">
-                          {tier.quotas.appointments === -1 ? '8' : tier.quotas.appointments}
+                          {tier.quotas.appointments === -1 ? '‚àû' : tier.quotas.appointments}
                         </span>
                       </div>
 
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center text-gray-600">
                           <Users className="h-4 w-4 mr-2" />
-                          Membres Èquipe
+                          Membres √©quipe
                         </span>
                         <span className="font-semibold">{tier.quotas.teamMembers}</span>
                       </div>
@@ -139,7 +139,7 @@ export default function PartnerUpgradePage() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center text-gray-600">
                           <FileText className="h-4 w-4 mr-2" />
-                          Fichiers mÈdia
+                          Fichiers m√©dia
                         </span>
                         <span className="font-semibold">{tier.quotas.mediaUploads}</span>
                       </div>
@@ -198,7 +198,7 @@ export default function PartnerUpgradePage() {
         {/* Detailed Features */}
         <div className="mt-16">
           <h2 className="text-3xl font-bold text-center mb-12">
-            FonctionnalitÈs dÈtaillÈes par niveau
+            Fonctionnalit√©s d√©taill√©es par niveau
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -216,12 +216,12 @@ export default function PartnerUpgradePage() {
                     <div>
                       <h4 className="font-semibold text-sm text-gray-900 mb-2 flex items-center">
                         <Check className="h-4 w-4 text-green-600 mr-2" />
-                        FonctionnalitÈs incluses
+                        Fonctionnalit√©s incluses
                       </h4>
                       <ul className="space-y-2">
                         {tier.features.map((feature) => (
                           <li key={feature} className="text-sm text-gray-600 flex items-start">
-                            <span className="text-green-600 mr-2">ï</span>
+                            <span className="text-green-600 mr-2">‚Ä¢</span>
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -236,7 +236,7 @@ export default function PartnerUpgradePage() {
                       <ul className="space-y-2">
                         {tier.exclusivePerks.map((perk) => (
                           <li key={perk} className="text-sm text-gray-600 flex items-start">
-                            <span className="text-yellow-600 mr-2">?</span>
+                            <span className="text-yellow-600 mr-2">‚òÖ</span>
                             <span>{perk}</span>
                           </li>
                         ))}
@@ -262,13 +262,13 @@ export default function PartnerUpgradePage() {
               Maximisez votre retour sur investissement
             </h2>
             <p className="text-lg text-blue-100 mb-6">
-              En moyenne, nos partenaires Gold et Platinum gÈnËrent 5x leur investissement
-              en nouveaux contrats et opportunitÈs business gr‚ce au sib 2026.
+              En moyenne, nos partenaires Gold et Platinum g√©n√®rent 5x leur investissement
+              en nouveaux contrats et opportunit√©s business gr√¢ce au SIB 2026.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
               <div>
                 <div className="text-4xl font-bold">500+</div>
-                <div className="text-blue-200 text-sm">Visiteurs qualifiÈs</div>
+                <div className="text-blue-200 text-sm">Visiteurs qualifi√©s</div>
               </div>
               <div>
                 <div className="text-4xl font-bold">150+</div>
@@ -293,19 +293,19 @@ export default function PartnerUpgradePage() {
               {
                 tier: 'Platinum',
                 company: 'TechCorp International',
-                quote: "Le niveau Platinum nous a permis d'obtenir une visibilitÈ exceptionnelle. 87 rendez-vous qualifiÈs en 3 jours!",
+                quote: "Le niveau Platinum nous a permis d'obtenir une visibilit√© exceptionnelle. 87 rendez-vous qualifi√©s en 3 jours!",
                 author: 'Jean Dupont, CEO'
               },
               {
                 tier: 'Gold',
                 company: 'Innovation Solutions',
-                quote: "Le ROI a ÈtÈ immÈdiat. Nous avons signÈ 3 contrats majeurs dËs la premiËre semaine aprËs le salon.",
+                quote: "Le ROI a √©t√© imm√©diat. Nous avons sign√© 3 contrats majeurs d√®s la premi√®re semaine apr√®s le salon.",
                 author: 'Marie Martin, Directrice'
               },
               {
                 tier: 'Silver',
                 company: 'StartUp Tech',
-                quote: "Niveau Silver parfait pour une premiËre participation. Les analytics nous ont beaucoup aidÈs.",
+                quote: "Niveau Silver parfait pour une premi√®re participation. Les analytics nous ont beaucoup aid√©s.",
                 author: 'Ahmed Benali, Fondateur'
               }
             ].map((testimonial) => (
@@ -319,7 +319,7 @@ export default function PartnerUpgradePage() {
                   </span>
                 </div>
                 <p className="text-gray-600 italic mb-4">"{testimonial.quote}"</p>
-                <p className="text-sm text-gray-500">? {testimonial.author}</p>
+                <p className="text-sm text-gray-500">‚óè {testimonial.author}</p>
               </Card>
             ))}
           </div>
@@ -328,26 +328,26 @@ export default function PartnerUpgradePage() {
         {/* FAQ Section */}
         <div className="mt-16">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Questions frÈquentes
+            Questions fr√©quentes
           </h2>
 
           <div className="max-w-3xl mx-auto space-y-4">
             {[
               {
-                q: "Puis-je changer de niveau pendant l'ÈvÈnement?",
-                a: "Oui, vous pouvez upgrader votre niveau ‡ tout moment. Le prix sera ajustÈ au prorata."
+                q: "Puis-je changer de niveau pendant l'√©v√©nement?",
+                a: "Oui, vous pouvez upgrader votre niveau √† tout moment. Le prix sera ajust√© au prorata."
               },
               {
-                q: "Les quotas sont-ils partagÈs entre les membres de l'Èquipe?",
-                a: "Oui, les quotas sont globaux pour votre organisation et partagÈs entre tous les membres."
+                q: "Les quotas sont-ils partag√©s entre les membres de l'√©quipe?",
+                a: "Oui, les quotas sont globaux pour votre organisation et partag√©s entre tous les membres."
               },
               {
                 q: "Que se passe-t-il si j'atteins mes quotas?",
                 a: "Vous recevrez une notification et pourrez soit upgrader votre niveau, soit attendre le renouvellement."
               },
               {
-                q: "Les analytics sont-elles en temps rÈel?",
-                a: "Pour Silver et Gold, les analytics sont mises ‡ jour toutes les heures. Platinum bÈnÈficie d'analytics en temps rÈel avec IA."
+                q: "Les analytics sont-elles en temps r√©el?",
+                a: "Pour Silver et Gold, les analytics sont mises √† jour toutes les heures. Platinum b√©n√©ficie d'analytics en temps r√©el avec IA."
               }
             ].map((faq) => (
               <Card key={faq.q} className="p-6">
@@ -366,10 +366,10 @@ export default function PartnerUpgradePage() {
           className="mt-16 text-center"
         >
           <h2 className="text-3xl font-bold mb-4">
-            PrÍt ‡ passer au niveau supÈrieur?
+            Pr√™t √† passer au niveau sup√©rieur?
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Rejoignez les leaders de l'industrie et maximisez votre prÈsence au sib 2026
+            Rejoignez les leaders de l'industrie et maximisez votre pr√©sence au SIB 2026
           </p>
           <Button
             variant="default"

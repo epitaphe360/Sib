@@ -1,52 +1,49 @@
-/**
- * Google Auth Service — via Supabase OAuth (Firebase supprimé)
- */
-import { createClient } from '@supabase/supabase-js';
+import { initializeApp } from 'firebase/app';
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  signOut as firebaseSignOut,
+  onAuthStateChanged,
+  User as FirebaseUser
+} from 'firebase/auth';
+import { User } from '../types';
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
+// Configuration Firebase (remplacez par vos vraies clés)
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || '',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || ''
+};
 
-export class GoogleAuthService {
-  /**
-   * Connexion avec Google via Supabase OAuth
-   */
-  static async signInWithGoogle(): Promise<void> {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-        queryParams: {
-          prompt: 'select_account',
-        },
-      },
-    });
+// Vérifier si Firebase est configuré
+const isFirebaseConfigured = firebaseConfig.apiKey && 
+                             firebaseConfig.authDomain && 
+                             firebaseConfig.projectId;
 
-    if (error) throw new Error(error.message);
-  }
+// Initialiser Firebase seulement si configuré
+let app: ReturnType<typeof initializeApp> | null = null;
+let auth: ReturnType<typeof getAuth> | null = null;
+let googleProvider: GoogleAuthProvider | null = null;
 
-  /**
-   * Déconnexion
-   */
-  static async signOut(): Promise<void> {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw new Error(error.message);
-  }
-
-  /**
-   * Écouter les changements d'état (compatibilité)
-   */
-  static onAuthStateChanged(callback: (user: unknown) => void) {
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-      callback(session?.user ?? null);
-    });
-    return () => data.subscription.unsubscribe();
-  }
+if (isFirebaseConfigured) {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  googleProvider = new GoogleAuthProvider();
+  
+  // Configuration du provider Google
+  googleProvider.addScope('email');
+  googleProvider.addScope('profile');
+  googleProvider.setCustomParameters({
+    prompt: 'select_account'
+  });
 }
 
-export default GoogleAuthService;
 
+export class GoogleAuthService {
   
   /**
    * Connexion avec Google
@@ -61,7 +58,7 @@ export default GoogleAuthService;
       const firebaseUser = result.user;
       
       // Récupérer les informations utilisateur depuis Google
-      const googleUser = await this.mapFirebaseUserToSIBUser(firebaseUser);
+      const googleUser = await this.mapFirebaseUserToSIBsUser(firebaseUser);
       
       // Vérifier si l'utilisateur existe déjà dans notre base
       const existingUser = await this.checkExistingUser(googleUser.email);
@@ -122,7 +119,7 @@ export default GoogleAuthService;
   /**
    * Mapper un utilisateur Firebase vers un utilisateur SIB
    */
-  private static async mapFirebaseUserToSIBUser(firebaseUser: FirebaseUser): Promise<User> {
+  private static async mapFirebaseUserToSIBsUser(firebaseUser: FirebaseUser): Promise<User> {
     const displayName = firebaseUser.displayName || '';
     const nameParts = displayName.split(' ');
     const firstName = nameParts[0] || '';
@@ -219,7 +216,7 @@ export default GoogleAuthService;
    * Créer un nouvel utilisateur depuis Google
    */
   private static async createUserFromGoogle(firebaseUser: FirebaseUser): Promise<User> {
-    const newUser = await this.mapFirebaseUserToSIBUser(firebaseUser);
+    const newUser = await this.mapFirebaseUserToSIBsUser(firebaseUser);
 
     // Simulation de création en base
     // En production, remplacez par un vrai appel API

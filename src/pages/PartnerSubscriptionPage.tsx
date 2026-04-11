@@ -49,7 +49,7 @@ const partnerTiers: PartnerTierData[] = [
       { name: 'Mini-site dédié', included: true },
       { name: 'Bannière rotative', included: true },
       { name: 'Présence newsletter', included: true },
-      { name: 'Vidéos "Inside sib"', included: true },
+      { name: 'Vidéos "Inside SIB"', included: true },
       { name: 'Interview Live Studio', included: true },
       { name: 'Inclusion podcast', included: false },
       { name: 'Priorité algorithmique', included: false },
@@ -81,7 +81,7 @@ const partnerTiers: PartnerTierData[] = [
       { name: 'Section "Top Innovations"', included: true },
       { name: 'Présence newsletters', included: true },
       { name: 'Capsules vidéo sponsorisées', included: true },
-      { name: 'Podcast sib Talks', included: true },
+      { name: 'Podcast SIB Talks', included: true },
       { name: 'Interview Live Studio', included: true },
       { name: 'Testimonial vidéo (1 min)', included: true },
     ],
@@ -89,7 +89,7 @@ const partnerTiers: PartnerTierData[] = [
       'Logo visible en 3ème ligne prioritaire',
       'Présence dans toutes les newsletters',
       'Mini-site avec actualités complètes',
-      'Capsules vidéo "Inside sib"',
+      'Capsules vidéo "Inside SIB"',
       'Interview audio dans le Podcast',
       'Interview Live Studio "Meet The Leaders"',
       'Vidéo testimonial diffusée',
@@ -113,7 +113,7 @@ const partnerTiers: PartnerTierData[] = [
       { name: 'Section "Top Innovations"', included: true },
       { name: 'Newsletter en 2ème ligne', included: true },
       { name: 'Capsules vidéo sponsorisées', included: true },
-      { name: 'Podcast sib Talks', included: true },
+      { name: 'Podcast SIB Talks', included: true },
       { name: 'Interview Live Studio', included: true },
       { name: 'Testimonial vidéo (2 min)', included: true },
       { name: 'Support prioritaire', included: true },
@@ -121,7 +121,7 @@ const partnerTiers: PartnerTierData[] = [
     benefits: [
       'Logo visible en 2ème ligne prioritaire',
       'Tous les canaux web & email',
-      'Mini-site "sib Premium Exposure"',
+      'Mini-site "SIB Premium Exposure"',
       'Capsules vidéo & brand awareness',
       'Interview audio Podcast',
       'Interview Live Studio prioritaire',
@@ -147,8 +147,8 @@ const partnerTiers: PartnerTierData[] = [
       { name: 'Section "Top Innovations"', included: true },
       { name: 'Newsletters en 1ère ligne', included: true },
       { name: 'Webinaires sponsorisés', included: true },
-      { name: 'Capsules vidéo "Inside sib"', included: true },
-      { name: 'Podcast sib Talks', included: true },
+      { name: 'Capsules vidéo "Inside SIB"', included: true },
+      { name: 'Podcast SIB Talks', included: true },
       { name: 'Interview Live Studio prioritaire', included: true },
       { name: 'Testimonial vidéo (3 min)', included: true },
       { name: 'Support VIP 24/7', included: true },
@@ -197,7 +197,7 @@ export default function PartnerSubscriptionPage() {
 
   // Pourquoi devenir partenaire - WordPress
   const whyPartner = [
-    'Positionner votre marque comme leader ou acteur engagé du secteur portuaire.',
+    'Positionner votre marque comme leader ou acteur engagé du secteur du bâtiment.',
     'Bénéficier d\'une visibilité premium : branding, conférences, ateliers, supports print & digitaux.',
     'Accéder à des services VIP, rencontres de haut niveau et conférences exclusives.',
     'Créer des activations ciblées (sponsoring de zone, d\'événement, contenu co-marqué).'
@@ -205,8 +205,8 @@ export default function PartnerSubscriptionPage() {
 
   // Avantages médias
   const mediaAdvantages = [
-    { icon: Video, title: 'Capsules vidéo "Inside sib"', description: 'Visibilité vidéo marquée à votre image' },
-    { icon: Mic, title: 'Podcast sib Talks', description: 'Interview audio dans notre podcast officiel' },
+    { icon: Video, title: 'Capsules vidéo "Inside SIB"', description: 'Visibilité vidéo marquée à votre image' },
+    { icon: Mic, title: 'Podcast SIB Talks', description: 'Interview audio dans notre podcast officiel' },
     { icon: Radio, title: 'Interview Live Studio', description: 'Passage dans "Meet The Leaders"' },
     { icon: Eye, title: 'Bannière Web rotative', description: 'Présence visuelle sur tout le site' },
     { icon: Mail, title: 'Newsletters & E-mailings', description: 'Présence dans toutes les communications' },
@@ -248,7 +248,7 @@ export default function PartnerSubscriptionPage() {
               </h1>
 
               <p className="text-lg md:text-xl text-indigo-100 mb-8 leading-relaxed">
-                Associez votre marque à un événement de référence du secteur portuaire mondial. 
+                Associez votre marque à un événement de référence du secteur du bâtiment mondial. 
                 Bénéficiez d'une visibilité premium, de services VIP et d'opportunités de networking 
                 exclusives auprès des décideurs internationaux.
               </p>
@@ -568,7 +568,7 @@ export default function PartnerSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Lieu</h3>
-                    <p className="text-gray-600">Parc d'Exposition Mohammed VI – Casablanca, Maroc</p>
+                    <p className="text-gray-600">Parc d'Exposition Mohammed VI – El Jadida, Maroc</p>
                   </div>
                 </div>
 
@@ -631,8 +631,8 @@ export default function PartnerSubscriptionPage() {
                   </div>
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
                     <Mail className="h-5 w-5 text-amber-600 flex-shrink-0" />
-                    <a href="mailto:contact@sib2026.ma" className="text-sm text-amber-600 hover:underline font-medium">
-                      contact@sib2026.ma
+                    <a href="mailto:contact@sibevent.com" className="text-sm text-amber-600 hover:underline font-medium">
+                      contact@sibevent.com
                     </a>
                   </div>
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
@@ -762,7 +762,7 @@ export default function PartnerSubscriptionPage() {
             <Card className="p-6 hover:shadow-md transition-shadow">
               <h3 className="font-semibold text-gray-900 mb-3">Comment contacter le support ?</h3>
               <p className="text-gray-600">
-                Contactez notre équipe via le formulaire du site ou par e-mail : contact@sib2026.ma
+                Contactez notre équipe via le formulaire du site ou par e-mail : contact@sibevent.com
               </p>
             </Card>
           </div>

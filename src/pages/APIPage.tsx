@@ -1,4 +1,4 @@
-import { Card } from '../components/ui/Card';
+ï»¿import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Code, Key, FileText, Zap } from 'lucide-react';
 import { toast } from 'sonner';
@@ -20,7 +20,7 @@ export default function APIPage() {
             API SIB
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Intégrez les données de SIB 2026 dans vos applications et systèmes d'information.
+            IntÃ©grez les donnÃ©es de SIB 2026 dans vos applications et systÃ¨mes d'information.
           </p>
         </div>
 
@@ -34,13 +34,13 @@ export default function APIPage() {
               API RESTful
             </h3>
             <p className="text-gray-600 mb-6">
-              Interface REST complète pour accéder aux données des exposants, visiteurs et événements.
+              Interface REST complÃ¨te pour accÃ©der aux donnÃ©es des exposants, visiteurs et Ã©vÃ©nements.
             </p>
             <ul className="text-left text-sm text-gray-600 space-y-1">
-              <li>• Endpoints documentés</li>
-              <li>• Format JSON standard</li>
-              <li>• Authentification JWT</li>
-              <li>• Rate limiting intelligent</li>
+              <li>â€¢ Endpoints documentÃ©s</li>
+              <li>â€¢ Format JSON standard</li>
+              <li>â€¢ Authentification JWT</li>
+              <li>â€¢ Rate limiting intelligent</li>
             </ul>
           </Card>
 
@@ -49,16 +49,16 @@ export default function APIPage() {
               <Zap className="h-8 w-8 text-green-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              Temps réel
+              Temps rÃ©el
             </h3>
             <p className="text-gray-600 mb-6">
-              WebSockets pour les mises à jour en temps réel des données et notifications.
+              WebSockets pour les mises Ã  jour en temps rÃ©el des donnÃ©es et notifications.
             </p>
             <ul className="text-left text-sm text-gray-600 space-y-1">
-              <li>• Notifications push</li>
-              <li>• Mises à jour live</li>
-              <li>• Événements temps réel</li>
-              <li>• Synchronisation automatique</li>
+              <li>â€¢ Notifications push</li>
+              <li>â€¢ Mises Ã  jour live</li>
+              <li>â€¢ Ã‰vÃ©nements temps rÃ©el</li>
+              <li>â€¢ Synchronisation automatique</li>
             </ul>
           </Card>
 
@@ -67,16 +67,16 @@ export default function APIPage() {
               <Key className="h-8 w-8 text-purple-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              Sécurité
+              SÃ©curitÃ©
             </h3>
             <p className="text-gray-600 mb-6">
-              Protocoles de sécurité avancés pour protéger vos données et intégrations.
+              Protocoles de sÃ©curitÃ© avancÃ©s pour protÃ©ger vos donnÃ©es et intÃ©grations.
             </p>
             <ul className="text-left text-sm text-gray-600 space-y-1">
-              <li>• Chiffrement SSL/TLS</li>
-              <li>• Authentification OAuth 2.0</li>
-              <li>• Gestion des permissions</li>
-              <li>• Audit logs complets</li>
+              <li>â€¢ Chiffrement SSL/TLS</li>
+              <li>â€¢ Authentification OAuth 2.0</li>
+              <li>â€¢ Gestion des permissions</li>
+              <li>â€¢ Audit logs complets</li>
             </ul>
           </Card>
         </div>
@@ -89,7 +89,7 @@ export default function APIPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Données des Exposants
+                DonnÃ©es des Exposants
               </h3>
               <div className="bg-gray-100 p-4 rounded-lg font-mono text-sm mb-4">
                 <div className="text-green-600">GET /api/exhibitors</div>
@@ -98,7 +98,7 @@ export default function APIPage() {
                 <div className="text-purple-600">PUT /api/exhibitors/{'{id}'}</div>
               </div>
               <p className="text-gray-600">
-                Accédez aux informations des exposants, leurs produits et services.
+                AccÃ©dez aux informations des exposants, leurs produits et services.
               </p>
             </div>
             <div>
@@ -112,7 +112,7 @@ export default function APIPage() {
                 <div className="text-red-600">DELETE /api/appointments/{'{id}'}</div>
               </div>
               <p className="text-gray-600">
-                Gérez les rendez-vous entre visiteurs et exposants.
+                GÃ©rez les rendez-vous entre visiteurs et exposants.
               </p>
             </div>
           </div>
@@ -121,18 +121,18 @@ export default function APIPage() {
         {/* Getting Started */}
         <Card className="p-8 mb-12">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-            Démarrage Rapide
+            DÃ©marrage Rapide
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                1. Obtenir une clé API
+                1. Obtenir une clÃ© API
               </h3>
               <p className="text-gray-600 mb-4">
-                Contactez notre équipe pour obtenir vos identifiants d'API.
+                Contactez notre Ã©quipe pour obtenir vos identifiants d'API.
               </p>
               <Button onClick={handleAPIRequest} className="mb-4">
-                Demander une clé API
+                Demander une clÃ© API
               </Button>
             </div>
             <div>
@@ -152,10 +152,10 @@ export default function APIPage() {
         <Card className="p-8 text-center">
           <FileText className="h-16 w-16 text-blue-600 mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Documentation Complète
+            Documentation ComplÃ¨te
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Consultez notre documentation détaillée pour intégrer pleinement l'API SIB.
+            Consultez notre documentation dÃ©taillÃ©e pour intÃ©grer pleinement l'API SIB.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button onClick={() => window.open(CONFIG.urls.api.docs, '_blank')} size="lg">
@@ -170,7 +170,7 @@ export default function APIPage() {
             </Button>
           </div>
           <p className="text-gray-500 mt-4">
-            Email: {getSupportEmail('api')} | Téléphone: {getSupportPhone('api')}
+            Email: {getSupportEmail('api')} | TÃ©lÃ©phone: {getSupportPhone('api')}
           </p>
         </Card>
       </div>

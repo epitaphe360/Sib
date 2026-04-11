@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+﻿import React, { memo } from 'react';
 import { Check, X, Edit } from 'lucide-react';
 import { Button } from '../../ui/Button';
 import { toast } from 'sonner';
@@ -92,3 +92,4 @@ export const EditableText: React.FC<EditableTextProps> = memo(({
 });
 
 EditableText.displayName = 'EditableText';
+

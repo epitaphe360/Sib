@@ -214,7 +214,7 @@ export default function MetricsPage() {
       color: 'bg-purple-500'
     },
     {
-      name: 'Industrie Portuaire',
+      name: 'Industrie du Bâtiment',
       exhibitors: loading ? 0 : Math.round(pavilionData.totalExhibitors * 0.30),
       visitors: loading ? 0 : Math.round(pavilionData.totalVisitors * 0.30),
       conferences: loading ? 0 : Math.round(pavilionData.totalConferences * 0.20),

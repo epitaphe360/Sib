@@ -1,4 +1,4 @@
-import { supabase } from '../../lib/supabase';
+﻿import { supabase } from '../../lib/supabase';
 import { Product, TechnicalSpec } from '../../types';
 import { StorageService } from '../storage/storageService';
 
@@ -432,3 +432,4 @@ export class ProductService {
     };
   }
 }
+

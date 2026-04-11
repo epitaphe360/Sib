@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import i18n from '../i18n/config';
 import { allTranslations } from './translations';
+import { migratePersistedStorage } from './persistMigration';
 
 export interface Language {
   code: string;
@@ -35,6 +36,11 @@ interface LanguageState {
   getAvailableLanguages: () => Language[];
   translateText: (key: string, fallback?: string) => string;
 }
+
+const LANGUAGE_STORAGE_KEY = 'siports-language-storage';
+const LEGACY_LANGUAGE_STORAGE_KEY = 'sibs-language-storage';
+
+migratePersistedStorage(LANGUAGE_STORAGE_KEY, LEGACY_LANGUAGE_STORAGE_KEY);
 
 // Utiliser le dictionnaire de traductions enrichi
 const translations = allTranslations;
@@ -130,7 +136,7 @@ export const useLanguageStore = create<LanguageState>()(
       }
     }),
     {
-      name: 'SIB-language-storage',
+      name: LANGUAGE_STORAGE_KEY,
       partialize: (state) => ({ currentLanguage: state.currentLanguage })
     }
   )

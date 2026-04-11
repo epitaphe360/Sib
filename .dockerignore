@@ -30,11 +30,6 @@ build/
 .next/
 out/
 
-# WordPress (déploiement séparé)
-wordpress-plugin/
-wordpress-integration/
-wordpress-pages/
-
 # Git
 .git/
 .github/

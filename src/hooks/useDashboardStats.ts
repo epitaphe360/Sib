@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import { useDashboardStore } from '../store/dashboardStore';
 
 interface DashboardStatsWithGrowth {
@@ -63,3 +63,4 @@ export const useDashboardStats = (): DashboardStatsWithGrowth | null => {
     };
   }, [dashboard]);
 };
+

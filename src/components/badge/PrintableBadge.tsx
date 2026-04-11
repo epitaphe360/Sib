@@ -23,9 +23,9 @@ export default function PrintableBadge({
   badge,
   format = 'badge',
   showLogo = true,
-  eventName = 'sib 2026',
+  eventName = 'SIB 2026',
   eventDates = '1 - 3 Avril 2026',
-  eventLocation = 'Casablanca, Maroc',
+  eventLocation = 'El Jadida, Maroc',
   onReady,
 }: PrintableBadgeProps) {
   const [qrCodeDataURL, setQrCodeDataURL] = useState<string>('');

@@ -43,11 +43,11 @@ export function generateICS(appointment: Appointment): string {
   }
   
   const now = new Date();
-  const uid = `${appointment.id}@sib2026.ma`;
+  const uid = `${appointment.id}@sibevent.com`;
   
   const exhibitorName = escapeICSText(appointment.exhibitorName || 'Exposant');
   const location = escapeICSText(
-    appointment.location || 'sib 2026, Casablanca, Maroc'
+    appointment.location || 'SIB 2026, El Jadida, Maroc'
   );
   const description = escapeICSText(
     `Rendez-vous avec ${appointment.exhibitorName}\\n\\n` +
@@ -59,10 +59,10 @@ export function generateICS(appointment: Appointment): string {
   const icsContent = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//sib 2026//Appointment//FR',
+    'PRODID:-//SIB 2026//Appointment//FR',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:sib 2026',
+    'X-WR-CALNAME:SIB 2026',
     'X-WR-TIMEZONE:Africa/Casablanca',
     'BEGIN:VEVENT',
     `UID:${uid}`,
@@ -124,7 +124,7 @@ export function getGoogleCalendarLink(appointment: Appointment): string {
       appointment.type === 'in-person' ? 'En présentiel' : 
       appointment.type === 'virtual' ? 'Virtuel' : 'Hybride'
     }${appointment.notes ? `\n\nNotes: ${appointment.notes}` : ''}`,
-    location: appointment.location || 'sib 2026, Casablanca, Maroc',
+    location: appointment.location || 'SIB 2026, El Jadida, Maroc',
   });
   
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
@@ -151,7 +151,7 @@ export function getOutlookCalendarLink(appointment: Appointment): string {
       appointment.type === 'in-person' ? 'En présentiel' : 
       appointment.type === 'virtual' ? 'Virtuel' : 'Hybride'
     }${appointment.notes ? `\n\nNotes: ${appointment.notes}` : ''}`,
-    location: appointment.location || 'sib 2026, Casablanca, Maroc',
+    location: appointment.location || 'SIB 2026, El Jadida, Maroc',
   });
   
   return `https://outlook.office.com/calendar/0/deeplink/compose?${params.toString()}`;

@@ -115,11 +115,11 @@ export const Header: React.FC = memo(() => {
     { name: t('media.library'), href: ROUTES.MEDIA_LIBRARY, description: t('media.library_desc'), icon: Play },
   ] : [];
   return (
-    <header className="fixed top-0 left-0 right-0 z-[200] transition-all duration-500 bg-white/95 sm:bg-white/80 backdrop-blur-md sm:backdrop-blur-2xl border-b border-slate-200/50 shadow-sm" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+    <header className="fixed top-0 left-0 right-0 z-[200] transition-all duration-500 bg-white/90 sm:bg-white/75 backdrop-blur-xl border-b border-slate-200/60 shadow-[0_8px_26px_-18px_rgba(15,35,64,0.5)]" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       {/* Pattern Zellige Subtil en fond */}
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #0f172a 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-center h-16 sm:h-20 xl:h-28">
           
           {/* Logo Premium */}
@@ -128,8 +128,8 @@ export const Header: React.FC = memo(() => {
               <div className="absolute -inset-2 bg-blue-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative h-12 sm:h-16 xl:h-20 w-auto flex items-center rounded-lg px-1 sm:px-3 py-1">
                 <img
-                  src="/logo-fond-bleu.jpg"
-                  alt="SIB - Salon International du B�timent"
+                  src="/logo-sib2026.png"
+                  alt="SIB - Salon International des Ports"
                   className="h-10 sm:h-14 xl:h-16 w-auto object-contain"
                 />
               </div>
@@ -142,7 +142,7 @@ export const Header: React.FC = memo(() => {
               <Link
                 key={item.name}
                 to={item.href}
-                className="relative px-1.5 py-2 text-[10.5px] font-bold uppercase tracking-[0.06em] text-slate-500 hover:text-slate-900 transition-all group whitespace-nowrap"
+                className="relative px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all group whitespace-nowrap"
               >
                 {item.name}
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -155,7 +155,7 @@ export const Header: React.FC = memo(() => {
             {/* Event Dropdown Premium */}
             <div className="relative" onMouseEnter={() => setIsEventMenuOpen(true)} onMouseLeave={() => setIsEventMenuOpen(false)}>
               <button
-                className="px-1.5 py-2 text-[10.5px] font-bold uppercase tracking-[0.06em] text-slate-500 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+                className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
               >
                 <span>{t('nav.event')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -185,7 +185,7 @@ export const Header: React.FC = memo(() => {
             {/* Participate Dropdown Premium */}
             <div className="relative" onMouseEnter={() => setIsParticipateMenuOpen(true)} onMouseLeave={() => setIsParticipateMenuOpen(false)}>
               <button
-                className="px-1.5 py-2 text-[10.5px] font-bold uppercase tracking-[0.06em] text-slate-500 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+                className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
               >
                 <span>{t('nav.participate')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -214,7 +214,7 @@ export const Header: React.FC = memo(() => {
             {mediaVisible && (
             <div className="relative" onMouseEnter={() => setIsMediaMenuOpen(true)} onMouseLeave={() => setIsMediaMenuOpen(false)}>
               <button
-                className="px-1.5 py-2 text-[10.5px] font-bold uppercase tracking-[0.06em] text-slate-500 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+                className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
               >
                 <Video className="w-3.5 h-3.5 text-blue-500" />
                 <span>{t('media.menu_title')}</span>
@@ -250,7 +250,7 @@ export const Header: React.FC = memo(() => {
             {/* Contact Link */}
             <Link
               to="/contact"
-              className="px-1.5 py-2 text-[10.5px] font-bold uppercase tracking-[0.06em] text-slate-500 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+              className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
             >
               <span>{t('nav.contact')}</span>
               <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -394,6 +394,13 @@ export const Header: React.FC = memo(() => {
                             {t('nav.b2b_networking')}
                           </Link>
                           <Link
+                            to={ROUTES.ADVANCED_MATCHING}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-1"
+                            onClick={closeProfile}
+                          >
+                            🤖 Matching IA Avancé
+                          </Link>
+                          <Link
                             to={ROUTES.MINISITE_EDITOR}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             onClick={closeProfile}
@@ -496,6 +503,15 @@ export const Header: React.FC = memo(() => {
                           >
                             {t('nav.my_appointments')}
                           </Link>
+                          {!isFreeVisitor && (
+                            <Link
+                              to={ROUTES.ADVANCED_MATCHING}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              onClick={closeProfile}
+                            >
+                              🤖 Matching IA Avancé
+                            </Link>
+                          )}
                           <Link
                             to="/badge/digital"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -528,12 +544,12 @@ export const Header: React.FC = memo(() => {
             ) : (
               <div className="flex items-center space-x-3">
                 <Link to={ROUTES.LOGIN}>
-                  <Button variant="outline" size="sm" className="border-SIB-primary text-SIB-primary hover:bg-SIB-primary hover:text-white">
+                  <Button variant="outline" size="sm" className="border-siports-primary text-siports-primary hover:bg-siports-primary hover:text-white">
                     {t('nav.login')}
                   </Button>
                 </Link>
                 <Link to={ROUTES.VISITOR_SUBSCRIPTION}>
-                  <Button size="sm" className="bg-SIB-primary hover:bg-SIB-dark text-white">
+                  <Button size="sm" className="bg-siports-primary hover:bg-siports-dark text-white">
                     {t('nav.register')}
                   </Button>
                 </Link>

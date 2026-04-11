@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Utilitaires pour améliorer la robustesse des appels API
  * - Timeout
  * - Retry logic avec exponential backoff
@@ -208,3 +208,4 @@ export default {
   robustAPICall,
   globalRateLimiter
 };
+

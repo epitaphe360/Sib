@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Données de démonstration pour les créneaux horaires du salon SIB 2026
  * Ces créneaux sont pré-configurés pour les 3 jours du salon (1-3 avril 2026)
  */
@@ -88,7 +88,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
     maxBookings: 15,
     currentBookings: 5,
     available: true,
-    location: 'Webinaire - Innovations Portuaires'
+    location: 'Webinaire - Innovations BTPs'
   },
   {
     exhibitorId: 'demo-partner-1',
@@ -294,3 +294,5 @@ export const getDemoSlotsStats = () => {
     occupancyRate: Math.round((currentBookings / totalCapacity) * 100)
   };
 };
+
+

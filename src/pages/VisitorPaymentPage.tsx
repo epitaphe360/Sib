@@ -129,37 +129,6 @@ export default function VisitorPaymentPage() {
     }
   }
 
-  const handleStripePayment = async () => {
-    if (!user) return;
-
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      // Create payment record
-      const paymentRecord = await createPaymentRecord({
-        userId: user.id,
-        amount: PAYMENT_AMOUNTS.VIP_PASS,
-        currency: 'EUR',
-        paymentMethod: 'stripe',
-        status: 'pending',
-      });
-
-      // Create Stripe checkout session
-      const session = await createStripeCheckoutSession(user.id, user.email);
-
-      // Redirect to Stripe
-      await redirectToStripeCheckout(session.id);
-    } catch (err: unknown) {
-      const errorInfo = err as Record<string, unknown>;
-      console.error('Stripe payment error:', err);
-      setError((errorInfo.message as string) || t('payment.stripeError'));
-      toast.error(t('payment.stripeErrorToast'));
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
   const handlePayPalApprove = async (data: Record<string, unknown>) => {
     if (!user) return;
 
@@ -339,15 +308,16 @@ export default function VisitorPaymentPage() {
     if (!user) return;
     setIsProcessing(true);
     try {
+      const transactionId = crypto.randomUUID();
       // Create payment record (may fail if table doesn't exist - non-blocking)
       try {
         await createPaymentRecord({
           userId: user.id,
           amount: PAYMENT_AMOUNTS.VIP_PASS,
           currency: 'EUR',
-          paymentMethod: 'stripe',
+          paymentMethod: 'bank_transfer',
           status: 'approved',
-          transactionId: `sim_${Date.now()}`
+          transactionId
         });
       } catch (paymentError) {
         console.warn('Payment record creation skipped:', paymentError);
@@ -377,7 +347,7 @@ export default function VisitorPaymentPage() {
           user.name,
           PAYMENT_AMOUNTS.VIP_PASS,
           'EUR',
-          `sim_${Date.now()}`
+          transactionId
         );
       } catch (emailErr) {
         console.warn('Failed to send receipt email', emailErr);

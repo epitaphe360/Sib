@@ -1,4 +1,4 @@
-
+﻿
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -23,7 +23,7 @@ export default function SignUpSuccessPage() {
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          // Redirection automatique apr�s 10 secondes pour visiteurs
+          // Redirection automatique après 10 secondes pour visiteurs
           if (accountType === 'visitor') {
             navigate(ROUTES.VISITOR_DASHBOARD, {
               state: { message: t('signupSuccess.welcomeMessage') }
@@ -209,7 +209,7 @@ export default function SignUpSuccessPage() {
               transition={{ delay: 0.8 }}
               className="text-center text-sm text-gray-500 mt-6 pt-6 border-t border-gray-200"
             >
-              {t('signupSuccess.questions')} <a href="mailto:support@SIB.fr" className="text-green-600 hover:text-green-700 font-semibold">{t('signupSuccess.contactSupport')}</a>
+              {t('signupSuccess.questions')} <a href="mailto:support@sibs.fr" className="text-green-600 hover:text-green-700 font-semibold">{t('signupSuccess.contactSupport')}</a>
             </motion.p>
           </div>
         </Card>

@@ -1,9 +1,12 @@
-/**
+﻿/**
  * Service Export Complet
  * Supporte CSV, Excel, PDF
  * Génération professionnelle de rapports
  */
 
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { logger } from '../lib/logger';
 import { Exhibitor, Partner, User, Appointment } from '../types';
 
@@ -72,11 +75,27 @@ class ExportService {
     try {
       logger.debug('Exporting to Excel', { count: data.length });
 
-      // For now, use CSV format with Excel MIME type
-      // TODO: Add 'xlsx' package for true Excel files
-      const csv = await this.exportToCsv(data, options);
-      const blob = new Blob([await csv.text()], {
-        type: 'application/vnd.ms-excel',
+      const headers = options.headers || Object.keys(data[0] || {});
+      const fields = options.fields || Object.keys(data[0] || {});
+
+      // Build worksheet rows
+      const wsData: (string | number | null)[][] = [headers];
+      data.forEach((item) => {
+        const row = fields.map((field) => {
+          const value = this.getNestedValue(item, field);
+          if (value === null || value === undefined) return null;
+          if (typeof value === 'number') return value;
+          return String(value);
+        });
+        wsData.push(row);
+      });
+
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, options.title || 'Export');
+      const buf = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
+      const blob = new Blob([buf], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
 
       logger.info('Excel export successful', { rows: data.length });
@@ -88,7 +107,7 @@ class ExportService {
   }
 
   /**
-   * Export to PDF
+   * Export to PDF (jsPDF + autoTable)
    */
   async exportToPdf<T extends Record<string, any>>(
     data: T[],
@@ -97,12 +116,36 @@ class ExportService {
     try {
       logger.debug('Exporting to PDF', { count: data.length });
 
-      // Create HTML table
-      const html = this.generateHtmlTable(data, options);
+      const headers = options.headers || Object.keys(data[0] || {});
+      const fields = options.fields || Object.keys(data[0] || {});
+      const title = options.title || 'Export';
 
-      // Convert to PDF using browser print
-      // TODO: Add 'jspdf' for true PDF generation
-      const blob = new Blob([html], { type: 'text/html' });
+      const doc = new jsPDF({ orientation: 'landscape' });
+
+      // Title
+      doc.setFontSize(16);
+      doc.text(title, 14, 15);
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`Généré le ${new Date().toLocaleString('fr-FR')}`, 14, 22);
+
+      const body = data.map((item) =>
+        fields.map((field) => {
+          const value = this.getNestedValue(item, field);
+          return value !== null && value !== undefined ? String(value) : '';
+        })
+      );
+
+      autoTable(doc, {
+        head: [headers],
+        body,
+        startY: 28,
+        styles: { fontSize: 8, cellPadding: 3 },
+        headStyles: { fillColor: [37, 99, 235], textColor: 255, fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [245, 247, 250] },
+      });
+
+      const blob = new Blob([doc.output('arraybuffer')], { type: 'application/pdf' });
 
       logger.info('PDF export successful', { rows: data.length });
       return blob;
@@ -389,3 +432,4 @@ class ExportService {
 
 export const exportService = new ExportService();
 export default exportService;
+

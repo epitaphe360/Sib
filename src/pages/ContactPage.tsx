@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -51,7 +51,7 @@ export default function ContactPage() {
     setIsLoading(true);
 
     try {
-      // Sauvegarde en base de donn�es
+      // Sauvegarde en base de données
       const result = await SupabaseService.createContactMessage({
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
@@ -73,8 +73,8 @@ export default function ContactPage() {
           message: formData.message.trim()
         });
       } catch (emailError) {
-        console.warn('⚠️ Email non envoy� (Edge Function manquante):', emailError);
-        // Ne pas bloquer l'utilisateur si l'email �choue
+        console.warn('âš ï¸ Email non envoyé (Edge Function manquante):', emailError);
+        // Ne pas bloquer l'utilisateur si l'email échoue
       }
 
       // Navigation vers page de confirmation
@@ -87,7 +87,7 @@ export default function ContactPage() {
       });
 
     } catch (error) {
-      console.error('❌ Erreur lors de l\'envoi du message:', error);
+      console.error('âŒ Erreur lors de l\'envoi du message:', error);
       toast.error(t('contact.error'));
     } finally {
       setIsLoading(false);
@@ -258,8 +258,8 @@ export default function ContactPage() {
                     <h3 className="font-semibold text-gray-900">{t('contact.address')}</h3>
                     <p className="text-gray-600">
                       LINECO EVENTS<br />
-                      19, rue Badr Assayab � 1er �tage n�2<br />
-                      Casablanca � Maroc
+                      19, rue Badr Assayab – 1er étage n°2<br />
+                      Casablanca – Maroc
                     </p>
                   </div>
                 </div>
@@ -271,10 +271,10 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900">Email</h3>
                     <a
-                      href="mailto:contact@sib2026.ma"
+                      href="mailto:contact@sibevent.com"
                       className="text-blue-600 hover:text-blue-800"
                     >
-                      contact@sib2026.ma
+                      contact@sibevent.com
                     </a>
                   </div>
                 </div>
@@ -325,7 +325,7 @@ export default function ContactPage() {
               </p>
               <div className="flex space-x-4">
                 <a
-                  href="https://facebook.com/SIB2026"
+                  href="https://facebook.com/sibs2026"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors"
@@ -333,7 +333,7 @@ export default function ContactPage() {
                   Facebook
                 </a>
                 <a
-                  href="https://linkedin.com/company/SIB2026"
+                  href="https://linkedin.com/company/sibs2026"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-blue-700 text-white p-3 rounded-lg hover:bg-blue-800 transition-colors"
@@ -341,7 +341,7 @@ export default function ContactPage() {
                   LinkedIn
                 </a>
                 <a
-                  href="https://twitter.com/SIB2026"
+                  href="https://twitter.com/sibs2026"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-blue-400 text-white p-3 rounded-lg hover:bg-blue-500 transition-colors"

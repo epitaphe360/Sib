@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+ï»¿import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { 
@@ -84,10 +84,10 @@ export default function NewsArticleCreationForm() {
   const [newTag, setNewTag] = useState('');
 
   const categories = [
-    'Événement',
+    'Ã‰vÃ©nement',
     'Innovation',
     'Partenariat',
-    'Durabilité',
+    'DurabilitÃ©',
     'Formation',
     'Commerce',
     'Technologie',
@@ -99,7 +99,7 @@ export default function NewsArticleCreationForm() {
     
     try {
       if (!user) {
-        throw new Error('Utilisateur non connecté');
+        throw new Error('Utilisateur non connectÃ©');
       }
 
       if (!formData.title || !formData.excerpt || !formData.content || !formData.category) {
@@ -125,18 +125,18 @@ export default function NewsArticleCreationForm() {
 
       if (isEditMode && editId) {
         await updateNewsArticle(editId, articleData);
-        toast.success(`?? Article mis à jour : ${formData.title}`);
+        toast.success(`?? Article mis Ã  jour : ${formData.title}`);
       } else {
         await createNewsArticle(articleData as any);
-        toast.success(`?? Article publié : ${formData.title}`);
+        toast.success(`?? Article publiÃ© : ${formData.title}`);
       }
       
-      // Rediriger vers la page des actualités
+      // Rediriger vers la page des actualitÃ©s
       navigate(ROUTES.ADMIN_NEWS); // Changed from ROUTES.NEWS to ADMIN_NEWS to go back to admin list
       
     } catch (error) {
       setIsSubmitting(false);
-      const action = isEditMode ? 'modification' : 'création';
+      const action = isEditMode ? 'modification' : 'crÃ©ation';
       toast.error(error instanceof Error ? `Erreur ${action} article: ${error.message}` : `Erreur inconnue lors de la ${action} de l'article`);
     }
   };
@@ -192,10 +192,10 @@ export default function NewsArticleCreationForm() {
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {isEditMode ? 'Modifier l\'Article' : 'Créer un Nouvel Article'}
+              {isEditMode ? 'Modifier l\'Article' : 'CrÃ©er un Nouvel Article'}
             </h1>
             <p className="text-gray-600">
-              {isEditMode ? 'Mettre à jour les informations de l\'article' : 'Publier une nouvelle actualité portuaire'}
+              {isEditMode ? 'Mettre Ã  jour les informations de l\'article' : 'Publier une nouvelle actualitÃ© bÃ¢timent'}
             </p>
           </motion.div>
         </div>
@@ -222,14 +222,14 @@ export default function NewsArticleCreationForm() {
                 {/* Extrait */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Extrait/Résumé *
+                    Extrait/RÃ©sumÃ© *
                   </label>
                   <textarea
                     value={formData.excerpt}
                     onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                     rows={3}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Résumé de l'article qui apparaîtra dans la liste..."
+                    placeholder="RÃ©sumÃ© de l'article qui apparaÃ®tra dans la liste..."
                   />
                 </div>
 
@@ -243,10 +243,10 @@ export default function NewsArticleCreationForm() {
                     onChange={(e) => handleContentChange(e.target.value)}
                     rows={12}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Rédigez le contenu complet de votre article..."
+                    placeholder="RÃ©digez le contenu complet de votre article..."
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Temps de lecture estimé: {formData.readTime} minute{formData.readTime > 1 ? 's' : ''}
+                    Temps de lecture estimÃ©: {formData.readTime} minute{formData.readTime > 1 ? 's' : ''}
                   </p>
                 </div>
 
@@ -266,7 +266,7 @@ export default function NewsArticleCreationForm() {
                     <div className="mt-2">
                       <img
                         src={formData.image}
-                        alt="Aperçu"
+                        alt="AperÃ§u"
                         className="w-32 h-20 object-cover rounded-lg"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
@@ -295,9 +295,9 @@ export default function NewsArticleCreationForm() {
 
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Métadonnées */}
+            {/* MÃ©tadonnÃ©es */}
             <Card className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Métadonnées</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">MÃ©tadonnÃ©es</h3>
               
               <div className="space-y-4">
                 <div>
@@ -314,14 +314,14 @@ export default function NewsArticleCreationForm() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Catégorie *
+                    CatÃ©gorie *
                   </label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Sélectionnez une catégorie</option>
+                    <option value="">SÃ©lectionnez une catÃ©gorie</option>
                     {categories.map((category) => (
                       <option key={category} value={category}>{category}</option>
                     ))}
@@ -336,7 +336,7 @@ export default function NewsArticleCreationForm() {
                       onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     />
-                    <span className="text-sm text-gray-700">Article à la une</span>
+                    <span className="text-sm text-gray-700">Article Ã  la une</span>
                   </label>
                 </div>
               </div>
@@ -344,7 +344,7 @@ export default function NewsArticleCreationForm() {
 
             {/* Tags */}
             <Card className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Mots-clés</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Mots-clÃ©s</h3>
               
               <div className="space-y-3">
                 <div className="flex space-x-2">
@@ -368,7 +368,7 @@ export default function NewsArticleCreationForm() {
                       onClick={() => removeTag(tag)}
                       className="inline-flex items-center font-medium rounded-full px-2.5 py-1 text-sm bg-SIB-primary/10 text-SIB-primary border border-SIB-primary/20 cursor-pointer hover:bg-SIB-primary/20"
                     >
-                      {tag} ×
+                      {tag} Ã—
                     </button>
                   ))}
                 </div>
@@ -386,7 +386,7 @@ export default function NewsArticleCreationForm() {
                   onClick={() => setShowPreview(!showPreview)}
                 >
                   <Eye className="h-4 w-4 mr-2" />
-                  {showPreview ? 'Masquer' : 'Prévisualiser'}
+                  {showPreview ? 'Masquer' : 'PrÃ©visualiser'}
                 </Button>
                 
                 <Button 
@@ -422,7 +422,7 @@ export default function NewsArticleCreationForm() {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-bold text-gray-900">
-                    Aperçu de l'Article
+                    AperÃ§u de l'Article
                   </h3>
                   <Button variant="outline" size="sm" onClick={() => setShowPreview(false)}>
                     Fermer
@@ -462,7 +462,7 @@ export default function NewsArticleCreationForm() {
                   
                   {formData.tags.length > 0 && (
                     <div className="mt-6 pt-4 border-t border-gray-200">
-                      <h4 className="font-medium text-gray-900 mb-2">Mots-clés :</h4>
+                      <h4 className="font-medium text-gray-900 mb-2">Mots-clÃ©s :</h4>
                       <div className="flex flex-wrap gap-2">
                         {formData.tags.map((tag) => (
                           <Badge key={tag} variant="info" size="sm">

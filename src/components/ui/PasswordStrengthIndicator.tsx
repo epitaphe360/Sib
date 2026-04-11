@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Check, X } from 'lucide-react';
 
 interface PasswordStrengthIndicatorProps {
@@ -74,3 +74,4 @@ export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>
     </div>
   );
 };
+

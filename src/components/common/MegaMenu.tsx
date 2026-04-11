@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+﻿import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -168,3 +168,4 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
     </nav>
   );
 };
+

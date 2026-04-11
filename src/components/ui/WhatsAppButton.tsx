@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { MessageCircle } from 'lucide-react';
 import { Button } from './Button';
 import { openWhatsApp, SUPPORT_CONFIG } from '../../config/supportConfig';
@@ -80,3 +80,4 @@ export function WhatsAppButton({
     </Button>
   );
 }
+

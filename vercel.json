@@ -14,7 +14,6 @@
       "VITE_SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo",
       "VITE_SHOW_DEMO_LOGINS": "true",
       "VITE_EXHIBITORS_SERVER_URL": "http://localhost:4002",
-      "VITE_STRIPE_PUBLISHABLE_KEY": "pk_test_your_stripe_publishable_key_here",
       "VITE_FIREBASE_API_KEY": "your_firebase_api_key_here",
       "VITE_FIREBASE_PROJECT_ID": "your_project_id",
       "VITE_FIREBASE_STORAGE_BUCKET": "your-project-id.appspot.com",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,17 +30,17 @@ import { Exhibitor, ExhibitorCategory } from '../../types';
 // Zod validation schema
 const exhibitorEditSchema = z.object({
   companyName: z.string()
-    .min(2, 'Le nom de l\'entreprise doit contenir au moins 2 caractères')
-    .max(200, 'Le nom ne doit pas dépasser 200 caractères'),
+    .min(2, 'Le nom de l\'entreprise doit contenir au moins 2 caractÃ¨res')
+    .max(200, 'Le nom ne doit pas dÃ©passer 200 caractÃ¨res'),
   description: z.string()
-    .min(10, 'La description doit contenir au moins 10 caractères')
-    .max(2000, 'La description ne doit pas dépasser 2000 caractères'),
+    .min(10, 'La description doit contenir au moins 10 caractÃ¨res')
+    .max(2000, 'La description ne doit pas dÃ©passer 2000 caractÃ¨res'),
   category: z.enum(['port-industry', 'port-operations', 'institutional', 'academic'] as const, {
-    required_error: 'La catégorie est requise'
+    required_error: 'La catÃ©gorie est requise'
   }),
   sector: z.string()
-    .min(1, 'Le secteur d\'activité est requis')
-    .max(100, 'Le secteur ne doit pas dépasser 100 caractères'),
+    .min(1, 'Le secteur d\'activitÃ© est requis')
+    .max(100, 'Le secteur ne doit pas dÃ©passer 100 caractÃ¨res'),
   website: z.string()
     .url('URL invalide')
     .optional()
@@ -51,52 +51,52 @@ const exhibitorEditSchema = z.object({
       .optional()
       .or(z.literal('')),
     phone: z.string()
-      .regex(/^\+?[1-9]\d{1,14}$/, 'Numéro de téléphone invalide (format international)')
+      .regex(/^\+?[1-9]\d{1,14}$/, 'NumÃ©ro de tÃ©lÃ©phone invalide (format international)')
       .optional()
       .or(z.literal('')),
     address: z.string()
-      .max(200, 'L\'adresse ne doit pas dépasser 200 caractères')
+      .max(200, 'L\'adresse ne doit pas dÃ©passer 200 caractÃ¨res')
       .optional()
       .or(z.literal('')),
     city: z.string()
-      .max(100, 'La ville ne doit pas dépasser 100 caractères')
+      .max(100, 'La ville ne doit pas dÃ©passer 100 caractÃ¨res')
       .optional()
       .or(z.literal('')),
     country: z.string()
-      .max(100, 'Le pays ne doit pas dépasser 100 caractères')
+      .max(100, 'Le pays ne doit pas dÃ©passer 100 caractÃ¨res')
       .optional()
       .or(z.literal('')),
     zipCode: z.string()
-      .max(20, 'Le code postal ne doit pas dépasser 20 caractères')
+      .max(20, 'Le code postal ne doit pas dÃ©passer 20 caractÃ¨res')
       .optional()
       .or(z.literal('')),
     contactPerson: z.string()
-      .max(100, 'Le nom de la personne ne doit pas dépasser 100 caractères')
+      .max(100, 'Le nom de la personne ne doit pas dÃ©passer 100 caractÃ¨res')
       .optional()
       .or(z.literal(''))
   }),
   establishedYear: z.string()
-    .regex(/^\d{4}$/, 'Année invalide (format: YYYY)')
+    .regex(/^\d{4}$/, 'AnnÃ©e invalide (format: YYYY)')
     .refine((year) => {
       const yearNum = parseInt(year, 10);
       return yearNum >= 1800 && yearNum <= new Date().getFullYear();
-    }, 'L\'année doit être entre 1800 et aujourd\'hui')
+    }, 'L\'annÃ©e doit Ãªtre entre 1800 et aujourd\'hui')
     .optional()
     .or(z.literal('')),
   employeeCount: z.string()
-    .regex(/^\d+$/, 'Doit être un nombre entier')
+    .regex(/^\d+$/, 'Doit Ãªtre un nombre entier')
     .optional()
     .or(z.literal('')),
   revenue: z.string()
-    .regex(/^\d+(\.\d+)?$/, 'Doit être un nombre valide')
+    .regex(/^\d+(\.\d+)?$/, 'Doit Ãªtre un nombre valide')
     .optional()
     .or(z.literal('')),
   certifications: z.string()
-    .max(500, 'Les certifications ne doivent pas dépasser 500 caractères')
+    .max(500, 'Les certifications ne doivent pas dÃ©passer 500 caractÃ¨res')
     .optional()
     .or(z.literal('')),
   markets: z.string()
-    .max(500, 'Les marchés ne doivent pas dépasser 500 caractères')
+    .max(500, 'Les marchÃ©s ne doivent pas dÃ©passer 500 caractÃ¨res')
     .optional()
     .or(z.literal(''))
 });
@@ -146,7 +146,7 @@ export default function ExhibitorEditForm() {
   // Watch form values for preview
   const formValues = watch();
 
-  // Charger les données de l'exposant
+  // Charger les donnÃ©es de l'exposant
   useEffect(() => {
     if (exhibitors.length === 0) {
       fetchExhibitors();
@@ -159,7 +159,7 @@ export default function ExhibitorEditForm() {
     }
   }, [id, selectExhibitor, exhibitors]);
 
-  // Remplir le formulaire avec les données de l'exposant sélectionné
+  // Remplir le formulaire avec les donnÃ©es de l'exposant sÃ©lectionnÃ©
   useEffect(() => {
     if (selectedExhibitor) {
       reset({
@@ -196,14 +196,14 @@ export default function ExhibitorEditForm() {
 
     try {
       if (!id) {
-        throw new Error('ID de l\'exposant non défini');
+        throw new Error('ID de l\'exposant non dÃ©fini');
       }
 
-      // Télécharger l'image du logo depuis l'ancienne URL si c'est une URL locale
+      // TÃ©lÃ©charger l'image du logo depuis l'ancienne URL si c'est une URL locale
       let logoUrl = logo;
       if (logoUrl && logoUrl.startsWith('/')) {
         try {
-          // Note: Le bucket exhibitor-logos est créé via les migrations SQL
+          // Note: Le bucket exhibitor-logos est crÃ©Ã© via les migrations SQL
 
           // Convertir l'URL locale en URL Supabase
           logoUrl = await StorageService.uploadImageFromUrl(
@@ -212,7 +212,7 @@ export default function ExhibitorEditForm() {
             'logos'
           );
         } catch (error) {
-          console.error('Erreur lors du téléchargement du logo:', error);
+          console.error('Erreur lors du tÃ©lÃ©chargement du logo:', error);
           // Continuer avec l'ancienne URL en cas d'erreur
         }
       }
@@ -225,7 +225,7 @@ export default function ExhibitorEditForm() {
         ? data.markets.split(',').map(item => item.trim()).filter(Boolean)
         : [];
 
-      // Préparer les données pour la mise à jour
+      // PrÃ©parer les donnÃ©es pour la mise Ã  jour
       const exhibitorData: Partial<Exhibitor> = {
         companyName: data.companyName,
         description: data.description,
@@ -249,23 +249,23 @@ export default function ExhibitorEditForm() {
         markets: marketsArray,
       };
 
-      // Mise à jour dans Supabase
+      // Mise Ã  jour dans Supabase
       await SupabaseService.updateExhibitor(id, exhibitorData);
 
-      // Mise à jour du store local
+      // Mise Ã  jour du store local
       updateExhibitorInStore(id, exhibitorData);
 
-      toast.success('Exposant mis à jour avec succès !');
+      toast.success('Exposant mis Ã  jour avec succÃ¨s !');
       navigate(`/exhibitors/${id}`);
     } catch (error) {
-      console.error('Erreur lors de la mise à jour:', error);
-      toast.error('Erreur lors de la mise à jour. Veuillez réessayer.');
+      console.error('Erreur lors de la mise Ã  jour:', error);
+      toast.error('Erreur lors de la mise Ã  jour. Veuillez rÃ©essayer.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Afficher un loader pendant le chargement des données
+  // Afficher un loader pendant le chargement des donnÃ©es
   if (exhibitors.length === 0 || !selectedExhibitor) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -282,7 +282,7 @@ export default function ExhibitorEditForm() {
   return (
     <div className="bg-gray-50 min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Entête */}
+        {/* EntÃªte */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center">
             <Button variant="ghost" onClick={() => navigate(`/exhibitors/${id}`)} className="mr-4">
@@ -351,16 +351,16 @@ export default function ExhibitorEditForm() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Catégorie *
+                        CatÃ©gorie *
                       </label>
                       <select
                         {...register('category')}
                         className={`w-full px-3 py-2 border ${errors.category ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 ${errors.category ? 'focus:ring-red-500' : 'focus:ring-blue-500'}`}
                       >
-                        <option value="port-industry">Industrie Portuaire</option>
-                        <option value="port-operations">Opérations Portuaires</option>
+                        <option value="port-industry">Industrie du BÃ¢timent</option>
+                        <option value="port-operations">OpÃ©rations du BÃ¢timent</option>
                         <option value="institutional">Institutionnel</option>
-                        <option value="academic">Académique</option>
+                        <option value="academic">AcadÃ©mique</option>
                       </select>
                       {errors.category && (
                         <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
@@ -369,14 +369,14 @@ export default function ExhibitorEditForm() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Secteur d'activité *
+                        Secteur d'activitÃ© *
                       </label>
                       <input
                         type="text"
                         {...register('sector')}
                         className={`w-full px-3 py-2 border ${errors.sector ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 ${errors.sector ? 'focus:ring-red-500' : 'focus:ring-blue-500'}`}
-                        placeholder="ex: Maritime, Transport, Énergie..."
-                        aria-label="ex: Maritime, Transport, Énergie..."
+                        placeholder="ex: BÃ¢timent, Transport, Ã‰nergie..."
+                        aria-label="ex: BÃ¢timent, Transport, Ã‰nergie..."
                       />
                       {errors.sector && (
                         <p className="text-red-500 text-sm mt-1">{errors.sector.message}</p>
@@ -410,7 +410,7 @@ export default function ExhibitorEditForm() {
               <Card className="p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
                   <MapPin className="h-5 w-5 mr-2 text-blue-600" />
-                  Coordonnées
+                  CoordonnÃ©es
                 </h2>
 
                 <div className="space-y-5">
@@ -438,7 +438,7 @@ export default function ExhibitorEditForm() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Téléphone
+                        TÃ©lÃ©phone
                       </label>
                       <div className="flex items-center">
                         <div className="bg-gray-100 px-3 py-2 rounded-l-lg border border-gray-300 border-r-0">
@@ -528,14 +528,14 @@ export default function ExhibitorEditForm() {
               <Card className="p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
                   <ClipboardCheck className="h-5 w-5 mr-2 text-blue-600" />
-                  Informations supplémentaires
+                  Informations supplÃ©mentaires
                 </h2>
 
                 <div className="space-y-5">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Année de création
+                        AnnÃ©e de crÃ©ation
                       </label>
                       <div className="flex items-center">
                         <div className="bg-gray-100 px-3 py-2 rounded-l-lg border border-gray-300 border-r-0">
@@ -556,7 +556,7 @@ export default function ExhibitorEditForm() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Nombre d'employés
+                        Nombre d'employÃ©s
                       </label>
                       <div className="flex items-center">
                         <div className="bg-gray-100 px-3 py-2 rounded-l-lg border border-gray-300 border-r-0">
@@ -577,7 +577,7 @@ export default function ExhibitorEditForm() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Chiffre d'affaires (M€)
+                        Chiffre d'affaires (Mâ‚¬)
                       </label>
                       <div className="flex items-center">
                         <div className="bg-gray-100 px-3 py-2 rounded-l-lg border border-gray-300 border-r-0">
@@ -599,7 +599,7 @@ export default function ExhibitorEditForm() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Certifications (séparées par des virgules)
+                      Certifications (sÃ©parÃ©es par des virgules)
                     </label>
                     <div className="flex items-center">
                       <div className="bg-gray-100 px-3 py-2 rounded-l-lg border border-gray-300 border-r-0">
@@ -619,7 +619,7 @@ export default function ExhibitorEditForm() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Marchés (séparés par des virgules)
+                      MarchÃ©s (sÃ©parÃ©s par des virgules)
                     </label>
                     <div className="flex items-center">
                       <div className="bg-gray-100 px-3 py-2 rounded-l-lg border border-gray-300 border-r-0">
@@ -640,7 +640,7 @@ export default function ExhibitorEditForm() {
               </Card>
             </div>
 
-            {/* Colonne de droite (Logo et aperçu) */}
+            {/* Colonne de droite (Logo et aperÃ§u) */}
             <div className="space-y-6">
               <Card className="p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">
@@ -656,13 +656,13 @@ export default function ExhibitorEditForm() {
                 />
                 
                 <p className="text-sm text-gray-500 mt-4">
-                  Format recommandé: PNG ou JPG, 512x512px, max 2MB
+                  Format recommandÃ©: PNG ou JPG, 512x512px, max 2MB
                 </p>
               </Card>
 
               <Card className="p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                  Aperçu de la fiche
+                  AperÃ§u de la fiche
                 </h2>
                 
                 <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
@@ -674,7 +674,7 @@ export default function ExhibitorEditForm() {
                         className="h-16 w-16 object-cover rounded-lg"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = '/SIB-logo.jpg';
+                          target.src = '/siports-logo.jpg';
                         }}
                       />
                     ) : (
@@ -687,7 +687,7 @@ export default function ExhibitorEditForm() {
                         {formValues.companyName || 'Nom de l\'entreprise'}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {formValues.sector || 'Secteur d\'activité'}
+                        {formValues.sector || 'Secteur d\'activitÃ©'}
                       </p>
                     </div>
                   </div>
@@ -697,11 +697,11 @@ export default function ExhibitorEditForm() {
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-                        {formValues.category === 'port-industry' ? 'Industrie Portuaire' :
-                         formValues.category === 'port-operations' ? 'Opérations Portuaires' :
+                        {formValues.category === 'port-industry' ? 'Industrie du BÃ¢timent' :
+                         formValues.category === 'port-operations' ? 'OpÃ©rations du BÃ¢timent' :
                          formValues.category === 'institutional' ? 'Institutionnel' :
-                         formValues.category === 'academic' ? 'Académique' :
-                         'Catégorie'}
+                         formValues.category === 'academic' ? 'AcadÃ©mique' :
+                         'CatÃ©gorie'}
                       </span>
                       {(formValues.markets || '').split(',').filter(Boolean).slice(0, 3).map((market, i) => (
                         <span key={i} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">

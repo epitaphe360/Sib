@@ -27,12 +27,14 @@ import { motion } from 'framer-motion';
 import { LevelBadge, QuotaWidget } from '../common/QuotaWidget';
 import { getVisitorQuota } from '../../config/quotas';
 import useAuthStore from '../../store/authStore';
+import { supabase, isSupabaseReady } from '../../lib/supabase';
 
 export default function VisitorProfileSettings() {
   const { visitorProfile, updateProfile, updateNotificationPreferences, isLoading, fetchVisitorData } = useVisitorStore();
   const { user } = useAuthStore();
   const [isEditing, setIsEditing] = useState(false);
   const [activeSection, setActiveSection] = useState<'profile' | 'interests' | 'notifications' | 'privacy' | 'quotas'>('profile');
+  const [meetingsUsed, setMeetingsUsed] = useState(0);
 
   // Charger les données du visiteur au montage du composant
   useEffect(() => {
@@ -40,6 +42,26 @@ export default function VisitorProfileSettings() {
       fetchVisitorData();
     }
   }, [user, visitorProfile, fetchVisitorData]);
+
+  // Charger l'utilisation du quota depuis daily_quotas
+  useEffect(() => {
+    const loadQuota = async () => {
+      if (!isSupabaseReady() || !supabase || !user?.id) return;
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const { data } = await supabase
+          .from('daily_quotas')
+          .select('meetings_used')
+          .eq('user_id', user.id)
+          .eq('quota_date', today)
+          .maybeSingle();
+        if (data) setMeetingsUsed(data.meetings_used ?? 0);
+      } catch {
+        // Quiet fail — quota stays at 0
+      }
+    };
+    loadQuota();
+  }, [user?.id]);
 
   const [formData, setFormData] = useState({
     firstName: visitorProfile?.firstName || '',
@@ -89,7 +111,7 @@ export default function VisitorProfileSettings() {
     'Port Operations',
     'Digital Transformation',
     'Sustainability',
-    'Maritime Technology',
+    'Building Technology',
     'Logistics',
     'Infrastructure',
     'Equipment Manufacturing',
@@ -110,7 +132,7 @@ export default function VisitorProfileSettings() {
   ];
 
   const availableCompetencies = [
-    'Gestion de projet portuaire',
+    'Gestion de projet bâtiment',
     'Analyse de performance',
     'Consulting stratégique',
     'Transformation digitale',
@@ -121,14 +143,14 @@ export default function VisitorProfileSettings() {
   ];
 
   const availableThematics = [
-    'Technologies maritimes',
+    'Technologies BTP',
     'Énergies renouvelables',
-    'construction et BTP',
+    'Logistique bâtiment',
     'Innovation digitale',
     'Défense navale',
     'Automatisation',
     'Intelligence artificielle',
-    'Blockchain maritime'
+    'BIM & PropTech'
   ];
 
   if (isLoading) {
@@ -443,7 +465,7 @@ export default function VisitorProfileSettings() {
                                 type="text"
                                 value={formData.businessSector}
                                 onChange={(e) => setFormData({ ...formData, businessSector: e.target.value })}
-                                placeholder="Ex: Consulting maritime"
+                                placeholder="Ex: Consulting construction"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                               />
                             ) : (
@@ -543,7 +565,7 @@ export default function VisitorProfileSettings() {
                       {/* Quota Rendez-vous B2B */}
                       <QuotaWidget
                         label="Rendez-vous B2B"
-                        current={0} // TODO: Récupérer depuis la base de données
+                        current={meetingsUsed}
                         limit={getVisitorQuota(user?.visitor_level || 'free')}
                         icon={<Calendar className="h-4 w-4 text-gray-400" />}
                         showUpgrade={user?.visitor_level === 'free'}

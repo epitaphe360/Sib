@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Composant Search Avancé avec Autocomplete et Filtres
  * Conforme WCAG 2.1
  */
@@ -350,3 +350,4 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
     </div>
   );
 };
+

@@ -47,6 +47,8 @@ export default function ChatInterface() {
   const [userSearch, setUserSearch] = useState('');
   const [userList, setUserList] = useState<Array<{id: string, name: string, type: string}>>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
+  const isBotParticipant = (participants: string[]) => participants.includes('siports-bot');
+  const isBotSender = (senderId: string) => senderId === 'siports-bot';
 
   useEffect(() => {
     fetchConversations();
@@ -285,7 +287,7 @@ export default function ChatInterface() {
                 ) : (
                   <div className="space-y-1">
                     {conversations.map((conversation) => {
-                      const isBot = conversation.participants.includes('SIB-bot');
+                      const isBot = isBotParticipant(conversation.participants);
                       const otherParticipant = isBot ? 'Assistant SIB' : 'Sarah Johnson';
                       const isOnline = conversation.participants.some(p => onlineUsers.includes(p));
                       
@@ -353,7 +355,7 @@ export default function ChatInterface() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div className="h-10 w-10 bg-gray-300 rounded-full flex items-center justify-center">
-                          {activeConv?.participants.includes('SIB-bot') ? (
+                          {activeConv?.participants && isBotParticipant(activeConv.participants) ? (
                             <Bot className="h-5 w-5 text-blue-600" />
                           ) : (
                             <User className="h-5 w-5 text-gray-600" />
@@ -361,7 +363,7 @@ export default function ChatInterface() {
                         </div>
                         <div>
                           <h4 className="font-medium text-gray-900">
-                            {activeConv?.participants.includes('SIB-bot') ? 'Assistant SIB' : 'Sarah Johnson'}
+                            {activeConv?.participants && isBotParticipant(activeConv.participants) ? 'Assistant SIB' : 'Sarah Johnson'}
                           </h4>
                           <p className="text-sm text-gray-500">
                             {onlineUsers.includes(activeConv?.participants[1] || '') ? 'En ligne' : 'Hors ligne'}
@@ -387,7 +389,7 @@ export default function ChatInterface() {
                   <div className="flex-1 overflow-y-auto p-4 space-y-4">
                     <AnimatePresence>
                       {activeMessages.map((message) => {
-                        const isBot = message.senderId === 'SIB-bot';
+                        const isBot = isBotSender(message.senderId);
                         const isCurrentUser = message.senderId === 'user1';
                         
                         return (

@@ -18,7 +18,9 @@ DELETE FROM public.exhibitors;
 DELETE FROM public.exhibitor_profiles;
 DELETE FROM public.partner_profiles;
 DELETE FROM public.visitor_profiles;
-DELETE FROM public.notifications;
+DELETE FROM public.partners WHERE user_id IN (
+  SELECT id FROM public.users WHERE email LIKE '%@test.siport.com' OR email LIKE '%@siports.com'
+);
 DELETE FROM public.registration_requests;
 DELETE FROM public.user_favorites;
 DELETE FROM public.daily_quotas WHERE user_id IN (
@@ -167,15 +169,15 @@ VALUES
   ('00000000-0000-0000-0000-000000000017', 'StartUp Port Innovations', 'port-operations', 'IoT', 'Innovative IoT solutions for port operations', NULL, 'https://www.portinnovations.startup', false, false, jsonb_build_object('email', 'exhibitor-9m@test.siport.com', 'phone', '+212 6 11 22 33 44', 'address', '321 Innovation Park, Fez', 'name', 'StartUp Team'), NOW(), NOW());
 
 -- Step 4: Create partner records (link to partners table)
-INSERT INTO public.partners (user_id, company_name, partner_type, partnership_level, sector, description, logo_url, website, verified, contact_info, created_at, updated_at)
+INSERT INTO public.partners (user_id, name, type, sponsorship_level, sector, description, logo_url, website, verified, created_at, updated_at)
 VALUES 
-  ('00000000-0000-0000-0000-000000000005', 'Gold Partner Industries', 'corporate', 'gold', 'Port Operations', 'Premium partnership for port excellence', NULL, 'https://www.goldpartner.com', true, jsonb_build_object('email', 'partner-gold@test.siport.com', 'phone', '+212 6 99 88 77 66', 'address', '111 Gold Street, Casablanca'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000006', 'Silver Tech Group', 'tech', 'silver', 'Technology', 'Technology partner for digital transformation', NULL, 'https://www.silvertech.com', true, jsonb_build_object('email', 'partner-silver@test.siport.com', 'phone', '+212 6 77 66 55 44', 'address', '222 Silver Ave, Marrakech'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000011', 'Platinium Global Corp', 'corporate', 'platinium', 'Port Management', 'Global platinum partner', NULL, 'https://www.platinium-global.com', true, jsonb_build_object('email', 'partner-platinium@test.siport.com', 'phone', '+212 6 33 44 55 66', 'address', '333 Platinum Lane, Agadir'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000012', 'Museum Cultural Center', 'cultural', 'museum', 'Culture & Heritage', 'Cultural partnership for heritage', NULL, 'https://www.museum-center.ma', true, jsonb_build_object('email', 'partner-museum@test.siport.com', 'phone', '+212 6 22 33 44 55', 'address', '444 Culture Way, Essaouira'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000013', 'PortTech Solutions', 'tech', 'gold', 'Technology', 'Port technology innovation partner', NULL, 'https://www.porttech-solutions.com', true, jsonb_build_object('email', 'partner-porttech@test.siport.com', 'phone', '+212 6 11 22 33 44', 'address', '555 Tech Drive, Tétouan'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000014', 'OceanFreight Logistics', 'logistics', 'silver', 'Logistics', 'Maritime freight specialist', NULL, 'https://www.oceanfreight.logistics', true, jsonb_build_object('email', 'partner-oceanfreight@test.siport.com', 'phone', '+212 6 88 99 00 11', 'address', '666 Ocean Path, Safi'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000015', 'Coastal Maritime Services', 'services', 'silver', 'Maritime Services', 'Comprehensive maritime services', NULL, 'https://www.coastal-maritime.com', true, jsonb_build_object('email', 'partner-coastal@test.siport.com', 'phone', '+212 6 77 88 99 00', 'address', '777 Coastal Road, El Jadida'), NOW(), NOW());
+  ('00000000-0000-0000-0000-000000000005', 'Gold Partner Industries', 'corporate', 'gold', 'Port Operations', 'Premium partnership for port excellence', NULL, 'https://www.goldpartner.com', true, NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000006', 'Silver Tech Group', 'tech', 'silver', 'Technology', 'Technology partner for digital transformation', NULL, 'https://www.silvertech.com', true, NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000011', 'Platinium Global Corp', 'corporate', 'platinium', 'Port Management', 'Global platinum partner', NULL, 'https://www.platinium-global.com', true, NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000012', 'Museum Cultural Center', 'cultural', 'museum', 'Culture & Heritage', 'Cultural partnership for heritage', NULL, 'https://www.museum-center.ma', true, NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000013', 'PortTech Solutions', 'tech', 'gold', 'Technology', 'Port technology innovation partner', NULL, 'https://www.porttech-solutions.com', true, NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000014', 'OceanFreight Logistics', 'logistics', 'silver', 'Logistics', 'Maritime freight specialist', NULL, 'https://www.oceanfreight.logistics', true, NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000015', 'Coastal Maritime Services', 'services', 'silver', 'Maritime Services', 'Comprehensive maritime services', NULL, 'https://www.coastal-maritime.com', true, NOW(), NOW());
 
 -- Verify accounts were created
 SELECT COUNT(*) as created_accounts FROM auth.users WHERE email LIKE '%@test.siport.com' OR email LIKE '%@siports.com';

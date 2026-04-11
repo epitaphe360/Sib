@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ï»¿import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { Library, ArrowLeft, Search, Filter, Video, Mic, Play, MessageSquare, Star } from 'lucide-react';
@@ -29,7 +29,7 @@ export const MediaLibraryPage: React.FC = () => {
       const data = await mediaService.getMedia(filters);
       setMedia(data);
     } catch (error) {
-      console.error('Erreur chargement médias:', error);
+      console.error('Erreur chargement mÃ©dias:', error);
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export const MediaLibraryPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link to={ROUTES.HOME} className="inline-flex items-center text-white/80 hover:text-white mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour à l'accueil
+            Retour Ã  l'accueil
           </Link>
           
           <div className="flex items-center space-x-4 mb-4">
@@ -77,12 +77,12 @@ export const MediaLibraryPage: React.FC = () => {
               <Library className="w-8 h-8" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold mb-2">Bibliothèque Média</h1>
-              <p className="text-xl text-white/90">Tous les contenus sib en un seul endroit</p>
+              <h1 className="text-4xl font-bold mb-2">BibliothÃ¨que MÃ©dia</h1>
+              <p className="text-xl text-white/90">Tous les contenus SIB en un seul endroit</p>
             </div>
           </div>
 
-          {/* Stats Grid - Masqué temporairement */}
+          {/* Stats Grid - MasquÃ© temporairement */}
           {/* <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
               <p className="text-white/70 text-xs mb-1">Total</p>
@@ -101,7 +101,7 @@ export const MediaLibraryPage: React.FC = () => {
               <p className="text-2xl font-bold">{stats.capsules}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <p className="text-white/70 text-xs mb-1">Témoignages</p>
+              <p className="text-white/70 text-xs mb-1">TÃ©moignages</p>
               <p className="text-2xl font-bold">{stats.testimonials}</p>
             </div>
           </div> */}
@@ -109,7 +109,7 @@ export const MediaLibraryPage: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Contenu masqué - En cours de mise à jour */}
+        {/* Contenu masquÃ© - En cours de mise Ã  jour */}
         {/* Filters */}
         {/* <div className="mb-8 space-y-4">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -117,7 +117,7 @@ export const MediaLibraryPage: React.FC = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Rechercher dans tous les médias..."
+                placeholder="Rechercher dans tous les mÃ©dias..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
@@ -139,7 +139,7 @@ export const MediaLibraryPage: React.FC = () => {
                 <option value="capsule_inside">Capsules Inside</option>
                 <option value="live_studio">Live Studio</option>
                 <option value="best_moments">Best Moments</option>
-                <option value="testimonial">Témoignages</option>
+                <option value="testimonial">TÃ©moignages</option>
               </select>
             </div>
 
@@ -150,7 +150,7 @@ export const MediaLibraryPage: React.FC = () => {
             >
               {categories.map(cat => (
                 <option key={cat} value={cat}>
-                  {cat === 'all' ? 'Toutes les catégories' : cat}
+                  {cat === 'all' ? 'Toutes les catÃ©gories' : cat}
                 </option>
               ))}
             </select>
@@ -165,7 +165,7 @@ export const MediaLibraryPage: React.FC = () => {
         ) : filteredMedia.length === 0 ? (
           <div className="text-center py-20">
             <Library className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">Aucun média trouvé</h3>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">Aucun mÃ©dia trouvÃ©</h3>
             <p className="text-gray-500">Essayez de modifier vos filtres de recherche</p>
           </div>
         ) : (
@@ -176,21 +176,21 @@ export const MediaLibraryPage: React.FC = () => {
           </div>
         )} */}
 
-        {/* Message de mise à jour */}
+        {/* Message de mise Ã  jour */}
         <div className="max-w-3xl mx-auto text-center py-20">
           <div className="bg-white rounded-3xl shadow-xl p-12 border-2 border-indigo-100">
             <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
               <Library className="w-10 h-10 text-white" />
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Contenu en cours de mise à jour
+              Contenu en cours de mise Ã  jour
             </h2>
             <p className="text-xl text-gray-600 mb-6">
-              Notre bibliothèque média est actuellement en cours d'enrichissement par notre agence.
+              Notre bibliothÃ¨que mÃ©dia est actuellement en cours d'enrichissement par notre agence.
             </p>
             <div className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-6">
               <p className="text-gray-700 mb-4">
-                <span className="font-semibold text-indigo-700">Les contenus suivants seront progressivement ajoutés :</span>
+                <span className="font-semibold text-indigo-700">Les contenus suivants seront progressivement ajoutÃ©s :</span>
               </p>
               <ul className="space-y-2 text-left max-w-md mx-auto">
                 <li className="flex items-center gap-3 text-gray-700">
@@ -199,11 +199,11 @@ export const MediaLibraryPage: React.FC = () => {
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <Mic className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Épisodes de podcasts</span>
+                  <span>Ã‰pisodes de podcasts</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <Play className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Capsules "Inside sib"</span>
+                  <span>Capsules "Inside SIB"</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <Video className="w-5 h-5 text-indigo-600 flex-shrink-0" />
@@ -211,16 +211,16 @@ export const MediaLibraryPage: React.FC = () => {
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <Star className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Best Moments de l'événement</span>
+                  <span>Best Moments de l'Ã©vÃ©nement</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <MessageSquare className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Témoignages de participants</span>
+                  <span>TÃ©moignages de participants</span>
                 </li>
               </ul>
             </div>
             <div className="mt-8 text-gray-500 italic">
-              Les contenus seront disponibles au fur et à mesure de leur production.
+              Les contenus seront disponibles au fur et Ã  mesure de leur production.
             </div>
           </div>
         </div>

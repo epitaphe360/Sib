@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+Ôªøimport React, { useState, useEffect } from 'react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { 
@@ -33,7 +33,7 @@ export default function MiniSiteGalleryManager({
     setImages(initialImages || []);
   }, [initialImages]);
 
-  // Mettre ‡ jour le parent lorsque les images changent
+  // Mettre √† jour le parent lorsque les images changent
   useEffect(() => {
     onImagesChange(images);
   }, [images, onImagesChange]);
@@ -46,29 +46,21 @@ export default function MiniSiteGalleryManager({
     setProgress(0);
 
     try {
-      // Note: Les buckets sont crÈÈs via les migrations SQL
-
-      // Simuler une progression
-      const progressInterval = setInterval(() => {
-        setProgress(prev => {
-          const newProgress = prev + Math.floor(Math.random() * 10);
-          return newProgress > 90 ? 90 : newProgress;
-        });
-      }, 200);
+      // Note: Les buckets sont cr√©√©s via les migrations SQL
 
       const uploadPromises: Promise<string>[] = [];
       
-      // PrÈparer les tÈlÈchargements
+      // Pr√©parer les t√©l√©chargements
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         
-        // VÈrifier le type de fichier
+        // V√©rifier le type de fichier
         if (!file.type.startsWith('image/')) {
           toast.error(`Le fichier "${file.name}" n'est pas une image.`);
           continue;
         }
         
-        // VÈrifier la taille du fichier (5MB max)
+        // V√©rifier la taille du fichier (5MB max)
         if (file.size > 5 * 1024 * 1024) {
           toast.error(`L'image "${file.name}" est trop volumineuse. Taille maximale: 5MB.`);
           continue;
@@ -80,32 +72,34 @@ export default function MiniSiteGalleryManager({
           `gallery/${exhibitorId}`
         ));
       }
+
+      setProgress(30);
       
-      // TÈlÈcharger toutes les images
+      // T√©l√©charger toutes les images
       const newImageUrls = await Promise.all(uploadPromises);
+      setProgress(90);
       
-      // Ajouter les nouvelles images ‡ la liste existante
+      // Ajouter les nouvelles images √† la liste existante
       setImages(prev => [...prev, ...newImageUrls]);
-      
-      clearInterval(progressInterval);
+
       setProgress(100);
       
-      toast.success(`${newImageUrls.length} image(s) tÈlÈchargÈe(s) avec succËs.`);
+      toast.success(`${newImageUrls.length} image(s) t√©l√©charg√©e(s) avec succ√®s.`);
       
-      // RÈinitialiser
+      // R√©initialiser
       setTimeout(() => {
         setProgress(0);
         setIsLoading(false);
       }, 1000);
       
     } catch (error) {
-      console.error('Erreur lors du tÈlÈchargement:', error);
-      toast.error('Erreur lors du tÈlÈchargement des images.');
+      console.error('Erreur lors du t√©l√©chargement:', error);
+      toast.error('Erreur lors du t√©l√©chargement des images.');
       setIsLoading(false);
       setProgress(0);
     }
     
-    // RÈinitialiser l'input file
+    // R√©initialiser l'input file
     e.target.value = '';
   };
 
@@ -122,7 +116,7 @@ export default function MiniSiteGalleryManager({
       setSelectedImageIndex(selectedImageIndex - 1);
     }
     
-    toast.success('Image supprimÈe.');
+    toast.success('Image supprim√©e.');
   };
 
   const handleMoveImage = (index: number, direction: 'up' | 'down') => {
@@ -135,13 +129,13 @@ export default function MiniSiteGalleryManager({
       const newImages = [...prev];
       const newIndex = direction === 'up' ? index - 1 : index + 1;
       
-      // …changer les images
+      // √âchanger les images
       [newImages[index], newImages[newIndex]] = [newImages[newIndex], newImages[index]];
       
       return newImages;
     });
     
-    // Mettre ‡ jour l'index sÈlectionnÈ si nÈcessaire
+    // Mettre √† jour l'index s√©lectionn√© si n√©cessaire
     if (selectedImageIndex === index) {
       setSelectedImageIndex(direction === 'up' ? index - 1 : index + 1);
     } else if (selectedImageIndex === (direction === 'up' ? index - 1 : index + 1)) {
@@ -173,12 +167,12 @@ export default function MiniSiteGalleryManager({
           {isLoading ? (
             <>
               <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
-              TÈlÈchargement en cours...
+              T√©l√©chargement en cours...
             </>
           ) : (
             <>
               <Upload className="h-5 w-5 mr-2" />
-              TÈlÈcharger des images
+              T√©l√©charger des images
             </>
           )}
         </Button>
@@ -201,7 +195,7 @@ export default function MiniSiteGalleryManager({
               ></div>
             </div>
             <p className="text-xs text-gray-500 mt-1 text-center">
-              {progress}% terminÈ
+              {progress}% termin√©
             </p>
           </div>
         )}
@@ -223,7 +217,7 @@ export default function MiniSiteGalleryManager({
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = '/SIB-logo.jpg';
+                    target.src = '/siports-logo.jpg';
                   }}
                 />
                 <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
@@ -241,7 +235,7 @@ export default function MiniSiteGalleryManager({
                   size="sm"
                   onClick={() => handleMoveImage(selectedImageIndex, 'up')}
                   disabled={selectedImageIndex === 0}
-                  title="DÈplacer vers le haut"
+                  title="D√©placer vers le haut"
                 >
                   <MoveUp className="h-4 w-4" />
                 </Button>
@@ -250,7 +244,7 @@ export default function MiniSiteGalleryManager({
                   size="sm"
                   onClick={() => handleMoveImage(selectedImageIndex, 'down')}
                   disabled={selectedImageIndex === images.length - 1}
-                  title="DÈplacer vers le bas"
+                  title="D√©placer vers le bas"
                 >
                   <MoveDown className="h-4 w-4" />
                 </Button>
@@ -273,7 +267,7 @@ export default function MiniSiteGalleryManager({
           <div className="flex items-start space-x-2 text-sm text-gray-500">
             <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
             <p>
-              Cliquez sur une image pour la sÈlectionner, puis utilisez les boutons pour la dÈplacer ou la supprimer.
+              Cliquez sur une image pour la s√©lectionner, puis utilisez les boutons pour la d√©placer ou la supprimer.
               {t('minisite.section.gallery_order')}
             </p>
           </div>

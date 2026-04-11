@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Hook pour gérer la traduction des partenaires
  * Retourne le contenu traduit mot par mot selon la langue active
  */
@@ -44,3 +44,4 @@ export function usePartnerTranslation(partner: any): TranslatedPartner {
     };
   }, [partner, currentLanguage]);
 }
+

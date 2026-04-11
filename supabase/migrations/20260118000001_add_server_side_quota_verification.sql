@@ -212,8 +212,8 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-COMMENT ON FUNCTION book_appointment_atomic IS
-'Réserve un rendez-vous B2B de manière atomique avec vérification de quota côté serveur';
+COMMENT ON FUNCTION book_appointment_atomic(uuid, uuid, text) IS
+'Reserve un rendez-vous B2B de maniere atomique avec verification de quota cote serveur';
 
 -- ============================================================================
 -- PERMISSIONS
@@ -233,13 +233,13 @@ DO $$
 DECLARE
   v_test_quota integer;
 BEGIN
-  -- Créer un utilisateur test
+  -- Créer un utilisateur test avec un UUID distinct (non-demo accounts)
   INSERT INTO users (id, email, type, visitor_level)
-  VALUES ('00000000-0000-0000-0000-000000000001', 'test_free@test.com', 'visitor', 'free')
-  ON CONFLICT (id) DO UPDATE SET visitor_level = 'free';
+  VALUES ('ffffffff-0118-0001-0000-000000000001', 'test_free_quota@test.internal', 'visitor', 'free')
+  ON CONFLICT (id) DO UPDATE SET type = 'visitor', visitor_level = 'free';
 
   -- Vérifier le quota
-  v_test_quota := get_user_b2b_quota('00000000-0000-0000-0000-000000000001');
+  v_test_quota := get_user_b2b_quota('ffffffff-0118-0001-0000-000000000001');
 
   IF v_test_quota != 0 THEN
     RAISE EXCEPTION 'ÉCHEC TEST: Visiteur gratuit devrait avoir quota = 0, obtenu = %', v_test_quota;
@@ -254,10 +254,10 @@ DECLARE
   v_test_quota integer;
 BEGIN
   INSERT INTO users (id, email, type)
-  VALUES ('00000000-0000-0000-0000-000000000002', 'test_exhibitor@test.com', 'exhibitor')
+  VALUES ('ffffffff-0118-0001-0000-000000000002', 'test_exhibitor_quota@test.internal', 'exhibitor')
   ON CONFLICT (id) DO UPDATE SET type = 'exhibitor';
 
-  v_test_quota := get_user_b2b_quota('00000000-0000-0000-0000-000000000002');
+  v_test_quota := get_user_b2b_quota('ffffffff-0118-0001-0000-000000000002');
 
   IF v_test_quota != 999999 THEN
     RAISE EXCEPTION 'ÉCHEC TEST: Exposant devrait avoir quota = 999999, obtenu = %', v_test_quota;
@@ -272,10 +272,10 @@ DECLARE
   v_test_quota integer;
 BEGIN
   INSERT INTO users (id, email, type, visitor_level)
-  VALUES ('00000000-0000-0000-0000-000000000003', 'test_vip@test.com', 'visitor', 'vip')
-  ON CONFLICT (id) DO UPDATE SET visitor_level = 'vip';
+  VALUES ('ffffffff-0118-0001-0000-000000000003', 'test_vip_quota@test.internal', 'visitor', 'vip')
+  ON CONFLICT (id) DO UPDATE SET type = 'visitor', visitor_level = 'vip';
 
-  v_test_quota := get_user_b2b_quota('00000000-0000-0000-0000-000000000003');
+  v_test_quota := get_user_b2b_quota('ffffffff-0118-0001-0000-000000000003');
 
   IF v_test_quota != 10 THEN
     RAISE EXCEPTION 'ÉCHEC TEST: Visiteur VIP devrait avoir quota = 10, obtenu = %', v_test_quota;
@@ -285,9 +285,6 @@ BEGIN
 END $$;
 
 -- Nettoyage des utilisateurs de test
-DELETE FROM users WHERE email LIKE 'test_%@test.com';
+DELETE FROM users WHERE email LIKE '%@test.internal';
 
-RAISE NOTICE '========================================';
-RAISE NOTICE '✅ Migration terminée avec succès';
-RAISE NOTICE '🔐 Vérification de quota côté serveur activée';
-RAISE NOTICE '========================================';
+-- Migration terminée avec succès: Vérification de quota côté serveur activée

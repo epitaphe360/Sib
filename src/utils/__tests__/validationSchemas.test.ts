@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tests for Zod validation schemas
  * Coverage: Email, password, phone, URL, user, product schemas
  */
@@ -293,3 +293,4 @@ describe('validationSchemas', () => {
     });
   });
 });
+

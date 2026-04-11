@@ -22,8 +22,10 @@ interface ChatState {
   setOnlineUsers: (users: string[]) => void;
 }
 
+const BOT_ID = 'siports-bot';
+
 const mockChatBot: ChatBot = {
-  id: 'SIB-bot',
+  id: BOT_ID,
   name: 'Assistant SIB',
   avatar: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=100',
   status: 'online',
@@ -75,10 +77,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   fetchConversations: async () => {
     set({ isLoading: true, error: null });
     try {
-      // Récupérer l'utilisateur connecté depuis authStore
-      const authStoreModule = await import('./authStore');
-      const authStore = authStoreModule.default;
-      const user = authStore.getState ? authStore.getState().user : null;
+      const user = useAuthStore.getState().user;
 
       if (!user) {
         console.warn('⚠️ No authenticated user found');
@@ -114,10 +113,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
         throw new Error('Conversation non trouvée');
       }
 
-      // Récupérer l'utilisateur connecté depuis authStore
-      const authStoreModule = await import('./authStore');
-      const authStore = authStoreModule.default;
-      const user = authStore.getState ? authStore.getState().user : null;
+      const user = useAuthStore.getState().user;
 
       if (!user) {
         throw new Error('Utilisateur non authentifié');
@@ -180,10 +176,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   markAsRead: async (conversationId) => {
     const { conversations } = get();
 
-    // Récupérer l'utilisateur connecté
-    const authStoreModule = await import('./authStore');
-    const authStore = authStoreModule.default;
-    const user = authStore.getState ? authStore.getState().user : null;
+    const user = useAuthStore.getState().user;
 
     if (!user) {
       console.warn('⚠️ Cannot mark as read: no authenticated user');
@@ -250,7 +243,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
     const botMessage: ChatMessage = {
       id: Date.now().toString(),
-      senderId: 'SIB-bot',
+      senderId: BOT_ID,
       receiverId: currentUserId,
       content: message,
       type: 'text',

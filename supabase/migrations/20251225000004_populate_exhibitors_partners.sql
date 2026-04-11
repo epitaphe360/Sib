@@ -43,7 +43,7 @@ FROM public.users u
 WHERE u.type = 'exhibitor' AND u.email LIKE '%@test.siport.com';
 
 -- Create partners from users with type='partner'
-INSERT INTO public.partners (user_id, company_name, partner_type, partnership_level, sector, description, contact_info, created_at, updated_at)
+INSERT INTO public.partners (user_id, name, type, sponsorship_level, sector, description, created_at, updated_at)
 SELECT 
   u.id,
   u.name,
@@ -56,7 +56,7 @@ SELECT
     WHEN u.email LIKE '%oceanfreight%' THEN 'logistics'
     WHEN u.email LIKE '%coastal%' THEN 'services'
     ELSE 'corporate'
-  END as partner_type,
+  END as type,
   CASE 
     WHEN u.email LIKE '%gold%' THEN 'gold'
     WHEN u.email LIKE '%silver%' THEN 'silver'
@@ -66,7 +66,7 @@ SELECT
     WHEN u.email LIKE '%oceanfreight%' THEN 'silver'
     WHEN u.email LIKE '%coastal%' THEN 'silver'
     ELSE 'silver'
-  END as partnership_level,
+  END as sponsorship_level,
   CASE 
     WHEN u.email LIKE '%gold%' THEN 'Port Operations'
     WHEN u.email LIKE '%silver%' THEN 'Technology'
@@ -87,7 +87,6 @@ SELECT
     WHEN u.email LIKE '%coastal%' THEN 'Comprehensive maritime services'
     ELSE 'Strategic partner'
   END as description,
-  jsonb_build_object('email', u.email, 'phone', '+212 6 00 00 00 00', 'name', u.name) as contact_info,
   NOW(),
   NOW()
 FROM public.users u

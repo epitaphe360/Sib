@@ -96,7 +96,7 @@ export function useAdminDashboard() {
   const handleImportArticles = async () => {
     setIsImportingArticles(true);
     try {
-      toast.loading('🔄 Synchronisation des articles depuis sib2026.ma...', { id: 'import-articles', duration: 10000 });
+      toast.loading('🔄 Synchronisation des articles depuis sib.ma...', { id: 'import-articles', duration: 10000 });
       const result = await fetchFromOfficialSite();
       if (result && result.success && result.stats) {
         const { inserted, updated, total } = result.stats;

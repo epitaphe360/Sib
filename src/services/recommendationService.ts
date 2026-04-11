@@ -18,11 +18,11 @@ const getIntersection = (arr1: string[], arr2: string[]): string[] => {
 const complementaryObjectives: Record<string, string[]> = {
   'Trouver de nouveaux partenaires': ['Développer mon réseau', 'Présenter mes innovations'],
   'Développer mon réseau': ['Trouver de nouveaux partenaires', 'Rencontrer des investisseurs'],
-  'Présenter mes innovations': ['Découvrir les innovations portuaires', 'Identifier des fournisseurs'],
+  'Présenter mes innovations': ['Découvrir les innovations BTP', 'Identifier des fournisseurs'],
   'Identifier des fournisseurs': ['Présenter mes innovations', 'Explorer de nouveaux marchés'],
   'Explorer de nouveaux marchés': ['Trouver de nouveaux partenaires'],
   'Rencontrer des investisseurs': ['Présenter mes innovations'],
-  'Découvrir les innovations portuaires': ['Présenter mes innovations'],
+  'Découvrir les innovations BTP': ['Présenter mes innovations'],
 };
 
 // --- Scoring Weights ---
@@ -121,11 +121,11 @@ class RecommendationService {
           userId: currentUser.id,
           recommendedUserId: potentialMatch.id,
           score: Math.min(100, Math.round(score)), // Cap score at 100
-          reasons: reasons.length > 0 ? reasons : ['Professionnel du secteur portuaire'], // Default reason if empty
+          reasons: reasons.length > 0 ? reasons : ['Professionnel du secteur du bâtiment'], // Default reason if empty
           category: 'Professional Match',
           viewed: false,
           contacted: false,
-          mutualConnections: Math.floor(Math.random() * 5), // Mock data
+          mutualConnections: 0, // Calculé côté serveur au besoin
           recommendedUser: potentialMatch,
         });
       }

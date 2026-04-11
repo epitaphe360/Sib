@@ -28,7 +28,7 @@ export default function RegistrationSuccessPage() {
             });
           } else {
             navigate(ROUTES.LOGIN, {
-              state: { message: 'Inscription rÈussie ! Votre compte est en attente de validation.' }
+              state: { message: 'Inscription r√©ussie ! Votre compte est en attente de validation.' }
             });
           }
           return 0;
@@ -87,8 +87,8 @@ export default function RegistrationSuccessPage() {
               className="text-3xl font-bold text-center text-gray-900 mb-4"
             >
               {accountType === 'visitor'
-                ? ' Compte crÈÈ !'
-                : '? Inscription rÈussie !'}
+                ? ' Compte cr√©√© !'
+                : '‚úÖ Inscription r√©ussie !'}
             </motion.h1>
 
             {/* Description */}
@@ -101,7 +101,7 @@ export default function RegistrationSuccessPage() {
               {accountType === 'visitor' ? (
                 <>
                   <p className="text-center text-gray-700">
-                    FÈlicitations ! Votre compte visiteur a ÈtÈ crÈÈ avec succËs.
+                    F√©licitations ! Votre compte visiteur a √©t√© cr√©√© avec succ√®s.
                   </p>
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <p className="text-sm text-gray-600">
@@ -109,13 +109,13 @@ export default function RegistrationSuccessPage() {
                     </p>
                   </div>
                   <p className="text-sm text-gray-500 text-center">
-                    Vous pouvez maintenant accÈder ‡ toutes les fonctionnalitÈs de SIB 2026 et explorer les innovations portuaires.
+                    Vous pouvez maintenant acc√©der √† toutes les fonctionnalit√©s de SIB 2026 et explorer les innovations BTP.
                   </p>
                 </>
               ) : (
                 <>
                   <p className="text-center text-gray-700">
-                    Votre demande d'inscription a ÈtÈ reÁue avec succËs.
+                    Votre demande d'inscription a √©t√© re√ßue avec succ√®s.
                   </p>
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <p className="text-sm text-gray-600">
@@ -124,10 +124,10 @@ export default function RegistrationSuccessPage() {
                   </div>
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                     <p className="text-sm text-gray-600 font-semibold text-center">
-                      ‚è≥ Votre compte est en attente de validation
+                      √¢¬è¬≥ Votre compte est en attente de validation
                     </p>
                     <p className="text-xs text-gray-500 text-center mt-2">
-                      Notre Èquipe d'administrateurs examinera votre demande. Vous recevrez un email de confirmation une fois votre compte validÈ.
+                      Notre √©quipe d'administrateurs examinera votre demande. Vous recevrez un email de confirmation une fois votre compte valid√©.
                     </p>
                   </div>
                 </>
@@ -171,7 +171,7 @@ export default function RegistrationSuccessPage() {
                 className="mt-8 pt-6 border-t border-gray-200"
               >
                 <p className="text-sm font-semibold text-gray-900 mb-3">
-                  Vous avez accËs ‡ :
+                  Vous avez acc√®s √† :
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center text-sm text-gray-600">
@@ -180,7 +180,7 @@ export default function RegistrationSuccessPage() {
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <CheckCircle className="h-4 w-4 text-green-600 mr-3" />
-                    Programme des confÈrences
+                    Programme des conf√©rences
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <CheckCircle className="h-4 w-4 text-green-600 mr-3" />
@@ -188,7 +188,7 @@ export default function RegistrationSuccessPage() {
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <CheckCircle className="h-4 w-4 text-green-600 mr-3" />
-                    RÈseau professionnel
+                    R√©seau professionnel
                   </li>
                 </ul>
               </motion.div>
@@ -203,7 +203,7 @@ export default function RegistrationSuccessPage() {
           transition={{ delay: 1 }}
           className="text-center text-green-100 text-sm mt-6"
         >
-          Besoin d'aide ? <a href="mailto:support@SIB.fr" className="underline hover:text-white">Contactez notre support</a>
+          Besoin d'aide ? <a href="mailto:support@sibs.fr" className="underline hover:text-white">Contactez notre support</a>
         </motion.p>
       </div>
     </div>

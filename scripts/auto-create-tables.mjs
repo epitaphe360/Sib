@@ -220,7 +220,7 @@ async function main() {
   
   if (allOk) {
     console.log('\n🎉 TOUTES LES TABLES SONT PRÊTES !');
-    console.log('   Vous pouvez maintenant lancer la migration WordPress.\n');
+    console.log('   Vous pouvez maintenant lancer l\'application.\n');
   }
 }
 

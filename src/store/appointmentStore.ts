@@ -700,8 +700,30 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
   updateAppointmentStatus: async (appointmentId, status) => {
     const { appointments, timeSlots } = get();
 
-    // TODO: Same transaction concern as cancelAppointment
-    // Persist to Supabase if possible
+    // Pour un statut 'cancelled', utiliser le RPC atomique (comme cancelAppointment)
+    if (status === 'cancelled') {
+      const resolvedUser = useAuthStore.getState().user;
+      if (!resolvedUser?.id) throw new Error('Vous devez être connecté.');
+      const supabase = supabaseClient;
+      const { data, error } = await supabase.rpc('cancel_appointment_atomic', {
+        p_appointment_id: appointmentId,
+        p_user_id: resolvedUser.id,
+      });
+      if (error) throw new Error(error.message || 'Erreur lors de l\'annulation');
+      if (!data || !data.success) throw new Error(data?.error || 'Erreur lors de l\'annulation');
+      const updatedAppointments = appointments.map(a => a.id === appointmentId ? { ...a, status: 'cancelled' as const } : a);
+      const appointment = appointments.find(a => a.id === appointmentId);
+      if (appointment?.timeSlotId) {
+        const affectedSlot = timeSlots.find(s => s.id === appointment.timeSlotId);
+        if (affectedSlot?.exhibitorId) {
+          try { await get().fetchTimeSlots(affectedSlot.exhibitorId); } catch { /* ignore */ }
+        }
+      }
+      set({ appointments: updatedAppointments });
+      return;
+    }
+
+    // Persist to Supabase for other statuses
     if (SupabaseService && typeof SupabaseService.updateAppointmentStatus === 'function') {
       try {
         await SupabaseService.updateAppointmentStatus(appointmentId, status as any);

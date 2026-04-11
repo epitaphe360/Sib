@@ -10,7 +10,7 @@ export const SUPPORT_CONFIG = {
   },
   
   // Email
-  email: 'contact@sib2026.ma',
+  email: 'contact@sib.ma',
   
   // Téléphone
   phone: '+212668385228',
@@ -35,17 +35,17 @@ export const SUPPORT_CONFIG = {
     commercial: {
       name: 'Équipe Commerciale',
       whatsapp: '+33766504580',
-      email: 'commercial@sib2026.ma',
+      email: 'commercial@sib.ma',
     },
     support: {
       name: 'Support Technique',
       whatsapp: '+33766504580',
-      email: 'support@sib2026.ma',
+      email: 'support@sib.ma',
     },
     exhibitors: {
       name: 'Exposants',
       whatsapp: '+33766504580',
-      email: 'exposants@SIB.com',
+      email: 'exposants@sibs.com',
     },
   },
 };

@@ -1,38 +1,165 @@
-// SIPORTS 2026 - Service Worker for Web Push Notifications
-// This service worker handles push notifications ONLY
-// It does NOT cache any assets to prevent stale content issues
+// SIB 2026 — Unified Service Worker: Offline Caching + Push Notifications
+// CDC requirement: PWA / mode offline réel
+// Strategy: Cache-First for static assets, Network-First for API data
 
-const CACHE_VERSION = 'siports-v3-20260216';
+const CACHE_NAME = 'sib2026-v1';
+const API_CACHE_NAME = 'sib2026-api-v1';
 
-// Install event - skip waiting immediately, no caching
+// Static assets to pre-cache
+const STATIC_ASSETS = [
+  '/',
+  '/manifest.json',
+  '/favicon.ico',
+];
+
+// Patterns that bypass caching entirely (auth / payment)
+const BYPASS_PATTERNS = [
+  /supabase\.co\/auth/,
+  /paypal\.com/,
+  /api-m\./,
+];
+
+// API patterns to cache with network-first strategy
+const API_CACHE_PATTERNS = [
+  /\/rest\/v1\/exhibitors/,
+  /\/rest\/v1\/events/,
+  /\/rest\/v1\/pavilions/,
+  /\/rest\/v1\/articles/,
+  /\/rest\/v1\/speakers/,
+  /\/rest\/v1\/partners/,
+];
+
+// ─── Install ──────────────────────────────────────────────────────────────────
+
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker v3...');
-  // Clear ALL old caches and skip waiting
+  console.log('[SW] SIB 2026 service worker installing...');
   event.waitUntil(
-    caches.keys().then((names) => {
-      return Promise.all(names.map((name) => caches.delete(name)));
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(STATIC_ASSETS).catch((err) => {
+        console.warn('[SW] Pre-cache partial failure:', err);
+      });
     }).then(() => self.skipWaiting())
   );
 });
 
-// Activate event - clean up ALL caches and claim clients
+// ─── Activate ────────────────────────────────────────────────────────────────
+
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker v3...');
+  console.log('[SW] SIB 2026 service worker activating...');
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((name) => caches.delete(name))
-      );
-    }).then(() => self.clients.claim())
+    caches.keys().then((names) =>
+      Promise.all(
+        names
+          .filter((n) => n !== CACHE_NAME && n !== API_CACHE_NAME)
+          .map((n) => {
+            console.log('[SW] Removing old cache:', n);
+            return caches.delete(n);
+          })
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
-// Fetch event - ALWAYS go to network, never serve from cache
+// ─── Fetch ────────────────────────────────────────────────────────────────────
+
 self.addEventListener('fetch', (event) => {
-  // Let all requests go directly to the network
-  // Do NOT intercept or cache anything
-  return;
+  const { request } = event;
+  const url = new URL(request.url);
+
+  if (request.method !== 'GET') return;
+  if (!['http:', 'https:'].includes(url.protocol)) return;
+  if (BYPASS_PATTERNS.some((re) => re.test(request.url))) return;
+
+  // API data: network-first, short stale fallback
+  if (API_CACHE_PATTERNS.some((re) => re.test(request.url))) {
+    event.respondWith(networkFirstWithCache(request, API_CACHE_NAME));
+    return;
+  }
+
+  // Static assets: cache-first
+  if (url.pathname.match(/\.(js|css|woff2?|ttf|eot|png|jpg|jpeg|svg|ico|webp|gif)$/)) {
+    event.respondWith(cacheFirst(request));
+    return;
+  }
+
+  // HTML navigation: network-first, offline shell fallback
+  if (request.mode === 'navigate') {
+    event.respondWith(navigationHandler(request));
+  }
 });
+
+// ─── Caching Strategies ───────────────────────────────────────────────────────
+
+async function cacheFirst(request) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    return new Response('Offline — resource not cached', { status: 503 });
+  }
+}
+
+async function networkFirstWithCache(request, cacheName) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const headers = new Headers(response.headers);
+      headers.set('sw-cached-at', Date.now().toString());
+      const cache = await caches.open(cacheName);
+      const stored = new Response(await response.clone().arrayBuffer(), {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
+      cache.put(request, stored);
+    }
+    return response;
+  } catch {
+    const cached = await caches.match(request);
+    if (cached) {
+      console.log('[SW] Serving stale API cache for:', request.url);
+      return cached;
+    }
+    return new Response(JSON.stringify({ error: 'offline' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+async function navigationHandler(request) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    const cached = await caches.match(request) || await caches.match('/');
+    if (cached) return cached;
+    return new Response(
+      `<!doctype html><html lang="fr"><head><meta charset="utf-8">
+      <meta name="viewport" content="width=device-width">
+      <title>SIB 2026 - Hors ligne</title>
+      <style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f8fafc}
+      .box{text-align:center;padding:2rem;max-width:380px}h1{color:#1e40af}p{color:#6b7280}</style>
+      </head><body><div class="box">
+      <h1>SIB 2026</h1><p>Mode hors ligne – vérifiez votre connexion internet.</p>
+      <button onclick="location.reload()" style="margin-top:1rem;padding:.75rem 1.5rem;background:#1e40af;color:white;border:none;border-radius:.5rem;cursor:pointer">
+      Réessayer</button></div></body></html>`,
+      { status: 200, headers: { 'Content-Type': 'text/html;charset=utf-8' } }
+    );
+  }
+}
+
+
 
 // Push event - handle incoming push notifications
 self.addEventListener('push', (event) => {

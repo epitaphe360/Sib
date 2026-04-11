@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Building2, Eye, ExternalLink, Sparkles, Search } from 'lucide-react';
 import { Card } from '../components/ui/Card';
@@ -208,3 +208,4 @@ export default function MiniSiteListPage() {
     </div>
   );
 }
+

@@ -5,7 +5,7 @@
 export const accommodationTranslations = {
   fr: {
     'accommodation.title': 'Hébergement & Hôtels Partenaires',
-    'accommodation.subtitle': 'Profitez de tarifs préférentiels négociés exclusivement pour les participants du sib',
+    'accommodation.subtitle': 'Profitez de tarifs préférentiels négociés exclusivement pour les participants du SIB',
     'accommodation.badge': 'Hôtels Partenaires',
     'accommodation.hotels_partners': 'Hôtels Partenaires',
     'accommodation.vip_discount': 'Reduction VIP',
@@ -17,7 +17,7 @@ export const accommodationTranslations = {
     'accommodation.vip_benefit_3': 'Navette gratuite vers le lieu du salon',
     'accommodation.featured_partner': 'Partenaire Premium',
     'accommodation.standard_rate': 'Tarif Standard',
-    'accommodation.vip_rate': 'Tarif VIP sib',
+    'accommodation.vip_rate': 'Tarif VIP SIB',
     'accommodation.per_night': 'par nuit',
     'accommodation.book_now': 'Réserver',
     'accommodation.contact_hotel': 'Contacter l\'hôtel',
@@ -44,7 +44,7 @@ export const accommodationTranslations = {
     'accommodation.hotel.ibis.desc': 'Hôtel moderne et confortable avec excellent rapport qualité-prix',
     'accommodation.hotel.mazagan.desc': 'Resort 5 étoiles avec casino, plage privée et multiple restaurants gastronomiques',
     'accommodation.hotel.royal.desc': 'Hôtel élégant situé sur un parcours de golf avec vue panoramique',
-    'accommodation.hotel.suisse.desc': 'Hôtel familial avec service personnalisé au cœur d\'Casablanca',
+    'accommodation.hotel.suisse.desc': 'Hôtel familial avec service personnalisé au cœur d\'El Jadida',
     'accommodation.hotel.provence.desc': 'Charme méditerranéen avec terrasse panoramique',
 
     // Distances
@@ -67,7 +67,7 @@ export const accommodationTranslations = {
   },
   en: {
     'accommodation.title': 'Accommodation & Partner Hotels',
-    'accommodation.subtitle': 'Enjoy preferential rates negotiated exclusively for sib participants',
+    'accommodation.subtitle': 'Enjoy preferential rates negotiated exclusively for SIB participants',
     'accommodation.badge': 'Partner Hotels',
     'accommodation.hotels_partners': 'Partner Hotels',
     'accommodation.vip_discount': 'VIP Discount',
@@ -79,7 +79,7 @@ export const accommodationTranslations = {
     'accommodation.vip_benefit_3': 'Free shuttle to the venue',
     'accommodation.featured_partner': 'Premium Partner',
     'accommodation.standard_rate': 'Standard Rate',
-    'accommodation.vip_rate': 'sib VIP Rate',
+    'accommodation.vip_rate': 'SIB VIP Rate',
     'accommodation.per_night': 'per night',
     'accommodation.book_now': 'Book now',
     'accommodation.contact_hotel': 'Contact hotel',
@@ -106,7 +106,7 @@ export const accommodationTranslations = {
     'accommodation.hotel.ibis.desc': 'Modern and comfortable hotel with excellent value for money',
     'accommodation.hotel.mazagan.desc': '5-star resort with casino, private beach and multiple gourmet restaurants',
     'accommodation.hotel.royal.desc': 'Elegant hotel located on a golf course with panoramic views',
-    'accommodation.hotel.suisse.desc': 'Family hotel with personalized service in the heart of Casablanca',
+    'accommodation.hotel.suisse.desc': 'Family hotel with personalized service in the heart of El Jadida',
     'accommodation.hotel.provence.desc': 'Mediterranean charm with panoramic terrace',
 
     // Distances

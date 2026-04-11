@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+ï»¿import { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -55,10 +55,10 @@ export default function ExhibitorDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { exhibitors, selectExhibitor, selectedExhibitor, fetchExhibitors } = useExhibitorStore();
   const { articles, fetchNews } = useNewsStore();
-  // activeTab temporairement retiré (non utilisé)
+  // activeTab temporairement retirÃ© (non utilisÃ©)
 
   useEffect(() => {
-    // Charger les exposants si pas encore chargés
+    // Charger les exposants si pas encore chargÃ©s
     if (exhibitors.length === 0) {
       fetchExhibitors();
     }
@@ -74,7 +74,7 @@ export default function ExhibitorDetailPage() {
     fetchNews();
   }, [fetchNews]);
 
-  // Fonction pour gérer le clic sur le bouton RDV
+  // Fonction pour gÃ©rer le clic sur le bouton RDV
   const handleAppointmentClick = () => {
     const availabilitySection = document.getElementById("disponibilites");
     if (availabilitySection) {
@@ -82,7 +82,7 @@ export default function ExhibitorDetailPage() {
     }
   };
 
-  // Fonction pour gérer le clic sur le bouton Message (chat interne)
+  // Fonction pour gÃ©rer le clic sur le bouton Message (chat interne)
   const handleMessageClick = () => {
     if (!isAuthenticated) {
       toast.error('Veuillez vous connecter pour utiliser la messagerie');
@@ -90,7 +90,7 @@ export default function ExhibitorDetailPage() {
       return;
     }
     if (!canChat) {
-      toast.error('La messagerie est réservée aux exposants, partenaires et visiteurs VIP');
+      toast.error('La messagerie est rÃ©servÃ©e aux exposants, partenaires et visiteurs VIP');
       return;
     }
     if (selectedExhibitor?.userId) {
@@ -114,16 +114,16 @@ export default function ExhibitorDetailPage() {
     );
   }
 
-  // Vérifier si l'exposant existe
+  // VÃ©rifier si l'exposant existe
   if (!selectedExhibitor && id) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Exposant non trouvé
+            Exposant non trouvÃ©
           </h3>
           <p className="text-gray-600 mb-4">
-            L'exposant avec l'ID "{id}" n'existe pas ou a été supprimé.
+            L'exposant avec l'ID "{id}" n'existe pas ou a Ã©tÃ© supprimÃ©.
           </p>
           <Link to={ROUTES.EXHIBITORS}>
             <Button>
@@ -136,10 +136,10 @@ export default function ExhibitorDetailPage() {
     );
   }
 
-  // local non-null alias pour simplifier les accès (après la garde)
+  // local non-null alias pour simplifier les accÃ¨s (aprÃ¨s la garde)
   const exhibitor = selectedExhibitor!;
 
-  // Les données du mini-site sont maintenant chargées depuis Supabase
+  // Les donnÃ©es du mini-site sont maintenant chargÃ©es depuis Supabase
   // Extract sections using helper functions
   const heroSection = getHeroSection(exhibitor.miniSite);
   const aboutSection = getAboutSection(exhibitor.miniSite);
@@ -180,11 +180,11 @@ export default function ExhibitorDetailPage() {
             
             <div className="hidden md:flex items-center space-x-8">
               <a href="#accueil" className="text-gray-700 hover:text-blue-600 transition-colors">Accueil</a>
-              <a href="#apropos" className="text-gray-700 hover:text-blue-600 transition-colors">À propos</a>
+              <a href="#apropos" className="text-gray-700 hover:text-blue-600 transition-colors">Ã€ propos</a>
               <a href="#produits" className="text-gray-700 hover:text-blue-600 transition-colors">Produits</a>
-              <a href="#actualites" className="text-gray-700 hover:text-blue-600 transition-colors">Actualités</a>
+              <a href="#actualites" className="text-gray-700 hover:text-blue-600 transition-colors">ActualitÃ©s</a>
               <a href="#galerie" className="text-gray-700 hover:text-blue-600 transition-colors">Galerie</a>
-              <a href="#disponibilites" className="text-gray-700 hover:text-blue-600 transition-colors">Disponibilités</a>
+              <a href="#disponibilites" className="text-gray-700 hover:text-blue-600 transition-colors">DisponibilitÃ©s</a>
             </div>
 
             <div className="flex items-center space-x-3">
@@ -238,33 +238,18 @@ export default function ExhibitorDetailPage() {
                 }}
               >
                 <Zap className="h-4 w-4 mr-2" />
-                {heroSection?.ctaText || 'Découvrir nos solutions'}
+                {heroSection?.ctaText || 'DÃ©couvrir nos solutions'}
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 className="border-white text-white hover:bg-white hover:text-blue-600"
                 onClick={() => {
-                  const catalogData = {
-                    company: exhibitor.companyName,
-                    products: exhibitor.products.length || 0,
-                    pages: 24,
-                    size: '2.4 MB'
-                  };
-
-                  // Simulation du téléchargement
-                  const link = document.createElement('a');
-                  link.href = 'data:application/pdf;base64,JVBERi0xLjQKJdPr6eEKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwo+PgplbmRvYmoKMiAwIG9iago8PAovVHlwZSAvUGFnZXMKL0tpZHMgWzMgMCBSXQovQ291bnQgMQo+PgplbmRvYmoKMyAwIG9iago8PAovVHlwZSAvUGFnZQovUGFyZW50IDIgMCBSCi9NZWRpYUJveCBbMCAwIDYxMiA3OTJdCj4+CmVuZG9iago=';
-                  link.download = `catalogue-${catalogData.company?.toLowerCase().replace(/\s+/g, '-')}.pdf`;
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-
-                  toast('?? Téléchargement démarré...', { icon: '??' });
+                  toast.info('Catalogue PDF non disponible pour cet exposant.');
                 }}
               >
                 <Download className="h-4 w-4 mr-2" />
-                Télécharger catalogue
+                TÃ©lÃ©charger catalogue
               </Button>
             </div>
             
@@ -299,7 +284,7 @@ export default function ExhibitorDetailPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              {aboutSection?.title || 'À propos de nous'}
+              {aboutSection?.title || 'Ã€ propos de nous'}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               {aboutSection?.description || exhibitor.description}
@@ -336,7 +321,7 @@ export default function ExhibitorDetailPage() {
             className="text-center"
           >
             <h3 className="text-xl font-bold text-gray-900 mb-6">
-              Certifications & Accréditations
+              Certifications & AccrÃ©ditations
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
               {aboutSection?.certifications?.map((cert) => (
@@ -350,7 +335,7 @@ export default function ExhibitorDetailPage() {
         </div>
       </section>
 
-      {/* Products Section - Design Amélioré */}
+      {/* Products Section - Design AmÃ©liorÃ© */}
       <section id="produits" className="py-20 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100/40 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -371,7 +356,7 @@ export default function ExhibitorDetailPage() {
               Produits & Services
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Découvrez notre gamme de solutions innovantes pour l'industrie maritime et portuaire
+              DÃ©couvrez notre gamme de solutions innovantes pour l'industrie du bÃ¢timent et bÃ¢timent
             </p>
           </motion.div>
 
@@ -425,7 +410,7 @@ export default function ExhibitorDetailPage() {
                       {product.description}
                     </p>
                     
-                    {/* Spécifications avec icône */}
+                    {/* SpÃ©cifications avec icÃ´ne */}
                     {product.specifications && (
                       <div className="mb-5 p-3 bg-gray-50 rounded-xl border border-gray-100">
                         <div className="flex items-start gap-2">
@@ -447,7 +432,7 @@ export default function ExhibitorDetailPage() {
                             setTimeout(() => {
                               const messageField = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
                               if (messageField) {
-                                messageField.value = `Demande de devis pour : ${product.name}\n\nCatégorie : ${product.category}\nSpécifications : ${product.specifications || 'À définir'}\n\nMerci de me faire parvenir un devis détaillé.`;
+                                messageField.value = `Demande de devis pour : ${product.name}\n\nCatÃ©gorie : ${product.category}\nSpÃ©cifications : ${product.specifications || 'Ã€ dÃ©finir'}\n\nMerci de me faire parvenir un devis dÃ©taillÃ©.`;
                               }
                             }, 500);
                           }
@@ -461,7 +446,7 @@ export default function ExhibitorDetailPage() {
                         size="sm"
                         className="hover:bg-blue-50 hover:border-blue-300 transition-all"
                         onClick={() => {
-                          toast.success('?? Téléchargement de la fiche technique...');
+                          toast.success('?? TÃ©lÃ©chargement de la fiche technique...');
                         }}
                       >
                         <Download className="h-4 w-4" />
@@ -513,10 +498,10 @@ export default function ExhibitorDetailPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Actualités & Innovations
+              ActualitÃ©s & Innovations
             </h2>
             <p className="text-lg text-gray-600">
-              Restez informé de nos dernières nouvelles et innovations
+              Restez informÃ© de nos derniÃ¨res nouvelles et innovations
             </p>
           </motion.div>
 
@@ -559,7 +544,7 @@ export default function ExhibitorDetailPage() {
                       </Link>
                       <div className="flex items-center text-sm text-gray-500">
                         <span>{article.readTime} min de lecture</span>
-                        <span className="mx-2">•</span>
+                        <span className="mx-2">â€¢</span>
                         <span>{article.views} vues</span>
                       </div>
                     </div>
@@ -581,10 +566,10 @@ export default function ExhibitorDetailPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Galerie & Réalisations
+              Galerie & RÃ©alisations
             </h2>
             <p className="text-lg text-gray-600">
-              Découvrez nos projets et réalisations en images
+              DÃ©couvrez nos projets et rÃ©alisations en images
             </p>
           </motion.div>
 
@@ -600,7 +585,7 @@ export default function ExhibitorDetailPage() {
               >
                 <img
                   src={image.url}
-                  alt={image.alt || `Réalisation ${index + 1}`}
+                  alt={image.alt || `RÃ©alisation ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
               </motion.div>
@@ -619,7 +604,7 @@ export default function ExhibitorDetailPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Témoignages Clients
+              TÃ©moignages Clients
             </h2>
             <p className="text-lg text-gray-600">
               Ce que disent nos partenaires de nos solutions
@@ -680,7 +665,7 @@ export default function ExhibitorDetailPage() {
               Prendre Rendez-vous
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Consultez les créneaux disponibles de {exhibitor.companyName} et réservez votre rencontre.
+              Consultez les crÃ©neaux disponibles de {exhibitor.companyName} et rÃ©servez votre rencontre.
             </p>
           </motion.div>
           <PublicAvailability userId={exhibitor.id} />
@@ -700,7 +685,7 @@ export default function ExhibitorDetailPage() {
               Contactez-nous
             </h2>
             <p className="text-lg text-gray-600">
-              Prêt à discuter de vos besoins ? Contactez notre équipe pour un devis personnalisé
+              PrÃªt Ã  discuter de vos besoins ? Contactez notre Ã©quipe pour un devis personnalisÃ©
             </p>
           </motion.div>
 
@@ -731,7 +716,7 @@ export default function ExhibitorDetailPage() {
                       <Phone className="h-5 w-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Téléphone</p>
+                      <p className="font-medium text-gray-900">TÃ©lÃ©phone</p>
                       <p className="text-gray-600"></p>
                     </div>
                   </div>
@@ -754,11 +739,11 @@ export default function ExhibitorDetailPage() {
                 <ul className="space-y-3">
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">Réponse sous 24h ouvrées</span>
+                    <span className="text-gray-600">RÃ©ponse sous 24h ouvrÃ©es</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">Devis gratuit et personnalisé</span>
+                    <span className="text-gray-600">Devis gratuit et personnalisÃ©</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
@@ -786,14 +771,14 @@ export default function ExhibitorDetailPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Prénom *
+                        PrÃ©nom *
                       </label>
                       <input type="text"
                         name="firstName"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Votre prénom"
+                        placeholder="Votre prÃ©nom"
                         required
-                       aria-label="Votre prénom" />
+                       aria-label="Votre prÃ©nom" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -822,18 +807,18 @@ export default function ExhibitorDetailPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Société
+                      SociÃ©tÃ©
                     </label>
                     <input type="text"
                       name="company"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Nom de votre société"
-                     aria-label="Nom de votre société" />
+                      placeholder="Nom de votre sociÃ©tÃ©"
+                     aria-label="Nom de votre sociÃ©tÃ©" />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Téléphone
+                      TÃ©lÃ©phone
                     </label>
                     <input type="tel"
                       name="phone"
@@ -851,7 +836,7 @@ export default function ExhibitorDetailPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     >
-                      <option value="">Sélectionnez un sujet</option>
+                      <option value="">SÃ©lectionnez un sujet</option>
                       <option value="quote">Demande de devis</option>
                       <option value="information">Demande d'informations</option>
                       <option value="partnership">Partenariat commercial</option>
@@ -868,7 +853,7 @@ export default function ExhibitorDetailPage() {
                       name="message"
                       rows={4}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Décrivez votre projet et vos besoins..."
+                      placeholder="DÃ©crivez votre projet et vos besoins..."
                       required
                     />
                   </div>
@@ -879,7 +864,7 @@ export default function ExhibitorDetailPage() {
                     onClick={(e) => {
                       e.preventDefault();
 
-                      toast.success(`?? Message envoyé avec succès ! Nous vous répondrons sous 24h.`);
+                      toast.success(`?? Message envoyÃ© avec succÃ¨s ! Nous vous rÃ©pondrons sous 24h.`);
                     }}
                   >
                     <Send className="h-4 w-4 mr-2" />
@@ -901,10 +886,10 @@ export default function ExhibitorDetailPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl font-bold mb-4">
-              Prêt à transformer vos opérations portuaires ?
+              PrÃªt Ã  transformer vos opÃ©rations BTP ?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Rejoignez plus de 500 ports dans le monde qui font confiance à nos solutions
+              Rejoignez plus de 500 ports dans le monde qui font confiance Ã  nos solutions
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50"
@@ -913,38 +898,22 @@ export default function ExhibitorDetailPage() {
                     company: selectedExhibitor?.companyName,
                     products: selectedExhibitor?.products.length || 0,
                     duration: '30 minutes',
-                    format: 'Démonstration interactive'
+                    format: 'DÃ©monstration interactive'
                   };
                   
-                  toast.success(`?? Démonstration programmée pour ${demoData.company}`);
+                  toast.success(`?? DÃ©monstration programmÃ©e pour ${demoData.company}`);
                 }}
               >
                 <Target className="h-5 w-5 mr-2" />
-                Demander une démonstration
+                Demander une dÃ©monstration
               </Button>
               <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600"
                 onClick={() => {
-                  const catalogData = {
-                    company: selectedExhibitor?.companyName,
-                    products: selectedExhibitor?.products.length || 0,
-                    pages: 48,
-                    size: '5.2 MB',
-                    format: 'PDF Haute Qualité'
-                  };
-                  
-                  // Simulation téléchargement
-                  const link = document.createElement('a');
-                  link.href = 'data:application/pdf;base64,JVBERi0xLjQKJdPr6eEK';
-                  link.download = `catalogue-complet-${catalogData.company?.toLowerCase().replace(/\s+/g, '-')}.pdf`;
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  
-                  toast('?? Téléchargement du catalogue complet démarré', { icon: '??' });
+                  toast.info('Catalogue complet non disponible pour cet exposant.');
                 }}
               >
                 <Download className="h-5 w-5 mr-2" />
-                Télécharger notre catalogue
+                TÃ©lÃ©charger notre catalogue
               </Button>
             </div>
           </motion.div>
@@ -980,9 +949,9 @@ export default function ExhibitorDetailPage() {
             <div>
               <h4 className="font-semibold text-white mb-4">Liens rapides</h4>
               <ul className="space-y-2">
-                <li><a href="#apropos" className="text-gray-400 hover:text-white transition-colors">À propos</a></li>
+                <li><a href="#apropos" className="text-gray-400 hover:text-white transition-colors">Ã€ propos</a></li>
                 <li><a href="#produits" className="text-gray-400 hover:text-white transition-colors">Produits</a></li>
-                <li><a href="#actualites" className="text-gray-400 hover:text-white transition-colors">Actualités</a></li>
+                <li><a href="#actualites" className="text-gray-400 hover:text-white transition-colors">ActualitÃ©s</a></li>
               </ul>
             </div>
 
@@ -1008,16 +977,16 @@ export default function ExhibitorDetailPage() {
 
           <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 {exhibitor.companyName}. Tous droits réservés.
+              Â© 2024 {exhibitor.companyName}. Tous droits rÃ©servÃ©s.
             </p>
             <p className="text-sm text-gray-500 mt-4 md:mt-0">
-              Propulsé par SIB 2026
+              PropulsÃ© par SIB 2026
             </p>
           </div>
         </div>
       </footer>
 
-      {/* Floating Action Button - positionné au-dessus du widget chatbot */}
+      {/* Floating Action Button - positionnÃ© au-dessus du widget chatbot */}
       <div className="fixed bottom-24 right-6 z-50">
         <div className="flex flex-col space-y-3">
           <Button 
@@ -1055,11 +1024,11 @@ export default function ExhibitorDetailPage() {
               if (isFavorite) {
                 const newFavorites = favorites.filter((id: string) => id !== exhibitor.id);
                 localStorage.setItem('SIB-favorites', JSON.stringify(newFavorites));
-                toast.success(`Favoris mis à jour — retiré: ${exhibitor.companyName}`);
+                toast.success(`Favoris mis Ã  jour â€” retirÃ©: ${exhibitor.companyName}`);
               } else {
                 favorites.push(exhibitor.id);
                 localStorage.setItem('SIB-favorites', JSON.stringify(favorites));
-                toast.success(`Favoris mis à jour — ajouté: ${exhibitor.companyName}`);
+                toast.success(`Favoris mis Ã  jour â€” ajoutÃ©: ${exhibitor.companyName}`);
               }
             }}
             title={t('ui.add_remove_favorite')}

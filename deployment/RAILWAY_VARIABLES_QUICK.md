@@ -33,16 +33,6 @@ VITE_FIREBASE_APP_ID=1:123456789012:web:xxxxxxxxxxxx
 1. https://console.firebase.google.com
 2. Project Settings → General → Your apps → SDK setup
 
-### Stripe (Si vous utilisez les paiements)
-
-```bash
-VITE_STRIPE_PUBLISHABLE_KEY=pk_live_XXXXXXXXXXXXXXXXXXXXX
-```
-
-**Où trouver ?**
-1. https://dashboard.stripe.com
-2. Developers → API keys → Publishable key
-
 ### Secrets API (Générer avec openssl)
 
 ```bash
@@ -85,7 +75,7 @@ NODE_ENV=production
 ### Complet (Toutes fonctionnalités)
 - [ ] Variables Supabase ✅
 - [ ] Variables Firebase (si utilisé)
-- [ ] Variable Stripe (si paiements)
+- [ ] Paiements PayPal/CMI/virement validés
 - [ ] Secrets API générés
 - [ ] `VITE_APP_URL` configuré
 - [ ] `NODE_ENV=production` configuré

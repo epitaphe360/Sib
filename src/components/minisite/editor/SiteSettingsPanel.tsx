@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+﻿import React, { memo, useCallback } from 'react';
 import { Settings, Upload } from 'lucide-react';
 import { Card } from '../../ui/Card';
 import { Button } from '../../ui/Button';
@@ -131,3 +131,4 @@ export const SiteSettingsPanel: React.FC<SiteSettingsPanelProps> = memo(({
 });
 
 SiteSettingsPanel.displayName = 'SiteSettingsPanel';
+

@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface MediaVisibilityState {
@@ -19,3 +19,4 @@ export const useMediaVisibilityStore = create<MediaVisibilityState>()(
     }
   )
 );
+

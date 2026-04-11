@@ -1,13 +1,9 @@
 import { supabase } from '../lib/supabase';
-import { loadStripe, Stripe } from '@stripe/stripe-js';
 
 /**
  * Payment Service for sib 2026
- * Handles Stripe, PayPal, and CMI Morocco payment integrations
+ * Handles PayPal, CMI Morocco and bank transfer payment integrations
  */
-
-// Stripe public key (should be in env variables)
-const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY || '';
 
 // PayPal client ID (should be in env variables)
 export const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID || '';
@@ -15,60 +11,24 @@ export const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID || '';
 // Payment amounts
 export const PAYMENT_AMOUNTS = {
   VIP_PASS: 300, // euros
-  VIP_PASS_CENTS: 30000, // cents for Stripe
+  VIP_PASS_CENTS: 30000,
 };
 
-let stripePromise: Promise<Stripe | null>;
-
 /**
- * Get Stripe instance
- */
-export function getStripe() {
-  if (!stripePromise) {
-    stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
-  }
-  return stripePromise;
-}
-
-/**
- * Create Stripe checkout session for VIP pass
+ * Stripe is disabled for this project
  */
 export async function createStripeCheckoutSession(userId: string, userEmail: string) {
-  try {
-    // Call backend function to create checkout session
-    const { data, error } = await supabase.functions.invoke('create-stripe-checkout', {
-      body: {
-        userId,
-        userEmail,
-        amount: PAYMENT_AMOUNTS.VIP_PASS_CENTS,
-        currency: 'eur',
-        productName: 'Pass Premium VIP sib 2026',
-        successUrl: `${window.location.origin}/visitor/payment-success`,
-        cancelUrl: `${window.location.origin}/visitor/subscription`,
-      },
-    });
-
-    if (error) throw error;
-
-    return data;
-  } catch (error) {
-    console.error('Error creating Stripe checkout session:', error);
-    throw error;
-  }
+  void userId;
+  void userEmail;
+  throw new Error('Stripe est désactivé. Utilisez PayPal, CMI ou virement bancaire.');
 }
 
 /**
- * Handle Stripe payment redirect
+ * Stripe is disabled for this project
  */
 export async function redirectToStripeCheckout(sessionId: string) {
-  const stripe = await getStripe();
-  if (!stripe) throw new Error('Stripe not loaded');
-
-  const { error } = await stripe.redirectToCheckout({ sessionId });
-  if (error) {
-    console.error('Stripe redirect error:', error);
-    throw error;
-  }
+  void sessionId;
+  throw new Error('Stripe est désactivé.');
 }
 
 /**
@@ -184,7 +144,7 @@ export async function createPaymentRecord(params: {
   userId: string;
   amount: number;
   currency: string;
-  paymentMethod: 'stripe' | 'paypal' | 'cmi' | 'bank_transfer';
+  paymentMethod: 'paypal' | 'cmi' | 'bank_transfer';
   transactionId?: string;
   status: 'pending' | 'approved' | 'rejected';
 }) {

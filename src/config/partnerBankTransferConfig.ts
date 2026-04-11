@@ -69,7 +69,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         '⚠️ IMPORTANT: Indiquez la référence de paiement dans le libellé du virement',
         '⚠️ Le montant doit être exact selon le tier choisi',
         '⚠️ Conservez votre preuve de virement (vous devrez l\'uploader)',
-        '⚠️ Les virements sont en MAD (Dirham marocain)',
+        '⚠️ Les virements sont en USD - vérifiez le taux de change avec votre banque',
         '⚠️ Vous pouvez suivre l\'état de votre demande dans votre tableau de bord'
       ],
       additionalInfo: [
@@ -93,7 +93,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         '⚠️ IMPORTANT: Include the payment reference in the transfer description',
         '⚠️ Amount must be exact according to chosen tier',
         '⚠️ Keep your transfer proof (you will need to upload it)',
-        '⚠️ Transfers are in MAD (Moroccan Dirham)',
+        '⚠️ Transfers are in USD - check exchange rate with your bank',
         '⚠️ You can track your request status in your dashboard'
       ],
       additionalInfo: [
@@ -117,7 +117,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         '⚠️ مهم: قم بتضمين مرجع الدفع في وصف التحويل',
         '⚠️ يجب أن يكون المبلغ دقيقًا حسب المستوى المختار',
         '⚠️ احتفظ بإثبات التحويل الخاص بك (ستحتاج إلى تحميله)',
-        '⚠️ التحويلات بالدرهم المغربي (MAD)',
+        '⚠️ التحويلات بالدولار الأمريكي - تحقق من سعر الصرف مع البنك الخاص بك',
         '⚠️ يمكنك تتبع حالة طلبك في لوحة التحكم الخاصة بك'
       ],
       additionalInfo: [
@@ -144,7 +144,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
 
 /**
  * Générer la référence de paiement pour un partenaire
- * Format: sib-PARTNER-{USER_ID_SHORT}-{TIER}-{TIMESTAMP}
+ * Format: SIB-PARTNER-{USER_ID_SHORT}-{TIER}-{TIMESTAMP}
  */
 export function generatePartnerPaymentReference(
   userId: string,
@@ -155,14 +155,14 @@ export function generatePartnerPaymentReference(
   const requestShort = requestId.substring(0, 8).toUpperCase();
   const tierCode = tier.substring(0, 3).toUpperCase();
   const timestamp = Date.now().toString().slice(-6);
-  return `sib-PARTNER-${userShort}-${tierCode}-${requestShort}-${timestamp}`;
+  return `SIB-PARTNER-${userShort}-${tierCode}-${requestShort}-${timestamp}`;
 }
 
 /**
  * Valider le format d'une référence de paiement partenaire
  */
 export function validatePartnerPaymentReference(reference: string): boolean {
-  const pattern = /^sib-PARTNER-[A-F0-9]{8}-(MUS|SIL|GOL|PLA)-[A-F0-9]{8}-\d{6}$/;
+  const pattern = /^SIB-PARTNER-[A-F0-9]{8}-(MUS|SIL|GOL|PLA)-[A-F0-9]{8}-\d{6}$/;
   return pattern.test(reference);
 }
 

@@ -13,7 +13,6 @@ WORKDIR /app
 # Ce ne sont PAS des secrets serveur :
 #   - VITE_FIREBASE_*: Clés publiques Firebase pour l'auth client
 #   - VITE_SUPABASE_ANON_KEY: Clé anonyme publique Supabase (row-level security)
-#   - VITE_STRIPE_PUBLISHABLE_KEY: Clé PUBLIQUE Stripe (pk_live_...)
 # 
 # Ces variables sont visibles dans le code source du navigateur par design.
 # C'est la pratique standard pour les applications Vite/React.
@@ -28,7 +27,6 @@ ARG VITE_FIREBASE_MESSAGING_SENDER_ID
 ARG VITE_FIREBASE_APP_ID
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
-ARG VITE_STRIPE_PUBLISHABLE_KEY
 
 # Set as environment variables for the build process
 ENV VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY \
@@ -38,8 +36,7 @@ ENV VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY \
     VITE_FIREBASE_MESSAGING_SENDER_ID=$VITE_FIREBASE_MESSAGING_SENDER_ID \
     VITE_FIREBASE_APP_ID=$VITE_FIREBASE_APP_ID \
     VITE_SUPABASE_URL=$VITE_SUPABASE_URL \
-    VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY \
-    VITE_STRIPE_PUBLISHABLE_KEY=$VITE_STRIPE_PUBLISHABLE_KEY
+    VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
 # Copier les fichiers de dépendances
 COPY package*.json ./

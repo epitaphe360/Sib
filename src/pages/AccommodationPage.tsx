@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 import { Hotel, Star, MapPin, Phone, Wifi, ParkingCircle, Waves, BellRing, UtensilsCrossed, CheckCircle, X } from 'lucide-react';
 
@@ -411,3 +411,4 @@ const AccommodationPage: React.FC = () => {
 };
 
 export default AccommodationPage;
+

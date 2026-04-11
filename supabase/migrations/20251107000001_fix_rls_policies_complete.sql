@@ -105,33 +105,54 @@ FOR SELECT
 TO public
 USING (true);
 
--- Permettre aux utilisateurs authentifiés de créer leurs propres créneaux
+-- Permettre aux utilisateurs authentifiés de créer/modifier/supprimer leurs créneaux
 DROP POLICY IF EXISTS "Users can create own time slots" ON time_slots;
-
-CREATE POLICY "Users can create own time slots"
-ON time_slots
-FOR INSERT
-TO authenticated
-WITH CHECK (auth.uid() = user_id);
-
--- Permettre aux utilisateurs de modifier leurs propres créneaux
 DROP POLICY IF EXISTS "Users can update own time slots" ON time_slots;
-
-CREATE POLICY "Users can update own time slots"
-ON time_slots
-FOR UPDATE
-TO authenticated
-USING (auth.uid() = user_id)
-WITH CHECK (auth.uid() = user_id);
-
--- Permettre aux utilisateurs de supprimer leurs propres créneaux
 DROP POLICY IF EXISTS "Users can delete own time slots" ON time_slots;
 
-CREATE POLICY "Users can delete own time slots"
-ON time_slots
-FOR DELETE
-TO authenticated
-USING (auth.uid() = user_id);
+DO $$
+BEGIN
+  -- Si la colonne user_id existe dans time_slots, on l'utilise directement
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'time_slots' AND column_name = 'user_id'
+  ) THEN
+    CREATE POLICY "Users can create own time slots"
+    ON time_slots FOR INSERT TO authenticated
+    WITH CHECK (auth.uid() = user_id);
+
+    CREATE POLICY "Users can update own time slots"
+    ON time_slots FOR UPDATE TO authenticated
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+    CREATE POLICY "Users can delete own time slots"
+    ON time_slots FOR DELETE TO authenticated
+    USING (auth.uid() = user_id);
+  ELSE
+    -- Sinon, on passe par la table exhibitors
+    CREATE POLICY "Users can create own time slots"
+    ON time_slots FOR INSERT TO authenticated
+    WITH CHECK (exhibitor_id IN (
+      SELECT id FROM exhibitors WHERE exhibitors.user_id = auth.uid()
+    ));
+
+    CREATE POLICY "Users can update own time slots"
+    ON time_slots FOR UPDATE TO authenticated
+    USING (exhibitor_id IN (
+      SELECT id FROM exhibitors WHERE exhibitors.user_id = auth.uid()
+    ))
+    WITH CHECK (exhibitor_id IN (
+      SELECT id FROM exhibitors WHERE exhibitors.user_id = auth.uid()
+    ));
+
+    CREATE POLICY "Users can delete own time slots"
+    ON time_slots FOR DELETE TO authenticated
+    USING (exhibitor_id IN (
+      SELECT id FROM exhibitors WHERE exhibitors.user_id = auth.uid()
+    ));
+  END IF;
+END $$;
 
 -- ====================
 -- NEWS_ARTICLES POLICIES

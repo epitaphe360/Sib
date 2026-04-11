@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Hook useDebounce
  * Retarde l'update d'une valeur pour éviter trop d'appels
  */
@@ -67,3 +67,4 @@ export function useThrottle<T extends (...args: any[]) => any>(
     [callback, delay]
   );
 }
+

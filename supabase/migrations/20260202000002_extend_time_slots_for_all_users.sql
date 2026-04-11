@@ -31,7 +31,7 @@ DROP POLICY IF EXISTS "Admins can manage all slots" ON time_slots;
 CREATE POLICY "Anyone can view available time slots"
   ON time_slots FOR SELECT
   USING (available = true OR auth.uid() IN (
-    SELECT id FROM users WHERE user_type = 'admin'
+    SELECT id FROM users WHERE type = 'admin'
   ));
 
 -- Politique pour les propriétaires (exhibitors, partners, or VIP visitors)
@@ -49,7 +49,7 @@ CREATE POLICY "Users can manage their own slots"
     OR EXISTS (
       SELECT 1 FROM users
       WHERE id = auth.uid()
-      AND user_type = 'admin'
+      AND type = 'admin'
     )
   )
   WITH CHECK (
@@ -61,7 +61,7 @@ CREATE POLICY "Users can manage their own slots"
     OR EXISTS (
       SELECT 1 FROM users
       WHERE id = auth.uid()
-      AND user_type = 'admin'
+      AND type = 'admin'
     )
   );
 
@@ -72,6 +72,6 @@ CREATE POLICY "Admins can manage all time slots"
     EXISTS (
       SELECT 1 FROM users
       WHERE id = auth.uid()
-      AND user_type = 'admin'
+      AND type = 'admin'
     )
   );

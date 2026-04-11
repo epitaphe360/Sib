@@ -1,14 +1,14 @@
-/**
- * ExhibitorsPage Optimisé - EXEMPLE d'implémentation complète
+ï»¿/**
+ * ExhibitorsPage OptimisÃ© - EXEMPLE d'implÃ©mentation complÃ¨te
  * Utilise tous les nouveaux composants pour atteindre 100%
  *
  * Features:
  * - Pagination avec usePagination
- * - Search avancé avec autocomplete
+ * - Search avancÃ© avec autocomplete
  * - Filtres multiples
  * - Sorting
  * - Export CSV/Excel/PDF
- * - Cards mémoïsées pour performance
+ * - Cards mÃ©moÃ¯sÃ©es pour performance
  * - Rate limiting
  * - Accessibility WCAG 2.1
  */
@@ -115,18 +115,18 @@ export const ExhibitorsPageOptimized: React.FC = () => {
   const searchFilters = [
     {
       key: 'category',
-      label: 'Catégorie',
+      label: 'CatÃ©gorie',
       type: 'select' as const,
       options: [
         { value: 'institutional', label: 'Institutionnel' },
-        { value: 'port-industry', label: 'Industrie Portuaire' },
-        { value: 'port-operations', label: 'Opérations Portuaires' },
-        { value: 'academic', label: 'Académique' },
+        { value: 'port-industry', label: 'Industrie du BÃ¢timent' },
+        { value: 'port-operations', label: 'OpÃ©rations du BÃ¢timent' },
+        { value: 'academic', label: 'AcadÃ©mique' },
       ],
     },
     {
       key: 'verified',
-      label: 'Vérifié uniquement',
+      label: 'VÃ©rifiÃ© uniquement',
       type: 'checkbox' as const,
     },
     {
@@ -145,10 +145,10 @@ export const ExhibitorsPageOptimized: React.FC = () => {
           {/* Header */}
           <header id="main-navigation" className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              Exposants sib 2026
+              Exposants SIB 2026
             </h1>
             <p className="text-lg text-gray-600">
-              Découvrez les {totalItems} exposants participant au salon
+              DÃ©couvrez les {totalItems} exposants participant au salon
             </p>
           </header>
 
@@ -181,15 +181,15 @@ export const ExhibitorsPageOptimized: React.FC = () => {
               >
                 <option value="companyName">Nom</option>
                 <option value="sector">Secteur</option>
-                <option value="category">Catégorie</option>
+                <option value="category">CatÃ©gorie</option>
               </select>
 
               <button
                 onClick={() => sortField && toggleSort(sortField)}
                 className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                aria-label={`Direction: ${sortDirection === 'asc' ? 'Croissant' : 'Décroissant'}`}
+                aria-label={`Direction: ${sortDirection === 'asc' ? 'Croissant' : 'DÃ©croissant'}`}
               >
-                {sortDirection === 'asc' ? '?' : '?'}
+                {sortDirection === 'asc' ? 'â†‘' : 'â†“'}
               </button>
             </div>
 
@@ -249,7 +249,7 @@ export const ExhibitorsPageOptimized: React.FC = () => {
             ) : paginatedItems.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-lg text-gray-600">
-                  Aucun exposant trouvé pour votre recherche
+                  Aucun exposant trouvÃ© pour votre recherche
                 </p>
                 <button
                   onClick={clearFilters}
@@ -299,10 +299,10 @@ export const ExhibitorsPageOptimized: React.FC = () => {
           <footer id="footer" className="mt-12 pt-8 border-t border-gray-200">
             <div className="text-center text-sm text-gray-600">
               <p>
-                {totalItems} exposants · Page {currentPage} sur {totalPages}
+                {totalItems} exposants Â· Page {currentPage} sur {totalPages}
               </p>
               <p className="mt-2">
-                Recherche: "{searchQuery || 'Aucune'}" · Résultats: {paginatedItems.length}
+                Recherche: "{searchQuery || 'Aucune'}" Â· RÃ©sultats: {paginatedItems.length}
               </p>
             </div>
           </footer>

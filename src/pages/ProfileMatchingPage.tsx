@@ -31,42 +31,42 @@ import { ROUTES } from '../lib/routes';
 
 // Types de secteurs disponibles pour le matching
 const AVAILABLE_SECTORS = [
-  'Port Operations',
-  'Maritime Technology',
-  'Digital Transformation',
-  'Logistics & Supply Chain',
-  'Sustainability & Environment',
-  'Infrastructure & Construction',
-  'Equipment Manufacturing',
-  'Consulting Services',
-  'Research & Development',
-  'Government & Regulation',
-  'Energy & Renewables',
-  'Shipping & Freight',
-  'Offshore Industries',
-  'Cybersecurity Maritime',
-  'Training & Education'
+  'Gros Oeuvre',
+  'Second Oeuvre',
+  'MEP / CVC / Électricité',
+  'Matériaux de Construction',
+  'Finitions & Revêtements',
+  'Architecture & Bureau d\'Études',
+  'Promotion Immobilière',
+  'Ingénierie Structure',
+  'VRD & Terrassement',
+  'Énergie & Renouvelables',
+  'BIM & Digital Construction',
+  'Sécurité Incendie',
+  'Équipements de Chantier',
+  'Maintenance Technique',
+  'Formation & Certification BTP'
 ];
 
 // Centres d'intérêt disponibles
 const AVAILABLE_INTERESTS = [
-  'Smart Ports',
-  'Decarbonization',
-  'Automation',
-  'IoT & Sensors',
-  'Artificial Intelligence',
-  'Blockchain',
-  'Green Technologies',
-  'Port Security',
-  'Terminal Operations',
-  'Cargo Handling',
-  'Fleet Management',
-  'Port Community Systems',
-  'Trade Facilitation',
-  'Maritime Safety',
+  'Décarbonation des chantiers',
+  'Industrialisation de la construction',
+  'Préfabrication',
+  'IoT Bâtiment',
+  'Intelligence Artificielle',
+  'BIM 4D/5D',
+  'Économie circulaire',
+  'Sécurité chantier',
+  'Gestion de projet',
+  'Matériaux bas carbone',
+  'Efficacité énergétique',
+  'Smart Building',
+  'Conformité réglementaire',
+  'BTP Safety',
   'Innovation',
   'Startups',
-  'Investment Opportunities'
+  'Opportunités d\'investissement'
 ];
 
 // Objectifs de participation
@@ -77,7 +77,7 @@ const AVAILABLE_OBJECTIVES = [
   'Identifier des fournisseurs',
   'Explorer de nouveaux marchés',
   'Rencontrer des investisseurs',
-  'Découvrir les innovations portuaires',
+  'Découvrir les innovations BTP',
   'Benchmarking & veille',
   'Opportunités d\'emploi',
   'Formation continue'
@@ -746,3 +746,5 @@ export default function ProfileMatchingPage() {
     </div>
   );
 }
+
+

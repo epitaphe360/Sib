@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+﻿import React, { useEffect, useState, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toast } from 'sonner';
 import { Download, Printer, RefreshCw, AlertTriangle, CheckCircle, XCircle, Scan, Calendar, User, Briefcase, Building } from 'lucide-react';
@@ -148,7 +148,7 @@ export default function BadgePage() {
       </style>
 
       <div className="no-print mb-8 text-center">
-        <h1 className="text-3xl font-bold mb-2">?? {t('badge.my_access_badge')}</h1>
+        <h1 className="text-3xl font-bold mb-2">🎫 {t('badge.my_access_badge')}</h1>
         <p className="text-gray-600">
           {badge
             ? t('badge.download_print_info')
@@ -179,7 +179,7 @@ export default function BadgePage() {
             ) : (
               <>
                 <Scan className="w-5 h-5 mr-2" />
-                ? {t('badge.generate_my_badge')}
+                ✨ {t('badge.generate_my_badge')}
               </>
             )}
           </Button>
@@ -228,12 +228,12 @@ export default function BadgePage() {
             >
               {/* Header */}
               <div className="text-center p-6 border-b-2" style={{ borderColor: badgeColor }}>
-                <img src="/logo-fond-bleu.jpg" alt="SIB Logo" className="h-16 mx-auto mb-3" />
+                <img src="/logo-sib2026.png" alt="SIB Logo" className="h-16 mx-auto mb-3" />
                 <div className="text-2xl font-bold" style={{ color: badgeColor }}>
                   SIB 2026
                 </div>
                 <div className="text-xs text-gray-500 mt-1 uppercase tracking-wider">
-                  Salon International du B�timent et de leurs �cosyst�me
+                  Salon International des Ports et de leurs Écosystème
                 </div>
               </div>
 
@@ -332,7 +332,7 @@ export default function BadgePage() {
               {(badge.accessLevel === 'vip' || badge.accessLevel === 'premium') && (
                 <div className="mt-4 bg-yellow-50 p-3 rounded-lg border border-yellow-200 text-yellow-800 text-sm">
                   <strong className="block mb-1 flex items-center gap-1">
-                    <span className="text-lg">??</span> {t('badge.vip_advantages')}
+                    <span className="text-lg">👑</span> {t('badge.vip_advantages')}
                   </strong>
                   <ul className="list-disc list-inside pl-1 space-y-1 text-xs">
                     <li>{t('badge.vip_advantage_1')}</li>
@@ -345,7 +345,7 @@ export default function BadgePage() {
 
             {/* Stats */}
             <Card className="p-6">
-              <h4 className="text-lg font-bold text-gray-900 mb-4">?? {t('badge.statistics')}</h4>
+              <h4 className="text-lg font-bold text-gray-900 mb-4">📊 {t('badge.statistics')}</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <div className="text-xs text-gray-500 mb-1">{t('badge.scans_done')}</div>

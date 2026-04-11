@@ -203,7 +203,7 @@ export default function AvailabilityManager({ userId, userType, onAvailabilityUp
             Gestion des Disponibilités
           </h3>
           <p className="text-base text-gray-600">
-            Créez et gérez vos créneaux de rendez-vous pour sib 2026
+            Créez et gérez vos créneaux de rendez-vous pour SIB 2026
           </p>
         </div>
         <Button
@@ -352,7 +352,7 @@ export default function AvailabilityManager({ userId, userType, onAvailabilityUp
               Aucune disponibilité configurée
             </h4>
             <p className="text-gray-600 mb-6 max-w-md mx-auto leading-relaxed">
-              Commencez par ajouter vos créneaux de disponibilité pour permettre aux visiteurs de prendre rendez-vous avec vous pendant sib 2026.
+              Commencez par ajouter vos créneaux de disponibilité pour permettre aux visiteurs de prendre rendez-vous avec vous pendant SIB 2026.
             </p>
             <Button 
               onClick={() => setShowAddForm(true)}

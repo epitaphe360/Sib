@@ -38,7 +38,7 @@ export interface PaymentConfirmationData {
 }
 
 class EmailTemplateService {
-  private baseUrl = import.meta.env.VITE_APP_URL || 'https://sib2026.ma';
+  private baseUrl = import.meta.env.VITE_APP_URL || 'https://sibevent.com';
 
   /**
    * Base HTML template
@@ -51,7 +51,7 @@ class EmailTemplateService {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="x-apple-disable-message-reformatting">
-  <title>sib 2026</title>
+  <title>SIB 2026</title>
   ${previewText ? `<!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]-->` : ''}
   <style>
     body {
@@ -142,9 +142,9 @@ class EmailTemplateService {
           <!-- Header -->
           <tr>
             <td class="header">
-              <a href="${this.baseUrl}" class="logo">sib 2026</a>
+              <a href="${this.baseUrl}" class="logo">SIB 2026</a>
               <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 16px;">
-                Salon International du B�timent
+                Salon International des Ports
               </p>
             </td>
           </tr>
@@ -160,18 +160,18 @@ class EmailTemplateService {
           <tr>
             <td class="footer">
               <div class="social-links">
-                <a href="https://facebook.com/siport2026">Facebook</a>
-                <a href="https://twitter.com/siport2026">Twitter</a>
-                <a href="https://linkedin.com/company/siport2026">LinkedIn</a>
+                <a href="https://facebook.com/sib2026">Facebook</a>
+                <a href="https://twitter.com/sib2026">Twitter</a>
+                <a href="https://linkedin.com/company/sib2026">LinkedIn</a>
               </div>
 
               <p>
-                sib 2026 - Salon International du B�timent<br>
-                1-3 Avril 2026, Casablanca, Maroc
+                SIB 2026 - Salon International des Ports<br>
+                1-3 Avril 2026, El Jadida, Maroc
               </p>
 
               <p style="font-size: 12px; color: #9ca3af; margin-top: 20px;">
-                Vous recevez cet email car vous êtes inscrit sur sib2026.ma<br>
+                Vous recevez cet email car vous êtes inscrit sur sibevent.com<br>
                 <a href="${this.baseUrl}/unsubscribe" style="color: #3B82F6;">Se désabonner</a> |
                 <a href="${this.baseUrl}/preferences" style="color: #3B82F6;">Préférences</a>
               </p>
@@ -193,7 +193,7 @@ class EmailTemplateService {
     const content = `
       <h1>Bienvenue ${data.firstName} ! 🎉</h1>
 
-      <p>Merci de vous être inscrit sur sib 2026 en tant que <strong>${data.accountType}</strong>.</p>
+      <p>Merci de vous être inscrit sur SIB 2026 en tant que <strong>${data.accountType}</strong>.</p>
 
       <p>Votre compte a été créé avec succès. Vous pouvez dès maintenant accéder à votre tableau de bord et profiter de toutes les fonctionnalités de la plateforme.</p>
 
@@ -205,29 +205,29 @@ class EmailTemplateService {
         <a href="${data.loginUrl}" class="button">Accéder à mon compte</a>
       </center>
 
-      <p>Si vous avez des questions, n'hésitez pas à nous contacter à support@sib2026.ma</p>
+      <p>Si vous avez des questions, n'hésitez pas à nous contacter à support@sibevent.com</p>
 
-      <p>À bientôt,<br>L'équipe sib 2026</p>
+      <p>À bientôt,<br>L'équipe SIB 2026</p>
     `;
 
     const text = `
 Bienvenue ${data.firstName} !
 
-Merci de vous être inscrit sur sib 2026 en tant que ${data.accountType}.
+Merci de vous être inscrit sur SIB 2026 en tant que ${data.accountType}.
 
 Votre compte a été créé avec succès. Connectez-vous sur ${data.loginUrl}
 
 Adresse email: ${data.email}
 
-Si vous avez des questions, contactez-nous à support@sib2026.ma
+Si vous avez des questions, contactez-nous à support@sibevent.com
 
 À bientôt,
-L'équipe sib 2026
+L'équipe SIB 2026
     `.trim();
 
     return {
-      subject: 'Bienvenue sur sib 2026 ! 🎉',
-      html: this.getBaseTemplate(content, 'Bienvenue sur sib 2026 !'),
+      subject: 'Bienvenue sur SIB 2026 ! 🎉',
+      html: this.getBaseTemplate(content, 'Bienvenue sur SIB 2026 !'),
       text,
     };
   }
@@ -264,7 +264,7 @@ L'équipe sib 2026
         </p>
       ` : ''}
 
-      <p>À bientôt,<br>L'équipe sib 2026</p>
+      <p>À bientôt,<br>L'équipe SIB 2026</p>
     `;
 
     const text = `
@@ -284,7 +284,7 @@ Nous vous rappelons ce rendez-vous 24h avant.
 ${data.cancelUrl ? `Annuler: ${data.cancelUrl}` : ''}
 
 À bientôt,
-L'équipe sib 2026
+L'équipe SIB 2026
     `.trim();
 
     return {
@@ -317,7 +317,7 @@ L'équipe sib 2026
 
       <p>Votre compte a été activé et vous avez maintenant accès à toutes les fonctionnalités.</p>
 
-      <p>Merci de votre confiance,<br>L'équipe sib 2026</p>
+      <p>Merci de votre confiance,<br>L'équipe SIB 2026</p>
     `;
 
     const text = `
@@ -333,11 +333,11 @@ Date: ${data.date}
 Téléchargez votre reçu: ${data.downloadUrl}
 
 Merci de votre confiance,
-L'équipe sib 2026
+L'équipe SIB 2026
     `.trim();
 
     return {
-      subject: 'Paiement confirmé - sib 2026',
+      subject: 'Paiement confirmé - SIB 2026',
       html: this.getBaseTemplate(content, 'Votre paiement a été confirmé'),
       text,
     };

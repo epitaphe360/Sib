@@ -18,27 +18,34 @@ const getJWTSecret = (): string => {
   const secret = import.meta.env.VITE_JWT_SECRET;
 
   if (!secret) {
-    console.error(
-      '⚠️ SECURITY WARNING: VITE_JWT_SECRET not configured! ' +
-      'QR Codes will use a temporary session-only secret. ' +
-      'Please configure VITE_JWT_SECRET in your .env file for production.'
+    if (import.meta.env.PROD) {
+      // SECURITY: In production, a missing secret is a fatal misconfiguration —
+      // silently falling back to a random key would break cross-session QR validation
+      // and allow signature forgery after a server restart.
+      throw new Error(
+        '[SECURITY] VITE_JWT_SECRET is not configured. ' +
+        'QR code signing requires a stable secret in production. ' +
+        'Add VITE_JWT_SECRET to your environment variables.'
+      );
+    }
+    // Development only: use a deterministic fixed dev secret so scans still work
+    // across hot-reloads. Never use this in production.
+    console.warn(
+      '⚠️ [DEV] VITE_JWT_SECRET not set — using insecure dev fallback. ' +
+      'Configure VITE_JWT_SECRET before deploying to production.'
     );
-
-    // Generate a random secret for this session only
-    // This is NOT persistent and will break QR validation across server restarts
-    const randomSecret = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
-
-    return randomSecret;
+    return 'dev-only-secret-do-not-use-in-production-32ch';
   }
 
   // Validate secret length
   if (secret.length < 32) {
-    console.warn(
-      '⚠️ SECURITY WARNING: JWT_SECRET is too short! ' +
-      'Minimum recommended length is 32 characters for HS256.'
-    );
+    const msg =
+      '⚠️ SECURITY WARNING: VITE_JWT_SECRET is too short! ' +
+      'Minimum recommended length is 32 characters for HS256.';
+    if (import.meta.env.PROD) {
+      throw new Error(msg);
+    }
+    console.warn(msg);
   }
 
   return secret;
@@ -123,12 +130,41 @@ export const ACCESS_LEVELS = {
     events: ['all'] // Tous les événements
   },
 
-  // Exposants
+  // Exposants (tiers CDC SIB 2026 par surface de stand)
+  exhibitor_9m2: {
+    level: 'exhibitor_9m2',
+    displayName: '🏢 Exposant 9m²',
+    color: '#66BB6A',
+    zones: ['public', 'exhibition_hall', 'exhibitor_area', 'stand'],
+    events: ['public_conferences']
+  },
+  exhibitor_18m2: {
+    level: 'exhibitor_18m2',
+    displayName: '🏢 Exposant 18m²',
+    color: '#43A047',
+    zones: ['public', 'exhibition_hall', 'exhibitor_area', 'stand', 'networking_area'],
+    events: ['public_conferences', 'exhibitor_meetings', 'workshops']
+  },
+  exhibitor_36m2: {
+    level: 'exhibitor_36m2',
+    displayName: '🏢 Exposant 36m²',
+    color: '#2E7D32',
+    zones: ['public', 'exhibition_hall', 'exhibitor_area', 'stand', 'networking_area', 'vip_lounge'],
+    events: ['public_conferences', 'exhibitor_meetings', 'workshops', 'vip_events']
+  },
+  exhibitor_54m2: {
+    level: 'exhibitor_54m2',
+    displayName: '🏢 Exposant 54m²+ (Grand Stand)',
+    color: '#1B5E20',
+    zones: ['public', 'exhibition_hall', 'exhibitor_area', 'stand', 'networking_area', 'vip_lounge', 'backstage', 'technical_area'],
+    events: ['public_conferences', 'exhibitor_meetings', 'workshops', 'vip_events', 'keynotes', 'press_area']
+  },
+  // Legacy alias for backward compatibility
   exhibitor: {
-    level: 'exhibitor',
+    level: 'exhibitor_18m2',
     displayName: '🏢 Exposant',
     color: '#4CAF50',
-    zones: ['public', 'exhibition_hall', 'exhibitor_area', 'stand', 'technical_area'],
+    zones: ['public', 'exhibition_hall', 'exhibitor_area', 'stand', 'networking_area'],
     events: ['public_conferences', 'exhibitor_meetings']
   },
 

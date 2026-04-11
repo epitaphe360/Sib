@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { X, Calendar, Clock, MapPin, Users, Globe, Mail } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Card } from './Card';
@@ -26,8 +26,8 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
   useEffect(() => {
     if (!isOpen) return;
 
-    // Date du salon SIB 2026 (1-3 Avril 2026)
-    const salonDate = new Date('2026-04-01T09:00:00');
+    // Date du salon SIB 2026 (25-29 Novembre 2026)
+    const salonDate = new Date('2026-11-25T09:00:00');
 
     const calculateTimeLeft = () => {
       const now = new Date();
@@ -49,7 +49,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
     // Calcul initial
     setTimeLeft(calculateTimeLeft());
 
-    // Mise à jour chaque seconde
+    // Mise Ã  jour chaque seconde
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
@@ -59,10 +59,10 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
 
   const salonInfo = {
     name: 'SIB 2026',
-    fullName: 'Salon International du Bâtiment',
-    dates: '1-3 Avril 2026',
-    location: 'Casablanca, Maroc',
-    venue: 'Mohammed VI Exhibition Center',
+    fullName: 'Salon International des Ports',
+    dates: '25-29 Novembre 2026',
+    location: 'El Jadida, Maroc',
+    venue: 'Parc d\'Exposition Mohammed VI',
     hours: '9h30 - 18h00',
     stats: {
       exhibitors: 300,
@@ -119,7 +119,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
             </div>
           </div>
 
-          {/* Compte à rebours */}
+          {/* Compte Ã  rebours */}
           <div className="p-8">
             {isEventStarted ? (
               <motion.div
@@ -128,7 +128,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                 className="text-center"
               >
                 <div className="bg-green-100 p-8 rounded-2xl mb-6">
-                  <div className="text-6xl mb-4">??</div>
+                  <div className="text-6xl mb-4">ðŸŽ‰</div>
                   <h3 className="text-3xl font-bold text-green-800 mb-2">
                     {t('countdown.event_started')}
                   </h3>
@@ -209,7 +209,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
               </div>
             )}
 
-            {/* Informations détaillées du salon */}
+            {/* Informations dÃ©taillÃ©es du salon */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <Card>
                 <div className="p-6">
@@ -282,27 +282,27 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                   <div className="text-center p-4 bg-blue-50 rounded-lg">
                     <div className="font-bold text-blue-600 mb-2">{t('countdown.day1_title')}</div>
                     <div className="text-sm text-gray-600 space-y-1">
-                      <div>• {t('countdown.day1_opening')}</div>
-                      <div>• {t('countdown.day1_plenary')}</div>
-                      <div>• {t('countdown.day1_networking')}</div>
+                      <div>â€¢ {t('countdown.day1_opening')}</div>
+                      <div>â€¢ {t('countdown.day1_plenary')}</div>
+                      <div>â€¢ {t('countdown.day1_networking')}</div>
                     </div>
                   </div>
                   
                   <div className="text-center p-4 bg-green-50 rounded-lg">
                     <div className="font-bold text-green-600 mb-2">{t('countdown.day2_title')}</div>
                     <div className="text-sm text-gray-600 space-y-1">
-                      <div>• {t('countdown.day2_workshops')}</div>
-                      <div>• {t('countdown.day2_b2b')}</div>
-                      <div>• {t('countdown.day2_demos')}</div>
+                      <div>â€¢ {t('countdown.day2_workshops')}</div>
+                      <div>â€¢ {t('countdown.day2_b2b')}</div>
+                      <div>â€¢ {t('countdown.day2_demos')}</div>
                     </div>
                   </div>
                   
                   <div className="text-center p-4 bg-purple-50 rounded-lg">
                     <div className="font-bold text-purple-600 mb-2">{t('countdown.day3_title')}</div>
                     <div className="text-sm text-gray-600 space-y-1">
-                      <div>• {t('countdown.day3_roundtables')}</div>
-                      <div>• {t('countdown.day3_awards')}</div>
-                      <div>• {t('countdown.day3_closing')}</div>
+                      <div>â€¢ {t('countdown.day3_roundtables')}</div>
+                      <div>â€¢ {t('countdown.day3_awards')}</div>
+                      <div>â€¢ {t('countdown.day3_closing')}</div>
                     </div>
                   </div>
                 </div>
@@ -353,10 +353,10 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                 variant="outline"
                 onClick={() => {
                   const calendarEvent = {
-                    title: 'SIB 2026 - Salon International du Bâtiment',
+                    title: 'SIB 2026 - Salon International des Ports',
                     start: '2026-04-01T09:00:00',
                     end: '2026-04-03T18:00:00',
-                    location: 'Mohammed VI Exhibition Center, Casablanca, Maroc',
+                    location: 'Mohammed VI Exhibition Center, El Jadida, Maroc',
                     description: t('countdown.calendar_description')
                   };
                   
@@ -377,11 +377,11 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                 <div>
                   <h5 className="font-semibold text-gray-900 mb-3">{t('countdown.practical_info')}</h5>
                   <div className="space-y-2 text-gray-600">
-                    <div>• {t('countdown.info_registration')}</div>
-                    <div>• {t('countdown.info_parking')}</div>
-                    <div>• {t('countdown.info_shuttles')}</div>
-                    <div>• {t('countdown.info_catering')}</div>
-                    <div>• {t('countdown.info_wifi')}</div>
+                    <div>â€¢ {t('countdown.info_registration')}</div>
+                    <div>â€¢ {t('countdown.info_parking')}</div>
+                    <div>â€¢ {t('countdown.info_shuttles')}</div>
+                    <div>â€¢ {t('countdown.info_catering')}</div>
+                    <div>â€¢ {t('countdown.info_wifi')}</div>
                   </div>
                 </div>
                 
@@ -390,14 +390,14 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                   <div className="space-y-2 text-gray-600">
                     <div className="flex items-center space-x-2">
                       <Mail className="h-4 w-4" />
-                      <span>contact@sib2026.ma</span>
+                      <span>contact@sibevent.com</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Globe className="h-4 w-4" />
-                      <span>www.sib2026.ma</span>
+                      <span>www.sibevent.com</span>
                     </div>
-                    <div>?? +212 1 23 45 67 89</div>
-                    <div>?? {t('countdown.contact_hours')}</div>
+                    <div>ðŸ“± +212 1 23 45 67 89</div>
+                    <div>ðŸ•’ {t('countdown.contact_hours')}</div>
                   </div>
                 </div>
               </div>

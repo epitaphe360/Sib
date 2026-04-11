@@ -184,7 +184,7 @@ export const MobilePreview: React.FC<MobilePreviewProps> = ({ sections, siteConf
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
                 <div className="flex-1 mx-4 bg-white rounded px-3 py-1 text-xs text-gray-500">
-                  SIB.com/{siteConfig.slug || 'preview'}
+                  sibs.com/{siteConfig.slug || 'preview'}
                 </div>
               </div>
             )}

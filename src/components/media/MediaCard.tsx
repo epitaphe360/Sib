@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Composant MediaCard réutilisable
  * Pour afficher un média (webinaire, podcast, capsule, etc.)
  */
@@ -177,3 +177,4 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 };
 
 export default MediaCard;
+

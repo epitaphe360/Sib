@@ -1,4 +1,4 @@
-
+﻿
 // Configuration centralisée pour toutes les valeurs de l'application
 export const CONFIG = {
   // Support emails
@@ -133,3 +133,4 @@ export const getSupportMessage = (type: keyof typeof CONFIG.messages.support) =>
 
 export const getUserActionMessage = (action: keyof typeof CONFIG.messages.user) =>
   CONFIG.messages.user[action];
+

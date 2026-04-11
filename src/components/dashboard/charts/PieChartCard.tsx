@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { Card } from '../../ui/Card';
 import {
   PieChart,
@@ -151,3 +151,4 @@ export function PieChartCard({
     </motion.div>
   );
 }
+

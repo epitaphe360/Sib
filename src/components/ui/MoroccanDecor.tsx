@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export const MoroccanPattern = ({ 
   className = "opacity-10", 
@@ -46,3 +46,4 @@ export const MoroccanArch = ({ className = "", color = "white" }: { className?: 
     </svg>
   </div>
 );
+

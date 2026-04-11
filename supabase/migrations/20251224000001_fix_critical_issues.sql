@@ -107,6 +107,8 @@ CREATE INDEX IF NOT EXISTS idx_daily_quotas_user_date ON daily_quotas(user_id, q
 -- =====================================================
 -- 4. UPDATE book_appointment_atomic FUNCTION
 -- =====================================================
+-- Drop old version with different return type to avoid ambiguity
+DROP FUNCTION IF EXISTS book_appointment_atomic(UUID, UUID, UUID, TEXT, TEXT);
 CREATE OR REPLACE FUNCTION book_appointment_atomic(
   p_time_slot_id UUID,
   p_visitor_id UUID,
@@ -203,6 +205,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- =====================================================
 -- 5. CREATE cancel_appointment_atomic FUNCTION
 -- =====================================================
+-- Drop existing version with different parameter names
+DROP FUNCTION IF EXISTS cancel_appointment_atomic(UUID, UUID);
 CREATE OR REPLACE FUNCTION cancel_appointment_atomic(
   p_appointment_id UUID,
   p_user_id UUID

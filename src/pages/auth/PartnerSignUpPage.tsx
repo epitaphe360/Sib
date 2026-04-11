@@ -1,4 +1,4 @@
-
+Ôªø
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -94,7 +94,7 @@ export default function PartnerSignUpPage() {
   // Watch les valeurs pour la progression
   const watchedFields = watch();
   
-  // Validation email en temps rÈel
+  // Validation email en temps r√©el
   const { suggestion: emailSuggestion } = useEmailValidation(watchedFields.email || '');
 
   // SECURITY: Exclude password fields from localStorage
@@ -110,7 +110,7 @@ export default function PartnerSignUpPage() {
     const draft = loadFromLocalStorage();
     if (draft) {
       const confirmed = window.confirm(
-        'Un brouillon de formulaire a ÈtÈ trouvÈ. Voulez-vous le reprendre ?'
+        'Un brouillon de formulaire a √©t√© trouv√©. Voulez-vous le reprendre ?'
       );
       if (confirmed) {
         Object.keys(draft).forEach((key) => {
@@ -128,13 +128,13 @@ export default function PartnerSignUpPage() {
     { value: 'technologie', label: 'Technologie et Innovation' },
     { value: 'finance', label: 'Finance et Banque' },
     { value: 'institutionnel', label: 'Institutionnel et Gouvernemental' },
-    { value: 'media', label: 'MÈdias et Communication' },
-    { value: 'energie', label: '…nergie et Ressources' },
+    { value: 'media', label: 'M√©dias et Communication' },
+    { value: 'energie', label: '√ânergie et Ressources' },
     { value: 'agriculture', label: 'Agriculture et Agroalimentaire' },
-    { value: 'sante', label: 'SantÈ et Bien-Ítre' },
-    { value: 'education', label: '…ducation et Formation' },
+    { value: 'sante', label: 'Sant√© et Bien-√™tre' },
+    { value: 'education', label: '√âducation et Formation' },
     { value: 'immobilier', label: 'Immobilier et Construction' },
-    { value: 'tourisme', label: 'Tourisme et HÙtellerie' },
+    { value: 'tourisme', label: 'Tourisme et H√¥tellerie' },
     { value: 'industrie', label: 'Industrie et Manufacturing' },
   ];
 
@@ -164,13 +164,13 @@ export default function PartnerSignUpPage() {
     register('partnerTier');
   }, [register]);
 
-  // Quand le formulaire est valide, stocker les donnÈes et ouvrir la preview
+  // Quand le formulaire est valide, stocker les donn√©es et ouvrir la preview
   const handlePreviewSubmit: SubmitHandler<PartnerSignUpFormValues> = (data) => {
     setValidatedFormData(data);
     setShowPreview(true);
   };
 
-  // Fonction appelÈe depuis la modal de confirmation
+  // Fonction appel√©e depuis la modal de confirmation
   const handleConfirmSubmit = async () => {
     if (!validatedFormData) {
       toast.error(t.toastFormDataUnavailable);
@@ -185,8 +185,8 @@ export default function PartnerSignUpPage() {
 
     const finalProfileData = {
       ...profileData,
-      sectors: sectors,         // Tableau JSON ó permet filtrage et Èdition
-      sector: sectors.join(', '), // ChaÓne lisible pour affichage rÈtrocompatible
+      sectors: sectors,         // Tableau JSON ‚Äî permet filtrage et √©dition
+      sector: sectors.join(', '), // Cha√Æne lisible pour affichage r√©trocompatible
       role: 'partner' as const,
       status: 'pending' as const,
     };
@@ -211,24 +211,24 @@ export default function PartnerSignUpPage() {
           });
         } catch (emailError) {
           console.error('Erreur envoi email paiement:', emailError);
-          // Ne pas bloquer l'inscription si l'email Èchoue
+          // Ne pas bloquer l'inscription si l'email √©choue
         }
       }
 
-      // Supprimer le brouillon aprËs succËs
+      // Supprimer le brouillon apr√®s succ√®s
       clearLocalStorage();
 
       toast.success(t.toastSignUpSuccess);
       
-      // ? FIX: Redirection vers le choix du mode de paiement IMP…DIATEMENT lors de l'inscription
-      // Cela Èvite que l'utilisateur ne se retrouve sur le tableau de bord sans avoir payÈ
-      // Note: Cela suppose que l'auto-login a fonctionnÈ ou qu'on utilise le userId/email pour prÈ-remplir
+      // ‚úÖ FIX: Redirection vers le choix du mode de paiement IMP√âDIATEMENT lors de l'inscription
+      // Cela √©vite que l'utilisateur ne se retrouve sur le tableau de bord sans avoir pay√©
+      // Note: Cela suppose que l'auto-login a fonctionn√© ou qu'on utilise le userId/email pour pr√©-remplir
       navigate(`${ROUTES.PARTNER_PAYMENT_SELECTION}?tier=${data.partnerTier}`);
     } catch (error) {
       console.error("Sign up error:", error);
       if (error instanceof Error && (error.message.includes('already registered') || error.message.includes('already exists'))) {
         toast.error(
-          'Cette adresse email est dÈj‡ utilisÈe. Veuillez vous connecter ou utiliser une autre adresse.',
+          'Cette adresse email est d√©j√† utilis√©e. Veuillez vous connecter ou utiliser une autre adresse.',
           { duration: 6000 }
         );
       } else {
@@ -248,7 +248,7 @@ export default function PartnerSignUpPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* SÈlecteur de langue */}
+        {/* S√©lecteur de langue */}
         <div className="flex justify-end gap-2">
           {(['fr', 'en'] as Language[]).map((lang) => (
             <button
@@ -301,27 +301,27 @@ export default function PartnerSignUpPage() {
                     <Crown className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10 pointer-events-none" />
                     <Select onValueChange={(value: string) => setValue('partnerTier', value)} defaultValue="museum">
                       <SelectTrigger id="partnerTier" className="pl-10">
-                        <SelectValue placeholder="SÈlectionnez votre niveau" />
+                        <SelectValue placeholder="S√©lectionnez votre niveau" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="museum">??? Museum Partner (18.400 Ä)</SelectItem>
-                        <SelectItem value="silver">?? Silver Partner (Contactez-nous)</SelectItem>
-                        <SelectItem value="gold">?? Gold Partner (Contactez-nous)</SelectItem>
-                        <SelectItem value="platinum">?? Platinum Partner (Contactez-nous)</SelectItem>
+                        <SelectItem value="museum">üèõÔ∏è Museum Partner (18.400 ‚Ç¨)</SelectItem>
+                        <SelectItem value="silver">ü•à Silver Partner (Contactez-nous)</SelectItem>
+                        <SelectItem value="gold">ü•á Gold Partner (Contactez-nous)</SelectItem>
+                        <SelectItem value="platinum">üíé Platinum Partner (Contactez-nous)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   {errors.partnerTier && <p className="text-red-500 text-xs mt-1">{errors.partnerTier.message}</p>}
-                  <p className="text-xs text-gray-500 mt-1">Vous pourrez changer de niveau ultÈrieurement.</p>
+                  <p className="text-xs text-gray-500 mt-1">Vous pourrez changer de niveau ult√©rieurement.</p>
                 </div>
                 <div>
-                  <Label htmlFor="sectors">Secteur(s) d'activitÈ *</Label>
+                  <Label htmlFor="sectors">Secteur(s) d'activit√© *</Label>
                   <MultiSelect
-                    label="Secteurs d'activitÈ"
+                    label="Secteurs d'activit√©"
                     options={sectorsOptions}
                     selectedValues={watchedFields.sectors || []}
                     onChange={(values) => setValue('sectors', values)}
-                    placeholder="SÈlectionnez vos secteurs d'activitÈ"
+                    placeholder="S√©lectionnez vos secteurs d'activit√©"
                     maxSelections={3}
                   />
                   {errors.sectors && <p className="text-red-500 text-xs mt-1">{errors.sectors.message}</p>}
@@ -332,7 +332,7 @@ export default function PartnerSignUpPage() {
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10 pointer-events-none" />
                     <Select onValueChange={(value: string) => setValue('country', value)} defaultValue="">
                       <SelectTrigger id="country" className="pl-10">
-                        <SelectValue placeholder="SÈlectionnez votre pays" />
+                        <SelectValue placeholder="S√©lectionnez votre pays" />
                       </SelectTrigger>
                       <SelectContent>
                         {countries.map((country) => (
@@ -354,14 +354,14 @@ export default function PartnerSignUpPage() {
                   {errors.website && <p className="text-red-500 text-xs mt-1">{errors.website.message}</p>}
                 </div>
                  <div>
-                  <Label htmlFor="partnershipType">Type de partenariat souhaitÈ *</Label>
+                  <Label htmlFor="partnershipType">Type de partenariat souhait√© *</Label>
                   <Select onValueChange={(value: string) => setValue('partnershipType', value)} defaultValue="">
                     <SelectTrigger id="partnershipType">
-                      <SelectValue placeholder="SÈlectionnez un type" />
+                      <SelectValue placeholder="S√©lectionnez un type" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="institutionnel">Institutionnel</SelectItem>
-                      <SelectItem value="media">MÈdia</SelectItem>
+                      <SelectItem value="media">M√©dia</SelectItem>
                       <SelectItem value="technologique">Technologique</SelectItem>
                       <SelectItem value="financier">Financier</SelectItem>
                       <SelectItem value="logistique">Logistique</SelectItem>
@@ -377,10 +377,10 @@ export default function PartnerSignUpPage() {
                 <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Informations de Contact</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="firstName">PrÈnom *</Label>
+                    <Label htmlFor="firstName">Pr√©nom *</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                      <Input id="firstName" {...register('firstName')} placeholder="Votre prÈnom" className="pl-10" />
+                      <Input id="firstName" {...register('firstName')} placeholder="Votre pr√©nom" className="pl-10" />
                     </div>
                     {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName.message}</p>}
                   </div>
@@ -433,7 +433,7 @@ export default function PartnerSignUpPage() {
                   <p className="text-xs text-gray-500 mt-1">Utilisez votre email professionnel</p>
                 </div>
                 <div>
-                  <Label htmlFor="phone">TÈlÈphone *</Label>
+                  <Label htmlFor="phone">T√©l√©phone *</Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <Input 
@@ -455,7 +455,7 @@ export default function PartnerSignUpPage() {
                       id="password" 
                       type="password" 
                       {...register('password')} 
-                      placeholder="CrÈez un mot de passe sÈcurisÈ" 
+                      placeholder="Cr√©ez un mot de passe s√©curis√©" 
                       className="pl-10"
                       autoComplete="new-password"
                     />
@@ -488,17 +488,17 @@ export default function PartnerSignUpPage() {
                 id="companyDescription" 
                 {...register('companyDescription')} 
                 rows={4} 
-                placeholder="DÈcrivez votre organisation, vos activitÈs et pourquoi vous souhaitez devenir partenaire de SIB 2026." 
+                placeholder="D√©crivez votre organisation, vos activit√©s et pourquoi vous souhaitez devenir partenaire de SIB 2026." 
               />
               {errors.companyDescription && <p className="text-red-500 text-xs mt-1">{errors.companyDescription.message}</p>}
               <p className="text-xs text-gray-500 mt-1">
-                {watchedFields.companyDescription?.length || 0} / 20 caractËres minimum
+                {watchedFields.companyDescription?.length || 0} / 20 caract√®res minimum
               </p>
             </div>
 
             {/* CGU et RGPD */}
             <div className="space-y-4 border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900">Conditions GÈnÈrales</h3>
+              <h3 className="text-lg font-medium text-gray-900">Conditions G√©n√©rales</h3>
               
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
@@ -512,7 +512,7 @@ export default function PartnerSignUpPage() {
                     <label htmlFor="acceptTerms" className="text-sm text-gray-700 cursor-pointer">
                       J'accepte les{' '}
                       <Link to={ROUTES.TERMS} target="_blank" className="text-primary-600 hover:text-primary-700 underline">
-                        Conditions GÈnÈrales d'Utilisation
+                        Conditions G√©n√©rales d'Utilisation
                       </Link>
                       {' '}* 
                     </label>
@@ -531,9 +531,9 @@ export default function PartnerSignUpPage() {
                     <label htmlFor="acceptPrivacy" className="text-sm text-gray-700 cursor-pointer">
                       J'accepte la{' '}
                       <Link to={ROUTES.PRIVACY} target="_blank" className="text-primary-600 hover:text-primary-700 underline">
-                        Politique de ConfidentialitÈ
+                        Politique de Confidentialit√©
                       </Link>
-                      {' '}et consent au traitement de mes donnÈes personnelles conformÈment au RGPD *
+                      {' '}et consent au traitement de mes donn√©es personnelles conform√©ment au RGPD *
                     </label>
                     {errors.acceptPrivacy && <p className="text-red-500 text-xs mt-1">{errors.acceptPrivacy.message}</p>}
                   </div>
@@ -542,7 +542,7 @@ export default function PartnerSignUpPage() {
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-xs text-blue-900">
-                  <strong>Protection de vos donnÈes :</strong> Vos informations personnelles sont sÈcurisÈes et ne seront jamais partagÈes avec des tiers sans votre consentement. Vous pouvez exercer vos droits d'accËs, de rectification et de suppression ‡ tout moment.
+                  <strong>Protection de vos donn√©es :</strong> Vos informations personnelles sont s√©curis√©es et ne seront jamais partag√©es avec des tiers sans votre consentement. Vous pouvez exercer vos droits d'acc√®s, de rectification et de suppression √† tout moment.
                 </p>
               </div>
             </div>
@@ -555,13 +555,13 @@ export default function PartnerSignUpPage() {
                 variant="default"
                 data-testid="partner-submit-button"
               >
-                {isLoading ? 'Envoi en cours...' : "PrÈvisualiser et soumettre"}
+                {isLoading ? 'Envoi en cours...' : "Pr√©visualiser et soumettre"}
               </Button>
               
               {watchedFields && Object.keys(watchedFields).length > 0 && (
                 <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
                   <Save className="h-3 w-3" />
-                  <span>Brouillon enregistrÈ automatiquement</span>
+                  <span>Brouillon enregistr√© automatiquement</span>
                 </div>
               )}
 
@@ -571,7 +571,7 @@ export default function PartnerSignUpPage() {
             </div>
           </form>
 
-          {/* Modal de prÈvisualisation */}
+          {/* Modal de pr√©visualisation */}
           <PreviewModal
             isOpen={showPreview}
             onClose={() => setShowPreview(false)}
@@ -583,7 +583,7 @@ export default function PartnerSignUpPage() {
 
         <div className="text-center">
           <p className="text-sm text-gray-600">
-            Vous avez dÈj‡ un compte ?{' '}
+            Vous avez d√©j√† un compte ?{' '}
             <Link to={ROUTES.LOGIN} className="text-primary-600 hover:text-primary-700 font-medium">
               Se connecter
             </Link>

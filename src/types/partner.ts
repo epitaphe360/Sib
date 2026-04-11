@@ -1,4 +1,4 @@
-import { PartnerTier } from '../config/partnerTiers';
+﻿import { PartnerTier } from '../config/partnerTiers';
 
 /**
  * Types pour le système partenaire
@@ -176,7 +176,7 @@ export interface PartnerUpgradeRequest {
   targetTier: PartnerTier;
   amount: number;
   currency: string;
-  paymentMethod: 'stripe' | 'paypal' | 'cmi' | 'wire_transfer';
+  paymentMethod: 'paypal' | 'cmi' | 'wire_transfer' | 'bank_transfer';
   paymentStatus: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
   paymentDetails?: Record<string, any>;
   requestedAt: Date;
@@ -195,3 +195,4 @@ export interface PartnerQuotaCheck {
   isReached: boolean;
   percentage: number; // 0-100
 }
+
