@@ -1,0 +1,129 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Apply migrations and run concurrency test
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  apply-and-test:
+    runs-on: self-hosted
+    env:
+      NODE_OPTIONS: '--dns-result-order=ipv4first'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check DNS resolution (IPv4 / IPv6)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          HOST=$(echo "$DATABASE_URL" | sed -E 's#.*@([^:/]+).*#\1#')
+          echo "Checking DNS for $HOST (IPv4 then IPv6)..."
+          node -e "const dns=require('dns'); const h=process.argv[1]; dns.lookup(h, {family:4}, (e,a)=>{ if(e){ console.error('v4 lookup failed',e); process.exit(2);} else console.log('v4 addr',a); })" "$HOST" || true
+          node -e "const dns=require('dns'); const h=process.argv[1]; dns.lookup(h, {family:6}, (e,a)=>{ if(e) console.error('v6 lookup failed',e); else console.log('v6 addr',a); })" "$HOST" || true
+
+      - name: Node & env diagnostics
+        run: |
+          echo "node version:"; node -v || true
+          echo "NODE_OPTIONS:"; echo "$NODE_OPTIONS" || true
+
+      - name: IPv4 TCP connectivity test to DB host
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          HOST=$(echo "$DATABASE_URL" | sed -E 's#.*@([^:/]+).*#\1#')
+          echo "Resolving A records for $HOST..."
+          apt-get update -y >/dev/null || true
+          apt-get install -y dnsutils netcat-openbsd >/dev/null || true
+          dig +short A $HOST || true
+          dig +short AAAA $HOST || true
+          echo "Testing IPv4 TCP connectivity to $HOST:5432 (this may fail if host blocks GitHub Actions egress)"
+          # Try IPv4 TCP connect; nc returns non-zero on failure but we want to capture output
+          nc -4 -vz -w 5 $HOST 5432 || echo "nc IPv4 connect failed (expected if host unreachable)"
+
+
+      - name: Apply SQL migrations
+        id: apply_migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          set -eo pipefail
+          echo "NODE_OPTIONS=$NODE_OPTIONS"
+          # Try to resolve IPv4 replacement
+          URL_REPLACED=$(node scripts/resolve_db_ipv4.mjs --database-url "$DATABASE_URL" || true)
+          MIGRATION_LOG=migration.log
+          MIGRATION_OK=0
+          if [ -n "$URL_REPLACED" ]; then
+            echo "Attempting migrations using IPv4 replacement"
+            echo "Using connection string (masked): ${URL_REPLACED//:*@/:****@}"
+            node scripts/apply_sql.cjs --database-url "$URL_REPLACED" --continue-on-error 2>&1 | tee $MIGRATION_LOG || true
+            RC=${PIPESTATUS[0]}
+            if [ "$RC" -eq 0 ]; then MIGRATION_OK=1; fi
+          else
+            echo "No IPv4 replacement available; attempting with original DATABASE_URL"
+            node scripts/apply_sql.cjs --database-url "$DATABASE_URL" --continue-on-error 2>&1 | tee $MIGRATION_LOG || true
+            RC=${PIPESTATUS[0]}
+            if [ "$RC" -eq 0 ]; then MIGRATION_OK=1; fi
+          fi
+          if [ "$MIGRATION_OK" -ne 1 ]; then
+            echo "Migrations failed. Capturing diagnostics..."
+            echo "Run exit code: $RC" > migration-failed-diagnostic.txt
+            echo "Last 200 lines of migration.log:" >> migration-failed-diagnostic.txt
+            tail -n 200 $MIGRATION_LOG >> migration-failed-diagnostic.txt || true
+            # try to grep for ENETUNREACH spécifiquement
+            grep -E "ENETUNREACH|EAI_AGAIN|ECONNREFUSED|REFUSED" $MIGRATION_LOG || true >> migration-failed-diagnostic.txt
+          fi
+          echo "migration_ok=$MIGRATION_OK" >> $GITHUB_OUTPUT
+
+      - name: Upload migration log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: migration-log
+          path: migration.log
+
+      - name: Upload migration diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: migration-diagnostics
+          path: |
+            migration-failed-diagnostic.txt
+            migration.log
+
+      - name: Create test entities
+        id: create_entities
+        if: steps.apply_migrations.outputs.migration_ok == '1'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          node scripts/create_test_entities.mjs --database-url "$DATABASE_URL" | tee created.txt
+          VISITOR_ID=$(grep visitor_id created.txt | awk '{print $2}')
+          TIME_SLOT_ID=$(grep time_slot_id created.txt | awk '{print $2}')
+          echo "visitor=$VISITOR_ID" >> $GITHUB_OUTPUT
+          echo "timeslot=$TIME_SLOT_ID" >> $GITHUB_OUTPUT
+
+      - name: Run concurrency test
+        if: steps.apply_migrations.outputs.migration_ok == '1'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          PARALLEL=50
+          echo "Running concurrency test with parallel=$PARALLEL, time_slot=${{ steps.create_entities.outputs.timeslot }}, visitor=${{ steps.create_entities.outputs.visitor }}"
+          node scripts/concurrent_book_test.mjs --database-url "$DATABASE_URL" --time-slot ${{ steps.create_entities.outputs.timeslot }} --visitor ${{ steps.create_entities.outputs.visitor }} --parallel $PARALLEL
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: concurrency-results
+          path: created.txt

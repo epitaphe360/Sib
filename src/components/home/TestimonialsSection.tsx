@@ -1,0 +1,188 @@
+/**
+ * Section Témoignages sur la HomePage
+ * Contenu depuis Supabase (ou fallback statique)
+ */
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Quote, Star } from 'lucide-react';
+import { useSupabaseTestimonials } from '../../hooks/useSupabaseContent';
+import { MoroccanPattern } from '../ui/MoroccanDecor';
+
+interface TestimonialCardProps {
+  name: string;
+  company: string;
+  position?: string;
+  quote: string;
+  photo_url?: string;
+  rating?: number;
+}
+
+const TestimonialCard: React.FC<TestimonialCardProps> = ({
+  name,
+  company,
+  position,
+  quote,
+  photo_url,
+  rating = 5
+}) => {
+  const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=D4AF37&color=fff&size=128`;
+
+  return (
+    <motion.div
+      whileHover={{ y: -8 }}
+      className="relative bg-white/90 backdrop-blur-md rounded-2xl p-8 border-l-4 border-SIB-gold shadow-lg hover:shadow-xl transition-all h-full"
+    >
+      {/* Pattern Zellige en arrière-plan */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <MoroccanPattern scale={0.5} />
+      </div>
+
+      <div className="relative z-10">
+        {/* Quote icon décoratif */}
+        <div className="absolute -top-4 -right-4 text-6xl text-SIB-gold/10 font-serif">
+          <Quote className="w-16 h-16" />
+        </div>
+
+        {/* Rating */}
+        {rating && (
+          <div className="flex gap-1 mb-4">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-4 h-4 ${
+                  i < rating ? 'text-SIB-gold fill-SIB-gold' : 'text-slate-300'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Citation */}
+        <blockquote className="text-lg italic text-slate-700 mb-6 leading-relaxed">
+          "{quote}"
+        </blockquote>
+
+        {/* Auteur */}
+        <div className="flex items-center gap-4 pt-6 border-t border-slate-200">
+          <img
+            src={photo_url || defaultAvatar}
+            alt={name}
+            className="w-16 h-16 rounded-full border-4 border-SIB-gold object-cover"
+            onError={(e) => {
+              e.currentTarget.src = defaultAvatar;
+            }}
+          />
+          <div className="flex-1 min-w-0">
+            <div className="font-bold text-SIB-primary text-lg truncate">
+              {name}
+            </div>
+            {position && (
+              <div className="text-sm text-slate-600 truncate">{position}</div>
+            )}
+            <div className="text-sm text-slate-500 font-semibold truncate">
+              {company}
+            </div>
+          </div>
+        </div>
+
+        {/* Décoration carrés marocains */}
+        <div className="absolute bottom-4 right-4 flex gap-1">
+          <div className="w-2 h-2 bg-red-600 rotate-45" />
+          <div className="w-2 h-2 bg-SIB-gold rotate-45" />
+          <div className="w-2 h-2 bg-green-600 rotate-45" />
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// Témoignages par défaut en attendant données Supabase
+const defaultTestimonials: TestimonialCardProps[] = [
+  {
+    name: 'Mohamed Al-Fassi',
+    company: 'Tanger Med Port Authority',
+    position: 'Directeur Général',
+    quote: 'SIB a été un catalyseur exceptionnel pour le développement de nos partenariats stratégiques en Afrique. Un événement incontournable.',
+    rating: 5
+  },
+  {
+    name: 'Sarah Dubois',
+    company: 'CMA CGM Group',
+    position: 'VP Operations Africa',
+    quote: 'La qualité du networking et des conférences font de SIB le rendez-vous annuel de référence pour l\'industrie maritime africaine.',
+    rating: 5
+  },
+  {
+    name: 'Ahmed Benkirane',
+    company: 'Marsa Maroc',
+    position: 'Directeur Innovation',
+    quote: 'SIB nous a permis de découvrir les dernières technologies Smart Port et d\'établir des connexions précieuses avec des leaders mondiaux.',
+    rating: 5
+  }
+];
+
+export const TestimonialsSection: React.FC = () => {
+  const { data: supabaseTestimonials, loading } = useSupabaseTestimonials(3);
+  
+  // Utiliser Supabase si disponible, sinon témoignages par défaut
+  const testimonials = supabaseTestimonials?.length > 0 ? supabaseTestimonials : defaultTestimonials;
+
+  return (
+    <section className="py-20 bg-gradient-to-br from-SIB-primary via-SIB-secondary to-SIB-accent relative overflow-hidden">
+      {/* Pattern Zellige lumineux */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.1) 35px, rgba(255,255,255,0.1) 70px),
+                           repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.1) 35px, rgba(255,255,255,0.1) 70px)`
+        }} />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        {/* En-tête */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg mb-6">
+            <Quote className="w-6 h-6 text-SIB-gold" />
+            <span className="text-sm font-bold text-white uppercase tracking-wider">
+              Témoignages
+            </span>
+          </div>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Ce que disent nos participants
+          </h2>
+          
+          <p className="text-blue-100 text-lg max-w-2xl mx-auto">
+            Découvrez les expériences des professionnels qui ont participé à SIB
+          </p>
+        </motion.div>
+
+        {/* Grid de témoignages */}
+        {loading ? (
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <TestimonialCard {...testimonial} />
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};

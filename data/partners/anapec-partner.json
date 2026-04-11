@@ -1,0 +1,130 @@
+{
+  "companyName": "Agence Nationale de Promotion de l'Emploi et des Compétences (ANAPEC)",
+  "tagline": "L'accompagnement engagé",
+  "logo": "https://upload.wikimedia.org/wikipedia/fr/thumb/c/c3/Logo_ANAPEC.svg/1200px-Logo_ANAPEC.svg.png",
+  "description": "L'ANAPEC est un établissement public administratif marocain, sous la tutelle de l'État, agissant comme le bras opérationnel du gouvernement pour la promotion de l'emploi et des compétences.",
+  
+  "heroTitle": "Le service public d'emploi marocain",
+  "heroSubtitle": "Un service universel, inclusif et de proximité pour tous. Accompagnement des chercheurs d'emploi, porteurs de projets et employeurs.",
+  "heroImage": null,
+  "heroCTA": {"text": "Accéder aux offres", "link": "https://anapec.ma/home-page-o1/chercheur-emploi/offres-demploi/"},
+  
+  "aboutTitle": "Qui sommes-nous ?",
+  "aboutDescription": "Créée par la loi 51-99, l'ANAPEC a pour mission de contribuer à l'organisation et à la mise en œuvre des programmes de promotion de l'emploi qualifié. Elle assure l'intermédiation sur le marché du travail et conseille les employeurs sur leurs besoins en compétences.",
+  "aboutImage": null,
+  "mission": "Prospection et collecte des offres d'emploi, accueil et orientation des demandeurs, appui à la création d'entreprises, et mise en œuvre des programmes nationaux d'emploi.",
+  "values": ["Engagement", "Professionnalisme", "Inclusion", "Qualité de service"],
+  "stats": [
+    {"label": "Effectif", "value": "+700 collaborateurs"},
+    {"label": "Insertion 2022", "value": "133 000 chercheurs d'emploi"},
+    {"label": "Présidence AMSEP", "value": "2ème mandat consécutif"}
+  ],
+  
+  "products": [
+    {
+      "name": "Programme IDMAJ",
+      "description": "Encouragement à l'embauche des nouveaux demandeurs d'emploi via des contrats d'insertion avec exonération de charges sociales.",
+      "category": "Insertion Professionnelle",
+      "image": null,
+      "features": ["Stage de 24 mois max", "Indemnité 1600-6000 DH", "Exonération CNSS/TFP/IR"],
+      "price": null
+    },
+    {
+      "name": "Programme TAHFIZ",
+      "description": "Soutien aux entreprises et associations créées entre 2015 et 2026 pour le recrutement de leurs premiers salariés.",
+      "category": "Appui aux Entreprises",
+      "image": null,
+      "features": ["Exonération IR (plafond 10k DH)", "Prise en charge part patronale CNSS", "Limite de 5 salariés"],
+      "price": null
+    },
+    {
+      "name": "Awrach 2 / Prime d'Appui à l'Emploi",
+      "description": "Prime mensuelle versée aux employeurs pour favoriser les recrutements durables.",
+      "category": "Soutien à l'Emploi",
+      "image": null,
+      "features": ["Prime de 1500 DH/mois", "Durée de 9 mois", "Contrat de 12 mois min"],
+      "price": null
+    }
+  ],
+  
+  "services": [
+    "Intermédiation active sur le marché du travail",
+    "Conseil et accompagnement des employeurs",
+    "Orientation et bilan de compétences pour chercheurs d'emploi",
+    "Appui à l'auto-emploi et à l'entrepreneuriat",
+    "Formation contractuelle pour l'emploi (TAEHIL)"
+  ],
+  "achievements": [
+    "Réélection à la présidence de l'Association Mondiale des Services Publics d'Emploi (AMSEP) en 2022",
+    "Lancement de l'application 'Welcome ANAPEC' pour les migrants régularisés"
+  ],
+  
+  "teamMembers": [
+    {
+      "name": "Mohamed Achiq",
+      "position": "Directeur Général",
+      "bio": "Titulaire d'un doctorat de l'École des Mines de Paris, nommé en août 2021. Ancien DG des services de la région Rabat-Salé-Kénitra.",
+      "photo": "https://medias24.com/uploads/2021/08/28/mohamed-achiq.jpg",
+      "email": null,
+      "linkedin": "https://ma.linkedin.com/company/anapec",
+      "phone": null,
+      "specialties": ["Gouvernance", "Emploi", "Ingénierie"]
+    }
+  ],
+  
+  "gallery": null,
+  
+  "certifications": [
+    {
+      "name": "Présidence de l'AMSEP",
+      "issuer": "Association Mondiale des Services Publics d'Emploi",
+      "year": 2022,
+      "logo": null,
+      "description": "Le Maroc assure la présidence mondiale pour la période 2022-2025."
+    }
+  ],
+  
+  "articles": [
+    {
+      "title": "Réforme de l'ANAPEC : vers 1,45 million d'insertions",
+      "excerpt": "Le gouvernement marocain lance une réforme majeure pour porter le taux de couverture de l'agence à 1,45 million de nouveaux chercheurs d'emploi.",
+      "content": null,
+      "image": null,
+      "date": "2025-08-21",
+      "category": "Réforme"
+    }
+  ],
+  
+  "socialLinks": {
+    "linkedin": "https://www.linkedin.com/company/anapec/",
+    "facebook": "https://www.facebook.com/anapec.officiel/",
+    "instagram": "https://www.instagram.com/anapec_officiel/",
+    "twitter": "https://x.com/anapec",
+    "youtube": "https://www.youtube.com/anapectv",
+    "whatsapp": null
+  },
+  
+  "contactInfo": {
+    "email": "skills@anapec.org",
+    "phone": "+212 522 789 450",
+    "address": "4, Lotissement La Colline - Sidi Maarouf 20270 - Casablanca - Maroc",
+    "website": "http://www.anapec.org"
+  },
+  
+  "theme": "modern",
+  "colors": {
+    "primary": "#7b2cbf",
+    "secondary": "#ffffff",
+    "accent": "#ff9f1c"
+  },
+  
+  "_metadata": {
+    "extractedAt": "2026-01-28T14:45:00Z",
+    "confidence": "high",
+    "fieldsFound": 38,
+    "fieldsTotal": 50,
+    "source": "manual_entry",
+    "partner_type": "government",
+    "sector": "Employment & Skills"
+  }
+}

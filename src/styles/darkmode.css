@@ -1,0 +1,124 @@
+/**
+ * 🌓 Dark Mode Global Styles
+ * Applied when <html class="dark"> is present
+ */
+
+/* Card and Container Elements */
+.dark [class*="bg-white"],
+html.dark > body [class*="bg-white"] {
+  background-color: rgb(31, 41, 55) !important;
+}
+
+/* Text Colors */
+.dark [class*="text-gray-900"],
+html.dark [class*="text-gray-700"] {
+  color: rgb(243, 244, 246) !important;
+}
+
+.dark [class*="text-gray"] {
+  color: rgb(209, 213, 219) !important;
+}
+
+/* Border Colors */
+.dark [class*="border-gray-200"],
+.dark [class*="border-gray-300"] {
+  border-color: rgb(55, 65, 81) !important;
+}
+
+/* Background for inputs and textareas */
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="number"],
+.dark input[type="tel"],
+.dark input[type="url"],
+.dark textarea,
+.dark select {
+  background-color: rgb(31, 41, 55) !important;
+  color: rgb(243, 244, 246) !important;
+  border-color: rgb(55, 65, 81) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: rgb(107, 114, 128) !important;
+}
+
+/* Modal Backgrounds */
+.dark [class*="bg-white"] {
+  background-color: rgb(31, 41, 55) !important;
+}
+
+/* Dropdown and Select Elements */
+.dark select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23adb5bd' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-color: rgb(31, 41, 55) !important;
+}
+
+/* Hover States */
+.dark [class*="hover:bg-gray"] {
+  color: rgb(243, 244, 246);
+}
+
+.dark [class*="hover:bg-gray"]:hover {
+  background-color: rgb(55, 65, 81) !important;
+}
+
+/* Focus states */
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+  border-color: rgb(96, 165, 250) !important;
+}
+
+/* Dialog and Modal Overlays */
+.dark [class*="fixed"] [class*="inset-0"] {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Tables */
+.dark table,
+.dark tbody,
+.dark thead,
+.dark tr,
+.dark th,
+.dark td {
+  color: rgb(243, 244, 246);
+  border-color: rgb(55, 65, 81);
+}
+
+.dark table tbody tr {
+  background-color: rgb(31, 41, 55);
+}
+
+.dark table tbody tr:hover {
+  background-color: rgb(55, 65, 81);
+}
+
+/* Badge and Status Elements */
+.dark [class*="badge"],
+.dark [class*="badge-"] {
+  background-color: rgb(55, 65, 81);
+  color: rgb(243, 244, 246);
+}
+
+/* Scrollbar styling */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgb(31, 41, 55);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgb(75, 85, 99);
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgb(107, 114, 128);
+}

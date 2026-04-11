@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Télécharger SIPORTS 2026 - Archive Complète</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: #1e40af;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .download-btn {
+            background: #1e40af;
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+        }
+        .download-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30, 64, 175, 0.3);
+        }
+        .info {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .info h3 {
+            margin: 0 0 10px 0;
+            color: #1f2937;
+            font-size: 16px;
+        }
+        .info ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .info li {
+            margin-bottom: 5px;
+        }
+        .file-info {
+            background: #ecfdf5;
+            border: 1px solid #d1fae5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .file-info strong {
+            color: #065f46;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🚢</div>
+        <h1>SIPORTS 2026</h1>
+        <p class="subtitle">Archive Complète - Salon International des Ports</p>
+        
+        <div class="file-info">
+            <strong>📦 Fichier:</strong> siports-2026-complete-demo.zip<br>
+            <strong>📏 Taille:</strong> ~15 MB (sans node_modules)<br>
+            <strong>📅 Généré:</strong> <span id="date"></span>
+        </div>
+        
+        <a href="../SAUVEGARDE/siports-2026-complete-demo.zip" 
+           class="download-btn" 
+           download="siports-2026-complete-demo.zip">
+            📥 Télécharger l'Archive Complète
+        </a>
+        
+        <div class="info">
+            <h3>🎯 Contenu de l'Archive</h3>
+            <ul>
+                <li>✅ Code source React + TypeScript complet</li>
+                <li>✅ Comptes de démonstration (Admin, Exposant, Partenaire, Visiteur)</li>
+                <li>✅ Base de données avec schéma complet</li>
+                <li>✅ Plugin WordPress fonctionnel</li>
+                <li>✅ Configuration mobile (iOS/Android)</li>
+                <li>✅ Documentation complète</li>
+                <li>✅ Scripts de déploiement multi-plateforme</li>
+            </ul>
+        </div>
+        
+        <div class="info">
+            <h3>🎭 Comptes de Test Inclus</h3>
+            <ul>
+                <li><strong>Admin:</strong> admin.siports@siports.com / demo123</li>
+                <li><strong>Exposant:</strong> exposant@siports.com / demo123</li>
+                <li><strong>Partenaire:</strong> partenaire@siports.com / demo123</li>
+                <li><strong>Visiteur:</strong> visiteur@siports.com / demo123</li>
+            </ul>
+        </div>
+        
+        <div class="info">
+            <h3>🚀 Installation Rapide</h3>
+            <ul>
+                <li>1. Extraire: <code>unzip siports-2026-complete-demo.zip</code></li>
+                <li>2. Installer: <code>npm install</code></li>
+                <li>3. Configurer: <code>cp .env.example .env</code></li>
+                <li>4. Démarrer: <code>npm run dev</code></li>
+            </ul>
+        </div>
+        
+        <p style="margin-top: 30px; color: #6b7280; font-size: 14px;">
+            © 2024 SIPORTS Team - 5-7 Février 2026 • El Jadida, Maroc
+        </p>
+    </div>
+    
+    <script>
+        document.getElementById('date').textContent = new Date().toLocaleString('fr-FR');
+    </script>
+</body>
+</html>

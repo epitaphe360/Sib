@@ -1,0 +1,128 @@
+╔═══════════════════════════════════════════════════════════════╗
+║       VERIFIER ET APPLIQUER LES MIGRATIONS RLS - 18 FEV 2026  ║
+╚═══════════════════════════════════════════════════════════════╝
+
+📋 ETAPE 1 : VERIFIER SI DEJA APPLIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Allez sur Supabase SQL Editor:
+   👉 https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu/sql/new
+
+2. Collez et executez cette requete:
+   
+   SELECT * FROM storage.buckets 
+   WHERE id IN ('partner-logos', 'exhibitor-logos');
+
+3. Regardez le resultat:
+
+   ❌ SI 0 LIGNES (ou erreur "bucket not found"):
+      -> Les migrations NE SONT PAS appliquees
+      -> Passez a l'ETAPE 2 ci-dessous
+   
+   ✅ SI 2 LIGNES TROUVEES:
+      id              | name            | public | file_size_limit
+      ----------------|-----------------|--------|-----------------
+      partner-logos   | partner-logos   | true   | 5242880
+      exhibitor-logos | exhibitor-logos | true   | 5242880
+      
+      -> Les migrations SONT DEJA appliquees
+      -> RIEN A FAIRE, passez aux TESTS (voir fin du fichier)
+
+
+📋 ETAPE 2 : APPLIQUER LES MIGRATIONS (Si buckets n'existent pas)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MIGRATION 1 : PARTENAIRES
+-------------------------
+
+1. Ouvrez le fichier:
+   supabase\migrations\20260218000001_fix_partner_logo_update.sql
+
+2. Copiez TOUT le contenu du fichier (Ctrl+A puis Ctrl+C)
+
+3. Allez sur Supabase SQL Editor:
+   👉 https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu/sql/new
+
+4. Collez le SQL (Ctrl+V)
+
+5. Cliquez sur le bouton "RUN" en haut a droite
+
+6. Verifiez qu'il n'y a PAS d'erreur (message vert "Success")
+
+
+MIGRATION 2 : EXPOSANTS
+------------------------
+
+1. EFFACEZ l'editeur SQL (Ctrl+A puis Delete)
+
+2. Ouvrez le fichier:
+   supabase\migrations\20260218000002_fix_exhibitor_logo_update.sql
+
+3. Copiez TOUT le contenu du fichier (Ctrl+A puis Ctrl+C)
+
+4. Restez sur Supabase SQL Editor (meme page)
+
+5. Collez le SQL (Ctrl+V)
+
+6. Cliquez sur le bouton "RUN"
+
+7. Verifiez qu'il n'y a PAS d'erreur (message vert "Success")
+
+
+📋 ETAPE 3 : TESTER (Apres avoir applique les migrations)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST PARTENAIRE
+---------------
+1. Connectez-vous avec: partner9@test.com / Test123456!
+2. Allez dans le profil partenaire
+3. Essayez de modifier/ajouter un logo
+4. ✅ Ca devrait fonctionner SANS erreur "new row violates row-level security"
+
+TEST EXPOSANT
+-------------
+1. Deconnectez-vous
+2. Connectez-vous avec: expo9@test.com / Test123456!
+3. Allez dans le profil exposant
+4. Essayez de modifier/ajouter un logo
+5. ✅ Ca devrait fonctionner SANS erreur "new row violates row-level security"
+
+
+📋 FICHIERS CONCERNES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Migration 1 (PARTENAIRES):
+- Fichier: supabase\migrations\20260218000001_fix_partner_logo_update.sql
+- Taille: ~137 lignes
+- Cree: bucket 'partner-logos' + policies RLS
+
+Migration 2 (EXPOSANTS):
+- Fichier: supabase\migrations\20260218000002_fix_exhibitor_logo_update.sql
+- Taille: ~151 lignes
+- Cree: bucket 'exhibitor-logos' + policies RLS
+
+
+📋 AIDE RAPIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q: Comment savoir si j'ai deja applique les migrations?
+R: Executez la requete de l'ETAPE 1. Si 2 buckets existent, c'est deja fait.
+
+Q: Que faire si j'ai une erreur "already exists" lors de l'application?
+R: C'est OK! Ca veut dire que la migration est deja appliquee partiellement.
+   Continuez avec l'autre migration.
+
+Q: L'erreur RLS persiste apres les migrations?
+R: Verifiez que vous avez bien applique LES DEUX migrations (partner ET exhibitor).
+   Verifiez aussi que le code utilise les bons noms de buckets:
+   - 'partner-logos' (PAS 'partners')
+   - 'exhibitor-logos' (PAS 'exhibitors')
+
+Q: Ou trouver l'URL Supabase?
+R: https://supabase.com/dashboard/project/eqjoqgpbxhsfgcovipgu/sql/new
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Date: 18 fevrier 2026
+Migrations: 20260218000001 + 20260218000002
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

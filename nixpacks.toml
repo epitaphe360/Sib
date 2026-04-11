@@ -1,0 +1,21 @@
+# Nixpacks Configuration for SIPORTS Web Application
+# Nixpacks injecte automatiquement toutes les variables Railway au build
+# (contrairement au Dockerfile où les ARG doivent être passés explicitement)
+
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = [
+  "npm ci --prefer-offline --no-audit --loglevel=error || npm install --prefer-offline --no-audit"
+]
+
+# Nixpacks expose toutes les variables Railway dans process.env
+# vite.config.ts mappe automatiquement les vars (VITE_ ou non) vers .env
+[phases.build]
+cmds = [
+  "npm run build"
+]
+
+[start]
+cmd = "node server.js"

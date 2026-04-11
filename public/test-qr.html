@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code de Test - SIPORTS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f9ff;
+            margin: 0;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+        }
+        h1 { color: #1e40af; margin-bottom: 1rem; }
+        #qrcode { margin: 2rem auto; }
+        .code {
+            font-family: monospace;
+            background: #f3f4f6;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+        .photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #1e40af;
+            margin: 1rem auto;
+        }
+        .name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1e293b;
+        }
+        .info {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .divider {
+            border-top: 1px solid #e5e7eb;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎫 Badge de Test</h1>
+        
+        <!-- Photo du visiteur -->
+        <img 
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face" 
+            alt="Photo visiteur"
+            class="photo"
+        />
+        
+        <div class="name">Administrateur SIPORT</div>
+        <div class="info">SIPORTS 2026</div>
+        
+        <div class="divider"></div>
+        
+        <p style="color: #6b7280; margin-bottom: 1rem;">Scannez ce QR code avec l'application</p>
+        
+        <div id="qrcode"></div>
+        
+        <div class="code">F29F85-81739C</div>
+        
+        <p style="margin-top: 1.5rem; color: #059669; font-weight: bold;">
+            ✅ Ce badge a une photo pour vérification d'identité
+        </p>
+    </div>
+
+    <script>
+        // Le code du badge
+        const badgeCode = "F29F85-81739C";
+        
+        // Générer le QR Code
+        new QRCode(document.getElementById("qrcode"), {
+            text: badgeCode,
+            width: 200,
+            height: 200,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    </script>
+</body>
+</html>

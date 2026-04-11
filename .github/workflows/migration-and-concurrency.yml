@@ -1,0 +1,51 @@
+name: Apply migration and run concurrency test
+
+on:
+  workflow_dispatch:
+    inputs:
+      time_slot_id:
+        description: 'ID du time_slot à utiliser pour le test de concurrence'
+        required: false
+      visitor_id:
+        description: 'ID du visiteur utilisé pour les requêtes (optionnel)'
+        required: false
+      parallel:
+        description: 'Nombre de requêtes parallèles'
+        required: false
+        default: '20'
+
+jobs:
+  apply-and-test:
+    name: Appliquer migration puis tester concurrence
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lister migrations (debug)
+        run: ls -la supabase/migrations || true
+
+      - name: Apply SQL migrations
+        if: env.DATABASE_URL != ''
+        run: |
+          echo "Applying migrations using DATABASE_URL from secrets..."
+          node scripts/apply_sql.cjs
+
+      - name: Run concurrency test
+        if: env.DATABASE_URL != ''
+        run: |
+          echo "Running concurrency test"
+          npm run test:concurrency -- --time-slot ${INPUTS_time_slot_id:-} --visitor ${INPUTS_visitor_id:-} --parallel ${INPUTS_parallel}
+
+      - name: Done
+        run: echo "Migration and concurrency test finished"
