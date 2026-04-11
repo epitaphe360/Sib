@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const { Client } = pg;
 
 const DB_URL = 'postgresql://postgres:WZiG!G3RfqiDY8H@db.sbyizudifmqakzxjlndr.supabase.co:5432/postgres';
-const MIGRATIONS_DIR = path.join(__dirname, 'siportv3_source', 'supabase', 'migrations');
+const MIGRATIONS_DIR = path.join(__dirname, '..', 'siportv3_source', 'supabase', 'migrations');
 
 const client = new Client({ connectionString: DB_URL, ssl: { rejectUnauthorized: false } });
 

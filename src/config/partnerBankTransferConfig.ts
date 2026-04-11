@@ -69,7 +69,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         '⚠️ IMPORTANT: Indiquez la référence de paiement dans le libellé du virement',
         '⚠️ Le montant doit être exact selon le tier choisi',
         '⚠️ Conservez votre preuve de virement (vous devrez l\'uploader)',
-        '⚠️ Les virements sont en USD - vérifiez le taux de change avec votre banque',
+        '⚠️ Les virements sont en MAD (Dirham marocain)',
         '⚠️ Vous pouvez suivre l\'état de votre demande dans votre tableau de bord'
       ],
       additionalInfo: [
@@ -93,7 +93,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         '⚠️ IMPORTANT: Include the payment reference in the transfer description',
         '⚠️ Amount must be exact according to chosen tier',
         '⚠️ Keep your transfer proof (you will need to upload it)',
-        '⚠️ Transfers are in USD - check exchange rate with your bank',
+        '⚠️ Transfers are in MAD (Moroccan Dirham)',
         '⚠️ You can track your request status in your dashboard'
       ],
       additionalInfo: [
@@ -117,7 +117,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         '⚠️ مهم: قم بتضمين مرجع الدفع في وصف التحويل',
         '⚠️ يجب أن يكون المبلغ دقيقًا حسب المستوى المختار',
         '⚠️ احتفظ بإثبات التحويل الخاص بك (ستحتاج إلى تحميله)',
-        '⚠️ التحويلات بالدولار الأمريكي - تحقق من سعر الصرف مع البنك الخاص بك',
+        '⚠️ التحويلات بالدرهم المغربي (MAD)',
         '⚠️ يمكنك تتبع حالة طلبك في لوحة التحكم الخاصة بك'
       ],
       additionalInfo: [

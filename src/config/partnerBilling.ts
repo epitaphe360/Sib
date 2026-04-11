@@ -13,8 +13,8 @@ export type PartnerTier = 'egide' | 'strategic' | 'platinum' | 'gold' | 'silver'
 
 export interface PartnerBillingConfig {
   tier: PartnerTier;
-  amount: number;              // Montant en USD
-  currency: 'USD';
+  amount: number;              // Montant en MAD
+  currency: 'MAD';
   displayName: string;
   description: string;
   features: string[];
@@ -42,8 +42,8 @@ export interface PartnerBillingConfig {
 export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
   egide: {
     tier: 'egide' as PartnerTier,
-    amount: 150000,
-    currency: 'USD',
+    amount: 1500000,
+    currency: 'MAD',
     displayName: 'Égide',
     description: 'Partenaire Égide - Patron principal de l\'événement',
     features: ['Naming rights', 'Stands illimités', 'Keynote d\'ouverture', 'Concierge dédié'],
@@ -55,8 +55,8 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
 
   strategic: {
     tier: 'strategic' as PartnerTier,
-    amount: 120000,
-    currency: 'USD',
+    amount: 1200000,
+    currency: 'MAD',
     displayName: 'Partenaire Stratégique',
     description: 'Partenaire Stratégique - Co-branding événementiel',
     features: ['Co-branding', '4 stands', 'Panel discussion', 'Accès VIP complet'],
@@ -68,8 +68,8 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
 
   museum: {
     tier: 'museum',
-    amount: 20000,
-    currency: 'USD',
+    amount: 200000,
+    currency: 'MAD',
     displayName: 'Museum Partner',
     description: 'Partenariat Museum - Visibilité de base',
     features: [
@@ -102,8 +102,8 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
 
   silver: {
     tier: 'silver',
-    amount: 48000,
-    currency: 'USD',
+    amount: 480000,
+    currency: 'MAD',
     displayName: 'Silver Partner',
     description: 'Partenariat Silver - Visibilité renforcée',
     features: [
@@ -139,8 +139,8 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
 
   gold: {
     tier: 'gold',
-    amount: 68000,
-    currency: 'USD',
+    amount: 680000,
+    currency: 'MAD',
     displayName: 'Gold Partner',
     description: 'Partenariat Gold - Visibilité maximale',
     features: [
@@ -179,8 +179,8 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
 
   platinum: {
     tier: 'platinum',
-    amount: 98000,
-    currency: 'USD',
+    amount: 980000,
+    currency: 'MAD',
     displayName: 'Platinum Partner',
     description: 'Partenariat Platinum - Visibilité VIP exclusive',
     features: [
@@ -224,8 +224,8 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
 
   support: {
     tier: 'support' as PartnerTier,
-    amount: 15000,
-    currency: 'USD',
+    amount: 150000,
+    currency: 'MAD',
     displayName: 'Partenaire de Support',
     description: 'Partenaire de Support - Soutien logistique et technique',
     features: ['1 stand', '15 RDV B2B', 'Logo sur site', 'Accès conférences'],
@@ -237,8 +237,8 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
 
   cultural: {
     tier: 'cultural' as PartnerTier,
-    amount: 10000,
-    currency: 'USD',
+    amount: 100000,
+    currency: 'MAD',
     displayName: 'Partenaire Culturel',
     description: 'Partenaire Culturel - Animation et patrimoine',
     features: ['Espace culturel', '10 RDV B2B', 'Logo sur site', 'Animation culturelle'],

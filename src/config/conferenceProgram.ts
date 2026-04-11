@@ -1,6 +1,7 @@
 /**
  * Programme détaillé des conférences SIB 2026
- * 1-3 Avril 2026
+ * Salon International du Bâtiment - 1-3 Avril 2026
+ * Mohammed VI Exhibition Center, Casablanca, Maroc
  */
 
 export interface ConferenceSession {
@@ -23,22 +24,17 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
     sessions: [
       {
         time: '10:00 - 12:30',
-        title: 'Allocutions institutionnelles (Ministres,...)',
+        title: 'Allocutions institutionnelles (Ministres, Élus, Fédérations professionnelles BTP)',
         type: 'opening'
       },
       {
         time: '10:00 - 12:30',
-        title: 'Panel Ministériel : « La coopération régionale et le développement des infrastructures portuaires en Afrique »',
+        title: 'Panel Ministériel : « Les grands chantiers du Maroc 2026-2030 : Enjeux, Financement et Opportunités pour le secteur BTP »',
         type: 'panel'
       },
       {
         time: '10:00 - 12:30',
-        title: 'Ouverture officielle de l\'exposition',
-        type: 'opening'
-      },
-      {
-        time: '10:00 - 12:30',
-        title: 'Ouverture officielle du musée',
+        title: 'Ouverture officielle de l\'exposition SIB 2026',
         type: 'opening'
       },
       {
@@ -48,8 +44,15 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
       },
       {
         time: '14:00 – 15:30',
-        title: 'Transformation Financière des Ports Africains : PPP, Climat et Blended Finance',
-        type: 'session'
+        title: 'Financement des projets BTP au Maroc : PPP, Fonds Climat et Investissements Publics',
+        type: 'session',
+        description: 'Mécanismes de financement innovants pour les grands projets d\'infrastructure'
+      },
+      {
+        time: '15:30 – 17:00',
+        title: 'Réglementation thermique et efficacité énergétique dans la construction : RTCM 2026',
+        type: 'session',
+        description: 'Mise en conformité, certifications et bonnes pratiques énergétiques'
       }
     ]
   },
@@ -59,8 +62,9 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
     sessions: [
       {
         time: '09:00 – 10:30',
-        title: 'Vers des ports africains durables et résilients face aux changements climatiques',
-        type: 'session'
+        title: 'BTP durable et construction verte : matériaux biosourcés, recyclage et économie circulaire',
+        type: 'session',
+        description: 'Vers un secteur de la construction plus responsable et moins carboné'
       },
       {
         time: '10:30 – 11:00',
@@ -69,8 +73,9 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
       },
       {
         time: '11:00 – 12:30',
-        title: 'Transition climatique et réglementaire : une nouvelle ère pour l\'industrie navale',
-        type: 'session'
+        title: 'BIM & Digital Twin : la révolution numérique du bâtiment au Maroc',
+        type: 'session',
+        description: 'Adoption du BIM dans les marchés publics et privés, retours d\'expérience'
       },
       {
         time: '12:30 – 14:00',
@@ -79,8 +84,15 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
       },
       {
         time: '14:00 – 15:30',
-        title: 'Ports du futur : entre digitalisation, cybersécurité et compétitivité',
-        type: 'session'
+        title: 'Smart Building et Domotique : vers des bâtiments intelligents, connectés et sécurisés',
+        type: 'session',
+        description: 'Systèmes KNX, IoT bâtiment, gestion technique centralisée (GTC)'
+      },
+      {
+        time: '15:30 – 17:00',
+        title: 'Industrialisation et préfabrication : accélérer les délais de livraison dans la construction',
+        type: 'session',
+        description: 'Modules préfabriqués, construction hors-site, supply chain optimisée'
       }
     ]
   },
@@ -90,28 +102,31 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
     sessions: [
       {
         time: '09:00 – 10:30',
-        title: 'Quelle stratégie pour renforcer l\'inclusion et la formation dans le maritime africain ?',
-        type: 'session'
+        title: 'Formation et compétences dans le BTP marocain : quelles stratégies pour répondre aux besoins du marché ?',
+        type: 'session',
+        description: 'Partenariats universités-entreprises, formation professionnelle, certifications'
       },
       {
         time: '10:30 – 12:00',
-        title: 'Leadership Féminin au cœur de la transformation maritime en partenariat avec (RFPMP-AOC)',
-        type: 'session'
+        title: 'Leadership Féminin dans le BTP : Ingénieures, Architectes et Cheffes de projet au Maroc',
+        type: 'session',
+        description: 'Témoignages, défis et perspectives pour les femmes dans le secteur de la construction'
       },
       {
         time: '12:00 – 12:30',
-        title: 'Cérémonie de clôture',
+        title: 'Cérémonie de clôture et remise des prix SIB 2026',
         type: 'ceremony'
       },
       {
         time: '12:30 – 15:00',
-        title: 'Déjeuner de réseautage',
+        title: 'Déjeuner de clôture et networking',
         type: 'lunch'
       },
       {
         time: '15:00',
-        title: 'Visite au port de Jorf Lasfar',
-        type: 'visit'
+        title: 'Visite du chantier Mohammed VI Exhibition Center',
+        type: 'visit',
+        description: 'Découverte des innovations techniques du lieu d\'accueil SIB 2026'
       }
     ]
   }

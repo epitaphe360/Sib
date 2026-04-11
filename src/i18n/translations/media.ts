@@ -45,7 +45,7 @@ export const mediaTranslations = {
     
     // Podcast specific NEW
     'media.podcast.page_title': 'sib Talks',
-    'media.podcast.page_subtitle': 'Écoutez les voix qui façonnent l\'industrie portuaire',
+    'media.podcast.page_subtitle': 'Écoutez les voix qui façonnent l\'industrie du bâtiment et de la construction',
     'media.podcast.featured_episode': 'Épisode en vedette',
     'media.podcast.search_placeholder': 'Rechercher un épisode...',
     'media.podcast.no_results': 'Aucun podcast trouvé',

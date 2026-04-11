@@ -13,7 +13,7 @@ export interface PartnerTierConfig {
   id: PartnerTier;
   name: string;
   displayName: string;
-  price: number; // en USD
+  price: number; // en MAD
   color: string;
   icon: string;
 

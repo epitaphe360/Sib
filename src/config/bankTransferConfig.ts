@@ -14,13 +14,13 @@ export const BANK_TRANSFER_INFO = {
   // Montants
   amounts: {
     premium: {
-      amount: 700.00,
-      currency: 'EUR',
+      amount: 7000.00,
+      currency: 'MAD',
       description: 'Pass Premium VIP - Accès 3 jours All Inclusive'
     },
     free: {
       amount: 0.00,
-      currency: 'EUR',
+      currency: 'MAD',
       description: 'Pass Gratuit - Inscription immédiate sans paiement'
     }
   },
@@ -31,14 +31,14 @@ export const BANK_TRANSFER_INFO = {
       title: 'Instructions de virement bancaire',
       steps: [
         'Effectuez le virement depuis votre banque en ligne ou en agence',
-        'Montant exact: 700,00 EUR',
+        'Montant exact: 7 000,00 MAD',
         'Référence obligatoire: Votre ID de demande (fourni après soumission)',
         'Délai de traitement: 2-3 jours ouvrés',
         'Après validation par l\'administrateur, votre compte sera automatiquement mis à niveau'
       ],
       important: [
         '⚠️ Assurez-vous d\'indiquer la référence de paiement dans le virement',
-        '⚠️ Le montant doit être exact (700,00 EUR)',
+        '⚠️ Le montant doit être exact (7 000,00 MAD)',
         '⚠️ Conservez votre preuve de virement (screenshot ou PDF)',
         '⚠️ Vous pourrez suivre l\'état de votre demande dans votre profil'
       ]
@@ -47,7 +47,7 @@ export const BANK_TRANSFER_INFO = {
       title: 'Bank Transfer Instructions',
       steps: [
         'Make the transfer from your online banking or at your bank branch',
-        'Exact amount: 700.00 EUR',
+        'Exact amount: 7,000.00 MAD',
         'Mandatory reference: Your request ID (provided after submission)',
         'Processing time: 2-3 business days',
         'After admin validation, your account will be automatically upgraded'

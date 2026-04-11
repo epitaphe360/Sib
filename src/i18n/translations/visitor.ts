@@ -25,14 +25,18 @@ export const visitorTranslations = {
     'visitor.form.submitting': 'Création en cours...',
     
     // Secteurs
-    'visitor.sector.authority': 'Autorité Portuaire',
-    'visitor.sector.transport': 'Transport Maritime',
-    'visitor.sector.logistics': 'Logistique',
-    'visitor.sector.consulting': 'Consulting',
-    'visitor.sector.technology': 'Technologie',
-    'visitor.sector.student': 'Étudiant',
+    'visitor.sector.authority': 'Maître d\'Ouvrage / Promoteur',
+    'visitor.sector.transport': 'Entrepreneur / Constructeur',
+    'visitor.sector.logistics': 'Logistique & Supply Chain',
+    'visitor.sector.consulting': 'Bureau d\'Études & Architecture',
+    'visitor.sector.technology': 'Solutions Numériques BTP',
+    'visitor.sector.student': 'Étudiant / Chercheur',
     'visitor.sector.media': 'Média/Presse',
-    'visitor.sector.institutional': 'Institutionnel',
+    'visitor.sector.institutional': 'Institutionnel / Gouvernement',
+    'visitor.sector.materials': 'Fabricant Matériaux & Produits',
+    'visitor.sector.equipment': 'Équipementier & Outillage',
+    'visitor.sector.energy': 'Énergie & Efficacité Énergétique',
+    'visitor.sector.interior': 'Aménagement Intérieur & Décoration',
     'visitor.sector.other': 'Autre',
 
     // Features

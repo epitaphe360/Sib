@@ -247,8 +247,8 @@ export const HeroSection: React.FC = () => {
               <div className="absolute -inset-4 bg-SIB-gold/20 rounded-t-[10rem] rounded-b-2xl blur-xl" />
               <div className="relative rounded-t-[10rem] rounded-b-2xl overflow-hidden border-4 border-white/20 shadow-2xl aspect-[4/3]">
                 <img
-                  src="https://images.pexels.com/photos/906982/pexels-photo-906982.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Port maritime moderne"
+                  src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  alt="Chantier de construction moderne"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-SIB-primary/60 to-transparent" />
@@ -272,7 +272,7 @@ export const HeroSection: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-lg font-bold text-SIB-primary">Innovation</p>
-                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Smart Port</p>
+                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Smart Building</p>
                   </div>
                 </div>
               </motion.div>

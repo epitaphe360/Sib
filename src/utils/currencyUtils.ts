@@ -5,7 +5,7 @@
  * mise en cache depuis une API externe avec fallback.
  */
 
-const CACHE_KEY_PREFIX = 'siport_exchange_rate_';
+const CACHE_KEY_PREFIX = 'sib_exchange_rate_';
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 heures
 
 interface CachedRate {

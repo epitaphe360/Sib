@@ -22,13 +22,16 @@ export const exhibitorsTranslations = {
     
     // Catégories
     'exhibitors.category.all': 'Toutes les catégories',
-    'exhibitors.category.institutional': 'Institutionnel',
-    'exhibitors.category.port_industry': 'Industrie Portuaire',
-    'exhibitors.category.operations': 'Exploitation & Gestion',
-    'exhibitors.category.academic': 'Académique & Formation',
-    'exhibitors.category.technology': 'Technologie',
-    'exhibitors.category.automation': 'Automatisation',
-    'exhibitors.category.equipment': 'Équipement',
+    'exhibitors.category.institutional': 'Institutionnel & Gouvernement',
+    'exhibitors.category.port_industry': 'Gros Œuvre & Génie Civil',
+    'exhibitors.category.operations': 'Matériaux & Produits de Construction',
+    'exhibitors.category.academic': 'Académique & Formation BTP',
+    'exhibitors.category.technology': 'Solutions Numériques & BIM',
+    'exhibitors.category.automation': 'Smart Building & Domotique',
+    'exhibitors.category.equipment': 'Équipements & Outillage',
+    'exhibitors.category.energy': 'Énergie, CVC & Électricité',
+    'exhibitors.category.interior': 'Aménagement Intérieur',
+    'exhibitors.category.infrastructure': 'Infrastructures & Travaux Publics',
     
     // Niveaux de stand
     'exhibitors.level.basic_9': '9m² Basique',
