@@ -1,0 +1,130 @@
+/**
+ * Traductions pour la page Hébergement
+ */
+
+export const accommodationTranslations = {
+  fr: {
+    'accommodation.title': 'Hébergement & Hôtels Partenaires',
+    'accommodation.subtitle': 'Profitez de tarifs préférentiels négociés exclusivement pour les participants du sib',
+    'accommodation.badge': 'Hôtels Partenaires',
+    'accommodation.hotels_partners': 'Hôtels Partenaires',
+    'accommodation.vip_discount': 'Reduction VIP',
+    'accommodation.april_dates': 'Avril 2026',
+    'accommodation.vip_advantage_title': 'Avantages VIP & Premium',
+    'accommodation.vip_advantage_desc': 'En réservant via notre plateforme avec votre code unique, vous bénéficiez de :',
+    'accommodation.vip_benefit_1': 'Tarifs réduits jusqu\'à -20% sur le tarif public',
+    'accommodation.vip_benefit_2': 'Surclassement selon disponibilité',
+    'accommodation.vip_benefit_3': 'Navette gratuite vers le lieu du salon',
+    'accommodation.featured_partner': 'Partenaire Premium',
+    'accommodation.standard_rate': 'Tarif Standard',
+    'accommodation.vip_rate': 'Tarif VIP sib',
+    'accommodation.per_night': 'par nuit',
+    'accommodation.book_now': 'Réserver',
+    'accommodation.contact_hotel': 'Contacter l\'hôtel',
+    'accommodation.website': 'Site web',
+    'accommodation.details': 'Détails & Tarifs',
+    'accommodation.amenities': 'Équipements',
+    'accommodation.location': 'Localisation',
+    
+    // Amenities
+    'accommodation.amenity_wifi': 'Wi-Fi Haut Débit',
+    'accommodation.amenity_parking': 'Parking Gratuit',
+    'accommodation.amenity_pool': 'Piscine',
+    'accommodation.amenity_spa': 'Spa & Bien-être',
+    'accommodation.amenity_restaurant': 'Restaurant',
+    'accommodation.amenity_gym': 'Salle de sport',
+    'accommodation.amenity_casino': 'Casino',
+    'accommodation.amenity_beach': 'Accès Plage',
+    'accommodation.amenity_golf': 'Golf',
+    'accommodation.amenity_bar': 'Bar / Lounge',
+    'accommodation.amenity_terrace': 'Terrasse',
+
+    // Hotels Descriptions
+    'accommodation.hotel.pullman.desc': 'Complexe luxueux avec golf 18 trous, spa de luxe et accès direct à la plage',
+    'accommodation.hotel.ibis.desc': 'Hôtel moderne et confortable avec excellent rapport qualité-prix',
+    'accommodation.hotel.mazagan.desc': 'Resort 5 étoiles avec casino, plage privée et multiple restaurants gastronomiques',
+    'accommodation.hotel.royal.desc': 'Hôtel élégant situé sur un parcours de golf avec vue panoramique',
+    'accommodation.hotel.suisse.desc': 'Hôtel familial avec service personnalisé au cœur d\'Casablanca',
+    'accommodation.hotel.provence.desc': 'Charme méditerranéen avec terrasse panoramique',
+
+    // Distances
+    'accommodation.dist.5km': '5 km du salon',
+    'accommodation.dist.3km': '3 km du salon',
+    'accommodation.dist.6km': '6 km du salon',
+    'accommodation.dist.4km': '4 km du salon',
+    'accommodation.dist.2km': '2 km du salon',
+    'accommodation.dist.2.5km': '2.5 km du salon',
+    
+    // Room Types
+    'accommodation.room.deluxe_single': 'Chambre Deluxe Single',
+    'accommodation.room.deluxe_double': 'Chambre Deluxe Double',
+    'accommodation.room.suite_junior_single': 'Suite Junior Single',
+    'accommodation.room.suite_junior_double': 'Suite Junior Double',
+    'accommodation.room.garden_pool_single': 'Chambre Vue Jardin et Piscine (Single)',
+    'accommodation.room.garden_pool_double': 'Chambre Vue Jardin et Piscine (Double)',
+    'accommodation.room.suite_partial_ocean': 'Suite Vue Partiel Océan',
+    'accommodation.room.suite_full_ocean': 'Suite Vue Plein Océan',
+  },
+  en: {
+    'accommodation.title': 'Accommodation & Partner Hotels',
+    'accommodation.subtitle': 'Enjoy preferential rates negotiated exclusively for sib participants',
+    'accommodation.badge': 'Partner Hotels',
+    'accommodation.hotels_partners': 'Partner Hotels',
+    'accommodation.vip_discount': 'VIP Discount',
+    'accommodation.april_dates': 'April 2026',
+    'accommodation.vip_advantage_title': 'VIP & Premium Advantages',
+    'accommodation.vip_advantage_desc': 'By booking through our platform with your unique code, you benefit from:',
+    'accommodation.vip_benefit_1': 'Reduced rates up to -20% off public price',
+    'accommodation.vip_benefit_2': 'Upgrade subject to availability',
+    'accommodation.vip_benefit_3': 'Free shuttle to the venue',
+    'accommodation.featured_partner': 'Premium Partner',
+    'accommodation.standard_rate': 'Standard Rate',
+    'accommodation.vip_rate': 'sib VIP Rate',
+    'accommodation.per_night': 'per night',
+    'accommodation.book_now': 'Book now',
+    'accommodation.contact_hotel': 'Contact hotel',
+    'accommodation.website': 'Website',
+    'accommodation.details': 'Details & Rates',
+    'accommodation.amenities': 'Amenities',
+    'accommodation.location': 'Location',
+
+    // Amenities
+    'accommodation.amenity_wifi': 'High Speed Wi-Fi',
+    'accommodation.amenity_parking': 'Free Parking',
+    'accommodation.amenity_pool': 'Pool',
+    'accommodation.amenity_spa': 'Spa & Wellness',
+    'accommodation.amenity_restaurant': 'Restaurant',
+    'accommodation.amenity_gym': 'Gym',
+    'accommodation.amenity_casino': 'Casino',
+    'accommodation.amenity_beach': 'Beach Access',
+    'accommodation.amenity_golf': 'Golf',
+    'accommodation.amenity_bar': 'Bar / Lounge',
+    'accommodation.amenity_terrace': 'Terrace',
+
+    // Hotels Descriptions
+    'accommodation.hotel.pullman.desc': 'Luxury complex with 18-hole golf course, luxury spa and direct beach access',
+    'accommodation.hotel.ibis.desc': 'Modern and comfortable hotel with excellent value for money',
+    'accommodation.hotel.mazagan.desc': '5-star resort with casino, private beach and multiple gourmet restaurants',
+    'accommodation.hotel.royal.desc': 'Elegant hotel located on a golf course with panoramic views',
+    'accommodation.hotel.suisse.desc': 'Family hotel with personalized service in the heart of Casablanca',
+    'accommodation.hotel.provence.desc': 'Mediterranean charm with panoramic terrace',
+
+    // Distances
+    'accommodation.dist.5km': '5 km from venue',
+    'accommodation.dist.3km': '3 km from venue',
+    'accommodation.dist.6km': '6 km from venue',
+    'accommodation.dist.4km': '4 km from venue',
+    'accommodation.dist.2km': '2 km from venue',
+    'accommodation.dist.2.5km': '2.5 km from venue',
+    
+    // Room Types
+    'accommodation.room.deluxe_single': 'Deluxe Room Single',
+    'accommodation.room.deluxe_double': 'Deluxe Room Double',
+    'accommodation.room.suite_junior_single': 'Junior Suite Single',
+    'accommodation.room.suite_junior_double': 'Junior Suite Double',
+    'accommodation.room.garden_pool_single': 'Garden & Pool View Room (Single)',
+    'accommodation.room.garden_pool_double': 'Garden & Pool View Room (Double)',
+    'accommodation.room.suite_partial_ocean': 'Partial Ocean View Suite',
+    'accommodation.room.suite_full_ocean': 'Full Ocean View Suite',
+  }
+};

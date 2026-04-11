@@ -1,0 +1,38 @@
+# Nixpacks ignore file
+# Exclure l'application mobile du build Railway
+
+# Applications mobiles (React Native/Expo/Capacitor)
+siports-mobile/
+mobile/
+
+# Sauvegardes et fichiers temporaires
+SAUVEGARDE/
+attached_assets/
+
+# Fichiers de développement
+.git/
+.github/
+*.md
+docs/
+
+# Tests
+e2e/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+playwright-report/
+test-results/
+
+# WordPress (déjà buildé séparément)
+wordpress-plugin/
+wordpress-integration/
+wordpress-pages/
+
+# Scripts de développement (sauf inject-build-version.js requis pour le build)
+# scripts/
+
+# Fichiers temporaires
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,78 @@
+# Docker ignore file
+# Synchronisé avec .nixpacksignore
+
+# Applications mobiles (React Native/Expo/Capacitor)
+siports-mobile/
+mobile/
+
+# Node modules (sera réinstallé)
+node_modules/
+.pnp
+.pnp.js
+
+# Sauvegardes et fichiers temporaires
+SAUVEGARDE/
+attached_assets/
+
+# Tests
+e2e/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+playwright-report/
+test-results/
+coverage/
+
+# Build artifacts (sera rebuildé)
+dist/
+build/
+.next/
+out/
+
+# WordPress (déploiement séparé)
+wordpress-plugin/
+wordpress-integration/
+wordpress-pages/
+
+# Git
+.git/
+.github/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+docs/
+deployment/
+
+# Scripts (sauf inject-build-version.js requis pour le build)
+# scripts/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files (configurés dans Railway)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp

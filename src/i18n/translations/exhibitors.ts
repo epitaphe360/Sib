@@ -1,0 +1,198 @@
+/**
+ * Traductions pour les exposants
+ */
+
+export const exhibitorsTranslations = {
+  fr: {
+    // Pages exposants
+    'exhibitors.title': 'Exposants',
+    'exhibitors.subtitle': 'Découvrez les entreprises et organisations',
+    'exhibitors.search': 'Chercher un exposant',
+    'exhibitors.filter': 'Filtrer',
+    'exhibitors.all': 'Tous les exposants',
+    'exhibitors.featured': 'En vedette',
+    'exhibitors.verified': 'Vérifié',
+    'exhibitors.view_profile': 'Voir le profil',
+    'exhibitors.contact': 'Contacter',
+    'exhibitors.book_appointment': 'Réserver un rendez-vous',
+    'exhibitors.save': 'Sauvegarder',
+    'exhibitors.unsave': 'Retirer des favoris',
+    'exhibitors.no_results': 'Aucun exposant trouvé',
+    'exhibitors.count': '{{count}} exposants',
+    
+    // Catégories
+    'exhibitors.category.all': 'Toutes les catégories',
+    'exhibitors.category.institutional': 'Institutionnel',
+    'exhibitors.category.port_industry': 'Industrie Portuaire',
+    'exhibitors.category.operations': 'Exploitation & Gestion',
+    'exhibitors.category.academic': 'Académique & Formation',
+    'exhibitors.category.technology': 'Technologie',
+    'exhibitors.category.automation': 'Automatisation',
+    'exhibitors.category.equipment': 'Équipement',
+    
+    // Niveaux de stand
+    'exhibitors.level.basic_9': '9m² Basique',
+    'exhibitors.level.standard_18': '18m² Standard',
+    'exhibitors.level.premium_36': '36m² Premium',
+    'exhibitors.level.elite_54': '54m²+ Élite',
+    
+    // Page de détail
+    'exhibitors.detail.about': 'À propos',
+    'exhibitors.detail.products': 'Produits & Services',
+    'exhibitors.detail.team': 'Équipe',
+    'exhibitors.detail.contact': 'Contact',
+    'exhibitors.detail.booth': 'Stand',
+    'exhibitors.detail.booth_number': 'N° de stand',
+    'exhibitors.detail.booth_size': 'Taille',
+    'exhibitors.detail.pavilion': 'Pavillon',
+    'exhibitors.detail.website': 'Site web',
+    'exhibitors.detail.email': 'Email',
+    'exhibitors.detail.phone': 'Téléphone',
+    'exhibitors.detail.address': 'Adresse',
+    'exhibitors.detail.social': 'Réseaux sociaux',
+    'exhibitors.detail.minisite': 'Mini-site',
+    'exhibitors.detail.brochures': 'Brochures',
+    'exhibitors.detail.videos': 'Vidéos',
+    
+    // Produits
+    'exhibitors.products.title': 'Produits & Services',
+    'exhibitors.products.view_all': 'Voir tous les produits',
+    'exhibitors.products.request_info': 'Demander des informations',
+    'exhibitors.products.download_catalog': 'Télécharger le catalogue',
+    'exhibitors.products.no_products': 'Aucun produit disponible',
+    
+    // Rendez-vous
+    'exhibitors.appointment.title': 'Réserver un rendez-vous',
+    'exhibitors.appointment.select_date': 'Sélectionner une date',
+    'exhibitors.appointment.select_time': 'Sélectionner une heure',
+    'exhibitors.appointment.available_slots': 'Créneaux disponibles',
+    'exhibitors.appointment.no_slots': 'Aucun créneau disponible',
+    'exhibitors.appointment.duration': 'Durée',
+    'exhibitors.appointment.minutes': '{{count}} minutes',
+    'exhibitors.appointment.confirm': 'Confirmer le rendez-vous',
+    'exhibitors.appointment.success': 'Rendez-vous confirmé !',
+    'exhibitors.appointment.error': 'Erreur lors de la réservation',
+    
+    // Profil exposant (pour l'exposant lui-même)
+    'exhibitors.profile.edit': 'Modifier le profil',
+    'exhibitors.profile.preview': 'Prévisualiser',
+    'exhibitors.profile.basic_info': 'Informations de base',
+    'exhibitors.profile.company_name': 'Nom de l\'entreprise',
+    'exhibitors.profile.description': 'Description',
+    'exhibitors.profile.logo': 'Logo',
+    'exhibitors.profile.banner': 'Bannière',
+    'exhibitors.profile.category': 'Catégorie',
+    'exhibitors.profile.products': 'Produits',
+    'exhibitors.profile.add_product': 'Ajouter un produit',
+    'exhibitors.profile.team_members': 'Membres de l\'équipe',
+    'exhibitors.profile.add_member': 'Ajouter un membre',
+    'exhibitors.profile.save_changes': 'Enregistrer les modifications',
+    'exhibitors.profile.changes_saved': 'Modifications enregistrées',
+    
+    // Mini-site
+    'exhibitors.minisite.create': 'Créer un mini-site',
+    'exhibitors.minisite.edit': 'Modifier le mini-site',
+    'exhibitors.minisite.publish': 'Publier',
+    'exhibitors.minisite.unpublish': 'Dépublier',
+    'exhibitors.minisite.preview': 'Prévisualiser',
+    'exhibitors.minisite.url': 'URL du mini-site',
+    'exhibitors.minisite.visits': 'Visites',
+    'exhibitors.minisite.analytics': 'Statistiques',
+  },
+  en: {
+    // Exhibitors pages
+    'exhibitors.title': 'Exhibitors',
+    'exhibitors.subtitle': 'Discover companies and organizations',
+    'exhibitors.search': 'Search exhibitor',
+    'exhibitors.filter': 'Filter',
+    'exhibitors.all': 'All exhibitors',
+    'exhibitors.featured': 'Featured',
+    'exhibitors.verified': 'Verified',
+    'exhibitors.view_profile': 'View profile',
+    'exhibitors.contact': 'Contact',
+    'exhibitors.book_appointment': 'Book appointment',
+    'exhibitors.save': 'Save',
+    'exhibitors.unsave': 'Remove from favorites',
+    'exhibitors.no_results': 'No exhibitors found',
+    'exhibitors.count': '{{count}} exhibitors',
+    
+    // Categories
+    'exhibitors.category.all': 'All categories',
+    'exhibitors.category.institutional': 'Institutional',
+    'exhibitors.category.port_industry': 'Port Industry',
+    'exhibitors.category.operations': 'Operations & Management',
+    'exhibitors.category.academic': 'Academic & Training',
+    'exhibitors.category.technology': 'Technology',
+    'exhibitors.category.automation': 'Automation',
+    'exhibitors.category.equipment': 'Equipment',
+    
+    // Booth levels
+    'exhibitors.level.basic_9': '9m² Basic',
+    'exhibitors.level.standard_18': '18m² Standard',
+    'exhibitors.level.premium_36': '36m² Premium',
+    'exhibitors.level.elite_54': '54m²+ Elite',
+    
+    // Detail page
+    'exhibitors.detail.about': 'About',
+    'exhibitors.detail.products': 'Products & Services',
+    'exhibitors.detail.team': 'Team',
+    'exhibitors.detail.contact': 'Contact',
+    'exhibitors.detail.booth': 'Booth',
+    'exhibitors.detail.booth_number': 'Booth number',
+    'exhibitors.detail.booth_size': 'Size',
+    'exhibitors.detail.pavilion': 'Pavilion',
+    'exhibitors.detail.website': 'Website',
+    'exhibitors.detail.email': 'Email',
+    'exhibitors.detail.phone': 'Phone',
+    'exhibitors.detail.address': 'Address',
+    'exhibitors.detail.social': 'Social media',
+    'exhibitors.detail.minisite': 'Mini-site',
+    'exhibitors.detail.brochures': 'Brochures',
+    'exhibitors.detail.videos': 'Videos',
+    
+    // Products
+    'exhibitors.products.title': 'Products & Services',
+    'exhibitors.products.view_all': 'View all products',
+    'exhibitors.products.request_info': 'Request information',
+    'exhibitors.products.download_catalog': 'Download catalog',
+    'exhibitors.products.no_products': 'No products available',
+    
+    // Appointments
+    'exhibitors.appointment.title': 'Book an appointment',
+    'exhibitors.appointment.select_date': 'Select a date',
+    'exhibitors.appointment.select_time': 'Select a time',
+    'exhibitors.appointment.available_slots': 'Available slots',
+    'exhibitors.appointment.no_slots': 'No slots available',
+    'exhibitors.appointment.duration': 'Duration',
+    'exhibitors.appointment.minutes': '{{count}} minutes',
+    'exhibitors.appointment.confirm': 'Confirm appointment',
+    'exhibitors.appointment.success': 'Appointment confirmed!',
+    'exhibitors.appointment.error': 'Booking error',
+    
+    // Exhibitor profile (for the exhibitor themselves)
+    'exhibitors.profile.edit': 'Edit profile',
+    'exhibitors.profile.preview': 'Preview',
+    'exhibitors.profile.basic_info': 'Basic information',
+    'exhibitors.profile.company_name': 'Company name',
+    'exhibitors.profile.description': 'Description',
+    'exhibitors.profile.logo': 'Logo',
+    'exhibitors.profile.banner': 'Banner',
+    'exhibitors.profile.category': 'Category',
+    'exhibitors.profile.products': 'Products',
+    'exhibitors.profile.add_product': 'Add product',
+    'exhibitors.profile.team_members': 'Team members',
+    'exhibitors.profile.add_member': 'Add member',
+    'exhibitors.profile.save_changes': 'Save changes',
+    'exhibitors.profile.changes_saved': 'Changes saved',
+    
+    // Mini-site
+    'exhibitors.minisite.create': 'Create mini-site',
+    'exhibitors.minisite.edit': 'Edit mini-site',
+    'exhibitors.minisite.publish': 'Publish',
+    'exhibitors.minisite.unpublish': 'Unpublish',
+    'exhibitors.minisite.preview': 'Preview',
+    'exhibitors.minisite.url': 'Mini-site URL',
+    'exhibitors.minisite.visits': 'Visits',
+    'exhibitors.minisite.analytics': 'Analytics',
+  },
+};

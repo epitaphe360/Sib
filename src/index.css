@@ -1,0 +1,171 @@
+/* stylelint-disable */
+/* Autogénéré pour TailwindCSS - désactivé stylelint */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import './styles/darkmode.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    /* Force light mode - prevents iOS Safari automatic dark mode */
+    color-scheme: light;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.6%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.6%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 100% 50%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214 86% 90%;
+    --input: 214 86% 90%;
+    --ring: 221 83% 53%;
+  }
+  
+  html.dark {
+    /* Dark Mode CSS Variables */
+    --background: 222 84% 5%;
+    --foreground: 210 40% 98%;
+    --card: 222 84% 5%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 84% 5%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 100% 50%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 13% 34%;
+    --accent: 210 100% 50%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 222 47% 11%;
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 210 100% 50%;
+  }
+  
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply text-gray-900 bg-gradient-to-br from-siports-light via-siports-secondary to-siports-primary;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  html {
+    overflow-x: hidden;
+  }
+  
+  /* Dark Mode Global Styles */
+  html.dark {
+    color-scheme: dark;
+  }
+  
+  html.dark body {
+    color: rgb(243, 244, 246);
+    background-color: rgb(17, 24, 39);
+  }
+  
+  html.dark h1,
+  html.dark h2,
+  html.dark h3,
+  html.dark h4,
+  html.dark h5,
+  html.dark h6 {
+    color: rgb(243, 244, 246);
+  }
+  
+  html.dark input,
+  html.dark textarea,
+  html.dark select {
+    background-color: rgb(31, 41, 55);
+    color: rgb(243, 244, 246);
+    border-color: rgb(55, 65, 81);
+  }
+  
+  html.dark input::placeholder,
+  html.dark textarea::placeholder {
+    color: rgb(107, 114, 128);
+  }
+}
+
+@layer components {
+  .siports-gradient {
+    background: linear-gradient(135deg, #1B365D 0%, #2E5984 50%, #4A90A4 100%);
+  }
+  
+  .siports-text-gradient {
+    background: linear-gradient(135deg, #1B365D 0%, #4A90A4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .siports-card-hover {
+    @apply hover:shadow-siports-lg hover:-translate-y-1 transition-all duration-300;
+  }
+  
+  .siports-btn-primary {
+    @apply bg-siports-primary text-white hover:bg-siports-dark focus:ring-siports-primary shadow-lg font-semibold;
+  }
+  
+  .siports-btn-secondary {
+    @apply bg-siports-gold text-siports-dark hover:bg-yellow-400 focus:ring-siports-gold shadow-lg font-semibold;
+  }
+  
+  /* Nouveau style pour les sections principales */
+  .siports-section {
+    @apply bg-white/95 backdrop-blur-sm border border-white/20;
+  }
+  
+  .dark .siports-section {
+    background-color: rgba(31, 41, 55, 0.95);
+    border-color: rgba(55, 65, 81, 0.2);
+  }
+  
+  /* Style pour les cartes avec effet de verre */
+  .siports-glass-card {
+    @apply bg-white/90 backdrop-blur-md border border-white/30 shadow-xl;
+  }
+  
+  .dark .siports-glass-card {
+    background-color: rgba(31, 41, 55, 0.9);
+    border-color: rgba(55, 65, 81, 0.3);
+  }
+  
+  /* Dark mode for common elements */
+  .dark [class*="bg-white"] {
+    background-color: rgb(31, 41, 55);
+  }
+  
+  .dark [class*="text-gray-900"] {
+    color: rgb(243, 244, 246);
+  }
+  
+  .dark [class*="border-gray-200"] {
+    border-color: rgb(55, 65, 81);
+  }
+  
+  .dark [class*="border-gray-300"] {
+    border-color: rgb(75, 85, 99);
+  }
+}

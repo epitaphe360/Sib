@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Force light mode on iOS/Android - prevents automatic dark mode color changes -->
+    <meta name="color-scheme" content="light" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!-- Build version to detect stale HTML -->
+    <meta name="build-version" content="v1.0.0-sib2026" />
+    <meta name="build-time" content="2026-04-11T00:00:00Z" />
+
+    <!-- Primary Meta Tags -->
+    <title>SIB 2026 - Salon International du Bâtiment</title>
+    <meta name="title" content="SIB 2026 - Salon International du Bâtiment" />
+    <meta name="description" content="Plateforme officielle du Salon International du Bâtiment 2026 à Casablanca, Maroc. Connectez exposants, partenaires et visiteurs professionnels." />
+    <meta name="keywords" content="SIB, salon bâtiment, construction, BTP, architecture, matériaux, Casablanca, Maroc, immobilier, énergie" />
+    <meta name="author" content="SIB 2026" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sib2026.ma/" />
+    <meta property="og:title" content="SIB 2026 - Salon International du Bâtiment" />
+    <meta property="og:description" content="Plateforme officielle du Salon International du Bâtiment 2026 à Casablanca, Maroc. Connectez exposants, partenaires et visiteurs professionnels." />
+    <meta property="og:image" content="https://sib2026.ma/og-image.jpg" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="SIB 2026" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://sib2026.ma/" />
+    <meta property="twitter:title" content="SIB 2026 - Salon International du Bâtiment" />
+    <meta property="twitter:description" content="Plateforme officielle du Salon International du Bâtiment 2026 à Casablanca, Maroc. Connectez exposants, partenaires et visiteurs professionnels." />
+    <meta property="twitter:image" content="https://sib2026.ma/twitter-card.jpg" />
+
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#1e40af" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="SIB 2026" />
+
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Emergency Chunk Load Error Handler -->
+    <script>
+      (function() {
+        // CRITICAL: Aggressive cache-busting and Service Worker cleanup
+        var BUILD_VERSION = document.querySelector('meta[name="build-version"]')?.content || 'unknown';
+        var storageKey = 'app-build-version';
+        var lastVersion = localStorage.getItem(storageKey);
+        
+        // If build version changed, clear all caches and force reload
+        if (lastVersion && lastVersion !== BUILD_VERSION && BUILD_VERSION !== 'BUILD_VERSION_PLACEHOLDER') {
+          console.warn('🔄 New build detected:', lastVersion, '→', BUILD_VERSION);
+          localStorage.clear();
+          sessionStorage.clear();
+          
+          if ('caches' in window) {
+            caches.keys().then(function(names) {
+              for (var i = 0; i < names.length; i++) {
+                caches.delete(names[i]);
+              }
+            });
+          }
+          
+          localStorage.setItem(storageKey, BUILD_VERSION);
+          window.location.reload(true); // Hard reload
+          return;
+        }
+        
+        localStorage.setItem(storageKey, BUILD_VERSION);
+        
+        // Aggressively unregister any Service Workers to prevent stale caching
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(var i = 0; i < registrations.length; i++) {
+              registrations[i].unregister();
+            }
+          });
+        }
+
+        // Check for chunk load errors immediately
+        window.addEventListener('error', function(e) {
+          var msg = e.message || '';
+          var isChunkError = msg.indexOf('fetch') > -1 || msg.indexOf('import') > -1 || msg.indexOf('chunk') > -1 || msg.indexOf('Unexpected token') > -1 || msg.indexOf('404') > -1;
+          
+          if (isChunkError) {
+            console.warn('⚠️ Emergency reload triggered by chunk error:', msg);
+            var lastReload = localStorage.getItem('last-emergency-reload');
+            var now = Date.now();
+            
+            // Throttle reloads to 3s (more aggressive)
+            if (!lastReload || (now - lastReload) > 3000) {
+              localStorage.setItem('last-emergency-reload', now);
+              
+              // Force hard reload with cache bypass
+              if ('caches' in window) {
+                caches.keys().then(function(names) {
+                  for (var i = 0; i < names.length; i++) {
+                    caches.delete(names[i]);
+                  }
+                  window.location.reload(true);
+                });
+              } else {
+                window.location.reload(true);
+              }
+            }
+            // Prevent default error reporting
+            return true;
+          }
+        }, true);
+        
+        window.addEventListener('unhandledrejection', function(e) {
+          var msg = (e.reason && e.reason.message) || '';
+          if (msg.indexOf('fetch') > -1 || msg.indexOf('import') > -1 || msg.indexOf('404') > -1) {
+            var lastReload = localStorage.getItem('last-emergency-reload');
+            var now = Date.now();
+            if (!lastReload || (now - lastReload) > 3000) {
+              localStorage.setItem('last-emergency-reload', now);
+              
+              if ('caches' in window) {
+                caches.keys().then(function(names) {
+                  for (var i = 0; i < names.length; i++) {
+                    caches.delete(names[i]);
+                  }
+                  window.location.reload(true);
+                });
+              } else {
+                window.location.reload(true);
+              }
+            }
+          }
+        });
+      })();
+    </script>
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "SIPORTS 2026 - Salon International des Ports",
+      "description": "Salon International des Ports et de la Logistique Maritime",
+      "startDate": "2026-04-01",
+      "endDate": "2026-04-03",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": "El Jadida",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "El Jadida",
+          "addressCountry": "MA"
+        }
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "SIPORTS",
+        "url": "https://siports.com"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

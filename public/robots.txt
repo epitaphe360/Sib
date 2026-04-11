@@ -1,0 +1,45 @@
+# robots.txt for SIPORTS 2026
+
+# Allow all robots
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /messages/
+Disallow: /appointments/
+Disallow: /api/
+
+# Disallow authentication pages (no SEO value)
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+
+# Allow public pages
+Allow: /exhibitors
+Allow: /events
+Allow: /partners
+Allow: /pavilions
+Allow: /news
+Allow: /networking
+Allow: /contact
+Allow: /venue
+
+# Sitemap location
+Sitemap: https://siports.com/sitemap.xml
+
+# Crawl delay (optional, adjust if needed)
+Crawl-delay: 1
+
+# SEO FIX: Block aggressive crawlers
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: DotBot
+Crawl-delay: 10
