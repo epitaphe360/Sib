@@ -47,9 +47,6 @@ export class GoogleAuthService {
 
 export default GoogleAuthService;
 
-
-
-export class GoogleAuthService {
   
   /**
    * Connexion avec Google

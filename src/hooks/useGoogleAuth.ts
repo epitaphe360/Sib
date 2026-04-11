@@ -60,10 +60,6 @@ export const useGoogleAuth = (): UseGoogleAuthReturn => {
 
 export default useGoogleAuth;
 
-
-interface UseGoogleAuthReturn {
-  isInitialized: boolean;
-  currentUser: FirebaseUser | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   isLoading: boolean;
