@@ -688,7 +688,7 @@ export class SupabaseService {
       const { data, error, count } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, benefits, contact_info, views, created_at`,
+          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees, country`,
           { count: 'exact' }
         )
         .eq('is_published', true)
@@ -711,14 +711,8 @@ export class SupabaseService {
         country: partner.contact_info?.country || '',
         verified: partner.verified,
         featured: partner.featured,
-        views: partner.views || 0,
-        contributions: Array.isArray(partner.benefits)
-          ? partner.benefits.map((benefit: any) =>
-              typeof benefit === 'object' && benefit !== null
-                ? (benefit.name || benefit.description || String(benefit))
-                : String(benefit)
-            )
-          : [],
+        views: 0,
+        contributions: [],
         establishedYear: 2024,
         employees: '1-10',
         createdAt: new Date(partner.created_at),
@@ -753,7 +747,7 @@ export class SupabaseService {
       const { data, error } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, benefits, contact_info, views, created_at`
+          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees, country`
         )
         .eq('is_published', true) // Filtrer uniquement les partenaires publiés
         .order('partner_type');
@@ -774,18 +768,10 @@ export class SupabaseService {
         country: partner.contact_info?.country || '',
         verified: partner.verified,
         featured: partner.featured,
-        views: partner.views || 0,
-        // FIX: benefits can be an array of objects {name, features, description} or strings
-        // Extract only the name if it's an object, otherwise use the string directly
-        contributions: Array.isArray(partner.benefits)
-          ? partner.benefits.map((benefit: any) =>
-              typeof benefit === 'object' && benefit !== null
-                ? (benefit.name || benefit.description || String(benefit))
-                : String(benefit)
-            )
-          : [],
-        establishedYear: 2024, // Default as column missing
-        employees: '1-10', // Default as column missing
+        views: 0,
+        contributions: [],
+        establishedYear: (partner as any).established_year || 2024,
+        employees: (partner as any).employees || '1-10',
         createdAt: new Date(partner.created_at),
         updatedAt: new Date(partner.created_at)
       }));
@@ -810,16 +796,23 @@ export class SupabaseService {
 
     const safeSupabase = supabase!;
     try {
-      // Récupérer toutes les données enrichies depuis la base de données
-      const { data, error } = await safeSupabase
-        .from('partners')
-        .select(
-          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, benefits, contact_info, created_at, views, is_published,
-           mission, vision, values_list, certifications, awards, social_media, key_figures, testimonials, news, expertise, clients, video_url, gallery, established_year, employees, country,
-           projects:partner_projects(*)`
-        )
-        .eq('id', id)
-        .single();
+      // Récupérer les données du partenaire (colonnes core garanties + enrichies si disponibles)
+      const coreSelect = `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees, country, contributions, projects:partner_projects(*)`;
+      const enrichedSelect = `${coreSelect}, mission, vision, values, certifications, awards, social_media, key_figures, testimonials, news, expertise, clients, video_url, gallery`;
+
+      let data: Record<string, any> | null = null;
+      let error: any = null;
+
+      // Tenter d'abord la requête enrichie, retomber sur le core en cas d'erreur de colonne manquante
+      const enrichedResult = await safeSupabase.from('partners').select(enrichedSelect).eq('id', id).single();
+      if (enrichedResult.error && (enrichedResult.error.code === 'PGRST204' || String(enrichedResult.error.message).includes('column'))) {
+        const coreResult = await safeSupabase.from('partners').select(coreSelect).eq('id', id).single();
+        data = coreResult.data as Record<string, any> | null;
+        error = coreResult.error;
+      } else {
+        data = enrichedResult.data as Record<string, any> | null;
+        error = enrichedResult.error;
+      }
 
       if (error) throw error;
       if (!data) return null;
@@ -873,14 +866,9 @@ export class SupabaseService {
         verified: data.verified ?? true,
         featured: data.featured ?? false,
         is_published: data.is_published ?? false, // Statut de publication
-        views: data.views || 0,
-        // FIX: Normaliser benefits → contributions (peut être string[] ou {name, description}[])
-        contributions: Array.isArray(data.benefits)
-          ? data.benefits.map((b: any) =>
-              typeof b === 'object' && b !== null
-                ? (b.name || b.description || String(b))
-                : String(b)
-            )
+        views: 0,
+        contributions: Array.isArray(data.contributions)
+          ? data.contributions
           : [],
         establishedYear: data.established_year || data.contact_info?.establishedYear || 2010,
         employees: data.employees || data.contact_info?.employees || '500-1000',
@@ -888,7 +876,7 @@ export class SupabaseService {
         // Données enrichies depuis la base de données (avec fallback)
         mission: data.mission || fallbackData.mission,
         vision: data.vision || fallbackData.vision,
-        values: data.values_list || fallbackData.values,
+        values: data.values || fallbackData.values,
         certifications: data.certifications || fallbackData.certifications,
         // FIX: Normaliser awards (peut être string[] ou {name, year, issuer}[])
         awards: Array.isArray(data.awards)

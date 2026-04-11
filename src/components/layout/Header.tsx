@@ -28,7 +28,6 @@ export const Header: React.FC = memo(() => {
   const [isEventMenuOpen, setIsEventMenuOpen] = useState(false);
   const [isParticipateMenuOpen, setIsParticipateMenuOpen] = useState(false);
   const [isMediaMenuOpen, setIsMediaMenuOpen] = useState(false);
-  const [isUniversMenuOpen, setIsUniversMenuOpen] = useState(false);
   const { user, isAuthenticated, isLoading, logout } = useAuthStore();
   const { t } = useTranslation();
   const location = useLocation();
@@ -43,7 +42,6 @@ export const Header: React.FC = memo(() => {
     setIsEventMenuOpen(false);
     setIsParticipateMenuOpen(false);
     setIsMediaMenuOpen(false);
-    setIsUniversMenuOpen(false);
   }, [location.pathname]);
 
   // ✅ Fermer le menu mobile quand on clique en dehors (overlay)
@@ -105,12 +103,6 @@ export const Header: React.FC = memo(() => {
     { name: t('participate.become_partner'), href: ROUTES.PARTNER_SUBSCRIPTION, description: t('participate.partner_desc') },
   ];
 
-  const universMenuItems = [
-    { name: 'Chef-d\'Œuvre', href: ROUTES.CONCEPT_A, description: 'Luxe / Corporate / B2B' },
-    { name: 'Mégastructure', href: ROUTES.CONCEPT_B, description: 'Industriel Brut / Construction' },
-    { name: 'Smart City', href: ROUTES.CONCEPT_C, description: 'BIM / Domotique / Verre' },
-  ];
-
   const { mediaVisible } = useMediaVisibilityStore();
 
   const mediaMenuItems = mediaVisible ? [
@@ -146,33 +138,6 @@ export const Header: React.FC = memo(() => {
 
           {/* Desktop Navigation Luxe */}
           <nav className="hidden lg:flex items-center space-x-0 flex-1 min-w-0 justify-center">
-
-            {/* Nos Univers Dropdown (NEW) */}
-            <div className="relative" onMouseEnter={() => setIsUniversMenuOpen(true)} onMouseLeave={() => setIsUniversMenuOpen(false)}>
-              <button className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-blue-600 hover:text-blue-800 transition-all flex items-center gap-1 group whitespace-nowrap">
-                <span>Nos Univers</span>
-                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
-              </button>
-              
-              {isUniversMenuOpen && (
-                <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
-                  {universMenuItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      to={item.href}
-                      className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group"
-                      onMouseEnter={() => setIsUniversMenuOpen(true)}
-                      onMouseLeave={() => setIsUniversMenuOpen(false)}
-                    >
-                      <div>
-                        <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
 
             <div className="w-[1px] h-6 bg-slate-200 mx-2" />
 
