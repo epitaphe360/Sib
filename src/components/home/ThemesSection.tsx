@@ -23,48 +23,48 @@ const themes = [
   {
     Icon: HardHat,
     number: '01',
-    title: 'Construction & Gros Œuvre',
-    desc: 'Béton, structure, fondations, coffrage, charpente métallique et systèmes de construction.',
+    title: 'Gros Œuvre',
+    desc: 'Matériaux de construction, produits chimiques, étanchéité, isolation thermique et phonique, béton et acier.',
     color: '#FF6B35',
     bg: 'rgba(255,107,53,0.1)',
   },
   {
     Icon: Compass,
     number: '02',
-    title: 'Architecture & Design',
-    desc: 'Conception architecturale, design d\'intérieur, aménagement urbain et paysage.',
+    title: 'Menuiserie & Fermeture',
+    desc: 'Menuiserie bois, métallique et PVC, portes, fenêtres, volets, façades et systèmes d\'occultation.',
     color: '#8B5CF6',
     bg: 'rgba(139,92,246,0.1)',
   },
   {
-    Icon: Cpu,
-    number: '03',
-    title: 'Smart Building',
-    desc: 'Bâtiment connecté, domotique, automatisation, IoT, sécurité intelligente et BIM.',
-    color: '#3B82F6',
-    bg: 'rgba(59,130,246,0.1)',
-  },
-  {
     Icon: Layers,
-    number: '04',
-    title: 'Matériaux & Innovation',
-    desc: 'Matériaux innovants, revêtements, isolation, menuiserie, verre et céramique.',
+    number: '03',
+    title: 'Sanitaire & Climatisation',
+    desc: 'Plomberie, robinetterie, systèmes solaires thermiques, revêtements sol et mur, carrelage et céramique.',
     color: '#10B981',
     bg: 'rgba(16,185,129,0.1)',
   },
   {
+    Icon: Zap,
+    number: '04',
+    title: 'Équipement Électrique',
+    desc: 'Installation électrique, ascenseurs, énergie renouvelable, domotique et systèmes de sécurité intelligents.',
+    color: '#F59E0B',
+    bg: 'rgba(245,158,11,0.1)',
+  },
+  {
     Icon: Building2,
     number: '05',
-    title: 'Immobilier & Urbanisme',
-    desc: 'Promoteurs, aménageurs, financement immobilier, logement social et résidentiel.',
+    title: 'Décoration & Aménagement',
+    desc: 'Ameublement, éclairage, artisanat marocain, revêtements décoratifs, peintures et finitions haut de gamme.',
     color: GOLD,
     bg: 'rgba(212,175,55,0.1)',
   },
   {
-    Icon: Zap,
+    Icon: Cpu,
     number: '06',
-    title: 'Énergie & Durabilité',
-    desc: 'Énergies renouvelables, efficacité énergétique, certification verte et bâtiment durable.',
+    title: 'Construction Durable & Digital',
+    desc: 'Solutions écologiques, certifications vertes, BIM, intelligence artificielle, maquette numérique et Smart Building.',
     color: '#06B6D4',
     bg: 'rgba(6,182,212,0.1)',
   },
@@ -105,7 +105,7 @@ export const ThemesSection: React.FC = () => {
             Les Filières du Bâtiment
           </h2>
           <p className="text-base text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            SIB 2026 réunit tous les acteurs de la chaîne de valeur du secteur bâtiment autour de six grandes filières thématiques.
+            SIB 2026 réunit entreprises privées, organismes publics, fournisseurs de matériaux, architectes et ingénieurs autour de six filières officielles, avec Espace Démonstration, SIB Academy et rencontres B2B.
           </p>
           <div className="flex items-center justify-center gap-3 mt-6">
             <div className="h-px w-16" style={{ background: `linear-gradient(to right, transparent, ${GOLD})` }} />

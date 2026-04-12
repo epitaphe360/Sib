@@ -160,7 +160,7 @@ export const HeroSection: React.FC = () => {
                 className="text-sm font-bold tracking-[0.22em] uppercase"
                 style={{ color: GOLD }}
               >
-                40ème Édition
+                20ème Édition · 40 Ans d'Histoire
               </span>
               <span style={{ color: GOLD }}>✦</span>
             </div>
@@ -187,6 +187,12 @@ export const HeroSection: React.FC = () => {
             >
               du Bâtiment
             </h1>
+            <p
+              className="text-sm sm:text-base mt-4 tracking-widest uppercase text-white"
+              style={{ opacity: 0.5, letterSpacing: '0.18em' }}
+            >
+              Mise en œuvre maîtrisée · Matériaux & Bâtiments valorisés
+            </p>
           </motion.div>
 
           {/* Séparateur doré */}
