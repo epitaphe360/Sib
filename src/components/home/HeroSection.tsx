@@ -1,327 +1,384 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Users, Building2, ArrowRight } from 'lucide-react';
-import { Button } from '../ui/Button';
+import { Calendar, MapPin, ArrowRight, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../hooks/useTranslation';
 import { ROUTES } from '../../lib/routes';
-import { MoroccanPattern, MoroccanArch } from '../ui/MoroccanDecor';
+
+const GOLD = '#D4AF37';
+const DARK_BG = '#020913';
 
 export const HeroSection: React.FC = () => {
   const [timeLeft, setTimeLeft] = React.useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const { t } = useTranslation();
 
   React.useEffect(() => {
-    // Date du salon SIB 2026 (25-29 Novembre 2026)
     const salonDate = new Date('2026-11-25T09:00:00');
-    
+
     const calculateTimeLeft = () => {
-      const now = new Date();
-      const difference = salonDate.getTime() - now.getTime();
-
-      if (difference <= 0) {
-        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-      }
-
+      const diff = salonDate.getTime() - Date.now();
+      if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
       return {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((difference % (1000 * 60)) / 1000)
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
       };
     };
 
     setTimeLeft(calculateTimeLeft());
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
+    const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const formatNumber = (num: number) => {
-    return num.toString().padStart(2, '0');
-  };
+  const fmt = (n: number) => n.toString().padStart(2, '0');
 
-  const getTimeUnit = (value: number, singularKey: string, pluralKey: string) => {
-    return value <= 1 ? t(singularKey) : t(pluralKey);
-  };
+  const countdown = [
+    { value: timeLeft.days, label: 'Jours' },
+    { value: timeLeft.hours, label: 'Heures' },
+    { value: timeLeft.minutes, label: 'Min' },
+    { value: timeLeft.seconds, label: 'Sec' },
+  ];
 
   return (
     <>
-      {/* Bannière Sous l'égide du Ministère */}
-      <div className="bg-white py-8 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-xl md:text-2xl font-serif italic text-gray-600 mb-6">
+      {/* ── Bandeau Ministère ─────────────────────────────────────────── */}
+      <div className="bg-white border-b border-gray-100 py-4">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <p className="text-xs font-semibold tracking-[0.18em] uppercase text-gray-400">
             Sous l'égide du
           </p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-            <img
-              src="/logo-ministere.png"
-              alt="Royaume du Maroc - Ministère de l'Équipement et de l'Eau"
-              className="h-24 md:h-32 w-auto object-contain transition-transform hover:scale-105 duration-300"
-              onError={(e) => {
-                const target = e.currentTarget;
-                target.onerror = null;
-                target.src = '/logo-ministere.svg';
-              }}
-            />
-          </div>
+          <div className="h-4 w-px bg-gray-200 hidden sm:block" />
+          <img
+            src="/logo-ministere.png"
+            alt="Ministère de l'Équipement et de l'Eau — Maroc"
+            className="h-14 md:h-18 w-auto object-contain"
+            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/logo-ministere.svg'; }}
+          />
         </div>
       </div>
 
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white overflow-hidden min-h-[90vh] flex items-center">
-      {/* Moroccan Zellige Pattern Background */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,215,0,0.1) 35px, rgba(255,215,0,0.1) 70px),
-                           repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(0,128,0,0.1) 35px, rgba(0,128,0,0.1) 70px)`
-        }} />
-      </div>
-      
-      {/* Decorative Moroccan Arches */}
-      <div className="absolute top-0 left-0 w-full h-24 opacity-20">
-        <svg viewBox="0 0 1200 100" className="w-full h-full" preserveAspectRatio="none">
-          <path d="M0,0 Q150,80 300,0 Q450,80 600,0 Q750,80 900,0 Q1050,80 1200,0 L1200,100 L0,100 Z" fill="currentColor" className="text-sib-gold" />
-        </svg>
-      </div>
-      
-      {/* Background Pattern */}
-      <MoroccanPattern className="opacity-10" color="white" scale={1.5} />
-      
-      {/* Decorative Arch at bottom */}
-      <MoroccanArch className="text-white" />
+      {/* ── Hero Cinématique ──────────────────────────────────────────── */}
+      <section
+        className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden"
+        style={{ background: `linear-gradient(160deg, ${DARK_BG} 0%, #04111f 45%, #071828 70%, #0A1929 100%)` }}
+      >
+        {/* Blueprint grid */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(212,175,55,0.06) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(212,175,55,0.06) 1px, transparent 1px)
+            `,
+            backgroundSize: '70px 70px',
+          }}
+        />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+        {/* Radial glow — titre */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse, rgba(212,175,55,0.13) 0%, transparent 65%)',
+          }}
+        />
+
+        {/* Coins décoratifs */}
+        {[
+          { top: '2rem', left: '2rem' },
+          { top: '2rem', right: '2rem', flipX: true },
+          { bottom: '5rem', left: '2rem', flipY: true },
+          { bottom: '5rem', right: '2rem', flip: true },
+        ].map((pos, i) => (
+          <div
+            key={i}
+            className="absolute hidden lg:block opacity-15"
+            style={{
+              top: pos.top,
+              left: pos.left,
+              bottom: pos.bottom,
+              right: pos.right,
+              transform: pos.flip ? 'scale(-1)' : pos.flipX ? 'scaleX(-1)' : pos.flipY ? 'scaleY(-1)' : undefined,
+            }}
           >
-            <div className="mb-6">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-4">
-                <Calendar className="h-4 w-4 mr-2" />
-                25-29 Novembre 2026
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+              <path d="M0 36 L36 0 L72 36 L36 72 Z" stroke={GOLD} strokeWidth="1.2" fill="none" />
+              <path d="M18 36 L36 18 L54 36 L36 54 Z" stroke={GOLD} strokeWidth="0.6" fill="none" />
+              <circle cx="36" cy="36" r="3" fill={GOLD} fillOpacity="0.5" />
+            </svg>
+          </div>
+        ))}
+
+        {/* Texte vertical latéral */}
+        <div
+          className="hidden xl:flex absolute left-6 top-1/2 -translate-y-1/2 flex-col items-center gap-3 select-none"
+          style={{ opacity: 0.25 }}
+        >
+          <div className="w-px h-20" style={{ background: `linear-gradient(to bottom, transparent, ${GOLD})` }} />
+          <span
+            className="text-white text-xs tracking-[0.3em] uppercase"
+            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+          >
+            Salon International du Bâtiment
+          </span>
+          <div className="w-px h-20" style={{ background: `linear-gradient(to bottom, ${GOLD}, transparent)` }} />
+        </div>
+        <div
+          className="hidden xl:flex absolute right-6 top-1/2 -translate-y-1/2 flex-col items-center gap-3 select-none"
+          style={{ opacity: 0.25 }}
+        >
+          <div className="w-px h-20" style={{ background: `linear-gradient(to bottom, transparent, ${GOLD})` }} />
+          <span
+            className="text-white text-xs tracking-[0.3em] uppercase"
+            style={{ writingMode: 'vertical-rl' }}
+          >
+            El Jadida · Maroc · 2026
+          </span>
+          <div className="w-px h-20" style={{ background: `linear-gradient(to bottom, ${GOLD}, transparent)` }} />
+        </div>
+
+        {/* ── Contenu central ──────────────────────────────────────────── */}
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-8 text-center py-20">
+
+          {/* Badge 40ème Édition */}
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="mb-8 flex justify-center"
+          >
+            <div
+              className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full"
+              style={{
+                border: `1px solid ${GOLD}55`,
+                background: 'rgba(212,175,55,0.08)',
+                backdropFilter: 'blur(12px)',
+              }}
+            >
+              <span style={{ color: GOLD }}>✦</span>
+              <span
+                className="text-sm font-bold tracking-[0.22em] uppercase"
+                style={{ color: GOLD }}
+              >
+                40ème Édition
               </span>
-              <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-6">
-                {t('hero.title')}
-              </h1>
-              <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-                {t('hero.subtitle')}
-              </p>
+              <span style={{ color: GOLD }}>✦</span>
+            </div>
+          </motion.div>
+
+          {/* Titre principal */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.15 }}
+          >
+            <h1
+              className="font-heading font-bold text-white leading-none uppercase tracking-wide"
+              style={{ fontSize: 'clamp(2.2rem, 7.5vw, 5.5rem)' }}
+            >
+              Salon International
+            </h1>
+            <h1
+              className="font-heading font-bold leading-none uppercase tracking-wide"
+              style={{
+                fontSize: 'clamp(2.2rem, 7.5vw, 5.5rem)',
+                color: GOLD,
+              }}
+            >
+              du Bâtiment
+            </h1>
+          </motion.div>
+
+          {/* Séparateur doré */}
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.45 }}
+            className="flex items-center justify-center gap-3 my-8"
+          >
+            <div className="h-px w-28" style={{ background: `linear-gradient(to right, transparent, ${GOLD}80)` }} />
+            <div className="w-1.5 h-1.5 rotate-45" style={{ background: GOLD }} />
+            <div className="h-px w-28" style={{ background: `linear-gradient(to left, transparent, ${GOLD}80)` }} />
+          </motion.div>
+
+          {/* Date & Lieu */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.55 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 mb-12"
+          >
+            <div
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold text-white tracking-wide"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              <Calendar className="h-4 w-4 flex-shrink-0" style={{ color: GOLD }} />
+              25 — 29 Novembre 2026
             </div>
 
-            {/* Compte à Rebours */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="mb-8"
+            <div className="hidden sm:block w-1 h-1 rounded-full bg-white opacity-25" />
+
+            <div
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold text-white tracking-wide"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                backdropFilter: 'blur(8px)',
+              }}
             >
-              <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                <h2 className="text-2xl font-bold text-center mb-2 text-white">
-                  {t('hero.countdown.title')}
-                </h2>
-                <p className="text-center text-blue-200 mb-6 text-sm">
-                  {t('hero.countdown.subtitle')}
-                </p>
-                
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-sib-gold to-amber-600 rounded-2xl transform rotate-2 group-hover:rotate-3 transition-transform"></div>
-                    <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-4 shadow-2xl text-center border-2 border-sib-gold">
-                      <div className="text-3xl font-bold text-sib-gold mb-1">
-                        {formatNumber(timeLeft.days)}
-                      </div>
-                      <div className="text-amber-200 text-xs font-medium uppercase tracking-wide">
-                        {getTimeUnit(timeLeft.days, 'time.day', 'time.days')}
-                      </div>
-                    </div>
-                  </div>
+              <MapPin className="h-4 w-4 flex-shrink-0" style={{ color: GOLD }} />
+              Parc d'Expo Mohammed VI · El Jadida, Maroc
+            </div>
+          </motion.div>
 
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl transform rotate-2 group-hover:rotate-3 transition-transform"></div>
-                    <div className="relative bg-white rounded-2xl p-4 shadow-2xl text-center border-2 border-green-600">
-                      <div className="text-3xl font-bold text-green-700 mb-1">
-                        {formatNumber(timeLeft.hours)}
-                      </div>
-                      <div className="text-green-600 text-xs font-medium uppercase tracking-wide">
-                        {getTimeUnit(timeLeft.hours, 'time.hour', 'time.hours')}
-                      </div>
-                    </div>
-                  </div>
+          {/* Countdown */}
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.65 }}
+            className="mb-14"
+          >
+            <p
+              className="text-xs tracking-[0.22em] uppercase mb-5 text-white"
+              style={{ opacity: 0.45 }}
+            >
+              Ouverture dans
+            </p>
 
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-sib-gold to-amber-600 rounded-2xl transform -rotate-2 group-hover:-rotate-3 transition-transform"></div>
-                    <div className="relative bg-white rounded-2xl p-4 shadow-2xl text-center border-2 border-sib-gold">
-                      <div className="text-3xl font-bold text-amber-700 mb-1">
-                        {formatNumber(timeLeft.minutes)}
-                      </div>
-                      <div className="text-amber-600 text-xs font-medium uppercase tracking-wide">
-                        {getTimeUnit(timeLeft.minutes, 'time.minute', 'time.minutes')}
-                      </div>
+            <div className="flex items-center justify-center gap-3 sm:gap-5">
+              {countdown.map((item, i) => (
+                <React.Fragment key={i}>
+                  <div className="flex flex-col items-center">
+                    <div
+                      className="flex items-center justify-center w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-xl sm:rounded-2xl"
+                      style={{
+                        background: 'rgba(255,255,255,0.04)',
+                        border: `1px solid ${GOLD}30`,
+                        backdropFilter: 'blur(12px)',
+                        boxShadow: `0 0 24px ${GOLD}12, inset 0 1px 0 rgba(255,255,255,0.06)`,
+                      }}
+                    >
+                      <span
+                        className="font-heading font-bold text-2xl sm:text-4xl tabular-nums"
+                        style={{ color: GOLD, letterSpacing: '0.04em' }}
+                      >
+                        {fmt(item.value)}
+                      </span>
                     </div>
-                  </div>
-
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-600 to-green-700 rounded-2xl transform -rotate-2 group-hover:-rotate-3 transition-transform"></div>
-                    <div className="relative bg-gradient-to-br from-green-600 to-green-700 rounded-2xl p-4 shadow-2xl text-center">
-                      <div className="text-3xl font-bold text-white mb-1">
-                        {formatNumber(timeLeft.seconds)}
-                      </div>
-                      <div className="text-green-100 text-xs font-medium uppercase tracking-wide">
-                        {getTimeUnit(timeLeft.seconds, 'time.second', 'time.seconds')}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="text-center mt-6">
-                  <div className="inline-flex items-center space-x-2 bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm">
-                    <MapPin className="h-4 w-4 text-white" />
-                    <span className="text-white text-sm font-medium">
-                      Parc d'Exposition Mohammed VI • El Jadida
+                    <span
+                      className="text-[10px] sm:text-xs mt-2 tracking-widest uppercase text-white"
+                      style={{ opacity: 0.45 }}
+                    >
+                      {item.label}
                     </span>
                   </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Event Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-              <div className="flex items-center space-x-3 bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="bg-sib-gold/20 p-2 rounded-lg">
-                  <MapPin className="h-5 w-5 text-sib-gold" />
-                </div>
-                <div>
-                  <p className="font-semibold text-white">{t('hero.stats.location')}</p>
-                  <p className="text-blue-100 text-sm">Morocco</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="bg-sib-gold/20 p-2 rounded-lg">
-                  <Users className="h-5 w-5 text-sib-gold" />
-                </div>
-                <div>
-                  <p className="font-semibold text-white">Networking</p>
-                  <p className="text-blue-100 text-sm">B2B & B2G</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="bg-sib-gold/20 p-2 rounded-lg">
-                  <Building2 className="h-5 w-5 text-sib-gold" />
-                </div>
-                <div>
-                  <p className="font-semibold text-white">Format</p>
-                  <p className="text-blue-100 text-sm">Hybride</p>
-                </div>
-              </div>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to={ROUTES.REGISTER_EXHIBITOR}>
-                <Button size="lg" className="bg-sib-gold text-white hover:bg-sib-gold/90 border-none w-full sm:w-auto shadow-lg shadow-sib-gold/20">
-                  {t('hero.cta.exhibitor')}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to={ROUTES.EXHIBITORS}>
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-sib-primary w-full sm:w-auto">
-                  {t('hero.cta.discover')}
-                </Button>
-              </Link>
+                  {i < countdown.length - 1 && (
+                    <span
+                      className="text-xl sm:text-2xl font-bold -mt-5 text-white"
+                      style={{ opacity: 0.25 }}
+                    >
+                      :
+                    </span>
+                  )}
+                </React.Fragment>
+              ))}
             </div>
           </motion.div>
 
-          {/* Visual */}
+          {/* Boutons CTA */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative block"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.85 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <div className="relative z-10">
-              <div className="absolute -inset-4 bg-sib-gold/20 rounded-t-[10rem] rounded-b-2xl blur-xl" />
-              <div className="relative rounded-t-[10rem] rounded-b-2xl overflow-hidden border-4 border-white/20 shadow-2xl aspect-[4/3]">
-                <img
-                  src="https://images.pexels.com/photos/906982/pexels-photo-906982.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Bâtiment construction moderne"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-sib-primary/60 to-transparent" />
-              </div>
-              
-              {/* Decorative Elements */}
-              <div className="hidden lg:block absolute -top-12 -right-12 text-sib-gold/20 animate-spin-slow">
-                <MoroccanPattern className="w-48 h-48" />
-              </div>
-
-              {/* Floating Stats */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="hidden lg:block absolute bottom-8 -left-12 bg-white p-4 rounded-xl shadow-xl border-l-4 border-sib-gold"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="bg-sib-primary/5 p-3 rounded-lg">
-                    <Users className="h-6 w-6 text-sib-primary" />
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-sib-primary">Innovation</p>
-                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Smart Bâtiment</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                className="hidden lg:block absolute top-24 -right-8 bg-white p-4 rounded-xl shadow-xl border-l-4 border-sib-gold"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="bg-sib-primary/5 p-3 rounded-lg">
-                    <Calendar className="h-6 w-6 text-sib-primary" />
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-sib-primary">Conférences</p>
-                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">High Level</p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+            <Link to={ROUTES.REGISTER_EXHIBITOR}>
+              <HeroButton variant="gold">
+                Devenir Exposant
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </HeroButton>
+            </Link>
+            <Link to={ROUTES.REGISTER_VISITOR}>
+              <HeroButton variant="outline-white">
+                Visiter le Salon
+              </HeroButton>
+            </Link>
+            <Link to={ROUTES.EXHIBITORS}>
+              <HeroButton variant="outline-gold">
+                Découvrir
+              </HeroButton>
+            </Link>
           </motion.div>
         </div>
-      </div>
 
-      {/* Wave Separator */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg
-          className="w-full h-12 text-white"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.3 }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+          style={{ opacity: 0.35 }}
         >
-          <path
-            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
-            opacity=".25"
-            fill="currentColor"
-          />
-          <path
-            d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z"
-            opacity=".5"
-            fill="currentColor"
-          />
-          <path
-            d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"
-            fill="currentColor"
-          />
-        </svg>
-      </div>
-    </section>
+          <span className="text-white text-[10px] tracking-[0.22em] uppercase">Défiler</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
+          >
+            <ChevronDown className="h-5 w-5 text-white" />
+          </motion.div>
+        </motion.div>
+      </section>
     </>
+  );
+};
+
+/* ── Composant bouton héro ─────────────────────────────────────────────── */
+type HeroBtnVariant = 'gold' | 'outline-white' | 'outline-gold';
+
+const HeroButton: React.FC<{
+  variant: HeroBtnVariant;
+  children: React.ReactNode;
+}> = ({ variant, children }) => {
+  const [hovered, setHovered] = React.useState(false);
+
+  const styles: Record<HeroBtnVariant, React.CSSProperties> = {
+    gold: {
+      background: hovered
+        ? 'linear-gradient(135deg, #e8c84a, #C9A020)'
+        : 'linear-gradient(135deg, #D4AF37, #B8960C)',
+      color: DARK_BG,
+      border: 'none',
+      boxShadow: hovered ? '0 8px 28px rgba(212,175,55,0.45)' : '0 4px 18px rgba(212,175,55,0.3)',
+      transform: hovered ? 'translateY(-2px)' : 'none',
+    },
+    'outline-white': {
+      background: hovered ? 'rgba(255,255,255,0.1)' : 'transparent',
+      color: 'white',
+      border: `1px solid ${hovered ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.3)'}`,
+      backdropFilter: 'blur(8px)',
+      transform: hovered ? 'translateY(-2px)' : 'none',
+    },
+    'outline-gold': {
+      background: hovered ? 'rgba(212,175,55,0.12)' : 'transparent',
+      color: GOLD,
+      border: `1px solid ${hovered ? `${GOLD}80` : `${GOLD}35`}`,
+      backdropFilter: 'blur(8px)',
+      transform: hovered ? 'translateY(-2px)' : 'none',
+    },
+  };
+
+  return (
+    <button
+      className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-250"
+      style={styles[variant]}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {children}
+    </button>
   );
 };
