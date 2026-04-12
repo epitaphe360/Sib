@@ -19,7 +19,7 @@ export default function HomePage() {
       {/* Section Stats */}
       <StatsSection />
       
-      {/* À propos de SIPORTS */}
+      {/* À propos de SIB */}
       <AboutSalonSection />
       
       {/* Partenaires à la Une - Titre + Bande défilante + 3 Fiches */}

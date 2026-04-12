@@ -243,7 +243,7 @@ export const NetworkingSection: React.FC = () => {
             Prêt à développer votre réseau professionnel ?
           </h3>
           <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-            Rejoignez dès maintenant la plateforme SIPORTS et découvrez comment 
+            Rejoignez dès maintenant la plateforme SIB et découvrez comment 
             l'intelligence artificielle peut transformer votre approche du réseautage.
           </p>
           <Link to={ROUTES.NETWORKING}>

@@ -138,7 +138,7 @@ export const FeaturedExhibitors: React.FC = () => {
             {t('home.featured_exhibitors_title', 'Exposants à la Une')}
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('home.featured_exhibitors_desc', 'Les organisations leaders qui soutiennent SIPORTS 2026')}
+            {t('home.featured_exhibitors_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
           </p>
           <div className="mt-6 flex items-center justify-center gap-2">
             <div className="h-1 w-12 bg-gradient-to-r from-transparent via-green-500 to-transparent rounded-full"></div>

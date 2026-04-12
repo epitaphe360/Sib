@@ -89,7 +89,7 @@ export const AboutSalonSection: React.FC = () => {
                 <span className="text-siports-primary font-semibold">{t('about.badge')}</span>
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                SIPORTS 2026 — <span className="text-siports-primary">{t('home.about_subtitle')}</span>
+                SIB 2026 — <span className="text-siports-primary">{t('home.about_subtitle')}</span>
               </h2>
               <p className="text-lg text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: t('about.desc1') }} />
               <p className="text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: t('about.desc2') }} />

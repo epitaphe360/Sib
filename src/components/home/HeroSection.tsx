@@ -12,8 +12,8 @@ export const HeroSection: React.FC = () => {
   const { t } = useTranslation();
 
   React.useEffect(() => {
-    // Date du salon SIPORTS 2026 (1-3 Avril 2026)
-    const salonDate = new Date('2026-04-01T09:00:00');
+    // Date du salon SIB 2026 (25-29 Novembre 2026)
+    const salonDate = new Date('2026-11-25T09:00:00');
     
     const calculateTimeLeft = () => {
       const now = new Date();
