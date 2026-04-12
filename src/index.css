@@ -145,46 +145,46 @@
 }
 
 @layer components {
-  .siports-gradient {
+  .sib-gradient {
     background: linear-gradient(135deg, #1B365D 0%, #2E5984 50%, #4A90A4 100%);
   }
   
-  .siports-text-gradient {
+  .sib-text-gradient {
     background: linear-gradient(135deg, #1B365D 0%, #4A90A4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   
-  .siports-card-hover {
-    @apply hover:shadow-siports-xl hover:-translate-y-1 transition-all duration-300;
+  .sib-card-hover {
+    @apply hover:shadow-sib-xl hover:-translate-y-1 transition-all duration-300;
   }
   
-  .siports-btn-primary {
-    @apply bg-siports-primary text-white hover:bg-siports-dark focus:ring-siports-primary shadow-lg font-semibold;
+  .sib-btn-primary {
+    @apply bg-sib-primary text-white hover:bg-sib-dark focus:ring-sib-primary shadow-lg font-semibold;
   }
   
-  .siports-btn-secondary {
-    @apply bg-siports-gold text-siports-dark hover:bg-yellow-400 focus:ring-siports-gold shadow-lg font-semibold;
+  .sib-btn-secondary {
+    @apply bg-sib-gold text-sib-dark hover:bg-yellow-400 focus:ring-sib-gold shadow-lg font-semibold;
   }
   
   /* Nouveau style pour les sections principales */
-  .siports-section {
+  .sib-section {
     @apply bg-white/95 backdrop-blur-sm border border-white/20;
   }
   
-  .dark .siports-section {
+  .dark .sib-section {
     background-color: rgba(31, 41, 55, 0.95);
     border-color: rgba(55, 65, 81, 0.2);
   }
   
   /* Style pour les cartes avec effet de verre */
-  .siports-glass-card {
+  .sib-glass-card {
     @apply bg-white/90 backdrop-blur-md border border-white/30 shadow-xl;
     box-shadow: 0 14px 32px -16px rgba(7, 28, 48, 0.45);
   }
   
-  .dark .siports-glass-card {
+  .dark .sib-glass-card {
     background-color: rgba(31, 41, 55, 0.9);
     border-color: rgba(55, 65, 81, 0.3);
   }

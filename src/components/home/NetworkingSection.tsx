@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { 
@@ -60,13 +60,13 @@ export const NetworkingSection: React.FC = () => {
     <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-sky-50 relative overflow-hidden">
       {/* Moroccan Geometric Background */}
       <div className="absolute inset-0 opacity-[0.05]">
-        <div className="absolute top-10 left-10 w-32 h-32 border-4 border-siports-gold rounded-full" />
+        <div className="absolute top-10 left-10 w-32 h-32 border-4 border-sib-gold rounded-full" />
         <div className="absolute top-20 right-20 w-24 h-24 border-4 border-red-600 rotate-45 transform" />
         <div className="absolute bottom-20 left-1/4 w-40 h-40 border-4 border-green-600" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
-        <div className="absolute bottom-10 right-1/3 w-36 h-36 border-4 border-siports-gold rotate-12 transform" />
+        <div className="absolute bottom-10 right-1/3 w-36 h-36 border-4 border-sib-gold rotate-12 transform" />
       </div>
       {/* Background Pattern */}
-      <MoroccanPattern className="opacity-[0.03] text-siports-primary" scale={1.5} />
+      <MoroccanPattern className="opacity-[0.03] text-sib-primary" scale={1.5} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -79,14 +79,14 @@ export const NetworkingSection: React.FC = () => {
           >
             <div className="mb-8">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="bg-siports-primary p-2 rounded-lg">
+                <div className="bg-sib-primary p-2 rounded-lg">
                   <Network className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-siports-primary font-semibold">{t('home.networking_label')}</span>
+                <span className="text-sib-primary font-semibold">{t('home.networking_label')}</span>
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                 {t('home.networking_title').split('bons').map((part, i) => (
-                  i === 0 ? part : <span key={`part-${i}`} className="text-siports-primary">bons{part}</span>
+                  i === 0 ? part : <span key={`part-${i}`} className="text-sib-primary">bons{part}</span>
                 ))}
               </h2>
               <p className="text-lg text-gray-600 mb-8">

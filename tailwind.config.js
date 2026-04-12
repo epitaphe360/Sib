@@ -14,31 +14,12 @@ export default {
           light: '#87CEEB',
           dark: '#0F2A44',
           gold: '#D4AF37',
-          orange: '#FF6B35'
-        },
-        SIB: {
-          primary: '#1B365D',
-          secondary: '#2E5984',
-          accent: '#4A90A4',
-          light: '#87CEEB',
-          dark: '#0F2A44',
-          gold: '#D4AF37',
-          orange: '#FF6B35'
-        },
-        siports: {
-          primary: '#1B365D',    // Bleu marine profond (conservé)
-          secondary: '#2E5984',  // Bleu océan (conservé)
-          accent: '#4A90A4',     // Bleu turquoise (conservé)
-          light: '#87CEEB',      // Bleu ciel (conservé)
-          dark: '#0F2A44',       // Bleu nuit (conservé)
-          gold: '#D4AF37',       // Or maritime (conservé)
-          orange: '#FF6B35',     // Orange énergique (conservé)
-          // Nouvelles couleurs inspirées du site SIPORTS
-          'navy': '#0A1929',     // Bleu marine très foncé
-          'teal': '#006D77',     // Bleu-vert océan
-          'coral': '#FF7F50',    // Corail pour les accents
-          'sand': '#F4E4BC',     // Sable pour les fonds clairs
-          'maritime': '#2C5F5D', // Vert maritime
+          orange: '#FF6B35',
+          navy: '#0A1929',
+          teal: '#006D77',
+          coral: '#FF7F50',
+          sand: '#F4E4BC',
+          maritime: '#2C5F5D',
           gray: {
             50: '#F8FAFC',
             100: '#F1F5F9',
@@ -51,7 +32,16 @@ export default {
             800: '#1E293B',
             900: '#0F172A'
           }
-        }
+        },
+        SIB: {
+          primary: '#1B365D',
+          secondary: '#2E5984',
+          accent: '#4A90A4',
+          light: '#87CEEB',
+          dark: '#0F2A44',
+          gold: '#D4AF37',
+          orange: '#FF6B35'
+        },
       },
       fontFamily: {
         sans: ['"Open Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -80,13 +70,10 @@ export default {
         '3xl': '1.5rem'
       },
       boxShadow: {
-        // Aliases historiques (`shadow-sib*`) utilisés par les composants UI
+        // Ombres portées SIB
         sib: '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
         'sib-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)',
         'sib-xl': '0 18px 38px -18px rgba(7, 32, 57, 0.45), 0 12px 22px -16px rgba(7, 32, 57, 0.32)',
-        'siports': '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
-        'siports-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)',
-        'siports-xl': '0 18px 38px -18px rgba(7, 32, 57, 0.45), 0 12px 22px -16px rgba(7, 32, 57, 0.32)'
       },
       animation: {
         'blob': 'blob 7s infinite',

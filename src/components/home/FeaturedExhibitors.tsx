@@ -120,7 +120,7 @@ export const FeaturedExhibitors: React.FC = () => {
           backgroundPosition: '0 0, 40px 40px, 20px 60px'
         }} />
       </div>
-      <MoroccanPattern className="opacity-[0.03] text-siports-primary" scale={2} />
+      <MoroccanPattern className="opacity-[0.03] text-sib-primary" scale={2} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Premium Header */}
