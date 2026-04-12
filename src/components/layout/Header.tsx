@@ -137,15 +137,13 @@ export const Header: React.FC = memo(() => {
           </Link>
 
           {/* Desktop Navigation Luxe */}
-          <nav className="hidden lg:flex items-center space-x-0 flex-1 min-w-0 justify-center">
-
-            <div className="w-[1px] h-6 bg-slate-200 mx-2" />
+          <nav className="hidden lg:flex items-center gap-0 xl:gap-1 flex-1 justify-center">
 
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className="relative px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all group whitespace-nowrap"
+                className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all group whitespace-nowrap"
               >
                 {item.name}
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -153,12 +151,12 @@ export const Header: React.FC = memo(() => {
             ))}
             
             {/* Divider Vertical Minimaliste */}
-            <div className="w-[1px] h-6 bg-slate-200 mx-2" />
+            <div className="w-[1px] h-5 bg-slate-200 mx-0.5 xl:mx-1" />
 
             {/* Event Dropdown Premium */}
             <div className="relative" onMouseEnter={() => setIsEventMenuOpen(true)} onMouseLeave={() => setIsEventMenuOpen(false)}>
               <button
-                className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+                className="px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
               >
                 <span>{t('nav.event')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -188,7 +186,7 @@ export const Header: React.FC = memo(() => {
             {/* Participate Dropdown Premium */}
             <div className="relative" onMouseEnter={() => setIsParticipateMenuOpen(true)} onMouseLeave={() => setIsParticipateMenuOpen(false)}>
               <button
-                className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+                className="px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
               >
                 <span>{t('nav.participate')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -217,9 +215,9 @@ export const Header: React.FC = memo(() => {
             {mediaVisible && (
             <div className="relative" onMouseEnter={() => setIsMediaMenuOpen(true)} onMouseLeave={() => setIsMediaMenuOpen(false)}>
               <button
-                className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+                className="px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
               >
-                <Video className="w-3.5 h-3.5 text-blue-500" />
+                <Video className="w-3 h-3 xl:w-3.5 xl:h-3.5 text-blue-500" />
                 <span>{t('media.menu_title')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
@@ -253,7 +251,7 @@ export const Header: React.FC = memo(() => {
             {/* Contact Link */}
             <Link
               to="/contact"
-              className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+              className="px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
             >
               <span>{t('nav.contact')}</span>
               <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />

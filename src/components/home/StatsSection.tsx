@@ -1,147 +1,88 @@
 import React from 'react';
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { Users, Building2, Globe, Mic2 } from 'lucide-react';
+import { useTranslation } from '../../hooks/useTranslation';
 
-const GOLD = '#D4AF37';
-
-interface StatItem {
-  raw: number;
-  display: string;
-  suffix?: string;
-  label: string;
-  sublabel: string;
-}
-
-const STATS: StatItem[] = [
-  { raw: 500,    display: '500',     suffix: '+', label: 'Exposants',      sublabel: 'marques nationales & internationales' },
-  { raw: 50,     display: '50',      suffix: '',  label: 'Pays',           sublabel: 'représentés dans le monde' },
-  { raw: 200000, display: '200 000', suffix: '+', label: 'Visiteurs',      sublabel: 'professionnels & grand public' },
-  { raw: 30000,  display: '30 000',  suffix: ' m²', label: 'Surface',     sublabel: 'd\'exposition aménagée' },
+const stats = [
+  {
+    icon: Building2,
+    value: '300+',
+    labelKey: 'stats.exhibitors',
+    color: 'text-blue-600',
+    bg: 'bg-blue-100',
+    glowColor: 'from-blue-400/30'
+  },
+  {
+    icon: Users,
+    value: '6,000+',
+    labelKey: 'stats.visitors',
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-100',
+    glowColor: 'from-emerald-400/30'
+  },
+  {
+    icon: Globe,
+    value: '40',
+    labelKey: 'stats.countries',
+    color: 'text-purple-600',
+    bg: 'bg-purple-100',
+    glowColor: 'from-purple-400/30'
+  },
+  {
+    icon: Mic2,
+    value: '40+',
+    labelKey: 'stats.conferences',
+    color: 'text-amber-600',
+    bg: 'bg-amber-100',
+    glowColor: 'from-amber-400/30'
+  }
 ];
 
-/* Compteur animé */
-const Counter: React.FC<{ target: number; suffix?: string }> = ({ target, suffix = '' }) => {
-  const ref = React.useRef<HTMLSpanElement>(null);
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => Math.round(v).toLocaleString('fr-FR'));
-  const inView = useInView(ref, { once: true, margin: '-60px' });
-
-  React.useEffect(() => {
-    if (inView) {
-      animate(count, target, { duration: 2, ease: [0.16, 1, 0.3, 1] });
-    }
-  }, [inView, count, target]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      <motion.span>{rounded}</motion.span>
-      {suffix}
-    </span>
-  );
-};
-
 export const StatsSection: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
-    <section className="relative bg-white overflow-hidden">
-      {/* Bande latérale dorée gauche */}
-      <div
-        className="absolute left-0 top-0 bottom-0 w-1"
-        style={{ background: `linear-gradient(to bottom, transparent, ${GOLD}, transparent)` }}
-      />
+    <section className="relative py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 overflow-hidden">
+      {/* Subtle geometric background */}
+      <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+      <div className="absolute top-0 left-0 w-96 h-96 bg-siports-gold/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-
-        {/* En-tête */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <p
-            className="text-xs font-bold tracking-[0.25em] uppercase mb-3"
-            style={{ color: GOLD }}
-          >
-            SIB en Chiffres
-          </p>
-          <h2 className="font-heading font-bold text-4xl sm:text-5xl text-gray-900 uppercase tracking-wide">
-            Une plateforme de référence
-          </h2>
-          <div className="flex items-center justify-center gap-3 mt-5">
-            <div className="h-px w-20" style={{ background: `linear-gradient(to right, transparent, ${GOLD})` }} />
-            <div className="w-1.5 h-1.5 rotate-45" style={{ background: GOLD }} />
-            <div className="h-px w-20" style={{ background: `linear-gradient(to left, transparent, ${GOLD})` }} />
-          </div>
-        </motion.div>
-
-        {/* Grille des stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-gray-100 rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-          {STATS.map((stat, i) => (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {stats.map((stat, index) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 24 }}
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group bg-white px-6 py-10 sm:py-14 flex flex-col items-center text-center hover:bg-gray-50 transition-colors duration-300"
+              transition={{ duration: 0.6, delay: index * 0.12 }}
+              className="group"
             >
-              {/* Nombre */}
-              <div
-                className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl leading-none mb-3 transition-colors duration-300 group-hover:text-[#B8960C]"
-                style={{ color: '#1B365D' }}
-              >
-                <Counter target={stat.raw} suffix={stat.suffix} />
+              <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-6 sm:p-8 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-300 hover:shadow-lg hover:shadow-blue-900/20">
+                {/* Glow effect on hover */}
+                <div className={`absolute -inset-1 bg-gradient-to-br ${stat.glowColor} to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl`} />
+                
+                <div className="relative flex flex-col items-center text-center">
+                  {/* Icon */}
+                  <div className={`p-3 rounded-xl ${stat.bg} mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <stat.icon className={`h-7 w-7 ${stat.color}`} />
+                  </div>
+
+                  {/* Value */}
+                  <div className="text-4xl sm:text-5xl font-bold text-white mb-1 tracking-tight">
+                    {stat.value}
+                  </div>
+
+                  {/* Label */}
+                  <div className="text-sm sm:text-base font-medium text-blue-100 uppercase tracking-wider">
+                    {t(stat.labelKey) || stat.labelKey.split('.')[1]}
+                  </div>
+                </div>
               </div>
-
-              {/* Trait doré animé */}
-              <div className="relative h-0.5 w-12 mb-3 overflow-hidden rounded-full bg-gray-100">
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.7, delay: i * 0.1 + 0.3 }}
-                  className="absolute inset-0 origin-left rounded-full"
-                  style={{ background: GOLD }}
-                />
-              </div>
-
-              {/* Label principal */}
-              <p className="font-heading font-bold text-lg sm:text-xl text-gray-900 uppercase tracking-wide mb-1">
-                {stat.label}
-              </p>
-
-              {/* Sous-label */}
-              <p className="text-xs sm:text-sm text-gray-400 leading-snug">
-                {stat.sublabel}
-              </p>
             </motion.div>
           ))}
         </div>
-
-        {/* Bandeau ligne événement */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 py-5 rounded-2xl"
-          style={{
-            background: 'linear-gradient(135deg, #0A1929 0%, #1B365D 100%)',
-          }}
-        >
-          {[
-            { icon: '📅', text: '25 – 29 Novembre 2026' },
-            { icon: '📍', text: 'Parc Expo Mohammed VI · El Jadida' },
-            { icon: '🏆', text: '20ème Édition · 40 Ans d\'Histoire' },
-            { icon: '🤝', text: '300+ Rencontres B2B' },
-          ].map((item, i) => (
-            <div key={i} className="flex items-center gap-2 text-white">
-              <span className="text-base">{item.icon}</span>
-              <span className="text-sm font-semibold tracking-wide">{item.text}</span>
-            </div>
-          ))}
-        </motion.div>
       </div>
     </section>
   );

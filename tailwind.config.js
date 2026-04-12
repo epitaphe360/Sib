@@ -5,6 +5,26 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Aliases historiques utilisés dans le code (`sib-*`, `SIB-*`)
+        // Pour éviter des styles manquants et garder une palette unique.
+        sib: {
+          primary: '#1B365D',
+          secondary: '#2E5984',
+          accent: '#4A90A4',
+          light: '#87CEEB',
+          dark: '#0F2A44',
+          gold: '#D4AF37',
+          orange: '#FF6B35'
+        },
+        SIB: {
+          primary: '#1B365D',
+          secondary: '#2E5984',
+          accent: '#4A90A4',
+          light: '#87CEEB',
+          dark: '#0F2A44',
+          gold: '#D4AF37',
+          orange: '#FF6B35'
+        },
         siports: {
           primary: '#1B365D',    // Bleu marine profond (conservé)
           secondary: '#2E5984',  // Bleu océan (conservé)
@@ -60,6 +80,10 @@ export default {
         '3xl': '1.5rem'
       },
       boxShadow: {
+        // Aliases historiques (`shadow-sib*`) utilisés par les composants UI
+        sib: '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
+        'sib-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)',
+        'sib-xl': '0 18px 38px -18px rgba(7, 32, 57, 0.45), 0 12px 22px -16px rgba(7, 32, 57, 0.32)',
         'siports': '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
         'siports-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)',
         'siports-xl': '0 18px 38px -18px rgba(7, 32, 57, 0.45), 0 12px 22px -16px rgba(7, 32, 57, 0.32)'

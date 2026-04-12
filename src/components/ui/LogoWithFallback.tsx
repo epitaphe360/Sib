@@ -25,7 +25,7 @@ function generatePlaceholder(name: string): string {
 
   const svgData = `<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="6" fill="${backgroundColor}"/><text x="24" y="30" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-weight="600" font-size="16">${initials}</text></svg>`;
 
-  return `data:image/svg+xml;base64,${btoa(svgData)}`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgData)}`;
 }
 
 export default function LogoWithFallback({

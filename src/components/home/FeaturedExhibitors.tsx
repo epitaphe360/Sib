@@ -64,8 +64,8 @@ export const FeaturedExhibitors: React.FC = () => {
   const getCategoryLabel = (category: string) => {
     // Map backend values to translation keys
     // institutional -> categories.institutional
-    // bâtiment-industry -> categories.bâtiment-industry
-    // bâtiment-operations -> categories.bâtiment-operations
+    // port-industry -> categories.port-industry
+    // port-operations -> categories.port-operations
     // academic -> categories.academic
     
     // Check if category matches one of our keys, otherwise return as is or fallback
@@ -80,8 +80,8 @@ export const FeaturedExhibitors: React.FC = () => {
   const getCategoryColor = (category: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {
     const colors = {
       'institutional': 'success' as const,
-      'bâtiment-industry': 'error' as const,
-      'bâtiment-operations': 'info' as const,
+      'port-industry': 'error' as const,
+      'port-operations': 'info' as const,
       'academic': 'warning' as const
     };
     return colors[category as keyof typeof colors] || 'default';
@@ -120,7 +120,7 @@ export const FeaturedExhibitors: React.FC = () => {
           backgroundPosition: '0 0, 40px 40px, 20px 60px'
         }} />
       </div>
-      <MoroccanPattern className="opacity-[0.03] text-sib-primary" scale={2} />
+      <MoroccanPattern className="opacity-[0.03] text-siports-primary" scale={2} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Premium Header */}
@@ -138,7 +138,7 @@ export const FeaturedExhibitors: React.FC = () => {
             {t('home.featured_exhibitors_title', 'Exposants à la Une')}
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('home.featured_exhibitors_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
+            {t('home.featured_exhibitors_desc', 'Les organisations leaders qui soutiennent SIPORTS 2026')}
           </p>
           <div className="mt-6 flex items-center justify-center gap-2">
             <div className="h-1 w-12 bg-gradient-to-r from-transparent via-green-500 to-transparent rounded-full"></div>

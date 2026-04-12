@@ -1,12 +1,11 @@
 /**
- * Section 40ème Édition — Célébration du jubilé
- * Design : fond sombre, chiffre "40" monumental, timeline des jalons
+ * Section "40 ans d'histoire" — Timeline des jalons
+ * Design : clair, hiérarchie simple, palette sib
  */
 
 import React from 'react';
 import { motion } from 'framer-motion';
-
-const GOLD = '#D4AF37';
+import { Card } from '../ui/Card';
 
 const milestones = [
   {
@@ -34,218 +33,102 @@ const milestones = [
 
 export const EditionSection: React.FC = () => {
   return (
-    <section
-      className="relative py-24 lg:py-32 overflow-hidden"
-      style={{
-        background: 'linear-gradient(160deg, #020913 0%, #04111f 40%, #0A1929 100%)',
-      }}
-    >
-      {/* Blueprint grid */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(212,175,55,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(212,175,55,0.05) 1px, transparent 1px)
-          `,
-          backgroundSize: '80px 80px',
-        }}
-      />
+    <section className="relative py-20 lg:py-28 overflow-hidden bg-white">
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white via-sib-light/40 to-white" />
 
-      {/* Éclat radial doré */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse, rgba(212,175,55,0.07) 0%, transparent 65%)',
-        }}
-      />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-        {/* ── En-tête ─────────────────────────────────────────────────── */}
-        <div className="text-center mb-16 lg:mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {/* En-tête */}
+        <div className="text-center mb-14 lg:mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-3 mb-6"
+            transition={{ duration: 0.5 }}
+            className="text-xs font-bold tracking-[0.25em] uppercase text-sib-gold"
           >
-            <div className="h-px w-12" style={{ background: `linear-gradient(to right, transparent, ${GOLD})` }} />
-            <span
-              className="text-xs font-bold tracking-[0.25em] uppercase"
-              style={{ color: GOLD }}
-            >
-              Depuis 1985
-            </span>
-            <div className="h-px w-12" style={{ background: `linear-gradient(to left, transparent, ${GOLD})` }} />
-          </motion.div>
-
-          {/* Grand "40" */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="relative inline-block"
-          >
-            {/* Ombre portée monumentale */}
-            <span
-              className="font-heading font-bold select-none pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              style={{
-                fontSize: 'clamp(10rem, 25vw, 20rem)',
-                lineHeight: 1,
-                color: 'transparent',
-                WebkitTextStroke: `1px rgba(212,175,55,0.08)`,
-                letterSpacing: '-0.04em',
-                userSelect: 'none',
-              }}
-            >
-              40
-            </span>
-
-            <h2
-              className="font-heading font-bold leading-none relative"
-              style={{
-                fontSize: 'clamp(6rem, 20vw, 16rem)',
-                background: `linear-gradient(135deg, ${GOLD} 0%, #F5D978 40%, ${GOLD} 70%, #9A7820 100%)`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '-0.04em',
-              }}
-            >
-              40
-            </h2>
-          </motion.div>
+            Depuis 1986
+          </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.05 }}
+            className="mt-4"
           >
-            <p
-              className="font-heading font-bold text-2xl sm:text-4xl uppercase tracking-[0.15em] text-white mt-2 mb-3"
-            >
-              Ans d'Excellence
+            <div className="relative inline-block">
+              <span className="absolute inset-0 -translate-y-3 select-none pointer-events-none text-sib-primary/8 font-heading font-bold tracking-tight" style={{ fontSize: 'clamp(5rem, 18vw, 11rem)', lineHeight: 1 }}>
+                40
+              </span>
+              <h2 className="relative font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-slate-900 tracking-tight">
+                40 ans d'excellence
+              </h2>
+            </div>
+            <p className="mt-4 text-base text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Depuis 1986, le SIB est le rendez-vous biennal de référence des professionnels du Bâtiment, de la Construction,
+              de l'Urbanisme et de la Décoration, au niveau national et international.
             </p>
-            <p className="text-sm sm:text-base max-w-xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>
-              Depuis 1986, le SIB est le rendez-vous biennal de référence des professionnels du Bâtiment, de la Construction, de l'Urbanisme et de la Décoration, au niveau national et international.
-            </p>
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <div className="h-px w-20 bg-gradient-to-r from-transparent to-sib-gold" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-sib-gold" />
+              <div className="h-px w-20 bg-gradient-to-l from-transparent to-sib-gold" />
+            </div>
           </motion.div>
         </div>
 
-        {/* ── Timeline ────────────────────────────────────────────────── */}
-        <div className="relative">
-          {/* Ligne centrale */}
-          <div
-            className="hidden lg:block absolute top-10 left-0 right-0 h-px"
-            style={{ background: `linear-gradient(to right, transparent, ${GOLD}40, ${GOLD}80, ${GOLD}40, transparent)` }}
-          />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {milestones.map((m, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 32 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.65, delay: i * 0.12 }}
-                className="relative"
+        {/* Timeline */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {milestones.map((m, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.08 }}
+            >
+              <Card
+                hover
+                padding="lg"
+                className={m.highlight ? 'border-sib-gold/35 bg-sib-gold/5' : ''}
               >
-                {/* Point sur la ligne (desktop) */}
-                <div
-                  className="hidden lg:flex absolute -top-[calc(2.5rem-1px)] left-1/2 -translate-x-1/2 w-5 h-5 rounded-full items-center justify-center z-20"
-                  style={{
-                    background: m.highlight ? GOLD : '#0A1929',
-                    border: `2px solid ${m.highlight ? GOLD : `${GOLD}50`}`,
-                    boxShadow: m.highlight ? `0 0 16px ${GOLD}60` : undefined,
-                  }}
-                >
-                  {m.highlight && (
-                    <div className="w-2 h-2 rounded-full" style={{ background: GOLD }} />
-                  )}
+                <div className={m.highlight ? 'text-sib-gold' : 'text-sib-primary'}>
+                  <div className="font-heading font-bold text-4xl">{m.year}</div>
+                  <div className="mt-2 h-0.5 w-10 rounded-full bg-current opacity-40" />
                 </div>
 
-                {/* Carte */}
-                <div
-                  className="rounded-2xl p-6 h-full flex flex-col transition-all duration-300 hover:-translate-y-1"
-                  style={{
-                    background: m.highlight
-                      ? `linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.06) 100%)`
-                      : 'rgba(255,255,255,0.04)',
-                    border: m.highlight
-                      ? `1px solid ${GOLD}40`
-                      : '1px solid rgba(255,255,255,0.07)',
-                    boxShadow: m.highlight ? `0 0 32px ${GOLD}12` : undefined,
-                  }}
-                >
-                  {/* Année */}
-                  <div
-                    className="font-heading font-bold text-4xl mb-2"
-                    style={{ color: m.highlight ? GOLD : 'rgba(255,255,255,0.35)' }}
-                  >
-                    {m.year}
+                <h3 className="mt-4 font-heading font-bold text-lg uppercase tracking-wide text-slate-900">
+                  {m.title}
+                </h3>
+                <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+                  {m.desc}
+                </p>
+
+                {m.highlight && (
+                  <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-sib-gold/30 bg-white/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-sib-gold">
+                    <span>✦</span>
+                    Édition anniversaire
                   </div>
-
-                  {/* Trait */}
-                  <div
-                    className="h-0.5 w-8 rounded-full mb-3"
-                    style={{ background: m.highlight ? GOLD : 'rgba(255,255,255,0.15)' }}
-                  />
-
-                  {/* Titre */}
-                  <h3
-                    className="font-heading font-bold text-lg uppercase tracking-wide mb-2"
-                    style={{ color: m.highlight ? GOLD : 'white' }}
-                  >
-                    {m.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p
-                    className="text-xs sm:text-sm leading-relaxed flex-1"
-                    style={{ color: m.highlight ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.45)' }}
-                  >
-                    {m.desc}
-                  </p>
-
-                  {m.highlight && (
-                    <div
-                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase"
-                      style={{ color: GOLD }}
-                    >
-                      <span>✦</span>
-                      <span>Édition Anniversaire</span>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                )}
+              </Card>
+            </motion.div>
+          ))}
         </div>
 
-        {/* ── Séparateur bas ──────────────────────────────────────────── */}
+        {/* Bas */}
         <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-16 flex items-center justify-center gap-4"
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-12 flex items-center justify-center"
         >
-          <div className="h-px flex-1 max-w-xs" style={{ background: `linear-gradient(to right, transparent, ${GOLD}50)` }} />
-          <div
-            className="px-5 py-2 rounded-full text-xs font-bold tracking-[0.2em] uppercase"
-            style={{
-              border: `1px solid ${GOLD}30`,
-              color: GOLD,
-              background: 'rgba(212,175,55,0.05)',
-            }}
-          >
-            1986 — 2026 · 40 Ans · 20 Éditions
+          <div className="inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white/80 backdrop-blur px-5 py-2 text-xs font-bold uppercase tracking-[0.2em] text-slate-700 shadow-sib">
+            1986 — 2026
+            <span className="text-slate-300">·</span>
+            40 ans
+            <span className="text-slate-300">·</span>
+            20 éditions
           </div>
-          <div className="h-px flex-1 max-w-xs" style={{ background: `linear-gradient(to left, transparent, ${GOLD}50)` }} />
         </motion.div>
       </div>
     </section>

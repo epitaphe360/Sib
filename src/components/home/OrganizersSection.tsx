@@ -6,8 +6,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const GOLD = '#D4AF37';
-
 interface OrganizerItem {
   role: string;
   name: string;
@@ -61,41 +59,27 @@ const organizers: OrganizerItem[] = [
   },
 ];
 
-const categoryColors: Record<OrganizerItem['category'], { bg: string; border: string; label: string; labelColor: string }> = {
+const categoryMeta: Record<OrganizerItem['category'], { label: string; accentClass: string; borderClass: string }> = {
   tutelle: {
-    bg: 'rgba(212,175,55,0.06)',
-    border: `${GOLD}30`,
     label: 'Tutelle',
-    labelColor: GOLD,
+    accentClass: 'text-sib-gold',
+    borderClass: 'border-sib-gold/25',
   },
   partenaire: {
-    bg: 'rgba(27,54,93,0.05)',
-    border: 'rgba(27,54,93,0.12)',
     label: 'Partenaire',
-    labelColor: '#1B365D',
+    accentClass: 'text-sib-primary',
+    borderClass: 'border-sib-primary/15',
   },
   organisateur: {
-    bg: 'rgba(16,185,129,0.05)',
-    border: 'rgba(16,185,129,0.15)',
     label: 'Organisateur Délégué',
-    labelColor: '#059669',
+    accentClass: 'text-sib-secondary',
+    borderClass: 'border-sib-secondary/20',
   },
 };
 
 export const OrganizersSection: React.FC = () => {
   return (
-    <section className="relative py-16 lg:py-20 bg-gray-50 border-t border-b border-gray-100 overflow-hidden">
-      {/* Fond léger */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.025]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(27,54,93,1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(27,54,93,1) 1px, transparent 1px)
-          `,
-          backgroundSize: '48px 48px',
-        }}
-      />
+    <section className="relative py-16 lg:py-20 bg-gradient-to-b from-sib-light/40 via-white to-white border-t border-b border-slate-200/60 overflow-hidden">
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -107,19 +91,16 @@ export const OrganizersSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <p
-            className="text-xs font-bold tracking-[0.25em] uppercase mb-3"
-            style={{ color: GOLD }}
-          >
+          <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 text-sib-gold">
             Partenaires & Organisateurs
           </p>
           <h2 className="font-heading font-bold text-3xl sm:text-4xl text-gray-900 uppercase tracking-wide">
             Sous l'égide des Institutions
           </h2>
           <div className="flex items-center justify-center gap-3 mt-4">
-            <div className="h-px w-16" style={{ background: `linear-gradient(to right, transparent, ${GOLD})` }} />
-            <div className="w-1.5 h-1.5 rotate-45" style={{ background: GOLD }} />
-            <div className="h-px w-16" style={{ background: `linear-gradient(to left, transparent, ${GOLD})` }} />
+            <div className="h-0.5 w-16 rounded-full bg-sib-gold/70" />
+            <div className="w-1.5 h-1.5 rotate-45 bg-sib-gold" />
+            <div className="h-0.5 w-16 rounded-full bg-sib-gold/70" />
           </div>
         </motion.div>
 
@@ -129,11 +110,7 @@ export const OrganizersSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.65 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 p-6 sm:p-8 rounded-2xl mb-10"
-          style={{
-            background: `linear-gradient(135deg, rgba(212,175,55,0.07) 0%, rgba(27,54,93,0.05) 100%)`,
-            border: `1px solid ${GOLD}25`,
-          }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 p-6 sm:p-8 rounded-2xl mb-10 bg-gradient-to-br from-sib-gold/10 via-white to-sib-light/60 border border-sib-gold/20 shadow-sib"
         >
           <img
             src="/logo-ministere.png"
@@ -142,13 +119,13 @@ export const OrganizersSection: React.FC = () => {
             onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/logo-ministere.svg'; }}
           />
           <div className="text-center sm:text-left">
-            <p className="text-xs font-bold tracking-[0.18em] uppercase mb-1" style={{ color: GOLD }}>
+            <p className="text-xs font-bold tracking-[0.18em] uppercase mb-1 text-sib-gold">
               Sous le Haut Patronage de Sa Majesté le Roi Mohammed VI
             </p>
             <h3 className="font-heading font-bold text-lg sm:text-xl text-gray-900 uppercase">
               Ministère de l'Habitat et de la Politique de la Ville
             </h3>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-slate-600 mt-1">
               Aménagement du Territoire National · Urbanisme · Habitat · Politique de la Ville
             </p>
           </div>
@@ -157,7 +134,7 @@ export const OrganizersSection: React.FC = () => {
         {/* Grille partenaires */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {organizers.slice(2).map((org, i) => {
-            const style = categoryColors[org.category];
+            const meta = categoryMeta[org.category];
             return (
               <motion.div
                 key={i}
@@ -165,38 +142,27 @@ export const OrganizersSection: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="rounded-xl p-5 flex items-start gap-4"
-                style={{
-                  background: style.bg,
-                  border: `1px solid ${style.border}`,
-                }}
+                className={`rounded-xl p-5 flex items-start gap-4 border bg-white/90 backdrop-blur shadow-sm ${meta.borderClass}`}
               >
                 {/* Acronyme badge */}
                 <div
-                  className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-heading font-bold text-xs text-center leading-tight"
-                  style={{
-                    background: 'white',
-                    border: `1px solid ${style.border}`,
-                    color: style.labelColor,
-                    fontSize: org.acronym.length > 5 ? '0.6rem' : '0.75rem',
-                  }}
+                  className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-heading font-bold text-center leading-tight bg-white border ${meta.borderClass} ${meta.accentClass} ${org.acronym.length > 5 ? 'text-[0.6rem]' : 'text-xs'}`}
                 >
                   {org.acronym}
                 </div>
                 <div className="min-w-0">
                   {/* Role */}
                   <span
-                    className="text-[10px] font-bold tracking-[0.15em] uppercase"
-                    style={{ color: style.labelColor }}
+                    className={`text-[10px] font-bold tracking-[0.15em] uppercase ${meta.accentClass}`}
                   >
-                    {style.label}
+                    {meta.label}
                   </span>
                   {/* Nom */}
                   <h4 className="font-semibold text-sm text-gray-900 leading-snug mt-0.5 mb-1">
                     {org.name}
                   </h4>
                   {/* Description */}
-                  <p className="text-xs text-gray-500 leading-snug">
+                  <p className="text-xs text-slate-600 leading-snug">
                     {org.description}
                   </p>
                 </div>
