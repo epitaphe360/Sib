@@ -1,5 +1,7 @@
-﻿import { HeroSection } from '../components/home/HeroSection';
+import { HeroSection } from '../components/home/HeroSection';
 import { StatsSection } from '../components/home/StatsSection';
+import { EditionSection } from '../components/home/EditionSection';
+import { ThemesSection } from '../components/home/ThemesSection';
 import { AboutSalonSection } from '../components/home/AboutSalonSection';
 import { FeaturedPartners } from '../components/home/FeaturedPartners';
 import { FeaturedExhibitors } from '../components/home/FeaturedExhibitors';
@@ -10,28 +12,34 @@ import { ServicesSection } from '../components/home/ServicesSection';
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-transparent">
-      {/* Section Hero */}
+      {/* 1. Hero cinématique — fond sombre, badge 40ème, countdown premium */}
       <HeroSection />
-      
-      {/* Section Stats */}
+
+      {/* 2. Stats — chiffres clés animés sur fond blanc */}
       <StatsSection />
-      
-      {/* À propos de SIB */}
+
+      {/* 3. 40ème Édition — célébration anniversaire, timeline */}
+      <EditionSection />
+
+      {/* 4. Filières — 6 univers du salon bâtiment */}
+      <ThemesSection />
+
+      {/* 5. À propos du salon */}
       <AboutSalonSection />
-      
-      {/* Partenaires à la Une - Titre + Bande défilante + 3 Fiches */}
+
+      {/* 6. Partenaires à la Une */}
       <FeaturedPartners />
-      
-      {/* Exposants à la une */}
+
+      {/* 7. Exposants à la une */}
       <FeaturedExhibitors />
-      
-      {/* Logo Showcase Exposants */}
+
+      {/* 8. Logo Showcase Exposants */}
       <LogoShowcaseSection type="exhibitors" />
-      
-      {/* Section Networking */}
+
+      {/* 9. Networking B2B */}
       <NetworkingSection />
-      
-      {/* Section Services */}
+
+      {/* 10. Services */}
       <ServicesSection />
     </div>
   );
