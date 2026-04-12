@@ -280,7 +280,7 @@ export const CapsuleDetailPage: React.FC = () => {
                 Inside SIB
               </h3>
               <p className="text-sm text-blue-100 mb-4">
-                Des capsules vidéo exclusives pour découvrir les coulisses du salon et les acteurs clés du sport business.
+                Des capsules vidéo exclusives pour découvrir les coulisses du salon et les acteurs clés du secteur du bâtiment.
               </p>
               <Button variant="secondary" className="w-full" asChild>
                 <Link to="/media/capsules">

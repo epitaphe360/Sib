@@ -358,7 +358,7 @@ export const LiveStudioDetailPage: React.FC = () => {
                 Live Studio SIB
               </h3>
               <p className="text-sm text-gray-600">
-                Des interviews exclusives avec les acteurs clés du sport business, en direct de notre studio.
+                Des interviews exclusives avec les acteurs clés du secteur du bâtiment, en direct de notre studio.
               </p>
             </div>
 

@@ -401,12 +401,12 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('visitor-free@test.siport.com', 'Admin123!', 'marketing')}
+                  onClick={() => handleDemoLogin('marketing@sibs.com', 'Admin123!', 'marketing')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 transition-colors"
                 >
                   {demoLoading === 'marketing' ? <Loader className="h-4 w-4 animate-spin" /> : <BarChart2 className="h-4 w-4" />}
-                  Visiteur
+                  Marketing
                 </button>
               </div>
             </div>
