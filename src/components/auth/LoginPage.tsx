@@ -7,7 +7,11 @@ import {
   EyeOff,
   Anchor,
   AlertCircle,
-  Loader
+  Loader,
+  Shield,
+  Building2,
+  Store,
+  BarChart2
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { Card } from '../ui/Card';
@@ -28,6 +32,8 @@ export default function LoginPage() {
   const { login, loginWithGoogle, isLoading, isGoogleLoading } = useAuthStore();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [demoLoading, setDemoLoading] = useState<string | null>(null);
+  const showDemoLogins = import.meta.env.VITE_SHOW_DEMO_LOGINS === 'true';
 
   // ✅ CRITICAL FIX: Récupérer l'URL de redirection depuis les paramètres d'URL
   const redirectUrl = useMemo(() => {
@@ -62,10 +68,11 @@ export default function LoginPage() {
   };
 
   // ✅ Fonction pour connexion rapide avec les comptes démo
-  const handleDemoLogin = async (demoEmail: string, demoPassword: string) => {
+  const handleDemoLogin = async (demoEmail: string, demoPassword: string, key: string) => {
     setError('');
     setEmail(demoEmail);
     setPassword(demoPassword);
+    setDemoLoading(key);
     
     try {
       await login(demoEmail, demoPassword, { rememberMe: true });
@@ -85,6 +92,8 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       setError(err.message || t('login.connectionError'));
+    } finally {
+      setDemoLoading(null);
     }
   };
 
@@ -350,6 +359,58 @@ export default function LoginPage() {
               </Link>
             </p>
           </div>
+
+          {/* Raccourcis connexion rapide - uniquement en mode démo */}
+          {showDemoLogins && (
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200" />
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="px-2 bg-white text-gray-400">⚡ Connexion rapide</span>
+                </div>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin('admin.sibs@sibs.com', 'TestPassword123!', 'admin')}
+                  disabled={demoLoading !== null || isLoading}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 transition-colors"
+                >
+                  {demoLoading === 'admin' ? <Loader className="h-4 w-4 animate-spin" /> : <Shield className="h-4 w-4" />}
+                  Admin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin('contact@bollore-maroc.ma', 'TestPassword123!', 'partner')}
+                  disabled={demoLoading !== null || isLoading}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 transition-colors"
+                >
+                  {demoLoading === 'partner' ? <Loader className="h-4 w-4 animate-spin" /> : <Building2 className="h-4 w-4" />}
+                  Partenaire
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin('r.senhaji@somaport.ma', 'TestPassword123!', 'exhibitor')}
+                  disabled={demoLoading !== null || isLoading}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+                >
+                  {demoLoading === 'exhibitor' ? <Loader className="h-4 w-4 animate-spin" /> : <Store className="h-4 w-4" />}
+                  Exposant
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin('marketing@sibs.com', 'TestPassword123!', 'marketing')}
+                  disabled={demoLoading !== null || isLoading}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                >
+                  {demoLoading === 'marketing' ? <Loader className="h-4 w-4 animate-spin" /> : <BarChart2 className="h-4 w-4" />}
+                  Marketing
+                </button>
+              </div>
+            </div>
+          )}
         </Card>
       </motion.div>
     </div>
