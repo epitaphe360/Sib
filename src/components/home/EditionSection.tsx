@@ -10,24 +10,24 @@ const GOLD = '#D4AF37';
 
 const milestones = [
   {
-    year: '1985',
+    year: '1986',
     title: '1ère Édition',
-    desc: 'Naissance du Salon International du Bâtiment à Casablanca — premier rendez-vous du secteur au Maroc.',
+    desc: 'Naissance du Salon International du Bâtiment à Casablanca, organisé par URBACOM — premier rendez-vous BTP d\'envergure internationale au Maroc.',
   },
   {
-    year: '1998',
-    title: 'Rayonnement Régional',
-    desc: 'Le SIB devient la référence du bâtiment en Afrique du Nord, attirant les premiers exposants internationaux.',
+    year: '2004',
+    title: 'Ère Mohammed VI',
+    desc: 'Le SIB se tient désormais sous le Haut Patronage de Sa Majesté le Roi Mohammed VI. Transfert progressif vers le Parc d\'Exposition Mohammed VI d\'El Jadida.',
   },
   {
-    year: '2012',
-    title: 'Internationalisation',
-    desc: '+200 exposants, 30 pays représentés. Lancement de la plateforme numérique B2B et des conférences high-level.',
+    year: '2022',
+    title: '18ème Édition',
+    desc: '500+ exposants · 160 000 visiteurs · 42 pays. Retour en force après la pandémie, sous le signe de l\'innovation et de la construction durable.',
   },
   {
     year: '2026',
-    title: '40ème Édition',
-    desc: 'El Jadida — Nouveau site, ambition continentale, plateforme digitale et 300+ exposants attendus.',
+    title: '20ème Édition',
+    desc: 'El Jadida · 40 ans d\'histoire. 500+ exposants, 200 000+ visiteurs attendus, SIB Academy, Espace Démonstration, 300+ rencontres B2B.',
     highlight: true,
   },
 ];
@@ -131,7 +131,7 @@ export const EditionSection: React.FC = () => {
               Ans d'Excellence
             </p>
             <p className="text-sm sm:text-base max-w-xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>
-              Quarante éditions au service de l'innovation, de la construction durable et du développement du secteur bâtiment au Maroc et en Afrique.
+              Depuis 1986, le SIB est le rendez-vous biennal de référence des professionnels du Bâtiment, de la Construction, de l'Urbanisme et de la Décoration, au niveau national et international.
             </p>
           </motion.div>
         </div>
@@ -243,7 +243,7 @@ export const EditionSection: React.FC = () => {
               background: 'rgba(212,175,55,0.05)',
             }}
           >
-            1985 — 2026
+            1986 — 2026 · 40 Ans · 20 Éditions
           </div>
           <div className="h-px flex-1 max-w-xs" style={{ background: `linear-gradient(to left, transparent, ${GOLD}50)` }} />
         </motion.div>

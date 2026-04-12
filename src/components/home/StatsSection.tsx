@@ -13,10 +13,10 @@ interface StatItem {
 }
 
 const STATS: StatItem[] = [
-  { raw: 300, display: '300', suffix: '+', label: 'Exposants', sublabel: 'entreprises participantes' },
-  { raw: 40,  display: '40',  suffix: '',  label: 'Pays',      sublabel: 'représentés dans le monde' },
-  { raw: 6000,display: '6 000', suffix: '+', label: 'Professionnels', sublabel: 'visiteurs attendus' },
-  { raw: 40,  display: '40',  suffix: '+', label: 'Conférences', sublabel: 'high level & ateliers' },
+  { raw: 500,    display: '500',     suffix: '+', label: 'Exposants',      sublabel: 'marques nationales & internationales' },
+  { raw: 50,     display: '50',      suffix: '',  label: 'Pays',           sublabel: 'représentés dans le monde' },
+  { raw: 200000, display: '200 000', suffix: '+', label: 'Visiteurs',      sublabel: 'professionnels & grand public' },
+  { raw: 30000,  display: '30 000',  suffix: ' m²', label: 'Surface',     sublabel: 'd\'exposition aménagée' },
 ];
 
 /* Compteur animé */
@@ -132,8 +132,9 @@ export const StatsSection: React.FC = () => {
         >
           {[
             { icon: '📅', text: '25 – 29 Novembre 2026' },
-            { icon: '📍', text: 'Parc d'Expo Mohammed VI · El Jadida' },
-            { icon: '🏆', text: '40ème Édition' },
+            { icon: '📍', text: 'Parc Expo Mohammed VI · El Jadida' },
+            { icon: '🏆', text: '20ème Édition · 40 Ans d\'Histoire' },
+            { icon: '🤝', text: '300+ Rencontres B2B' },
           ].map((item, i) => (
             <div key={i} className="flex items-center gap-2 text-white">
               <span className="text-base">{item.icon}</span>

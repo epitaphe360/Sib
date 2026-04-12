@@ -57,10 +57,10 @@ const features = [
 ];
 
 const cardStats = [
-  { number: '300+', labelKey: 'about.exhibitors_stat', Icon: Building2 },
-  { number: '40',   labelKey: 'about.countries_stat',  Icon: Globe },
-  { number: '6 000+', labelKey: 'about.visitors_stat', Icon: Users },
-  { number: '5 j',  labelKey: 'about.days_stat',        Icon: CalendarDays },
+  { number: '500+',      labelKey: 'about.exhibitors_stat', Icon: Building2 },
+  { number: '50',        labelKey: 'about.countries_stat',  Icon: Globe },
+  { number: '200 000+',  labelKey: 'about.visitors_stat',   Icon: Users },
+  { number: '30 000 m²', labelKey: 'about.surface_stat',    Icon: CalendarDays },
 ];
 
 export const AboutSalonSection: React.FC = () => {
@@ -123,20 +123,17 @@ export const AboutSalonSection: React.FC = () => {
               <div className="w-1.5 h-1.5 rotate-45" style={{ background: GOLD }} />
             </div>
 
-            {/* Description */}
+            {/* Description officielle */}
             <div className="space-y-4 mb-10 text-gray-600 leading-relaxed">
-              <p
-                className="text-base"
-                dangerouslySetInnerHTML={{ __html: t('about.desc1', 'Le Salon International du Bâtiment (SIB) est le rendez-vous incontournable des professionnels du secteur au Maroc et en Afrique.') }}
-              />
-              <p
-                className="text-sm"
-                dangerouslySetInnerHTML={{ __html: t('about.desc2', 'Depuis sa création, le SIB rassemble chaque deux ans les acteurs majeurs de la construction, de l\'architecture, de l\'immobilier et des matériaux innovants.') }}
-              />
-              <p
-                className="text-sm"
-                dangerouslySetInnerHTML={{ __html: t('about.desc3', 'Cette 40ème édition marque un tournant majeur dans l\'histoire du salon, avec une nouvelle vision et une ambition internationale renforcée.') }}
-              />
+              <p className="text-base">
+                Le <strong className="text-gray-900">Salon International du Bâtiment (SIB)</strong> s'est imposé comme le rendez-vous biennal de référence des acteurs clés du secteur du <strong className="text-gray-900">Bâtiment, de la Construction, de l'Urbanisme, de la Décoration et de l'Immobilier</strong> aux niveaux national et international.
+              </p>
+              <p className="text-sm">
+                Fondé en <strong className="text-gray-900">1986</strong> et organisé par <strong className="text-gray-900">URBACOM</strong> en partenariat avec le Ministère de l'Habitat, il réunit entreprises privées, organismes publics, fournisseurs de matériaux, importateurs d'équipements, architectes et ingénieurs pour des échanges d'expertise et la promotion des dernières innovations.
+              </p>
+              <p className="text-sm">
+                La 20ème édition en <strong className="text-gray-900">2026</strong> marque les <strong className="text-gray-900">40 ans d'histoire</strong> du salon, avec de nouveaux espaces : <em>SIB Academy, Espace Démonstration, SIB Women</em> et <em>300+ rencontres B2B</em> avec des décideurs internationaux.
+              </p>
             </div>
 
             {/* Features 2×2 */}
@@ -324,10 +321,10 @@ export const AboutSalonSection: React.FC = () => {
           />
           <div className="relative z-10">
             <h3 className="font-heading font-bold text-2xl sm:text-3xl text-white uppercase tracking-wide mb-3">
-              {t('about.cta_title', 'Participez à la 40ème Édition')}
+              {t('about.cta_title', 'Participez à la 20ème Édition · 40 Ans d\'Histoire')}
             </h3>
             <p className="text-sm sm:text-base mb-6 max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.6)' }}>
-              {t('about.cta_desc', 'Inscrivez-vous dès maintenant et faites partie du plus grand rassemblement du secteur bâtiment au Maghreb.')}
+              {t('about.cta_desc', 'Sous le Haut Patronage de Sa Majesté le Roi · 25-29 Novembre 2026 · Parc d\'Exposition Mohammed VI · El Jadida')}
             </p>
             <Link to={ROUTES.VISITOR_SUBSCRIPTION}>
               <button
