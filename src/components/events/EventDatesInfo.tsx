@@ -3,9 +3,11 @@ import { Card } from '../ui/Card';
 
 export default function EventDatesInfo() {
   const eventDates = [
-    { date: '1er avril 2026', day: 'Jour 1', color: 'bg-blue-500' },
-    { date: '2 avril 2026', day: 'Jour 2', color: 'bg-blue-600' },
-    { date: '3 avril 2026', day: 'Jour 3', color: 'bg-blue-700' }
+    { date: '25 novembre 2026', day: 'Jour 1', color: 'bg-blue-500' },
+    { date: '26 novembre 2026', day: 'Jour 2', color: 'bg-blue-600' },
+    { date: '27 novembre 2026', day: 'Jour 3', color: 'bg-blue-700' },
+    { date: '28 novembre 2026', day: 'Jour 4', color: 'bg-blue-800' },
+    { date: '29 novembre 2026', day: 'Jour 5', color: 'bg-blue-900' }
   ];
 
   return (
@@ -38,13 +40,13 @@ export default function EventDatesInfo() {
           <div className="flex items-center justify-center text-sm text-gray-700">
             <Clock className="h-4 w-4 mr-2 text-blue-600" />
             <span className="font-medium">
-              Horaires : 8h00 - 18h00
+              Horaires : 9h00 - 19h00
             </span>
           </div>
         </div>
 
         <div className="mt-3 text-center text-xs text-blue-700 font-medium">
-          ⚠️ Les rendez-vous ne peuvent être pris QUE durant ces 3 jours
+          ⚠️ Les rendez-vous ne peuvent être pris QUE durant ces 5 jours
         </div>
       </div>
     </Card>

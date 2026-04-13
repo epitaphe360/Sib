@@ -1,6 +1,6 @@
-﻿/**
+/**
  * Données de démonstration pour les créneaux horaires du salon SIB 2026
- * Ces créneaux sont pré-configurés pour les 3 jours du salon (1-3 avril 2026)
+ * Ces créneaux sont pré-configurés pour les 5 jours du salon (25-29 novembre 2026)
  */
 
 import { TimeSlot } from '../types';
@@ -14,13 +14,13 @@ const generateSlotId = (prefix: string, index: number): string => {
 
 /**
  * Créneaux de démonstration pour les partenaires
- * Ces créneaux couvrent les 3 jours du salon avec différents types de rendez-vous
+ * Ces créneaux couvrent les 5 jours du salon avec différents types de rendez-vous
  */
 export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
-  // === JOUR 1: 1er Avril 2026 ===
+  // === JOUR 1: 25 Novembre 2026 ===
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 1), // 1er avril 2026
+    date: new Date(2026, 10, 25), // 25 novembre 2026
     startTime: '09:00',
     endTime: '09:30',
     duration: 30,
@@ -32,7 +32,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 1),
+    date: new Date(2026, 10, 25),
     startTime: '09:30',
     endTime: '10:00',
     duration: 30,
@@ -44,7 +44,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 1),
+    date: new Date(2026, 10, 25),
     startTime: '10:00',
     endTime: '10:30',
     duration: 30,
@@ -56,7 +56,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 1),
+    date: new Date(2026, 10, 25),
     startTime: '11:00',
     endTime: '12:00',
     duration: 60,
@@ -68,7 +68,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 1),
+    date: new Date(2026, 10, 25),
     startTime: '14:00',
     endTime: '14:30',
     duration: 30,
@@ -80,7 +80,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 1),
+    date: new Date(2026, 10, 25),
     startTime: '15:00',
     endTime: '16:00',
     duration: 60,
@@ -92,7 +92,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 1),
+    date: new Date(2026, 10, 25),
     startTime: '16:30',
     endTime: '17:00',
     duration: 30,
@@ -103,10 +103,10 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
     location: 'Stand A-12'
   },
 
-  // === JOUR 2: 2 Avril 2026 ===
+  // === JOUR 2: 26 Novembre 2026 ===
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 2), // 2 avril 2026
+    date: new Date(2026, 10, 26), // 26 novembre 2026
     startTime: '09:00',
     endTime: '09:45',
     duration: 45,
@@ -118,7 +118,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 2),
+    date: new Date(2026, 10, 26),
     startTime: '10:00',
     endTime: '11:00',
     duration: 60,
@@ -130,7 +130,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 2),
+    date: new Date(2026, 10, 26),
     startTime: '11:30',
     endTime: '12:00',
     duration: 30,
@@ -142,7 +142,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 2),
+    date: new Date(2026, 10, 26),
     startTime: '14:00',
     endTime: '15:00',
     duration: 60,
@@ -154,7 +154,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 2),
+    date: new Date(2026, 10, 26),
     startTime: '15:30',
     endTime: '16:00',
     duration: 30,
@@ -166,7 +166,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 2),
+    date: new Date(2026, 10, 26),
     startTime: '16:30',
     endTime: '17:30',
     duration: 60,
@@ -177,10 +177,10 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
     location: 'Table ronde - Digitalisation des Bâtiments'
   },
 
-  // === JOUR 3: 3 Avril 2026 ===
+  // === JOUR 3: 27 Novembre 2026 ===
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 3), // 3 avril 2026
+    date: new Date(2026, 10, 27), // 27 novembre 2026
     startTime: '09:00',
     endTime: '09:30',
     duration: 30,
@@ -192,7 +192,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 3),
+    date: new Date(2026, 10, 27),
     startTime: '09:30',
     endTime: '10:30',
     duration: 60,
@@ -204,7 +204,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 3),
+    date: new Date(2026, 10, 27),
     startTime: '11:00',
     endTime: '11:30',
     duration: 30,
@@ -216,7 +216,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 3),
+    date: new Date(2026, 10, 27),
     startTime: '11:30',
     endTime: '12:00',
     duration: 30,
@@ -228,7 +228,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 3),
+    date: new Date(2026, 10, 27),
     startTime: '14:00',
     endTime: '15:00',
     duration: 60,
@@ -240,7 +240,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 3),
+    date: new Date(2026, 10, 27),
     startTime: '15:30',
     endTime: '16:00',
     duration: 30,
@@ -252,7 +252,7 @@ export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [
   },
   {
     exhibitorId: 'demo-partner-1',
-    date: new Date(2026, 3, 3),
+    date: new Date(2026, 10, 27),
     startTime: '16:00',
     endTime: '17:00',
     duration: 60,

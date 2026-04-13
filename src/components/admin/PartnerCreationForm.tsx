@@ -29,7 +29,7 @@ import ImageUploader from '../ui/upload/ImageUploader';
 interface NewPartnerForm {
   // Informations organisation
   organizationName: string;
-  partnerType: 'institutional' | 'platinum' | 'gold' | 'silver' | 'bronze';
+  partnerType: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner';
   sector: string;
   country: string;
   website: string;
@@ -68,7 +68,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
   
   const [formData, setFormData] = useState<NewPartnerForm>({
     organizationName: partnerToEdit?.name || '',
-    partnerType: partnerToEdit?.partner_tier || 'silver',
+    partnerType: partnerToEdit?.partner_tier || 'partner',
     sector: partnerToEdit?.sector || '',
     country: partnerToEdit?.country || '',
     website: partnerToEdit?.website || '',
@@ -98,39 +98,46 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
 
   const partnerTypes = [
     {
-      type: 'institutional',
-      name: 'Institutionnel',
-      description: 'Organisateur ou institution gouvernementale',
-      price: 'Sur mesure',
-      color: 'bg-purple-100 text-purple-600'
+      type: 'organizer',
+      name: 'Organisateur',
+      description: 'Organisateur principal du salon SIB',
+      price: '—',
+      color: 'bg-yellow-100 text-yellow-700'
     },
     {
-      type: 'platinum',
-      name: 'Partenaire Platine',
-      description: 'Partenaire stratégique majeur',
-      price: '150,000€+',
-      color: 'bg-gray-100 text-gray-800'
+      type: 'co_organizer',
+      name: 'Co-organisateur',
+      description: 'Co-organisateur institutionnel du salon',
+      price: '—',
+      color: 'bg-orange-100 text-orange-600'
     },
     {
-      type: 'gold',
-      name: 'Partenaire Or',
-      description: 'Partenaire premium avec visibilité élevée',
-      price: '75,000€+',
-      color: 'bg-yellow-100 text-yellow-600'
+      type: 'official_sponsor',
+      name: 'Sponsor Officiel',
+      description: 'Sponsor stratégique — visibilité maximale',
+      price: '500 000 MAD',
+      color: 'bg-rose-100 text-rose-600'
     },
     {
-      type: 'silver',
-      name: 'Partenaire Argent',
-      description: 'Partenaire officiel avec avantages',
-      price: '35,000€+',
-      color: 'bg-gray-100 text-gray-600'
+      type: 'delegated_organizer',
+      name: 'Organisateur Délégué',
+      description: 'Responsable d\'une zone du salon',
+      price: '—',
+      color: 'bg-green-100 text-green-600'
     },
     {
-      type: 'bronze',
-      name: 'Partenaire Bronze',
-      description: 'Partenaire associé',
-      price: '15,000€+',
+      type: 'partner',
+      name: 'Partenaire',
+      description: 'Partenaire officiel du salon SIB',
+      price: '200 000+ MAD',
       color: 'bg-indigo-100 text-indigo-600'
+    },
+    {
+      type: 'press_partner',
+      name: 'Partenaire Presse',
+      description: 'Partenaire média et presse',
+      price: '—',
+      color: 'bg-red-100 text-red-600'
     }
   ];
 
@@ -265,7 +272,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
         // Reset form et redirection
         setFormData({
           organizationName: '',
-          partnerType: 'silver',
+          partnerType: 'partner',
           sector: '',
           country: '',
           website: '',
@@ -720,7 +727,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                     onClick={() => {
                       setFormData({ 
                         ...formData, 
-                        partnerType: type.type as 'institutional' | 'platinum' | 'gold' | 'silver' | 'bronze',
+                        partnerType: type.type as 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner',
                         sponsorshipLevel: type.name,
                         contractValue: type.price
                       });

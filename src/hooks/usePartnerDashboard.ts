@@ -99,7 +99,7 @@ export function usePartnerDashboard() {
     { name: t('partner.stats.messages'), value: dashboardStats?.messages?.value || 0 },
   ], [dashboardStats, confirmedAppointments.length, t]);
 
-  const partnerTier = ((user as any)?.partner_tier || user?.profile?.partner_tier || 'museum') as string;
+  const partnerTier = ((user as any)?.partner_tier || user?.profile?.partner_tier || 'partner') as string;
 
   const handleAccept = async (appointmentId: string) => {
     const appointment = appointments.find(a => a.id === appointmentId);

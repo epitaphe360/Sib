@@ -147,7 +147,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       if (message.includes('exposant') || message.includes('entreprise')) {
         return {
           id: Date.now().toString(),
-          content: "?? SIB 2026 accueille 300+ exposants internationaux ! Découvrez les leaders de l'industrie du bâtiment. Connectez-vous pour accéder au réseautage intelligent et aux RDV B2B.",
+          content: "?? SIB 2026 accueille 600+ exposants internationaux de 50 pays ! Découvrez les leaders de l'industrie du bâtiment. Connectez-vous pour accéder au réseautage intelligent et aux RDV B2B.",
           isBot: true,
           timestamp,
           type: 'suggestion',
@@ -171,7 +171,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       if (message.includes('salon') || message.includes('SIB') || message.includes('information')) {
         return {
           id: Date.now().toString(),
-          content: "?? SIB 2026 - Le plus grand salon bâtiment international ! ?? 1-3 Avril 2026 à Casablanca, Maroc. 300+ exposants, 6,000+ visiteurs de 40 pays, 40+ conférences !",
+          content: "?? SIB 2026 - Le plus grand salon bâtiment en Afrique ! ?? 25-29 Novembre 2026 à El Jadida, Maroc. 600+ exposants, 200 000 visiteurs de 50 pays, 20 conférences !",
           isBot: true,
           timestamp,
           type: 'quick_reply',
@@ -182,7 +182,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       if (message.includes('programme') || message.includes('événement')) {
         return {
           id: Date.now().toString(),
-          content: "?? Le programme SIB comprend 40+ événements : conférences plénières, ateliers techniques, sessions de networking, webinaires. Connectez-vous pour personnaliser votre agenda !",
+          content: "?? Le programme SIB comprend 20 conférences, des ateliers techniques, des sessions de networking B2B via URBA EVENT et des démonstrations. Connectez-vous pour personnaliser votre agenda !",
           isBot: true,
           timestamp,
           type: 'suggestion',
@@ -213,7 +213,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     if (message.includes('salon') || message.includes('SIB') || message.includes('information')) {
       return {
         id: Date.now().toString(),
-        content: `?? Bonjour ${firstName} ! SIB 2026 se déroule du 1er au 3 avril 2026 à Casablanca, Maroc. C'est le plus grand salon bâtiment international avec 300+ exposants, 6,000+ visiteurs de 40 pays !`,
+        content: `?? Bonjour ${firstName} ! SIB 2026 se déroule du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI, El Jadida. C'est le rendez-vous incontournable du bâtiment en Afrique avec 600+ exposants, 200 000 visiteurs de 50 pays !`,
         isBot: true,
         timestamp,
         type: 'suggestion',
@@ -302,7 +302,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         if (message.includes('métrique') || message.includes('statistique') || message.includes('performance')) {
           return {
             id: Date.now().toString(),
-            content: `?? ${firstName}, voici les métriques clés : 300 exposants actifs, 6,000 visiteurs inscrits, 1247 utilisateurs en ligne. Voulez-vous voir le tableau de bord complet ?`,
+            content: `?? ${firstName}, voici les métriques clés : 600 exposants actifs, 200 000 visiteurs inscrits, 1247 utilisateurs en ligne. Voulez-vous voir le tableau de bord complet ?`,
             isBot: true,
             timestamp,
             type: 'suggestion',
@@ -519,8 +519,8 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
             content: `?? ${firstName}, comment puis-je vous aider aujourd'hui avec SIB 2026 ?`,
             suggestions: [
               { title: "Informations salon", description: "Dates, lieu, programme", action: "/", icon: Globe },
-              { title: "Voir les exposants", description: "300+ entreprises", action: "/exhibitors", icon: Building2 },
-              { title: "Programme événements", description: "40+ conférences", action: "/events", icon: Calendar }
+              { title: "Voir les exposants", description: "600+ entreprises", action: "/exhibitors", icon: Building2 },
+              { title: "Programme événements", description: "20+ conférences", action: "/events", icon: Calendar }
             ]
           };
       }
@@ -595,9 +595,9 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     } else {
       // Action personnalisée
       const actionMessages = {
-        'info_salon': `?? SIB 2026 - Salon International du Bâtiment\n?? 1-3 Avril 2026\n?? Casablanca, Maroc\n?? 300+ exposants\n?? 6,000+ visiteurs\n?? 40 pays`,
-        'support': `?? SUPPORT SIB\n?? Email: support@sib2026.ma\n?? Tél: +212 1 23 45 67 89\n?? Lun-Ven: 9h-18h\n?? Chat en direct disponible`,
-        'contact_commercial': `?? ÉQUIPE COMMERCIALE\n?? commercial@sib2026.ma\n?? +212 1 23 45 67 90\n?? Partenariats & Sponsoring\n?? Devis personnalisés`
+        'info_salon': `?? SIB 2026 - Salon International du Bâtiment\n?? 25-29 Novembre 2026\n?? El Jadida, Maroc\n?? 600+ exposants\n?? 200 000 visiteurs\n?? 50 pays`,
+        'support': `❓ SUPPORT SIB\n📧 Email: contact@sibevent.com\n📞 Tél: +212 6 68 38 52 28\n⏰ Lun-Ven: 9h-18h\n💬 Chat en direct disponible`,
+        'contact_commercial': `💼 ÉQUIPE COMMERCIALE\n📧 contact@sibevent.com\n📞 +212 6 68 38 52 28\n🤝 Partenariats & Sponsoring\n📄 Devis personnalisés`
       };
       
       const message = actionMessages[action as keyof typeof actionMessages] || `?? Action: ${action}`;

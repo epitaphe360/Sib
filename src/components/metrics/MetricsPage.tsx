@@ -144,8 +144,8 @@ export default function MetricsPage() {
     {
       title: 'Exposants',
       value: loading ? '...' : adminMetrics.totalExhibitors.toString(),
-      target: '300+',
-      progress: loading ? 0 : Math.round((adminMetrics.totalExhibitors / 300) * 100),
+      target: '600+',
+      progress: loading ? 0 : Math.round((adminMetrics.totalExhibitors / 600) * 100),
       icon: Building2,
       color: 'text-blue-600',
       bgColor: 'bg-blue-100',
@@ -155,8 +155,8 @@ export default function MetricsPage() {
     {
       title: 'Visiteurs Professionnels',
       value: loading ? '...' : pavilionData.totalVisitors.toLocaleString(),
-      target: '6,000+',
-      progress: loading ? 0 : Math.round((pavilionData.totalVisitors / 6000) * 100),
+      target: '200 000+',
+      progress: loading ? 0 : Math.round((pavilionData.totalVisitors / 200000) * 100),
       icon: Users,
       color: 'text-green-600',
       bgColor: 'bg-green-100',
@@ -166,8 +166,8 @@ export default function MetricsPage() {
     {
       title: 'Conférences & Panels',
       value: loading ? '...' : pavilionData.totalConferences.toString(),
-      target: '30+',
-      progress: loading ? 0 : Math.round((pavilionData.totalConferences / 30) * 100),
+      target: '20+',
+      progress: loading ? 0 : Math.round((pavilionData.totalConferences / 20) * 100),
       icon: Calendar,
       color: 'text-purple-600',
       bgColor: 'bg-purple-100',

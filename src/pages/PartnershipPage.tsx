@@ -101,7 +101,7 @@ export default function PartnershipPage() {
                 Visibilité Internationale
               </h3>
               <p className="text-gray-600 mb-4">
-                SIB 2026 rassemble plus de 500 exposants et 10 000 visiteurs professionnels du monde entier.
+                SIB 2026 rassemble plus de 600 exposants et 200 000 visiteurs professionnels du monde entier.
               </p>
               <ul className="text-gray-600 space-y-2">
                 <li>• Exposition auprès de décideurs clés</li>

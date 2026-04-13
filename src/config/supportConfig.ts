@@ -5,12 +5,12 @@
 export const SUPPORT_CONFIG = {
   // WhatsApp - Principal canal de communication
   whatsapp: {
-    number: '+33766504580', // Numéro WhatsApp de support
+    number: '+212668385228', // Numéro WhatsApp de support
     message: 'Bonjour, je souhaiterais entrer en contact avec votre équipe commerciale',
   },
   
   // Email
-  email: 'contact@sib.ma',
+  email: 'contact@sibevent.com',
   
   // Téléphone
   phone: '+212668385228',
@@ -34,18 +34,18 @@ export const SUPPORT_CONFIG = {
   teams: {
     commercial: {
       name: 'Équipe Commerciale',
-      whatsapp: '+33766504580',
-      email: 'commercial@sib.ma',
+      whatsapp: '+212668385228',
+      email: 'contact@sibevent.com',
     },
     support: {
       name: 'Support Technique',
-      whatsapp: '+33766504580',
-      email: 'support@sib.ma',
+      whatsapp: '+212668385228',
+      email: 'contact@sibevent.com',
     },
     exhibitors: {
       name: 'Exposants',
-      whatsapp: '+33766504580',
-      email: 'exposants@sibs.com',
+      whatsapp: '+212668385228',
+      email: 'contact@sibevent.com',
     },
   },
 };

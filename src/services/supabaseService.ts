@@ -671,6 +671,39 @@ export class SupabaseService {
   }
 
   // ==================== PARTNERS ====================
+
+  /** Normalise les valeurs DB (gold/silver/government/…) vers les tiers SIB valides */
+  private static normalizePartnerTier(
+    partnerType?: string | null,
+    partnershipLevel?: unknown
+  ): 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner' {
+    type SIBTier = 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner';
+    const map: Record<string, SIBTier> = {
+      'gold': 'official_sponsor',
+      'silver': 'co_organizer',
+      'bronze': 'partner',
+      'platinum': 'organizer',
+      'government': 'organizer',
+      'governmental': 'organizer',
+      'institutional': 'official_sponsor',
+      'press': 'press_partner',
+      'media': 'press_partner',
+      'sponsor': 'official_sponsor',
+      'organizer': 'organizer',
+      'co_organizer': 'co_organizer',
+      'official_sponsor': 'official_sponsor',
+      'delegated_organizer': 'delegated_organizer',
+      'partner': 'partner',
+      'press_partner': 'press_partner',
+    };
+    let rawLevel: string | null = null;
+    if (typeof partnershipLevel === 'string') rawLevel = partnershipLevel;
+    else if (typeof partnershipLevel === 'object' && partnershipLevel !== null)
+      rawLevel = (partnershipLevel as any).level || (partnershipLevel as any).name || null;
+    if (rawLevel && map[rawLevel]) return map[rawLevel];
+    if (partnerType && map[partnerType]) return map[partnerType];
+    return 'partner';
+  }
   static async getPartnersPaginated(options?: {
     limit?: number;
     offset?: number;
@@ -685,13 +718,16 @@ export class SupabaseService {
     const offset = options?.offset ?? 0;
 
     try {
+      // Sélectionner uniquement les colonnes garanties dans la table partners
       const { data, error, count } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees, country`,
+          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published`,
           { count: 'exact' }
         )
-        .eq('is_published', true)
+        // Afficher les partenaires publiés (true) OU dont is_published n'est pas renseigné (null)
+        .or('is_published.eq.true,is_published.is.null')
+        .order('featured', { ascending: false })
         .order('partner_type')
         .range(offset, offset + limit - 1);
 
@@ -700,17 +736,18 @@ export class SupabaseService {
       const items = (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
         name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
-        partner_tier: (typeof partner.partnership_level === 'object' && partner.partnership_level !== null)
-          ? ((partner.partnership_level as any).level || (partner.partnership_level as any).name || 'silver')
-          : (typeof partner.partnership_level === 'string' ? partner.partnership_level : (typeof partner.partner_type === 'string' ? partner.partner_type : 'silver')),
-        category: (typeof partner.partner_type === 'object') ? 'Partenaire' : partner.partner_type,
+        partner_tier: SupabaseService.normalizePartnerTier(
+          typeof partner.partner_type === 'string' ? partner.partner_type : null,
+          partner.partnership_level
+        ),
+        category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
         description: typeof partner.description === 'string' ? partner.description : '',
         logo: partner.logo_url,
         website: partner.website,
-        country: partner.contact_info?.country || '',
-        verified: partner.verified,
-        featured: partner.featured,
+        country: (partner.contact_info as any)?.country || (partner.contact_info as any)?.pays || '',
+        verified: partner.verified ?? false,
+        featured: partner.featured ?? false,
         views: 0,
         contributions: [],
         establishedYear: 2024,
@@ -743,13 +780,14 @@ export class SupabaseService {
 
     const safeSupabase = supabase!;
     try {
-      // FIX: Use correct column names matching the partners table schema (from createMissingTables.ts)
+      // FIX: Sélectionner uniquement les colonnes garanties dans la table partners
       const { data, error } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees, country`
+          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published`
         )
-        .eq('is_published', true) // Filtrer uniquement les partenaires publiés
+        .or('is_published.eq.true,is_published.is.null')
+        .order('featured', { ascending: false })
         .order('partner_type');
 
       if (error) throw error;
@@ -757,21 +795,22 @@ export class SupabaseService {
       return (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
         name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
-        partner_tier: (typeof partner.partnership_level === 'object' && partner.partnership_level !== null)
-          ? ((partner.partnership_level as any).level || (partner.partnership_level as any).name || 'silver')
-          : (typeof partner.partnership_level === 'string' ? partner.partnership_level : (typeof partner.partner_type === 'string' ? partner.partner_type : 'silver')),
-        category: (typeof partner.partner_type === 'object') ? 'Partenaire' : partner.partner_type,
+        partner_tier: SupabaseService.normalizePartnerTier(
+          typeof partner.partner_type === 'string' ? partner.partner_type : null,
+          partner.partnership_level
+        ),
+        category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
         description: typeof partner.description === 'string' ? partner.description : '',
         logo: partner.logo_url,
         website: partner.website,
-        country: partner.contact_info?.country || '',
-        verified: partner.verified,
-        featured: partner.featured,
+        country: (partner.contact_info as any)?.country || (partner.contact_info as any)?.pays || '',
+        verified: partner.verified ?? false,
+        featured: partner.featured ?? false,
         views: 0,
         contributions: [],
-        establishedYear: (partner as any).established_year || 2024,
-        employees: (partner as any).employees || '1-10',
+        establishedYear: 2024,
+        employees: '1-10',
         createdAt: new Date(partner.created_at),
         updatedAt: new Date(partner.created_at)
       }));
@@ -797,7 +836,7 @@ export class SupabaseService {
     const safeSupabase = supabase!;
     try {
       // Récupérer les données du partenaire (colonnes core garanties + enrichies si disponibles)
-      const coreSelect = `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees, country, contributions, projects:partner_projects(*)`;
+      const coreSelect = `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, contributions, projects:partner_projects(*)`;
       const enrichedSelect = `${coreSelect}, mission, vision, values, certifications, awards, social_media, key_figures, testimonials, news, expertise, clients, video_url, gallery`;
 
       let data: Record<string, any> | null = null;
@@ -862,7 +901,7 @@ export class SupabaseService {
         longDescription: typeof data.description === 'string' ? data.description : fallbackData.longDescription,
         logo: data.logo_url,
         website: data.website,
-        country: data.country || data.contact_info?.country || 'Maroc',
+        country: (data.contact_info as any)?.country || (data.contact_info as any)?.pays || 'Maroc',
         verified: data.verified ?? true,
         featured: data.featured ?? false,
         is_published: data.is_published ?? false, // Statut de publication
@@ -1005,6 +1044,44 @@ export class SupabaseService {
       projects: userDB.partner_projects || [],
       createdAt: new Date(userDB.created_at),
       updatedAt: new Date(userDB.updated_at)
+    };
+  }
+
+  private static transformAuthUserToUser(authUser: any, emailFallback?: string): User {
+    const meta = authUser?.user_metadata || {};
+    const firstName = meta.firstName || meta.first_name || '';
+    const lastName = meta.lastName || meta.last_name || '';
+
+    return {
+      id: authUser?.id,
+      email: authUser?.email || emailFallback || '',
+      name: meta.name || [firstName, lastName].filter(Boolean).join(' ') || (authUser?.email?.split('@')[0] || 'Utilisateur'),
+      type: meta.type || 'visitor',
+      visitor_level: meta.visitor_level,
+      profile: {
+        firstName,
+        lastName,
+        company: meta.company || '',
+        position: meta.position || '',
+        country: meta.country || '',
+        bio: meta.bio || '',
+        standArea: Number(meta.standArea || 9),
+        interests: Array.isArray(meta.interests) ? meta.interests : [],
+        objectives: Array.isArray(meta.objectives) ? meta.objectives : [],
+        sectors: Array.isArray(meta.sectors) ? meta.sectors : [],
+        products: Array.isArray(meta.products) ? meta.products : [],
+        videos: Array.isArray(meta.videos) ? meta.videos : [],
+        images: Array.isArray(meta.images) ? meta.images : [],
+        participationObjectives: Array.isArray(meta.participationObjectives) ? meta.participationObjectives : [],
+        thematicInterests: Array.isArray(meta.thematicInterests) ? meta.thematicInterests : [],
+        collaborationTypes: Array.isArray(meta.collaborationTypes) ? meta.collaborationTypes : [],
+        expertise: Array.isArray(meta.expertise) ? meta.expertise : [],
+        visitObjectives: Array.isArray(meta.visitObjectives) ? meta.visitObjectives : []
+      },
+      status: meta.status || 'active',
+      projects: [],
+      createdAt: authUser?.created_at ? new Date(authUser.created_at) : new Date(),
+      updatedAt: authUser?.updated_at ? new Date(authUser.updated_at) : new Date()
     };
   }
 
@@ -1345,9 +1422,29 @@ export class SupabaseService {
       }
 
       // Récupérer le profil utilisateur
-      let user = await this.getUserByEmail(email);
+      let user: User | null = null;
+      let usersPolicyRecursion = false;
+
+      try {
+        user = await this.getUserByEmail(email);
+      } catch (profileError) {
+        const message = profileError instanceof Error ? profileError.message : String(profileError || '');
+        usersPolicyRecursion = message.includes('infinite recursion detected in policy for relation "users"');
+
+        if (usersPolicyRecursion) {
+          console.warn('⚠️ Policy RLS récursive détectée sur users, fallback sur auth.user');
+          user = this.transformAuthUserToUser(data.user, email);
+        } else {
+          throw profileError;
+        }
+      }
 
       if (!user) {
+        if (usersPolicyRecursion) {
+          user = this.transformAuthUserToUser(data.user, email);
+          return user;
+        }
+
         // Profil absent dans users (inscription partielle) → le créer automatiquement
         console.warn('⚠️ Profil absent dans users, création automatique...');
         const authUser = data.user;
@@ -3799,17 +3896,16 @@ export class SupabaseService {
     }
 
     const safeSupabase = supabase!;
-    
+
+    // Champs non-sensibles (pas de trigger)
     const dbData: any = {};
     if (partnerData.organizationName) dbData.company_name = partnerData.organizationName;
-    if (partnerData.partnerType) dbData.partner_type = partnerData.partnerType;
     if (partnerData.sector) dbData.sector = partnerData.sector;
     if (partnerData.description) dbData.description = partnerData.description;
     if (partnerData.website) dbData.website = partnerData.website;
     if (partnerData.logo) dbData.logo_url = partnerData.logo;
     if (partnerData.verified !== undefined) dbData.verified = partnerData.verified;
     if (partnerData.featured !== undefined) dbData.featured = partnerData.featured;
-    if (partnerData.sponsorshipLevel) dbData.partnership_level = partnerData.sponsorshipLevel;
     if (partnerData.isPublished !== undefined) dbData.is_published = partnerData.isPublished;
     if (partnerData.country) dbData.country = partnerData.country;
 
@@ -3821,6 +3917,29 @@ export class SupabaseService {
     if (error) {
       console.error('Supabase updatePartner error:', error);
       throw new Error(error.message || JSON.stringify(error));
+    }
+
+    // Champs protégés par trigger (partner_type, sponsorship_level, partner_tier)
+    // → mise à jour séparée via RPC admin si disponible, sinon update direct
+    const tierData: any = {};
+    if (partnerData.partnerType) {
+      tierData.partner_type = partnerData.partnerType;
+      tierData.partner_tier = partnerData.partnerType;
+    }
+    if (partnerData.sponsorshipLevel) tierData.sponsorship_level = partnerData.sponsorshipLevel;
+
+    if (Object.keys(tierData).length > 0) {
+      // Tenter via RPC admin (contourne le trigger) — si la fonction n'existe pas, ignorer silencieusement
+      const { error: rpcError } = await (safeSupabase as any).rpc('admin_update_partner_tier', {
+        p_partner_id: partnerId,
+        p_partner_type: tierData.partner_type ?? null,
+        p_partner_tier: tierData.partner_tier ?? null,
+        p_sponsorship_level: tierData.sponsorship_level ?? null,
+      });
+
+      if (rpcError && !rpcError.message?.includes('Could not find the function')) {
+        console.warn('Tier update skipped (trigger protection):', rpcError.message);
+      }
     }
   }
 

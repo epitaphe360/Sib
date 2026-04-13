@@ -100,34 +100,34 @@ export const ACCESS_LEVELS = {
   },
 
   // Partenaires
-  partner_museum: {
-    level: 'museum',
-    displayName: '🏛️ Museum Partner',
+  partner: {
+    level: 'partner',
+    displayName: '🤝 Partenaire',
     color: '#3F51B5',
     zones: ['public', 'exhibition_hall', 'partner_area', 'stand'],
     events: ['public_conferences', 'partner_meetings']
   },
   partner_silver: {
     level: 'silver',
-    displayName: '🥈 Silver Partner',
+    displayName: '🥈 Sponsor Silver',
     color: '#C0C0C0',
     zones: ['public', 'exhibition_hall', 'partner_area', 'stand', 'vip_lounge'],
     events: ['public_conferences', 'partner_meetings', 'vip_events']
   },
   partner_gold: {
     level: 'gold',
-    displayName: '🥇 Gold Partner',
+    displayName: '🥇 Sponsor Gold',
     color: '#FFD700',
     zones: ['public', 'exhibition_hall', 'partner_area', 'stand', 'vip_lounge', 'backstage'],
     events: ['public_conferences', 'partner_meetings', 'vip_events', 'keynotes']
   },
-  partner_platinum: {
-    level: 'platinum',
-    displayName: '💎 Platinum Partner',
+  partner_official_sponsor: {
+    level: 'official_sponsor',
+    displayName: '💎 Sponsor Officiel',
     color: '#E0E0E0',
     gradient: ['#B9F2FF', '#E0E0E0', '#FFFFFF'],
-    zones: ['all'], // Accès complet
-    events: ['all'] // Tous les événements
+    zones: ['all'],
+    events: ['all']
   },
 
   // Exposants (tiers CDC SIB 2026 par surface de stand)
@@ -196,7 +196,7 @@ export interface QRCodePayload {
 
   // Type et niveau
   userType: 'visitor' | 'partner' | 'exhibitor' | 'admin' | 'security';
-  level: string; // 'free', 'premium', 'museum', 'silver', 'gold', 'platinum'
+  level: string; // 'free', 'premium', 'organizer', 'co_organizer', 'official_sponsor', 'partner'
 
   // Sécurité
   iat: number; // Issued At timestamp
@@ -297,7 +297,7 @@ function getUserAccessLevel(user: User): keyof typeof ACCESS_LEVELS {
   if (user.type === 'security') return 'security';
   if (user.type === 'exhibitor') return 'exhibitor';
   if (user.type === 'partner') {
-    const tier = user.partner_tier || 'museum';
+    const tier = user.partner_tier || 'partner';
     return `partner_${tier}` as keyof typeof ACCESS_LEVELS;
   }
   if (user.type === 'visitor') {

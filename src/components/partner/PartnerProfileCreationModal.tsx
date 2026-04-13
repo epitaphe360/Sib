@@ -99,23 +99,23 @@ export default function PartnerProfileCreationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto p-5 sm:p-6">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-            <Building2 className="h-6 w-6 text-primary-600" />
+          <DialogTitle className="text-xl font-bold flex items-center gap-2">
+            <Building2 className="h-5 w-5 text-primary-600" />
             Créer votre Profil Partenaire
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-sm">
             Complétez votre profil pour apparaître dans l'annuaire des partenaires SIB 2026
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-3">
           {/* Progress Indicator */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4">
             <div className={`flex items-center gap-2 ${currentStep >= 1 ? 'text-primary-600' : 'text-gray-400'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 1 ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}>
-                {currentStep > 1 ? <CheckCircle className="h-5 w-5" /> : '1'}
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-sm ${currentStep >= 1 ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}>
+                {currentStep > 1 ? <CheckCircle className="h-4 w-4" /> : '1'}
               </div>
               <span className="text-sm font-medium">Informations</span>
             </div>
@@ -123,7 +123,7 @@ export default function PartnerProfileCreationModal({
               <div className={`h-full ${currentStep >= 2 ? 'bg-primary-600' : 'bg-gray-200'} transition-all`} style={{width: currentStep >= 2 ? '100%' : '0%'}} />
             </div>
             <div className={`flex items-center gap-2 ${currentStep >= 2 ? 'text-primary-600' : 'text-gray-400'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 2 ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}>
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-sm ${currentStep >= 2 ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}>
                 2
               </div>
               <span className="text-sm font-medium">Détails</span>
@@ -132,26 +132,26 @@ export default function PartnerProfileCreationModal({
 
           {/* Step 1: Basic Information */}
           {currentStep === 1 && (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
-                <Label htmlFor="companyName">Nom de l'organisation *</Label>
+                <Label className="text-sm" htmlFor="companyName">Nom de l'organisation *</Label>
                 <div className="relative">
-                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     id="companyName"
                     value={formData.companyName}
                     onChange={(e) => handleChange('companyName', e.target.value)}
-                    placeholder="Tanger Med Logistics"
-                    className="pl-10"
+                    placeholder="Atlas BTP Solutions"
+                    className="h-10 pl-9 text-sm"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="type">Type d'organisation *</Label>
+                <Label className="text-sm" htmlFor="type">Type d'organisation *</Label>
                 <Select value={formData.type} onValueChange={(value) => handleChange('type', value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10 text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -165,31 +165,31 @@ export default function PartnerProfileCreationModal({
               </div>
 
               <div>
-                <Label htmlFor="country">Pays *</Label>
+                <Label className="text-sm" htmlFor="country">Pays *</Label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     id="country"
                     value={formData.country}
                     onChange={(e) => handleChange('country', e.target.value)}
                     placeholder="Maroc"
-                    className="pl-10"
+                    className="h-10 pl-9 text-sm"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="website">Site officiel</Label>
+                <Label className="text-sm" htmlFor="website">Site officiel</Label>
                 <div className="relative">
-                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     id="website"
                     type="url"
                     value={formData.website}
                     onChange={(e) => handleChange('website', e.target.value)}
                     placeholder="https://votre-site.com"
-                    className="pl-10"
+                    className="h-10 pl-9 text-sm"
                   />
                 </div>
               </div>
@@ -197,6 +197,7 @@ export default function PartnerProfileCreationModal({
               <div className="flex justify-end">
                 <Button
                   type="button"
+                  size="sm"
                   onClick={() => setCurrentStep(2)}
                   disabled={!isStep1Valid}
                 >
@@ -208,15 +209,16 @@ export default function PartnerProfileCreationModal({
 
           {/* Step 2: Detailed Information */}
           {currentStep === 2 && (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
-                <Label htmlFor="description">Description *</Label>
+                <Label className="text-sm" htmlFor="description">Description *</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Partenaire logistique premium du bâtiment de Tanger Med, offrant des services de stockage et de distribution internationaux."
-                  rows={4}
+                  placeholder="Entreprise BTP spécialisée en construction durable, rénovation et gestion de projets de bâtiments à l'échelle nationale."
+                  rows={3}
+                  className="text-sm"
                   required
                 />
                 <p className="text-xs text-gray-500 mt-1">
@@ -226,25 +228,25 @@ export default function PartnerProfileCreationModal({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="yearsOfExperience">Années d'expérience *</Label>
+                  <Label className="text-sm" htmlFor="yearsOfExperience">Années d'expérience *</Label>
                   <div className="relative">
-                    <TrendingUp className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <TrendingUp className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="yearsOfExperience"
                       type="number"
                       min="1"
                       value={formData.yearsOfExperience}
                       onChange={(e) => handleChange('yearsOfExperience', parseInt(e.target.value) || 1)}
-                      className="pl-10"
+                      className="h-10 pl-9 text-sm"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="employees">Nombre d'employés *</Label>
+                  <Label className="text-sm" htmlFor="employees">Nombre d'employés *</Label>
                   <Select value={formData.employees} onValueChange={(value) => handleChange('employees', value)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-10 text-sm">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -260,30 +262,32 @@ export default function PartnerProfileCreationModal({
               </div>
 
               <div>
-                <Label htmlFor="activeProjects">Projets actifs</Label>
+                <Label className="text-sm" htmlFor="activeProjects">Projets actifs</Label>
                 <div className="relative">
-                  <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     id="activeProjects"
                     type="number"
                     min="0"
                     value={formData.activeProjects}
                     onChange={(e) => handleChange('activeProjects', parseInt(e.target.value) || 0)}
-                    className="pl-10"
+                    className="h-10 pl-9 text-sm"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-between pt-4">
+              <div className="flex justify-between pt-2">
                 <Button
                   type="button"
                   variant="outline"
+                  size="sm"
                   onClick={() => setCurrentStep(1)}
                 >
                   Retour
                 </Button>
                 <Button
                   type="submit"
+                  size="sm"
                   disabled={!isStep2Valid || isSubmitting}
                 >
                   {isSubmitting ? 'Création...' : 'Créer mon profil'}

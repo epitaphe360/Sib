@@ -74,17 +74,13 @@ export default defineConfig({
       overlay: false
     },
     allowedHosts: true,
-    watch: {
-      usePolling: true,
-      interval: 1000,
-    },
+    // usePolling uniquement pour Docker/WSL/CI — désactivé en dev Windows natif
+    ...(process.env.CHOKIDAR_USEPOLLING === 'true' ? {
+      watch: { usePolling: true, interval: 1000 }
+    } : {}),
     // Fix COEP issue with reCAPTCHA
     middlewareMode: false,
-    headers: {
-      // COEP is disabled to allow reCAPTCHA and other cross-origin resources
-      // 'Cross-Origin-Embedder-Policy': 'credentialless',
-      // 'Cross-Origin-Opener-Policy': 'same-origin-allow-popups'
-    }
+    headers: {}
   },
   preview: {
     host: '0.0.0.0',
@@ -141,15 +137,31 @@ export default defineConfig({
     assetsInlineLimit: 0
   },
   optimizeDeps: {
-    exclude: ['lucide-react'],
+    // lucide-react doit rester exclu (trop grand → tree-shaking à la demande)
+    exclude: ['lucide-react', 'jsdom', 'cheerio', 'express', 'nodemailer', 'pg', 'bcryptjs'],
     include: [
       'react',
       'react-dom',
       'react/jsx-runtime',
+      'react-router-dom',
+      '@supabase/supabase-js',
+      'framer-motion',
+      'zustand',
+      'clsx',
+      'tailwind-merge',
+      'react-hook-form',
+      'zod',
+      'sonner',
+      'react-hot-toast',
+      'i18next',
+      'react-i18next',
       '@radix-ui/react-avatar',
       '@radix-ui/react-label',
       '@radix-ui/react-select',
-      '@radix-ui/react-slot'
+      '@radix-ui/react-slot',
+      '@radix-ui/react-tabs',
     ],
+    // Force Vite à pré-bundler firebase (SDK très lourd)
+    force: false,
   },
 });

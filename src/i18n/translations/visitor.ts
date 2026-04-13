@@ -85,8 +85,8 @@ export const visitorTranslations = {
     'visitor.form.submitting': 'Creating...',
     
     // Sectors
-    'visitor.sector.authority': 'Bâtiment Authority',
-    'visitor.sector.transport': 'Bâtiment Transport',
+    'visitor.sector.authority': 'Building Authority',
+    'visitor.sector.transport': 'Construction & Mobility',
     'visitor.sector.logistics': 'Logistics',
     'visitor.sector.consulting': 'Consulting',
     'visitor.sector.technology': 'Technology',

@@ -47,7 +47,7 @@ export default function PartnerBankTransferPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const requestId = searchParams.get('request_id');
-  const tier = (searchParams.get('tier') || 'museum') as PartnerTier;
+  const tier = (searchParams.get('tier') || 'partner') as PartnerTier;
   const { user } = useAuthStore();
 
   const [paymentRequest, setPaymentRequest] = useState<PartnerPaymentRequest | null>(null);

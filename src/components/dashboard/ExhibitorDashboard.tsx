@@ -223,12 +223,12 @@ export default memo(function ExhibitorDashboard() {
           >
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-2xl flex items-center justify-between z-10">
               <div className="flex items-center space-x-3">
-                <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg">
-                  <Sparkles className="h-6 w-6 text-white" />
+                <div className="p-2 bg-[#C9A84C]/15 border border-[#C9A84C]/30 rounded-lg">
+                  <Sparkles className="h-6 w-6 text-[#C9A84C]" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Create Mini-Site with AI</h2>
-                  <p className="text-sm text-gray-600">Automatically generate your mini-site from your website</p>
+                  <h2 className="text-2xl font-bold text-gray-900">Créer un mini-site avec l'IA</h2>
+                  <p className="text-sm text-gray-600">Générez automatiquement votre mini-site depuis votre site web</p>
                 </div>
               </div>
               <Button variant="outline" onClick={() => ctx.setShowMiniSiteScrapper(false)} className="rounded-full">

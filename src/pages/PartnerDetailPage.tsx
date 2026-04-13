@@ -97,7 +97,7 @@ interface Project {
 interface Partner {
   id: string;
   name: string;
-  type: 'platinum' | 'gold' | 'silver' | 'bronze' | 'institutional';
+  type: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner';
   category: string;
   description: string;
   longDescription?: string;
@@ -242,11 +242,11 @@ export default function PartnerDetailPage() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'institutional': return Crown;
-      case 'platinum': return Award;
-      case 'gold': return Star;
-      case 'silver': return Building2;
-      case 'bronze': return Handshake;
+      case 'organizer': return Crown;
+      case 'official_sponsor': return Award;
+      case 'co_organizer': return Star;
+      case 'partner': return Building2;
+      case 'press_partner': return Handshake;
       default: return Building2;
     }
   };
@@ -255,11 +255,11 @@ export default function PartnerDetailPage() {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'institutional': return 'bg-purple-100 text-purple-600';
-      case 'platinum': return 'bg-gray-100 text-gray-800';
-      case 'gold': return 'bg-yellow-100 text-yellow-600';
-      case 'silver': return 'bg-gray-100 text-gray-600';
-      case 'bronze': return 'bg-orange-100 text-orange-600';
+      case 'organizer': return 'bg-purple-100 text-purple-600';
+      case 'official_sponsor': return 'bg-yellow-100 text-yellow-600';
+      case 'co_organizer': return 'bg-indigo-100 text-indigo-600';
+      case 'partner': return 'bg-gray-100 text-gray-600';
+      case 'press_partner': return 'bg-orange-100 text-orange-600';
       default: return 'bg-blue-100 text-blue-600';
     }
   };
@@ -929,7 +929,7 @@ export default function PartnerDetailPage() {
                         return "Activités de recherche scientifique et d'innovation technologique pour développer de nouvelles solutions adaptées aux enjeux du secteur.";
                       }
                       if (lowerTitle.includes('naval') || lowerTitle.includes('marine')) {
-                        return "Ingénierie et expertise navale couvrant la conception, la construction et la maintenance des chantiers et systèmes BTP.";
+                        return "Ingénierie et expertise en construction couvrant la conception, la réalisation et la maintenance des bâtiments et infrastructures BTP.";
                       }
                       if (lowerTitle.includes('vts') || lowerTitle.includes('trafic') || lowerTitle.includes('surveillance')) {
                         return "Systèmes de surveillance et de gestion du trafic construction pour la sécurité de la navigation et la protection de l'environnement côtier.";

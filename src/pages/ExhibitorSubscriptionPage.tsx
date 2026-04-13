@@ -4,10 +4,10 @@ import { useTranslation } from '../hooks/useTranslation';
 import { 
   Check, X, Crown, Zap, Star, Award, 
   Globe, Users, GraduationCap, Landmark,
-  Ship, Cog, ArrowRight,
+  Hammer, Cog, ArrowRight,
   MapPin, CalendarDays, Clock, CreditCard,
   MessageCircle, Ticket, Mail,
-  Phone, Building2, Target, Download
+  Phone, Building2, Target, Download, Sparkles, Shield
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -177,19 +177,19 @@ export default function ExhibitorSubscriptionPage() {
 
   // Stats WordPress
   const wpStats = [
-    { number: '6 000+', label: 'Visiteurs qualifiés' },
-    { number: '300+', label: 'Exposants' },
-    { number: '30', label: 'Conférences et panels' },
-    { number: '3', label: 'Jours de rencontres B2B' }
+    { number: '200 000+', label: 'Visiteurs professionnels' },
+    { number: '600+', label: 'Exposants' },
+    { number: '20', label: 'Conférences' },
+    { number: '5', label: 'Jours de salon' }
   ];
 
   // Pourquoi participer - WordPress
   const whyParticipate = [
-    'Gagnez en visibilité internationale auprès de plus de 6 000 visiteurs qualifiés.',
+    'Gagnez en visibilité internationale auprès de plus de 200 000 visiteurs professionnels.',
     'Présentez vos solutions aux décideurs, investisseurs, autorités BTP, industriels et opérateurs logistiques.',
     'Participez à un salon de réseautage ciblé avec des espaces B2B dédiés.',
     'Affichez votre engagement en innovation, durabilité et connectivité construction.',
-    'Valorisez votre image de marque dans un événement à bâtimentée médiatique mondiale.'
+    'Valorisez votre image de marque dans un événement à portée médiatique internationale.'
   ];
 
 
@@ -206,14 +206,14 @@ export default function ExhibitorSubscriptionPage() {
       icon: Cog,
       title: 'Industrie bâtiment',
       subtitle: 'L\'excellence opérationnelle au service de la compétitivité des bâtiments',
-      description: 'Construction et modernisation des infrastructures BTP. Maintenance, manutention et dragage. Transformation digitale et automatisation. Solutions durables. Sécurité et cybersécurité bâtiment.',
+      description: 'Construction et modernisation des infrastructures BTP. Maintenance préventive et gestion des chantiers. Transformation digitale et automatisation. Solutions durables. Sécurité et cybersecurité bâtiment.',
       color: 'from-indigo-500 to-indigo-700'
     },
     {
-      icon: Ship,
+      icon: Hammer,
       title: 'Exploitation & Gestion des bâtiments',
       subtitle: 'Échange d\'expertise et coopération',
-      description: 'Rencontres entre les bâtiments du monde pour renforcer leur coopération et développer de nouveaux corridors BTP. Espaces B2B et de networking ciblés conçus pour stimuler les échanges d\'expertise.',
+      description: 'Rencontres entre les acteurs du bâtiment pour renforcer leur coopération et développer de nouveaux partenariats. Espaces B2B et de networking ciblés conçus pour stimuler les échanges d\'expertise.',
       color: 'from-green-500 to-green-700'
     },
     {
@@ -229,52 +229,76 @@ export default function ExhibitorSubscriptionPage() {
     <div className="min-h-screen bg-white">
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 1 : HERO WORDPRESS - PARTICIPEZ AU SIB 2026
+          SECTION 1 : HERO IMMERSIF EXPOSANT
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative bg-gradient-to-br from-sib-primary via-blue-800 to-indigo-900 text-white overflow-hidden">
-        <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
-        <div className="absolute inset-0 opacity-[0.08]">
-          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-sib-gold rounded-full" />
-          <div className="absolute top-20 right-20 w-24 h-24 border-4 border-white rotate-45 transform" />
-          <div className="absolute bottom-20 left-1/4 w-40 h-40 border-4 border-sib-gold" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
+      <section className="relative min-h-[90vh] flex items-center text-white overflow-hidden">
+        {/* Background image salon */}
+        <div className="absolute inset-0">
+          <img 
+            src="https://images.pexels.com/photos/2760241/pexels-photo-2760241.jpeg?auto=compress&cs=tinysrgb&w=1920" 
+            alt="Salon exposition" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-blue-800/85 to-indigo-900/75" />
+          <div className="absolute inset-0 bg-gradient-to-t from-blue-950/60 via-transparent to-blue-900/30" />
+        </div>
+        
+        {/* Pattern Zellige subtil */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 11px)' }} />
+
+        {/* Éléments décoratifs géométriques */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-20 -right-20 w-96 h-96 border border-sib-gold/20 rounded-full" />
+          <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] border border-white/10 rounded-full" />
+          <div className="absolute top-1/4 right-1/4 w-3 h-3 bg-sib-gold/40 rounded-full animate-pulse" />
+          <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 relative z-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
-                <Building2 className="w-4 h-4 text-sib-gold" />
-                <span className="text-sm font-semibold text-sib-gold uppercase tracking-wider">
+              {/* Badge */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="inline-flex items-center gap-2 bg-sib-gold/20 backdrop-blur-md px-5 py-2.5 rounded-full mb-8 border border-sib-gold/30"
+              >
+                <Sparkles className="w-4 h-4 text-sib-gold" />
+                <span className="text-sm font-bold text-sib-gold uppercase tracking-widest">
                   Devenez exposant au SIB 2026
                 </span>
-              </div>
+              </motion.div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Participez au{' '}
-                <span className="text-sib-gold">SIB</span>{' '}
-                2026
+              {/* Titre principal */}
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.1]">
+                <span className="block">Exposez au</span>
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-sib-gold via-yellow-300 to-amber-400">
+                  SIB 2026
+                </span>
               </h1>
 
-              <p className="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed">
-                En exposant au Salon International du Bâtiment et de leur Écosystème, vous vous positionnez 
-                au cœur de l'innovation, de la coopération stratégique et du développement des 
-                infrastructures BTP mondiales. Que vous soyez institution, entreprise, bâtiment, 
-                équipementier, startup ou organisme de formation, prenez votre place parmi les acteurs 
-                qui façonnent l'avenir construction à l'échelle internationale.
+              <p className="text-lg md:text-xl text-blue-100/90 mb-4 leading-relaxed max-w-lg">
+                Du 25 au 29 Novembre 2026 — Parc d'Exposition Mohammed VI, El Jadida
+              </p>
+              <p className="text-base text-blue-200/70 mb-10 leading-relaxed max-w-lg">
+                Positionnez-vous au cœur de l'innovation et de la coopération stratégique du secteur 
+                du bâtiment. Rejoignez plus de 600 exposants et 200 000 visiteurs professionnels.
               </p>
 
+              {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to={ROUTES.CONTACT}>
                   <Button
                     size="lg"
-                    className="bg-sib-gold text-sib-primary hover:bg-yellow-400 font-bold text-lg px-8"
+                    className="bg-gradient-to-r from-sib-gold to-amber-400 text-blue-950 hover:from-yellow-400 hover:to-amber-300 font-bold text-lg px-10 py-4 shadow-2xl shadow-sib-gold/25 transition-all hover:scale-105"
                   >
                     <Mail className="mr-2 h-5 w-5" />
-                    Nous contacter
+                    Réserver votre stand
                   </Button>
                 </Link>
                 <Button
@@ -283,35 +307,58 @@ export default function ExhibitorSubscriptionPage() {
                   onClick={() => {
                     document.getElementById('exhibitor-tiers')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="border-white text-white hover:bg-white/10 font-semibold"
+                  className="border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 font-semibold backdrop-blur-sm px-8 py-4 transition-all"
                 >
                   <CreditCard className="mr-2 h-5 w-5" />
                   Voir les offres
                 </Button>
               </div>
+
+              {/* Trust indicators */}
+              <div className="flex items-center gap-6 mt-10 text-blue-200/70 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span>Réservation ouverte</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  <span>Tarifs sur devis</span>
+                </div>
+              </div>
             </motion.div>
 
-            {/* Stats Cards */}
+            {/* Stats Cards avec effet verre */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="grid grid-cols-2 gap-4"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="grid grid-cols-2 gap-5"
             >
               {wpStats.map((stat, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center hover:bg-white/15 transition-all"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.5 + index * 0.12 }}
+                  className="group bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-7 text-center hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-300 cursor-default"
                 >
-                  <div className="text-3xl md:text-4xl font-bold text-sib-gold mb-2">{stat.number}</div>
-                  <div className="text-sm text-blue-200">{stat.label}</div>
+                  <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-sib-gold to-amber-300 mb-2">
+                    {stat.number}
+                  </div>
+                  <div className="text-sm text-blue-100/80 font-medium">{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
           </div>
+        </div>
+
+        {/* Wave transition */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+            <path d="M0,40 C320,80 440,0 720,40 C1000,80 1120,0 1440,40 L1440,80 L0,80 Z" fill="white" fillOpacity="0.06"/>
+            <path d="M0,50 C360,90 480,10 720,50 C960,90 1080,10 1440,50 L1440,80 L0,80 Z" fill="white" fillOpacity="0.08"/>
+            <path d="M0,60 C400,80 560,40 720,60 C880,80 1040,40 1440,60 L1440,80 L0,80 Z" fill="white"/>
+          </svg>
         </div>
       </section>
 
@@ -419,7 +466,7 @@ export default function ExhibitorSubscriptionPage() {
                   <CalendarDays className="h-5 w-5 text-amber-600" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">1-3 Avril 2026</p>
+                  <p className="font-semibold text-gray-900">25-29 Novembre 2026</p>
                   <p className="text-sm text-gray-500">Parc d'Exposition Mohammed VI – El Jadida</p>
                 </div>
               </motion.div>
@@ -691,7 +738,7 @@ export default function ExhibitorSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Dates</h3>
-                    <p className="text-gray-600">1-3 Avril 2026</p>
+                    <p className="text-gray-600">25-29 Novembre 2026</p>
                   </div>
                 </div>
 
@@ -701,7 +748,7 @@ export default function ExhibitorSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Horaires</h3>
-                    <p className="text-gray-600">9h30 à 18h</p>
+                    <p className="text-gray-600">9h00 à 19h00</p>
                   </div>
                 </div>
 
@@ -711,7 +758,7 @@ export default function ExhibitorSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Entrée</h3>
-                    <p className="text-gray-600">Sur badge nominatif</p>
+                    <p className="text-gray-600">Gratuite — sur badge électronique</p>
                   </div>
                 </div>
               </div>
@@ -733,7 +780,7 @@ export default function ExhibitorSubscriptionPage() {
                     Contact Organisation
                   </h3>
                   <p className="text-gray-600 mb-6">
-                    LINECO EVENTS
+                    URBACOM
                   </p>
                 </div>
 

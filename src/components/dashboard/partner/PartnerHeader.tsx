@@ -3,7 +3,6 @@ import { Award, BarChart3 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '../../ui/Badge';
 import { Button } from '../../ui/Button';
-import { MoroccanPattern } from '../../ui/MoroccanDecor';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { ROUTES } from '../../../lib/routes';
 import type { User } from '../../../types';
@@ -23,14 +22,14 @@ export function PartnerHeader({ user, partnerTier, isPublished, isTogglingPublis
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-gradient-to-r from-indigo-700 via-indigo-800 to-purple-800 rounded-2xl shadow-2xl mx-4 mt-4 mb-6 relative overflow-hidden"
+      className="rounded-2xl shadow-2xl mx-4 mt-4 mb-6 overflow-hidden"
     >
-      <MoroccanPattern className="opacity-10" color="white" scale={0.8} />
-      <div className="relative max-w-7xl mx-auto px-6 py-8">
+      <div className="h-1 w-full bg-gradient-to-r from-[#C9A84C] via-[#E8C96A] to-[#C9A84C]" />
+      <div className="bg-[#0F2034] px-6 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-4 w-full md:w-auto">
-            <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20">
-              <Award className="h-10 w-10 text-amber-300" />
+            <div className="bg-[#C9A84C]/15 backdrop-blur-sm p-4 rounded-xl border border-[#C9A84C]/30">
+              <Award className="h-10 w-10 text-[#C9A84C]" />
             </div>
             <div>
               <div className="flex items-center gap-3 flex-wrap mb-2">
@@ -50,18 +49,18 @@ export function PartnerHeader({ user, partnerTier, isPublished, isTogglingPublis
                   {isTogglingPublish ? t('exhibitor.header.changing') : isPublished ? t('exhibitor.header.published_status') : t('exhibitor.header.hidden_status')}
                 </button>
               </div>
-              <p className="text-indigo-100 text-sm">{t('partner.hero_subtitle')}</p>
-              <p className="text-indigo-200 text-sm">{user?.profile?.company || ''}</p>
+              <p className="text-slate-300 text-sm">{t('partner.hero_subtitle')}</p>
+              <p className="text-slate-400 text-sm">{user?.profile?.company || ''}</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link to={ROUTES.BADGE}>
-              <Button variant="outline" size="lg" className="border-2 border-white/30 text-white hover:bg-white/10">
-                🎫 {t('partner.virtual_badge')}
+              <Button variant="outline" size="lg" className="border-[#C9A84C]/40 text-[#C9A84C] hover:bg-[#C9A84C]/10">
+                {t('partner.virtual_badge')}
               </Button>
             </Link>
             <Link to={ROUTES.PARTNER_ANALYTICS}>
-              <Button size="lg" className="bg-white text-indigo-700 hover:bg-indigo-50 font-bold">
+              <Button size="lg" className="bg-[#C9A84C] text-[#0F2034] hover:bg-[#A88830] font-bold">
                 <BarChart3 className="h-4 w-4 mr-2" />
                 {t('partner.roi_performance')}
               </Button>

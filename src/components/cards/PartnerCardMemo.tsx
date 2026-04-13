@@ -15,22 +15,23 @@ export interface PartnerCardProps {
 
 const PartnerCardComponent: React.FC<PartnerCardProps> = ({ partner, onClick }) => {
   const getTierIcon = (tier: string) => {
-    if (tier === 'platinum' || tier === 'platinum') {
+    if (tier === 'organizer' || tier === 'co_organizer') {
+      return <Crown className="h-5 w-5 text-yellow-600" />;
+    }
+    if (tier === 'official_sponsor') {
       return <Crown className="h-5 w-5 text-purple-500" />;
     }
-    if (tier === 'gold') {
-      return <Crown className="h-5 w-5 text-yellow-500" />;
-    }
-    if (tier === 'silver') {
-      return <Crown className="h-5 w-5 text-gray-400" />;
+    if (tier === 'delegated_organizer') {
+      return <Crown className="h-5 w-5 text-green-500" />;
     }
     return null;
   };
 
   const getTierBadgeColor = (tier: string) => {
-    if (tier === 'platinum' || tier === 'platinum') return 'bg-purple-100 text-purple-800';
-    if (tier === 'gold') return 'bg-yellow-100 text-yellow-800';
-    if (tier === 'silver') return 'bg-gray-100 text-gray-800';
+    if (tier === 'organizer' || tier === 'co_organizer') return 'bg-yellow-100 text-yellow-800';
+    if (tier === 'official_sponsor') return 'bg-purple-100 text-purple-800';
+    if (tier === 'delegated_organizer') return 'bg-green-100 text-green-800';
+    if (tier === 'press_partner') return 'bg-red-100 text-red-800';
     return 'bg-blue-100 text-blue-800';
   };
 

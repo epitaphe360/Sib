@@ -127,10 +127,10 @@ export default function ContactSuccessPage() {
               </a>
               {' '}ou{' '}
               <a
-                href="tel:+212123456789"
+                href="tel:+212668385228"
                 className="text-blue-600 hover:text-blue-800 font-medium"
               >
-                +212 1 23 45 67 89
+                +212 6 68 38 52 28
               </a>
             </p>
           </div>

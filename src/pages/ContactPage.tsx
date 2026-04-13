@@ -257,7 +257,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900">{t('contact.address')}</h3>
                     <p className="text-gray-600">
-                      LINECO EVENTS<br />
+                      URBACOM<br />
                       19, rue Badr Assayab – 1er étage n°2<br />
                       Casablanca – Maroc
                     </p>

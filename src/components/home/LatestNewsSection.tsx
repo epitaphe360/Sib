@@ -26,7 +26,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
   date,
   category
 }) => {
-  const defaultImage = 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800';
+  const defaultImage = 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=800';
 
   return (
     <motion.div

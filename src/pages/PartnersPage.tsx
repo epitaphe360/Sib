@@ -17,7 +17,7 @@ interface Partner {
   id: string;
   name: string;
   name_en?: string;
-  partner_tier: PartnerTier; // Nouveau système: museum, silver, gold, platinum
+  partner_tier: PartnerTier; // 6 types SIB: organizer, co_organizer, official_sponsor, delegated_organizer, partner, press_partner
   category: string;
   category_en?: string;
   description: string;
@@ -86,29 +86,23 @@ export default function PartnersPage() {
   const pageSize = 24;
   const [hasMore, setHasMore] = useState(true);
   const [partnerStats, setPartnerStats] = useState({
-    egide: 0,
-    strategic: 0,
-    platinum: 0,
-    gold: 0,
-    silver: 0,
-    support: 0,
-    cultural: 0,
-    academic: 0,
-    museum: 0,
+    organizer: 0,
+    co_organizer: 0,
+    official_sponsor: 0,
+    delegated_organizer: 0,
+    partner: 0,
+    press_partner: 0,
     total: 0
   });
 
   const recomputePartnerStats = useCallback((data: Partner[]) => {
     const stats = {
-      egide: data.filter(p => p.partner_tier === 'egide').length,
-      strategic: data.filter(p => p.partner_tier === 'strategic').length,
-      platinum: data.filter(p => p.partner_tier === 'platinum').length,
-      gold: data.filter(p => p.partner_tier === 'gold').length,
-      silver: data.filter(p => p.partner_tier === 'silver').length,
-      support: data.filter(p => p.partner_tier === 'support').length,
-      cultural: data.filter(p => p.partner_tier === 'cultural').length,
-      academic: data.filter(p => p.partner_tier === 'academic').length,
-      museum: data.filter(p => p.partner_tier === 'museum').length,
+      organizer: data.filter(p => p.partner_tier === 'organizer').length,
+      co_organizer: data.filter(p => p.partner_tier === 'co_organizer').length,
+      official_sponsor: data.filter(p => p.partner_tier === 'official_sponsor').length,
+      delegated_organizer: data.filter(p => p.partner_tier === 'delegated_organizer').length,
+      partner: data.filter(p => p.partner_tier === 'partner').length,
+      press_partner: data.filter(p => p.partner_tier === 'press_partner').length,
       total: data.length
     };
     setPartnerStats(stats);
@@ -143,15 +137,12 @@ export default function PartnersPage() {
         setHasMore(false);
         // Statistiques par défaut
         setPartnerStats({
-          egide: 0,
-          strategic: 0,
-          platinum: 0,
-          gold: 0,
-          silver: 0,
-          support: 0,
-          cultural: 0,
-          academic: 0,
-          museum: 0,
+          organizer: 0,
+          co_organizer: 0,
+          official_sponsor: 0,
+          delegated_organizer: 0,
+          partner: 0,
+          press_partner: 0,
           total: 0
         });
       } finally {
@@ -197,15 +188,12 @@ export default function PartnersPage() {
   // ? OPTIMISÉ: Mémoriser les tiers pour éviter recréation
   const partnerTiers = useMemo(() => [
     { value: '', label: t('pages.partners.filter_tier') },
-    { value: 'egide', label: 'Égide' },
-    { value: 'strategic', label: 'Partenaires Stratégiques' },
-    { value: 'platinum', label: 'Sponsor Platinum' },
-    { value: 'gold', label: 'Sponsor Gold' },
-    { value: 'silver', label: 'Sponsor Silver' },
-    { value: 'support', label: 'Partenaires de Support' },
-    { value: 'cultural', label: 'Partenaires Culturels' },
-    { value: 'academic', label: 'Partenaires Académiques' },
-    { value: 'museum', label: 'Museum' }
+    { value: 'organizer', label: 'Organisateurs' },
+    { value: 'co_organizer', label: 'Co-organisateurs' },
+    { value: 'official_sponsor', label: 'Sponsor Officiel' },
+    { value: 'delegated_organizer', label: 'Organisateur Délégué' },
+    { value: 'partner', label: 'Nos Partenaires' },
+    { value: 'press_partner', label: 'Nos Partenaires Presse' },
   ], [t]);
 
   // ? OPTIMISÉ: Mémoriser les pays
@@ -352,69 +340,53 @@ export default function PartnersPage() {
           </motion.div>
         )}
 
-        {/* Stats - Niveaux Partenaires */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+        {/* Stats - Types Partenaires SIB */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
           <Card>
             <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🛡️</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.egide}</div>
-              <div className="text-xs font-semibold text-gray-600">Égide</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🎯</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.strategic}</div>
-              <div className="text-xs font-semibold text-gray-600">Stratégiques</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">💎</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.platinum}</div>
-              <div className="text-xs font-semibold text-gray-600">Platinum</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🥇</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.gold}</div>
-              <div className="text-xs font-semibold text-gray-600">Gold</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🥈</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.silver}</div>
-              <div className="text-xs font-semibold text-gray-600">Silver</div>
+              <div className="text-3xl mb-1">🏛️</div>
+              <div className="text-xl font-bold text-gray-900">{partnerStats.organizer}</div>
+              <div className="text-xs font-semibold text-gray-600">Organisateurs</div>
             </div>
           </Card>
 
           <Card>
             <div className="p-4 text-center">
               <div className="text-3xl mb-1">🤝</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.support}</div>
-              <div className="text-xs font-semibold text-gray-600">Support</div>
+              <div className="text-xl font-bold text-gray-900">{partnerStats.co_organizer}</div>
+              <div className="text-xs font-semibold text-gray-600">Co-organisateurs</div>
             </div>
           </Card>
 
           <Card>
             <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🎭</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.cultural}</div>
-              <div className="text-xs font-semibold text-gray-600">Culturels</div>
+              <div className="text-3xl mb-1">⭐</div>
+              <div className="text-xl font-bold text-gray-900">{partnerStats.official_sponsor}</div>
+              <div className="text-xs font-semibold text-gray-600">Sponsor Officiel</div>
             </div>
           </Card>
 
           <Card>
             <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🎓</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.academic}</div>
-              <div className="text-xs font-semibold text-gray-600">Académiques</div>
+              <div className="text-3xl mb-1">📋</div>
+              <div className="text-xl font-bold text-gray-900">{partnerStats.delegated_organizer}</div>
+              <div className="text-xs font-semibold text-gray-600">Org. Délégué</div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="p-4 text-center">
+              <div className="text-3xl mb-1">🌐</div>
+              <div className="text-xl font-bold text-gray-900">{partnerStats.partner}</div>
+              <div className="text-xs font-semibold text-gray-600">Nos Partenaires</div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="p-4 text-center">
+              <div className="text-3xl mb-1">📰</div>
+              <div className="text-xl font-bold text-gray-900">{partnerStats.press_partner}</div>
+              <div className="text-xs font-semibold text-gray-600">Presse</div>
             </div>
           </Card>
 
@@ -463,15 +435,12 @@ export default function PartnersPage() {
         ) : (
           <div className="space-y-10">
             {[
-              { key: 'egide', label: 'Partenaire Égide', emoji: '🎯', gradient: 'from-purple-600 to-indigo-700', border: 'border-purple-200', bg: 'bg-purple-50' },
-              { key: 'strategic', label: 'Partenaires Stratégiques', emoji: '💎', gradient: 'from-blue-600 to-cyan-600', border: 'border-blue-200', bg: 'bg-blue-50' },
-              { key: 'platinum', label: 'Sponsors Platinum', emoji: '🏆', gradient: 'from-gray-700 to-gray-900', border: 'border-gray-300', bg: 'bg-gray-50' },
-              { key: 'gold', label: 'Sponsors Gold', emoji: '🥇', gradient: 'from-yellow-500 to-amber-600', border: 'border-yellow-200', bg: 'bg-yellow-50' },
-              { key: 'silver', label: 'Sponsors Silver', emoji: '🥈', gradient: 'from-gray-400 to-gray-500', border: 'border-gray-200', bg: 'bg-gray-50' },
-              { key: 'support', label: 'Partenaires de Support', emoji: '🤝', gradient: 'from-green-500 to-emerald-600', border: 'border-green-200', bg: 'bg-green-50' },
-              { key: 'cultural', label: 'Partenaires Culturels', emoji: '🎭', gradient: 'from-rose-500 to-pink-600', border: 'border-rose-200', bg: 'bg-rose-50' },
-              { key: 'academic', label: 'Partenaires Académiques', emoji: '🎓', gradient: 'from-teal-500 to-cyan-600', border: 'border-teal-200', bg: 'bg-teal-50' },
-              { key: 'museum', label: 'Partenaires Museum', emoji: '🏛️', gradient: 'from-orange-500 to-amber-600', border: 'border-orange-200', bg: 'bg-orange-50' },
+              { key: 'organizer',           label: 'Organisateurs',         emoji: '🏛️', gradient: 'from-yellow-600 to-amber-700',   border: 'border-yellow-200', bg: 'bg-yellow-50' },
+              { key: 'co_organizer',        label: 'Co-organisateurs',      emoji: '🤝', gradient: 'from-amber-500 to-yellow-600',  border: 'border-amber-200',  bg: 'bg-amber-50' },
+              { key: 'official_sponsor',    label: 'Sponsor Officiel',      emoji: '⭐', gradient: 'from-blue-600 to-blue-800',     border: 'border-blue-200',   bg: 'bg-blue-50' },
+              { key: 'delegated_organizer', label: 'Organisateur Délégué',  emoji: '📋', gradient: 'from-green-600 to-emerald-700', border: 'border-green-200',  bg: 'bg-green-50' },
+              { key: 'partner',             label: 'Nos Partenaires',       emoji: '🌐', gradient: 'from-purple-500 to-indigo-600', border: 'border-purple-200', bg: 'bg-purple-50' },
+              { key: 'press_partner',       label: 'Nos Partenaires Presse',emoji: '📰', gradient: 'from-red-600 to-rose-700',      border: 'border-red-200',    bg: 'bg-red-50' },
             ]
               .map(tier => ({
                 ...tier,

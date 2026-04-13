@@ -217,7 +217,7 @@ export default function AdvancedMatchingPage() {
           </h1>
           <p className="text-gray-500 max-w-xl mx-auto">
             Décrivez ce que vous cherchez en langage naturel. Notre IA analyse les {' '}
-            <strong>500 exposants SIB</strong> et vous propose les meilleurs résultats.
+            <strong>600 exposants SIB</strong> et vous propose les meilleurs résultats.
           </p>
         </div>
 

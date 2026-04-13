@@ -109,7 +109,7 @@ export const Footer: React.FC = memo(() => {
                   <MapPin className="h-5 w-5 text-blue-400" />
                 </div>
                 <div>
-                   <div className="text-sm font-black text-white uppercase tracking-wider">LINECO EVENTS</div>
+                   <div className="text-sm font-black text-white uppercase tracking-wider">URBACOM</div>
                    <div className="text-[11px] font-bold text-slate-500">19, rue Badr Assayab – 1er étage n°2</div>
                    <div className="text-[11px] font-bold text-slate-500">Casablanca – Maroc</div>
                 </div>

@@ -167,7 +167,7 @@ class EmailTemplateService {
 
               <p>
                 SIB 2026 - Salon International du Bâtiment<br>
-                1-3 Avril 2026, El Jadida, Maroc
+                25-29 Novembre 2026, El Jadida, Maroc
               </p>
 
               <p style="font-size: 12px; color: #9ca3af; margin-top: 20px;">

@@ -24,8 +24,8 @@ export function VisitorQuickActions({ userLevel, remaining }: VisitorQuickAction
       <motion.div variants={itemVariants}>
         <Card className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-full">
           <div className="flex items-start space-x-3 mb-4">
-            <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg">
-              <Network className="h-5 w-5 text-white" />
+            <div className="p-2 bg-[#1B365D]/10 rounded-lg">
+              <Network className="h-5 w-5 text-[#1B365D]" />
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900">{t('visitor.ai_networking')}</h3>
@@ -34,12 +34,12 @@ export function VisitorQuickActions({ userLevel, remaining }: VisitorQuickAction
           </div>
           <div className="space-y-3">
             <Link to={ROUTES.NETWORKING}>
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all">
+              <Button className="w-full bg-[#1B365D] hover:bg-[#0F2034] text-white shadow-md transition-all">
                 <Network className="h-4 w-4 mr-2" />{t('visitor.explore_network')}
               </Button>
             </Link>
             <Link to={ROUTES.PROFILE_MATCHING}>
-              <Button variant="outline" className="w-full border-purple-200 text-purple-700 hover:bg-purple-50">
+              <Button variant="outline" className="w-full border-[#1B365D]/30 text-[#1B365D] hover:bg-[#1B365D]/5">
                 <Target className="h-4 w-4 mr-2" />{t('visitor.configure_matching')}<ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </Link>
@@ -50,8 +50,8 @@ export function VisitorQuickActions({ userLevel, remaining }: VisitorQuickAction
       <motion.div variants={itemVariants}>
         <Card className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-full">
           <div className="flex items-start space-x-3 mb-4">
-            <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg">
-              <Calendar className="h-5 w-5 text-white" />
+            <div className="p-2 bg-[#2D6A4F]/10 rounded-lg">
+              <Calendar className="h-5 w-5 text-[#2D6A4F]" />
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900">{t('visitor.schedule_appointment')}</h3>

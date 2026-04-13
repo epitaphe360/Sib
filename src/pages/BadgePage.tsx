@@ -57,8 +57,9 @@ export default function BadgePage() {
       toast.success(t('badge.badge_generated_success'));
     } catch (err: any) {
       console.error('Error generating badge:', err);
-      setError(err.message || t('badge.error_generating'));
-      toast.error(t('badge.error_generating'));
+      const errorMessage = err?.message || t('badge.error_generating');
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setGenerating(false);
     }
@@ -308,7 +309,7 @@ export default function BadgePage() {
                   <span>{t('badge.valid_from')}</span>
                 </div>
                 <div className="font-bold text-sm tracking-widest">
-                  1 - 3 AVRIL 2026
+                  25 - 29 NOVEMBRE 2026
                 </div>
               </div>
             </div>

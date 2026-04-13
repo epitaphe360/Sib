@@ -35,16 +35,26 @@ export const CreateMediaPage: React.FC = () => {
     { value: 'testimonial', label: 'Témoignage', icon: MessageCircle, color: 'pink' }
   ];
 
-  const categories = [
-    'Business',
-    'Innovation',
-    'Logistique',
-    'Transport',
-    'Environnement',
-    'Éducation',
-    'Technologie',
-    'Supply Chain'
-  ];
+  const categoriesByType: Record<string, string[]> = {
+    testimonial: [
+      'Exposant',
+      'Partenaire',
+      'Visiteur Professionnel',
+      'Institutionnel / Officiel',
+      'Presse'
+    ],
+    default: [
+      'Bâtiment & Construction',
+      'Innovation BTP',
+      'Matériaux & Produits',
+      'Architecture & Design',
+      'Énergie & Durabilité',
+      'Réglementation',
+      'Financement Immobilier',
+      'Technologies BTP'
+    ]
+  };
+  const categories = categoriesByType[formData.type] ?? categoriesByType.default;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -241,7 +251,7 @@ export const CreateMediaPage: React.FC = () => {
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Catégorie
+                {formData.type === 'testimonial' ? 'Profil du témoin' : 'Catégorie'}
               </label>
               <select
                 value={formData.category}

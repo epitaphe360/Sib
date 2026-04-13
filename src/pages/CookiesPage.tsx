@@ -217,7 +217,7 @@ export default function CookiesPage() {
               <p className="text-gray-700">
                 <strong>Délégué à la Protection des Données</strong><br />
                 Email : privacy@sibevent.com<br />
-                Téléphone : +212 1 23 45 67 92
+                Téléphone : +212 6 68 38 52 28
               </p>
             </div>
           </div>

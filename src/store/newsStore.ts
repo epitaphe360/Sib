@@ -39,7 +39,7 @@ const fallbackArticles: NewsArticle[] = [
     id: 'fallback-3',
     title: 'Développement Durable : Les Bâtiments s\'engagent pour l\'Environnement',
     excerpt: 'Les initiatives écologiques se multiplient dans les bâtiments pour réduire l\'empreinte carbone du transport construction.',
-    content: 'Face aux enjeux climatiques, les bâtiments adoptent des stratégies ambitieuses pour réduire leur impact environnemental. Énergies renouvelables, électrification des quais, gestion des déchets : tour d\'horizon des bonnes pratiques.',
+    content: 'Face aux enjeux climatiques, les bâtiments adoptent des stratégies ambitieuses pour réduire leur impact environnemental. Énergies renouvelables, électrification des chantiers, réduction des déchets de construction : tour d\'horizon des bonnes pratiques.',
     author: 'Équipe SIB',
     publishedAt: new Date('2025-12-05'),
     category: 'Environnement',

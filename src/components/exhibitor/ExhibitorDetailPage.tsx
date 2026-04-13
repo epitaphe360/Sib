@@ -961,7 +961,7 @@ export default function ExhibitorDetailPage() {
               <div className="space-y-2 text-sm text-gray-400">
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-4 w-4" />
-                  <span>1-3 Avril 2026</span>
+                  <span>25-29 Nov. 2026</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4" />

@@ -1,55 +1,69 @@
 /**
  * Informations bancaires pour les virements Partenaires et Exposants
- * Configuration des montants selon le tier (Museum, Silver, Gold, Platinum)
- *
- * ✅ FIX P0-3: Import des montants depuis Single Source of Truth
+ * Configuration des montants selon le tier de sponsoring SIB 2026
+ * Silver (200K MAD) / Gold (350K MAD) / Officiel (500K MAD)
  */
 
 import { PartnerTier } from './partnerTiers';
-import { PARTNER_BILLING } from './partnerBilling';
 
 export const PARTNER_BANK_TRANSFER_INFO = {
   // Informations du compte bancaire
   bankName: 'Attijariwafa bank',
-  accountHolder: 'LINECO EVENTS',
+  accountHolder: 'URBACOM',
   iban: 'MA64 007 780 000413200000498 25',
   bic: 'BCMAMAMC',
   swift: 'BCMAMAMC',
   domiciliation: 'CASA MY IDRISS 1ER',
 
-  // ✅ Montants par tier - Import depuis SSOT
+  // Montants par tier de sponsoring — brochure SIB 2026
   amounts: {
-    museum: {
-      amount: PARTNER_BILLING.museum.amount,
-      currency: PARTNER_BILLING.museum.currency,
-      tier: 'museum' as PartnerTier,
-      displayName: PARTNER_BILLING.museum.displayName,
-      description: PARTNER_BILLING.museum.description,
-      features: PARTNER_BILLING.museum.features
+    organizer: {
+      amount: 0,
+      currency: 'MAD' as const,
+      tier: 'organizer' as PartnerTier,
+      displayName: 'Organisateurs',
+      description: 'Organisateur principal du salon',
+      features: ['Gestion complète de l\'événement']
     },
-    silver: {
-      amount: PARTNER_BILLING.silver.amount,
-      currency: PARTNER_BILLING.silver.currency,
-      tier: 'silver' as PartnerTier,
-      displayName: PARTNER_BILLING.silver.displayName,
-      description: PARTNER_BILLING.silver.description,
-      features: PARTNER_BILLING.silver.features
+    co_organizer: {
+      amount: 0,
+      currency: 'MAD' as const,
+      tier: 'co_organizer' as PartnerTier,
+      displayName: 'Co-organisateurs',
+      description: 'Co-organisation du salon',
+      features: ['Co-branding officiel']
     },
-    gold: {
-      amount: PARTNER_BILLING.gold.amount,
-      currency: PARTNER_BILLING.gold.currency,
-      tier: 'gold' as PartnerTier,
-      displayName: PARTNER_BILLING.gold.displayName,
-      description: PARTNER_BILLING.gold.description,
-      features: PARTNER_BILLING.gold.features
+    official_sponsor: {
+      amount: 500000,
+      currency: 'MAD' as const,
+      tier: 'official_sponsor' as PartnerTier,
+      displayName: 'Sponsor Officiel',
+      description: 'Visibilité maximale — Partenaire stratégique (500 000 MAD)',
+      features: ['Logo sur tous les supports', '1 000 invitations', '4 bannières web', 'Habillage façade', 'Rubans badges', 'Catalogue 4ème couverture', 'Conférence de presse']
     },
-    platinum: {
-      amount: PARTNER_BILLING.platinum.amount,
-      currency: PARTNER_BILLING.platinum.currency,
-      tier: 'platinum' as PartnerTier,
-      displayName: PARTNER_BILLING.platinum.displayName,
-      description: PARTNER_BILLING.platinum.description,
-      features: PARTNER_BILLING.platinum.features
+    delegated_organizer: {
+      amount: 0,
+      currency: 'MAD' as const,
+      tier: 'delegated_organizer' as PartnerTier,
+      displayName: 'Organisateur Délégué',
+      description: 'Organisateur délégué d\'une zone du salon',
+      features: ['Gestion déléguée d\'une zone']
+    },
+    partner: {
+      amount: 200000,
+      currency: 'MAD' as const,
+      tier: 'partner' as PartnerTier,
+      displayName: 'Sponsor Silver',
+      description: 'Visibilité & communication (200 000 MAD)',
+      features: ['Logo sur les supports', '200 invitations', '1 bannière web', 'Salle conférence 1h', 'Publicité écrans']
+    },
+    press_partner: {
+      amount: 0,
+      currency: 'MAD' as const,
+      tier: 'press_partner' as PartnerTier,
+      displayName: 'Partenaire Presse',
+      description: 'Partenaire presse officiel',
+      features: ['Accréditation presse', 'Espace presse dédié']
     }
   },
 
@@ -69,7 +83,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         '⚠️ IMPORTANT: Indiquez la référence de paiement dans le libellé du virement',
         '⚠️ Le montant doit être exact selon le tier choisi',
         '⚠️ Conservez votre preuve de virement (vous devrez l\'uploader)',
-        '⚠️ Les virements sont en USD - vérifiez le taux de change avec votre banque',
+        '⚠️ Les virements sont en MAD (Dirham marocain)',
         '⚠️ Vous pouvez suivre l\'état de votre demande dans votre tableau de bord'
       ],
       additionalInfo: [
@@ -93,7 +107,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         '⚠️ IMPORTANT: Include the payment reference in the transfer description',
         '⚠️ Amount must be exact according to chosen tier',
         '⚠️ Keep your transfer proof (you will need to upload it)',
-        '⚠️ Transfers are in USD - check exchange rate with your bank',
+        '⚠️ Transfers are in MAD (Moroccan Dirham)',
         '⚠️ You can track your request status in your dashboard'
       ],
       additionalInfo: [
@@ -117,7 +131,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         '⚠️ مهم: قم بتضمين مرجع الدفع في وصف التحويل',
         '⚠️ يجب أن يكون المبلغ دقيقًا حسب المستوى المختار',
         '⚠️ احتفظ بإثبات التحويل الخاص بك (ستحتاج إلى تحميله)',
-        '⚠️ التحويلات بالدولار الأمريكي - تحقق من سعر الصرف مع البنك الخاص بك',
+        '⚠️ التحويلات بالدرهم المغربي (MAD)',
         '⚠️ يمكنك تتبع حالة طلبك في لوحة التحكم الخاصة بك'
       ],
       additionalInfo: [
@@ -131,9 +145,9 @@ export const PARTNER_BANK_TRANSFER_INFO = {
 
   // Contact support partenaires
   support: {
-    email: 'partners@sib.com',
-    phone: '+33 7 66 50 45 80',
-    whatsapp: '+33 7 66 50 45 80',
+    email: 'contact@sibevent.com',
+    phone: '+212 6 68 38 52 28',
+    whatsapp: '+212668385228',
     hours: {
       fr: 'Lundi - Vendredi: 9h00 - 18h00 (GMT+1)',
       en: 'Monday - Friday: 9:00 AM - 6:00 PM (GMT+1)',
@@ -162,7 +176,7 @@ export function generatePartnerPaymentReference(
  * Valider le format d'une référence de paiement partenaire
  */
 export function validatePartnerPaymentReference(reference: string): boolean {
-  const pattern = /^SIB-PARTNER-[A-F0-9]{8}-(MUS|SIL|GOL|PLA)-[A-F0-9]{8}-\d{6}$/;
+  const pattern = /^SIB-PARTNER-[A-F0-9]{8}-(ORG|CO_|OFF|DEL|PAR|PRE)-[A-F0-9]{8}-\d{6}$/;
   return pattern.test(reference);
 }
 
@@ -189,25 +203,25 @@ export function calculateUpgradeAmount(
  * Convertir USD en autres devises (approximatif)
  */
 export function convertPartnerAmount(
-  amountUSD: number,
+  amountMAD: number,
   targetCurrency: 'EUR' | 'MAD' | 'USD'
 ): number {
   const rates = {
-    EUR: 0.92,  // 1 USD = 0.92 EUR
-    MAD: 10.15, // 1 USD = 10.15 MAD
-    USD: 1.00
+    EUR: 0.091, // 1 MAD ≈ 0.091 EUR
+    USD: 0.099, // 1 MAD ≈ 0.099 USD
+    MAD: 1.00
   };
-  return Math.round(amountUSD * rates[targetCurrency] * 100) / 100;
+  return Math.round(amountMAD * rates[targetCurrency] * 100) / 100;
 }
 
 /**
  * Formater un montant avec sa devise
  */
 export function formatPartnerAmount(
-  amountUSD: number,
-  currency: 'USD' | 'EUR' | 'MAD' = 'USD'
+  amountMAD: number,
+  currency: 'USD' | 'EUR' | 'MAD' = 'MAD'
 ): string {
-  const amount = convertPartnerAmount(amountUSD, currency);
+  const amount = convertPartnerAmount(amountMAD, currency);
 
   switch (currency) {
     case 'EUR':

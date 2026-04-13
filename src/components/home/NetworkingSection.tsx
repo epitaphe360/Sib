@@ -50,9 +50,9 @@ export const NetworkingSection: React.FC = () => {
   ];
 
   const stats = [
-    { number: '6,000+', labelKey: 'home.stats_professionals' },
-    { number: '40', labelKey: 'home.stats_countries' },
-    { number: '300+', labelKey: 'home.stats_exhibitors' },
+    { number: '200,000+', labelKey: 'home.stats_professionals' },
+    { number: '50', labelKey: 'home.stats_countries' },
+    { number: '600+', labelKey: 'home.stats_exhibitors' },
     { number: '95%', labelKey: 'home.stats_satisfaction' }
   ];
 
@@ -60,13 +60,13 @@ export const NetworkingSection: React.FC = () => {
     <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-sky-50 relative overflow-hidden">
       {/* Moroccan Geometric Background */}
       <div className="absolute inset-0 opacity-[0.05]">
-        <div className="absolute top-10 left-10 w-32 h-32 border-4 border-SIB-gold rounded-full" />
+        <div className="absolute top-10 left-10 w-32 h-32 border-4 border-sib-gold rounded-full" />
         <div className="absolute top-20 right-20 w-24 h-24 border-4 border-red-600 rotate-45 transform" />
         <div className="absolute bottom-20 left-1/4 w-40 h-40 border-4 border-green-600" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
-        <div className="absolute bottom-10 right-1/3 w-36 h-36 border-4 border-SIB-gold rotate-12 transform" />
+        <div className="absolute bottom-10 right-1/3 w-36 h-36 border-4 border-sib-gold rotate-12 transform" />
       </div>
       {/* Background Pattern */}
-      <MoroccanPattern className="opacity-[0.03] text-SIB-primary" scale={1.5} />
+      <MoroccanPattern className="opacity-[0.03] text-sib-primary" scale={1.5} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -79,14 +79,14 @@ export const NetworkingSection: React.FC = () => {
           >
             <div className="mb-8">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="bg-SIB-primary p-2 rounded-lg">
+                <div className="bg-blue-600 p-2 rounded-lg">
                   <Network className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-SIB-primary font-semibold">{t('home.networking_label')}</span>
+                <span className="text-blue-600 font-semibold">{t('home.networking_label')}</span>
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                 {t('home.networking_title').split('bons').map((part, i) => (
-                  i === 0 ? part : <span key={`part-${i}`} className="text-SIB-primary">bons{part}</span>
+                  i === 0 ? part : <span key={`part-${i}`} className="text-sib-primary">bons{part}</span>
                 ))}
               </h2>
               <p className="text-lg text-gray-600 mb-8">
@@ -163,10 +163,10 @@ export const NetworkingSection: React.FC = () => {
                   <Users className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Réseau BTP International
+                  Réseau Professionnel BTP
                 </h3>
                 <p className="text-gray-600">
-                  Rejoignez une grande communauté de professionnels du bâtiment
+                  Rejoignez la plus grande communauté de professionnels du bâtiment
                 </p>
               </div>
 
@@ -237,20 +237,20 @@ export const NetworkingSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
-          className="mt-16 text-center bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white"
+          className="mt-16 text-center bg-blue-600 rounded-2xl p-8 text-white"
         >
           <h3 className="text-2xl font-bold mb-4">
             Prêt à développer votre réseau professionnel ?
           </h3>
-          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+          <p className="text-white/70 mb-6 max-w-2xl mx-auto">
             Rejoignez dès maintenant la plateforme SIB et découvrez comment 
             l'intelligence artificielle peut transformer votre approche du réseautage.
           </p>
           <Link to={ROUTES.NETWORKING}>
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
+            <button className="inline-flex items-center gap-2 px-6 py-3 bg-yellow-400 text-blue-900 rounded-xl font-semibold hover:bg-yellow-300 transition-colors">
               Découvrir le Réseautage
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            </button>
           </Link>
         </motion.div>
       </div>

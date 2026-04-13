@@ -24,7 +24,7 @@ export default function PrintableBadge({
   format = 'badge',
   showLogo = true,
   eventName = 'SIB 2026',
-  eventDates = '1 - 3 Avril 2026',
+  eventDates = '25 - 29 Novembre 2026',
   eventLocation = 'El Jadida, Maroc',
   onReady,
 }: PrintableBadgeProps) {

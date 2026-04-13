@@ -25,8 +25,10 @@ import { isAuthInitialized } from '../../lib/initAuth';
 export const Header: React.FC = memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isEventMenuOpen, setIsEventMenuOpen] = useState(false);
-  const [isParticipateMenuOpen, setIsParticipateMenuOpen] = useState(false);
+  const [isSalonMenuOpen, setIsSalonMenuOpen] = useState(false);
+  const [isExposerMenuOpen, setIsExposerMenuOpen] = useState(false);
+  const [isVisiterMenuOpen, setIsVisiterMenuOpen] = useState(false);
+  const [isPartenairesMenuOpen, setIsPartenairesMenuOpen] = useState(false);
   const [isMediaMenuOpen, setIsMediaMenuOpen] = useState(false);
   const { user, isAuthenticated, isLoading, logout } = useAuthStore();
   const { t } = useTranslation();
@@ -39,8 +41,10 @@ export const Header: React.FC = memo(() => {
   useEffect(() => {
     setIsMenuOpen(false);
     setIsProfileOpen(false);
-    setIsEventMenuOpen(false);
-    setIsParticipateMenuOpen(false);
+    setIsSalonMenuOpen(false);
+    setIsExposerMenuOpen(false);
+    setIsVisiterMenuOpen(false);
+    setIsPartenairesMenuOpen(false);
     setIsMediaMenuOpen(false);
   }, [location.pathname]);
 
@@ -58,22 +62,19 @@ export const Header: React.FC = memo(() => {
   // OPTIMIZATION: Memoized callbacks to prevent re-creating functions on every render
   const toggleMenu = useCallback(() => {
     setIsMenuOpen(prev => !prev);
-    // Fermer le profile dropdown quand on ouvre le menu
     setIsProfileOpen(false);
   }, []);
   const toggleProfile = useCallback(() => {
     setIsProfileOpen(prev => !prev);
-    // Fermer le menu mobile quand on ouvre le profile
     setIsMenuOpen(false);
   }, []);
-  const toggleEventMenu = useCallback(() => setIsEventMenuOpen(prev => !prev), []);
-  const toggleParticipateMenu = useCallback(() => setIsParticipateMenuOpen(prev => !prev), []);
+  const toggleSalonMenu = useCallback(() => setIsSalonMenuOpen(prev => !prev), []);
+  const toggleExposerMenu = useCallback(() => setIsExposerMenuOpen(prev => !prev), []);
+  const toggleVisiterMenu = useCallback(() => setIsVisiterMenuOpen(prev => !prev), []);
+  const togglePartenairesMenu = useCallback(() => setIsPartenairesMenuOpen(prev => !prev), []);
   const toggleMediaMenu = useCallback(() => setIsMediaMenuOpen(prev => !prev), []);
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
   const closeProfile = useCallback(() => setIsProfileOpen(false), []);
-  const closeEventMenu = useCallback(() => setIsEventMenuOpen(false), []);
-  const closeParticipateMenu = useCallback(() => setIsParticipateMenuOpen(false), []);
-  const closeMediaMenu = useCallback(() => setIsMediaMenuOpen(false), []);
 
   const handleLogout = useCallback(() => {
     logout();
@@ -82,26 +83,48 @@ export const Header: React.FC = memo(() => {
 
   const isFreeVisitor = user?.type === 'visitor' && (user?.visitor_level === 'free' || !user?.visitor_level);
 
-  const navigation = [
-    { name: t('nav.home'), href: ROUTES.HOME },
-    { name: t('nav.partners'), href: ROUTES.PARTNERS },
-    { name: t('nav.exhibitors'), href: ROUTES.EXHIBITORS },
-    // Cacher le réseautage pour les visiteurs free
-    ...(isFreeVisitor ? [] : [{ name: t('nav.networking'), href: ROUTES.NETWORKING }]),
+  // ══════════════════════════════════════════════
+  // MENU : LE SALON
+  // ══════════════════════════════════════════════
+  const salonMenuItems = [
+    { name: t('salon.presentation'), href: ROUTES.PRESENTATION, description: t('salon.presentation_desc') },
+    { name: t('salon.nouveautes'), href: ROUTES.NOUVEAUTES, description: t('salon.nouveautes_desc') },
+    { name: t('salon.secteurs'), href: ROUTES.SECTEURS, description: t('salon.secteurs_desc') },
+    { name: t('salon.editions'), href: ROUTES.EDITIONS, description: t('salon.editions_desc') },
+    { name: t('salon.telechargements'), href: ROUTES.TELECHARGEMENTS, description: t('salon.telechargements_desc') },
   ];
 
-  const eventMenuItems = [
-    { name: t('event.program'), href: ROUTES.EVENTS, description: t('event.program_desc') },
-    { name: t('event.pavilions'), href: ROUTES.PAVILIONS, description: t('event.pavilions_desc') },
-    { name: t('event.news'), href: ROUTES.NEWS, description: t('event.news_desc') },
-    { name: t('event.prepare_visit'), href: ROUTES.ACCOMMODATION, description: t('event.prepare_desc') },
+  // ══════════════════════════════════════════════
+  // MENU : EXPOSER
+  // ══════════════════════════════════════════════
+  const exposerMenuItems = [
+    { name: t('exposer.pourquoi'), href: ROUTES.POURQUOI_EXPOSER, description: t('exposer.pourquoi_desc') },
+    { name: t('exposer.espaces'), href: ROUTES.ESPACES_SIB, description: t('exposer.espaces_desc') },
+    { name: t('exposer.reserver'), href: ROUTES.EXHIBITOR_SUBSCRIPTION, description: t('exposer.reserver_desc') },
+    { name: t('exposer.annuaire'), href: ROUTES.EXHIBITORS, description: t('exposer.annuaire_desc') },
   ];
 
-  const participateMenuItems = [
-    { name: t('participate.visitors'), href: ROUTES.VISITOR_SUBSCRIPTION, description: t('participate.visitors_desc') },
-    { name: t('participate.become_exhibitor'), href: ROUTES.EXHIBITOR_SUBSCRIPTION, description: t('participate.exhibitor_desc') },
-    { name: t('participate.become_partner'), href: ROUTES.PARTNER_SUBSCRIPTION, description: t('participate.partner_desc') },
+  // ══════════════════════════════════════════════
+  // MENU : VISITER
+  // ══════════════════════════════════════════════
+  const visiterMenuItems = [
+    { name: t('visiter.pourquoi'), href: ROUTES.POURQUOI_VISITER, description: t('visiter.pourquoi_desc') },
+    { name: t('visiter.infos'), href: ROUTES.INFOS_PRATIQUES, description: t('visiter.infos_desc') },
+    { name: t('visiter.badge'), href: ROUTES.REGISTER_VISITOR, description: t('visiter.badge_desc') },
+    { name: t('visiter.vip'), href: ROUTES.VISITOR_VIP_REGISTRATION, description: t('visiter.vip_desc') },
   ];
+
+  // ══════════════════════════════════════════════
+  // MENU : PARTENAIRES
+  // ══════════════════════════════════════════════
+  const partenairesMenuItems = [
+    { name: t('partenaires.devenir'), href: ROUTES.PARTNER_SUBSCRIPTION, description: t('partenaires.devenir_desc') },
+    { name: t('partenaires.annuaire'), href: ROUTES.PARTNERS, description: t('partenaires.annuaire_desc') },
+  ];
+
+  // ══════════════════════════════════════════════
+  // MENU : MÉDIAS (conditionnel)
+  // ══════════════════════════════════════════════
 
   const { mediaVisible } = useMediaVisibilityStore();
 
@@ -126,55 +149,29 @@ export const Header: React.FC = memo(() => {
           <Link to={ROUTES.HOME} className="flex-shrink-0 flex items-center group">
             <div className="relative">
               <div className="absolute -inset-2 bg-blue-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative h-12 sm:h-16 xl:h-20 w-auto flex items-center rounded-lg px-1 sm:px-3 py-1">
+              <div className="relative w-auto flex items-center">
                 <img
                   src="/logo-sib2026.png"
                   alt="SIB - Salon International du Bâtiment"
-                  className="h-10 sm:h-14 xl:h-16 w-auto object-contain"
+                  className="h-14 sm:h-18 xl:h-24 w-auto object-contain"
                 />
               </div>
             </div>
           </Link>
 
-          {/* Desktop Navigation Luxe */}
-          <nav className="hidden lg:flex items-center space-x-0 flex-1 min-w-0 justify-center">
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-0 xl:gap-0.5 flex-1 justify-center">
 
-            <div className="w-[1px] h-6 bg-slate-200 mx-2" />
-
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="relative px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all group whitespace-nowrap"
-              >
-                {item.name}
-                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
-              </Link>
-            ))}
-            
-            {/* Divider Vertical Minimaliste */}
-            <div className="w-[1px] h-6 bg-slate-200 mx-2" />
-
-            {/* Event Dropdown Premium */}
-            <div className="relative" onMouseEnter={() => setIsEventMenuOpen(true)} onMouseLeave={() => setIsEventMenuOpen(false)}>
-              <button
-                className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
-              >
-                <span>{t('nav.event')}</span>
+            {/* Le Salon ▼ */}
+            <div className="relative" onMouseEnter={() => setIsSalonMenuOpen(true)} onMouseLeave={() => setIsSalonMenuOpen(false)}>
+              <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap">
+                <span>{t('nav.le_salon')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
-              
-              {/* Dropdown Content */}
-              {isEventMenuOpen && (
-                <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
-                  {eventMenuItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group"
-                      onMouseEnter={() => setIsEventMenuOpen(true)}
-                      onMouseLeave={() => setIsEventMenuOpen(false)}
-                    >
+              {isSalonMenuOpen && (
+                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                  {salonMenuItems.map((item) => (
+                    <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
                       <div>
                         <div className="font-semibold text-slate-900">{item.name}</div>
                         <div className="text-xs text-slate-500">{item.description}</div>
@@ -185,26 +182,16 @@ export const Header: React.FC = memo(() => {
               )}
             </div>
 
-            {/* Participate Dropdown Premium */}
-            <div className="relative" onMouseEnter={() => setIsParticipateMenuOpen(true)} onMouseLeave={() => setIsParticipateMenuOpen(false)}>
-              <button
-                className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
-              >
-                <span>{t('nav.participate')}</span>
+            {/* Exposer ▼ */}
+            <div className="relative" onMouseEnter={() => setIsExposerMenuOpen(true)} onMouseLeave={() => setIsExposerMenuOpen(false)}>
+              <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap">
+                <span>{t('nav.exposer')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
-              
-              {/* Dropdown Content */}
-              {isParticipateMenuOpen && (
-                <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
-                  {participateMenuItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group"
-                      onMouseEnter={() => setIsParticipateMenuOpen(true)}
-                      onMouseLeave={() => setIsParticipateMenuOpen(false)}
-                    >
+              {isExposerMenuOpen && (
+                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                  {exposerMenuItems.map((item) => (
+                    <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
                       <div>
                         <div className="font-semibold text-slate-900">{item.name}</div>
                         <div className="text-xs text-slate-500">{item.description}</div>
@@ -214,29 +201,73 @@ export const Header: React.FC = memo(() => {
                 </div>
               )}
             </div>
+
+            {/* Visiter ▼ */}
+            <div className="relative" onMouseEnter={() => setIsVisiterMenuOpen(true)} onMouseLeave={() => setIsVisiterMenuOpen(false)}>
+              <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap">
+                <span>{t('nav.visiter')}</span>
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              </button>
+              {isVisiterMenuOpen && (
+                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                  {visiterMenuItems.map((item) => (
+                    <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
+                      <div>
+                        <div className="font-semibold text-slate-900">{item.name}</div>
+                        <div className="text-xs text-slate-500">{item.description}</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Partenaires ▼ */}
+            <div className="relative" onMouseEnter={() => setIsPartenairesMenuOpen(true)} onMouseLeave={() => setIsPartenairesMenuOpen(false)}>
+              <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap">
+                <span>{t('nav.partners')}</span>
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              </button>
+              {isPartenairesMenuOpen && (
+                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                  {partenairesMenuItems.map((item) => (
+                    <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
+                      <div>
+                        <div className="font-semibold text-slate-900">{item.name}</div>
+                        <div className="text-xs text-slate-500">{item.description}</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="w-[1px] h-5 bg-slate-200 mx-0.5 xl:mx-1" />
+
+            {/* Programme (lien direct) */}
+            <Link
+              to={ROUTES.EVENTS}
+              className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all group whitespace-nowrap"
+            >
+              {t('nav.programme')}
+              <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+            </Link>
+
+            {/* Médias ▼ (conditionnel) */}
             {mediaVisible && (
             <div className="relative" onMouseEnter={() => setIsMediaMenuOpen(true)} onMouseLeave={() => setIsMediaMenuOpen(false)}>
-              <button
-                className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
-              >
-                <Video className="w-3.5 h-3.5 text-blue-500" />
+              <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap">
+                <Video className="w-3 h-3 xl:w-3.5 xl:h-3.5 text-blue-500" />
                 <span>{t('media.menu_title')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
-              
-              {/* Dropdown Content */}
               {isMediaMenuOpen && (
                 <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
                   {mediaMenuItems.map((item) => {
                     const Icon = item.icon;
                     return (
-                      <Link
-                        key={item.name}
-                        to={item.href}
-                        className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group"
-                        onMouseEnter={() => setIsMediaMenuOpen(true)}
-                        onMouseLeave={() => setIsMediaMenuOpen(false)}
-                      >
+                      <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group">
                         <Icon className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-slate-400 group-hover:text-blue-600" />
                         <div>
                           <div className="font-semibold text-slate-900">{item.name}</div>
@@ -250,10 +281,10 @@ export const Header: React.FC = memo(() => {
             </div>
             )}
 
-            {/* Contact Link */}
+            {/* Contact */}
             <Link
               to="/contact"
-              className="px-2.5 py-2 text-xs xl:text-sm font-bold uppercase tracking-[0.07em] text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+              className="px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
             >
               <span>{t('nav.contact')}</span>
               <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -272,9 +303,6 @@ export const Header: React.FC = memo(() => {
               {/* Notifications - masqué sur mobile */}
               <button data-testid="notifications-button" className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative">
                 <Bell className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    3
-                  </span>
                 </button>
 
                 {/* Messages - masqué sur mobile */}
@@ -283,9 +311,6 @@ export const Header: React.FC = memo(() => {
                   className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative"
                 >
                   <MessageCircle className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center">
-                    2
-                  </span>
                 </Link>
 
                 {/* Calendar - masqué sur mobile */}
@@ -605,70 +630,83 @@ export const Header: React.FC = memo(() => {
                   </button>
                 </div>
               )}
-              
-              {/* Navigation principale */}
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
-                  onClick={closeMenu}
-                >
-                  {item.name}
-                </Link>
-              ))}
 
-              {/* Mobile Event Menu */}
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <div className="px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t('nav.event')}
-                </div>
-                {eventMenuItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
-                    onClick={closeMenu}
-                  >
+              {/* ══ Le Salon ══ */}
+              <div className="border-b border-gray-200 pb-2">
+                <button onClick={toggleSalonMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {t('nav.le_salon')}
+                  <span className={`transition-transform ${isSalonMenuOpen ? 'rotate-180' : ''}`}>▾</span>
+                </button>
+                {isSalonMenuOpen && salonMenuItems.map((item) => (
+                  <Link key={item.name} to={item.href} className="block px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
                     <div>{item.name}</div>
                     <div className="text-xs text-gray-500">{item.description}</div>
                   </Link>
                 ))}
               </div>
 
-              {/* Mobile Participate Menu */}
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <div className="px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t('nav.participate')}
-                </div>
-                {participateMenuItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
-                    onClick={closeMenu}
-                  >
+              {/* ══ Exposer ══ */}
+              <div className="border-b border-gray-200 pb-2">
+                <button onClick={toggleExposerMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {t('nav.exposer')}
+                  <span className={`transition-transform ${isExposerMenuOpen ? 'rotate-180' : ''}`}>▾</span>
+                </button>
+                {isExposerMenuOpen && exposerMenuItems.map((item) => (
+                  <Link key={item.name} to={item.href} className="block px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
                     <div>{item.name}</div>
                     <div className="text-xs text-gray-500">{item.description}</div>
                   </Link>
                 ))}
               </div>
 
-              {/* Mobile Media Menu */}
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <div className="px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
-                  <Video className="w-4 h-4 mr-2" />
-                  {t('media.menu_title')}
-                </div>
-                {mediaMenuItems.map((item) => {
+              {/* ══ Visiter ══ */}
+              <div className="border-b border-gray-200 pb-2">
+                <button onClick={toggleVisiterMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {t('nav.visiter')}
+                  <span className={`transition-transform ${isVisiterMenuOpen ? 'rotate-180' : ''}`}>▾</span>
+                </button>
+                {isVisiterMenuOpen && visiterMenuItems.map((item) => (
+                  <Link key={item.name} to={item.href} className="block px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
+                    <div>{item.name}</div>
+                    <div className="text-xs text-gray-500">{item.description}</div>
+                  </Link>
+                ))}
+              </div>
+
+              {/* ══ Partenaires ══ */}
+              <div className="border-b border-gray-200 pb-2">
+                <button onClick={togglePartenairesMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {t('nav.partners')}
+                  <span className={`transition-transform ${isPartenairesMenuOpen ? 'rotate-180' : ''}`}>▾</span>
+                </button>
+                {isPartenairesMenuOpen && partenairesMenuItems.map((item) => (
+                  <Link key={item.name} to={item.href} className="block px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
+                    <div>{item.name}</div>
+                    <div className="text-xs text-gray-500">{item.description}</div>
+                  </Link>
+                ))}
+              </div>
+
+              {/* ══ Programme (lien direct) ══ */}
+              <Link
+                to={ROUTES.EVENTS}
+                className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
+                onClick={closeMenu}
+              >
+                {t('nav.programme')}
+              </Link>
+
+              {/* ══ Médias ══ */}
+              {mediaVisible && mediaMenuItems.length > 0 && (
+              <div className="border-t border-gray-200 pt-2">
+                <button onClick={toggleMediaMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <span className="flex items-center"><Video className="w-4 h-4 mr-2" />{t('media.menu_title')}</span>
+                  <span className={`transition-transform ${isMediaMenuOpen ? 'rotate-180' : ''}`}>▾</span>
+                </button>
+                {isMediaMenuOpen && mediaMenuItems.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className="flex items-start px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
-                      onClick={closeMenu}
-                    >
+                    <Link key={item.name} to={item.href} className="flex items-start px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
                       <Icon className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" />
                       <div>
                         <div>{item.name}</div>
@@ -678,11 +716,12 @@ export const Header: React.FC = memo(() => {
                   );
                 })}
               </div>
+              )}
 
-              {/* Mobile Contact Link */}
+              {/* ══ Contact ══ */}
               <div className="border-t border-gray-200 pt-2 mt-2">
                 <Link
-                  to="/contact"
+                  to={ROUTES.CONTACT}
                   className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
                   onClick={closeMenu}
                 >

@@ -184,7 +184,7 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
             {user.type === 'partner' ? 'Partenaire' : 'Exposant'} • {timeSlots.filter(s => s.available).length} créneau{timeSlots.filter(s => s.available).length !== 1 ? 'x' : ''} disponible{timeSlots.filter(s => s.available).length !== 1 ? 's' : ''}
           </p>
           <div className="mt-2 inline-flex items-center px-2 py-1 rounded bg-blue-50 text-blue-700 text-xs font-medium">
-            📅 SIB 2026 : 1-3 avril uniquement
+            📅 SIB 2026 : 25-29 novembre uniquement
           </div>
         </div>
         {showBooking && (

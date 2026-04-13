@@ -12,7 +12,7 @@ export const matchingTranslations = {
     'matching.score': 'Score de compatibilité',
     
     // Secteurs d'activité
-    'matching.sector.port_operations': 'Exploitation Bâtiment',
+    'matching.sector.port_operations': 'Exploitation & Gestion BTP',
     'matching.sector.construction_tech': 'Technologies BTP',
     'matching.sector.digital_transformation': 'Transformation Digitale',
     'matching.sector.logistics': 'Logistique et Supply Chain',
@@ -26,7 +26,7 @@ export const matchingTranslations = {
     'matching.sector.energy': 'Énergie et Utilities',
     'matching.sector.it': 'IT et Systèmes',
     'matching.sector.construction_services': 'Services BTP',
-    'matching.sector.cargo_handling': 'Manutention de Marchandises',
+    'matching.sector.cargo_handling': 'Gestion des Matériaux de Construction',
     
     // Centres d'intérêt
     'matching.interest.innovation': 'Innovation et R&D',
@@ -37,7 +37,7 @@ export const matchingTranslations = {
     'matching.interest.blockchain': 'Blockchain',
     'matching.interest.iot': 'Internet des Objets (IoT)',
     'matching.interest.cybersecurity': 'Cybersécurité',
-    'matching.interest.smart_ports': 'Bâtiments Intelligents',
+    'matching.interest.smart_ports': 'Bâtiments Intelligents (Smart Building)',
     'matching.interest.green_tech': 'Technologies Vertes',
     
     // Objectifs networking
@@ -89,7 +89,7 @@ export const matchingTranslations = {
     'matching.score': 'Compatibility score',
     
     // Sectors
-    'matching.sector.port_operations': 'Bâtiment Operations',
+    'matching.sector.port_operations': 'Construction Operations & Management',
     'matching.sector.construction_tech': 'Bâtiment Technologies',
     'matching.sector.digital_transformation': 'Digital Transformation',
     'matching.sector.logistics': 'Logistics and Supply Chain',
@@ -103,7 +103,7 @@ export const matchingTranslations = {
     'matching.sector.energy': 'Energy and Utilities',
     'matching.sector.it': 'IT and Systems',
     'matching.sector.construction_services': 'Bâtiment Services',
-    'matching.sector.cargo_handling': 'Cargo Handling',
+    'matching.sector.cargo_handling': 'Construction Materials Management',
     
     // Interests
     'matching.interest.innovation': 'Innovation and R&D',
@@ -114,7 +114,7 @@ export const matchingTranslations = {
     'matching.interest.blockchain': 'Blockchain',
     'matching.interest.iot': 'Internet of Things (IoT)',
     'matching.interest.cybersecurity': 'Cybersecurity',
-    'matching.interest.smart_ports': 'Smart Bâtiments',
+    'matching.interest.smart_ports': 'Smart Buildings & PropTech',
     'matching.interest.green_tech': 'Green Technologies',
     
     // Networking goals

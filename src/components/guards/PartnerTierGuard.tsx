@@ -1,4 +1,4 @@
-﻿import { useEffect, ReactNode } from 'react';
+import { useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import useAuthStore from '../../store/authStore';
@@ -16,20 +16,20 @@ interface PartnerTierGuardProps {
 }
 
 /**
- * Guard pour protéger les routes selon le niveau partenaire
+ * Guard pour prot�ger les routes selon le niveau partenaire
  *
  * Utilisation:
  * - requiredTier: Niveau exact requis
- * - minimumTier: Niveau minimum requis (ex: silver ou supérieur)
+ * - minimumTier: Niveau minimum requis (ex: silver ou sup�rieur)
  *
  * @example
  * // Require exact tier
- * <PartnerTierGuard requiredTier="platinum">
- *   <platinumOnlyFeature />
+ * <PartnerTierGuard requiredTier="official_sponsor">
+ *   <OfficialSponsorOnlyFeature />
  * </PartnerTierGuard>
  *
  * @example
- * // Require minimum tier (silver, gold, or platinum)
+ * // Require minimum tier (silver, gold, or official_sponsor)
  * <PartnerTierGuard minimumTier="silver">
  *   <PremiumFeature />
  * </PartnerTierGuard>
@@ -47,38 +47,38 @@ export function PartnerTierGuard({
   const { user } = useAuthStore();
 
   useEffect(() => {
-    // Vérifier que l'utilisateur est connecté
+    // V�rifier que l'utilisateur est connect�
     if (!user) {
       if (showToast) {
-        toast.error('Accès refusé', {
-          description: 'Vous devez être connecté pour accéder à cette page.'
+        toast.error('Acc�s refus�', {
+          description: 'Vous devez �tre connect� pour acc�der � cette page.'
         });
       }
       navigate(ROUTES.LOGIN, { replace: true });
       return;
     }
 
-    // Vérifier que l'utilisateur est un partenaire
+    // V�rifier que l'utilisateur est un partenaire
     if (user.type !== 'partner') {
       if (showToast) {
-        toast.error('Accès refusé', {
-          description: 'Cette page est réservée aux partenaires.'
+        toast.error('Acc�s refus�', {
+          description: 'Cette page est r�serv�e aux partenaires.'
         });
       }
       navigate(ROUTES.UNAUTHORIZED, { replace: true });
       return;
     }
 
-    // Récupérer le niveau partenaire (depuis le profil ou la base de données)
-    const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'museum') as PartnerTier;
+    // R�cup�rer le niveau partenaire (depuis le profil ou la base de donn�es)
+    const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'partner') as PartnerTier;
 
-    // Vérification du niveau requis exact
+    // V�rification du niveau requis exact
     if (requiredTier && partnerTier !== requiredTier) {
       const requiredConfig = getPartnerTierConfig(requiredTier);
 
       if (showToast) {
-        toast.error('Accès réservé', {
-          description: customMessage || `Cette fonctionnalité est réservée aux partenaires ${requiredConfig.displayName}.`,
+        toast.error('Acc�s r�serv�', {
+          description: customMessage || `Cette fonctionnalit� est r�serv�e aux partenaires ${requiredConfig.displayName}.`,
           action: {
             label: 'Voir les offres',
             onClick: () => navigate(ROUTES.PARTNER_PROFILE)
@@ -89,17 +89,17 @@ export function PartnerTierGuard({
       return;
     }
 
-    // Vérification du niveau minimum
+    // V�rification du niveau minimum
     if (minimumTier) {
       const comparison = comparePartnerTiers(partnerTier, minimumTier);
 
-      // Si le niveau actuel est inférieur au minimum requis
+      // Si le niveau actuel est inf�rieur au minimum requis
       if (comparison < 0) {
         const minimumConfig = getPartnerTierConfig(minimumTier);
 
         if (showToast) {
-          toast.error('Accès réservé', {
-            description: customMessage || `Cette fonctionnalité nécessite au minimum le niveau ${minimumConfig.displayName}.`,
+          toast.error('Acc�s r�serv�', {
+            description: customMessage || `Cette fonctionnalit� n�cessite au minimum le niveau ${minimumConfig.displayName}.`,
             action: {
               label: 'Upgrader',
               onClick: () => navigate(ROUTES.PARTNER_PROFILE)
@@ -111,17 +111,17 @@ export function PartnerTierGuard({
       }
     }
 
-    // Vérification de quota spécifique (si fourni)
+    // V�rification de quota sp�cifique (si fourni)
     if (quotaType && user.type === 'partner') {
-      const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'museum') as PartnerTier;
+      const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'partner') as PartnerTier;
 
-      // Vérifier si le tier a accès à ce quota
+      // V�rifier si le tier a acc�s � ce quota
       const hasAccess = hasPartnerAccess(partnerTier, quotaType as keyof PartnerTierConfig['quotas']);
 
       if (!hasAccess) {
         toast({
-          title: 'Accès restreint',
-          description: customMessage || `Votre niveau ${partnerTier} n'a pas accès à cette fonctionnalité. Veuillez upgrader votre compte.`,
+          title: 'Acc�s restreint',
+          description: customMessage || `Votre niveau ${partnerTier} n'a pas acc�s � cette fonctionnalit�. Veuillez upgrader votre compte.`,
           variant: 'destructive',
           action: {
             label: 'Upgrader',
@@ -132,26 +132,26 @@ export function PartnerTierGuard({
         return;
       }
 
-      // Note: La vérification de l'utilisation actuelle vs quota max
-      // nécessite une requête DB et sera implémentée au niveau du composant
-      // qui utilise PartnerTierGuard, pas ici pour éviter les requêtes multiples
+      // Note: La v�rification de l'utilisation actuelle vs quota max
+      // n�cessite une requ�te DB et sera impl�ment�e au niveau du composant
+      // qui utilise PartnerTierGuard, pas ici pour �viter les requ�tes multiples
     }
   }, [user, requiredTier, minimumTier, quotaType, fallbackRoute, showToast, customMessage, navigate]);
 
-  // Si toutes les vérifications passent, afficher le contenu
+  // Si toutes les v�rifications passent, afficher le contenu
   if (!user || user.type !== 'partner') {
     return null;
   }
 
   if (requiredTier) {
-    const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'museum') as PartnerTier;
+    const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'partner') as PartnerTier;
     if (partnerTier !== requiredTier) {
       return null;
     }
   }
 
   if (minimumTier) {
-    const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'museum') as PartnerTier;
+    const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'partner') as PartnerTier;
     const comparison = comparePartnerTiers(partnerTier, minimumTier);
     if (comparison < 0) {
       return null;
@@ -162,7 +162,7 @@ export function PartnerTierGuard({
 }
 
 /**
- * Hook pour vérifier le niveau partenaire
+ * Hook pour v�rifier le niveau partenaire
  */
 export function usePartnerTier() {
   const { user } = useAuthStore();
@@ -171,11 +171,11 @@ export function usePartnerTier() {
     return null;
   }
 
-  return (user.partner_tier || user.profile?.partner_tier || 'museum') as PartnerTier;
+  return (user.partner_tier || user.profile?.partner_tier || 'partner') as PartnerTier;
 }
 
 /**
- * Hook pour vérifier l'accès à une fonctionnalité
+ * Hook pour v�rifier l'acc�s � une fonctionnalit�
  */
 export function usePartnerAccess(minimumTier?: PartnerTier, requiredTier?: PartnerTier): boolean {
   const currentTier = usePartnerTier();

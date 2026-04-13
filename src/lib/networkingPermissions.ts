@@ -1,7 +1,7 @@
 export type UserType = 'admin' | 'partner' | 'exhibitor' | 'visitor';
 export type VisitorPassType = 'free' | 'premium';
-export type ExhibitorStatus = 'basic' | 'premium' | 'platinum';
-export type PartnerTier = 'bronze' | 'silver' | 'gold' | 'platinum';
+export type ExhibitorStatus = 'basic' | 'premium';
+export type PartnerTier = 'partner' | 'silver' | 'gold' | 'official_sponsor' | 'organizer' | 'co_organizer' | 'delegated_organizer' | 'press_partner';
 
 export interface NetworkingPermissions {
   canAccessNetworking: boolean;
@@ -78,7 +78,7 @@ export function getNetworkingPermissions(userType: UserType, userLevel?: string)
       };
 
     case 'partner': {
-      const partnerTier = (userLevel as PartnerTier) || 'bronze';
+      const partnerTier = (userLevel as PartnerTier) || 'partner';
       const partnerMultiplier = getPartnerMultiplier(partnerTier);
       return {
         ...basePermissions,
@@ -88,15 +88,15 @@ export function getNetworkingPermissions(userType: UserType, userLevel?: string)
         canMakeConnections: true,
         canScheduleMeetings: true,
         canAccessPremiumFeatures: true,
-        canAccessVIPLounge: partnerTier !== 'bronze',
+        canAccessVIPLounge: partnerTier !== 'partner' && partnerTier !== 'press_partner',
         canAccessPartnerEvents: true,
         maxConnectionsPerDay: 50 * partnerMultiplier,
         maxMessagesPerDay: 100 * partnerMultiplier,
         maxMeetingsPerDay: 15 * partnerMultiplier,
         priorityLevel: 7 + partnerMultiplier,
-        canBypassQueue: partnerTier === 'gold' || partnerTier === 'platinum',
+        canBypassQueue: partnerTier === 'gold' || partnerTier === 'official_sponsor' || partnerTier === 'organizer',
         canAccessAIRecommendations: true,
-        canAccessAnalytics: partnerTier !== 'bronze',
+        canAccessAnalytics: partnerTier !== 'partner' && partnerTier !== 'press_partner',
       };
     }
 
@@ -111,13 +111,13 @@ export function getNetworkingPermissions(userType: UserType, userLevel?: string)
         canMakeConnections: true,
         canScheduleMeetings: true,
         canAccessPremiumFeatures: exhibitorStatus !== 'basic',
-        canAccessVIPLounge: exhibitorStatus === 'platinum',
+        canAccessVIPLounge: exhibitorStatus === 'premium',
         canAccessPartnerEvents: false,
         maxConnectionsPerDay: 20 * exhibitorMultiplier,
         maxMessagesPerDay: 50 * exhibitorMultiplier,
         maxMeetingsPerDay: 8 * exhibitorMultiplier,
         priorityLevel: 4 + exhibitorMultiplier,
-        canBypassQueue: exhibitorStatus === 'platinum',
+        canBypassQueue: exhibitorStatus === 'premium',
         canAccessAIRecommendations: true,
         canAccessAnalytics: exhibitorStatus !== 'basic',
       };
@@ -221,16 +221,16 @@ export function getEventAccessPermissions(userType: UserType, userLevel?: string
       };
 
     case 'partner': {
-      const partnerTier = (userLevel as PartnerTier) || 'bronze';
+      const partnerTier = (userLevel as PartnerTier) || 'partner';
       return {
         ...baseEventPermissions,
         canAccessPremiumWorkshops: true,
-        canAccessVIPEvents: partnerTier !== 'bronze',
+        canAccessVIPEvents: partnerTier !== 'partner' && partnerTier !== 'press_partner',
         canAccessPartnerExclusives: true,
         canAccessNetworkingBreakfast: true,
-        canAccessGalaDinner: partnerTier === 'gold' || partnerTier === 'platinum',
-        canAccessExecutiveLounge: partnerTier === 'platinum',
-        maxEventsPerDay: partnerTier === 'platinum' ? -1 : 10,
+        canAccessGalaDinner: partnerTier === 'gold' || partnerTier === 'official_sponsor' || partnerTier === 'organizer',
+        canAccessExecutiveLounge: partnerTier === 'official_sponsor' || partnerTier === 'organizer',
+        maxEventsPerDay: partnerTier === 'official_sponsor' || partnerTier === 'organizer' ? -1 : 10,
         hasQRAccess: true,
         qrAccessLevel: 'partner',
       };
@@ -241,12 +241,12 @@ export function getEventAccessPermissions(userType: UserType, userLevel?: string
       return {
         ...baseEventPermissions,
         canAccessPremiumWorkshops: exhibitorStatus !== 'basic',
-        canAccessVIPEvents: exhibitorStatus === 'platinum',
+        canAccessVIPEvents: exhibitorStatus === 'premium',
         canAccessPartnerExclusives: false,
         canAccessNetworkingBreakfast: true,
-        canAccessGalaDinner: exhibitorStatus === 'platinum',
-        canAccessExecutiveLounge: exhibitorStatus === 'platinum',
-        maxEventsPerDay: exhibitorStatus === 'platinum' ? -1 : 8,
+        canAccessGalaDinner: exhibitorStatus === 'premium',
+        canAccessExecutiveLounge: exhibitorStatus === 'premium',
+        maxEventsPerDay: exhibitorStatus === 'premium' ? -1 : 8,
         hasQRAccess: true,
         qrAccessLevel: 'exhibitor',
       };
@@ -313,10 +313,14 @@ function getVisitorEventPermissions(passType: VisitorPassType): EventAccessPermi
  */
 function getPartnerMultiplier(tier: PartnerTier): number {
   switch (tier) {
-    case 'bronze': return 1;
+    case 'partner': return 1;
+    case 'press_partner': return 1;
     case 'silver': return 1.5;
     case 'gold': return 2;
-    case 'platinum': return 3;
+    case 'official_sponsor': return 3;
+    case 'organizer': return 3;
+    case 'co_organizer': return 2.5;
+    case 'delegated_organizer': return 2.5;
     default: return 1;
   }
 }
@@ -324,8 +328,7 @@ function getPartnerMultiplier(tier: PartnerTier): number {
 function getExhibitorMultiplier(status: ExhibitorStatus): number {
   switch (status) {
     case 'basic': return 1;
-    case 'premium': return 1.5;
-    case 'platinum': return 2;
+    case 'premium': return 2;
     default: return 1;
   }
 }

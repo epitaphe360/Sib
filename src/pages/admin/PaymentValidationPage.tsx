@@ -608,11 +608,11 @@ export default function PaymentValidationPage() {
                         <div className="bg-gray-50 rounded-xl p-4">
                           <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Niveau Partenaire</p>
                           <p className="font-semibold text-gray-900">
-                            {request.metadata.partnerTier === 'gold' && '🥇 Gold Partner'}
-                            {request.metadata.partnerTier === 'silver' && '🥈 Silver Partner'}
-                            {request.metadata.partnerTier === 'platinum' && '💎 Platinum Partner'}
-                            {request.metadata.partnerTier === 'museum' && '🏛️ Museum Partner'}
-                            {!['gold', 'silver', 'platinum', 'museum'].includes(request.metadata.partnerTier) && request.metadata.partnerTier}
+                            {request.metadata.partnerTier === 'gold' && '🥇 Sponsor Gold'}
+                            {request.metadata.partnerTier === 'silver' && '🥈 Sponsor Silver'}
+                            {request.metadata.partnerTier === 'official_sponsor' && '💎 Sponsor Officiel'}
+                            {request.metadata.partnerTier === 'organizer' && '🏆 Organisateur'}
+                            {!['gold', 'silver', 'official_sponsor', 'organizer'].includes(request.metadata.partnerTier) && request.metadata.partnerTier}
                           </p>
                         </div>
                       )}

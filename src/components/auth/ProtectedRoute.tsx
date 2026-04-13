@@ -22,19 +22,26 @@ export default function ProtectedRoute({
   const [isReady, setIsReady] = useState(false);
   const readyRef = useRef(false);
 
-  // Wait ONE tick for zustand hydration - only once
+  // Wait for zustand hydration + auth initialization
   useEffect(() => {
     if (readyRef.current) return;
     const timer = setTimeout(() => {
       readyRef.current = true;
       setIsReady(true);
-    }, 100);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
-  // Show nothing while loading
+  // Show spinner while loading (not blank screen)
   if (!isReady || isLoading) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-gray-500">Chargement...</p>
+        </div>
+      </div>
+    );
   }
 
   // Not authenticated → login

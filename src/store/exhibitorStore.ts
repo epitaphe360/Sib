@@ -76,7 +76,8 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
           companyName.toLowerCase().includes(search) ||
           description.toLowerCase().includes(search);
 
-        return exhibitor.verified && exhibitor.miniSite?.published === true && matchesCategory && matchesSector && matchesSearch;
+        const isPubliclyVisible = exhibitor.isPublished === true || exhibitor.miniSite?.published === true;
+        return exhibitor.verified && isPubliclyVisible && matchesCategory && matchesSector && matchesSearch;
       });
 
       set({ 
@@ -183,7 +184,9 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
         description.toLowerCase().includes(search);
       
       // Seuls les exposants vérifiés ET publiés sont visibles publiquement
-      return exhibitor.verified && exhibitor.miniSite?.published === true && matchesCategory && matchesSector && matchesSearch;
+      // La publication peut provenir soit de exhibitors.is_published soit de mini_sites.published.
+      const isPubliclyVisible = exhibitor.isPublished === true || exhibitor.miniSite?.published === true;
+      return exhibitor.verified && isPubliclyVisible && matchesCategory && matchesSector && matchesSearch;
     });
 
     console.log(`📊 ${filtered.length} exposants après filtrage`);

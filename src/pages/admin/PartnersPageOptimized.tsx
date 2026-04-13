@@ -55,7 +55,7 @@ import { logger } from '../../lib/logger';
 interface Partner {
   id: string;
   organization_name: string;
-  partner_type: 'institutional' | 'platinum' | 'gold' | 'silver' | 'bronze';
+  partner_type: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner';
   sector: string;
   country: string;
   website: string | null;
@@ -158,11 +158,12 @@ export default function PartnersPageOptimized() {
 
   const getPartnerTypeBadge = (type: string) => {
     const badges = {
-      institutional: { label: 'Institutionnel', color: 'bg-purple-100 text-purple-800' },
-      platinum: { label: 'Platine', color: 'bg-gray-100 text-gray-800' },
-      gold: { label: 'Or', color: 'bg-yellow-100 text-yellow-800' },
-      silver: { label: 'Argent', color: 'bg-gray-100 text-gray-600' },
-      bronze: { label: 'Bronze', color: 'bg-orange-100 text-orange-800' }
+      organizer: { label: 'Organisateur', color: 'bg-purple-100 text-purple-800' },
+      co_organizer: { label: 'Co-Organisateur', color: 'bg-indigo-100 text-indigo-800' },
+      official_sponsor: { label: 'Sponsor Officiel', color: 'bg-yellow-100 text-yellow-800' },
+      delegated_organizer: { label: 'Org. Délégué', color: 'bg-blue-100 text-blue-800' },
+      partner: { label: 'Partenaire', color: 'bg-gray-100 text-gray-600' },
+      press_partner: { label: 'Partenaire Presse', color: 'bg-orange-100 text-orange-800' }
     };
     const badge = badges[type as keyof typeof badges] || badges.silver;
     return <Badge className={badge.color}>{badge.label}</Badge>;
@@ -290,9 +291,9 @@ export default function PartnersPageOptimized() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Platine/Or</p>
+                  <p className="text-sm font-medium text-gray-600">Sponsors Officiels</p>
                   <p className="text-3xl font-bold text-yellow-600">
-                    {partners.filter(p => ['platinum', 'gold'].includes(p.partner_type)).length}
+                    {partners.filter(p => ['official_sponsor', 'organizer'].includes(p.partner_type)).length}
                   </p>
                 </div>
                 <Award className="h-8 w-8 text-yellow-600" />
@@ -357,11 +358,12 @@ export default function PartnersPageOptimized() {
                     className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
                   >
                     <option value="">Tous les types</option>
-                    <option value="institutional">Institutionnel</option>
-                    <option value="platinum">Platine</option>
-                    <option value="gold">Or</option>
-                    <option value="silver">Argent</option>
-                    <option value="bronze">Bronze</option>
+                    <option value="organizer">Organisateur</option>
+                    <option value="co_organizer">Co-Organisateur</option>
+                    <option value="official_sponsor">Sponsor Officiel</option>
+                    <option value="delegated_organizer">Org. Délégué</option>
+                    <option value="partner">Partenaire</option>
+                    <option value="press_partner">Partenaire Presse</option>
                   </select>
                 </div>
               </div>

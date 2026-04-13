@@ -538,8 +538,8 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     // VALIDATION TEMPORELLE: Vérifier que le créneau est valide
     const slotDate = slot.date ? new Date(slot.date) : null;
     const now = new Date();
-    const salonStart = new Date('2026-04-01T00:00:00');
-    const salonEnd = new Date('2026-04-03T23:59:59');
+    const salonStart = new Date('2026-11-25T00:00:00');
+    const salonEnd = new Date('2026-11-29T23:59:59');
 
     if (!slotDate) {
       console.log('❌ Slot has no date!');
@@ -553,7 +553,7 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
 
     if (slotDate < salonStart || slotDate > salonEnd) {
       console.log('❌ Slot is outside salon dates!');
-      throw new Error('Ce créneau est en dehors des dates du salon (1-3 Avril 2026)');
+      throw new Error('Ce créneau est en dehors des dates du salon (25-29 Novembre 2026)');
     }
     console.log('✅ Slot date is valid');
 

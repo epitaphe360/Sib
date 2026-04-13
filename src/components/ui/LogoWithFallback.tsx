@@ -9,23 +9,32 @@ interface LogoWithFallbackProps {
 
 // Fonction pour générer un placeholder SVG avec les initiales
 function generatePlaceholder(name: string): string {
-  const initials = name
-    .split(' ')
-    .map(word => word.charAt(0))
-    .join('')
-    .substring(0, 2)
-    .toUpperCase();
+  try {
+    // Extraire uniquement les caractères ASCII pour éviter btoa/SVG Unicode errors
+    const asciiName = name.replace(/[^\x00-\x7F]/g, '');
+    const rawInitials = (asciiName.length > 0 ? asciiName : 'P')
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .substring(0, 2)
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, '') || 'P';
 
-  const colors = [
-    '#1e40af', '#7c3aed', '#dc2626', '#059669',
-    '#ea580c', '#0891b2', '#be185d', '#4338ca'
-  ];
-  const colorIndex = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
-  const backgroundColor = colors[colorIndex];
+    const colors = [
+      '#1e40af', '#7c3aed', '#dc2626', '#059669',
+      '#ea580c', '#0891b2', '#be185d', '#4338ca'
+    ];
+    const colorIndex = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
+    const backgroundColor = colors[colorIndex];
 
-  const svgData = `<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="6" fill="${backgroundColor}"/><text x="24" y="30" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-weight="600" font-size="16">${initials}</text></svg>`;
+    // Utiliser encodeURIComponent pour une data URI UTF-8 safe (pas de btoa)
+    const svgData = `<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="6" fill="${backgroundColor}"/><text x="24" y="30" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-weight="600" font-size="16">${rawInitials}</text></svg>`;
 
-  return `data:image/svg+xml;base64,${btoa(svgData)}`;
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgData)}`;
+  } catch {
+    // Fallback ultime : carré coloré sans texte
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="6" fill="#1e40af"/></svg>')}`;
+  }
 }
 
 export default function LogoWithFallback({

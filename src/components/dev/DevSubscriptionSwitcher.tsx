@@ -201,44 +201,44 @@ export default function DevSubscriptionSwitcher() {
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <Button
-                    onClick={() => updateUserLevel('partner', 'bronze')}
+                    onClick={() => updateUserLevel('partner', 'partner')}
                     disabled={isUpdating}
-                    variant={currentRole === 'partner' && currentLevel === 'bronze' ? 'primary' : 'outline'}
+                    variant={currentRole === 'partner' && currentLevel === 'partner' ? 'primary' : 'outline'}
                     size="sm"
                     className="flex items-center justify-center gap-1"
                   >
-                    <Award className="h-3 w-3 text-orange-700" />
-                    Bronze
+                    <Award className="h-3 w-3 text-indigo-500" />
+                    Partenaire
                   </Button>
                   <Button
-                    onClick={() => updateUserLevel('partner', 'silver')}
+                    onClick={() => updateUserLevel('partner', 'official_sponsor')}
                     disabled={isUpdating}
-                    variant={currentRole === 'partner' && currentLevel === 'silver' ? 'primary' : 'outline'}
+                    variant={currentRole === 'partner' && currentLevel === 'official_sponsor' ? 'primary' : 'outline'}
                     size="sm"
                     className="flex items-center justify-center gap-1"
                   >
-                    <Award className="h-3 w-3 text-gray-400" />
-                    Silver
+                    <Crown className="h-3 w-3 text-purple-500" />
+                    Sponsor Officiel
                   </Button>
                   <Button
-                    onClick={() => updateUserLevel('partner', 'gold')}
+                    onClick={() => updateUserLevel('partner', 'organizer')}
                     disabled={isUpdating}
-                    variant={currentRole === 'partner' && currentLevel === 'gold' ? 'primary' : 'outline'}
+                    variant={currentRole === 'partner' && currentLevel === 'organizer' ? 'primary' : 'outline'}
                     size="sm"
                     className="flex items-center justify-center gap-1"
                   >
-                    <Award className="h-3 w-3 text-yellow-500" />
-                    Gold
+                    <Crown className="h-3 w-3 text-yellow-500" />
+                    Organisateur
                   </Button>
                   <Button
-                    onClick={() => updateUserLevel('partner', 'platinum')}
+                    onClick={() => updateUserLevel('partner', 'press_partner')}
                     disabled={isUpdating}
-                    variant={currentRole === 'partner' && currentLevel === 'platinum' ? 'primary' : 'outline'}
+                    variant={currentRole === 'partner' && currentLevel === 'press_partner' ? 'primary' : 'outline'}
                     size="sm"
                     className="flex items-center justify-center gap-1"
                   >
-                    <Crown className="h-3 w-3 text-blue-400" />
-                    Platinum
+                    <Award className="h-3 w-3 text-red-500" />
+                    Presse
                   </Button>
                 </div>
               </div>

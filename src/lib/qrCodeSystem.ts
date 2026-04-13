@@ -131,14 +131,14 @@ export function generateQRCodeData(
                      (userType === 'visitor' && userLevel === 'premium'),
     vipEvents: userType === 'admin' || userType === 'partner' ||
                (userType === 'visitor' && userLevel === 'premium') ||
-               (userType === 'exhibitor' && userLevel === 'platinum'),
+               (userType === 'exhibitor' && userLevel === 'premium'),
     partnerExclusives: userType === 'admin' || userType === 'partner',
     galaDinner: userType === 'admin' || userType === 'partner' ||
                 (userType === 'visitor' && userLevel === 'premium') ||
-                (userType === 'exhibitor' && userLevel === 'platinum'),
+                (userType === 'exhibitor' && userLevel === 'premium'),
     executiveLounge: userType === 'admin' ||
-                    (userType === 'partner' && userLevel === 'platinum') ||
-                    (userType === 'exhibitor' && userLevel === 'platinum') ||
+                    (userType === 'partner' && userLevel === 'official_sponsor') ||
+                    (userType === 'exhibitor' && userLevel === 'premium') ||
                     (userType === 'visitor' && userLevel === 'premium'),
   };
 
@@ -222,7 +222,7 @@ export function canAccessEvent(
       if (userType === 'partner') {
         return { canAccess: true, event };
       }
-      if (userType === 'exhibitor' && userLevel === 'platinum') {
+      if (userType === 'exhibitor' && userLevel === 'premium') {
         return { canAccess: true, event };
       }
       if (userType === 'visitor' && userLevel === 'premium') {
@@ -240,7 +240,7 @@ export function canAccessEvent(
       if (userType === 'partner') {
         return { canAccess: true, event };
       }
-      if (userType === 'exhibitor' && userLevel === 'platinum') {
+      if (userType === 'exhibitor' && userLevel === 'premium') {
         return { canAccess: true, event };
       }
       if (userType === 'visitor' && userLevel === 'premium') {
@@ -353,9 +353,9 @@ export function getHighestAccessLevel(
       };
 
     case 'partner': {
-      const partnerLevel = userLevel === 'platinum' ? 'Partenaire Platinum' :
-                          userLevel === 'gold' ? 'Partenaire Gold' :
-                          userLevel === 'silver' ? 'Partenaire Silver' : 'Partenaire Bronze';
+      const partnerLevel = userLevel === 'official_sponsor' ? 'Sponsor Officiel' :
+                          userLevel === 'gold' ? 'Sponsor Gold' :
+                          userLevel === 'silver' ? 'Sponsor Silver' : 'Partenaire';
       return {
         level: partnerLevel,
         description: 'Accès privilégié aux événements partenaires et networking exclusif.',
@@ -364,14 +364,14 @@ export function getHighestAccessLevel(
           'Networking premium illimité',
           'Accès lounge exécutif',
           'Priorité sur les rendez-vous',
-          ...(userLevel === 'platinum' || userLevel === 'gold' ? ['Dîner de gala'] : []),
+          ...(userLevel === 'official_sponsor' || userLevel === 'gold' ? ['Dîner de gala'] : []),
         ],
       };
     }
 
     case 'exhibitor': {
-      const exhibitorLevel = userLevel === 'platinum' ? 'Exposant Platinum' :
-                             userLevel === 'premium' ? 'Exposant Premium' : 'Exposant Standard';
+      const exhibitorLevel = userLevel === 'premium' ? 'Exposant Premium' :
+                             userLevel === 'basic' ? 'Exposant Standard' : 'Exposant Standard';
       return {
         level: exhibitorLevel,
         description: 'Accès exposant avec privilèges de présentation et networking.',
@@ -380,7 +380,7 @@ export function getHighestAccessLevel(
           'Forum exposants',
           'Networking professionnel',
           'Gestion des rendez-vous',
-          ...(userLevel === 'platinum' ? ['Événements VIP', 'Dîner de gala'] : []),
+          ...(userLevel === 'premium' ? ['Événements VIP', 'Dîner de gala'] : []),
         ],
       };
     }

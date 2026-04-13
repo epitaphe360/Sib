@@ -22,22 +22,22 @@ export const DemoAccountsPage: React.FC = () => {
     // Visiteurs
     { email: 'youssef.alami@royalairmaroc.com', password: 'TestPassword123!', label: '👤 Visiteur - Royal Air Maroc', type: 'visitor', color: '#3B82F6' },
     { email: 'sara.benjelloun@ocp.ma', password: 'TestPassword123!', label: '👤 Visiteur - OCP', type: 'visitor', color: '#3B82F6' },
-    { email: 'ahmed.tazi@tangermed.ma', password: 'TestPassword123!', label: '👤 Visiteur - Tanger Med', type: 'visitor', color: '#3B82F6' },
+    { email: 'ahmed.tazi@tangermed.ma', password: 'TestPassword123!', label: '👤 Visiteur - Groupe Atlas', type: 'visitor', color: '#3B82F6' },
     
     // Exposants
-    { email: 'r.senhaji@somaport.ma', password: 'TestPassword123!', label: '🏪 Exposant - Somaport', type: 'exhibitor', color: '#10B981' },
-    { email: 'a.idrissi@anp.org.ma', password: 'TestPassword123!', label: '🏭 Exposant - ANP', type: 'exhibitor', color: '#14B8A6' },
+    { email: 'r.senhaji@somaport.ma', password: 'TestPassword123!', label: '🏪 Exposant - Constructa Maroc', type: 'exhibitor', color: '#10B981' },
+    { email: 'a.idrissi@anp.org.ma', password: 'TestPassword123!', label: '🏭 Exposant - BTP Infrastructures', type: 'exhibitor', color: '#14B8A6' },
     { email: 'f.amrani@ocpgroup.ma', password: 'TestPassword123!', label: '🏗️ Exposant - OCP Group', type: 'exhibitor', color: '#06B6D4' },
-    { email: 'k.bennani@tangermed.ma', password: 'TestPassword123!', label: '🚢 Exposant - Tanger Med', type: 'exhibitor', color: '#6366F1' },
+    { email: 'k.bennani@tangermed.ma', password: 'TestPassword123!', label: '🏗️ Exposant - Groupe Atlas', type: 'exhibitor', color: '#6366F1' },
     
     // Partenaires
-    { email: 'contact@bollore-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - Bolloré', type: 'partner', color: '#F59E0B' },
-    { email: 'contact@msc-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - MSC Maroc', type: 'partner', color: '#D97706' },
-    { email: 'contact@cma-cgm.ma', password: 'TestPassword123!', label: '🤝 Partenaire - CMA CGM', type: 'partner', color: '#EAB308' },
-    { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🏛️ Musée Bâtiment', type: 'partner', color: '#9CA3AF' },
+    { email: 'contact@bollore-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - MatBuild Group', type: 'partner', color: '#F59E0B' },
+    { email: 'contact@msc-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - UrbanTech Maroc', type: 'partner', color: '#D97706' },
+    { email: 'contact@cma-cgm.ma', password: 'TestPassword123!', label: '🤝 Partenaire - EcoBeton', type: 'partner', color: '#EAB308' },
+    { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🥈 Partenaire', type: 'partner', color: '#9CA3AF' },
     
     // Admin
-    { email: 'admin.sibs@sibs.com', password: 'TestPassword123!', label: '⚙️ Administrateur', type: 'admin', color: '#EF4444' },
+    { email: 'admin.siports@siports.com', password: 'Admin123!', label: '⚙️ Administrateur SIB', type: 'admin', color: '#EF4444' },
   ];
 
   const handleLogin = async (account: QuickAccount) => {
@@ -155,10 +155,9 @@ export const DemoAccountsPage: React.FC = () => {
               </div>
               <div style={{ 
                 fontSize: '0.85rem', 
-                color: '#94a3b8',
-                fontFamily: 'monospace'
+                color: '#94a3b8'
               }}>
-                {account.email}
+                Compte de démonstration prêt à l'emploi
               </div>
               {showPasswords && (
                 <div style={{ 

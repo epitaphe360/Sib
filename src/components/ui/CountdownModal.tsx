@@ -63,12 +63,12 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
     dates: '25-29 Novembre 2026',
     location: 'El Jadida, Maroc',
     venue: 'Parc d\'Exposition Mohammed VI',
-    hours: '9h30 - 18h00',
+    hours: '9h00 - 19h00',
     stats: {
-      exhibitors: 300,
-      visitors: 6000,
-      countries: 40,
-      conferences: 40
+      exhibitors: 600,
+      visitors: 200000,
+      countries: 50,
+      conferences: 20
     }
   };
 
@@ -396,7 +396,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                       <Globe className="h-4 w-4" />
                       <span>www.sibevent.com</span>
                     </div>
-                    <div>📱 +212 1 23 45 67 89</div>
+                    <div>📱 +212 6 68 38 52 28</div>
                     <div>🕒 {t('countdown.contact_hours')}</div>
                   </div>
                 </div>

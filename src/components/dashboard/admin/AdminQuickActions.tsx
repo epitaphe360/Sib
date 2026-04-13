@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   BarChart3, Users, Building2, Calendar, Award, Plus, FileText,
-  Video, Shield, Mail, Handshake, Crown, Power
+  Video, Shield, Mail, Handshake, Crown, Power, ChevronRight
 } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
 
@@ -11,147 +11,140 @@ interface AdminQuickActionsProps {
   t: (key: string, params?: Record<string, unknown>) => string;
 }
 
+/** Lien d'action uniforme â€” navy + or sur hover */
+function ActionLink({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
+  return (
+    <Link to={to}>
+      <motion.div
+        whileHover={{ x: 4 }}
+        className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-[#334155] hover:text-[#1B365D] hover:bg-[#1B365D]/5 transition-all group"
+      >
+        <span className="flex-shrink-0 text-[#C9A84C] group-hover:text-[#A88830] transition-colors">{icon}</span>
+        <span className="text-xs font-semibold truncate">{label}</span>
+        <ChevronRight className="h-3 w-3 ml-auto opacity-0 group-hover:opacity-60 transition-opacity flex-shrink-0" />
+      </motion.div>
+    </Link>
+  );
+}
+
+/** Titre de colonne uniforme */
+function ColHeader({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <div className="flex items-center gap-2 mb-4 pb-3 border-b border-sib-gray-100">
+      <span className="text-[#C9A84C]">{icon}</span>
+      <span className="text-xs font-bold text-[#1B365D] uppercase tracking-wider">{label}</span>
+    </div>
+  );
+}
+
 export function AdminQuickActions({ adminMetrics: m, t }: AdminQuickActionsProps) {
   const metrics = m as any;
+
   return (
     <div className="mb-8">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-slate-800 to-slate-900 px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
+        <div className="bg-white rounded-xl shadow-sib border border-sib-gray-100 overflow-hidden">
+
+          {/* Header navy */}
+          <div className="bg-[#0F2034] px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="bg-white/10 p-2.5 rounded-xl"><Plus className="h-5 w-5 text-white" /></div>
-              <h3 className="text-lg font-bold text-white">{t('admin.quick_actions')}</h3>
+              <Power className="h-4 w-4 text-[#C9A84C]" />
+              <span className="text-white font-semibold text-sm">{t('admin.quick_actions')}</span>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Compteurs sobres */}
+            <div className="flex items-center gap-3 text-xs">
               {[
-                { Icon: Users, value: metrics.totalUsers, label: t('admin.users_label'), bg: 'bg-blue-500/20', iconCls: 'text-blue-300' },
-                { Icon: Building2, value: metrics.totalExhibitors, label: t('admin.exhibitors'), bg: 'bg-emerald-500/20', iconCls: 'text-emerald-300' },
-                { Icon: Handshake, value: metrics.totalPartners, label: t('admin.partners'), bg: 'bg-purple-500/20', iconCls: 'text-purple-300' },
-                { Icon: Crown, value: metrics.totalVisitors, label: t('admin.visitors'), bg: 'bg-amber-500/20', iconCls: 'text-amber-300' },
-              ].map(({ Icon, value, label, bg, iconCls }, i) => (
-                <div key={i} className={`${bg} rounded-lg px-3 py-1.5 flex items-center gap-2`}>
-                  <Icon className={`h-3.5 w-3.5 ${iconCls}`} />
-                  <span className="text-white text-sm font-bold">{value}</span>
-                  <span className="text-white/60 text-xs hidden sm:inline">{label}</span>
+                { label: t('admin.users_label'), val: metrics.totalUsers },
+                { label: t('admin.exhibitors'), val: metrics.totalExhibitors },
+                { label: t('admin.partners'), val: metrics.totalPartners },
+              ].map(({ label, val }) => (
+                <div key={label} className="hidden sm:flex items-center gap-1.5 bg-white/10 rounded px-2 py-1">
+                  <span className="font-bold text-[#C9A84C]">{val || 0}</span>
+                  <span className="text-slate-400">{label}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 divide-y xl:divide-y-0 xl:divide-x divide-gray-100">
-            {/* Col 1 — Participants */}
+          {/* 4 colonnes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 divide-y xl:divide-y-0 xl:divide-x divide-sib-gray-100">
+
+            {/* Col 1 â€” Participants */}
             <div className="p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 bg-emerald-100 rounded-lg"><Building2 className="h-4 w-4 text-emerald-600" /></div>
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{t('admin.participant_management')}</span>
+              <ColHeader icon={<Building2 className="h-4 w-4" />} label={t('admin.participant_management')} />
+              <div className="space-y-0.5">
+                <ActionLink to={ROUTES.ADMIN_CREATE_EXHIBITOR} icon={<Plus className="h-3.5 w-3.5" />} label={t('admin.create_exhibitor')} />
+                <ActionLink to={ROUTES.ADMIN_EXHIBITORS} icon={<Building2 className="h-3.5 w-3.5" />} label={t('admin.manage_exhibitors_action')} />
+                <ActionLink to={ROUTES.ADMIN_CREATE_PARTNER} icon={<Plus className="h-3.5 w-3.5" />} label={t('admin.create_partner')} />
+                <ActionLink to={ROUTES.ADMIN_PARTNERS_MANAGE} icon={<Handshake className="h-3.5 w-3.5" />} label={t('admin.manage_partners_action')} />
+                <ActionLink to={ROUTES.ADMIN_VIP_VISITORS} icon={<Crown className="h-3.5 w-3.5" />} label={t('admin.vip_visitors_management')} />
+                <ActionLink to={ROUTES.ADMIN_USERS} icon={<Users className="h-3.5 w-3.5" />} label={t('admin.users_label')} />
               </div>
-              <div className="space-y-1">
-                {[
-                  { to: ROUTES.ADMIN_CREATE_EXHIBITOR, icon: <Plus className="h-3.5 w-3.5" />, label: t('admin.create_exhibitor'), cls: 'text-emerald-700 hover:bg-emerald-50' },
-                  { to: ROUTES.ADMIN_EXHIBITORS, icon: <Building2 className="h-3.5 w-3.5" />, label: t('admin.manage_exhibitors_action'), cls: 'text-teal-700 hover:bg-teal-50' },
-                  { to: ROUTES.ADMIN_CREATE_PARTNER, icon: <Plus className="h-3.5 w-3.5" />, label: t('admin.create_partner'), cls: 'text-purple-700 hover:bg-purple-50' },
-                  { to: ROUTES.ADMIN_PARTNERS_MANAGE, icon: <Handshake className="h-3.5 w-3.5" />, label: t('admin.manage_partners_action'), cls: 'text-pink-700 hover:bg-pink-50' },
-                  { to: ROUTES.ADMIN_VIP_VISITORS, icon: <Crown className="h-3.5 w-3.5" />, label: t('admin.vip_visitors_management'), cls: 'text-amber-700 hover:bg-amber-50' },
-                  { to: ROUTES.ADMIN_USERS, icon: <Users className="h-3.5 w-3.5" />, label: t('admin.users_label'), cls: 'text-blue-700 hover:bg-blue-50' },
-                ].map(item => (
-                  <Link key={item.to} to={item.to}>
-                    <motion.div whileHover={{ x: 3 }} className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors ${item.cls}`}>
-                      <span className="flex-shrink-0">{item.icon}</span>
-                      <span className="text-xs font-semibold truncate">{item.label}</span>
-                    </motion.div>
-                  </Link>
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-dashed border-red-200">
+              <div className="mt-4 pt-4 border-t border-sib-gray-100">
                 <Link to={ROUTES.ADMIN_PUBLICATION_CONTROL}>
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                    className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-2.5 rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition-all">
-                    <Power className="h-3.5 w-3.5" />
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center justify-center gap-2 bg-[#1B365D] hover:bg-[#0F2034] text-white px-3 py-2.5 rounded-lg text-xs font-bold transition-colors"
+                  >
+                    <Power className="h-3.5 w-3.5 text-[#C9A84C]" />
                     {t('admin.total_control')}
                   </motion.div>
                 </Link>
               </div>
             </div>
 
-            {/* Col 2 — Content */}
+            {/* Col 2 â€” Contenu */}
             <div className="p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 bg-orange-100 rounded-lg"><Calendar className="h-4 w-4 text-orange-600" /></div>
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{t('admin.content_management')}</span>
-              </div>
-              <div className="space-y-1">
-                {[
-                  { to: ROUTES.ADMIN_CREATE_EVENT, icon: <Plus className="h-3.5 w-3.5" />, label: t('admin.create_event'), cls: 'text-orange-700 hover:bg-orange-50' },
-                  { to: ROUTES.ADMIN_EVENTS, icon: <Calendar className="h-3.5 w-3.5" />, label: t('admin.manage_events_action'), cls: 'text-red-700 hover:bg-red-50' },
-                  { to: ROUTES.ADMIN_CREATE_NEWS, icon: <Plus className="h-3.5 w-3.5" />, label: t('admin.create_article'), cls: 'text-blue-700 hover:bg-blue-50' },
-                  { to: ROUTES.ADMIN_NEWS, icon: <FileText className="h-3.5 w-3.5" />, label: t('admin.manage_articles_action'), cls: 'text-cyan-700 hover:bg-cyan-50' },
-                  { to: ROUTES.ADMIN_CREATE_PAVILION, icon: <Plus className="h-3.5 w-3.5" />, label: t('admin.create_pavilion_action'), cls: 'text-indigo-700 hover:bg-indigo-50' },
-                  { to: ROUTES.ADMIN_PAVILIONS, icon: <Building2 className="h-3.5 w-3.5" />, label: t('admin.manage_pavilions_action'), cls: 'text-purple-700 hover:bg-purple-50' },
-                ].map(item => (
-                  <Link key={item.to} to={item.to}>
-                    <motion.div whileHover={{ x: 3 }} className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors ${item.cls}`}>
-                      <span className="flex-shrink-0">{item.icon}</span>
-                      <span className="text-xs font-semibold truncate">{item.label}</span>
-                    </motion.div>
-                  </Link>
-                ))}
+              <ColHeader icon={<Calendar className="h-4 w-4" />} label={t('admin.content_management')} />
+              <div className="space-y-0.5">
+                <ActionLink to={ROUTES.ADMIN_CREATE_EVENT} icon={<Plus className="h-3.5 w-3.5" />} label={t('admin.create_event')} />
+                <ActionLink to={ROUTES.ADMIN_EVENTS} icon={<Calendar className="h-3.5 w-3.5" />} label={t('admin.manage_events_action')} />
+                <ActionLink to={ROUTES.ADMIN_CREATE_NEWS} icon={<Plus className="h-3.5 w-3.5" />} label={t('admin.create_article')} />
+                <ActionLink to={ROUTES.ADMIN_NEWS} icon={<FileText className="h-3.5 w-3.5" />} label={t('admin.manage_articles_action')} />
+                <ActionLink to={ROUTES.ADMIN_CREATE_PAVILION} icon={<Plus className="h-3.5 w-3.5" />} label={t('admin.create_pavilion_action')} />
+                <ActionLink to={ROUTES.ADMIN_PAVILIONS} icon={<Building2 className="h-3.5 w-3.5" />} label={t('admin.manage_pavilions_action')} />
               </div>
             </div>
 
-            {/* Col 3 — Media */}
+            {/* Col 3 â€” MÃ©dias */}
             <div className="p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 bg-rose-100 rounded-lg"><Video className="h-4 w-4 text-rose-600" /></div>
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{t('admin.media_management_section')}</span>
-              </div>
-              <div className="space-y-1">
-                {[
-                  { to: ROUTES.ADMIN_MEDIA_MANAGE, icon: <Video className="h-3.5 w-3.5" />, label: t('admin.manage_media_action'), cls: 'text-rose-700 hover:bg-rose-50' },
-                  { to: ROUTES.ADMIN_PARTNER_MEDIA_APPROVAL, icon: <Shield className="h-3.5 w-3.5" />, label: t('admin.validate_media'), cls: 'text-amber-700 hover:bg-amber-50' },
-                  { to: ROUTES.ADMIN_EMAIL_TEMPLATES, icon: <Mail className="h-3.5 w-3.5" />, label: t('admin.email_templates_label'), cls: 'text-orange-700 hover:bg-orange-50' },
-                ].map(item => (
-                  <Link key={item.to} to={item.to}>
-                    <motion.div whileHover={{ x: 3 }} className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors ${item.cls}`}>
-                      <span className="flex-shrink-0">{item.icon}</span>
-                      <span className="text-xs font-semibold truncate">{item.label}</span>
-                    </motion.div>
-                  </Link>
-                ))}
+              <ColHeader icon={<Video className="h-4 w-4" />} label={t('admin.media_management_section')} />
+              <div className="space-y-0.5">
+                <ActionLink to={ROUTES.ADMIN_MEDIA_MANAGE} icon={<Video className="h-3.5 w-3.5" />} label={t('admin.manage_media_action')} />
+                <ActionLink to={ROUTES.ADMIN_PARTNER_MEDIA_APPROVAL} icon={<Shield className="h-3.5 w-3.5" />} label={t('admin.validate_media')} />
+                <ActionLink to={ROUTES.ADMIN_EMAIL_TEMPLATES} icon={<Mail className="h-3.5 w-3.5" />} label={t('admin.email_templates_label')} />
               </div>
             </div>
 
-            {/* Col 4 — Nav & Stats */}
+            {/* Col 4 â€” Analytique */}
             <div className="p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 bg-slate-100 rounded-lg"><BarChart3 className="h-4 w-4 text-slate-600" /></div>
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{t('admin.nav_and_stats')}</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2.5">
+              <ColHeader icon={<BarChart3 className="h-4 w-4" />} label={t('admin.nav_and_stats')} />
+              <div className="space-y-3">
                 {[
-                  { to: ROUTES.METRICS, Icon: BarChart3, value: null, label: t('admin.metrics_label'), cls: 'bg-slate-50 border-slate-200', iconCls: 'text-slate-500', textCls: 'text-slate-700' },
-                  { to: ROUTES.ADMIN_USERS, Icon: Users, value: metrics.totalUsers, label: t('admin.users_label'), cls: 'bg-blue-50 border-blue-200', iconCls: 'text-blue-500', textCls: 'text-blue-700' },
-                  { to: ROUTES.ADMIN_PAVILIONS, Icon: Building2, value: metrics.totalExhibitors, label: t('admin.pavilions_label'), cls: 'bg-green-50 border-green-200', iconCls: 'text-green-500', textCls: 'text-green-700' },
-                  { to: ROUTES.ADMIN_EVENTS, Icon: Calendar, value: metrics.totalEvents, label: t('admin.events_label'), cls: 'bg-purple-50 border-purple-200', iconCls: 'text-purple-500', textCls: 'text-purple-700' },
-                ].map(({ to, Icon, value, label, cls, iconCls, textCls }) => (
+                  { to: ROUTES.METRICS, Icon: BarChart3, value: null, label: t('admin.metrics_label') },
+                  { to: ROUTES.ADMIN_USERS, Icon: Users, value: metrics.totalUsers, label: t('admin.users_label') },
+                  { to: ROUTES.ADMIN_PAVILIONS, Icon: Award, value: metrics.totalExhibitors, label: t('admin.pavilions_label') },
+                  { to: ROUTES.ADMIN_EVENTS, Icon: Calendar, value: metrics.totalEvents, label: t('admin.events_label') },
+                ].map(({ to, Icon, value, label }) => (
                   <Link key={to} to={to}>
-                    <motion.div whileHover={{ scale: 1.04 }} className={`${cls} border rounded-xl p-3 text-center hover:shadow-md transition-all`}>
-                      <Icon className={`h-6 w-6 ${iconCls} mx-auto mb-1.5`} />
-                      {value !== null && <div className={`text-sm font-bold ${textCls}`}>{value}</div>}
-                      <div className={`${value !== null ? 'text-[10px]' : 'text-xs font-bold'} ${textCls}`}>{label}</div>
+                    <motion.div
+                      whileHover={{ x: 3 }}
+                      className="flex items-center justify-between p-3 rounded-lg bg-sib-gray-50 hover:bg-[#1B365D]/5 border border-sib-gray-100 hover:border-[#1B365D]/20 transition-all"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Icon className="h-4 w-4 text-[#C9A84C]" />
+                        <span className="text-xs font-semibold text-[#1B365D]">{label}</span>
+                      </div>
+                      {value != null && (
+                        <span className="text-sm font-bold text-[#0F2034]">{value}</span>
+                      )}
                     </motion.div>
                   </Link>
                 ))}
-                <Link to={ROUTES.ADMIN_VIP_VISITORS} className="col-span-2">
-                  <motion.div whileHover={{ scale: 1.02 }} className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center justify-between hover:shadow-md transition-all">
-                    <div className="flex items-center gap-2">
-                      <Crown className="h-5 w-5 text-amber-500" />
-                      <span className="text-xs font-bold text-amber-700">{t('admin.vip_visitors_management')}</span>
-                    </div>
-                    <span className="text-base font-bold text-amber-600">{metrics.totalVisitors}</span>
-                  </motion.div>
-                </Link>
               </div>
             </div>
+
           </div>
         </div>
       </motion.div>

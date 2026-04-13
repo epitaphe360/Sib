@@ -247,7 +247,7 @@ export default function AvailabilityManager({ userId, userType, onAvailabilityUp
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
               <p className="mt-2 text-xs bg-blue-100 text-blue-800 font-semibold px-3 py-2 rounded-lg inline-flex items-center">
-                📅 SIB 2026 : Uniquement du 1 au 3 avril 2026
+                📅 SIB 2026 : Du 25 au 29 novembre 2026
               </p>
             </div>
 

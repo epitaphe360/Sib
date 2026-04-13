@@ -33,10 +33,10 @@ export const DEFAULT_SALON_CONFIG: SalonConfig = {
     country: 'Maroc'
   },
   hours: {
-    opening: '9h',
-    closing: '18h'
+    opening: '9h00',
+    closing: '19h00'
   },
-  expectedVisitors: 6000
+  expectedVisitors: 200000
 };
 
 /**

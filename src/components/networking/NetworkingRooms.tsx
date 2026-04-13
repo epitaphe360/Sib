@@ -22,15 +22,15 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
 
   const sectors = [
     'all',
-    'Sport Business',
-    'Marketing & Communication',
-    'Médias & Broadcast',
-    'E-sport & Gaming',
-    'Équipementiers',
-    'Sponsoring',
-    'Innovation & Tech',
+    'BTP & Construction',
+    'Architecture & Design',
+    'Matériaux & Équipements',
+    'Énergie & Développement Durable',
+    'Innovation & Technologies',
+    'Financement & Investissement',
+    'Médias & Communication',
     'Infrastructures',
-    'Santé & Performance'
+    'Habitat & Immobilier'
   ];
 
   useEffect(() => {

@@ -108,7 +108,7 @@ export default function VisitorProfileSettings() {
   };
 
   const availableSectors = [
-    'Bâtiment Operations',
+    'Construction Operations',
     'Digital Transformation',
     'Sustainability',
     'Building Technology',
@@ -145,9 +145,9 @@ export default function VisitorProfileSettings() {
   const availableThematics = [
     'Technologies BTP',
     'Énergies renouvelables',
-    'Logistique bâtiment',
+    'Logistique BTP & Approvisionnement',
     'Innovation digitale',
-    'Défense navale',
+    'Éco-construction & Matériaux Durables',
     'Automatisation',
     'Intelligence artificielle',
     'BIM & PropTech'

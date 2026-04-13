@@ -10,10 +10,10 @@ import { PARTNER_BILLING } from '../config/partnerBilling';
 
 // ✅ Constantes de prix (base de calcul) - Import depuis SSOT
 const TIER_PRICES = {
-  museum: PARTNER_BILLING.museum.amount * 100,    // Convert USD to cents
-  silver: PARTNER_BILLING.silver.amount * 100,    // Convert USD to cents
-  gold: PARTNER_BILLING.gold.amount * 100,        // Convert USD to cents
-  platinum: PARTNER_BILLING.platinum.amount * 100 // Convert USD to cents
+  partner: PARTNER_BILLING.partner.amount * 100,              // Convert MAD to centimes
+  silver: PARTNER_BILLING.silver.amount * 100,                // Convert MAD to centimes
+  gold: PARTNER_BILLING.gold.amount * 100,                    // Convert MAD to centimes
+  official_sponsor: PARTNER_BILLING.official_sponsor.amount * 100 // Convert MAD to centimes
 };
 
 // Conversion EUR/MAD pour CMI

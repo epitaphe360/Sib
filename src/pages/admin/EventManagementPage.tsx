@@ -268,7 +268,7 @@ function DayModal({
                 value={form.date}
                 onChange={e => setForm({ ...form, date: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Mercredi 1er avril 2026"
+                placeholder="Mercredi 25 novembre 2026"
               />
             </div>
             <div>
@@ -353,7 +353,7 @@ function InfoPanel() {
           {[
             { key: 'eventTitle', label: 'Titre', placeholder: 'SIB — 1ère Édition' },
             { key: 'eventTheme', label: 'Thème', placeholder: 'Les bâtiments au cœur…' },
-            { key: 'eventDates', label: 'Dates', placeholder: '1er au 3 avril 2026' },
+            { key: 'eventDates', label: 'Dates', placeholder: '25 au 29 novembre 2026' },
             { key: 'eventLocation', label: 'Lieu', placeholder: 'Parc des Expositions…' },
           ].map(f => (
             <div key={f.key}>

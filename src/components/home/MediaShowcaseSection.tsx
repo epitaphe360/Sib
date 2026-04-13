@@ -76,51 +76,51 @@ export const MediaShowcaseSection: React.FC = () => {
   const defaultMedia: MediaItem[] = [
     {
       id: 1,
-      title: 'Bâtiment moderne',
-      url: 'https://images.unsplash.com/photo-1494412651409-8963ce7935a7?w=800',
-      alt: 'Bâtiment moderne'
+      title: 'Chantier de construction',
+      url: 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=800',
+      alt: 'Chantier de construction'
     },
     {
       id: 2,
-      title: 'Container shipping',
-      url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800',
-      alt: 'Container shipping'
+      title: 'Architecture moderne',
+      url: 'https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg?w=800',
+      alt: 'Architecture moderne'
     },
     {
       id: 3,
-      title: 'Terminal bâtiment',
-      url: 'https://images.pexels.com/photos/906982/pexels-photo-906982.jpeg?w=800',
-      alt: 'Terminal bâtiment'
+      title: 'Gros œuvre BTP',
+      url: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?w=800',
+      alt: 'Gros œuvre BTP'
     },
     {
       id: 4,
-      title: 'Logistique construction',
-      url: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=800',
-      alt: 'Logistique construction'
+      title: 'Matériaux de construction',
+      url: 'https://images.pexels.com/photos/1370704/pexels-photo-1370704.jpeg?w=800',
+      alt: 'Matériaux de construction'
     },
     {
       id: 5,
-      title: 'Smart Bâtiment',
-      url: 'https://images.unsplash.com/photo-1605745341075-1a8f0b1d064e?w=800',
-      alt: 'Smart Bâtiment'
+      title: 'Design & Architecture',
+      url: 'https://images.pexels.com/photos/2760243/pexels-photo-2760243.jpeg?w=800',
+      alt: 'Design et Architecture'
     },
     {
       id: 6,
-      title: 'Shipping vessels',
-      url: 'https://images.unsplash.com/photo-1568876694728-451bbf694b83?w=800',
-      alt: 'Shipping vessels'
+      title: 'Structure métallique',
+      url: 'https://images.pexels.com/photos/277667/pexels-photo-277667.jpeg?w=800',
+      alt: 'Structure métallique'
     },
     {
       id: 7,
-      title: 'Bâtiment infrastructure',
-      url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
-      alt: 'Bâtiment infrastructure'
+      title: 'Innovation BTP',
+      url: 'https://images.pexels.com/photos/1117452/pexels-photo-1117452.jpeg?w=800',
+      alt: 'Innovation BTP'
     },
     {
       id: 8,
-      title: 'Bâtiment technology',
-      url: 'https://images.unsplash.com/photo-1534313916812-f0b8a3d19e7a?w=800',
-      alt: 'Bâtiment technology'
+      title: 'Salon professionnel',
+      url: 'https://images.pexels.com/photos/1640147/pexels-photo-1640147.jpeg?w=800',
+      alt: 'Salon professionnel du bâtiment'
     }
   ];
 
@@ -182,11 +182,11 @@ export const MediaShowcaseSection: React.FC = () => {
                   onClick={() => setSelectedImage(item)}
                 >
                   <img
-                    src={item.thumbnail || item.url || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400'}
+                    src={item.thumbnail || item.url || 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=400'}
                     alt={item.alt || item.title || 'Image du salon'}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
-                      e.currentTarget.src = 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400';
+                      e.currentTarget.src = 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=400';
                     }}
                   />
                   

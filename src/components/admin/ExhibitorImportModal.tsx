@@ -32,7 +32,7 @@ const EXAMPLE_DATA = [
   {
     company_name: 'BTP Solutions Maroc',
     sector: 'Gros Oeuvre',
-    category: 'port_industry',
+    category: 'construction_industry',
     description: 'Entreprise spécialisée en gros oeuvre',
     website: 'https://example.com',
     contact_email: 'contact@example.com',
@@ -166,7 +166,7 @@ export function ExhibitorImportModal({ onClose, onSuccess }: Props) {
             .insert({
               company_name: row.company_name.toString().trim(),
               sector: row.sector?.toString() || null,
-              category: row.category?.toString() || 'port_industry',
+              category: row.category?.toString() || 'construction_industry',
               description: row.description?.toString() || null,
               website: row.website?.toString() || null,
               contact_info: {

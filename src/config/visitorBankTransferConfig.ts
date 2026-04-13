@@ -6,7 +6,7 @@
 export const VISITOR_BANK_TRANSFER_INFO = {
   // Informations du compte bancaire
   bankName: 'Attijariwafa bank',
-  accountHolder: 'LINECO EVENTS',
+  accountHolder: 'URBACOM',
   iban: 'MA64 007 780 000413200000498 25',
   bic: 'BCMAMAMC',
   swift: 'BCMAMAMC',
@@ -51,7 +51,7 @@ export const VISITOR_BANK_TRANSFER_INFO = {
         'Pour les virements internationaux, des frais bancaires peuvent s\'appliquer',
         'Les virements SEPA (Europe) sont généralement traités en 1-2 jours',
         'Les virements SWIFT internationaux peuvent prendre 3-5 jours',
-        'En cas de question, contactez-nous: contact@sib2026.com'
+        'En cas de question, contactez-nous: contact@sibevent.com'
       ]
     },
     en: {
@@ -74,7 +74,7 @@ export const VISITOR_BANK_TRANSFER_INFO = {
         'International transfers may incur bank fees',
         'SEPA transfers (Europe) are typically processed in 1-2 days',
         'SWIFT international transfers may take 3-5 days',
-        'For questions, contact us: contact@sib2026.com'
+        'For questions, contact us: contact@sibevent.com'
       ]
     },
     ar: {
@@ -97,7 +97,7 @@ export const VISITOR_BANK_TRANSFER_INFO = {
         'قد تنطبق رسوم مصرفية على التحويلات الدولية',
         'عادةً ما تتم معالجة تحويلات SEPA (أوروبا) في 1-2 أيام',
         'قد تستغرق تحويلات SWIFT الدولية 3-5 أيام',
-        'للاستفسارات، اتصل بنا: contact@sib2026.com'
+        'للاستفسارات، اتصل بنا: contact@sibevent.com'
       ]
     }
   }

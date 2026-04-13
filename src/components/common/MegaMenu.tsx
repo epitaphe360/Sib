@@ -113,7 +113,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
 
       {/* Mobile Menu Button */}
       <div className="lg:hidden flex items-center justify-between px-4 py-4">
-        <div className="text-2xl font-bold text-gray-900">Epitaphe360</div>
+        <div className="text-2xl font-bold text-gray-900">SIB 2026</div>
         <button
           onClick={handleMobileMenuToggle}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"

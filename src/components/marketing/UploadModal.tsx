@@ -24,8 +24,17 @@ export default function UploadModal({ initialType = 'webinar', onUpload, onClose
     title: '',
     description: '',
     url: '',
-    category: 'Technologie',
+    category: initialType === 'testimonial' ? 'Témoignage' : 'Technologie',
   });
+
+  const handleTypeChange = (type: UploadableMediaType) => {
+    setSelectedType(type);
+    if (type === 'testimonial') {
+      setFormData((prev) => ({ ...prev, category: 'Témoignage' }));
+    } else if (formData.category === 'Témoignage') {
+      setFormData((prev) => ({ ...prev, category: 'Technologie' }));
+    }
+  };
 
   const typeOptions: { value: UploadableMediaType; label: string; icon: typeof Video }[] = [
     { value: 'webinar', label: t('marketing.filters.webinars'), icon: Video },
@@ -80,7 +89,7 @@ export default function UploadModal({ initialType = 'webinar', onUpload, onClose
                     type="button"
                     variant={selectedType === opt.value ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setSelectedType(opt.value)}
+                    onClick={() => handleTypeChange(opt.value)}
                   >
                     <opt.icon className="h-4 w-4 mr-1" />
                     {opt.label}
@@ -119,32 +128,38 @@ export default function UploadModal({ initialType = 'webinar', onUpload, onClose
             {/* URL */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('marketing.media.video_url')} *
+                {selectedType === 'testimonial' ? 'URL de la vidéo témoignage *' : `${t('marketing.media.video_url')} *`}
               </label>
               <input
                 type="url"
                 required
-                placeholder="https://..."
+                placeholder={selectedType === 'testimonial' ? 'https://youtube.com/watch?v=...' : 'https://...'}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value={formData.url}
                 onChange={(e) => update('url', e.target.value)}
               />
             </div>
 
-            {/* Category */}
+            {/* Category — masquée et fixée à 'Témoignage' si type testimonial */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t('marketing.articles.category')}
               </label>
-              <select
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                value={formData.category}
-                onChange={(e) => update('category', e.target.value)}
-              >
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+              {selectedType === 'testimonial' ? (
+                <div className="w-full px-3 py-2 border border-[#C9A84C]/40 bg-[#C9A84C]/8 rounded-lg text-sm font-medium text-[#1B365D]">
+                  Témoignage
+                </div>
+              ) : (
+                <select
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]"
+                  value={formData.category}
+                  onChange={(e) => update('category', e.target.value)}
+                >
+                  {categories.filter(c => c !== 'Témoignage').map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              )}
             </div>
 
             {/* Actions */}

@@ -31,7 +31,7 @@ export const AppointmentCalendarWidget: React.FC = () => {
       const newDate = new Date(prev);
       newDate.setDate(newDate.getDate() + days);
       
-      // Limiter entre le 1er et le 3 avril 2026
+      // Limiter entre le 25 et le 29 novembre 2026
       const minDate = new Date(`${getMinSlotDate()}T00:00:00`);
       const maxDate = new Date(`${getMaxSlotDate()}T00:00:00`);
       

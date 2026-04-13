@@ -229,7 +229,7 @@ export default function ExhibitorSignUpPage() {
               subscriptionLevel,
               standArea,
               eventName: 'SIB 2026',
-              eventDates: '5-7 Février 2026'
+              eventDates: '25-29 Novembre 2026'
             }
           });
 

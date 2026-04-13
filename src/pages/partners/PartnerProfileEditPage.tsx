@@ -307,7 +307,7 @@ export const PartnerProfileEditPage: React.FC = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                       <option value="corporate">Entreprise</option>
                       <option value="sponsor">Sponsor</option>
-                      <option value="museum">Musée</option>
+                      <option value="organizer">Organisateur</option>
                       <option value="association">Association</option>
                       <option value="government">Organisation gouvernementale</option>
                     </select>

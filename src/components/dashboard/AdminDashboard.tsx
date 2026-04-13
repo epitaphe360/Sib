@@ -1,18 +1,15 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Shield, AlertTriangle, BarChart3, Activity } from 'lucide-react';
-import { Card } from '../ui/Card';
-import { Badge } from '../ui/Badge';
+import { Shield, AlertTriangle, BarChart3 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
 import RegistrationRequests from '../admin/RegistrationRequests';
 import { useAdminDashboard } from '../../hooks/useAdminDashboard';
 import {
   AdminHeader,
-  AdminAlertsSection,
+  AdminActionsPanel,
   AdminMetricsGrid,
   AdminChartsSection,
-  AdminQuickActions,
   SystemHealthPanel,
   ActivityFeed,
 } from './admin';
@@ -24,13 +21,15 @@ export default function AdminDashboard() {
   // ── Early returns ─────────────────────────────────────────────────────────
   if (!user || user.type !== 'admin') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sib-bg flex items-center justify-center">
         <div className="text-center">
-          <Shield className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-lg font-medium text-gray-900 mb-2">{t('dashboard.restricted_access')}</h2>
-          <p className="text-gray-600 mb-4">{t('dashboard.restricted_message')}</p>
+          <div className="p-4 bg-[#1B365D]/10 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+            <Shield className="h-8 w-8 text-[#1B365D]" />
+          </div>
+          <h2 className="text-lg font-semibold text-[#0F2034] mb-2">{t('dashboard.restricted_access')}</h2>
+          <p className="text-sib-gray-500 mb-6">{t('dashboard.restricted_message')}</p>
           <Link to={ROUTES.DASHBOARD}>
-            <Button variant="default">{t('dashboard.back_to_dashboard')}</Button>
+            <Button variant="default" className="bg-[#1B365D] hover:bg-[#0F2034]">{t('dashboard.back_to_dashboard')}</Button>
           </Link>
         </div>
       </div>
@@ -39,13 +38,13 @@ export default function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="min-h-screen bg-sib-bg p-6">
         <div className="max-w-7xl mx-auto animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map(i => <div key={`sk-${i}`} className="h-32 bg-gray-200 rounded-lg"></div>)}
+          <div className="h-40 bg-[#1B365D]/10 rounded-2xl" />
+          <div className="grid grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => <div key={`sk-${i}`} className="h-28 bg-sib-gray-100 rounded-xl" />)}
           </div>
-          <div className="h-64 bg-gray-200 rounded-lg"></div>
+          <div className="h-56 bg-sib-gray-100 rounded-xl" />
         </div>
       </div>
     );
@@ -53,19 +52,21 @@ export default function AdminDashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sib-bg flex items-center justify-center">
         <div className="text-center">
-          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-lg font-medium text-gray-900 mb-2">{t('dashboard.metrics_error')}</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <Button variant="default" onClick={() => fetchMetrics()}>{t('dashboard.retry')}</Button>
+          <AlertTriangle className="h-10 w-10 text-[#C9A84C] mx-auto mb-4" />
+          <h2 className="text-lg font-semibold text-[#0F2034] mb-2">{t('dashboard.metrics_error')}</h2>
+          <p className="text-sib-gray-500 mb-6">{error}</p>
+          <Button variant="default" className="bg-[#1B365D] hover:bg-[#0F2034]" onClick={() => fetchMetrics()}>
+            {t('dashboard.retry')}
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <AdminHeader
@@ -76,7 +77,7 @@ export default function AdminDashboard() {
           t={t}
         />
 
-        <AdminAlertsSection
+        <AdminActionsPanel
           adminMetrics={adminMetrics as any}
           showRegistrationRequests={ctx.showRegistrationRequests}
           onToggleRegistrationRequests={() => ctx.setShowRegistrationRequests(v => !v)}
@@ -84,8 +85,15 @@ export default function AdminDashboard() {
         />
 
         {ctx.showRegistrationRequests && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-            <RegistrationRequests />
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+            <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-4">
+                <span className="text-white font-bold text-sm">{t('admin.registration_requests')}</span>
+              </div>
+              <div className="p-6">
+                <RegistrationRequests />
+              </div>
+            </div>
           </motion.div>
         )}
 
@@ -100,47 +108,43 @@ export default function AdminDashboard() {
           isLoading={isLoading}
         />
 
-        <AdminQuickActions adminMetrics={adminMetrics as any} t={t} />
+        {/* Santé + Activité côte à côte */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+            <SystemHealthPanel healthItems={ctx.systemHealth as any} />
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
+            <ActivityFeed activities={ctx.recentAdminActivity as any} formatDate={ctx.formatDate} />
+          </motion.div>
+        </div>
 
-        {/* System Health */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="mb-8">
-          <SystemHealthPanel healthItems={ctx.systemHealth as any} />
-        </motion.div>
-
-        {/* Activity Feed */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
-          <ActivityFeed
-            activities={ctx.recentAdminActivity as any}
-            formatDate={ctx.formatDate}
-          />
-        </motion.div>
-
-        {/* Metrics link */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }} className="mt-8">
-          <Card className="bg-gradient-to-r from-red-50 to-pink-50 border-red-200">
-            <div className="p-8 text-center">
-              <div className="bg-red-100 p-4 rounded-full w-16 h-16 mx-auto mb-4">
-                <BarChart3 className="h-8 w-8 text-red-600" />
+        {/* Métriques détaillées — navy sobre */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="mb-4">
+          <div className="bg-[#0F2034] rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-[#C9A84C]/15 border border-[#C9A84C]/30">
+                <BarChart3 className="h-6 w-6 text-[#C9A84C]" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{t('admin.detailed_metrics')}</h3>
-              <p className="text-gray-600 mb-6">{t('admin.detailed_metrics_desc')}</p>
-              <div className="flex items-center justify-center space-x-4">
-                <Link to={ROUTES.METRICS}>
-                  <Button variant="default" size="lg" className="bg-red-600 hover:bg-red-700">
-                    <BarChart3 className="h-5 w-5 mr-2" />
-                    {t('admin.full_metrics')}
-                  </Button>
-                </Link>
-                <Badge variant="error" size="sm">
-                  <Shield className="h-3 w-3 mr-1" />
-                  {t('admin.admin_access_only')}
-                </Badge>
+              <div>
+                <h3 className="text-white font-heading font-bold">{t('admin.detailed_metrics')}</h3>
+                <p className="text-slate-400 text-sm">{t('admin.detailed_metrics_desc')}</p>
               </div>
             </div>
-          </Card>
+            <Link to={ROUTES.METRICS}>
+              <Button
+                variant="outline"
+                className="border-[#C9A84C]/40 text-[#C9A84C] hover:bg-[#C9A84C]/10 bg-transparent whitespace-nowrap"
+              >
+                <BarChart3 className="h-4 w-4 mr-2" />
+                {t('admin.full_metrics')}
+              </Button>
+            </Link>
+          </div>
         </motion.div>
 
       </div>
     </div>
   );
 }
+
+

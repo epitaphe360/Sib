@@ -97,27 +97,27 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
   );
 };
 
-// Témoignages par défaut en attendant données Supabase
+// Témoignages par défaut (reflètent les vraies données Supabase — seed_testimonials_sib.sql)
 const defaultTestimonials: TestimonialCardProps[] = [
   {
-    name: 'Mohamed Al-Fassi',
-    company: 'Tanger Med Bâtiment Authority',
+    name: 'Karim Tazi',
+    company: 'LafargeHolcim Maroc',
+    position: 'Directeur Commercial',
+    quote: 'Le SIB est le rendez-vous annuel incontournable du secteur du bâtiment au Maroc. Chaque édition nous permet de présenter nos nouvelles gammes à des milliers de professionnels qualifiés. La qualité des visiteurs est remarquable.',
+    rating: 5
+  },
+  {
+    name: 'Fatima Ezzahra Bensouda',
+    company: 'Groupe Al Omrane',
+    position: 'Directrice Développement',
+    quote: 'Exposer au SIB nous a ouvert des opportunités de partenariat que nous n\'aurions pas trouvées ailleurs. En trois jours, nous avons noué des contacts avec des promoteurs immobiliers de toute l\'Afrique du Nord.',
+    rating: 5
+  },
+  {
+    name: 'Youssef El Alamy',
+    company: 'Saint-Gobain Maroc',
     position: 'Directeur Général',
-    quote: 'SIB a été un catalyseur exceptionnel pour le développement de nos partenariats stratégiques en Afrique. Un événement incontournable.',
-    rating: 5
-  },
-  {
-    name: 'Sarah Dubois',
-    company: 'CMA CGM Group',
-    position: 'VP Operations Africa',
-    quote: 'La qualité du networking et des conférences font de SIB le rendez-vous annuel de référence pour l\'industrie du bâtiment africaine.',
-    rating: 5
-  },
-  {
-    name: 'Ahmed Benkirane',
-    company: 'Marsa Maroc',
-    position: 'Directeur Innovation',
-    quote: 'SIB nous a permis de découvrir les dernières technologies Smart Bâtiment et d\'établir des connexions précieuses avec des leaders mondiaux.',
+    quote: 'Le SIB nous offre une vitrine exceptionnelle. Le public est ciblé, professionnel, et les retombées commerciales sont mesurables dès le lendemain du salon. Nous ne manquons aucune édition depuis 2010.',
     rating: 5
   }
 ];

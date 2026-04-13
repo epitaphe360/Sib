@@ -16,14 +16,12 @@ export const partnersTranslations = {
     'partners.count': '{{count}} partenaires',
     
     // Niveaux de partenariat
-    'partners.tier.platinum': 'Platinum',
-    'partners.tier.gold': 'Gold',
-    'partners.tier.silver': 'Silver',
-    'partners.tier.bronze': 'Bronze',
-    'partners.tier.museum': 'Musée',
-    'partners.tier.institutional': 'Institutionnel',
-    'partners.tier.media': 'Média',
-    'partners.tier.technical': 'Technique',
+    'partners.tier.organizer': 'Organisateur',
+    'partners.tier.co_organizer': 'Co-organisateur',
+    'partners.tier.official_sponsor': 'Sponsor Officiel',
+    'partners.tier.delegated_organizer': 'Organisateur Délégué',
+    'partners.tier.partner': 'Partenaire',
+    'partners.tier.press_partner': 'Partenaire Presse',
     
     // Catégories
     'partners.category.all': 'Toutes les catégories',
@@ -106,14 +104,12 @@ export const partnersTranslations = {
     'partners.count': '{{count}} partners',
     
     // Partnership tiers
-    'partners.tier.platinum': 'Platinum',
-    'partners.tier.gold': 'Gold',
-    'partners.tier.silver': 'Silver',
-    'partners.tier.bronze': 'Bronze',
-    'partners.tier.museum': 'Museum',
-    'partners.tier.institutional': 'Institutional',
-    'partners.tier.media': 'Media',
-    'partners.tier.technical': 'Technical',
+    'partners.tier.organizer': 'Organizer',
+    'partners.tier.co_organizer': 'Co-organizer',
+    'partners.tier.official_sponsor': 'Official Sponsor',
+    'partners.tier.delegated_organizer': 'Delegated Organizer',
+    'partners.tier.partner': 'Partner',
+    'partners.tier.press_partner': 'Press Partner',
     
     // Categories
     'partners.category.all': 'All categories',

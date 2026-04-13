@@ -30,14 +30,14 @@ export default function PartnerDashboard() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 text-center space-y-6">
-          <div className="mx-auto w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
-            <CreditCard className="w-12 h-12 text-orange-600" />
+          <div className="mx-auto w-24 h-24 bg-[#C9A84C]/15 rounded-full flex items-center justify-center mb-6">
+            <CreditCard className="w-12 h-12 text-[#C9A84C]" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900">{t('partner.activation_required')}</h2>
           <p className="text-lg text-gray-600">{t('partner.payment_validation_needed')}</p>
           <div className="pt-4 flex justify-center gap-4">
             <Link to="/partner/payment-selection">
-              <Button className="bg-gradient-to-r from-indigo-600 to-indigo-600 text-white px-8 py-4 rounded-xl text-lg">
+              <Button className="bg-[#1B365D] hover:bg-[#0F2034] text-white px-8 py-4 rounded-xl text-lg">
                 {t('partner.finalize_payment')}
               </Button>
             </Link>
@@ -49,15 +49,15 @@ export default function PartnerDashboard() {
 
   if (!user || user.type !== 'partner') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sib-bg flex items-center justify-center p-4">
         <Card className="p-8 text-center bg-white rounded-2xl shadow-2xl max-w-md w-full">
-          <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
-            <Shield className="h-10 w-10 text-white" />
+          <div className="w-20 h-20 mx-auto mb-4 bg-[#1B365D]/10 rounded-full flex items-center justify-center">
+            <Shield className="h-10 w-10 text-[#C9A84C]" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('partner.access_denied')}</h2>
           <p className="text-gray-600 mb-6">{t('partner.reserved_partners')}</p>
           <Link to={ROUTES.DASHBOARD}>
-            <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+            <Button className="w-full bg-[#1B365D] hover:bg-[#0F2034]">
               {t('common.back_to_dashboard')}
             </Button>
           </Link>
@@ -68,9 +68,9 @@ export default function PartnerDashboard() {
 
   if (ctx.isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 p-6">
+      <div className="min-h-screen bg-sib-bg p-6">
         <div className="max-w-7xl mx-auto text-center py-12">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#1B365D] mx-auto mb-4"></div>
           <LoadingMessage message="Chargement du tableau de bord partenaire..." />
         </div>
       </div>
@@ -79,10 +79,10 @@ export default function PartnerDashboard() {
 
   if (!ctx.dashboard && ctx.dashboardError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sib-bg flex items-center justify-center p-4">
         <div className="text-center max-w-md bg-white rounded-2xl shadow-2xl p-8">
           <ErrorMessage message={ctx.dashboardError} />
-          <Button onClick={() => ctx.fetchDashboard()} className="mt-4 bg-gradient-to-r from-purple-600 to-pink-600">
+          <Button onClick={() => ctx.fetchDashboard()} className="mt-4 bg-[#1B365D] hover:bg-[#0F2034]">
             <Activity className="h-4 w-4 mr-2" />
             Réessayer
           </Button>

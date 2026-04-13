@@ -64,7 +64,7 @@ export default function VisaLetterPage() {
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(80, 80, 80);
-    doc.text('Mohammed VI Exhibition Center, Casablanca - 1-3 Avril 2026', 105, y, { align: 'center' });
+    doc.text('Parc d\'Exposition Mohammed VI, El Jadida - 25-29 Novembre 2026', 105, y, { align: 'center' });
     y += 3;
     doc.setDrawColor(30, 58, 138);
     doc.setLineWidth(0.8);
@@ -83,7 +83,7 @@ export default function VisaLetterPage() {
     doc.setFontSize(10);
     doc.setTextColor(80, 80, 80);
     const refNum = `SIB2026-VISA-${Math.floor(100000 + Math.random() * 900000)}`;
-    doc.text(`Casablanca, le ${dateStr}`, marginLeft, y);
+    doc.text(`El Jadida, le ${dateStr}`, marginLeft, y);
     doc.text(`Réf. : ${refNum}`, marginRight, y, { align: 'right' });
     y += 12;
 
@@ -97,7 +97,7 @@ export default function VisaLetterPage() {
     doc.text(salutation, marginLeft, y);
     y += 8;
 
-    const intro = `Nous avons l'honneur de vous informer que ${fullName} est officiellement invité(e) à participer au Salon International du Bâtiment SIB 2026, qui se tiendra du 1 au 3 avril 2026 au Mohammed VI Exhibition Center, Casablanca, Royaume du Maroc.`;
+    const intro = `Nous avons l'honneur de vous informer que ${fullName} est officiellement invité(e) à participer au Salon International du Bâtiment SIB 2026, qui se tiendra du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI, El Jadida, Royaume du Maroc.`;
     const introLines = doc.splitTextToSize(intro, pageWidth);
     doc.text(introLines, marginLeft, y);
     y += introLines.length * 6 + 4;
@@ -153,9 +153,9 @@ export default function VisaLetterPage() {
     y += 6;
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(80, 80, 80);
-    doc.text('Mohammed VI Exhibition Center, Casablanca, Maroc', marginLeft, y);
+    doc.text('URBACOM — 19, rue Badr Assayab – 1er étage n°2, Casablanca – Maroc', marginLeft, y);
     y += 5;
-    doc.text('contact@sib2026.ma  |  www.sib2026.ma', marginLeft, y);
+    doc.text('contact@sibevent.com  |  www.sibevent.com', marginLeft, y);
 
     // --- Pied de page ---
     doc.setDrawColor(200, 200, 200);
@@ -332,15 +332,15 @@ export default function VisaLetterPage() {
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-sm">
           <div className="bg-white rounded-lg p-4 border">
             <p className="font-semibold text-gray-700">Dates</p>
-            <p className="text-gray-500">1-3 Avril 2026</p>
+            <p className="text-gray-500">25-29 Novembre 2026</p>
           </div>
           <div className="bg-white rounded-lg p-4 border">
             <p className="font-semibold text-gray-700">Lieu</p>
-            <p className="text-gray-500">Mohammed VI Exhibition Center</p>
+            <p className="text-gray-500">Parc d'Exposition Mohammed VI</p>
           </div>
           <div className="bg-white rounded-lg p-4 border">
             <p className="font-semibold text-gray-700">Ville</p>
-            <p className="text-gray-500">Casablanca, Maroc</p>
+            <p className="text-gray-500">El Jadida, Maroc</p>
           </div>
         </div>
       </div>

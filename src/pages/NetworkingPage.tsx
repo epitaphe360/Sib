@@ -105,16 +105,43 @@ export default function NetworkingPage() {
   // Stats networking calculées dynamiquement
   const profileCompleteness = React.useMemo(() => {
     if (!user) return 0;
-    const fields = [
-      (user as any).firstName || (user as any).profile?.firstName,
-      (user as any).lastName || (user as any).profile?.lastName,
-      (user as any).company || (user as any).profile?.company,
-      (user as any).position || (user as any).profile?.position,
-      (user as any).phone || (user as any).profile?.phone,
-      (user as any).bio || (user as any).profile?.bio,
-      (user as any).linkedin || (user as any).profile?.linkedin,
-    ];
-    return Math.min(100, Math.round(fields.filter(Boolean).length / 7 * 100));
+
+    const profile = (user as any).profile || {};
+    const sectors = Array.isArray(profile.sectors) ? profile.sectors : [];
+    const interests = Array.isArray(profile.interests) ? profile.interests : [];
+    const objectives = Array.isArray(profile.objectives) ? profile.objectives : [];
+    const collaborationTypes = Array.isArray(profile.collaborationTypes) ? profile.collaborationTypes : [];
+    const country = profile.country || (user as any).country || '';
+    const company = profile.company || (user as any).company || '';
+    const companySize = profile.companySize || '';
+    const bio = profile.bio || (user as any).bio || '';
+
+    let score = 0;
+    if (sectors.length > 0) score += 20;
+    if (interests.length > 0) score += 20;
+    if (objectives.length > 0) score += 20;
+    if (collaborationTypes.length > 0) score += 15;
+    if (country) score += 10;
+    if (company) score += 5;
+    if (companySize) score += 5;
+    if (typeof bio === 'string' && bio.trim().length > 20) score += 5;
+
+    return Math.min(100, score);
+  }, [user]);
+  const missingMatchingCriteria = React.useMemo(() => {
+    if (!user) return [] as string[];
+
+    const profile = (user as any).profile || {};
+    const missing: string[] = [];
+
+    if (!Array.isArray(profile.sectors) || profile.sectors.length === 0) missing.push('Secteurs');
+    if (!Array.isArray(profile.interests) || profile.interests.length === 0) missing.push('Intérêts');
+    if (!Array.isArray(profile.objectives) || profile.objectives.length === 0) missing.push('Objectifs');
+    if (!Array.isArray(profile.collaborationTypes) || profile.collaborationTypes.length === 0) missing.push('Types de collaboration');
+    if (!profile.country) missing.push('Pays');
+    if (!profile.bio || String(profile.bio).trim().length <= 20) missing.push('Bio (20+ caractères)');
+
+    return missing;
   }, [user]);
   const networkingScore = Math.min(100, connections.length * 4 + Math.round(profileCompleteness * 0.3));
   const engagementPct = Math.min(100, connections.length > 0 ? connections.length * 8 : 0);
@@ -355,6 +382,24 @@ export default function NetworkingPage() {
     }
   };
 
+  const handleGenerateAdvancedMatching = async () => {
+    if (!user) {
+      toast.error(t('networking.error.must_be_logged'));
+      return;
+    }
+
+    toast.loading('Génération des recommandations IA en cours...');
+    try {
+      await generateRecommendations(user.id);
+      toast.dismiss();
+      toast.success('✨ ' + t('networking.success.recommendations'));
+    } catch (error) {
+      toast.dismiss();
+      toast.error(t('networking.error.recommendations'));
+      console.error(t('error.recommendation'), error);
+    }
+  };
+
   const getCompatibilityColor = (score: number) => {
     if (score >= 80) return 'text-emerald-600';
     if (score >= 60) return 'text-blue-600';
@@ -487,7 +532,7 @@ export default function NetworkingPage() {
                 { icon: Briefcase, label: "Tables rondes sectorielles", desc: "Échanges d'expertise approfondis" },
                 { icon: Building2, label: "Zone Lounge Business & VIP", desc: "Espaces de travail et de détente" },
                 { icon: Mic, label: "Sessions de pitch", desc: "Découvrez les innovations du secteur" },
-                { icon: Users, label: "Espaces d'échanges", desc: "Plus de 6000 professionnels attendus" }
+                { icon: Users, label: "Espaces d'échanges", desc: "Plus de 200 000 professionnels attendus" }
               ].map((item) => (
                 <div key={item.label} className="flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group">
                   <item.icon className="h-12 w-12 text-blue-400 mb-4 group-hover:scale-110 transition-transform" />
@@ -657,6 +702,58 @@ export default function NetworkingPage() {
                     })()}
                   </div>
                 </div>
+
+                {!isLoading && !error && recommendations.length === 0 && (
+                  <div className="mt-6 p-4 bg-gradient-to-r from-amber-50 to-blue-50 rounded-2xl border border-amber-200">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <div>
+                        <h3 className="font-bold text-slate-900 text-sm">Matching avancé non généré</h3>
+                        <p className="text-xs text-slate-600">Cliquez pour lancer l'analyse IA et afficher vos recommandations.</p>
+                        {missingMatchingCriteria.length > 0 && (
+                          <div className="mt-3">
+                            <p className="text-[11px] text-slate-700 font-semibold mb-2">
+                              Critères à compléter ({missingMatchingCriteria.length})
+                            </p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {missingMatchingCriteria.slice(0, 4).map((criterion) => (
+                                <span
+                                  key={criterion}
+                                  className="px-2 py-1 rounded-full text-[10px] font-bold bg-white text-slate-700 border border-slate-200"
+                                >
+                                  {criterion}
+                                </span>
+                              ))}
+                              {missingMatchingCriteria.length > 4 && (
+                                <span className="px-2 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                                  +{missingMatchingCriteria.length - 4}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col sm:items-end gap-2">
+                        <Button
+                          onClick={handleGenerateAdvancedMatching}
+                          disabled={isLoading}
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700 text-white"
+                        >
+                          <Zap className="h-4 w-4 mr-2" />
+                          Générer maintenant
+                        </Button>
+                        {missingMatchingCriteria.length > 0 && (
+                          <Link
+                            to={ROUTES.PROFILE_MATCHING}
+                            className="text-[11px] font-semibold text-blue-700 hover:text-blue-800 underline"
+                          >
+                            Compléter mon profil
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl shadow-xl p-8 text-white relative overflow-hidden">
@@ -750,22 +847,7 @@ export default function NetworkingPage() {
                 </div>
 
                 <Button
-                  onClick={async () => {
-                    if (user) {
-                      toast.loading('Génération des recommandations IA en cours...');
-                      try {
-                        await generateRecommendations(user.id);
-                        toast.dismiss();
-                        toast.success('✨ ' + t('networking.success.recommendations'));
-                      } catch (error) {
-                        toast.dismiss();
-                        toast.error(t('networking.error.recommendations'));
-                        console.error(t('error.recommendation'), error);
-                      }
-                    } else {
-                      toast.error(t('networking.error.must_be_logged'));
-                    }
-                  }}
+                  onClick={handleGenerateAdvancedMatching}
                   disabled={isLoading}
                   size="lg"
                   className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-12 py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1742,7 +1824,7 @@ export default function NetworkingPage() {
 
                 {(() => {
                   const filteredSlots = Array.isArray(timeSlots) ? timeSlots.filter(slot => {
-                    // ✅ FIX: Filtrer pour n'afficher que les 3 jours du salon (1-3 Avril 2026)
+                    // ✅ FIX: Filtrer pour n'afficher que les 5 jours du salon (25-29 Novembre 2026)
                     if (slot.available === false) return false;
                     if (!slot.date) return false;
                     const slotDate = new Date(slot.date as any);

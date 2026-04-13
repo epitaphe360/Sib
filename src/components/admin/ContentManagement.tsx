@@ -1,497 +1,430 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ROUTES } from '../../lib/routes';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Settings,
-  FileText,
-  Users,
-  Building2,
-  Calendar,
-  BarChart3,
-  Globe,
-  Shield,
-  Edit,
-  Save,
-  Eye,
-  ArrowLeft,
-  RefreshCw,
-  AlertTriangle
+  Globe, Zap, Layers, BookOpen, TrendingUp, Eye,
+  Download, LayoutGrid, Info, Save, CheckCircle2,
+  AlertCircle, Loader2, ExternalLink, ChevronRight,
+  Clock, Edit3,
 } from 'lucide-react';
-import { Card } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
-import { Badge } from '../../components/ui/Badge';
-import { motion } from 'framer-motion';
+import { supabase } from '../../lib/supabase';
+import { ROUTES } from '../../lib/routes';
 
-interface ContentSection {
-  id: string;
-  title: string;
-  description: string;
-  icon_name: string; // Store icon name as string
-  color: string;
-  bg_color: string;
-  last_modified: string;
-  status: 'published' | 'draft' | 'archived';
-  content_data: any; // JSONB field for actual content
+// ─── Types ────────────────────────────────────────────────────────────────────
+interface FieldDef {
+  key: string;
+  label: string;
+  type: 'text' | 'textarea';
+  placeholder?: string;
 }
 
-// Map icon names to Lucide React components
-const iconMap: { [key: string]: any } = {
-  Globe: Globe,
-  Building2: Building2,
-  Users: Users,
-  Calendar: Calendar,
-  FileText: FileText,
-  Shield: Shield,
-  BarChart3: BarChart3,
-};
+interface PageDef {
+  slug: string;
+  title: string;
+  Icon: React.FC<{ className?: string }>;
+  route: string;
+  fields: FieldDef[];
+}
 
+// ─── Définition des pages et de leurs champs éditables ────────────────────────
+const PAGES: PageDef[] = [
+  {
+    slug: 'presentation',
+    title: 'Présentation',
+    Icon: Globe,
+    route: ROUTES.PRESENTATION,
+    fields: [
+      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Salon International du Bâtiment' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Depuis 1986, le SIB est le rendez-vous incontournable...' },
+      { key: 'stat_exposants', label: 'Nombre d\'exposants', type: 'text', placeholder: '500' },
+      { key: 'stat_visiteurs', label: 'Nombre de visiteurs', type: 'text', placeholder: '200 000' },
+      { key: 'stat_pays', label: 'Nombre de pays', type: 'text', placeholder: '50' },
+      { key: 'stat_surface', label: 'Surface d\'exposition', type: 'text', placeholder: '35 000 m²' },
+      { key: 'about_text', label: 'Texte À propos (remplace les paragraphes de présentation)', type: 'textarea', placeholder: 'Le Salon International du Bâtiment – SIB revient pour sa 20ᵉ édition...' },
+    ],
+  },
+  {
+    slug: 'nouveautes',
+    title: 'Nouveautés',
+    Icon: Zap,
+    route: ROUTES.NOUVEAUTES,
+    fields: [
+      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Nouveautés' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Découvrez les innovations et les changements majeurs...' },
+      { key: 'item_1_title', label: 'Nouveauté 1 — Titre', type: 'text' },
+      { key: 'item_1_desc', label: 'Nouveauté 1 — Description', type: 'textarea' },
+      { key: 'item_2_title', label: 'Nouveauté 2 — Titre', type: 'text' },
+      { key: 'item_2_desc', label: 'Nouveauté 2 — Description', type: 'textarea' },
+      { key: 'item_3_title', label: 'Nouveauté 3 — Titre', type: 'text' },
+      { key: 'item_3_desc', label: 'Nouveauté 3 — Description', type: 'textarea' },
+      { key: 'item_4_title', label: 'Nouveauté 4 — Titre', type: 'text' },
+      { key: 'item_4_desc', label: 'Nouveauté 4 — Description', type: 'textarea' },
+      { key: 'item_5_title', label: 'Nouveauté 5 — Titre', type: 'text' },
+      { key: 'item_5_desc', label: 'Nouveauté 5 — Description', type: 'textarea' },
+      { key: 'item_6_title', label: 'Nouveauté 6 — Titre', type: 'text' },
+      { key: 'item_6_desc', label: 'Nouveauté 6 — Description', type: 'textarea' },
+      { key: 'item_7_title', label: 'Nouveauté 7 — Titre', type: 'text' },
+      { key: 'item_7_desc', label: 'Nouveauté 7 — Description', type: 'textarea' },
+    ],
+  },
+  {
+    slug: 'secteurs-activites',
+    title: 'Secteurs d\'Activités',
+    Icon: Layers,
+    route: ROUTES.SECTEURS_ACTIVITES,
+    fields: [
+      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Secteurs d\'Activités' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Le SIB couvre l\'ensemble de la chaîne de valeur du bâtiment...' },
+    ],
+  },
+  {
+    slug: 'editions',
+    title: 'Éditions',
+    Icon: BookOpen,
+    route: ROUTES.EDITIONS,
+    fields: [
+      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Nos Éditions' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Depuis 1986, le SIB accompagne l\'essor du secteur du bâtiment...' },
+    ],
+  },
+  {
+    slug: 'pourquoi-exposer',
+    title: 'Pourquoi Exposer',
+    Icon: TrendingUp,
+    route: ROUTES.POURQUOI_EXPOSER,
+    fields: [
+      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Pourquoi Exposer au SIB ?' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Rejoignez le plus grand salon du bâtiment au Maroc...' },
+      { key: 'arg_1_title', label: 'Argument 1 — Titre', type: 'text' },
+      { key: 'arg_1_desc', label: 'Argument 1 — Description', type: 'textarea' },
+      { key: 'arg_2_title', label: 'Argument 2 — Titre', type: 'text' },
+      { key: 'arg_2_desc', label: 'Argument 2 — Description', type: 'textarea' },
+      { key: 'arg_3_title', label: 'Argument 3 — Titre', type: 'text' },
+      { key: 'arg_3_desc', label: 'Argument 3 — Description', type: 'textarea' },
+      { key: 'arg_4_title', label: 'Argument 4 — Titre', type: 'text' },
+      { key: 'arg_4_desc', label: 'Argument 4 — Description', type: 'textarea' },
+      { key: 'arg_5_title', label: 'Argument 5 — Titre', type: 'text' },
+      { key: 'arg_5_desc', label: 'Argument 5 — Description', type: 'textarea' },
+      { key: 'arg_6_title', label: 'Argument 6 — Titre', type: 'text' },
+      { key: 'arg_6_desc', label: 'Argument 6 — Description', type: 'textarea' },
+    ],
+  },
+  {
+    slug: 'pourquoi-visiter',
+    title: 'Pourquoi Visiter',
+    Icon: Eye,
+    route: ROUTES.POURQUOI_VISITER,
+    fields: [
+      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Pourquoi Visiter le SIB ?' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: '5 jours pour découvrir, apprendre et connecter...' },
+      { key: 'arg_1_title', label: 'Raison 1 — Titre', type: 'text' },
+      { key: 'arg_1_desc', label: 'Raison 1 — Description', type: 'textarea' },
+      { key: 'arg_2_title', label: 'Raison 2 — Titre', type: 'text' },
+      { key: 'arg_2_desc', label: 'Raison 2 — Description', type: 'textarea' },
+      { key: 'arg_3_title', label: 'Raison 3 — Titre', type: 'text' },
+      { key: 'arg_3_desc', label: 'Raison 3 — Description', type: 'textarea' },
+      { key: 'arg_4_title', label: 'Raison 4 — Titre', type: 'text' },
+      { key: 'arg_4_desc', label: 'Raison 4 — Description', type: 'textarea' },
+      { key: 'arg_5_title', label: 'Raison 5 — Titre', type: 'text' },
+      { key: 'arg_5_desc', label: 'Raison 5 — Description', type: 'textarea' },
+      { key: 'arg_6_title', label: 'Raison 6 — Titre', type: 'text' },
+      { key: 'arg_6_desc', label: 'Raison 6 — Description', type: 'textarea' },
+    ],
+  },
+  {
+    slug: 'telechargements',
+    title: 'Téléchargements',
+    Icon: Download,
+    route: ROUTES.TELECHARGEMENTS,
+    fields: [
+      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Téléchargements' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Documents officiels, catalogues et bilans des éditions passées.' },
+    ],
+  },
+  {
+    slug: 'espaces-sib',
+    title: 'Espaces SIB',
+    Icon: LayoutGrid,
+    route: ROUTES.ESPACES_SIB,
+    fields: [
+      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Espaces SIB' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Parce que le SIB ne se résume pas qu\'aux stands d\'exposition...' },
+      { key: 'espace_1_title', label: 'Espace 1 — Titre', type: 'text' },
+      { key: 'espace_1_desc', label: 'Espace 1 — Description', type: 'textarea' },
+      { key: 'espace_2_title', label: 'Espace 2 — Titre', type: 'text' },
+      { key: 'espace_2_desc', label: 'Espace 2 — Description', type: 'textarea' },
+      { key: 'espace_3_title', label: 'Espace 3 — Titre', type: 'text' },
+      { key: 'espace_3_desc', label: 'Espace 3 — Description', type: 'textarea' },
+      { key: 'espace_4_title', label: 'Espace 4 — Titre', type: 'text' },
+      { key: 'espace_4_desc', label: 'Espace 4 — Description', type: 'textarea' },
+      { key: 'espace_5_title', label: 'Espace 5 — Titre', type: 'text' },
+      { key: 'espace_5_desc', label: 'Espace 5 — Description', type: 'textarea' },
+    ],
+  },
+  {
+    slug: 'infos-pratiques',
+    title: 'Infos Pratiques',
+    Icon: Info,
+    route: ROUTES.INFOS_PRATIQUES,
+    fields: [
+      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Infos Pratiques' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Tout ce qu\'il faut savoir pour préparer votre visite...' },
+      { key: 'lieu_adresse', label: 'Adresse du lieu', type: 'textarea', placeholder: 'Route Nationale 1 vers Azemmour, Région Casablanca - Settat, 24000 — EL JADIDA' },
+      { key: 'tarifs_intro', label: 'Texte introduction tarifs', type: 'textarea', placeholder: 'L\'entrée est gratuite tout au long des 5 jours d\'exposition...' },
+      { key: 'navette_exposants', label: 'Navettes exposants', type: 'text', placeholder: 'Départ 08h30, Retour 19h00' },
+      { key: 'navette_visiteurs', label: 'Navettes visiteurs', type: 'text', placeholder: 'Départs 08h30 et 10h30 — Retours 17h30 et 18h30' },
+      { key: 'hebergement_text', label: 'Texte hébergement', type: 'textarea', placeholder: 'Les hôtels recommandés à proximité...' },
+    ],
+  },
+];
+
+// ─── Composant principal ──────────────────────────────────────────────────────
 export default function ContentManagement() {
-  const [contentSections, setContentSections] = useState<ContentSection[]>([]);
-  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [selectedPage, setSelectedPage] = useState<PageDef | null>(null);
+  const [allContents, setAllContents] = useState<Record<string, Record<string, string>>>({});
+  const [editValues, setEditValues] = useState<Record<string, string>>({});
+  const [updatedDates, setUpdatedDates] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [currentContentData, setCurrentContentData] = useState<any>({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
+  // Chargement initial de tous les contenus
   useEffect(() => {
-    fetchContentSections();
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from('page_contents')
+          .select('page_slug, content, updated_at');
+        if (data) {
+          const contentMap: Record<string, Record<string, string>> = {};
+          const dateMap: Record<string, string> = {};
+          data.forEach((row: any) => {
+            contentMap[row.page_slug] = row.content ?? {};
+            dateMap[row.page_slug] = row.updated_at;
+          });
+          setAllContents(contentMap);
+          setUpdatedDates(dateMap);
+        }
+      } catch { /* silently fail */ }
+      setIsLoading(false);
+    })();
   }, []);
 
-  const fetchContentSections = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // Static content sections - these represent the different pages/sections that can be managed
-      const staticSections: ContentSection[] = [
-        {
-          id: 'home',
-          title: 'Page d\'Accueil',
-          description: 'Contenu principal de la page d\'accueil SIB',
-          icon_name: 'Globe',
-          color: 'text-blue-600',
-          bg_color: 'bg-blue-100',
-          last_modified: new Date().toISOString(),
-          status: 'published',
-          content_data: {}
-        },
-        {
-          id: 'pavilions',
-          title: 'Pavillons Thématiques',
-          description: 'Gestion des pavillons et de leurs contenus',
-          icon_name: 'Building2',
-          color: 'text-green-600',
-          bg_color: 'bg-green-100',
-          last_modified: new Date().toISOString(),
-          status: 'published',
-          content_data: {}
-        },
-        {
-          id: 'exhibitors',
-          title: 'Exposants',
-          description: 'Présentation et informations des exposants',
-          icon_name: 'Users',
-          color: 'text-purple-600',
-          bg_color: 'bg-purple-100',
-          last_modified: new Date().toISOString(),
-          status: 'published',
-          content_data: {}
-        },
-        {
-          id: 'events',
-          title: 'Événements',
-          description: 'Programmation et agenda des événements',
-          icon_name: 'Calendar',
-          color: 'text-orange-600',
-          bg_color: 'bg-orange-100',
-          last_modified: new Date().toISOString(),
-          status: 'published',
-          content_data: {}
-        },
-        {
-          id: 'news',
-          title: 'Actualités',
-          description: 'Articles et communiqués de presse',
-          icon_name: 'FileText',
-          color: 'text-indigo-600',
-          bg_color: 'bg-indigo-100',
-          last_modified: new Date().toISOString(),
-          status: 'published',
-          content_data: {}
-        },
-        {
-          id: 'partners',
-          title: 'Partenaires',
-          description: 'Informations sur les partenaires SIB',
-          icon_name: 'Shield',
-          color: 'text-red-600',
-          bg_color: 'bg-red-100',
-          last_modified: new Date().toISOString(),
-          status: 'published',
-          content_data: {}
-        },
-        {
-          id: 'metrics',
-          title: 'Métriques',
-          description: 'Statistiques et indicateurs de performance',
-          icon_name: 'BarChart3',
-          color: 'text-cyan-600',
-          bg_color: 'bg-cyan-100',
-          last_modified: new Date().toISOString(),
-          status: 'published',
-          content_data: {}
-        }
-      ];
-      setContentSections(staticSections);
-      if (selectedSectionId) {
-        const current = staticSections.find((s: ContentSection) => s.id === selectedSectionId);
-        setCurrentContentData(current?.content_data || {});
-      }
-    } catch (err) {
-      console.error('Error fetching content sections:', err);
-      setError('Failed to load content sections. Please try again later.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handlePageSelect = useCallback((page: PageDef) => {
+    setSelectedPage(page);
+    setEditValues(allContents[page.slug] ?? {});
+    setSaveStatus('idle');
+  }, [allContents]);
 
-  const handleSectionSelect = (sectionId: string) => {
-    setSelectedSectionId(sectionId);
-    setIsEditing(false);
-    const section = contentSections.find(s => s.id === sectionId);
-    setCurrentContentData(section?.content_data || {});
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
+  const handleFieldChange = useCallback((key: string, value: string) => {
+    setEditValues((prev) => ({ ...prev, [key]: value }));
+  }, []);
 
   const handleSave = async () => {
-    if (!selectedSectionId) return;
-
-    setIsLoading(true);
-    setError(null);
+    if (!selectedPage) return;
+    setIsSaving(true);
+    setSaveStatus('idle');
     try {
-      // Update local state - in a full implementation, this would save to a backend
-      const updatedSections = contentSections.map(section =>
-        section.id === selectedSectionId
-          ? { ...section, content_data: currentContentData, last_modified: new Date().toISOString() }
-          : section
+      const { data: { user } } = await supabase.auth.getUser();
+      const { error } = await supabase.from('page_contents').upsert(
+        { page_slug: selectedPage.slug, content: editValues, updated_by: user?.id ?? null },
+        { onConflict: 'page_slug' }
       );
-      setContentSections(updatedSections);
-      setIsEditing(false);
-      // Note: For persistent storage, implement backend API endpoint or use SupabaseService with proper authentication
-      console.log('Content saved locally. Implement backend persistence for production.');
-    } catch (err) {
-      console.error('Error saving content:', err);
-      setError('Failed to save content. Please try again.');
+      if (error) throw error;
+      setAllContents((prev) => ({ ...prev, [selectedPage.slug]: editValues }));
+      setUpdatedDates((prev) => ({ ...prev, [selectedPage.slug]: new Date().toISOString() }));
+      setSaveStatus('success');
+      setTimeout(() => setSaveStatus('idle'), 4000);
+    } catch {
+      setSaveStatus('error');
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
     }
   };
 
-  const handlePreview = () => {
-    // Implement actual preview logic, e.g., open in new tab or modal
+  const handleReset = () => {
+    if (!selectedPage) return;
+    setEditValues(allContents[selectedPage.slug] ?? {});
+    setSaveStatus('idle');
   };
 
-  const handleContentChange = (key: string, value: any) => {
-    setCurrentContentData(prev => ({ ...prev, [key]: value }));
-  };
+  const formatDate = (iso: string) =>
+    iso
+      ? new Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso))
+      : null;
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'published':
-        return <Badge variant="success">Publié</Badge>;
-      case 'draft':
-        return <Badge variant="warning">Brouillon</Badge>;
-      case 'archived':
-        return <Badge variant="info">Archivé</Badge>;
-      default:
-        return <Badge variant="default">{status}</Badge>;
-    }
-  };
-
-  const selectedSectionData = contentSections.find(section => section.id === selectedSectionId);
-
-  if (isLoading && contentSections.length === 0) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <RefreshCw className="h-12 w-12 text-blue-500 animate-spin mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900">Chargement du contenu...</h3>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center p-6 bg-white rounded-lg shadow-md">
-          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Erreur de chargement</h3>
-          <p className="text-gray-600">{error}</p>
-          <Button onClick={fetchContentSections} className="mt-4">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Réessayer
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  const hasCustomContent = (slug: string) =>
+    Object.values(allContents[slug] ?? {}).some((v) => v?.trim() !== '');
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-4">
-            <Link to={ROUTES.ADMIN_DASHBOARD}>
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour au Dashboard
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Gestion du Contenu</h1>
-              <p className="text-gray-600 mt-2">
-                Administration centralisée de tous les contenus de l'application SIB
-              </p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* En-tête */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Gestion du Contenu</h1>
+        <p className="text-gray-500 mt-2 max-w-2xl">
+          Modifiez le contenu des pages publiques du site SIB directement depuis l'interface
+          d'administration. Les modifications sont visibles immédiatement après sauvegarde.
+        </p>
+      </div>
+
+      {isLoading ? (
+        <div className="flex items-center justify-center py-40">
+          <Loader2 className="w-8 h-8 text-sib-navy animate-spin" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Panneau gauche — liste des pages */}
+          <div className="lg:col-span-4">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">
+                  Pages du site ({PAGES.length})
+                </p>
+              </div>
+              <ul className="divide-y divide-gray-50">
+                {PAGES.map((page) => {
+                  const isSelected = selectedPage?.slug === page.slug;
+                  const dated = updatedDates[page.slug];
+                  const hasContent = hasCustomContent(page.slug);
+                  return (
+                    <li key={page.slug}>
+                      <button
+                        onClick={() => handlePageSelect(page)}
+                        className={`w-full text-left px-5 py-4 flex items-center gap-4 transition-all hover:bg-gray-50 ${isSelected ? 'bg-blue-50 border-l-4 border-sib-navy' : 'border-l-4 border-transparent'}`}
+                      >
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${isSelected ? 'bg-sib-navy' : 'bg-gray-100'}`}>
+                          <page.Icon className={`w-5 h-5 ${isSelected ? 'text-white' : 'text-gray-500'}`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className={`font-semibold text-sm truncate ${isSelected ? 'text-sib-navy' : 'text-gray-800'}`}>
+                            {page.title}
+                          </p>
+                          {dated ? (
+                            <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                              <Clock className="w-3 h-3" />
+                              {formatDate(dated)}
+                            </p>
+                          ) : (
+                            <p className="text-xs text-gray-400 mt-0.5">Non personnalisé</p>
+                          )}
+                        </div>
+                        {hasContent && (
+                          <span
+                            className="w-2.5 h-2.5 rounded-full bg-emerald-400 flex-shrink-0"
+                            title="Contenu personnalisé actif"
+                          />
+                        )}
+                        <ChevronRight className={`w-4 h-4 flex-shrink-0 ${isSelected ? 'text-sib-navy' : 'text-gray-300'}`} />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Liste des sections */}
-          <div className="lg:col-span-1">
-            <Card>
-              <div className="p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <Settings className="h-5 w-5 mr-2 text-gray-600" />
-                  Sections Modifiables
-                </h2>
-
-                <div className="space-y-3">
-                  {contentSections.map((section) => {
-                    const IconComponent = iconMap[section.icon_name] || Settings;
-                    const isSelected = selectedSectionId === section.id;
-
-                    return (
-                      <motion.div
-                        key={section.id}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <button
-                          onClick={() => handleSectionSelect(section.id)}
-                          className={`w-full p-4 rounded-lg border text-left transition-all ${
-                            isSelected
-                              ? 'border-blue-500 bg-blue-50 shadow-md'
-                              : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                          }`}
-                        >
-                          <div className="flex items-start space-x-3">
-                            <div className={`p-2 rounded-lg ${section.bg_color}`}>
-                              <IconComponent className={`h-4 w-4 ${section.color}`} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-medium text-gray-900 text-sm">
-                                {section.title}
-                              </h3>
-                              <p className="text-xs text-gray-600 mt-1 line-clamp-2">
-                                {section.description}
-                              </p>
-                              <div className="flex items-center justify-between mt-2">
-                                <span className="text-xs text-gray-500">
-                                  Modifié: {new Date(section.last_modified).toLocaleDateString('fr-FR')}
-                                </span>
-                                {getStatusBadge(section.status)}
-                              </div>
-                            </div>
-                          </div>
-                        </button>
-                      </motion.div>
-                    );
-                  })}
+          {/* Panneau droit — éditeur */}
+          <div className="lg:col-span-8">
+            {!selectedPage ? (
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm h-full flex items-center justify-center py-40">
+                <div className="text-center text-gray-400">
+                  <Edit3 className="w-14 h-14 mx-auto mb-4 opacity-20" />
+                  <p className="font-semibold text-gray-500">Sélectionnez une page à modifier</p>
+                  <p className="text-sm mt-1 text-gray-400">Cliquez sur une page dans le panneau de gauche</p>
                 </div>
               </div>
-            </Card>
-          </div>
-
-          {/* Éditeur de contenu */}
-          <div className="lg:col-span-2">
-            {selectedSectionData ? (
-              <Card>
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${selectedSectionData.bg_color}`}>
-                        {selectedSectionData.icon_name && iconMap[selectedSectionData.icon_name] ? React.createElement(iconMap[selectedSectionData.icon_name], { className: `h-5 w-5 ${selectedSectionData.color}` }) : <Settings className={`h-5 w-5 ${selectedSectionData.color}`} />}
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-semibold text-gray-900">
-                          {selectedSectionData.title}
-                        </h2>
-                        <p className="text-sm text-gray-600">
-                          {selectedSectionData.description}
-                        </p>
-                      </div>
+            ) : (
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
+                {/* En-tête de l'éditeur */}
+                <div className="px-8 py-5 border-b border-gray-100 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-sib-navy flex items-center justify-center flex-shrink-0">
+                      <selectedPage.Icon className="w-5 h-5 text-white" />
                     </div>
+                    <div>
+                      <h2 className="font-bold text-gray-900">{selectedPage.title}</h2>
+                      <a
+                        href={selectedPage.route}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-sib-gold hover:underline flex items-center gap-1"
+                      >
+                        <ExternalLink className="w-3 h-3" /> Voir la page en direct
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handleReset}
+                      className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      disabled={isSaving}
+                      className="px-6 py-2 bg-sib-navy text-white text-sm font-bold rounded-xl hover:bg-sib-navy/90 transition-colors disabled:opacity-50 flex items-center gap-2 shadow-sm"
+                    >
+                      {isSaving
+                        ? <Loader2 className="w-4 h-4 animate-spin" />
+                        : <Save className="w-4 h-4" />}
+                      Sauvegarder
+                    </button>
+                  </div>
+                </div>
 
-                    <div className="flex space-x-2">
-                      <Button variant="outline" size="sm" onClick={handlePreview}>
-                        <Eye className="h-4 w-4 mr-2" />
-                        Prévisualiser
-                      </Button>
-                      {!isEditing ? (
-                        <Button variant="default" size="sm" onClick={handleEdit}>
-                          <Edit className="h-4 w-4 mr-2" />
-                          Modifier
-                        </Button>
+                {/* Messages de statut */}
+                {saveStatus === 'success' && (
+                  <div className="mx-8 mt-5 px-5 py-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-emerald-700 text-sm">
+                    <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                    Modifications sauvegardées. Les visiteurs voient le nouveau contenu immédiatement.
+                  </div>
+                )}
+                {saveStatus === 'error' && (
+                  <div className="mx-8 mt-5 px-5 py-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-red-700 text-sm">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                    Erreur lors de la sauvegarde. Vérifiez votre connexion et vos droits d'administration.
+                  </div>
+                )}
+
+                {/* Champs éditables */}
+                <div className="px-8 py-6 space-y-6">
+                  <div className="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-700 text-xs">
+                    <span className="text-base flex-shrink-0">💡</span>
+                    <span>
+                      Laissez un champ vide pour conserver la valeur par défaut codée dans l'application.
+                      Remplissez un champ uniquement si vous souhaitez personnaliser ce contenu.
+                    </span>
+                  </div>
+
+                  {selectedPage.fields.map((field) => (
+                    <div key={field.key}>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        {field.label}
+                      </label>
+                      {field.type === 'textarea' ? (
+                        <textarea
+                          value={editValues[field.key] ?? ''}
+                          onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                          placeholder={field.placeholder ?? ''}
+                          rows={4}
+                          className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-800 resize-y focus:outline-none focus:ring-2 focus:ring-sib-navy/20 focus:border-sib-navy transition-colors placeholder:text-gray-300"
+                        />
                       ) : (
-                        <Button variant="default" size="sm" onClick={handleSave} disabled={isLoading}>
-                          {isLoading ? (
-                            <>
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                              Sauvegarde...
-                            </>
-                          ) : (
-                            <>
-                              <Save className="h-4 w-4 mr-2" />
-                              Sauvegarder
-                            </>
-                          )}
-                        </Button>
+                        <input
+                          type="text"
+                          value={editValues[field.key] ?? ''}
+                          onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                          placeholder={field.placeholder ?? ''}
+                          className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-sib-navy/20 focus:border-sib-navy transition-colors placeholder:text-gray-300"
+                        />
                       )}
                     </div>
-                  </div>
-
-                  {/* Zone d'édition */}
-                  <div className="space-y-6">
-                    {selectedSectionId === 'home' && (
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Titre Principal
-                          </label>
-                          <input
-                            type="text"
-                            disabled={!isEditing}
-                            value={currentContentData.mainTitle || ''}
-                            onChange={(e) => handleContentChange('mainTitle', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Description
-                          </label>
-                          <textarea
-                            rows={4}
-                            disabled={!isEditing}
-                            value={currentContentData.descriptionText || ''}
-                            onChange={(e) => handleContentChange('descriptionText', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Statistiques Clés (séparées par des virgules)
-                          </label>
-                          <input
-                            type="text"
-                            disabled={!isEditing}
-                            value={currentContentData.keyStats ? currentContentData.keyStats.join(', ') : ''}
-                            onChange={(e) => handleContentChange('keyStats', e.target.value.split(',').map((s: string) => s.trim()))}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedSectionId === 'pavilions' && (
-                      <div className="space-y-4">
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                          <p className="text-sm text-blue-800">
-                            <strong>Info:</strong> La gestion des pavillons se fait via la page dédiée
-                            "Gestion des Pavillons" dans le menu principal.
-                          </p>
-                          <Link to={ROUTES.ADMIN_PAVILIONS}>
-                            <Button variant="outline" size="sm" className="mt-2">
-                              <Building2 className="h-4 w-4 mr-2" />
-                              Aller à la Gestion des Pavillons
-                            </Button>
-                          </Link>
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedSectionId === 'events' && (
-                      <div className="space-y-4">
-                        <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                          <p className="text-sm text-orange-800">
-                            <strong>Info:</strong> La gestion des événements se fait via la page dédiée
-                            "Gestion des Événements" dans le menu principal.
-                          </p>
-                          <Link to={ROUTES.ADMIN_EVENTS}>
-                            <Button variant="outline" size="sm" className="mt-2">
-                              <Calendar className="h-4 w-4 mr-2" />
-                              Aller à la Gestion des Événements
-                            </Button>
-                          </Link>
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedSectionId === 'news' && (
-                      <div className="space-y-4">
-                        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-                          <p className="text-sm text-indigo-800">
-                            <strong>Info:</strong> La gestion des actualités se fait via le système
-                            de création d'articles dans le menu principal.
-                          </p>
-                          <Link to={ROUTES.ADMIN_CREATE_NEWS}>
-                            <Button variant="outline" size="sm" className="mt-2">
-                              <FileText className="h-4 w-4 mr-2" />
-                              Créer un Article
-                            </Button>
-                          </Link>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Sections génériques */}
-                    {(selectedSectionId === 'exhibitors' || selectedSectionId === 'partners' || selectedSectionId === 'metrics') && (
-                      <div className="space-y-4">
-                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                          <p className="text-sm text-gray-700">
-                            Cette section est gérée automatiquement par le système.
-                            Les modifications se font via les interfaces dédiées dans le menu principal.
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  ))}
                 </div>
-              </Card>
-            ) : (
-              <Card>
-                <div className="p-12 text-center">
-                  <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    Sélectionnez une Section
-                  </h3>
-                  <p className="text-gray-600">
-                    Choisissez une section dans la liste à gauche pour commencer l'édition du contenu
-                  </p>
-                </div>
-              </Card>
+              </div>
             )}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
-

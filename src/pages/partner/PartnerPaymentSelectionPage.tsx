@@ -46,7 +46,7 @@ export default function PartnerPaymentSelectionPage() {
     }
   }, [user, tier, navigate]);
 
-  const tier = (searchParams.get('tier') || 'museum') as PartnerTier;
+  const tier = (searchParams.get('tier') || 'partner') as PartnerTier;
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(null);
   const [processing, setProcessing] = useState(false);
 

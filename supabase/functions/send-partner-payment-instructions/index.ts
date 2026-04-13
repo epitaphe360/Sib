@@ -311,7 +311,7 @@ function getPartnerPaymentInstructionHTML(data: PartnerPaymentInstructionRequest
         <div class="bank-details">
           <div class="bank-row">
             <span class="bank-label">Bénéficiaire :</span>
-            <span class="bank-value">LINECO EVENTS</span>
+            <span class="bank-value">URBACOM</span>
           </div>
           <div class="bank-row">
             <span class="bank-label">Banque :</span>

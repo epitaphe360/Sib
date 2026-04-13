@@ -22,9 +22,9 @@ export async function sendPartnerPaymentInstructions(
   try {
     const { userId, email, firstName, lastName, companyName } = data;
 
-    // Créer une demande de paiement par défaut (tier museum)
-    const defaultTier = 'museum';
-    const amount = 20000; // $20,000 pour tier museum
+    // Créer une demande de paiement par défaut (tier partner)
+    const defaultTier = 'partner';
+    const amount = 200000; // 200 000 MAD pour tier partner
 
     // Créer la payment_request
     const { data: paymentRequest, error: paymentError } = await supabase
@@ -33,7 +33,7 @@ export async function sendPartnerPaymentInstructions(
         user_id: userId,
         requested_level: defaultTier,
         amount: amount,
-        currency: 'USD',
+        currency: 'MAD',
         payment_method: 'bank_transfer',
         status: 'pending',
         created_at: new Date().toISOString()

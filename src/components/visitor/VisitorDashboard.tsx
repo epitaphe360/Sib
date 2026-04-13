@@ -30,16 +30,16 @@ export default memo(function VisitorDashboard() {
 
   if (!ctx.isAuthenticated || !ctx.user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sib-bg flex items-center justify-center">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md border border-gray-100">
-            <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-SIB-primary to-SIB-secondary rounded-full flex items-center justify-center">
-              <Users className="h-10 w-10 text-SIB-gold" />
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md border border-sib-gray-100">
+            <div className="w-20 h-20 mx-auto mb-4 bg-[#C9A84C]/15 rounded-full flex items-center justify-center border border-[#C9A84C]/30">
+              <Users className="h-10 w-10 text-[#C9A84C]" />
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('visitor.unauthorized_access')}</h3>
             <p className="text-gray-600 mb-6">{t('visitor.please_login')}</p>
             <Link to={ROUTES.LOGIN}>
-              <Button className="w-full bg-gradient-to-r from-SIB-primary to-SIB-secondary hover:from-SIB-secondary hover:to-SIB-primary text-white">
+              <Button className="w-full bg-[#1B365D] hover:bg-[#0F2034] text-white">
                 <Activity className="h-4 w-4 mr-2" />{t('nav.login')}
               </Button>
             </Link>
@@ -50,7 +50,7 @@ export default memo(function VisitorDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sib-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Pending payment banner */}

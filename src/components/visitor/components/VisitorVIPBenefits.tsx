@@ -9,17 +9,17 @@ export function VisitorVIPBenefits() {
   const { t } = useTranslation();
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8">
-      <Card className="p-6 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-xl shadow-lg relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-10">
-          <Crown className="w-32 h-32 text-yellow-600" />
+      <Card className="p-6 bg-[#0F2034] border border-[#C9A84C]/20 rounded-xl shadow-lg relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-5">
+          <Crown className="w-32 h-32 text-[#C9A84C]" />
         </div>
         <div className="flex items-center gap-3 mb-6 relative z-10">
-          <div className="p-2 bg-yellow-100 rounded-lg">
-            <Crown className="h-6 w-6 text-yellow-600" />
+          <div className="p-2 bg-[#C9A84C]/15 rounded-lg border border-[#C9A84C]/30">
+            <Crown className="h-6 w-6 text-[#C9A84C]" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-900">{t('visitor.vip_benefits_title')}</h3>
-            <p className="text-yellow-700 text-sm">{t('visitor.vip_benefits_subtitle')}</p>
+            <h3 className="text-xl font-bold text-white">{t('visitor.vip_benefits_title')}</h3>
+            <p className="text-[#C9A84C]/80 text-sm">{t('visitor.vip_benefits_subtitle')}</p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 relative z-10">
@@ -32,13 +32,13 @@ export function VisitorVIPBenefits() {
             { icon: Headphones, label: t('visitor.vip_support_priority'), desc: t('visitor.vip_support_desc'), to: ROUTES.SUPPORT },
             { icon: Zap, label: t('visitor.vip_news_priority'), desc: t('visitor.vip_news_desc'), to: ROUTES.NEWS },
           ].map(({ icon: Icon, label, desc, to }) => {
-            const cls = "flex items-start gap-3 p-3 bg-white/60 rounded-lg border border-yellow-100 transition-all hover:bg-white hover:shadow-sm";
+            const cls = "flex items-start gap-3 p-3 bg-white/5 rounded-lg border border-[#C9A84C]/15 transition-all hover:bg-white/10 hover:border-[#C9A84C]/30";
             const inner = (
               <>
-                <Icon className="h-5 w-5 text-yellow-600 mt-0.5" />
+                <Icon className="h-5 w-5 text-[#C9A84C] mt-0.5" />
                 <div>
-                  <p className="font-semibold text-gray-900">{label}</p>
-                  <p className="text-xs text-gray-600">{desc}</p>
+                  <p className="font-semibold text-white">{label}</p>
+                  <p className="text-xs text-slate-400">{desc}</p>
                 </div>
               </>
             );

@@ -594,24 +594,24 @@ export default function PendingAccountPage() {
               
               <div className="grid md:grid-cols-3 gap-4">
                 <a 
-                  href="mailto:exposants@sibs.com"
+                  href="mailto:contact@sibevent.com"
                   className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                 >
                   <Mail className="h-5 w-5 text-blue-600" />
                   <div>
                     <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-medium">exposants@sibs.com</p>
+                    <p className="font-medium">contact@sibevent.com</p>
                   </div>
                 </a>
 
                 <a 
-                  href="tel:+33123456789"
+                  href="tel:+212668385228"
                   className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                 >
                   <Phone className="h-5 w-5 text-green-600" />
                   <div>
                     <p className="text-sm text-gray-500">Telephone</p>
-                    <p className="font-medium">+33 1 23 45 67 89</p>
+                    <p className="font-medium">+212 6 68 38 52 28</p>
                   </div>
                 </a>
 

@@ -39,7 +39,7 @@ const VISITOR_POSITIONS = [
   'Directeur des Opérations',
   'Directeur Commercial',
   'Responsable Logistique',
-  'Responsable Supply Chain',
+  'Responsable Approvisionnement',
   'Ingénieur',
   'Consultant',
   'Chercheur',
@@ -268,10 +268,10 @@ export default function RegisterPage() {
   ];
 
   const sectors = [
-    'Autorité urbaine',
-    'Opérateur de Terminal',
-    'Transport & mobilité',
-    'Logistique',
+    'Organisme Institutionnel',
+    'Opérateur de Chantier',
+    'Transport & Mobilité Urbaine',
+    'Logistique BTP',
     'Équipements BTP',
     'Services BTP',
     'Consulting',

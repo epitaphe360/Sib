@@ -50,10 +50,10 @@ interface SectorBreakdown {
 
 const SECTOR_COLORS = ['#1D4ED8', '#059669', '#D97706', '#7C3AED', '#DC2626', '#0891B2', '#B45309'];
 const SUBSCRIPTION_COSTS: Record<string, number> = {
-  or: 25000,
-  platinum: 50000,
-  premium: 35000,
-  standard: 15000,
+  official_sponsor: 500000,
+  organizer: 0,
+  gold: 350000,
+  partner: 200000,
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────

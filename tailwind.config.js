@@ -5,22 +5,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        siports: {
-          primary: '#1B365D',    // Bleu marine profond (conservé)
-          secondary: '#2E5984',  // Bleu océan (conservé)
-          accent: '#4A90A4',     // Bleu turquoise (conservé)
-          light: '#87CEEB',      // Bleu ciel (conservé)
-          dark: '#0F2A44',       // Bleu nuit (conservé)
-          gold: '#D4AF37',       // Or maritime (conservé)
-          orange: '#FF6B35',     // Orange énergique (conservé)
-          // Nouvelles couleurs inspirées du site SIPORTS
-          'navy': '#0A1929',     // Bleu marine très foncé
-          'teal': '#006D77',     // Bleu-vert océan
-          'coral': '#FF7F50',    // Corail pour les accents
-          'sand': '#F4E4BC',     // Sable pour les fonds clairs
-          'maritime': '#2C5F5D', // Vert maritime
+        // Palette officielle SIB — Salon International du Bâtiment
+        sib: {
+          navy:         '#1B365D',  // Bleu architecte — couleur primaire
+          'navy-light': '#2E5984',  // Bleu moyen
+          'navy-dark':  '#0F2034',  // Bleu nuit
+          gold:         '#C9A84C',  // Or architectural — accent premium
+          'gold-light': '#E8C96A',  // Or clair
+          'gold-dark':  '#A88830',  // Or profond
+          green:        '#2D6A4F',  // Vert construction durable
+          'green-light':'#3D8A65',
+          bg:           '#F8FBFF',  // Fond de base
+          surface:      '#FFFFFF',  // Surface cartes
+          anthracite:   '#1A2332',  // Texte principal
           gray: {
-            50: '#F8FAFC',
+            50:  '#F8FAFC',
             100: '#F1F5F9',
             200: '#E2E8F0',
             300: '#CBD5E1',
@@ -29,9 +28,21 @@ export default {
             600: '#475569',
             700: '#334155',
             800: '#1E293B',
-            900: '#0F172A'
-          }
-        }
+            900: '#0F172A',
+          },
+        },
+        // Aliases pour rétrocompatibilité (classes bg-SIB-primary, text-SIB-gold, etc.)
+        'SIB-primary':   '#1B365D',
+        'SIB-secondary': '#2E5984',
+        'SIB-gold':      '#C9A84C',
+        'SIB-accent':    '#2D6A4F',
+        // Ancien namespace conservé pour migration progressive
+        siports: {
+          primary:   '#1B365D',
+          secondary: '#2E5984',
+          gold:      '#C9A84C',
+          orange:    '#FF6B35',
+        },
       },
       fontFamily: {
         sans: ['"Open Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -60,9 +71,13 @@ export default {
         '3xl': '1.5rem'
       },
       boxShadow: {
-        'siports': '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
+        'sib':    '0 4px 6px -1px rgba(27, 54, 93, 0.12), 0 2px 4px -1px rgba(27, 54, 93, 0.07)',
+        'sib-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.12), 0 4px 6px -2px rgba(27, 54, 93, 0.07)',
+        'sib-xl': '0 18px 38px -10px rgba(27, 54, 93, 0.18), 0 12px 22px -8px rgba(27, 54, 93, 0.12)',
+        // Rétrocompatibilité
+        'siports':    '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
         'siports-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)',
-        'siports-xl': '0 18px 38px -18px rgba(7, 32, 57, 0.45), 0 12px 22px -16px rgba(7, 32, 57, 0.32)'
+        'siports-xl': '0 18px 38px -18px rgba(7, 32, 57, 0.45), 0 12px 22px -16px rgba(7, 32, 57, 0.32)',
       },
       animation: {
         'blob': 'blob 7s infinite',

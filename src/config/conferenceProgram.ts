@@ -1,6 +1,6 @@
 /**
  * Programme détaillé des conférences SIB 2026
- * 1-3 Avril 2026
+ * 25-29 Novembre 2026
  */
 
 export interface ConferenceSession {
@@ -18,7 +18,7 @@ export interface DayProgram {
 
 export const CONFERENCE_PROGRAM: DayProgram[] = [
   {
-    date: '1 avril 2026',
+    date: '25 novembre 2026',
     dayNumber: 1,
     sessions: [
       {
@@ -54,7 +54,7 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
     ]
   },
   {
-    date: '2 avril 2026',
+    date: '26 novembre 2026',
     dayNumber: 2,
     sessions: [
       {
@@ -69,7 +69,7 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
       },
       {
         time: '11:00 – 12:30',
-        title: 'Transition climatique et réglementaire : une nouvelle ère pour l\'industrie navale',
+        title: 'Transition énergétique et réglementaire : une nouvelle ère pour l\'industrie du bâtiment',
         type: 'session'
       },
       {
@@ -85,7 +85,7 @@ export const CONFERENCE_PROGRAM: DayProgram[] = [
     ]
   },
   {
-    date: '3 avril 2026',
+    date: '27 novembre 2026',
     dayNumber: 3,
     sessions: [
       {

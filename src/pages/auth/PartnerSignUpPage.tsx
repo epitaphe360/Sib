@@ -87,7 +87,7 @@ export default function PartnerSignUpPage() {
       acceptTerms: false,
       acceptPrivacy: false,
       sectors: [],
-      partnerTier: 'museum', // Default to museum
+      partnerTier: 'silver', // Default to silver
     }
   });
 
@@ -299,15 +299,14 @@ export default function PartnerSignUpPage() {
                   <Label htmlFor="partnerTier">Niveau de Partenariat *</Label>
                   <div className="relative">
                     <Crown className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10 pointer-events-none" />
-                    <Select onValueChange={(value: string) => setValue('partnerTier', value)} defaultValue="museum">
+                    <Select onValueChange={(value: string) => setValue('partnerTier', value)} defaultValue="silver">
                       <SelectTrigger id="partnerTier" className="pl-10">
                         <SelectValue placeholder="Sélectionnez votre niveau" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="museum">🏛️ Museum Partner (18.400 €)</SelectItem>
-                        <SelectItem value="silver">🥈 Silver Partner (Contactez-nous)</SelectItem>
-                        <SelectItem value="gold">🥇 Gold Partner (Contactez-nous)</SelectItem>
-                        <SelectItem value="platinum">💎 Platinum Partner (Contactez-nous)</SelectItem>
+                        <SelectItem value="silver">🥈 Sponsor Silver (200 000 MAD)</SelectItem>
+                        <SelectItem value="gold">🥇 Sponsor Gold (350 000 MAD)</SelectItem>
+                        <SelectItem value="official_sponsor">⭐ Sponsor Officiel (500 000 MAD)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

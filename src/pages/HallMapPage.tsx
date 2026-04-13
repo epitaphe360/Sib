@@ -189,7 +189,7 @@ export default function HallMapPage() {
                 Plan Interactif des Halls — SIB 2026
               </h1>
               <p className="text-gray-500 text-sm mt-0.5">
-                Casablanca Exhibition Center · 3–6 Février 2026 · {isLoadingBooths ? 'Chargement...' : `${occupiedCount}/${booths.length} stands occupés`}
+                Parc d'Exposition Mohammed VI, El Jadida · 25–29 Novembre 2026 · {isLoadingBooths ? 'Chargement...' : `${occupiedCount}/${booths.length} stands occupés`}
               </p>
             </div>
             <div className="flex items-center gap-2">

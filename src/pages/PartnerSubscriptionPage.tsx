@@ -37,136 +37,111 @@ interface PartnerTierData {
 
 const partnerTiers: PartnerTierData[] = [
   {
-    id: 'partner-museum',
-    name: 'Partenaire Musée (20k$)',
-    price: 20000,
-    currency: 'USD',
-    icon: <Star className="w-8 h-8" />,
-    description: 'Présence & mini-site',
-    level: 'museum',
-    features: [
-      { name: 'Logo sur le site', included: true },
-      { name: 'Mini-site dédié', included: true },
-      { name: 'Bannière rotative', included: true },
-      { name: 'Présence newsletter', included: true },
-      { name: 'Vidéos "Inside SIB"', included: true },
-      { name: 'Interview Live Studio', included: true },
-      { name: 'Inclusion podcast', included: false },
-      { name: 'Priorité algorithmique', included: false },
-    ],
-    benefits: [
-      'Logo en 4ème ligne sur le site',
-      'Mini-site Premium Exposure',
-      'Bannière Web rotative',
-      'Présence dans e-mailings',
-      'Capsules vidéo marquées',
-      'Interview "Meet The Leaders"',
-      'Mention "Best Moments"',
-    ],
-    cta: 'Inscription Partenaire',
-    color: 'bg-cyan-50',
-  },
-  {
     id: 'partner-silver',
-    name: 'Partenaire Silver (48k$)',
-    price: 48000,
-    currency: 'USD',
+    name: 'Sponsor Silver',
+    price: 200000,
+    currency: 'MAD',
     icon: <Award className="w-8 h-8" />,
-    description: 'Visibilité renforcée 3ème ligne',
+    description: 'Visibilité & communication',
     level: 'silver',
     features: [
-      { name: 'Logo en 3ème ligne', included: true },
-      { name: 'Mini-site dédié', included: true },
-      { name: 'Bannière rotative', included: true },
-      { name: 'Section "Top Innovations"', included: true },
-      { name: 'Présence newsletters', included: true },
-      { name: 'Capsules vidéo sponsorisées', included: true },
-      { name: 'Podcast SIB Talks', included: true },
-      { name: 'Interview Live Studio', included: true },
-      { name: 'Testimonial vidéo (1 min)', included: true },
+      { name: 'Logo sur tous les supports de communication', included: true },
+      { name: 'Logo sur le plan officiel', included: true },
+      { name: 'Bannière sur le site web (1)', included: true },
+      { name: 'Livraison de 200 invitations personnalisées', included: true },
+      { name: 'Diffusion publicités réseaux sociaux', included: true },
+      { name: 'Diffusion publicités sur écrans du salon', included: true },
+      { name: 'Salle de conférence (1h00)', included: true },
+      { name: 'Insertion catalogue officiel', included: true },
+      { name: 'Livraison reportage photos/vidéos post-salon', included: true },
+      { name: 'Habillage façade salon', included: false },
+      { name: 'Impression logo sur rubans des badges', included: false },
     ],
     benefits: [
-      'Logo visible en 3ème ligne prioritaire',
-      'Présence dans toutes les newsletters',
-      'Mini-site avec actualités complètes',
-      'Capsules vidéo "Inside SIB"',
-      'Interview audio dans le Podcast',
-      'Interview Live Studio "Meet The Leaders"',
-      'Vidéo testimonial diffusée',
-      '50 rendez-vous mensuels',
+      'Logo sur le plan officiel du salon',
+      '200 invitations personnalisées',
+      '1 bannière sur le site web',
+      'Publicité sur les écrans géants',
+      'Salle de conférence 1h00',
+      'Reportage photos/vidéos post-salon',
+      'Citation dans le rapport final',
     ],
-    cta: 'Inscription Partenaire',
+    cta: 'Devenir Sponsor Silver',
     color: 'bg-indigo-50',
   },
   {
     id: 'partner-gold',
-    name: 'Partenaire Gold (68k$)',
-    price: 68000,
-    currency: 'USD',
+    name: 'Sponsor Gold',
+    price: 350000,
+    currency: 'MAD',
     icon: <Crown className="w-8 h-8" />,
-    description: 'Visibilité premium 2ème ligne',
+    description: 'Visibilité renforcée',
     level: 'gold',
     features: [
-      { name: 'Logo en 2ème ligne', included: true },
-      { name: 'Mini-site premium', included: true },
-      { name: 'Bannière Web rotative', included: true },
-      { name: 'Section "Top Innovations"', included: true },
-      { name: 'Newsletter en 2ème ligne', included: true },
-      { name: 'Capsules vidéo sponsorisées', included: true },
-      { name: 'Podcast SIB Talks', included: true },
-      { name: 'Interview Live Studio', included: true },
-      { name: 'Testimonial vidéo (2 min)', included: true },
-      { name: 'Support prioritaire', included: true },
+      { name: 'Logo sur tous les supports de communication', included: true },
+      { name: 'Logo sur le plan officiel', included: true },
+      { name: 'Bannières sur le site web (2)', included: true },
+      { name: 'Livraison de 500 invitations personnalisées', included: true },
+      { name: 'Diffusion publicités réseaux sociaux', included: true },
+      { name: 'Diffusion publicités sur écrans du salon', included: true },
+      { name: 'Jingles et opening vidéos SIB TV', included: true },
+      { name: 'Salle de conférence (1h30)', included: true },
+      { name: 'Insertion catalogue 3ème de couverture', included: true },
+      { name: 'Présentation détaillée + mot du DG', included: true },
+      { name: 'Livraison reportage photos/vidéos post-salon', included: true },
     ],
     benefits: [
-      'Logo visible en 2ème ligne prioritaire',
-      'Tous les canaux web & email',
-      'Mini-site "SIB Premium Exposure"',
-      'Capsules vidéo & brand awareness',
-      'Interview audio Podcast',
-      'Interview Live Studio prioritaire',
-      'Vidéo testimonial 2 min diffusée',
-      '100 rendez-vous mensuels',
-      'Support technique prioritaire',
+      'Logo premier plan sur tous les supports',
+      '500 invitations personnalisées',
+      '2 bannières sur le site web',
+      'Jingles et opening vidéos SIB TV',
+      'Salle de conférence 1h30',
+      'Page dans le catalogue officiel (3ème couverture)',
+      'Présentation détaillée + mot du DG',
+      'Reportage complet post-salon',
     ],
-    cta: 'Inscription Partenaire',
-    color: 'bg-rose-50',
+    cta: 'Devenir Sponsor Gold',
+    color: 'bg-amber-50',
   },
   {
-    id: 'partner-platinum',
-    name: 'Partenaire Platinum (98k$)',
-    price: 98000,
-    currency: 'USD',
+    id: 'partner-officiel',
+    name: 'Sponsor Officiel',
+    price: 500000,
+    currency: 'MAD',
     icon: <Crown className="w-8 h-8" />,
-    description: 'Visibilité maximale 1ère ligne + illimité',
-    level: 'platinum',
+    description: 'Visibilité maximale — Partenaire stratégique',
+    level: 'official_sponsor',
     features: [
-      { name: 'Logo en 1ère ligne partout', included: true },
-      { name: 'Mini-site premium', included: true },
-      { name: 'Bannière Web rotative', included: true },
-      { name: 'Section "Top Innovations"', included: true },
-      { name: 'Newsletters en 1ère ligne', included: true },
-      { name: 'Webinaires sponsorisés', included: true },
-      { name: 'Capsules vidéo "Inside SIB"', included: true },
-      { name: 'Podcast SIB Talks', included: true },
-      { name: 'Interview Live Studio prioritaire', included: true },
-      { name: 'Testimonial vidéo (3 min)', included: true },
-      { name: 'Support VIP 24/7', included: true },
+      { name: 'Logo sur tous les supports de communication', included: true },
+      { name: 'Logo sur le plan officiel', included: true },
+      { name: 'Publicité plan de poche (4ème de couverture)', included: true },
+      { name: 'Bannières sur le site web (4)', included: true },
+      { name: 'Livraison de 1 000 invitations personnalisées', included: true },
+      { name: 'Diffusion publicités réseaux sociaux (posts sponsorisés)', included: true },
+      { name: 'Plusieurs passages par jour sur écrans géants', included: true },
+      { name: 'Jingles et opening vidéos SIB TV', included: true },
+      { name: 'Salle de conférence (2h00)', included: true },
+      { name: 'Impression logo sur rubans des badges visiteurs', included: true },
+      { name: 'Publicité sur totems d\'orientation', included: true },
+      { name: 'Habillage façade sortie Hall A / entrée Hall B', included: true },
+      { name: 'Catalogue 4ème de couverture + présentation + mot DG + signet', included: true },
+      { name: 'Citation lors de la conférence de presse', included: true },
+      { name: 'Reportage complet photos/vidéos + pressbook + rapport final', included: true },
     ],
     benefits: [
-      'Logo en 1ère ligne sur tous les canaux',
-      'Mini-site "Premium Exposure" complet',
-      'Webinaires sponsorisés avec replay',
-      'Capsules vidéo exclusives marquées',
-      'Inclusion podcast prioritaire',
-      'Interview Live Studio "Meet The Leaders"',
-      'Vidéo testimonial 3 min premium',
-      'Rendez-vous illimités',
-      'Support VIP dédié',
-      'Priorité algorithmique maximale',
+      'Visibilité maximale sur tous les canaux',
+      '1 000 invitations personnalisées',
+      '4 bannières sur le site web',
+      'Posts sponsorisés sur les réseaux sociaux',
+      'Logo sur rubans des badges visiteurs',
+      'Habillage façade du salon',
+      'Salle de conférence 2h00',
+      'Catalogue 4ème de couverture + signet',
+      'Citation lors de la conférence de presse',
+      'Rapport final + pressbook + Best-Of',
     ],
-    cta: 'Inscription Partenaire',
-    color: 'bg-indigo-50',
+    cta: 'Devenir Sponsor Officiel',
+    color: 'bg-rose-50',
   },
 ];
 
@@ -189,10 +164,10 @@ export default function PartnerSubscriptionPage() {
 
   // Stats
   const wpStats = [
-    { number: '6 000+', label: 'Visiteurs qualifiés' },
-    { number: '300+', label: 'Exposants' },
-    { number: '30', label: 'Conférences et panels' },
-    { number: '3', label: 'Jours de rencontres B2B' }
+    { number: '200 000+', label: 'Visiteurs professionnels' },
+    { number: '600+', label: 'Exposants' },
+    { number: '20', label: 'Conférences' },
+    { number: '5', label: 'Jours de salon' }
   ];
 
   // Pourquoi devenir partenaire - WordPress
@@ -578,7 +553,7 @@ export default function PartnerSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Dates</h3>
-                    <p className="text-gray-600">1-3 Avril 2026</p>
+                    <p className="text-gray-600">25-29 Novembre 2026</p>
                   </div>
                 </div>
 
@@ -588,7 +563,7 @@ export default function PartnerSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Horaires</h3>
-                    <p className="text-gray-600">9h30 à 18h</p>
+                    <p className="text-gray-600">9h00 à 19h00</p>
                   </div>
                 </div>
 
@@ -598,7 +573,7 @@ export default function PartnerSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Entrée</h3>
-                    <p className="text-gray-600">Sur badge nominatif</p>
+                    <p className="text-gray-600">Gratuite — sur badge électronique</p>
                   </div>
                 </div>
               </div>
@@ -620,7 +595,7 @@ export default function PartnerSubscriptionPage() {
                     Contact Organisation
                   </h3>
                   <p className="text-gray-600 mb-6">
-                    LINECO EVENTS
+                    URBACOM
                   </p>
                 </div>
 

@@ -805,8 +805,8 @@ const resources = {
         calendar: {
           title: 'Calendrier des Rendez-vous',
           create_slot: 'Nouveau Créneau',
-          slot_date_restriction: 'Les créneaux doivent être créés entre le 1er et le 3 avril 2026',
-          date_outside_salon: 'La date doit être comprise entre le 1er et le 3 avril 2026'
+          slot_date_restriction: 'Les créneaux doivent être créés entre le 25 et le 29 novembre 2026',
+          date_outside_salon: 'La date doit être comprise entre le 25 et le 29 novembre 2026'
         }
       },
       contact: {
@@ -835,9 +835,9 @@ const resources = {
           partnership: 'Partenariat'
         },
         info: {
-          email: 'contact@sib.ma',
-          phone: '+212 XXX XXX XXX',
-          address: 'El Jadida, Maroc'
+          email: 'contact@sibevent.com',
+          phone: '+212 6 68 38 52 28',
+          address: '19, rue Badr Assayab – 1er étage n°2, Casablanca – Maroc'
         }
       },
       venue: {
@@ -862,7 +862,7 @@ const resources = {
         subtitle: 'Profitez de tarifs préférentiels dans nos hôtels partenaires',
         hotels_partners: 'Hôtels partenaires',
         vip_discount: 'Réduction VIP',
-        april_dates: 'Avril 2026',
+        april_dates: 'Novembre 2026',
         vip_advantage_title: '🌟 Avantage Visiteurs VIP',
         vip_advantage_desc: 'En tant que visiteur VIP, bénéficiez de tarifs préférentiels exclusifs sur tous nos hôtels partenaires',
         vip_benefit_1: 'Jusqu\'à -20% sur tous les hôtels',
@@ -905,7 +905,7 @@ const resources = {
         scan_instructions: 'Présentez ce code QR à l\'entrée',
         visitor_info: 'Informations visiteur',
         level_info: 'Niveau',
-        valid_dates: 'Valide du 1er au 3 avril 2026',
+        valid_dates: 'Valide du 25 au 29 novembre 2026',
         access_granted: 'Accès autorisé',
         upgrade_to_premium: 'Passer Privilège pour plus d\'avantages',
         loading_badge: 'Chargement de votre badge...',
@@ -1214,10 +1214,10 @@ const resources = {
         timeline: 'Historique & Timeline',
         team: 'Notre Équipe',
         admin_only: 'Seul l\'administrateur peut modifier le niveau de sponsoring',
-        company_example: 'Tanger Med Logistics',
+        company_example: 'Atlas BTP Solutions',
         country_example: 'Maroc',
         website_placeholder: 'https://votre-site.com',
-        description_example: 'Partenaire logistique premium du bâtiment de Tanger Med, offrant des services de stockage et de distribution internationaux.'
+        description_example: 'Partenaire logistique premium spécialisé dans les services BTP, offrant des solutions de stockage de matériaux, de distribution et de gestion de chantier.'
       },
       admin_media: {
         manager_title: 'Gestionnaire de médias administrateur',
@@ -1307,7 +1307,7 @@ const resources = {
           enterCity: 'Paris',
           selectCountry: 'Sélectionnez un pays',
           enterCompany: 'Nom de votre entreprise',
-          companyExample: 'Tanger Med Logistics',
+          companyExample: 'BTP Solutions Maroc',
           countryExample: 'Maroc',
           enterPosition: 'Votre poste',
           positionExample: 'Directeur Partenariats, CEO, etc.',
@@ -1349,7 +1349,7 @@ const resources = {
         this_week: 'Cette semaine',
         available_spots: 'Places disponibles',
         title: 'Planning SIB 2026',
-        event_days_description: 'Disponibilités pour les 3 jours de l\'événement',
+        event_days_description: 'Disponibilités pour les 5 jours de l\'événement',
         export_google: 'Exporter Google Calendar',
         export_outlook: 'Exporter Outlook',
         grid_view: 'Grille',
@@ -1360,7 +1360,7 @@ const resources = {
         no_slots: 'Aucun créneau',
         plan_availability: 'Planifiez vos disponibilités pour ce jour',
         no_availability: 'Aucune disponibilité définie',
-        start_planning: 'Commencez à planifier vos rendez-vous pour les 3 jours de l\'événement',
+        start_planning: 'Commencez à planifier vos rendez-vous pour les 5 jours de l\'événement',
         create_availability: 'Créer mes disponibilités',
         full: 'COMPLET',
         no_spots_left: 'place restante',
@@ -1371,7 +1371,7 @@ const resources = {
         create_my_availability: 'Créer mes disponibilités',
         add_new_slot: 'Ajouter un nouveau créneau',
         no_slots_configured: 'Aucun créneau configuré',
-        no_availability_message: 'Vous n\'avez pas encore défini de disponibilités pour les 3 jours du salon SIB.',
+        no_availability_message: 'Vous n\'avez pas encore défini de disponibilités pour les 5 jours du salon SIB.',
         create_first_slot: 'Créer mon premier créneau'
       },
       months: {
@@ -1477,16 +1477,16 @@ const resources = {
         visitors: 'Visiteurs',
         countries: 'Pays',
         conferences: 'Conférences',
-        program_3days: 'Programme des 3 Jours',
-        day1_title: 'Jour 1 - 1er Avril',
+        program_3days: 'Programme des 5 Jours',
+        day1_title: 'Jour 1 - 25 Novembre',
         day1_opening: 'Cérémonie d\'ouverture',
         day1_plenary: 'Conférences plénières',
         day1_networking: 'Networking d\'accueil',
-        day2_title: 'Jour 2 - 2 Avril',
+        day2_title: 'Jour 2 - 26 Novembre',
         day2_workshops: 'Ateliers techniques',
         day2_b2b: 'Sessions B2B',
         day2_demos: 'Démonstrations',
-        day3_title: 'Jour 3 - 3 Avril',
+        day3_title: 'Jour 3 - 27 Novembre',
         day3_roundtables: 'Tables rondes',
         day3_awards: 'Remise des prix',
         day3_closing: 'Cérémonie de clôture',
@@ -1498,7 +1498,7 @@ const resources = {
         copied_clipboard: '🔗 Compte à rebours copié dans le presse-papiers !',
         copy_failed: 'Impossible de copier',
         add_to_calendar: 'Ajouter au Calendrier',
-        calendar_description: 'Le plus grand salon bâtiment international - 300+ exposants, 6,000+ visiteurs de 40 pays',
+        calendar_description: 'Le plus grand salon bâtiment international - 600+ exposants, 200 000+ visiteurs de 50 pays',
         calendar_added: '📅 Événement ajouté à votre calendrier : SIB 2026, rappels automatiques et itinéraire inclus.',
         practical_info: 'Informations Pratiques',
         info_registration: 'Inscription gratuite pour les visiteurs',
@@ -2278,8 +2278,8 @@ const resources = {
         calendar: {
           title: 'Appointment Calendar',
           create_slot: 'New Slot',
-          slot_date_restriction: 'Slots must be created between April 1-3, 2026',
-          date_outside_salon: 'Date must be between April 1-3, 2026'
+          slot_date_restriction: 'Slots must be created between November 25-29, 2026',
+          date_outside_salon: 'Date must be between November 25-29, 2026'
         }
       },
       contact: {
@@ -2308,9 +2308,9 @@ const resources = {
           partnership: 'Partnership'
         },
         info: {
-          email: 'contact@sib.ma',
-          phone: '+212 XXX XXX XXX',
-          address: 'El Jadida, Morocco'
+          email: 'contact@sibevent.com',
+          phone: '+212 6 68 38 52 28',
+          address: '19, rue Badr Assayab – 1er étage n°2, Casablanca – Morocco'
         }
       },
       venue: {
@@ -2335,7 +2335,7 @@ const resources = {
         subtitle: 'Enjoy preferential rates at our partner hotels',
         hotels_partners: 'Partner hotels',
         vip_discount: 'VIP Discount',
-        april_dates: 'April 2026',
+        april_dates: 'November 2026',
         vip_advantage_title: '🌟 VIP Visitor Advantage',
         vip_advantage_desc: 'As a VIP visitor, benefit from exclusive preferential rates at all our partner hotels',
         vip_benefit_1: 'Up to -20% off all hotels',
@@ -2378,7 +2378,7 @@ const resources = {
         scan_instructions: 'Present this QR code at the entrance',
         visitor_info: 'Visitor Information',
         level_info: 'Level',
-        valid_dates: 'Valid from April 1-3, 2026',
+        valid_dates: 'Valid from November 25-29, 2026',
         access_granted: 'Access Granted',
         upgrade_to_premium: 'Upgrade to Premium for more benefits',
         loading_badge: 'Loading your badge...',
@@ -2687,10 +2687,10 @@ const resources = {
         timeline: 'History & Timeline',
         team: 'Our Team',
         admin_only: 'Only administrators can modify sponsorship level',
-        company_example: 'Tanger Med Logistics',
+        company_example: 'Atlas BTP Solutions',
         country_example: 'Morocco',
         website_placeholder: 'https://your-website.com',
-        description_example: 'Premium logistics partner of Tanger Med bâtiment, offering international storage and distribution services.'
+        description_example: 'Premium logistics partner specialised in BTP services, offering construction materials storage, distribution and site management solutions.'
       },
       admin_media: {
         manager_title: 'Admin Media Manager',
@@ -2780,7 +2780,7 @@ const resources = {
           enterCity: 'Paris',
           selectCountry: 'Select a country',
           enterCompany: 'Your company name',
-          companyExample: 'Tanger Med Logistics',
+          companyExample: 'BTP Solutions Maroc',
           countryExample: 'Morocco',
           enterPosition: 'Your position',
           positionExample: 'Partnership Director, CEO, etc.',
@@ -2822,7 +2822,7 @@ const resources = {
         this_week: 'This week',
         available_spots: 'Available spots',
         title: 'SIB 2026 Schedule',
-        event_days_description: 'Availability for the 3 days of the event',
+        event_days_description: 'Availability for the 5 days of the event',
         export_google: 'Export to Google Calendar',
         export_outlook: 'Export to Outlook',
         grid_view: 'Grid',
@@ -2833,7 +2833,7 @@ const resources = {
         no_slots: 'No slots',
         plan_availability: 'Schedule your availability for this day',
         no_availability: 'No availability set',
-        start_planning: 'Start planning your appointments for the 3 days of the event',
+        start_planning: 'Start planning your appointments for the 5 days of the event',
         create_availability: 'Create my availability',
         full: 'FULL',
         no_spots_left: 'spot left',
@@ -2844,7 +2844,7 @@ const resources = {
         create_my_availability: 'Create my availability',
         add_new_slot: 'Add a new slot',
         no_slots_configured: 'No slots configured',
-        no_availability_message: 'You have not yet defined any availability for the 3 days of the SIB event.',
+        no_availability_message: 'You have not yet defined any availability for the 5 days of the SIB event.',
         create_first_slot: 'Create my first slot'
       },
       months: {
@@ -2950,16 +2950,16 @@ const resources = {
         visitors: 'Visitors',
         countries: 'Countries',
         conferences: 'Conferences',
-        program_3days: '3-Day Program',
-        day1_title: 'Day 1 - April 1st',
+        program_3days: '5-Day Program',
+        day1_title: 'Day 1 - November 25th',
         day1_opening: 'Opening ceremony',
         day1_plenary: 'Plenary conferences',
         day1_networking: 'Welcome networking',
-        day2_title: 'Day 2 - April 2nd',
+        day2_title: 'Day 2 - November 26th',
         day2_workshops: 'Technical workshops',
         day2_b2b: 'B2B sessions',
         day2_demos: 'Demonstrations',
-        day3_title: 'Day 3 - April 3rd',
+        day3_title: 'Day 3 - November 27th',
         day3_roundtables: 'Round tables',
         day3_awards: 'Award ceremony',
         day3_closing: 'Closing ceremony',
@@ -2971,7 +2971,7 @@ const resources = {
         copied_clipboard: '🔗 Countdown copied to clipboard!',
         copy_failed: 'Unable to copy',
         add_to_calendar: 'Add to Calendar',
-        calendar_description: 'The largest international bâtiment exhibition - 300+ exhibitors, 6,000+ visitors from 40 countries',
+        calendar_description: 'The largest international bâtiment exhibition - 600+ exhibitors, 200,000+ visitors from 50 countries',
         calendar_added: '📅 Event added to your calendar: SIB 2026, automatic reminders and directions included.',
         practical_info: 'Practical Information',
         info_registration: 'Free registration for visitors',
@@ -3248,9 +3248,9 @@ const resources = {
         exhibitor_18m: 'Exhibitor 18m² (Standard)',
         exhibitor_36m: 'Exhibitor 36m² (Premium)',
         exhibitor_54m: 'Exhibitor 54m²+ (Elite)',
-        partner_museum: 'Museum Partner (20k$)',
-        partner_silver: 'Silver Partner (48k$)',
-        partner_gold: 'Gold Partner (68k$)',
+        partner_silver: 'Silver Sponsor (200K MAD)',
+        partner_gold: 'Gold Sponsor (350K MAD)',
+        partner_officiel: 'Official Sponsor (500K MAD)',
         signup_free: 'Sign up for free',
         mini_site: 'Customized mini-site',
         unlimited_meetings: 'Unlimited meetings'

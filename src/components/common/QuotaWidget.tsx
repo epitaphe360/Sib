@@ -131,17 +131,14 @@ export function LevelBadge({ level, type, showIcon = true, size = 'md' }: LevelB
 
     if (type === 'partner') {
       const configs: Record<string, any> = {
-        egide: { label: 'Égide', color: 'bg-gradient-to-r from-indigo-600 to-indigo-900 text-white', icon: '🛡️' },
-        strategic: { label: 'Stratégique', color: 'bg-gradient-to-r from-blue-600 to-blue-800 text-white', icon: '🎯' },
-        platinum: { label: 'Platinum', color: 'bg-gradient-to-r from-purple-500 to-purple-700 text-white', icon: '💎' },
-        gold: { label: 'Gold', color: 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white', icon: '🥇' },
-        silver: { label: 'Silver', color: 'bg-gradient-to-r from-gray-400 to-gray-600 text-white', icon: '🥈' },
-        support: { label: 'Support', color: 'bg-gradient-to-r from-teal-500 to-teal-700 text-white', icon: '🤝' },
-        cultural: { label: 'Culturel', color: 'bg-gradient-to-r from-rose-500 to-rose-700 text-white', icon: '🎭' },
-        academic: { label: 'Académique', color: 'bg-gradient-to-r from-emerald-500 to-emerald-700 text-white', icon: '🎓' },
-        museum: { label: 'Museum', color: 'bg-gradient-to-r from-amber-700 to-amber-900 text-white', icon: '🏛️' }
+        organizer: { label: 'Organisateurs', color: 'bg-gradient-to-r from-yellow-600 to-yellow-800 text-white', icon: '🏛️' },
+        co_organizer: { label: 'Co-organisateurs', color: 'bg-gradient-to-r from-amber-600 to-amber-800 text-white', icon: '🤝' },
+        official_sponsor: { label: 'Sponsor Officiel', color: 'bg-gradient-to-r from-blue-600 to-blue-800 text-white', icon: '⭐' },
+        delegated_organizer: { label: 'Organisateur Délégué', color: 'bg-gradient-to-r from-green-600 to-green-800 text-white', icon: '📋' },
+        partner: { label: 'Nos Partenaires', color: 'bg-gradient-to-r from-purple-600 to-purple-800 text-white', icon: '🌐' },
+        press_partner: { label: 'Nos Partenaires Presse', color: 'bg-gradient-to-r from-red-600 to-red-800 text-white', icon: '📰' }
       };
-      return configs[level] || configs.support;
+      return configs[level] || configs.partner;
     }
 
     if (type === 'exhibitor') {

@@ -35,7 +35,7 @@ export interface ArticleItem {
   shortcode: string;
 }
 
-export type ContentTab = 'media' | 'articles';
+export type ContentTab = 'media' | 'articles' | 'pages';
 
 export type MediaType =
   | 'webinar'

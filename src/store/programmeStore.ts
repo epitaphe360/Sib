@@ -64,14 +64,14 @@ const generateId = () => Math.random().toString(36).substring(2, 10);
 const DEFAULT_INFO: ProgrammeInfo = {
   eventTitle: 'SIB — 1ère Édition',
   eventTheme: '« Les bâtiments au cœur des transformations économiques et de l\'intégration régionale »',
-  eventDates: '1er au 3 avril 2026',
+  eventDates: '25 au 29 novembre 2026',
   eventLocation: 'Parc des Expositions Mohammed VI — El Jadida, Maroc',
   eventDescription: 'Espace de réflexion stratégique et de dialogue de haut niveau réunissant décideurs institutionnels et acteurs majeurs de l\'écosystème bâtiment.',
   axes: [
     { title: 'Intégration & Coopération', description: 'Initiative Atlantique du Maroc' },
     { title: 'Performance & Transformation', description: 'Connectivité et digitalisation' },
     { title: 'Durabilité & Résilience', description: 'Transition verte et climat' },
-    { title: 'Économie Bleue', description: 'Industrie navale, pêche, plaisance' },
+    { title: 'Éco-construction & Durabilité', description: 'Matériaux durables, éco-conception' },
     { title: 'Sécurité & Sûreté', description: 'Risques BTP et BTP' },
     { title: 'Innovation & Formation', description: 'Compétences et recherche appliquée' },
   ],
@@ -80,7 +80,7 @@ const DEFAULT_INFO: ProgrammeInfo = {
 const DEFAULT_DAYS: DayProgram[] = [
   {
     id: 'day1',
-    date: 'Mercredi 1er avril 2026',
+    date: 'Mercredi 25 novembre 2026',
     dayLabel: 'Jour 1',
     theme: 'Ouverture & Intégration Bâtiment',
     sessions: [
@@ -91,42 +91,42 @@ const DEFAULT_DAYS: DayProgram[] = [
       { id: 's1-5', time: '13h00', title: 'Pause déjeuner', type: 'pause', speakers: [], description: '' },
       { id: 's1-6', time: '14h30', title: 'Panel 1 : Facteurs de l\'intégration du bâtiment dans l\'espace atlantique africain', type: 'panel', speakers: ['Mme Sanae ELAMRANI (Ministère des Affaires étrangères)', 'Mme Nisrine IOUZZI', 'Dr Mourad Fdil ou Maître Lahlou'], description: 'Analyse des dynamiques d\'intégration bâtiment dans le cadre de l\'Initiative Atlantique du Maroc et de la coopération régionale africaine.' },
       { id: 's1-7', time: '16h00', title: 'Panel 2 : Financement et attractivité des projets BTP', type: 'panel', speakers: ['M. El Mostafa ALMOUZANI', 'Mme Delphine Garcia (experte financement)', 'BAD (Banque Africaine de Développement)', 'Abdou Souleye Diop (Forvis Mazars)'], description: 'Stratégies de financement innovantes et leviers d\'attractivité pour les grands projets d\'infrastructure bâtiment en Afrique.' },
-      { id: 's1-8', time: '18h00', title: 'Fin de la 1ère journée', type: 'officiel', speakers: [], description: '' },
+      { id: 's1-8', time: '19h00', title: 'Fin de la 1ère journée', type: 'officiel', speakers: [], description: '' },
     ]
   },
   {
     id: 'day2',
-    date: 'Jeudi 2 avril 2026',
+    date: 'Jeudi 26 novembre 2026',
     dayLabel: 'Jour 2',
     theme: 'Compétitivité, Connectivité & Économie Bleue',
     sessions: [
-      { id: 's2-1', time: '09h30', title: 'Ouverture de la journée', type: 'officiel', speakers: [], description: '' },
-      { id: 's2-2', time: '10h00', title: 'Panel 3 : Les nouveaux leviers de compétitivité dans le secteur du bâtiment', type: 'panel', speakers: ['MCE ou MTEDD', 'M. Ilyas CHOUBAILI', 'M. Youssef IMGHI', 'ANP ou SAPT', 'Christophe Gaigneux', 'Cluster construction'], description: 'Transition verte, croisière et nouveaux modèles de compétitivité pour les bâtiments africains et méditerranéens.' },
-      { id: 's2-3', time: '11h30', title: 'Table Ronde 1 : Enjeux de la connectivité et des performances', type: 'table-ronde', speakers: ['M. Jean-Marie Koffi (AGPAOC)', 'IAPH', 'MEE', 'M. Francisco Esteban Lefler (PIANC)', 'Cluster construction'], description: 'Rôle des hubs africains dans les chaînes logistiques mondiales et leviers de performance bâtiment.' },
+      { id: 's2-1', time: '09h00', title: 'Ouverture de la journée', type: 'officiel', speakers: [], description: '' },
+      { id: 's2-2', time: '10h00', title: 'Panel 3 : Les nouveaux leviers de compétitivité dans le secteur du bâtiment', type: 'panel', speakers: ['MCE ou MTEDD', 'M. Ilyas CHOUBAILI', 'M. Youssef IMGHI', 'ANP ou SAPT', 'Christophe Gaigneux', 'Cluster construction'], description: 'Transition verte, innovation constructive et nouveaux modèles de compétitivité pour les acteurs africains et méditerranéens du BTP.' },
+      { id: 's2-3', time: '11h30', title: 'Table Ronde 1 : Enjeux de la connectivité et des performances', type: 'table-ronde', speakers: ['M. Jean-Marie Koffi (AGPAOC)', 'IAPH', 'MEE', 'M. Francisco Esteban Lefler (PIANC)', 'Cluster construction'], description: 'Rôle des acteurs africains dans les chaînes d\'approvisionnement mondiales et leviers de performance BTP.' },
       { id: 's2-4', time: '13h00', title: 'Pause déjeuner', type: 'pause', speakers: [], description: '' },
       { id: 's2-5', time: '14h30', title: 'Ted Talk 1 : Évolution technologique & IA dans le management bâtiment', type: 'ted-talk', speakers: ['MTNRA ou ISEM'], description: 'Comment l\'intelligence artificielle transforme la gestion et l\'exploitation des bâtiments.' },
-      { id: 's2-6', time: '15h00', title: 'Ted Talk 2 : Marketing bâtiment et attractivité', type: 'ted-talk', speakers: ['TANGER MED ou ANP'], description: 'Stratégies de branding et de positionnement pour les bâtiments du 21ème siècle.' },
+      { id: 's2-6', time: '15h00', title: 'Ted Talk 2 : Marketing bâtiment et attractivité', type: 'ted-talk', speakers: ['FNBTP ou CGEM'], description: 'Stratégies de branding et de positionnement pour les bâtiments du 21ème siècle.' },
       { id: 's2-7', time: '15h30', title: 'Ted Talk 3 : Bâtiments et gouvernance économique', type: 'ted-talk', speakers: ['M. Geraint Evans (CEO UK Major Bâtiments Group)'], description: 'Vision internationale de la gouvernance bâtiment et de son impact économique.' },
-      { id: 's2-8', time: '16h00', title: 'Table Ronde 2 : Promotion de l\'économie bleue', type: 'table-ronde', speakers: ['MTL', 'MEE', 'MEMDD', 'Prof. BENAZZOUZ (ISEM)', 'Dr TARIQ ESSAID'], description: 'Développement du littoral, industrie navale, pêche et plaisance comme moteurs de croissance durable.' },
-      { id: 's2-9', time: '18h00', title: 'Fin de la journée', type: 'officiel', speakers: [], description: '' },
+      { id: 's2-8', time: '16h00', title: 'Table Ronde 2 : Promotion de l\'innovation en construction durable', type: 'table-ronde', speakers: ['MTL', 'MEE', 'MEMDD', 'Prof. BENAZZOUZ (ISEM)', 'Dr TARIQ ESSAID'], description: 'Développement de la construction verte, éco-matériaux et solutions durables comme moteurs de croissance.' },
+      { id: 's2-9', time: '19h00', title: 'Fin de la journée', type: 'officiel', speakers: [], description: '' },
     ]
   },
   {
     id: 'day3',
-    date: 'Vendredi 3 avril 2026',
+    date: 'Vendredi 27 novembre 2026',
     dayLabel: 'Jour 3',
     theme: 'Ateliers, Innovation & Clôture',
     sessions: [
-      { id: 's3-1', time: '09h30', title: 'Ouverture de la journée', type: 'officiel', speakers: [], description: '' },
+      { id: 's3-1', time: '09h00', title: 'Ouverture de la journée', type: 'officiel', speakers: [], description: '' },
       { id: 's3-2', time: '10h00', title: 'Atelier 1 : Leadership féminin construction', type: 'atelier', speakers: ['Magalie Thaddées', 'RFPMP-AOC'], description: 'Promotion de l\'égalité des genres et de l\'autonomisation des femmes dans le secteur de la construction et bâtiment africain.' },
       { id: 's3-3', time: '10h45', title: 'Atelier 2 : Évolution de la formation et management des compétences', type: 'atelier', speakers: ['Dr Anass KETTANI'], description: 'Adapter les programmes de formation aux nouveaux métiers BTP et BTP.' },
       { id: 's3-4', time: '11h30', title: 'Atelier 3 : Cybersécurité bâtiment', type: 'atelier', speakers: ['PORTNET ou TMPCS', 'M. Omar Benaicha'], description: 'Protection des infrastructures BTP critiques face aux menaces cyber.' },
-      { id: 's3-5', time: '12h15', title: 'Atelier 4 : Smartport — Enjeux et perspectives', type: 'atelier', speakers: ['Bâtiment du Havre', 'Geraint Evans'], description: 'Transformation numérique des bâtiments : IoT, jumeaux numériques et bâtiments intelligents.' },
+      { id: 's3-5', time: '12h15', title: 'Atelier 4 : Smart Building — Enjeux et perspectives', type: 'atelier', speakers: ['Bâtiment du Havre', 'Geraint Evans'], description: 'Transformation numérique des bâtiments : IoT, jumeaux numériques et bâtiments intelligents.' },
       { id: 's3-6', time: '13h00', title: 'Pause déjeuner', type: 'pause', speakers: [], description: '' },
       { id: 's3-7', time: '14h30', title: 'Concours d\'innovation bâtiment', type: 'concours', speakers: [], description: 'Présentation et évaluation des projets innovants soumis par les startups et chercheurs.' },
       { id: 's3-8', time: '16h00', title: 'Résultats du concours & Remise des prix', type: 'concours', speakers: [], description: 'Annonce des lauréats et cérémonie de remise des prix de l\'innovation.' },
       { id: 's3-9', time: '17h00', title: 'Allocutions de clôture', type: 'cloture', speakers: [], description: '' },
-      { id: 's3-10', time: '18h00', title: 'Clôture officielle du salon', type: 'cloture', speakers: [], description: '' },
+      { id: 's3-10', time: '19h00', title: 'Clôture officielle du salon', type: 'cloture', speakers: [], description: '' },
     ]
   }
 ];

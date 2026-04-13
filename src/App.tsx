@@ -1,7 +1,8 @@
 ﻿import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { lazyRetry } from './utils/lazyRetry';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { usePageTracking } from './hooks/usePageTracking';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -140,6 +141,17 @@ const HallMapPage = lazyRetry(() => import('./pages/HallMapPage'));
 const CatalogPage = lazyRetry(() => import('./pages/CatalogPage'));
 const ProductDetailPage = lazyRetry(() => import('./pages/ProductDetailPage'));
 
+// Pages publiques vitrine (Le Salon, Exposer, Visiter)
+const PresentationPage = lazyRetry(() => import('./pages/public/PresentationPage'));
+const EditionsPage = lazyRetry(() => import('./pages/public/EditionsPage'));
+const PourquoiVisiterPage = lazyRetry(() => import('./pages/public/PourquoiVisiterPage'));
+const PourquoiExposerPage = lazyRetry(() => import('./pages/public/PourquoiExposerPage'));
+const InfosPratiquesPage = lazyRetry(() => import('./pages/public/InfosPratiquesPage'));
+const SecteursPage = lazyRetry(() => import('./pages/public/SecteursPage'));
+const NouveautesPage = lazyRetry(() => import('./pages/public/NouveautesPage'));
+const EspacesSibPage = lazyRetry(() => import('./pages/public/EspacesSibPage'));
+const TelechargementPage = lazyRetry(() => import('./pages/public/TelechargementPage'));
+
 // Media pages
 const WebinarsPage = lazyRetry(() => import('./pages/media/WebinarsPage'));
 const PodcastsPage = lazyRetry(() => import('./pages/media/PodcastsPage'));
@@ -186,6 +198,7 @@ if (import.meta.env.DEV) {
 
 const App = () => {
   const [isChatBotOpen, setIsChatBotOpen] = React.useState(false);
+  const location = useLocation();
   const { currentLanguage } = useLanguageStore();
 
   // Tracking des visites de pages pour le trafic hebdomadaire (admin dashboard)
@@ -258,13 +271,31 @@ const App = () => {
               </div>
             </div>
           }>
-            <Routes>
+            <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+            >
+            <Routes location={location}>
             <Route path={ROUTES.HOME} element={<HomePage />} />
             <Route path={ROUTES.EXHIBITORS} element={<ExhibitorsPage />} />
             <Route path={ROUTES.EXHIBITOR_DETAIL} element={<ExhibitorDetailPage />} />
             <Route path={ROUTES.PARTNERS} element={<PartnersPage />} />
             <Route path={ROUTES.PARTNER_DETAIL} element={<PartnerDetailPage />} />
             <Route path={ROUTES.PAVILIONS} element={<PavillonsPage />} />
+            {/* Pages publiques vitrine */}
+            <Route path={ROUTES.PRESENTATION} element={<PresentationPage />} />
+            <Route path={ROUTES.NOUVEAUTES} element={<NouveautesPage />} />
+            <Route path={ROUTES.SECTEURS} element={<SecteursPage />} />
+            <Route path={ROUTES.EDITIONS} element={<EditionsPage />} />
+            <Route path={ROUTES.TELECHARGEMENTS} element={<TelechargementPage />} />
+            <Route path={ROUTES.POURQUOI_EXPOSER} element={<PourquoiExposerPage />} />
+            <Route path={ROUTES.ESPACES_SIB} element={<EspacesSibPage />} />
+            <Route path={ROUTES.POURQUOI_VISITER} element={<PourquoiVisiterPage />} />
+            <Route path={ROUTES.INFOS_PRATIQUES} element={<InfosPratiquesPage />} />
             <Route path={ROUTES.METRICS} element={<ProtectedRoute><MetricsPage /></ProtectedRoute>} />
             <Route path={ROUTES.NETWORKING} element={<NetworkingPage />} />
             <Route path={ROUTES.INTERACTION_HISTORY} element={<ProtectedRoute><InteractionHistoryPage /></ProtectedRoute>} />
@@ -449,6 +480,8 @@ const App = () => {
               </Link>
             </div>} />
           </Routes>
+          </motion.div>
+          </AnimatePresence>
         </Suspense>
       </main>
       <Footer />

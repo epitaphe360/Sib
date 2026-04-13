@@ -29,15 +29,12 @@ export const FeaturedPartners: React.FC = () => {
 
         // Ordre de priorité des tiers
         const tierPriority: Record<string, number> = {
-          'egide': 1,
-          'strategic': 2,
-          'platinum': 3,
-          'gold': 4,
-          'academic': 5,
-          'cultural': 6,
-          'silver': 7,
-          'support': 8,
-          'museum': 9,
+          'organizer': 1,
+          'co_organizer': 2,
+          'official_sponsor': 3,
+          'delegated_organizer': 4,
+          'partner': 5,
+          'press_partner': 6,
         };
 
         const sorted = [...pool].sort((a, b) => {
@@ -61,30 +58,24 @@ export const FeaturedPartners: React.FC = () => {
 
   const getTierLabel = (tier: string) => {
     const labels: Record<string, string> = {
-      'egide': 'Égide',
-      'strategic': 'Stratégique',
-      'platinum': 'Platinum',
-      'gold': 'Gold',
-      'silver': 'Silver',
-      'support': 'Support',
-      'cultural': 'Culturel',
-      'academic': 'Académique',
-      'museum': 'Museum'
+      'organizer': 'Organisateurs',
+      'co_organizer': 'Co-organisateurs',
+      'official_sponsor': 'Sponsor Officiel',
+      'delegated_organizer': 'Organisateur Délégué',
+      'partner': 'Nos Partenaires',
+      'press_partner': 'Nos Partenaires Presse'
     };
     return labels[tier] || tier;
   };
 
   const getTierColor = (tier: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {
     const colors: Record<string, 'default' | 'success' | 'warning' | 'error' | 'info'> = {
-      'egide': 'error',
-      'strategic': 'info',
-      'platinum': 'warning',
-      'gold': 'warning',
-      'silver': 'info',
-      'support': 'success',
-      'cultural': 'error',
-      'academic': 'success',
-      'museum': 'default'
+      'organizer': 'warning',
+      'co_organizer': 'warning',
+      'official_sponsor': 'info',
+      'delegated_organizer': 'success',
+      'partner': 'default',
+      'press_partner': 'error'
     };
     return colors[tier] || 'default';
   };
@@ -115,7 +106,7 @@ export const FeaturedPartners: React.FC = () => {
   return (
     <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-slate-50 relative overflow-hidden">
       {/* Background Pattern */}
-      <MoroccanPattern className="opacity-[0.04] text-blue-600" scale={1.8} />
+              <MoroccanPattern className="opacity-[0.04] text-blue-400" scale={1.8} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Premium Header */}
@@ -125,7 +116,7 @@ export const FeaturedPartners: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center justify-center px-4 py-2 mb-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full text-sm font-semibold uppercase tracking-wider shadow-lg">
+          <div className="inline-flex items-center justify-center px-4 py-2 mb-4 bg-blue-600 text-white rounded-full text-sm font-semibold uppercase tracking-wider shadow-lg">
             <Award className="h-4 w-4 mr-2" />
             {t('home.featured_partners_badge', 'Partenaires Officiels')}
           </div>
@@ -136,9 +127,9 @@ export const FeaturedPartners: React.FC = () => {
             {t('home.featured_partners_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
           </p>
           <div className="mt-6 flex items-center justify-center gap-2">
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full"></div>
-            <div className="h-1 w-24 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-500 rounded-full"></div>
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full"></div>
+            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full"></div>
+            <div className="h-1 w-24 bg-blue-600 rounded-full"></div>
+            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full"></div>
           </div>
         </motion.div>
       </div>
@@ -158,7 +149,7 @@ export const FeaturedPartners: React.FC = () => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card hover className="h-full border-blue-200 shadow-lg hover:shadow-2xl transition-all duration-300 bg-white relative">
+              <Card hover className="h-full border-blue-100 shadow-lg hover:shadow-2xl transition-all duration-300 bg-white relative">
                 <div className="flex flex-col h-full p-8">
                   {/* Badge vérifié en haut à droite */}
                   {partner.verified && (
@@ -173,7 +164,7 @@ export const FeaturedPartners: React.FC = () => {
                     <LogoWithFallback
                       src={partner.logo}
                       alt={partner.name}
-                      className="h-40 w-40 rounded-2xl object-contain border-2 border-blue-100 bg-white p-4 shadow-md"
+                      className="h-24 w-24 rounded-xl object-contain border border-blue-100 bg-white p-2 shadow-sm"
                     />
                   </div>
 

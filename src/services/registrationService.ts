@@ -28,7 +28,7 @@ export const PHONE_SCHEMA = z.string()
 
 export type UserType = 'visitor' | 'partner' | 'exhibitor';
 export type VisitorLevel = 'free' | 'premium' | 'vip';
-export type PartnerTier = 'museum' | 'silver' | 'gold' | 'platinum';
+export type PartnerTier = 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner';
 
 export interface BaseRegistrationData {
   email: string;
@@ -223,9 +223,9 @@ export async function generateVisitorBadge(
   email: string,
   name: string,
   level: VisitorLevel
-): Promise<{ success: boolean; error?: Error }> {
+): Promise<{ success: boolean; emailSent?: boolean; error?: Error }> {
   try {
-    const { error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
+    const { data, error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
       body: {
         userId,
         email,
@@ -241,7 +241,7 @@ export async function generateVisitorBadge(
       return { success: false, error: badgeError };
     }
 
-    return { success: true };
+    return { success: true, emailSent: !!data?.emailSent };
   } catch (error) {
     console.error('Erreur generateVisitorBadge:', error);
     return { success: false, error: error as Error };
@@ -369,8 +369,11 @@ export async function registerUser(
 
     // 3. Générer le badge pour les visiteurs
     if (data.type === 'visitor' && autoGenerateBadge) {
-      await generateVisitorBadge(userId, data.email, fullName, data.level);
-      await sendVisitorWelcomeEmail(userId, data.email, fullName, data.level);
+      const badgeResult = await generateVisitorBadge(userId, data.email, fullName, data.level);
+      // Fallback email uniquement si la génération n'a pas déjà déclenché l'envoi
+      if (!badgeResult.emailSent) {
+        await sendVisitorWelcomeEmail(userId, data.email, fullName, data.level);
+      }
     }
 
     // 4. Envoyer email pour définir mot de passe si nécessaire

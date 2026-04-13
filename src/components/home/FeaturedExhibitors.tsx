@@ -64,8 +64,8 @@ export const FeaturedExhibitors: React.FC = () => {
   const getCategoryLabel = (category: string) => {
     // Map backend values to translation keys
     // institutional -> categories.institutional
-    // bâtiment-industry -> categories.bâtiment-industry
-    // bâtiment-operations -> categories.bâtiment-operations
+    // construction-industry -> categories.construction-industry
+    // building-operations -> categories.building-operations
     // academic -> categories.academic
     
     // Check if category matches one of our keys, otherwise return as is or fallback
@@ -80,8 +80,8 @@ export const FeaturedExhibitors: React.FC = () => {
   const getCategoryColor = (category: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {
     const colors = {
       'institutional': 'success' as const,
-      'bâtiment-industry': 'error' as const,
-      'bâtiment-operations': 'info' as const,
+      'construction-industry': 'error' as const,
+      'building-operations': 'info' as const,
       'academic': 'warning' as const
     };
     return colors[category as keyof typeof colors] || 'default';
@@ -120,7 +120,7 @@ export const FeaturedExhibitors: React.FC = () => {
           backgroundPosition: '0 0, 40px 40px, 20px 60px'
         }} />
       </div>
-      <MoroccanPattern className="opacity-[0.03] text-sib-primary" scale={2} />
+      <MoroccanPattern className="opacity-[0.03] text-blue-400" scale={2} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Premium Header */}
@@ -130,7 +130,7 @@ export const FeaturedExhibitors: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center justify-center px-4 py-2 mb-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-full text-sm font-semibold uppercase tracking-wider shadow-lg">
+          <div className="inline-flex items-center justify-center px-4 py-2 mb-4 bg-blue-600 text-white rounded-full text-sm font-semibold uppercase tracking-wider shadow-lg">
             <Users className="h-4 w-4 mr-2" />
             {t('home.featured_exhibitors_badge', 'Exposants Officiels')}
           </div>
@@ -141,9 +141,9 @@ export const FeaturedExhibitors: React.FC = () => {
             {t('home.featured_exhibitors_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
           </p>
           <div className="mt-6 flex items-center justify-center gap-2">
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-green-500 to-transparent rounded-full"></div>
-            <div className="h-1 w-24 bg-gradient-to-r from-green-500 via-green-600 to-green-500 rounded-full"></div>
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-green-500 to-transparent rounded-full"></div>
+            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full"></div>
+            <div className="h-1 w-24 bg-blue-600 rounded-full"></div>
+            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full"></div>
           </div>
         </motion.div>
 
@@ -162,56 +162,45 @@ export const FeaturedExhibitors: React.FC = () => {
               viewport={{ once: true }}
             >
               <Card hover className="h-full relative">
-                <div className="flex flex-col h-full p-8">
+                <div className="flex flex-col h-full p-5">
                   {/* Badge vérifié en haut à droite */}
                   {exhibitor.verified && (
-                    <Badge variant="success" size="sm" className="absolute top-4 right-4 flex items-center">
+                    <Badge variant="success" size="sm" className="absolute top-3 right-3 flex items-center">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       {t('home.verified')}
                     </Badge>
                   )}
 
                   {/* Logo centré */}
-                  <div className="flex justify-center mb-6">
+                  <div className="flex justify-center mb-4">
                     <LogoWithFallback
                       src={exhibitor.logo}
                       alt={exhibitor.companyName}
-                      className="h-40 w-40 rounded-2xl object-contain border-2 border-gray-100 bg-white p-4 shadow-md"
+                      className="h-24 w-24 rounded-xl object-contain border border-gray-100 bg-white p-2 shadow-sm"
                     />
                   </div>
 
                   {/* Nom et secteur centrés */}
-                  <div className="text-center mb-4">
-                    <h3 className="font-bold text-gray-900 text-xl mb-2 leading-tight px-2">
+                  <div className="text-center mb-3">
+                    <h3 className="font-bold text-gray-900 text-lg mb-1 leading-tight px-2">
                       {exhibitor.companyName}
                     </h3>
-                    <p className="text-sm text-gray-600 font-semibold">{translateSector(exhibitor.sector, t)}</p>
-                  </div>
-
-                  {/* Category */}
-                  <div className="flex justify-center mb-4">
-                    <Badge 
-                      variant={getCategoryColor(exhibitor.category)}
-                      size="sm"
-                      className="font-medium"
-                    >
-                      {getCategoryLabel(exhibitor.category)}
-                    </Badge>
+                    <p className="text-xs text-gray-500 font-medium">{translateSector(exhibitor.sector, t)}</p>
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-700 text-sm mb-6 flex-grow line-clamp-4 leading-relaxed text-center">
+                  <p className="text-gray-600 text-sm mb-4 flex-grow line-clamp-3 leading-relaxed text-center">
                     {exhibitor.description}
                   </p>
 
                   {/* Stats */}
-                  <div className="flex items-center justify-center space-x-6 text-sm text-gray-600 mb-6 border-t border-gray-100 pt-4">
+                  <div className="flex items-center justify-center space-x-4 text-xs text-gray-500 mb-4 border-t border-gray-100 pt-3">
                     <div className="flex items-center space-x-1">
-                      <Users className="h-4 w-4 text-blue-500" />
+                      <Users className="h-3.5 w-3.5 text-blue-600" />
                       <span>{viewsMap[exhibitor.id] ?? exhibitor.miniSite?.views ?? 0} {t('home.views', 'vues')}</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <MapPin className="h-4 w-4 text-green-500" />
+                      <MapPin className="h-3.5 w-3.5 text-yellow-500" />
                       <span>{exhibitor.products.length || (exhibitor.miniSite?.sections?.filter(s => s.type === 'products').length ?? 0)} {t('home.products', 'produits')}</span>
                     </div>
                   </div>
@@ -266,10 +255,10 @@ export const FeaturedExhibitors: React.FC = () => {
           className="text-center"
         >
           <Link to={ROUTES.EXHIBITORS}>
-            <Button size="lg">
+            <button className="inline-flex items-center gap-2 px-8 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-md">
               {t('home.discover_all_exhibitors', 'Découvrez tous les exposants')}
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              <ArrowRight className="h-5 w-5" />
+            </button>
           </Link>
         </motion.div>
       </div>

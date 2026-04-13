@@ -374,7 +374,7 @@ export default function BadgePrintStationPage() {
       </div>
       ${!isCard ? `
         <div class="footer">
-          <div>1 - 3 Avril 2026 • El Jadida, Maroc</div>
+          <div>25 - 29 Novembre 2026 • El Jadida, Maroc</div>
           <div style="margin-top: 0.5mm">
             Valide du ${new Date(badge.validFrom).toLocaleDateString('fr-FR')} au ${new Date(badge.validUntil).toLocaleDateString('fr-FR')}
           </div>

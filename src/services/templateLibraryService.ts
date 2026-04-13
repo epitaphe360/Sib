@@ -267,8 +267,8 @@ class TemplateLibraryService {
         type: 'contact',
         content: {
           title: 'Contactez-nous',
-          email: 'contact@sib.com',
-          phone: '+212 5XX XXX XXX',
+          email: 'contact@sibevent.com',
+          phone: '+212 6 68 38 52 28',
           address: '',
           formFields: ['name', 'email', 'company', 'message']
         },

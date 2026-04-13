@@ -33,7 +33,7 @@ export default function PartnerUpgradePage() {
   const { user } = useAuthStore();
   const [selectedTier, setSelectedTier] = useState<PartnerTier | null>(null);
 
-  const currentTier = (user?.partner_tier || user?.profile?.partner_tier || 'museum') as PartnerTier;
+  const currentTier = (user?.partner_tier || user?.profile?.partner_tier || 'partner') as PartnerTier;
   const currentConfig = getPartnerTierConfig(currentTier);
 
   const handleUpgrade = (targetTier: PartnerTier) => {
@@ -262,16 +262,16 @@ export default function PartnerUpgradePage() {
               Maximisez votre retour sur investissement
             </h2>
             <p className="text-lg text-blue-100 mb-6">
-              En moyenne, nos partenaires Gold et Platinum génèrent 5x leur investissement
+              En moyenne, nos sponsors Gold et Officiel génèrent 5x leur investissement
               en nouveaux contrats et opportunités business grâce au SIB 2026.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
               <div>
-                <div className="text-4xl font-bold">500+</div>
+                <div className="text-4xl font-bold">200 000+</div>
                 <div className="text-blue-200 text-sm">Visiteurs qualifiés</div>
               </div>
               <div>
-                <div className="text-4xl font-bold">150+</div>
+                <div className="text-4xl font-bold">300+</div>
                 <div className="text-blue-200 text-sm">Rendez-vous B2B</div>
               </div>
               <div>
@@ -291,21 +291,21 @@ export default function PartnerUpgradePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                tier: 'Platinum',
+                tier: 'Sponsor Officiel',
                 company: 'TechCorp International',
-                quote: "Le niveau Platinum nous a permis d'obtenir une visibilité exceptionnelle. 87 rendez-vous qualifiés en 3 jours!",
+                quote: "Le sponsoring officiel nous a permis d'obtenir une visibilité exceptionnelle. 87 rendez-vous qualifiés en 5 jours!",
                 author: 'Jean Dupont, CEO'
               },
               {
-                tier: 'Gold',
+                tier: 'Sponsor Gold',
                 company: 'Innovation Solutions',
                 quote: "Le ROI a été immédiat. Nous avons signé 3 contrats majeurs dès la première semaine après le salon.",
                 author: 'Marie Martin, Directrice'
               },
               {
-                tier: 'Silver',
+                tier: 'Sponsor Silver',
                 company: 'StartUp Tech',
-                quote: "Niveau Silver parfait pour une première participation. Les analytics nous ont beaucoup aidés.",
+                quote: "Le sponsoring Silver est parfait pour une première participation. Les analytics nous ont beaucoup aidés.",
                 author: 'Ahmed Benali, Fondateur'
               }
             ].map((testimonial) => (
@@ -347,7 +347,7 @@ export default function PartnerUpgradePage() {
               },
               {
                 q: "Les analytics sont-elles en temps réel?",
-                a: "Pour Silver et Gold, les analytics sont mises à jour toutes les heures. Platinum bénéficie d'analytics en temps réel avec IA."
+                a: "Pour Silver et Gold, les analytics sont mises à jour toutes les heures. Le Sponsor Officiel bénéficie d'analytics en temps réel avec IA."
               }
             ].map((faq) => (
               <Card key={faq.q} className="p-6">
