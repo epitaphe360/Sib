@@ -270,9 +270,6 @@ export const Header: React.FC = memo(() => {
               {/* Notifications - masqué sur mobile */}
               <button data-testid="notifications-button" className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative">
                 <Bell className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    3
-                  </span>
                 </button>
 
                 {/* Messages - masqué sur mobile */}
@@ -281,9 +278,6 @@ export const Header: React.FC = memo(() => {
                   className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative"
                 >
                   <MessageCircle className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center">
-                    2
-                  </span>
                 </Link>
 
                 {/* Calendar - masqué sur mobile */}
@@ -653,6 +647,7 @@ export const Header: React.FC = memo(() => {
               </div>
 
               {/* Mobile Media Menu */}
+              {mediaVisible && mediaMenuItems.length > 0 && (
               <div className="border-t border-gray-200 pt-2 mt-2">
                 <div className="px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
                   <Video className="w-4 h-4 mr-2" />
@@ -676,6 +671,7 @@ export const Header: React.FC = memo(() => {
                   );
                 })}
               </div>
+              )}
 
               {/* Mobile Contact Link */}
               <div className="border-t border-gray-200 pt-2 mt-2">

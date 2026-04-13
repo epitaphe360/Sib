@@ -17,7 +17,7 @@ export interface User {
   name: string;
   type: 'exhibitor' | 'partner' | 'visitor' | 'admin' | 'security';
   visitor_level?: 'free' | 'premium' | 'vip';
-  partner_tier?: 'museum' | 'silver' | 'gold' | 'platinum'; // Niveau partenaire
+  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de partenaire SIB
   profile: UserProfile;
   status: 'pending' | 'active' | 'suspended' | 'rejected' | 'pending_payment';
   projects?: PartnerProject[];
@@ -63,7 +63,7 @@ export interface UserProfile {
   standNumber?: string; // Numéro de stand pour les exposants
   standArea?: number; // Surface du stand en m² (9, 18, 36, 54+)
   // Partner specific fields  
-  partner_tier?: 'museum' | 'silver' | 'gold' | 'platinum'; // Niveau de partenariat
+  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de partenaire SIB
 }
 
 export interface Exhibitor {
@@ -96,7 +96,7 @@ export interface Partner {
   userId: string;
   organizationName: string;
   organizationName_en?: string; // English translation
-  partnerType: 'institutional' | 'platinum' | 'gold' | 'silver' | 'bronze';
+  partnerType: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner';
   sector: string;
   sector_en?: string; // English translation
   country: string;

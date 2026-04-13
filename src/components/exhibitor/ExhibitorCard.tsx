@@ -62,6 +62,10 @@ const ExhibitorCard: React.FC<ExhibitorCardProps> = memo(({
     onScheduleAppointment(exhibitor.id);
   }, [onScheduleAppointment, exhibitor.id]);
 
+  const handleMessage = React.useCallback(() => {
+    onMessage?.(exhibitor.id);
+  }, [onMessage, exhibitor.id]);
+
   if (viewMode === 'list') {
     return (
       <motion.div

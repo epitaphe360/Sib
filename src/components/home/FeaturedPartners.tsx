@@ -29,15 +29,12 @@ export const FeaturedPartners: React.FC = () => {
 
         // Ordre de priorité des tiers
         const tierPriority: Record<string, number> = {
-          'egide': 1,
-          'strategic': 2,
-          'platinum': 3,
-          'gold': 4,
-          'academic': 5,
-          'cultural': 6,
-          'silver': 7,
-          'support': 8,
-          'museum': 9,
+          'organizer': 1,
+          'co_organizer': 2,
+          'official_sponsor': 3,
+          'delegated_organizer': 4,
+          'partner': 5,
+          'press_partner': 6,
         };
 
         const sorted = [...pool].sort((a, b) => {
@@ -61,30 +58,24 @@ export const FeaturedPartners: React.FC = () => {
 
   const getTierLabel = (tier: string) => {
     const labels: Record<string, string> = {
-      'egide': 'Égide',
-      'strategic': 'Stratégique',
-      'platinum': 'Platinum',
-      'gold': 'Gold',
-      'silver': 'Silver',
-      'support': 'Support',
-      'cultural': 'Culturel',
-      'academic': 'Académique',
-      'museum': 'Museum'
+      'organizer': 'Organisateurs',
+      'co_organizer': 'Co-organisateurs',
+      'official_sponsor': 'Sponsor Officiel',
+      'delegated_organizer': 'Organisateur Délégué',
+      'partner': 'Nos Partenaires',
+      'press_partner': 'Nos Partenaires Presse'
     };
     return labels[tier] || tier;
   };
 
   const getTierColor = (tier: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {
     const colors: Record<string, 'default' | 'success' | 'warning' | 'error' | 'info'> = {
-      'egide': 'error',
-      'strategic': 'info',
-      'platinum': 'warning',
-      'gold': 'warning',
-      'silver': 'info',
-      'support': 'success',
-      'cultural': 'error',
-      'academic': 'success',
-      'museum': 'default'
+      'organizer': 'warning',
+      'co_organizer': 'warning',
+      'official_sponsor': 'info',
+      'delegated_organizer': 'success',
+      'partner': 'default',
+      'press_partner': 'error'
     };
     return colors[tier] || 'default';
   };

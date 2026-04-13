@@ -24,29 +24,23 @@ const getTierPriority = (partner: Partner): number => {
   const sponsorshipLevel = partner.sponsorshipLevel?.toLowerCase() || '';
   const partnerType = partner.partnerType?.toLowerCase() || '';
   
-  // Égide (highest priority)
-  if (sponsorshipLevel.includes('egide') || sponsorshipLevel.includes('égide')) return 1;
+  // Organisateurs (highest priority)
+  if (partnerType === 'organizer' || sponsorshipLevel.includes('organizer')) return 1;
   
-  // Stratégiques
-  if (sponsorshipLevel.includes('strategic') || sponsorshipLevel.includes('stratégique')) return 2;
+  // Co-organisateurs
+  if (partnerType === 'co_organizer' || sponsorshipLevel.includes('co_organizer')) return 2;
   
-  // Platinum
-  if (partnerType === 'platinum') return 3;
+  // Sponsor Officiel
+  if (partnerType === 'official_sponsor' || sponsorshipLevel.includes('official_sponsor')) return 3;
   
-  // Gold
-  if (partnerType === 'gold') return 4;
+  // Organisateur Délégué
+  if (partnerType === 'delegated_organizer' || sponsorshipLevel.includes('delegated_organizer')) return 4;
   
-  // Silver
-  if (partnerType === 'silver') return 5;
+  // Nos Partenaires
+  if (partnerType === 'partner') return 5;
   
-  // Support
-  if (sponsorshipLevel.includes('support')) return 6;
-  
-  // Culturels
-  if (sponsorshipLevel.includes('cultural') || sponsorshipLevel.includes('culturel')) return 7;
-  
-  // Académiques
-  if (sponsorshipLevel.includes('academic') || sponsorshipLevel.includes('académique') || sponsorshipLevel.includes('academique')) return 8;
+  // Nos Partenaires Presse
+  if (partnerType === 'press_partner' || sponsorshipLevel.includes('press_partner')) return 6;
   
   // Autres (bronze, institutional, etc.)
   return 9;

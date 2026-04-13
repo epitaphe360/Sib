@@ -1008,6 +1008,44 @@ export class SupabaseService {
     };
   }
 
+  private static transformAuthUserToUser(authUser: any, emailFallback?: string): User {
+    const meta = authUser?.user_metadata || {};
+    const firstName = meta.firstName || meta.first_name || '';
+    const lastName = meta.lastName || meta.last_name || '';
+
+    return {
+      id: authUser?.id,
+      email: authUser?.email || emailFallback || '',
+      name: meta.name || [firstName, lastName].filter(Boolean).join(' ') || (authUser?.email?.split('@')[0] || 'Utilisateur'),
+      type: meta.type || 'visitor',
+      visitor_level: meta.visitor_level,
+      profile: {
+        firstName,
+        lastName,
+        company: meta.company || '',
+        position: meta.position || '',
+        country: meta.country || '',
+        bio: meta.bio || '',
+        standArea: Number(meta.standArea || 9),
+        interests: Array.isArray(meta.interests) ? meta.interests : [],
+        objectives: Array.isArray(meta.objectives) ? meta.objectives : [],
+        sectors: Array.isArray(meta.sectors) ? meta.sectors : [],
+        products: Array.isArray(meta.products) ? meta.products : [],
+        videos: Array.isArray(meta.videos) ? meta.videos : [],
+        images: Array.isArray(meta.images) ? meta.images : [],
+        participationObjectives: Array.isArray(meta.participationObjectives) ? meta.participationObjectives : [],
+        thematicInterests: Array.isArray(meta.thematicInterests) ? meta.thematicInterests : [],
+        collaborationTypes: Array.isArray(meta.collaborationTypes) ? meta.collaborationTypes : [],
+        expertise: Array.isArray(meta.expertise) ? meta.expertise : [],
+        visitObjectives: Array.isArray(meta.visitObjectives) ? meta.visitObjectives : []
+      },
+      status: meta.status || 'active',
+      projects: [],
+      createdAt: authUser?.created_at ? new Date(authUser.created_at) : new Date(),
+      updatedAt: authUser?.updated_at ? new Date(authUser.updated_at) : new Date()
+    };
+  }
+
   private static transformExhibitorDBToExhibitor(exhibitorDB: ExhibitorDB): Exhibitor {
     const products = (exhibitorDB.products || []).map((p: ProductDB) => ({
       id: p.id,
@@ -1345,9 +1383,29 @@ export class SupabaseService {
       }
 
       // Récupérer le profil utilisateur
-      let user = await this.getUserByEmail(email);
+      let user: User | null = null;
+      let usersPolicyRecursion = false;
+
+      try {
+        user = await this.getUserByEmail(email);
+      } catch (profileError) {
+        const message = profileError instanceof Error ? profileError.message : String(profileError || '');
+        usersPolicyRecursion = message.includes('infinite recursion detected in policy for relation "users"');
+
+        if (usersPolicyRecursion) {
+          console.warn('⚠️ Policy RLS récursive détectée sur users, fallback sur auth.user');
+          user = this.transformAuthUserToUser(data.user, email);
+        } else {
+          throw profileError;
+        }
+      }
 
       if (!user) {
+        if (usersPolicyRecursion) {
+          user = this.transformAuthUserToUser(data.user, email);
+          return user;
+        }
+
         // Profil absent dans users (inscription partielle) → le créer automatiquement
         console.warn('⚠️ Profil absent dans users, création automatique...');
         const authUser = data.user;

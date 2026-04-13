@@ -374,7 +374,7 @@ export default function LoginPage() {
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('admin.siports@siports.com', 'Admin123!', 'admin')}
+                  onClick={() => handleDemoLogin('admin@sibs.com', 'Sib2026!Admin', 'admin')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 transition-colors"
                 >
@@ -383,7 +383,7 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('partner-gold@test.siport.com', 'Admin123!', 'partner')}
+                  onClick={() => handleDemoLogin('partenaire@sibs.com', 'Sib2026!Partner', 'partner')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 transition-colors"
                 >
@@ -392,7 +392,7 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('exhibitor-54m@test.siport.com', 'Admin123!', 'exhibitor')}
+                  onClick={() => handleDemoLogin('exposant@sibs.com', 'Sib2026!Expo', 'exhibitor')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 transition-colors"
                 >
@@ -401,7 +401,7 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('marketing@sibs.com', 'Admin123!', 'marketing')}
+                  onClick={() => handleDemoLogin('marketing@sibs.com', 'Sib2026!Marketing', 'marketing')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 transition-colors"
                 >
