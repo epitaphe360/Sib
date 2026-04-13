@@ -14,6 +14,7 @@ interface BadgeRequest {
   level: 'free' | 'vip'
   includePhoto?: boolean
   photoUrl?: string
+  sendWelcomeEmail?: boolean
 }
 
 /**
@@ -121,6 +122,46 @@ function generateNonce(): string {
   return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('')
 }
 
+async function withTransientRetry<T>(operation: () => Promise<T>, maxAttempts = 3): Promise<T> {
+  let lastError: unknown
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await operation()
+    } catch (error) {
+      lastError = error
+      const message = error instanceof Error ? error.message.toLowerCase() : ''
+      const isTransient =
+        message.includes('timeout') ||
+        message.includes('too many') ||
+        message.includes('temporar') ||
+        message.includes('deadlock') ||
+        message.includes('could not serialize')
+
+      if (!isTransient || attempt === maxAttempts) {
+        throw error
+      }
+
+      const backoffMs = 100 * attempt
+      await new Promise((resolve) => setTimeout(resolve, backoffMs))
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error('Unknown transient retry failure')
+}
+
+async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string): Promise<T> {
+  let timeoutId: number | undefined
+  try {
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(() => reject(new Error(`${label} timeout after ${timeoutMs}ms`)), timeoutMs)
+    })
+    return await Promise.race([promise, timeoutPromise])
+  } finally {
+    if (timeoutId !== undefined) clearTimeout(timeoutId)
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -133,27 +174,21 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { userId, email, name, level, includePhoto = false, photoUrl = '' }: BadgeRequest = await req.json()
+    const {
+      userId,
+      email,
+      name,
+      level,
+      includePhoto = false,
+      photoUrl = '',
+      sendWelcomeEmail = true,
+    }: BadgeRequest = await req.json()
 
     // Validation
     if (!userId || !email || !name || !level) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
-
-    // Récupérer les infos utilisateur
-    const { data: user, error: userError } = await supabaseClient
-      .from('users')
-      .select('*')
-      .eq('id', userId)
-      .single()
-
-    if (userError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'User not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
@@ -191,63 +226,74 @@ serve(async (req) => {
     // Déterminer le type de badge
     const badgeType = level === 'free' ? 'visitor_free' : 'visitor_premium'
 
-    // Vérifier si un badge existe déjà
-    const { data: existingBadge } = await supabaseClient
-      .from('digital_badges')
-      .select('id')
-      .eq('user_id', userId)
-      .single()
-
-    let badgeData
-    if (existingBadge) {
-      // Mettre à jour le badge existant
-      const { data, error } = await supabaseClient
-        .from('digital_badges')
-        .update({
-          qr_data: qrContent,
-          badge_type: badgeType,
-          current_token: token,
-          token_expires_at: new Date(jwtPayload.exp * 1000).toISOString(),
-          last_rotation_at: new Date().toISOString(),
-          photo_url: photoUrl || null,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', existingBadge.id)
-        .select()
-        .single()
-
-      if (error) throw error
-      badgeData = data
-    } else {
-      // Créer un nouveau badge
-      const { data, error } = await supabaseClient
-        .from('digital_badges')
-        .insert({
-          user_id: userId,
-          qr_data: qrContent,
-          badge_type: badgeType,
-          current_token: token,
-          token_expires_at: new Date(jwtPayload.exp * 1000).toISOString(),
-          last_rotation_at: new Date().toISOString(),
-          rotation_interval_seconds: 30,
-          photo_url: photoUrl || null,
-          is_active: true
-        })
-        .select()
-        .single()
-
-      if (error) throw error
-      badgeData = data
+    const badgePayload = {
+      user_id: userId,
+      qr_data: qrContent,
+      badge_type: badgeType,
+      current_token: token,
+      token_expires_at: new Date(jwtPayload.exp * 1000).toISOString(),
+      last_rotation_at: new Date().toISOString(),
+      rotation_interval_seconds: 30,
+      photo_url: photoUrl || null,
+      is_active: true,
+      updated_at: new Date().toISOString(),
     }
 
-    console.log(`Badge ${existingBadge ? 'updated' : 'created'} for user ${userId} (${level})`)
+    const { data: badgeData, error: badgeError } = await withTransientRetry(async () => {
+      return await supabaseClient
+        .from('digital_badges')
+        .upsert(badgePayload, { onConflict: 'user_id' })
+        .select()
+        .single()
+    })
+
+    if (badgeError || !badgeData) {
+      throw badgeError || new Error('Badge upsert failed with empty response')
+    }
+
+    console.log(`Badge upserted for user ${userId} (${level})`)
+
+    // Best effort email sending (non-bloquant)
+    let emailSent = false
+    let emailError: string | null = null
+
+    if (sendWelcomeEmail) {
+      try {
+        const { error: welcomeEmailError } = await withTimeout(
+          supabaseClient.functions.invoke('send-visitor-welcome-email', {
+            body: {
+              userId,
+              email,
+              name,
+              level,
+              qrContent,
+            },
+          }),
+          6000,
+          'send-visitor-welcome-email invoke'
+        )
+
+        if (welcomeEmailError) {
+          emailError = welcomeEmailError.message || 'Email function invocation failed'
+          console.error('❌ Error invoking send-visitor-welcome-email:', welcomeEmailError)
+        } else {
+          emailSent = true
+          console.log(`✅ Welcome email queued/sent for ${email}`)
+        }
+      } catch (mailError) {
+        emailError = mailError instanceof Error ? mailError.message : 'Unknown email error'
+        console.error('❌ Welcome email error:', mailError)
+      }
+    }
 
     return new Response(
       JSON.stringify({
         success: true,
         badge: badgeData,
         qrContent: qrContent,
-        message: `Badge ${level} généré avec succès`
+        message: `Badge ${level} généré avec succès`,
+        emailSent,
+        emailError,
       }),
       {
         status: 200,

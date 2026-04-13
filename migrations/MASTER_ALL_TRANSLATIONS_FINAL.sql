@@ -376,7 +376,7 @@ UPDATE news_articles SET
 <ul>
 <li>High-speed freight lines connecting all major ports to Casablanca hub</li>
 <li>Direct rail access to Tanger Med, Nador West Med, and Kenitra</li>
-<li>Integration with trans-Maghreb rail corridor (future connection to Morocco, Tunisia)</li>
+<li>Integration with trans-Maghreb rail corridor (future connection to Maroc, Tunisia)</li>
 <li>Target: 25% of port cargo transported by rail (vs. current 5%)</li>
 </ul>
 
@@ -390,7 +390,7 @@ UPDATE news_articles SET
 <h3>Dry Ports and Logistics Platforms</h3>
 <ul>
 <li>Zenata (Casablanca): 323 hectares logistics zone with customs facilities</li>
-<li>Oujda: Border logistics hub for Moroccon trade (when relations normalize)</li>
+<li>Oujda: Border logistics hub for Marocn trade (when relations normalize)</li>
 <li>Marrakech: Inland distribution center for southern Morocco</li>
 </ul>
 
