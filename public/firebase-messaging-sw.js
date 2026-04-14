@@ -23,9 +23,9 @@ let messaging = null;
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDvQxZ1234567890-abcdefghijklmnop', // Will be injected
-  authDomain: 'siport-2026.firebaseapp.com',
-  projectId: 'siport-2026',
-  storageBucket: 'siport-2026.appspot.com',
+  authDomain: 'sib-2026.firebaseapp.com',
+  projectId: 'sib-2026',
+  storageBucket: 'sib-2026.appspot.com',
   messagingSenderId: '123456789000',
   appId: '1:123456789000:web:abcdef1234567890',
 };
@@ -49,7 +49,7 @@ if (messaging) {
 
   const { notification, data } = payload;
 
-  const notificationTitle = notification?.title || 'SIPORT 2026';
+  const notificationTitle = notification?.title || 'SIB 2026';
   const notificationOptions = {
     body: notification?.body || '',
     icon: notification?.icon || '/logo.png',

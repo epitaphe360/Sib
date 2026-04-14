@@ -1,4 +1,4 @@
-# 🚀 Guide de Déploiement SIPORTS 2026
+# 🚀 Guide de Déploiement SIB 2026
 
 ## 📋 Compatibilité Plateformes
 
@@ -83,8 +83,8 @@ npm run mobile:open-android
 ```typescript
 // capacitor.config.ts
 {
-  appId: 'com.siports.app2026',
-  appName: 'SIPORTS 2026',
+  appId: 'com.sib.app2026',
+  appName: 'SIB 2026',
   webDir: 'dist',
   plugins: {
     SplashScreen: { backgroundColor: "#1e40af" },
@@ -154,4 +154,4 @@ npm run lint             # Vérification code
 | **iOS App Store** | ✅ Prêt | Natives | Excellent |
 | **Google Play** | ✅ Prêt | Natives | Excellent |
 
-L'application SIPORTS 2026 est **100% compatible** avec toutes ces plateformes ! 🎉
+L'application SIB 2026 est **100% compatible** avec toutes ces plateformes ! 🎉

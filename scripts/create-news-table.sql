@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.news (
     featured BOOLEAN DEFAULT FALSE,
     image_url TEXT,
     read_time INTEGER DEFAULT 1,
-    source TEXT DEFAULT 'siports',
+    source TEXT DEFAULT 'sib',
     views INTEGER DEFAULT 0,
     status TEXT DEFAULT 'draft',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

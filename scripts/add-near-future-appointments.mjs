@@ -22,12 +22,12 @@ async function addNearFutureAppointments() {
       .from('users')
       .select('id, email, type')
       .eq('type', 'visitor')
-      .in('email', ['visitor-vip@test.siport.com', 'demo.visitor@siports.com']);
+      .in('email', ['visitor-vip@test.sib2026.ma', 'demo.visitor@sib.com']);
 
     if (visitorsError) throw visitorsError;
     console.log(`✅ ${visitors.length} visiteurs trouvés`);
 
-    const vipVisitor = visitors.find(v => v.email === 'visitor-vip@test.siport.com') || visitors[0];
+    const vipVisitor = visitors.find(v => v.email === 'visitor-vip@test.sib2026.ma') || visitors[0];
 
     const { data: exhibitors, error: exhibitorsError } = await supabase
       .from('exhibitors')

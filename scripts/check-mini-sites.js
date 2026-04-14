@@ -6,10 +6,10 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const exhibitorEmails = [
-  'exhibitor-9m@test.siport.com',
-  'exhibitor-18m@test.siport.com',
-  'exhibitor-36m@test.siport.com',
-  'exhibitor-54m@test.siport.com'
+  'exhibitor-9m@test.sib2026.ma',
+  'exhibitor-18m@test.sib2026.ma',
+  'exhibitor-36m@test.sib2026.ma',
+  'exhibitor-54m@test.sib2026.ma'
 ];
 
 async function checkMiniSites() {

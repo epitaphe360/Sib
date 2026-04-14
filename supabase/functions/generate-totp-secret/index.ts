@@ -44,7 +44,7 @@ Deno.serve(async (req: Request) => {
 
     // Generate TOTP secret
     const totp = new OTPAuth.TOTP({
-      issuer: 'SIPORTS 2026',
+      issuer: 'SIB 2026',
       label: user.email,
       algorithm: 'SHA1',
       digits: 6,

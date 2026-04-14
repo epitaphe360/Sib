@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { DOMParser } from 'linkedom';
 
-const NEWS_URL = 'https://siportevent.com/actualite-portuaire/';
+const NEWS_URL = 'https://sib2026.ma/actualite-portuaire/';
 
 async function testNewsScraper() {
   console.log('🔍 Testing news scraper...\n');

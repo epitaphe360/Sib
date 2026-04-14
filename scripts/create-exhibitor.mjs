@@ -22,7 +22,7 @@ const supabase = createClient(url, serviceKey, {
 });
 
 const exhibitor = {
-  email: process.env.EXHIBITOR_EMAIL || 'exhibitor.test@siports.com',
+  email: process.env.EXHIBITOR_EMAIL || 'exhibitor.test@sib.com',
   name: process.env.EXHIBITOR_NAME || 'Test Exhibitor',
   type: 'exhibitor',
   profile: {

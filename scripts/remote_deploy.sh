@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Usage: ./remote_deploy.sh <user@host> <remote_wp_path> [plugin-zip-path]
-# Example: ./remote_deploy.sh ubuntu@1.2.3.4 /var/www/html/wordpress ./wordpress-plugin/siport-plugin.zip
+# Example: ./remote_deploy.sh ubuntu@1.2.3.4 /var/www/html/wordpress ./wordpress-plugin/sib-plugin.zip
 
 set -euo pipefail
 SSH_TARGET="$1"
 WP_PATH="$2"
-ZIP_PATH="${3:-./wordpress-plugin/siport-plugin.zip}"
+ZIP_PATH="${3:-./wordpress-plugin/sib-plugin.zip}"
 
 if [ ! -f "$ZIP_PATH" ]; then
   echo "Plugin zip not found at $ZIP_PATH"

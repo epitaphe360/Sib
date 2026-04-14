@@ -467,14 +467,14 @@ VALUES
    ARRAY['finance', 'investissement', 'startup'], 'Finance', NOW() - INTERVAL '21 days'),
 
   -- Podcasts
-  ('podcast', 'SIPORT Talks #1: L''écosystème portuaire marocain',
+  ('podcast', 'SIB Talks #1: L''écosystème portuaire marocain',
    'Premier épisode de notre podcast dédié à l''industrie des ports. Invité spécial: le président de l''Autorité Portuaire.',
    'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800',
    1800, 'published', 2100, 156,
-   '[{"name": "Farid Bensalem", "title": "Journaliste Maritime", "company": "SIPORTS"}]'::jsonb,
+   '[{"name": "Farid Bensalem", "title": "Journaliste Maritime", "company": "SIB"}]'::jsonb,
    ARRAY['podcast', 'interview', 'port'], 'Interview', NOW() - INTERVAL '5 days'),
 
-  ('podcast', 'SIPORT Talks #2: Femmes et Secteur Maritime',
+  ('podcast', 'SIB Talks #2: Femmes et Secteur Maritime',
    'Focus sur les femmes dans le secteur maritime marocain. Défis, opportunités et success stories.',
    'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800',
    2100, 'published', 1850, 203,
@@ -482,14 +482,14 @@ VALUES
    ARRAY['femmes', 'port', 'égalité'], 'Société', NOW() - INTERVAL '12 days'),
 
   -- Capsules Inside
-  ('capsule_inside', 'Inside SIPORT: Coulisses du salon',
+  ('capsule_inside', 'Inside SIB: Coulisses du salon',
    'Découvrez les coulisses de l''organisation du plus grand salon portuaire du Maroc.',
    'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800',
    300, 'published', 3500, 245,
    '[]'::jsonb,
    ARRAY['coulisses', 'organisation', 'salon'], 'Behind The Scenes', NOW() - INTERVAL '3 days'),
 
-  ('capsule_inside', 'Inside SIPORT: Préparation des stands',
+  ('capsule_inside', 'Inside SIB: Préparation des stands',
    'Comment les exposants préparent leurs stands pour impressionner les visiteurs.',
    'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800',
    240, 'published', 2800, 178,
@@ -505,8 +505,8 @@ VALUES
    ARRAY['interview', 'leader', 'technologie'], 'Leadership', NOW() - INTERVAL '8 days'),
 
   -- Best Moments
-  ('best_moments', 'SIPORTS 2025: Les moments forts',
-   'Revivez les meilleurs moments de l''édition 2025 du salon SIPORTS.',
+  ('best_moments', 'SIB 2025: Les moments forts',
+   'Revivez les meilleurs moments de l''édition 2025 du salon SIB.',
    'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
    420, 'published', 4200, 312,
    '[]'::jsonb,
@@ -514,7 +514,7 @@ VALUES
 
   -- Testimonials
   ('testimonial', 'Témoignage: Exposant satisfait',
-   'Ahmed Kaci, exposant depuis 3 éditions, partage son expérience au salon SIPORTS.',
+   'Ahmed Kaci, exposant depuis 3 éditions, partage son expérience au salon SIB.',
    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800',
    180, 'published', 980, 67,
    '[{"name": "Ahmed Kaci", "title": "Directeur Commercial", "company": "Équipements Portuaires Pro"}]'::jsonb,

@@ -3,11 +3,11 @@
 
 -- First, delete any existing data to avoid duplicates
 DELETE FROM public.exhibitors WHERE user_id IN (
-  SELECT id FROM public.users WHERE type = 'exhibitor' AND email LIKE '%@test.siport.com'
+  SELECT id FROM public.users WHERE type = 'exhibitor' AND email LIKE '%@test.sib2026.ma'
 );
 
 DELETE FROM public.partners WHERE user_id IN (
-  SELECT id FROM public.users WHERE type = 'partner' AND email LIKE '%@test.siport.com'
+  SELECT id FROM public.users WHERE type = 'partner' AND email LIKE '%@test.sib2026.ma'
 );
 
 -- Create exhibitors from users with type='exhibitor'
@@ -40,7 +40,7 @@ SELECT
   NOW(),
   NOW()
 FROM public.users u
-WHERE u.type = 'exhibitor' AND u.email LIKE '%@test.siport.com';
+WHERE u.type = 'exhibitor' AND u.email LIKE '%@test.sib2026.ma';
 
 -- Create partners from users with type='partner'
 INSERT INTO public.partners (user_id, name, type, sponsorship_level, sector, description, created_at, updated_at)
@@ -90,7 +90,7 @@ SELECT
   NOW(),
   NOW()
 FROM public.users u
-WHERE u.type = 'partner' AND u.email LIKE '%@test.siport.com';
+WHERE u.type = 'partner' AND u.email LIKE '%@test.sib2026.ma';
 
 -- Verify the data was created
 SELECT 'Exhibitors created' as status, COUNT(*) as count FROM public.exhibitors;

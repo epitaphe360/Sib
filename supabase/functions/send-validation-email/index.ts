@@ -38,7 +38,7 @@ Deno.serve(async (req: Request) => {
 
   try {
     const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
-    const SENDER_EMAIL = Deno.env.get('SENDER_EMAIL') || 'no-reply@siports.com';
+    const SENDER_EMAIL = Deno.env.get('SENDER_EMAIL') || 'no-reply@sib.com';
 
     if (!SENDGRID_API_KEY) {
       throw new Error('SENDGRID_API_KEY non configurée');
@@ -50,8 +50,8 @@ Deno.serve(async (req: Request) => {
 
     const isApproved = status === 'approved';
     const subject = isApproved 
-      ? `✅ SIPORTS 2026 - Votre compte Exposant a été validé !`
-      : `❌ SIPORTS 2026 - Mise à jour de votre demande d'inscription`;
+      ? `✅ SIB 2026 - Votre compte Exposant a été validé !`
+      : `❌ SIB 2026 - Mise à jour de votre demande d'inscription`;
     
     const statusLabel = isApproved ? 'Approuvée' : 'Rejetée';
     const statusColor = isApproved ? '#10b981' : '#ef4444';
@@ -76,7 +76,7 @@ Deno.serve(async (req: Request) => {
         <body>
           <div class="container">
             <div class="header">
-              <h1>SIPORTS 2026 - Mise à Jour</h1>
+              <h1>SIB 2026 - Mise à Jour</h1>
             </div>
             <div class="content">
               <h2>Bonjour ${escapeHtml(firstName)} ${escapeHtml(lastName)},</h2>
@@ -87,7 +87,7 @@ Deno.serve(async (req: Request) => {
                 <h3>Statut de votre demande : <span style="color: ${statusColor};">${escapeHtml(statusLabel)}</span></h3>
                 
                 ${isApproved ? `
-                  <p>Félicitations ! Votre compte a été examiné et **approuvé** par notre équipe administrative. Vous êtes maintenant un exposant officiel de SIPORTS 2026.</p>
+                  <p>Félicitations ! Votre compte a été examiné et **approuvé** par notre équipe administrative. Vous êtes maintenant un exposant officiel de SIB 2026.</p>
                   <p>Vous pouvez désormais vous connecter pour accéder à toutes les fonctionnalités de votre espace exposant (création de mini-site, gestion des produits, prise de rendez-vous, etc.).</p>
                   <a href="${Deno.env.get('SITE_URL') || 'http://localhost:3000'}${actionLink}" class="button">${actionText}</a>
                 ` : `
@@ -97,10 +97,10 @@ Deno.serve(async (req: Request) => {
                 `}
               </div>
               
-              <p>Merci de votre intérêt pour SIPORTS 2026.</p>
+              <p>Merci de votre intérêt pour SIB 2026.</p>
               
               <div class="footer">
-                <p><strong>SIPORTS 2026</strong><br>
+                <p><strong>SIB 2026</strong><br>
                 Salon International des Ports et de la Logistique</p>
                 <p style="font-size: 12px; color: #9ca3af;">Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
               </div>

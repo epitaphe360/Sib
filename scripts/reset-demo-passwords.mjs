@@ -6,7 +6,7 @@ const s = createClient(
 );
 
 const DEMO_ACCOUNTS = [
-  'admin.siports@siports.com',
+  'admin.sib@sib.com',
   'exhibitor1@test.com',
   'exhibitor2@test.com',
   'visitor1@test.com',

@@ -16,10 +16,10 @@ async function addExhibitorPartnerAppointments() {
       .select('id, email, name')
       .eq('type', 'exhibitor')
       .in('email', [
-        'exhibitor-9m@test.siport.com',
-        'exhibitor-18m@test.siport.com',
-        'exhibitor-36m@test.siport.com',
-        'exhibitor-54m@test.siport.com'
+        'exhibitor-9m@test.sib2026.ma',
+        'exhibitor-18m@test.sib2026.ma',
+        'exhibitor-36m@test.sib2026.ma',
+        'exhibitor-54m@test.sib2026.ma'
       ]);
 
     // 2. Récupérer les utilisateurs partenaires
@@ -29,10 +29,10 @@ async function addExhibitorPartnerAppointments() {
       .select('id, email, name')
       .eq('type', 'partner')
       .in('email', [
-        'partner-museum@test.siport.com',
-        'partner-silver@test.siport.com',
-        'partner-gold@test.siport.com',
-        'partner-platinium@test.siport.com'
+        'partner-museum@test.sib2026.ma',
+        'partner-silver@test.sib2026.ma',
+        'partner-gold@test.sib2026.ma',
+        'partner-platinium@test.sib2026.ma'
       ]);
 
     // 3. Récupérer les profils exhibitors

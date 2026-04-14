@@ -1,5 +1,5 @@
 /**
- * 📅 TESTS CYCLE DE VIE DES RENDEZ-VOUS B2B - SIPORT 2026
+ * 📅 TESTS CYCLE DE VIE DES RENDEZ-VOUS B2B - SIB 2026
  *
  * Couvre l'ensemble du parcours rendez-vous :
  * - Réservation (avec mocks créneaux + quota)
@@ -22,12 +22,12 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:9324';
 const PASSWORDS = ['Test@123456', 'Admin123!'];
 
 const ACCOUNTS = {
-  visitorVip:   { email: 'visitor-vip@test.siport.com' },
-  visitorFree:  { email: 'visitor-free@test.siport.com' },
-  exhibitor9m:  { email: 'exhibitor-9m@test.siport.com' },
-  exhibitor54m: { email: 'exhibitor-54m@test.siport.com' },
-  partnerGold:  { email: 'partner-gold@test.siport.com' },
-  admin:        { email: 'admin.siports@siports.com' },
+  visitorVip:   { email: 'visitor-vip@test.sib2026.ma' },
+  visitorFree:  { email: 'visitor-free@test.sib2026.ma' },
+  exhibitor9m:  { email: 'exhibitor-9m@test.sib2026.ma' },
+  exhibitor54m: { email: 'exhibitor-54m@test.sib2026.ma' },
+  partnerGold:  { email: 'partner-gold@test.sib2026.ma' },
+  admin:        { email: 'admin.sib@sib.com' },
 };
 
 // ─── Données de fixtures ───────────────────────────────────────────────────────

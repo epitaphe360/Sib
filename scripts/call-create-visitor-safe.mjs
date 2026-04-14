@@ -14,7 +14,7 @@ if (!url || !anon) {
 
 const supabase = createClient(url, anon);
 
-const email = process.env.VISITOR_EMAIL || 'visitor.real@siports.com';
+const email = process.env.VISITOR_EMAIL || 'visitor.real@sib.com';
 const name = process.env.VISITOR_NAME || 'Real Visitor';
 
 try {

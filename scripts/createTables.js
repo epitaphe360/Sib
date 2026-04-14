@@ -97,7 +97,7 @@ function executeSQL(sql) {
 // SQL pour créer toutes les tables
 const createTablesSQL = `
 -- ========================================
--- TABLES MANQUANTES POUR SIPORTS
+-- TABLES MANQUANTES POUR SIB
 -- ========================================
 
 -- 1. PARTNERS TABLE

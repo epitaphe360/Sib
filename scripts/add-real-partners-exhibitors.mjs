@@ -1,5 +1,5 @@
 /**
- * Script d'ajout de partenaires et exposants réels - SIPORT 2026
+ * Script d'ajout de partenaires et exposants réels - SIB 2026
  * IMPORTANT : Utilise uniquement des informations publiques vérifiées
  */
 
@@ -501,7 +501,7 @@ async function createExhibitor(exhData) {
 
 async function main() {
   console.log('\n╔════════════════════════════════════════════════════════════╗');
-  console.log('║  AJOUT DE PARTENAIRES & EXPOSANTS RÉELS - SIPORT 2026     ║');
+  console.log('║  AJOUT DE PARTENAIRES & EXPOSANTS RÉELS - SIB 2026     ║');
   console.log('╚════════════════════════════════════════════════════════════╝\n');
 
   let stats = {

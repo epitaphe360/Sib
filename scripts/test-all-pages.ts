@@ -50,10 +50,10 @@ const ROUTES_TO_TEST = [
 
 // Comptes de test
 const TEST_ACCOUNTS = {
-  visitor: { email: 'visitor-vip@test.siport.com', password: 'Test@123456' },
-  partner: { email: 'partner-gold@test.siport.com', password: 'Test@123456' },
-  exhibitor: { email: 'exhibitor-18m@test.siport.com', password: 'Test@123456' },
-  admin: { email: 'admin@siport.com', password: 'Admin@123456' },
+  visitor: { email: 'visitor-vip@test.sib2026.ma', password: 'Test@123456' },
+  partner: { email: 'partner-gold@test.sib2026.ma', password: 'Test@123456' },
+  exhibitor: { email: 'exhibitor-18m@test.sib2026.ma', password: 'Test@123456' },
+  admin: { email: 'admin@sib2026.ma', password: 'Admin@123456' },
 };
 
 class PageTester {
@@ -345,7 +345,7 @@ class PageTester {
   }
 
   private generateMarkdownReport(report: any): string {
-    let md = `# Rapport de Test Complet - SIPORT v3\n\n`;
+    let md = `# Rapport de Test Complet - SIB 2026\n\n`;
     md += `**Date:** ${new Date().toLocaleString('fr-FR')}\n\n`;
     md += `## 📊 Résumé\n\n`;
     md += `| Métrique | Valeur |\n`;

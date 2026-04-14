@@ -351,7 +351,7 @@ async function verify() {
 
 async function main() {
   console.log('═══════════════════════════════════════════════════════════════');
-  console.log('   🚀 RÉINITIALISATION EXPOSANTS SIPORT 2026');
+  console.log('   🚀 RÉINITIALISATION EXPOSANTS SIB 2026');
   console.log('═══════════════════════════════════════════════════════════════');
 
   await deleteAll();

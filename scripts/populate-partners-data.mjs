@@ -21,9 +21,9 @@ const enrichedDataByType = {
     employees: "1000-5000",
     country: "Maroc",
     social_media: {
-      linkedin: "https://linkedin.com/company/sponsor-siports",
-      twitter: "https://twitter.com/sponsor_siports",
-      facebook: "https://facebook.com/sponsorsiports"
+      linkedin: "https://linkedin.com/company/sponsor-sib",
+      twitter: "https://twitter.com/sponsor_sib",
+      facebook: "https://facebook.com/sponsorsib"
     },
     key_figures: [
       { label: "Investissement total", value: "50M €", icon: "TrendingUp" },
@@ -82,9 +82,9 @@ const enrichedDataByType = {
     employees: "500-1000",
     country: "Maroc",
     social_media: {
-      linkedin: "https://linkedin.com/company/exhibitor-siports",
-      youtube: "https://youtube.com/@exhibitor_siports",
-      twitter: "https://twitter.com/exhibitor_siports"
+      linkedin: "https://linkedin.com/company/exhibitor-sib",
+      youtube: "https://youtube.com/@exhibitor_sib",
+      twitter: "https://twitter.com/exhibitor_sib"
     },
     key_figures: [
       { label: "Produits exposés", value: "150+", icon: "Package" },
@@ -93,7 +93,7 @@ const enrichedDataByType = {
       { label: "Salons participés", value: "50+", icon: "Calendar" }
     ],
     awards: [
-      { name: "Innovation Award SIPORTS 2024", year: 2024, issuer: "SIPORTS Organization" },
+      { name: "Innovation Award SIB 2024", year: 2024, issuer: "SIB Organization" },
       { name: "Best Maritime Equipment", year: 2023, issuer: "Maritime Tech Awards" },
       { name: "Green Technology Excellence", year: 2023, issuer: "Eco Maritime Forum" }
     ],
@@ -144,9 +144,9 @@ const enrichedDataByType = {
     employees: "200-500",
     country: "Maroc",
     social_media: {
-      linkedin: "https://linkedin.com/company/partner-siports",
-      twitter: "https://twitter.com/partner_siports",
-      youtube: "https://youtube.com/@partner_siports"
+      linkedin: "https://linkedin.com/company/partner-sib",
+      twitter: "https://twitter.com/partner_sib",
+      youtube: "https://youtube.com/@partner_sib"
     },
     key_figures: [
       { label: "Projets livrés", value: "200+", icon: "CheckCircle" },
@@ -206,11 +206,11 @@ const enrichedDataByType = {
     employees: "50-100",
     country: "Maroc",
     social_media: {
-      linkedin: "https://linkedin.com/company/media-siports",
-      twitter: "https://twitter.com/media_siports",
-      facebook: "https://facebook.com/mediasiports",
-      youtube: "https://youtube.com/@media_siports",
-      instagram: "https://instagram.com/media_siports"
+      linkedin: "https://linkedin.com/company/media-sib",
+      twitter: "https://twitter.com/media_sib",
+      facebook: "https://facebook.com/mediasib",
+      youtube: "https://youtube.com/@media_sib",
+      instagram: "https://instagram.com/media_sib"
     },
     key_figures: [
       { label: "Articles publiés", value: "5000+", icon: "FileText" },
@@ -226,7 +226,7 @@ const enrichedDataByType = {
       {
         quote: "Une couverture médiatique exceptionnelle de nos événements. Professionnalisme et créativité remarquables.",
         author: "Amina Tazi",
-        role: "Directrice Communication, SIPORTS",
+        role: "Directrice Communication, SIB",
         avatar: "https://randomuser.me/api/portraits/women/28.jpg"
       },
       {
@@ -250,7 +250,7 @@ const enrichedDataByType = {
         image: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400"
       }
     ],
-    clients: ["SIPORTS", "African Ports Association", "IMO", "Port Authorities Network", "UNCTAD"],
+    clients: ["SIB", "African Ports Association", "IMO", "Port Authorities Network", "UNCTAD"],
     gallery: [
       "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800",
       "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800",

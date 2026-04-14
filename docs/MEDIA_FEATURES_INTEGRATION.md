@@ -1,12 +1,12 @@
-# 🎬 Guide d'Intégration des Fonctionnalités Médias SIPORT
+# 🎬 Guide d'Intégration des Fonctionnalités Médias SIB
 
 ## 📋 Vue d'ensemble
 
 Ce document décrit comment intégrer les 6 fonctionnalités médias premium pour les partenaires :
 
 1. **Webinaires sponsorisés** (replays)
-2. **Capsules vidéo "Inside SIPORT"**
-3. **Podcast "SIPORT Talks"**
+2. **Capsules vidéo "Inside SIB"**
+3. **Podcast "SIB Talks"**
 4. **Interview "Meet The Leaders"** (Live Studio)
 5. **Capsule vidéo "Best Moments"**
 6. **Testimonials** (interviews/vidéos courtes)
@@ -112,7 +112,7 @@ src/
 │   └── media/
 │       ├── WebinarsPage.tsx              # Liste des webinaires
 │       ├── WebinarDetailPage.tsx         # Replay d'un webinaire
-│       ├── CapsulesInsidePage.tsx        # Capsules "Inside SIPORT"
+│       ├── CapsulesInsidePage.tsx        # Capsules "Inside SIB"
 │       ├── PodcastsPage.tsx              # Liste des podcasts
 │       ├── PodcastEpisodePage.tsx        # Épisode individuel
 │       ├── LiveStudioPage.tsx            # Live Studio interviews
@@ -512,7 +512,7 @@ export const WebinarsPage: React.FC = () => {
       {/* Header */}
       <div className="mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Webinaires SIPORT
+          Webinaires SIB
         </h1>
         <p className="text-lg text-gray-600">
           Retrouvez tous nos webinaires sponsorisés en replay
@@ -914,7 +914,7 @@ export const PodcastsPage: React.FC = () => {
           <Podcast className="h-8 w-8 text-purple-600" />
         </div>
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          SIPORT Talks - Le Podcast
+          SIB Talks - Le Podcast
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Interviews audio avec les leaders de l'industrie maritime et portuaire
@@ -1115,7 +1115,7 @@ export const ROUTES = {
   WEBINAR_DETAIL: '/media/webinar/:id',
   PODCASTS: '/media/podcasts',
   PODCAST_DETAIL: '/media/podcast/:id',
-  CAPSULES_INSIDE: '/media/inside-siport',
+  CAPSULES_INSIDE: '/media/inside-sib',
   LIVE_STUDIO: '/media/live-studio',
   BEST_MOMENTS: '/media/best-moments',
   TESTIMONIALS: '/media/testimonials',
@@ -1149,8 +1149,8 @@ export const ROUTES = {
 | Fonctionnalité | Bronze | Silver | Gold | Platinum |
 |----------------|--------|--------|------|----------|
 | Webinaires sponsorisés | ❌ | ✅ Replay | ✅ Replay | ✅ Live + Replay |
-| Capsules "Inside SIPORT" | ❌ | ✅ 1/trim | ✅ 1/mois | ✅ 2/mois |
-| Podcast "SIPORT Talks" | ❌ | ✅ 1 épisode | ✅ 2 épisodes | ✅ 4 épisodes |
+| Capsules "Inside SIB" | ❌ | ✅ 1/trim | ✅ 1/mois | ✅ 2/mois |
+| Podcast "SIB Talks" | ❌ | ✅ 1 épisode | ✅ 2 épisodes | ✅ 4 épisodes |
 | Live Studio "Meet The Leaders" | ❌ | ✅ 1 fois | ✅ 2 fois | ✅ 4 fois |
 | Best Moments | ❌ | ✅ Mention | ✅ Feature | ✅ Dedicated |
 | Testimonials | ❌ | ✅ 1 min | ✅ 2 min | ✅ 3 min |

@@ -1,11 +1,11 @@
-# ✅ CHECKLIST DE DÉPLOIEMENT SIPORTS 2026
+# ✅ CHECKLIST DE DÉPLOIEMENT SIB 2026
 
 ## 📋 PARTIE 1 : SUPABASE (Backend)
 
 ### Création du Projet
 - [ ] Compte Supabase créé sur https://supabase.com
 - [ ] Nouveau projet créé
-- [ ] Nom du projet : `siports-2026-prod`
+- [ ] Nom du projet : `sib-2026-prod`
 - [ ] Région sélectionnée : Europe West (ou proche de vos utilisateurs)
 - [ ] Mot de passe database sauvegardé de manière sécurisée
 
@@ -48,7 +48,7 @@
 - [ ] Compte Railway créé sur https://railway.app
 - [ ] GitHub autorisé
 - [ ] Nouveau projet créé : "Deploy from GitHub repo"
-- [ ] Repository sélectionné : `epitaphe360/siportv3`
+- [ ] Repository sélectionné : `epitaphe360/sib-2026`
 - [ ] Branche sélectionnée : `main` (ou votre branche de prod)
 
 ### Variables d'Environnement
@@ -277,4 +277,4 @@
 
 **Dernière mise à jour :** Novembre 2024
 **Version :** 1.0
-**Projet :** SIPORTS 2026
+**Projet :** SIB 2026

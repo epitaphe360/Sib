@@ -174,7 +174,7 @@ serve(async (req) => {
     }
 
     // Générer JWT
-    const jwtSecret = Deno.env.get('JWT_SECRET') || 'siports-2026-secure-secret-key-change-in-production'
+    const jwtSecret = Deno.env.get('JWT_SECRET') || 'sib-2026-secure-secret-key-change-in-production'
     const token = await generateJWT(jwtPayload, jwtSecret)
 
     // Créer QR code data (le QR sera généré côté client)

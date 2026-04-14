@@ -34,7 +34,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 
 const TEST_USERS = [
   {
-    email: 'visiteur@siports.com',
+    email: 'visiteur@sib.com',
     password: 'Visit123!',
     type: 'visitor',
     name: 'Jean Visiteur',
@@ -47,7 +47,7 @@ const TEST_USERS = [
     }
   },
   {
-    email: 'exposant@siports.com',
+    email: 'exposant@sib.com',
     password: 'Expo123!',
     type: 'exhibitor',
     name: 'Marie Exposant',
@@ -60,7 +60,7 @@ const TEST_USERS = [
     }
   },
   {
-    email: 'partenaire@siports.com',
+    email: 'partenaire@sib.com',
     password: 'Partner123!',
     type: 'partner',
     name: 'Pierre Partenaire',
@@ -73,14 +73,14 @@ const TEST_USERS = [
     }
   },
   {
-    email: 'admin.siports@siports.com',
+    email: 'admin.sib@sib.com',
     password: 'Admin123!',
     type: 'admin',
-    name: 'Admin SIPORTS',
+    name: 'Admin SIB',
     profile: {
       firstName: 'Admin',
-      lastName: 'SIPORTS',
-      company: 'SIPORTS',
+      lastName: 'SIB',
+      company: 'SIB',
       position: 'Administrateur',
       country: 'France'
     }

@@ -12,13 +12,13 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 });
 
 const testAccounts = [
-  { email: 'visitor-free@test.siport.com', password: 'Test@123456', type: 'visitor' },
-  { email: 'visitor-vip@test.siport.com', password: 'Test@123456', type: 'visitor' },
-  { email: 'exhibitor-9m@test.siport.com', password: 'Test@123456', type: 'exhibitor' },
-  { email: 'partner-museum@test.siport.com', password: 'Test@123456', type: 'partner' },
-  { email: 'partner-gold@test.siport.com', password: 'Test@123456', type: 'partner' },
-  { email: 'admin.siports@siports.com', password: 'Test@123456', type: 'admin' },
-  { email: 'partner-silver@test.siport.com', password: 'Test@123456', type: 'partner' }
+  { email: 'visitor-free@test.sib2026.ma', password: 'Test@123456', type: 'visitor' },
+  { email: 'visitor-vip@test.sib2026.ma', password: 'Test@123456', type: 'visitor' },
+  { email: 'exhibitor-9m@test.sib2026.ma', password: 'Test@123456', type: 'exhibitor' },
+  { email: 'partner-museum@test.sib2026.ma', password: 'Test@123456', type: 'partner' },
+  { email: 'partner-gold@test.sib2026.ma', password: 'Test@123456', type: 'partner' },
+  { email: 'admin.sib@sib.com', password: 'Test@123456', type: 'admin' },
+  { email: 'partner-silver@test.sib2026.ma', password: 'Test@123456', type: 'partner' }
 ];
 
 async function createOrUpdateUser(account) {

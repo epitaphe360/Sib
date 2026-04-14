@@ -15,7 +15,7 @@ console.log('\n🔧 CORRECTION DU COMPTE "Global Ship"\n');
 console.log('='.repeat(60));
 
 const accountInfo = {
-  email: 'exhibitor-54m@test.siport.com',
+  email: 'exhibitor-54m@test.sib2026.ma',
   password: 'Demo2026!',
   company: 'Global Shipping Solutions',
   exhibitorId: '0761473c-7b11-405e-8d01-cbed36308f7c'
@@ -143,7 +143,7 @@ async function main() {
 
   console.log('\n' + '='.repeat(60));
   console.log('✅ COMPTE "Global Ship" CORRIGÉ\n');
-  console.log('📧 Email: exhibitor-54m@test.siport.com');
+  console.log('📧 Email: exhibitor-54m@test.sib2026.ma');
   console.log('🔑 Mot de passe: Demo2026!');
   console.log(`📅 ${slotsCreated} créneaux disponibles`);
   console.log('='.repeat(60) + '\n');

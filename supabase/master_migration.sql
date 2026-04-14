@@ -1,4 +1,4 @@
-﻿-- SIB 2026 - Master Migration (91 fichiers)
+-- SIB 2026 - Master Migration (91 fichiers)
 -- Appliquer dans Supabase SQL Editor
 
 
@@ -412,7 +412,7 @@ COMMIT;
 
 -- Pour créer un podcast:
 -- INSERT INTO media_contents (type, title, description, audio_url, speakers, duration, status)
--- VALUES ('podcast', 'SIPORT Talks #1', '...', 'https://...', '[...]', 3600, 'published');
+-- VALUES ('podcast', 'SIB Talks #1', '...', 'https://...', '[...]', 3600, 'published');
 
 -- Pour enregistrer une vue:
 -- SELECT increment_media_views('<media_uuid>');
@@ -667,7 +667,7 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #1 - L''Avenir de la Logistique Maritime avec Ahmed Hassan',
+  'SIB Talks #1 - L''Avenir de la Logistique Maritime avec Ahmed Hassan',
   'Dans ce premier épisode, nous recevons Ahmed Hassan, CEO de Maritime Logistics International. Il nous parle de sa vision pour l''avenir du transport maritime et des défis à venir.',
   'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
@@ -696,7 +696,7 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #2 - Innovation et Digitalisation avec Clara Dubois',
+  'SIB Talks #2 - Innovation et Digitalisation avec Clara Dubois',
   'Clara Dubois, Directrice de l''Innovation chez PortTech, partage son parcours et les projets innovants qui transforment les opérations portuaires.',
   'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
@@ -715,7 +715,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #3 - L''Essor des Ports Africains avec Amadou Koné',
+  'SIB Talks #3 - L''Essor des Ports Africains avec Amadou Koné',
   'Amadou Koné, Directeur du Port d''Abidjan, nous parle du développement spectaculaire des infrastructures portuaires en Afrique de l''Ouest et des opportunités à saisir.',
   'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
@@ -734,7 +734,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #4 - Transition Énergétique avec Marina Silva',
+  'SIB Talks #4 - Transition Énergétique avec Marina Silva',
   'Marina Silva, experte en énergies marines renouvelables, explore les solutions pour décarboner le secteur maritime et portuaire.',
   'https://images.unsplash.com/photo-1497864149936-d3163f0c0f4b?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
@@ -753,7 +753,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #5 - Automatisation et Robotique avec Dr. Hans Schmidt',
+  'SIB Talks #5 - Automatisation et Robotique avec Dr. Hans Schmidt',
   'Le Dr. Hans Schmidt, pionnier de la robotique portuaire, partage sa vision sur l''automatisation des terminaux et l''impact sur l''emploi.',
   'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
@@ -772,7 +772,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #6 - Femmes Leaders dans le Maritime avec Samira Alaoui',
+  'SIB Talks #6 - Femmes Leaders dans le Maritime avec Samira Alaoui',
   'Samira Alaoui, première femme Capitaine de Port au Maroc, raconte son parcours inspirant et encourage plus de diversité dans le secteur.',
   'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
@@ -791,7 +791,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #7 - Économie Bleue et Opportunités avec Jean-Paul Océan',
+  'SIB Talks #7 - Économie Bleue et Opportunités avec Jean-Paul Océan',
   'Jean-Paul Océan, économiste spécialisé dans l''économie maritime, analyse les tendances du marché et les opportunités de croissance.',
   'https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
@@ -810,7 +810,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #8 - Formation et Compétences avec Patricia N''Dour',
+  'SIB Talks #8 - Formation et Compétences avec Patricia N''Dour',
   'Patricia N''Dour, Directrice de l''Institut Maritime de Dakar, présente les nouvelles formations pour préparer les professionnels de demain.',
   'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
@@ -829,7 +829,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #9 - Partenariats Public-Privé avec Alexandre Fontaine',
+  'SIB Talks #9 - Partenariats Public-Privé avec Alexandre Fontaine',
   'Alexandre Fontaine, expert en PPP, explique comment structurer des partenariats gagnants pour financer les grands projets portuaires.',
   'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
@@ -848,7 +848,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #10 - Digitalisation des Douanes avec Fatou Diagne',
+  'SIB Talks #10 - Digitalisation des Douanes avec Fatou Diagne',
   'Fatou Diagne, Directrice des Douanes Sénégalaises, partage l''expérience réussie de digitalisation du Port de Dakar.',
   'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
@@ -863,7 +863,7 @@ INSERT INTO media_contents (
 );
 
 -- ============================================================================
--- SEED: CAPSULES "INSIDE SIPORT"
+-- SEED: CAPSULES "INSIDE SIB"
 -- ============================================================================
 
 -- Capsule 1
@@ -880,12 +880,12 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Découverte du Pavillon Innovation',
-  'Plongez au cœur du Pavillon Innovation de SIPORT 2026. Découvrez les exposants et leurs solutions révolutionnaires.',
+  'Inside SIB - Découverte du Pavillon Innovation',
+  'Plongez au cœur du Pavillon Innovation de SIB 2026. Découvrez les exposants et leurs solutions révolutionnaires.',
   'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   180,
-  ARRAY['siport', 'pavillon', 'innovation', 'découverte'],
+  ARRAY['sib', 'pavillon', 'innovation', 'découverte'],
   'Événement',
   'published',
   NOW() - INTERVAL '3 days'
@@ -905,12 +905,12 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Les Coulisses de l''Organisation',
-  'Rencontrez l''équipe qui organise SIPORT et découvrez les coulisses de cet événement d''envergure internationale.',
+  'Inside SIB - Les Coulisses de l''Organisation',
+  'Rencontrez l''équipe qui organise SIB et découvrez les coulisses de cet événement d''envergure internationale.',
   'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   240,
-  ARRAY['siport', 'organisation', 'équipe', 'coulisses'],
+  ARRAY['sib', 'organisation', 'équipe', 'coulisses'],
   'Événement',
   'published',
   NOW() - INTERVAL '10 days'
@@ -921,7 +921,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Interview Express : Les Startups de la Maritime Tech',
+  'Inside SIB - Interview Express : Les Startups de la Maritime Tech',
   'Micro-interviews des jeunes pousses innovantes qui bousculent le secteur maritime. 3 minutes pour convaincre !',
   'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -937,8 +937,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Visite Guidée du Stand Maersk',
-  'Découvrez en exclusivité les innovations présentées par Maersk sur leur stand SIPORT 2025.',
+  'Inside SIB - Visite Guidée du Stand Maersk',
+  'Découvrez en exclusivité les innovations présentées par Maersk sur leur stand SIB 2025.',
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   220,
@@ -953,8 +953,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Le Making-Of du Salon',
-  'De la conception à l''inauguration : le making-of complet de SIPORT. Montage, logistique et premières impressions.',
+  'Inside SIB - Le Making-Of du Salon',
+  'De la conception à l''inauguration : le making-of complet de SIB. Montage, logistique et premières impressions.',
   'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   280,
@@ -969,7 +969,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Zone Networking : Quand les Deals se Font',
+  'Inside SIB - Zone Networking : Quand les Deals se Font',
   'Ambiance survoltée dans la zone networking. Rencontres, échanges de cartes et deals en direct.',
   'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -985,7 +985,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Les Démonstrations Technologiques',
+  'Inside SIB - Les Démonstrations Technologiques',
   'Tour rapide des démonstrations tech les plus impressionnantes : drones, robots, réalité virtuelle et plus encore.',
   'https://images.unsplash.com/photo-1535378620166-273708d44e4c?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -1001,7 +1001,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Focus sur les Partenaires Gold',
+  'Inside SIB - Focus sur les Partenaires Gold',
   'Rencontre avec nos partenaires Gold et découverte de leurs contributions exceptionnelles à l''événement.',
   'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -1017,8 +1017,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - La Conférence Inaugurale en 3 Minutes',
-  'Revivez les moments clés de la conférence inaugurale de SIPORT 2025 avec les discours des personnalités.',
+  'Inside SIB - La Conférence Inaugurale en 3 Minutes',
+  'Revivez les moments clés de la conférence inaugurale de SIB 2025 avec les discours des personnalités.',
   'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   185,
@@ -1033,7 +1033,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Les Workshops Pratiques',
+  'Inside SIB - Les Workshops Pratiques',
   'Immersion dans les ateliers pratiques : formations, sessions hands-on et partage d''expériences entre professionnels.',
   'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -1266,12 +1266,12 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Meilleurs Moments Jour 1',
-  'Revivez les temps forts de la première journée de SIPORT 2025 : inaugurations, rencontres et moments marquants.',
+  'SIB 2025 - Les Meilleurs Moments Jour 1',
+  'Revivez les temps forts de la première journée de SIB 2025 : inaugurations, rencontres et moments marquants.',
   'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   300,
-  ARRAY['siport', 'highlights', 'événement', 'résumé'],
+  ARRAY['sib', 'highlights', 'événement', 'résumé'],
   'Événement',
   'published',
   NOW() - INTERVAL '30 days'
@@ -1282,12 +1282,12 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Jour 2 : Moments d''Exception',
+  'SIB 2025 - Jour 2 : Moments d''Exception',
   'Compilé des meilleurs moments du deuxième jour : conférences plénières, débats animés et networking intensif.',
   'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   285,
-  ARRAY['siport', 'jour2', 'highlights', 'conférences'],
+  ARRAY['sib', 'jour2', 'highlights', 'conférences'],
   'Événement',
   'published',
   NOW() - INTERVAL '29 days'
@@ -1298,7 +1298,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Gala de Clôture : Les Instants Mémorables',
+  'SIB 2025 - Gala de Clôture : Les Instants Mémorables',
   'Le gala de clôture en images : remise des awards, discours émouvants et célébration collective.',
   'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -1314,12 +1314,12 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2024 - Rétrospective de l''Édition Précédente',
-  'Les moments forts de SIPORT 2024 : innovation, rencontres et succès partagés.',
+  'SIB 2024 - Rétrospective de l''Édition Précédente',
+  'Les moments forts de SIB 2024 : innovation, rencontres et succès partagés.',
   'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   380,
-  ARRAY['siport 2024', 'rétrospective', 'archives', 'histoire'],
+  ARRAY['sib 2024', 'rétrospective', 'archives', 'histoire'],
   'Événement',
   'published',
   NOW() - INTERVAL '395 days'
@@ -1330,7 +1330,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Annonces Majeures',
+  'SIB 2025 - Les Annonces Majeures',
   'Compilation des annonces les plus importantes : nouveaux partenariats, innovations et projets révolutionnaires.',
   'https://images.unsplash.com/photo-1560439514-4e9645039924?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -1346,7 +1346,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Démonstrations qui Ont Marqué les Esprits',
+  'SIB 2025 - Les Démonstrations qui Ont Marqué les Esprits',
   'Retour sur les démonstrations technologiques spectaculaires qui ont impressionné les visiteurs.',
   'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -1362,7 +1362,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Networking : Les Rencontres qui Comptent',
+  'SIB 2025 - Networking : Les Rencontres qui Comptent',
   'Immersion dans l''espace networking avec les échanges les plus prometteurs et les connexions établies.',
   'https://images.unsplash.com/photo-1528605105345-5344ea20e269?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -1378,7 +1378,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Témoignages Spontanés',
+  'SIB 2025 - Les Témoignages Spontanés',
   'Réactions à chaud des participants, exposants et visiteurs : émotions, surprises et satisfactions.',
   'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -1394,8 +1394,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Coulisses du Succès',
-  'Dans les coulisses de SIPORT : l''équipe à l''œuvre, les préparatifs et la coordination parfaite.',
+  'SIB 2025 - Les Coulisses du Succès',
+  'Dans les coulisses de SIB : l''équipe à l''œuvre, les préparatifs et la coordination parfaite.',
   'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   310,
@@ -1410,8 +1410,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Le Meilleur du Meilleur : Édition Collector',
-  'Compilation ultime des moments les plus extraordinaires de SIPORT 2025. Une édition à ne pas manquer !',
+  'SIB 2025 - Le Meilleur du Meilleur : Édition Collector',
+  'Compilation ultime des moments les plus extraordinaires de SIB 2025. Une édition à ne pas manquer !',
   'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   420,
@@ -1441,7 +1441,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Port Autonome de Dakar',
-  'Découvrez l''expérience du Port Autonome de Dakar en tant que partenaire Gold de SIPORT et les bénéfices de cette collaboration.',
+  'Découvrez l''expérience du Port Autonome de Dakar en tant que partenaire Gold de SIB et les bénéfices de cette collaboration.',
   'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   120,
@@ -1470,7 +1470,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - TechMarine Solutions',
-  'TechMarine Solutions partage son retour d''expérience après 2 ans de partenariat avec SIPORT et les résultats obtenus.',
+  'TechMarine Solutions partage son retour d''expérience après 2 ans de partenariat avec SIB et les résultats obtenus.',
   'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   90,
@@ -1489,7 +1489,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Bollore Logistics : Un Partenariat Fructueux',
-  'Le Directeur Régional de Bollore Logistics témoigne de l''impact positif de sa participation à SIPORT sur son activité.',
+  'Le Directeur Régional de Bollore Logistics témoigne de l''impact positif de sa participation à SIB sur son activité.',
   'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   135,
@@ -1508,7 +1508,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Port de Lomé : Une Collaboration Stratégique',
-  'Le Port de Lomé explique comment SIPORT a facilité des partenariats stratégiques et accéléré sa modernisation.',
+  'Le Port de Lomé explique comment SIB a facilité des partenariats stratégiques et accéléré sa modernisation.',
   'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   105,
@@ -1526,8 +1526,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'testimonial',
-  'Témoignage - Startup MarineAI : Le Tremplin SIPORT',
-  'La startup MarineAI raconte comment SIPORT lui a permis de rencontrer ses premiers clients majeurs.',
+  'Témoignage - Startup MarineAI : Le Tremplin SIB',
+  'La startup MarineAI raconte comment SIB lui a permis de rencontrer ses premiers clients majeurs.',
   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   95,
@@ -1546,7 +1546,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - CMA CGM : Exposition à Forte Valeur Ajoutée',
-  'CMA CGM souligne la qualité exceptionnelle des visiteurs et contacts générés lors de SIPORT.',
+  'CMA CGM souligne la qualité exceptionnelle des visiteurs et contacts générés lors de SIB.',
   'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   110,
@@ -1565,7 +1565,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Port de Cotonou : Visibilité Internationale',
-  'Le Port de Cotonou témoigne de la visibilité internationale obtenue grâce à sa participation à SIPORT.',
+  'Le Port de Cotonou témoigne de la visibilité internationale obtenue grâce à sa participation à SIB.',
   'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   125,
@@ -1584,7 +1584,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Jeune Diplômé : Opportunités de Carrière',
-  'Un jeune diplômé raconte comment SIPORT lui a permis de décrocher son premier emploi dans le secteur portuaire.',
+  'Un jeune diplômé raconte comment SIB lui a permis de décrocher son premier emploi dans le secteur portuaire.',
   'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   85,
@@ -1603,7 +1603,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - MSC : Plateforme d''Excellence',
-  'MSC confirme SIPORT comme LA plateforme incontournable pour le business maritime en Afrique.',
+  'MSC confirme SIB comme LA plateforme incontournable pour le business maritime en Afrique.',
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   115,
@@ -1622,7 +1622,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Consultant Indépendant : Réseau Élargi',
-  'Un consultant indépendant explique comment SIPORT a triplé son réseau professionnel en seulement 3 jours.',
+  'Un consultant indépendant explique comment SIB a triplé son réseau professionnel en seulement 3 jours.',
   'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   100,
@@ -2130,7 +2130,7 @@ CREATE TRIGGER update_products_updated_at
 
 -- [20250930112332_20250930_complete_schema.sql]
 /*
-  # Complete SIPORTS Schema
+  # Complete SIB Schema
 
   This migration creates all remaining tables needed for the application:
   - time_slots and appointments (for scheduling)
@@ -2440,7 +2440,7 @@ CREATE POLICY "Admins can manage partners"
 
 -- [20250930121016_create_pavilions_table.sql]
 /*
-  # Create pavilions table for SIPORTS 2026
+  # Create pavilions table for SIB 2026
 
   1. New Tables
     - `pavilions`
@@ -5250,7 +5250,7 @@ CREATE TABLE IF NOT EXISTS public.bank_transfer_info (
   account_holder text NOT NULL,
   iban text NOT NULL,
   bic_swift text,
-  reference_format text NOT NULL DEFAULT 'SIPORTS-PREMIUM-{USER_ID}',
+  reference_format text NOT NULL DEFAULT 'SIB-PREMIUM-{USER_ID}',
   instructions text,
   is_active boolean DEFAULT true,
   created_at timestamp with time zone DEFAULT now()
@@ -9864,7 +9864,7 @@ CREATE INDEX IF NOT EXISTS idx_favorites_exhibitor_id ON favorites(exhibitor_id)
 -- =====================================================
 CREATE TABLE IF NOT EXISTS salon_config (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text NOT NULL DEFAULT 'SIPORTS 2026',
+  name text NOT NULL DEFAULT 'SIB 2026',
   edition text DEFAULT '2026',
   start_date timestamptz DEFAULT '2026-06-15T09:00:00Z',
   end_date timestamptz DEFAULT '2026-06-18T18:00:00Z',
@@ -9873,8 +9873,8 @@ CREATE TABLE IF NOT EXISTS salon_config (
   description text DEFAULT 'Salon International des Ports',
   logo_url text,
   banner_url text,
-  website_url text DEFAULT 'https://siportevent.com',
-  contact_email text DEFAULT 'contact@siportevent.com',
+  website_url text DEFAULT 'https://sib2026.ma',
+  contact_email text DEFAULT 'contact@sib2026.ma',
   contact_phone text,
   social_links jsonb DEFAULT '{}',
   features jsonb DEFAULT '{"networking": true, "appointments": true, "chat": true, "events": true}',
@@ -9903,7 +9903,7 @@ CREATE POLICY "Admin can manage salon config" ON salon_config
 
 -- Insert default salon config if not exists
 INSERT INTO salon_config (name, edition, description)
-SELECT 'SIPORTS 2026', '2026', 'Salon International des Ports - Maroc'
+SELECT 'SIB 2026', '2026', 'Salon International des Ports - Maroc'
 WHERE NOT EXISTS (SELECT 1 FROM salon_config LIMIT 1);
 
 -- =====================================================
@@ -10657,14 +10657,14 @@ VALUES
    ARRAY['finance', 'investissement', 'startup'], 'Finance', NOW() - INTERVAL '21 days'),
 
   -- Podcasts
-  ('podcast', 'SIPORT Talks #1: L''écosystème portuaire marocain',
+  ('podcast', 'SIB Talks #1: L''écosystème portuaire marocain',
    'Premier épisode de notre podcast dédié à l''industrie des ports. Invité spécial: le président de l''Autorité Portuaire.',
    'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800',
    1800, 'published', 2100, 156,
-   '[{"name": "Farid Bensalem", "title": "Journaliste Maritime", "company": "SIPORTS"}]'::jsonb,
+   '[{"name": "Farid Bensalem", "title": "Journaliste Maritime", "company": "SIB"}]'::jsonb,
    ARRAY['podcast', 'interview', 'port'], 'Interview', NOW() - INTERVAL '5 days'),
 
-  ('podcast', 'SIPORT Talks #2: Femmes et Secteur Maritime',
+  ('podcast', 'SIB Talks #2: Femmes et Secteur Maritime',
    'Focus sur les femmes dans le secteur maritime marocain. Défis, opportunités et success stories.',
    'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800',
    2100, 'published', 1850, 203,
@@ -10672,14 +10672,14 @@ VALUES
    ARRAY['femmes', 'port', 'égalité'], 'Société', NOW() - INTERVAL '12 days'),
 
   -- Capsules Inside
-  ('capsule_inside', 'Inside SIPORT: Coulisses du salon',
+  ('capsule_inside', 'Inside SIB: Coulisses du salon',
    'Découvrez les coulisses de l''organisation du plus grand salon portuaire du Maroc.',
    'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800',
    300, 'published', 3500, 245,
    '[]'::jsonb,
    ARRAY['coulisses', 'organisation', 'salon'], 'Behind The Scenes', NOW() - INTERVAL '3 days'),
 
-  ('capsule_inside', 'Inside SIPORT: Préparation des stands',
+  ('capsule_inside', 'Inside SIB: Préparation des stands',
    'Comment les exposants préparent leurs stands pour impressionner les visiteurs.',
    'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800',
    240, 'published', 2800, 178,
@@ -10695,8 +10695,8 @@ VALUES
    ARRAY['interview', 'leader', 'technologie'], 'Leadership', NOW() - INTERVAL '8 days'),
 
   -- Best Moments
-  ('best_moments', 'SIPORTS 2025: Les moments forts',
-   'Revivez les meilleurs moments de l''édition 2025 du salon SIPORTS.',
+  ('best_moments', 'SIB 2025: Les moments forts',
+   'Revivez les meilleurs moments de l''édition 2025 du salon SIB.',
    'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
    420, 'published', 4200, 312,
    '[]'::jsonb,
@@ -10704,7 +10704,7 @@ VALUES
 
   -- Testimonials
   ('testimonial', 'Témoignage: Exposant satisfait',
-   'Ahmed Kaci, exposant depuis 3 éditions, partage son expérience au salon SIPORTS.',
+   'Ahmed Kaci, exposant depuis 3 éditions, partage son expérience au salon SIB.',
    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800',
    180, 'published', 980, 67,
    '[{"name": "Ahmed Kaci", "title": "Directeur Commercial", "company": "Équipements Portuaires Pro"}]'::jsonb,
@@ -11044,22 +11044,22 @@ BEGIN
   -- Define the users we want to ensure exist
   FOR v_users IN 
     SELECT * FROM (VALUES 
-      ('00000000-0000-0000-0000-000000000001', 'admin.siports@siports.com'),
-      ('00000000-0000-0000-0000-000000000002', 'exhibitor-54m@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000003', 'exhibitor-36m@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000004', 'exhibitor-18m@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000017', 'exhibitor-9m@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000005', 'partner-gold@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000006', 'partner-silver@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000011', 'partner-platinium@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000012', 'partner-museum@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000013', 'partner-porttech@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000014', 'partner-oceanfreight@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000015', 'partner-coastal@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000007', 'visitor-vip@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000008', 'visitor-premium@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000009', 'visitor-basic@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000010', 'visitor-free@test.siport.com')
+      ('00000000-0000-0000-0000-000000000001', 'admin.sib@sib.com'),
+      ('00000000-0000-0000-0000-000000000002', 'exhibitor-54m@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000003', 'exhibitor-36m@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000004', 'exhibitor-18m@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000017', 'exhibitor-9m@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000005', 'partner-gold@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000006', 'partner-silver@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000011', 'partner-platinium@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000012', 'partner-museum@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000013', 'partner-porttech@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000014', 'partner-oceanfreight@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000015', 'partner-coastal@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000007', 'visitor-vip@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000008', 'visitor-premium@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000009', 'visitor-basic@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000010', 'visitor-free@test.sib2026.ma')
     ) AS t(id, email)
   LOOP
     v_user_id := v_users.id::uuid;
@@ -11087,11 +11087,11 @@ INSERT INTO users (id, email, name, type, status, profile, created_at)
 VALUES 
   (
     '00000000-0000-0000-0000-000000000001',
-    'admin.siports@siports.com',
-    'Admin SIPORTS',
+    'admin.sib@sib.com',
+    'Admin SIB',
     'admin',
     'active',
-    '{"role": "administrator", "avatar": "https://ui-avatars.com/api/?name=Admin+SIPORTS"}',
+    '{"role": "administrator", "avatar": "https://ui-avatars.com/api/?name=Admin+SIB"}',
     NOW()
   )
 ON CONFLICT (id) DO UPDATE SET
@@ -11106,7 +11106,7 @@ INSERT INTO users (id, email, name, type, status, profile, created_at)
 VALUES 
   (
     '00000000-0000-0000-0000-000000000002',
-    'exhibitor-54m@test.siport.com',
+    'exhibitor-54m@test.sib2026.ma',
     'ABB Marine & Ports',
     'exhibitor',
     'active',
@@ -11115,7 +11115,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000003',
-    'exhibitor-36m@test.siport.com',
+    'exhibitor-36m@test.sib2026.ma',
     'Advanced Port Systems',
     'exhibitor',
     'active',
@@ -11124,7 +11124,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000004',
-    'exhibitor-18m@test.siport.com',
+    'exhibitor-18m@test.sib2026.ma',
     'Maritime Equipment Co',
     'exhibitor',
     'active',
@@ -11133,7 +11133,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000017',
-    'exhibitor-9m@test.siport.com',
+    'exhibitor-9m@test.sib2026.ma',
     'StartUp Port Innovations',
     'exhibitor',
     'active',
@@ -11152,7 +11152,7 @@ INSERT INTO users (id, email, name, type, status, profile, created_at)
 VALUES 
   (
     '00000000-0000-0000-0000-000000000005',
-    'partner-gold@test.siport.com',
+    'partner-gold@test.sib2026.ma',
     'Gold Partner Industries',
     'partner',
     'active',
@@ -11161,7 +11161,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000006',
-    'partner-silver@test.siport.com',
+    'partner-silver@test.sib2026.ma',
     'Silver Tech Group',
     'partner',
     'active',
@@ -11170,7 +11170,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000011',
-    'partner-platinium@test.siport.com',
+    'partner-platinium@test.sib2026.ma',
     'Platinium Global Corp',
     'partner',
     'active',
@@ -11179,7 +11179,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000012',
-    'partner-museum@test.siport.com',
+    'partner-museum@test.sib2026.ma',
     'Museum Heritage',
     'partner',
     'active',
@@ -11188,7 +11188,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000013',
-    'partner-porttech@test.siport.com',
+    'partner-porttech@test.sib2026.ma',
     'Port Tech Systems',
     'partner',
     'active',
@@ -11197,7 +11197,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000014',
-    'partner-oceanfreight@test.siport.com',
+    'partner-oceanfreight@test.sib2026.ma',
     'Ocean Freight Services',
     'partner',
     'active',
@@ -11206,7 +11206,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000015',
-    'partner-coastal@test.siport.com',
+    'partner-coastal@test.sib2026.ma',
     'Coastal Shipping Co',
     'partner',
     'active',
@@ -11225,7 +11225,7 @@ INSERT INTO users (id, email, name, type, visitor_level, status, profile, create
 VALUES 
   (
     '00000000-0000-0000-0000-000000000007',
-    'visitor-vip@test.siport.com',
+    'visitor-vip@test.sib2026.ma',
     'Jean Dupont',
     'visitor',
     'vip',
@@ -11235,7 +11235,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000008',
-    'visitor-premium@test.siport.com',
+    'visitor-premium@test.sib2026.ma',
     'Marie Martin',
     'visitor',
     'premium',
@@ -11245,7 +11245,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000009',
-    'visitor-basic@test.siport.com',
+    'visitor-basic@test.sib2026.ma',
     'Pierre Dubois',
     'visitor',
     'basic',
@@ -11255,7 +11255,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000010',
-    'visitor-free@test.siport.com',
+    'visitor-free@test.sib2026.ma',
     'Sophie Bernard',
     'visitor',
     'free',
@@ -11435,7 +11435,7 @@ VALUES
     'Gold Partner Industries',
     'Marie Laurent',
     'contact@gold-partner.example.com',
-    'Partenaire stratégique majeur offrant des services premium et un accompagnement personnalisé. Sponsor principal de l''événement SIPORTS 2025.',
+    'Partenaire stratégique majeur offrant des services premium et un accompagnement personnalisé. Sponsor principal de l''événement SIB 2025.',
     'https://gold-partner.example.com',
     'https://ui-avatars.com/api/?name=Gold+Partner&size=200',
     'France',
@@ -11878,15 +11878,15 @@ INSERT INTO news_articles (id, title, content, excerpt, author_id, author, publi
 VALUES
   (
     '00000000-0000-0000-0000-000000000401',
-    'SIPORTS 2025 : Record d''affluence attendu',
-    'Le salon SIPORTS 2025 s''annonce comme l''édition la plus importante de son histoire avec plus de 500 exposants confirmés et 50 000 visiteurs attendus. Cette année, l''accent est mis sur l''innovation durable et les technologies vertes...',
-    'Le salon SIPORTS 2025 bat tous les records avec 500 exposants et 50 000 visiteurs attendus.',
-    (SELECT id FROM users WHERE email = 'admin@siports.com' LIMIT 1),
-    'Admin SIPORTS',
+    'SIB 2025 : Record d''affluence attendu',
+    'Le salon SIB 2025 s''annonce comme l''édition la plus importante de son histoire avec plus de 500 exposants confirmés et 50 000 visiteurs attendus. Cette année, l''accent est mis sur l''innovation durable et les technologies vertes...',
+    'Le salon SIB 2025 bat tous les records avec 500 exposants et 50 000 visiteurs attendus.',
+    (SELECT id FROM users WHERE email = 'admin@sib.com' LIMIT 1),
+    'Admin SIB',
     true,
     NOW() - INTERVAL '2 days',
     'Événement',
-    ARRAY['SIPORTS', 'Salon', 'Innovation'],
+    ARRAY['SIB', 'Salon', 'Innovation'],
     'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
     NOW() - INTERVAL '2 days'
   ),
@@ -11895,8 +11895,8 @@ VALUES
     'TechExpo Solutions dévoile sa nouvelle plateforme VR',
     'L''exposant TechExpo Solutions présentera en exclusivité sa nouvelle plateforme de réalité virtuelle destinée aux salons professionnels. Une révolution dans l''expérience visiteur...',
     'TechExpo Solutions lance une plateforme VR révolutionnaire pour les salons.',
-    (SELECT id FROM users WHERE email = 'admin@siports.com' LIMIT 1),
-    'Admin SIPORTS',
+    (SELECT id FROM users WHERE email = 'admin@sib.com' LIMIT 1),
+    'Admin SIB',
     true,
     NOW() - INTERVAL '5 days',
     'Technologie',
@@ -11909,8 +11909,8 @@ VALUES
     'Agriculture de demain : Les innovations d''AgriInnov',
     'AgriInnov présente ses dernières solutions IoT pour l''agriculture de précision. Des capteurs intelligents et des systèmes d''irrigation automatisés qui réduisent la consommation d''eau de 40%...',
     'AgriInnov révolutionne l''agriculture avec des solutions IoT innovantes.',
-    (SELECT id FROM users WHERE email = 'admin@siports.com' LIMIT 1),
-    'Admin SIPORTS',
+    (SELECT id FROM users WHERE email = 'admin@sib.com' LIMIT 1),
+    'Admin SIB',
     true,
     NOW() - INTERVAL '1 day',
     'Agriculture',
@@ -11923,8 +11923,8 @@ VALUES
     'ModeDesign Paris : La haute couture rencontre la tech',
     'La maison ModeDesign Paris fusionne tradition et innovation avec sa nouvelle collection intégrant des textiles intelligents et des accessoires connectés...',
     'ModeDesign Paris présente une collection alliant haute couture et technologies.',
-    (SELECT id FROM users WHERE email = 'admin@siports.com' LIMIT 1),
-    'Admin SIPORTS',
+    (SELECT id FROM users WHERE email = 'admin@sib.com' LIMIT 1),
+    'Admin SIB',
     true,
     NOW() - INTERVAL '3 days',
     'Mode',
@@ -13116,7 +13116,7 @@ BEGIN
     v_user_id := gen_random_uuid();
     
     INSERT INTO public.users (id, email, name, type, status, created_at)
-    VALUES (v_user_id, 'exhibitor-bulk-' || i || '@demo.siport.com', 'Exposant ' || i, 'exhibitor', 'active', NOW() - (i || ' minutes')::interval);
+    VALUES (v_user_id, 'exhibitor-bulk-' || i || '@demo.sib2026.ma', 'Exposant ' || i, 'exhibitor', 'active', NOW() - (i || ' minutes')::interval);
     
     INSERT INTO public.exhibitors (id, user_id, company_name, category, sector, description, verified, created_at)
     VALUES (gen_random_uuid(), v_user_id, 'Company ' || i, v_categories[(i % 4) + 1]::exhibitor_category, 'Secteur ' || (i % 5 + 1), 'Description de l''exposant ' || i, true, NOW() - (i || ' minutes')::interval);
@@ -13130,7 +13130,7 @@ BEGIN
     v_user_id := gen_random_uuid();
     
     INSERT INTO public.users (id, email, name, type, status, created_at)
-    VALUES (v_user_id, 'visitor-bulk-' || i || '@demo.siport.com', 'Visiteur ' || i, 'visitor', 'active', NOW() - (i || ' seconds')::interval);
+    VALUES (v_user_id, 'visitor-bulk-' || i || '@demo.sib2026.ma', 'Visiteur ' || i, 'visitor', 'active', NOW() - (i || ' seconds')::interval);
     
     INSERT INTO public.visitor_profiles (id, user_id, first_name, last_name, country, created_at)
     VALUES (gen_random_uuid(), v_user_id, 'Visiteur', i::text, v_countries[(i % 40) + 1], NOW() - (i || ' seconds')::interval);
@@ -13636,22 +13636,22 @@ BEGIN
   -- Define the users to create
   FOR v_record IN 
     SELECT * FROM (VALUES 
-      ('00000000-0000-0000-0000-000000000001'::uuid, 'admin.siports@siports.com', 'admin', 'Admin SIPORTS'),
-      ('00000000-0000-0000-0000-000000000002'::uuid, 'exhibitor-54m@test.siport.com', 'exhibitor', 'ABB Marine & Ports'),
-      ('00000000-0000-0000-0000-000000000003'::uuid, 'exhibitor-36m@test.siport.com', 'exhibitor', 'Advanced Port Systems'),
-      ('00000000-0000-0000-0000-000000000004'::uuid, 'exhibitor-18m@test.siport.com', 'exhibitor', 'Maritime Equipment Co'),
-      ('00000000-0000-0000-0000-000000000017'::uuid, 'exhibitor-9m@test.siport.com', 'exhibitor', 'StartUp Port Innovations'),
-      ('00000000-0000-0000-0000-000000000005'::uuid, 'partner-gold@test.siport.com', 'partner', 'Gold Partner Industries'),
-      ('00000000-0000-0000-0000-000000000006'::uuid, 'partner-silver@test.siport.com', 'partner', 'Silver Tech Group'),
-      ('00000000-0000-0000-0000-000000000011'::uuid, 'partner-platinium@test.siport.com', 'partner', 'Platinium Global Corp'),
-      ('00000000-0000-0000-0000-000000000012'::uuid, 'partner-museum@test.siport.com', 'partner', 'Museum Cultural Center'),
-      ('00000000-0000-0000-0000-000000000013'::uuid, 'partner-porttech@test.siport.com', 'partner', 'PortTech Solutions'),
-      ('00000000-0000-0000-0000-000000000014'::uuid, 'partner-oceanfreight@test.siport.com', 'partner', 'OceanFreight Logistics'),
-      ('00000000-0000-0000-0000-000000000015'::uuid, 'partner-coastal@test.siport.com', 'partner', 'Coastal Maritime Services'),
-      ('00000000-0000-0000-0000-000000000007'::uuid, 'visitor-vip@test.siport.com', 'visitor', 'VIP Visitor'),
-      ('00000000-0000-0000-0000-000000000008'::uuid, 'visitor-premium@test.siport.com', 'visitor', 'Premium Visitor'),
-      ('00000000-0000-0000-0000-000000000009'::uuid, 'visitor-basic@test.siport.com', 'visitor', 'Basic Visitor'),
-      ('00000000-0000-0000-0000-000000000010'::uuid, 'visitor-free@test.siport.com', 'visitor', 'Free Visitor')
+      ('00000000-0000-0000-0000-000000000001'::uuid, 'admin.sib@sib.com', 'admin', 'Admin SIB'),
+      ('00000000-0000-0000-0000-000000000002'::uuid, 'exhibitor-54m@test.sib2026.ma', 'exhibitor', 'ABB Marine & Ports'),
+      ('00000000-0000-0000-0000-000000000003'::uuid, 'exhibitor-36m@test.sib2026.ma', 'exhibitor', 'Advanced Port Systems'),
+      ('00000000-0000-0000-0000-000000000004'::uuid, 'exhibitor-18m@test.sib2026.ma', 'exhibitor', 'Maritime Equipment Co'),
+      ('00000000-0000-0000-0000-000000000017'::uuid, 'exhibitor-9m@test.sib2026.ma', 'exhibitor', 'StartUp Port Innovations'),
+      ('00000000-0000-0000-0000-000000000005'::uuid, 'partner-gold@test.sib2026.ma', 'partner', 'Gold Partner Industries'),
+      ('00000000-0000-0000-0000-000000000006'::uuid, 'partner-silver@test.sib2026.ma', 'partner', 'Silver Tech Group'),
+      ('00000000-0000-0000-0000-000000000011'::uuid, 'partner-platinium@test.sib2026.ma', 'partner', 'Platinium Global Corp'),
+      ('00000000-0000-0000-0000-000000000012'::uuid, 'partner-museum@test.sib2026.ma', 'partner', 'Museum Cultural Center'),
+      ('00000000-0000-0000-0000-000000000013'::uuid, 'partner-porttech@test.sib2026.ma', 'partner', 'PortTech Solutions'),
+      ('00000000-0000-0000-0000-000000000014'::uuid, 'partner-oceanfreight@test.sib2026.ma', 'partner', 'OceanFreight Logistics'),
+      ('00000000-0000-0000-0000-000000000015'::uuid, 'partner-coastal@test.sib2026.ma', 'partner', 'Coastal Maritime Services'),
+      ('00000000-0000-0000-0000-000000000007'::uuid, 'visitor-vip@test.sib2026.ma', 'visitor', 'VIP Visitor'),
+      ('00000000-0000-0000-0000-000000000008'::uuid, 'visitor-premium@test.sib2026.ma', 'visitor', 'Premium Visitor'),
+      ('00000000-0000-0000-0000-000000000009'::uuid, 'visitor-basic@test.sib2026.ma', 'visitor', 'Basic Visitor'),
+      ('00000000-0000-0000-0000-000000000010'::uuid, 'visitor-free@test.sib2026.ma', 'visitor', 'Free Visitor')
     ) AS t(id, email, type, name)
   LOOP
     v_user_id := v_record.id;
@@ -13689,7 +13689,7 @@ BEGIN
 END $$;
 
 -- Verify the accounts were created
-SELECT COUNT(*) as created_accounts FROM auth.users WHERE email LIKE '%@test.siport.com' OR email LIKE '%@siports.com';
+SELECT COUNT(*) as created_accounts FROM auth.users WHERE email LIKE '%@test.sib2026.ma' OR email LIKE '%@sib.com';
 
 
 -- [20251225000003_recreate_demo_accounts.sql]
@@ -13718,60 +13718,60 @@ DELETE FROM public.registration_requests;
 DELETE FROM public.user_favorites;
 DELETE FROM public.daily_quotas WHERE user_id IN (
   SELECT id FROM public.users WHERE email IN (
-    'admin.siports@siports.com',
-    'exhibitor-54m@test.siport.com',
-    'exhibitor-36m@test.siport.com',
-    'exhibitor-18m@test.siport.com',
-    'exhibitor-9m@test.siport.com',
-    'partner-gold@test.siport.com',
-    'partner-silver@test.siport.com',
-    'partner-platinium@test.siport.com',
-    'partner-museum@test.siport.com',
-    'partner-porttech@test.siport.com',
-    'partner-oceanfreight@test.siport.com',
-    'partner-coastal@test.siport.com',
-    'visitor-vip@test.siport.com',
-    'visitor-premium@test.siport.com',
-    'visitor-basic@test.siport.com',
-    'visitor-free@test.siport.com'
+    'admin.sib@sib.com',
+    'exhibitor-54m@test.sib2026.ma',
+    'exhibitor-36m@test.sib2026.ma',
+    'exhibitor-18m@test.sib2026.ma',
+    'exhibitor-9m@test.sib2026.ma',
+    'partner-gold@test.sib2026.ma',
+    'partner-silver@test.sib2026.ma',
+    'partner-platinium@test.sib2026.ma',
+    'partner-museum@test.sib2026.ma',
+    'partner-porttech@test.sib2026.ma',
+    'partner-oceanfreight@test.sib2026.ma',
+    'partner-coastal@test.sib2026.ma',
+    'visitor-vip@test.sib2026.ma',
+    'visitor-premium@test.sib2026.ma',
+    'visitor-basic@test.sib2026.ma',
+    'visitor-free@test.sib2026.ma'
   )
 );
 DELETE FROM public.users WHERE email IN (
-  'admin.siports@siports.com',
-  'exhibitor-54m@test.siport.com',
-  'exhibitor-36m@test.siport.com',
-  'exhibitor-18m@test.siport.com',
-  'exhibitor-9m@test.siport.com',
-  'partner-gold@test.siport.com',
-  'partner-silver@test.siport.com',
-  'partner-platinium@test.siport.com',
-  'partner-museum@test.siport.com',
-  'partner-porttech@test.siport.com',
-  'partner-oceanfreight@test.siport.com',
-  'partner-coastal@test.siport.com',
-  'visitor-vip@test.siport.com',
-  'visitor-premium@test.siport.com',
-  'visitor-basic@test.siport.com',
-  'visitor-free@test.siport.com'
+  'admin.sib@sib.com',
+  'exhibitor-54m@test.sib2026.ma',
+  'exhibitor-36m@test.sib2026.ma',
+  'exhibitor-18m@test.sib2026.ma',
+  'exhibitor-9m@test.sib2026.ma',
+  'partner-gold@test.sib2026.ma',
+  'partner-silver@test.sib2026.ma',
+  'partner-platinium@test.sib2026.ma',
+  'partner-museum@test.sib2026.ma',
+  'partner-porttech@test.sib2026.ma',
+  'partner-oceanfreight@test.sib2026.ma',
+  'partner-coastal@test.sib2026.ma',
+  'visitor-vip@test.sib2026.ma',
+  'visitor-premium@test.sib2026.ma',
+  'visitor-basic@test.sib2026.ma',
+  'visitor-free@test.sib2026.ma'
 );
 
 DELETE FROM auth.users WHERE email IN (
-  'admin.siports@siports.com',
-  'exhibitor-54m@test.siport.com',
-  'exhibitor-36m@test.siport.com',
-  'exhibitor-18m@test.siport.com',
-  'exhibitor-9m@test.siport.com',
-  'partner-gold@test.siport.com',
-  'partner-silver@test.siport.com',
-  'partner-platinium@test.siport.com',
-  'partner-museum@test.siport.com',
-  'partner-porttech@test.siport.com',
-  'partner-oceanfreight@test.siport.com',
-  'partner-coastal@test.siport.com',
-  'visitor-vip@test.siport.com',
-  'visitor-premium@test.siport.com',
-  'visitor-basic@test.siport.com',
-  'visitor-free@test.siport.com'
+  'admin.sib@sib.com',
+  'exhibitor-54m@test.sib2026.ma',
+  'exhibitor-36m@test.sib2026.ma',
+  'exhibitor-18m@test.sib2026.ma',
+  'exhibitor-9m@test.sib2026.ma',
+  'partner-gold@test.sib2026.ma',
+  'partner-silver@test.sib2026.ma',
+  'partner-platinium@test.sib2026.ma',
+  'partner-museum@test.sib2026.ma',
+  'partner-porttech@test.sib2026.ma',
+  'partner-oceanfreight@test.sib2026.ma',
+  'partner-coastal@test.sib2026.ma',
+  'visitor-vip@test.sib2026.ma',
+  'visitor-premium@test.sib2026.ma',
+  'visitor-basic@test.sib2026.ma',
+  'visitor-free@test.sib2026.ma'
 );
 
 -- Step 2: Create demo accounts with bcrypt-hashed passwords
@@ -13781,7 +13781,7 @@ DELETE FROM auth.users WHERE email IN (
 INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, created_at, updated_at, aud, role)
 VALUES (
   '00000000-0000-0000-0000-000000000001',
-  'admin.siports@siports.com',
+  'admin.sib@sib.com',
   crypt('Admin123!', gen_salt('bf')),
   NOW(),
   NOW(),
@@ -13793,8 +13793,8 @@ VALUES (
 INSERT INTO public.users (id, email, name, type, status, profile, created_at, updated_at)
 VALUES (
   '00000000-0000-0000-0000-000000000001',
-  'admin.siports@siports.com',
-  'Admin SIPORTS',
+  'admin.sib@sib.com',
+  'Admin SIB',
   'admin',
   'active',
   jsonb_build_object('role', 'administrator'),
@@ -13805,75 +13805,75 @@ VALUES (
 -- Exhibitors (54m², 36m², 18m², 9m²)
 INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, created_at, updated_at, aud, role)
 VALUES 
-  ('00000000-0000-0000-0000-000000000002', 'exhibitor-54m@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000003', 'exhibitor-36m@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000004', 'exhibitor-18m@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000017', 'exhibitor-9m@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated');
+  ('00000000-0000-0000-0000-000000000002', 'exhibitor-54m@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000003', 'exhibitor-36m@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000004', 'exhibitor-18m@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000017', 'exhibitor-9m@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated');
 
 INSERT INTO public.users (id, email, name, type, status, profile, created_at, updated_at)
 VALUES 
-  ('00000000-0000-0000-0000-000000000002', 'exhibitor-54m@test.siport.com', 'ABB Marine & Ports', 'exhibitor', 'active', jsonb_build_object('sector', 'Technology'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000003', 'exhibitor-36m@test.siport.com', 'Advanced Port Systems', 'exhibitor', 'active', jsonb_build_object('sector', 'Automation'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000004', 'exhibitor-18m@test.siport.com', 'Maritime Equipment Co', 'exhibitor', 'active', jsonb_build_object('sector', 'Equipment'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000017', 'exhibitor-9m@test.siport.com', 'StartUp Port Innovations', 'exhibitor', 'active', jsonb_build_object('sector', 'IoT'), NOW(), NOW());
+  ('00000000-0000-0000-0000-000000000002', 'exhibitor-54m@test.sib2026.ma', 'ABB Marine & Ports', 'exhibitor', 'active', jsonb_build_object('sector', 'Technology'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000003', 'exhibitor-36m@test.sib2026.ma', 'Advanced Port Systems', 'exhibitor', 'active', jsonb_build_object('sector', 'Automation'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000004', 'exhibitor-18m@test.sib2026.ma', 'Maritime Equipment Co', 'exhibitor', 'active', jsonb_build_object('sector', 'Equipment'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000017', 'exhibitor-9m@test.sib2026.ma', 'StartUp Port Innovations', 'exhibitor', 'active', jsonb_build_object('sector', 'IoT'), NOW(), NOW());
 
 -- Partners
 INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, created_at, updated_at, aud, role)
 VALUES 
-  ('00000000-0000-0000-0000-000000000005', 'partner-gold@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000006', 'partner-silver@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000011', 'partner-platinium@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000012', 'partner-museum@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000013', 'partner-porttech@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000014', 'partner-oceanfreight@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000015', 'partner-coastal@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated');
+  ('00000000-0000-0000-0000-000000000005', 'partner-gold@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000006', 'partner-silver@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000011', 'partner-platinium@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000012', 'partner-museum@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000013', 'partner-porttech@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000014', 'partner-oceanfreight@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000015', 'partner-coastal@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated');
 
 INSERT INTO public.users (id, email, name, type, status, profile, created_at, updated_at)
 VALUES 
-  ('00000000-0000-0000-0000-000000000005', 'partner-gold@test.siport.com', 'Gold Partner Industries', 'partner', 'active', jsonb_build_object('level', 'gold'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000006', 'partner-silver@test.siport.com', 'Silver Tech Group', 'partner', 'active', jsonb_build_object('level', 'silver'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000011', 'partner-platinium@test.siport.com', 'Platinium Global Corp', 'partner', 'active', jsonb_build_object('level', 'platinium'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000012', 'partner-museum@test.siport.com', 'Museum Cultural Center', 'partner', 'active', jsonb_build_object('level', 'museum'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000013', 'partner-porttech@test.siport.com', 'PortTech Solutions', 'partner', 'active', jsonb_build_object('level', 'porttech'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000014', 'partner-oceanfreight@test.siport.com', 'OceanFreight Logistics', 'partner', 'active', jsonb_build_object('level', 'oceanfreight'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000015', 'partner-coastal@test.siport.com', 'Coastal Maritime Services', 'partner', 'active', jsonb_build_object('level', 'coastal'), NOW(), NOW());
+  ('00000000-0000-0000-0000-000000000005', 'partner-gold@test.sib2026.ma', 'Gold Partner Industries', 'partner', 'active', jsonb_build_object('level', 'gold'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000006', 'partner-silver@test.sib2026.ma', 'Silver Tech Group', 'partner', 'active', jsonb_build_object('level', 'silver'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000011', 'partner-platinium@test.sib2026.ma', 'Platinium Global Corp', 'partner', 'active', jsonb_build_object('level', 'platinium'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000012', 'partner-museum@test.sib2026.ma', 'Museum Cultural Center', 'partner', 'active', jsonb_build_object('level', 'museum'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000013', 'partner-porttech@test.sib2026.ma', 'PortTech Solutions', 'partner', 'active', jsonb_build_object('level', 'porttech'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000014', 'partner-oceanfreight@test.sib2026.ma', 'OceanFreight Logistics', 'partner', 'active', jsonb_build_object('level', 'oceanfreight'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000015', 'partner-coastal@test.sib2026.ma', 'Coastal Maritime Services', 'partner', 'active', jsonb_build_object('level', 'coastal'), NOW(), NOW());
 
 -- Visitors
 INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, created_at, updated_at, aud, role)
 VALUES 
-  ('00000000-0000-0000-0000-000000000007', 'visitor-vip@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000008', 'visitor-premium@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000009', 'visitor-basic@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
-  ('00000000-0000-0000-0000-000000000010', 'visitor-free@test.siport.com', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated');
+  ('00000000-0000-0000-0000-000000000007', 'visitor-vip@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000008', 'visitor-premium@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000009', 'visitor-basic@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated'),
+  ('00000000-0000-0000-0000-000000000010', 'visitor-free@test.sib2026.ma', crypt('Admin123!', gen_salt('bf')), NOW(), NOW(), NOW(), 'authenticated', 'authenticated');
 
 INSERT INTO public.users (id, email, name, type, status, profile, created_at, updated_at)
 VALUES 
-  ('00000000-0000-0000-0000-000000000007', 'visitor-vip@test.siport.com', 'VIP Visitor', 'visitor', 'active', jsonb_build_object('visitor_level', 'vip'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000008', 'visitor-premium@test.siport.com', 'Premium Visitor', 'visitor', 'active', jsonb_build_object('visitor_level', 'premium'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000009', 'visitor-basic@test.siport.com', 'Basic Visitor', 'visitor', 'active', jsonb_build_object('visitor_level', 'basic'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000010', 'visitor-free@test.siport.com', 'Free Visitor', 'visitor', 'active', jsonb_build_object('visitor_level', 'free'), NOW(), NOW());
+  ('00000000-0000-0000-0000-000000000007', 'visitor-vip@test.sib2026.ma', 'VIP Visitor', 'visitor', 'active', jsonb_build_object('visitor_level', 'vip'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000008', 'visitor-premium@test.sib2026.ma', 'Premium Visitor', 'visitor', 'active', jsonb_build_object('visitor_level', 'premium'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000009', 'visitor-basic@test.sib2026.ma', 'Basic Visitor', 'visitor', 'active', jsonb_build_object('visitor_level', 'basic'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000010', 'visitor-free@test.sib2026.ma', 'Free Visitor', 'visitor', 'active', jsonb_build_object('visitor_level', 'free'), NOW(), NOW());
 
 -- Step 3: Create exhibitor records (linking users to the exhibitors table)
 INSERT INTO public.exhibitors (user_id, company_name, category, sector, description, logo_url, website, verified, featured, contact_info, created_at, updated_at)
 VALUES 
-  ('00000000-0000-0000-0000-000000000002', 'ABB Marine & Ports', 'port-industry', 'Technology', 'Leader in maritime automation and port technology solutions', NULL, 'https://www.abb.com', true, true, jsonb_build_object('email', 'exhibitor-54m@test.siport.com', 'phone', '+212 6 12 34 56 78', 'address', '123 Tech Street, Casablanca', 'name', 'ABB Sales Team'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000003', 'Advanced Port Systems', 'port-operations', 'Automation', 'Cutting-edge automation systems for modern ports', NULL, 'https://www.advancedport.com', true, true, jsonb_build_object('email', 'exhibitor-36m@test.siport.com', 'phone', '+212 6 98 76 54 32', 'address', '456 Port Avenue, Tangier', 'name', 'APS Team'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000004', 'Maritime Equipment Co', 'port-industry', 'Equipment', 'Premium maritime equipment supplier', NULL, 'https://www.maritimeequip.com', true, false, jsonb_build_object('email', 'exhibitor-18m@test.siport.com', 'phone', '+212 6 55 44 33 22', 'address', '789 Harbor Blvd, Rabat', 'name', 'Maritime Team'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000017', 'StartUp Port Innovations', 'port-operations', 'IoT', 'Innovative IoT solutions for port operations', NULL, 'https://www.portinnovations.startup', false, false, jsonb_build_object('email', 'exhibitor-9m@test.siport.com', 'phone', '+212 6 11 22 33 44', 'address', '321 Innovation Park, Fez', 'name', 'StartUp Team'), NOW(), NOW());
+  ('00000000-0000-0000-0000-000000000002', 'ABB Marine & Ports', 'port-industry', 'Technology', 'Leader in maritime automation and port technology solutions', NULL, 'https://www.abb.com', true, true, jsonb_build_object('email', 'exhibitor-54m@test.sib2026.ma', 'phone', '+212 6 12 34 56 78', 'address', '123 Tech Street, Casablanca', 'name', 'ABB Sales Team'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000003', 'Advanced Port Systems', 'port-operations', 'Automation', 'Cutting-edge automation systems for modern ports', NULL, 'https://www.advancedport.com', true, true, jsonb_build_object('email', 'exhibitor-36m@test.sib2026.ma', 'phone', '+212 6 98 76 54 32', 'address', '456 Port Avenue, Tangier', 'name', 'APS Team'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000004', 'Maritime Equipment Co', 'port-industry', 'Equipment', 'Premium maritime equipment supplier', NULL, 'https://www.maritimeequip.com', true, false, jsonb_build_object('email', 'exhibitor-18m@test.sib2026.ma', 'phone', '+212 6 55 44 33 22', 'address', '789 Harbor Blvd, Rabat', 'name', 'Maritime Team'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000017', 'StartUp Port Innovations', 'port-operations', 'IoT', 'Innovative IoT solutions for port operations', NULL, 'https://www.portinnovations.startup', false, false, jsonb_build_object('email', 'exhibitor-9m@test.sib2026.ma', 'phone', '+212 6 11 22 33 44', 'address', '321 Innovation Park, Fez', 'name', 'StartUp Team'), NOW(), NOW());
 
 -- Step 4: Create partner records (link to partners table)
 INSERT INTO public.partners (user_id, company_name, partner_type, partnership_level, sector, description, logo_url, website, verified, contact_info, created_at, updated_at)
 VALUES 
-  ('00000000-0000-0000-0000-000000000005', 'Gold Partner Industries', 'corporate', 'gold', 'Port Operations', 'Premium partnership for port excellence', NULL, 'https://www.goldpartner.com', true, jsonb_build_object('email', 'partner-gold@test.siport.com', 'phone', '+212 6 99 88 77 66', 'address', '111 Gold Street, Casablanca'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000006', 'Silver Tech Group', 'tech', 'silver', 'Technology', 'Technology partner for digital transformation', NULL, 'https://www.silvertech.com', true, jsonb_build_object('email', 'partner-silver@test.siport.com', 'phone', '+212 6 77 66 55 44', 'address', '222 Silver Ave, Marrakech'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000011', 'Platinium Global Corp', 'corporate', 'platinium', 'Port Management', 'Global platinum partner', NULL, 'https://www.platinium-global.com', true, jsonb_build_object('email', 'partner-platinium@test.siport.com', 'phone', '+212 6 33 44 55 66', 'address', '333 Platinum Lane, Agadir'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000012', 'Museum Cultural Center', 'cultural', 'museum', 'Culture & Heritage', 'Cultural partnership for heritage', NULL, 'https://www.museum-center.ma', true, jsonb_build_object('email', 'partner-museum@test.siport.com', 'phone', '+212 6 22 33 44 55', 'address', '444 Culture Way, Essaouira'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000013', 'PortTech Solutions', 'tech', 'gold', 'Technology', 'Port technology innovation partner', NULL, 'https://www.porttech-solutions.com', true, jsonb_build_object('email', 'partner-porttech@test.siport.com', 'phone', '+212 6 11 22 33 44', 'address', '555 Tech Drive, Tétouan'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000014', 'OceanFreight Logistics', 'logistics', 'silver', 'Logistics', 'Maritime freight specialist', NULL, 'https://www.oceanfreight.logistics', true, jsonb_build_object('email', 'partner-oceanfreight@test.siport.com', 'phone', '+212 6 88 99 00 11', 'address', '666 Ocean Path, Safi'), NOW(), NOW()),
-  ('00000000-0000-0000-0000-000000000015', 'Coastal Maritime Services', 'services', 'silver', 'Maritime Services', 'Comprehensive maritime services', NULL, 'https://www.coastal-maritime.com', true, jsonb_build_object('email', 'partner-coastal@test.siport.com', 'phone', '+212 6 77 88 99 00', 'address', '777 Coastal Road, El Jadida'), NOW(), NOW());
+  ('00000000-0000-0000-0000-000000000005', 'Gold Partner Industries', 'corporate', 'gold', 'Port Operations', 'Premium partnership for port excellence', NULL, 'https://www.goldpartner.com', true, jsonb_build_object('email', 'partner-gold@test.sib2026.ma', 'phone', '+212 6 99 88 77 66', 'address', '111 Gold Street, Casablanca'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000006', 'Silver Tech Group', 'tech', 'silver', 'Technology', 'Technology partner for digital transformation', NULL, 'https://www.silvertech.com', true, jsonb_build_object('email', 'partner-silver@test.sib2026.ma', 'phone', '+212 6 77 66 55 44', 'address', '222 Silver Ave, Marrakech'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000011', 'Platinium Global Corp', 'corporate', 'platinium', 'Port Management', 'Global platinum partner', NULL, 'https://www.platinium-global.com', true, jsonb_build_object('email', 'partner-platinium@test.sib2026.ma', 'phone', '+212 6 33 44 55 66', 'address', '333 Platinum Lane, Agadir'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000012', 'Museum Cultural Center', 'cultural', 'museum', 'Culture & Heritage', 'Cultural partnership for heritage', NULL, 'https://www.museum-center.ma', true, jsonb_build_object('email', 'partner-museum@test.sib2026.ma', 'phone', '+212 6 22 33 44 55', 'address', '444 Culture Way, Essaouira'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000013', 'PortTech Solutions', 'tech', 'gold', 'Technology', 'Port technology innovation partner', NULL, 'https://www.porttech-solutions.com', true, jsonb_build_object('email', 'partner-porttech@test.sib2026.ma', 'phone', '+212 6 11 22 33 44', 'address', '555 Tech Drive, Tétouan'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000014', 'OceanFreight Logistics', 'logistics', 'silver', 'Logistics', 'Maritime freight specialist', NULL, 'https://www.oceanfreight.logistics', true, jsonb_build_object('email', 'partner-oceanfreight@test.sib2026.ma', 'phone', '+212 6 88 99 00 11', 'address', '666 Ocean Path, Safi'), NOW(), NOW()),
+  ('00000000-0000-0000-0000-000000000015', 'Coastal Maritime Services', 'services', 'silver', 'Maritime Services', 'Comprehensive maritime services', NULL, 'https://www.coastal-maritime.com', true, jsonb_build_object('email', 'partner-coastal@test.sib2026.ma', 'phone', '+212 6 77 88 99 00', 'address', '777 Coastal Road, El Jadida'), NOW(), NOW());
 
 -- Verify accounts were created
-SELECT COUNT(*) as created_accounts FROM auth.users WHERE email LIKE '%@test.siport.com' OR email LIKE '%@siports.com';
+SELECT COUNT(*) as created_accounts FROM auth.users WHERE email LIKE '%@test.sib2026.ma' OR email LIKE '%@sib.com';
 SELECT COUNT(*) as exhibitors_count FROM public.exhibitors;
 SELECT COUNT(*) as partners_count FROM public.partners;
 
@@ -13884,11 +13884,11 @@ SELECT COUNT(*) as partners_count FROM public.partners;
 
 -- First, delete any existing data to avoid duplicates
 DELETE FROM public.exhibitors WHERE user_id IN (
-  SELECT id FROM public.users WHERE type = 'exhibitor' AND email LIKE '%@test.siport.com'
+  SELECT id FROM public.users WHERE type = 'exhibitor' AND email LIKE '%@test.sib2026.ma'
 );
 
 DELETE FROM public.partners WHERE user_id IN (
-  SELECT id FROM public.users WHERE type = 'partner' AND email LIKE '%@test.siport.com'
+  SELECT id FROM public.users WHERE type = 'partner' AND email LIKE '%@test.sib2026.ma'
 );
 
 -- Create exhibitors from users with type='exhibitor'
@@ -13921,7 +13921,7 @@ SELECT
   NOW(),
   NOW()
 FROM public.users u
-WHERE u.type = 'exhibitor' AND u.email LIKE '%@test.siport.com';
+WHERE u.type = 'exhibitor' AND u.email LIKE '%@test.sib2026.ma';
 
 -- Create partners from users with type='partner'
 INSERT INTO public.partners (user_id, company_name, partner_type, partnership_level, sector, description, contact_info, created_at, updated_at)
@@ -13972,7 +13972,7 @@ SELECT
   NOW(),
   NOW()
 FROM public.users u
-WHERE u.type = 'partner' AND u.email LIKE '%@test.siport.com';
+WHERE u.type = 'partner' AND u.email LIKE '%@test.sib2026.ma';
 
 -- Verify the data was created
 SELECT 'Exhibitors created' as status, COUNT(*) as count FROM public.exhibitors;
@@ -16006,7 +16006,7 @@ COMMENT ON COLUMN public.media_contents.status IS
   'Statut du média: draft (brouillon), pending_approval (en attente de validation admin), approved (validé), published (publié), rejected (rejeté), archived (archivé)';
 
 COMMENT ON COLUMN public.media_contents.created_by_type IS 
-  'Type de créateur: admin (équipe SIPORT), partner (partenaire sponsor), exhibitor (exposant)';
+  'Type de créateur: admin (équipe SIB), partner (partenaire sponsor), exhibitor (exposant)';
 
 COMMENT ON COLUMN public.media_contents.created_by_id IS 
   'ID du créateur (référence users.id)';
@@ -16744,7 +16744,7 @@ GRANT ALL ON notifications_devices TO service_role;
 
 
 -- [20260106000003_atomic_transaction_functions.sql]
--- Database Transactions - Atomic Operations for SIPORT 2026
+-- Database Transactions - Atomic Operations for SIB 2026
 -- Purpose: Ensure data consistency across multi-table operations
 -- Phase: 4 - Missing Implementations (Bug #11)
 -- Date: January 6, 2026
@@ -17839,23 +17839,23 @@ WHERE level = 'premium';
 -- Update exhibitor profiles with standArea
 UPDATE public.users 
 SET profile = jsonb_set(profile, '{standArea}', '54'::jsonb)
-WHERE email = 'exhibitor-54m@test.siport.com';
+WHERE email = 'exhibitor-54m@test.sib2026.ma';
 
 UPDATE public.users 
 SET profile = jsonb_set(profile, '{standArea}', '36'::jsonb)
-WHERE email = 'exhibitor-36m@test.siport.com';
+WHERE email = 'exhibitor-36m@test.sib2026.ma';
 
 UPDATE public.users 
 SET profile = jsonb_set(profile, '{standArea}', '18'::jsonb)
-WHERE email = 'exhibitor-18m@test.siport.com';
+WHERE email = 'exhibitor-18m@test.sib2026.ma';
 
 UPDATE public.users 
 SET profile = jsonb_set(profile, '{standArea}', '9'::jsonb)
-WHERE email = 'exhibitor-9m@test.siport.com';
+WHERE email = 'exhibitor-9m@test.sib2026.ma';
 
 -- Verify the updates
 SELECT email, profile->>'standArea' as stand_area FROM public.users 
-WHERE email LIKE 'exhibitor-%@test.siport.com'
+WHERE email LIKE 'exhibitor-%@test.sib2026.ma'
 ORDER BY email;
 
 
@@ -18116,17 +18116,17 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
   'visitor_welcome_free',
   'Bienvenue Visiteur Gratuit',
   'Email de bienvenue pour les visiteurs avec pass gratuit',
-  '🎉 Bienvenue à SIPORTS 2026 - Pass Gratuit Confirmé',
+  '🎉 Bienvenue à SIB 2026 - Pass Gratuit Confirmé',
   '<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenue à SIPORTS 2026</title>
+  <title>Bienvenue à SIB 2026</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-    <h1 style="color: white; margin: 0; font-size: 28px;">🎉 Bienvenue à SIPORTS 2026</h1>
+    <h1 style="color: white; margin: 0; font-size: 28px;">🎉 Bienvenue à SIB 2026</h1>
     <p style="color: #e8f5e9; margin: 10px 0 0 0; font-size: 16px;">Pass Gratuit confirmé</p>
   </div>
 
@@ -18134,13 +18134,13 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
     <p style="font-size: 18px; margin-top: 0;">Bonjour <strong>{{name}}</strong>,</p>
 
     <p style="font-size: 16px;">
-      Félicitations ! Votre inscription gratuite au <strong>Salon International des Ports et de la Logistique Maritime (SIPORTS) 2026</strong> a été confirmée avec succès.
+      Félicitations ! Votre inscription gratuite au <strong>Salon International des Ports et de la Logistique Maritime (SIB) 2026</strong> a été confirmée avec succès.
     </p>
 
     <div style="background: white; border-left: 4px solid #22c55e; padding: 20px; margin: 25px 0; border-radius: 5px;">
       <h3 style="margin-top: 0; color: #16a34a;">✅ Votre Pass Gratuit inclut :</h3>
       <ul style="margin: 10px 0; padding-left: 20px;">
-        <li>Accès au salon SIPORTS 2026</li>
+        <li>Accès au salon SIB 2026</li>
         <li>Badge QR sécurisé d''entrée</li>
         <li>Accès aux zones publiques et hall d''exposition</li>
         <li>Participation aux conférences publiques</li>
@@ -18156,23 +18156,23 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
 
     <div style="background: #e0f2fe; border-left: 4px solid #0ea5e9; padding: 20px; margin: 25px 0; border-radius: 5px;">
       <h3 style="margin-top: 0; color: #0369a1;">📞 Besoin d''aide ?</h3>
-      <p style="margin: 5px 0;">Email : <a href="mailto:contact@siports2026.com" style="color: #0ea5e9;">contact@siports2026.com</a></p>
+      <p style="margin: 5px 0;">Email : <a href="mailto:contact@sib2026.com" style="color: #0ea5e9;">contact@sib2026.com</a></p>
       <p style="margin: 5px 0;">Téléphone : +212 5 22 XX XX XX</p>
     </div>
 
     <p style="text-align: center; color: #666; font-size: 14px; margin-top: 30px;">
-      Nous avons hâte de vous accueillir au SIPORTS 2026 !<br>
-      L''équipe SIPORTS
+      Nous avons hâte de vous accueillir au SIB 2026 !<br>
+      L''équipe SIB
     </p>
   </div>
 </body>
 </html>',
   'Bonjour {{name}},
 
-Félicitations ! Votre inscription gratuite au Salon International des Ports et de la Logistique Maritime (SIPORTS) 2026 a été confirmée avec succès.
+Félicitations ! Votre inscription gratuite au Salon International des Ports et de la Logistique Maritime (SIB) 2026 a été confirmée avec succès.
 
 VOTRE PASS GRATUIT INCLUT :
-- Accès au salon SIPORTS 2026
+- Accès au salon SIB 2026
 - Badge QR sécurisé d''entrée
 - Accès aux zones publiques et hall d''exposition
 - Participation aux conférences publiques
@@ -18182,15 +18182,15 @@ Dates : 15-18 Avril 2026
 Lieu : Parc des Expositions de Casablanca, Maroc
 Horaires : 9h00 - 18h00
 
-Nous avons hâte de vous accueillir au SIPORTS 2026 !
-L''équipe SIPORTS',
+Nous avons hâte de vous accueillir au SIB 2026 !
+L''équipe SIB',
   '["name", "email", "level"]'::jsonb
 ),
 (
   'visitor_welcome_vip',
   'Bienvenue Visiteur VIP',
   'Email de bienvenue pour les visiteurs VIP avec demande de paiement',
-  '👑 Compte VIP créé - Finaliser le paiement - SIPORTS 2026',
+  '👑 Compte VIP créé - Finaliser le paiement - SIB 2026',
   '<!DOCTYPE html>
 <html>
 <head>
@@ -18208,7 +18208,7 @@ L''équipe SIPORTS',
     <p style="font-size: 18px; margin-top: 0;">Bonjour <strong>{{name}}</strong>,</p>
 
     <p style="font-size: 16px;">
-      Votre compte <strong>Pass VIP Premium</strong> pour SIPORTS 2026 a été créé avec succès ! 🎉
+      Votre compte <strong>Pass VIP Premium</strong> pour SIB 2026 a été créé avec succès ! 🎉
     </p>
 
     <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; margin: 25px 0; border-radius: 5px;">
@@ -18220,20 +18220,20 @@ L''équipe SIPORTS',
 
     <p style="text-align: center; color: #666; font-size: 14px; margin-top: 30px;">
       Merci d''avoir choisi le Pass VIP Premium !<br>
-      L''équipe SIPORTS
+      L''équipe SIB
     </p>
   </div>
 </body>
 </html>',
   'Bonjour {{name}},
 
-Votre compte Pass VIP Premium pour SIPORTS 2026 a été créé avec succès !
+Votre compte Pass VIP Premium pour SIB 2026 a été créé avec succès !
 
 ACTION REQUISE : FINALISER LE PAIEMENT
 Pour activer votre accès VIP, veuillez finaliser le paiement de 700 EUR.
 
 Merci d''avoir choisi le Pass VIP Premium !
-L''équipe SIPORTS',
+L''équipe SIB',
   '["name", "email", "level"]'::jsonb
 );
 
@@ -18955,7 +18955,7 @@ ORDER BY created_at DESC;
 -- RÉSULTAT ATTENDU
 -- ============================================
 -- Seul le compte LINECO EVENTS / Attijariwafa bank doit être actif (is_active = true)
--- L'ancien compte SIPORTS EVENT SARL / Banque Internationale doit être inactif (is_active = false)
+-- L'ancien compte SIB EVENT SARL / Banque Internationale doit être inactif (is_active = false)
 
 
 -- [enable_rls_security.sql]

@@ -1,8 +1,8 @@
-# 🚂 Guide de Déploiement Railway - SIPORTV3
+# 🚂 Guide de Déploiement Railway - SIB2026
 
 ## 📋 Vue d'ensemble
 
-Ce guide vous accompagne pas à pas pour déployer SIPORTV3 sur Railway.app.
+Ce guide vous accompagne pas à pas pour déployer SIB2026 sur Railway.app.
 
 ---
 
@@ -22,7 +22,7 @@ Ce guide vous accompagne pas à pas pour déployer SIPORTV3 sur Railway.app.
 1. Connectez-vous sur [railway.app](https://railway.app)
 2. Cliquez sur **"New Project"**
 3. Sélectionnez **"Deploy from GitHub repo"**
-4. Choisissez le repository **siportv3**
+4. Choisissez le repository **sib-2026**
 5. Railway détectera automatiquement `railway.json`
 
 ### 2. Configuration Automatique
@@ -344,7 +344,7 @@ Attendez 5-30 minutes pour la propagation DNS.
 - Railway Discord: [railway.app/discord](https://railway.app/discord)
 - Railway Docs: [docs.railway.app](https://docs.railway.app)
 
-### Problème avec SIPORTV3 ?
+### Problème avec SIB2026 ?
 - GitHub Issues: Créez une issue sur le repository
 - Documentation: Consultez `/docs`
 
@@ -370,7 +370,7 @@ Attendez 5-30 minutes pour la propagation DNS.
 
 ## 🎉 Félicitations !
 
-Votre application SIPORTV3 est maintenant déployée sur Railway ! 🚀
+Votre application SIB2026 est maintenant déployée sur Railway ! 🚀
 
 **Prochaines étapes recommandées :**
 1. Configurez le monitoring
@@ -383,4 +383,4 @@ Votre application SIPORTV3 est maintenant déployée sur Railway ! 🚀
 
 **Dernière mise à jour**: Novembre 2024
 **Version**: 1.0
-**Auteur**: Équipe SIPORTV3
+**Auteur**: Équipe SIB2026

@@ -25,25 +25,25 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 
 const DEMO_ACCOUNTS = [
   {
-    email: 'admin.siports@siports.com',
+    email: 'admin.sib@sib.com',
     password: 'Admin123!',
-    metadata: { first_name: 'Admin', last_name: 'SIPORT', role: 'admin', account_type: 'admin' },
+    metadata: { first_name: 'Admin', last_name: 'SIB', role: 'admin', account_type: 'admin' },
     type: 'admin'
   },
   {
-    email: 'exposant@siports.com',
+    email: 'exposant@sib.com',
     password: 'Expo123!',
     metadata: { first_name: 'Exposant', last_name: 'Demo', role: 'exhibitor', account_type: 'exhibitor' },
     type: 'exhibitor'
   },
   {
-    email: 'visiteur@siports.com',
+    email: 'visiteur@sib.com',
     password: 'Visit123!',
     metadata: { first_name: 'Visiteur', last_name: 'Demo', role: 'visitor', account_type: 'visitor' },
     type: 'visitor'
   },
   {
-    email: 'partenaire@siports.com',
+    email: 'partenaire@sib.com',
     password: 'Partner123!',
     metadata: { first_name: 'Partenaire', last_name: 'Demo', role: 'partner', account_type: 'partner' },
     type: 'partner'

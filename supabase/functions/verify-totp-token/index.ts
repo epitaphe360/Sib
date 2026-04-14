@@ -45,7 +45,7 @@ Deno.serve(async (req: Request) => {
 
     // Create TOTP instance with user's secret
     const totp = new OTPAuth.TOTP({
-      issuer: 'SIPORTS 2026',
+      issuer: 'SIB 2026',
       algorithm: 'SHA1',
       digits: 6,
       period: 30,

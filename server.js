@@ -27,9 +27,9 @@ app.use((req, res, next) => {
     const host = req.headers.host;
     const proto = req.headers['x-forwarded-proto'] || 'http';
     
-    // Redirect bare domain → www (SSL cert is only on www.siportevent.com)
-    if (host === 'siportevent.com') {
-      return res.redirect(301, `https://www.siportevent.com${req.url}`);
+    // Redirect bare domain → www (SSL cert is only on www.sib2026.ma)
+    if (host === 'sib2026.ma') {
+      return res.redirect(301, `https://www.sib2026.ma${req.url}`);
     }
     // Redirect HTTP → HTTPS
     if (proto === 'http') {
@@ -43,9 +43,9 @@ app.use((req, res, next) => {
 const allowedOrigins = [
   'http://localhost:5173', // Development
   'http://localhost:3000', // Development
-  'https://siportevent.com', // Production
-  'https://www.siportevent.com', // Production with www
-  'https://app.siportevent.com', // App subdomain
+  'https://sib2026.ma', // Production
+  'https://www.sib2026.ma', // Production with www
+  'https://app.sib2026.ma', // App subdomain
   // Add your Railway deployment URL here when available
   // 'https://your-app.railway.app'
 ];
@@ -85,15 +85,15 @@ app.use((req, res, next) => {
 // EMAIL CONFIGURATION (SMTP)
 // ============================================
 const smtpConfig = {
-  host: process.env.SMTP_HOST || 'mail.siportevent.com',
+  host: process.env.SMTP_HOST || 'mail.sib2026.ma',
   port: parseInt(process.env.SMTP_PORT || '465'),
   secure: process.env.SMTP_SECURE === 'true', // true for 465, false for 587
   auth: {
-    user: process.env.SMTP_USER || 'contact@siportevent.com',
+    user: process.env.SMTP_USER || 'contact@sib2026.ma',
     pass: process.env.SMTP_PASS,
   },
   tls: {
-    rejectUnauthorized: false // Accept self-signed certificate from mail.siportevent.com
+    rejectUnauthorized: false // Accept self-signed certificate from mail.sib2026.ma
   }
 };
 
@@ -130,7 +130,7 @@ app.post('/api/send-email', async (req, res) => {
     }
 
     const mailOptions = {
-      from: `"SIPORT 2026" <${process.env.SMTP_USER || 'contact@siportevent.com'}>`,
+      from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@sib2026.ma'}>`,
       to,
       subject,
       html,
@@ -191,10 +191,10 @@ app.post('/api/contact', async (req, res) => {
 
     // Email to admin
     const adminEmail = {
-      from: `"SIPORT 2026" <${process.env.SMTP_USER}>`,
-      to: process.env.ADMIN_EMAIL || 'contact@siportevent.com',
+      from: `"SIB 2026" <${process.env.SMTP_USER}>`,
+      to: process.env.ADMIN_EMAIL || 'contact@sib2026.ma',
       replyTo: email,
-      subject: `[Contact SIPORT] ${subjectLabel} - ${firstName} ${lastName}`,
+      subject: `[Contact SIB] ${subjectLabel} - ${firstName} ${lastName}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white; padding: 20px; text-align: center;">
@@ -216,9 +216,9 @@ app.post('/api/contact', async (req, res) => {
 
     // Confirmation email to user
     const userEmail = {
-      from: `"SIPORT 2026" <${process.env.SMTP_USER}>`,
+      from: `"SIB 2026" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: 'SIPORT 2026 - Votre message a bien été reçu',
+      subject: 'SIB 2026 - Votre message a bien été reçu',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white; padding: 20px; text-align: center;">
@@ -232,7 +232,7 @@ app.post('/api/contact', async (req, res) => {
               <p><strong>Votre message:</strong></p>
               <p style="white-space: pre-wrap;">${message}</p>
             </div>
-            <p style="margin-top: 20px;">Cordialement,<br><strong>L'équipe SIPORT 2026</strong></p>
+            <p style="margin-top: 20px;">Cordialement,<br><strong>L'équipe SIB 2026</strong></p>
           </div>
         </div>
       `,
@@ -289,7 +289,7 @@ app.post('/api/send-visitor-welcome-email', async (req, res) => {
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 640px; margin: 0 auto; background: #ffffff;">
         <!-- Header -->
         <div style="background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #0ea5e9 100%); padding: 40px 30px; text-align: center; border-radius: 8px 8px 0 0;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">🎉 Bienvenue au SIPORT 2026</h1>
+          <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">🎉 Bienvenue au SIB 2026</h1>
           <p style="color: #bfdbfe; margin: 10px 0 0; font-size: 16px;">Salon International des Infrastructures Portuaires</p>
         </div>
 
@@ -331,7 +331,7 @@ app.post('/api/send-visitor-welcome-email', async (req, res) => {
 
           <!-- CTA Button -->
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://siportevent.com/visitor/dashboard" 
+            <a href="https://sib2026.ma/visitor/dashboard" 
                style="display: inline-block; background: linear-gradient(135deg, #2563eb, #0ea5e9); color: #ffffff; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px;">
               Accéder à mon tableau de bord
             </a>
@@ -345,23 +345,23 @@ app.post('/api/send-visitor-welcome-email', async (req, res) => {
         <!-- Footer -->
         <div style="background: #1e293b; padding: 20px 30px; text-align: center; border-radius: 0 0 8px 8px;">
           <p style="color: #94a3b8; margin: 0; font-size: 13px;">
-            © 2026 SIPORT - Salon International des Infrastructures Portuaires
+            © 2026 SIB - Salon International des Infrastructures Portuaires
           </p>
           <p style="color: #64748b; margin: 5px 0 0; font-size: 12px;">
-            Contact : contact@siportevent.com | www.siportevent.com
+            Contact : contact@sib2026.ma | www.sib2026.ma
           </p>
         </div>
       </div>
     `;
 
     const mailOptions = {
-      from: `"SIPORT 2026" <${process.env.SMTP_USER || 'contact@siportevent.com'}>`,
+      from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@sib2026.ma'}>`,
       to: email,
       subject: isVIP
-        ? '🎫 SIPORT 2026 - Inscription VIP confirmée'
-        : '🎉 SIPORT 2026 - Inscription visiteur confirmée',
+        ? '🎫 SIB 2026 - Inscription VIP confirmée'
+        : '🎉 SIB 2026 - Inscription visiteur confirmée',
       html,
-      text: `Bienvenue au SIB 2026, ${name} !\n\nVotre inscription en tant que Visiteur ${levelLabel} a été confirmée.\n\nDates : 25-29 Novembre 2026\nLieu : Parc d'Exposition Mohammed VI, El Jadida, Maroc\n\nAccédez à votre tableau de bord : https://siportevent.com/visitor/dashboard\n\nCordialement,\nL'équipe SIB 2026`,
+      text: `Bienvenue au SIB 2026, ${name} !\n\nVotre inscription en tant que Visiteur ${levelLabel} a été confirmée.\n\nDates : 25-29 Novembre 2026\nLieu : Parc d'Exposition Mohammed VI, El Jadida, Maroc\n\nAccédez à votre tableau de bord : https://sib2026.ma/visitor/dashboard\n\nCordialement,\nL'équipe SIB 2026`,
     };
 
     const info = await transporter.sendMail(mailOptions);

@@ -52,7 +52,7 @@ const supabase = createClient(url, serviceKey, {
 });
 
 const visitor = {
-  email: process.env.VISITOR_EMAIL || 'visitor.real@siports.com',
+  email: process.env.VISITOR_EMAIL || 'visitor.real@sib.com',
   name: process.env.VISITOR_NAME || 'Real Visitor',
   type: 'visitor',
   profile: {

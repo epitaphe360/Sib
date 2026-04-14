@@ -37,7 +37,7 @@ export const DemoAccountsPage: React.FC = () => {
     { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🏛️ Musée Bâtiment', type: 'partner', color: '#9CA3AF' },
     
     // Admin
-    { email: 'admin.siports@siports.com', password: 'Admin123!', label: '⚙️ Administrateur SIB', type: 'admin', color: '#EF4444' },
+    { email: 'admin.sib@sib.com', password: 'Admin123!', label: '⚙️ Administrateur SIB', type: 'admin', color: '#EF4444' },
   ];
 
   const handleLogin = async (account: QuickAccount) => {

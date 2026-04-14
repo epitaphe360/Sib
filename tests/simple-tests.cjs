@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Tests Simples pour SIPORTS v3
+ * Tests Simples pour SIB v3
  * Sans Playwright - Pure Node.js
  */
 
@@ -22,7 +22,7 @@ const colors = {
 
 console.log(`${colors.blue}╔═══════════════════════════════════════════════════════════╗${colors.reset}`);
 console.log(`${colors.blue}║                                                           ║${colors.reset}`);
-console.log(`${colors.blue}║         SIPORTS v3 - Tests Automatisés Simple            ║${colors.reset}`);
+console.log(`${colors.blue}║         SIB v3 - Tests Automatisés Simple            ║${colors.reset}`);
 console.log(`${colors.blue}║                                                           ║${colors.reset}`);
 console.log(`${colors.blue}╚═══════════════════════════════════════════════════════════╝${colors.reset}`);
 console.log('');
@@ -108,9 +108,9 @@ async function runTests() {
 
   console.log(`\n${colors.yellow}═══ 2. Tests de Contenu HTML ═══${colors.reset}\n`);
 
-  await test('Page login contient "SIPORTS"', async () => {
+  await test('Page login contient "SIB"', async () => {
     const res = await makeRequest('/login');
-    if (!res.body.includes('SIPORTS')) throw new Error('Text "SIPORTS" not found');
+    if (!res.body.includes('SIB')) throw new Error('Text "SIB" not found');
   });
 
   await test('Page login contient "Connexion"', async () => {

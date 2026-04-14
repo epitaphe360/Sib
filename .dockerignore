@@ -2,7 +2,7 @@
 # Synchronisé avec .nixpacksignore
 
 # Applications mobiles (React Native/Expo/Capacitor)
-siports-mobile/
+sib-mobile/
 mobile/
 
 # Node modules (sera réinstallé)

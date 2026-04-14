@@ -5,7 +5,7 @@
 
 ## Objectif
 
-Ce document décrit la conception technique pour l'intégration de la synchronisation des rendez-vous avec les calendriers externes (Google Calendar, Outlook, Apple Calendar) et l'implémentation d'un système de notifications et de rappels pour les rendez-vous dans l'application SIPORT v3.
+Ce document décrit la conception technique pour l'intégration de la synchronisation des rendez-vous avec les calendriers externes (Google Calendar, Outlook, Apple Calendar) et l'implémentation d'un système de notifications et de rappels pour les rendez-vous dans l'application SIB 2026.
 
 ## 1. Synchronisation avec les Calendriers Externes
 

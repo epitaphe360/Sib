@@ -16,7 +16,7 @@ async function addDemoAppointments() {
       .from('users')
       .select('id, email, name')
       .eq('type', 'visitor')
-      .in('email', ['visitor-free@test.siport.com', 'visitor-vip@test.siport.com']);
+      .in('email', ['visitor-free@test.sib2026.ma', 'visitor-vip@test.sib2026.ma']);
     
     // Récupérer d'abord les users exposants
     const { data: exhibitorUsers } = await supabase
@@ -24,10 +24,10 @@ async function addDemoAppointments() {
       .select('id')
       .eq('type', 'exhibitor')
       .in('email', [
-        'exhibitor-9m@test.siport.com',
-        'exhibitor-18m@test.siport.com',
-        'exhibitor-36m@test.siport.com',
-        'exhibitor-54m@test.siport.com'
+        'exhibitor-9m@test.sib2026.ma',
+        'exhibitor-18m@test.sib2026.ma',
+        'exhibitor-36m@test.sib2026.ma',
+        'exhibitor-54m@test.sib2026.ma'
       ]);
     
     const exhibitorUserIds = exhibitorUsers?.map(u => u.id) || [];

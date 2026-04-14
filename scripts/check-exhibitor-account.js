@@ -6,14 +6,14 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function checkAccount() {
-  console.log('🔍 Vérification du compte exhibitor-9m@test.siport.com...\n');
+  console.log('🔍 Vérification du compte exhibitor-9m@test.sib2026.ma...\n');
 
   try {
     // Chercher l'utilisateur par email
     const { data: users, error } = await supabase
       .from('users')
       .select('*')
-      .eq('email', 'exhibitor-9m@test.siport.com');
+      .eq('email', 'exhibitor-9m@test.sib2026.ma');
 
     if (error) {
       console.error('❌ Erreur:', error.message);
@@ -48,7 +48,7 @@ async function checkAccount() {
     
     // Tentative de connexion avec le mot de passe
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-      email: 'exhibitor-9m@test.siport.com',
+      email: 'exhibitor-9m@test.sib2026.ma',
       password: 'Test@123456'
     });
 
@@ -57,7 +57,7 @@ async function checkAccount() {
       console.log('\n⚠️ Le compte existe dans la table users mais pas dans auth.users');
       console.log('   OU le mot de passe est incorrect');
       console.log('\n💡 Solution: Recréer le compte avec:');
-      console.log('   - Email: exhibitor-9m@test.siport.com');
+      console.log('   - Email: exhibitor-9m@test.sib2026.ma');
       console.log('   - Password: Test@123456');
     } else {
       console.log('✅ Connexion RÉUSSIE !');

@@ -1,5 +1,5 @@
 # PowerShell script to verify site and plugin assets + Supabase API
-# Usage: .\local_verify.ps1 -SiteUrl 'https://clone.siportevent.com' -PluginFolder 'siport-plugin'
+# Usage: .\local_verify.ps1 -SiteUrl 'https://clone.sib2026.ma' -PluginFolder 'sib-plugin'
 param(
   [Parameter(Mandatory=$true)] [string] $SiteUrl,
   [Parameter(Mandatory=$true)] [string] $PluginFolder

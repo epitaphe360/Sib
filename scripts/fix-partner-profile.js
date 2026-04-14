@@ -7,7 +7,7 @@ const supabase = createClient(
 
 async function main() {
   const userId = '25c455f4-ec53-46f8-8ea4-dba7a80d0395';
-  const email = 'partner-museum@test.siport.com';
+  const email = 'partner-museum@test.sib2026.ma';
   
   console.log('=== Vérification profil partner-museum ===\n');
   

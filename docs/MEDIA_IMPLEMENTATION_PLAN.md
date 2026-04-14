@@ -44,12 +44,12 @@
 ```bash
 Fichier: src/pages/media/PodcastsPage.tsx
 ```
-- Liste des épisodes "SIPORT Talks"
+- Liste des épisodes "SIB Talks"
 - Player audio intégré
 - Affichage des intervenants
 - Possibilité de télécharger les épisodes
 
-#### B. Page Capsules "Inside SIPORT"
+#### B. Page Capsules "Inside SIB"
 ```bash
 Fichier: src/pages/media/CapsulesInsidePage.tsx
 ```

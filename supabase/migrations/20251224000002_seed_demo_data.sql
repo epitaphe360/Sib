@@ -269,22 +269,22 @@ BEGIN
   -- Define the users we want to ensure exist
   FOR v_users IN 
     SELECT * FROM (VALUES 
-      ('00000000-0000-0000-0000-000000000001', 'admin.siports@siports.com'),
-      ('00000000-0000-0000-0000-000000000002', 'exhibitor-54m@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000003', 'exhibitor-36m@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000004', 'exhibitor-18m@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000017', 'exhibitor-9m@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000005', 'partner-gold@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000006', 'partner-silver@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000011', 'partner-platinium@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000012', 'partner-museum@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000013', 'partner-porttech@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000014', 'partner-oceanfreight@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000015', 'partner-coastal@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000007', 'visitor-vip@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000008', 'visitor-premium@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000009', 'visitor-basic@test.siport.com'),
-      ('00000000-0000-0000-0000-000000000010', 'visitor-free@test.siport.com')
+      ('00000000-0000-0000-0000-000000000001', 'admin.sib@sib.com'),
+      ('00000000-0000-0000-0000-000000000002', 'exhibitor-54m@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000003', 'exhibitor-36m@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000004', 'exhibitor-18m@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000017', 'exhibitor-9m@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000005', 'partner-gold@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000006', 'partner-silver@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000011', 'partner-platinium@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000012', 'partner-museum@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000013', 'partner-porttech@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000014', 'partner-oceanfreight@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000015', 'partner-coastal@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000007', 'visitor-vip@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000008', 'visitor-premium@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000009', 'visitor-basic@test.sib2026.ma'),
+      ('00000000-0000-0000-0000-000000000010', 'visitor-free@test.sib2026.ma')
     ) AS t(id, email)
   LOOP
     v_user_id := v_users.id::uuid;
@@ -312,11 +312,11 @@ INSERT INTO users (id, email, name, type, status, profile, created_at)
 VALUES 
   (
     '00000000-0000-0000-0000-000000000001',
-    'admin.siports@siports.com',
-    'Admin SIPORTS',
+    'admin.sib@sib.com',
+    'Admin SIB',
     'admin',
     'active',
-    '{"role": "administrator", "avatar": "https://ui-avatars.com/api/?name=Admin+SIPORTS"}',
+    '{"role": "administrator", "avatar": "https://ui-avatars.com/api/?name=Admin+SIB"}',
     NOW()
   )
 ON CONFLICT (id) DO UPDATE SET
@@ -331,7 +331,7 @@ INSERT INTO users (id, email, name, type, status, profile, created_at)
 VALUES 
   (
     '00000000-0000-0000-0000-000000000002',
-    'exhibitor-54m@test.siport.com',
+    'exhibitor-54m@test.sib2026.ma',
     'ABB Marine & Ports',
     'exhibitor',
     'active',
@@ -340,7 +340,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000003',
-    'exhibitor-36m@test.siport.com',
+    'exhibitor-36m@test.sib2026.ma',
     'Advanced Port Systems',
     'exhibitor',
     'active',
@@ -349,7 +349,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000004',
-    'exhibitor-18m@test.siport.com',
+    'exhibitor-18m@test.sib2026.ma',
     'Maritime Equipment Co',
     'exhibitor',
     'active',
@@ -358,7 +358,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000017',
-    'exhibitor-9m@test.siport.com',
+    'exhibitor-9m@test.sib2026.ma',
     'StartUp Port Innovations',
     'exhibitor',
     'active',
@@ -377,7 +377,7 @@ INSERT INTO users (id, email, name, type, status, profile, created_at)
 VALUES 
   (
     '00000000-0000-0000-0000-000000000005',
-    'partner-gold@test.siport.com',
+    'partner-gold@test.sib2026.ma',
     'Gold Partner Industries',
     'partner',
     'active',
@@ -386,7 +386,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000006',
-    'partner-silver@test.siport.com',
+    'partner-silver@test.sib2026.ma',
     'Silver Tech Group',
     'partner',
     'active',
@@ -395,7 +395,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000011',
-    'partner-platinium@test.siport.com',
+    'partner-platinium@test.sib2026.ma',
     'Platinium Global Corp',
     'partner',
     'active',
@@ -404,7 +404,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000012',
-    'partner-museum@test.siport.com',
+    'partner-museum@test.sib2026.ma',
     'Museum Heritage',
     'partner',
     'active',
@@ -413,7 +413,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000013',
-    'partner-porttech@test.siport.com',
+    'partner-porttech@test.sib2026.ma',
     'Port Tech Systems',
     'partner',
     'active',
@@ -422,7 +422,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000014',
-    'partner-oceanfreight@test.siport.com',
+    'partner-oceanfreight@test.sib2026.ma',
     'Ocean Freight Services',
     'partner',
     'active',
@@ -431,7 +431,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000015',
-    'partner-coastal@test.siport.com',
+    'partner-coastal@test.sib2026.ma',
     'Coastal Shipping Co',
     'partner',
     'active',
@@ -450,7 +450,7 @@ INSERT INTO users (id, email, name, type, visitor_level, status, profile, create
 VALUES 
   (
     '00000000-0000-0000-0000-000000000007',
-    'visitor-vip@test.siport.com',
+    'visitor-vip@test.sib2026.ma',
     'Jean Dupont',
     'visitor',
     'vip',
@@ -460,7 +460,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000008',
-    'visitor-premium@test.siport.com',
+    'visitor-premium@test.sib2026.ma',
     'Marie Martin',
     'visitor',
     'premium',
@@ -470,7 +470,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000009',
-    'visitor-basic@test.siport.com',
+    'visitor-basic@test.sib2026.ma',
     'Pierre Dubois',
     'visitor',
     'basic',
@@ -480,7 +480,7 @@ VALUES
   ),
   (
     '00000000-0000-0000-0000-000000000010',
-    'visitor-free@test.siport.com',
+    'visitor-free@test.sib2026.ma',
     'Sophie Bernard',
     'visitor',
     'free',
@@ -660,7 +660,7 @@ VALUES
     'Gold Partner Industries',
     'Marie Laurent',
     'contact@gold-partner.example.com',
-    'Partenaire stratégique majeur offrant des services premium et un accompagnement personnalisé. Sponsor principal de l''événement SIPORTS 2025.',
+    'Partenaire stratégique majeur offrant des services premium et un accompagnement personnalisé. Sponsor principal de l''événement SIB 2025.',
     'https://gold-partner.example.com',
     'https://ui-avatars.com/api/?name=Gold+Partner&size=200',
     'France',
@@ -1087,15 +1087,15 @@ INSERT INTO news_articles (id, title, content, excerpt, author_id, author, publi
 VALUES
   (
     '00000000-0000-0000-0000-000000000401',
-    'SIPORTS 2025 : Record d''affluence attendu',
-    'Le salon SIPORTS 2025 s''annonce comme l''édition la plus importante de son histoire avec plus de 500 exposants confirmés et 50 000 visiteurs attendus. Cette année, l''accent est mis sur l''innovation durable et les technologies vertes...',
-    'Le salon SIPORTS 2025 bat tous les records avec 500 exposants et 50 000 visiteurs attendus.',
-    (SELECT id FROM users WHERE email = 'admin@siports.com' LIMIT 1),
-    'Admin SIPORTS',
+    'SIB 2025 : Record d''affluence attendu',
+    'Le salon SIB 2025 s''annonce comme l''édition la plus importante de son histoire avec plus de 500 exposants confirmés et 50 000 visiteurs attendus. Cette année, l''accent est mis sur l''innovation durable et les technologies vertes...',
+    'Le salon SIB 2025 bat tous les records avec 500 exposants et 50 000 visiteurs attendus.',
+    (SELECT id FROM users WHERE email = 'admin@sib.com' LIMIT 1),
+    'Admin SIB',
     true,
     NOW() - INTERVAL '2 days',
     'Événement',
-    ARRAY['SIPORTS', 'Salon', 'Innovation'],
+    ARRAY['SIB', 'Salon', 'Innovation'],
     'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
     NOW() - INTERVAL '2 days'
   ),
@@ -1104,8 +1104,8 @@ VALUES
     'TechExpo Solutions dévoile sa nouvelle plateforme VR',
     'L''exposant TechExpo Solutions présentera en exclusivité sa nouvelle plateforme de réalité virtuelle destinée aux salons professionnels. Une révolution dans l''expérience visiteur...',
     'TechExpo Solutions lance une plateforme VR révolutionnaire pour les salons.',
-    (SELECT id FROM users WHERE email = 'admin@siports.com' LIMIT 1),
-    'Admin SIPORTS',
+    (SELECT id FROM users WHERE email = 'admin@sib.com' LIMIT 1),
+    'Admin SIB',
     true,
     NOW() - INTERVAL '5 days',
     'Technologie',
@@ -1118,8 +1118,8 @@ VALUES
     'Agriculture de demain : Les innovations d''AgriInnov',
     'AgriInnov présente ses dernières solutions IoT pour l''agriculture de précision. Des capteurs intelligents et des systèmes d''irrigation automatisés qui réduisent la consommation d''eau de 40%...',
     'AgriInnov révolutionne l''agriculture avec des solutions IoT innovantes.',
-    (SELECT id FROM users WHERE email = 'admin@siports.com' LIMIT 1),
-    'Admin SIPORTS',
+    (SELECT id FROM users WHERE email = 'admin@sib.com' LIMIT 1),
+    'Admin SIB',
     true,
     NOW() - INTERVAL '1 day',
     'Agriculture',
@@ -1132,8 +1132,8 @@ VALUES
     'ModeDesign Paris : La haute couture rencontre la tech',
     'La maison ModeDesign Paris fusionne tradition et innovation avec sa nouvelle collection intégrant des textiles intelligents et des accessoires connectés...',
     'ModeDesign Paris présente une collection alliant haute couture et technologies.',
-    (SELECT id FROM users WHERE email = 'admin@siports.com' LIMIT 1),
-    'Admin SIPORTS',
+    (SELECT id FROM users WHERE email = 'admin@sib.com' LIMIT 1),
+    'Admin SIB',
     true,
     NOW() - INTERVAL '3 days',
     'Mode',
@@ -2325,7 +2325,7 @@ BEGIN
     v_user_id := gen_random_uuid();
     
     INSERT INTO public.users (id, email, name, type, status, created_at)
-    VALUES (v_user_id, 'exhibitor-bulk-' || i || '@demo.siport.com', 'Exposant ' || i, 'exhibitor', 'active', NOW() - (i || ' minutes')::interval);
+    VALUES (v_user_id, 'exhibitor-bulk-' || i || '@demo.sib2026.ma', 'Exposant ' || i, 'exhibitor', 'active', NOW() - (i || ' minutes')::interval);
     
     INSERT INTO public.exhibitors (id, user_id, company_name, category, sector, description, verified, created_at)
     VALUES (gen_random_uuid(), v_user_id, 'Company ' || i, v_categories[(i % 4) + 1]::exhibitor_category, 'Secteur ' || (i % 5 + 1), 'Description de l''exposant ' || i, true, NOW() - (i || ' minutes')::interval);
@@ -2339,7 +2339,7 @@ BEGIN
     v_user_id := gen_random_uuid();
     
     INSERT INTO public.users (id, email, name, type, status, created_at)
-    VALUES (v_user_id, 'visitor-bulk-' || i || '@demo.siport.com', 'Visiteur ' || i, 'visitor', 'active', NOW() - (i || ' seconds')::interval);
+    VALUES (v_user_id, 'visitor-bulk-' || i || '@demo.sib2026.ma', 'Visiteur ' || i, 'visitor', 'active', NOW() - (i || ' seconds')::interval);
     
     INSERT INTO public.visitor_profiles (id, user_id, first_name, last_name, country, created_at)
     VALUES (gen_random_uuid(), v_user_id, 'Visiteur', i::text, v_countries[(i % 40) + 1], NOW() - (i || ' seconds')::interval);

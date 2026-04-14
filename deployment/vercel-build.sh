@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script de build pour Vercel
-echo "🚀 Building SIPORTS 2026 for Vercel..."
+echo "🚀 Building SIB 2026 for Vercel..."
 
 # Installation des dépendances
 npm ci
@@ -18,4 +18,4 @@ else
     exit 1
 fi
 
-echo "🎉 SIPORTS 2026 ready for Vercel deployment!"
+echo "🎉 SIB 2026 ready for Vercel deployment!"

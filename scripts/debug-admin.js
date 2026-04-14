@@ -14,13 +14,13 @@ const supabaseServiceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function debugAdmin() {
-  console.log('🔍 Débogage de l\'utilisateur admin@siports.com...');
+  console.log('🔍 Débogage de l\'utilisateur admin@sib.com...');
   
   // 1. Vérifier dans public.users
   const { data: publicUser, error: publicError } = await supabase
     .from('users')
     .select('*')
-    .eq('email', 'admin@siports.com')
+    .eq('email', 'admin@sib.com')
     .single();
     
   if (publicError) {
@@ -37,7 +37,7 @@ async function debugAdmin() {
   if (authError) {
     console.error('❌ Erreur listUsers:', authError.message);
   } else {
-    const found = authUsers.users.find(u => u.email === 'admin@siports.com');
+    const found = authUsers.users.find(u => u.email === 'admin@sib.com');
     if (found) {
       console.log('✅ Trouvé dans auth.users:', { id: found.id, email: found.email });
     } else {

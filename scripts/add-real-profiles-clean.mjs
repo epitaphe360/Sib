@@ -1,5 +1,5 @@
 /**
- * Script de suppression et réinsertion de partenaires/exposants - SIPORT 2026
+ * Script de suppression et réinsertion de partenaires/exposants - SIB 2026
  */
 
 import dotenv from 'dotenv';
@@ -303,7 +303,7 @@ async function createExhibitor(exhData) {
 
 async function main() {
   console.log('\n╔═══════════════════════════════════════════════════════════╗');
-  console.log('║  AJOUT PARTENAIRES & EXPOSANTS RÉELS - SIPORT 2026       ║');
+  console.log('║  AJOUT PARTENAIRES & EXPOSANTS RÉELS - SIB 2026       ║');
   console.log('╚═══════════════════════════════════════════════════════════╝');
 
   // Nettoyage

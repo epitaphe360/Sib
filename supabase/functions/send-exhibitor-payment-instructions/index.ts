@@ -247,7 +247,7 @@ function getPaymentInstructionHTML(data: PaymentInstructionRequest): string {
   <div class="container">
     <!-- Header -->
     <div class="header">
-      <div class="logo">⚓ SIPORTS 2026</div>
+      <div class="logo">⚓ SIB 2026</div>
       <p class="subtitle">Salon International des Ports & Services Maritimes</p>
       <p class="subtitle">5-7 Février 2026 • Casablanca, Maroc</p>
     </div>
@@ -257,7 +257,7 @@ function getPaymentInstructionHTML(data: PaymentInstructionRequest): string {
       <p class="greeting">Bonjour ${name},</p>
 
       <p style="font-size: 16px; color: #374151;">
-        Félicitations ! 🎉 Votre inscription en tant qu'<strong>exposant SIPORTS 2026</strong> a été créée avec succès pour <strong>${companyName}</strong>.
+        Félicitations ! 🎉 Votre inscription en tant qu'<strong>exposant SIB 2026</strong> a été créée avec succès pour <strong>${companyName}</strong>.
       </p>
 
       <!-- Subscription Details -->
@@ -344,7 +344,7 @@ function getPaymentInstructionHTML(data: PaymentInstructionRequest): string {
           <div class="step-number">2</div>
           <div class="step-content">
             <h4>Envoyez-nous la preuve de paiement</h4>
-            <p>Envoyez votre reçu bancaire à <strong>paiements@siports.com</strong> pour accélérer le traitement</p>
+            <p>Envoyez votre reçu bancaire à <strong>paiements@sib.com</strong> pour accélérer le traitement</p>
           </div>
         </div>
 
@@ -377,7 +377,7 @@ function getPaymentInstructionHTML(data: PaymentInstructionRequest): string {
       <div class="contact-info">
         <h4>💬 Besoin d'aide ?</h4>
         <div class="contact-item">
-          <strong>Email :</strong> <a href="mailto:support@siports.com">support@siports.com</a>
+          <strong>Email :</strong> <a href="mailto:support@sib.com">support@sib.com</a>
         </div>
         <div class="contact-item">
           <strong>Téléphone :</strong> +212 5 22 XX XX XX
@@ -391,23 +391,23 @@ function getPaymentInstructionHTML(data: PaymentInstructionRequest): string {
       </div>
 
       <p style="color: #6B7280; font-size: 14px; margin-top: 30px;">
-        Nous sommes impatients de vous accueillir au salon SIPORTS 2026 ! 🚢
+        Nous sommes impatients de vous accueillir au salon SIB 2026 ! 🚢
       </p>
     </div>
 
     <!-- Footer -->
     <div class="footer">
       <p style="margin-bottom: 10px;">
-        <strong>SIPORTS 2026</strong> - Salon International des Ports & Services Maritimes
+        <strong>SIB 2026</strong> - Salon International des Ports & Services Maritimes
       </p>
       <p style="margin: 5px 0;">
         5-7 Février 2026 • Mohammed VI Exhibition Center • Casablanca, Maroc
       </p>
       <p style="margin: 5px 0; font-size: 12px;">
-        © 2024 SIPORTS. Tous droits réservés.
+        © 2024 SIB. Tous droits réservés.
       </p>
       <p style="margin-top: 15px; font-size: 11px; color: #9CA3AF;">
-        Vous recevez cet email car vous vous êtes inscrit en tant qu'exposant pour SIPORTS 2026.
+        Vous recevez cet email car vous vous êtes inscrit en tant qu'exposant pour SIB 2026.
         <br>Si vous pensez qu'il s'agit d'une erreur, veuillez nous contacter immédiatement.
       </p>
     </div>
@@ -469,9 +469,9 @@ serve(async (req) => {
     }
 
     const emailPayload = {
-      from: 'SIPORTS 2026 <noreply@siports.com>',
+      from: 'SIB 2026 <noreply@sib.com>',
       to: [email],
-      subject: `💰 Instructions de Paiement - Abonnement Exposant SIPORTS 2026`,
+      subject: `💰 Instructions de Paiement - Abonnement Exposant SIB 2026`,
       html: htmlContent,
     };
 

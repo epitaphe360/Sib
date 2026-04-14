@@ -8,7 +8,7 @@ console.log(`📌 User: ${process.env.SMTP_USER}`);
 console.log('---------------------------------------------------');
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'mail.siportevent.com',
+  host: process.env.SMTP_HOST || 'mail.sib2026.ma',
   port: parseInt(process.env.SMTP_PORT || '465'),
   secure: process.env.SMTP_SECURE === 'true',
   auth: {

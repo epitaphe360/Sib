@@ -246,7 +246,7 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #1 - L''Avenir de la Logistique Maritime avec Ahmed Hassan',
+  'SIB Talks #1 - L''Avenir de la Logistique Maritime avec Ahmed Hassan',
   'Dans ce premier épisode, nous recevons Ahmed Hassan, CEO de Maritime Logistics International. Il nous parle de sa vision pour l''avenir du transport maritime et des défis à venir.',
   'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
@@ -275,7 +275,7 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #2 - Innovation et Digitalisation avec Clara Dubois',
+  'SIB Talks #2 - Innovation et Digitalisation avec Clara Dubois',
   'Clara Dubois, Directrice de l''Innovation chez PortTech, partage son parcours et les projets innovants qui transforment les opérations portuaires.',
   'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
@@ -294,7 +294,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #3 - L''Essor des Ports Africains avec Amadou Koné',
+  'SIB Talks #3 - L''Essor des Ports Africains avec Amadou Koné',
   'Amadou Koné, Directeur du Port d''Abidjan, nous parle du développement spectaculaire des infrastructures portuaires en Afrique de l''Ouest et des opportunités à saisir.',
   'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
@@ -313,7 +313,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #4 - Transition Énergétique avec Marina Silva',
+  'SIB Talks #4 - Transition Énergétique avec Marina Silva',
   'Marina Silva, experte en énergies marines renouvelables, explore les solutions pour décarboner le secteur maritime et portuaire.',
   'https://images.unsplash.com/photo-1497864149936-d3163f0c0f4b?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
@@ -332,7 +332,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #5 - Automatisation et Robotique avec Dr. Hans Schmidt',
+  'SIB Talks #5 - Automatisation et Robotique avec Dr. Hans Schmidt',
   'Le Dr. Hans Schmidt, pionnier de la robotique portuaire, partage sa vision sur l''automatisation des terminaux et l''impact sur l''emploi.',
   'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
@@ -351,7 +351,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #6 - Femmes Leaders dans le Maritime avec Samira Alaoui',
+  'SIB Talks #6 - Femmes Leaders dans le Maritime avec Samira Alaoui',
   'Samira Alaoui, première femme Capitaine de Port au Maroc, raconte son parcours inspirant et encourage plus de diversité dans le secteur.',
   'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
@@ -370,7 +370,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #7 - Économie Bleue et Opportunités avec Jean-Paul Océan',
+  'SIB Talks #7 - Économie Bleue et Opportunités avec Jean-Paul Océan',
   'Jean-Paul Océan, économiste spécialisé dans l''économie maritime, analyse les tendances du marché et les opportunités de croissance.',
   'https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
@@ -389,7 +389,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #8 - Formation et Compétences avec Patricia N''Dour',
+  'SIB Talks #8 - Formation et Compétences avec Patricia N''Dour',
   'Patricia N''Dour, Directrice de l''Institut Maritime de Dakar, présente les nouvelles formations pour préparer les professionnels de demain.',
   'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
@@ -408,7 +408,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #9 - Partenariats Public-Privé avec Alexandre Fontaine',
+  'SIB Talks #9 - Partenariats Public-Privé avec Alexandre Fontaine',
   'Alexandre Fontaine, expert en PPP, explique comment structurer des partenariats gagnants pour financer les grands projets portuaires.',
   'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
@@ -427,7 +427,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, audio_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'podcast',
-  'SIPORT Talks #10 - Digitalisation des Douanes avec Fatou Diagne',
+  'SIB Talks #10 - Digitalisation des Douanes avec Fatou Diagne',
   'Fatou Diagne, Directrice des Douanes Sénégalaises, partage l''expérience réussie de digitalisation du Port de Dakar.',
   'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=800',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
@@ -442,7 +442,7 @@ INSERT INTO media_contents (
 );
 
 -- ============================================================================
--- SEED: CAPSULES "INSIDE SIPORT"
+-- SEED: CAPSULES "INSIDE SIB"
 -- ============================================================================
 
 -- Capsule 1
@@ -459,12 +459,12 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Découverte du Pavillon Innovation',
-  'Plongez au cœur du Pavillon Innovation de SIPORT 2026. Découvrez les exposants et leurs solutions révolutionnaires.',
+  'Inside SIB - Découverte du Pavillon Innovation',
+  'Plongez au cœur du Pavillon Innovation de SIB 2026. Découvrez les exposants et leurs solutions révolutionnaires.',
   'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   180,
-  ARRAY['siport', 'pavillon', 'innovation', 'découverte'],
+  ARRAY['sib', 'pavillon', 'innovation', 'découverte'],
   'Événement',
   'published',
   NOW() - INTERVAL '3 days'
@@ -484,12 +484,12 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Les Coulisses de l''Organisation',
-  'Rencontrez l''équipe qui organise SIPORT et découvrez les coulisses de cet événement d''envergure internationale.',
+  'Inside SIB - Les Coulisses de l''Organisation',
+  'Rencontrez l''équipe qui organise SIB et découvrez les coulisses de cet événement d''envergure internationale.',
   'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   240,
-  ARRAY['siport', 'organisation', 'équipe', 'coulisses'],
+  ARRAY['sib', 'organisation', 'équipe', 'coulisses'],
   'Événement',
   'published',
   NOW() - INTERVAL '10 days'
@@ -500,7 +500,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Interview Express : Les Startups de la Maritime Tech',
+  'Inside SIB - Interview Express : Les Startups de la Maritime Tech',
   'Micro-interviews des jeunes pousses innovantes qui bousculent le secteur maritime. 3 minutes pour convaincre !',
   'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -516,8 +516,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Visite Guidée du Stand Maersk',
-  'Découvrez en exclusivité les innovations présentées par Maersk sur leur stand SIPORT 2025.',
+  'Inside SIB - Visite Guidée du Stand Maersk',
+  'Découvrez en exclusivité les innovations présentées par Maersk sur leur stand SIB 2025.',
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   220,
@@ -532,8 +532,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Le Making-Of du Salon',
-  'De la conception à l''inauguration : le making-of complet de SIPORT. Montage, logistique et premières impressions.',
+  'Inside SIB - Le Making-Of du Salon',
+  'De la conception à l''inauguration : le making-of complet de SIB. Montage, logistique et premières impressions.',
   'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   280,
@@ -548,7 +548,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Zone Networking : Quand les Deals se Font',
+  'Inside SIB - Zone Networking : Quand les Deals se Font',
   'Ambiance survoltée dans la zone networking. Rencontres, échanges de cartes et deals en direct.',
   'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -564,7 +564,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Les Démonstrations Technologiques',
+  'Inside SIB - Les Démonstrations Technologiques',
   'Tour rapide des démonstrations tech les plus impressionnantes : drones, robots, réalité virtuelle et plus encore.',
   'https://images.unsplash.com/photo-1535378620166-273708d44e4c?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -580,7 +580,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Focus sur les Partenaires Gold',
+  'Inside SIB - Focus sur les Partenaires Gold',
   'Rencontre avec nos partenaires Gold et découverte de leurs contributions exceptionnelles à l''événement.',
   'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -596,8 +596,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - La Conférence Inaugurale en 3 Minutes',
-  'Revivez les moments clés de la conférence inaugurale de SIPORT 2025 avec les discours des personnalités.',
+  'Inside SIB - La Conférence Inaugurale en 3 Minutes',
+  'Revivez les moments clés de la conférence inaugurale de SIB 2025 avec les discours des personnalités.',
   'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   185,
@@ -612,7 +612,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'capsule_inside',
-  'Inside SIPORT - Les Workshops Pratiques',
+  'Inside SIB - Les Workshops Pratiques',
   'Immersion dans les ateliers pratiques : formations, sessions hands-on et partage d''expériences entre professionnels.',
   'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -845,12 +845,12 @@ INSERT INTO media_contents (
   published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Meilleurs Moments Jour 1',
-  'Revivez les temps forts de la première journée de SIPORT 2025 : inaugurations, rencontres et moments marquants.',
+  'SIB 2025 - Les Meilleurs Moments Jour 1',
+  'Revivez les temps forts de la première journée de SIB 2025 : inaugurations, rencontres et moments marquants.',
   'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   300,
-  ARRAY['siport', 'highlights', 'événement', 'résumé'],
+  ARRAY['sib', 'highlights', 'événement', 'résumé'],
   'Événement',
   'published',
   NOW() - INTERVAL '30 days'
@@ -861,12 +861,12 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Jour 2 : Moments d''Exception',
+  'SIB 2025 - Jour 2 : Moments d''Exception',
   'Compilé des meilleurs moments du deuxième jour : conférences plénières, débats animés et networking intensif.',
   'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   285,
-  ARRAY['siport', 'jour2', 'highlights', 'conférences'],
+  ARRAY['sib', 'jour2', 'highlights', 'conférences'],
   'Événement',
   'published',
   NOW() - INTERVAL '29 days'
@@ -877,7 +877,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Gala de Clôture : Les Instants Mémorables',
+  'SIB 2025 - Gala de Clôture : Les Instants Mémorables',
   'Le gala de clôture en images : remise des awards, discours émouvants et célébration collective.',
   'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -893,12 +893,12 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2024 - Rétrospective de l''Édition Précédente',
-  'Les moments forts de SIPORT 2024 : innovation, rencontres et succès partagés.',
+  'SIB 2024 - Rétrospective de l''Édition Précédente',
+  'Les moments forts de SIB 2024 : innovation, rencontres et succès partagés.',
   'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   380,
-  ARRAY['siport 2024', 'rétrospective', 'archives', 'histoire'],
+  ARRAY['sib 2024', 'rétrospective', 'archives', 'histoire'],
   'Événement',
   'published',
   NOW() - INTERVAL '395 days'
@@ -909,7 +909,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Annonces Majeures',
+  'SIB 2025 - Les Annonces Majeures',
   'Compilation des annonces les plus importantes : nouveaux partenariats, innovations et projets révolutionnaires.',
   'https://images.unsplash.com/photo-1560439514-4e9645039924?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -925,7 +925,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Démonstrations qui Ont Marqué les Esprits',
+  'SIB 2025 - Les Démonstrations qui Ont Marqué les Esprits',
   'Retour sur les démonstrations technologiques spectaculaires qui ont impressionné les visiteurs.',
   'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -941,7 +941,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Networking : Les Rencontres qui Comptent',
+  'SIB 2025 - Networking : Les Rencontres qui Comptent',
   'Immersion dans l''espace networking avec les échanges les plus prometteurs et les connexions établies.',
   'https://images.unsplash.com/photo-1528605105345-5344ea20e269?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -957,7 +957,7 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Témoignages Spontanés',
+  'SIB 2025 - Les Témoignages Spontanés',
   'Réactions à chaud des participants, exposants et visiteurs : émotions, surprises et satisfactions.',
   'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
@@ -973,8 +973,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Les Coulisses du Succès',
-  'Dans les coulisses de SIPORT : l''équipe à l''œuvre, les préparatifs et la coordination parfaite.',
+  'SIB 2025 - Les Coulisses du Succès',
+  'Dans les coulisses de SIB : l''équipe à l''œuvre, les préparatifs et la coordination parfaite.',
   'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   310,
@@ -989,8 +989,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, tags, category, status, published_at
 ) VALUES (
   'best_moments',
-  'SIPORT 2025 - Le Meilleur du Meilleur : Édition Collector',
-  'Compilation ultime des moments les plus extraordinaires de SIPORT 2025. Une édition à ne pas manquer !',
+  'SIB 2025 - Le Meilleur du Meilleur : Édition Collector',
+  'Compilation ultime des moments les plus extraordinaires de SIB 2025. Une édition à ne pas manquer !',
   'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   420,
@@ -1020,7 +1020,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Port Autonome de Dakar',
-  'Découvrez l''expérience du Port Autonome de Dakar en tant que partenaire Gold de SIPORT et les bénéfices de cette collaboration.',
+  'Découvrez l''expérience du Port Autonome de Dakar en tant que partenaire Gold de SIB et les bénéfices de cette collaboration.',
   'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   120,
@@ -1049,7 +1049,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - TechMarine Solutions',
-  'TechMarine Solutions partage son retour d''expérience après 2 ans de partenariat avec SIPORT et les résultats obtenus.',
+  'TechMarine Solutions partage son retour d''expérience après 2 ans de partenariat avec SIB et les résultats obtenus.',
   'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   90,
@@ -1068,7 +1068,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Bollore Logistics : Un Partenariat Fructueux',
-  'Le Directeur Régional de Bollore Logistics témoigne de l''impact positif de sa participation à SIPORT sur son activité.',
+  'Le Directeur Régional de Bollore Logistics témoigne de l''impact positif de sa participation à SIB sur son activité.',
   'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   135,
@@ -1087,7 +1087,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Port de Lomé : Une Collaboration Stratégique',
-  'Le Port de Lomé explique comment SIPORT a facilité des partenariats stratégiques et accéléré sa modernisation.',
+  'Le Port de Lomé explique comment SIB a facilité des partenariats stratégiques et accéléré sa modernisation.',
   'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   105,
@@ -1105,8 +1105,8 @@ INSERT INTO media_contents (
   type, title, description, thumbnail_url, video_url, duration, speakers, tags, category, status, published_at
 ) VALUES (
   'testimonial',
-  'Témoignage - Startup MarineAI : Le Tremplin SIPORT',
-  'La startup MarineAI raconte comment SIPORT lui a permis de rencontrer ses premiers clients majeurs.',
+  'Témoignage - Startup MarineAI : Le Tremplin SIB',
+  'La startup MarineAI raconte comment SIB lui a permis de rencontrer ses premiers clients majeurs.',
   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   95,
@@ -1125,7 +1125,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - CMA CGM : Exposition à Forte Valeur Ajoutée',
-  'CMA CGM souligne la qualité exceptionnelle des visiteurs et contacts générés lors de SIPORT.',
+  'CMA CGM souligne la qualité exceptionnelle des visiteurs et contacts générés lors de SIB.',
   'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   110,
@@ -1144,7 +1144,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Port de Cotonou : Visibilité Internationale',
-  'Le Port de Cotonou témoigne de la visibilité internationale obtenue grâce à sa participation à SIPORT.',
+  'Le Port de Cotonou témoigne de la visibilité internationale obtenue grâce à sa participation à SIB.',
   'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   125,
@@ -1163,7 +1163,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Jeune Diplômé : Opportunités de Carrière',
-  'Un jeune diplômé raconte comment SIPORT lui a permis de décrocher son premier emploi dans le secteur portuaire.',
+  'Un jeune diplômé raconte comment SIB lui a permis de décrocher son premier emploi dans le secteur portuaire.',
   'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   85,
@@ -1182,7 +1182,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - MSC : Plateforme d''Excellence',
-  'MSC confirme SIPORT comme LA plateforme incontournable pour le business maritime en Afrique.',
+  'MSC confirme SIB comme LA plateforme incontournable pour le business maritime en Afrique.',
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_2mb.mp4',
   115,
@@ -1201,7 +1201,7 @@ INSERT INTO media_contents (
 ) VALUES (
   'testimonial',
   'Témoignage - Consultant Indépendant : Réseau Élargi',
-  'Un consultant indépendant explique comment SIPORT a triplé son réseau professionnel en seulement 3 jours.',
+  'Un consultant indépendant explique comment SIB a triplé son réseau professionnel en seulement 3 jours.',
   'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=1200',
   'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
   100,

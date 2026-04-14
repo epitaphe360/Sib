@@ -69,7 +69,7 @@ try {
   }
 
   // Test IndexedDB
-  const dbRequest = indexedDB.open('siport-storage');
+  const dbRequest = indexedDB.open('sib-storage');
   dbRequest.onerror = () => {
     console.log('❌ IndexedDB: NOT available');
   };

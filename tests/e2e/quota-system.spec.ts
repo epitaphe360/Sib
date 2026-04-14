@@ -1,5 +1,5 @@
 /**
- * 📊 TESTS SYSTÈME DE QUOTAS B2B - SIPORT 2026
+ * 📊 TESTS SYSTÈME DE QUOTAS B2B - SIB 2026
  *
  * Vérifie l'ensemble du système de quotas par tier :
  * - Respect des limites de rendez-vous selon le niveau (stand, tier partenaire, visiteur)
@@ -22,17 +22,17 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:9324';
 const PASSWORDS = ['Test@123456', 'Admin123!'];
 
 const ACCOUNTS = {
-  visitorFree:     { email: 'visitor-free@test.siport.com',    name: 'Visiteur Gratuit' },
-  visitorVip:      { email: 'visitor-vip@test.siport.com',     name: 'Visiteur VIP' },
-  exhibitor9m:     { email: 'exhibitor-9m@test.siport.com',    name: 'Exposant 9m²',   quota: 10 },
-  exhibitor18m:    { email: 'exhibitor-18m@test.siport.com',   name: 'Exposant 18m²',  quota: 20 },
-  exhibitor36m:    { email: 'exhibitor-36m@test.siport.com',   name: 'Exposant 36m²',  quota: 50 },
-  exhibitor54m:    { email: 'exhibitor-54m@test.siport.com',   name: 'Exposant 54m²',  quota: 100 },
-  partnerMuseum:   { email: 'partner-museum@test.siport.com',  name: 'Partenaire Musée',   quota: 10 },
-  partnerSilver:   { email: 'partner-silver@test.siport.com',  name: 'Partenaire Silver',  quota: 50 },
-  partnerGold:     { email: 'partner-gold@test.siport.com',    name: 'Partenaire Gold',    quota: 100 },
-  partnerPlatinum: { email: 'partner-platinum@test.siport.com',name: 'Partenaire Platinum', quota: -1 }, // illimité
-  admin:           { email: 'admin.siports@siports.com',       name: 'Admin' },
+  visitorFree:     { email: 'visitor-free@test.sib2026.ma',    name: 'Visiteur Gratuit' },
+  visitorVip:      { email: 'visitor-vip@test.sib2026.ma',     name: 'Visiteur VIP' },
+  exhibitor9m:     { email: 'exhibitor-9m@test.sib2026.ma',    name: 'Exposant 9m²',   quota: 10 },
+  exhibitor18m:    { email: 'exhibitor-18m@test.sib2026.ma',   name: 'Exposant 18m²',  quota: 20 },
+  exhibitor36m:    { email: 'exhibitor-36m@test.sib2026.ma',   name: 'Exposant 36m²',  quota: 50 },
+  exhibitor54m:    { email: 'exhibitor-54m@test.sib2026.ma',   name: 'Exposant 54m²',  quota: 100 },
+  partnerMuseum:   { email: 'partner-museum@test.sib2026.ma',  name: 'Partenaire Musée',   quota: 10 },
+  partnerSilver:   { email: 'partner-silver@test.sib2026.ma',  name: 'Partenaire Silver',  quota: 50 },
+  partnerGold:     { email: 'partner-gold@test.sib2026.ma',    name: 'Partenaire Gold',    quota: 100 },
+  partnerPlatinum: { email: 'partner-platinum@test.sib2026.ma',name: 'Partenaire Platinum', quota: -1 }, // illimité
+  admin:           { email: 'admin.sib@sib.com',       name: 'Admin' },
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

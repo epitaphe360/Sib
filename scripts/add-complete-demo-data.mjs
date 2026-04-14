@@ -15,7 +15,7 @@ async function addCompleteDemoData() {
       .from('users')
       .select('id, email, name')
       .eq('type', 'visitor')
-      .in('email', ['visitor-free@test.siport.com', 'visitor-vip@test.siport.com']);
+      .in('email', ['visitor-free@test.sib2026.ma', 'visitor-vip@test.sib2026.ma']);
 
     console.log(`✅ ${visitors?.length || 0} visiteurs trouvés`);
 
@@ -60,7 +60,7 @@ async function addCompleteDemoData() {
 
     console.log('✅ Nettoyage terminé');
 
-    // 4. Créer des créneaux horaires (time_slots) pour SIPORTS 2026
+    // 4. Créer des créneaux horaires (time_slots) pour SIB 2026
     console.log('\n📅 Création des créneaux horaires (1-3 avril 2026)...');
     
     const eventDates = ['2026-04-01', '2026-04-02', '2026-04-03'];
@@ -156,13 +156,13 @@ async function addCompleteDemoData() {
     // Débug: afficher un créneau exemple
     console.log('Exemple de créneau créé:', JSON.stringify(createdSlots[0], null, 2));
 
-    // 5. Créer les rendez-vous pour SIPORTS 2026 (1-3 avril)
+    // 5. Créer les rendez-vous pour SIB 2026 (1-3 avril)
     console.log('\n📝 Création des rendez-vous...');
     
     const appointments = [];
 
     // Utiliser visiteur VIP pour tous les rendez-vous (visitor-free n'a pas le droit)
-    const vipVisitor = visitors.find(v => v.email === 'visitor-vip@test.siport.com') || visitors[1] || visitors[0];
+    const vipVisitor = visitors.find(v => v.email === 'visitor-vip@test.sib2026.ma') || visitors[1] || visitors[0];
     
     // Rendez-vous 1er avril matin avec TechMarine (10h00)
     const slot1erAvrilMatin = createdSlots.find(s => 
@@ -177,7 +177,7 @@ async function addCompleteDemoData() {
         exhibitor_id: exhibitors[0].id,
         visitor_id: vipVisitor.id,
         status: 'confirmed',
-        notes: 'Discussion sur SmartPort PMS - SIPORTS 2026',
+        notes: 'Discussion sur SmartPort PMS - SIB 2026',
         message: 'Je souhaite en savoir plus sur vos solutions de gestion portuaire',
         meeting_type: 'in-person'
       });

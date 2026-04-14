@@ -8,7 +8,7 @@ const BASE_URL = 'http://localhost:5173';
 
 const TEST_ACCOUNTS = [
   {
-    email: 'visitor-free@test.siport.com',
+    email: 'visitor-free@test.sib2026.ma',
     password: 'Test@1234567',
     firstName: 'Visiteur',
     lastName: 'Free Test',
@@ -16,7 +16,7 @@ const TEST_ACCOUNTS = [
     type: 'visitor'
   },
   {
-    email: 'visitor-vip@test.siport.com',
+    email: 'visitor-vip@test.sib2026.ma',
     password: 'Test@1234567',
     firstName: 'Visiteur',
     lastName: 'VIP Test',
@@ -24,7 +24,7 @@ const TEST_ACCOUNTS = [
     type: 'visitor'
   },
   {
-    email: 'exhibitor-9m@test.siport.com',
+    email: 'exhibitor-9m@test.sib2026.ma',
     password: 'Test@1234567',
     firstName: 'Exposant',
     lastName: '9m Test',
@@ -32,7 +32,7 @@ const TEST_ACCOUNTS = [
     type: 'exhibitor'
   },
   {
-    email: 'admin-test@test.siport.com',
+    email: 'admin-test@test.sib2026.ma',
     password: 'Test@1234567',
     firstName: 'Admin',
     lastName: 'Test',

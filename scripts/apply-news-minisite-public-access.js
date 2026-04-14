@@ -21,7 +21,7 @@ try {
   console.log('\n📝 INSTRUCTIONS POUR APPLIQUER LA MIGRATION:');
   console.log('============================================');
   console.log('1. Allez à https://supabase.com/dashboard');
-  console.log('2. Sélectionnez votre projet SIPORTS');
+  console.log('2. Sélectionnez votre projet SIB');
   console.log('3. Allez dans l\'onglet "SQL Editor"');
   console.log('4. Cliquez sur "New Query"');
   console.log('5. Copiez-collez tout le contenu ci-dessous:');

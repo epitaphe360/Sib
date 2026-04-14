@@ -9,9 +9,9 @@ const corsHeaders = {
 
 // Configuration SMTP
 const SMTP_CONFIG = {
-  hostname: Deno.env.get('SMTP_HOST') || 'mail.siportevent.com',
+  hostname: Deno.env.get('SMTP_HOST') || 'mail.sib2026.ma',
   port: parseInt(Deno.env.get('SMTP_PORT') || '587'),
-  username: Deno.env.get('SMTP_USERNAME') || 'contact@siportevent.com',
+  username: Deno.env.get('SMTP_USERNAME') || 'contact@sib2026.ma',
   password: Deno.env.get('SMTP_PASSWORD') || 'S!P0RT@9083',
 }
 
@@ -139,7 +139,7 @@ serve(async (req) => {
       console.log('🔌 Connexion SMTP SSL/TLS sur port 465...')
 
       await client.send({
-        from: `SIPORTS 2026 <${SMTP_CONFIG.username}>`,
+        from: `SIB 2026 <${SMTP_CONFIG.username}>`,
         to: email,
         subject: subject,
         content: "auto",
@@ -169,7 +169,7 @@ serve(async (req) => {
         console.log('🔌 Tentative SMTP STARTTLS sur port 587...')
 
         await client2.send({
-          from: `SIPORTS 2026 <${SMTP_CONFIG.username}>`,
+          from: `SIB 2026 <${SMTP_CONFIG.username}>`,
           to: email,
           subject: subject,
           content: "auto",

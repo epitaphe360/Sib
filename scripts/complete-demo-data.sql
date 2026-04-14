@@ -19,23 +19,23 @@
 -- COMPTES À CRÉER:
 -- ================
 -- 👑 ADMIN:
---    admin@siport.com
+--    admin@sib2026.ma
 --
 -- 👥 VISITEURS:
---    visitor-free@test.siport.com
---    visitor-vip@test.siport.com
+--    visitor-free@test.sib2026.ma
+--    visitor-vip@test.sib2026.ma
 --
 -- 🤝 PARTENAIRES:
---    partner-museum@test.siport.com
---    partner-silver@test.siport.com
---    partner-gold@test.siport.com
---    partner-platinium@test.siport.com
+--    partner-museum@test.sib2026.ma
+--    partner-silver@test.sib2026.ma
+--    partner-gold@test.sib2026.ma
+--    partner-platinium@test.sib2026.ma
 --
 -- 🏢 EXPOSANTS:
---    exhibitor-9m@test.siport.com
---    exhibitor-18m@test.siport.com
---    exhibitor-36m@test.siport.com
---    exhibitor-54m@test.siport.com
+--    exhibitor-9m@test.sib2026.ma
+--    exhibitor-18m@test.sib2026.ma
+--    exhibitor-36m@test.sib2026.ma
+--    exhibitor-54m@test.sib2026.ma
 -- =====================================================
 
 -- =====================================================
@@ -45,12 +45,12 @@
 -- ADMIN
 -- IMPORTANT: Le code authStore.ts attend status = 'active' pour autoriser la connexion
 UPDATE public.users SET
-  name = 'Administrateur SIPORT',
+  name = 'Administrateur SIB',
   role = 'admin',
   type = 'admin',
   status = 'active',
   is_active = true
-WHERE email = 'admin@siport.com';
+WHERE email = 'admin@sib2026.ma';
 
 -- VISITEURS
 UPDATE public.users SET
@@ -60,7 +60,7 @@ UPDATE public.users SET
   visitor_level = 'free',
   status = 'active',
   is_active = true
-WHERE email = 'visitor-free@test.siport.com';
+WHERE email = 'visitor-free@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Visiteur VIP Premium Demo',
@@ -69,7 +69,7 @@ UPDATE public.users SET
   visitor_level = 'premium',
   status = 'active',
   is_active = true
-WHERE email = 'visitor-vip@test.siport.com';
+WHERE email = 'visitor-vip@test.sib2026.ma';
 
 -- PARTENAIRES
 UPDATE public.users SET
@@ -79,7 +79,7 @@ UPDATE public.users SET
   partner_tier = 'museum',
   status = 'active',
   is_active = true
-WHERE email = 'partner-museum@test.siport.com';
+WHERE email = 'partner-museum@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Partenaire Silver Demo',
@@ -88,7 +88,7 @@ UPDATE public.users SET
   partner_tier = 'silver',
   status = 'active',
   is_active = true
-WHERE email = 'partner-silver@test.siport.com';
+WHERE email = 'partner-silver@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Partenaire Gold Demo',
@@ -97,7 +97,7 @@ UPDATE public.users SET
   partner_tier = 'gold',
   status = 'active',
   is_active = true
-WHERE email = 'partner-gold@test.siport.com';
+WHERE email = 'partner-gold@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Partenaire Platinium Demo',
@@ -106,7 +106,7 @@ UPDATE public.users SET
   partner_tier = 'platinium',
   status = 'active',
   is_active = true
-WHERE email = 'partner-platinium@test.siport.com';
+WHERE email = 'partner-platinium@test.sib2026.ma';
 
 -- EXPOSANTS
 UPDATE public.users SET
@@ -115,7 +115,7 @@ UPDATE public.users SET
   type = 'exhibitor',
   status = 'active',
   is_active = true
-WHERE email = 'exhibitor-9m@test.siport.com';
+WHERE email = 'exhibitor-9m@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Exposant Standard 18m² Demo',
@@ -123,7 +123,7 @@ UPDATE public.users SET
   type = 'exhibitor',
   status = 'active',
   is_active = true
-WHERE email = 'exhibitor-18m@test.siport.com';
+WHERE email = 'exhibitor-18m@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Exposant Premium 36m² Demo',
@@ -131,7 +131,7 @@ UPDATE public.users SET
   type = 'exhibitor',
   status = 'active',
   is_active = true
-WHERE email = 'exhibitor-36m@test.siport.com';
+WHERE email = 'exhibitor-36m@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Exposant Elite 54m² Demo',
@@ -139,7 +139,7 @@ UPDATE public.users SET
   type = 'exhibitor',
   status = 'active',
   is_active = true
-WHERE email = 'exhibitor-54m@test.siport.com';
+WHERE email = 'exhibitor-54m@test.sib2026.ma';
 
 -- =====================================================
 -- ÉTAPE 2: Création des profils visiteurs
@@ -157,7 +157,7 @@ SELECT
   'France',
   'professional',
   'free'
-FROM public.users WHERE email = 'visitor-free@test.siport.com'
+FROM public.users WHERE email = 'visitor-free@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   first_name = EXCLUDED.first_name,
   last_name = EXCLUDED.last_name,
@@ -180,7 +180,7 @@ SELECT
   'France',
   'professional',
   'premium'
-FROM public.users WHERE email = 'visitor-vip@test.siport.com'
+FROM public.users WHERE email = 'visitor-vip@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   first_name = EXCLUDED.first_name,
   last_name = EXCLUDED.last_name,
@@ -201,13 +201,13 @@ SELECT
   id,
   'Musée Maritime du Maroc',
   'Hassan Alami',
-  'partner-museum@test.siport.com',
+  'partner-museum@test.sib2026.ma',
   '+212 5 22 00 00 01',
   'Musée national dédié à l''histoire maritime du Maroc, présentant des collections uniques d''instruments de navigation et de maquettes de navires.',
   'https://musee-maritime.ma',
   'Maroc',
   'museum'
-FROM public.users WHERE email = 'partner-museum@test.siport.com'
+FROM public.users WHERE email = 'partner-museum@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   contact_name = EXCLUDED.contact_name,
@@ -224,13 +224,13 @@ SELECT
   id,
   'Port Solutions Maroc',
   'Fatima Bennani',
-  'partner-silver@test.siport.com',
+  'partner-silver@test.sib2026.ma',
   '+212 5 22 00 00 02',
   'Leader marocain des solutions portuaires innovantes, spécialisé dans l''optimisation des opérations de manutention.',
   'https://portsolutions.ma',
   'Maroc',
   'silver'
-FROM public.users WHERE email = 'partner-silver@test.siport.com'
+FROM public.users WHERE email = 'partner-silver@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   contact_name = EXCLUDED.contact_name,
@@ -247,13 +247,13 @@ SELECT
   id,
   'Tanger Med Logistics',
   'Ahmed El Fassi',
-  'partner-gold@test.siport.com',
+  'partner-gold@test.sib2026.ma',
   '+212 5 39 00 00 03',
   'Partenaire logistique premium du port de Tanger Med, offrant des services de stockage et de distribution internationaux.',
   'https://tangermedlogistics.ma',
   'Maroc',
   'gold'
-FROM public.users WHERE email = 'partner-gold@test.siport.com'
+FROM public.users WHERE email = 'partner-gold@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   contact_name = EXCLUDED.contact_name,
@@ -270,13 +270,13 @@ SELECT
   id,
   'Royal Maritime Group',
   'Youssef Tazi',
-  'partner-platinium@test.siport.com',
+  'partner-platinium@test.sib2026.ma',
   '+212 5 22 00 00 04',
-  'Groupe maritime d''excellence, sponsor principal de SIPORTS 2026. Leader dans le transport maritime et les services portuaires en Afrique.',
+  'Groupe maritime d''excellence, sponsor principal de SIB 2026. Leader dans le transport maritime et les services portuaires en Afrique.',
   'https://royalmaritime.ma',
   'Maroc',
   'platinium'
-FROM public.users WHERE email = 'partner-platinium@test.siport.com'
+FROM public.users WHERE email = 'partner-platinium@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   contact_name = EXCLUDED.contact_name,
@@ -298,7 +298,7 @@ SELECT
   'TechPort Startup',
   'Karim',
   'Basic',
-  'exhibitor-9m@test.siport.com',
+  'exhibitor-9m@test.sib2026.ma',
   '+212 6 00 00 00 01',
   'Startup innovante dans le secteur portuaire, développant des solutions IoT pour la gestion des conteneurs.',
   'https://techport-startup.ma',
@@ -307,7 +307,7 @@ SELECT
   'IoT & Smart Ports',
   'A-101',
   9.0
-FROM public.users WHERE email = 'exhibitor-9m@test.siport.com'
+FROM public.users WHERE email = 'exhibitor-9m@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   first_name = EXCLUDED.first_name,
@@ -329,7 +329,7 @@ SELECT
   'MarineTech Solutions',
   'Salma',
   'Standard',
-  'exhibitor-18m@test.siport.com',
+  'exhibitor-18m@test.sib2026.ma',
   '+212 6 00 00 00 02',
   'Solutions maritimes complètes pour les opérateurs portuaires. Spécialiste des systèmes de tracking et de gestion de flotte.',
   'https://marinetech.ma',
@@ -338,7 +338,7 @@ SELECT
   'Fleet Management',
   'B-205',
   18.0
-FROM public.users WHERE email = 'exhibitor-18m@test.siport.com'
+FROM public.users WHERE email = 'exhibitor-18m@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   first_name = EXCLUDED.first_name,
@@ -360,7 +360,7 @@ SELECT
   'Global Shipping Corp',
   'Omar',
   'Premium',
-  'exhibitor-36m@test.siport.com',
+  'exhibitor-36m@test.sib2026.ma',
   '+212 6 00 00 00 03',
   'Leader mondial du transport maritime, présent sur 5 continents. Offrant des solutions de shipping complètes pour les entreprises.',
   'https://globalshipping.com',
@@ -369,7 +369,7 @@ SELECT
   'International Freight',
   'C-310',
   36.0
-FROM public.users WHERE email = 'exhibitor-36m@test.siport.com'
+FROM public.users WHERE email = 'exhibitor-36m@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   first_name = EXCLUDED.first_name,
@@ -391,7 +391,7 @@ SELECT
   'Royal Port Authority',
   'Nadia',
   'Elite',
-  'exhibitor-54m@test.siport.com',
+  'exhibitor-54m@test.sib2026.ma',
   '+212 6 00 00 00 04',
   'Autorité portuaire royale, gestionnaire des plus grands ports du Royaume. Innovation, durabilité et excellence au service du commerce maritime.',
   'https://royalport.ma',
@@ -400,7 +400,7 @@ SELECT
   'Port Operations',
   'ELITE-1',
   54.0
-FROM public.users WHERE email = 'exhibitor-54m@test.siport.com'
+FROM public.users WHERE email = 'exhibitor-54m@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   first_name = EXCLUDED.first_name,
@@ -437,8 +437,8 @@ FROM public.users u
 LEFT JOIN public.exhibitor_profiles ep ON ep.user_id = u.id
 LEFT JOIN public.partner_profiles pp ON pp.user_id = u.id
 LEFT JOIN public.visitor_profiles vp ON vp.user_id = u.id
-WHERE u.email LIKE '%test.siport.com'
-   OR u.email = 'admin@siport.com'
+WHERE u.email LIKE '%test.sib2026.ma'
+   OR u.email = 'admin@sib2026.ma'
 ORDER BY u.role, u.email;
 
 -- =====================================================
@@ -446,21 +446,21 @@ ORDER BY u.role, u.email;
 -- =====================================================
 --
 -- 👑 Admin:
---    admin@siport.com / Test@123456
+--    admin@sib2026.ma / Test@123456
 --
 -- 👥 Visiteurs:
---    visitor-free@test.siport.com / Test@123456 (FREE - 0 RDV B2B)
---    visitor-vip@test.siport.com / Test@123456 (PREMIUM - 10 RDV B2B)
+--    visitor-free@test.sib2026.ma / Test@123456 (FREE - 0 RDV B2B)
+--    visitor-vip@test.sib2026.ma / Test@123456 (PREMIUM - 10 RDV B2B)
 --
 -- 🤝 Partenaires:
---    partner-museum@test.siport.com / Test@123456 (🏛️ Musée - 20 RDV)
---    partner-silver@test.siport.com / Test@123456 (🥈 Silver - 50 RDV)
---    partner-gold@test.siport.com / Test@123456 (🥇 Gold - 100 RDV)
---    partner-platinium@test.siport.com / Test@123456 (💎 Platinium - Illimité)
+--    partner-museum@test.sib2026.ma / Test@123456 (🏛️ Musée - 20 RDV)
+--    partner-silver@test.sib2026.ma / Test@123456 (🥈 Silver - 50 RDV)
+--    partner-gold@test.sib2026.ma / Test@123456 (🥇 Gold - 100 RDV)
+--    partner-platinium@test.sib2026.ma / Test@123456 (💎 Platinium - Illimité)
 --
 -- 🏢 Exposants:
---    exhibitor-9m@test.siport.com / Test@123456 (📦 9m² Basic - 0 RDV B2B)
---    exhibitor-18m@test.siport.com / Test@123456 (🏪 18m² Standard - 15 RDV)
---    exhibitor-36m@test.siport.com / Test@123456 (🏬 36m² Premium - 30 RDV)
---    exhibitor-54m@test.siport.com / Test@123456 (🏛️ 54m² Elite - Illimité)
+--    exhibitor-9m@test.sib2026.ma / Test@123456 (📦 9m² Basic - 0 RDV B2B)
+--    exhibitor-18m@test.sib2026.ma / Test@123456 (🏪 18m² Standard - 15 RDV)
+--    exhibitor-36m@test.sib2026.ma / Test@123456 (🏬 36m² Premium - 30 RDV)
+--    exhibitor-54m@test.sib2026.ma / Test@123456 (🏛️ 54m² Elite - Illimité)
 -- =====================================================

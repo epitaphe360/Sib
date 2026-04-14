@@ -10,7 +10,7 @@ const TEST_PASSWORD = process.env.TEST_PASSWORD || 'Test@123456';
 
 export const TEST_USERS = {
   admin: {
-    email: 'admin-test@test.siport.com',
+    email: 'admin-test@test.sib2026.ma',
     password: TEST_PASSWORD,
     firstName: 'Admin',
     lastName: 'Test',
@@ -18,7 +18,7 @@ export const TEST_USERS = {
   },
 
   visitor: {
-    email: 'visitor-free@test.siport.com',
+    email: 'visitor-free@test.sib2026.ma',
     password: TEST_PASSWORD,
     firstName: 'Jean',
     lastName: 'Dupont',
@@ -30,7 +30,7 @@ export const TEST_USERS = {
   },
 
   exhibitor: {
-    email: 'exhibitor-9m@test.siport.com',
+    email: 'exhibitor-9m@test.sib2026.ma',
     password: TEST_PASSWORD,
     firstName: 'Thomas',
     lastName: 'Dubois',
@@ -42,7 +42,7 @@ export const TEST_USERS = {
   },
 
   partner: {
-    email: 'partner-museum@test.siport.com',
+    email: 'partner-museum@test.sib2026.ma',
     password: TEST_PASSWORD,
     firstName: 'Pierre',
     lastName: 'Leclerc',

@@ -29,7 +29,7 @@ COMMENT ON COLUMN public.media_contents.status IS
   'Statut du média: draft (brouillon), pending_approval (en attente de validation admin), approved (validé), published (publié), rejected (rejeté), archived (archivé)';
 
 COMMENT ON COLUMN public.media_contents.created_by_type IS 
-  'Type de créateur: admin (équipe SIPORT), partner (partenaire sponsor), exhibitor (exposant)';
+  'Type de créateur: admin (équipe SIB), partner (partenaire sponsor), exhibitor (exposant)';
 
 COMMENT ON COLUMN public.media_contents.created_by_id IS 
   'ID du créateur (référence users.id)';

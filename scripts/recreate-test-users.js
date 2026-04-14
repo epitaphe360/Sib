@@ -13,21 +13,21 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 const TEST_USERS = [
   // Admin
   {
-    email: 'admin@siport.com',
+    email: 'admin@sib2026.ma',
     password: 'Test@123456',
     role: 'admin',
-    full_name: 'Administrateur SIPORT',
+    full_name: 'Administrateur SIB',
   },
   // Visiteurs
   {
-    email: 'visitor-free@test.siport.com',
+    email: 'visitor-free@test.sib2026.ma',
     password: 'Test@123456',
     role: 'visitor',
     full_name: 'Visiteur Gratuit Test',
     visitor_level: 'free',
   },
   {
-    email: 'visitor-vip@test.siport.com',
+    email: 'visitor-vip@test.sib2026.ma',
     password: 'Test@123456',
     role: 'visitor',
     full_name: 'Visiteur VIP Test',
@@ -35,28 +35,28 @@ const TEST_USERS = [
   },
   // Partenaires
   {
-    email: 'partner-museum@test.siport.com',
+    email: 'partner-museum@test.sib2026.ma',
     password: 'Test@123456',
     role: 'partner',
     full_name: 'Partenaire Musée Test',
     partnership_level: 'museum',
   },
   {
-    email: 'partner-silver@test.siport.com',
+    email: 'partner-silver@test.sib2026.ma',
     password: 'Test@123456',
     role: 'partner',
     full_name: 'Partenaire Silver Test',
     partnership_level: 'silver',
   },
   {
-    email: 'partner-gold@test.siport.com',
+    email: 'partner-gold@test.sib2026.ma',
     password: 'Test@123456',
     role: 'partner',
     full_name: 'Partenaire Gold Test',
     partnership_level: 'gold',
   },
   {
-    email: 'partner-platinium@test.siport.com',
+    email: 'partner-platinium@test.sib2026.ma',
     password: 'Test@123456',
     role: 'partner',
     full_name: 'Partenaire Platinium Test',
@@ -64,28 +64,28 @@ const TEST_USERS = [
   },
   // Exposants
   {
-    email: 'exhibitor-9m@test.siport.com',
+    email: 'exhibitor-9m@test.sib2026.ma',
     password: 'Test@123456',
     role: 'exhibitor',
     full_name: 'Exposant 9m² Test',
     stand_type: '9m2',
   },
   {
-    email: 'exhibitor-18m@test.siport.com',
+    email: 'exhibitor-18m@test.sib2026.ma',
     password: 'Test@123456',
     role: 'exhibitor',
     full_name: 'Exposant 18m² Test',
     stand_type: '18m2',
   },
   {
-    email: 'exhibitor-36m@test.siport.com',
+    email: 'exhibitor-36m@test.sib2026.ma',
     password: 'Test@123456',
     role: 'exhibitor',
     full_name: 'Exposant 36m² Test',
     stand_type: '36m2',
   },
   {
-    email: 'exhibitor-54m@test.siport.com',
+    email: 'exhibitor-54m@test.sib2026.ma',
     password: 'Test@123456',
     role: 'exhibitor',
     full_name: 'Exposant 54m² Test',

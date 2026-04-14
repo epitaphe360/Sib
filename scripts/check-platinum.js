@@ -11,7 +11,7 @@ async function checkPlatinum() {
   const { data: user } = await supabase
     .from('users')
     .select('id, email, type')
-    .eq('email', 'partner-platinium@test.siport.com')
+    .eq('email', 'partner-platinium@test.sib2026.ma')
     .single();
 
   if (!user) {

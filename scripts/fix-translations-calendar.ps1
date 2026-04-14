@@ -10,7 +10,7 @@ $content = Get-Content $file -Raw -Encoding UTF8
 
 # Remplacement des textes hardcodés
 $replacements = @{
-    "'Lieu SIPORT'" = "t('calendar.default_location')"
+    "'Lieu SIB'" = "t('calendar.default_location')"
     "'Ouvrir'" = "t('actions.open')"
     "'Fermer'" = "t('actions.close')"
     "'Retirer'" = "t('actions.remove')"

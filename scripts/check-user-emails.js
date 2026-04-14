@@ -39,11 +39,11 @@ async function checkUsers() {
     }
   }
 
-  // Vérifier si admin@siport.com existe
+  // Vérifier si admin@sib2026.ma existe
   console.log('\n\n🔍 === VÉRIFICATION DES COMPTES ADMIN ===\n');
   
   const adminEmails = [
-    'admin@siport.com',
+    'admin@sib2026.ma',
     'admin@test.com',
     'test@test.com',
     'visitor1@test.com',

@@ -1,5 +1,5 @@
 /*
-  # Complete SIPORTS Schema
+  # Complete SIB Schema
 
   This migration creates all remaining tables needed for the application:
   - time_slots and appointments (for scheduling)

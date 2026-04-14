@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 /**
  * 🎯 SUITE COMPLÈTE DE TESTS E2E - TOUS LES PARCOURS UTILISATEURS
  *
- * Cette suite couvre l'intégralité des fonctionnalités de l'application SIPORT:
+ * Cette suite couvre l'intégralité des fonctionnalités de l'application SIB:
  *
  * 1. 🌐 PARCOURS PUBLIC (Guest/Visiteur non connecté)
  * 2. 👤 PARCOURS VISITEUR COMPLET (Inscription Free → Upgrade VIP → Badge)
@@ -52,7 +52,7 @@ const generateTestData = () => {
       description: 'Partenaire stratégique pour le développement portuaire.',
     },
     admin: {
-      email: 'admin@siport.com',
+      email: 'admin@sib2026.ma',
       password: 'Admin123!@#',
     },
   };
@@ -110,7 +110,7 @@ test.describe('🌐 PARCOURS PUBLIC - Navigation sans connexion', () => {
     console.log('📍 1. Navigation Homepage...');
     await page.goto(BASE_URL);
     await page.waitForLoadState('networkidle');
-    await expect(page).toHaveTitle(/SIPORT|Salon/i);
+    await expect(page).toHaveTitle(/SIB|Salon/i);
     console.log('   ✅ Homepage chargée\n');
 
     // 1.2 Page Exposants (liste publique)
@@ -905,9 +905,9 @@ test.describe('📺 FONCTIONNALITÉS MÉDIA', () => {
     console.log(`   → ${podcastCount} podcasts trouvés`);
     console.log('   ✅ Page podcasts consultée\n');
 
-    // 5.4 Capsules Inside SIPORT
-    console.log('📍 4. Capsules Inside SIPORT...');
-    await page.goto(`${BASE_URL}/media/inside-siport`);
+    // 5.4 Capsules Inside SIB
+    console.log('📍 4. Capsules Inside SIB...');
+    await page.goto(`${BASE_URL}/media/inside-sib`);
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
     console.log('   ✅ Page capsules consultée\n');

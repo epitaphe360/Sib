@@ -5,7 +5,7 @@
  */
 import 'dotenv/config';
 
-const WORDPRESS_API = 'https://siportevent.com/wp-json/wp/v2';
+const WORDPRESS_API = 'https://sib2026.ma/wp-json/wp/v2';
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SERVICE_KEY = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
 

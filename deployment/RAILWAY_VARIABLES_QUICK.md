@@ -57,7 +57,7 @@ Copier-coller les résultats dans Railway.
 ### Configuration
 
 ```bash
-VITE_APP_URL=https://siportv3-production.up.railway.app
+VITE_APP_URL=https://sib-production.up.railway.app
 NODE_ENV=production
 ```
 
@@ -69,7 +69,7 @@ NODE_ENV=production
 - [ ] `VITE_SUPABASE_URL` configuré
 - [ ] `VITE_SUPABASE_ANON_KEY` configuré
 - [ ] Redéploiement Railway terminé
-- [ ] Rafraîchir la page : https://siportv3-production.up.railway.app
+- [ ] Rafraîchir la page : https://sib-production.up.railway.app
 - [ ] ✅ Plus de warning Supabase
 
 ### Complet (Toutes fonctionnalités)
@@ -103,7 +103,7 @@ Attendez 1-2 minutes.
 
 ### 5. Tester l'application
 
-Rafraîchir : https://siportv3-production.up.railway.app
+Rafraîchir : https://sib-production.up.railway.app
 
 ✅ Plus de warning Supabase !
 
@@ -145,7 +145,7 @@ Rafraîchir : https://siportv3-production.up.railway.app
 **Solutions :**
 1. Vérifier les URLs autorisées dans Supabase :
    - Supabase → Authentication → URL Configuration
-   - Ajouter : `https://siportv3-production.up.railway.app`
+   - Ajouter : `https://sib-production.up.railway.app`
 
 2. Vérifier que Supabase est en ligne :
    - Supabase Dashboard → Project Status

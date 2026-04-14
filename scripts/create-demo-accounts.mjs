@@ -11,7 +11,7 @@ console.log('\n🔧 CRÉATION DE COMPTES DE DÉMO FIABLES\n');
 
 const demoAccounts = [
   {
-    email: 'demo.visitor@siports.com',
+    email: 'demo.visitor@sib.com',
     password: 'Demo2026!',
     type: 'visitor',
     name: 'Visiteur Démo',
@@ -19,14 +19,14 @@ const demoAccounts = [
     visitor_level: 'free'
   },
   {
-    email: 'demo.exhibitor@siports.com',
+    email: 'demo.exhibitor@sib.com',
     password: 'Demo2026!',
     type: 'exhibitor',
     name: 'Exposant Démo',
     status: 'active'
   },
   {
-    email: 'demo.partner@siports.com',
+    email: 'demo.partner@sib.com',
     password: 'Demo2026!',
     type: 'partner',
     name: 'Partenaire Démo',

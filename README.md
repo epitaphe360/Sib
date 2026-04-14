@@ -1,6 +1,6 @@
-# 🚢 SIPORT v3 - Plateforme Maritime & Portuaire
+# 🚢 SIB 2026 - Plateforme Maritime & Portuaire
 
-Plateforme digitale complète pour le salon professionnel SIPORT (Salon International des Ports d'Afrique).
+Plateforme digitale complète pour le salon professionnel SIB (Salon International des Ports d'Afrique).
 
 ---
 
@@ -72,8 +72,8 @@ npm run dev
 
 ### Pages Média (Nouveau !)
 - `/media/webinars` - Webinaires sponsorisés
-- `/media/podcasts` - Podcasts SIPORT Talks
-- `/media/capsules` - Capsules Inside SIPORT
+- `/media/podcasts` - Podcasts SIB Talks
+- `/media/capsules` - Capsules Inside SIB
 - `/media/live-studio` - Meet The Leaders
 - `/media/best-moments` - Meilleurs moments
 - `/media/testimonials` - Témoignages vidéo
@@ -113,7 +113,7 @@ npm run dev
 
 ### 🎬 Média & Contenu
 - ✅ Webinaires en replay
-- ✅ Podcasts SIPORT Talks
+- ✅ Podcasts SIB Talks
 - ✅ Capsules vidéo Inside
 - ✅ Interviews Live Studio
 - ✅ Best Moments du salon
@@ -227,13 +227,13 @@ Ce projet est sous licence MIT.
 Pour toute question ou problème :
 - Consulter la documentation
 - Ouvrir une issue GitHub
-- Contacter l'équipe SIPORT
+- Contacter l'équipe SIB
 
 ---
 
 ## 🎉 Remerciements
 
-- Équipe SIPORT
+- Équipe SIB
 - Contributeurs open-source
 - Communauté maritime et portuaire
 

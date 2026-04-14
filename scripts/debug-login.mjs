@@ -2,7 +2,7 @@ import { chromium } from '@playwright/test';
 import fs from 'fs';
 
 const BASE_URL = 'http://localhost:5173';
-const EMAIL = 'visitor-free@test.siport.com';
+const EMAIL = 'visitor-free@test.sib2026.ma';
 const PASSWORD = 'Test@1234567';
 
 (async () => {

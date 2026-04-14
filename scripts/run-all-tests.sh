@@ -44,7 +44,7 @@ done
 
 echo -e "${BLUE}╔═══════════════════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║                                                           ║${NC}"
-echo -e "${BLUE}║         SIPORTS v3 - Suite de Tests E2E Complète         ║${NC}"
+echo -e "${BLUE}║         SIB v3 - Suite de Tests E2E Complète         ║${NC}"
 echo -e "${BLUE}║                                                           ║${NC}"
 echo -e "${BLUE}╚═══════════════════════════════════════════════════════════╝${NC}"
 echo ""

@@ -17,7 +17,7 @@ try {
 } catch {
     Write-Host "⏳ Lancement du serveur frontend..." -ForegroundColor Yellow
     # Lancer npm run dev en arrière-plan
-    $frontendProcess = Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd 'c:\Users\samye\OneDrive\Desktop\siportversionfinal\siportv3'; npm run dev" -PassThru
+    $frontendProcess = Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd 'c:\Users\samye\OneDrive\Desktop\sibversionfinal\sib-2026'; npm run dev" -PassThru
     Write-Host "   PID: $($frontendProcess.Id)`n" -ForegroundColor Gray
     
     # Attendre que le serveur soit prêt
@@ -45,7 +45,7 @@ try {
 
 # Lancer le script de création des comptes
 Write-Host "🚀 Lancement de la création des comptes..`n" -ForegroundColor Cyan
-cd c:\Users\samye\OneDrive\Desktop\siportversionfinal\siportv3
+cd c:\Users\samye\OneDrive\Desktop\sibversionfinal\sib-2026
 node scripts/create-test-accounts.mjs
 
 Write-Host "`n✅ Processus terminé!`n" -ForegroundColor Green

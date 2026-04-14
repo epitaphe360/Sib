@@ -1,5 +1,5 @@
 /**
- * 🎯 SIPORT 2026 - Suite de Tests E2E Complète
+ * 🎯 SIB 2026 - Suite de Tests E2E Complète
  * 
  * Ce fichier unique regroupe TOUS les scénarios de test de l'application.
  * Mise à jour: 28 Janvier 2026
@@ -19,14 +19,14 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:9324';
 const PASSWORDS = ['Admin123!', 'Test@123456', 'Test@1234567', 'Test123456!', 'Demo2026!'];
 
 const TEST_ACCOUNTS = {
-  visitor: { email: 'visitor-free@test.siport.com', name: 'Visiteur Gratuit' },
-  visitorVip: { email: 'visitor-vip@test.siport.com', name: 'Visiteur VIP' },
-  exhibitor9m: { email: 'exhibitor-9m@test.siport.com', name: 'Exposant 9m²' },
-  exhibitor54m: { email: 'exhibitor-54m@test.siport.com', name: 'Exposant 54m²' },
-  partnerMuseum: { email: 'partner-museum@test.siport.com', name: 'Partenaire Musée' },
-  partnerGold: { email: 'partner-gold@test.siport.com', name: 'Partenaire Gold' },
-  partnerSilver: { email: 'partner-silver@test.siport.com', name: 'Partenaire Silver' },
-  admin: { email: 'admin.siports@siports.com', name: 'Admin SIPORTS' }
+  visitor: { email: 'visitor-free@test.sib2026.ma', name: 'Visiteur Gratuit' },
+  visitorVip: { email: 'visitor-vip@test.sib2026.ma', name: 'Visiteur VIP' },
+  exhibitor9m: { email: 'exhibitor-9m@test.sib2026.ma', name: 'Exposant 9m²' },
+  exhibitor54m: { email: 'exhibitor-54m@test.sib2026.ma', name: 'Exposant 54m²' },
+  partnerMuseum: { email: 'partner-museum@test.sib2026.ma', name: 'Partenaire Musée' },
+  partnerGold: { email: 'partner-gold@test.sib2026.ma', name: 'Partenaire Gold' },
+  partnerSilver: { email: 'partner-silver@test.sib2026.ma', name: 'Partenaire Silver' },
+  admin: { email: 'admin.sib@sib.com', name: 'Admin SIB' }
 };
 
 // ============================================================================
@@ -421,7 +421,7 @@ test.describe('📄 Pages Publiques', () => {
   
   test('PAGE-01: Page d\'accueil', async ({ page }) => {
     await page.goto(BASE_URL);
-    await expect(page).toHaveTitle(/SIPORT/i);
+    await expect(page).toHaveTitle(/SIB/i);
   });
 
   test('PAGE-02: Page contact', async ({ page }) => {
@@ -490,8 +490,8 @@ test.describe('📺 Médiathèque', () => {
     await checkPageLoads(page, `${BASE_URL}/media/testimonials`);
   });
 
-  test('MEDIA-05: Inside SIPORT', async ({ page }) => {
-    await checkPageLoads(page, `${BASE_URL}/media/inside-siport`);
+  test('MEDIA-05: Inside SIB', async ({ page }) => {
+    await checkPageLoads(page, `${BASE_URL}/media/inside-sib`);
   });
 
   test('MEDIA-06: Best Moments', async ({ page }) => {

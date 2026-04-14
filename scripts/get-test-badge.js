@@ -25,7 +25,7 @@ async function getBadge() {
   const { data: users, error: userError } = await supabase
     .from('profiles')
     .select('id, email, full_name')
-    .eq('email', 'visitor-vip@test.siport.com')
+    .eq('email', 'visitor-vip@test.sib2026.ma')
     .single();
 
   if (userError || !users) {
@@ -33,7 +33,7 @@ async function getBadge() {
      const { data: usersFree, error: userErrorFree } = await supabase
     .from('profiles')
     .select('id, email, full_name')
-    .eq('email', 'visitor-free@test.siport.com')
+    .eq('email', 'visitor-free@test.sib2026.ma')
     .single();
     
     if (userErrorFree || !usersFree) {

@@ -696,7 +696,7 @@ async function main() {
             order: 0,
             content: {
               title: exhibitor.company_name,
-              subtitle: 'Exposant SIPORTS 2026 - Stand 36m²',
+              subtitle: 'Exposant SIB 2026 - Stand 36m²',
               description: exhibitor.description || 'Acteur du secteur maritime et portuaire',
               ctaText: 'Découvrir nos solutions'
             }
@@ -707,7 +707,7 @@ async function main() {
             order: 1,
             content: {
               title: `À propos de ${exhibitor.company_name}`,
-              description: exhibitor.description || 'Nous sommes fiers de participer à SIPORTS 2026.',
+              description: exhibitor.description || 'Nous sommes fiers de participer à SIB 2026.',
               features: ['Innovation maritime', 'Solutions portuaires', 'Expertise reconnue', 'Partenariats internationaux']
             }
           },

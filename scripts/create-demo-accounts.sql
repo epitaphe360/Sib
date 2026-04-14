@@ -13,17 +13,17 @@
 -- IMPORTANT: Le code authStore.ts attend status = 'active' pour autoriser la connexion
 UPDATE public.users
 SET
-  name = 'Administrateur SIPORT',
+  name = 'Administrateur SIB',
   role = 'admin',
   type = 'admin',
   status = 'active',
   is_active = true
-WHERE email = 'admin@siport.com';
+WHERE email = 'admin@sib2026.ma';
 
 -- Vérifier les utilisateurs
 SELECT id, email, name, role, type, status, is_active 
 FROM public.users 
-WHERE email LIKE '%siport%' OR email LIKE '%test%'
+WHERE email LIKE '%sib%' OR email LIKE '%test%'
 ORDER BY created_at DESC
 LIMIT 20;
 
@@ -39,16 +39,16 @@ LIMIT 20;
 -- 
 -- COMPTES À CRÉER:
 -- ================
--- visitor-free@test.siport.com
--- visitor-vip@test.siport.com
--- partner-museum@test.siport.com
--- partner-silver@test.siport.com
--- partner-gold@test.siport.com
--- partner-platinium@test.siport.com
--- exhibitor-9m@test.siport.com
--- exhibitor-18m@test.siport.com
--- exhibitor-36m@test.siport.com
--- exhibitor-54m@test.siport.com
+-- visitor-free@test.sib2026.ma
+-- visitor-vip@test.sib2026.ma
+-- partner-museum@test.sib2026.ma
+-- partner-silver@test.sib2026.ma
+-- partner-gold@test.sib2026.ma
+-- partner-platinium@test.sib2026.ma
+-- exhibitor-9m@test.sib2026.ma
+-- exhibitor-18m@test.sib2026.ma
+-- exhibitor-36m@test.sib2026.ma
+-- exhibitor-54m@test.sib2026.ma
 --
 -- Après avoir créé les utilisateurs dans Auth, exécuter ce script
 -- pour mettre à jour leurs profils dans public.users
@@ -62,7 +62,7 @@ UPDATE public.users SET
   visitor_level = 'free',
   status = 'active',
   is_active = true
-WHERE email = 'visitor-free@test.siport.com';
+WHERE email = 'visitor-free@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Visiteur VIP Test',
@@ -71,7 +71,7 @@ UPDATE public.users SET
   visitor_level = 'vip',
   status = 'active',
   is_active = true
-WHERE email = 'visitor-vip@test.siport.com';
+WHERE email = 'visitor-vip@test.sib2026.ma';
 
 -- Mettre à jour les profils des partenaires
 UPDATE public.users SET
@@ -81,7 +81,7 @@ UPDATE public.users SET
   partner_tier = 'museum',
   status = 'active',
   is_active = true
-WHERE email = 'partner-museum@test.siport.com';
+WHERE email = 'partner-museum@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Partenaire Silver Test',
@@ -90,7 +90,7 @@ UPDATE public.users SET
   partner_tier = 'silver',
   status = 'active',
   is_active = true
-WHERE email = 'partner-silver@test.siport.com';
+WHERE email = 'partner-silver@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Partenaire Gold Test',
@@ -99,7 +99,7 @@ UPDATE public.users SET
   partner_tier = 'gold',
   status = 'active',
   is_active = true
-WHERE email = 'partner-gold@test.siport.com';
+WHERE email = 'partner-gold@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Partenaire Platinium Test',
@@ -108,7 +108,7 @@ UPDATE public.users SET
   partner_tier = 'platinium',
   status = 'active',
   is_active = true
-WHERE email = 'partner-platinium@test.siport.com';
+WHERE email = 'partner-platinium@test.sib2026.ma';
 
 -- Mettre à jour les profils des exposants
 UPDATE public.users SET
@@ -117,7 +117,7 @@ UPDATE public.users SET
   type = 'exhibitor',
   status = 'active',
   is_active = true
-WHERE email = 'exhibitor-9m@test.siport.com';
+WHERE email = 'exhibitor-9m@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Exposant 18m² Test',
@@ -125,7 +125,7 @@ UPDATE public.users SET
   type = 'exhibitor',
   status = 'active',
   is_active = true
-WHERE email = 'exhibitor-18m@test.siport.com';
+WHERE email = 'exhibitor-18m@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Exposant 36m² Test',
@@ -133,7 +133,7 @@ UPDATE public.users SET
   type = 'exhibitor',
   status = 'active',
   is_active = true
-WHERE email = 'exhibitor-36m@test.siport.com';
+WHERE email = 'exhibitor-36m@test.sib2026.ma';
 
 UPDATE public.users SET
   name = 'Exposant 54m² Test',
@@ -141,10 +141,10 @@ UPDATE public.users SET
   type = 'exhibitor',
   status = 'active',
   is_active = true
-WHERE email = 'exhibitor-54m@test.siport.com';
+WHERE email = 'exhibitor-54m@test.sib2026.ma';
 
 -- Vérification finale
 SELECT email, name, role, type, visitor_level, partner_tier, status, is_active 
 FROM public.users 
-WHERE email LIKE '%test.siport.com' OR email = 'admin@siport.com'
+WHERE email LIKE '%test.sib2026.ma' OR email = 'admin@sib2026.ma'
 ORDER BY role, email;

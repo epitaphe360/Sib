@@ -1,7 +1,7 @@
-# SIPORTS 2026 - Product Requirements Document
+# SIB 2026 - Product Requirements Document
 
 ## Project Overview
-**Application**: SIPORTS 2026 - Salon International des Ports  
+**Application**: SIB 2026 - Salon International des Ports  
 **Date de l'événement**: 1-3 Avril 2026  
 **Lieu**: Centre d'Exhibition Mohammed VI, El Jadida, Maroc
 

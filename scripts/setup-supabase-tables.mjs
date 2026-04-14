@@ -27,7 +27,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function executeSQL() {
   console.log('\n═══════════════════════════════════════════════════════');
   console.log('  CRÉATION DES TABLES SUPABASE');
-  console.log('  SIPORTS 2026 - Contenu Site Vitrine');
+  console.log('  SIB 2026 - Contenu Site Vitrine');
   console.log('═══════════════════════════════════════════════════════\n');
 
   try {

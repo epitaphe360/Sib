@@ -47,7 +47,7 @@ async function checkTemplates() {
 
   console.log('\n✅ TOUT EST PRÊT!');
   console.log('\n📌 POUR TESTER:');
-  console.log('   1. Connectez-vous en tant qu\'exposant (technoport@siports.ma / Siports2024!)');
+  console.log('   1. Connectez-vous en tant qu\'exposant (technoport@sib.ma / Siports2024!)');
   console.log('   2. Allez sur: http://localhost:9323/exhibitor/minisite/create');
   console.log('   3. Cliquez sur "Partir d\'un template"');
   console.log('   4. Vous verrez les 10 templates disponibles!\n');

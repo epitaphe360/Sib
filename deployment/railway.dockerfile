@@ -1,4 +1,4 @@
-# Railway Dockerfile pour SIPORTS 2026
+# Railway Dockerfile pour SIB 2026
 # Vite v6 is compatible with Node.js 18+
 FROM node:20-alpine AS builder
 
