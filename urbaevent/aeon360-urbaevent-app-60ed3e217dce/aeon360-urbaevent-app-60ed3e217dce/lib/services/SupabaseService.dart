@@ -185,6 +185,78 @@ class SupabaseService {
   }
 
   // ──────────────────────────────────────────────────────────────────
+  // E-BADGES / INSCRIPTIONS
+  // ──────────────────────────────────────────────────────────────────
+
+  /// Récupère la liste des e-badges (inscriptions) de l'utilisateur connecté.
+  /// Retourne les données avec les infos du salon associé.
+  Future<List<Map<String, dynamic>>> getMyEbadges() async {
+    final userId = currentUser?.id;
+    if (userId == null) return [];
+
+    final res = await _client
+        .from(SupabaseConfig.tableRegistrations)
+        .select('*, salon:salons(*)')
+        .eq('user_id', userId)
+        .order('created_at', ascending: false);
+
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  /// Crée ou récupère l'inscription de l'utilisateur pour un salon.
+  /// Retourne l'inscription (avec ID).
+  Future<Map<String, dynamic>> registerForSalon({
+    required String salonId,
+    String type = 'visitor',
+  }) async {
+    final userId = currentUser?.id;
+    if (userId == null) throw Exception('Non authentifié');
+
+    // Upsert : crée si n'existe pas, sinon retourne l'existant
+    final res = await _client
+        .from(SupabaseConfig.tableRegistrations)
+        .upsert(
+          {
+            'user_id': userId,
+            'salon_id': salonId,
+            'type': type,
+            'status': 'confirmed',
+            'confirmed': true,
+          },
+          onConflict: 'user_id,salon_id',
+        )
+        .select('*, salon:salons(*)')
+        .single();
+
+    return Map<String, dynamic>.from(res);
+  }
+
+  /// Génère (ou renouvelle) le token QR pour un badge existant.
+  /// Appelle l'Edge Function generate-qr et met à jour qr_token en DB.
+  Future<String> refreshQrToken({
+    required String registrationId,
+    required String salonId,
+  }) async {
+    final userId = currentUser?.id;
+    if (userId == null) throw Exception('Non authentifié');
+
+    // Génère un nouveau token via Edge Function
+    final token = await generateQrToken(salonId: salonId);
+
+    // Sauvegarde en DB pour référence
+    await _client
+        .from(SupabaseConfig.tableRegistrations)
+        .update({
+          'qr_token': token,
+          'qr_expires_at':
+              DateTime.now().add(const Duration(hours: 24)).toIso8601String(),
+        })
+        .eq('id', registrationId);
+
+    return token;
+  }
+
+  // ──────────────────────────────────────────────────────────────────
   // CONTACTS / SCANS (badges)
   // ──────────────────────────────────────────────────────────────────
 

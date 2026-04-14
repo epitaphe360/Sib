@@ -75,7 +75,8 @@ class _HomePage extends State<HomePage> {
   Rev2.ResponseMyEvents? userResponseEvents;
   List<EventItem> filteredEvents = [];
   ResponseUser? _responseUser;
-  ResponseEbadges? responseEbadges;
+  ResponseEbadges? responseEbadges; // legacy (non utilisé)
+  List<Map<String, dynamic>> _myEbadges = [];
   ResponseScanContact? responseScanContact;
   ResponseContactList? responseContactList;
   List<ContactItem>? contactItemList;
@@ -740,41 +741,30 @@ class _HomePage extends State<HomePage> {
     getEventList();
   }
 
+  /// Charge les e-badges de l'utilisateur depuis Supabase.
   Future<void> getEbadgesList() async {
-    Preference preference = await Preference.getInstance();
-
-    final jwtToken = preference.getToken();
-
-    if (jwtToken.isNotEmpty) {
-      final url = Uri.parse(Urls.baseURL +
-          Urls.ebadgesList +
-          preference.getLoginDetails()!.user.id.toString() +
-          Urls.ebadgesListFilter);
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
-
-      final parsedJson = jsonDecode(response.body);
-      print('Response Ebadge' + response.body);
-      if (response.statusCode == HttpStatus.ok) {
-        setState(() {
-          responseEbadges = ResponseEbadges.fromJson(parsedJson);
-        });
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        setState(() {
-          preference.clearAppPreferences();
-          isLoggedIn = false;
-          uiMode = Const.homeUI;
-        });
+    if (!isLoggedIn) return;
+    try {
+      final badges = await SupabaseService.instance.getMyEbadges();
+      // Si aucun badge et salon actif dispo → créer automatiquement l'inscription
+      if (badges.isEmpty) {
+        final salonId = ActiveSalon.current?['id'] as String?;
+        if (salonId != null) {
+          final reg = await SupabaseService.instance.registerForSalon(
+            salonId: salonId,
+            type: _userType,
+          );
+          setState(() { _myEbadges = [reg]; });
+        } else {
+          setState(() { _myEbadges = []; });
+        }
       } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+        setState(() { _myEbadges = badges; });
       }
-
-      getContactList();
+    } catch (e) {
+      debugPrint('getEbadgesList error: $e');
     }
+    getContactList();
   }
 
   void _handlePageVisibilityChange(bool isVisible) {
@@ -1629,54 +1619,69 @@ class _HomePage extends State<HomePage> {
                       ),
                     if (uiMode == Const.scanUI)
                       Expanded(flex: 4, child: _scanner()),
-                    if (uiMode == Const.eBadgesUI)
-                      if (responseEbadges != null && uiMode == Const.eBadgesUI)
-                        if (responseEbadges != null &&
-                            responseEbadges!.data.isNotEmpty &&
-                            uiMode == Const.eBadgesUI)
-                          Expanded(
-                            flex: 1,
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              scrollDirection: Axis.vertical,
-                              itemCount: responseEbadges!.data.length,
-                              itemBuilder: (context, index) {
-                                return Ebadge(
-                                    index,
-                                    responseEbadges!.data[index],
-                                    handleEBadgeDetails);
-                              },
-                              // reverse: true,
-                              physics: BouncingScrollPhysics(),
-                            ),
-                          ),
-                    if (responseEbadges != null && uiMode == Const.eBadgesUI)
-                      if (responseEbadges != null &&
-                          responseEbadges!.data.isEmpty &&
-                          uiMode == Const.eBadgesUI)
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height:
-                                    (MediaQuery.of(context).size.height / 2) -
-                                        150,
+                    // ── E-Badges (données Supabase) ──
+                    if (uiMode == Const.eBadgesUI && _myEbadges.isNotEmpty)
+                      Expanded(
+                        flex: 1,
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          scrollDirection: Axis.vertical,
+                          itemCount: _myEbadges.length,
+                          itemBuilder: (context, index) {
+                            final reg = _myEbadges[index];
+                            final salon = reg['salon'] as Map<String, dynamic>?;
+                            final salonName = salon?['name'] as String? ?? 'SIB 2026';
+                            final confirmed = reg['confirmed'] as bool?;
+                            final type = reg['type'] as String? ?? 'visitor';
+                            return GestureDetector(
+                              onTap: () => setState(() {
+                                ebadgeItemPosition = index;
+                                uiMode = Const.eBadgeDetailsUI;
+                              }),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.badge_outlined, size: 36, color: Color(0xFF4598D1)),
+                                    const SizedBox(width: 12),
+                                    Expanded(child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(salonName, style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w700)),
+                                        Text(type.toUpperCase(), style: GoogleFonts.roboto(fontSize: 12, color: const Color(0xFF4598D1))),
+                                      ],
+                                    )),
+                                    Icon(
+                                      confirmed == true ? Icons.check_circle : confirmed == false ? Icons.cancel : Icons.hourglass_empty,
+                                      color: confirmed == true ? Colors.green : confirmed == false ? Colors.red : Colors.orange,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Text(
-                                Intl.message("no_badges", name: "no_badges"),
-                                style: GoogleFonts.roboto(
-                                    color: Colors.black,
-                                    fontStyle: FontStyle.normal,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
+                            );
+                          },
+                          physics: const BouncingScrollPhysics(),
                         ),
-
-                    if (uiMode == Const.eBadgesUI && responseEbadges == null)
-                      Expanded(flex: 1, child: Container()),
+                      ),
+                    if (uiMode == Const.eBadgesUI && _myEbadges.isEmpty)
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            SizedBox(height: (MediaQuery.of(context).size.height / 2) - 150),
+                            Text(
+                              Intl.message("no_badges", name: "no_badges"),
+                              style: GoogleFonts.roboto(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
                     if (uiMode == Const.profileUI && _responseUser != null)
                       Profile(
                           'try', "", handleProfileCallbacks, _responseUser!),
@@ -1722,8 +1727,12 @@ class _HomePage extends State<HomePage> {
                           ),
                         ),
                       ),
-                    if (uiMode == Const.eBadgeDetailsUI)
-                      EBadgeDetails(responseEbadges!.data[ebadgeItemPosition]),
+                    if (uiMode == Const.eBadgeDetailsUI && ebadgeItemPosition >= 0 && ebadgeItemPosition < _myEbadges.length)
+                      EBadgeDetails(
+                        registration: _myEbadges[ebadgeItemPosition],
+                        userName: _responseUser?.name ?? '',
+                        userCompany: _responseUser?.company,
+                      ),
 
                     // Bottom Section
                     CustomBottomBar(uiMode, handleCallback)

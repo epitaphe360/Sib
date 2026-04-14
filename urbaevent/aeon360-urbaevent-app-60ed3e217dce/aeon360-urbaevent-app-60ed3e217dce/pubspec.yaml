@@ -40,6 +40,7 @@ dependencies:
   provider: ^6.0.5
   vibration: ^3.0.0
   qr_mobile_vision: ^5.0.1
+  qr_flutter: ^4.1.0
   visibility_detector: ^0.4.0+2
   flutter_local_notifications: ^17.2.3
   firebase_messaging: ^14.6.8
