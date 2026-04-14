@@ -179,6 +179,14 @@
   ADMIN_PRESS_ACCREDITATIONS: '/admin/press-accreditations',
   SPEAKERS: '/speakers',
   ADMIN_SPEAKERS: '/admin/speakers',
+
+  // UrbaEvent - Sélection multi-salons
+  SALON_SELECTION: '/salons',
+  SALON_SIB: '/',
+  SALON_SIR: '/salon/sir',
+  SALON_SIP: '/salon/sip',
+  SALON_BTP: '/salon/btp',
+  SALON_SIE: '/salon/sie',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
