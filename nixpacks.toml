@@ -10,6 +10,9 @@ cmds = [
   "npm ci --prefer-offline --no-audit --loglevel=error || npm install --prefer-offline --no-audit"
 ]
 
+[phases.install.envVars]
+NODE_ENV = "development"
+
 [phases.build]
 cmds = [
   "npm run build"
