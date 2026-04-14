@@ -524,7 +524,7 @@ app.delete('/api/admin/exhibitors/:id', async (req, res) => {
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://sib-2026.vercel.app';
 
 // Catch-all: redirect non-API requests to Vercel frontend
-app.get('*', (req, res) => {
+app.get('{*path}', (req, res) => {
   // If someone hits Railway directly (not an API route), redirect to Vercel
   if (process.env.NODE_ENV === 'production') {
     res.redirect(302, `${FRONTEND_URL}${req.originalUrl}`);
