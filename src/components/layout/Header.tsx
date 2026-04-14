@@ -254,6 +254,15 @@ export const Header: React.FC = memo(() => {
               <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
             </Link>
 
+            {/* Réseautage (lien direct) */}
+            <Link
+              to={ROUTES.NETWORKING}
+              className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all group whitespace-nowrap"
+            >
+              {t('nav.networking')}
+              <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+            </Link>
+
             {/* Médias ▼ (conditionnel) */}
             {mediaVisible && (
             <div className="relative" onMouseEnter={() => setIsMediaMenuOpen(true)} onMouseLeave={() => setIsMediaMenuOpen(false)}>
@@ -694,6 +703,15 @@ export const Header: React.FC = memo(() => {
                 onClick={closeMenu}
               >
                 {t('nav.programme')}
+              </Link>
+
+              {/* ══ Réseautage (lien direct) ══ */}
+              <Link
+                to={ROUTES.NETWORKING}
+                className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
+                onClick={closeMenu}
+              >
+                {t('nav.networking')}
               </Link>
 
               {/* ══ Médias ══ */}
