@@ -472,7 +472,7 @@ const App = () => {
             </div>} />
           </Routes>
         </Suspense>
-      </main>
+      </AppShell>
       <Footer />
 
       <Suspense fallback={null}>
@@ -503,7 +503,6 @@ const App = () => {
       </Suspense>
 
       <Toaster position="top-right" />
-      </AppShell>
     </ErrorBoundary>
   );
 }

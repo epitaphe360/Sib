@@ -162,8 +162,7 @@ export const BTP_SYNONYMS: Record<string, string[]> = {
 
   // Géographies
   'afrique': ['geo-afrique'],
-  'maroc': ['geo-maroc', 'geo-afrique'],
-  'maroc': ['geo-maghreb', 'geo-afrique'],
+  'maroc': ['geo-maroc', 'geo-maghreb', 'geo-afrique'],
   'maghreb': ['geo-maghreb', 'geo-afrique'],
   'tunisie': ['geo-maghreb', 'geo-afrique'],
   'senegal': ['geo-afrique-subsaharienne', 'geo-afrique'],
@@ -175,7 +174,6 @@ export const BTP_SYNONYMS: Record<string, string[]> = {
   'espagne': ['geo-europe'],
   'export': ['geo-international', 'export'],
   'international': ['geo-international'],
-  'maghreb': ['geo-maghreb', 'geo-afrique'],
   'moyen-orient': ['geo-moyen-orient'],
   'golf': ['geo-moyen-orient'],
   'émirats': ['geo-moyen-orient'],
