@@ -27,9 +27,12 @@ app.use((req, res, next) => {
     const host = req.headers.host;
     const proto = req.headers['x-forwarded-proto'] || 'http';
     
-    // Redirect bare domain → www (SSL cert is only on www.siportevent.com)
+    // Redirect bare domain → www (SSL cert handling)
+    if (host === 'sib2026.ma') {
+      return res.redirect(301, `https://www.sib2026.ma${req.url}`);
+    }
     if (host === 'siportevent.com') {
-      return res.redirect(301, `https://www.siportevent.com${req.url}`);
+      return res.redirect(301, `https://www.sib2026.ma${req.url}`);
     }
     // Redirect HTTP → HTTPS
     if (proto === 'http') {
@@ -43,11 +46,13 @@ app.use((req, res, next) => {
 const allowedOrigins = [
   'http://localhost:5173', // Development
   'http://localhost:3000', // Development
-  'https://siportevent.com', // Production
-  'https://www.siportevent.com', // Production with www
-  'https://app.siportevent.com', // App subdomain
-  // Add your Railway deployment URL here when available
-  // 'https://your-app.railway.app'
+  'http://localhost:9323', // Development Vite
+  'https://sib2026.ma', // Production
+  'https://www.sib2026.ma', // Production with www
+  'https://app.sib2026.ma', // App subdomain
+  'https://siportevent.com', // Legacy
+  'https://www.siportevent.com', // Legacy with www
+  // Railway deployment URL (auto-assigned)
 ];
 
 app.use((req, res, next) => {

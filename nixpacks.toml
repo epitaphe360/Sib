@@ -18,8 +18,8 @@ cmds = [
 [phases.build.envVars]
 VITE_SUPABASE_URL = "https://sbyizudifmqakzxjlndr.supabase.co"
 VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieWl6dWRpZm1xYWt6eGpsbmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MTg3MDEsImV4cCI6MjA5MTQ5NDcwMX0.yyD0fROU_oSkfgkiRbWXwyoZm3YthCCQSj7pM7HHSVg"
-VITE_SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieWl6dWRpZm1xYWt6eGpsbmRyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTkxODcwMSwiZXhwIjoyMDkxNDk0NzAxfQ.-dbIT8rJ1cDoP-USJejVZku6R5MCg_UXvnuEHY1--cY"
-VITE_SHOW_DEMO_LOGINS = "true"
+# VITE_SUPABASE_SERVICE_ROLE_KEY retiré — jamais côté client, uniquement dans Railway env vars pour server.js
+VITE_SHOW_DEMO_LOGINS = "false"
 VITE_FIREBASE_API_KEY = "local-dev"
 VITE_FIREBASE_AUTH_DOMAIN = "local-dev.firebaseapp.com"
 VITE_FIREBASE_PROJECT_ID = "local-dev"
