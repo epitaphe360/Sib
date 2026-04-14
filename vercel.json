@@ -24,6 +24,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://sib-production.up.railway.app/api/:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
