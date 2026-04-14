@@ -177,21 +177,7 @@ import { useAuthStore } from './store/authStore';
 import { useLocation } from 'react-router-dom';
 import { UrbaEventNav } from './components/layout/UrbaEventNav';
 
-const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];
-
-function AppShell({ children }: { children: React.ReactNode }) {
-  const location = useLocation();
-  const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
-  return (
-    <div className="min-h-screen flex flex-col">
-      <SkipToContent />
-      {isUrbaRoute ? <UrbaEventNav /> : <Header />}
-      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : 'pt-16 sm:pt-20 xl:pt-28'}`}>
-        {children}
-      </main>
-    </div>
-  );
-}
+const URBA_PREFIXES = ['/salons', '/salon/'];
 
 // Import cleanup functions for dev debugging (not used in production)
 if (import.meta.env.DEV) {
@@ -207,6 +193,8 @@ if (import.meta.env.DEV) {
 const App = () => {
   const [isChatBotOpen, setIsChatBotOpen] = React.useState(false);
   const { currentLanguage } = useLanguageStore();
+  const location = useLocation();
+  const isUrbaRoute = URBA_PREFIXES.some(p => location.pathname.startsWith(p));
 
   // Tracking des visites de pages pour le trafic hebdomadaire (admin dashboard)
   usePageTracking();
@@ -266,7 +254,13 @@ const App = () => {
   return (
     <ErrorBoundary>
       <ScrollToTop />
-      <AppShell>
+      <div className="min-h-screen flex flex-col">
+        <SkipToContent />
+        {isUrbaRoute ? <UrbaEventNav /> : <Header />}
+        <main
+          id="main-content"
+          className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : 'pt-16 sm:pt-20 xl:pt-28'}`}
+        >
           <Suspense fallback={
             <div className="flex items-center justify-center min-h-screen bg-gray-50">
               <div className="flex flex-col items-center">
@@ -503,7 +497,7 @@ const App = () => {
       </Suspense>
 
       <Toaster position="top-right" />
-      </AppShell>
+      </div>
     </ErrorBoundary>
   );
 }
