@@ -1,7 +1,7 @@
 ﻿import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { lazyRetry } from './utils/lazyRetry';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { usePageTracking } from './hooks/usePageTracking';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -444,6 +444,19 @@ const App = () => {
             <Route path={ROUTES.ADMIN_PARTNER_MEDIA_APPROVAL} element={<ProtectedRoute requiredRole="admin"><PartnerMediaApprovalPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_LIVE_EVENTS} element={<ProtectedRoute requiredRole="admin"><LiveEventManager /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_LIVE_EVENT_CREATE} element={<ProtectedRoute requiredRole="admin"><LiveEventManager /></ProtectedRoute>} />
+
+            {/* Pages statiques menu - Le Salon */}
+            <Route path={ROUTES.PRESENTATION} element={<Navigate to={ROUTES.HOME} replace />} />
+            <Route path={ROUTES.NOUVEAUTES} element={<Navigate to={ROUTES.HOME} replace />} />
+            <Route path={ROUTES.SECTEURS} element={<Navigate to={ROUTES.HOME} replace />} />
+            <Route path={ROUTES.EDITIONS} element={<Navigate to={ROUTES.HOME} replace />} />
+            <Route path={ROUTES.TELECHARGEMENTS} element={<Navigate to={ROUTES.HOME} replace />} />
+            {/* Pages statiques menu - Exposer */}
+            <Route path={ROUTES.POURQUOI_EXPOSER} element={<Navigate to={ROUTES.REGISTER_EXHIBITOR} replace />} />
+            <Route path={ROUTES.ESPACES_SIB} element={<Navigate to={ROUTES.PAVILIONS} replace />} />
+            {/* Pages statiques menu - Visiter */}
+            <Route path={ROUTES.POURQUOI_VISITER} element={<Navigate to={ROUTES.REGISTER_VISITOR} replace />} />
+            <Route path={ROUTES.INFOS_PRATIQUES} element={<Navigate to={ROUTES.HOME} replace />} />
 
             {/* Speakers & Press routes */}
             <Route path={ROUTES.SPEAKERS} element={<SpeakersPage />} />

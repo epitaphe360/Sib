@@ -187,6 +187,21 @@
   SALON_SIP: '/salon/sip',
   SALON_BTP: '/salon/btp',
   SALON_SIE: '/salon/sie',
+
+  // Pages statiques - Le Salon
+  PRESENTATION: '/presentation',
+  NOUVEAUTES: '/nouveautes',
+  SECTEURS: '/secteurs',
+  EDITIONS: '/editions',
+  TELECHARGEMENTS: '/telechargements',
+
+  // Pages statiques - Exposer
+  POURQUOI_EXPOSER: '/pourquoi-exposer',
+  ESPACES_SIB: '/espaces',
+
+  // Pages statiques - Visiter
+  POURQUOI_VISITER: '/pourquoi-visiter',
+  INFOS_PRATIQUES: '/infos-pratiques',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
