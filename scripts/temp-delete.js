@@ -4,4 +4,4 @@ const supabase = createClient('https://sbyizudifmqakzxjlndr.supabase.co', 'eyJhb
 
 console.log('Suppression des partenaires...');
 await supabase.from('partners').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-console.log(' Partenaires supprimés');
+console.log('Partenaires supprimes');
