@@ -1,0 +1,995 @@
+<!-- Slider Section Start  -->
+<div class="meeta-hero-section-3 d-flex align-items-center" style="background-image: url(assets/images/BTP-EXPO.jpg)">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-lg-8 d-flex justify-content-center_ meeta-hero-content">
+				<!-- Countdown Start -->
+				<div class="meeta-countdown-wrap d-flex justify-content-center align-items-center flex-column">
+					<div class="meeta-countdown-3 countdown mb-4" data-countdown="2024/05/29 09:00" data-format="short" style="margin-top: -40px">
+						<div class="single-countdown">
+							<span class="count countdown__time daysLeft"></span>
+							<span class="value countdown__time daysText"></span>
+						</div>
+						<div class="single-countdown countdown-2">
+							<span class="count countdown__time hoursLeft"></span>
+							<span class="value countdown__time hoursText"></span>
+						</div>
+						<div class="single-countdown countdown-3">
+							<span class="count countdown__time minsLeft"></span>
+							<span class="value countdown__time minsText"></span>
+						</div>
+						<div class="single-countdown countdown-4">
+							<span class="count countdown__time secsLeft"></span>
+							<span class="value countdown__time secsText"></span>
+						</div>
+					</div>
+					<div class="meeta-countdown-date">
+						<h3 class="text text-lieu" style="font-size: 35px; letter-spacing: 1px">Marrakech Parc Expo</h3>
+						<h3 class="text text-lieu2 mb-3" style="font-size: 25px">"Circuit International Automobile Moulay El Hassan"</h3>
+						<h3 class="number mb-3">29 Mai - 1er Juin 2024</h3>
+
+						<p class="text">Construire le Maroc de demain : Horizon 2030</p>
+					</div>
+
+					<div class="meeta-hero-content hero-btn mt-2">
+						<a routerlink="/exposer" class="btn-2" href="/exposer">Réserver votre Stand</a>
+					</div>
+				</div>
+				<!-- Countdown End -->
+			</div>
+			<div class="col-lg-4">
+				<div class="hero-form" data-aos_="fade-up">
+					<div class="hero-form-wrap">
+						<div class="heading-wrap text-center">
+							<h3 class="title" style="font-size: 20px">Demander votre badge</h3>
+							<div class="divider_custom"></div>
+						</div>
+						<form [formGroup]="visitorForm" (ngSubmit)="onVisitorFormSubmit()">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="single-form">
+										<input
+											type="text"
+											class="form-control form-control-sm"
+											[ngClass]="{ input_required: submitted && !visitorForm.get('name').valid }"
+											formControlName="name"
+											placeholder="Nom & Prénom"
+										/>
+										<span class="form-text text-danger" *ngIf="submitted && !visitorForm.get('name').valid"> Champ obligatoire </span>
+										<span class="required_star"></span>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="single-form">
+										<input
+											type="text"
+											class="form-control form-control-sm"
+											[ngClass]="{ input_required: submitted && !visitorForm.get('email').valid }"
+											formControlName="email"
+											placeholder="Email"
+										/>
+										<span class="form-text text-danger" *ngIf="submitted && !visitorForm.get('email').valid">
+											<span *ngIf="visitorForm.get('email').errors?.required"> Champ obligatoire </span>
+											<span *ngIf="visitorForm.get('email').errors?.email"> Format d'email incorrecte </span>
+										</span>
+										<span class="required_star"></span>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="single-form">
+										<input
+											type="text"
+											class="form-control form-control-sm"
+											[ngClass]="{ input_required: submitted && !visitorForm.get('phone').valid }"
+											formControlName="phone"
+											placeholder="Téléphone"
+										/>
+										<span class="form-text text-danger" *ngIf="submitted && !visitorForm.get('phone').valid"> Champ obligatoire </span>
+										<span class="required_star"></span>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="single-form">
+										<input type="text" class="form-control form-control-sm" formControlName="company" placeholder="Société" />
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="single-form">
+										<input type="text" class="form-control form-control-sm" formControlName="jobPosition" placeholder="Fonction" />
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="alert alert-success d-flex align-items-center" role="alert" *ngIf="submitValidated == true" style="margin-top: 20px">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											fill="currentColor"
+											class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+											viewBox="0 0 16 16"
+											role="img"
+										>
+											<path
+												d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"
+											/>
+										</svg>
+										<div style="margin-left: 5px">Votre demande a bien été effectuée</div>
+									</div>
+									<div class="alert alert-danger d-flex align-items-center" role="alert" *ngIf="submitValidated == false" style="margin-top: 20px">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											fill="currentColor"
+											class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+											viewBox="0 0 16 16"
+											role="img"
+										>
+											<path
+												d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+											/>
+										</svg>
+										<div style="margin-left: 5px">Demande déja effectuée avec cet email et/ou ce téléphone</div>
+									</div>
+									<div class="form-btn mt-4">
+										<button class="btn-2 style-2" type="submit">Envoyer la demande</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Slider Section End -->
+
+<!-- Register & Countdown Section Start -->
+<div class="meeta-register-countdown" style="padding-top: 95px">
+	<div class="container position-relative">
+		<!-- Register & Countdown Wrapper Start -->
+		<div class="meeta-register-countdown-wrapper">
+			<div class="row align-items-center">
+				<div class="col-lg-6 offset-lg-3 justify-content-center">
+					<h3 class="t-orga">Partenaires institutionnels</h3>
+				</div>
+
+				<div class="col-lg-12">
+					<div class="row">
+						<div class="col-lg-4 mb-5">
+							<div class="meeta-sponsor-logo logo-orga">
+								<a href="#">
+									<img src="assets/images/LOGO-MINISTERE-EQUIPEMENT.png" alt="MINISTERE-EQUIPEMENT" />
+								</a>
+							</div>
+						</div>
+						<div class="col-lg-4 mb-5">
+							<div class="meeta-sponsor-logo logo-orga">
+								<a href="#">
+									<img src="assets/images/LOGO-MINISTERE-HABITAT.png" alt="MINISTERE-HABITAT" />
+								</a>
+							</div>
+						</div>
+						<div class="col-lg-4 mb-5">
+							<div class="meeta-sponsor-logo logo-orga">
+								<a href="#">
+									<img src="assets/images/LOGO-MINISTERE-TEDD.png" alt="MINISTERE-TEDD" />
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row align-items-center">
+				<div class="col-lg-4 mb-5">
+					<h3 class="t-orga">Organisateur</h3>
+					<div class="meeta-sponsor-logo logo-orga">
+						<a href="#"><img src="assets/images/LOGO-FNBTP.png" alt="LOGO-FNBTP" style="width: 200px" /></a>
+					</div>
+				</div>
+				<div class="col-lg-4 mb-5">
+					<h3 class="t-orga">Co-Organisateur</h3>
+					<div class="meeta-sponsor-logo logo-orga">
+						<a href="#"><img src="assets/images/LOGO-AIM-BTP.png" alt="LOGO-AIM-BTP" style="width: 200px" /></a>
+					</div>
+				</div>
+				<div class="col-lg-4 mb-5">
+					<h3 class="t-orga">Organisateur délégué</h3>
+					<div class="meeta-sponsor-logo logo-orga">
+						<a href="#"><img src="assets/images/LOGO-URBACOM.png" alt="LOGO-URBACOM" style="width: 200px" /></a>
+					</div>
+				</div>
+			</div>
+			<!-- <img class="register-countdown-shape" src="assets/images/shape/shape-5.png" alt="Shape" /> -->
+		</div>
+	</div>
+	<!-- Register & Countdown Section End -->
+
+	<!-- About Section Start -->
+	<div class="meeta-about-section section-padding">
+		<div class="container">
+			<div class="row gy-5 align-items-center">
+				<div class="col-lg-7">
+					<!-- About Images Start -->
+					<div class="meeta-about-images">
+						<div class="image">
+							<img src="assets/images/BTP-EXPO.jpg" alt="About" />
+						</div>
+					</div>
+					<!-- About Images End -->
+				</div>
+				<div class="col-lg-5">
+					<!-- Section Title Start -->
+					<div class="meeta-section-title meeta-about-title">
+						<h4 class="sub-title">Présentation</h4>
+						<h2 class="main-title">BTP Expo<span class="color-yellow">.</span></h2>
+					</div>
+					<!-- Section Title End -->
+
+					<!-- About Content Start -->
+					<div class="meeta-about-content">
+						<p class="mb-4">
+							<strong>Le BTP EXPO</strong> est un salon professionnel fondé en 2003 par la Fédération Nationale du Bâtiment et des Travaux Publics <strong>(FNBTP)</strong> visant à
+							rassembler les acteurs clés de l'industrie du BTP, en l'occurrence les établissements et entreprises publics, les entreprises de construction, les fournisseurs de matériaux
+							et matériels de construction, les architectes, les ingénieurs ainsi que tous les professionnels du secteur.
+						</p>
+						<a class="btn-2" routerLink="/btp-expo">En savoir plus</a>
+					</div>
+					<!-- About Content End -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- About Section End -->
+
+	<!-- Video Section Start -->
+	<div class="meeta-video-section section-padding">
+		<div class="container">
+			<div class="meeta-video-wrap">
+				<div class="row g-0">
+					<div class="col-lg-6">
+						<!-- Video Content Start -->
+						<div class="meeta-video-content">
+							<h4 class="sub-title">Présentation</h4>
+							<h2 class="main-title">Forum du BTP <span class="color-yellow">.</span></h2>
+							<div class="video-info">
+								<p class="mb-3">
+									Le Forum du BTP est un événement concomitant au salon BTP EXPO. Il a pour but d'informer les participants et de répondre à leurs interrogations concernant les
+									dernières tendances, les défis et les opportunités de l'industrie de la construction.
+								</p>
+								<a class="btn-2" routerLink="/forum">En savoir plus</a>
+							</div>
+						</div>
+						<!-- Video Content End -->
+					</div>
+					<div class="col-lg-6">
+						<!-- Video Image Start -->
+						<div class="meeta-video-img text-center" style="background-image: url(assets/images/FORUM-BTP.jpg)">
+							<!-- <a class="popup-video" href="https://www.youtube.com/watch?v=ZkbIGF5xNU0">
+                            <i class="fas fa-play"></i>
+                        </a> -->
+						</div>
+						<!-- Video Image End -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Video Section End -->
+
+	<!-- Formulaire Section Start -->
+	<!-- <div class="meeta-hero-section-5 d-flex align-items-center section-padding" id="reserver">
+    <img class="image-1" src="assets/images/hero-5-img-1.png" alt="">
+    <img class="image-2" src="assets/images/hero-5-img-2.png" alt="">
+    <img class="shape-1" src="assets/images/shape/hero-5-shape-1.png" alt="">
+    <img class="shape-2" src="assets/images/shape/hero-5-shape-2.png" alt="">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hero-content">
+                    <div class="title-wrap text-center">
+                        <h2 class="title">Formulaire <br>d'exposition</h2>
+                    </div>
+                    <div class="search-form-wrap">
+                        <div class="search-form-inner">
+                            <div class="hero-form">
+                                <div class="hero-form-wrap">
+                                    <div class="heading-wrap text-center">
+                                        <h3 class="title">Réserver votre Stand</h3>
+                                    </div>
+                                    <form [formGroup]="exposantForm" (ngSubmit)="onFormSubmit()">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="single-form">
+                                                    <input type="text"
+                                                        [ngClass]="{'input_required': submitted  && !exposantForm.get('nom').valid}"
+                                                        formControlName="nom" placeholder="Nom & Prénom">
+                                                    <span class="form-text text-danger"
+                                                        *ngIf="submitted  && !exposantForm.get('nom').valid">
+                                                        Champ obligatoire
+                                                    </span>
+                                                    <span class="required_star_lg"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="single-form">
+                                                    <input type="text"
+                                                        [ngClass]="{'input_required': submitted && !exposantForm.get('email').valid}"
+                                                        formControlName="email" placeholder="Email">
+                                                    <span class="form-text text-danger"
+                                                        *ngIf="submitted && !exposantForm.get('email').valid">
+                                                        <span *ngIf="exposantForm.get('email').errors?.required">
+                                                            Champ obligatoire
+                                                        </span>
+                                                        <span *ngIf="exposantForm.get('email').errors?.email">
+                                                            Format d'email incorrecte
+                                                        </span>
+                                                    </span>
+                                                    <span class="required_star_lg"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="single-form">
+                                                    <input type="text"
+                                                        [ngClass]="{'input_required': submitted && !exposantForm.get('telephone').valid}"
+                                                        formControlName="telephone" placeholder="Téléphone">
+                                                    <span class="form-text text-danger"
+                                                        *ngIf="submitted && !exposantForm.get('telephone').valid">
+                                                        Champ obligatoire
+                                                    </span>
+                                                    <span class="required_star_lg"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="single-form">
+                                                    <input type="text" placeholder="Société">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="single-form">
+                                                    <select class="nice-select" formControlName="secteur_activite"
+                                                        (change)="onSecteurChange($event.target.value)"
+                                                        *ngIf="autreSecteurVisible == false">
+                                                        <option value="" selected>
+                                                            --Secteurs d'activités--
+                                                        </option>
+                                                        <option value="Institutionnels & Donneurs d'ordre">
+                                                            Institutionnels & Donneurs d'ordre
+                                                        </option>
+                                                        <option value="Menuiserie & Fermeture">
+                                                            Menuiserie & Fermeture
+                                                        </option>
+                                                        <option value="Entreprises de Construction">
+                                                            Entreprises de Construction
+                                                        </option>
+                                                        <option value="Gros Oeuvres">
+                                                            Gros Oeuvres
+                                                        </option>
+                                                        <option value="Décoration, Aménagement Urbain">
+                                                            Décoration, Aménagement Urbain
+                                                        </option>
+                                                        <option value="Matériels et Outillages de Bâtiment">
+                                                            Matériels et Outillages de Bâtiment
+                                                        </option>
+                                                        <option
+                                                            value="Sanitaire, Climatisation, Finition et Revêtement">
+                                                            Sanitaire, Climatisation, Finition et Revêtement
+                                                        </option>
+                                                        <option value="Équipements Électriques et Systèmes Intégrés">
+                                                            Équipements Électriques et Systèmes Intégrés
+                                                        </option>
+                                                        <option value="Engins et matériels du BTP">
+                                                            Engins et matériels du BTP
+                                                        </option>
+                                                        <option value="Autre">Autre...</option>
+                                                    </select>
+                                                    <input type="text" formControlName="secteur_activite"
+                                                        placeholder="Autre" id="secteur_activite"
+                                                        *ngIf="autreSecteurVisible == true">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="single-form">
+                                                    <textarea placeholder="Message"
+                                                        formControlName="message"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="alert alert-success d-flex align-items-center" role="alert"
+                                                    *ngIf="submitValidated == true" style="margin-top: 20px;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        fill="currentColor"
+                                                        class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+                                                        viewBox="0 0 16 16" role="img">
+                                                        <path
+                                                            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+                                                    </svg>
+                                                    <div style="margin-left: 5px;">
+                                                        Votre demande d'inscription a bien été enregistrée
+                                                    </div>
+                                                </div>
+                                                <div class="alert alert-danger d-flex align-items-center" role="alert"
+                                                    *ngIf="submitValidated == false" style="margin-top: 20px;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        fill="currentColor"
+                                                        class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+                                                        viewBox="0 0 16 16" role="img">
+                                                        <path
+                                                            d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                                    </svg>
+                                                    <div style="margin-left: 5px;">
+                                                        Inscription déja effectuée avec cet email et/ou ce téléphone
+                                                    </div>
+                                                </div>
+                                                <div class="form-btn">
+                                                    <button class="btn-2" type="submit" [disabled]="submitLoading">
+                                                        Envoyer la demande
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+	<!-- Formulaire Section End -->
+
+	<!-- Event Schedule Start  -->
+	<!-- <div class="meeta-event-schedule meeta-event-schedule-2 section-padding">
+    <div class="container">
+        <div class="meeta-section-title-2 text-center">
+            <h4 class="sub-title">Forum du BTP</h4>
+            <h2 class="main-title">Programme & conférences</h2>
+        </div>
+        <div class="row gy-5 justify-content-between">
+            <div class="col-lg-12">
+                <div class="meeta-event-schedule-tabs">
+                    <ul class="meeta-event-schedule-tabs-menu">
+                        <li data-tab-target="#tab1" class="active">
+                            <div class="meeta-event-schedule-time">
+                                <h4 class="meeta-event-schedule-day">Jour 1</h4>
+                                <p>06 Déc 2023</p>
+                            </div>
+                        </li>
+                        <li data-tab-target="#tab2" class="tab">
+                            <div class="meeta-event-schedule-time">
+                                <h4 class="meeta-event-schedule-day">Jour 2</h4>
+                                <p>07 Déc 2023</p>
+                            </div>
+                        </li>
+                        <li data-tab-target="#tab3" class="tab">
+                            <div class="meeta-event-schedule-time">
+                                <h4 class="meeta-event-schedule-day">Jour 3</h4>
+                                <p>08 Déc 2023</p>
+                            </div>
+                        </li>
+                        <li data-tab-target="#tab4" class="tab">
+                            <div class="meeta-event-schedule-time">
+                                <h4 class="meeta-event-schedule-day">Jour 4</h4>
+                                <p>09 Déc 2023</p>
+                            </div>
+                        </li>
+                        <li data-tab-target="#tab5" class="tab">
+                            <div class="meeta-event-schedule-time">
+                                <h4 class="meeta-event-schedule-day">Jour 5</h4>
+                                <p>10 Déc 2023</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="meeta-event-schedule-tab-content">
+                        <div id="tab1" class="meeta-event-schedule-tab-pane active">
+                            <ul class="meeta-event-accordion">
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-1.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <div class="info-conf">
+                                                <span class="time">09H - 11H</span>
+                                                <span class="salle-conf">Salle 1</span>
+                                                <span class="theme-conf color-2">Thème conférence</span>
+                                            </div>
+                                            <h3 class="title">Registration for opening workshop </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body open">
+                                        <p>We're inviting the top creatives in the tech industry from all over the world
+                                            to
+                                            come learn, grow, scrape their knees, try new things, to be vulnerable, and
+                                            to
+                                            have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-2.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <div class="info-conf">
+                                                <span class="time">09H - 11H</span>
+                                                <span class="salle-conf">Salle 5</span>
+                                                <span class="theme-conf color-2">Thème conférence</span>
+                                            </div>
+                                            <h3 class="title">Introduction about speakers </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all over the world
+                                            to
+                                            come learn, grow, scrape their knees, try new things, to be vulnerable, and
+                                            to
+                                            have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-3.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <div class="info-conf">
+                                                <span class="time">09H - 11H</span>
+                                                <span class="salle-conf">Salle 3</span>
+                                                <span class="theme-conf color-2">Thème conférence</span>
+                                            </div>
+                                            <h3 class="title">Lunch Break </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all over the world
+                                            to
+                                            come learn, grow, scrape their knees, try new things, to be vulnerable, and
+                                            to
+                                            have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="tab2" class="meeta-event-schedule-tab-pane">
+                            <ul class="meeta-event-accordion">
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-1.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <div class="info-conf">
+                                                <span class="time">09H - 11H</span>
+                                                <span class="salle-conf">Salle 2</span>
+                                                <span class="theme-conf color-2">Thème conférence</span>
+                                            </div>
+                                            <h3 class="title">Discussion about technolgy </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body open">
+                                        <p>We're inviting the top creatives in the tech industry from all over the world
+                                            to come learn, grow, scrape their knees, try new things, to be vulnerable,
+                                            and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-2.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <div class="info-conf">
+                                                <span class="time">09H - 11H</span>
+                                                <span class="salle-conf">Salle 10</span>
+                                                <span class="theme-conf color-2">Thème conférence</span>
+                                            </div>
+                                            <h3 class="title">Introduction about speakers </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all over the world
+                                            to come learn, grow, scrape their knees, try new things, to be vulnerable,
+                                            and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-3.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <div class="info-conf">
+                                                <span class="time">09H - 11H</span>
+                                                <span class="salle-conf">Salle 10</span>
+                                                <span class="theme-conf color-2">Thème conférence</span>
+                                            </div>
+                                            <h3 class="title">Lunch Break </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all over the world
+                                            to come learn, grow, scrape their knees, try new things, to be vulnerable,
+                                            and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="tab3" class="meeta-event-schedule-tab-pane">
+                            <ul class="meeta-event-accordion">
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-2.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <span class="time">11 AM - 01 AM</span>
+                                            <h3 class="title">Introduction about speakers </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all over the
+                                            world to come learn, grow, scrape their knees, try new things, to be
+                                            vulnerable, and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-1.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <span class="time">09 AM - 11 AM</span>
+                                            <h3 class="title">Registration for opening workshop </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body open">
+                                        <p>We're inviting the top creatives in the tech industry from all over the
+                                            world to come learn, grow, scrape their knees, try new things, to be
+                                            vulnerable, and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-3.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <span class="time">01 AM - 02 AM</span>
+                                            <h3 class="title">Lunch Break </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all over the
+                                            world to come learn, grow, scrape their knees, try new things, to be
+                                            vulnerable, and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="tab4" class="meeta-event-schedule-tab-pane">
+                            <ul class="meeta-event-accordion">
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-1.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <span class="time">09 AM - 11 AM</span>
+                                            <h3 class="title">Registration for opening workshop </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body open">
+                                        <p>We're inviting the top creatives in the tech industry from all over
+                                            the world to come learn, grow, scrape their knees, try new things,
+                                            to be vulnerable, and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-2.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <span class="time">11 AM - 01 AM</span>
+                                            <h3 class="title">Discussion about technolgy </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all over
+                                            the world to come learn, grow, scrape their knees, try new things,
+                                            to be vulnerable, and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-3.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <span class="time">01 AM - 02 AM</span>
+                                            <h3 class="title">Lunch Break </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all over
+                                            the world to come learn, grow, scrape their knees, try new things,
+                                            to be vulnerable, and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="tab5" class="meeta-event-schedule-tab-pane">
+                            <ul class="meeta-event-accordion">
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-1.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <span class="time">09 AM - 11 AM</span>
+                                            <h3 class="title">Registration for opening workshop </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body open">
+                                        <p>We're inviting the top creatives in the tech industry from all
+                                            over the world to come learn, grow, scrape their knees, try new
+                                            things, to be vulnerable, and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-2.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <span class="time">11 AM - 01 AM</span>
+                                            <h3 class="title">Discussion about technolgy </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all
+                                            over the world to come learn, grow, scrape their knees, try new
+                                            things, to be vulnerable, and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                                <li class="meeta-event-accordion-item">
+                                    <div class="meeta-event-accordion-toggle">
+                                        <div class="image">
+                                            <img src="assets/images/schedule-3.jpg" alt="">
+                                        </div>
+                                        <div class="event-title">
+                                            <span class="time">01 AM - 02 AM</span>
+                                            <h3 class="title">Lunch Break </h3>
+                                        </div>
+                                    </div>
+                                    <div class="meeta-event-accordion-body">
+                                        <p>We're inviting the top creatives in the tech industry from all
+                                            over the world to come learn, grow, scrape their knees, try new
+                                            things, to be vulnerable, and to have epic adventures</p>
+                                    </div>
+                                    <a routerLink="/conference" class="btn"
+                                        style="margin-left: 128px; margin-top: 21px;">En savoir plus</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+	<!-- Event Schedule End -->
+
+	<!--Galerie d'image-->
+	<div class="hls_sol">
+		<ul>
+			<li>
+				<img src="assets/images/MUS_2470p.jpg" alt="" />
+				<div class="hls_sol_data">
+					<div class="hls_data"></div>
+				</div>
+			</li>
+			<li>
+				<img src="assets/images/MUS_282.jpg" alt="" />
+				<div class="hls_sol_data">
+					<div class="hls_data"></div>
+				</div>
+			</li>
+			<li>
+				<img src="assets/images/MUS_338.jpg" alt="" />
+				<div class="hls_sol_data">
+					<div class="hls_data"></div>
+				</div>
+			</li>
+			<li>
+				<img src="assets/images/DSC_4506.jpg" alt="" />
+				<div class="hls_sol_data"></div>
+			</li>
+			<li>
+				<img src="assets/images/MUS_400.jpg" alt="" />
+				<div class="hls_sol_data"></div>
+			</li>
+
+			<li>
+				<img src="assets/images/DSC_34320.jpg" alt="" />
+				<div class="hls_sol_data"></div>
+			</li>
+		</ul>
+	</div>
+
+	<!-- Swiper Secteurs Activites Start -->
+	<app-swiper-secteurs-activites></app-swiper-secteurs-activites>
+
+	<!-- Swiper Partners -->
+	<app-swiper-partners></app-swiper-partners>
+
+	<!-- Testimonial Start -->
+	<!-- <div class="meeta-testimonial section-padding">
+    <img class="testimonial-shape-02" src="assets/images/shape/shape-11.png" alt="Shape">
+    <div class="container">
+        <div class="meeta-section-title text-center">
+            <h4 class="sub-title">En vidéo</h4>
+            <h2 class="main-title">Témoignages</h2>
+        </div>
+    </div>
+    <div class="container-fluid custom-container">
+        <div class="meeta-testimonial-active">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="single-testimonial">
+                            <div class="meeta-about-section-2">
+                                <div class="container">
+                                    <div class="row align-items-center">
+                                        <div class="meeta-about-images-2">
+                                            <div class="image">
+                                                <img src="assets/images/ALW_4646_e80870e56f-.jpg" alt="About">
+                                            </div>
+                                            <div class="play-btn">
+                                                <a class="popup-video"
+                                                    href="https://www.youtube-nocookie.com/embed/Ga6RYejo6Hk"><i
+                                                        class="fas fa-play"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="single-testimonial">
+                            <div class="meeta-about-section-2">
+                                <div class="container">
+                                    <div class="row align-items-center">
+                                        <div class="meeta-about-images-2">
+                                            <div class="image">
+                                                <img src="assets/images/ALW_4646_e80870e56f-.jpg" alt="About">
+                                            </div>
+                                            <div class="play-btn">
+                                                <a class="popup-video"
+                                                    href="https://www.youtube-nocookie.com/embed/Ga6RYejo6Hk"><i
+                                                        class="fas fa-play"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="single-testimonial">
+                            <div class="meeta-about-section-2">
+                                <div class="container">
+                                    <div class="row align-items-center">
+                                        <div class="meeta-about-images-2">
+                                            <div class="image">
+                                                <img src="assets/images/ALW_4646_e80870e56f-.jpg" alt="About">
+                                            </div>
+                                            <div class="play-btn">
+                                                <a class="popup-video"
+                                                    href="https://www.youtube-nocookie.com/embed/Ga6RYejo6Hk"><i
+                                                        class="fas fa-play"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
+</div> -->
+	<!-- Testimonial End -->
+
+	<!-- Event Sponsors Start -->
+	<!-- <div class="meeta-event-sponsors-4 meeta-event-sponsors-5 section-padding"
+    style="background-image: url(assets/images/bg/sponsor-5-bg.jpg);">
+    <div class="container">
+        <div class="meeta-section-title-2 section-title-3 text-center">
+            <h4 class="sub-title">BTP Expo & Forum</h4>
+            <h2 class="main-title">Nos Partenaires</h2>
+        </div>
+        <div class="meeta-sponsor-wrap">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="meeta-sponsor-item-box sponsor-box-1">
+                        <div class="meeta-sponsor-logo sponsor-logo-1">
+                            <a href="#"><img src="assets/images/sponsors-5.png" alt=""></a>
+                        </div>
+                        <div class="meeta-sponsor-logo sponsor-logo-2">
+                            <a href="#"><img src="assets/images/sponsors-9.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="meeta-sponsor-item-box sponsor-box-2">
+                        <div class="meeta-sponsor-logo sponsor-logo-3">
+                            <a href="#"><img src="assets/images/sponsors-7.png" alt=""></a>
+                        </div>
+                        <div class="meeta-sponsor-logo sponsor-logo-4">
+                            <a href="#"><img src="assets/images/sponsors-11.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="meeta-sponsor-item-box sponsor-box-3">
+                        <div class="meeta-sponsor-logo sponsor-logo-5">
+                            <a href="#"><img src="assets/images/sponsors-6.png" alt=""></a>
+                        </div>
+                        <div class="meeta-sponsor-logo sponsor-logo-6">
+                            <a href="#"><img src="assets/images/sponsors-10.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="meeta-sponsor-item-box sponsor-box-4">
+                        <div class="meeta-sponsor-logo sponsor-logo-7">
+                            <a href="#"><img src="assets/images/sponsors-8.png" alt=""></a>
+                        </div>
+                        <div class="meeta-sponsor-logo sponsor-logo-8">
+                            <a href="#"><img src="assets/images/sponsors-12.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+	<!-- Event Sponsors End -->
+</div>

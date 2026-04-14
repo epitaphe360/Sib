@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "scans",
+  "info": {
+    "singularName": "scan",
+    "pluralName": "scans",
+    "displayName": "5- Users Scans",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "event": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event",
+      "inversedBy": "scans"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "scans"
+    },
+    "typeScanner": {
+      "type": "enumeration",
+      "enum": [
+        "visitor",
+        "exhibitor",
+        "collaborator",
+        "controller"
+      ]
+    },
+    "typeScanned": {
+      "type": "enumeration",
+      "enum": [
+        "visitor",
+        "exhibitor",
+        "collaborator",
+        "controller"
+      ]
+    }
+  }
+}

@@ -428,19 +428,19 @@ export default function PartnerSubscriptionPage() {
           </motion.div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center max-w-7xl mx-auto">
             {partnerTiers.map((tier) => (
               <Card
                 key={tier.id}
-                className={`relative overflow-hidden h-full flex flex-col transition-transform hover:scale-105 ${tier.color}`}
+                className={`relative overflow-hidden h-full w-full max-w-[400px] flex flex-col transition-transform hover:scale-[1.02] ${tier.color}`}
               >
                 {/* Header */}
-                <div className="p-6 pb-8 border-b-2 border-gray-200">
-                  <div className="flex items-center justify-between mb-4">
+                <div className="p-5 pb-5 border-b border-gray-200">
+                  <div className="flex items-center justify-between mb-3">
                     <div className="text-3xl">{tier.icon}</div>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{tier.name}</h3>
-                  <p className="text-sm text-gray-600 mb-4">{tier.description}</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-1.5">{tier.name}</h3>
+                  <p className="text-sm text-gray-600 mb-3">{tier.description}</p>
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-gray-900">{tier.price.toLocaleString()}</span>
                     <span className="text-lg text-gray-600">{tier.currency}</span>
@@ -448,10 +448,10 @@ export default function PartnerSubscriptionPage() {
                 </div>
 
                 {/* Features */}
-                <div className="p-6 flex-grow">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wider">Fonctionnalités</h4>
-                  <ul className="space-y-3">
-                    {tier.features.map((feature) => (
+                <div className="p-5 flex-grow">
+                  <h4 className="text-xs font-semibold text-gray-900 mb-3 uppercase tracking-wider">Fonctionnalités</h4>
+                  <ul className="space-y-2">
+                    {tier.features.slice(0, 4).map((feature) => (
                       <li key={feature.name} className="flex items-start gap-3">
                         {feature.included ? (
                           <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -465,20 +465,28 @@ export default function PartnerSubscriptionPage() {
                     ))}
                   </ul>
 
+                  {tier.features.length > 4 && (
+                    <p className="text-xs text-gray-500 mt-2">+ {tier.features.length - 4} fonctionnalités supplémentaires</p>
+                  )}
+
                   {/* Benefits */}
-                  <h4 className="text-sm font-semibold text-gray-900 mt-6 mb-4 uppercase tracking-wider">Avantages</h4>
-                  <ul className="space-y-2 mb-6">
-                    {tier.benefits.map((benefit) => (
+                  <h4 className="text-xs font-semibold text-gray-900 mt-5 mb-3 uppercase tracking-wider">Avantages</h4>
+                  <ul className="space-y-2 mb-4">
+                    {tier.benefits.slice(0, 2).map((benefit) => (
                       <li key={benefit} className="text-sm text-gray-700 flex items-start gap-2">
                         <Star className="w-4 h-4 text-yellow-500 flex-shrink-0 mt-0.5" />
                         {benefit}
                       </li>
                     ))}
                   </ul>
+
+                  {tier.benefits.length > 2 && (
+                    <p className="text-xs text-gray-500">+ {tier.benefits.length - 2} avantages supplémentaires</p>
+                  )}
                 </div>
 
                 {/* CTA */}
-                <div className="p-6 border-t-2 border-gray-200">
+                <div className="p-5 border-t border-gray-200">
                   <Button
                     onClick={() => handleSubscribe(tier.id)}
                     className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-semibold hover:shadow-lg transition-all"

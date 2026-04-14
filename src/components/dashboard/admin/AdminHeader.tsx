@@ -29,56 +29,59 @@ export function AdminHeader({ user, isLoading, onRefresh, t }: AdminHeaderProps)
   const countdown = useCountdown();
 
   return (
-    <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-8">
-      <div className="rounded-2xl overflow-hidden shadow-2xl" style={{ background: 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 40%, #2563eb 70%, #1e3a8a 100%)' }}>
+    <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-12">
+      <div
+        className="rounded-2xl overflow-hidden shadow-2xl relative"
+        style={{ background: 'linear-gradient(135deg, #0a1628 0%, #0e1f40 40%, #0a1220 100%)', border: '1px solid rgba(201,168,76,0.18)' }}
+      >
+        {/* Glow gold top-left */}
+        <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%)' }} />
 
-        {/* Motif zellige en fond */}
-        <div className="absolute inset-0 opacity-5 pointer-events-none" style={{
-          backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.3) 10px, rgba(255,255,255,0.3) 11px)`,
-        }} />
-
-        {/* Barre dorée animée */}
+        {/* Barre dorée animée — shimmer */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="h-1 w-full origin-left"
-          style={{ background: 'linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24)' }}
+          className="h-1.5 w-full origin-left animate-shimmer"
+          style={{
+            background: 'linear-gradient(90deg, #f59e0b 0%, #fbbf24 30%, #fef08a 50%, #fbbf24 70%, #f59e0b 100%)',
+            backgroundSize: '200% auto',
+          }}
         />
 
-        <div className="px-8 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative">
+        <div className="px-10 py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative">
           {/* Titre + utilisateur */}
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-6">
             <motion.div
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ duration: 3, repeat: Infinity, repeatDelay: 5 }}
-              className="p-3.5 rounded-2xl bg-white/15 border border-white/30 backdrop-blur-sm"
+              className="p-4 rounded-2xl bg-white/15 border border-white/30 backdrop-blur-sm flex-shrink-0"
             >
               <Shield className="h-8 w-8 text-yellow-300" />
             </motion.div>
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-2xl font-bold text-white tracking-tight">
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-3xl font-bold text-white tracking-tight">
                   {t('admin.dashboard_title')}
                 </h1>
                 <motion.span
                   animate={{ opacity: [1, 0.5, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="flex items-center gap-1 bg-green-400/20 border border-green-400/40 text-green-300 text-xs font-semibold px-2 py-0.5 rounded-full"
+                  className="flex items-center gap-1.5 bg-green-400/20 border border-green-400/40 text-green-300 text-xs font-bold px-3 py-1 rounded-full"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                   LIVE
                 </motion.span>
               </div>
-              <p className="text-blue-200 text-sm">
-                Bonjour, <span className="font-semibold text-white">{user?.profile?.firstName || 'Administrateur'}</span> · {dateStr}
+              <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.50)' }}>
+                Bonjour, <span className="font-semibold text-white">{user?.profile?.firstName || 'Administrateur'}</span> • {dateStr}
               </p>
             </div>
           </div>
 
           {/* Actions droite */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm">
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-2.5 bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 backdrop-blur-sm">
               <Zap className="h-4 w-4 text-yellow-300" />
               <span className="text-white text-xs font-medium">{t('admin.system_operational')}</span>
             </div>
@@ -87,9 +90,9 @@ export function AdminHeader({ user, isLoading, onRefresh, t }: AdminHeaderProps)
               size="sm"
               onClick={onRefresh}
               disabled={isLoading}
-              className="border-white/30 text-white hover:text-white hover:bg-white/20 bg-white/10 backdrop-blur-sm"
+              className="border-white/30 text-white hover:text-white hover:bg-white/20 bg-white/10 backdrop-blur-sm text-sm"
             >
-              <RefreshCw className={`h-4 w-4 mr-1.5 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
               Actualiser
             </Button>
           </div>
@@ -101,9 +104,10 @@ export function AdminHeader({ user, isLoading, onRefresh, t }: AdminHeaderProps)
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="border-t border-white/10 px-8 py-4 flex flex-wrap items-center gap-6 bg-black/10"
+            className="border-t px-10 py-6 flex flex-wrap items-center gap-8"
+            style={{ borderColor: 'rgba(201,168,76,0.12)', background: 'rgba(201,168,76,0.04)' }}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Clock className="h-4 w-4 text-yellow-300" />
               <span className="text-blue-200 text-sm font-medium">Ouverture SIB 2026</span>
             </div>

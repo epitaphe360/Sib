@@ -67,3 +67,10 @@ package-lock.json
 # Environment files
 *.env
 *.env.*
+
+# Secrets / env files in urbaevent backend
+urbaevent/**/.env*
+urbaevent/**/*.env-*
+
+# Large SQL dumps
+urbaevent/*.sql

@@ -1,0 +1,150 @@
+{
+  "kind": "collectionType",
+  "collectionName": "events",
+  "info": {
+    "singularName": "event",
+    "pluralName": "events",
+    "displayName": "1- Events Moderation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "organizer": {
+      "type": "string",
+      "required": true
+    },
+    "fullDescription": {
+      "type": "richtext"
+    },
+    "startDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "endDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "dateString": {
+      "type": "string",
+      "required": true
+    },
+    "timeString": {
+      "type": "string",
+      "required": true
+    },
+    "locationAddress": {
+      "type": "string",
+      "required": true
+    },
+    "locationLatLng": {
+      "type": "string",
+      "required": true
+    },
+    "banner": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "gates": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::gate.gate",
+      "mappedBy": "event"
+    },
+    "conferences": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::conference.conference",
+      "mappedBy": "event"
+    },
+    "registrations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::registration.registration",
+      "mappedBy": "event"
+    },
+    "scans": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::scan.scan",
+      "mappedBy": "event"
+    },
+    "scans_controller": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::scan-controller.scan-controller",
+      "mappedBy": "event"
+    },
+    "controllers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "eventControl"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "presentationUrl": {
+      "type": "string",
+      "required": false
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "simple",
+        "exhibitor"
+      ],
+      "default": "simple",
+      "required": true
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "badgeBackground": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "smallBadgeBackground": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "description": {
+      "type": "text"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "email"
+    }
+  }
+}

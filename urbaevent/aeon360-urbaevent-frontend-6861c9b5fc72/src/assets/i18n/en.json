@@ -1,0 +1,10 @@
+{
+    "title": "Salon international du bâtiment",
+    "contact": "Contact",
+    "newsletter": {
+        "title": "S'abonner",
+        "description": "Soyez le premier à recevoir les dernières nouvelles sur les tendances, les promotions et bien plus encore !",
+        "placeholder": "Votre adresse email",
+        "cta": "Rejoindre"
+    }
+}

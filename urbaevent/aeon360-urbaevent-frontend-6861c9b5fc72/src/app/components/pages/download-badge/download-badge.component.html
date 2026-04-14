@@ -1,0 +1,155 @@
+<!-- Slider Section Start  -->
+<div class="meeta-hero-section-5 d-flex align-items-center section-padding">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="hero-content">
+					<!-- <div class="title-wrap text-center">
+						<h2 class="title">UrbaEvent</h2>
+					</div> -->
+					<div class="search-form-wrap">
+						<div class="search-form-inner">
+							<!-- Hero Form Start -->
+							<div class="hero-form">
+								<div class="hero-form-wrap">
+									<div class="heading-wrap text-center">
+										<h3 class="title">Télécharger un Badge</h3>
+									</div>
+									<div class="alert alert-success text-center" role="alert" *ngIf="submitValidated == true" style="margin: 10px 0px">Badge téléchargé avec succès</div>
+									<form [formGroup]="form" (ngSubmit)="onSubmitForm()">
+										<div class="row">
+											<!-- Event -->
+											<div class="col-sm-12">
+												<div class="single-form">
+													<select
+														class="form-control"
+														[ngClass]="{ input_required: submitted && !form.get('event').valid }"
+														formControlName="event"
+														(change)="getExhibitorList()"
+													>
+														<option value="">Sélectionnez un événement</option>
+														<option [value]="item.id" *ngFor="let item of events">
+															{{ item.name }}
+														</option>
+													</select>
+													<span class="form-text text-danger" *ngIf="submitted && !form.get('event').valid"> Champ obligatoire </span>
+													<span class="required_star_lg"></span>
+												</div>
+											</div>
+											<!-- Type badge -->
+											<div class="col-sm-12">
+												<div class="single-form">
+													<select
+														class="form-control"
+														[ngClass]="{ input_required: submitted && !form.get('type').valid }"
+														formControlName="type"
+														(change)="getExhibitorList()"
+													>
+														<option value="">Sélectionnez un type de badge</option>
+														<option [value]="item.name" *ngFor="let item of types">
+															{{ item.label }}
+														</option>
+													</select>
+													<span class="form-text text-danger" *ngIf="submitted && !form.get('type').valid"> Champ obligatoire </span>
+													<span class="required_star_lg"></span>
+												</div>
+											</div>
+											<!-- Exhibitor -->
+											<div class="col-sm-12" *ngIf="form.get('type').value == 'collaborator'">
+												<div class="single-form">
+													<select class="form-control" [ngClass]="{ input_required: submitted && !form.get('exhibitor').valid }" formControlName="exhibitor">
+														<option value="">Sélectionnez un exposant</option>
+														<option [value]="item.user.id" *ngFor="let item of exhibitors">
+															{{ item.user.company }}
+														</option>
+													</select>
+													<span class="form-text text-danger" *ngIf="submitted && !form.get('exhibitor').valid"> Champ obligatoire </span>
+													<span class="required_star_lg"></span>
+												</div>
+											</div>
+											<!-- Nom & Prénom -->
+											<div class="col-sm-12">
+												<div class="single-form">
+													<input type="text" [ngClass]="{ input_required: submitted && !form.get('name').valid }" formControlName="name" placeholder="Nom & Prénom" />
+													<span class="form-text text-danger" *ngIf="submitted && !form.get('name').valid"> Champ obligatoire </span>
+													<span class="required_star_lg"></span>
+												</div>
+											</div>
+											<!-- Email -->
+											<div class="col-sm-12">
+												<div class="single-form">
+													<input
+														type="text"
+														[ngClass]="{
+															input_required: submitted && !form.get('email').valid
+														}"
+														formControlName="email"
+														placeholder="Email"
+													/>
+													<span class="form-text text-danger" *ngIf="submitted && !form.get('email').valid">
+														<span *ngIf="form.get('email').errors?.required"> Champ obligatoire </span>
+														<span *ngIf="form.get('email').errors?.email"> Format d'email incorrecte </span>
+													</span>
+													<span class="required_star_lg"></span>
+												</div>
+											</div>
+											<!-- Phone -->
+											<div class="col-sm-12">
+												<div class="single-form">
+													<input
+														type="text"
+														[ngClass]="{
+															input_required: submitted && !form.get('phone').valid
+														}"
+														formControlName="phone"
+														placeholder="Téléphone"
+													/>
+													<span class="form-text text-danger" *ngIf="submitted && !form.get('phone').valid"> Champ obligatoire </span>
+													<span class="required_star_lg"></span>
+												</div>
+											</div>
+											<!-- Company -->
+											<div class="col-sm-12" *ngIf="form.get('type').value == 'visitor'">
+												<div class="single-form">
+													<input
+														type="text"
+														[ngClass]="{
+															input_required: submitted && !form.get('company').valid
+														}"
+														formControlName="company"
+														placeholder="Société"
+													/>
+												</div>
+											</div>
+											<!-- Job position -->
+											<div class="col-sm-12">
+												<div class="single-form">
+													<input
+														type="text"
+														[ngClass]="{
+															input_required: submitted && !form.get('jobPosition').valid
+														}"
+														formControlName="jobPosition"
+														placeholder="Fonction"
+													/>
+												</div>
+											</div>
+
+											<div class="col-sm-12 mt-2">
+												<div class="form-btn">
+													<button class="btn-2" type="submit" [disabled]="submitLoading">Télécharger</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<!-- Hero Form End -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Slider Section End -->

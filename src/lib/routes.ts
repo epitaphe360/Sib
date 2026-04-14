@@ -75,6 +75,9 @@
   VENUE: '/venue',
   ACCOMMODATION: '/hebergement',
 
+  // Vitrine publique par salon
+  SALON_PUBLIC: '/salons/:slug',
+
   // Pages publiques vitrine (Le Salon, Exposer, Visiter)
   PRESENTATION: '/presentation',
   NOUVEAUTES: '/nouveautes',
@@ -98,6 +101,7 @@
   PARTNER_SUPPORT_PAGE: '/partner/support-page',
 
   // Pages admin manquantes
+  ADMIN_SALONS: '/admin/salons',
   ADMIN_PARTNERS: '/admin/partners',
   ADMIN_MEDIA: '/admin/media',
   ADMIN_EXHIBITORS_LIST: '/admin/exhibitors-list',

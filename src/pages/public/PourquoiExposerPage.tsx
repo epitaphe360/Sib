@@ -35,6 +35,58 @@ const chiffres = [
 
 export default function PourquoiExposerPage() {
   const cms = usePageContent('pourquoi-exposer');
+
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
+
+  const chiffres = (() => {
+    const raw = cms.stats_json;
+    if (!raw) return [
+      { value: '600+', label: 'Exposants' },
+      { value: '200 000+', label: 'Visiteurs' },
+      { value: '35 000 m²', label: 'Surface' },
+      { value: '50', label: 'Pays' },
+      { value: '5', label: 'Jours' },
+      { value: '10', label: 'Secteurs' },
+    ];
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [
+        { value: '600+', label: 'Exposants' },
+        { value: '200 000+', label: 'Visiteurs' },
+        { value: '35 000 m²', label: 'Surface' },
+        { value: '50', label: 'Pays' },
+        { value: '5', label: 'Jours' },
+        { value: '10', label: 'Secteurs' },
+      ];
+    }
+  })();
+
+  const secteurs_cles = (() => {
+    const raw = cms.sectors_json;
+    if (!raw) return [
+      'Gros Œuvre & Structure', 'Menuiserie & Fermeture', 'Décoration & Aménagement',
+      'Climatisation & Sanitaire', 'Équipements Électriques', 'Matériels & Machines',
+      'Environnement Durable', 'Formation & Institutions', 'Immobilier & Financement',
+      'Technologies Numériques',
+    ];
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.map((s: unknown) => String(s)) : [];
+    } catch {
+      return [
+        'Gros Œuvre & Structure', 'Menuiserie & Fermeture', 'Décoration & Aménagement',
+        'Climatisation & Sanitaire', 'Équipements Électriques', 'Matériels & Machines',
+        'Environnement Durable', 'Formation & Institutions', 'Immobilier & Financement',
+        'Technologies Numériques',
+      ];
+    }
+  })();
+
   const arguments_exposer = [
     { icon: Users, title: cms.arg_1_title || '200 000+ visiteurs', desc: cms.arg_1_desc || "Architectes, ingénieurs, promoteurs, décideurs publics et privés venus du Maroc, d'Afrique et du monde entier." },
     { icon: Globe, title: cms.arg_2_title || '50 pays représentés', desc: cms.arg_2_desc || '600 exposants et 1 500 marques internationales réunis sur 35 000 m².' },
@@ -62,7 +114,7 @@ export default function PourquoiExposerPage() {
               className="inline-flex items-center gap-2 px-8 py-4 bg-sib-gold text-sib-navy rounded-lg font-bold text-lg hover:bg-sib-gold/90 transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300"
             >
               <TrendingUp className="w-5 h-5" />
-              Réservez votre stand
+              {getCms('hero_cta', 'Réservez votre stand')}
             </Link>
           </HeroReveal>
         </div>
@@ -86,7 +138,7 @@ export default function PourquoiExposerPage() {
       <div className="container mx-auto px-4 py-16">
         <ScrollReveal>
           <h2 className="text-3xl font-bold text-sib-navy mb-10 text-center font-display">
-            6 raisons d'exposer
+            {getCms('reasons_title', "6 raisons d'exposer")}
           </h2>
         </ScrollReveal>
         <StaggerReveal slow className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -109,7 +161,7 @@ export default function PourquoiExposerPage() {
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <h2 className="text-3xl font-bold text-sib-navy mb-8 text-center font-display">
-              Secteurs représentés
+              {getCms('sectors_title', 'Secteurs représentés')}
             </h2>
           </ScrollReveal>
           <StaggerReveal className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
@@ -129,16 +181,15 @@ export default function PourquoiExposerPage() {
         <div className="container mx-auto px-4 text-center">
           <ScrollReveal variant={scaleUp}>
             <Eye className="w-12 h-12 text-sib-navy mx-auto mb-4" />
-            <h3 className="text-3xl font-bold text-sib-navy mb-4 font-display">Prêt à exposer ?</h3>
+            <h3 className="text-3xl font-bold text-sib-navy mb-4 font-display">{getCms('cta_title', 'Prêt à exposer ?')}</h3>
             <p className="text-sib-navy/70 max-w-xl mx-auto mb-8">
-              Réservez votre stand dès maintenant et bénéficiez des meilleurs emplacements
-              pour la 20ème édition du SIB.
+              {getCms('cta_text', 'Réservez votre stand dès maintenant et bénéficiez des meilleurs emplacements pour la 20ème édition du SIB.')}
             </p>
             <Link
               to={ROUTES.EXHIBITOR_SUBSCRIPTION}
               className="inline-flex items-center gap-2 px-8 py-4 bg-sib-navy text-white rounded-lg font-bold text-lg hover:bg-sib-navy/90 transition-all duration-300 hover:scale-105 transform"
             >
-              Demander un devis
+              {getCms('cta_button', 'Demander un devis')}
             </Link>
           </ScrollReveal>
         </div>

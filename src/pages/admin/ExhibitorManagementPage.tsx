@@ -11,9 +11,11 @@ import { supabase } from '../../lib/supabase';
 import { SupabaseService } from '../../services/supabaseService';
 import { Exhibitor } from '../../types';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useSalon } from '../../contexts/SalonContext';
 
 export default function ExhibitorManagementPage() {
   const { t } = useTranslation();
+  const { currentSalon } = useSalon();
   const [exhibitors, setExhibitors] = useState<Exhibitor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -24,16 +26,25 @@ export default function ExhibitorManagementPage() {
 
   useEffect(() => {
     fetchExhibitors();
-  }, []);
+  }, [currentSalon]);
 
   const fetchExhibitors = async () => {
     setIsLoading(true);
     try {
-      // Requête directe Supabase sans joins complexes pour l'admin
-      const { data, error } = await supabase!
+      let query = supabase!
         .from('exhibitors')
         .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, contact_info, created_at, updated_at')
         .order('company_name', { ascending: true });
+
+      if (currentSalon) {
+        if (currentSalon.is_default) {
+          query = query.or(`salon_id.eq.${currentSalon.id},salon_id.is.null`);
+        } else {
+          query = query.eq('salon_id', currentSalon.id);
+        }
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error('❌ Erreur chargement exposants admin:', error);

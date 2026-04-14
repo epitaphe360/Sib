@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "apples",
+  "info": {
+    "singularName": "apple",
+    "pluralName": "apples",
+    "displayName": "apple"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": false,
+      "unique": false
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "socialId": {
+      "type": "string"
+    }
+  }
+}

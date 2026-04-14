@@ -128,21 +128,36 @@ export default function NetworkingPage() {
 
     return Math.min(100, score);
   }, [user]);
-  const missingMatchingCriteria = React.useMemo(() => {
-    if (!user) return [] as string[];
+  const matchingCriteriaChecklist = React.useMemo(() => {
+    if (!user) return [] as Array<{ label: string; completed: boolean }>;
 
     const profile = (user as any).profile || {};
-    const missing: string[] = [];
+    const sectors = Array.isArray(profile.sectors) ? profile.sectors : [];
+    const interests = Array.isArray(profile.interests) ? profile.interests : [];
+    const objectives = Array.isArray(profile.objectives) ? profile.objectives : [];
+    const collaborationTypes = Array.isArray(profile.collaborationTypes) ? profile.collaborationTypes : [];
+    const country = profile.country || (user as any).country || '';
+    const company = profile.company || (user as any).company || '';
+    const companySize = profile.companySize || '';
+    const bio = profile.bio || (user as any).bio || '';
 
-    if (!Array.isArray(profile.sectors) || profile.sectors.length === 0) missing.push('Secteurs');
-    if (!Array.isArray(profile.interests) || profile.interests.length === 0) missing.push('Intérêts');
-    if (!Array.isArray(profile.objectives) || profile.objectives.length === 0) missing.push('Objectifs');
-    if (!Array.isArray(profile.collaborationTypes) || profile.collaborationTypes.length === 0) missing.push('Types de collaboration');
-    if (!profile.country) missing.push('Pays');
-    if (!profile.bio || String(profile.bio).trim().length <= 20) missing.push('Bio (20+ caractères)');
-
-    return missing;
+    return [
+      { label: 'Secteurs', completed: sectors.length > 0 },
+      { label: 'Intérêts', completed: interests.length > 0 },
+      { label: 'Objectifs', completed: objectives.length > 0 },
+      { label: 'Types de collaboration', completed: collaborationTypes.length > 0 },
+      { label: 'Pays', completed: Boolean(country) },
+      { label: 'Entreprise', completed: Boolean(company) },
+      { label: 'Taille entreprise', completed: Boolean(companySize) },
+      { label: 'Bio (20+ caractères)', completed: typeof bio === 'string' && bio.trim().length > 20 }
+    ];
   }, [user]);
+
+  const missingMatchingCriteria = React.useMemo(() => {
+    return matchingCriteriaChecklist
+      .filter((criterion) => !criterion.completed)
+      .map((criterion) => criterion.label);
+  }, [matchingCriteriaChecklist]);
   const networkingScore = Math.min(100, connections.length * 4 + Math.round(profileCompleteness * 0.3));
   const engagementPct = Math.min(100, connections.length > 0 ? connections.length * 8 : 0);
 
@@ -709,25 +724,29 @@ export default function NetworkingPage() {
                       <div>
                         <h3 className="font-bold text-slate-900 text-sm">Matching avancé non généré</h3>
                         <p className="text-xs text-slate-600">Cliquez pour lancer l'analyse IA et afficher vos recommandations.</p>
-                        {missingMatchingCriteria.length > 0 && (
+                        {matchingCriteriaChecklist.length > 0 && (
                           <div className="mt-3">
                             <p className="text-[11px] text-slate-700 font-semibold mb-2">
-                              Critères à compléter ({missingMatchingCriteria.length})
+                              Checklist profil ({8 - missingMatchingCriteria.length}/8)
                             </p>
-                            <div className="flex flex-wrap gap-1.5">
-                              {missingMatchingCriteria.slice(0, 4).map((criterion) => (
-                                <span
-                                  key={criterion}
-                                  className="px-2 py-1 rounded-full text-[10px] font-bold bg-white text-slate-700 border border-slate-200"
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                              {matchingCriteriaChecklist.map((criterion) => (
+                                <div
+                                  key={criterion.label}
+                                  className={`px-2 py-1 rounded-lg text-[10px] font-semibold border flex items-center gap-1.5 ${
+                                    criterion.completed
+                                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                      : 'bg-white text-slate-700 border-slate-200'
+                                  }`}
                                 >
-                                  {criterion}
-                                </span>
+                                  {criterion.completed ? (
+                                    <CheckCircle className="h-3 w-3" />
+                                  ) : (
+                                    <X className="h-3 w-3" />
+                                  )}
+                                  <span>{criterion.label}</span>
+                                </div>
                               ))}
-                              {missingMatchingCriteria.length > 4 && (
-                                <span className="px-2 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
-                                  +{missingMatchingCriteria.length - 4}
-                                </span>
-                              )}
                             </div>
                           </div>
                         )}

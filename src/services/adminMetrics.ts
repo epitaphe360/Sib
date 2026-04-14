@@ -55,10 +55,22 @@ const defaultMetrics: AdminMetrics = {
 
 const METRICS_SERVER_URL = (import.meta.env.VITE_METRICS_SERVER_URL as string) || (import.meta.env.DEV ? 'http://localhost:4001/metrics' : '');
 
+// ── Cache in-mémoire (5 min) pour éviter de re-mesurer à chaque appel ────
+let _cachedMetrics: AdminMetrics | null = null;
+let _cacheExpiry = 0;
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+// ── Résultat du ping partagé — mesuré une seule fois par appel getMetrics ─
+let _sharedPingMs: number | null = null;
+
 export class AdminMetricsService {
 
   // Primary entry: prefers server-side admin client. In browser, tries metrics-server fallback.
-  static async getMetrics(): Promise<AdminMetrics> {
+  static async getMetrics(forceRefresh = false): Promise<AdminMetrics> {
+    // Servir depuis le cache si disponible et non forcé
+    if (!forceRefresh && _cachedMetrics && Date.now() < _cacheExpiry) {
+      return _cachedMetrics;
+    }
     const client = (supabase as any);
 
     // If no service client present and running in browser, try metrics-server endpoint.
@@ -79,6 +91,14 @@ export class AdminMetricsService {
     }
 
     if (!client) return defaultMetrics;
+
+    // Mesurer le ping une seule fois pour ce cycle (partagé entre getDbUptime + getAvgResponseTime)
+    _sharedPingMs = null;
+    try {
+      const pingStart = performance.now();
+      await client.from('users').select('id').limit(1);
+      _sharedPingMs = Math.round(performance.now() - pingStart);
+    } catch { _sharedPingMs = null; }
 
     try {
       const results: Record<string, number | undefined> = {};
@@ -158,6 +178,10 @@ export class AdminMetricsService {
         trafficData,
         recentActivity
       };
+
+      // Mettre en cache
+      _cachedMetrics = metrics;
+      _cacheExpiry = Date.now() + CACHE_TTL_MS;
 
       return metrics;
     } catch (err) {
@@ -245,54 +269,27 @@ export class AdminMetricsService {
     }
   }
 
-  // Uptime base de données : ping réel
+  // Uptime base de données : utilise le ping partagé pour éviter une double requête
   private static async getDbUptime(): Promise<number> {
-    const client = (supabase as any);
-    if (!client) return 0;
-    try {
-      const start = performance.now();
-      const { error } = await client.from('users').select('id').limit(1);
-      const elapsed = performance.now() - start;
-      if (error) return 0;
-      // < 500ms = 99.9%, < 1000ms = 99.5%, < 2000ms = 99.0%, sinon 98%
-      if (elapsed < 500) return 99.9;
-      if (elapsed < 1000) return 99.5;
-      if (elapsed < 2000) return 99.0;
-      return 98.0;
-    } catch {
-      return 0;
-    }
+    const elapsed = _sharedPingMs;
+    if (elapsed === null) return 0;
+    // Seuils adaptés à Supabase depuis Afrique du Nord (latence ~300-600ms normale)
+    if (elapsed < 700)  return 99.9;
+    if (elapsed < 1200) return 99.5;
+    if (elapsed < 2000) return 99.0;
+    return 98.0;
   }
   private static async getAvgResponseTime(): Promise<number> {
+    // Réutiliser le ping partagé — pas de requête supplémentaire
+    if (_sharedPingMs !== null) return _sharedPingMs;
     const client = (supabase as any);
-    if (!client) {
-      // Valeur par défaut optimiste pour une bonne connexion
-      return 45;
-    }
-    
+    if (!client) return 45;
     try {
-      const { data, error } = await client
-        .from('api_logs')
-        .select('response_time')
-        .gte('created_at', new Date(Date.now() - 60 * 60 * 1000).toISOString())
-        .limit(100);
-      
-      if (error || !data || data.length === 0) {
-        // Si pas de logs, faire un test de performance simple
-        const start = performance.now();
-        await client.from('users').select('id').limit(1);
-        const elapsed = performance.now() - start;
-        return Math.round(elapsed) || 50;
-      }
-      
-      const avg = data.reduce((sum: number, log: any) => sum + (log.response_time || 0), 0) / data.length;
-      return Math.round(avg);
-    } catch (err) {
-      // Test de performance en cas d'erreur
       const start = performance.now();
-      await client.from('users').select('id').limit(1).catch(() => {});
-      const elapsed = performance.now() - start;
-      return Math.round(elapsed) || 50;
+      await client.from('users').select('id').limit(1);
+      return Math.round(performance.now() - start);
+    } catch {
+      return 50;
     }
   }
 

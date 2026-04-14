@@ -9,7 +9,7 @@ interface DocGroup {
   docs: { name: string; url: string; size?: string }[];
 }
 
-const documents: DocGroup[] = [
+const defaultDocuments: DocGroup[] = [
   {
     year: '2026',
     label: 'SIB 2026 — 20ème Édition',
@@ -52,6 +52,29 @@ const documents: DocGroup[] = [
 
 export default function TelechargementPage() {
   const cms = usePageContent('telechargements');
+
+  const documents: DocGroup[] = (() => {
+    const raw = cms.documents_json;
+    if (!raw) return defaultDocuments;
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return defaultDocuments;
+      return parsed.map((group: any) => ({
+        year: String(group?.year ?? ''),
+        label: String(group?.label ?? ''),
+        docs: Array.isArray(group?.docs)
+          ? group.docs.map((doc: any) => ({
+              name: String(doc?.name ?? ''),
+              url: String(doc?.url ?? ''),
+              size: doc?.size ? String(doc.size) : undefined,
+            })).filter((doc: any) => doc.name && doc.url)
+          : [],
+      })).filter((group: DocGroup) => group.label.length > 0);
+    } catch {
+      return defaultDocuments;
+    }
+  })();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}

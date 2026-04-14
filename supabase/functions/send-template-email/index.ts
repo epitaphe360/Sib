@@ -1,7 +1,7 @@
 /**
  * Generic Email Sending Function
  *
- * Sends emails using SMTP (mail.siportevent.com)
+ * Sends emails using SMTP (mail.sibevent.com)
  * Supports HTML and plain text emails
  */
 
@@ -15,13 +15,13 @@ const corsHeaders = {
 
 // Configuration SMTP
 const SMTP_CONFIG = {
-  hostname: Deno.env.get('SMTP_HOST') || 'mail.siportevent.com',
+  hostname: Deno.env.get('SMTP_HOST') || 'mail.sibevent.com',
   port: parseInt(Deno.env.get('SMTP_PORT') || '587'),
-  username: Deno.env.get('SMTP_USERNAME') || 'contact@siportevent.com',
+  username: Deno.env.get('SMTP_USERNAME') || 'contact@sibevent.com',
   password: Deno.env.get('SMTP_PASSWORD') || 'S!P0RT@9083',
 };
 
-const DEFAULT_SENDER_EMAIL = 'contact@siportevent.com';
+const DEFAULT_SENDER_EMAIL = 'contact@sibevent.com';
 
 interface EmailRequest {
   to: string | string[];

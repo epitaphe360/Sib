@@ -1,0 +1,42 @@
+{
+	"name": "urbaevent",
+	"private": true,
+	"version": "1.0.0",
+	"description": "URBAEVENT",
+	"scripts": {
+		"dev": "strapi develop",
+		"dev:admin": "strapi develop --watch-admin",
+		"start": "strapi start",
+		"build": "strapi build",
+		"build:prod": "NODE_ENV=production strapi build",
+		"strapi": "strapi"
+	},
+	"dependencies": {
+		"@_sh/strapi-plugin-ckeditor": "^1.1.2",
+		"@strapi/plugin-i18n": "4.12.0",
+		"@strapi/plugin-users-permissions": "4.12.0",
+		"@strapi/provider-email-nodemailer": "^4.12.4",
+		"@strapi/strapi": "4.12.0",
+		"crypto-js": "^4.1.1",
+		"file-saver": "^2.0.5",
+		"generate-password": "^1.7.0",
+		"jspdf": "^2.5.1",
+		"pg": "8.6.0",
+		"qrcode": "^1.5.1",
+		"randomstring": "^1.3.0",
+		"sib-api-v3-sdk": "^8.4.2",
+		"strapi-plugin-transformer": "^3.1.0",
+		"xlsx": "^0.18.5"
+	},
+	"author": {
+		"name": "Developer"
+	},
+	"strapi": {
+		"uuid": "64553d20-31b5-4b3a-971d-ccbe1e497c36"
+	},
+	"engines": {
+		"node": ">=14.19.1 <=16.x.x",
+		"npm": ">=6.0.0"
+	},
+	"license": "MIT"
+}

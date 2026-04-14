@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "registrations",
+  "info": {
+    "singularName": "registration",
+    "pluralName": "registrations",
+    "displayName": "4- Events Registrations",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "registrations"
+    },
+    "event": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event",
+      "inversedBy": "registrations"
+    },
+    "conference": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::conference.conference",
+      "inversedBy": "registrations"
+    },
+    "gate": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::gate.gate",
+      "inversedBy": "registrations"
+    },
+    "booth": {
+      "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "visitor",
+        "exhibitor",
+        "collaborator"
+      ],
+      "required": true
+    },
+    "confirmed": {
+      "type": "boolean"
+    },
+    "emailBadgeSent": {
+      "type": "boolean"
+    },
+    "message": {
+      "type": "text"
+    }
+  }
+}

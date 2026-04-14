@@ -5,7 +5,13 @@ import { ScrollReveal, HeroReveal, StaggerReveal, fadeUp } from '../../component
 
 export default function EspacesSibPage() {
   const cms = usePageContent('espaces-sib');
-  const espaces = [
+
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
+
+  const defaultEspaces = [
     {
       icon: Wrench,
       title: cms.espace_1_title || '2 Espaces de Démonstration',
@@ -32,6 +38,24 @@ export default function EspacesSibPage() {
       description: cms.espace_5_desc || "URBA EVENT est le programme de rencontres d'affaires B2B du SIB. Pour l'édition 2026, 300 rencontres qualifiées sont planifiées entre exposants nationaux et internationaux. L'objectif : faciliter les partenariats stratégiques et la signature de contrats pendant les 5 jours du salon.",
     },
   ];
+
+  const espaces = (() => {
+    const raw = cms.espaces_json;
+    if (!raw) return defaultEspaces;
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return defaultEspaces;
+      const icons = [Wrench, GraduationCap, Briefcase, Tv, Handshake];
+      return parsed.map((item: any, idx: number) => ({
+        icon: icons[idx % icons.length],
+        title: String(item?.title ?? ''),
+        description: String(item?.description ?? ''),
+      })).filter((e: any) => e.title);
+    } catch {
+      return defaultEspaces;
+    }
+  })();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
@@ -39,7 +63,7 @@ export default function EspacesSibPage() {
       <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
-            5 espaces dédiés
+            {getCms('hero_badge', '5 espaces dédiés')}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Espaces SIB'}</h1>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
@@ -79,16 +103,16 @@ export default function EspacesSibPage() {
       <ScrollReveal variant={fadeUp} delay={0.2}>
       <div className="bg-sib-navy/5 py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-sib-navy mb-4 font-display">Intéressé par un espace ?</h2>
+          <h2 className="text-2xl font-bold text-sib-navy mb-4 font-display">{getCms('cta_title', 'Intéressé par un espace ?')}</h2>
           <p className="text-gray-600 mb-8 max-w-lg mx-auto">
-            Contactez-nous pour en savoir plus sur les modalités de participation et de réservation.
+            {getCms('cta_text', 'Contactez-nous pour en savoir plus sur les modalités de participation et de réservation.')}
           </p>
           <a
-            href="/contact"
+            href={getCms('cta_url', '/contact')}
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all"
             style={{ background: '#C9A84C' }}
           >
-            Contactez-nous
+            {getCms('cta_button', 'Contactez-nous')}
           </a>
         </div>
       </div>

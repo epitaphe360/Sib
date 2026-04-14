@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -23,6 +23,8 @@ import {
   Eye,
   Layers,
   FileText,
+  Upload,
+  Loader,
 } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -667,11 +669,29 @@ function DayAccordion({ day }: { day: DayProgram }) {
 /* ═══════════════════════════════════════════════════ */
 export default function EventManagementPage() {
   const { t } = useTranslation();
-  const { days, info, addDay, resetToDefault } = useProgrammeStore();
+  const { days, info, addDay, resetToDefault, syncToSupabase, loadFromSupabase } = useProgrammeStore();
   const [addingDay, setAddingDay] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<'programme' | 'info'>('programme');
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  // Charger depuis Supabase au premier rendu (pour avoir la dernière version publiée)
+  useEffect(() => {
+    loadFromSupabase().catch(() => {/* silently keep local state */});
+  }, []);
+
+  const handlePublish = async () => {
+    setIsSyncing(true);
+    try {
+      await syncToSupabase();
+      toast.success('Programme publié — visible par tous les visiteurs');
+    } catch {
+      toast.error('Erreur lors de la publication. Vérifiez votre connexion.');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   // Stats
   const totalSessions = days.reduce((n, d) => n + d.sessions.length, 0);
@@ -732,6 +752,18 @@ export default function EventManagementPage() {
               >
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Réinitialiser
+              </Button>
+              <Button
+                size="sm"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-60"
+                onClick={handlePublish}
+                disabled={isSyncing}
+              >
+                {isSyncing
+                  ? <Loader className="w-4 h-4 mr-2 animate-spin" />
+                  : <Upload className="w-4 h-4 mr-2" />
+                }
+                {isSyncing ? 'Publication…' : 'Publier les modifications'}
               </Button>
             </div>
           </div>

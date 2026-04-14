@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { User, Mail, Phone, MapPin, Briefcase, Loader, Lock, Upload, Crown, Camera } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Briefcase, Loader, Lock, Upload, Crown, Camera, CheckCircle } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { motion } from 'framer-motion';
@@ -187,7 +187,7 @@ export default function VisitorVIPRegistration() {
           accountType = `visiteur ${level}`;
         }
         
-        toast.error(`?? Cet email est déjà enregistré en tant que ${accountType}. Connectez-vous pour accéder à votre compte.`);
+        toast.error(`Cet email est déjà enregistré en tant que ${accountType}. Connectez-vous pour accéder à votre compte.`);
         
         setTimeout(() => {
           if (window.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
@@ -410,7 +410,14 @@ export default function VisitorVIPRegistration() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-yellow-800 to-yellow-600 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-blue-950 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="pointer-events-none absolute inset-0 opacity-20" style={{
+        backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,215,0,0.08) 35px, rgba(255,215,0,0.08) 70px),
+                         repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(0,128,0,0.08) 35px, rgba(0,128,0,0.08) 70px)`
+      }} />
+      <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-sib-gold/20 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <motion.div
@@ -419,26 +426,26 @@ export default function VisitorVIPRegistration() {
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-3 rounded-lg shadow-lg">
+            <div className="bg-sib-gold p-3 rounded-lg shadow-lg shadow-sib-gold/30">
               <Crown className="h-8 w-8 text-gray-900" />
             </div>
             <div>
               <span className="text-2xl font-bold text-white">SIB VIP</span>
-              <span className="text-sm text-yellow-200 block leading-none">Premium Pass 2026</span>
+              <span className="text-sm text-white/70 block leading-none">Premium Pass 2026</span>
             </div>
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">
             Inscription Pass Premium VIP
           </h1>
-          <p className="text-yellow-100 text-lg">
+          <p className="text-white/80 text-lg">
             Accès complet au salon avec badge photo sécurisé
           </p>
-          <div className="mt-4 inline-flex items-center space-x-3 bg-yellow-800 px-6 py-3 rounded-full">
-            <span className="text-yellow-100 font-semibold">?? RDV B2B Illimités</span>
-            <span className="text-yellow-200">•</span>
-            <span className="text-yellow-100 font-semibold">?? Gala exclusif</span>
-            <span className="text-yellow-200">•</span>
-            <span className="text-yellow-100 font-semibold">?? Networking premium</span>
+          <div className="mt-4 inline-flex items-center space-x-3 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-full">
+            <span className="text-sib-gold font-semibold">RDV B2B Illimités</span>
+            <span className="text-white/60">•</span>
+            <span className="text-sib-gold font-semibold">Gala exclusif</span>
+            <span className="text-white/60">•</span>
+            <span className="text-sib-gold font-semibold">Networking premium</span>
           </div>
         </motion.div>
 
@@ -448,7 +455,7 @@ export default function VisitorVIPRegistration() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="p-8">
+          <Card className="p-8 bg-white/95 backdrop-blur-xl border border-white/40 shadow-2xl shadow-blue-950/30">
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error("? Validation errors:", errors);
               toast.error("Veuillez corriger les erreurs rouges dans le formulaire.");
@@ -674,43 +681,43 @@ export default function VisitorVIPRegistration() {
               </div>
 
               {/* VIP Benefits */}
-              <div className="bg-gradient-to-r from-yellow-50 to-purple-50 border border-yellow-300 rounded-lg p-6">
-                <h4 className="font-bold text-yellow-900 mb-3 flex items-center">
+              <div className="bg-gradient-to-r from-blue-50 to-amber-50 border border-sib-gold/40 rounded-lg p-6">
+                <h4 className="font-bold text-blue-900 mb-3 flex items-center">
                   <Crown className="h-5 w-5 mr-2" />
                   Inclus dans votre Pass Premium VIP
                 </h4>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li className="flex items-start">
-                    <span className="text-yellow-600 mr-2">?</span>
+                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
                     <span><strong>Rendez-vous B2B ILLIMITÉS</strong> - Planifiez autant de meetings que souhaité</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-600 mr-2">?</span>
+                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
                     <span><strong>Badge ultra-sécurisé avec photo</strong> - QR code JWT rotatif</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-600 mr-2">?</span>
+                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
                     <span><strong>Accès zones VIP</strong> - Salons premium, networking area</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-600 mr-2">?</span>
+                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
                     <span><strong>Gala de clôture exclusif</strong> - Événement réseau premium</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-600 mr-2">?</span>
+                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
                     <span><strong>Ateliers et conférences VIP</strong> - Contenus exclusifs</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-600 mr-2">?</span>
+                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
                     <span><strong>{t('common.complete_dashboard')}</strong> - {t('common.dashboard')} {t('common.appointments')} & {t('common.networking')}</span>
                   </li>
                 </ul>
               </div>
 
               {/* Payment Info */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-blue-50/80 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-900">
-                  <strong>?? Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page de paiement sécurisé (700 EUR). Votre accès VIP sera activé immédiatement après validation du paiement.
+                  <strong>Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page de paiement sécurisé (700 EUR). Votre accès VIP sera activé immédiatement après validation du paiement.
                 </p>
               </div>
 
@@ -718,7 +725,7 @@ export default function VisitorVIPRegistration() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 py-4 text-lg font-bold shadow-lg"
+                className="w-full bg-sib-gold hover:bg-sib-gold/90 text-white py-4 text-lg font-bold shadow-lg shadow-sib-gold/30"
               >
                 {isSubmitting ? (
                   <>
@@ -742,9 +749,9 @@ export default function VisitorVIPRegistration() {
                   type="button"
                   variant="outline"
                   onClick={() => navigate(ROUTES.REGISTER_VISITOR)}
-                  className="border-green-500 text-green-600 hover:bg-green-50"
+                  className="border-blue-500 text-blue-700 hover:bg-blue-50"
                 >
-                  ?? S'inscrire avec le Pass Gratuit
+                  S'inscrire avec le Pass Gratuit
                 </Button>
               </div>
             </form>

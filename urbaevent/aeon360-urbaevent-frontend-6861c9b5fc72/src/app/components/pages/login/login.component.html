@@ -1,0 +1,75 @@
+<!-- reservation Form Start -->
+<div class="contact-form-section section-padding">
+	<div class="container">
+		<!-- Contact Wrap Start -->
+		<div class="contact-wrap">
+			<div class="row justify-content-center">
+				<div class="col-lg-5">
+					<div class="form-title text-center">
+						<h3 class="title">Se connecter</h3>
+					</div>
+					<!-- Contact Form Wrap Start -->
+					<div class="contact-form-wrap">
+						<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="single-form">
+										<input
+											type="text"
+											class="form-control form-control-lg"
+											[ngClass]="{ input_required: submitted && !loginForm.get('email').valid }"
+											formControlName="email"
+											placeholder="Email"
+										/>
+										<span class="form-text text-danger" *ngIf="submitted && !loginForm.get('email').valid">
+											<span *ngIf="loginForm.get('email').errors?.required"> Champ obligatoire </span>
+											<span *ngIf="loginForm.get('email').errors?.email"> Format d'email incorrecte </span>
+										</span>
+										<span class="required_star_lg"></span>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="single-form">
+										<input
+											type="password"
+											class="form-control form-control-lg"
+											[ngClass]="{ input_required: submitted && !loginForm.get('password').valid }"
+											formControlName="password"
+											placeholder="Mot de passe"
+										/>
+										<span class="form-text text-danger" *ngIf="submitted && !loginForm.get('password').valid"> Champ obligatoire </span>
+										<span class="required_star_lg"></span>
+									</div>
+								</div>
+								<div class="col-md-12 mt-3">
+									<div class="alert alert-danger d-flex align-items-center" role="alert" *ngIf="submitValidated == false" style="margin-top: 20px">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											fill="currentColor"
+											class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+											viewBox="0 0 16 16"
+											role="img"
+										>
+											<path
+												d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+											/>
+										</svg>
+										<div style="margin-left: 5px">Login et/ou Mot de passe est incorect.</div>
+									</div>
+									<div class="form-btn">
+										<button class="btn-2 w-100" type="submit">Se connecter</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<!-- Contact Form Wrap End -->
+				</div>
+			</div>
+		</div>
+		<!-- Contact Wrap End -->
+	</div>
+</div>
+<!-- reservation Form End -->

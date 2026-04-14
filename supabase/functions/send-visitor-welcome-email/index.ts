@@ -64,7 +64,7 @@ async function sendViaSmtp(to: string, subject: string, htmlContent: string): Pr
     })
 
     await withTimeout(client.send({
-      from: `SIPORTS 2026 <${SMTP_CONFIG.username}>`,
+      from: `SIB 2026 <${SMTP_CONFIG.username}>`,
       to,
       subject,
       content: 'auto',
@@ -90,13 +90,20 @@ async function sendViaSmtp(to: string, subject: string, htmlContent: string): Pr
   })
 
   await withTimeout(client2.send({
-    from: `SIPORTS 2026 <${SMTP_CONFIG.username}>`,
+    from: `SIB 2026 <${SMTP_CONFIG.username}>`,
     to,
     subject,
     content: 'auto',
     html: htmlContent,
   }), 5000, 'smtp:587 send')
   await client2.close()
+}
+
+function normalizeSibBranding(content: string): string {
+  return content
+    .replace(/SIPORTS?\s*2026/gi, 'SIB 2026')
+    .replace(/SIPORTS?/gi, 'SIB')
+    .replace(/Salon International des Infrastructures Portuaires/gi, 'Salon International du Batiment')
 }
 
 async function sendViaResend(to: string, subject: string, htmlContent: string): Promise<void> {
@@ -209,9 +216,11 @@ serve(async (req) => {
     console.log('📝 Remplacement des variables:', variables)
 
     // Remplacer les variables dans le contenu
-    const subject = replaceVariables(template.subject, variables)
-    const templateHtmlContent = replaceVariables(template.html_content, variables)
-    const textContent = template.text_content ? replaceVariables(template.text_content, variables) : ''
+    const subject = normalizeSibBranding(replaceVariables(template.subject, variables))
+    const templateHtmlContent = normalizeSibBranding(replaceVariables(template.html_content, variables))
+    const textContent = template.text_content
+      ? normalizeSibBranding(replaceVariables(template.text_content, variables))
+      : ''
 
     // Garantit que le QR est présent dans l'email, meme sans placeholder dans le template.
     const qrBlock = qrContent

@@ -5,7 +5,7 @@ import {
   ScrollReveal, StaggerReveal, StaggerItem, HoverCard, HeroReveal,
 } from '../../components/ui/motion';
 
-const nouveautes = [
+const defaultNouveautes = [
   {
     icon: Zap,
     title: '40 ans d\'excellence — Édition anniversaire',
@@ -64,6 +64,33 @@ const nouveautes = [
 
 export default function NouveautesPage() {
   const cms = usePageContent('nouveautes');
+
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
+
+  const parsedItems = (() => {
+    const raw = cms.items_json;
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  })();
+
+  const nouveautes = (parsedItems ?? defaultNouveautes).map((item: any, index: number) => {
+    const fallback = defaultNouveautes[index] ?? defaultNouveautes[0];
+    return {
+      icon: fallback.icon,
+      title: getCms(`item_${index + 1}_title`, item?.title ?? fallback.title),
+      desc: getCms(`item_${index + 1}_desc`, item?.desc ?? fallback.desc),
+      color: item?.color ?? fallback.color,
+    };
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
@@ -71,7 +98,7 @@ export default function NouveautesPage() {
         <div className="container mx-auto px-4 text-center">
           <HeroReveal>
             <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
-              SIB 2026
+              {getCms('hero_badge', 'SIB 2026')}
             </span>
           </HeroReveal>
           <HeroReveal delay={0.15}>

@@ -137,6 +137,8 @@ const PressAccreditationPage = lazyRetry(() => import('./pages/press/PressAccred
 const SpeakersPage = lazyRetry(() => import('./pages/public/SpeakersPage'));
 const AdminPressAccreditationsPage = lazyRetry(() => import('./pages/admin/PressAccreditationsPage'));
 const AdminSpeakersPage = lazyRetry(() => import('./pages/admin/SpeakersManagementPage'));
+const AdminSalonsPage = lazyRetry(() => import('./pages/admin/SalonsManagementPage'));
+const SalonPublicPage = lazyRetry(() => import('./pages/public/SalonPublicPage'));
 const HallMapPage = lazyRetry(() => import('./pages/HallMapPage'));
 const CatalogPage = lazyRetry(() => import('./pages/CatalogPage'));
 const ProductDetailPage = lazyRetry(() => import('./pages/ProductDetailPage'));
@@ -287,6 +289,7 @@ const App = () => {
             <Route path={ROUTES.PARTNER_DETAIL} element={<PartnerDetailPage />} />
             <Route path={ROUTES.PAVILIONS} element={<PavillonsPage />} />
             {/* Pages publiques vitrine */}
+            <Route path={ROUTES.SALON_PUBLIC} element={<SalonPublicPage />} />
             <Route path={ROUTES.PRESENTATION} element={<PresentationPage />} />
             <Route path={ROUTES.NOUVEAUTES} element={<NouveautesPage />} />
             <Route path={ROUTES.SECTEURS} element={<SecteursPage />} />
@@ -462,6 +465,7 @@ const App = () => {
             <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
             <Route path={ROUTES.NETWORKING_MATCHMAKING} element={<ProtectedRoute><MatchmakingDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_SPEAKERS} element={<ProtectedRoute requiredRole="admin"><AdminSpeakersPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SALONS} element={<ProtectedRoute requiredRole="admin"><AdminSalonsPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PRESS_ACCREDITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminPressAccreditationsPage /></ProtectedRoute>} />
             <Route path={ROUTES.NOT_FOUND} element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>

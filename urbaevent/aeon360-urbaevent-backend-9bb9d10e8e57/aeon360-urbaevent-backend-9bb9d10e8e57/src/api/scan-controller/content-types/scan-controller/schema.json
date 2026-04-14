@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "scans_controllers",
+  "info": {
+    "singularName": "scan-controller",
+    "pluralName": "scans-controllers",
+    "displayName": "6- Check in agent Scans",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "event": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event",
+      "inversedBy": "scans_controller"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "scan_controllers"
+    },
+    "gate": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::gate.gate",
+      "inversedBy": "scan_controllers"
+    },
+    "controller": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "scan_controllers"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "visitor",
+        "exhibitor",
+        "collaborator"
+      ],
+      "required": true
+    }
+  }
+}

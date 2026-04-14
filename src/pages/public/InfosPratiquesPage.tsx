@@ -8,7 +8,7 @@ import {
   fadeUp, fadeLeft, fadeRight, scaleUp,
 } from '../../components/ui/motion';
 
-const horaires = [
+const defaultHoraires = [
   { jour: 'Mardi 25 Novembre', heures: '9h00 – 19h00' },
   { jour: 'Mercredi 26 Novembre', heures: '9h00 – 19h00' },
   { jour: 'Jeudi 27 Novembre', heures: '9h00 – 19h00' },
@@ -18,6 +18,57 @@ const horaires = [
 
 export default function InfosPratiquesPage() {
   const cms = usePageContent('infos-pratiques');
+
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
+
+  const horaires = (() => {
+    const raw = cms.horaires_json;
+    if (!raw) return defaultHoraires;
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed)
+        ? parsed.map((h: any) => ({ jour: String(h?.jour ?? ''), heures: String(h?.heures ?? '') })).filter((h: any) => h.jour)
+        : defaultHoraires;
+    } catch {
+      return defaultHoraires;
+    }
+  })();
+
+  const tarifsBullets = (() => {
+    const raw = cms.tarifs_bullets_json;
+    if (!raw) {
+      return [
+        "D'un badge électronique téléchargeable sur le site ou à l'accueil du salon",
+        "D'une invitation dûment remplie",
+        "D'une carte de visite professionnelle",
+      ];
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.map((b: unknown) => String(b)) : [];
+    } catch {
+      return [
+        "D'un badge électronique téléchargeable sur le site ou à l'accueil du salon",
+        "D'une invitation dûment remplie",
+        "D'une carte de visite professionnelle",
+      ];
+    }
+  })();
+
+  const venirSections = (() => {
+    const raw = cms.venir_json;
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  })();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
@@ -41,12 +92,12 @@ export default function InfosPratiquesPage() {
               <MapPin className="w-8 h-8 text-sib-gold flex-shrink-0 mt-1" />
               <div>
                 <h2 className="text-2xl font-bold text-sib-navy font-display">Parc d'Exposition Mohammed VI</h2>
+                <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('lieu_title', "Parc d'Exposition Mohammed VI")}</h2>
                 <p className="text-gray-600 mt-2">
                   {cms.lieu_adresse || 'Adresse : Route Nationale 1 vers Azemmour, Région Casablanca - Settat, 24000 — EL JADIDA'}
                 </p>
                 <p className="text-gray-500 text-sm mt-2">
-                  Implanté au cœur du Pôle urbain Mazagan (PUMA), le Parc d'Exposition Mohammed VI
-                  se voit efficacement desservi et stratégiquement connecté aux autres villes du royaume.
+                  {getCms('lieu_context', "Implanté au cœur du Pôle urbain Mazagan (PUMA), le Parc d'Exposition Mohammed VI se voit efficacement desservi et stratégiquement connecté aux autres villes du royaume.")}
                 </p>
               </div>
             </div>
@@ -58,7 +109,7 @@ export default function InfosPratiquesPage() {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
             <div className="flex items-center gap-3 mb-6">
               <Clock className="w-7 h-7 text-sib-gold" />
-              <h2 className="text-2xl font-bold text-sib-navy font-display">Horaires</h2>
+              <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('horaires_title', 'Horaires')}</h2>
             </div>
             <div className="grid gap-3">
               {horaires.map((h) => (
@@ -79,30 +130,24 @@ export default function InfosPratiquesPage() {
           <div className="bg-sib-gold/10 rounded-2xl p-8 mb-8">
             <div className="flex items-center gap-3 mb-4">
               <Ticket className="w-7 h-7 text-sib-gold" />
-              <h2 className="text-2xl font-bold text-sib-navy font-display">Tarifs</h2>
+              <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('tarifs_title', 'Tarifs')}</h2>
             </div>
             <p className="text-gray-700 mb-4">
               {cms.tarifs_intro || "L'entrée est"} <strong>gratuite</strong>{!cms.tarifs_intro && ' tout au long des 5 jours d\'exposition. Toutefois, l\'accès au salon sera conditionné par la présentation :'}
             </p>
             <ul className="space-y-2 text-gray-600 ml-4">
-              <li className="flex items-start gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-sib-gold mt-2 flex-shrink-0" />
-                D'un <strong>badge électronique</strong> téléchargeable sur le site ou à l'accueil du salon
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-sib-gold mt-2 flex-shrink-0" />
-                D'une <strong>invitation</strong> dûment remplie
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-sib-gold mt-2 flex-shrink-0" />
-                D'une <strong>carte de visite professionnelle</strong>
-              </li>
+              {tarifsBullets.map((bullet, idx) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-sib-gold mt-2 flex-shrink-0" />
+                  {bullet}
+                </li>
+              ))}
             </ul>
             <Link
               to={ROUTES.BADGE}
               className="inline-block mt-6 px-6 py-3 bg-sib-navy text-white rounded-lg font-semibold hover:bg-sib-navy/90 transition-colors"
             >
-              Obtenir mon badge gratuit
+              {getCms('tarifs_cta', 'Obtenir mon badge gratuit')}
             </Link>
           </div>
           </ScrollReveal>
@@ -110,21 +155,20 @@ export default function InfosPratiquesPage() {
           {/* Comment venir */}
           <ScrollReveal variant={fadeUp} delay={0.2}>
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
-            <h2 className="text-2xl font-bold text-sib-navy mb-8 font-display">Comment venir ?</h2>
+            <h2 className="text-2xl font-bold text-sib-navy mb-8 font-display">{getCms('venir_title', 'Comment venir ?')}</h2>
 
             <div className="space-y-8">
               {/* Navettes */}
               <div className="border-l-4 border-sib-gold pl-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Bus className="w-6 h-6 text-sib-navy" />
-                  <h3 className="text-lg font-bold text-gray-900">Par Navettes SIB</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{venirSections?.[0]?.title ?? 'Par Navettes SIB'}</h3>
                 </div>
                 <p className="text-gray-600 mb-4">
-                  Des navettes seront mises gratuitement à disposition des visiteurs du Parc d'Exposition
-                  à destination ou en provenance de Casablanca.
+                  {venirSections?.[0]?.desc ?? "Des navettes seront mises gratuitement à disposition des visiteurs du Parc d'Exposition à destination ou en provenance de Casablanca."}
                 </p>
                 <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm">
-                  <p className="text-gray-500 italic">Les points de pick-up seront confirmés ultérieurement.</p>
+                  <p className="text-gray-500 italic">{venirSections?.[0]?.note ?? 'Les points de pick-up seront confirmés ultérieurement.'}</p>
                 </div>
               </div>
 
@@ -132,14 +176,13 @@ export default function InfosPratiquesPage() {
               <div className="border-l-4 border-gray-200 pl-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Car className="w-6 h-6 text-sib-navy" />
-                  <h3 className="text-lg font-bold text-gray-900">Par voiture</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{venirSections?.[1]?.title ?? 'Par voiture'}</h3>
                 </div>
                 <p className="text-gray-600 mb-2">
-                  Accès rapide par l'autoroute Casablanca–El Jadida (sortie Azemmour) ou depuis la route
-                  nationale Azemmour–El Jadida. Trajet depuis Casablanca : <strong>50 minutes</strong>.
+                  {venirSections?.[1]?.desc ?? "Accès rapide par l'autoroute Casablanca–El Jadida (sortie Azemmour) ou depuis la route nationale Azemmour–El Jadida. Trajet depuis Casablanca : 50 minutes."}
                 </p>
                 <p className="text-gray-500 text-sm italic">
-                  « Afin d'accompagner la transition écologique, nous invitons nos visiteurs à privilégier le covoiturage. »
+                  {venirSections?.[1]?.note ?? "« Afin d'accompagner la transition écologique, nous invitons nos visiteurs à privilégier le covoiturage. »"}
                 </p>
                 <p className="text-gray-600 mt-2 text-sm">Parking : <strong>2 500 places</strong> + parking VIP 52 places + parking autocars 50 places.</p>
               </div>
@@ -148,16 +191,14 @@ export default function InfosPratiquesPage() {
               <div className="border-l-4 border-gray-200 pl-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Train className="w-6 h-6 text-sib-navy" />
-                  <h3 className="text-lg font-bold text-gray-900">Par train</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{venirSections?.[2]?.title ?? 'Par train'}</h3>
                 </div>
                 <p className="text-gray-600 mb-2">
-                  Accès facile depuis la gare d'Azemmour — Parc d'Expositions Mohammed VI (PEM6).
+                  {venirSections?.[2]?.desc ?? "Accès facile depuis la gare d'Azemmour — Parc d'Expositions Mohammed VI (PEM6)."}
                 </p>
                 <div className="bg-sib-gold/10 rounded-lg p-3 text-sm">
                   <p className="text-gray-700">
-                    L'<strong>ONCF</strong>, partenaire Transport et Logistique du SIB, propose une <strong>réduction
-                    de 30%</strong> à bord de tous les trains en provenance ou en direction de la gare PEM6
-                    durant la période du salon.
+                    {venirSections?.[2]?.note ?? "L'ONCF, partenaire Transport et Logistique du SIB, propose une réduction de 30% à bord de tous les trains en provenance ou en direction de la gare PEM6 durant la période du salon."}
                   </p>
                 </div>
               </div>
@@ -166,10 +207,10 @@ export default function InfosPratiquesPage() {
               <div className="border-l-4 border-gray-200 pl-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Plane className="w-6 h-6 text-sib-navy" />
-                  <h3 className="text-lg font-bold text-gray-900">Par avion</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{venirSections?.[3]?.title ?? 'Par avion'}</h3>
                 </div>
                 <p className="text-gray-600">
-                  Le parc se situe à seulement <strong>1h de route</strong> depuis l'aéroport Mohammed V.
+                  {venirSections?.[3]?.desc ?? "Le parc se situe à seulement 1h de route depuis l'aéroport Mohammed V."}
                 </p>
               </div>
             </div>
@@ -181,7 +222,7 @@ export default function InfosPratiquesPage() {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
             <div className="flex items-center gap-3 mb-4">
               <Hotel className="w-7 h-7 text-sib-gold" />
-              <h2 className="text-2xl font-bold text-sib-navy font-display">Hébergement</h2>
+              <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('hebergement_title', 'Hébergement')}</h2>
             </div>
             <p className="text-gray-600 mb-4">
               Les exposants et visiteurs disposent d'une multitude de choix pour séjourner à proximité du parc.
@@ -191,7 +232,7 @@ export default function InfosPratiquesPage() {
               to={ROUTES.ACCOMMODATION}
               className="inline-flex items-center gap-2 px-6 py-3 bg-sib-gold text-sib-navy rounded-lg font-semibold hover:bg-sib-gold/90 transition-colors"
             >
-              Voir les hébergements
+              {getCms('hebergement_cta', 'Voir les hébergements')}
             </Link>
           </div>
           </ScrollReveal>

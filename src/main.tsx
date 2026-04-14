@@ -4,6 +4,7 @@ import App from './App';
 import './index.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import { SalonProvider } from './contexts/SalonContext';
 
 // Kill any existing service worker and clear ALL caches
 if ('serviceWorker' in navigator) {
@@ -44,7 +45,9 @@ const mount = (el: Element) => {
     <React.StrictMode>
       <ThemeProvider>
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <App />
+          <SalonProvider>
+            <App />
+          </SalonProvider>
         </Router>
       </ThemeProvider>
     </React.StrictMode>

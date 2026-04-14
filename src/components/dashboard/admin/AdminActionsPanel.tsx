@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -9,6 +10,17 @@ import {
   Power, ChevronRight,
 } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
+
+// ─── Variants stagger pour les grilles de tuiles ───────────────────────────
+const gridVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07 } },
+};
+
+const tileVariants = {
+  hidden: { opacity: 0, y: 18, scale: 0.92 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring' as const, stiffness: 150, damping: 15 } },
+};
 
 interface AdminActionsPanelProps {
   adminMetrics: Record<string, number | unknown>;
@@ -30,32 +42,32 @@ interface TileProps {
 function Tile({ Icon, label, sub, badge, urgent, active }: TileProps) {
   return (
     <motion.div
-      whileHover={{ y: -3, scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
-      className={`flex flex-col items-center justify-center gap-3 p-5 rounded-2xl border-2 transition-all cursor-pointer select-none relative
-        ${urgent
-          ? 'border-[#C9A84C] bg-[#C9A84C]/8 hover:bg-[#C9A84C]/14'
-          : active
-          ? 'border-[#1B365D] bg-[#1B365D]/6'
-          : 'border-sib-gray-200 bg-white hover:border-[#1B365D]/40 hover:bg-[#1B365D]/4'
-        }`}
+      variants={tileVariants}
+      whileHover={{ y: -4, scale: 1.03, boxShadow: urgent ? '0 0 24px rgba(201,168,76,0.2)' : '0 0 20px rgba(255,255,255,0.08)' }}
+      whileTap={{ scale: 0.96 }}
+      className="flex flex-col items-center justify-center gap-4 p-6 rounded-2xl transition-all cursor-pointer select-none relative"
+      style={{
+        background: urgent ? 'rgba(201,168,76,0.07)' : active ? 'rgba(201,168,76,0.05)' : 'rgba(255,255,255,0.03)',
+        border: urgent ? '1px solid rgba(201,168,76,0.45)' : active ? '1px solid rgba(201,168,76,0.3)' : '1px solid rgba(255,255,255,0.07)',
+        backdropFilter: 'blur(16px)',
+      }}
     >
       {/* Badge urgence */}
       {badge != null && badge > 0 && (
-        <span className="absolute top-2.5 right-2.5 bg-[#C9A84C] text-[#0F2034] text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center leading-tight">
+        <span className="absolute top-3 right-3 bg-[#C9A84C] text-[#0F2034] text-xs font-bold px-2 py-1 rounded-full min-w-[24px] text-center leading-tight">
           {badge}
         </span>
       )}
 
       {/* Icône grande */}
-      <div className={`p-4 rounded-2xl ${urgent ? 'bg-[#C9A84C]/20' : 'bg-[#1B365D]/8'}`}>
-        <Icon className={`h-10 w-10 ${urgent ? 'text-[#A88830]' : 'text-[#1B365D]'}`} />
+      <div className={`p-4 rounded-2xl ${urgent ? 'bg-[#C9A84C]/20' : 'bg-white/6'}`}>
+        <Icon className={`h-11 w-11 ${urgent ? 'text-[#C9A84C]' : 'text-white/60'}`} />
       </div>
 
       {/* Texte */}
       <div className="text-center">
-        <div className="text-sm font-bold text-[#0F2034] leading-tight">{label}</div>
-        {sub && <div className="text-xs text-sib-gray-400 mt-0.5">{sub}</div>}
+        <div className="text-sm font-bold leading-tight" style={{ color: urgent ? '#C9A84C' : 'rgba(255,255,255,0.82)' }}>{label}</div>
+        {sub && <div className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>{sub}</div>}
       </div>
     </motion.div>
   );
@@ -64,11 +76,11 @@ function Tile({ Icon, label, sub, badge, urgent, active }: TileProps) {
 // ─── Titre de section ────────────────────────────────────────────────────
 function SectionTitle({ icon, label, sub }: { icon: React.ReactNode; label: string; sub?: string }) {
   return (
-    <div className="flex items-center gap-3 mb-4">
+    <div className="flex items-center gap-4 mb-6 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
       <span>{icon}</span>
       <div>
-        <h3 className="text-sm font-bold text-[#0F2034] uppercase tracking-wider">{label}</h3>
-        {sub && <p className="text-xs text-sib-gray-400">{sub}</p>}
+        <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#C9A84C', letterSpacing: '0.15em' }}>{label}</h3>
+        {sub && <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.3)' }}>{sub}</p>}
       </div>
     </div>
   );
@@ -87,33 +99,39 @@ export function AdminActionsPanel({
   const totalUrgent = pendingVal + pendingMod;
 
   return (
-    <div className="mb-8">
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <div className="bg-white rounded-xl shadow-sib border border-sib-gray-100 overflow-hidden">
+    <div className="mb-12">
+      <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ delay: 0.05 }}>
+        <div
+          className="rounded-2xl overflow-hidden"
+          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)' }}
+        >
 
-          {/* Header navy */}
-          <div className="bg-[#0F2034] px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Power className="h-5 w-5 text-[#C9A84C]" />
-              <span className="text-white font-semibold text-sm">Actions &amp; Navigation</span>
+          {/* Header navy animé */}
+          <div
+            className="bg-[#0F2034] px-8 py-5 flex items-center justify-between animate-gradient-x"
+            style={{ background: 'linear-gradient(90deg, #0F2034, #1B365D, #0F2034)', backgroundSize: '300% auto' }}
+          >
+            <div className="flex items-center gap-4">
+              <Power className="h-6 w-6 text-[#C9A84C]" />
+              <span className="text-white font-semibold text-base">Actions &amp; Navigation</span>
             </div>
             {totalUrgent > 0 && (
-              <span className="bg-[#C9A84C] text-[#0F2034] text-xs font-bold px-2.5 py-1 rounded-full">
+              <span className="bg-[#C9A84C] text-[#0F2034] text-xs font-bold px-3 py-1.5 rounded-full">
                 {totalUrgent} en attente
               </span>
             )}
           </div>
 
-          <div className="p-6 space-y-8">
+          <div className="p-8 space-y-10">
 
             {/* ── URGENCES ─────────────────────────────────────────── */}
             <div>
               <SectionTitle
-                icon={<AlertCircle className="h-4 w-4 text-[#C9A84C]" />}
+                icon={<AlertCircle className="h-5 w-5 text-[#C9A84C]" />}
                 label="Urgences"
                 sub="Actions nécessitant une réponse"
               />
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
 
                 {/* Inscriptions — bouton toggle */}
                 <button className="text-left" onClick={onToggleRegistrationRequests}>
@@ -146,16 +164,16 @@ export function AdminActionsPanel({
                     urgent={pendingMod > 0}
                   />
                 </Link>
-              </div>
+              </motion.div>
             </div>
 
             {/* ── PARTICIPANTS ─────────────────────────────────────── */}
             <div>
               <SectionTitle
-                icon={<Users className="h-4 w-4 text-[#1B365D]" />}
+                icon={<Users className="h-5 w-5 text-[#1B365D]" />}
                 label="Participants"
               />
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-4 gap-5">
                 <Link to={ROUTES.ADMIN_EXHIBITORS}>
                   <Tile Icon={Building2} label="Exposants" sub={`${metrics.totalExhibitors || 0} inscrits`} />
                 </Link>
@@ -168,16 +186,16 @@ export function AdminActionsPanel({
                 <Link to={ROUTES.ADMIN_USERS}>
                   <Tile Icon={Users} label={t('admin.users_label')} sub={`${metrics.totalUsers || 0} comptes`} />
                 </Link>
-              </div>
+              </motion.div>
             </div>
 
             {/* ── CONTENU ──────────────────────────────────────────── */}
             <div>
               <SectionTitle
-                icon={<Calendar className="h-4 w-4 text-[#1B365D]" />}
+                icon={<Calendar className="h-5 w-5 text-[#1B365D]" />}
                 label="Contenu"
               />
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
                 <Link to={ROUTES.ADMIN_EVENTS}>
                   <Tile Icon={Calendar} label="Événements" sub={`${metrics.totalEvents || 0} programmés`} />
                 </Link>
@@ -187,16 +205,16 @@ export function AdminActionsPanel({
                 <Link to={ROUTES.ADMIN_PAVILIONS}>
                   <Tile Icon={LayoutGrid} label="Pavillons" sub={`${metrics.totalExhibitors || 0} stands`} />
                 </Link>
-              </div>
+              </motion.div>
             </div>
 
             {/* ── MÉDIAS & STATS ───────────────────────────────────── */}
             <div>
               <SectionTitle
-                icon={<Video className="h-4 w-4 text-[#1B365D]" />}
+                icon={<Video className="h-5 w-5 text-[#1B365D]" />}
                 label="Médias &amp; Statistiques"
               />
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
                 <Link to={ROUTES.ADMIN_MEDIA_MANAGE}>
                   <Tile Icon={Video} label="Médias" sub="Bibliothèque" />
                 </Link>
@@ -206,23 +224,25 @@ export function AdminActionsPanel({
                 <Link to={ROUTES.METRICS}>
                   <Tile Icon={BarChart3} label="Statistiques" sub="Métriques plateforme" />
                 </Link>
-              </div>
+              </motion.div>
             </div>
 
             {/* ── CONTRÔLE TOTAL ───────────────────────────────────── */}
             <Link to={ROUTES.ADMIN_PUBLICATION_CONTROL}>
               <motion.div
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex items-center justify-between bg-[#0F2034] hover:bg-[#1B365D] border-2 border-[#C9A84C]/40 hover:border-[#C9A84C]/70 text-white px-6 py-4 rounded-2xl transition-all"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              className="flex items-center justify-between px-8 py-5 rounded-2xl transition-all"
+              style={{ background: 'rgba(201,168,76,0.07)', border: '1px solid rgba(201,168,76,0.25)' }}
+              onHoverStart={e => ((e.target as HTMLElement).closest('.control-btn') as HTMLElement | null)?.style && ((e.target as HTMLElement).closest('.control-btn') as any)?.style.setProperty('border-color', 'rgba(201,168,76,0.5)')}
               >
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-xl bg-[#C9A84C]/15 border border-[#C9A84C]/30">
+                <div className="flex items-center gap-5">
+                  <div className="p-4 rounded-xl bg-[#C9A84C]/15 border border-[#C9A84C]/30">
                     <Power className="h-6 w-6 text-[#C9A84C]" />
                   </div>
                   <div>
-                    <div className="font-bold text-base">{t('admin.total_control')}</div>
-                    <div className="text-slate-400 text-xs mt-0.5">Contrôle publication et accès complet</div>
+                    <div className="font-bold text-lg">{t('admin.total_control')}</div>
+                    <div className="text-slate-400 text-xs mt-1">Contrôle publication et accès complet</div>
                   </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-[#C9A84C]/70" />

@@ -1,0 +1,161 @@
+{
+  "kind": "collectionType",
+  "collectionName": "up_users",
+  "info": {
+    "name": "user",
+    "description": "",
+    "singularName": "user",
+    "pluralName": "users",
+    "displayName": "7- App Users"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "unique": true,
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "minLength": 6,
+      "required": true
+    },
+    "emailOTP": {
+      "type": "string"
+    },
+    "emailOTPConfirmed": {
+      "type": "boolean",
+      "default": false
+    },
+    "provider": {
+      "type": "string",
+      "default": "local",
+      "required": true
+    },
+    "password": {
+      "type": "password",
+      "minLength": 6,
+      "private": true,
+      "searchable": false,
+      "required": false
+    },
+    "resetPasswordToken": {
+      "type": "string",
+      "private": true,
+      "searchable": false
+    },
+    "confirmationToken": {
+      "type": "string",
+      "private": true,
+      "searchable": false
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false
+    },
+    "role": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.role",
+      "inversedBy": "users"
+    },
+    "socialId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": false,
+      "unique": false
+    },
+    "company": {
+      "type": "string"
+    },
+    "jobPosition": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "lang": {
+      "type": "enumeration",
+      "enum": [
+        "french",
+        "english"
+      ],
+      "default": "french"
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "registrations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::registration.registration",
+      "mappedBy": "user"
+    },
+    "collaborators": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "exhibitor"
+    },
+    "exhibitor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "collaborators"
+    },
+    "scans": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::scan.scan",
+      "mappedBy": "users"
+    },
+    "scan_controllers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::scan-controller.scan-controller",
+      "mappedBy": "controller"
+    },
+    "eventControl": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event",
+      "inversedBy": "controllers"
+    },
+    "lastNotificationIndex": {
+      "type": "integer"
+    },
+    "businessSector": {
+      "type": "string"
+    },
+    "credsSent": {
+      "type": "boolean"
+    },
+    "fcm": {
+      "type": "text"
+    },
+    "os": {
+      "type": "string"
+    },
+    "appVersion": {
+      "type": "string"
+    }
+  }
+}

@@ -33,6 +33,72 @@ const transports = [
 
 export default function PourquoiVisiterPage() {
   const cms = usePageContent('pourquoi-visiter');
+
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
+
+  const infos_pratiques = (() => {
+    const raw = cms.infos_json;
+    if (!raw) {
+      return [
+        { icon: Calendar, label: 'Dates', value: '25 – 29 Novembre 2026' },
+        { icon: Clock, label: 'Horaires', value: '9h00 – 19h00' },
+        { icon: MapPin, label: 'Lieu', value: "Parc d'Exposition Mohammed VI, El Jadida" },
+        { icon: Gift, label: 'Entrée', value: 'Gratuite (badge requis)' },
+      ];
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      const icons = [Calendar, Clock, MapPin, Gift];
+      return Array.isArray(parsed)
+        ? parsed.map((item: any, idx: number) => ({
+            icon: icons[idx % icons.length],
+            label: String(item?.label ?? ''),
+            value: String(item?.value ?? ''),
+          })).filter((i: any) => i.label)
+        : [];
+    } catch {
+      return [
+        { icon: Calendar, label: 'Dates', value: '25 – 29 Novembre 2026' },
+        { icon: Clock, label: 'Horaires', value: '9h00 – 19h00' },
+        { icon: MapPin, label: 'Lieu', value: "Parc d'Exposition Mohammed VI, El Jadida" },
+        { icon: Gift, label: 'Entrée', value: 'Gratuite (badge requis)' },
+      ];
+    }
+  })();
+
+  const transports = (() => {
+    const raw = cms.transport_json;
+    if (!raw) {
+      return [
+        { icon: Train, title: 'Navettes gratuites SIB', desc: "Navettes gratuites Casablanca ↔ Parc d'Exposition Mohammed VI. Les points de pick-up seront confirmés ultérieurement." },
+        { icon: Train, title: 'Train ONCF', desc: "Gare Azemmour — Parc d'Expositions Mohammed VI (PEM6). Réduction de 30% sur tous les trains durant la période du salon." },
+        { icon: Car, title: 'En voiture', desc: "50 min depuis Casablanca via l'autoroute Casa–El Jadida (sortie Azemmour) ou route nationale Azemmour–El Jadida. Parking 2 500 places." },
+        { icon: Plane, title: 'En avion', desc: "1h de route depuis l'aéroport Mohammed V de Casablanca." },
+      ];
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      const icons = [Train, Train, Car, Plane];
+      return Array.isArray(parsed)
+        ? parsed.map((item: any, idx: number) => ({
+            icon: icons[idx % icons.length],
+            title: String(item?.title ?? ''),
+            desc: String(item?.desc ?? ''),
+          })).filter((t: any) => t.title)
+        : [];
+    } catch {
+      return [
+        { icon: Train, title: 'Navettes gratuites SIB', desc: "Navettes gratuites Casablanca ↔ Parc d'Exposition Mohammed VI. Les points de pick-up seront confirmés ultérieurement." },
+        { icon: Train, title: 'Train ONCF', desc: "Gare Azemmour — Parc d'Expositions Mohammed VI (PEM6). Réduction de 30% sur tous les trains durant la période du salon." },
+        { icon: Car, title: 'En voiture', desc: "50 min depuis Casablanca via l'autoroute Casa–El Jadida (sortie Azemmour) ou route nationale Azemmour–El Jadida. Parking 2 500 places." },
+        { icon: Plane, title: 'En avion', desc: "1h de route depuis l'aéroport Mohammed V de Casablanca." },
+      ];
+    }
+  })();
+
   const arguments_visiter = [
     { icon: Lightbulb, title: cms.arg_1_title || 'Découvrir les innovations', desc: cms.arg_1_desc || "Le salon offre une réponse complète aux besoins des particuliers et des professionnels dans un espace et un temps maîtrisé." },
     { icon: Network, title: cms.arg_2_title || 'Networking & B2B', desc: cms.arg_2_desc || "300 rencontres B2B planifiées via URBA EVENT. Rencontrez fournisseurs, fabricants et professionnels de votre secteur." },
@@ -59,7 +125,7 @@ export default function PourquoiVisiterPage() {
               to={ROUTES.BADGE}
               className="inline-flex items-center gap-2 px-8 py-4 bg-sib-gold text-sib-navy rounded-lg font-bold text-lg hover:bg-sib-gold/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
             >
-              Obtenez votre badge gratuit
+              {getCms('hero_cta', 'Obtenez votre badge gratuit')}
             </Link>
           </HeroReveal>
         </div>
@@ -69,7 +135,7 @@ export default function PourquoiVisiterPage() {
       <div className="container mx-auto px-4 py-16">
         <ScrollReveal>
           <h2 className="text-3xl font-bold text-sib-navy mb-10 text-center font-display">
-            6 bonnes raisons de visiter
+            {getCms('reasons_title', '6 bonnes raisons de visiter')}
           </h2>
         </ScrollReveal>
         <StaggerReveal slow className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -92,7 +158,7 @@ export default function PourquoiVisiterPage() {
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <h2 className="text-3xl font-bold text-sib-navy mb-8 text-center font-display">
-              Infos Pratiques
+              {getCms('infos_title', 'Infos Pratiques')}
             </h2>
           </ScrollReveal>
           <StaggerReveal className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
@@ -113,7 +179,7 @@ export default function PourquoiVisiterPage() {
       <div className="container mx-auto px-4 py-16">
         <ScrollReveal>
           <h2 className="text-3xl font-bold text-sib-navy mb-8 text-center font-display">
-            Comment s'y rendre ?
+            {getCms('transport_title', "Comment s'y rendre ?")}
           </h2>
         </ScrollReveal>
         <StaggerReveal className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
@@ -133,15 +199,15 @@ export default function PourquoiVisiterPage() {
       <div className="bg-sib-navy text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <ScrollReveal variant={scaleUp}>
-            <h3 className="text-3xl font-bold mb-4 font-display">Prêt à visiter ?</h3>
+            <h3 className="text-3xl font-bold mb-4 font-display">{getCms('cta_title', 'Prêt à visiter ?')}</h3>
             <p className="text-white/70 max-w-xl mx-auto mb-8">
-              L'entrée est gratuite. Inscrivez-vous dès maintenant pour obtenir votre badge électronique.
+              {getCms('cta_text', "L'entrée est gratuite. Inscrivez-vous dès maintenant pour obtenir votre badge électronique.")}
             </p>
             <Link
               to={ROUTES.BADGE}
               className="inline-flex items-center gap-2 px-8 py-4 bg-sib-gold text-sib-navy rounded-lg font-bold text-lg hover:bg-sib-gold/90 transition-all duration-300 hover:scale-105 transform"
             >
-              S'inscrire gratuitement
+              {getCms('cta_button', "S'inscrire gratuitement")}
             </Link>
           </ScrollReveal>
         </div>

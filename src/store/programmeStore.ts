@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { migratePersistedStorage } from './persistMigration';
+import { getPageContent, savePageContent } from '../lib/pageContent';
+
+const SUPABASE_SLUG = 'programme_scientifique';
 
 /* ═══════════════════════════════════════════════════ */
 /*  Programme Scientifique SIB – Store             */
@@ -51,6 +54,9 @@ interface ProgrammeState {
   removeSession: (dayId: string, sessionId: string) => void;
   moveSession: (dayId: string, sessionId: string, direction: 'up' | 'down') => void;
   resetToDefault: () => void;
+  // Supabase sync
+  syncToSupabase: () => Promise<void>;
+  loadFromSupabase: () => Promise<void>;
 }
 
 const PROGRAMME_STORAGE_KEY = 'sib-programme';
@@ -133,7 +139,7 @@ const DEFAULT_DAYS: DayProgram[] = [
 
 export const useProgrammeStore = create<ProgrammeState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       info: DEFAULT_INFO,
       days: DEFAULT_DAYS,
 
@@ -207,6 +213,27 @@ export const useProgrammeStore = create<ProgrammeState>()(
       })),
 
       resetToDefault: () => set({ info: DEFAULT_INFO, days: DEFAULT_DAYS }),
+
+      syncToSupabase: async () => {
+        const { info, days } = get();
+        await savePageContent(SUPABASE_SLUG, {
+          programme_data: JSON.stringify({ info, days }),
+        });
+      },
+
+      loadFromSupabase: async () => {
+        const content = await getPageContent(SUPABASE_SLUG);
+        if (content.programme_data) {
+          try {
+            const parsed = JSON.parse(content.programme_data);
+            if (parsed?.info && parsed?.days) {
+              set({ info: parsed.info, days: parsed.days });
+            }
+          } catch {
+            // ignore parse errors – keep local state
+          }
+        }
+      },
     }),
     {
       name: PROGRAMME_STORAGE_KEY,

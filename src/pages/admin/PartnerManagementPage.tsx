@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { SupabaseService } from '../../services/supabaseService';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useSalon } from '../../contexts/SalonContext';
 
 interface PartnerUI {
   id: string;
@@ -28,6 +29,7 @@ interface PartnerUI {
 
 export default function PartnerManagementPage() {
   const { t } = useTranslation();
+  const { currentSalon } = useSalon();
   const [partners, setPartners] = useState<PartnerUI[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -37,13 +39,39 @@ export default function PartnerManagementPage() {
 
   useEffect(() => {
     fetchPartners();
-  }, []);
+  }, [currentSalon]);
 
   const fetchPartners = async () => {
     setIsLoading(true);
     try {
-      const data = await SupabaseService.getPartners();
-      setPartners(data);
+      let query = supabase!
+        .from('partners')
+        .select('id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published')
+        .or('is_published.eq.true,is_published.is.null')
+        .order('featured', { ascending: false });
+      if (currentSalon) {
+        if (currentSalon.is_default) {
+          query = query.or(`salon_id.eq.${currentSalon.id},salon_id.is.null`);
+        } else {
+          query = query.eq('salon_id', currentSalon.id);
+        }
+      }
+      const { data, error } = await query;
+      if (error) throw error;
+      setPartners((SupabaseService as any).mapPartners ? (SupabaseService as any).mapPartners(data) : (data || []).map((p: any) => ({
+        id: p.id,
+        name: p.company_name || 'Partenaire',
+        partner_tier: p.partnership_level || p.partner_type || 'partner',
+        category: p.partner_type || 'partner',
+        sector: p.sector || '',
+        description: p.description || '',
+        logo: p.logo_url,
+        website: p.website,
+        country: p.contact_info?.country || '',
+        verified: p.verified ?? false,
+        featured: p.featured ?? false,
+        contributions: [],
+      })));
     } catch (error) {
       console.error('Erreur lors du chargement des partenaires:', error);
       toast.error('Impossible de récupérer la liste des partenaires.');

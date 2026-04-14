@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "gates",
+  "info": {
+    "singularName": "gate",
+    "pluralName": "gates",
+    "displayName": "3- Gates Moderation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "event": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event",
+      "inversedBy": "gates"
+    },
+    "registrations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::registration.registration",
+      "mappedBy": "gate"
+    },
+    "scan_controllers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::scan-controller.scan-controller",
+      "mappedBy": "gate"
+    }
+  }
+}

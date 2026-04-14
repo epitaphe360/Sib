@@ -1,4 +1,4 @@
-import { useState, memo, useMemo } from 'react';
+import { useState, memo, useMemo, useEffect } from 'react';
 import {
   Calendar,
   Clock,
@@ -21,7 +21,8 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../hooks/useTranslation';
-import { useProgrammeStore, type SessionType } from '../../store/programmeStore';
+import { useProgrammeStore, type SessionType, type ProgrammeInfo, type DayProgram } from '../../store/programmeStore';
+import { getPageContent } from '../../lib/pageContent';
 
 /* ═══════════════════════════════════════════════════ */
 /*  Static icon mapping for axes                       */
@@ -145,8 +146,28 @@ const SessionCard: React.FC<{
 
 export default memo(function EventsPage() {
   const { t } = useTranslation();
-  const { days, info } = useProgrammeStore();
+  const { days: storeDays, info: storeInfo } = useProgrammeStore();
   const [activeDay, setActiveDay] = useState(0);
+  // Données publiées depuis Supabase (override le store local si disponibles)
+  const [publishedInfo, setPublishedInfo] = useState<ProgrammeInfo | null>(null);
+  const [publishedDays, setPublishedDays] = useState<DayProgram[] | null>(null);
+
+  useEffect(() => {
+    getPageContent('programme_scientifique').then(content => {
+      if (content.programme_data) {
+        try {
+          const parsed = JSON.parse(content.programme_data);
+          if (parsed?.info && parsed?.days) {
+            setPublishedInfo(parsed.info);
+            setPublishedDays(parsed.days);
+          }
+        } catch { /* utiliser les données du store */ }
+      }
+    }).catch(() => { /* silently fall back */ });
+  }, []);
+
+  const info = publishedInfo ?? storeInfo;
+  const days = publishedDays ?? storeDays;
 
   // Memoize translated type labels
   const typeLabels = useMemo(() => {

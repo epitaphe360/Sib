@@ -1,0 +1,58 @@
+<!-- Header Start -->
+<div class="meeta-header-section meeta-header-2 meeta-header-3">
+	<!-- Header Middle Start -->
+	<div class="header-middle header-sticky">
+		<div class="container">
+			<div class="header-wrap">
+				<!-- Header Logo Start -->
+				<div class="header-logo header-logo-3">
+					<a class="logo-black" routerLink="/">
+						<img src="assets/images/logo.png" alt="Logo" />
+					</a>
+					<a class="logo-white" routerLink="/">
+						<img src="assets/images/logo.png" alt="Logo" />
+					</a>
+				</div>
+
+				<div class="header-meta">
+					<div class="header-btn d-none d-lg-block">
+						<a class="btn btn-danger" *ngIf="loggedData != null" style="font-weight: 500" (click)="onSignOut()">
+							<i class="fa fa-sign-out-alt"></i>
+							&nbsp; Se déconnecter
+						</a>
+					</div>
+					<div class="header-toggle d-lg-none">
+						<button data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample">
+							<span></span>
+							<span></span>
+							<span></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="offcanvas offcanvas-start" id="offcanvasExample">
+	<div class="offcanvas-header">
+		<div class="offcanvas-logo">
+			<a routerLink="/" data-bs-dismiss="offcanvas">
+				<img src="assets/images/logo.png" alt="Logo" />
+			</a>
+		</div>
+		<button type="button" class="close-btn" data-bs-dismiss="offcanvas">
+			<i class="flaticon-close"></i>
+		</button>
+	</div>
+	<!-- Offcanvas Body Start -->
+	<div class="offcanvas-body">
+		<div class="offcanvas-menu">
+			<ul class="main-menu">
+				<li>
+					<a class="text-danger" routerLink="/espace-controleur" *ngIf="loggedData != null"> Se déconnecter </a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

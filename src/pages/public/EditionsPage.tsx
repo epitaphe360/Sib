@@ -14,7 +14,7 @@ interface Edition {
   highlight?: string;
 }
 
-const editions: Edition[] = [
+const defaultEditions: Edition[] = [
   { year: 2026, edition: '20ème', dates: 'Du 25 au 29 Novembre', lieu: 'Parc d\'Exposition Mohammed VI, El Jadida', exposants: '600', highlight: '40 ans du SIB — Édition anniversaire exceptionnelle' },
   { year: 2024, edition: '19ème', theme: 'Mise en œuvre Maîtrisée, Matériaux et Bâtiments Valorisés', dates: 'Du 20 au 24 Novembre', lieu: 'Parc d\'Exposition Mohammed VI, El Jadida', exposants: '500', visiteurs: '200 000' },
   { year: 2022, edition: '18ème', theme: 'Innovation et résilience au service d\'un cadre de vie meilleur', dates: 'Du 23 au 27 Novembre', lieu: 'Parc d\'Exposition Mohammed VI, El Jadida', exposants: '500', visiteurs: '160 000' },
@@ -39,6 +39,35 @@ const editions: Edition[] = [
 
 export default function EditionsPage() {
   const cms = usePageContent('editions');
+
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
+
+  const editions: Edition[] = (() => {
+    const raw = cms.timeline_json;
+    if (!raw) return defaultEditions;
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return defaultEditions;
+      return parsed
+        .map((item: any) => ({
+          year: Number(item?.year),
+          edition: String(item?.edition ?? ''),
+          theme: item?.theme ? String(item.theme) : undefined,
+          dates: item?.dates ? String(item.dates) : undefined,
+          lieu: item?.lieu ? String(item.lieu) : undefined,
+          exposants: item?.exposants ? String(item.exposants) : undefined,
+          visiteurs: item?.visiteurs ? String(item.visiteurs) : undefined,
+          highlight: item?.highlight ? String(item.highlight) : undefined,
+        }))
+        .filter((ed: Edition) => Number.isFinite(ed.year) && ed.edition.length > 0);
+    } catch {
+      return defaultEditions;
+    }
+  })();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
@@ -46,7 +75,7 @@ export default function EditionsPage() {
       <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
-            40 ans d'histoire
+            {getCms('hero_badge', "40 ans d'histoire")}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Nos Éditions'}</h1>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">

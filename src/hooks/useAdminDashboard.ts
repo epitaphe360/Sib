@@ -62,7 +62,7 @@ export function useAdminDashboard() {
   ];
 
   const systemHealth = [
-    { name: 'API Performance', status: adminMetrics.avgResponseTime > 300 ? 'warning' : 'excellent', value: adminMetrics.avgResponseTime > 0 ? `${adminMetrics.avgResponseTime}ms` : '--', color: adminMetrics.avgResponseTime > 300 ? 'text-yellow-600' : 'text-green-600' },
+    { name: 'API Performance', status: adminMetrics.avgResponseTime > 700 ? 'warning' : 'excellent', value: adminMetrics.avgResponseTime > 0 ? `${adminMetrics.avgResponseTime}ms` : '--', color: adminMetrics.avgResponseTime > 700 ? 'text-yellow-600' : 'text-green-600' },
     { name: 'Database', status: adminMetrics.systemUptime > 0 ? 'excellent' : 'warning', value: adminMetrics.systemUptime > 0 ? `${adminMetrics.systemUptime}%` : 'Hors ligne', color: adminMetrics.systemUptime > 0 ? 'text-green-600' : 'text-red-600' },
     { name: 'Storage', status: adminMetrics.dataStorage > 5 ? 'warning' : 'excellent', value: adminMetrics.dataStorage > 0 ? `${adminMetrics.dataStorage} GB` : '0 GB', color: adminMetrics.dataStorage > 5 ? 'text-yellow-600' : 'text-green-600' },
     { name: t('admin.api_calls_24h'), status: 'info', value: adminMetrics.apiCalls > 0 ? adminMetrics.apiCalls.toLocaleString() : '0', color: 'text-blue-600' },

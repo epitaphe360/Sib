@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, animate, useInView } from 'framer-motion';
 import { Users, Building2, Award, UserCheck, TrendingUp, ArrowUpRight } from 'lucide-react';
 
 interface AdminMetricsGridProps {
@@ -6,129 +7,176 @@ interface AdminMetricsGridProps {
   t: (key: string, params?: Record<string, unknown>) => string;
 }
 
+// ── Compteur animé déclenché à l'entrée dans le viewport ──────────────────
+function AnimatedNumber({ value, delay }: { value: number; delay: number }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(0, value, {
+      duration: 1.4,
+      delay,
+      ease: 'easeOut',
+      onUpdate(v) { setCount(Math.round(v)); },
+    });
+    return () => controls.stop();
+  }, [value, delay, inView]);
+
+  return <span ref={ref}>{count.toLocaleString()}</span>;
+}
+
+// ── Variants stagger ───────────────────────────────────────────────────────
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 28, scale: 0.94 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring' as const, stiffness: 130, damping: 14 } },
+};
+
+const barVariants = {
+  hidden: { width: '0%' },
+  visible: { width: '70%', transition: { duration: 0.9, ease: 'easeOut' } },
+};
+
 export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) {
   const metrics = m as any;
 
-  const cards = [
+  const statsHero = [
     {
-      Icon: Users,
-      value: metrics.totalUsers?.toLocaleString() ?? '0',
+      value: metrics.totalUsers ?? 0,
       label: t('admin.total_users'),
-      sub: `${metrics.activeUsers?.toLocaleString() ?? '0'} actifs`,
-      trend: '+12%',
-      gradient: 'from-blue-500 to-blue-700',
-      lightBg: 'from-blue-50 to-blue-100',
-      iconBg: 'bg-blue-500',
-      textColor: 'text-blue-600',
-      delay: 0.1,
+      suffix: '',
+      description: 'utilisateurs inscrits sur la plateforme',
+      icon: Users,
+      color: '#5B9FFF',
     },
     {
-      Icon: Building2,
-      value: String(metrics.totalExhibitors ?? 0),
+      value: metrics.totalExhibitors ?? 0,
       label: t('admin.exhibitors'),
-      sub: `${metrics.onlineExhibitors || 0} en ligne`,
-      trend: '+5%',
-      gradient: 'from-amber-400 to-amber-600',
-      lightBg: 'from-amber-50 to-orange-100',
-      iconBg: 'bg-amber-500',
-      textColor: 'text-amber-600',
-      delay: 0.2,
+      suffix: '',
+      description: 'exposants confirmés pour le salon',
+      icon: Building2,
+      color: '#C9A84C',
     },
     {
-      Icon: Award,
-      value: String(metrics.totalPartners ?? 0),
-      label: t('admin.partners'),
-      sub: 'Partenaires actifs',
-      trend: '+3%',
-      gradient: 'from-emerald-500 to-emerald-700',
-      lightBg: 'from-emerald-50 to-green-100',
-      iconBg: 'bg-emerald-500',
-      textColor: 'text-emerald-600',
-      delay: 0.3,
+      value: '98',
+      label: 'Taux',
+      suffix: '%',
+      description: 'de satisfaction général',
+      icon: Award,
+      color: '#2D6A4F',
     },
     {
-      Icon: UserCheck,
-      value: metrics.totalVisitors?.toLocaleString() ?? '0',
+      value: metrics.totalVisitors ?? 0,
       label: t('admin.visitors'),
-      sub: `${metrics.activeUsers?.toLocaleString() ?? '0'} en ligne`,
-      trend: '+18%',
-      gradient: 'from-purple-500 to-purple-700',
-      lightBg: 'from-purple-50 to-purple-100',
-      iconBg: 'bg-purple-500',
-      textColor: 'text-purple-600',
-      delay: 0.4,
+      suffix: '',
+      description: 'visiteurs actuels en ligne',
+      icon: UserCheck,
+      color: '#A855F7',
     },
   ];
 
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-          <TrendingUp className="h-5 w-5 text-blue-600" />
-          {t('admin.platform_statistics')}
-        </h2>
-        <span className="flex items-center gap-1.5 text-xs text-green-600 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-          Temps réel
+    <div className="mb-16">
+      {/* Hero section — divider premium */}
+      <motion.div
+        className="flex items-center justify-between mb-12 pb-8"
+        initial={{ opacity: 0, y: -12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.5 }}
+      >
+        <div>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold flex items-center gap-4 mb-2" style={{ color: 'rgba(255,255,255,0.98)' }}>
+            <TrendingUp className="h-8 w-8" style={{ color: '#C9A84C' }} />
+            {t('admin.platform_statistics')}
+          </h2>
+          <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.40)' }}>
+            Indicateurs clés de performance • Mis à jour en temps réel
+          </p>
+        </div>
+        <span className="flex items-center gap-2 text-xs px-4 py-2 rounded-full font-medium" style={{ color: '#C9A84C', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.3)' }}>
+          <span className="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse" />
+          EN DIRECT
         </span>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {cards.map(({ Icon, value, label, sub, trend, gradient, lightBg, iconBg, textColor, delay }) => (
+      {/* Stats grid — ÉNORME display */}
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+      >
+        {statsHero.map(({ value, label, suffix, description, icon: Icon, color }, idx) => (
           <motion.div
-            key={label}
-            initial={{ opacity: 0, y: 24, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay, duration: 0.4, type: 'spring', stiffness: 120 }}
-            whileHover={{ y: -6, scale: 1.02 }}
-            className="relative overflow-hidden rounded-2xl shadow-lg cursor-pointer"
+            key={idx}
+            variants={cardVariants}
+            whileHover={{ y: -12, scale: 1.05 }}
+            className="relative group cursor-pointer transition-all duration-500"
           >
-            {/* Fond dégradé léger */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${lightBg} opacity-60`} />
+            {/* Subtle glow background */}
+            <div
+              className="absolute inset-0 rounded-2xl blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"
+              style={{ background: color }}
+            />
 
-            {/* Cercle décoratif fond */}
-            <div className={`absolute -right-6 -bottom-6 w-28 h-28 rounded-full bg-gradient-to-br ${gradient} opacity-10`} />
+            {/* Card container */}
+            <div
+              className="relative rounded-2xl border p-8 h-full flex flex-col shadow-luxury backdrop-blur-md"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                borderColor: 'rgba(255,255,255,0.08)',
+              }}
+            >
+              {/* Top accent bar */}
+              <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: color }} />
 
-            <div className="relative p-5 border border-white rounded-2xl bg-white/70 backdrop-blur-sm h-full">
-              {/* Header */}
-              <div className="flex items-start justify-between mb-4">
-                <motion.div
-                  whileHover={{ rotate: 10 }}
-                  className={`p-2.5 rounded-xl ${iconBg} shadow-md`}
-                >
-                  <Icon className="h-5 w-5 text-white" />
-                </motion.div>
-                <span className={`flex items-center gap-0.5 text-xs font-bold ${textColor} bg-white rounded-full px-2 py-0.5 shadow-sm`}>
-                  <ArrowUpRight className="h-3 w-3" />
-                  {trend}
-                </span>
+              {/* Icon circle */}
+              <div className="mb-6 inline-flex w-fit">
+                <div className="p-3 rounded-xl" style={{ background: `${color}18`, border: `1px solid ${color}30` }}>
+                  <Icon className="h-6 w-6" style={{ color }} />
+                </div>
               </div>
 
-              {/* Valeur animée */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: delay + 0.2 }}
-                className="text-3xl font-black text-gray-900 mb-1 font-mono"
-              >
-                {value}
-              </motion.div>
-              <div className="text-sm font-bold text-gray-700 mb-2">{label}</div>
-
-              {/* Barre de progression décorative */}
-              <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden mt-3">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: '70%' }}
-                  transition={{ delay: delay + 0.3, duration: 0.8 }}
-                  className={`h-full bg-gradient-to-r ${gradient} rounded-full`}
-                />
+              {/* HUGE number in serif */}
+              <div className="mb-4 flex-1">
+                <div className="font-serif font-bold tracking-tight leading-none mb-1" style={{ fontSize: '3.5rem', color }}>
+                  <AnimatedNumber value={typeof value === 'number' ? value : parseInt(value)} delay={idx * 0.08} />
+                  <span className="text-2xl ml-1" style={{ color }}>
+                    {suffix}
+                  </span>
+                </div>
               </div>
-              <p className="text-xs text-gray-500 mt-2">{sub}</p>
+
+              {/* Label + description */}
+              <div>
+                <h3 className="text-sm font-bold uppercase tracking-wider mb-1" style={{ color: 'rgba(255,255,255,0.85)', letterSpacing: '0.08em' }}>
+                  {label}
+                </h3>
+                <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.40)' }}>
+                  {description}
+                </p>
+              </div>
+
+              {/* Bottom divider */}
+              <div className="mt-6 pt-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }} />
+
+              {/* Trend badge */}
+              <div className="flex items-center gap-1.5 text-xs mt-4 font-medium" style={{ color }}>
+                <ArrowUpRight className="h-3.5 w-3.5" />
+                <span>+12% ce mois</span>
+              </div>
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

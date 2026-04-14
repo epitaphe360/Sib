@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
+import { useSalon } from '../../contexts/SalonContext';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface FieldDef {
@@ -32,13 +33,56 @@ const PAGES: PageDef[] = [
     Icon: Globe,
     route: ROUTES.PRESENTATION,
     fields: [
+      { key: 'hero_badge', label: 'Bandeau hero', type: 'text', placeholder: "20ème Édition — 40 ans d'excellence" },
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Salon International du Bâtiment' },
       { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Depuis 1986, le SIB est le rendez-vous incontournable...' },
+      { key: 'hero_date', label: 'Hero — Date', type: 'text', placeholder: '25 – 29 Novembre 2026' },
+      { key: 'hero_location', label: 'Hero — Lieu', type: 'text', placeholder: "Parc d'Exposition Mohammed VI, El Jadida" },
+      { key: 'hero_hours', label: 'Hero — Horaires', type: 'text', placeholder: '9h00 – 19h00' },
       { key: 'stat_exposants', label: 'Nombre d\'exposants', type: 'text', placeholder: '500' },
+      { key: 'stat_exposants_label', label: 'Stat exposants — Libellé', type: 'text', placeholder: 'Exposants' },
+      { key: 'stat_exposants_sub', label: 'Stat exposants — Sous-texte', type: 'text', placeholder: '1 500 marques représentées' },
       { key: 'stat_visiteurs', label: 'Nombre de visiteurs', type: 'text', placeholder: '200 000' },
+      { key: 'stat_visiteurs_label', label: 'Stat visiteurs — Libellé', type: 'text', placeholder: 'Visiteurs' },
+      { key: 'stat_visiteurs_sub', label: 'Stat visiteurs — Sous-texte', type: 'text', placeholder: 'professionnels & grand public' },
       { key: 'stat_pays', label: 'Nombre de pays', type: 'text', placeholder: '50' },
+      { key: 'stat_pays_label', label: 'Stat pays — Libellé', type: 'text', placeholder: 'Pays' },
+      { key: 'stat_pays_sub', label: 'Stat pays — Sous-texte', type: 'text', placeholder: 'représentés' },
       { key: 'stat_surface', label: 'Surface d\'exposition', type: 'text', placeholder: '35 000 m²' },
-      { key: 'about_text', label: 'Texte À propos (remplace les paragraphes de présentation)', type: 'textarea', placeholder: 'Le Salon International du Bâtiment – SIB revient pour sa 20ᵉ édition...' },
+      { key: 'stat_surface_label', label: 'Stat surface — Libellé', type: 'text', placeholder: 'Surface' },
+      { key: 'stat_surface_sub', label: 'Stat surface — Sous-texte', type: 'text', placeholder: "d'exposition" },
+      { key: 'about_title', label: 'Titre section À propos', type: 'text', placeholder: 'Le Salon International du Bâtiment' },
+      { key: 'about_text', label: 'Texte À propos (remplace les paragraphes de présentation)', type: 'textarea', placeholder: "Le Salon International du Bâtiment – SIB revient pour sa 20ᵉ édition, célébrant ainsi ses 40 années d'existence. Ce salon incontournable se déroulera du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI d'El Jadida.\n\nFondé en 1986, le SIB s'est imposé comme le rendez-vous biennal de référence du secteur du bâtiment au Maroc et en Afrique. Il réunit 600 exposants et 1 500 marques internationales autour d'un même objectif : construire l'avenir. Avec 200 000 visiteurs professionnels, 50 pays représentés, 300 rencontres B2B planifiées via URBA EVENT et 35 000 m² d'exposition, le SIB s'impose comme le hub africain de la construction et de l'innovation.\n\nOrganisé par le Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville et l'Agence Marocaine de Développement des Investissements et des Exportations – AMDIE, et co-organisé par la Fédération des Industries des Matériaux de Construction – FMC et la Fédération Nationale du Bâtiment et des Travaux Publics – FNBTP, URBACOM en assure la gestion déléguée depuis 2006.\n\nAu-delà de sa portée nationale, le SIB s'impose aujourd'hui comme le grand rendez-vous africain du bâtiment et des matériaux de construction, un espace où convergent les expertises du continent. Le salon propose 2 espaces de démonstration, 30 applications techniques, 20 conférences animées par des experts marocains et internationaux, ainsi que des espaces thématiques : SIB Academy, SIB Recrutement, SIB TV, Espace B2B et Espace Démonstration." },
+      { key: 'about_read_more', label: 'Bouton en savoir plus', type: 'text', placeholder: 'Savoir plus' },
+      { key: 'about_read_less', label: 'Bouton réduire', type: 'text', placeholder: 'Réduire' },
+      { key: 'image_badge_date', label: 'Image — Badge date', type: 'text', placeholder: '25-29 Novembre 2026' },
+      { key: 'image_location_label', label: 'Image — Libellé emplacement', type: 'text', placeholder: 'Emplacement' },
+      { key: 'image_location_value', label: 'Image — Valeur emplacement', type: 'text', placeholder: "Parc d'Exposition Mohammed VI - EL JADIDA" },
+      { key: 'image_date_label', label: 'Image — Libellé date', type: 'text', placeholder: 'Date' },
+      { key: 'image_date_value', label: 'Image — Valeur date', type: 'text', placeholder: 'Du 25 au 29 Novembre 2026' },
+      { key: 'free_entry_title', label: 'Section entrée — Titre', type: 'text', placeholder: 'Entrée Gratuite' },
+      { key: 'free_entry_text', label: 'Section entrée — Texte', type: 'textarea', placeholder: "L'accès au salon est entièrement gratuit. Un badge électronique est requis et peut être obtenu en ligne ou sur place." },
+      { key: 'free_entry_cta', label: 'Section entrée — Bouton', type: 'text', placeholder: 'Obtenez votre badge' },
+      { key: 'organizers_title', label: 'Section organisateurs — Titre', type: 'text', placeholder: 'Organisateurs' },
+      { key: 'brochure_title', label: 'Section brochure — Titre', type: 'text', placeholder: 'Téléchargez la brochure SIB 2026' },
+      { key: 'brochure_text', label: 'Section brochure — Texte', type: 'textarea', placeholder: 'Retrouvez toutes les informations essentielles sur le salon, le programme et les modalités de participation.' },
+      { key: 'brochure_cta', label: 'Section brochure — Bouton', type: 'text', placeholder: 'Brochure SIB 2026 (PDF)' },
+      { key: 'brochure_url', label: 'Section brochure — URL PDF', type: 'text', placeholder: 'https://sib.ma/backend/uploads/Brochure_SIB_2026_F_3175004ace.pdf' },
+      { key: 'org_1_name', label: 'Organisateur 1 — Nom', type: 'text', placeholder: 'Ministère MUAT' },
+      { key: 'org_1_role', label: 'Organisateur 1 — Rôle', type: 'text', placeholder: 'Organisateur' },
+      { key: 'org_1_desc', label: 'Organisateur 1 — Description', type: 'textarea', placeholder: "Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville" },
+      { key: 'org_2_name', label: 'Organisateur 2 — Nom', type: 'text', placeholder: 'AMDIE' },
+      { key: 'org_2_role', label: 'Organisateur 2 — Rôle', type: 'text', placeholder: 'Organisateur' },
+      { key: 'org_2_desc', label: 'Organisateur 2 — Description', type: 'textarea', placeholder: 'Agence Marocaine de Développement des Investissements et des Exportations' },
+      { key: 'org_3_name', label: 'Organisateur 3 — Nom', type: 'text', placeholder: 'FMC' },
+      { key: 'org_3_role', label: 'Organisateur 3 — Rôle', type: 'text', placeholder: 'Co-organisateur' },
+      { key: 'org_3_desc', label: 'Organisateur 3 — Description', type: 'textarea', placeholder: 'Fédération des Industries des Matériaux de Construction' },
+      { key: 'org_4_name', label: 'Organisateur 4 — Nom', type: 'text', placeholder: 'FNBTP' },
+      { key: 'org_4_role', label: 'Organisateur 4 — Rôle', type: 'text', placeholder: 'Co-organisateur' },
+      { key: 'org_4_desc', label: 'Organisateur 4 — Description', type: 'textarea', placeholder: 'Fédération Nationale du Bâtiment et des Travaux Publics' },
+      { key: 'org_5_name', label: 'Organisateur 5 — Nom', type: 'text', placeholder: 'URBACOM' },
+      { key: 'org_5_role', label: 'Organisateur 5 — Rôle', type: 'text', placeholder: 'Organisateur délégué' },
+      { key: 'org_5_desc', label: 'Organisateur 5 — Description', type: 'textarea', placeholder: '1ʳᵉ agence conseil en communication et événementiel, gestion déléguée depuis 2006' },
     ],
   },
   {
@@ -47,6 +91,7 @@ const PAGES: PageDef[] = [
     Icon: Zap,
     route: ROUTES.NOUVEAUTES,
     fields: [
+      { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: 'SIB 2026' },
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Nouveautés' },
       { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Découvrez les innovations et les changements majeurs...' },
       { key: 'item_1_title', label: 'Nouveauté 1 — Titre', type: 'text' },
@@ -63,6 +108,7 @@ const PAGES: PageDef[] = [
       { key: 'item_6_desc', label: 'Nouveauté 6 — Description', type: 'textarea' },
       { key: 'item_7_title', label: 'Nouveauté 7 — Titre', type: 'text' },
       { key: 'item_7_desc', label: 'Nouveauté 7 — Description', type: 'textarea' },
+      { key: 'items_json', label: 'Nouveautés JSON (optionnel)', type: 'textarea', placeholder: '[{"title":"...","desc":"...","color":"bg-amber-50 text-amber-600"}]' },
     ],
   },
   {
@@ -71,8 +117,12 @@ const PAGES: PageDef[] = [
     Icon: Layers,
     route: ROUTES.SECTEURS_ACTIVITES,
     fields: [
+      { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: "10 secteurs d'activité" },
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Secteurs d\'Activités' },
       { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Le SIB couvre l\'ensemble de la chaîne de valeur du bâtiment...' },
+      { key: 'search_placeholder', label: 'Placeholder recherche', type: 'text', placeholder: 'Rechercher un secteur ou une sous-catégorie...' },
+      { key: 'empty_text', label: 'Texte aucun résultat', type: 'text', placeholder: 'Aucun secteur ne correspond à votre recherche.' },
+      { key: 'secteurs_json', label: 'Secteurs JSON (optionnel)', type: 'textarea', placeholder: '[{"id":1,"name":"...","subcategories":["...","..."]}]' },
     ],
   },
   {
@@ -81,8 +131,10 @@ const PAGES: PageDef[] = [
     Icon: BookOpen,
     route: ROUTES.EDITIONS,
     fields: [
+      { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: "40 ans d'histoire" },
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Nos Éditions' },
       { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Depuis 1986, le SIB accompagne l\'essor du secteur du bâtiment...' },
+      { key: 'timeline_json', label: 'Timeline JSON (optionnel)', type: 'textarea', placeholder: '[{"year":2026,"edition":"20ème","dates":"...","lieu":"..."}]' },
     ],
   },
   {
@@ -93,6 +145,9 @@ const PAGES: PageDef[] = [
     fields: [
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Pourquoi Exposer au SIB ?' },
       { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Rejoignez le plus grand salon du bâtiment au Maroc...' },
+      { key: 'hero_cta', label: 'Bouton hero', type: 'text', placeholder: 'Réservez votre stand' },
+      { key: 'reasons_title', label: 'Titre section raisons', type: 'text', placeholder: "6 raisons d'exposer" },
+      { key: 'stats_json', label: 'Stats JSON (optionnel)', type: 'textarea', placeholder: '[{"value":"600+","label":"Exposants"}]' },
       { key: 'arg_1_title', label: 'Argument 1 — Titre', type: 'text' },
       { key: 'arg_1_desc', label: 'Argument 1 — Description', type: 'textarea' },
       { key: 'arg_2_title', label: 'Argument 2 — Titre', type: 'text' },
@@ -105,6 +160,11 @@ const PAGES: PageDef[] = [
       { key: 'arg_5_desc', label: 'Argument 5 — Description', type: 'textarea' },
       { key: 'arg_6_title', label: 'Argument 6 — Titre', type: 'text' },
       { key: 'arg_6_desc', label: 'Argument 6 — Description', type: 'textarea' },
+      { key: 'sectors_title', label: 'Titre section secteurs', type: 'text', placeholder: 'Secteurs représentés' },
+      { key: 'sectors_json', label: 'Secteurs (liste JSON optionnelle)', type: 'textarea', placeholder: '["Gros Œuvre & Structure","Menuiserie & Fermeture"]' },
+      { key: 'cta_title', label: 'Titre CTA bas de page', type: 'text', placeholder: 'Prêt à exposer ?' },
+      { key: 'cta_text', label: 'Texte CTA bas de page', type: 'textarea', placeholder: 'Réservez votre stand dès maintenant...' },
+      { key: 'cta_button', label: 'Bouton CTA bas de page', type: 'text', placeholder: 'Demander un devis' },
     ],
   },
   {
@@ -115,6 +175,8 @@ const PAGES: PageDef[] = [
     fields: [
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Pourquoi Visiter le SIB ?' },
       { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: '5 jours pour découvrir, apprendre et connecter...' },
+      { key: 'hero_cta', label: 'Bouton hero', type: 'text', placeholder: 'Obtenez votre badge gratuit' },
+      { key: 'reasons_title', label: 'Titre section raisons', type: 'text', placeholder: '6 bonnes raisons de visiter' },
       { key: 'arg_1_title', label: 'Raison 1 — Titre', type: 'text' },
       { key: 'arg_1_desc', label: 'Raison 1 — Description', type: 'textarea' },
       { key: 'arg_2_title', label: 'Raison 2 — Titre', type: 'text' },
@@ -127,6 +189,13 @@ const PAGES: PageDef[] = [
       { key: 'arg_5_desc', label: 'Raison 5 — Description', type: 'textarea' },
       { key: 'arg_6_title', label: 'Raison 6 — Titre', type: 'text' },
       { key: 'arg_6_desc', label: 'Raison 6 — Description', type: 'textarea' },
+      { key: 'infos_title', label: 'Titre section infos', type: 'text', placeholder: 'Infos Pratiques' },
+      { key: 'infos_json', label: 'Infos pratiques JSON (optionnel)', type: 'textarea', placeholder: '[{"label":"Dates","value":"25 – 29 Novembre 2026"}]' },
+      { key: 'transport_title', label: 'Titre section transport', type: 'text', placeholder: "Comment s'y rendre ?" },
+      { key: 'transport_json', label: 'Transport JSON (optionnel)', type: 'textarea', placeholder: '[{"title":"Par navettes","desc":"..."}]' },
+      { key: 'cta_title', label: 'Titre CTA bas de page', type: 'text', placeholder: 'Prêt à visiter ?' },
+      { key: 'cta_text', label: 'Texte CTA bas de page', type: 'textarea', placeholder: "L'entrée est gratuite..." },
+      { key: 'cta_button', label: 'Bouton CTA bas de page', type: 'text', placeholder: "S'inscrire gratuitement" },
     ],
   },
   {
@@ -137,6 +206,7 @@ const PAGES: PageDef[] = [
     fields: [
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Téléchargements' },
       { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Documents officiels, catalogues et bilans des éditions passées.' },
+      { key: 'documents_json', label: 'Documents JSON (optionnel)', type: 'textarea', placeholder: '[{"year":"2026","label":"SIB 2026","docs":[{"name":"Brochure","url":"https://..."}]}]' },
     ],
   },
   {
@@ -145,6 +215,7 @@ const PAGES: PageDef[] = [
     Icon: LayoutGrid,
     route: ROUTES.ESPACES_SIB,
     fields: [
+      { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: '5 espaces dédiés' },
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Espaces SIB' },
       { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Parce que le SIB ne se résume pas qu\'aux stands d\'exposition...' },
       { key: 'espace_1_title', label: 'Espace 1 — Titre', type: 'text' },
@@ -157,6 +228,11 @@ const PAGES: PageDef[] = [
       { key: 'espace_4_desc', label: 'Espace 4 — Description', type: 'textarea' },
       { key: 'espace_5_title', label: 'Espace 5 — Titre', type: 'text' },
       { key: 'espace_5_desc', label: 'Espace 5 — Description', type: 'textarea' },
+      { key: 'espaces_json', label: 'Espaces JSON (optionnel)', type: 'textarea', placeholder: '[{"title":"...","description":"..."}]' },
+      { key: 'cta_title', label: 'Titre CTA', type: 'text', placeholder: 'Intéressé par un espace ?' },
+      { key: 'cta_text', label: 'Texte CTA', type: 'textarea', placeholder: 'Contactez-nous pour en savoir plus...' },
+      { key: 'cta_button', label: 'Bouton CTA', type: 'text', placeholder: 'Contactez-nous' },
+      { key: 'cta_url', label: 'Lien CTA', type: 'text', placeholder: '/contact' },
     ],
   },
   {
@@ -167,17 +243,29 @@ const PAGES: PageDef[] = [
     fields: [
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Infos Pratiques' },
       { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Tout ce qu\'il faut savoir pour préparer votre visite...' },
+      { key: 'lieu_title', label: 'Titre section lieu', type: 'text', placeholder: 'Parc d\'Exposition Mohammed VI' },
       { key: 'lieu_adresse', label: 'Adresse du lieu', type: 'textarea', placeholder: 'Route Nationale 1 vers Azemmour, Région Casablanca - Settat, 24000 — EL JADIDA' },
+      { key: 'lieu_context', label: 'Contexte section lieu', type: 'textarea', placeholder: 'Implanté au cœur du Pôle urbain Mazagan (PUMA)...' },
+      { key: 'horaires_title', label: 'Titre section horaires', type: 'text', placeholder: 'Horaires' },
+      { key: 'horaires_json', label: 'Horaires JSON (optionnel)', type: 'textarea', placeholder: '[{"jour":"Mardi 25 Novembre","heures":"9h00 – 19h00"}]' },
+      { key: 'tarifs_title', label: 'Titre section tarifs', type: 'text', placeholder: 'Tarifs' },
       { key: 'tarifs_intro', label: 'Texte introduction tarifs', type: 'textarea', placeholder: 'L\'entrée est gratuite tout au long des 5 jours d\'exposition...' },
+      { key: 'tarifs_bullets_json', label: 'Tarifs bullets JSON (optionnel)', type: 'textarea', placeholder: '["Badge électronique...","Invitation...","Carte de visite..."]' },
+      { key: 'tarifs_cta', label: 'Bouton section tarifs', type: 'text', placeholder: 'Obtenir mon badge gratuit' },
+      { key: 'venir_title', label: 'Titre section transport', type: 'text', placeholder: 'Comment venir ?' },
+      { key: 'venir_json', label: 'Sections transport JSON (optionnel)', type: 'textarea', placeholder: '[{"title":"Par Navettes SIB","desc":"...","note":"..."}]' },
+      { key: 'hebergement_title', label: 'Titre section hébergement', type: 'text', placeholder: 'Hébergement' },
       { key: 'navette_exposants', label: 'Navettes exposants', type: 'text', placeholder: 'Départ 08h30, Retour 19h00' },
       { key: 'navette_visiteurs', label: 'Navettes visiteurs', type: 'text', placeholder: 'Départs 08h30 et 10h30 — Retours 17h30 et 18h30' },
       { key: 'hebergement_text', label: 'Texte hébergement', type: 'textarea', placeholder: 'Les hôtels recommandés à proximité...' },
+      { key: 'hebergement_cta', label: 'Bouton section hébergement', type: 'text', placeholder: 'Voir les hébergements' },
     ],
   },
 ];
 
 // ─── Composant principal ──────────────────────────────────────────────────────
 export default function ContentManagement() {
+  const { currentSalon } = useSalon();
   const [selectedPage, setSelectedPage] = useState<PageDef | null>(null);
   const [allContents, setAllContents] = useState<Record<string, Record<string, string>>>({});
   const [editValues, setEditValues] = useState<Record<string, string>>({});
@@ -186,13 +274,40 @@ export default function ContentManagement() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
+  const getDefaultValuesForPage = useCallback((page: PageDef): Record<string, string> => {
+    return page.fields.reduce((acc, field) => {
+      acc[field.key] = field.placeholder ?? '';
+      return acc;
+    }, {} as Record<string, string>);
+  }, []);
+
+  const getPrefilledValuesForPage = useCallback((page: PageDef): Record<string, string> => {
+    const defaults = getDefaultValuesForPage(page);
+    const persisted = allContents[page.slug] ?? {};
+    return page.fields.reduce((acc, field) => {
+      const persistedValue = persisted[field.key];
+      acc[field.key] = typeof persistedValue === 'string' && persistedValue.length > 0
+        ? persistedValue
+        : defaults[field.key] ?? '';
+      return acc;
+    }, {} as Record<string, string>);
+  }, [allContents, getDefaultValuesForPage]);
+
   // Chargement initial de tous les contenus
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await supabase
+        let query = supabase
           .from('page_contents')
           .select('page_slug, content, updated_at');
+        if (currentSalon) {
+          if (currentSalon.is_default) {
+            query = query.or(`salon_id.eq.${currentSalon.id},salon_id.is.null`);
+          } else {
+            query = query.eq('salon_id', currentSalon.id);
+          }
+        }
+        const { data } = await query;
         if (data) {
           const contentMap: Record<string, Record<string, string>> = {};
           const dateMap: Record<string, string> = {};
@@ -206,13 +321,13 @@ export default function ContentManagement() {
       } catch { /* silently fail */ }
       setIsLoading(false);
     })();
-  }, []);
+  }, [currentSalon]);
 
   const handlePageSelect = useCallback((page: PageDef) => {
     setSelectedPage(page);
-    setEditValues(allContents[page.slug] ?? {});
+    setEditValues(getPrefilledValuesForPage(page));
     setSaveStatus('idle');
-  }, [allContents]);
+  }, [getPrefilledValuesForPage]);
 
   const handleFieldChange = useCallback((key: string, value: string) => {
     setEditValues((prev) => ({ ...prev, [key]: value }));
@@ -223,13 +338,29 @@ export default function ContentManagement() {
     setIsSaving(true);
     setSaveStatus('idle');
     try {
+      const defaults = getDefaultValuesForPage(selectedPage);
+      const normalizedContent = Object.fromEntries(
+        Object.entries(editValues).filter(([key, value]) => {
+          const trimmed = (value ?? '').trim();
+          const defaultValue = (defaults[key] ?? '').trim();
+          return trimmed !== '' && trimmed !== defaultValue;
+        })
+      );
+
       const { data: { user } } = await supabase.auth.getUser();
+      const upsertPayload: Record<string, unknown> = {
+        page_slug: selectedPage.slug,
+        content: normalizedContent,
+        updated_by: user?.id ?? null,
+        ...(currentSalon ? { salon_id: currentSalon.id } : {}),
+      };
+      const conflictCol = currentSalon ? 'page_slug,salon_id' : 'page_slug';
       const { error } = await supabase.from('page_contents').upsert(
-        { page_slug: selectedPage.slug, content: editValues, updated_by: user?.id ?? null },
-        { onConflict: 'page_slug' }
+        upsertPayload,
+        { onConflict: conflictCol }
       );
       if (error) throw error;
-      setAllContents((prev) => ({ ...prev, [selectedPage.slug]: editValues }));
+      setAllContents((prev) => ({ ...prev, [selectedPage.slug]: normalizedContent }));
       setUpdatedDates((prev) => ({ ...prev, [selectedPage.slug]: new Date().toISOString() }));
       setSaveStatus('success');
       setTimeout(() => setSaveStatus('idle'), 4000);
@@ -242,7 +373,7 @@ export default function ContentManagement() {
 
   const handleReset = () => {
     if (!selectedPage) return;
-    setEditValues(allContents[selectedPage.slug] ?? {});
+    setEditValues(getPrefilledValuesForPage(selectedPage));
     setSaveStatus('idle');
   };
 
@@ -390,8 +521,8 @@ export default function ContentManagement() {
                   <div className="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-700 text-xs">
                     <span className="text-base flex-shrink-0">💡</span>
                     <span>
-                      Laissez un champ vide pour conserver la valeur par défaut codée dans l'application.
-                      Remplissez un champ uniquement si vous souhaitez personnaliser ce contenu.
+                      Les champs sont préremplis avec le contenu actuel de la page. Seules les valeurs
+                      modifiées (différentes du contenu par défaut) sont enregistrées comme personnalisation.
                     </span>
                   </div>
 

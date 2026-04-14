@@ -43,10 +43,20 @@ export default {
           gold:      '#C9A84C',
           orange:    '#FF6B35',
         },
+        // Luxury luxury palette — beige, tan, cream
+        luxury: {
+          cream:    '#FAF9F6',
+          beige:    '#D4C5B9',
+          tan:      '#A89878',
+          bronze:   '#8B7355',
+          charcoal: '#2B2520',
+        },
       },
       fontFamily: {
         sans: ['"Open Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        heading: ['"Big Shoulders Display"', '"Open Sans"', 'sans-serif']
+        heading: ['"Big Shoulders Display"', '"Open Sans"', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],
@@ -74,6 +84,11 @@ export default {
         'sib':    '0 4px 6px -1px rgba(27, 54, 93, 0.12), 0 2px 4px -1px rgba(27, 54, 93, 0.07)',
         'sib-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.12), 0 4px 6px -2px rgba(27, 54, 93, 0.07)',
         'sib-xl': '0 18px 38px -10px rgba(27, 54, 93, 0.18), 0 12px 22px -8px rgba(27, 54, 93, 0.12)',
+        // Luxury elevation shadows — deep, premium feel
+        'luxury': '0 8px 16px -2px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
+        'luxury-lg': '0 20px 40px -6px rgba(0, 0, 0, 0.2), 0 4px 8px -2px rgba(0, 0, 0, 0.12)',
+        'luxury-xl': '0 32px 64px -8px rgba(0, 0, 0, 0.25), 0 8px 16px -4px rgba(0, 0, 0, 0.15)',
+        'luxury-2xl': '0 48px 96px -12px rgba(0, 0, 0, 0.3), 0 12px 24px -6px rgba(0, 0, 0, 0.18)',
         // Rétrocompatibilité
         'siports':    '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
         'siports-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)',
@@ -81,21 +96,29 @@ export default {
       },
       animation: {
         'blob': 'blob 7s infinite',
+        'gradient-x':   'gradient-x 10s ease infinite',
+        'gradient-slow': 'gradient-x 16s ease infinite',
+        'shimmer':       'shimmer 2.2s linear infinite',
+        'color-pulse':   'color-pulse 3s ease-in-out infinite',
       },
       keyframes: {
         blob: {
-          '0%': {
-            transform: 'translate(0px, 0px) scale(1)',
-          },
-          '33%': {
-            transform: 'translate(30px, -50px) scale(1.1)',
-          },
-          '66%': {
-            transform: 'translate(-20px, 20px) scale(0.9)',
-          },
-          '100%': {
-            transform: 'translate(0px, 0px) scale(1)',
-          },
+          '0%':   { transform: 'translate(0px, 0px) scale(1)' },
+          '33%':  { transform: 'translate(30px, -50px) scale(1.1)' },
+          '66%':  { transform: 'translate(-20px, 20px) scale(0.9)' },
+          '100%': { transform: 'translate(0px, 0px) scale(1)' },
+        },
+        'gradient-x': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%':      { backgroundPosition: '100% 50%' },
+        },
+        'shimmer': {
+          '0%':   { backgroundPosition: '-200% center' },
+          '100%': { backgroundPosition: '200% center' },
+        },
+        'color-pulse': {
+          '0%, 100%': { opacity: '1' },
+          '50%':      { opacity: '0.7' },
         },
       },
     },

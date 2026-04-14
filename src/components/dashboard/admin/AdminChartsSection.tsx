@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { TrendingUp, BarChart3 } from 'lucide-react';
 import { LineChartCard, BarChartCard, PieChartCard } from '../charts';
 import { useTranslation } from '../../../hooks/useTranslation';
@@ -20,37 +21,63 @@ export function AdminChartsSection({
   const hasTrafficData = trafficData.some(d => d.visits > 0 || d.pageViews > 0);
   return (
     <div className="mb-8 space-y-6">
-      <div className="flex items-center justify-between">
+      <motion.div
+        className="flex items-center justify-between"
+        initial={{ opacity: 0, x: -16 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.4 }}
+      >
         <h2 className="text-2xl font-bold text-gray-900">{t('admin.analytics_trends')}</h2>
         <div className="flex items-center space-x-2 text-sm text-gray-500">
           <TrendingUp className="h-4 w-4" />
           <span>{t('admin.realtime_data')}</span>
         </div>
-      </div>
+      </motion.div>
 
-      <LineChartCard
-        title={t('admin.user_growth')}
-        data={userGrowthData}
-        dataKeys={[
-          { key: 'users', color: '#3b82f6', name: t('admin.total_users_chart') },
-          { key: 'exhibitors', color: '#10b981', name: t('admin.exhibitors') },
-          { key: 'visitors', color: '#8b5cf6', name: t('admin.visitors') },
-        ]}
-        height={350}
-        showArea={true}
-        loading={isLoading}
-      />
+      <motion.div
+        initial={{ opacity: 0, y: 28 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.5 }}
+      >
+        <LineChartCard
+          title={t('admin.user_growth')}
+          data={userGrowthData}
+          dataKeys={[
+            { key: 'users', color: '#3b82f6', name: t('admin.total_users_chart') },
+            { key: 'exhibitors', color: '#10b981', name: t('admin.exhibitors') },
+            { key: 'visitors', color: '#8b5cf6', name: t('admin.visitors') },
+          ]}
+          height={350}
+          showArea={true}
+          loading={isLoading}
+        />
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <PieChartCard
-          title={t('admin.user_distribution')}
-          data={userTypeDistribution}
-          colors={userTypeDistribution.map(d => d.color || '#cbd5e1')}
-          height={320}
-          loading={isLoading}
-          showPercentage={true}
-        />
-        <div className="relative">
+        <motion.div
+          initial={{ opacity: 0, x: -28 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <PieChartCard
+            title={t('admin.user_distribution')}
+            data={userTypeDistribution}
+            colors={userTypeDistribution.map(d => d.color || '#cbd5e1')}
+            height={320}
+            loading={isLoading}
+            showPercentage={true}
+          />
+        </motion.div>
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0, x: 28 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <BarChartCard
             title={t('admin.platform_activity')}
             data={activityData}
@@ -65,10 +92,16 @@ export function AdminChartsSection({
               <p className="text-sm text-gray-400">{t('exhibitor.analytics_no_activity')}</p>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
 
-      <div className="relative">
+      <motion.div
+        className="relative"
+        initial={{ opacity: 0, y: 28 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
         <LineChartCard
           title={t('admin.weekly_traffic')}
           data={trafficData}
@@ -79,7 +112,7 @@ export function AdminChartsSection({
           height={300}
           loading={isLoading}
         />
-      </div>
+      </motion.div>
     </div>
   );
 }

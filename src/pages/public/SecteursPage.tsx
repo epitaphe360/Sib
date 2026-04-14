@@ -12,7 +12,7 @@ interface Secteur {
   subcategories: string[];
 }
 
-const secteurs: Secteur[] = [
+const defaultSecteurs: Secteur[] = [
   { id: 1, name: 'Gros Œuvre & Structure', subcategories: ['Matériaux de construction (ciment, béton, acier, verre, composites)', 'Produits chimiques et solutions de structure', 'Charpentes métalliques et bois', 'Étanchéité, isolation et imperméabilisation', 'Couvertures, tuiles et systèmes de façade', 'Outillage et composants du gros œuvre'] },
   { id: 2, name: 'Menuiserie & Fermeture', subcategories: ['Menuiserie bois, aluminium, PVC et mixte', 'Portes industrielles, portes blindées, fenêtres et vitrages', 'Quincaillerie, serrurerie, extrusion aluminium', 'Systèmes de fermeture et automatisation'] },
   { id: 3, name: 'Décoration & Aménagement Intérieur', subcategories: ['Ameublement et agencement intérieur', 'Éclairage, design et scénographie', 'Revêtements décoratifs, tissus, papiers peints', 'Artisanat marocain et création sur mesure'] },
@@ -27,6 +27,32 @@ const secteurs: Secteur[] = [
 
 export default function SecteursPage() {
   const cms = usePageContent('secteurs-activites');
+
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
+
+  const secteurs: Secteur[] = (() => {
+    const raw = cms.secteurs_json;
+    if (!raw) return defaultSecteurs;
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return defaultSecteurs;
+      return parsed
+        .map((item: any, index: number) => ({
+          id: Number(item?.id ?? index + 1),
+          name: String(item?.name ?? ''),
+          subcategories: Array.isArray(item?.subcategories)
+            ? item.subcategories.map((s: unknown) => String(s))
+            : [],
+        }))
+        .filter((s: Secteur) => s.name.length > 0);
+    } catch {
+      return defaultSecteurs;
+    }
+  })();
+
   const [search, setSearch] = useState('');
   const [expanded, setExpanded] = useState<number | null>(null);
 
@@ -43,7 +69,7 @@ export default function SecteursPage() {
         <div className="container mx-auto px-4 text-center">
           <HeroReveal>
             <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
-              10 secteurs d'activité
+              {getCms('hero_badge', "10 secteurs d'activité")}
             </span>
           </HeroReveal>
           <HeroReveal delay={0.15}>
@@ -63,7 +89,7 @@ export default function SecteursPage() {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
-            placeholder="Rechercher un secteur ou une sous-catégorie..."
+            placeholder={getCms('search_placeholder', 'Rechercher un secteur ou une sous-catégorie...')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-12 pr-4 py-4 rounded-xl shadow-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sib-gold/50 text-gray-800"
@@ -133,7 +159,7 @@ export default function SecteursPage() {
 
         {filtered.length === 0 && (
           <div className="text-center py-12 text-gray-500">
-            Aucun secteur ne correspond à votre recherche.
+            {getCms('empty_text', 'Aucun secteur ne correspond à votre recherche.')}
           </div>
         )}
       </div>
