@@ -452,8 +452,8 @@ const App = () => {
             <Route path={ROUTES.EDITIONS} element={<Navigate to={ROUTES.HOME} replace />} />
             <Route path={ROUTES.TELECHARGEMENTS} element={<Navigate to={ROUTES.HOME} replace />} />
             {/* Pages statiques menu - Exposer */}
-            <Route path={ROUTES.POURQUOI_EXPOSER} element={<Navigate to={ROUTES.REGISTER_EXHIBITOR} replace />} />
-            <Route path={ROUTES.ESPACES_SIB} element={<Navigate to={ROUTES.PAVILIONS} replace />} />
+            <Route path={ROUTES.POURQUOI_EXPOSER} element={<Navigate to={ROUTES.PAVILIONS} replace />} />
+            <Route path={ROUTES.ESPACES_SIB} element={<Navigate to={ROUTES.REGISTER_EXHIBITOR} replace />} />
             {/* Pages statiques menu - Visiter */}
             <Route path={ROUTES.POURQUOI_VISITER} element={<Navigate to={ROUTES.REGISTER_VISITOR} replace />} />
             <Route path={ROUTES.INFOS_PRATIQUES} element={<Navigate to={ROUTES.HOME} replace />} />
