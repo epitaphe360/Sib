@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -594,7 +594,7 @@ class _AgentHomePage extends State<AgentHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'UrbaEvent',
+      title: 'SIB',
       home: _buildHomeContent(),
     );
   }

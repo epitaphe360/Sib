@@ -1,4 +1,4 @@
-import 'package:com.urbaevent/model/agent/ResponseMyScans.dart';
+﻿import 'package:com.urbaevent/model/agent/ResponseMyScans.dart';
 import 'package:com.urbaevent/utils/Preference.dart';
 import 'package:com.urbaevent/utils/ThemeColor.dart';
 import 'package:com.urbaevent/utils/Urls.dart';

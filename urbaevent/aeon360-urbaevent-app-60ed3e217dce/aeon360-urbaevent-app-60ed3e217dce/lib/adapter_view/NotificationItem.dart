@@ -1,4 +1,4 @@
-import 'package:com.urbaevent/utils/Preference.dart';
+﻿import 'package:com.urbaevent/utils/Preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';

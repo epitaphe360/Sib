@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:com.urbaevent/model/events/ResponseEvents.dart';
 import 'package:com.urbaevent/utils/ThemeColor.dart';
@@ -27,7 +27,7 @@ class _Events extends State<CurrentEvents> {
     // Priorité 2 : banner URL classique (ancien Strapi)
     if (widget._datum.banner != null && widget._datum.banner!.url.isNotEmpty) {
       final url = widget._datum.banner!.url;
-      return url.startsWith('http') ? url : 'https://app.urbaevent.ma/backend$url';
+      return url.startsWith('http') ? url : 'https://sbyizudifmqakzxjlndr.supabase.co/storage/v1$url';
     }
     return '';
   }

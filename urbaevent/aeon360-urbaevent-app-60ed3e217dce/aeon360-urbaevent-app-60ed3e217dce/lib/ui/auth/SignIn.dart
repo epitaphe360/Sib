@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
@@ -47,7 +47,7 @@ class _SignIn extends State<SignIn> {
   final config = LinkedInConfig(
     clientId: '78kcdmw2pij8wd',
     clientSecret: '8q7htBpieQXUmhkB',
-    redirectUrl: 'https://www.btp-expo.ma',
+    redirectUrl: 'https://sib2026.ma',
   );
 
   UserObject? user;
@@ -389,7 +389,7 @@ class _SignIn extends State<SignIn> {
     ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'UrbaEvent',
+      title: 'SIB',
       home: _buildContent(),
     );
   }

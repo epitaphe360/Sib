@@ -1,4 +1,4 @@
-import 'package:com.urbaevent/services/SupabaseService.dart';
+﻿import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:com.urbaevent/ui/content_ui/home/SalonListPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:async';
@@ -330,7 +330,7 @@ class _HomePage extends State<HomePage> {
         return EventItem(
           id: e.key + 1,
           name: s['name'] ?? '',
-          organizer: 'Urbacom',
+          organizer: 'SIB',
           description: s['description'],
           fullDescription: s['description'] ?? '',
           startDate: s['date_debut'] != null ? DateTime.parse(s['date_debut']) : now,
@@ -795,15 +795,185 @@ class _HomePage extends State<HomePage> {
   }
 
   double _calculateListViewHeight(int itemCount) {
-    const listItemHeight = 105.0+50; // Example height of a ListTile
-    const listPadding = 16.0; // Example padding between items
+    const listItemHeight = 105.0 + 50;
+    const listPadding = 16.0;
     return itemCount * (listItemHeight + listPadding);
+  }
+
+  // ──────────── Helpers HomePage ────────────
+
+  void _openWebView(String title, String path) {
+    final base = ActiveSalon.webUrl ?? 'https://sib2026.vercel.app';
+    final url = '$base$path';
+    final token = SupabaseService.instance.supabaseClient.auth.currentSession?.accessToken;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => WebViewScreen(title: title, url: url, accessToken: token),
+      ),
+    );
+  }
+
+  Widget _buildSalonHero() {
+    final coverUrl = ActiveSalon.coverUrl;
+    final salonName = ActiveSalon.name ?? 'SIB';
+    final location = ActiveSalon.location ?? '';
+    final description = ActiveSalon.description ?? '';
+    final dateDebut = ActiveSalon.dateDebut;
+    final dateFin = ActiveSalon.dateFin;
+    String dateBadge = '';
+    if (dateDebut != null && dateFin != null) {
+      final fmt = DateFormat('dd MMM', 'fr');
+      dateBadge = '${fmt.format(dateDebut)} – ${DateFormat('dd MMM yyyy', 'fr').format(dateFin)}';
+    }
+    return Container(
+      margin: const EdgeInsets.only(bottom: 4),
+      child: Stack(
+        children: [
+          // Image de couverture
+          Container(
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: const Color(0xFF0D2137),
+              image: coverUrl != null
+                  ? DecorationImage(image: NetworkImage(coverUrl), fit: BoxFit.cover, colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.45), BlendMode.darken))
+                  : null,
+            ),
+          ),
+          // Gradient en bas
+          Positioned(
+            left: 0, right: 0, bottom: 0,
+            child: Container(
+              height: 100,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Color(0xCC0D2137)],
+                ),
+              ),
+            ),
+          ),
+          // Badge date
+          if (dateBadge.isNotEmpty)
+            Positioned(
+              top: 12, right: 12,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF4598D1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(dateBadge, style: GoogleFonts.roboto(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
+              ),
+            ),
+          // Nom + location
+          Positioned(
+            left: 16, bottom: 12, right: 16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(salonName, style: GoogleFonts.roboto(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
+                if (location.isNotEmpty)
+                  Row(children: [
+                    const Icon(Icons.location_on, color: Color(0xFF4598D1), size: 14),
+                    const SizedBox(width: 3),
+                    Text(location, style: GoogleFonts.roboto(color: Colors.white70, fontSize: 12)),
+                  ]),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickAccess() {
+    final accent = const Color(0xFF4598D1);
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(Intl.message('quickAccess', name: 'quickAccess', desc: 'Accès rapide'),
+              style: GoogleFonts.roboto(color: const Color(0xFF0D2137), fontSize: 15, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(child: _QuickBtn(icon: Icons.store_outlined, label: 'Exposants', color: accent, onTap: () => _openWebView('Exposants', '/exhibitors'))),
+              const SizedBox(width: 10),
+              Expanded(child: _QuickBtn(icon: Icons.handshake_outlined, label: 'Partenaires', color: const Color(0xFF16A34A), onTap: () => _openWebView('Partenaires', '/partners'))),
+              const SizedBox(width: 10),
+              Expanded(child: _QuickBtn(icon: Icons.event_outlined, label: 'Programme', color: const Color(0xFFF97316), onTap: () => _openWebView('Programme', '/events'))),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMediaSection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Médias', style: GoogleFonts.roboto(color: const Color(0xFF0D2137), fontSize: 15, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(child: _QuickBtn(icon: Icons.videocam_outlined, label: 'Webinaires', color: const Color(0xFF7C3AED), onTap: () => _openWebView('Webinaires', '/media/webinars'))),
+              const SizedBox(width: 10),
+              Expanded(child: _QuickBtn(icon: Icons.headphones_outlined, label: 'Podcasts', color: const Color(0xFFDC2626), onTap: () => _openWebView('Podcasts', '/media/podcasts'))),
+              const SizedBox(width: 10),
+              Expanded(child: _QuickBtn(icon: Icons.live_tv_outlined, label: 'Live Studio', color: const Color(0xFF4598D1), onTap: () => _openWebView('Live Studio', '/media/live-studio'))),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNetworkingSection() {
+    return GestureDetector(
+      onTap: () => _openWebView('Réseautage', '/networking'),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF0D2137), Color(0xFF4598D1)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [BoxShadow(color: const Color(0xFF4598D1).withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))],
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.people_alt_outlined, color: Colors.white, size: 28),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Matching & Réseautage', style: GoogleFonts.roboto(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700)),
+                  Text('Rencontrez vos partenaires idéaux', style: GoogleFonts.roboto(color: Colors.white70, fontSize: 12)),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios, color: Colors.white54, size: 16),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'UrbaEvent',
+      title: 'SIB',
       debugShowCheckedModeBanner: false,
       home: _buildHomeContent(),
     );
@@ -1173,308 +1343,89 @@ class _HomePage extends State<HomePage> {
                     if (uiMode == Const.homeUI)
                       Expanded(
                         flex: 1,
-                        child: Container(
-                          child: SingleChildScrollView(
-                            padding: EdgeInsets.zero,
-                            child: Column(
-                              children: [
-                                if (getEventsInit)
-                                  Container(
-                                    height: 216,
-                                    child: CurrentEvents(responseEvents.data[0],
-                                        0, handleEventDetailsCallback),
-                                  ),
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.zero,
+                          child: Column(
+                            children: [
+                              // ── Hero image + description ──
+                              _buildSalonHero(),
+                              // ── Accès rapide : Exposants / Partenaires / Programme ──
+                              _buildQuickAccess(),
+                              // ── Médias : Webinaires / Podcasts / Live Studio ──
+                              _buildMediaSection(),
+                              // ── Réseautage (VIP / Exposant / Partenaire / Admin) ──
+                              if (_userType != 'visitor')
+                                _buildNetworkingSection(),
+                              const SizedBox(height: 16),
+                              // ── Mes événements ──
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 4, bottom: 8),
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                    Intl.message("myEvents", name: "myEvents"),
+                                    style: GoogleFonts.roboto(
+                                        color: const Color(0xFF0D2137),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700)),
+                              ),
+                              if (!isLoggedIn && isInit)
                                 Container(
-                                  padding: EdgeInsets.only(
-                                      left: 20, right: 20, bottom: 20),
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                      Intl.message("upcomingEvents",
-                                          name: "upcomingEvents"),
-                                      style: GoogleFonts.roboto(
-                                          color: Color.fromRGBO(51, 51, 51, 1),
-                                          fontStyle: FontStyle.normal,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700)),
-                                ),
-                                if (getEventsInit)
-                                  Container(
-                                    height: 100,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: responseEvents.data.length,
-                                      itemBuilder: (context, index) {
-                                        return UpcomingEvents(
-                                            responseEvents.data[index],
-                                            index,
-                                            handleEventDetailsCallback);
-                                      },
-                                      // reverse: true,
-                                      physics: BouncingScrollPhysics(),
-                                    ),
+                                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(color: const Color(0xFFE8ECF0)),
                                   ),
-                                // Raccourcis WebView (Matching B2B + Mini-sites Exposants)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 12),
-                                  child: Row(
+                                  child: Column(
                                     children: [
-                                      // Matching B2B visible seulement pour VIP, exposant, partenaire, admin
-                                      if (_userType != 'visitor')
-                                        Expanded(
-                                          child: _WebViewShortcut(
-                                            icon: Icons.people_alt_outlined,
-                                            label: 'Matching B2B',
-                                            onTap: () {
-                                              final token = SupabaseService
-                                                  .instance
-                                                  .supabaseClient
-                                                  .auth
-                                                  .currentSession
-                                                  ?.accessToken;
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (_) => WebViewScreen(
-                                                    title: 'Matching B2B',
-                                                    url:
-                                                        'https://sib.ma/matching/advanced',
-                                                    accessToken: token,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      if (_userType != 'visitor')
-                                        const SizedBox(width: 12),
-                                      Expanded(
-                                        child: _WebViewShortcut(
-                                          icon: Icons.business_outlined,
-                                          label: 'Exposants',
-                                          onTap: () {
-                                            final token = SupabaseService
-                                                .instance
-                                                .supabaseClient
-                                                .auth
-                                                .currentSession
-                                                ?.accessToken;
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) => WebViewScreen(
-                                                  title: 'Mini-sites Exposants',
-                                                  url:
-                                                      'https://sib.ma/exhibitors',
-                                                  accessToken: token,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
+                                      Text(
+                                          Intl.message("accessEventMessage", name: "accessEventMessage"),
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.roboto(color: const Color(0xFF647483), fontSize: 14)),
+                                      const SizedBox(height: 12),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(Intl.message("please", name: "please"),
+                                              style: GoogleFonts.roboto(fontSize: 14, color: const Color(0xFF333333), fontWeight: FontWeight.w600)),
+                                          TextButton(
+                                              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SignUp())),
+                                              child: Text(Intl.message("signup", name: "signup"),
+                                                  style: GoogleFonts.roboto(color: ThemeColor.colorAccent, fontSize: 14, fontWeight: FontWeight.w700))),
+                                          Text(Intl.message("or", name: "or"),
+                                              style: GoogleFonts.roboto(fontSize: 14, color: const Color(0xFF333333), fontWeight: FontWeight.w600)),
+                                          TextButton(
+                                              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SignIn())),
+                                              child: Text(Intl.message("login", name: "login"),
+                                                  style: GoogleFonts.roboto(color: ThemeColor.colorAccent, fontSize: 14, fontWeight: FontWeight.w700))),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: 20, right: 20, top: 20),
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                      Intl.message("myEvents",
-                                          name: "myEvents"),
-                                      style: GoogleFonts.roboto(
-                                          color: Color.fromRGBO(51, 51, 51, 1),
-                                          fontStyle: FontStyle.normal,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700)),
-                                ),
-                                if (!isLoggedIn && isInit)
-                                  Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          height: 30,
-                                        ),
-                                        Text(
-                                            Intl.message("accessEventMessage",
-                                                name: "accessEventMessage"),
-                                            style: GoogleFonts.roboto(
-                                                color: Color.fromRGBO(
-                                                    51, 51, 51, 1),
-                                                fontStyle: FontStyle.normal,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                                Intl.message(
-                                                    "please",
-                                                    name: "please"),
-                                                style: GoogleFonts.roboto(
-                                                    color: Color.fromRGBO(
-                                                        51, 51, 51, 1),
-                                                    fontStyle: FontStyle.normal,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    PageRouteBuilder(
-                                                      pageBuilder: (context,
-                                                              animation,
-                                                              secondaryAnimation) =>
-                                                          SignUp(),
-                                                      transitionsBuilder:
-                                                          (context,
-                                                              animation,
-                                                              secondaryAnimation,
-                                                              child) {
-                                                        const begin = Offset(
-                                                            1.0,
-                                                            0.0); // Slide from right
-                                                        const end = Offset.zero;
-                                                        const curve =
-                                                            Curves.easeInOut;
-                                                        var tween = Tween(
-                                                                begin: begin,
-                                                                end: end)
-                                                            .chain(CurveTween(
-                                                                curve: curve));
-                                                        var offsetAnimation =
-                                                            animation
-                                                                .drive(tween);
-                                                        return SlideTransition(
-                                                            position:
-                                                                offsetAnimation,
-                                                            child: child);
-                                                      },
-                                                    ),
-                                                  );
-                                                },
-                                                child: Text(
-                                                    Intl.message("signup",
-                                                        name: "signup"),
-                                                    style: GoogleFonts.roboto(
-                                                        color: Color.fromRGBO(
-                                                            69, 152, 209, 1),
-                                                        fontStyle:
-                                                            FontStyle.normal,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600))),
-                                            Text(Intl.message("or", name: "or"),
-                                                style: GoogleFonts.roboto(
-                                                    color: Color.fromRGBO(
-                                                        51, 51, 51, 1),
-                                                    fontStyle: FontStyle.normal,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    PageRouteBuilder(
-                                                      pageBuilder: (context,
-                                                              animation,
-                                                              secondaryAnimation) =>
-                                                          SignIn(),
-                                                      transitionsBuilder:
-                                                          (context,
-                                                              animation,
-                                                              secondaryAnimation,
-                                                              child) {
-                                                        const begin = Offset(
-                                                            1.0,
-                                                            0.0); // Slide from right
-                                                        const end = Offset.zero;
-                                                        const curve =
-                                                            Curves.easeInOut;
-                                                        var tween = Tween(
-                                                                begin: begin,
-                                                                end: end)
-                                                            .chain(CurveTween(
-                                                                curve: curve));
-                                                        var offsetAnimation =
-                                                            animation
-                                                                .drive(tween);
-                                                        return SlideTransition(
-                                                            position:
-                                                                offsetAnimation,
-                                                            child: child);
-                                                      },
-                                                    ),
-                                                  );
-                                                },
-                                                child: Text(
-                                                    Intl.message("login",
-                                                        name: "login"),
-                                                    style: GoogleFonts.roboto(
-                                                        color: Color.fromRGBO(
-                                                            69, 152, 209, 1),
-                                                        fontStyle:
-                                                            FontStyle.normal,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600))),
-                                          ],
-                                        ),
-                                      ],
+                              if (isLoggedIn && userResponseEvents != null)
+                                if (userResponseEvents!.data.isNotEmpty)
+                                  Container(
+                                    height: _calculateListViewHeight(userResponseEvents!.data.length),
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.all(0),
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: userResponseEvents!.data.length,
+                                      itemBuilder: (context, index) {
+                                        return MyEvents(userResponseEvents!.data[index], index, handleMyEventDetailsCallback);
+                                      },
                                     ),
                                   ),
-                                if (isLoggedIn && userResponseEvents != null)
-                                  if (userResponseEvents != null &&
-                                      userResponseEvents!.data.isNotEmpty)
-                                    Container(
-                                      height: _calculateListViewHeight(
-                                          userResponseEvents!.data.length),
-                                      child: ListView.builder(
-                                        padding: EdgeInsets.all(0),
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        scrollDirection: Axis.vertical,
-                                        itemCount:
-                                            userResponseEvents!.data.length,
-                                        itemBuilder: (context, index) {
-                                          return MyEvents(
-                                              userResponseEvents!.data[index],
-                                              index,
-                                              handleMyEventDetailsCallback);
-                                        },
-                                        // reverse: true,
-                                      ),
-                                    ),
-                                if (isLoggedIn)
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                if (userResponseEvents != null &&
-                                    userResponseEvents!.data.isEmpty)
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                if (userResponseEvents != null &&
-                                    userResponseEvents!.data.isEmpty &&
-                                    isLoggedIn)
-                                  Text(
-                                    Intl.message("msg_no_events",
-                                        name: "msg_no_events"),
-                                    style: GoogleFonts.roboto(
-                                        color: Colors.black,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                              ],
-                            ),
+                              if (isLoggedIn) const SizedBox(height: 40),
+                              if (userResponseEvents != null && userResponseEvents!.data.isEmpty) const SizedBox(height: 20),
+                              if (userResponseEvents != null && userResponseEvents!.data.isEmpty && isLoggedIn)
+                                Text(Intl.message("msg_no_events", name: "msg_no_events"),
+                                    style: GoogleFonts.roboto(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400)),
+                            ],
                           ),
                         ),
                       ),
@@ -1855,7 +1806,7 @@ class _HomePage extends State<HomePage> {
   }
 }
 
-/// Bouton raccourci vers un WebViewScreen
+/// Bouton raccourci vers un WebViewScreen (legacy, conservé)
 class _WebViewShortcut extends StatelessWidget {
   const _WebViewShortcut({
     required this.icon,
@@ -1897,6 +1848,42 @@ class _WebViewShortcut extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Bouton carré icône + label utilisé dans les sections accès rapide et médias
+class _QuickBtn extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+  const _QuickBtn({required this.icon, required this.label, required this.color, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withOpacity(0.3)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: 26),
+            const SizedBox(height: 6),
+            Text(label,
+                style: GoogleFonts.roboto(color: color, fontSize: 11, fontWeight: FontWeight.w600),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis),
           ],
         ),
       ),

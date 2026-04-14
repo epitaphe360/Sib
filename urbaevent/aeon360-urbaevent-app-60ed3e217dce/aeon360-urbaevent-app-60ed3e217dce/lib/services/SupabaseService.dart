@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:com.urbaevent/utils/SupabaseConfig.dart';
 
@@ -112,6 +112,15 @@ class SupabaseService {
         .from(SupabaseConfig.tableSalons)
         .select()
         .eq('is_active', true)
+        .order('sort_order', ascending: true);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  /// Liste TOUS les salons (actifs + inactifs) pour la page d'accueil
+  Future<List<Map<String, dynamic>>> getSalonsAll() async {
+    final res = await _client
+        .from(SupabaseConfig.tableSalons)
+        .select()
         .order('sort_order', ascending: true);
     return List<Map<String, dynamic>>.from(res);
   }

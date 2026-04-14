@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -52,7 +52,7 @@ class _SignUp extends State<SignUp> {
   final config = LinkedInConfig(
     clientId: '78kcdmw2pij8wd',
     clientSecret: '8q7htBpieQXUmhkB',
-    redirectUrl: 'https://www.btp-expo.ma',
+    redirectUrl: 'https://sib2026.ma',
   );
 
   UserObject? user;

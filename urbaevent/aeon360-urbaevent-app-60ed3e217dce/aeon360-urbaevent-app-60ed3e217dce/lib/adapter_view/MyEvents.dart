@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:com.urbaevent/utils/Const.dart';
 import 'package:flutter/material.dart';
 import 'package:com.urbaevent/model/events/ResponseMyEvents.dart';

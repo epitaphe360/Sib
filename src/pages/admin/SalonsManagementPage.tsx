@@ -8,6 +8,7 @@ import {
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
+import MobilePreview from '../../components/admin/MobilePreview';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
@@ -428,7 +429,7 @@ export default function SalonsManagementPage() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto"
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
@@ -444,7 +445,9 @@ export default function SalonsManagementPage() {
                   </button>
                 </div>
 
-                <div className="px-6 py-5 space-y-5">
+                <div className="flex flex-col lg:flex-row">
+                  {/* Left: Form fields */}
+                  <div className="flex-1 px-6 py-5 space-y-5 min-w-0">
 
                   {/* Nom + Slug */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -633,7 +636,20 @@ export default function SalonsManagementPage() {
                   </div>
 
                 </div>
-
+                  {/* Right: Mobile preview */}
+                  <div className="hidden lg:flex flex-shrink-0 w-[320px] border-l border-gray-100 bg-gray-50/50 items-start justify-center py-6 px-4">
+                    <MobilePreview
+                      name={form.name}
+                      logo_url={form.logo_url}
+                      cover_url={form.cover_url}
+                      description={form.description}
+                      location={form.location}
+                      date_debut={form.date_debut}
+                      date_fin={form.date_fin}
+                      is_active={form.is_active}
+                    />
+                  </div>
+                </div>
                 {/* Footer modal */}
                 <div className="flex justify-end gap-3 px-6 pb-6 pt-2 border-t border-gray-100">
                   <Button type="button" variant="outline" onClick={closeModal}>

@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'ThemeColor.dart';
 
 /// Branding dynamique chargé depuis la table `salons` (salon par défaut).
 /// Appelé une fois au démarrage dans main().
 class SalonBranding {
-  static String salonName = 'UrbaEvent';
+  static String salonName = 'SIB';
   static String? logoUrl;
   static String? coverUrl;
   static String? location;
@@ -22,7 +22,7 @@ class SalonBranding {
         orElse: () => salons.first,
       );
 
-      salonName = defaultSalon['name'] as String? ?? 'UrbaEvent';
+      salonName = defaultSalon['name'] as String? ?? 'SIB';
       logoUrl   = defaultSalon['logo_url'] as String?;
       coverUrl  = defaultSalon['cover_url'] as String?;
       location  = defaultSalon['location'] as String?;

@@ -1,4 +1,4 @@
-/// Configuration Supabase pour l'app UrbaEvent / SIB
+﻿/// Configuration Supabase pour l'app SIB / SIB
 /// Remplace les constantes Strapi de Urls.dart
 class SupabaseConfig {
   // ──────────────────────────────────────────────────────────────────

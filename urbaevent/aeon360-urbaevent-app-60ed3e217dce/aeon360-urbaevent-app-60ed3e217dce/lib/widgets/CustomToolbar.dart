@@ -1,4 +1,4 @@
-
+﻿
 import 'package:flutter/material.dart';
 import 'package:com.urbaevent/ui/content_ui/event/sub_views/MyAssociates.dart';
 import 'package:com.urbaevent/ui/content_ui/home/NotificationList.dart';

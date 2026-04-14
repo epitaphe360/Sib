@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'dart:math';
 
 import 'package:com.urbaevent/dialogs/Progressbar.dart';
@@ -68,10 +68,10 @@ class _SignUpStep2 extends State<SignUpStep2> {
   Future<void> redirectToTermsAndCondition() async {
     Preference preference = await Preference.getInstance();
     if (preference.getLanguage().toLowerCase() == "en") {
-      await launchUrlString("https://urbaevent.ma/terms-and-conditions.html",
+      await launchUrlString("https://sib2026.ma/terms",
           mode: LaunchMode.externalApplication);
     } else {
-      await launchUrlString("https://urbaevent.ma/terms-et-conditions.html",
+      await launchUrlString("https://sib2026.ma/conditions",
           mode: LaunchMode.externalApplication);
     }
   }

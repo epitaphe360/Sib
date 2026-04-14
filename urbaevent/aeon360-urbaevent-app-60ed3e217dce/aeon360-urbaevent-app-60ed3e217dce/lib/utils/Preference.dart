@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:ui';
 
 import 'package:com.urbaevent/generated/l10n.dart';
@@ -22,7 +22,7 @@ class Preference {
 
   Future<void> initialize() async {
     _preferences = await SharedPreferences.getInstance();
-    await _preferences!.setString('preferenceName', 'UrbaEvent');
+    await _preferences!.setString('preferenceName', 'SIB');
   }
 
   bool getFirstCheck() {

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:com.urbaevent/ui/content_ui/home/HomePage.dart';
 import 'package:com.urbaevent/utils/Const.dart';
@@ -23,7 +23,7 @@ class _RegistrationDone extends State<RegistrationDone> {
     ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'UrbaEvent',
+      title: 'SIB',
       home: _buildContent(),
     );
   }

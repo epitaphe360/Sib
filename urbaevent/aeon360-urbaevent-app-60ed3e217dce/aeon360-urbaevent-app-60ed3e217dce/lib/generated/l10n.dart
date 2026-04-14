@@ -1,4 +1,4 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
+﻿// GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'intl/messages_all.dart';
@@ -50,10 +50,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Welcome to \nUrbaEvent App`
+  /// `Welcome to \\nSIB App`
   String get welcome_msg1 {
     return Intl.message(
-      'Welcome to \nUrbaEvent App',
+      'Welcome to \\nSIB App',
       name: 'welcome_msg1',
       desc: '',
       args: [],

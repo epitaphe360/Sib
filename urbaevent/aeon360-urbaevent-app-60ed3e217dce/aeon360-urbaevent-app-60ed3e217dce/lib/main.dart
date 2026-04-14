@@ -1,4 +1,4 @@
-import 'package:com.urbaevent/firebase_options.dart';
+﻿import 'package:com.urbaevent/firebase_options.dart';
 import 'package:com.urbaevent/utils/LanguageProvider.dart';
 import 'package:com.urbaevent/utils/ThemeColor.dart';
 import 'package:com.urbaevent/utils/SalonBranding.dart';

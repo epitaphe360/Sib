@@ -1,4 +1,4 @@
-// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
+﻿// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
 // This is a library that provides messages for a en locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
@@ -248,7 +248,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "venue": MessageLookupByLibrary.simpleMessage("Venue"),
         "view": MessageLookupByLibrary.simpleMessage("View"),
         "welcome_msg1":
-            MessageLookupByLibrary.simpleMessage("Welcome to \nUrbaEvent App"),
+            MessageLookupByLibrary.simpleMessage("Welcome to \\nSIB App"),
         "welcome_msg2": MessageLookupByLibrary.simpleMessage(
             "From professional \nto professional"),
         "welcome_msg3":

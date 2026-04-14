@@ -1,13 +1,13 @@
-class Urls {
+﻿class Urls {
   //base url//
 
   //dev environment
-  // static String baseURL = "http://urbaevent.positif.ma/backend/api";
-  // static String imageURL = "http://urbaevent.positif.ma/backend";
+  // static String baseURL = "http://SIB.positif.ma/backend/api";
+  // static String imageURL = "http://SIB.positif.ma/backend";
 
   //  prod environment
-  static String baseURL = "https://app.urbaevent.ma/backend/api";
-  static String imageURL = "https://app.urbaevent.ma/backend";
+  static String baseURL = "https://sbyizudifmqakzxjlndr.supabase.co/rest/v1";
+  static String imageURL = "https://sbyizudifmqakzxjlndr.supabase.co/storage/v1";
 
   //login
   static String login = "/auth/local";
