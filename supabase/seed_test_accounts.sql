@@ -17,7 +17,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'v0000000-0000-0000-0000-000000000001',
-  'visitor-free@test.siport.com',
+  'visitor-free@test.sib2026.ma',
   'Visiteur Free Test',
   'visitor',
   now()
@@ -35,7 +35,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'v0000000-0000-0000-0000-000000000002',
-  'visitor-vip@test.siport.com',
+  'visitor-vip@test.sib2026.ma',
   'Visiteur VIP Test',
   'visitor',
   now()
@@ -53,7 +53,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'e0000000-0000-0000-0000-000000000001',
-  'exhibitor-9m@test.siport.com',
+  'exhibitor-9m@test.sib2026.ma',
   'Exposant 9m² Test',
   'exhibitor',
   now()
@@ -71,7 +71,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'e0000000-0000-0000-0000-000000000002',
-  'exhibitor-18m@test.siport.com',
+  'exhibitor-18m@test.sib2026.ma',
   'Exposant 18m² Test',
   'exhibitor',
   now()
@@ -89,7 +89,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'e0000000-0000-0000-0000-000000000003',
-  'exhibitor-36m@test.siport.com',
+  'exhibitor-36m@test.sib2026.ma',
   'Exposant 36m² Test',
   'exhibitor',
   now()
@@ -107,7 +107,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'p0000000-0000-0000-0000-000000000001',
-  'partner-museum@test.siport.com',
+  'partner-museum@test.sib2026.ma',
   'Partenaire Musée Test',
   'partner',
   now()
@@ -125,7 +125,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'p0000000-0000-0000-0000-000000000002',
-  'partner-chamber@test.siport.com',
+  'partner-chamber@test.sib2026.ma',
   'Partenaire Chambre Test',
   'partner',
   now()
@@ -143,7 +143,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'p0000000-0000-0000-0000-000000000003',
-  'partner-sponsor@test.siport.com',
+  'partner-sponsor@test.sib2026.ma',
   'Partenaire Sponsor Test',
   'partner',
   now()
@@ -161,7 +161,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000099',
-  'admin-test@test.siport.com',
+  'admin-test@test.sib2026.ma',
   'Admin Test',
   'admin',
   now()
@@ -177,7 +177,7 @@ DO $$
 DECLARE
   user_count INT;
 BEGIN
-  SELECT COUNT(*) INTO user_count FROM users WHERE email LIKE '%@test.siport.com';
+  SELECT COUNT(*) INTO user_count FROM users WHERE email LIKE '%@test.sib2026.ma';
   RAISE NOTICE '✅ % comptes de test créés dans users table', user_count;
   
   IF user_count >= 10 THEN

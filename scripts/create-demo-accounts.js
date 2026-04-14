@@ -19,28 +19,28 @@ const PASSWORD = 'Admin123!';
 
 const demoAccounts = [
   // Admin
-  { email: 'admin.siports@siports.com', name: 'Admin SIPORTS', type: 'admin', profile: { role: 'administrator' } },
+  { email: 'admin.sib@sib.com', name: 'Admin SIB', type: 'admin', profile: { role: 'administrator' } },
   
   // Exhibitors
-  { email: 'exhibitor-54m@test.siport.com', name: 'ABB Marine & Ports', type: 'exhibitor', profile: { sector: 'Technology', standArea: 54 } },
-  { email: 'exhibitor-36m@test.siport.com', name: 'Advanced Port Systems', type: 'exhibitor', profile: { sector: 'Automation', standArea: 36 } },
-  { email: 'exhibitor-18m@test.siport.com', name: 'Maritime Equipment Co', type: 'exhibitor', profile: { sector: 'Equipment', standArea: 18 } },
-  { email: 'exhibitor-9m@test.siport.com', name: 'StartUp Port Innovations', type: 'exhibitor', profile: { sector: 'IoT', standArea: 9 } },
+  { email: 'exhibitor-54m@test.sib2026.ma', name: 'ABB Marine & Ports', type: 'exhibitor', profile: { sector: 'Technology', standArea: 54 } },
+  { email: 'exhibitor-36m@test.sib2026.ma', name: 'Advanced Port Systems', type: 'exhibitor', profile: { sector: 'Automation', standArea: 36 } },
+  { email: 'exhibitor-18m@test.sib2026.ma', name: 'Maritime Equipment Co', type: 'exhibitor', profile: { sector: 'Equipment', standArea: 18 } },
+  { email: 'exhibitor-9m@test.sib2026.ma', name: 'StartUp Port Innovations', type: 'exhibitor', profile: { sector: 'IoT', standArea: 9 } },
   
   // Partners
-  { email: 'partner-gold@test.siport.com', name: 'Gold Partner Industries', type: 'partner', profile: { level: 'gold' } },
-  { email: 'partner-silver@test.siport.com', name: 'Silver Tech Group', type: 'partner', profile: { level: 'silver' } },
-  { email: 'partner-platinium@test.siport.com', name: 'Platinium Global Corp', type: 'partner', profile: { level: 'platinium' } },
-  { email: 'partner-museum@test.siport.com', name: 'Museum Cultural Center', type: 'partner', profile: { level: 'museum' } },
-  { email: 'partner-porttech@test.siport.com', name: 'PortTech Solutions', type: 'partner', profile: { level: 'porttech' } },
-  { email: 'partner-oceanfreight@test.siport.com', name: 'OceanFreight Logistics', type: 'partner', profile: { level: 'oceanfreight' } },
-  { email: 'partner-coastal@test.siport.com', name: 'Coastal Maritime Services', type: 'partner', profile: { level: 'coastal' } },
+  { email: 'partner-gold@test.sib2026.ma', name: 'Gold Partner Industries', type: 'partner', profile: { level: 'gold' } },
+  { email: 'partner-silver@test.sib2026.ma', name: 'Silver Tech Group', type: 'partner', profile: { level: 'silver' } },
+  { email: 'partner-platinium@test.sib2026.ma', name: 'Platinium Global Corp', type: 'partner', profile: { level: 'platinium' } },
+  { email: 'partner-museum@test.sib2026.ma', name: 'Museum Cultural Center', type: 'partner', profile: { level: 'museum' } },
+  { email: 'partner-porttech@test.sib2026.ma', name: 'PortTech Solutions', type: 'partner', profile: { level: 'porttech' } },
+  { email: 'partner-oceanfreight@test.sib2026.ma', name: 'OceanFreight Logistics', type: 'partner', profile: { level: 'oceanfreight' } },
+  { email: 'partner-coastal@test.sib2026.ma', name: 'Coastal Maritime Services', type: 'partner', profile: { level: 'coastal' } },
   
   // Visitors
-  { email: 'visitor-vip@test.siport.com', name: 'VIP Visitor', type: 'visitor', profile: { visitor_level: 'vip' } },
-  // visitor-premium@test.siport.com removed
-  { email: 'visitor-basic@test.siport.com', name: 'Basic Visitor', type: 'visitor', profile: { visitor_level: 'basic' } },
-  { email: 'visitor-free@test.siport.com', name: 'Free Visitor', type: 'visitor', profile: { visitor_level: 'free' } },
+  { email: 'visitor-vip@test.sib2026.ma', name: 'VIP Visitor', type: 'visitor', profile: { visitor_level: 'vip' } },
+  // visitor-premium@test.sib2026.ma removed
+  { email: 'visitor-basic@test.sib2026.ma', name: 'Basic Visitor', type: 'visitor', profile: { visitor_level: 'basic' } },
+  { email: 'visitor-free@test.sib2026.ma', name: 'Free Visitor', type: 'visitor', profile: { visitor_level: 'free' } },
 ];
 
 async function createDemoAccounts() {
@@ -142,10 +142,10 @@ async function createDemoAccounts() {
   
   console.log('\n🔐 Mot de passe pour tous les comptes: Admin123!');
   console.log('\n📋 Comptes disponibles:');
-  console.log('   Admin: admin.siports@siports.com');
-  console.log('   Exhibitor 54m²: exhibitor-54m@test.siport.com');
-  console.log('   Partner Gold: partner-gold@test.siport.com');
-  console.log('   Visitor VIP: visitor-vip@test.siport.com');
+  console.log('   Admin: admin.sib@sib.com');
+  console.log('   Exhibitor 54m²: exhibitor-54m@test.sib2026.ma');
+  console.log('   Partner Gold: partner-gold@test.sib2026.ma');
+  console.log('   Visitor VIP: visitor-vip@test.sib2026.ma');
 }
 
 createDemoAccounts().catch(console.error);

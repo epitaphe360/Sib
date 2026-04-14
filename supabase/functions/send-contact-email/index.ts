@@ -39,8 +39,8 @@ Deno.serve(async (req: Request) => {
 
   try {
     const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
-    const SENDER_EMAIL = Deno.env.get('SENDER_EMAIL') || 'no-reply@siports.com';
-    const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL') || 'contact@siportevent.com';
+    const SENDER_EMAIL = Deno.env.get('SENDER_EMAIL') || 'no-reply@sib.com';
+    const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL') || 'contact@sib2026.ma';
 
     if (!SENDGRID_API_KEY) {
       throw new Error('SENDGRID_API_KEY non configurée');
@@ -62,7 +62,7 @@ Deno.serve(async (req: Request) => {
     const subjectLabel = subjectLabels[subject] || subject;
 
     // Email de confirmation pour l'utilisateur
-    const userEmailSubject = 'SIPORTS 2026 - Votre message a bien été reçu';
+    const userEmailSubject = 'SIB 2026 - Votre message a bien été reçu';
     const userEmailContent = `
       <!DOCTYPE html>
       <html>
@@ -110,15 +110,15 @@ Deno.serve(async (req: Request) => {
                 <p>Notre équipe vous répondra dans les <strong>24 à 48 heures ouvrées</strong>.</p>
                 <p>Si votre demande est urgente, vous pouvez nous contacter directement :</p>
                 <ul>
-                  <li>📧 Email : <a href="mailto:contact@siportevent.com">contact@siportevent.com</a></li>
+                  <li>📧 Email : <a href="mailto:contact@sib2026.ma">contact@sib2026.ma</a></li>
                   <li>📞 Téléphone : +212 1 23 45 67 89</li>
                 </ul>
               </div>
 
-              <p style="margin-top: 30px;">En attendant, n'hésitez pas à découvrir notre plateforme SIPORTS 2026 !</p>
+              <p style="margin-top: 30px;">En attendant, n'hésitez pas à découvrir notre plateforme SIB 2026 !</p>
 
               <div class="footer">
-                <p><strong>SIPORTS 2026</strong><br>
+                <p><strong>SIB 2026</strong><br>
                 Salon International des Ports et de la Logistique<br>
                 5-7 Février 2026 • El Jadida, Maroc</p>
                 <p style="font-size: 12px; color: #9ca3af;">Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.</p>
@@ -130,7 +130,7 @@ Deno.serve(async (req: Request) => {
     `;
 
     // Email de notification pour l'admin
-    const adminEmailSubject = `[CONTACT SIPORTS] ${subjectLabel} - ${firstName} ${lastName}`;
+    const adminEmailSubject = `[CONTACT SIB] ${subjectLabel} - ${firstName} ${lastName}`;
     const adminEmailContent = `
       <!DOCTYPE html>
       <html>

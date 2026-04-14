@@ -13,7 +13,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-const TEST_VIP_EMAIL = 'visitor-vip@test.siport.com';
+const TEST_VIP_EMAIL = 'visitor-vip@test.sib2026.ma';
 const TEST_VIP_PASSWORD = 'Test@123456';
 
 async function ensureVIPTestAccount() {

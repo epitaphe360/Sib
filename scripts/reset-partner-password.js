@@ -6,7 +6,7 @@ const supabase = createClient(
 );
 
 async function main() {
-  const email = 'partner-museum@test.siport.com';
+  const email = 'partner-museum@test.sib2026.ma';
   const newPassword = 'Test@123456';
   
   console.log(`Réinitialisation du mot de passe pour: ${email}`);

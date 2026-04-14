@@ -15,14 +15,14 @@ const TEST_PASSWORD = 'Test@123456';
 const USERS = [
   {
     role: 'admin',
-    email: 'admin-test@test.siport.com',
+    email: 'admin-test@test.sib2026.ma',
     password: TEST_PASSWORD,
     name: 'Admin Test',
     type: 'admin'
   },
   {
     role: 'visitor',
-    email: 'visitor-free@test.siport.com',
+    email: 'visitor-free@test.sib2026.ma',
     password: TEST_PASSWORD,
     name: 'Jean Dupont',
     type: 'visitor',
@@ -41,7 +41,7 @@ const USERS = [
   },
   {
     role: 'exhibitor',
-    email: 'exhibitor-9m@test.siport.com',
+    email: 'exhibitor-9m@test.sib2026.ma',
     password: TEST_PASSWORD,
     name: 'Thomas Dubois',
     type: 'exhibitor',
@@ -62,7 +62,7 @@ const USERS = [
   },
   {
     role: 'partner',
-    email: 'partner-museum@test.siport.com',
+    email: 'partner-museum@test.sib2026.ma',
     password: TEST_PASSWORD,
     name: 'Pierre Leclerc',
     type: 'partner',

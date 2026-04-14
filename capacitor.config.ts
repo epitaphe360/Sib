@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.siports.app',
-  appName: 'SIPORTS 2026',
+  appId: 'com.sib2026.app',
+  appName: 'SIB 2026',
   webDir: 'dist',
   server: {
     androidScheme: 'https'
@@ -26,7 +26,7 @@ const config: CapacitorConfig = {
     }
   },
   ios: {
-    scheme: 'SIPORTS 2026'
+    scheme: 'SIB 2026'
   },
   android: {
     buildOptions: {

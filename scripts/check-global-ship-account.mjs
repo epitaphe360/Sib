@@ -14,7 +14,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 console.log('\n🔍 VÉRIFICATION DU COMPTE "Global Ship"\n');
 console.log('='.repeat(60));
 
-const emailToCheck = 'exhibitor-54m@test.siport.com';
+const emailToCheck = 'exhibitor-54m@test.sib2026.ma';
 
 async function main() {
   // 1. Vérifier si l'utilisateur existe dans auth.users

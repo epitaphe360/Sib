@@ -129,7 +129,7 @@ async function checkTableExists(supabaseUrl, supabaseKey, tableName) {
   
   const fullSQL = `
 -- ==============================================
--- CRÉATION DES TABLES MANQUANTES POUR SIPORT
+-- CRÉATION DES TABLES MANQUANTES POUR SIB
 -- Exécuter dans: Supabase Dashboard > SQL Editor
 -- ==============================================
 

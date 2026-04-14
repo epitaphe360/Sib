@@ -1,4 +1,4 @@
-# 🔒 RLS (Row Level Security) Policies - SIPORT V3
+# 🔒 RLS (Row Level Security) Policies - SIB V3
 
 **Date:** 27 janvier 2026
 **Status:** Documentation des policies requises

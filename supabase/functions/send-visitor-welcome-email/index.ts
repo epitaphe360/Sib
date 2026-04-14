@@ -9,9 +9,9 @@ const corsHeaders = {
 
 // Configuration SMTP
 const SMTP_CONFIG = {
-  hostname: Deno.env.get('SMTP_HOST') || 'mail.siportevent.com',
+  hostname: Deno.env.get('SMTP_HOST') || 'mail.sib2026.ma',
   port: parseInt(Deno.env.get('SMTP_PORT') || '587'),
-  username: Deno.env.get('SMTP_USERNAME') || 'contact@siportevent.com',
+  username: Deno.env.get('SMTP_USERNAME') || 'contact@sib2026.ma',
   password: Deno.env.get('SMTP_PASSWORD') || 'S!P0RT@9083',
 }
 
@@ -101,8 +101,8 @@ async function sendViaSmtp(to: string, subject: string, htmlContent: string): Pr
 
 function normalizeSibBranding(content: string): string {
   return content
-    .replace(/SIPORTS?\s*2026/gi, 'SIB 2026')
-    .replace(/SIPORTS?/gi, 'SIB')
+    .replace(/SIB?\s*2026/gi, 'SIB 2026')
+    .replace(/SIB?/gi, 'SIB')
     .replace(/Salon International des Infrastructures Portuaires/gi, 'Salon International du Batiment')
 }
 

@@ -14,7 +14,7 @@ const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 const TEST_ACCOUNTS = [
   {
     id: 'a0000000-0000-0000-0000-000000000001',
-    email: 'visitor-free@test.siport.com',
+    email: 'visitor-free@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'visitor',
     visitor_level: 'free',
@@ -22,7 +22,7 @@ const TEST_ACCOUNTS = [
   },
   {
     id: 'a0000000-0000-0000-0000-000000000002',
-    email: 'visitor-vip@test.siport.com',
+    email: 'visitor-vip@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'visitor',
     visitor_level: 'vip',
@@ -30,35 +30,35 @@ const TEST_ACCOUNTS = [
   },
   {
     id: 'a0000000-0000-0000-0000-000000000007',
-    email: 'exhibitor-9m@test.siport.com',
+    email: 'exhibitor-9m@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'exhibitor',
     name: 'Exposant 9m'
   },
   {
     id: 'a0000000-0000-0000-0000-000000000008',
-    email: 'exhibitor-18m@test.siport.com',
+    email: 'exhibitor-18m@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'exhibitor',
     name: 'Exposant 18m'
   },
   {
     id: 'a0000000-0000-0000-0000-000000000009',
-    email: 'exhibitor-36m@test.siport.com',
+    email: 'exhibitor-36m@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'exhibitor',
     name: 'Exposant 36m'
   },
   {
     id: 'a0000000-0000-0000-0000-000000000010',
-    email: 'exhibitor-54m@test.siport.com',
+    email: 'exhibitor-54m@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'exhibitor',
     name: 'Exposant 54m'
   },
   {
     id: 'a0000000-0000-0000-0000-000000000003',
-    email: 'partner-museum@test.siport.com',
+    email: 'partner-museum@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'partner',
     partner_tier: 'museum',
@@ -66,7 +66,7 @@ const TEST_ACCOUNTS = [
   },
   {
     id: 'a0000000-0000-0000-0000-000000000004',
-    email: 'partner-chamber@test.siport.com',
+    email: 'partner-chamber@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'partner',
     partner_tier: 'silver',
@@ -74,7 +74,7 @@ const TEST_ACCOUNTS = [
   },
   {
     id: 'a0000000-0000-0000-0000-000000000005',
-    email: 'partner-sponsor@test.siport.com',
+    email: 'partner-sponsor@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'partner',
     partner_tier: 'gold',
@@ -82,7 +82,7 @@ const TEST_ACCOUNTS = [
   },
   {
     id: 'a0000000-0000-0000-0000-000000000006',
-    email: 'partner-platinum@test.siport.com',
+    email: 'partner-platinum@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'partner',
     partner_tier: 'platinum',
@@ -90,7 +90,7 @@ const TEST_ACCOUNTS = [
   },
   {
     id: 'a0000000-0000-0000-0000-000000000099',
-    email: 'admin-test@test.siport.com',
+    email: 'admin-test@test.sib2026.ma',
     password: 'Test@1234567',
     type: 'admin',
     name: 'Admin Test'

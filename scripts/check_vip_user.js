@@ -15,7 +15,7 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function checkUser() {
-  const email = 'visitor-vip@test.siport.com';
+  const email = 'visitor-vip@test.sib2026.ma';
   console.log(`Checking user: ${email}`);
 
   const { data: users, error } = await supabase

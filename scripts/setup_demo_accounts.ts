@@ -8,21 +8,21 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciO
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
 const DEMO_ACCOUNTS = [
-  { email: 'admin.siports@siports.com', password: 'Admin123!', type: 'admin', name: 'Admin SIPORTS' },
-  { email: 'exhibitor-54m@test.siport.com', password: 'Admin123!', type: 'exhibitor', name: 'ABB Marine & Ports', standArea: 54 },
-  { email: 'exhibitor-36m@test.siport.com', password: 'Admin123!', type: 'exhibitor', name: 'Advanced Port Systems', standArea: 36 },
-  { email: 'exhibitor-18m@test.siport.com', password: 'Admin123!', type: 'exhibitor', name: 'Maritime Equipment Co', standArea: 18 },
-  { email: 'exhibitor-9m@test.siport.com', password: 'Admin123!', type: 'exhibitor', name: 'StartUp Port Innovations', standArea: 9 },
-  { email: 'partner-gold@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Gold Partner Industries' },
-  { email: 'partner-silver@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Silver Tech Group' },
-  { email: 'partner-platinium@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Platinium Global Corp' },
-  { email: 'partner-museum@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Museum Cultural Center' },
-  { email: 'partner-porttech@test.siport.com', password: 'Admin123!', type: 'partner', name: 'PortTech Solutions' },
-  { email: 'partner-oceanfreight@test.siport.com', password: 'Admin123!', type: 'partner', name: 'OceanFreight Logistics' },
-  { email: 'partner-coastal@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Coastal Maritime Services' },
-  { email: 'visitor-vip@test.siport.com', password: 'Admin123!', type: 'visitor', name: 'VIP Visitor' },
-  { email: 'visitor-basic@test.siport.com', password: 'Admin123!', type: 'visitor', name: 'Basic Visitor' },
-  { email: 'visitor-free@test.siport.com', password: 'Admin123!', type: 'visitor', name: 'Free Visitor' },
+  { email: 'admin.sib@sib.com', password: 'Admin123!', type: 'admin', name: 'Admin SIB' },
+  { email: 'exhibitor-54m@test.sib2026.ma', password: 'Admin123!', type: 'exhibitor', name: 'ABB Marine & Ports', standArea: 54 },
+  { email: 'exhibitor-36m@test.sib2026.ma', password: 'Admin123!', type: 'exhibitor', name: 'Advanced Port Systems', standArea: 36 },
+  { email: 'exhibitor-18m@test.sib2026.ma', password: 'Admin123!', type: 'exhibitor', name: 'Maritime Equipment Co', standArea: 18 },
+  { email: 'exhibitor-9m@test.sib2026.ma', password: 'Admin123!', type: 'exhibitor', name: 'StartUp Port Innovations', standArea: 9 },
+  { email: 'partner-gold@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Gold Partner Industries' },
+  { email: 'partner-silver@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Silver Tech Group' },
+  { email: 'partner-platinium@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Platinium Global Corp' },
+  { email: 'partner-museum@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Museum Cultural Center' },
+  { email: 'partner-porttech@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'PortTech Solutions' },
+  { email: 'partner-oceanfreight@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'OceanFreight Logistics' },
+  { email: 'partner-coastal@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Coastal Maritime Services' },
+  { email: 'visitor-vip@test.sib2026.ma', password: 'Admin123!', type: 'visitor', name: 'VIP Visitor' },
+  { email: 'visitor-basic@test.sib2026.ma', password: 'Admin123!', type: 'visitor', name: 'Basic Visitor' },
+  { email: 'visitor-free@test.sib2026.ma', password: 'Admin123!', type: 'visitor', name: 'Free Visitor' },
 ];
 
 async function setupDemoAccounts() {
@@ -122,7 +122,7 @@ async function setupDemoAccounts() {
     console.log(`Erreur lors de la listage: ${listError.message}`);
   } else {
     const demoUsers = users?.filter(u => 
-      u.email?.includes('@test.siport.com') || u.email?.includes('@siports.com')
+      u.email?.includes('@test.sib2026.ma') || u.email?.includes('@sib.com')
     );
     console.log(`✅ Comptes de démo trouvés: ${demoUsers?.length || 0}`);
     demoUsers?.forEach(user => {

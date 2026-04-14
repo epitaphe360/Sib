@@ -31,9 +31,6 @@ app.use((req, res, next) => {
     if (host === 'sib2026.ma') {
       return res.redirect(301, `https://www.sib2026.ma${req.url}`);
     }
-    if (host === 'siportevent.com') {
-      return res.redirect(301, `https://www.sib2026.ma${req.url}`);
-    }
     // Redirect HTTP → HTTPS
     if (proto === 'http') {
       return res.redirect(301, `https://${host}${req.url}`);
@@ -50,8 +47,6 @@ const allowedOrigins = [
   'https://sib2026.ma', // Production
   'https://www.sib2026.ma', // Production with www
   'https://app.sib2026.ma', // App subdomain
-  'https://siportevent.com', // Legacy
-  'https://www.siportevent.com', // Legacy with www
   // Railway deployment URL (auto-assigned)
 ];
 
@@ -90,15 +85,15 @@ app.use((req, res, next) => {
 // EMAIL CONFIGURATION (SMTP)
 // ============================================
 const smtpConfig = {
-  host: process.env.SMTP_HOST || 'mail.siportevent.com',
+  host: process.env.SMTP_HOST || 'mail.sib2026.ma',
   port: parseInt(process.env.SMTP_PORT || '465'),
   secure: process.env.SMTP_SECURE === 'true', // true for 465, false for 587
   auth: {
-    user: process.env.SMTP_USER || 'contact@siportevent.com',
+    user: process.env.SMTP_USER || 'contact@sib2026.ma',
     pass: process.env.SMTP_PASS,
   },
   tls: {
-    rejectUnauthorized: false // Accept self-signed certificate from mail.siportevent.com
+    rejectUnauthorized: false // Accept self-signed certificate from mail.sib2026.ma
   }
 };
 
@@ -135,7 +130,7 @@ app.post('/api/send-email', async (req, res) => {
     }
 
     const mailOptions = {
-      from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@siportevent.com'}>`,
+      from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@sib2026.ma'}>`,
       to,
       subject,
       html,
@@ -197,7 +192,7 @@ app.post('/api/contact', async (req, res) => {
     // Email to admin
     const adminEmail = {
       from: `"SIB 2026" <${process.env.SMTP_USER}>`,
-      to: process.env.ADMIN_EMAIL || 'contact@siportevent.com',
+      to: process.env.ADMIN_EMAIL || 'contact@sib2026.ma',
       replyTo: email,
       subject: `[Contact SIB] ${subjectLabel} - ${firstName} ${lastName}`,
       html: `
@@ -363,7 +358,7 @@ app.post('/api/send-visitor-welcome-email', async (req, res) => {
     `;
 
     const mailOptions = {
-      from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@siportevent.com'}>`,
+      from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@sib2026.ma'}>`,
       to: email,
       subject: isVIP
         ? '🎫 SIB 2026 - Inscription VIP confirmée'

@@ -105,7 +105,7 @@ async function insertTestData(supabaseUrl, supabaseKey, tableName, data) {
   
   const sql = `
 -- =====================================================
--- TABLES MANQUANTES POUR SIPORT
+-- TABLES MANQUANTES POUR SIB
 -- Exécuter dans Supabase SQL Editor
 -- =====================================================
 

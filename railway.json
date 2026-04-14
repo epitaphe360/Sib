@@ -15,12 +15,12 @@
       "VITE_SHOW_DEMO_LOGINS": "false",
       "SUPABASE_URL": "https://sbyizudifmqakzxjlndr.supabase.co",
       "SUPABASE_SERVICE_ROLE_KEY": "${{SUPABASE_SERVICE_ROLE_KEY}}",
-      "SMTP_HOST": "mail.siportevent.com",
+      "SMTP_HOST": "mail.sib2026.ma",
       "SMTP_PORT": "465",
       "SMTP_SECURE": "true",
-      "SMTP_USER": "contact@siportevent.com",
+      "SMTP_USER": "contact@sib2026.ma",
       "SMTP_PASS": "${{SMTP_PASS}}",
-      "ADMIN_EMAIL": "contact@siportevent.com"
+      "ADMIN_EMAIL": "contact@sib2026.ma"
     }
   }
 }

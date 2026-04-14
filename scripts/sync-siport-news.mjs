@@ -18,7 +18,7 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
   }
 });
 
-const NEWS_URL = 'https://siportevent.com/actualite-portuaire/';
+const NEWS_URL = 'https://sib2026.ma/actualite-portuaire/';
 const MAX_PAGES = 5; // Nombre maximum de pages à scraper
 
 async function scrapeArticleContent(url) {
@@ -155,13 +155,13 @@ async function scrapeArticles() {
               allArticles.push({
                 title,
                 excerpt: excerpt || content.substring(0, 200) + '...',
-                content: content || excerpt || `Article publié sur siportevent.com - ${title}`,
-                author: 'Équipe SIPORTS',
+                content: content || excerpt || `Article publié sur sib2026.ma - ${title}`,
+                author: 'Équipe SIB',
                 category: category,
                 image: mainImage || (images.length > 0 ? images[0] : ''),
                 additionalImages: images,
                 url,
-                tags: ['portuaire', 'SIPORTS', 'actualités', category.toLowerCase()],
+                tags: ['portuaire', 'SIB', 'actualités', category.toLowerCase()],
                 readTime: Math.max(2, Math.ceil(content.split(/\s+/).length / 200))
               });
               
@@ -257,7 +257,7 @@ async function syncToDatabase(articles) {
 }
 
 async function main() {
-  console.log('🚀 Starting SIPORTS news synchronization\n');
+  console.log('🚀 Starting SIB news synchronization\n');
   console.log('=' .repeat(60) + '\n');
 
   try {

@@ -20,7 +20,7 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
 });
 
 const SERVICE_ACCOUNT = {
-  email: 'service-clientele@siports.com',
+  email: 'service-clientele@sib.com',
   password: 'Service2026!',
   name: 'Service Clientèle',
   type: 'security',  // Utilise le type 'security' existant dans l'enum DB
@@ -161,7 +161,7 @@ async function createServiceClienteleAccount() {
           profile: {
             firstName: 'Service',
             lastName: 'Clientèle',
-            company: 'SIPORT 2026',
+            company: 'SIB 2026',
             position: 'Agent Service Clientèle',
             bio: 'Compte dédié au stand Service Clientèle pour l\'impression de badges papier',
             avatar: null,
@@ -203,7 +203,7 @@ async function createServiceClienteleAccount() {
           profile: {
             firstName: 'Service',
             lastName: 'Clientèle',
-            company: 'SIPORT 2026',
+            company: 'SIB 2026',
             position: 'Agent Service Clientèle',
             bio: 'Compte dédié au stand Service Clientèle pour l\'impression de badges papier',
             avatar: null,

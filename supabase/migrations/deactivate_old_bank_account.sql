@@ -26,4 +26,4 @@ ORDER BY created_at DESC;
 -- RÉSULTAT ATTENDU
 -- ============================================
 -- Seul le compte URBACOM / Attijariwafa bank doit être actif (is_active = true)
--- L'ancien compte SIPORTS EVENT SARL / Banque Internationale doit être inactif (is_active = false)
+-- L'ancien compte SIB EVENT SARL / Banque Internationale doit être inactif (is_active = false)

@@ -2,7 +2,7 @@
 # Exclure l'application mobile du build Railway
 
 # Applications mobiles (React Native/Expo/Capacitor)
-siports-mobile/
+sib-mobile/
 mobile/
 
 # Sauvegardes et fichiers temporaires

@@ -1,6 +1,6 @@
 # Guide d'utilisation du système de stockage d'images
 
-Ce document explique comment utiliser le système de stockage d'images dans le projet SiPorts.
+Ce document explique comment utiliser le système de stockage d'images dans le projet SIB.
 
 ## Table des matières
 
@@ -15,7 +15,7 @@ Ce document explique comment utiliser le système de stockage d'images dans le p
 
 ## Introduction
 
-Le système de stockage d'images permet de gérer l'upload, le stockage et la récupération d'images et d'autres fichiers dans l'application SiPorts. Il utilise Supabase Storage comme backend de stockage et offre une interface simple pour manipuler les fichiers.
+Le système de stockage d'images permet de gérer l'upload, le stockage et la récupération d'images et d'autres fichiers dans l'application SIB. Il utilise Supabase Storage comme backend de stockage et offre une interface simple pour manipuler les fichiers.
 
 ## Service de stockage
 

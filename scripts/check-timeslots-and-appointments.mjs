@@ -84,7 +84,7 @@ console.log('\n\n👤 Rendez-vous du visiteur VIP:\n');
 const { data: vipUser } = await supabase
   .from('users')
   .select('id')
-  .eq('email', 'visitor-vip@siports.com')
+  .eq('email', 'visitor-vip@sib.com')
   .single();
 
 if (vipUser) {

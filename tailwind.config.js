@@ -37,7 +37,7 @@ export default {
         'SIB-gold':      '#C9A84C',
         'SIB-accent':    '#2D6A4F',
         // Ancien namespace conservé pour migration progressive
-        siports: {
+        sib: {
           primary:   '#1B365D',
           secondary: '#2E5984',
           gold:      '#C9A84C',
@@ -90,9 +90,9 @@ export default {
         'luxury-xl': '0 32px 64px -8px rgba(0, 0, 0, 0.25), 0 8px 16px -4px rgba(0, 0, 0, 0.15)',
         'luxury-2xl': '0 48px 96px -12px rgba(0, 0, 0, 0.3), 0 12px 24px -6px rgba(0, 0, 0, 0.18)',
         // Rétrocompatibilité
-        'siports':    '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
-        'siports-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)',
-        'siports-xl': '0 18px 38px -18px rgba(7, 32, 57, 0.45), 0 12px 22px -16px rgba(7, 32, 57, 0.32)',
+        'sib':    '0 4px 6px -1px rgba(27, 54, 93, 0.1), 0 2px 4px -1px rgba(27, 54, 93, 0.06)',
+        'sib-lg': '0 10px 15px -3px rgba(27, 54, 93, 0.1), 0 4px 6px -2px rgba(27, 54, 93, 0.05)',
+        'sib-xl': '0 18px 38px -18px rgba(7, 32, 57, 0.45), 0 12px 22px -16px rgba(7, 32, 57, 0.32)',
       },
       animation: {
         'blob': 'blob 7s infinite',

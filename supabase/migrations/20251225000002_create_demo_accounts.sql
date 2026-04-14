@@ -44,22 +44,22 @@ BEGIN
   -- Define the users to create
   FOR v_record IN 
     SELECT * FROM (VALUES 
-      ('00000000-0000-0000-0000-000000000001'::uuid, 'admin.siports@siports.com', 'admin', 'Admin SIPORTS'),
-      ('00000000-0000-0000-0000-000000000002'::uuid, 'exhibitor-54m@test.siport.com', 'exhibitor', 'ABB Marine & Ports'),
-      ('00000000-0000-0000-0000-000000000003'::uuid, 'exhibitor-36m@test.siport.com', 'exhibitor', 'Advanced Port Systems'),
-      ('00000000-0000-0000-0000-000000000004'::uuid, 'exhibitor-18m@test.siport.com', 'exhibitor', 'Maritime Equipment Co'),
-      ('00000000-0000-0000-0000-000000000017'::uuid, 'exhibitor-9m@test.siport.com', 'exhibitor', 'StartUp Port Innovations'),
-      ('00000000-0000-0000-0000-000000000005'::uuid, 'partner-gold@test.siport.com', 'partner', 'Gold Partner Industries'),
-      ('00000000-0000-0000-0000-000000000006'::uuid, 'partner-silver@test.siport.com', 'partner', 'Silver Tech Group'),
-      ('00000000-0000-0000-0000-000000000011'::uuid, 'partner-platinium@test.siport.com', 'partner', 'Platinium Global Corp'),
-      ('00000000-0000-0000-0000-000000000012'::uuid, 'partner-museum@test.siport.com', 'partner', 'Museum Cultural Center'),
-      ('00000000-0000-0000-0000-000000000013'::uuid, 'partner-porttech@test.siport.com', 'partner', 'PortTech Solutions'),
-      ('00000000-0000-0000-0000-000000000014'::uuid, 'partner-oceanfreight@test.siport.com', 'partner', 'OceanFreight Logistics'),
-      ('00000000-0000-0000-0000-000000000015'::uuid, 'partner-coastal@test.siport.com', 'partner', 'Coastal Maritime Services'),
-      ('00000000-0000-0000-0000-000000000007'::uuid, 'visitor-vip@test.siport.com', 'visitor', 'VIP Visitor'),
-      ('00000000-0000-0000-0000-000000000008'::uuid, 'visitor-premium@test.siport.com', 'visitor', 'Premium Visitor'),
-      ('00000000-0000-0000-0000-000000000009'::uuid, 'visitor-basic@test.siport.com', 'visitor', 'Basic Visitor'),
-      ('00000000-0000-0000-0000-000000000010'::uuid, 'visitor-free@test.siport.com', 'visitor', 'Free Visitor')
+      ('00000000-0000-0000-0000-000000000001'::uuid, 'admin.sib@sib.com', 'admin', 'Admin SIB'),
+      ('00000000-0000-0000-0000-000000000002'::uuid, 'exhibitor-54m@test.sib2026.ma', 'exhibitor', 'ABB Marine & Ports'),
+      ('00000000-0000-0000-0000-000000000003'::uuid, 'exhibitor-36m@test.sib2026.ma', 'exhibitor', 'Advanced Port Systems'),
+      ('00000000-0000-0000-0000-000000000004'::uuid, 'exhibitor-18m@test.sib2026.ma', 'exhibitor', 'Maritime Equipment Co'),
+      ('00000000-0000-0000-0000-000000000017'::uuid, 'exhibitor-9m@test.sib2026.ma', 'exhibitor', 'StartUp Port Innovations'),
+      ('00000000-0000-0000-0000-000000000005'::uuid, 'partner-gold@test.sib2026.ma', 'partner', 'Gold Partner Industries'),
+      ('00000000-0000-0000-0000-000000000006'::uuid, 'partner-silver@test.sib2026.ma', 'partner', 'Silver Tech Group'),
+      ('00000000-0000-0000-0000-000000000011'::uuid, 'partner-platinium@test.sib2026.ma', 'partner', 'Platinium Global Corp'),
+      ('00000000-0000-0000-0000-000000000012'::uuid, 'partner-museum@test.sib2026.ma', 'partner', 'Museum Cultural Center'),
+      ('00000000-0000-0000-0000-000000000013'::uuid, 'partner-porttech@test.sib2026.ma', 'partner', 'PortTech Solutions'),
+      ('00000000-0000-0000-0000-000000000014'::uuid, 'partner-oceanfreight@test.sib2026.ma', 'partner', 'OceanFreight Logistics'),
+      ('00000000-0000-0000-0000-000000000015'::uuid, 'partner-coastal@test.sib2026.ma', 'partner', 'Coastal Maritime Services'),
+      ('00000000-0000-0000-0000-000000000007'::uuid, 'visitor-vip@test.sib2026.ma', 'visitor', 'VIP Visitor'),
+      ('00000000-0000-0000-0000-000000000008'::uuid, 'visitor-premium@test.sib2026.ma', 'visitor', 'Premium Visitor'),
+      ('00000000-0000-0000-0000-000000000009'::uuid, 'visitor-basic@test.sib2026.ma', 'visitor', 'Basic Visitor'),
+      ('00000000-0000-0000-0000-000000000010'::uuid, 'visitor-free@test.sib2026.ma', 'visitor', 'Free Visitor')
     ) AS t(id, email, type, name)
   LOOP
     v_user_id := v_record.id;
@@ -97,4 +97,4 @@ BEGIN
 END $$;
 
 -- Verify the accounts were created
-SELECT COUNT(*) as created_accounts FROM auth.users WHERE email LIKE '%@test.siport.com' OR email LIKE '%@siports.com';
+SELECT COUNT(*) as created_accounts FROM auth.users WHERE email LIKE '%@test.sib2026.ma' OR email LIKE '%@sib.com';

@@ -5,7 +5,7 @@
 
 ## Objectif
 
-Ce document analyse les sources de données disponibles dans l'application SIPORT v3 et les modèles de comportement utilisateur potentiels qui peuvent être exploités pour développer un moteur de recommandation basé sur l'IA. L'objectif est d'identifier les informations pertinentes pour suggérer des exposants, des produits ou des contacts aux utilisateurs.
+Ce document analyse les sources de données disponibles dans l'application SIB 2026 et les modèles de comportement utilisateur potentiels qui peuvent être exploités pour développer un moteur de recommandation basé sur l'IA. L'objectif est d'identifier les informations pertinentes pour suggérer des exposants, des produits ou des contacts aux utilisateurs.
 
 ## 1. Sources de Données Disponibles
 

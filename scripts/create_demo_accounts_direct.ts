@@ -66,7 +66,7 @@ async function setupDemoAccounts() {
     // Vérifier les comptes créés
     const { data: users } = await supabase.auth.admin.listUsers();
     const demoUsers = users?.filter(u => 
-      u.email?.includes('@test.siport.com') || u.email?.includes('@siports.com')
+      u.email?.includes('@test.sib2026.ma') || u.email?.includes('@sib.com')
     );
 
     if (demoUsers && demoUsers.length > 0) {

@@ -19,7 +19,7 @@ FAILED=0
 
 echo -e "${BLUE}╔═══════════════════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║                                                           ║${NC}"
-echo -e "${BLUE}║    SIPORTS v3 - Tests Automatisés (Sans Playwright)      ║${NC}"
+echo -e "${BLUE}║    SIB v3 - Tests Automatisés (Sans Playwright)      ║${NC}"
 echo -e "${BLUE}║                                                           ║${NC}"
 echo -e "${BLUE}╚═══════════════════════════════════════════════════════════╝${NC}"
 echo ""
@@ -100,10 +100,10 @@ echo ""
 echo -e "${YELLOW}═══ 4. Tests de Contenu HTML ═══${NC}"
 echo ""
 
-test_content "/login" "SIPORTS" "Logo SIPORTS sur page login"
+test_content "/login" "SIB" "Logo SIB sur page login"
 test_content "/login" "Connexion" "Titre connexion"
 test_content "/register" "Créer un compte" "Titre inscription"
-test_content "/" "SIPORTS" "Logo sur page accueil"
+test_content "/" "SIB" "Logo sur page accueil"
 
 echo ""
 echo -e "${YELLOW}═══ 5. Vérification Scripts/Assets ═══${NC}"

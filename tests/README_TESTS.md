@@ -1,4 +1,4 @@
-# 🧪 GUIDE DES TESTS - GetYourShare SIPORTS 2026
+# 🧪 GUIDE DES TESTS - GetYourShare SIB 2026
 
 Ce document explique comment **lancer et utiliser** le système de tests exhaustifs de l'application.
 
@@ -413,7 +413,7 @@ test.describe('Mon Groupe de Tests', () => {
 ## 📞 Support
 
 **Questions ou problèmes ?**
-- 📧 Email technique : dev@siportevent.com
+- 📧 Email technique : dev@sib2026.ma
 - 📚 Documentation Playwright : https://playwright.dev
 
 ---

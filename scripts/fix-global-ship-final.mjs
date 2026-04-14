@@ -72,7 +72,7 @@ async function main() {
     .from('users')
     .insert({
       id: NEW_ID,
-      email: 'exhibitor-54m@test.siport.com',
+      email: 'exhibitor-54m@test.sib2026.ma',
       type: 'exhibitor',
       profile: {
         company: 'Global Shipping Solutions',
@@ -151,7 +151,7 @@ async function main() {
   }
 
   const { data: testLogin, error: loginError } = await supabase.auth.signInWithPassword({
-    email: 'exhibitor-54m@test.siport.com',
+    email: 'exhibitor-54m@test.sib2026.ma',
     password: 'Demo2026!'
   });
 
@@ -163,7 +163,7 @@ async function main() {
 
   console.log('\n' + '='.repeat(60));
   console.log('✅ CORRECTION TERMINÉE\n');
-  console.log('📧 Email: exhibitor-54m@test.siport.com');
+  console.log('📧 Email: exhibitor-54m@test.sib2026.ma');
   console.log('🔑 Mot de passe: Demo2026!');
   console.log(`📅 ${slotsCreated} créneaux disponibles`);
   console.log('🏢 Société: Global Shipping Solutions');

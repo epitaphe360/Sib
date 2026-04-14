@@ -7,7 +7,7 @@
   <!-- SEO FIX: Added lastmod dates for better indexing -->
   <!-- Page d'accueil -->
   <url>
-    <loc>https://siports.com/</loc>
+    <loc>https://sib.com/</loc>
     <lastmod>2025-11-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -15,106 +15,106 @@
 
   <!-- Pages principales -->
   <url>
-    <loc>https://siports.com/exhibitors</loc>
+    <loc>https://sib.com/exhibitors</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/events</loc>
+    <loc>https://sib.com/events</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/partners</loc>
+    <loc>https://sib.com/partners</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/pavilions</loc>
+    <loc>https://sib.com/pavilions</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/news</loc>
+    <loc>https://sib.com/news</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/networking</loc>
+    <loc>https://sib.com/networking</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Authentification -->
   <url>
-    <loc>https://siports.com/login</loc>
+    <loc>https://sib.com/login</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/register</loc>
+    <loc>https://sib.com/register</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/register/exhibitor</loc>
+    <loc>https://sib.com/register/exhibitor</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/register/partner</loc>
+    <loc>https://sib.com/register/partner</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Pages informatives -->
   <url>
-    <loc>https://siports.com/contact</loc>
+    <loc>https://sib.com/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/venue</loc>
+    <loc>https://sib.com/venue</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/partnership</loc>
+    <loc>https://sib.com/partnership</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/support</loc>
+    <loc>https://sib.com/support</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <!-- Pages légales -->
   <url>
-    <loc>https://siports.com/privacy</loc>
+    <loc>https://sib.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/terms</loc>
+    <loc>https://sib.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://siports.com/cookies</loc>
+    <loc>https://sib.com/cookies</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

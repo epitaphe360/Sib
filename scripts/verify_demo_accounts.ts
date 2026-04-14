@@ -6,22 +6,22 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const DEMO_ACCOUNTS = [
-  { email: 'admin.siports@siports.com', password: 'Admin123!', type: 'admin', name: 'Admin SIPORTS' },
-  { email: 'exhibitor-54m@test.siport.com', password: 'Admin123!', type: 'exhibitor', name: 'ABB Marine & Ports' },
-  { email: 'exhibitor-36m@test.siport.com', password: 'Admin123!', type: 'exhibitor', name: 'Advanced Port Systems' },
-  { email: 'exhibitor-18m@test.siport.com', password: 'Admin123!', type: 'exhibitor', name: 'Maritime Equipment Co' },
-  { email: 'exhibitor-9m@test.siport.com', password: 'Admin123!', type: 'exhibitor', name: 'StartUp Port Innovations' },
-  { email: 'partner-gold@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Gold Partner Industries' },
-  { email: 'partner-silver@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Silver Tech Group' },
-  { email: 'partner-platinium@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Platinium Global Corp' },
-  { email: 'partner-museum@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Museum Cultural Center' },
-  { email: 'partner-porttech@test.siport.com', password: 'Admin123!', type: 'partner', name: 'PortTech Solutions' },
-  { email: 'partner-oceanfreight@test.siport.com', password: 'Admin123!', type: 'partner', name: 'OceanFreight Logistics' },
-  { email: 'partner-coastal@test.siport.com', password: 'Admin123!', type: 'partner', name: 'Coastal Maritime Services' },
-  { email: 'visitor-vip@test.siport.com', password: 'Admin123!', type: 'visitor', name: 'VIP Visitor' },
-  { email: 'visitor-premium@test.siport.com', password: 'Admin123!', type: 'visitor', name: 'Premium Visitor' },
-  { email: 'visitor-basic@test.siport.com', password: 'Admin123!', type: 'visitor', name: 'Basic Visitor' },
-  { email: 'visitor-free@test.siport.com', password: 'Admin123!', type: 'visitor', name: 'Free Visitor' },
+  { email: 'admin.sib@sib.com', password: 'Admin123!', type: 'admin', name: 'Admin SIB' },
+  { email: 'exhibitor-54m@test.sib2026.ma', password: 'Admin123!', type: 'exhibitor', name: 'ABB Marine & Ports' },
+  { email: 'exhibitor-36m@test.sib2026.ma', password: 'Admin123!', type: 'exhibitor', name: 'Advanced Port Systems' },
+  { email: 'exhibitor-18m@test.sib2026.ma', password: 'Admin123!', type: 'exhibitor', name: 'Maritime Equipment Co' },
+  { email: 'exhibitor-9m@test.sib2026.ma', password: 'Admin123!', type: 'exhibitor', name: 'StartUp Port Innovations' },
+  { email: 'partner-gold@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Gold Partner Industries' },
+  { email: 'partner-silver@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Silver Tech Group' },
+  { email: 'partner-platinium@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Platinium Global Corp' },
+  { email: 'partner-museum@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Museum Cultural Center' },
+  { email: 'partner-porttech@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'PortTech Solutions' },
+  { email: 'partner-oceanfreight@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'OceanFreight Logistics' },
+  { email: 'partner-coastal@test.sib2026.ma', password: 'Admin123!', type: 'partner', name: 'Coastal Maritime Services' },
+  { email: 'visitor-vip@test.sib2026.ma', password: 'Admin123!', type: 'visitor', name: 'VIP Visitor' },
+  { email: 'visitor-premium@test.sib2026.ma', password: 'Admin123!', type: 'visitor', name: 'Premium Visitor' },
+  { email: 'visitor-basic@test.sib2026.ma', password: 'Admin123!', type: 'visitor', name: 'Basic Visitor' },
+  { email: 'visitor-free@test.sib2026.ma', password: 'Admin123!', type: 'visitor', name: 'Free Visitor' },
 ];
 
 async function verifyAndCreateAccounts() {

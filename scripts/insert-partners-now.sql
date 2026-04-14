@@ -65,7 +65,7 @@ VALUES
   'corporate',
   'platinium',
   'Transport Maritime',
-  'Groupe maritime d''excellence, sponsor principal de SIPORTS 2026. Leader dans le transport maritime et les services portuaires en Afrique.',
+  'Groupe maritime d''excellence, sponsor principal de SIB 2026. Leader dans le transport maritime et les services portuaires en Afrique.',
   'https://placehold.co/200x200/8b5cf6/ffffff?text=RMG',
   'https://royalmaritime.ma',
   NOW(),

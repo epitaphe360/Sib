@@ -9,10 +9,10 @@ async function deleteExhibitorAuthAccounts() {
   console.log('🗑️ Suppression des comptes auth exhibitor...\n');
 
   const emails = [
-    'exhibitor-9m@test.siport.com',
-    'exhibitor-18m@test.siport.com',
-    'exhibitor-36m@test.siport.com',
-    'exhibitor-54m@test.siport.com'
+    'exhibitor-9m@test.sib2026.ma',
+    'exhibitor-18m@test.sib2026.ma',
+    'exhibitor-36m@test.sib2026.ma',
+    'exhibitor-54m@test.sib2026.ma'
   ];
 
   for (const email of emails) {

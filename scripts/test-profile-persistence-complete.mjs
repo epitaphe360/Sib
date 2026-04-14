@@ -21,7 +21,7 @@ async function testNetworkingProfilePersistence() {
     const { data: users, error: usersError } = await supabase
       .from('users')
       .select('id, email, type, profile')
-      .eq('email', 'visitor-vip@test.siport.com')
+      .eq('email', 'visitor-vip@test.sib2026.ma')
       .limit(1);
 
     if (usersError || !users || users.length === 0) {

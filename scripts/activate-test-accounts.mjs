@@ -15,15 +15,15 @@ const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
 });
 
 const ACCOUNTS = [
-  { email: 'visitor-free@test.siport.com', type: 'visitor', visitor_level: 'free', status: 'active' },
-  { email: 'visitor-vip@test.siport.com', type: 'visitor', visitor_level: 'vip', status: 'active' },
-  { email: 'exhibitor-9m@test.siport.com', type: 'exhibitor', status: 'active' },
-  { email: 'exhibitor-18m@test.siport.com', type: 'exhibitor', status: 'active' },
-  { email: 'exhibitor-36m@test.siport.com', type: 'exhibitor', status: 'active' },
-  { email: 'partner-museum@test.siport.com', type: 'partner', status: 'active' },
-  { email: 'partner-chamber@test.siport.com', type: 'partner', status: 'active' },
-  { email: 'partner-sponsor@test.siport.com', type: 'partner', status: 'active' },
-  { email: 'admin-test@test.siport.com', type: 'admin', status: 'active' }
+  { email: 'visitor-free@test.sib2026.ma', type: 'visitor', visitor_level: 'free', status: 'active' },
+  { email: 'visitor-vip@test.sib2026.ma', type: 'visitor', visitor_level: 'vip', status: 'active' },
+  { email: 'exhibitor-9m@test.sib2026.ma', type: 'exhibitor', status: 'active' },
+  { email: 'exhibitor-18m@test.sib2026.ma', type: 'exhibitor', status: 'active' },
+  { email: 'exhibitor-36m@test.sib2026.ma', type: 'exhibitor', status: 'active' },
+  { email: 'partner-museum@test.sib2026.ma', type: 'partner', status: 'active' },
+  { email: 'partner-chamber@test.sib2026.ma', type: 'partner', status: 'active' },
+  { email: 'partner-sponsor@test.sib2026.ma', type: 'partner', status: 'active' },
+  { email: 'admin-test@test.sib2026.ma', type: 'admin', status: 'active' }
 ];
 
 (async () => {

@@ -6,7 +6,7 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const testEmail = process.argv[2] || 'partner.e2e.1766706128475@test-siports.com';
+const testEmail = process.argv[2] || 'partner.e2e.1766706128475@test-sib.com';
 const testPassword = process.argv[3] || 'TestPassword123!';
 
 async function testLogin() {

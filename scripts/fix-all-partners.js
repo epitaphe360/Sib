@@ -6,13 +6,13 @@ const supabase = createClient(
 );
 
 const partnerAccounts = [
-  { email: 'partner-silver@test.siport.com', name: 'Silver Maritime Services', tier: 'silver' },
-  { email: 'partner-gold@test.siport.com', name: 'Gold Shipping Corp', tier: 'gold' },
-  { email: 'partner-platinium@test.siport.com', name: 'Platinium Port Authority', tier: 'platinium' },
-  { email: 'partner-museum@test.siport.com', name: 'Musée Maritime National', tier: 'museum' },
-  { email: 'partner-coastal@test.siport.com', name: 'Coastal Logistics', tier: 'silver' },
-  { email: 'partner-oceanfreight@test.siport.com', name: 'Ocean Freight International', tier: 'gold' },
-  { email: 'partner-porttech@test.siport.com', name: 'PortTech Solutions', tier: 'platinium' }
+  { email: 'partner-silver@test.sib2026.ma', name: 'Silver Maritime Services', tier: 'silver' },
+  { email: 'partner-gold@test.sib2026.ma', name: 'Gold Shipping Corp', tier: 'gold' },
+  { email: 'partner-platinium@test.sib2026.ma', name: 'Platinium Port Authority', tier: 'platinium' },
+  { email: 'partner-museum@test.sib2026.ma', name: 'Musée Maritime National', tier: 'museum' },
+  { email: 'partner-coastal@test.sib2026.ma', name: 'Coastal Logistics', tier: 'silver' },
+  { email: 'partner-oceanfreight@test.sib2026.ma', name: 'Ocean Freight International', tier: 'gold' },
+  { email: 'partner-porttech@test.sib2026.ma', name: 'PortTech Solutions', tier: 'platinium' }
 ];
 
 async function main() {
@@ -69,7 +69,7 @@ async function main() {
         email_verified: true,
         profile: {
           company: partner.name,
-          description: `Partenaire ${partner.tier} du salon SIPORTS 2026`
+          description: `Partenaire ${partner.tier} du salon SIB 2026`
         }
       });
     

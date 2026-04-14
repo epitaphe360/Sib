@@ -1,5 +1,5 @@
 /**
- * 🆕 SIPORT 2026 - Tests Pages Manquantes (couverture complète)
+ * 🆕 SIB 2026 - Tests Pages Manquantes (couverture complète)
  *
  * Couvre les ~45 pages non testées dans la suite principale :
  * - Pages publiques (hébergement, détails articles/produits, contact succès)
@@ -29,14 +29,14 @@ const HAS_AUTH_SEED = Boolean(
 const PASSWORDS = ['Test@123456'];
 
 const ACCOUNTS = {
-  visitor:      { email: 'visitor-free@test.siport.com' },
-  visitorVip:   { email: 'visitor-vip@test.siport.com' },
-  exhibitor9m:  { email: 'exhibitor-9m@test.siport.com' },
-  exhibitor54m: { email: 'exhibitor-54m@test.siport.com' },
-  partnerGold:  { email: 'partner-gold@test.siport.com' },
-  partnerMuseum:{ email: 'partner-museum@test.siport.com' },
-  partnerSilver:{ email: 'partner-silver@test.siport.com' },
-  admin:        { email: 'admin.siports@siports.com' },
+  visitor:      { email: 'visitor-free@test.sib2026.ma' },
+  visitorVip:   { email: 'visitor-vip@test.sib2026.ma' },
+  exhibitor9m:  { email: 'exhibitor-9m@test.sib2026.ma' },
+  exhibitor54m: { email: 'exhibitor-54m@test.sib2026.ma' },
+  partnerGold:  { email: 'partner-gold@test.sib2026.ma' },
+  partnerMuseum:{ email: 'partner-museum@test.sib2026.ma' },
+  partnerSilver:{ email: 'partner-silver@test.sib2026.ma' },
+  admin:        { email: 'admin.sib@sib.com' },
 };
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -344,7 +344,7 @@ test.describe('📺 Médias Détail Manquants', () => {
     await checkPageLoads(page, `${BASE_URL}/media/podcast/1`);
   });
 
-  test('MEDIA-DET-04: Détail capsule Inside SIPORT (/media/capsule/1)', async ({ page }) => {
+  test('MEDIA-DET-04: Détail capsule Inside SIB (/media/capsule/1)', async ({ page }) => {
     await checkPageLoads(page, `${BASE_URL}/media/capsule/1`);
   });
 

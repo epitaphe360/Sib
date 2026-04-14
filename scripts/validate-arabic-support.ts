@@ -212,8 +212,8 @@ async function validate() {
     },
     {
       name: 'Contient tous les comptes démo (11 boutons)',
-      check: checkFile(loginPagePath, /admin\.siports@siports\.com/) &&
-             checkFile(loginPagePath, /exhibitor-9m@test\.siport\.com/)
+      check: checkFile(loginPagePath, /admin\.sib@sib\.com/) &&
+             checkFile(loginPagePath, /exhibitor-9m@test\.sib2026\.ma/)
     }
   ];
 

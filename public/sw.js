@@ -166,12 +166,12 @@ self.addEventListener('push', (event) => {
   console.log('[SW] Push notification received:', event);
 
   let notificationData = {
-    title: 'SIPORTS 2026',
+    title: 'SIB 2026',
     body: 'Vous avez une nouvelle notification',
     icon: '/logo192.png',
     badge: '/badge-72x72.png',
     vibrate: [200, 100, 200],
-    tag: 'siports-notification',
+    tag: 'sib-notification',
     requireInteraction: false,
     data: {}
   };

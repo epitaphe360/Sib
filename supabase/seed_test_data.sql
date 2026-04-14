@@ -1,5 +1,5 @@
 -- ========================================
--- DONNÉES DE TEST SIPORT 2026
+-- DONNÉES DE TEST SIB 2026
 -- ========================================
 -- Créer des comptes de test pour chaque type de dashboard
 -- Password pour tous les comptes: Test@123456
@@ -31,54 +31,54 @@ BEGIN
   -- Nettoyer leads si la table existe
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'leads') THEN
     DELETE FROM leads WHERE scanner_id IN (
-      SELECT id FROM users WHERE email LIKE '%@test.siport.com'
+      SELECT id FROM users WHERE email LIKE '%@test.sib2026.ma'
     );
   END IF;
 
   -- Nettoyer quota_usage si la table existe
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'quota_usage') THEN
     DELETE FROM quota_usage WHERE user_id IN (
-      SELECT id FROM users WHERE email LIKE '%@test.siport.com'
+      SELECT id FROM users WHERE email LIKE '%@test.sib2026.ma'
     );
   END IF;
 
   -- Nettoyer user_upgrades si la table existe
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'user_upgrades') THEN
     DELETE FROM user_upgrades WHERE user_id IN (
-      SELECT id FROM users WHERE email LIKE '%@test.siport.com'
+      SELECT id FROM users WHERE email LIKE '%@test.sib2026.ma'
     );
   END IF;
 
   -- Nettoyer user_badges si la table existe
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'user_badges') THEN
     DELETE FROM user_badges WHERE user_id IN (
-      SELECT id FROM users WHERE email LIKE '%@test.siport.com'
+      SELECT id FROM users WHERE email LIKE '%@test.sib2026.ma'
     );
   END IF;
 
   -- Nettoyer exhibitor_profiles
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'exhibitor_profiles') THEN
     DELETE FROM exhibitor_profiles WHERE user_id IN (
-      SELECT id FROM users WHERE email LIKE '%@test.siport.com'
+      SELECT id FROM users WHERE email LIKE '%@test.sib2026.ma'
     );
   END IF;
 
   -- Nettoyer partner_profiles
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'partner_profiles') THEN
     DELETE FROM partner_profiles WHERE user_id IN (
-      SELECT id FROM users WHERE email LIKE '%@test.siport.com'
+      SELECT id FROM users WHERE email LIKE '%@test.sib2026.ma'
     );
   END IF;
 
   -- Nettoyer visitor_profiles
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'visitor_profiles') THEN
     DELETE FROM visitor_profiles WHERE user_id IN (
-      SELECT id FROM users WHERE email LIKE '%@test.siport.com'
+      SELECT id FROM users WHERE email LIKE '%@test.sib2026.ma'
     );
   END IF;
 
   -- Nettoyer users
-  DELETE FROM users WHERE email LIKE '%@test.siport.com';
+  DELETE FROM users WHERE email LIKE '%@test.sib2026.ma';
 
   RAISE NOTICE 'Nettoyage des données de test terminé';
 END $$;
@@ -97,7 +97,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000001',
-  'visitor-free@test.siport.com',
+  'visitor-free@test.sib2026.ma',
   'Jean Dupont',
   'visitor',
   'free',
@@ -138,7 +138,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000002',
-  'visitor-vip@test.siport.com',
+  'visitor-vip@test.sib2026.ma',
   'Marie Martin',
   'visitor',
   'premium',
@@ -231,7 +231,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000003',
-  'partner-museum@test.siport.com',
+  'partner-museum@test.sib2026.ma',
   'Pierre Leclerc',
   'partner',
   'museum',
@@ -294,7 +294,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000004',
-  'partner-silver@test.siport.com',
+  'partner-silver@test.sib2026.ma',
   'Ahmed Benali',
   'partner',
   'silver',
@@ -357,7 +357,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000005',
-  'partner-gold@test.siport.com',
+  'partner-gold@test.sib2026.ma',
   'Carlos Rodriguez',
   'partner',
   'gold',
@@ -420,7 +420,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000006',
-  'partner-platinium@test.siport.com',
+  'partner-platinium@test.sib2026.ma',
   'Henrik Nielsen',
   'partner',
   'platinium',
@@ -486,7 +486,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000007',
-  'exhibitor-9m@test.siport.com',
+  'exhibitor-9m@test.sib2026.ma',
   'Thomas Dubois',
   'exhibitor',
   now()
@@ -555,7 +555,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000008',
-  'exhibitor-18m@test.siport.com',
+  'exhibitor-18m@test.sib2026.ma',
   'Sophie Lefebvre',
   'exhibitor',
   now()
@@ -624,7 +624,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000009',
-  'exhibitor-36m@test.siport.com',
+  'exhibitor-36m@test.sib2026.ma',
   'David Chen',
   'exhibitor',
   now()
@@ -693,7 +693,7 @@ INSERT INTO users (
   created_at
 ) VALUES (
   'a0000000-0000-0000-0000-000000000010',
-  'exhibitor-54m@test.siport.com',
+  'exhibitor-54m@test.sib2026.ma',
   'Lars Svensson',
   'exhibitor',
   now()
@@ -788,20 +788,20 @@ BEGIN
 ========================================
 
 📧 VISITEURS:
-  - visitor-free@test.siport.com (FREE - 0 RDV)
-  - visitor-vip@test.siport.com (VIP - 10 RDV, 3 utilisés)
+  - visitor-free@test.sib2026.ma (FREE - 0 RDV)
+  - visitor-vip@test.sib2026.ma (VIP - 10 RDV, 3 utilisés)
 
 🤝 PARTENAIRES:
-  - partner-museum@test.siport.com (Museum $20k - 20 RDV, 5 utilisés)
-  - partner-silver@test.siport.com (Silver $48k - 50 RDV, 15 utilisés)
-  - partner-gold@test.siport.com (Gold $68k - 100 RDV, 45 utilisés)
-  - partner-platinium@test.siport.com (Platinium $98k - Illimité, 250 utilisés)
+  - partner-museum@test.sib2026.ma (Museum $20k - 20 RDV, 5 utilisés)
+  - partner-silver@test.sib2026.ma (Silver $48k - 50 RDV, 15 utilisés)
+  - partner-gold@test.sib2026.ma (Gold $68k - 100 RDV, 45 utilisés)
+  - partner-platinium@test.sib2026.ma (Platinium $98k - Illimité, 250 utilisés)
 
 🏢 EXPOSANTS:
-  - exhibitor-9m@test.siport.com (9m² Basic - 15 RDV, 7 utilisés)
-  - exhibitor-18m@test.siport.com (18m² Standard - 40 RDV, 22 utilisés)
-  - exhibitor-36m@test.siport.com (36m² Premium - 100 RDV, 58 utilisés)
-  - exhibitor-54m@test.siport.com (60m² Elite - Illimité, 350 utilisés)
+  - exhibitor-9m@test.sib2026.ma (9m² Basic - 15 RDV, 7 utilisés)
+  - exhibitor-18m@test.sib2026.ma (18m² Standard - 40 RDV, 22 utilisés)
+  - exhibitor-36m@test.sib2026.ma (36m² Premium - 100 RDV, 58 utilisés)
+  - exhibitor-54m@test.sib2026.ma (60m² Elite - Illimité, 350 utilisés)
 
 🔑 Mot de passe pour tous: Test@123456
 

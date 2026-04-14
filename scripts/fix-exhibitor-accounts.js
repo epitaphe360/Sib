@@ -11,10 +11,10 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
 });
 
 const exhibitorAccounts = [
-  { email: 'exhibitor-9m@test.siport.com', company: 'TechMarine Solutions', standSize: '9m²' },
-  { email: 'exhibitor-18m@test.siport.com', company: 'OceanLogistics Pro', standSize: '18m²' },
-  { email: 'exhibitor-36m@test.siport.com', company: 'PortTech Industries', standSize: '36m²' },
-  { email: 'exhibitor-54m@test.siport.com', company: 'Global Shipping Alliance', standSize: '54m²' }
+  { email: 'exhibitor-9m@test.sib2026.ma', company: 'TechMarine Solutions', standSize: '9m²' },
+  { email: 'exhibitor-18m@test.sib2026.ma', company: 'OceanLogistics Pro', standSize: '18m²' },
+  { email: 'exhibitor-36m@test.sib2026.ma', company: 'PortTech Industries', standSize: '36m²' },
+  { email: 'exhibitor-54m@test.sib2026.ma', company: 'Global Shipping Alliance', standSize: '54m²' }
 ];
 
 async function fixExhibitorAccounts() {

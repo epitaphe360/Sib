@@ -1,4 +1,4 @@
--- Database Transactions - Atomic Operations for SIPORT 2026
+-- Database Transactions - Atomic Operations for SIB 2026
 -- Purpose: Ensure data consistency across multi-table operations
 -- Phase: 4 - Missing Implementations (Bug #11)
 -- Date: January 6, 2026

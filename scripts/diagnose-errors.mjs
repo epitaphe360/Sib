@@ -70,10 +70,10 @@ try {
 console.log('\n📊 3. Vérification des comptes de test...\n');
 
 const testAccounts = [
-  { email: 'demo.visitor@siports.com', type: 'visitor' },
-  { email: 'demo.exhibitor@siports.com', type: 'exhibitor' },
-  { email: 'demo.partner@siports.com', type: 'partner' },
-  { email: 'partner-gold@test.siport.com', type: 'partner' }
+  { email: 'demo.visitor@sib.com', type: 'visitor' },
+  { email: 'demo.exhibitor@sib.com', type: 'exhibitor' },
+  { email: 'demo.partner@sib.com', type: 'partner' },
+  { email: 'partner-gold@test.sib2026.ma', type: 'partner' }
 ];
 
 for (const account of testAccounts) {

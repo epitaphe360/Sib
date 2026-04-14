@@ -13,10 +13,10 @@
 --    - Auto Confirm User: ✓ (coché)
 --
 -- COMPTES PARTENAIRES À CRÉER:
---    partner-museum@test.siport.com    (🏛️ Musée - $20,000)
---    partner-silver@test.siport.com    (🥈 Silver - $48,000)
---    partner-gold@test.siport.com      (🥇 Gold - $68,000)
---    partner-platinium@test.siport.com (💎 Platinium - $98,000)
+--    partner-museum@test.sib2026.ma    (🏛️ Musée - $20,000)
+--    partner-silver@test.sib2026.ma    (🥈 Silver - $48,000)
+--    partner-gold@test.sib2026.ma      (🥇 Gold - $68,000)
+--    partner-platinium@test.sib2026.ma (💎 Platinium - $98,000)
 --
 -- ÉTAPE 2: Exécuter ce script SQL
 -- =========================================================
@@ -33,7 +33,7 @@ UPDATE public.users SET
   partner_tier = 'museum',
   status = 'active',
   is_active = true
-WHERE email = 'partner-museum@test.siport.com';
+WHERE email = 'partner-museum@test.sib2026.ma';
 
 -- Partenaire Silver (🥈)
 UPDATE public.users SET
@@ -43,7 +43,7 @@ UPDATE public.users SET
   partner_tier = 'silver',
   status = 'active',
   is_active = true
-WHERE email = 'partner-silver@test.siport.com';
+WHERE email = 'partner-silver@test.sib2026.ma';
 
 -- Partenaire Gold (🥇)
 UPDATE public.users SET
@@ -53,7 +53,7 @@ UPDATE public.users SET
   partner_tier = 'gold',
   status = 'active',
   is_active = true
-WHERE email = 'partner-gold@test.siport.com';
+WHERE email = 'partner-gold@test.sib2026.ma';
 
 -- Partenaire Platinium (💎)
 UPDATE public.users SET
@@ -63,7 +63,7 @@ UPDATE public.users SET
   partner_tier = 'platinium',
   status = 'active',
   is_active = true
-WHERE email = 'partner-platinium@test.siport.com';
+WHERE email = 'partner-platinium@test.sib2026.ma';
 
 -- =====================================================
 -- Création des profils partenaires
@@ -75,13 +75,13 @@ SELECT
   id,
   'Musée Maritime du Maroc',
   'Hassan Alami',
-  'partner-museum@test.siport.com',
+  'partner-museum@test.sib2026.ma',
   '+212 5 22 00 00 01',
   'Musée national dédié à l''histoire maritime du Maroc, présentant des collections uniques d''instruments de navigation et de maquettes de navires.',
   'https://musee-maritime.ma',
   'Maroc',
   'museum'
-FROM public.users WHERE email = 'partner-museum@test.siport.com'
+FROM public.users WHERE email = 'partner-museum@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   contact_name = EXCLUDED.contact_name,
@@ -98,13 +98,13 @@ SELECT
   id,
   'Port Solutions Maroc',
   'Fatima Bennani',
-  'partner-silver@test.siport.com',
+  'partner-silver@test.sib2026.ma',
   '+212 5 22 00 00 02',
   'Leader marocain des solutions portuaires innovantes, spécialisé dans l''optimisation des opérations de manutention.',
   'https://portsolutions.ma',
   'Maroc',
   'silver'
-FROM public.users WHERE email = 'partner-silver@test.siport.com'
+FROM public.users WHERE email = 'partner-silver@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   contact_name = EXCLUDED.contact_name,
@@ -121,13 +121,13 @@ SELECT
   id,
   'Tanger Med Logistics',
   'Ahmed El Fassi',
-  'partner-gold@test.siport.com',
+  'partner-gold@test.sib2026.ma',
   '+212 5 39 00 00 03',
   'Partenaire logistique premium du port de Tanger Med, offrant des services de stockage et de distribution internationaux.',
   'https://tangermedlogistics.ma',
   'Maroc',
   'gold'
-FROM public.users WHERE email = 'partner-gold@test.siport.com'
+FROM public.users WHERE email = 'partner-gold@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   contact_name = EXCLUDED.contact_name,
@@ -144,13 +144,13 @@ SELECT
   id,
   'Royal Maritime Group',
   'Youssef Tazi',
-  'partner-platinium@test.siport.com',
+  'partner-platinium@test.sib2026.ma',
   '+212 5 22 00 00 04',
-  'Groupe maritime d''excellence, sponsor principal de SIPORTS 2026. Leader dans le transport maritime et les services portuaires en Afrique.',
+  'Groupe maritime d''excellence, sponsor principal de SIB 2026. Leader dans le transport maritime et les services portuaires en Afrique.',
   'https://royalmaritime.ma',
   'Maroc',
   'platinium'
-FROM public.users WHERE email = 'partner-platinium@test.siport.com'
+FROM public.users WHERE email = 'partner-platinium@test.sib2026.ma'
 ON CONFLICT (user_id) DO UPDATE SET
   company_name = EXCLUDED.company_name,
   contact_name = EXCLUDED.contact_name,
@@ -236,7 +236,7 @@ VALUES (
   'Royal Maritime Group',
   'platinium',
   'Groupe Maritime',
-  'Groupe maritime d''excellence, sponsor principal de SIPORTS 2026. Leader dans le transport maritime et les services portuaires en Afrique.',
+  'Groupe maritime d''excellence, sponsor principal de SIB 2026. Leader dans le transport maritime et les services portuaires en Afrique.',
   'https://placehold.co/200x200/8b5cf6/ffffff?text=RMG',
   'https://royalmaritime.ma',
   'Maroc',
@@ -293,22 +293,22 @@ ORDER BY
 -- =====================================================
 --
 -- 🏛️ Musée ($20,000):
---    Email: partner-museum@test.siport.com
+--    Email: partner-museum@test.sib2026.ma
 --    Password: Test@123456
 --    Quotas: 20 RDV, 5 events, 10 média, 3 team members
 --
 -- 🥈 Silver ($48,000):
---    Email: partner-silver@test.siport.com
+--    Email: partner-silver@test.sib2026.ma
 --    Password: Test@123456
 --    Quotas: 50 RDV, 10 events, 30 média, 5 team members
 --
 -- 🥇 Gold ($68,000):
---    Email: partner-gold@test.siport.com
+--    Email: partner-gold@test.sib2026.ma
 --    Password: Test@123456
 --    Quotas: 100 RDV, 20 events, 75 média, 10 team members
 --
 -- 💎 Platinium ($98,000):
---    Email: partner-platinium@test.siport.com
+--    Email: partner-platinium@test.sib2026.ma
 --    Password: Test@123456
 --    Quotas: ILLIMITÉ RDV, events, 200 média, 20 team members
 -- =====================================================

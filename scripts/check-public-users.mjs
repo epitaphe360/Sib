@@ -12,15 +12,15 @@ if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
 const ACCOUNTS = [
-  'visitor-free@test.siport.com',
-  'visitor-vip@test.siport.com',
-  'exhibitor-9m@test.siport.com',
-  'exhibitor-18m@test.siport.com',
-  'exhibitor-36m@test.siport.com',
-  'partner-museum@test.siport.com',
-  'partner-chamber@test.siport.com',
-  'partner-sponsor@test.siport.com',
-  'admin-test@test.siport.com'
+  'visitor-free@test.sib2026.ma',
+  'visitor-vip@test.sib2026.ma',
+  'exhibitor-9m@test.sib2026.ma',
+  'exhibitor-18m@test.sib2026.ma',
+  'exhibitor-36m@test.sib2026.ma',
+  'partner-museum@test.sib2026.ma',
+  'partner-chamber@test.sib2026.ma',
+  'partner-sponsor@test.sib2026.ma',
+  'admin-test@test.sib2026.ma'
 ];
 
 (async () => {

@@ -49,7 +49,7 @@ if (messaging) {
 
   const { notification, data } = payload;
 
-  const notificationTitle = notification?.title || 'SIPORT 2026';
+  const notificationTitle = notification?.title || 'SIB 2026';
   const notificationOptions = {
     body: notification?.body || '',
     icon: notification?.icon || '/logo.png',

@@ -14,25 +14,25 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 const testAccounts = [
   // Visiteurs
   { email: 'visitor1@test.com', password: 'Test@123456', type: 'visitor' },
-  { email: 'visitor-free@test.siport.com', password: 'Test@123456', type: 'visitor' },
-  { email: 'visitor-vip@test.siport.com', password: 'Test@123456', type: 'visitor' },
+  { email: 'visitor-free@test.sib2026.ma', password: 'Test@123456', type: 'visitor' },
+  { email: 'visitor-vip@test.sib2026.ma', password: 'Test@123456', type: 'visitor' },
   
   // Exposants
   { email: 'exhibitor1@test.com', password: 'Test@123456', type: 'exhibitor' },
   { email: 'exhibitor2@test.com', password: 'Test@123456', type: 'exhibitor' },
-  { email: 'exhibitor-9m@test.siport.com', password: 'Test@123456', type: 'exhibitor' },
-  { email: 'exhibitor-18m@test.siport.com', password: 'Test@123456', type: 'exhibitor' },
-  { email: 'exhibitor-36m@test.siport.com', password: 'Test@123456', type: 'exhibitor' },
-  { email: 'exhibitor-54m@test.siport.com', password: 'Test@123456', type: 'exhibitor' },
+  { email: 'exhibitor-9m@test.sib2026.ma', password: 'Test@123456', type: 'exhibitor' },
+  { email: 'exhibitor-18m@test.sib2026.ma', password: 'Test@123456', type: 'exhibitor' },
+  { email: 'exhibitor-36m@test.sib2026.ma', password: 'Test@123456', type: 'exhibitor' },
+  { email: 'exhibitor-54m@test.sib2026.ma', password: 'Test@123456', type: 'exhibitor' },
   
   // Partenaires
-  { email: 'partner-museum@test.siport.com', password: 'Test@123456', type: 'partner' },
-  { email: 'partner-silver@test.siport.com', password: 'Test@123456', type: 'partner' },
-  { email: 'partner-gold@test.siport.com', password: 'Test@123456', type: 'partner' },
-  { email: 'partner-platinium@test.siport.com', password: 'Test@123456', type: 'partner' },
+  { email: 'partner-museum@test.sib2026.ma', password: 'Test@123456', type: 'partner' },
+  { email: 'partner-silver@test.sib2026.ma', password: 'Test@123456', type: 'partner' },
+  { email: 'partner-gold@test.sib2026.ma', password: 'Test@123456', type: 'partner' },
+  { email: 'partner-platinium@test.sib2026.ma', password: 'Test@123456', type: 'partner' },
   
   // Admin
-  { email: 'admin-test@test.siport.com', password: 'Test@123456', type: 'admin' }
+  { email: 'admin-test@test.sib2026.ma', password: 'Test@123456', type: 'admin' }
 ];
 
 async function resetPassword(email, newPassword) {

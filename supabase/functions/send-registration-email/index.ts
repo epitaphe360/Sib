@@ -38,7 +38,7 @@ Deno.serve(async (req: Request) => {
 
   try {
     const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
-    const SENDER_EMAIL = Deno.env.get('SENDER_EMAIL') || 'no-reply@siports.com';
+    const SENDER_EMAIL = Deno.env.get('SENDER_EMAIL') || 'no-reply@sib.com';
 
     if (!SENDGRID_API_KEY) {
       throw new Error('SENDGRID_API_KEY non configurée');
@@ -58,7 +58,7 @@ Deno.serve(async (req: Request) => {
     }[userType];
 
     // Préparer le sujet et le contenu de l'email
-    const subject = `SIPORTS 2026 - Demande d'inscription ${accountTypeLabel} reçue`;
+    const subject = `SIB 2026 - Demande d'inscription ${accountTypeLabel} reçue`;
     
     const htmlContent = `
       <!DOCTYPE html>
@@ -78,7 +78,7 @@ Deno.serve(async (req: Request) => {
         <body>
           <div class="container">
             <div class="header">
-              <h1>🎉 Bienvenue sur SIPORTS 2026</h1>
+              <h1>🎉 Bienvenue sur SIB 2026</h1>
             </div>
             <div class="content">
               <h2>Bonjour ${escapeHtml(firstName)} ${escapeHtml(lastName)},</h2>
@@ -126,7 +126,7 @@ Deno.serve(async (req: Request) => {
               <p>Si vous avez des questions, n'hésitez pas à contacter notre équipe support.</p>
               
               <div class="footer">
-                <p><strong>SIPORTS 2026</strong><br>
+                <p><strong>SIB 2026</strong><br>
                 Salon International des Ports et de la Logistique<br>
                 El Jadida, Maroc</p>
                 <p style="font-size: 12px; color: #9ca3af;">Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>

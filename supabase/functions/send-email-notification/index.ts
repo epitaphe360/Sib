@@ -36,12 +36,12 @@ serve(async (req) => {
 
     // Send email via Resend
     const response = await resend.emails.send({
-      from: 'SIPORT 2026 <noreply@siportevent.com>',
+      from: 'SIB 2026 <noreply@sib2026.ma>',
       to: body.to,
       subject: body.subject,
       html: body.html,
       text: body.text || body.html,
-      replyTo: body.replyTo || 'support@siportevent.com',
+      replyTo: body.replyTo || 'support@sib2026.ma',
     });
 
     if (response.error) {

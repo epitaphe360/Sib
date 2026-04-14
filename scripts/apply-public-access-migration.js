@@ -38,7 +38,7 @@ async function applyPublicAccessMigration() {
     console.log('📝 INSTRUCTIONS POUR APPLIQUER LA MIGRATION:');
     console.log('='.repeat(50));
     console.log('1. Connectez-vous à votre compte Supabase');
-    console.log('2. Sélectionnez votre projet SIPORTS');
+    console.log('2. Sélectionnez votre projet SIB');
     console.log('3. Allez dans l\'onglet "SQL Editor"');
     console.log('4. Cliquez sur "New Query"');
     console.log('5. Copiez-collez tout le contenu ci-dessous:');

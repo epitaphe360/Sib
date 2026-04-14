@@ -1,4 +1,4 @@
-# 🚀 GUIDE DE DÉPLOIEMENT COMPLET - SIPORTS 2026
+# 🚀 GUIDE DE DÉPLOIEMENT COMPLET - SIB 2026
 
 ## 📋 Architecture de Déploiement
 
@@ -45,7 +45,7 @@
 Cliquez sur **"New Project"** et remplissez :
 
 ```
-Nom du projet : siports-2026-prod
+Nom du projet : SIB-2026-prod
 Organisation : [Votre organisation]
 Database Password : [Générez un mot de passe fort]
 Région : Europe West (Frankfurt) ou la plus proche de vos utilisateurs
@@ -70,13 +70,13 @@ Vous avez probablement des fichiers de migration dans votre projet. Exécutez-le
 
 ```bash
 # Localement, vérifier les fichiers de migration
-ls -la /home/user/siportv3/supabase/migrations/
+ls -la /home/user/SIB 2026/supabase/migrations/
 ```
 
 **Dans Supabase SQL Editor**, copiez-collez le contenu de chaque migration :
 
 ```sql
--- Exemple de tables principales SIPORTS
+-- Exemple de tables principales SIB
 -- (Adaptez selon vos migrations réelles)
 
 -- Table users (souvent déjà créée par Supabase Auth)
@@ -229,7 +229,7 @@ SELECT * FROM exhibitors LIMIT 5;
 1. Cliquez sur **"New Project"**
 2. Sélectionnez **"Deploy from GitHub repo"**
 3. Autorisez Railway à accéder à vos repos GitHub
-4. Sélectionnez : **epitaphe360/siportv3**
+4. Sélectionnez : **epitaphe360/SIB 2026**
 5. Sélectionnez la branche : **main** (ou votre branche de production)
 
 ---
@@ -354,7 +354,7 @@ Dans Railway Dashboard :
 Une fois le déploiement réussi :
 - Onglet **"Settings"**
 - Section **"Domains"**
-- Votre URL : `https://siports-production-xxxx.up.railway.app`
+- Votre URL : `https://SIB-production-xxxx.up.railway.app`
 
 ---
 
@@ -366,14 +366,14 @@ Une fois le déploiement réussi :
 
 Ajoutez votre domaine :
 ```
-siportevent.com
+SIBevent.com
 ```
 
 Railway vous donnera un enregistrement DNS :
 ```
 Type: CNAME
 Name: @
-Value: siports-production-xxxx.up.railway.app
+Value: SIB-production-xxxx.up.railway.app
 ```
 
 ### 2. Configurer chez votre Registrar
@@ -388,7 +388,7 @@ Retournez dans **Supabase** → **Authentication** → **URL Configuration**
 
 Ajoutez votre domaine personnalisé :
 ```
-https://siportevent.com
+https://SIBevent.com
 ```
 
 ---
@@ -613,17 +613,17 @@ Upgrader quand :
 - **Railway :** https://docs.railway.app
 - **Vite :** https://vitejs.dev
 
-## Ressources SIPORTS
+## Ressources SIB
 
-- **Guide Supabase Local :** `/home/user/siportv3/supabase/README.md`
-- **Guide Railway :** `/home/user/siportv3/deployment/RAILWAY_SETUP.md`
-- **Variables Template :** `/home/user/siportv3/deployment/railway.env.template`
+- **Guide Supabase Local :** `/home/user/SIB 2026/supabase/README.md`
+- **Guide Railway :** `/home/user/SIB 2026/deployment/RAILWAY_SETUP.md`
+- **Variables Template :** `/home/user/SIB 2026/deployment/railway.env.template`
 
 ---
 
 # 🎉 FÉLICITATIONS !
 
-Votre application SIPORTS 2026 est maintenant déployée en production !
+Votre application SIB 2026 est maintenant déployée en production !
 
 ```
 ✅ Backend : Supabase (Database + Auth + Storage)

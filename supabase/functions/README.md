@@ -1,4 +1,4 @@
-# Supabase Edge Functions - SIPORTS 2026
+# Supabase Edge Functions - SIB 2026
 
 ## Nouvelles fonctions visiteur
 
@@ -93,12 +93,12 @@ Envoie un email de bienvenue personnalisé selon le niveau du visiteur.
 ## Configuration Resend
 
 1. Créer un compte sur [resend.com](https://resend.com)
-2. Ajouter et vérifier votre domaine `siports2026.com`
+2. Ajouter et vérifier votre domaine `sib2026.com`
 3. Générer une API key
 4. Dans Supabase Dashboard > Edge Functions > Secrets:
    ```bash
    RESEND_API_KEY=re_xxxxxxxxxxxxx
-   PUBLIC_SITE_URL=https://siports2026.com
+   PUBLIC_SITE_URL=https://sib2026.com
    ```
 
 ## Déploiement
@@ -197,5 +197,5 @@ CREATE TABLE payment_requests (
 ## Support
 
 Pour toute question concernant ces edge functions :
-- Email : dev@siports2026.com
+- Email : dev@sib2026.com
 - Documentation Supabase : https://supabase.com/docs/guides/functions

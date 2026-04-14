@@ -773,7 +773,7 @@ async function createExhibitors() {
 
 async function main() {
   console.log('═══════════════════════════════════════════════════════════════');
-  console.log('   🚀 RÉINITIALISATION ET CRÉATION DES EXPOSANTS SIPORT 2026');
+  console.log('   🚀 RÉINITIALISATION ET CRÉATION DES EXPOSANTS SIB 2026');
   console.log('═══════════════════════════════════════════════════════════════');
 
   await deleteAllExistingData();

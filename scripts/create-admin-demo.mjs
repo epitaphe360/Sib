@@ -13,7 +13,7 @@ if (!supabaseServiceKey) {
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-const email = 'admin@siports.com';
+const email = 'admin@sib.com';
 const password = 'Admin2026!';
 
 async function createAdminAccount() {
@@ -58,7 +58,7 @@ async function createAdminAccount() {
       email_confirm: true,
       user_metadata: {
         firstName: 'Admin',
-        lastName: 'SIPORT'
+        lastName: 'SIB'
       }
     });
     
@@ -77,7 +77,7 @@ async function createAdminAccount() {
             type: 'admin',
             profile: {
               firstName: 'Admin',
-              lastName: 'SIPORT'
+              lastName: 'SIB'
             }
           });
           
@@ -102,7 +102,7 @@ async function createAdminAccount() {
       type: 'admin',
       profile: {
         firstName: 'Admin',
-        lastName: 'SIPORT'
+        lastName: 'SIB'
       }
     });
     
@@ -112,7 +112,7 @@ async function createAdminAccount() {
     
     console.log('\n✨ COMPTE ADMIN CRÉÉ AVEC SUCCÈS!\n');
     console.log('┌─────────────────────────────────────────┐');
-    console.log('│  📧 Email: admin@siports.com           │');
+    console.log('│  📧 Email: admin@sib.com           │');
     console.log('│  🔑 Mot de passe: Admin2026!           │');
     console.log('│  👤 Type: admin                         │');
     console.log('└─────────────────────────────────────────┘');

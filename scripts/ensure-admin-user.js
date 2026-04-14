@@ -7,7 +7,7 @@ const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXB
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function ensureAdmin() {
-  const email = 'admin.siports@siports.com';
+  const email = 'admin.sib@sib.com';
   
   // 1. Get Auth User ID
   let page = 1;
@@ -42,7 +42,7 @@ async function ensureAdmin() {
       .insert({
         id: userId,
         email: email,
-        name: 'Admin SIPORTS',
+        name: 'Admin SIB',
         type: 'admin',
         created_at: new Date()
       });

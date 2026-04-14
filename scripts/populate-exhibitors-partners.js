@@ -21,11 +21,11 @@ async function executeMigration() {
     const sql = `
 -- Delete existing data to avoid duplicates
 DELETE FROM public.exhibitors WHERE user_id IN (
-  SELECT id FROM public.users WHERE type = 'exhibitor' AND email LIKE '%@test.siport.com'
+  SELECT id FROM public.users WHERE type = 'exhibitor' AND email LIKE '%@test.sib2026.ma'
 );
 
 DELETE FROM public.partners WHERE user_id IN (
-  SELECT id FROM public.users WHERE type = 'partner' AND email LIKE '%@test.siport.com'
+  SELECT id FROM public.users WHERE type = 'partner' AND email LIKE '%@test.sib2026.ma'
 );
 
 -- Create exhibitors from users with type='exhibitor'
@@ -58,7 +58,7 @@ SELECT
   NOW(),
   NOW()
 FROM public.users u
-WHERE u.type = 'exhibitor' AND u.email LIKE '%@test.siport.com'
+WHERE u.type = 'exhibitor' AND u.email LIKE '%@test.sib2026.ma'
 ON CONFLICT (user_id) DO NOTHING;
 
 -- Create partners from users with type='partner'
@@ -110,7 +110,7 @@ SELECT
   NOW(),
   NOW()
 FROM public.users u
-WHERE u.type = 'partner' AND u.email LIKE '%@test.siport.com'
+WHERE u.type = 'partner' AND u.email LIKE '%@test.sib2026.ma'
 ON CONFLICT (user_id) DO NOTHING;
     `;
 
@@ -136,7 +136,7 @@ ON CONFLICT (user_id) DO NOTHING;
             .from('users')
             .select('id')
             .eq('type', 'exhibitor')
-            .like('email', '%@test.siport.com%')
+            .like('email', '%@test.sib2026.ma%')
           ).data?.map(u => u.id) || []
         );
 
@@ -148,7 +148,7 @@ ON CONFLICT (user_id) DO NOTHING;
             .from('users')
             .select('id')
             .eq('type', 'partner')
-            .like('email', '%@test.siport.com%')
+            .like('email', '%@test.sib2026.ma%')
           ).data?.map(u => u.id) || []
         );
 
@@ -158,7 +158,7 @@ ON CONFLICT (user_id) DO NOTHING;
         .from('users')
         .select('id, name, email')
         .eq('type', 'exhibitor')
-        .like('email', '%@test.siport.com%');
+        .like('email', '%@test.sib2026.ma%');
 
       if (exhibitorUsers && exhibitorUsers.length > 0) {
         const exhibitors = exhibitorUsers.map(u => ({
@@ -195,7 +195,7 @@ ON CONFLICT (user_id) DO NOTHING;
         .from('users')
         .select('id, name, email')
         .eq('type', 'partner')
-        .like('email', '%@test.siport.com%');
+        .like('email', '%@test.sib2026.ma%');
 
       if (partnerUsers && partnerUsers.length > 0) {
         const partners = partnerUsers.map(u => ({

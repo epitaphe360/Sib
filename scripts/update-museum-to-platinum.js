@@ -13,7 +13,7 @@ async function updateMuseumToPlatinum() {
     const { data: user, error: userError } = await supabase
       .from('users')
       .select('id, email')
-      .eq('email', 'partner-platinium@test.siport.com')
+      .eq('email', 'partner-platinium@test.sib2026.ma')
       .single();
 
     if (userError || !user) {

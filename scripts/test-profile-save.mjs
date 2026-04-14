@@ -21,7 +21,7 @@ async function testProfileSave() {
     const { data: users, error: usersError } = await supabase
       .from('users')
       .select('id, email, type, profile')
-      .or('email.eq.visitor-vip@siports.com,email.eq.exhibitor-9m@test.siport.com')
+      .or('email.eq.visitor-vip@sib.com,email.eq.exhibitor-9m@test.sib2026.ma')
       .limit(2);
 
     if (usersError) {

@@ -1,4 +1,4 @@
-# 🔐 Configuration de l'Authentification Google pour SIPORTS
+# 🔐 Configuration de l'Authentification Google pour SIB
 
 ## 📋 Prérequis
 
@@ -12,7 +12,7 @@
 
 1. Allez sur [Firebase Console](https://console.firebase.google.com/)
 2. Cliquez sur "Ajouter un projet"
-3. Nommez votre projet : `siports-2026`
+3. Nommez votre projet : `SIB-2026`
 4. Activez Google Analytics (optionnel)
 5. Créez le projet
 
@@ -30,7 +30,7 @@
 1. Dans Firebase Console → **Paramètres du projet** (⚙️)
 2. Onglet **"Général"**
 3. Cliquez sur **"Ajouter une application"** → **Web**
-4. Nom de l'app : `SIPORTS 2026 Platform`
+4. Nom de l'app : `SIB 2026 Platform`
 5. Cochez **"Configurer Firebase Hosting"** (optionnel)
 6. **Copiez la configuration** qui s'affiche
 
@@ -41,9 +41,9 @@ Créez un fichier `.env` à la racine du projet :
 ```env
 # Firebase Configuration
 VITE_FIREBASE_API_KEY=AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-VITE_FIREBASE_AUTH_DOMAIN=siports-2026.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=siports-2026
-VITE_FIREBASE_STORAGE_BUCKET=siports-2026.appspot.com
+VITE_FIREBASE_AUTH_DOMAIN=SIB-2026.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=SIB-2026
+VITE_FIREBASE_STORAGE_BUCKET=SIB-2026.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=123456789012
 VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
 ```
@@ -55,7 +55,7 @@ VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
 3. Ajoutez vos domaines :
    - `localhost` (pour le développement)
    - `votre-domaine.com` (pour la production)
-   - `siports.com` (domaine principal)
+   - `SIB.com` (domaine principal)
 
 ### **6. Configuration Google Cloud Console**
 
@@ -64,10 +64,10 @@ VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
 3. **APIs & Services** → **Credentials**
 4. Configurez l'**OAuth consent screen** :
    - Type d'utilisateur : **Externe**
-   - Nom de l'application : `SIPORTS 2026`
-   - Email de support : `contact@siportevent.com`
-   - Logo : Uploadez le logo SIPORTS
-   - Domaines autorisés : `siportevent.com`
+   - Nom de l'application : `SIB 2026`
+   - Email de support : `contact@SIBevent.com`
+   - Logo : Uploadez le logo SIB
+   - Domaines autorisés : `SIBevent.com`
 
 ### **7. Test de la Configuration**
 
@@ -178,7 +178,7 @@ npm run build
 ## 📞 Support
 
 - **Documentation Firebase :** https://firebase.google.com/docs/auth
-- **Support SIPORTS :** contact@siportevent.com
+- **Support SIB :** contact@SIBevent.com
 - **Issues GitHub :** Créez une issue sur le repository
 
 ## ✅ Checklist de Vérification

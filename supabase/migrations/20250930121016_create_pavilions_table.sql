@@ -1,5 +1,5 @@
 /*
-  # Create pavilions table for SIPORTS 2026
+  # Create pavilions table for SIB 2026
 
   1. New Tables
     - `pavilions`

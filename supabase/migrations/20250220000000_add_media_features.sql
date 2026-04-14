@@ -272,7 +272,7 @@ COMMIT;
 
 -- Pour créer un podcast:
 -- INSERT INTO media_contents (type, title, description, audio_url, speakers, duration, status)
--- VALUES ('podcast', 'SIPORT Talks #1', '...', 'https://...', '[...]', 3600, 'published');
+-- VALUES ('podcast', 'SIB Talks #1', '...', 'https://...', '[...]', 3600, 'published');
 
 -- Pour enregistrer une vue:
 -- SELECT increment_media_views('<media_uuid>');

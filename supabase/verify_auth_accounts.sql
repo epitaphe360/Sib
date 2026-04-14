@@ -10,11 +10,11 @@ SELECT
   created_at
 FROM auth.users 
 WHERE email IN (
-  'admin.siports@siports.com',
-  'partner-gold@test.siport.com',
-  'partner-silver@test.siport.com',
-  'exhibitor-54m@test.siport.com',
-  'visitor-vip@test.siport.com'
+  'admin.sib@sib.com',
+  'partner-gold@test.sib2026.ma',
+  'partner-silver@test.sib2026.ma',
+  'exhibitor-54m@test.sib2026.ma',
+  'visitor-vip@test.sib2026.ma'
 )
 ORDER BY email;
 
@@ -28,11 +28,11 @@ SELECT
 FROM public.users u
 LEFT JOIN auth.users au ON u.id = au.id
 WHERE u.email IN (
-  'admin.siports@siports.com',
-  'partner-gold@test.siport.com',
-  'partner-silver@test.siport.com',
-  'exhibitor-54m@test.siport.com',
-  'visitor-vip@test.siport.com'
+  'admin.sib@sib.com',
+  'partner-gold@test.sib2026.ma',
+  'partner-silver@test.sib2026.ma',
+  'exhibitor-54m@test.sib2026.ma',
+  'visitor-vip@test.sib2026.ma'
 )
 AND au.id IS NULL
 ORDER BY u.email;
@@ -42,7 +42,7 @@ SELECT
   'Total auth.users' as metric,
   COUNT(*) as count
 FROM auth.users 
-WHERE email LIKE '%@test.siport.com' OR email LIKE '%@siports.com'
+WHERE email LIKE '%@test.sib2026.ma' OR email LIKE '%@sib.com'
 
 UNION ALL
 
@@ -50,4 +50,4 @@ SELECT
   'Total public.users' as metric,
   COUNT(*) as count
 FROM public.users 
-WHERE email LIKE '%@test.siport.com' OR email LIKE '%@siports.com';
+WHERE email LIKE '%@test.sib2026.ma' OR email LIKE '%@sib.com';

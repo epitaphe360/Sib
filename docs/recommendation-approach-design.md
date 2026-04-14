@@ -5,7 +5,7 @@
 
 ## Objectif
 
-Ce document détaille l'approche choisie pour le moteur de recommandation basé sur l'IA et les technologies qui seront utilisées pour suggérer des exposants, des produits ou des contacts pertinents aux utilisateurs de l'application SIPORT v3.
+Ce document détaille l'approche choisie pour le moteur de recommandation basé sur l'IA et les technologies qui seront utilisées pour suggérer des exposants, des produits ou des contacts pertinents aux utilisateurs de l'application SIB 2026.
 
 ## 1. Approche de Recommandation Choisie : Hybride
 

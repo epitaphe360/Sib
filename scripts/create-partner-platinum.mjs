@@ -13,7 +13,7 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
 async function createPartnerPlatinum() {
   console.log('🔄 Création/Mise à jour du compte partner-platinum...\n');
 
-  const email = 'partner-platinum@test.siport.com';
+  const email = 'partner-platinum@test.sib2026.ma';
   const password = 'Demo2026!';
 
   try {
@@ -73,7 +73,7 @@ async function createPartnerPlatinum() {
           interests: ['Innovation portuaire', 'Technologies vertes', 'Transformation digitale'],
           objectives: ['Partenariat stratégique', 'Présenter mes innovations'],
           companySize: '500+',
-          description: 'Partenaire platinium premium du salon SIPORTS 2026',
+          description: 'Partenaire platinium premium du salon SIB 2026',
           collaborationTypes: ['Partenariat stratégique', 'Partenariat technologique', 'Partenariat commercial']
         }
       })
@@ -120,7 +120,7 @@ async function createPartnerPlatinum() {
       console.log('✅ Profil partenaire créé:', partnerData.id);
     }
 
-    console.log('\n✅ Compte partner-platinum@test.siport.com créé avec succès !');
+    console.log('\n✅ Compte partner-platinum@test.sib2026.ma créé avec succès !');
     console.log('📧 Email:', email);
     console.log('🔑 Mot de passe: Demo2026!');
     console.log('🎖️ Tier: Platinium');

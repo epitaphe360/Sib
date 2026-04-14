@@ -7,8 +7,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const BASE_URL = 'https://siportevent.com';
-const NEWS_URL = 'https://siportevent.com/actualite-portuaire/';
+const BASE_URL = 'https://sib2026.ma';
+const NEWS_URL = 'https://sib2026.ma/actualite-portuaire/';
 
 // Images de fallback par catégorie
 const fallbackImages: Record<string, string> = {
@@ -108,7 +108,7 @@ async function scrapeArticles(): Promise<ScrapedArticle[]> {
             image,
             sourceUrl: fullLink,
             readTime,
-            tags: ['portuaire', 'SIPORTS', category.toLowerCase()],
+            tags: ['portuaire', 'SIB', category.toLowerCase()],
             publishedAt: new Date().toISOString(),
           });
 
@@ -210,7 +210,7 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    console.log('🚀 Starting article synchronization from siportevent.com');
+    console.log('🚀 Starting article synchronization from sib2026.ma');
 
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',

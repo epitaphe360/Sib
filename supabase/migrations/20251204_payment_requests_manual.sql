@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS public.bank_transfer_info (
   account_holder text NOT NULL,
   iban text NOT NULL,
   bic_swift text,
-  reference_format text NOT NULL DEFAULT 'SIPORTS-PREMIUM-{USER_ID}',
+  reference_format text NOT NULL DEFAULT 'SIB-PREMIUM-{USER_ID}',
   instructions text,
   is_active boolean DEFAULT true,
   created_at timestamp with time zone DEFAULT now()

@@ -7,14 +7,14 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const demoAccounts = {
   admin: {
-    email: 'admin@siport.com',
+    email: 'admin@sib2026.ma',
     password: 'Admin123!',
-    name: 'Administrateur SIPORT',
+    name: 'Administrateur SIB',
     role: 'admin'
   },
   exhibitors: [
     {
-      email: 'exhibitor-9m@test.siport.com',
+      email: 'exhibitor-9m@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Exposant Stand 9m²',
       role: 'exhibitor',
@@ -23,7 +23,7 @@ const demoAccounts = {
       sector: 'Équipements Portuaires'
     },
     {
-      email: 'exhibitor-18m@test.siport.com',
+      email: 'exhibitor-18m@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Exposant Stand 18m²',
       role: 'exhibitor',
@@ -32,7 +32,7 @@ const demoAccounts = {
       sector: 'Logistique Maritime'
     },
     {
-      email: 'exhibitor-36m@test.siport.com',
+      email: 'exhibitor-36m@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Exposant Stand 36m²',
       role: 'exhibitor',
@@ -41,7 +41,7 @@ const demoAccounts = {
       sector: 'Automatisation Portuaire'
     },
     {
-      email: 'exhibitor-54m@test.siport.com',
+      email: 'exhibitor-54m@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Exposant Stand 54m²',
       role: 'exhibitor',
@@ -52,7 +52,7 @@ const demoAccounts = {
   ],
   partners: [
     {
-      email: 'partner-museum@test.siport.com',
+      email: 'partner-museum@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Consultant Musée',
       role: 'partner',
@@ -61,7 +61,7 @@ const demoAccounts = {
       specialization: 'Histoire portuaire'
     },
     {
-      email: 'partner-silver@test.siport.com',
+      email: 'partner-silver@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Consultant Silver',
       role: 'partner',
@@ -70,7 +70,7 @@ const demoAccounts = {
       specialization: 'Optimisation logistique'
     },
     {
-      email: 'partner-gold@test.siport.com',
+      email: 'partner-gold@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Consultant Gold',
       role: 'partner',
@@ -79,7 +79,7 @@ const demoAccounts = {
       specialization: 'Transformation digitale'
     },
     {
-      email: 'partner-platinium@test.siport.com',
+      email: 'partner-platinium@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Consultant Platinium',
       role: 'partner',
@@ -90,14 +90,14 @@ const demoAccounts = {
   ],
   visitors: [
     {
-      email: 'visitor-free@test.siport.com',
+      email: 'visitor-free@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Visiteur Gratuit',
       role: 'visitor',
       type: 'free'
     },
     {
-      email: 'visitor-vip@test.siport.com',
+      email: 'visitor-vip@test.sib2026.ma',
       password: 'Test@123456',
       name: 'Visiteur VIP',
       role: 'visitor',
@@ -126,7 +126,7 @@ async function setupDemoAccounts() {
     await supabase.from('partners').delete().neq('id', '00000000-0000-0000-0000-000000000000');
     
     // Supprimer tous les users sauf admin
-    await supabase.from('users').delete().neq('email', 'admin@siport.com');
+    await supabase.from('users').delete().neq('email', 'admin@sib2026.ma');
     
     console.log('   ✅ Données nettoyées\n');
 

@@ -1,4 +1,4 @@
-# robots.txt for SIPORTS 2026
+# robots.txt for SIB 2026
 
 # Allow all robots
 User-agent: *
@@ -29,7 +29,7 @@ Allow: /contact
 Allow: /venue
 
 # Sitemap location
-Sitemap: https://siports.com/sitemap.xml
+Sitemap: https://sib.com/sitemap.xml
 
 # Crawl delay (optional, adjust if needed)
 Crawl-delay: 1

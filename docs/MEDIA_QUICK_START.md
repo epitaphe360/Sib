@@ -2,7 +2,7 @@
 
 ## 📦 Ce qui a été créé
 
-Voici tous les fichiers créés pour intégrer les fonctionnalités médias dans votre application SIPORT :
+Voici tous les fichiers créés pour intégrer les fonctionnalités médias dans votre application SIB :
 
 ### 1. Documentation
 - ✅ `docs/MEDIA_FEATURES_INTEGRATION.md` - Guide complet d'intégration
@@ -37,7 +37,7 @@ Voici tous les fichiers créés pour intégrer les fonctionnalités médias dans
 
 1. **Connectez-vous à votre projet Supabase**
    - Allez sur https://app.supabase.com
-   - Sélectionnez votre projet SIPORT
+   - Sélectionnez votre projet SIB
 
 2. **Ouvrez l'éditeur SQL**
    - Cliquez sur "SQL Editor" dans le menu de gauche
@@ -385,7 +385,7 @@ Vous avez maintenant :
 
 Si vous rencontrez un problème ou souhaitez ajouter une fonctionnalité :
 
-1. **Podcasts** → "Crée la page des podcasts SIPORT Talks"
+1. **Podcasts** → "Crée la page des podcasts SIB Talks"
 2. **Admin** → "Crée l'interface admin pour gérer les médias"
 3. **Upload** → "Implémente l'upload vidéo avec Supabase Storage"
 4. **Live** → "Crée le système de streaming en direct"

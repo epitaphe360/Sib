@@ -11,17 +11,17 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
 });
 
 const demoAccounts = [
-  { email: 'demo.visitor@siports.com', password: 'Demo2026!', role: 'visitor', subscription_plan: 'free' },
-  { email: 'visitor-vip@test.siport.com', password: 'Demo2026!', role: 'visitor', subscription_plan: 'vip' },
-  { email: 'exhibitor-9m@test.siport.com', password: 'Demo2026!', role: 'exhibitor', subscription_plan: '9m2' },
-  { email: 'exhibitor-18m@test.siport.com', password: 'Demo2026!', role: 'exhibitor', subscription_plan: '18m2' },
-  { email: 'exhibitor-36m@test.siport.com', password: 'Demo2026!', role: 'exhibitor', subscription_plan: '36m2' },
-  { email: 'exhibitor-54m@test.siport.com', password: 'Demo2026!', role: 'exhibitor', subscription_plan: '54m2' },
-  { email: 'demo.partner@siports.com', password: 'Demo2026!', role: 'partner', subscription_plan: 'bronze' },
-  { email: 'partner-silver@test.siport.com', password: 'Demo2026!', role: 'partner', subscription_plan: 'silver' },
-  { email: 'partner-gold@test.siport.com', password: 'Demo2026!', role: 'partner', subscription_plan: 'gold' },
-  { email: 'partner-platinum@test.siport.com', password: 'Demo2026!', role: 'partner', subscription_plan: 'platinum' },
-  { email: 'admin@siports.com', password: 'Admin2026!', role: 'admin', subscription_plan: null }
+  { email: 'demo.visitor@sib.com', password: 'Demo2026!', role: 'visitor', subscription_plan: 'free' },
+  { email: 'visitor-vip@test.sib2026.ma', password: 'Demo2026!', role: 'visitor', subscription_plan: 'vip' },
+  { email: 'exhibitor-9m@test.sib2026.ma', password: 'Demo2026!', role: 'exhibitor', subscription_plan: '9m2' },
+  { email: 'exhibitor-18m@test.sib2026.ma', password: 'Demo2026!', role: 'exhibitor', subscription_plan: '18m2' },
+  { email: 'exhibitor-36m@test.sib2026.ma', password: 'Demo2026!', role: 'exhibitor', subscription_plan: '36m2' },
+  { email: 'exhibitor-54m@test.sib2026.ma', password: 'Demo2026!', role: 'exhibitor', subscription_plan: '54m2' },
+  { email: 'demo.partner@sib.com', password: 'Demo2026!', role: 'partner', subscription_plan: 'bronze' },
+  { email: 'partner-silver@test.sib2026.ma', password: 'Demo2026!', role: 'partner', subscription_plan: 'silver' },
+  { email: 'partner-gold@test.sib2026.ma', password: 'Demo2026!', role: 'partner', subscription_plan: 'gold' },
+  { email: 'partner-platinum@test.sib2026.ma', password: 'Demo2026!', role: 'partner', subscription_plan: 'platinum' },
+  { email: 'admin@sib.com', password: 'Admin2026!', role: 'admin', subscription_plan: null }
 ];
 
 async function createDemoAccounts() {

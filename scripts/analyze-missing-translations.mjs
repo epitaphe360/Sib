@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Script d'analyse des clés de traduction manquantes dans l'application SIPORTV3
+ * Script d'analyse des clés de traduction manquantes dans l'application SIB2026
  * 
  * Ce script :
  * 1. Lit toutes les clés existantes dans src/i18n/config.ts

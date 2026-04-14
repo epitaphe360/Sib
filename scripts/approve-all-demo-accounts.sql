@@ -11,21 +11,21 @@ SET
   status = 'active',
   is_active = true
 WHERE email IN (
-  'admin@siport.com',
+  'admin@sib2026.ma',
   'visitor1@test.com',
   'visitor2@test.com',
   'nathalie.robert1@partner.com',
   'pierre.laurent2@partner.com',
-  'visitor-free@test.siport.com',
-  'visitor-vip@test.siport.com',
-  'partner-museum@test.siport.com',
-  'partner-silver@test.siport.com',
-  'partner-gold@test.siport.com',
-  'partner-platinium@test.siport.com',
-  'exhibitor-9m@test.siport.com',
-  'exhibitor-18m@test.siport.com',
-  'exhibitor-36m@test.siport.com',
-  'exhibitor-54m@test.siport.com'
+  'visitor-free@test.sib2026.ma',
+  'visitor-vip@test.sib2026.ma',
+  'partner-museum@test.sib2026.ma',
+  'partner-silver@test.sib2026.ma',
+  'partner-gold@test.sib2026.ma',
+  'partner-platinium@test.sib2026.ma',
+  'exhibitor-9m@test.sib2026.ma',
+  'exhibitor-18m@test.sib2026.ma',
+  'exhibitor-36m@test.sib2026.ma',
+  'exhibitor-54m@test.sib2026.ma'
 );
 
 -- Vérification : voir tous les comptes et leur statut
@@ -40,5 +40,5 @@ SELECT
   partner_tier
 FROM public.users 
 WHERE email LIKE '%test%' 
-   OR email LIKE '%siport%'
+   OR email LIKE '%sib%'
 ORDER BY role, email;

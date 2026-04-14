@@ -1,8 +1,8 @@
-# 🎯 Suite de Tests E2E Complète - SIPORT v3
+# 🎯 Suite de Tests E2E Complète - SIB 2026
 
 ## Vue d'ensemble
 
-Cette suite de tests End-to-End (E2E) couvre **l'intégralité des fonctionnalités** de la plateforme SIPORT, simulant tous les parcours utilisateurs réels et toutes les interactions critiques.
+Cette suite de tests End-to-End (E2E) couvre **l'intégralité des fonctionnalités** de la plateforme SIB, simulant tous les parcours utilisateurs réels et toutes les interactions critiques.
 
 ## 📋 Contenu de la suite
 
@@ -116,7 +116,7 @@ npm run test:journey:comprehensive
 - ✅ Médiathèque principale
 - ✅ **Webinars** (liste et détail)
 - ✅ **Podcasts** (liste et détail)
-- ✅ **Capsules Inside SIPORT**
+- ✅ **Capsules Inside SIB**
 - ✅ **Live Studio**
 - ✅ **Best Moments**
 - ✅ **Témoignages**
@@ -255,7 +255,7 @@ VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_anon_key
 
 # Tests (optionnel)
-VITE_TEST_ADMIN_EMAIL=admin@siport.com
+VITE_TEST_ADMIN_EMAIL=admin@sib2026.ma
 VITE_TEST_ADMIN_PASSWORD=your_admin_password
 ```
 
@@ -429,5 +429,5 @@ Avant de merger du code, vérifier que:
 
 **Version**: 1.0.0
 **Date**: 2026-01-28
-**Auteur**: Équipe SIPORT + Claude Sonnet 4.5
+**Auteur**: Équipe SIB + Claude Sonnet 4.5
 **Maintenance**: Mettre à jour ce fichier à chaque ajout de test

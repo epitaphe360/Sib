@@ -15,17 +15,17 @@ Pour que les emails fonctionnent, vous devez ajouter ces variables d'environneme
 ### Variables SMTP :
 
 ```bash
-SMTP_HOST=mail.siportevent.com
+SMTP_HOST=mail.sib2026.ma
 SMTP_PORT=587
-SMTP_USERNAME=contact@siportevent.com
+SMTP_USERNAME=contact@sib2026.ma
 SMTP_PASSWORD=S!P0RT@9083
 ```
 
 ### Variables optionnelles :
 
 ```bash
-PUBLIC_SITE_URL=https://siports2026.com
-SENDER_EMAIL=contact@siportevent.com
+PUBLIC_SITE_URL=https://sib2026.com
+SENDER_EMAIL=contact@sib2026.ma
 ```
 
 ## Déploiement des Edge Functions
@@ -93,7 +93,7 @@ Et modifier le code des Edge Functions pour utiliser `client.connect()` au lieu 
 2. Vérifiez que les variables d'environnement sont bien configurées dans Supabase
 3. Testez la connexion SMTP avec telnet :
    ```powershell
-   telnet mail.siportevent.com 587
+   telnet mail.sib2026.ma 587
    ```
 4. Vérifiez les spams dans la boîte de réception
 

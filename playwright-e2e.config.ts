@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * SIPORTV3 - Configuration E2E Tests Ultra-Complète
+ * SIB 2026 - Configuration E2E Tests Ultra-Complète
  */
 export default defineConfig({
   testDir: './e2e/tests',

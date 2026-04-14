@@ -11,17 +11,17 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
 });
 
 const demoAccounts = [
-  { email: 'demo.visitor@siports.com', password: 'Demo2026!', role: 'visitor' },
-  { email: 'visitor-vip@test.siport.com', password: 'Demo2026!', role: 'visitor' },
-  { email: 'exhibitor-9m@test.siport.com', password: 'Demo2026!', role: 'exhibitor' },
-  { email: 'exhibitor-18m@test.siport.com', password: 'Demo2026!', role: 'exhibitor' },
-  { email: 'exhibitor-36m@test.siport.com', password: 'Demo2026!', role: 'exhibitor' },
-  { email: 'exhibitor-54m@test.siport.com', password: 'Demo2026!', role: 'exhibitor' },
-  { email: 'demo.partner@siports.com', password: 'Demo2026!', role: 'partner' },
-  { email: 'partner-silver@test.siport.com', password: 'Demo2026!', role: 'partner' },
-  { email: 'partner-gold@test.siport.com', password: 'Demo2026!', role: 'partner' },
-  { email: 'partner-platinum@test.siport.com', password: 'Demo2026!', role: 'partner' },
-  { email: 'admin@siports.com', password: 'Admin2026!', role: 'admin' }
+  { email: 'demo.visitor@sib.com', password: 'Demo2026!', role: 'visitor' },
+  { email: 'visitor-vip@test.sib2026.ma', password: 'Demo2026!', role: 'visitor' },
+  { email: 'exhibitor-9m@test.sib2026.ma', password: 'Demo2026!', role: 'exhibitor' },
+  { email: 'exhibitor-18m@test.sib2026.ma', password: 'Demo2026!', role: 'exhibitor' },
+  { email: 'exhibitor-36m@test.sib2026.ma', password: 'Demo2026!', role: 'exhibitor' },
+  { email: 'exhibitor-54m@test.sib2026.ma', password: 'Demo2026!', role: 'exhibitor' },
+  { email: 'demo.partner@sib.com', password: 'Demo2026!', role: 'partner' },
+  { email: 'partner-silver@test.sib2026.ma', password: 'Demo2026!', role: 'partner' },
+  { email: 'partner-gold@test.sib2026.ma', password: 'Demo2026!', role: 'partner' },
+  { email: 'partner-platinum@test.sib2026.ma', password: 'Demo2026!', role: 'partner' },
+  { email: 'admin@sib.com', password: 'Admin2026!', role: 'admin' }
 ];
 
 async function syncDemoAccountsAuth() {

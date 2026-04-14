@@ -1,4 +1,4 @@
--- Création rapide du compte partner-gold@test.siport.com
+-- Création rapide du compte partner-gold@test.sib2026.ma
 -- À exécuter dans le SQL Editor de Supabase
 
 -- Active l'extension pgcrypto
@@ -14,7 +14,7 @@ INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confir
 VALUES (
   '00000000-0000-0000-0000-000000000005',
   '00000000-0000-0000-0000-000000000000',
-  'partner-gold@test.siport.com',
+  'partner-gold@test.sib2026.ma',
   crypt('Admin123!', gen_salt('bf')),
   NOW(),
   NOW(),
@@ -31,7 +31,7 @@ VALUES (
 INSERT INTO public.users (id, email, name, type, status, partner_tier, profile, created_at, updated_at)
 VALUES (
   '00000000-0000-0000-0000-000000000005',
-  'partner-gold@test.siport.com',
+  'partner-gold@test.sib2026.ma',
   'Gold Partner Industries',
   'partner',
   'active',
@@ -68,7 +68,7 @@ INSERT INTO public.partner_profiles (
   'https://www.goldpartner.com',
   true,
   jsonb_build_object(
-    'email', 'partner-gold@test.siport.com',
+    'email', 'partner-gold@test.sib2026.ma',
     'phone', '+212 6 99 88 77 66',
     'address', '111 Gold Street, Casablanca'
   ),
@@ -83,7 +83,7 @@ SELECT
   role,
   email_confirmed_at IS NOT NULL as email_confirmed
 FROM auth.users 
-WHERE email = 'partner-gold@test.siport.com'
+WHERE email = 'partner-gold@test.sib2026.ma'
 
 UNION ALL
 
@@ -93,4 +93,4 @@ SELECT
   type as role,
   (status = 'active')::text::boolean as email_confirmed
 FROM public.users 
-WHERE email = 'partner-gold@test.siport.com';
+WHERE email = 'partner-gold@test.sib2026.ma';

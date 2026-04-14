@@ -60,7 +60,7 @@ async function seedConversations() {
           conversation_id: conversation.id,
           sender_id: user1.id,
           receiver_id: user2.id,
-          content: `Bonjour ${user2.name}, enchanté de vous rencontrer à SIPORTS 2026!`,
+          content: `Bonjour ${user2.name}, enchanté de vous rencontrer à SIB 2026!`,
           message_type: 'text',
           created_at: new Date(Date.now() - 120000).toISOString()
         },

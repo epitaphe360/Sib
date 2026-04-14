@@ -61,17 +61,17 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
   'visitor_welcome_free',
   'Bienvenue Visiteur Gratuit',
   'Email de bienvenue pour les visiteurs avec pass gratuit',
-  '🎉 Bienvenue à SIPORTS 2026 - Pass Gratuit Confirmé',
+  '🎉 Bienvenue à SIB 2026 - Pass Gratuit Confirmé',
   '<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenue à SIPORTS 2026</title>
+  <title>Bienvenue à SIB 2026</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-    <h1 style="color: white; margin: 0; font-size: 28px;">🎉 Bienvenue à SIPORTS 2026</h1>
+    <h1 style="color: white; margin: 0; font-size: 28px;">🎉 Bienvenue à SIB 2026</h1>
     <p style="color: #e8f5e9; margin: 10px 0 0 0; font-size: 16px;">Pass Gratuit confirmé</p>
   </div>
 
@@ -79,13 +79,13 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
     <p style="font-size: 18px; margin-top: 0;">Bonjour <strong>{{name}}</strong>,</p>
 
     <p style="font-size: 16px;">
-      Félicitations ! Votre inscription gratuite au <strong>Salon International des Ports et de la Logistique Maritime (SIPORTS) 2026</strong> a été confirmée avec succès.
+      Félicitations ! Votre inscription gratuite au <strong>Salon International des Ports et de la Logistique Maritime (SIB) 2026</strong> a été confirmée avec succès.
     </p>
 
     <div style="background: white; border-left: 4px solid #22c55e; padding: 20px; margin: 25px 0; border-radius: 5px;">
       <h3 style="margin-top: 0; color: #16a34a;">✅ Votre Pass Gratuit inclut :</h3>
       <ul style="margin: 10px 0; padding-left: 20px;">
-        <li>Accès au salon SIPORTS 2026</li>
+        <li>Accès au salon SIB 2026</li>
         <li>Badge QR sécurisé d''entrée</li>
         <li>Accès aux zones publiques et hall d''exposition</li>
         <li>Participation aux conférences publiques</li>
@@ -101,23 +101,23 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
 
     <div style="background: #e0f2fe; border-left: 4px solid #0ea5e9; padding: 20px; margin: 25px 0; border-radius: 5px;">
       <h3 style="margin-top: 0; color: #0369a1;">📞 Besoin d''aide ?</h3>
-      <p style="margin: 5px 0;">Email : <a href="mailto:contact@siports2026.com" style="color: #0ea5e9;">contact@siports2026.com</a></p>
+      <p style="margin: 5px 0;">Email : <a href="mailto:contact@sib2026.com" style="color: #0ea5e9;">contact@sib2026.com</a></p>
       <p style="margin: 5px 0;">Téléphone : +212 5 22 XX XX XX</p>
     </div>
 
     <p style="text-align: center; color: #666; font-size: 14px; margin-top: 30px;">
-      Nous avons hâte de vous accueillir au SIPORTS 2026 !<br>
-      L''équipe SIPORTS
+      Nous avons hâte de vous accueillir au SIB 2026 !<br>
+      L''équipe SIB
     </p>
   </div>
 </body>
 </html>',
   'Bonjour {{name}},
 
-Félicitations ! Votre inscription gratuite au Salon International des Ports et de la Logistique Maritime (SIPORTS) 2026 a été confirmée avec succès.
+Félicitations ! Votre inscription gratuite au Salon International des Ports et de la Logistique Maritime (SIB) 2026 a été confirmée avec succès.
 
 VOTRE PASS GRATUIT INCLUT :
-- Accès au salon SIPORTS 2026
+- Accès au salon SIB 2026
 - Badge QR sécurisé d''entrée
 - Accès aux zones publiques et hall d''exposition
 - Participation aux conférences publiques
@@ -127,15 +127,15 @@ Dates : 15-18 Avril 2026
 Lieu : Parc des Expositions de Casablanca, Maroc
 Horaires : 9h00 - 18h00
 
-Nous avons hâte de vous accueillir au SIPORTS 2026 !
-L''équipe SIPORTS',
+Nous avons hâte de vous accueillir au SIB 2026 !
+L''équipe SIB',
   '["name", "email", "level"]'::jsonb
 ),
 (
   'visitor_welcome_vip',
   'Bienvenue Visiteur VIP',
   'Email de bienvenue pour les visiteurs VIP avec demande de paiement',
-  '👑 Compte VIP créé - Finaliser le paiement - SIPORTS 2026',
+  '👑 Compte VIP créé - Finaliser le paiement - SIB 2026',
   '<!DOCTYPE html>
 <html>
 <head>
@@ -153,7 +153,7 @@ L''équipe SIPORTS',
     <p style="font-size: 18px; margin-top: 0;">Bonjour <strong>{{name}}</strong>,</p>
 
     <p style="font-size: 16px;">
-      Votre compte <strong>Pass VIP Premium</strong> pour SIPORTS 2026 a été créé avec succès ! 🎉
+      Votre compte <strong>Pass VIP Premium</strong> pour SIB 2026 a été créé avec succès ! 🎉
     </p>
 
     <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; margin: 25px 0; border-radius: 5px;">
@@ -165,20 +165,20 @@ L''équipe SIPORTS',
 
     <p style="text-align: center; color: #666; font-size: 14px; margin-top: 30px;">
       Merci d''avoir choisi le Pass VIP Premium !<br>
-      L''équipe SIPORTS
+      L''équipe SIB
     </p>
   </div>
 </body>
 </html>',
   'Bonjour {{name}},
 
-Votre compte Pass VIP Premium pour SIPORTS 2026 a été créé avec succès !
+Votre compte Pass VIP Premium pour SIB 2026 a été créé avec succès !
 
 ACTION REQUISE : FINALISER LE PAIEMENT
 Pour activer votre accès VIP, veuillez finaliser le paiement de 700 EUR.
 
 Merci d''avoir choisi le Pass VIP Premium !
-L''équipe SIPORTS',
+L''équipe SIB',
   '["name", "email", "level"]'::jsonb
 );
 

@@ -17,7 +17,7 @@ async function checkPartnerStructure() {
   const { data: existingPartner, error } = await supabaseAdmin
     .from('users')
     .select('*')
-    .eq('email', 'partner-gold@test.siport.com')
+    .eq('email', 'partner-gold@test.sib2026.ma')
     .single();
 
   if (error) {

@@ -15,7 +15,7 @@ async function checkAllDemoData() {
     const { data: admin } = await supabase
       .from('users')
       .select('email, name, role')
-      .eq('email', 'admin@siport.com')
+      .eq('email', 'admin@sib2026.ma')
       .single();
     if (admin) {
       console.log(`   ✅ ${admin.email} - ${admin.name}`);
@@ -24,10 +24,10 @@ async function checkAllDemoData() {
     // Exposants
     console.log('\n🏢 EXPOSANTS:');
     const exhibitorEmails = [
-      'exhibitor-9m@test.siport.com',
-      'exhibitor-18m@test.siport.com',
-      'exhibitor-36m@test.siport.com',
-      'exhibitor-54m@test.siport.com'
+      'exhibitor-9m@test.sib2026.ma',
+      'exhibitor-18m@test.sib2026.ma',
+      'exhibitor-36m@test.sib2026.ma',
+      'exhibitor-54m@test.sib2026.ma'
     ];
 
     for (const email of exhibitorEmails) {
@@ -67,10 +67,10 @@ async function checkAllDemoData() {
     // Partenaires
     console.log('\n🤝 PARTENAIRES:');
     const partnerEmails = [
-      'partner-museum@test.siport.com',
-      'partner-silver@test.siport.com',
-      'partner-gold@test.siport.com',
-      'partner-platinium@test.siport.com'
+      'partner-museum@test.sib2026.ma',
+      'partner-silver@test.sib2026.ma',
+      'partner-gold@test.sib2026.ma',
+      'partner-platinium@test.sib2026.ma'
     ];
 
     for (const email of partnerEmails) {
@@ -105,8 +105,8 @@ async function checkAllDemoData() {
     // Visiteurs
     console.log('\n👥 VISITEURS:');
     const visitorEmails = [
-      'visitor-free@test.siport.com',
-      'visitor-vip@test.siport.com'
+      'visitor-free@test.sib2026.ma',
+      'visitor-vip@test.sib2026.ma'
     ];
 
     for (const email of visitorEmails) {

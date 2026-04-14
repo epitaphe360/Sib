@@ -22,15 +22,15 @@ Write-Host "📋 Les comptes suivants doivent être créés manuellement:" -Fore
 Write-Host "   via http://localhost:5173/register`n"
 
 $accounts = @(
-    @{ Email = "visitor-free@test.siport.com"; Type = "Visiteur"; Level = "Gratuit"; Name = "Visiteur Free Test" },
-    @{ Email = "visitor-vip@test.siport.com"; Type = "Visiteur"; Level = "VIP 700€"; Name = "Visiteur VIP Test" },
-    @{ Email = "exhibitor-9m@test.siport.com"; Type = "Exposant"; Level = "9m²"; Name = "Exposant 9m Test" },
-    @{ Email = "exhibitor-18m@test.siport.com"; Type = "Exposant"; Level = "18m²"; Name = "Exposant 18m Test" },
-    @{ Email = "exhibitor-36m@test.siport.com"; Type = "Exposant"; Level = "36m²"; Name = "Exposant 36m Test" },
-    @{ Email = "partner-museum@test.siport.com"; Type = "Partenaire"; Level = "Musée"; Name = "Partenaire Musée" },
-    @{ Email = "partner-chamber@test.siport.com"; Type = "Partenaire"; Level = "Chambre"; Name = "Partenaire Chambre" },
-    @{ Email = "partner-sponsor@test.siport.com"; Type = "Partenaire"; Level = "Sponsor"; Name = "Partenaire Sponsor" },
-    @{ Email = "admin-test@test.siport.com"; Type = "Admin"; Level = "Admin"; Name = "Admin Test" }
+    @{ Email = "visitor-free@test.sib2026.ma"; Type = "Visiteur"; Level = "Gratuit"; Name = "Visiteur Free Test" },
+    @{ Email = "visitor-vip@test.sib2026.ma"; Type = "Visiteur"; Level = "VIP 700€"; Name = "Visiteur VIP Test" },
+    @{ Email = "exhibitor-9m@test.sib2026.ma"; Type = "Exposant"; Level = "9m²"; Name = "Exposant 9m Test" },
+    @{ Email = "exhibitor-18m@test.sib2026.ma"; Type = "Exposant"; Level = "18m²"; Name = "Exposant 18m Test" },
+    @{ Email = "exhibitor-36m@test.sib2026.ma"; Type = "Exposant"; Level = "36m²"; Name = "Exposant 36m Test" },
+    @{ Email = "partner-museum@test.sib2026.ma"; Type = "Partenaire"; Level = "Musée"; Name = "Partenaire Musée" },
+    @{ Email = "partner-chamber@test.sib2026.ma"; Type = "Partenaire"; Level = "Chambre"; Name = "Partenaire Chambre" },
+    @{ Email = "partner-sponsor@test.sib2026.ma"; Type = "Partenaire"; Level = "Sponsor"; Name = "Partenaire Sponsor" },
+    @{ Email = "admin-test@test.sib2026.ma"; Type = "Admin"; Level = "Admin"; Name = "Admin Test" }
 )
 
 $i = 1

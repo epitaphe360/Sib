@@ -1,42 +1,14 @@
-# 🚢 SIPORT v3 - Plateforme Maritime & Portuaire
+# 🏗️ SIB 2026 - Salon International du Bâtiment
 
-Plateforme digitale complète pour le salon professionnel SIPORT (Salon International des Ports d'Afrique).
-
----
-
-## 🎬 Nouveauté : Contenu Média Enrichi !
-
-✨ **61 contenus média** ont été ajoutés aux pages :
-- 🎥 10 Webinaires (~30h)
-- 🎙️ 10 Podcasts (~20h)  
-- 📹 10 Capsules Inside (~35min)
-- 🎬 10 Interviews Live Studio (~23h)
-- ⭐ 10 Best Moments (~50min)
-- 💬 11 Témoignages (~20min)
-
-**Total : ~75h de contenu multimédia !**
-
-👉 **[Voir le guide complet](README_MEDIA_ENRICHMENT.md)**  
-⚡ **[Démarrage rapide](QUICKSTART_MEDIA.md)**
+Plateforme digitale complète pour le **SIB 2026** (Salon International du Bâtiment).
 
 ---
 
 ## 📚 Documentation Principale
 
-### Getting Started
-- [📖 Guide Média Complet](GUIDE_MEDIA_CONTENT.md)
-- [⚡ Quick Start Média](QUICKSTART_MEDIA.md)
-- [📊 Détails Techniques](MEDIA_CONTENT_ENRICHMENT.md)
-
 ### Documentation Technique
-- [🎬 Intégration Médias](MEDIA_INTEGRATION_COMPLETE.md)
 - [🎯 Fonctionnalités Médias](docs/MEDIA_FEATURES_INTEGRATION.md)
 - [🚀 Plan d'Implémentation](docs/MEDIA_IMPLEMENTATION_PLAN.md)
-
-### Tests & Qualité
-- [✅ Tests E2E](e2e/README.md)
-- [📝 Rapports de Tests](TEST_EXECUTION_REPORT.md)
-- [🐛 Corrections](CRASH_FIX_REPORT.md)
 
 ---
 
@@ -70,10 +42,10 @@ npm run dev
 
 ## 📱 Pages Disponibles
 
-### Pages Média (Nouveau !)
-- `/media/webinars` - Webinaires sponsorisés
-- `/media/podcasts` - Podcasts SIPORT Talks
-- `/media/capsules` - Capsules Inside SIPORT
+### Pages Média
+- `/media/webinars` - Webinaires
+- `/media/podcasts` - Podcasts SIB Talks
+- `/media/capsules` - Capsules Inside SIB
 - `/media/live-studio` - Meet The Leaders
 - `/media/best-moments` - Meilleurs moments
 - `/media/testimonials` - Témoignages vidéo
@@ -113,7 +85,7 @@ npm run dev
 
 ### 🎬 Média & Contenu
 - ✅ Webinaires en replay
-- ✅ Podcasts SIPORT Talks
+- ✅ Podcasts SIB Talks
 - ✅ Capsules vidéo Inside
 - ✅ Interviews Live Studio
 - ✅ Best Moments du salon
@@ -227,15 +199,15 @@ Ce projet est sous licence MIT.
 Pour toute question ou problème :
 - Consulter la documentation
 - Ouvrir une issue GitHub
-- Contacter l'équipe SIPORT
+- Contacter l'équipe SIB
 
 ---
 
 ## 🎉 Remerciements
 
-- Équipe SIPORT
+- Équipe SIB
 - Contributeurs open-source
-- Communauté maritime et portuaire
+- Communauté du bâtiment et de la construction
 
 ---
 

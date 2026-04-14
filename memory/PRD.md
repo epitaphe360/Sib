@@ -1,9 +1,9 @@
-# SIPORTS 2026 - Product Requirements Document
+# SIB 2026 - Product Requirements Document
 
 ## Project Overview
-**Application**: SIPORTS 2026 - Salon International des Ports  
-**Date de l'événement**: 1-3 Avril 2026  
-**Lieu**: Centre d'Exhibition Mohammed VI, El Jadida, Maroc
+**Application**: SIB 2026 - Salon International du Bâtiment  
+**Date de l'événement**: 25-29 Novembre 2026  
+**Lieu**: Parc d'Exposition Mohammed VI, El Jadida, Maroc
 
 ## Architecture
 - **Frontend**: React + Vite + TypeScript + TailwindCSS
@@ -12,7 +12,7 @@
 - **Paiements**: Stripe, PayPal
 
 ## User Personas
-1. **Visiteur (Free/VIP)** - Professionnels du secteur portuaire
+1. **Visiteur (Free/VIP)** - Professionnels du secteur du bâtiment
 2. **Exposant** - Entreprises présentant produits/services
 3. **Partenaire** - Sponsors (Museum, Silver, Gold, Platinum)
 4. **Admin** - Gestionnaire de la plateforme

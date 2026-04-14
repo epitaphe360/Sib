@@ -11,19 +11,19 @@ const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
 });
 
 const accounts = [
-  { email: 'visitor-free@test.siport.com', password: 'Demo2026!' },
-  { email: 'visitor-vip@test.siport.com', password: 'Demo2026!' },
-  { email: 'exhibitor-9m@test.siport.com', password: 'Demo2026!' },
-  { email: 'exhibitor-18m@test.siport.com', password: 'Demo2026!' },
-  { email: 'exhibitor-36m@test.siport.com', password: 'Demo2026!' },
-  { email: 'exhibitor-54m@test.siport.com', password: 'Demo2026!' },
-  { email: 'demo.partner@siports.com', password: 'Demo2026!' },
-  { email: 'partner-museum@test.siport.com', password: 'Demo2026!' },
-  { email: 'partner-silver@test.siport.com', password: 'Demo2026!' },
-  { email: 'partner-gold@test.siport.com', password: 'Demo2026!' },
-  { email: 'partner-platinum@test.siport.com', password: 'Demo2026!' },
-  { email: 'marketing@siports.com', password: 'Demo2026!' },
-  { email: 'admin@siports.com', password: 'Demo2026!' }
+  { email: 'visitor-free@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'visitor-vip@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'exhibitor-9m@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'exhibitor-18m@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'exhibitor-36m@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'exhibitor-54m@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'demo.partner@sib.com', password: 'Demo2026!' },
+  { email: 'partner-museum@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'partner-silver@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'partner-gold@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'partner-platinum@test.sib2026.ma', password: 'Demo2026!' },
+  { email: 'marketing@sib.com', password: 'Demo2026!' },
+  { email: 'admin@sib.com', password: 'Demo2026!' }
 ];
 
 async function main() {

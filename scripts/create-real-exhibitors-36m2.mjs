@@ -205,7 +205,7 @@ function generateMiniSiteContent(companyName, description, website) {
         type: 'hero',
         content: {
           title: companyName,
-          subtitle: 'SIPORTS 2026 - Stand 36m²',
+          subtitle: 'SIB 2026 - Stand 36m²',
           description: description.substring(0, 200)
         }
       },
@@ -220,7 +220,7 @@ function generateMiniSiteContent(companyName, description, website) {
         type: 'contact',
         content: {
           title: 'Contactez-nous',
-          description: `Visitez notre stand au SIPORTS 2026 ou contactez-nous pour plus d'informations.`,
+          description: `Visitez notre stand au SIB 2026 ou contactez-nous pour plus d'informations.`,
           website: website,
           email: `contact@${companyName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`
         }

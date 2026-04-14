@@ -7,8 +7,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function testLogin() {
   const testsToRun = [
-    { email: 'admin@siport.com', password: 'Admin123!' },
-    { email: 'admin.siports@siports.com', password: 'Admin123!' },
+    { email: 'admin@sib2026.ma', password: 'Admin123!' },
+    { email: 'admin.sib@sib.com', password: 'Admin123!' },
     { email: 'visitor1@test.com', password: 'Test@123456' },
     { email: 'exhibitor1@test.com', password: 'Test@123456' }
   ];
