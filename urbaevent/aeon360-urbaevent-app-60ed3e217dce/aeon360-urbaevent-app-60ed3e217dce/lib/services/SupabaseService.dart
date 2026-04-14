@@ -189,6 +189,7 @@ class SupabaseService {
   // ──────────────────────────────────────────────────────────────────
 
   /// Enregistrer un scan de badge (remplace POST scan endpoint Strapi)
+  /// Déclenche aussi un envoi d'email au visiteur scanné via Edge Function.
   Future<void> saveScan({
     required String scannedUserId,
     String? salonId,
@@ -201,6 +202,19 @@ class SupabaseService {
       'connected_user_id': scannedUserId,
       'salon_id': salonId,
       'source': 'badge_scan',
+    });
+
+    // Envoyer un email au visiteur scanné (fire-and-forget, ne bloque pas l'UI)
+    _client.functions.invoke(
+      'send-scan-email',
+      body: {
+        'scannerId': userId,
+        'scannedUserId': scannedUserId,
+        if (salonId != null) 'salonId': salonId,
+      },
+    ).catchError((e) {
+      // L'email est non bloquant : on log sans faire crasher l'app
+      print('send-scan-email error (non-bloquant): $e');
     });
   }
 
