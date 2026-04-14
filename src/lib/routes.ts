@@ -185,7 +185,7 @@
   SALON_SIB: '/',
   SALON_SIR: '/salon/sir',
   SALON_SIP: '/salon/sip',
-  SALON_SIPORT: '/salon/siport',
+  SALON_BTP: '/salon/btp',
   SALON_SIE: '/salon/sie',
 } as const;
 

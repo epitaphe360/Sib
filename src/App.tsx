@@ -166,6 +166,7 @@ const ChatBotToggle = lazyRetry(() => import('./components/chatbot/ChatBotToggle
 const WhatsAppFloatingWidget = lazyRetry(() => import('./components/whatsapp/WhatsAppFloatingWidget').then((m) => ({ default: m.WhatsAppFloatingWidget })));
 const DevSubscriptionSwitcher = lazyRetry(() => import('./components/dev/DevSubscriptionSwitcher'));
 const SalonSelectionPage = lazyRetry(() => import('./pages/SalonSelectionPage'));
+const SalonPage = lazyRetry(() => import('./pages/SalonPage'));
 import { useLanguageStore } from './store/languageStore';
 import { ROUTES } from './lib/routes';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -173,6 +174,24 @@ import { initializeAuth } from './lib/initAuth';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { useAuthStore } from './store/authStore';
+import { useLocation } from 'react-router-dom';
+import { UrbaEventNav } from './components/layout/UrbaEventNav';
+
+const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];
+
+function AppShell({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
+  return (
+    <div className="min-h-screen flex flex-col">
+      <SkipToContent />
+      {isUrbaRoute ? <UrbaEventNav /> : <Header />}
+      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : 'pt-16 sm:pt-20 xl:pt-28'}`}>
+        {children}
+      </main>
+    </div>
+  );
+}
 
 // Import cleanup functions for dev debugging (not used in production)
 if (import.meta.env.DEV) {
@@ -247,10 +266,7 @@ const App = () => {
   return (
     <ErrorBoundary>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col">
-        <SkipToContent />
-        <Header />
-        <main id="main-content" className="flex-1 pt-16 sm:pt-20 xl:pt-28">
+      <AppShell>
           <Suspense fallback={
             <div className="flex items-center justify-center min-h-screen bg-gray-50">
               <div className="flex flex-col items-center">
@@ -262,10 +278,10 @@ const App = () => {
             <Routes>
             <Route path={ROUTES.HOME} element={<HomePage />} />
             <Route path={ROUTES.SALON_SELECTION} element={<SalonSelectionPage />} />
-            <Route path={ROUTES.SALON_SIR} element={<SalonSelectionPage />} />
-            <Route path={ROUTES.SALON_SIP} element={<SalonSelectionPage />} />
-            <Route path={ROUTES.SALON_SIPORT} element={<SalonSelectionPage />} />
-            <Route path={ROUTES.SALON_SIE} element={<SalonSelectionPage />} />
+            <Route path={ROUTES.SALON_SIR} element={<SalonPage salonId="sir" />} />
+            <Route path={ROUTES.SALON_SIP} element={<SalonPage salonId="sip" />} />
+            <Route path={ROUTES.SALON_BTP} element={<SalonPage salonId="btp" />} />
+            <Route path={ROUTES.SALON_SIE} element={<SalonPage salonId="sie" />} />
             <Route path={ROUTES.EXHIBITORS} element={<ExhibitorsPage />} />
             <Route path={ROUTES.EXHIBITOR_DETAIL} element={<ExhibitorDetailPage />} />
             <Route path={ROUTES.PARTNERS} element={<PartnersPage />} />
@@ -487,7 +503,7 @@ const App = () => {
       </Suspense>
 
       <Toaster position="top-right" />
-    </div>
+      </AppShell>
     </ErrorBoundary>
   );
 }
