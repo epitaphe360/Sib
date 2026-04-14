@@ -1,8 +1,7 @@
 ﻿import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { lazyRetry } from './utils/lazyRetry';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { Routes, Route, Link } from 'react-router-dom';
 import { usePageTracking } from './hooks/usePageTracking';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -137,22 +136,9 @@ const PressAccreditationPage = lazyRetry(() => import('./pages/press/PressAccred
 const SpeakersPage = lazyRetry(() => import('./pages/public/SpeakersPage'));
 const AdminPressAccreditationsPage = lazyRetry(() => import('./pages/admin/PressAccreditationsPage'));
 const AdminSpeakersPage = lazyRetry(() => import('./pages/admin/SpeakersManagementPage'));
-const AdminSalonsPage = lazyRetry(() => import('./pages/admin/SalonsManagementPage'));
-const SalonPublicPage = lazyRetry(() => import('./pages/public/SalonPublicPage'));
 const HallMapPage = lazyRetry(() => import('./pages/HallMapPage'));
 const CatalogPage = lazyRetry(() => import('./pages/CatalogPage'));
 const ProductDetailPage = lazyRetry(() => import('./pages/ProductDetailPage'));
-
-// Pages publiques vitrine (Le Salon, Exposer, Visiter)
-const PresentationPage = lazyRetry(() => import('./pages/public/PresentationPage'));
-const EditionsPage = lazyRetry(() => import('./pages/public/EditionsPage'));
-const PourquoiVisiterPage = lazyRetry(() => import('./pages/public/PourquoiVisiterPage'));
-const PourquoiExposerPage = lazyRetry(() => import('./pages/public/PourquoiExposerPage'));
-const InfosPratiquesPage = lazyRetry(() => import('./pages/public/InfosPratiquesPage'));
-const SecteursPage = lazyRetry(() => import('./pages/public/SecteursPage'));
-const NouveautesPage = lazyRetry(() => import('./pages/public/NouveautesPage'));
-const EspacesSibPage = lazyRetry(() => import('./pages/public/EspacesSibPage'));
-const TelechargementPage = lazyRetry(() => import('./pages/public/TelechargementPage'));
 
 // Media pages
 const WebinarsPage = lazyRetry(() => import('./pages/media/WebinarsPage'));
@@ -179,6 +165,8 @@ const ChatBot = lazyRetry(() => import('./components/chatbot/ChatBot').then((m) 
 const ChatBotToggle = lazyRetry(() => import('./components/chatbot/ChatBotToggle').then((m) => ({ default: m.ChatBotToggle })));
 const WhatsAppFloatingWidget = lazyRetry(() => import('./components/whatsapp/WhatsAppFloatingWidget').then((m) => ({ default: m.WhatsAppFloatingWidget })));
 const DevSubscriptionSwitcher = lazyRetry(() => import('./components/dev/DevSubscriptionSwitcher'));
+const SalonSelectionPage = lazyRetry(() => import('./pages/SalonSelectionPage'));
+const SalonPage = lazyRetry(() => import('./pages/SalonPage'));
 import { useLanguageStore } from './store/languageStore';
 import { ROUTES } from './lib/routes';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -186,6 +174,24 @@ import { initializeAuth } from './lib/initAuth';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { useAuthStore } from './store/authStore';
+import { useLocation } from 'react-router-dom';
+import { UrbaEventNav } from './components/layout/UrbaEventNav';
+
+const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];
+
+function AppShell({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
+  return (
+    <div className="min-h-screen flex flex-col">
+      <SkipToContent />
+      {isUrbaRoute ? <UrbaEventNav /> : <Header />}
+      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : 'pt-16 sm:pt-20 xl:pt-28'}`}>
+        {children}
+      </main>
+    </div>
+  );
+}
 
 // Import cleanup functions for dev debugging (not used in production)
 if (import.meta.env.DEV) {
@@ -200,7 +206,6 @@ if (import.meta.env.DEV) {
 
 const App = () => {
   const [isChatBotOpen, setIsChatBotOpen] = React.useState(false);
-  const location = useLocation();
   const { currentLanguage } = useLanguageStore();
 
   // Tracking des visites de pages pour le trafic hebdomadaire (admin dashboard)
@@ -261,10 +266,7 @@ const App = () => {
   return (
     <ErrorBoundary>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col">
-        <SkipToContent />
-        <Header />
-        <main id="main-content" className="flex-1 pt-16 sm:pt-20 xl:pt-28">
+      <AppShell>
           <Suspense fallback={
             <div className="flex items-center justify-center min-h-screen bg-gray-50">
               <div className="flex flex-col items-center">
@@ -273,32 +275,18 @@ const App = () => {
               </div>
             </div>
           }>
-            <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25, ease: 'easeInOut' }}
-            >
-            <Routes location={location}>
+            <Routes>
             <Route path={ROUTES.HOME} element={<HomePage />} />
+            <Route path={ROUTES.SALON_SELECTION} element={<SalonSelectionPage />} />
+            <Route path={ROUTES.SALON_SIR} element={<SalonPage salonId="sir" />} />
+            <Route path={ROUTES.SALON_SIP} element={<SalonPage salonId="sip" />} />
+            <Route path={ROUTES.SALON_BTP} element={<SalonPage salonId="btp" />} />
+            <Route path={ROUTES.SALON_SIE} element={<SalonPage salonId="sie" />} />
             <Route path={ROUTES.EXHIBITORS} element={<ExhibitorsPage />} />
             <Route path={ROUTES.EXHIBITOR_DETAIL} element={<ExhibitorDetailPage />} />
             <Route path={ROUTES.PARTNERS} element={<PartnersPage />} />
             <Route path={ROUTES.PARTNER_DETAIL} element={<PartnerDetailPage />} />
             <Route path={ROUTES.PAVILIONS} element={<PavillonsPage />} />
-            {/* Pages publiques vitrine */}
-            <Route path={ROUTES.SALON_PUBLIC} element={<SalonPublicPage />} />
-            <Route path={ROUTES.PRESENTATION} element={<PresentationPage />} />
-            <Route path={ROUTES.NOUVEAUTES} element={<NouveautesPage />} />
-            <Route path={ROUTES.SECTEURS} element={<SecteursPage />} />
-            <Route path={ROUTES.EDITIONS} element={<EditionsPage />} />
-            <Route path={ROUTES.TELECHARGEMENTS} element={<TelechargementPage />} />
-            <Route path={ROUTES.POURQUOI_EXPOSER} element={<PourquoiExposerPage />} />
-            <Route path={ROUTES.ESPACES_SIB} element={<EspacesSibPage />} />
-            <Route path={ROUTES.POURQUOI_VISITER} element={<PourquoiVisiterPage />} />
-            <Route path={ROUTES.INFOS_PRATIQUES} element={<InfosPratiquesPage />} />
             <Route path={ROUTES.METRICS} element={<ProtectedRoute><MetricsPage /></ProtectedRoute>} />
             <Route path={ROUTES.NETWORKING} element={<NetworkingPage />} />
             <Route path={ROUTES.INTERACTION_HISTORY} element={<ProtectedRoute><InteractionHistoryPage /></ProtectedRoute>} />
@@ -465,7 +453,6 @@ const App = () => {
             <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
             <Route path={ROUTES.NETWORKING_MATCHMAKING} element={<ProtectedRoute><MatchmakingDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_SPEAKERS} element={<ProtectedRoute requiredRole="admin"><AdminSpeakersPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_SALONS} element={<ProtectedRoute requiredRole="admin"><AdminSalonsPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PRESS_ACCREDITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminPressAccreditationsPage /></ProtectedRoute>} />
             <Route path={ROUTES.NOT_FOUND} element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
@@ -484,10 +471,8 @@ const App = () => {
               </Link>
             </div>} />
           </Routes>
-          </motion.div>
-          </AnimatePresence>
         </Suspense>
-      </main>
+      </AppShell>
       <Footer />
 
       <Suspense fallback={null}>
@@ -518,7 +503,6 @@ const App = () => {
       </Suspense>
 
       <Toaster position="top-right" />
-    </div>
     </ErrorBoundary>
   );
 }

@@ -75,20 +75,6 @@
   VENUE: '/venue',
   ACCOMMODATION: '/hebergement',
 
-  // Vitrine publique par salon
-  SALON_PUBLIC: '/salons/:slug',
-
-  // Pages publiques vitrine (Le Salon, Exposer, Visiter)
-  PRESENTATION: '/presentation',
-  NOUVEAUTES: '/nouveautes',
-  SECTEURS: '/secteurs',
-  EDITIONS: '/editions',
-  TELECHARGEMENTS: '/telechargements',
-  POURQUOI_EXPOSER: '/pourquoi-exposer',
-  ESPACES_SIB: '/espaces-sib',
-  POURQUOI_VISITER: '/pourquoi-visiter',
-  INFOS_PRATIQUES: '/infos-pratiques',
-
   // Pages partenaires
   PARTNER_ACTIVITY: '/partner/activity',
   PARTNER_ANALYTICS: '/partner/analytics',
@@ -101,7 +87,6 @@
   PARTNER_SUPPORT_PAGE: '/partner/support-page',
 
   // Pages admin manquantes
-  ADMIN_SALONS: '/admin/salons',
   ADMIN_PARTNERS: '/admin/partners',
   ADMIN_MEDIA: '/admin/media',
   ADMIN_EXHIBITORS_LIST: '/admin/exhibitors-list',
@@ -194,6 +179,14 @@
   ADMIN_PRESS_ACCREDITATIONS: '/admin/press-accreditations',
   SPEAKERS: '/speakers',
   ADMIN_SPEAKERS: '/admin/speakers',
+
+  // UrbaEvent - Sélection multi-salons
+  SALON_SELECTION: '/salons',
+  SALON_SIB: '/',
+  SALON_SIR: '/salon/sir',
+  SALON_SIP: '/salon/sip',
+  SALON_BTP: '/salon/btp',
+  SALON_SIE: '/salon/sie',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

@@ -1,7 +1,7 @@
 ﻿/**
  * Configuration des types de partenaires SIB Maroc
- * 6 catÃ©gories : Organisateurs, Co-organisateurs, Sponsor Officiel,
- *                Organisateur DÃ©lÃ©guÃ©, Nos Partenaires, Nos Partenaires Presse
+ * 6 catégories : Organisateurs, Co-organisateurs, Sponsor Officiel,
+ *                Organisateur Délégué, Nos Partenaires, Nos Partenaires Presse
  */
 
 export type PartnerTier =
@@ -33,7 +33,7 @@ export interface PartnerTierConfig {
     leadExports: number;
   };
 
-  // FonctionnalitÃ©s incluses
+  // Fonctionnalités incluses
   features: string[];
 
   // Avantages exclusifs
@@ -47,7 +47,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     displayName: 'Organisateurs',
     price: 0,
     color: '#C8A951',
-    icon: 'ðŸ›ï¸',
+    icon: '🏛️',
     quotas: {
       appointments: -1,
       eventRegistrations: -1,
@@ -62,12 +62,12 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     features: [
       'Organisateur principal du salon',
       'Logo en position dominante sur tous les supports',
-      'AccÃ¨s complet Ã  toutes les zones',
-      'Stands illimitÃ©s',
+      'Accès complet à toutes les zones',
+      'Stands illimités',
     ],
     exclusivePerks: [
-      'Gestion complÃ¨te de l\'Ã©vÃ©nement',
-      'VisibilitÃ© maximale sur tous les canaux',
+      'Gestion complète de l\'événement',
+      'Visibilité maximale sur tous les canaux',
     ],
   },
 
@@ -77,7 +77,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     displayName: 'Co-organisateurs',
     price: 0,
     color: '#B8860B',
-    icon: 'ðŸ¤',
+    icon: '🤝',
     quotas: {
       appointments: -1,
       eventRegistrations: -1,
@@ -91,13 +91,13 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     },
     features: [
       'Co-organisation du salon',
-      'Logo en 1Ã¨re ligne sur tous les supports',
-      'AccÃ¨s VIP complet',
+      'Logo en 1ère ligne sur tous les supports',
+      'Accès VIP complet',
       'Stands multiples',
     ],
     exclusivePerks: [
-      'Co-branding officiel de l\'Ã©vÃ©nement',
-      'ReprÃ©sentation institutionnelle',
+      'Co-branding officiel de l\'événement',
+      'Représentation institutionnelle',
     ],
   },
 
@@ -107,7 +107,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     displayName: 'Sponsor Officiel',
     price: 0,
     color: '#1B6CA8',
-    icon: 'â­',
+    icon: '⭐',
     quotas: {
       appointments: -1,
       eventRegistrations: -1,
@@ -121,25 +121,25 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     },
     features: [
       'Sponsor principal du salon',
-      'Logo en 1Ã¨re ligne partout',
+      'Logo en 1ère ligne partout',
       'Stand exposition premium',
-      'Rendez-vous B2B illimitÃ©s',
-      'VisibilitÃ© sur tous les supports officiels',
+      'Rendez-vous B2B illimités',
+      'Visibilité sur tous les supports officiels',
     ],
     exclusivePerks: [
       'Mention "Sponsor Officiel" sur tous les supports',
-      'Espace VIP dÃ©diÃ©',
-      'PrÃ©sence dans les communications officielles',
+      'Espace VIP dédié',
+      'Présence dans les communications officielles',
     ],
   },
 
   delegated_organizer: {
     id: 'delegated_organizer',
-    name: 'Organisateur DÃ©lÃ©guÃ©',
-    displayName: 'Organisateur DÃ©lÃ©guÃ©',
+    name: 'Organisateur Délégué',
+    displayName: 'Organisateur Délégué',
     price: 0,
     color: '#2E8B57',
-    icon: 'ðŸ“‹',
+    icon: '📋',
     quotas: {
       appointments: -1,
       eventRegistrations: -1,
@@ -152,14 +152,14 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
       leadExports: -1,
     },
     features: [
-      'Gestion dÃ©lÃ©guÃ©e d\'une partie du salon',
+      'Gestion déléguée d\'une partie du salon',
       'Logo sur les supports de sa zone',
-      'AccÃ¨s VIP',
-      'Stands dÃ©diÃ©s',
+      'Accès VIP',
+      'Stands dédiés',
     ],
     exclusivePerks: [
-      'ResponsabilitÃ© d\'organisation dÃ©lÃ©guÃ©e',
-      'VisibilitÃ© sur sa zone d\'activitÃ©',
+      'Responsabilité d\'organisation déléguée',
+      'Visibilité sur sa zone d\'activité',
     ],
   },
 
@@ -169,7 +169,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     displayName: 'Nos Partenaires',
     price: 0,
     color: '#6A5ACD',
-    icon: 'ðŸŒ',
+    icon: '🌐',
     quotas: {
       appointments: 30,
       eventRegistrations: 10,
@@ -185,12 +185,12 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
       'Logo sur le site officiel',
       'Listing dans le catalogue partenaires',
       'Stand exposition',
-      'AccÃ¨s aux confÃ©rences',
-      'PrÃ©sence dans la newsletter',
+      'Accès aux conférences',
+      'Présence dans la newsletter',
     ],
     exclusivePerks: [
       'Badge "Partenaire SIB"',
-      'Logo sur les supports imprimÃ©s',
+      'Logo sur les supports imprimés',
       'Networking professionnel',
     ],
   },
@@ -201,7 +201,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     displayName: 'Nos Partenaires Presse',
     price: 0,
     color: '#DC143C',
-    icon: 'ðŸ“°',
+    icon: '📰',
     quotas: {
       appointments: 10,
       eventRegistrations: 10,
@@ -215,18 +215,55 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
     },
     features: [
       'Logo sur le site officiel',
-      'AccrÃ©ditation presse officielle',
-      'AccÃ¨s Ã  toutes les confÃ©rences et dÃ©bats',
-      'Espace presse dÃ©diÃ©',
-      'Diffusion des communiquÃ©s de presse SIB',
+      'Accréditation presse officielle',
+      'Accès à toutes les conférences et débats',
+      'Espace presse dédié',
+      'Diffusion des communiqués de presse SIB',
     ],
     exclusivePerks: [
       'Badge "Partenaire Presse SIB"',
-      'AccÃ¨s aux interviews exclusives',
-      'Contenu Ã©ditorial SIB en avant-premiÃ¨re',
+      'Accès aux interviews exclusives',
+      'Contenu éditorial SIB en avant-première',
     ],
   },
 };
+
+/**
+ * Récupère la configuration d'un niveau partenaire
+
+  strategic: {
+    id: 'strategic' as PartnerTier,
+    name: 'Stratégique',
+    displayName: 'Partenaire Stratégique',
+    price: 120000,
+    color: '#16213e',
+    icon: '🎯',
+    quotas: {
+      appointments: -1,
+      eventRegistrations: -1,
+      mediaUploads: 200,
+      teamMembers: 30,
+      standsAllowed: 4,
+      promotionalEmails: -1,
+      showcaseProducts: 100,
+      analyticsAccess: true,
+      leadExports: -1,
+    },
+    features: [
+      'Partenaire stratégique officiel',
+      'Logo en 1ère ligne',
+      'Stand exposition VIP (4 stands)',
+      'Rendez-vous B2B illimités',
+      'Accès VIP complet',
+      'Support prioritaire',
+    ],
+    exclusivePerks: [
+      'Co-branding événementiel',
+      'Panel discussion dédié',
+      'Networking exclusif',
+      'Logo sur communications officielles',
+    ]
+  },
 
 /**
  * Récupère la configuration d'un type partenaire
@@ -236,8 +273,8 @@ export function getPartnerTierConfig(tier: PartnerTier | string): PartnerTierCon
 }
 
 /**
- * RÃ©cupÃ¨re le quota pour un type spÃ©cifique
- * -1 signifie illimitÃ©, retourne un grand nombre pour l'UI
+ * Récupère le quota pour un type spécifique
+ * -1 signifie illimité, retourne un grand nombre pour l'UI
  */
 export function getPartnerQuota(tier: PartnerTier | string, quotaType: keyof PartnerTierConfig['quotas']): number {
   const config = getPartnerTierConfig(tier);
@@ -248,7 +285,7 @@ export function getPartnerQuota(tier: PartnerTier | string, quotaType: keyof Par
 }
 
 /**
- * VÃ©rifie si un partenaire a accÃ¨s Ã  une fonctionnalitÃ©
+ * Vérifie si un partenaire a accès à une fonctionnalité
  */
 export function hasPartnerAccess(tier: PartnerTier | string, quotaType: keyof PartnerTierConfig['quotas']): boolean {
   const config = getPartnerTierConfig(tier);
@@ -287,7 +324,7 @@ export function getPartnerTiersSorted(): PartnerTierConfig[] {
 }
 
 /**
- * VÃ©rifie si le quota est atteint
+ * Vérifie si le quota est atteint
  */
 export function isQuotaReached(
   tier: PartnerTier | string,
@@ -327,33 +364,23 @@ export const PARTNER_TIER_ORDER: PartnerTier[] = [
 export function getPartnerTierIndex(tier: PartnerTier | string): number {
   return PARTNER_TIER_ORDER.indexOf(tier as PartnerTier);
 }
+
 /**
- * VÃ©rifie si un upgrade est possible
+ * Compare deux niveaux partenaires
  */
 export function canUpgradeTo(currentTier: PartnerTier | string, targetTier: PartnerTier): boolean {
-  const current = getPartnerTierConfig(currentTier);
-  const target = getPartnerTierConfig(targetTier);
+  const current = PARTNER_TIERS[currentTier as PartnerTier];
+  const target = PARTNER_TIERS[targetTier];
+  if (!current || !target) return false;
   return target.price > current.price;
 }
 
 /**
- * Calcule le prix d'upgrade (diffÃ©rence entre les deux niveaux)
+ * Calcule le prix d'upgrade (différence entre les deux niveaux)
  */
 export function calculateUpgradePrice(currentTier: PartnerTier | string, targetTier: PartnerTier): number {
-  const current = getPartnerTierConfig(currentTier);
-  const target = getPartnerTierConfig(targetTier);
+  const current = PARTNER_TIERS[currentTier as PartnerTier];
+  const target = PARTNER_TIERS[targetTier];
+  if (!current || !target) return 0;
   return Math.max(0, target.price - current.price);
-}
-
-/**
- * Compare deux niveaux partenaires
- * Retourne: -1 si tier1 < tier2, 0 si Ã©gal, 1 si tier1 > tier2
- */
-export function comparePartnerTiers(tier1: PartnerTier | string, tier2: PartnerTier | string): number {
-  const index1 = getPartnerTierIndex(tier1);
-  const index2 = getPartnerTierIndex(tier2);
-
-  if (index1 < index2) return -1;
-  if (index1 > index2) return 1;
-  return 0;
 }
