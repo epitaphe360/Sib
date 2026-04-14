@@ -1,6 +1,6 @@
 ﻿/**
  * Formulaire d'inscription Visiteur GRATUIT
- * Workflow simplifié sans mot de passe ni dashboard
+ * Workflow avec mot de passe et redirection vers tableau de bord QR code
  */
 import { useState, useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
