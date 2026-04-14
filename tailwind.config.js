@@ -5,6 +5,21 @@ export default {
   theme: {
     extend: {
       colors: {
+        // UrbaEvent Design System
+        urba: {
+          blue: '#4598D1',       // Bleu principal
+          lavender: '#F9F9FF',   // Fond lavande
+          orange: '#EB9A44',     // Accents orange
+          text: '#333333',       // Texte principal
+          secondary: '#647483', // Texte secondaire
+          success: '#4CAF50',    // Succès
+          alert: '#F44336',      // Alertes
+          gold: '#FFD700',       // VIP/Or
+          white: '#FFFFFF',
+          'blue-dark': '#2E7DB8',
+          'blue-light': '#7BBCE0',
+          'orange-light': '#F5C48A',
+        },
         // Aliases historiques utilisés dans le code (`sib-*`, `SIB-*`)
         // Pour éviter des styles manquants et garder une palette unique.
         sib: {

@@ -165,6 +165,7 @@ const ChatBot = lazyRetry(() => import('./components/chatbot/ChatBot').then((m) 
 const ChatBotToggle = lazyRetry(() => import('./components/chatbot/ChatBotToggle').then((m) => ({ default: m.ChatBotToggle })));
 const WhatsAppFloatingWidget = lazyRetry(() => import('./components/whatsapp/WhatsAppFloatingWidget').then((m) => ({ default: m.WhatsAppFloatingWidget })));
 const DevSubscriptionSwitcher = lazyRetry(() => import('./components/dev/DevSubscriptionSwitcher'));
+const SalonSelectionPage = lazyRetry(() => import('./pages/SalonSelectionPage'));
 import { useLanguageStore } from './store/languageStore';
 import { ROUTES } from './lib/routes';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -260,6 +261,11 @@ const App = () => {
           }>
             <Routes>
             <Route path={ROUTES.HOME} element={<HomePage />} />
+            <Route path={ROUTES.SALON_SELECTION} element={<SalonSelectionPage />} />
+            <Route path={ROUTES.SALON_SIR} element={<SalonSelectionPage />} />
+            <Route path={ROUTES.SALON_SIP} element={<SalonSelectionPage />} />
+            <Route path={ROUTES.SALON_SIPORT} element={<SalonSelectionPage />} />
+            <Route path={ROUTES.SALON_SIE} element={<SalonSelectionPage />} />
             <Route path={ROUTES.EXHIBITORS} element={<ExhibitorsPage />} />
             <Route path={ROUTES.EXHIBITOR_DETAIL} element={<ExhibitorDetailPage />} />
             <Route path={ROUTES.PARTNERS} element={<PartnersPage />} />
