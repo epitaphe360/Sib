@@ -17,6 +17,7 @@ import 'package:com.urbaevent/model/ResponseAuthRole.dart';
 import 'package:com.urbaevent/model/common/ResponseError.dart';
 import 'package:com.urbaevent/model/ResponseLogin.dart';
 import 'package:com.urbaevent/ui/content_ui/home/HomePage.dart';
+import 'package:com.urbaevent/ui/content_ui/home/SalonListPage.dart';
 import 'package:com.urbaevent/ui/auth/SignUp.dart';
 import 'package:com.urbaevent/utils/Const.dart';
 import 'package:com.urbaevent/utils/Preference.dart';
@@ -342,6 +343,10 @@ class _SignIn extends State<SignIn> {
   Future<void> navigateAfterLogin() async {
     final currentUser = SupabaseService.instance.currentUser;
     if (currentUser == null) return;
+
+    // Charger et sélectionner le salon actif AVANT la navigation
+    await _autoSelectSalon();
+
     final profile = await SupabaseService.instance.getUserProfile(currentUser.id);
     final String userType = profile?['type'] ?? 'visitor';
     if (!mounted) return;
@@ -357,6 +362,26 @@ class _SignIn extends State<SignIn> {
         MaterialPageRoute(builder: (context) => HomePage(Const.homeUI)),
         (route) => false,
       );
+    }
+  }
+
+  /// Charge le salon par défaut (is_default=true ou premier actif) et le définit dans ActiveSalon.
+  Future<void> _autoSelectSalon() async {
+    try {
+      final salons = await SupabaseService.instance.getSalonsAll();
+      if (salons.isEmpty) return;
+      // Préférer le salon marqué par défaut, sinon le premier actif, sinon le premier
+      Map<String, dynamic>? selected;
+      selected = salons.firstWhere(
+        (s) => s['is_default'] == true,
+        orElse: () => salons.firstWhere(
+          (s) => s['is_active'] == true,
+          orElse: () => salons.first,
+        ),
+      );
+      ActiveSalon.set(selected);
+    } catch (_) {
+      // Silencieux — la HomePage gère l'absence de salon
     }
   }
 

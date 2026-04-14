@@ -15,7 +15,6 @@ class CustomBottomBarAgent extends StatefulWidget {
 }
 
 class _CustomBottomBar extends State<CustomBottomBarAgent> {
-  int _height = 0;
   int role = 3;
 
   @override
@@ -42,14 +41,12 @@ class _CustomBottomBar extends State<CustomBottomBarAgent> {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid) {
-      _height = 80;
-    } else {
-      _height = 100;
-    }
+    final double bottomInset = MediaQuery.of(context).padding.bottom;
+    final double baseHeight = Platform.isAndroid ? 65.0 : 75.0;
 
     return Container(
-      height: _height.toDouble(),
+      height: baseHeight + bottomInset,
+      padding: EdgeInsets.only(bottom: bottomInset),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -134,10 +131,6 @@ class _CustomBottomBar extends State<CustomBottomBarAgent> {
               Spacer(),
             ],
           ),
-          if (Platform.isIOS)
-            SizedBox(
-              height: 10,
-            )
         ],
       ),
     );
