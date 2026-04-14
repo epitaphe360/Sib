@@ -4,6 +4,7 @@
 
 [phases.setup]
 nixPkgs = ["nodejs_20"]
+providers = ["node"]
 
 [phases.install]
 cmds = [
@@ -11,6 +12,8 @@ cmds = [
 ]
 
 # No build phase needed — Railway is API-only, no Vite build required
+[phases.build]
+cmds = ["echo 'No build needed - API only'"]
 
 [start]
 cmd = "node server.js"
