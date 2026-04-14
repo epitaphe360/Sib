@@ -7,11 +7,8 @@ nixPkgs = ["nodejs_20"]
 
 [phases.install]
 cmds = [
-  "npm ci --prefer-offline --no-audit --loglevel=error || npm install --prefer-offline --no-audit"
+  "NODE_ENV=development npm ci --prefer-offline --no-audit --loglevel=error || NODE_ENV=development npm install --prefer-offline --no-audit"
 ]
-
-[phases.install.envVars]
-NODE_ENV = "development"
 
 [phases.build]
 cmds = [
