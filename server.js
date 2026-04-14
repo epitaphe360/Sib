@@ -47,6 +47,9 @@ const allowedOrigins = [
   'https://sib2026.ma', // Production
   'https://www.sib2026.ma', // Production with www
   'https://app.sib2026.ma', // App subdomain
+  // Vercel frontend URLs
+  'https://sib.vercel.app',
+  'https://sib-2026.vercel.app',
   // Railway deployment URL (auto-assigned)
 ];
 
@@ -514,77 +517,29 @@ app.delete('/api/admin/exhibitors/:id', async (req, res) => {
 });
 
 // ============================================
-// RUNTIME ENV INJECTION
-// Railway doesn't reliably inject all env vars at build time.
-// So we inject them at runtime into index.html via <script> tag.
-// The client reads window.__ENV__ as fallback for import.meta.env.
+// FRONTEND HANDLING
+// Railway = backend API only. Frontend is on Vercel.
+// Non-API requests get redirected to the Vercel frontend.
 // ============================================
-const runtimeEnvVars = {};
-Object.entries(process.env).forEach(([key, value]) => {
-  if (key.startsWith('VITE_') && value) {
-    runtimeEnvVars[key] = value;
-  }
-});
-const envScript = `<script>window.__ENV__=${JSON.stringify(runtimeEnvVars)}</script>`;
-console.log(`🔧 Runtime env injection: ${Object.keys(runtimeEnvVars).length} VITE_ vars`);
-Object.keys(runtimeEnvVars).forEach(k => console.log(`   ✅ ${k}`));
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://sib-2026.vercel.app';
 
-// Read and cache index.html with injected env vars
-let cachedIndexHtml = null;
-function getIndexHtml() {
-  if (!cachedIndexHtml) {
+// Catch-all: redirect non-API requests to Vercel frontend
+app.get('*', (req, res) => {
+  // If someone hits Railway directly (not an API route), redirect to Vercel
+  if (process.env.NODE_ENV === 'production') {
+    res.redirect(302, `${FRONTEND_URL}${req.originalUrl}`);
+  } else {
+    // In dev, still serve static files if dist/ exists
     const indexPath = path.join(__dirname, 'dist', 'index.html');
     if (fs.existsSync(indexPath)) {
-      const raw = fs.readFileSync(indexPath, 'utf8');
-      // Inject env script right after <head> tag
-      cachedIndexHtml = raw.replace('<head>', `<head>${envScript}`);
-      console.log('📄 index.html loaded and env vars injected');
+      res.sendFile(indexPath);
+    } else {
+      res.status(200).json({ 
+        status: 'API server running',
+        message: 'Frontend is served by Vercel in production',
+        api: '/api/health'
+      });
     }
-  }
-  return cachedIndexHtml;
-}
-
-// Serve static files from dist folder
-app.use(express.static(path.join(__dirname, 'dist'), {
-  maxAge: '1y',
-  etag: true,
-  setHeaders: (res, filePath) => {
-    // Never cache HTML files (especially index.html)
-    if (filePath.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
-      res.setHeader('Pragma', 'no-cache');
-      res.setHeader('Expires', '0');
-      res.setHeader('Surrogate-Control', 'no-store'); // For Railway CDN
-    } else if (filePath.endsWith('.js') || filePath.endsWith('.mjs')) {
-      res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
-      // JS files can be cached but with validation
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    }
-  },
-  // Skip index.html from static serving — we handle it with env injection
-  index: false
-}));
-
-// Specific handler for missing assets to avoid SPA fallback returning HTML
-// This prevents the "MIME type" error by returning a 404 instead of index.html
-app.get('/assets/*', (req, res) => {
-  res.status(404).type('text/plain').send('Asset not found');
-});
-
-// SPA fallback - serve index.html with runtime env injection
-app.get('*', (req, res) => {
-  const html = getIndexHtml();
-  if (html) {
-    res.set({
-      'Content-Type': 'text/html; charset=UTF-8',
-      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
-      'Pragma': 'no-cache',
-      'Expires': '0',
-      'Surrogate-Control': 'no-store'
-    });
-    res.send(html);
-  } else {
-    res.status(404).send('Not Found - index.html missing from dist/');
   }
 });
 
@@ -595,7 +550,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📁 Serving static files from ./dist`);
+  console.log(`🚀 API Server running on port ${PORT}`);
+  console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'https://sib-2026.vercel.app'}`);
   console.log(`📧 Email API: ${transporter ? 'enabled' : 'disabled (set SMTP_PASS)'}`);
 });

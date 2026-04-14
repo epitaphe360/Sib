@@ -10,9 +10,6 @@
     "envVars": {
       "NODE_ENV": "production",
       "PORT": "5000",
-      "VITE_SUPABASE_URL": "https://sbyizudifmqakzxjlndr.supabase.co",
-      "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieWl6dWRpZm1xYWt6eGpsbmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MTg3MDEsImV4cCI6MjA5MTQ5NDcwMX0.yyD0fROU_oSkfgkiRbWXwyoZm3YthCCQSj7pM7HHSVg",
-      "VITE_SHOW_DEMO_LOGINS": "false",
       "SUPABASE_URL": "https://sbyizudifmqakzxjlndr.supabase.co",
       "SUPABASE_SERVICE_ROLE_KEY": "${{SUPABASE_SERVICE_ROLE_KEY}}",
       "SMTP_HOST": "mail.sib2026.ma",
@@ -20,7 +17,8 @@
       "SMTP_SECURE": "true",
       "SMTP_USER": "contact@sib2026.ma",
       "SMTP_PASS": "${{SMTP_PASS}}",
-      "ADMIN_EMAIL": "contact@sib2026.ma"
+      "ADMIN_EMAIL": "contact@sib2026.ma",
+      "FRONTEND_URL": "https://sib-2026.vercel.app"
     }
   }
 }
