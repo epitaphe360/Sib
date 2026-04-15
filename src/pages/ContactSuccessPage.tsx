@@ -120,10 +120,10 @@ export default function ContactSuccessPage() {
             <p className="text-sm text-gray-500">
               Besoin d'aide immédiate ?{' '}
               <a
-                href="mailto:contact@sibevent.com"
+                href="mailto:Sib2026@urbacom.net"
                 className="text-blue-600 hover:text-blue-800 font-medium"
               >
-                contact@sibevent.com
+                Sib2026@urbacom.net
               </a>
               {' '}ou{' '}
               <a

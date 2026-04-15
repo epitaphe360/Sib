@@ -13,7 +13,7 @@ export const SUPPORT_CONFIG = {
   email: 'contact@sib.ma',
   
   // Téléphone
-  phone: '+212668385228',
+  phone: '+212688500500',
   
   // Horaires d'ouverture
   hours: {
@@ -24,7 +24,7 @@ export const SUPPORT_CONFIG = {
 
   // Adresse
   address: {
-    street: '19, rue Badr Assayab – 1er étage n°2',
+    street: '63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185',
     city: 'Casablanca',
     country: 'Maroc',
     zip: '',

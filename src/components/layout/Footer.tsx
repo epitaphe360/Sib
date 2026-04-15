@@ -6,6 +6,12 @@ import useAuthStore from '../../store/authStore';
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Youtube, Grid3X3 } from 'lucide-react';
 
 const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];
+const SOCIAL_LINKS = [
+  { label: 'Facebook', href: 'https://www.facebook.com/sibevent', icon: Facebook },
+  { label: 'X (Twitter)', href: 'https://x.com/sibevent', icon: Twitter },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/sib-event', icon: Linkedin },
+  { label: 'YouTube', href: 'https://www.youtube.com/@sibevent', icon: Youtube },
+] as const;
 
 export const Footer: React.FC = memo(() => {
   const currentYear = new Date().getFullYear();
@@ -34,9 +40,17 @@ export const Footer: React.FC = memo(() => {
                 La plateforme digitale officielle des salons professionnels Urbacom au Maroc.
               </p>
               <div className="flex gap-2">
-                {[Facebook, Twitter, Linkedin, Youtube].map((Icon, i) => (
-                  <a key={i} href="#" className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all">
-                    <Icon className="w-4 h-4" />
+                {SOCIAL_LINKS.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={social.label}
+                    aria-label={social.label}
+                    className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all"
+                  >
+                    <social.icon className="w-4 h-4" />
                   </a>
                 ))}
               </div>
@@ -88,15 +102,15 @@ export const Footer: React.FC = memo(() => {
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-[#4598D1] mt-0.5 flex-shrink-0" />
-                  <span className="text-white/50 text-xs leading-relaxed">19, rue Badr Assayab<br />Casablanca – Maroc</span>
+                  <span className="text-white/50 text-xs leading-relaxed">63, Imm B, Rés LE YACHT, Bd de la Corniche<br />Casablanca 20510</span>
                 </div>
                 <a href="mailto:contact@urbaevent.ma" className="flex items-center gap-3 text-white/50 hover:text-white text-xs transition-colors">
                   <Mail className="w-4 h-4 text-[#4598D1] flex-shrink-0" />
                   contact@urbaevent.ma
                 </a>
-                <a href="tel:+212668385228" className="flex items-center gap-3 text-white/50 hover:text-white text-xs transition-colors">
+                <a href="tel:+212688500500" className="flex items-center gap-3 text-white/50 hover:text-white text-xs transition-colors">
                   <Phone className="w-4 h-4 text-[#4598D1] flex-shrink-0" />
-                  +212 6 68 38 52 28
+                  +212 6 88 50 05 00
                 </a>
               </div>
             </div>
@@ -141,9 +155,17 @@ export const Footer: React.FC = memo(() => {
               <img src="/logo-sib2026.png" alt="SIB — Salon International du Bâtiment" className="h-16 w-auto object-contain" />
             </Link>
             <div className="flex gap-3">
-              {[Facebook, Twitter, Linkedin, Youtube].map((Icon, i) => (
-                <a key={i} href="#" className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 hover:border-blue-500/50 transition-all group">
-                  <Icon className="h-5 w-5 group-hover:scale-110 transition-transform" />
+              {SOCIAL_LINKS.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={social.label}
+                  aria-label={social.label}
+                  className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 hover:border-blue-500/50 transition-all group"
+                >
+                  <social.icon className="h-5 w-5 group-hover:scale-110 transition-transform" />
                 </a>
               ))}
             </div>
@@ -191,22 +213,22 @@ export const Footer: React.FC = memo(() => {
                   <MapPin className="h-5 w-5 text-blue-400" />
                 </div>
                 <div>
-                  <div className="text-sm font-black text-white uppercase tracking-wider">LINECO EVENTS</div>
-                  <div className="text-[11px] font-bold text-slate-500">19, rue Badr Assayab – 1er étage n°2</div>
-                  <div className="text-[11px] font-bold text-slate-500">Casablanca – Maroc</div>
+                  <div className="text-sm font-black text-white uppercase tracking-wider">URBACOM</div>
+                  <div className="text-[11px] font-bold text-slate-500">63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185</div>
+                  <div className="text-[11px] font-bold text-slate-500">Casablanca 20510</div>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="h-10 w-10 shrink-0 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center">
                   <Mail className="h-5 w-5 text-emerald-400" />
                 </div>
-                <a href="mailto:contact@sibevent.com" className="text-sm font-bold text-slate-300 hover:text-white hover:underline transition-all">contact@sibevent.com</a>
+                <a href="mailto:Sib2026@urbacom.net" className="text-sm font-bold text-slate-300 hover:text-white hover:underline transition-all">Sib2026@urbacom.net</a>
               </div>
               <div className="flex items-center gap-4">
                 <div className="h-10 w-10 shrink-0 bg-slate-500/10 border border-slate-500/20 rounded-xl flex items-center justify-center">
                   <Phone className="h-5 w-5 text-slate-400" />
                 </div>
-                <a href="tel:+212668385228" className="text-sm font-bold text-slate-300 hover:text-white hover:underline transition-all">+212 6 68 38 52 28</a>
+                <a href="tel:+212688500500" className="text-sm font-bold text-slate-300 hover:text-white hover:underline transition-all">+212 6 88 50 05 00</a>
               </div>
             </div>
           </div>

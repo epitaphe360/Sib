@@ -5260,7 +5260,7 @@ CREATE TABLE IF NOT EXISTS public.bank_transfer_info (
 INSERT INTO public.bank_transfer_info (bank_name, account_holder, iban, bic_swift, instructions)
 VALUES (
   'Attijariwafa bank',
-  'LINECO EVENTS',
+  'URBACOM',
   'MA64 007 780 000413200000498 25',
   'BCMAMAMC',
   'Merci d''effectuer le virement avec la référence indiquée. Domiciliation: CASA MY IDRISS 1ER. Une fois le paiement effectué, téléchargez votre justificatif sur votre espace personnel. La validation peut prendre 24-48h.'
@@ -18931,7 +18931,7 @@ COMMENT ON FUNCTION cancel_appointment_atomic IS 'Atomic appointment cancellatio
 -- DÉSACTIVER L'ANCIEN COMPTE BANCAIRE
 -- ============================================
 -- Ce script désactive l'ancien compte Banque Internationale du Maroc
--- et garde uniquement le nouveau compte LINECO EVENTS / Attijariwafa bank actif
+-- et garde uniquement le nouveau compte URBACOM / Attijariwafa bank actif
 
 -- Désactiver tous les anciens comptes sauf Attijariwafa bank
 UPDATE public.bank_transfer_info
@@ -18954,7 +18954,7 @@ ORDER BY created_at DESC;
 -- ============================================
 -- RÉSULTAT ATTENDU
 -- ============================================
--- Seul le compte LINECO EVENTS / Attijariwafa bank doit être actif (is_active = true)
+-- Seul le compte URBACOM / Attijariwafa bank doit être actif (is_active = true)
 -- L'ancien compte SIB EVENT SARL / Banque Internationale doit être inactif (is_active = false)
 
 

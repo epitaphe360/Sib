@@ -985,14 +985,14 @@ export default function SubscriptionPage() {
                   </div>
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
                     <Mail className="h-5 w-5 text-sib-primary flex-shrink-0" />
-                    <a href="mailto:contact@sibevent.com" className="text-sm text-sib-primary hover:underline font-medium">
-                      contact@sibevent.com
+                    <a href="mailto:Sib2026@urbacom.net" className="text-sm text-sib-primary hover:underline font-medium">
+                      Sib2026@urbacom.net
                     </a>
                   </div>
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
                     <Phone className="h-5 w-5 text-sib-primary flex-shrink-0" />
-                    <a href="tel:+212668385228" className="text-sm text-sib-primary hover:underline font-medium">
-                      +212 6 68 38 52 28
+                    <a href="tel:+212688500500" className="text-sm text-sib-primary hover:underline font-medium">
+                      +212 6 88 50 05 00
                     </a>
                   </div>
                 </div>

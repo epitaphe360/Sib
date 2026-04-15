@@ -2,7 +2,7 @@
 -- DÉSACTIVER L'ANCIEN COMPTE BANCAIRE
 -- ============================================
 -- Ce script désactive l'ancien compte Banque Internationale du Maroc
--- et garde uniquement le nouveau compte LINECO EVENTS / Attijariwafa bank actif
+-- et garde uniquement le nouveau compte URBACOM / Attijariwafa bank actif
 
 -- Désactiver tous les anciens comptes sauf Attijariwafa bank
 UPDATE public.bank_transfer_info
@@ -25,5 +25,5 @@ ORDER BY created_at DESC;
 -- ============================================
 -- RÉSULTAT ATTENDU
 -- ============================================
--- Seul le compte LINECO EVENTS / Attijariwafa bank doit être actif (is_active = true)
+-- Seul le compte URBACOM / Attijariwafa bank doit être actif (is_active = true)
 -- L'ancien compte SIB EVENT SARL / Banque Internationale doit être inactif (is_active = false)

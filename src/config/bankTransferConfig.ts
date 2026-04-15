@@ -6,7 +6,7 @@
 export const BANK_TRANSFER_INFO = {
   // Informations du compte bancaire
   bankName: 'Attijariwafa bank',
-  accountHolder: 'LINECO EVENTS',
+  accountHolder: 'URBACOM',
   iban: 'MA64 007 780 000413200000498 25',
   bic: 'BCMAMAMC',
   domiciliation: 'CASA MY IDRISS 1ER',

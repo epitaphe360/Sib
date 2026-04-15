@@ -509,7 +509,7 @@ export default function NetworkingPage() {
               <a href="https://sibevent.com/mentions-legales/" className="hover:text-white transition-colors">Mentions Légales</a>
             </div>
             <div className="inline-block px-4 py-1 rounded-full bg-white/5 border border-white/10">
-              Contact : <a href="mailto:contact@sibevent.com" className="text-blue-400 hover:underline">contact@sibevent.com</a>
+              Contact : <a href="mailto:Sib2026@urbacom.net" className="text-blue-400 hover:underline">Sib2026@urbacom.net</a>
             </div>
           </div>
         </footer>

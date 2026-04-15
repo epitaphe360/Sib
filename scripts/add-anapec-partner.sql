@@ -35,7 +35,7 @@ INSERT INTO public.partners (
   jsonb_build_object(
     'email', 'skills@anapec.org',
     'phone', '+212 522 789 450',
-    'address', '4, Lotissement La Colline - Sidi Maarouf 20270 - Casablanca - Maroc',
+    'address', '4, Lotissement La Colline - Sidi Maarouf 20270 - Casablanca 20510',
     'social', jsonb_build_object(
       'linkedin', 'https://www.linkedin.com/company/anapec/',
       'facebook', 'https://www.facebook.com/anapec.officiel/',

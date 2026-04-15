@@ -227,7 +227,7 @@ CREATE TABLE IF NOT EXISTS public.bank_transfer_info (
 INSERT INTO public.bank_transfer_info (bank_name, account_holder, iban, bic_swift, instructions)
 VALUES (
   'Attijariwafa bank',
-  'LINECO EVENTS',
+  'URBACOM',
   'MA64 007 780 000413200000498 25',
   'BCMAMAMC',
   'Merci d''effectuer le virement avec la référence indiquée. Domiciliation: CASA MY IDRISS 1ER. Une fois le paiement effectué, téléchargez votre justificatif sur votre espace personnel. La validation peut prendre 24-48h.'

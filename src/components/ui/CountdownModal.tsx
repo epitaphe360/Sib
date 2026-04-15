@@ -390,7 +390,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                   <div className="space-y-2 text-gray-600">
                     <div className="flex items-center space-x-2">
                       <Mail className="h-4 w-4" />
-                      <span>contact@sibevent.com</span>
+                      <span>Sib2026@urbacom.net</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Globe className="h-4 w-4" />
