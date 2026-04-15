@@ -610,18 +610,18 @@ export default function PartnerSubscriptionPage() {
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
                     <MapPin className="h-5 w-5 text-amber-600 flex-shrink-0" />
-                    <p className="text-sm text-gray-700">19, rue Badr Assayab – 1er étage n°2, Casablanca – Maroc</p>
+                    <p className="text-sm text-gray-700">63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185, Casablanca 20510</p>
                   </div>
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
                     <Mail className="h-5 w-5 text-amber-600 flex-shrink-0" />
-                    <a href="mailto:contact@sibevent.com" className="text-sm text-amber-600 hover:underline font-medium">
-                      contact@sibevent.com
+                    <a href="mailto:Sib2026@urbacom.net" className="text-sm text-amber-600 hover:underline font-medium">
+                      Sib2026@urbacom.net
                     </a>
                   </div>
                   <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
                     <Phone className="h-5 w-5 text-amber-600 flex-shrink-0" />
-                    <a href="tel:+212668385228" className="text-sm text-amber-600 hover:underline font-medium">
-                      +212 6 68 38 52 28
+                    <a href="tel:+212688500500" className="text-sm text-amber-600 hover:underline font-medium">
+                      +212 6 88 50 05 00
                     </a>
                   </div>
                 </div>
@@ -745,7 +745,7 @@ export default function PartnerSubscriptionPage() {
             <Card className="p-6 hover:shadow-md transition-shadow">
               <h3 className="font-semibold text-gray-900 mb-3">Comment contacter le support ?</h3>
               <p className="text-gray-600">
-                Contactez notre équipe via le formulaire du site ou par e-mail : contact@sibevent.com
+                Contactez notre équipe via le formulaire du site ou par e-mail : Sib2026@urbacom.net
               </p>
             </Card>
           </div>

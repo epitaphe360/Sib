@@ -147,7 +147,7 @@ export default function PaymentSuccessPage() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => window.location.href = 'mailto:contact@sibevent.com'}
+              onClick={() => window.location.href = 'mailto:Sib2026@urbacom.net'}
               className="w-full"
             >
               {t('payment.error.contactSupport')}
@@ -283,8 +283,8 @@ export default function PaymentSuccessPage() {
             <div className="mt-8 pt-8 border-t border-gray-200">
               <p className="text-sm text-gray-600">
               {t('payment.support.needHelp')}{' '}
-                <a href="mailto:contact@sibevent.com" className="text-blue-600 hover:text-blue-700 font-semibold">
-                  contact@sibevent.com
+                <a href="mailto:Sib2026@urbacom.net" className="text-blue-600 hover:text-blue-700 font-semibold">
+                  Sib2026@urbacom.net
                 </a>
               </p>
             </div>

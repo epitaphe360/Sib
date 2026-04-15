@@ -153,9 +153,9 @@ export default function VisaLetterPage() {
     y += 6;
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(80, 80, 80);
-    doc.text('URBACOM — 19, rue Badr Assayab – 1er étage n°2, Casablanca – Maroc', marginLeft, y);
+    doc.text('URBACOM — 63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185, Casablanca 20510', marginLeft, y);
     y += 5;
-    doc.text('contact@sibevent.com  |  www.sibevent.com', marginLeft, y);
+    doc.text('Sib2026@urbacom.net  |  www.sibevent.com', marginLeft, y);
 
     // --- Pied de page ---
     doc.setDrawColor(200, 200, 200);

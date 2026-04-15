@@ -65,7 +65,7 @@ VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
 4. Configurez l'**OAuth consent screen** :
    - Type d'utilisateur : **Externe**
    - Nom de l'application : `SIB 2026`
-   - Email de support : `contact@SIBevent.com`
+   - Email de support : `Sib2026@urbacom.net`
    - Logo : Uploadez le logo SIB
    - Domaines autorisés : `SIBevent.com`
 
@@ -178,7 +178,7 @@ npm run build
 ## 📞 Support
 
 - **Documentation Firebase :** https://firebase.google.com/docs/auth
-- **Support SIB :** contact@SIBevent.com
+- **Support SIB :** Sib2026@urbacom.net
 - **Issues GitHub :** Créez une issue sur le repository
 
 ## ✅ Checklist de Vérification

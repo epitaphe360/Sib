@@ -145,9 +145,9 @@ export const PARTNER_BANK_TRANSFER_INFO = {
 
   // Contact support partenaires
   support: {
-    email: 'contact@sibevent.com',
-    phone: '+212 6 68 38 52 28',
-    whatsapp: '+212668385228',
+    email: 'Sib2026@urbacom.net',
+    phone: '+212 6 88 50 05 00',
+    whatsapp: '+212688500500',
     hours: {
       fr: 'Lundi - Vendredi: 9h00 - 18h00 (GMT+1)',
       en: 'Monday - Friday: 9:00 AM - 6:00 PM (GMT+1)',

@@ -17,11 +17,11 @@ const corsHeaders = {
 const SMTP_CONFIG = {
   hostname: Deno.env.get('SMTP_HOST') || 'mail.sibevent.com',
   port: parseInt(Deno.env.get('SMTP_PORT') || '587'),
-  username: Deno.env.get('SMTP_USERNAME') || 'contact@sibevent.com',
+  username: Deno.env.get('SMTP_USERNAME') || 'Sib2026@urbacom.net',
   password: Deno.env.get('SMTP_PASSWORD') || 'S!P0RT@9083',
 };
 
-const DEFAULT_SENDER_EMAIL = 'contact@sibevent.com';
+const DEFAULT_SENDER_EMAIL = 'Sib2026@urbacom.net';
 
 interface EmailRequest {
   to: string | string[];

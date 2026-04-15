@@ -835,9 +835,9 @@ const resources = {
           partnership: 'Partenariat'
         },
         info: {
-          email: 'contact@sibevent.com',
-          phone: '+212 6 68 38 52 28',
-          address: '19, rue Badr Assayab – 1er étage n°2, Casablanca – Maroc'
+          email: 'Sib2026@urbacom.net',
+          phone: '+212 6 88 50 05 00',
+          address: '63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185, Casablanca 20510'
         }
       },
       venue: {
@@ -2308,9 +2308,9 @@ const resources = {
           partnership: 'Partnership'
         },
         info: {
-          email: 'contact@sibevent.com',
-          phone: '+212 6 68 38 52 28',
-          address: '19, rue Badr Assayab – 1er étage n°2, Casablanca – Morocco'
+          email: 'Sib2026@urbacom.net',
+          phone: '+212 6 88 50 05 00',
+          address: '63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185, Casablanca 20510'
         }
       },
       venue: {

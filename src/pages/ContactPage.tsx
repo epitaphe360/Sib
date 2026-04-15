@@ -258,8 +258,8 @@ export default function ContactPage() {
                     <h3 className="font-semibold text-gray-900">{t('contact.address')}</h3>
                     <p className="text-gray-600">
                       URBACOM<br />
-                      19, rue Badr Assayab – 1er étage n°2<br />
-                      Casablanca – Maroc
+                      63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185<br />
+                      Casablanca 20510
                     </p>
                   </div>
                 </div>
@@ -271,10 +271,10 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900">Email</h3>
                     <a
-                      href="mailto:contact@sibevent.com"
+                      href="mailto:Sib2026@urbacom.net"
                       className="text-blue-600 hover:text-blue-800"
                     >
-                      contact@sibevent.com
+                      Sib2026@urbacom.net
                     </a>
                   </div>
                 </div>
@@ -286,10 +286,10 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900">{t('contact.phone')}</h3>
                     <a
-                      href="tel:+212668385228"
+                      href="tel:+212688500500"
                       className="text-blue-600 hover:text-blue-800"
                     >
-                      +212 6 68 38 52 28
+                      +212 6 88 50 05 00
                     </a>
                   </div>
                 </div>

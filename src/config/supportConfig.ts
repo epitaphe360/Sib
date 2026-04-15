@@ -5,15 +5,15 @@
 export const SUPPORT_CONFIG = {
   // WhatsApp - Principal canal de communication
   whatsapp: {
-    number: '+212668385228', // Numéro WhatsApp de support
+    number: '+212688500500', // Numéro WhatsApp de support
     message: 'Bonjour, je souhaiterais entrer en contact avec votre équipe commerciale',
   },
   
   // Email
-  email: 'contact@sibevent.com',
+  email: 'Sib2026@urbacom.net',
   
   // Téléphone
-  phone: '+212668385228',
+  phone: '+212688500500',
   
   // Horaires d'ouverture
   hours: {
@@ -24,7 +24,7 @@ export const SUPPORT_CONFIG = {
 
   // Adresse
   address: {
-    street: '19, rue Badr Assayab – 1er étage n°2',
+    street: '63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185',
     city: 'Casablanca',
     country: 'Maroc',
     zip: '',
@@ -34,18 +34,18 @@ export const SUPPORT_CONFIG = {
   teams: {
     commercial: {
       name: 'Équipe Commerciale',
-      whatsapp: '+212668385228',
-      email: 'contact@sibevent.com',
+      whatsapp: '+212688500500',
+      email: 'Sib2026@urbacom.net',
     },
     support: {
       name: 'Support Technique',
-      whatsapp: '+212668385228',
-      email: 'contact@sibevent.com',
+      whatsapp: '+212688500500',
+      email: 'Sib2026@urbacom.net',
     },
     exhibitors: {
       name: 'Exposants',
-      whatsapp: '+212668385228',
-      email: 'contact@sibevent.com',
+      whatsapp: '+212688500500',
+      email: 'Sib2026@urbacom.net',
     },
   },
 };

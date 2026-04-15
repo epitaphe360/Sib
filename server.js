@@ -288,7 +288,7 @@ app.post('/api/send-visitor-welcome-email', async (req, res) => {
     const levelLabel = isVIP ? 'VIP / Premium' : 'Gratuit';
 
     const appUrl = process.env.APP_URL || 'https://www.sibevent.com';
-    const contactEmail = process.env.CONTACT_EMAIL || 'contact@sibevent.com';
+    const contactEmail = process.env.CONTACT_EMAIL || 'Sib2026@urbacom.net';
 
     // Build HTML template
     const html = `

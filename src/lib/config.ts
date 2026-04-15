@@ -4,21 +4,21 @@ export const CONFIG = {
   // Support emails
   emails: {
     support: {
-      technical: 'contact@sibevent.com',
-      commercial: 'contact@sibevent.com',
-      exhibitor: 'contact@sibevent.com',
-      general: 'contact@sibevent.com',
-      api: 'contact@sibevent.com',
-      emergency: 'contact@sibevent.com'
+      technical: 'Sib2026@urbacom.net',
+      commercial: 'Sib2026@urbacom.net',
+      exhibitor: 'Sib2026@urbacom.net',
+      general: 'Sib2026@urbacom.net',
+      api: 'Sib2026@urbacom.net',
+      emergency: 'Sib2026@urbacom.net'
     }
   },
 
   // Phone numbers
   phones: {
     support: {
-      technical: '+212 6 68 38 52 28',
-      commercial: '+212 6 68 38 52 28',
-      api: '+212 6 68 38 52 28',
+      technical: '+212 6 88 50 05 00',
+      commercial: '+212 6 88 50 05 00',
+      api: '+212 6 88 50 05 00',
       emergency: ''
     }
   },

@@ -1,7 +1,7 @@
 ﻿import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { lazyRetry } from './utils/lazyRetry';
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import { usePageTracking } from './hooks/usePageTracking';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -134,6 +134,15 @@ const ForbiddenPage = lazyRetry(() => import('./pages/ForbiddenPage'));
 const VisaLetterPage = lazyRetry(() => import('./pages/visitor/VisaLetterPage'));
 const PressAccreditationPage = lazyRetry(() => import('./pages/press/PressAccreditationPage'));
 const SpeakersPage = lazyRetry(() => import('./pages/public/SpeakersPage'));
+const PresentationPage = lazyRetry(() => import('./pages/public/PresentationPage'));
+const NouveautesPage = lazyRetry(() => import('./pages/public/NouveautesPage'));
+const SecteursPage = lazyRetry(() => import('./pages/public/SecteursPage'));
+const EditionsPage = lazyRetry(() => import('./pages/public/EditionsPage'));
+const TelechargementPage = lazyRetry(() => import('./pages/public/TelechargementPage'));
+const PourquoiExposerPage = lazyRetry(() => import('./pages/public/PourquoiExposerPage'));
+const EspacesSibPage = lazyRetry(() => import('./pages/public/EspacesSibPage'));
+const PourquoiVisiterPage = lazyRetry(() => import('./pages/public/PourquoiVisiterPage'));
+const InfosPratiquesPage = lazyRetry(() => import('./pages/public/InfosPratiquesPage'));
 const AdminPressAccreditationsPage = lazyRetry(() => import('./pages/admin/PressAccreditationsPage'));
 const AdminSpeakersPage = lazyRetry(() => import('./pages/admin/SpeakersManagementPage'));
 const HallMapPage = lazyRetry(() => import('./pages/HallMapPage'));
@@ -446,17 +455,17 @@ const App = () => {
             <Route path={ROUTES.ADMIN_LIVE_EVENT_CREATE} element={<ProtectedRoute requiredRole="admin"><LiveEventManager /></ProtectedRoute>} />
 
             {/* Pages statiques menu - Le Salon */}
-            <Route path={ROUTES.PRESENTATION} element={<Navigate to={ROUTES.HOME} replace />} />
-            <Route path={ROUTES.NOUVEAUTES} element={<Navigate to={ROUTES.HOME} replace />} />
-            <Route path={ROUTES.SECTEURS} element={<Navigate to={ROUTES.HOME} replace />} />
-            <Route path={ROUTES.EDITIONS} element={<Navigate to={ROUTES.HOME} replace />} />
-            <Route path={ROUTES.TELECHARGEMENTS} element={<Navigate to={ROUTES.HOME} replace />} />
+            <Route path={ROUTES.PRESENTATION} element={<PresentationPage />} />
+            <Route path={ROUTES.NOUVEAUTES} element={<NouveautesPage />} />
+            <Route path={ROUTES.SECTEURS} element={<SecteursPage />} />
+            <Route path={ROUTES.EDITIONS} element={<EditionsPage />} />
+            <Route path={ROUTES.TELECHARGEMENTS} element={<TelechargementPage />} />
             {/* Pages statiques menu - Exposer */}
-            <Route path={ROUTES.POURQUOI_EXPOSER} element={<Navigate to={ROUTES.PAVILIONS} replace />} />
-            <Route path={ROUTES.ESPACES_SIB} element={<Navigate to={ROUTES.REGISTER_EXHIBITOR} replace />} />
+            <Route path={ROUTES.POURQUOI_EXPOSER} element={<PourquoiExposerPage />} />
+            <Route path={ROUTES.ESPACES_SIB} element={<EspacesSibPage />} />
             {/* Pages statiques menu - Visiter */}
-            <Route path={ROUTES.POURQUOI_VISITER} element={<Navigate to={ROUTES.REGISTER_VISITOR} replace />} />
-            <Route path={ROUTES.INFOS_PRATIQUES} element={<Navigate to={ROUTES.HOME} replace />} />
+            <Route path={ROUTES.POURQUOI_VISITER} element={<PourquoiVisiterPage />} />
+            <Route path={ROUTES.INFOS_PRATIQUES} element={<InfosPratiquesPage />} />
 
             {/* Speakers & Press routes */}
             <Route path={ROUTES.SPEAKERS} element={<SpeakersPage />} />

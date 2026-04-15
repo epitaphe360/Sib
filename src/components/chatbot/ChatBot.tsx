@@ -596,8 +596,8 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       // Action personnalisée
       const actionMessages = {
         'info_salon': `?? SIB 2026 - Salon International du Bâtiment\n?? 25-29 Novembre 2026\n?? El Jadida, Maroc\n?? 600+ exposants\n?? 200 000 visiteurs\n?? 50 pays`,
-        'support': `❓ SUPPORT SIB\n📧 Email: contact@sibevent.com\n📞 Tél: +212 6 68 38 52 28\n⏰ Lun-Ven: 9h-18h\n💬 Chat en direct disponible`,
-        'contact_commercial': `💼 ÉQUIPE COMMERCIALE\n📧 contact@sibevent.com\n📞 +212 6 68 38 52 28\n🤝 Partenariats & Sponsoring\n📄 Devis personnalisés`
+        'support': `❓ SUPPORT SIB\n📧 Email: Sib2026@urbacom.net\n📞 Tél: +212 6 88 50 05 00\n⏰ Lun-Ven: 9h-18h\n💬 Chat en direct disponible`,
+        'contact_commercial': `💼 ÉQUIPE COMMERCIALE\n📧 Sib2026@urbacom.net\n📞 +212 6 88 50 05 00\n🤝 Partenariats & Sponsoring\n📄 Devis personnalisés`
       };
       
       const message = actionMessages[action as keyof typeof actionMessages] || `?? Action: ${action}`;

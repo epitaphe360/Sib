@@ -63,8 +63,8 @@ export const BANK_TRANSFER_INFO = {
 
   // Contact support
   support: {
-    email: 'contact@sibevent.com',
-    phone: '+212 6 68 38 52 28',
+    email: 'Sib2026@urbacom.net',
+    phone: '+212 6 88 50 05 00',
     hours: 'Lundi - Vendredi: 9h00 - 18h00'
   }
 };

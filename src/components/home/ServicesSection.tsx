@@ -7,7 +7,7 @@ export function ServicesSection() {
   const { t } = useTranslation();
   const whatsappNumber = '+212612345678'; // À personnaliser avec votre numéro
   const phoneNumber = '+212123456789'; // À personnaliser
-  const emailAddress = 'contact@sibevent.com';
+  const emailAddress = 'Sib2026@urbacom.net';
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent('Bonjour, je souhaiterais entrer en contact avec votre équipe commerciale');

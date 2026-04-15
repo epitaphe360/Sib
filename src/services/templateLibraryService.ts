@@ -267,8 +267,8 @@ class TemplateLibraryService {
         type: 'contact',
         content: {
           title: 'Contactez-nous',
-          email: 'contact@sibevent.com',
-          phone: '+212 6 68 38 52 28',
+          email: 'Sib2026@urbacom.net',
+          phone: '+212 6 88 50 05 00',
           address: '',
           formFields: ['name', 'email', 'company', 'message']
         },
