@@ -11,7 +11,8 @@ import {
   Shield,
   Building2,
   Store,
-  BarChart2
+  BarChart2,
+  Users
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { Card } from '../ui/Card';
@@ -407,6 +408,15 @@ export default function LoginPage() {
                 >
                   {demoLoading === 'marketing' ? <Loader className="h-4 w-4 animate-spin" /> : <BarChart2 className="h-4 w-4" />}
                   Marketing
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin('visitor-free@test.sib2026.ma', 'Admin123!', 'visitor')}
+                  disabled={demoLoading !== null || isLoading}
+                  className="col-span-2 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 disabled:opacity-50 transition-colors"
+                >
+                  {demoLoading === 'visitor' ? <Loader className="h-4 w-4 animate-spin" /> : <Users className="h-4 w-4" />}
+                  Visiteur
                 </button>
               </div>
             </div>
