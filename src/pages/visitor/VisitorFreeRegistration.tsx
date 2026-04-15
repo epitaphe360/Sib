@@ -1,6 +1,6 @@
 ﻿/**
  * Formulaire d'inscription Visiteur GRATUIT
- * Workflow simplifié sans mot de passe ni dashboard
+ * Workflow avec mot de passe et redirection vers tableau de bord QR code
  */
 import { useState, useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { User, Mail, Phone, MapPin, Briefcase, Loader, CheckCircle, Building2, MailCheck } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Briefcase, Loader, CheckCircle, Anchor, Lock, Eye, EyeOff } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,6 +27,17 @@ const createFreeVisitorSchema = (t: (key: string) => string) => z.object({
   sector: z.string().min(2, t('visitor.validation.sector_required')),
   position: z.string().optional(),
   company: z.string().optional(),
+  password: z.string()
+    .min(8, t('visitor.validation.password_length'))
+    .max(72, 'Le mot de passe ne doit pas dépasser 72 caractères')
+    .regex(/[A-Z]/, t('visitor.validation.password_requirements'))
+    .regex(/[a-z]/, t('visitor.validation.password_requirements'))
+    .regex(/[0-9]/, t('visitor.validation.password_requirements'))
+    .regex(/[!@#$%^&*]/, t('visitor.validation.password_requirements')),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: t('visitor.validation.password_match'),
+  path: ['confirmPassword']
 });
 
 type FreeVisitorForm = z.infer<ReturnType<typeof createFreeVisitorSchema>>;
@@ -35,8 +46,8 @@ export default function VisitorFreeRegistration() {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [emailExists, setEmailExists] = useState<string | null>(null);
-  const [isResending, setIsResending] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const sectors = [
@@ -89,18 +100,37 @@ export default function VisitorFreeRegistration() {
       
       if (existingUser) {
         console.warn('?? [FREE VISITOR] Email déjà existant:', existingUser);
-        setEmailExists(emailToCheck);
+        let accountType = 'visiteur';
+        if (existingUser.type === 'exhibitor') {
+          accountType = 'exposant';
+        } else if (existingUser.type === 'partner') {
+          accountType = 'partenaire';
+        } else if (existingUser.type === 'visitor') {
+          const level = existingUser.visitor_level === 'premium' ? 'VIP' : 
+                       existingUser.visitor_level === 'standard' ? 'Standard' : 'Gratuit';
+          accountType = `visiteur ${level}`;
+        }
+        
+        // MESSAGE D'ERREUR CLAIR ET VISIBLE
+        toast.error(`?? ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`, 
+          { duration: 8000 }
+        );
+        
+        // Redirection automatique vers la page de connexion
+        setTimeout(() => {
+            navigate(ROUTES.LOGIN);
+        }, 3000);
+        
         setIsSubmitting(false);
         return;
       }
       
       console.log('? [FREE VISITOR] Email disponible');
 
-      // 2. Créer l'utilisateur Supabase Auth avec un mot de passe généré
-      const generatedPassword = crypto.randomUUID().slice(0, 16) + 'A1!';
+      // 2. Créer l'utilisateur Supabase Auth avec le mot de passe de l'utilisateur
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
-        password: generatedPassword,
+        password: data.password,
         options: {
           data: {
             name: fullName,
@@ -114,7 +144,22 @@ export default function VisitorFreeRegistration() {
         // Gérer le cas spécifique où l'utilisateur existe dans Auth mais pas dans public.users
         if (authError.message === 'User already registered') {
             console.warn('?? [FREE VISITOR] Email existe dans Auth mais pas dans users (compte orphelin).');
-            setEmailExists(data.email);
+            
+            // Afficher un message clair avec options
+            toast.error(
+              `?? ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`, 
+              { duration: 10000 }
+            );
+            
+            // Proposer les deux options
+            if (window.confirm('Voulez-vous aller à la page de connexion ?\n\nCliquez "OK" pour vous connecter\nCliquez "Annuler" pour réinitialiser votre mot de passe')) {
+              // Rediriger vers login
+              navigate(ROUTES.LOGIN);
+            } else {
+              // Rediriger vers mot de passe oublié
+              navigate(ROUTES.FORGOT_PASSWORD);
+            }
+            
             setIsSubmitting(false);
             return;
         }
@@ -140,16 +185,15 @@ export default function VisitorFreeRegistration() {
             businessSector: data.sector,
             position: data.position || '',
             company: data.company || '',
-            hasPassword: false // Compte FREE sans mot de passe (généré auto)
+            hasPassword: true // Compte FREE avec mot de passe défini
           }
         }]);
 
       if (userError) throw userError;
 
       // 4. Générer badge QR automatiquement (optionnel - Edge Function peut ne pas être déployée)
-      let emailAlreadySent = false;
       try {
-        const { data: badgeData, error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
+        const { error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
           body: {
             userId: authData.user.id,
             email: data.email,
@@ -162,7 +206,6 @@ export default function VisitorFreeRegistration() {
         if (badgeError) {
           console.error('? Erreur génération badge:', badgeError);
         } else {
-          emailAlreadySent = !!badgeData?.emailSent;
           console.log('? Badge QR généré avec succès');
         }
       } catch (badgeError) {
@@ -171,8 +214,7 @@ export default function VisitorFreeRegistration() {
       }
 
       // 5. Envoyer email de bienvenue via le serveur Node.js (SMTP)
-      if (!emailAlreadySent) {
-        try {
+      try {
         console.log('?? [FREE] Envoi email de bienvenue...');
         const emailController = new AbortController();
         const emailTimeout = setTimeout(() => emailController.abort(), 5000);
@@ -201,24 +243,28 @@ export default function VisitorFreeRegistration() {
           console.log('? Email de bienvenue envoyé avec succès:', emailResult.messageId);
           toast.success(`?? ${t('visitor.message.email_sent')}`, { duration: 3000 });
         }
-        } catch (emailError) {
+      } catch (emailError) {
         // Non bloquant - le serveur peut ne pas être accessible en dev
         console.warn('?? Erreur envoi email (non bloquant):', emailError);
-        }
       }
 
-      // Déconnecter immédiatement — un visiteur free n'a pas de compte connecté
-      await supabase.auth.signOut();
+      // NE PAS envoyer d'email de réinitialisation de mot de passe car l'utilisateur l'a déjà défini
+      // NE PAS déconnecter l'utilisateur (Allow login)
 
       // Succès !
-      console.log('? [FREE VISITOR] Inscription réussie ! QR code envoyé par email.');
+      console.log('? [FREE VISITOR] Inscription réussie ! Affichage du modal de succès.');
       setShowSuccess(true);
       
-      toast.success('Inscription réussie ! Consultez votre email pour votre code QR.', { duration: 6000 });
+      // Toast de succès immédiat
+      toast.success(
+        `?? ${t('visitor.message.success_title')}\n\n${t('visitor.message.success_desc')}\n\n${t('visitor.message.redirect')}`, 
+        { duration: 6000 }
+      );
 
       setTimeout(() => {
-        navigate(ROUTES.HOME);
-      }, 5000);
+        // Redirection vers le tableau de bord visiteur
+        navigate(ROUTES.VISITOR_DASHBOARD);
+      }, 3000);
 
     } catch (error: any) {
       console.error('Erreur inscription:', error);
@@ -229,14 +275,7 @@ export default function VisitorFreeRegistration() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-blue-950 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-0 opacity-20" style={{
-        backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,215,0,0.08) 35px, rgba(255,215,0,0.08) 70px),
-                         repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(0,128,0,0.08) 35px, rgba(0,128,0,0.08) 70px)`
-      }} />
-      <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-sib-gold/20 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
-
+    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <motion.div
@@ -244,27 +283,27 @@ export default function VisitorFreeRegistration() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-xl">
-              <Building2 className="h-8 w-8 text-sib-gold" />
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="bg-white p-3 rounded-lg">
+              <Anchor className="h-8 w-8 text-green-600" />
             </div>
             <div>
-              <span className="text-2xl font-bold text-white tracking-wide">SIB</span>
-              <span className="text-sm text-sib-gold block leading-none font-medium">2026</span>
+              <span className="text-2xl font-bold text-white">SIB</span>
+              <span className="text-sm text-green-200 block leading-none">2026</span>
             </div>
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
             {t('visitor.registration.free.title')}
           </h1>
-          <p className="text-white/80">
+          <p className="text-green-100">
             {t('visitor.registration.free.subtitle')}
           </p>
-          <div className="mt-4 inline-flex items-center space-x-3 bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full">
-            <span className="text-white/90 text-sm">{t('visitor.registration.free.badge_access')}</span>
-            <span className="text-sib-gold">•</span>
-            <span className="text-white/90 text-sm">{t('visitor.registration.free.badge_qr')}</span>
-            <span className="text-sib-gold">•</span>
-            <span className="text-white/90 text-sm">{t('visitor.registration.free.badge_free')}</span>
+          <div className="mt-4 inline-flex items-center space-x-2 bg-green-800 px-4 py-2 rounded-full">
+            <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_access')}</span>
+            <span className="text-green-200">•</span>
+            <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_qr')}</span>
+            <span className="text-green-200">•</span>
+            <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_free')}</span>
           </div>
         </motion.div>
 
@@ -274,7 +313,7 @@ export default function VisitorFreeRegistration() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="p-8 bg-white/95 backdrop-blur-xl border border-white/40 shadow-2xl shadow-blue-950/30">
+          <Card className="p-8">
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error('? [FREE VISITOR] Erreurs validation:', errors);
               toast.error(t('visitor.validation.check_errors', 'Veuillez corriger les erreurs surlignées en rouge'));
@@ -295,7 +334,7 @@ export default function VisitorFreeRegistration() {
                       id="firstName"
                       type="text"
                       {...register('firstName')}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder={t('visitor.form.firstname')}
                     />
                   </div>
@@ -314,7 +353,7 @@ export default function VisitorFreeRegistration() {
                       id="lastName"
                       type="text"
                       {...register('lastName')}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder={t('visitor.form.lastname')}
                     />
                   </div>
@@ -337,10 +376,10 @@ export default function VisitorFreeRegistration() {
                     id="email"
                     type="email"
                     {...register('email')}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 transition-colors ${
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
                       errors.email 
                         ? 'border-red-500 focus:ring-red-500' 
-                        : 'border-slate-300 focus:ring-[#1B365D] focus:border-[#1B365D]'
+                        : 'border-gray-300 focus:ring-green-500'
                     }`}
                     placeholder="votre@email.com"
                   />
@@ -367,7 +406,7 @@ export default function VisitorFreeRegistration() {
                       id="phone"
                       type="tel"
                       {...register('phone')}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="+33 1 23 45 67 89"
                     />
                   </div>
@@ -385,7 +424,7 @@ export default function VisitorFreeRegistration() {
                     <select
                       id="country"
                       {...register('country')}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] appearance-none transition-colors"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none bg-white"
                     >
                       <option value="">Sélectionnez</option>
                       {COUNTRIES.map((country) => (
@@ -409,7 +448,7 @@ export default function VisitorFreeRegistration() {
                 <select
                   id="sector"
                   {...register('sector')}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">Sélectionnez</option>
                   {sectors.map((sector) => (
@@ -433,7 +472,7 @@ export default function VisitorFreeRegistration() {
                       id="position"
                       type="text"
                       {...register('position')}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Ex: Ingénieur"
                     />
                   </div>
@@ -447,18 +486,69 @@ export default function VisitorFreeRegistration() {
                     id="company-field"
                     type="text"
                     {...register('company')}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     placeholder={t('visitor.form.company')}
                   />
                 </div>
               </div>
 
+              {/* Password Fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t('visitor.form.password')} *
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      {...register('password')}
+                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                  )}
+                </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t('visitor.form.confirm_password')} *
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      {...register('confirmPassword')}
+                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && (
+                    <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>
+                  )}
+                </div>
+              </div>
 
               {/* Info */}
-              <div className="bg-gradient-to-r from-blue-50 to-amber-50 border border-sib-gold/35 rounded-xl p-4">
-                <h4 className="font-semibold text-blue-900 mb-2">{t('visitor.free.features.title')}</h4>
-                <ul className="text-sm text-blue-800 space-y-1">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <h4 className="font-semibold text-green-900 mb-2">{t('visitor.free.features.title')}</h4>
+                <ul className="text-sm text-green-700 space-y-1">
                   <li>{t('visitor.free.features.list.1')}</li>
                   <li>{t('visitor.free.features.list.2')}</li>
                   <li>{t('visitor.free.features.list.3')}</li>
@@ -466,11 +556,33 @@ export default function VisitorFreeRegistration() {
                 </ul>
               </div>
 
-              {/* Submit */}
+              {/* Debug Info */}
+              {Object.keys(errors).length > 0 && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-red-900 mb-2">? Erreurs de validation :</h4>
+                  <ul className="text-sm text-red-700 space-y-1">
+                    {Object.entries(errors).map(([field, error]) => (
+                      <li key={field}>• {field}: {error?.message}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Submit - Bouton HTML natif pour éviter problème pointer-events */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-sib-gold hover:bg-sib-gold/90 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 text-lg font-semibold rounded-xl shadow-lg shadow-sib-gold/30 transition-all duration-200 flex items-center justify-center"
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 text-lg font-semibold rounded-lg shadow-lg transition-all duration-200 flex items-center justify-center"
+                onClick={(e) => {
+                  console.log('??? [FREE VISITOR] CLICK BOUTON', { 
+                    isSubmitting, 
+                    isValid, 
+                    isDirty,
+                    errorsCount: Object.keys(errors).length,
+                    formData: watch()
+                  });
+                  // Ne pas e.preventDefault() car on veut que le type="submit" fonctionne
+                }}
               >
                 {isSubmitting ? (
                   <>
@@ -483,7 +595,7 @@ export default function VisitorFreeRegistration() {
               </button>
 
               {/* VIP Link */}
-              <div className="text-center pt-4 border-t border-slate-200">
+              <div className="text-center pt-4 border-t">
                 <p className="text-sm text-gray-600 mb-2">
                   {t('visitor.upsell.vip.title')}
                 </p>
@@ -491,131 +603,75 @@ export default function VisitorFreeRegistration() {
                   type="button"
                   variant="outline"
                   onClick={() => navigate(ROUTES.VISITOR_VIP_REGISTRATION)}
-                  className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                  className="border-yellow-500 text-yellow-600 hover:bg-yellow-50"
                 >
                    {t('visitor.upsell.vip.button')}
                 </Button>
               </div>
             </form>
-            {/* Email already exists - resend QR */}
-            <AnimatePresence>
-              {emailExists && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-5"
-                >
-                  <p className="text-sm text-gray-800 mb-3">
-                    L'adresse <strong>{emailExists}</strong> est déjà inscrite.
-                  </p>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Vous pouvez renvoyer votre code QR par email.
-                  </p>
-                  <div className="flex gap-3">
-                    <button
-                      type="button"
-                      disabled={isResending}
-                      onClick={async () => {
-                        setIsResending(true);
-                        try {
-                          const ctrl = new AbortController();
-                          const timeout = setTimeout(() => ctrl.abort(), 8000);
-                          const res = await fetch('/api/send-visitor-welcome-email', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            signal: ctrl.signal,
-                            body: JSON.stringify({ email: emailExists, resend: true })
-                          });
-                          clearTimeout(timeout);
-                          const result = await res.json();
-                          if (res.ok && result.success) {
-                            toast.success('Code QR renvoyé ! Vérifiez votre boîte email.', { duration: 5000 });
-                            setEmailExists(null);
-                          } else {
-                            toast.error('Impossible de renvoyer l\'email. Réessayez plus tard.', { duration: 5000 });
-                          }
-                        } catch {
-                          toast.error('Erreur de connexion. Réessayez plus tard.', { duration: 5000 });
-                        } finally {
-                          setIsResending(false);
-                        }
-                      }}
-                      className="flex-1 bg-[#1B365D] hover:bg-[#0F2034] disabled:bg-gray-400 text-white py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
-                    >
-                      {isResending ? (
-                        <><Loader className="animate-spin h-4 w-4" /> Envoi en cours...</>
-                      ) : (
-                        <><MailCheck className="h-4 w-4" /> Renvoyer mon code QR</>
-                      )}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setEmailExists(null)}
-                      className="px-4 py-2.5 border border-slate-300 rounded-xl text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-                    >
-                      Fermer
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>          </Card>
+          </Card>
         </motion.div>
 
         {/* Success Modal */}
         <AnimatePresence>
           {showSuccess && (
-            <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999] p-4 backdrop-blur-sm">
+            <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[9999] p-4 backdrop-blur-sm">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                initial={{ opacity: 0, scale: 0.5, y: -50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
+                exit={{ opacity: 0, scale: 0.5 }}
                 transition={{ type: "spring", duration: 0.5 }}
-                className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-lg text-center border border-slate-200 relative overflow-hidden"
+                className="bg-gradient-to-br from-white to-green-50 rounded-2xl shadow-2xl p-10 w-full max-w-lg text-center border-4 border-green-500 relative overflow-hidden"
               >
+                {/* Confetti Effect Background */}
+                <div className="absolute inset-0 opacity-10 pointer-events-none">
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 animate-pulse" />
+                </div>
+
                 {/* Content */}
                 <div className="relative z-10">
-                  <div className="mx-auto w-20 h-20 bg-gradient-to-br from-[#1B365D] to-[#2E5984] rounded-full flex items-center justify-center mb-6 shadow-lg">
-                    <MailCheck className="h-12 w-12 text-white" />
+                  <div className="mx-auto w-28 h-28 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mb-6 shadow-xl">
+                    <CheckCircle className="h-20 w-20 text-white animate-bounce" />
                   </div>
                   
-                  <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                    Inscription confirmée !
+                  <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">
+                    ?? {t('visitor.message.success_title')}
                   </h2>
                   
-                  <p className="text-gray-600 mb-6">
-                    Votre code QR d'accès au salon a été envoyé à votre adresse email.
+                  <p className="text-lg text-gray-700 mb-6">
+                    {t('visitor.message.success_desc')}
                   </p>
 
-                  <div className="bg-[#1B365D]/5 border border-[#1B365D]/15 p-5 rounded-xl mb-6 text-left">
-                    <div className="text-gray-700 text-sm space-y-2.5">
+                  <div className="bg-white border-2 border-green-500 p-5 rounded-xl mb-6 text-left shadow-lg">
+                    <p className="font-bold text-green-800 mb-3 text-center">? Compte créé avec succès !</p>
+                    <div className="text-gray-700 text-sm space-y-2">
                       <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-[#1B365D] mr-2 mt-0.5 flex-shrink-0" />
-                        <span>Email envoyé à : <strong>{watch('email')}</strong></span>
+                        <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>Compte enregistré : <strong>{watch('email')}</strong></span>
                       </div>
                       <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-[#1B365D] mr-2 mt-0.5 flex-shrink-0" />
-                        <span>Votre badge QR est dans l'email</span>
+                        <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>Vous êtes maintenant connecté</span>
                       </div>
                       <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-[#1B365D] mr-2 mt-0.5 flex-shrink-0" />
-                        <span>Présentez-le à l'entrée du salon</span>
+                        <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>Accès immédiat à votre espace visiteur</span>
                       </div>
                     </div>
                   </div>
                   
-                  <p className="text-gray-500 mb-3 text-sm">
-                    Redirection vers l'accueil...
+                  <p className="text-gray-600 mb-3 text-sm font-medium">
+                    {t('visitor.message.redirect')}
                   </p>
                   
                   <motion.div
-                    className="relative h-2 bg-gray-100 rounded-full overflow-hidden"
+                    className="relative h-3 bg-gray-200 rounded-full overflow-hidden"
                   >
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: '100%' }}
-                      transition={{ duration: 5, ease: "linear" }}
-                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#1B365D] to-[#2E5984] rounded-full"
+                      transition={{ duration: 3, ease: "linear" }}
+                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-full"
                     />
                   </motion.div>
                 </div>
