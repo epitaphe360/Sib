@@ -15,7 +15,7 @@ export interface ApiErrorResponse {
 
 /**
  * Client API centralisé
- * 
+ *
  * Fournit :
  * - Configuration commune (base URL, headers)
  * - Gestion des erreurs

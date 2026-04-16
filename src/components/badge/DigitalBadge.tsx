@@ -32,7 +32,7 @@ export default function DigitalBadge() {
 
   // Générer un nouveau QR code
   const generateQR = async () => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       setIsRotating(true);
@@ -112,7 +112,7 @@ export default function DigitalBadge() {
 
   // Obtenir les informations de niveau d'accès
   let accessKey = `${payload.userType}_${payload.level}` as keyof typeof ACCESS_LEVELS;
-  
+
   // Correction pour les types qui n'ont pas de préfixe composé dans ACCESS_LEVELS
   if (['admin', 'security', 'exhibitor'].includes(payload.userType)) {
     accessKey = payload.userType as keyof typeof ACCESS_LEVELS;

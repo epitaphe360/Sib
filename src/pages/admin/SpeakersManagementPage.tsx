@@ -86,11 +86,11 @@ export default function SpeakersManagementPage() {
       };
       if (editingId) {
         const { error } = await supabase.from('speakers').update(payload).eq('id', editingId);
-        if (error) throw error;
+        if (error) {throw error;}
         toast.success('Intervenant mis à jour');
       } else {
         const { error } = await supabase.from('speakers').insert(payload);
-        if (error) throw error;
+        if (error) {throw error;}
         toast.success('Intervenant ajouté');
       }
       setModalOpen(false);
@@ -101,10 +101,10 @@ export default function SpeakersManagementPage() {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!window.confirm(`Supprimer "${name}" ?`)) return;
+    if (!window.confirm(`Supprimer "${name}" ?`)) {return;}
     try {
       const { error } = await supabase.from('speakers').delete().eq('id', id);
-      if (error) throw error;
+      if (error) {throw error;}
       toast.success('Intervenant supprimé');
       setSpeakers(prev => prev.filter(s => s.id !== id));
     } catch { toast.error('Erreur lors de la suppression'); }

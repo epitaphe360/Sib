@@ -57,7 +57,7 @@ export default function PartnerProfileEditor({ partnerId, onSave }: PartnerProfi
         .eq('user_id', partnerId)
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (data) {
         setProfile({
@@ -106,7 +106,7 @@ export default function PartnerProfileEditor({ partnerId, onSave }: PartnerProfi
         })
         .eq('user_id', partnerId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       toast.dismiss(savingToast);
       toast.success('✅ Profil sauvegardé avec succès!');
@@ -124,7 +124,7 @@ export default function PartnerProfileEditor({ partnerId, onSave }: PartnerProfi
   };
 
   const handleAddService = () => {
-    if (!newService.trim()) return;
+    if (!newService.trim()) {return;}
     setProfile({
       ...profile,
       services: [...(profile.services || []), newService.trim()]

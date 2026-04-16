@@ -122,7 +122,7 @@ export default function ContactPage() {
                   <input
                     type="text"
                     id="firstName"
-                    name="name"
+                    name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
                     required

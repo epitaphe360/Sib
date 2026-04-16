@@ -14,7 +14,7 @@ function AnimatedNumber({ value, delay }: { value: number; delay: number }) {
   const inView = useInView(ref, { once: true });
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView) {return;}
     const controls = animate(0, value, {
       duration: 1.4,
       delay,

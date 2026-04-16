@@ -3,9 +3,9 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { useTranslation } from '../../hooks/useTranslation';
 import { motion } from 'framer-motion';
-import { 
-  Clock, Mail, CreditCard, Upload, CheckCircle, 
-  AlertCircle, LogOut, FileText, RefreshCw, 
+import {
+  Clock, Mail, CreditCard, Upload, CheckCircle,
+  AlertCircle, LogOut, FileText, RefreshCw,
   Building2, Phone, Copy, ExternalLink
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
@@ -50,7 +50,7 @@ export default function PendingAccountPage() {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const fetchPaymentRequest = useCallback(async () => {
-    if (!user?.id) return;
+    if (!user?.id) {return;}
 
     try {
       const { data, error } = await supabase
@@ -79,7 +79,7 @@ export default function PendingAccountPage() {
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file || !paymentRequest) return;
+    if (!file || !paymentRequest) {return;}
 
     // Validation du fichier
     const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
@@ -118,7 +118,7 @@ export default function PendingAccountPage() {
       if (uploadError) {
         // Si le bucket n'existe pas, on cree l'URL manuellement
         console.warn('Upload error (bucket may not exist):', uploadError);
-        
+
         // Mise a jour du statut sans URL reelle pour la demo
         const { error: updateError } = await supabase
           .from('payment_requests')
@@ -129,7 +129,7 @@ export default function PendingAccountPage() {
           })
           .eq('id', paymentRequest.id);
 
-        if (updateError) throw updateError;
+        if (updateError) {throw updateError;}
       } else {
         // Obtenir l'URL publique
         const { data: urlData } = supabase.storage
@@ -146,12 +146,12 @@ export default function PendingAccountPage() {
           })
           .eq('id', paymentRequest.id);
 
-        if (updateError) throw updateError;
+        if (updateError) {throw updateError;}
       }
 
       setUploadProgress(100);
       toast.success('Preuve de paiement envoyee avec succes !');
-      
+
       // Rafraichir les donnees
       await fetchPaymentRequest();
     } catch (error) {
@@ -304,10 +304,10 @@ export default function PendingAccountPage() {
                   </span>
                 </div>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-gradient-to-r from-green-500 to-blue-500 transition-all duration-500"
-                    style={{ 
-                      width: paymentRequest?.status === 'approved' ? '100%' : 
+                    style={{
+                      width: paymentRequest?.status === 'approved' ? '100%' :
                              paymentRequest?.status === 'proof_uploaded' ? '66%' :
                              paymentRequest?.status === 'pending' ? '33%' : '15%'
                     }}
@@ -407,7 +407,7 @@ export default function PendingAccountPage() {
                           <p className="text-xs text-gray-500">Titulaire</p>
                           <p className="font-medium">{BANK_INFO.accountHolder}</p>
                         </div>
-                        <button 
+                        <button
                           onClick={() => copyToClipboard(BANK_INFO.accountHolder, 'Titulaire')}
                           className="p-2 hover:bg-gray-200 rounded-lg transition"
                         >
@@ -420,7 +420,7 @@ export default function PendingAccountPage() {
                           <p className="text-xs text-gray-500">IBAN</p>
                           <p className="font-mono font-medium text-sm">{BANK_INFO.iban}</p>
                         </div>
-                        <button 
+                        <button
                           onClick={() => copyToClipboard(BANK_INFO.iban.replace(/\s/g, ''), 'IBAN')}
                           className="p-2 hover:bg-gray-200 rounded-lg transition"
                         >
@@ -433,7 +433,7 @@ export default function PendingAccountPage() {
                           <p className="text-xs text-gray-500">BIC/SWIFT</p>
                           <p className="font-mono font-medium">{BANK_INFO.bic}</p>
                         </div>
-                        <button 
+                        <button
                           onClick={() => copyToClipboard(BANK_INFO.bic, 'BIC')}
                           className="p-2 hover:bg-gray-200 rounded-lg transition"
                         >
@@ -446,7 +446,7 @@ export default function PendingAccountPage() {
                           <p className="text-xs text-amber-600">Reference obligatoire</p>
                           <p className="font-mono font-bold text-amber-700">{paymentRequest.reference}</p>
                         </div>
-                        <button 
+                        <button
                           onClick={() => copyToClipboard(paymentRequest.reference, 'Reference')}
                           className="p-2 hover:bg-amber-100 rounded-lg transition"
                         >
@@ -476,17 +476,17 @@ export default function PendingAccountPage() {
 
                   <div className="space-y-4">
                     <p className="text-gray-600 text-sm">
-                      Une fois le virement effectue, uploadez votre justificatif 
+                      Une fois le virement effectue, uploadez votre justificatif
                       (capture d'ecran ou PDF du virement).
                     </p>
 
                     {/* Zone d'upload */}
-                    <label 
+                    <label
                       className={`
                         block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer
                         transition-all duration-300
-                        ${isUploading 
-                          ? 'border-blue-400 bg-blue-50' 
+                        ${isUploading
+                          ? 'border-blue-400 bg-blue-50'
                           : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50/50'
                         }
                       `}
@@ -504,7 +504,7 @@ export default function PendingAccountPage() {
                           <RefreshCw className="h-10 w-10 text-blue-500 mx-auto animate-spin" />
                           <p className="text-blue-600 font-medium">Upload en cours...</p>
                           <div className="w-full bg-blue-200 rounded-full h-2">
-                            <div 
+                            <div
                               className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                               style={{ width: `${uploadProgress}%` }}
                             />
@@ -554,7 +554,7 @@ export default function PendingAccountPage() {
                     Preuve de paiement recue !
                   </h3>
                   <p className="text-blue-700 mb-4">
-                    Notre equipe verifie actuellement votre virement. 
+                    Notre equipe verifie actuellement votre virement.
                     Vous serez notifie par email des que votre compte sera active.
                   </p>
                   <p className="text-sm text-blue-600">
@@ -562,7 +562,7 @@ export default function PendingAccountPage() {
                   </p>
 
                   {paymentRequest.transfer_proof_url && !paymentRequest.transfer_proof_url.startsWith('demo://') && (
-                    <a 
+                    <a
                       href={paymentRequest.transfer_proof_url}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -591,9 +591,9 @@ export default function PendingAccountPage() {
                 <Phone className="h-5 w-5 text-gray-600" />
                 Besoin d'aide ?
               </h3>
-              
+
               <div className="grid md:grid-cols-3 gap-4">
-                <a 
+                <a
                   href="mailto:Sib2026@urbacom.net"
                   className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                 >
@@ -604,7 +604,7 @@ export default function PendingAccountPage() {
                   </div>
                 </a>
 
-                <a 
+                <a
                   href="tel:+212688500500"
                   className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                 >

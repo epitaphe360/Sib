@@ -73,16 +73,16 @@ export const PartnerAnalyticsPage: React.FC = () => {
   const { dashboard, fetchDashboard } = useDashboardStore();
 
   useEffect(() => {
-    if (user && !dashboard) fetchDashboard();
+    if (user && !dashboard) {fetchDashboard();}
   }, [user, dashboard, fetchDashboard]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {return;}
     loadAllData();
   }, [user, selectedPeriod]);
 
   const loadAllData = async () => {
-    if (!user) return;
+    if (!user) {return;}
     setLoading(true);
     try {
       const periodDays = selectedPeriod === '7d' ? 7 : selectedPeriod === '30d' ? 30

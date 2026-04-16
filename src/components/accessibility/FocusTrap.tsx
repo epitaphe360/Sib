@@ -21,10 +21,10 @@ export const FocusTrap: React.FC<FocusTrapProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active) {return;}
 
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) {return;}
 
     // Get all focusable elements
     const getFocusableElements = (): HTMLElement[] => {
@@ -59,7 +59,7 @@ export const FocusTrap: React.FC<FocusTrapProps> = ({
       }
 
       // Tab key
-      if (e.key !== 'Tab') return;
+      if (e.key !== 'Tab') {return;}
 
       const currentElements = getFocusableElements();
       const currentFirst = currentElements[0];

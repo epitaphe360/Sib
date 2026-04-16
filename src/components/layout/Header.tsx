@@ -141,10 +141,10 @@ export const Header: React.FC = memo(() => {
     <header className="fixed top-0 left-0 right-0 z-[200] transition-all duration-500 bg-white/90 sm:bg-white/75 backdrop-blur-xl border-b border-slate-200/60 shadow-[0_8px_26px_-18px_rgba(15,35,64,0.5)]" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       {/* Pattern Zellige Subtil en fond */}
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #0f172a 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-center h-16 sm:h-20 xl:h-28">
-          
+
           {/* Logo Premium */}
           <Link to={ROUTES.HOME} className="flex-shrink-0 flex items-center group">
             <div className="relative">
@@ -315,16 +315,16 @@ export const Header: React.FC = memo(() => {
                 </button>
 
                 {/* Messages - masqué sur mobile */}
-                <Link 
-                  to={ROUTES.MESSAGES} 
+                <Link
+                  to={ROUTES.MESSAGES}
                   className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative"
                 >
                   <MessageCircle className="h-5 w-5" />
                 </Link>
 
                 {/* Calendar - masqué sur mobile */}
-                <Link aria-label="Calendar" 
-                  to={ROUTES.APPOINTMENTS} 
+                <Link aria-label="Calendar"
+                  to={ROUTES.APPOINTMENTS}
                   className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <Calendar className="h-5 w-5" />

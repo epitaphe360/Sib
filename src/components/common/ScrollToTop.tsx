@@ -2,7 +2,7 @@
 import { useLocation } from 'react-router-dom';
 
 /**
- * Composant utilitaire qui fait défiler la page vers le haut 
+ * Composant utilitaire qui fait défiler la page vers le haut
  * à chaque changement de navigation (route).
  */
 export const ScrollToTop = () => {

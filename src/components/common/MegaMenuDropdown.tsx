@@ -10,7 +10,7 @@ interface MegaMenuDropdownProps {
 
 /**
  * MegaMenuDropdown - Composant de dropdown pour le menu principal
- * 
+ *
  * Affiche les sous-services avec icônes et descriptions
  */
 export const MegaMenuDropdown: React.FC<MegaMenuDropdownProps> = ({

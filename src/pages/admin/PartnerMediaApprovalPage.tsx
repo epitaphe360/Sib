@@ -61,7 +61,7 @@ export default function PartnerMediaApprovalPage() {
         .order('created_at', { ascending: false })
         .range(0, 49);
 
-      if (error) throw error;
+      if (error) {throw error;}
       setPendingMedia(data || []);
     } catch (error) {
       console.error('Erreur chargement médias:', error);
@@ -72,16 +72,16 @@ export default function PartnerMediaApprovalPage() {
   };
 
   const handleApprove = async (mediaId: string) => {
-    if (!user) return;
+    if (!user) {return;}
     setProcessingId(mediaId);
-    
+
     try {
       const { data, error } = await supabase.rpc('approve_partner_media', {
         media_id: mediaId,
         admin_id: user.id
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (data?.success) {
         toast.success('Média approuvé avec succès !');
@@ -106,7 +106,7 @@ export default function PartnerMediaApprovalPage() {
     }
 
     setProcessingId(mediaId);
-    
+
     try {
       const { data, error } = await supabase.rpc('reject_partner_media', {
         media_id: mediaId,
@@ -114,7 +114,7 @@ export default function PartnerMediaApprovalPage() {
         reason: rejectionReason
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (data?.success) {
         toast.success('Média rejeté');

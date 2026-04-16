@@ -29,7 +29,7 @@ class TemplateLibraryService {
       }
 
       const { data, error } = await query;
-      if (error) throw error;
+      if (error) {throw error;}
 
       return data || [];
     } catch (error) {
@@ -49,7 +49,7 @@ class TemplateLibraryService {
         .eq('id', id)
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('Error loading template:', error);
@@ -68,7 +68,7 @@ class TemplateLibraryService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('Error creating template:', error);
@@ -86,7 +86,7 @@ class TemplateLibraryService {
         .update(updates)
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('Error updating template:', error);
@@ -123,7 +123,7 @@ class TemplateLibraryService {
     try {
       // Récupérer le template
       const template = await this.getTemplate(templateId);
-      if (!template) return null;
+      if (!template) {return null;}
 
       // Créer un nouveau mini-site basé sur le template
       const { data: newSite, error } = await supabase
@@ -146,7 +146,7 @@ class TemplateLibraryService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Incrémenter la popularité du template
       await this.incrementPopularity(templateId);

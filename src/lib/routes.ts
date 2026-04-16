@@ -154,7 +154,7 @@
   BEST_MOMENTS_DETAIL: '/media/best-moments/:id',
   TESTIMONIALS: '/media/testimonials',
   TESTIMONIAL_DETAIL: '/media/testimonial/:id',
-  
+
   // Admin Media Management
   ADMIN_MEDIA_CREATE: '/admin/media/create',
   ADMIN_MEDIA_MANAGE: '/admin/media/manage',

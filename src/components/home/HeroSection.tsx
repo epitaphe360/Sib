@@ -14,7 +14,7 @@ export const HeroSection: React.FC = () => {
   React.useEffect(() => {
     // Date du salon SIB 2026 (25-29 Novembre 2026)
     const salonDate = new Date('2026-11-25T09:00:00');
-    
+
     const calculateTimeLeft = () => {
       const now = new Date();
       const difference = salonDate.getTime() - now.getTime();
@@ -78,17 +78,17 @@ export const HeroSection: React.FC = () => {
                            repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(0,128,0,0.1) 35px, rgba(0,128,0,0.1) 70px)`
         }} />
       </div>
-      
+
       {/* Decorative Moroccan Arches */}
       <div className="absolute top-0 left-0 w-full h-24 opacity-20">
         <svg viewBox="0 0 1200 100" className="w-full h-full" preserveAspectRatio="none">
           <path d="M0,0 Q150,80 300,0 Q450,80 600,0 Q750,80 900,0 Q1050,80 1200,0 L1200,100 L0,100 Z" fill="currentColor" className="text-yellow-300" />
         </svg>
       </div>
-      
+
       {/* Background Pattern */}
       <MoroccanPattern className="opacity-10" color="white" scale={1.5} />
-      
+
       {/* Decorative Arch at bottom */}
       <MoroccanArch className="text-white" />
 
@@ -127,7 +127,7 @@ export const HeroSection: React.FC = () => {
                 <p className="text-center text-white/60 mb-6 text-sm">
                   {t('hero.countdown.subtitle')}
                 </p>
-                
+
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div className="relative group">
                     <div className="relative bg-white/10 border border-yellow-300/60 rounded-2xl p-4 text-center">
@@ -173,7 +173,7 @@ export const HeroSection: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="text-center mt-6">
                   <div className="inline-flex items-center space-x-2 bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm">
                     <MapPin className="h-4 w-4 text-white" />
@@ -249,7 +249,7 @@ export const HeroSection: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent" />
               </div>
-              
+
               {/* Decorative Elements */}
               <div className="hidden lg:block absolute -top-12 -right-12 text-sib-gold/20 animate-spin-slow">
                 <MoroccanPattern className="w-48 h-48" />

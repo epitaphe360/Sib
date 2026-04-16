@@ -37,7 +37,7 @@ export const SpeedNetworking: React.FC<SpeedNetworkingProps> = ({ sessionId }) =
     }
   }, [sessionId]);
 
-  // Check for current match changes every 5 seconds  
+  // Check for current match changes every 5 seconds
   useEffect(() => {
     if (sessionId) {
       const interval = setInterval(checkCurrentMatch, 5000);
@@ -71,9 +71,9 @@ export const SpeedNetworking: React.FC<SpeedNetworkingProps> = ({ sessionId }) =
         .eq('id', sessionId)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
       setSession(data);
-      setIsParticipant(data.participants.includes(user?.id));
+      setIsParticipant(data?.participants?.includes(user?.id) ?? false);
       await checkCurrentMatch();
     } catch (error) {
       console.error('Error loading session:', error);
@@ -84,7 +84,7 @@ export const SpeedNetworking: React.FC<SpeedNetworkingProps> = ({ sessionId }) =
   };
 
   const checkCurrentMatch = async () => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       const match = await SpeedNetworkingService.getCurrentMatch(sessionId, user.id);
@@ -95,7 +95,7 @@ export const SpeedNetworking: React.FC<SpeedNetworkingProps> = ({ sessionId }) =
   };
 
   const handleRegister = async () => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       await SpeedNetworkingService.registerParticipant(sessionId, user.id);
@@ -108,7 +108,7 @@ export const SpeedNetworking: React.FC<SpeedNetworkingProps> = ({ sessionId }) =
   };
 
   const handleConnect = async (userId: string) => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       await supabase
@@ -177,7 +177,7 @@ export const SpeedNetworking: React.FC<SpeedNetworkingProps> = ({ sessionId }) =
               </Badge>
             </div>
           </div>
-          
+
           {!isParticipant && session.status === 'scheduled' && (
             <Button
               onClick={handleRegister}

@@ -1,8 +1,6 @@
 import React, { memo } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Calendar } from 'lucide-react';
-import { Users, FileText, Award, Scan } from 'lucide-react';
-import { Sparkles } from 'lucide-react';
+import { Calendar, Users, FileText, Award, Scan } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { QRCodeCanvas as QRCode } from 'qrcode.react';
 
@@ -26,7 +24,6 @@ import { DashboardSkeleton } from '../ui/Skeleton';
 import { ErrorMessage } from '../common/ErrorMessage';
 import { QuotaSummaryCard } from '../common/QuotaWidget';
 import { MiniSiteSetupModal } from '../exhibitor/MiniSiteSetupModal';
-import ExhibitorMiniSiteScrapper from '../exhibitor/ExhibitorMiniSiteScrapper';
 import { ROUTES } from '../../lib/routes';
 import { getExhibitorQuota } from '../../config/exhibitorQuotas';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -157,7 +154,6 @@ export default memo(function ExhibitorDashboard() {
         />
 
         <ExhibitorQuickActions
-          onOpenScrapper={() => ctx.setShowMiniSiteScrapper(true)}
           onOpenQR={() => ctx.setShowQRModal(true)}
         />
 
@@ -213,41 +209,6 @@ export default memo(function ExhibitorDashboard() {
         />
       )}
 
-      {ctx.showMiniSiteScrapper && ctx.user?.id && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-          >
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-2xl flex items-center justify-between z-10">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-[#C9A84C]/15 border border-[#C9A84C]/30 rounded-lg">
-                  <Sparkles className="h-6 w-6 text-[#C9A84C]" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Créer un mini-site avec l'IA</h2>
-                  <p className="text-sm text-gray-600">Générez automatiquement votre mini-site depuis votre site web</p>
-                </div>
-              </div>
-              <Button variant="outline" onClick={() => ctx.setShowMiniSiteScrapper(false)} className="rounded-full">
-                ✕
-              </Button>
-            </div>
-            <div className="p-6">
-              <ExhibitorMiniSiteScrapper
-                exhibitorId={ctx.user.id}
-                userId={ctx.user.id}
-                onSuccess={() => {
-                  ctx.setShowMiniSiteScrapper(false);
-                  ctx.fetchDashboard();
-                }}
-              />
-            </div>
-          </motion.div>
-        </div>
-      )}
 
     </div>
   );

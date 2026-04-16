@@ -308,7 +308,7 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
           `)
           .order('created_at', { ascending: false });
 
-        if (error) throw error;
+        if (error) {throw error;}
 
         // Transformer les données pour correspondre à l'interface Appointment
         const transformedAppointments = (data || []).map((apt: any) => ({
@@ -366,7 +366,7 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
       // If SupabaseService is available and supabase is configured, use it
       if (SupabaseService && typeof SupabaseService.getTimeSlotsByUser === 'function') {
         const slots = await SupabaseService.getTimeSlotsByUser(exhibitorId);
-        
+
         set({ timeSlots: slots || [], isLoading: false });
         return;
       }
@@ -388,7 +388,7 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
           .order('slot_date', { ascending: true })
           .order('start_time', { ascending: true });
 
-        if (error) throw error;
+        if (error) {throw error;}
 
         // Transformer les données pour correspondre à l'interface TimeSlot
         const transformedSlots = (data || []).map((slot: any) => ({
@@ -429,7 +429,7 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
 
   bookAppointment: async (timeSlotId, message) => {
     console.log('🔴🔴🔴 bookAppointment CALLED 🔴🔴🔴', { timeSlotId, message });
-    
+
     // 🔒 PROTECTION ATOMIQUE contre les race conditions
     // Utilisation d'une Promise singleton pour garantir qu'un seul booking est en cours
     if (bookingPromise) {
@@ -592,7 +592,7 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     // The function returns a JSONB object
     const result = data;
     console.log('📊 RPC Result:', result);
-    
+
     if (!result || !result.success) {
       console.log('❌ Booking failed:', result);
       logger.error('[appointmentStore] Booking failed', { result });
@@ -643,7 +643,7 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     const { appointments, timeSlots } = get();
     const appointment = appointments.find(a => a.id === appointmentId);
 
-    if (!appointment) return;
+    if (!appointment) {return;}
 
     // Get authenticated user directly from store
     const resolvedUser = useAuthStore.getState().user;
@@ -703,14 +703,14 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     // Pour un statut 'cancelled', utiliser le RPC atomique (comme cancelAppointment)
     if (status === 'cancelled') {
       const resolvedUser = useAuthStore.getState().user;
-      if (!resolvedUser?.id) throw new Error('Vous devez être connecté.');
+      if (!resolvedUser?.id) {throw new Error('Vous devez être connecté.');}
       const supabase = supabaseClient;
       const { data, error } = await supabase.rpc('cancel_appointment_atomic', {
         p_appointment_id: appointmentId,
         p_user_id: resolvedUser.id,
       });
-      if (error) throw new Error(error.message || 'Erreur lors de l\'annulation');
-      if (!data || !data.success) throw new Error(data?.error || 'Erreur lors de l\'annulation');
+      if (error) {throw new Error(error.message || 'Erreur lors de l\'annulation');}
+      if (!data || !data.success) {throw new Error(data?.error || 'Erreur lors de l\'annulation');}
       const updatedAppointments = appointments.map(a => a.id === appointmentId ? { ...a, status: 'cancelled' as const } : a);
       const appointment = appointments.find(a => a.id === appointmentId);
       if (appointment?.timeSlotId) {

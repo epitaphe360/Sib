@@ -9,7 +9,7 @@ export const visitorTranslations = {
     'visitor.registration.free.badge_access': 'Accès salon',
     'visitor.registration.free.badge_qr': 'Badge QR',
     'visitor.registration.free.badge_free': 'Gratuit',
-    
+
     // Formulaire
     'visitor.form.firstname': 'Prénom',
     'visitor.form.lastname': 'Nom',
@@ -23,7 +23,7 @@ export const visitorTranslations = {
     'visitor.form.confirm_password': 'Confirmer le mot de passe',
     'visitor.form.submit': 'Créer mon badge gratuit',
     'visitor.form.submitting': 'Création en cours...',
-    
+
     // Secteurs
     'visitor.sector.authority': 'Autorité urbaine',
     'visitor.sector.transport': 'Transport & mobilité',
@@ -53,7 +53,7 @@ export const visitorTranslations = {
     'visitor.validation.password_length': 'Le mot de passe doit contenir au moins 12 caractères',
     'visitor.validation.password_requirements': 'Doit contenir majuscule, minuscule, chiffre et caractère spécial',
     'visitor.validation.password_match': 'Les mots de passe ne correspondent pas',
-    
+
     // Messages
     'visitor.message.email_check': 'Vérification de l\'email...',
     'visitor.message.account_exists': 'COMPTE EXISTANT',
@@ -69,7 +69,7 @@ export const visitorTranslations = {
     'visitor.registration.free.badge_access': 'Access to fair',
     'visitor.registration.free.badge_qr': 'QR Badge',
     'visitor.registration.free.badge_free': 'Free',
-    
+
     // Form
     'visitor.form.firstname': 'First Name',
     'visitor.form.lastname': 'Last Name',
@@ -83,7 +83,7 @@ export const visitorTranslations = {
     'visitor.form.confirm_password': 'Confirm Password',
     'visitor.form.submit': 'Create my free badge',
     'visitor.form.submitting': 'Creating...',
-    
+
     // Sectors
     'visitor.sector.authority': 'Building Authority',
     'visitor.sector.transport': 'Construction & Mobility',
@@ -113,7 +113,7 @@ export const visitorTranslations = {
     'visitor.validation.password_length': 'Password must be at least 12 characters',
     'visitor.validation.password_requirements': 'Must contain uppercase, lowercase, number and special char',
     'visitor.validation.password_match': 'Passwords do not match',
-    
+
     // Messages
     'visitor.message.email_check': 'Checking email...',
     'visitor.message.account_exists': 'ACCOUNT EXISTS',

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { toast } from 'sonner';
 import {
   Layout,
@@ -12,7 +12,10 @@ import {
   Plus,
   Trash2,
   Settings,
-  ArrowLeft
+  ArrowLeft,
+  Loader2,
+  ExternalLink,
+  Check,
 } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -22,6 +25,8 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { SupabaseService } from '../../services/supabaseService';
 import useAuthStore from '../../store/authStore';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface HeroContent {
   title: string;
@@ -38,10 +43,12 @@ interface AboutContent {
 }
 
 interface Product {
+  id: string;
   name: string;
   description: string;
   image: string;
   features: string[];
+  price?: string;
 }
 
 interface ProductsContent {
@@ -66,7 +73,13 @@ interface NewsContent {
   articles: NewsArticle[];
 }
 
-type SectionContent = HeroContent | AboutContent | ProductsContent | GalleryContent | NewsContent | Record<string, unknown>;
+type SectionContent =
+  | HeroContent
+  | AboutContent
+  | ProductsContent
+  | GalleryContent
+  | NewsContent
+  | Record<string, unknown>;
 
 interface Section {
   id: string;
@@ -77,333 +90,360 @@ interface Section {
   order: number;
 }
 
+interface SiteSettings {
+  primaryColor: string;
+  secondaryColor: string;
+  fontFamily: string;
+  logoUrl: string;
+}
+
+// ─── Default content ──────────────────────────────────────────────────────────
+
+function getDefaultContent(type: Section['type']): SectionContent {
+  switch (type) {
+    case 'hero':
+      return { title: 'Votre titre', subtitle: 'Votre sous-titre', backgroundImage: '', ctaText: 'En savoir plus', ctaLink: '#' };
+    case 'about':
+      return { title: 'À propos de nous', description: 'Décrivez votre entreprise...', features: [] };
+    case 'products':
+      return { title: 'Nos produits & services', products: [] };
+    case 'gallery':
+      return { title: 'Galerie', images: [] };
+    case 'news':
+      return { title: 'Actualités', articles: [] };
+    case 'contact':
+      return { title: 'Contactez-nous', address: '', phone: '', email: '', website: '' };
+    default:
+      return {};
+  }
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function MiniSiteBuilder() {
   const { user } = useAuthStore();
+  const [exhibitorId, setExhibitorId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const hasLoadedRef = useRef(false);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [realLogoUrl, setRealLogoUrl] = useState<string | null>(null);
-  const [sections, setSections] = useState<Section[]>([
-    {
-      id: '1',
-      type: 'hero',
-      title: 'Section Hero',
-      content: {
-        title: 'Bâtiment Solutions Inc.',
-        subtitle: 'Leading provider of integrated bâtiment management solutions',
-        backgroundImage:
-          'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200',
-        ctaText: 'Découvrir nos solutions',
-        ctaLink: '#products'
-      },
-      visible: true,
-      order: 0
-    },
-    {
-      id: '2',
-      type: 'about',
-      title: 'À propos',
-      content: {
-        title: 'Notre expertise',
-        description:
-          "Avec plus de 20 ans d'expérience dans le secteur du bâtiment, nous accompagnons les bâtiments du monde entier dans leur transformation digitale.",
-        features: ['Solutions innovantes', 'Expertise reconnue', 'Support 24/7', 'Présence internationale']
-      },
-      visible: true,
-      order: 1
-    },
-    {
-      id: '3',
-      type: 'products',
-      title: 'Produits & Services',
-      content: {
-        title: 'Nos solutions',
-        products: [
-          {
-            name: 'Système IA BTP',
-            description: 'Plateforme intelligente d\'optimisation des opérations BTP avec IA prédictive',
-            image:
-              'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=400',
-            features: ['Analytics prédictifs en temps réel', 'Automatisation IA', 'Intégration API complète'],
-            price: 'Sur devis',
-            inStock: true
-          },
-          {
-            name: 'Plateforme IoT Connectée',
-            description: 'Solution IoT de supervision et monitoring des équipements BTP',
-            image:
-              'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400',
-            features: ['Capteurs intelligents', 'Maintenance prédictive', 'Alertes instantanées'],
-            price: 'À partir de 15 000€',
-            inStock: true
-          },
-          {
-            name: 'Support Premium 24/7',
-            description: 'Assistance technique dédiée et formation continue de vos équipes',
-            image:
-              'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400',
-            features: ['Équipe dédiée multilingue', 'Intervention sous 2h', 'Formation personnalisée'],
-            price: '2 500€/mois',
-            inStock: true
-          }
-        ]
-      },
-      visible: true,
-      order: 2
-    }
-  ]);
-
-  const [siteSettings, setSiteSettings] = useState({
-    primaryColor: '#1e40af',
-    secondaryColor: '#3b82f6',
-    accentColor: '#60a5fa',
+  const [sections, setSections] = useState<Section[]>([]);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>({
+    primaryColor: '#C9A84C',
+    secondaryColor: '#0F2034',
     fontFamily: 'Inter',
-    logoUrl: '' // Sera remplacé par le vrai logo de l'entreprise
+    logoUrl: '',
   });
 
-  // Charger le vrai logo de l'entreprise depuis la base de données
+  // Section type definitions (no t() needed — UI labels)
+  const sectionTypes = useMemo<{ type: Section['type']; title: string; icon: React.ComponentType<{ className?: string }>; description: string }[]>(() => [
+    { type: 'hero', title: 'Section Hero', icon: Layout, description: "Bannière d'accueil avec CTA" },
+    { type: 'about', title: 'À propos', icon: FileText, description: 'Présentation de votre entreprise' },
+    { type: 'products', title: 'Produits', icon: Image, description: 'Catalogue produits/services' },
+    { type: 'gallery', title: 'Galerie', icon: Image, description: 'Photos et médias' },
+    { type: 'news', title: 'Actualités', icon: FileText, description: 'Articles et annonces' },
+  ], []);
+
+  // ─── Load from DB ──────────────────────────────────────────────────────────
+
   useEffect(() => {
-    const loadExhibitorLogo = async () => {
-      if (!user?.id) return;
+    const load = async () => {
+      if (!user?.id) { setIsLoading(false); return; }
       try {
-        // Récupérer les données de l'exposant
         const exhibitor = await SupabaseService.getExhibitorByUserId(user.id);
-        if (exhibitor?.logo_url) {
-          setRealLogoUrl(exhibitor.logo_url);
+        if (!exhibitor) { setIsLoading(false); return; }
+        setExhibitorId(exhibitor.id);
+
+        // Apply real logo if available
+        if (exhibitor.logo_url) {
           setSiteSettings(prev => ({ ...prev, logoUrl: exhibitor.logo_url }));
         }
+
+        const miniSite = await SupabaseService.getMiniSite(exhibitor.id);
+        if (miniSite?.sections?.length) {
+          const loaded = (miniSite.sections as any[]).map((s: any, i: number): Section => ({
+            id: s.id || String(i + 1),
+            type: (s.type || 'about') as Section['type'],
+            title: s.title || '',
+            content: s.content || {},
+            visible: s.visible !== false,
+            order: s.order ?? i,
+          }));
+          setSections(loaded);
+          if (miniSite.settings) {
+            setSiteSettings(prev => ({ ...prev, ...(miniSite.settings as Partial<SiteSettings>) }));
+          }
+        } else {
+          // Seed starter sections from profile (no fake company names)
+          const company = user.profile?.company || '';
+          const email = user.email || '';
+          setSections([
+            {
+              id: '1',
+              type: 'hero',
+              title: 'Section Hero',
+              content: {
+                title: company || 'Votre entreprise',
+                subtitle: 'Bienvenue sur notre espace SIB 2026',
+                backgroundImage: '',
+                ctaText: 'Découvrir',
+                ctaLink: '#about',
+              },
+              visible: true,
+              order: 0,
+            },
+            {
+              id: '2',
+              type: 'about',
+              title: 'À propos',
+              content: {
+                title: 'À propos de nous',
+                description: 'Présentez votre entreprise ici...',
+                features: [],
+              },
+              visible: true,
+              order: 1,
+            },
+            {
+              id: '3',
+              type: 'contact',
+              title: 'Contact',
+              content: { title: 'Contactez-nous', address: '', phone: '', email, website: '' },
+              visible: true,
+              order: 2,
+            },
+          ]);
+        }
       } catch (err) {
-        console.warn('Impossible de charger le logo de l\'entreprise:', err);
+        console.error('[MiniSiteBuilder] Load error:', err);
+        toast.error('Impossible de charger le mini-site');
+      } finally {
+        setIsLoading(false);
       }
     };
-    loadExhibitorLogo();
+    load();
   }, [user?.id]);
 
-  const sectionTypes: { type: Section['type']; title: string; icon: React.ComponentType<{ className?: string }>; description: string }[] = [
-    { type: 'hero', title: 'Section Hero', icon: Layout, description: "Bannière d'accueil avec titre et CTA" },
-    { type: 'about', title: 'À propos', icon: FileText, description: 'Présentation de votre entreprise' },
-    { type: 'products', title: 'Produits', icon: Image, description: 'Catalogue de vos produits et services' },
-    { type: 'gallery', title: 'Galerie', icon: Image, description: 'Photos et vidéos de votre entreprise' },
-    { type: 'news', title: 'Actualités', icon: FileText, description: 'Dernières nouvelles et annonces' }
-  ];
+  // Track unsaved changes — skip the initial load cycle
+  useEffect(() => {
+    if (!hasLoadedRef.current) {
+      if (!isLoading) {hasLoadedRef.current = true;}
+      return;
+    }
+    setHasUnsavedChanges(true);
+  }, [sections, siteSettings, isLoading]);
 
-  const addSection = (type: Section['type']) => {
+  // ─── Section actions ───────────────────────────────────────────────────────
+
+  const addSection = useCallback((type: Section['type']) => {
+    const label = sectionTypes.find(s => s.type === type)?.title || 'Nouvelle section';
     const newSection: Section = {
       id: Date.now().toString(),
       type,
-      title: sectionTypes.find((s) => s.type === type)?.title || 'Nouvelle section',
+      title: label,
       content: getDefaultContent(type),
       visible: true,
-      order: sections.length
+      order: 0,
     };
-    setSections((prev) => [...prev, newSection]);
-    toast.success('Section ajoutée');
-  };
+    setSections(prev => {
+      const shifted = prev.map((s, i) => ({ ...s, order: i + 1 }));
+      return [{ ...newSection, order: 0 }, ...shifted];
+    });
+    setActiveSection(newSection.id);
+    toast.success(`Section "${label}" ajoutée`);
+  }, [sectionTypes]);
 
-  const getDefaultContent = (type: Section['type']) => {
-    switch (type) {
-      case 'hero':
-        return { title: 'Votre titre', subtitle: 'Votre sous-titre', backgroundImage: '', ctaText: 'En savoir plus', ctaLink: '#' };
-      case 'about':
-        return { title: 'À propos de nous', description: 'Décrivez votre entreprise ici...', features: [] };
-      case 'products':
-        return { title: 'Nos produits', products: [] };
-      case 'gallery':
-        return { title: 'Galerie', images: [] };
-      case 'news':
-        return { title: 'Actualités', articles: [] };
-      default:
-        return {};
-    }
-  };
-
-  const removeSection = (id: string) => {
-    setSections((prev) => prev.filter((s) => s.id !== id));
+  const removeSection = useCallback((id: string) => {
+    const section = sections.find(s => s.id === id);
+    if (!window.confirm(`Supprimer la section "${section?.title}" ?`)) {return;}
+    setSections(prev => prev.filter(s => s.id !== id).map((s, i) => ({ ...s, order: i })));
+    if (activeSection === id) {setActiveSection(null);}
     toast.success('Section supprimée');
-  };
+  }, [sections, activeSection]);
 
-  const toggleSectionVisibility = (id: string) => {
-    setSections((prev) => prev.map((s) => (s.id === id ? { ...s, visible: !s.visible } : s)));
-  };
+  const toggleVisibility = useCallback((id: string) => {
+    setSections(prev => prev.map(s => s.id === id ? { ...s, visible: !s.visible } : s));
+  }, []);
 
-  // updateSectionContent kept out — implement when inline editors are added
+  // ─── Save (real) ───────────────────────────────────────────────────────────
 
-  const getPreviewWidth = () => {
-    switch (previewMode) {
-      case 'mobile':
-        return 'w-80';
-      case 'tablet':
-        return 'w-96';
-      case 'desktop':
-        return 'w-full';
-      default:
-        return 'w-full';
+  const handleSave = useCallback(async () => {
+    if (!exhibitorId) {
+      toast.error('Exposant introuvable — reconnectez-vous');
+      return;
     }
-  };
-
-  const handlePreview = () => {
-    const previewData = {
-      url: `https://SIB.com/minisite/preview/${Date.now()}`,
-      sections: sections.filter((s) => s.visible).length,
-      theme: siteSettings.fontFamily,
-      colors: siteSettings.primaryColor,
-      responsive: true,
-      seoOptimized: true,
-      loadTime: '1.2s',
-      mobileScore: '98/100'
-    };
-
-    const previewWindow = window.open('', '_blank', 'width=1200,height=800');
-    if (previewWindow) {
-      previewWindow.document.write(`
-        <html>
-          <head><title>Prévisualisation Mini-Site</title></head>
-          <body style="margin:0;padding:20px;font-family:${siteSettings.fontFamily}">
-            <h1 style="color:${siteSettings.primaryColor}">Prévisualisation Mini-Site</h1>
-            <p>Sections visibles: ${previewData.sections}</p>
-            <p>Thème: ${previewData.theme}</p>
-            <p>Couleur principale: ${previewData.colors}</p>
-            <div style="background:${siteSettings.primaryColor};color:white;padding:20px;margin:20px 0;">
-              <h2>Aperçu du design</h2>
-              <p>Votre mini-site avec les couleurs personnalisées</p>
-            </div>
-          </body>
-        </html>
-      `);
-      previewWindow.document.close();
+    setIsSaving(true);
+    try {
+      await SupabaseService.updateMiniSite(exhibitorId, {
+        sections: sections.map(s => ({
+          id: s.id,
+          type: s.type,
+          title: s.title,
+          content: s.content,
+          visible: s.visible,
+          order: s.order,
+        })),
+        settings: siteSettings,
+        published: true,
+      });
+      setHasUnsavedChanges(false);
+      toast.success('Mini-site sauvegardé');
+    } catch (err) {
+      console.error('[MiniSiteBuilder] Save error:', err);
+      toast.error('Erreur lors de la sauvegarde');
+    } finally {
+      setIsSaving(false);
     }
+  }, [exhibitorId, sections, siteSettings]);
 
-    toast.success('Prévisualisation générée et ouverte dans un nouvel onglet.');
-  };
+  // ─── Preview (safe — uses route, no document.write) ───────────────────────
 
-  const handleSave = () => {
-    const saveData = {
-      sections: sections.length,
-      visibleSections: sections.filter((s) => s.visible).length,
-      lastSaved: new Date().toLocaleTimeString('fr-FR'),
-      autoSave: true,
-      backup: true
-    };
+  const handlePreview = useCallback(() => {
+    if (!exhibitorId) {
+      toast.error('Sauvegardez d\'abord votre mini-site');
+      return;
+    }
+    window.open(`/minisite/${exhibitorId}`, '_blank', 'noopener,noreferrer');
+  }, [exhibitorId]);
 
-    // Simulate save
-    setTimeout(() => {
-      toast.success(`Mini-site sauvegardé (${saveData.lastSaved})`);
-    }, 400);
-  };
+  // ─── Computed ─────────────────────────────────────────────────────────────
+
+  const sortedVisible = useMemo(
+    () => [...sections].filter(s => s.visible).sort((a, b) => a.order - b.order),
+    [sections]
+  );
+
+  const previewWidth = previewMode === 'mobile' ? 'w-80' : previewMode === 'tablet' ? 'w-96' : 'w-full';
+
+  const appUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sibs.ma';
+
+  // ─── Loading ──────────────────────────────────────────────────────────────
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-sib-bg flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-10 w-10 animate-spin text-[#C9A84C] mx-auto mb-4" />
+          <p className="text-[#0F2034] font-medium">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Render ───────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
+    <div className="min-h-screen bg-sib-bg">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        {/* Breadcrumb */}
+        <div className="mb-4">
           <Link to={ROUTES.DASHBOARD}>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="text-[#0F2034] hover:text-[#C9A84C]">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Retour au Tableau de Bord Exposant
+              Tableau de bord
             </Button>
           </Link>
         </div>
 
-        <div className="flex items-center justify-between mb-8">
+        {/* Top bar */}
+        <div className="bg-[#0F2034] rounded-xl px-6 py-4 flex flex-wrap items-center justify-between gap-4 mb-6 shadow-sib">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Créateur de Mini-Site</h1>
-            <p className="text-gray-600">Personnalisez votre vitrine digitale pour SIB 2026</p>
+            <h1 className="text-xl font-bold text-white">Créateur de Mini-Site</h1>
+            <p className="text-sm text-white/60">Votre vitrine digitale SIB 2026</p>
           </div>
-
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 bg-white rounded-lg p-1 shadow-sm">
-              <button
-                onClick={() => setPreviewMode('desktop')}
-                className={`p-2 rounded ${previewMode === 'desktop' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
-              >
-                <Monitor className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => setPreviewMode('tablet')}
-                className={`p-2 rounded ${previewMode === 'tablet' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
-              >
-                <Tablet className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => setPreviewMode('mobile')}
-                className={`p-2 rounded ${previewMode === 'mobile' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
-              >
-                <Smartphone className="h-4 w-4" />
-              </button>
+          <div className="flex items-center gap-3">
+            {/* Preview mode toggle */}
+            <div className="flex items-center gap-1 bg-white/10 rounded-lg p-1">
+              {(['desktop', 'tablet', 'mobile'] as const).map(mode => {
+                const Icon = mode === 'desktop' ? Monitor : mode === 'tablet' ? Tablet : Smartphone;
+                return (
+                  <button key={mode}
+                    onClick={() => setPreviewMode(mode)}
+                    className={`p-2 rounded-md transition-colors ${previewMode === mode ? 'bg-[#C9A84C] text-white' : 'text-white/60 hover:text-white'}`}
+                    title={mode}>
+                    <Icon className="h-4 w-4" />
+                  </button>
+                );
+              })}
             </div>
-
-            <Button variant="outline" onClick={handlePreview}>
-              <Eye className="h-4 w-4 mr-2" />
-              Prévisualiser
+            <Button variant="outline" size="sm" onClick={handlePreview}
+              className="border-white/30 text-white hover:bg-white/10">
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Aperçu
             </Button>
-
-            <Button variant="default" onClick={handleSave}>
-              <Save className="h-4 w-4 mr-2" />
-              Sauvegarder
+            <Button size="sm" onClick={handleSave} disabled={isSaving}
+              className={`${hasUnsavedChanges ? 'bg-[#C9A84C] hover:bg-[#A88830]' : 'bg-green-600 hover:bg-green-700'} text-white font-semibold`}>
+              {isSaving
+                ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Sauvegarde...</>
+                : hasUnsavedChanges
+                  ? <><Save className="h-4 w-4 mr-2" />Sauvegarder</>
+                  : <><Check className="h-4 w-4 mr-2" />Sauvegardé</>}
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-1 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+          {/* ── Sidebar ── */}
+          <div className="lg:col-span-1 space-y-4">
+
+            {/* Settings */}
             <Card>
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <Settings className="h-4 w-4 mr-2" /> Paramètres du site
+                <h3 className="font-bold text-[#0F2034] mb-4 flex items-center gap-2 text-sm">
+                  <Settings className="h-4 w-4 text-[#C9A84C]" />
+                  Paramètres
                 </h3>
-
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Couleur principale</label>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="color"
-                        value={siteSettings.primaryColor}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, primaryColor: e.target.value })}
-                        className="w-8 h-8 rounded border border-gray-300"
-                      />
-                      <input
-                        type="text"
-                        value={siteSettings.primaryColor}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, primaryColor: e.target.value })}
-                        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
-                      />
+                    <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Couleur principale</label>
+                    <div className="flex items-center gap-2">
+                      <input type="color" value={siteSettings.primaryColor}
+                        onChange={e => setSiteSettings(prev => ({ ...prev, primaryColor: e.target.value }))}
+                        aria-label="Couleur principale"
+                        className="w-9 h-9 rounded-lg border border-gray-200 cursor-pointer p-0.5" />
+                      <input type="text" value={siteSettings.primaryColor}
+                        onChange={e => setSiteSettings(prev => ({ ...prev, primaryColor: e.target.value }))}
+                        aria-label="Code hex"
+                        className="flex-1 px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg font-mono" />
                     </div>
                   </div>
-
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Police</label>
-                    <select
-                      value={siteSettings.fontFamily}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, fontFamily: e.target.value })}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
+                    <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Police</label>
+                    <select value={siteSettings.fontFamily}
+                      onChange={e => setSiteSettings(prev => ({ ...prev, fontFamily: e.target.value }))}
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A84C]">
                       <option value="Inter">Inter</option>
                       <option value="Roboto">Roboto</option>
                       <option value="Open Sans">Open Sans</option>
                       <option value="Lato">Lato</option>
+                      <option value="Montserrat">Montserrat</option>
                     </select>
                   </div>
                 </div>
               </div>
             </Card>
 
+            {/* Add section */}
             <Card>
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <Plus className="h-4 w-4 mr-2" /> Ajouter une section
+                <h3 className="font-bold text-[#0F2034] mb-3 flex items-center gap-2 text-sm">
+                  <Plus className="h-4 w-4 text-[#C9A84C]" />
+                  Ajouter une section
                 </h3>
-
-                <div className="space-y-2">
-                  {sectionTypes.map((sectionType) => (
-                    <button
-                      key={sectionType.type}
-                      onClick={() => addSection(sectionType.type)}
-                      className="w-full p-3 text-left border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <sectionType.icon className="h-4 w-4 text-gray-400" />
+                <div className="space-y-1.5">
+                  {sectionTypes.map(st => (
+                    <button key={st.type}
+                      onClick={() => addSection(st.type)}
+                      className="w-full p-2.5 text-left border border-gray-100 rounded-lg hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-colors group">
+                      <div className="flex items-center gap-2.5">
+                        <st.icon className="h-4 w-4 text-gray-400 group-hover:text-[#C9A84C] flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-medium text-gray-900">{sectionType.title}</p>
-                          <p className="text-xs text-gray-500">{sectionType.description}</p>
+                          <p className="text-xs font-semibold text-gray-800">{st.title}</p>
+                          <p className="text-xs text-gray-400">{st.description}</p>
                         </div>
                       </div>
                     </button>
@@ -412,173 +452,253 @@ export default function MiniSiteBuilder() {
               </div>
             </Card>
 
+            {/* Sections list */}
             <Card>
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-4">Sections ({sections.length})</h3>
-
-                <div className="space-y-2">
-                  {sections.map((section) => (
-                    <div
-                      key={section.id}
-                      className={`p-3 border rounded-lg cursor-pointer transition-colors ${
-                        activeSection === section.id ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => setActiveSection(section.id)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <span className="text-sm font-medium text-gray-900">{section.title}</span>
+                <h3 className="font-bold text-[#0F2034] mb-3 text-sm">Sections ({sections.length})</h3>
+                {sections.length === 0
+                  ? <p className="text-xs text-gray-400 text-center py-4">Aucune section</p>
+                  : (
+                    <div className="space-y-1.5">
+                      {[...sections].sort((a, b) => a.order - b.order).map(section => (
+                        <div key={section.id}
+                          className={`p-2.5 border rounded-lg cursor-pointer transition-colors ${
+                            activeSection === section.id ? 'border-[#C9A84C] bg-[#C9A84C]/5' : 'border-gray-100 hover:border-gray-300'
+                          }`}
+                          onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}>
+                          <div className="flex items-center justify-between">
+                            <span className={`text-xs font-semibold truncate ${section.visible ? 'text-gray-800' : 'text-gray-400 line-through'}`}>
+                              {section.title}
+                            </span>
+                            <div className="flex items-center gap-0.5 flex-shrink-0">
+                              <button onClick={e => { e.stopPropagation(); toggleVisibility(section.id); }}
+                                className={`p-1 rounded ${section.visible ? 'text-green-500' : 'text-gray-300'}`}
+                                title={section.visible ? 'Masquer' : 'Afficher'}>
+                                <Eye className="h-3 w-3" />
+                              </button>
+                              <button onClick={e => { e.stopPropagation(); removeSection(section.id); }}
+                                className="p-1 rounded text-red-400 hover:text-red-600"
+                                title="Supprimer">
+                                <Trash2 className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </div>
+                          <Badge variant="info" size="sm" className="mt-1.5 text-xs">{section.type}</Badge>
                         </div>
-
-                        <div className="flex items-center space-x-1">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleSectionVisibility(section.id);
-                            }}
-                            className={`p-2 min-w-[40px] min-h-[40px] flex items-center justify-center rounded ${section.visible ? 'text-green-600' : 'text-gray-400'}`}
-                          >
-                            <Eye className="h-3 w-3" />
-                          </button>
-
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeSection(section.id);
-                            }}
-                            className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center rounded text-red-600 hover:bg-red-50"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="mt-2 flex items-center justify-between">
-                        <Badge variant="info" size="sm">
-                          {section.type}
-                        </Badge>
-                        <div className="flex items-center space-x-2">
-                          <Button size="sm" variant="ghost" onClick={() => setActiveSection(section.id)}>
-                            <Eye className="h-4 w-4 mr-2" /> Prévisualiser
-                          </Button>
-                        </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  )
+                }
               </div>
             </Card>
           </div>
 
+          {/* ── Preview ── */}
           <div className="lg:col-span-3">
-            <Card className="p-6">
-              <div className="flex justify-center">
-                <div className={`${getPreviewWidth()} transition-all duration-300`}>
-                  <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-lg">
-                    <div className="bg-gray-100 px-4 py-2 border-b border-gray-200">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex space-x-1">
-                          <Save className="h-4 w-4 mr-2" /> Sauvegarder
-                        </div>
-                        <div className="flex-1 bg-white rounded px-3 py-1 text-xs text-gray-500">SIB.com/exhibitor/bâtiment-solutions-inc</div>
-                      </div>
+            <Card className="overflow-hidden">
+              {/* Browser chrome */}
+              <div className="bg-gray-100 border-b border-gray-200 px-4 py-2.5 flex items-center gap-3">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 bg-red-400 rounded-full" />
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full" />
+                  <div className="w-3 h-3 bg-green-400 rounded-full" />
+                </div>
+                <div className="flex-1 bg-white border border-gray-200 rounded-md px-3 py-1 text-xs text-gray-500 font-mono truncate">
+                  {appUrl}/minisite/{exhibitorId?.slice(0, 8) || 'votre-stand'}
+                </div>
+              </div>
+
+              {/* Preview content */}
+              <div className="p-4 bg-gray-50 overflow-auto" style={{ minHeight: '70vh' }}>
+                <div className={`${previewWidth} mx-auto transition-all duration-300`}>
+                  <div className="bg-white shadow-xl rounded-lg overflow-hidden"
+                    style={{ fontFamily: siteSettings.fontFamily }}>
+
+                    {/* Site nav */}
+                    <div className="flex items-center justify-between px-6 py-3"
+                      style={{ backgroundColor: siteSettings.secondaryColor }}>
+                      {siteSettings.logoUrl
+                        ? <img src={siteSettings.logoUrl} alt="Logo" className="h-8 w-auto object-contain" />
+                        : <span className="text-white font-bold text-sm">{user?.profile?.company || 'Votre entreprise'}</span>}
                     </div>
 
-                    <div className="min-h-96">
-                      {sections
-                        .filter((s) => s.visible)
-                        .sort((a, b) => a.order - b.order)
-                        .map((section) => (
-                          <motion.div
-                            key={section.id}
-                            className={`border-2 border-transparent hover:border-blue-300 transition-colors ${
-                              activeSection === section.id ? 'border-blue-500' : ''
-                            }`}
-                            onClick={() => setActiveSection(section.id)}
-                          >
-                            {section.type === 'hero' && (
-                              <div
-                                className="relative h-64 bg-cover bg-center flex items-center justify-center"
+                    {/* Sections */}
+                    {sortedVisible.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+                        <Layout className="h-16 w-16 mb-4 opacity-30" />
+                        <p className="text-sm font-medium mb-4">Aucune section visible</p>
+                        <Button size="sm" className="bg-[#C9A84C] hover:bg-[#A88830] text-white"
+                          onClick={() => addSection('hero')}>
+                          <Plus className="h-4 w-4 mr-1" /> Ajouter Section Hero
+                        </Button>
+                      </div>
+                    ) : (
+                      sortedVisible.map(section => (
+                        <motion.div key={section.id}
+                          className={`border-2 transition-colors cursor-pointer ${
+                            activeSection === section.id ? 'border-[#C9A84C]' : 'border-transparent hover:border-[#C9A84C]/30'
+                          }`}
+                          onClick={() => setActiveSection(section.id)}>
+
+                          {activeSection === section.id && (
+                            <div className="bg-[#C9A84C] px-3 py-1 text-xs text-white font-semibold">
+                              Section active : {section.title}
+                            </div>
+                          )}
+
+                          {/* Hero */}
+                          {section.type === 'hero' && (() => {
+                            const c = section.content as HeroContent;
+                            return (
+                              <div className="relative h-56 flex items-center justify-center"
                                 style={{
-                                  backgroundImage: (section.content as HeroContent).backgroundImage ? `url(${(section.content as HeroContent).backgroundImage})` : 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)'
-                                }}
-                              >
-                                <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-                                <div className="relative text-center text-white px-6">
-                                  <h1 className="text-3xl font-bold mb-4">{(section.content as HeroContent).title}</h1>
-                                  <p className="text-lg mb-6 opacity-90">{(section.content as HeroContent).subtitle}</p>
-                                  <button
-                                    className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
-                                    style={{ color: siteSettings.primaryColor }}
-                                  >
-                                    {(section.content as HeroContent).ctaText}
-                                  </button>
+                                  background: c.backgroundImage
+                                    ? `url(${c.backgroundImage}) center/cover`
+                                    : `linear-gradient(135deg, ${siteSettings.secondaryColor} 0%, ${siteSettings.primaryColor} 100%)`,
+                                }}>
+                                <div className="absolute inset-0 bg-black/40" />
+                                <div className="relative text-center text-white px-6 w-full">
+                                  <h1 className="text-2xl font-bold mb-3">{c.title}</h1>
+                                  <p className="text-base text-white/90 mb-4">{c.subtitle}</p>
+                                  <span className="inline-block px-5 py-2 rounded-lg font-semibold text-sm text-white"
+                                    style={{ backgroundColor: siteSettings.primaryColor }}>
+                                    {c.ctaText}
+                                  </span>
                                 </div>
                               </div>
-                            )}
+                            );
+                          })()}
 
-                            {section.type === 'about' && (
+                          {/* About */}
+                          {section.type === 'about' && (() => {
+                            const c = section.content as AboutContent;
+                            return (
                               <div className="p-8">
-                                <h2 className="text-2xl font-bold text-gray-900 mb-4">{(section.content as AboutContent).title}</h2>
-                                <p className="text-gray-600 mb-6">{(section.content as AboutContent).description}</p>
-                                {(section.content as AboutContent).features.length > 0 && (
-                                  <div className="grid grid-cols-2 gap-4">
-                                    {(section.content as AboutContent).features.map((feature: any, idx: number) => {
-                                      const featureName = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-                                      if (!featureName) return null;
+                                <h2 className="text-2xl font-bold text-[#0F2034] mb-4">{c.title}</h2>
+                                <p className="text-gray-600 leading-relaxed mb-5">{c.description}</p>
+                                {c.features.length > 0 && (
+                                  <div className="grid grid-cols-2 gap-3">
+                                    {c.features.map((feat, i) => {
+                                      const name = typeof feat === 'string' ? feat : (feat as any)?.name || '';
+                                      if (!name) {return null;}
                                       return (
-                                        <div key={`feature-${idx}`} className="flex items-center space-x-2">
-                                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: siteSettings.primaryColor }}></div>
-                                          <span className="text-sm text-gray-700">{featureName}</span>
+                                        <div key={i} className="flex items-center gap-2">
+                                          <div className="w-2 h-2 rounded-full flex-shrink-0"
+                                            style={{ backgroundColor: siteSettings.primaryColor }} />
+                                          <span className="text-sm text-gray-700">{name}</span>
                                         </div>
                                       );
                                     })}
                                   </div>
                                 )}
                               </div>
-                            )}
+                            );
+                          })()}
 
-                            {section.type === 'products' && (
+                          {/* Products */}
+                          {section.type === 'products' && (() => {
+                            const c = section.content as ProductsContent;
+                            return (
                               <div className="p-8 bg-gray-50">
-                                <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">{(section.content as ProductsContent).title}</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                  {(section.content as ProductsContent).products.map((product: Product) => (
-                                    <div key={`product-${product.name}`} className="bg-white rounded-lg p-6 shadow-sm">
-                                      <img src={product.image} alt={product.name} className="w-full h-32 object-cover rounded-lg mb-4" />
-                                      <h3 className="font-semibold text-gray-900 mb-2">{product.name}</h3>
-                                      <p className="text-gray-600 text-sm mb-4">{product.description}</p>
-                                      <div className="flex flex-wrap gap-1">
-                                        {product.features.map((feature: any, idx: number) => {
-                                          const featureName = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-                                          if (!featureName) return null;
-                                          return <Badge key={`pf-${idx}`} variant="info" size="sm">{featureName}</Badge>;
-                                        })}
+                                <h2 className="text-2xl font-bold text-[#0F2034] mb-5 text-center">{c.title}</h2>
+                                {c.products.length === 0 ? (
+                                  <p className="text-center text-gray-400 py-8 text-sm">Aucun produit — utilisez l'éditeur complet pour en ajouter</p>
+                                ) : (
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {c.products.map((prod, i) => (
+                                      <div key={prod.id || i} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                                        {prod.image && (
+                                          <img src={prod.image} alt={prod.name}
+                                            className="w-full h-28 object-cover rounded-lg mb-3" />
+                                        )}
+                                        <h3 className="font-semibold text-[#0F2034] mb-1">{prod.name}</h3>
+                                        <p className="text-gray-500 text-sm">{prod.description}</p>
+                                        {prod.price && (
+                                          <p className="mt-2 font-bold text-sm" style={{ color: siteSettings.primaryColor }}>
+                                            {prod.price}
+                                          </p>
+                                        )}
                                       </div>
-                                    </div>
-                                  ))}
-                                </div>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </motion.div>
-                        ))}
+                            );
+                          })()}
 
-                      {sections.filter((s) => s.visible).length === 0 && (
-                        <div className="flex items-center justify-center h-64 text-gray-500">
-                          <div className="text-center">
-                            <Layout className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                            <p>Ajoutez des sections pour commencer à créer votre mini-site</p>
-                          </div>
-                        </div>
-                      )}
+                          {/* Gallery */}
+                          {section.type === 'gallery' && (() => {
+                            const c = section.content as GalleryContent;
+                            return (
+                              <div className="p-8">
+                                <h2 className="text-2xl font-bold text-[#0F2034] mb-5">{c.title}</h2>
+                                {c.images.length === 0 ? (
+                                  <p className="text-gray-400 text-sm text-center py-8">Aucune image</p>
+                                ) : (
+                                  <div className="grid grid-cols-3 gap-2">
+                                    {c.images.map((img, i) => (
+                                      <img key={i} src={img} alt=""
+                                        className="aspect-square object-cover rounded-lg" />
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
+
+                          {/* News */}
+                          {section.type === 'news' && (() => {
+                            const c = section.content as NewsContent;
+                            return (
+                              <div className="p-8 bg-gray-50">
+                                <h2 className="text-2xl font-bold text-[#0F2034] mb-5">{c.title}</h2>
+                                {(!c.articles || c.articles.length === 0) ? (
+                                  <p className="text-gray-400 text-sm text-center py-8">Aucun article</p>
+                                ) : (
+                                  <div className="space-y-4">
+                                    {c.articles.map((art, i) => (
+                                      <div key={art.id || i} className="bg-white rounded-xl p-4 border border-gray-100">
+                                        <h3 className="font-semibold text-[#0F2034] mb-1">{art.title}</h3>
+                                        <p className="text-gray-500 text-sm">{art.excerpt}</p>
+                                        <p className="text-xs text-gray-400 mt-2">
+                                          {art.date ? new Date(art.date).toLocaleDateString('fr-FR') : ''}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
+                        </motion.div>
+                      ))
+                    )}
+
+                    {/* Site footer */}
+                    <div className="px-6 py-4 text-center text-xs text-white/60"
+                      style={{ backgroundColor: siteSettings.secondaryColor }}>
+                      © 2026 SIB — Salon International du Bâtiment
                     </div>
                   </div>
                 </div>
               </div>
             </Card>
+
+            {/* Link to full editor */}
+            <div className="mt-4 p-4 bg-[#C9A84C]/10 border border-[#C9A84C]/20 rounded-xl flex items-center justify-between">
+              <div>
+                <p className="text-sm font-bold text-[#0F2034]">Éditeur avancé disponible</p>
+                <p className="text-xs text-gray-500">Modifiez les textes directement dans l'aperçu avec l'éditeur complet</p>
+              </div>
+              <Link to={ROUTES.MINISITE_EDITOR}>
+                <Button size="sm" className="bg-[#0F2034] hover:bg-[#1B365D] text-white">
+                  Éditeur complet →
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
+}

@@ -65,7 +65,7 @@ export default function ModerationPanel() {
           .eq('status', 'pending')
           .order('created_at', { ascending: true });
 
-        if (error) throw error;
+        if (error) {throw error;}
 
         const items: PendingContent[] = (data || []).map((row: any) => ({
           id: row.id,
@@ -101,7 +101,7 @@ export default function ModerationPanel() {
 
   useEffect(() => {
     const loadApprovedToday = async () => {
-      if (!isSupabaseReady() || !supabase) return;
+      if (!isSupabaseReady() || !supabase) {return;}
       try {
         const today = new Date().toISOString().split('T')[0];
         const { count } = await supabase
@@ -118,7 +118,7 @@ export default function ModerationPanel() {
   }, []);
 
   const handleApproveContent = async (content: PendingContent) => {
-    if (!isSupabaseReady() || !supabase) return;
+    if (!isSupabaseReady() || !supabase) {return;}
     setModeratingContent(prev => [...prev, content.id]);
 
     try {
@@ -127,7 +127,7 @@ export default function ModerationPanel() {
         .update({ status: 'approved', reviewed_by: (await supabase.auth.getUser()).data.user?.id, reviewed_at: new Date().toISOString() })
         .eq('id', content.id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       toast.success(`✅ Contenu approuvé - ${content.exhibitorName} — ${content.sectionTitle}`);
       setPendingContent(prev => prev.filter(c => c.id !== content.id));
@@ -140,7 +140,7 @@ export default function ModerationPanel() {
   };
 
   const handleRejectContent = async (content: PendingContent, comment: string) => {
-    if (!isSupabaseReady() || !supabase) return;
+    if (!isSupabaseReady() || !supabase) {return;}
     setModeratingContent(prev => [...prev, content.id]);
 
     try {
@@ -154,7 +154,7 @@ export default function ModerationPanel() {
         })
         .eq('id', content.id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       toast.error(`❌ Contenu refusé - ${content.exhibitorName} — ${content.sectionTitle}: ${comment}`);
       setPendingContent(prev => prev.map(c =>
@@ -230,7 +230,7 @@ export default function ModerationPanel() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
               <div className="flex items-center space-x-2">
                 <Flag className="h-5 w-5 text-orange-600" />
@@ -306,9 +306,9 @@ export default function ModerationPanel() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
-                      <Badge 
+                      <Badge
                         className={getPriorityColor(content.priority)}
                         size="sm"
                       >
@@ -351,7 +351,7 @@ export default function ModerationPanel() {
 
                   {/* Actions */}
                   <div className="flex space-x-3">
-                    <Button 
+                    <Button
                       className="bg-green-600 hover:bg-green-700"
                       onClick={() => handleApproveContent(content)}
                       disabled={moderatingContent.includes(content.id)}
@@ -368,8 +368,8 @@ export default function ModerationPanel() {
                         </>
                       )}
                     </Button>
-                    
-                    <Button 
+
+                    <Button
                       variant="outline"
                       onClick={() => {
                         setSelectedContent(content);
@@ -379,7 +379,7 @@ export default function ModerationPanel() {
                       <X className="h-4 w-4 mr-2" />
                       Refuser avec Commentaire
                     </Button>
-                    
+
                     <Button
                       variant="outline"
                       onClick={() => navigate(ROUTES.MINISITE_PREVIEW.replace(':exhibitorId', content.exhibitorId))}
@@ -437,12 +437,12 @@ export default function ModerationPanel() {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Refuser le Contenu
             </h3>
-            
+
             <div className="mb-4">
               <p className="text-sm text-gray-600 mb-2">
                 <strong>{selectedContent.exhibitorName}</strong> - {selectedContent.sectionTitle}
               </p>
-              
+
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Motif du refus et corrections demandées :
               </label>
@@ -454,10 +454,10 @@ export default function ModerationPanel() {
                 rows={4}
               />
             </div>
-            
+
             <div className="flex justify-end space-x-3">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => {
                   setShowModerationModal(false);
                   setSelectedContent(null);
@@ -466,7 +466,7 @@ export default function ModerationPanel() {
               >
                 Annuler
               </Button>
-              <Button 
+              <Button
                 onClick={() => handleRejectContent(selectedContent, moderationComment)}
                 disabled={!moderationComment.trim()}
                 className="bg-red-600 hover:bg-red-700"

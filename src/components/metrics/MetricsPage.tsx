@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
-import { 
-  TrendingUp, 
-  Users, 
-  Building2, 
-  Calendar, 
+import {
+  TrendingUp,
+  Users,
+  Building2,
+  Calendar,
   Globe,
   Target,
   Award,
@@ -191,7 +191,7 @@ export default function MetricsPage() {
   const getPerformanceLevel = (pavilion: PavilionMetric): { label: string, variant: 'success' | 'warning' | 'error' | 'default' } => {
     // Calculer un score basé sur les métriques
     const totalScore = pavilion.exhibitors + Math.floor(pavilion.visitors / 10) + pavilion.conferences;
-    
+
     if (totalScore >= 25) {
       return { label: 'Excellent', variant: 'success' };
     } else if (totalScore >= 15) {
@@ -332,18 +332,18 @@ export default function MetricsPage() {
                         </div>
                         <div className="flex items-center space-x-1">
                           <TrendingUp className={`h-4 w-4 ${
-                            metric.trend === 'up' ? 'text-green-500' : 
+                            metric.trend === 'up' ? 'text-green-500' :
                             metric.trend === 'down' ? 'text-red-500' : 'text-gray-500'
                           }`} />
                           <span className={`text-sm font-medium ${
-                            metric.trend === 'up' ? 'text-green-600' : 
+                            metric.trend === 'up' ? 'text-green-600' :
                             metric.trend === 'down' ? 'text-red-600' : 'text-gray-600'
                           }`}>
                             {metric.trendValue}
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="mb-2">
                         <div className="text-3xl font-bold text-gray-900">
                           {metric.value}
@@ -352,23 +352,23 @@ export default function MetricsPage() {
                           Objectif: {metric.target}
                         </div>
                       </div>
-                      
+
                       <div className="mb-2">
                         <div className="flex justify-between text-sm mb-1">
                           <span className="text-gray-600">{metric.title}</span>
                           <span className="text-gray-900 font-medium">{metric.progress}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
+                          <div
                             className={`h-2 rounded-full ${
-                              metric.progress >= 100 ? 'bg-green-500' : 
+                              metric.progress >= 100 ? 'bg-green-500' :
                               metric.progress >= 80 ? 'bg-blue-500' : 'bg-yellow-500'
                             }`}
                             style={{ width: `${Math.min(metric.progress, 100)}%` }}
                           />
                         </div>
                       </div>
-                      
+
                       {metric.progress >= 100 && (
                         <Badge variant="success" size="sm">
                           <Target className="h-3 w-3 mr-1" />
@@ -508,7 +508,7 @@ export default function MetricsPage() {
                         {pavilion.name}
                       </h3>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
                       <div className="text-center">
                         <div className="text-2xl font-bold text-gray-900">
@@ -535,7 +535,7 @@ export default function MetricsPage() {
                         <div className="text-xs text-gray-600">Satisfaction</div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Performance Globale</span>
                       <Badge variant={getPerformanceLevel(pavilion).variant} size="sm">

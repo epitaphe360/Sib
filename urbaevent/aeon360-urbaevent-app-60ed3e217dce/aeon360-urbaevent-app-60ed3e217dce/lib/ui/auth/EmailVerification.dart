@@ -192,9 +192,10 @@ class _EmailVerification extends State<EmailVerification> {
   }
 
   Widget _buildContent() {
-    return WillPopScope(
-      onWillPop: () {
-        exit(0);
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, _) {
+        if (!didPop) exit(0);
       },
       child: Scaffold(
         appBar: null,
@@ -255,11 +256,11 @@ class _EmailVerification extends State<EmailVerification> {
                       Container(
                         margin: EdgeInsets.fromLTRB(80, 20, 80, 20),
                         child: Center(
-                            child: RawKeyboardListener(
+                            child: KeyboardListener(
                           focusNode: FocusNode(),
                           // Create an empty FocusNode
-                          onKey: (RawKeyEvent event) {
-                            if (event is RawKeyUpEvent &&
+                          onKeyEvent: (KeyEvent event) {
+                            if (event is KeyUpEvent &&
                                 event.logicalKey ==
                                     LogicalKeyboardKey.backspace) {
                               for (int i = 0; i < focusNode.length; i++) {

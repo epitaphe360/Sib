@@ -172,7 +172,7 @@ export default function AvailabilityManager({ userId, userType, onAvailabilityUp
             </div>
           </div>
         </Card>
-        
+
         <Card className="p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
           <div className="flex items-center justify-between mb-2">
             <Clock className="h-10 w-10 opacity-80" />
@@ -182,7 +182,7 @@ export default function AvailabilityManager({ userId, userType, onAvailabilityUp
             </div>
           </div>
         </Card>
-        
+
         <Card className="p-6 bg-gradient-to-br from-emerald-500 to-teal-600 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
           <div className="flex items-center justify-between mb-2">
             <Users className="h-10 w-10 opacity-80" />
@@ -354,7 +354,7 @@ export default function AvailabilityManager({ userId, userType, onAvailabilityUp
             <p className="text-gray-600 mb-6 max-w-md mx-auto leading-relaxed">
               Commencez par ajouter vos créneaux de disponibilité pour permettre aux visiteurs de prendre rendez-vous avec vous pendant SIB 2026.
             </p>
-            <Button 
+            <Button
               onClick={() => setShowAddForm(true)}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3 shadow-lg hover:shadow-xl transition-all"
             >
@@ -392,7 +392,7 @@ export default function AvailabilityManager({ userId, userType, onAvailabilityUp
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <Badge 
+                  <Badge
                     variant={slot.available ? 'success' : 'error'}
                     className="px-4 py-2 text-sm font-bold"
                   >

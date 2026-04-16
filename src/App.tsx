@@ -1,7 +1,7 @@
 ﻿import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { lazyRetry } from './utils/lazyRetry';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { usePageTracking } from './hooks/usePageTracking';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -183,7 +183,6 @@ import { initializeAuth } from './lib/initAuth';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { useAuthStore } from './store/authStore';
-import { useLocation } from 'react-router-dom';
 import { UrbaEventNav } from './components/layout/UrbaEventNav';
 
 const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];

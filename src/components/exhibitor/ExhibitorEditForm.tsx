@@ -646,7 +646,7 @@ export default function ExhibitorEditForm() {
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">
                   Logo de l'entreprise
                 </h2>
-                
+
                 <ImageUploader
                   onImageUploaded={handleLogoUploaded}
                   initialImageUrl={logo}
@@ -654,7 +654,7 @@ export default function ExhibitorEditForm() {
                   folder="logos"
                   maxSizeMB={2}
                 />
-                
+
                 <p className="text-sm text-gray-500 mt-4">
                   Format recommandé: PNG ou JPG, 512x512px, max 2MB
                 </p>
@@ -664,7 +664,7 @@ export default function ExhibitorEditForm() {
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">
                   Aperçu de la fiche
                 </h2>
-                
+
                 <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                   <div className="p-4 border-b border-gray-200 flex items-center space-x-4">
                     {logo ? (

@@ -14,7 +14,7 @@ class SalonBranding {
   static Future<void> load() async {
     try {
       final salons = await SupabaseService.instance.getSalons();
-      if (salons == null || salons.isEmpty) return;
+      if (salons.isEmpty) return;
 
       // Chercher le salon par défaut, sinon prendre le premier actif
       final defaultSalon = salons.firstWhere(

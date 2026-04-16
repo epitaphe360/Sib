@@ -71,7 +71,7 @@ export const MediaLibraryPage: React.FC = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Retour à l'accueil
           </Link>
-          
+
           <div className="flex items-center space-x-4 mb-4">
             <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
               <Library className="w-8 h-8" />

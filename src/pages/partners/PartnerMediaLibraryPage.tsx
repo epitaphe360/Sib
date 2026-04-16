@@ -45,11 +45,11 @@ export default function PartnerMediaLibraryPage() {
   }, [user]);
 
   const fetchPartnerMedia = async () => {
-    if (!user) return;
-    
+    if (!user) {return;}
+
     setIsLoading(true);
     try {
-      let query = supabase
+      const query = supabase
         .from('media_contents')
         .select('id, title, description, type, category, thumbnail_url, video_url, duration, status, created_at, approved_at, rejection_reason')
         .eq('created_by_id', user.id)
@@ -59,7 +59,7 @@ export default function PartnerMediaLibraryPage() {
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      if (error) {throw error;}
       setMedia(data || []);
     } catch (error) {
       console.error('Erreur chargement médias:', error);
@@ -113,7 +113,7 @@ export default function PartnerMediaLibraryPage() {
   };
 
   const filteredMedia = media.filter(m => {
-    if (filter === 'all') return true;
+    if (filter === 'all') {return true;}
     return m.status === filter;
   });
 
@@ -240,7 +240,7 @@ export default function PartnerMediaLibraryPage() {
                 {filter === 'all' ? 'Aucun média' : `Aucun média ${filter === 'pending_approval' ? 'en attente' : filter === 'approved' ? 'approuvé' : 'rejeté'}`}
               </h3>
               <p className="text-gray-600 mb-4">
-                {filter === 'all' 
+                {filter === 'all'
                   ? 'Commencez par soumettre votre premier contenu média'
                   : 'Aucun contenu dans cette catégorie pour le moment'}
               </p>

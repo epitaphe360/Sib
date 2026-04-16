@@ -40,7 +40,7 @@ export const FeaturedPartners: React.FC = () => {
         const sorted = [...pool].sort((a, b) => {
           const pa = tierPriority[a.partner_tier || a.partner_type || a.partnerType || ''] ?? 99;
           const pb = tierPriority[b.partner_tier || b.partner_type || b.partnerType || ''] ?? 99;
-          if (pa !== pb) return pa - pb;
+          if (pa !== pb) {return pa - pb;}
           // À égalité de tier, ordre alphabétique
           return (a.organization_name || a.organizationName || a.company_name || '').localeCompare(b.organization_name || b.organizationName || b.company_name || '');
         });
@@ -101,7 +101,7 @@ export const FeaturedPartners: React.FC = () => {
     );
   }
 
-  if (partners.length === 0) return null;
+  if (partners.length === 0) {return null;}
 
   return (
     <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-slate-50 relative overflow-hidden">

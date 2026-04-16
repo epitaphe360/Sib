@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
-import { 
-  Check, X, Crown, Zap, Star, Award, 
+import {
+  Check, X, Crown, Zap, Star, Award,
   Building2, Globe, Users, GraduationCap, Landmark,
   Hammer, Cog, BookOpen, Palette, ArrowRight,
   MapPin, CalendarDays, Clock, CreditCard,
@@ -173,15 +173,15 @@ export default function SubscriptionPage() {
       <section className="relative min-h-[90vh] flex items-center text-white overflow-hidden">
         {/* Background image salon */}
         <div className="absolute inset-0">
-          <img 
-            src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920" 
-            alt="Salon du bâtiment" 
+          <img
+            src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920"
+            alt="Salon du bâtiment"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-blue-800/85 to-indigo-900/75" />
           <div className="absolute inset-0 bg-gradient-to-t from-blue-950/60 via-transparent to-blue-900/30" />
         </div>
-        
+
         {/* Pattern Zellige subtil */}
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 11px)' }} />
 
@@ -201,7 +201,7 @@ export default function SubscriptionPage() {
               transition={{ duration: 0.8 }}
             >
               {/* Badge */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}

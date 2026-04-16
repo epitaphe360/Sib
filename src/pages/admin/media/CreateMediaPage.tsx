@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Video, Mic, Film, Radio, Star, MessageCircle, Save, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { ArrowLeft, Video, Mic, Film, Radio, Star, MessageCircle, Save } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
 import { mediaService } from '../../../services/mediaService';
 import { toast } from 'sonner';
@@ -58,7 +57,7 @@ export const CreateMediaPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title || !formData.type) {
       toast.error('Veuillez remplir tous les champs obligatoires');
       return;
@@ -200,8 +199,8 @@ export const CreateMediaPage: React.FC = () => {
               />
             </div>
 
-            {(formData.type === 'webinar' || formData.type === 'capsule_inside' || 
-              formData.type === 'live_studio' || formData.type === 'best_moments' || 
+            {(formData.type === 'webinar' || formData.type === 'capsule_inside' ||
+              formData.type === 'live_studio' || formData.type === 'best_moments' ||
               formData.type === 'testimonial') && (
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">

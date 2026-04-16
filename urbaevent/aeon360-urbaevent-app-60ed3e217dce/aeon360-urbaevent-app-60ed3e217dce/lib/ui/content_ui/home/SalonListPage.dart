@@ -181,7 +181,7 @@ class _SalonListPageState extends State<SalonListPage> {
                 'La plateforme digitale des 5 grands salons professionnels du Maroc',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.roboto(
-                  color: Colors.white.withOpacity(0.85),
+                  color: Colors.white.withValues(alpha: 0.85),
                   fontSize: 14,
                   height: 1.5,
                 ),
@@ -538,7 +538,7 @@ class _SocialBtn extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
+              color: color.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: color, size: 22),
@@ -672,7 +672,7 @@ class _SalonCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.07),
+              color: Colors.black.withValues(alpha: 0.07),
               blurRadius: 10,
               offset: const Offset(0, 3),
             ),
@@ -699,12 +699,12 @@ class _SalonCard extends StatelessWidget {
                     Container(
                       height: 90,
                       width: double.infinity,
-                      color: Colors.black.withOpacity(0.45),
+                      color: Colors.black.withValues(alpha: 0.45),
                       child: Center(
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -733,7 +733,7 @@ class _SalonCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                           decoration: BoxDecoration(
-                            color: color.withOpacity(0.12),
+                            color: color.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(code, style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w800, color: color)),
@@ -814,7 +814,7 @@ class _SalonCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color, color.withOpacity(0.7)],
+          colors: [color, color.withValues(alpha: 0.7)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

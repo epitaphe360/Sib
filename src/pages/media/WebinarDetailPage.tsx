@@ -48,7 +48,7 @@ export const WebinarDetailPage: React.FC = () => {
         .eq('type', 'webinar')
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
       setWebinar(data);
     } catch (error) {
       console.error('Error loading webinar:', error);
@@ -85,7 +85,7 @@ export const WebinarDetailPage: React.FC = () => {
   };
 
   const formatDuration = (seconds?: number) => {
-    if (!seconds) return 'N/A';
+    if (!seconds) {return 'N/A';}
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     return hours > 0 ? `${hours}h ${minutes}min` : `${minutes}min`;

@@ -5,16 +5,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:com.urbaevent/model/ResponseAuthRole.dart';
 import 'package:com.urbaevent/model/ResponseNotifications.dart' hide Meta, Pagination;
 import 'package:com.urbaevent/utils/QrScannerOverlayShape.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:com.urbaevent/adapter_view/CurrentEvents.dart';
-import 'package:com.urbaevent/adapter_view/EBadge.dart';
 import 'package:com.urbaevent/adapter_view/MyContact.dart';
 import 'package:com.urbaevent/adapter_view/MyEvents.dart';
-import 'package:com.urbaevent/adapter_view/UpcomingEvent.dart';
 import 'package:com.urbaevent/dialogs/Progressbar.dart';
 import 'package:com.urbaevent/model/ResponseContactDetails.dart';
 import 'package:com.urbaevent/model/ResponseContactList.dart' hide Meta, Pagination;
@@ -48,7 +45,6 @@ import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
 import 'package:vibration/vibration.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -460,8 +456,8 @@ class _HomePage extends State<HomePage> {
   }
 
   Future<void> vibrateOnce() async {
-    var available = await Vibration.hasVibrator();
-    if (available != null) {
+    final available = await Vibration.hasVibrator();
+    if (available == true) {
       Vibration.vibrate(duration: 500);
     }
   }
@@ -806,9 +802,8 @@ class _HomePage extends State<HomePage> {
 
   Widget _buildSalonHero() {
     final coverUrl = ActiveSalon.coverUrl;
-    final salonName = ActiveSalon.name ?? 'SIB';
+    final salonName = ActiveSalon.name;
     final location = ActiveSalon.location ?? '';
-    final description = ActiveSalon.description ?? '';
     final dateDebut = ActiveSalon.dateDebut;
     final dateFin = ActiveSalon.dateFin;
     String dateBadge = '';
@@ -827,7 +822,7 @@ class _HomePage extends State<HomePage> {
             decoration: BoxDecoration(
               color: const Color(0xFF0D2137),
               image: coverUrl != null
-                  ? DecorationImage(image: NetworkImage(coverUrl), fit: BoxFit.cover, colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.45), BlendMode.darken))
+                  ? DecorationImage(image: NetworkImage(coverUrl), fit: BoxFit.cover, colorFilter: ColorFilter.mode(Colors.black.withValues(alpha: 0.45), BlendMode.darken))
                   : null,
             ),
           ),
@@ -938,7 +933,7 @@ class _HomePage extends State<HomePage> {
             end: Alignment.centerRight,
           ),
           borderRadius: BorderRadius.circular(14),
-          boxShadow: [BoxShadow(color: const Color(0xFF4598D1).withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))],
+          boxShadow: [BoxShadow(color: const Color(0xFF4598D1).withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))],
         ),
         child: Row(
           children: [
@@ -981,8 +976,11 @@ class _HomePage extends State<HomePage> {
       return false;
     }
 
-    return WillPopScope(
-      onWillPop: _onBackPressedOveRiding,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, _) {
+        if (!didPop) _onBackPressedOveRiding();
+      },
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: VisibilityDetector(
@@ -1815,54 +1813,6 @@ class _HomePage extends State<HomePage> {
   }
 }
 
-/// Bouton raccourci vers un WebViewScreen (legacy, conservé)
-class _WebViewShortcut extends StatelessWidget {
-  const _WebViewShortcut({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-        decoration: BoxDecoration(
-          color: ThemeColor.colorAccent.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: ThemeColor.colorAccent.withOpacity(0.4),
-            width: 1.2,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: ThemeColor.colorAccent, size: 22),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                label,
-                style: GoogleFonts.roboto(
-                  color: ThemeColor.colorAccent,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 /// Bouton carré icône + label utilisé dans les sections accès rapide et médias
 class _QuickBtn extends StatelessWidget {
@@ -1879,9 +1829,9 @@ class _QuickBtn extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
+          color: color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.3)),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

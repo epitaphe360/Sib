@@ -13,7 +13,7 @@ export default function SignUpSuccessPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [countdown, setCountdown] = useState(10);
-  
+
   const state = location.state as any;
   const accountType = state?.accountType || 'exhibitor';
   const email = state?.email || '';

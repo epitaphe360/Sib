@@ -160,20 +160,20 @@ export default function VisitorVIPRegistration() {
       // 2. Vérification préalable : L'email existe-t-il déjà ?
       console.log('?? [VIP INSCRIPTION] Vérification si email existe déjà...');
       const emailToCheck = data.email.toLowerCase().trim();
-      
+
       const { data: existingUser, error: checkError } = await supabase
         .from('users')
         .select('email, type, visitor_level')
         .eq('email', emailToCheck)
         .maybeSingle();
-      
+
       if (checkError && checkError.code !== 'PGRST116') {
         console.error('? [VIP INSCRIPTION] Erreur lors de la vérification:', checkError);
         toast.error('Erreur lors de la vérification de l\'email. Veuillez réessayer.');
         setIsSubmitting(false);
         return;
       }
-      
+
       if (existingUser) {
         console.warn('?? [VIP INSCRIPTION] Email déjà existant:', existingUser);
         let accountType = 'visiteur';
@@ -182,34 +182,34 @@ export default function VisitorVIPRegistration() {
         } else if (existingUser.type === 'partner') {
           accountType = 'partenaire';
         } else if (existingUser.type === 'visitor') {
-          const level = existingUser.visitor_level === 'premium' ? 'VIP' : 
+          const level = existingUser.visitor_level === 'premium' ? 'VIP' :
                        existingUser.visitor_level === 'standard' ? 'Standard' : 'Gratuit';
           accountType = `visiteur ${level}`;
         }
-        
+
         toast.error(`Cet email est déjà enregistré en tant que ${accountType}. Connectez-vous pour accéder à votre compte.`);
-        
+
         setTimeout(() => {
           if (window.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
             navigate(ROUTES.LOGIN);
           }
         }, 2000);
-        
+
         setIsSubmitting(false);
         return;
       }
-      
+
       console.log('? [VIP INSCRIPTION] Email disponible');
 
       // 3. Auth: Check if logged in or need to sign up
       let userId = currentUser?.id;
-      
+
       if (!userId) {
         console.log('?? Création compte auth...');
         console.log('   ?? Email:', data.email);
         console.log('   ?? Password length:', data.password.length);
         console.log('   ?? Name:', fullName);
-        
+
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email: data.email,
           password: data.password,
@@ -226,7 +226,7 @@ export default function VisitorVIPRegistration() {
           console.error('? Erreur auth signUp:', authError);
           console.error('   Code:', authError.status);
           console.error('   Message:', authError.message);
-          
+
           // Messages d'erreur plus clairs
           if (authError.message?.includes('User already registered')) {
             toast.error('Cet email est déjà utilisé');
@@ -344,7 +344,7 @@ export default function VisitorVIPRegistration() {
         console.log('?? [VIP] Envoi email de bienvenue...');
         const emailController = new AbortController();
         const emailTimeout = setTimeout(() => emailController.abort(), 5000);
-        
+
         const emailResponse = await fetch('/api/send-visitor-welcome-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -373,11 +373,11 @@ export default function VisitorVIPRegistration() {
       toast.success('Compte créé ! Redirection vers les instructions de paiement...');
 
       await new Promise(resolve => setTimeout(resolve, 100));
-      
-      const bankTransferUrl = paymentRequestId 
+
+      const bankTransferUrl = paymentRequestId
         ? `/visitor/bank-transfer?request_id=${paymentRequestId}`
         : ROUTES.VISITOR_PAYMENT;
-      
+
       console.log('?? Navigation vers', bankTransferUrl);
       navigate(bankTransferUrl, { replace: true });
 
@@ -387,10 +387,10 @@ export default function VisitorVIPRegistration() {
       console.error('   Message:', error.message);
       console.error('   Code:', error.code);
       console.error('   Status:', error.status);
-      
+
       // Message d'erreur plus spécifique selon le type
       let errorMessage = 'Erreur lors de l\'inscription';
-      
+
       if (error.message?.includes('already registered')) {
         errorMessage = 'Cet email est déjà utilisé. Connectez-vous ou utilisez un autre email.';
       } else if (error.message?.includes('Password')) {
@@ -402,7 +402,7 @@ export default function VisitorVIPRegistration() {
       } else if (error.message) {
         errorMessage = error.message;
       }
-      
+
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -459,7 +459,7 @@ export default function VisitorVIPRegistration() {
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error("? Validation errors:", errors);
               toast.error("Veuillez corriger les erreurs rouges dans le formulaire.");
-              
+
               // Scroll to first error
               const firstError = Object.keys(errors)[0];
               if (firstError) {
@@ -523,8 +523,8 @@ export default function VisitorVIPRegistration() {
                     type="email"
                     {...register('email')}
                     className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.email 
-                        ? 'border-red-500 focus:ring-red-500' 
+                      errors.email
+                        ? 'border-red-500 focus:ring-red-500'
                         : 'border-gray-300 focus:ring-yellow-500'
                     }`}
                     placeholder="votre@email.com"

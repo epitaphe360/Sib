@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:com.urbaevent/ui/content_ui/home/HomePage.dart';
-import 'package:com.urbaevent/utils/Const.dart';
 import 'package:com.urbaevent/widgets/CustomBottomBar.dart';
 import 'package:com.urbaevent/widgets/CustomToolbar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,7 +18,6 @@ class Plan extends StatefulWidget {
 }
 
 class _Plan extends State<Plan> {
-  GoogleMapController? _controller;
   String _mapStyle = '';
 
   void onCallBack() {
@@ -49,10 +47,10 @@ class _Plan extends State<Plan> {
   }
 
   void _loadMapStyle() async {
-    _mapStyle = await rootBundle.loadString('assets/grey_style.json');
-    if (_controller != null) {
-      _controller!.setMapStyle(_mapStyle);
-    }
+    final style = await rootBundle.loadString('assets/grey_style.json');
+    setState(() {
+      _mapStyle = style;
+    });
   }
 
   void _onMarkerTapped(MarkerId markerId) {
@@ -102,6 +100,7 @@ class _Plan extends State<Plan> {
               Expanded(
                 flex: 1,
                 child: GoogleMap(
+                  style: _mapStyle.isNotEmpty ? _mapStyle : null,
                   initialCameraPosition:
                       CameraPosition(target: centerLocation!, zoom: 12),
                   markers: {
@@ -113,12 +112,7 @@ class _Plan extends State<Plan> {
                       },
                     ),
                   },
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller = controller;
-                    if (_mapStyle.isNotEmpty) {
-                      _controller!.setMapStyle(_mapStyle);
-                    }
-                  },
+                  onMapCreated: (GoogleMapController _) {},
                 ),
               ),
               CustomBottomBar(-1, handleCallback)

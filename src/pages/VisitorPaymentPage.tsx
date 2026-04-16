@@ -33,20 +33,20 @@ export default function VisitorPaymentPage() {
 
   // Redirect if already VIP or create payment request - runs ONCE
   useEffect(() => {
-    if (initializedRef.current) return;
-    
+    if (initializedRef.current) {return;}
+
     // Get user from store directly (stable reference)
     const currentUser = useAuthStore.getState().user;
-    if (!currentUser) return;
-    
+    if (!currentUser) {return;}
+
     initializedRef.current = true;
-    
+
     if (currentUser.visitor_level === 'premium' || currentUser.visitor_level === 'vip') {
       toast.success(t('payment.alreadyPremium'));
       navigate(ROUTES.VISITOR_DASHBOARD, { replace: true });
       return;
     }
-    
+
     createBankTransferRequest();
   }, []); // Empty deps - runs only on mount
 
@@ -88,7 +88,7 @@ export default function VisitorPaymentPage() {
 
       // Créer une nouvelle demande de paiement
       const paymentReference = generateVisitorPaymentReference(user.id);
-      
+
       const { data: newRequest, error } = await supabase
         .from('payment_requests')
         .insert({
@@ -110,16 +110,16 @@ export default function VisitorPaymentPage() {
 
       console.log('✅ Payment request created:', newRequest.id);
       toast.success(t('payment.requestCreated'));
-      
+
       // Petit délai pour que l'utilisateur voit le toast
       setTimeout(() => {
         navigate(`/visitor/bank-transfer?request_id=${newRequest.id}`);
       }, 500);
-      
+
     } catch (error) {
       console.error('❌ Error in createBankTransferRequest:', error);
       toast.error(t('payment.requestError'));
-      
+
       // En cas d'erreur, rediriger vers le dashboard avec un message
       setTimeout(() => {
         navigate(ROUTES.VISITOR_DASHBOARD);
@@ -130,7 +130,7 @@ export default function VisitorPaymentPage() {
   }
 
   const handlePayPalApprove = async (data: Record<string, unknown>) => {
-    if (!user) return;
+    if (!user) {return;}
 
     setIsProcessing(true);
     setError(null);
@@ -162,7 +162,7 @@ export default function VisitorPaymentPage() {
   };
 
   const handleCMIPayment = async () => {
-    if (!user) return;
+    if (!user) {return;}
 
     setIsProcessing(true);
     setError(null);
@@ -194,14 +194,14 @@ export default function VisitorPaymentPage() {
 
   // TEST ONLY: Simulate successful payment
   const handleSimulateSuccess = async () => {
-    if (!user) return;
-    
+    if (!user) {return;}
+
     // Si l'utilisateur n'a pas de password auth, montrer le formulaire d'upgrade d'abord
     if (!user.profile?.hasPassword) {
       setShowUpgradeForm(true);
       return;
     }
-    
+
     await completeVIPUpgrade();
   };
 
@@ -227,7 +227,7 @@ export default function VisitorPaymentPage() {
 
   // Compléter les données VIP manquantes pour visiteur FREE
   const onSubmitUpgradeData = async (data: UpgradeVIPForm) => {
-    if (!user) return;
+    if (!user) {return;}
     setIsProcessing(true);
 
     try {
@@ -292,7 +292,7 @@ export default function VisitorPaymentPage() {
 
       toast.success(t('payment.profileCompleted'));
       setShowUpgradeForm(false);
-      
+
       // Maintenant faire l'upgrade VIP
       await completeVIPUpgrade();
     } catch (error) {
@@ -305,7 +305,7 @@ export default function VisitorPaymentPage() {
 
   // Finaliser l'upgrade VIP
   const completeVIPUpgrade = async () => {
-    if (!user) return;
+    if (!user) {return;}
     setIsProcessing(true);
     try {
       const transactionId = crypto.randomUUID();
@@ -322,21 +322,21 @@ export default function VisitorPaymentPage() {
       } catch (paymentError) {
         console.warn('Payment record creation skipped:', paymentError);
       }
-      
+
       // Update user status AND visitor_level to premium
       const { error } = await supabase
         .from('users')
-        .update({ 
+        .update({
           status: 'active',
           visitor_level: 'premium'
         })
         .eq('id', user.id);
-        
+
       if (error) {
         console.error('Error updating user:', error);
         throw error;
       }
-      
+
       // Show success toast
       toast.success(t('payment.simulatedSuccess'));
 
@@ -352,7 +352,7 @@ export default function VisitorPaymentPage() {
       } catch (emailErr) {
         console.warn('Failed to send receipt email', emailErr);
       }
-      
+
       // Navigate to success page
       navigate(ROUTES.VISITOR_PAYMENT_SUCCESS);
     } catch (err) {

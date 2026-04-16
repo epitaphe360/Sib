@@ -1,6 +1,6 @@
 /**
  * 🌓 Theme Context - Dark Mode Management
- * 
+ *
  * Manages dark/light theme preference across the application
  * Persists preference to localStorage and applies class to document element
  * Syncs with Tailwind's dark mode configuration
@@ -24,7 +24,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const savedTheme = localStorage.getItem('theme');
-      
+
       if (savedTheme === 'dark') {
         setIsDark(true);
       } else {
@@ -34,7 +34,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           localStorage.setItem('theme', 'light');
         }
       }
-      
+
       setIsInitialized(true);
     } catch (error) {
       console.warn('⚠️ Failed to initialize theme:', error);
@@ -44,10 +44,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Apply theme to document when isDark changes
   useEffect(() => {
-    if (!isInitialized) return;
+    if (!isInitialized) {return;}
 
     const htmlElement = document.documentElement;
-    
+
     if (isDark) {
       htmlElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');

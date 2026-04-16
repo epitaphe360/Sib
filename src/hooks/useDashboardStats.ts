@@ -29,7 +29,7 @@ export const useDashboardStats = (): DashboardStatsWithGrowth | null => {
   const { dashboard } = useDashboardStore();
 
   return useMemo(() => {
-    if (!dashboard?.stats) return null;
+    if (!dashboard?.stats) {return null;}
 
     // Use real weekly engagement data if populated, otherwise empty array
     const weeklyEngagement = (dashboard as any).weeklyEngagement || [];

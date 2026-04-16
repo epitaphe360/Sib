@@ -48,7 +48,7 @@ export const BestMomentsDetailPage: React.FC = () => {
         .eq('type', 'best_moments')
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
       setMoment(data);
     } catch (error) {
       console.error('Error loading best moment:', error);
@@ -90,7 +90,7 @@ export const BestMomentsDetailPage: React.FC = () => {
   };
 
   const formatDuration = (seconds?: number) => {
-    if (!seconds) return 'N/A';
+    if (!seconds) {return 'N/A';}
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
@@ -156,8 +156,8 @@ export const BestMomentsDetailPage: React.FC = () => {
           <div className="lg:col-span-2 space-y-6">
             {/* Video Player */}
             <div className="relative">
-              <Badge 
-                variant="default" 
+              <Badge
+                variant="default"
                 className="absolute top-4 left-4 z-10 bg-yellow-600"
               >
                 {getHighlightIcon(moment.highlight_type)} {getHighlightLabel(moment.highlight_type)}
@@ -176,7 +176,7 @@ export const BestMomentsDetailPage: React.FC = () => {
                 <Trophy className="h-5 w-5 text-yellow-600" />
                 <span className="text-sm font-medium text-gray-600 uppercase">Best Moments</span>
               </div>
-              
+
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
                 {moment.title}
               </h1>

@@ -8,6 +8,18 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
+import rateLimit from 'express-rate-limit';
+
+// ── HTML escape to prevent XSS in email templates ───────────────────────────
+function escapeHtml(str) {
+  if (typeof str !== 'string') return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
 
 import { createClient } from '@supabase/supabase-js';
 
@@ -20,6 +32,22 @@ const PORT = process.env.PORT || (process.env.NODE_ENV === 'production' ? 5000 :
 
 // JSON body parser for API endpoints
 app.use(express.json());
+
+// ── Rate limiting ────────────────────────────────────────────────────────────
+const emailRateLimit = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Trop de requêtes, réessayez dans une heure' },
+});
+const adminRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Trop de requêtes admin' },
+});
 
 // Force HTTPS redirect + redirect bare domain to www (Railway SSL is on www only)
 app.use((req, res, next) => {
@@ -96,7 +124,8 @@ const smtpConfig = {
     pass: process.env.SMTP_PASS,
   },
   tls: {
-    rejectUnauthorized: false // Accept self-signed certificate from mail.sib2026.ma
+    // In production, reject untrusted certificates. In dev, allow self-signed.
+    rejectUnauthorized: process.env.NODE_ENV === 'production',
   }
 };
 
@@ -113,7 +142,7 @@ if (process.env.SMTP_PASS) {
  * API: Send Email
  * POST /api/send-email
  */
-app.post('/api/send-email', async (req, res) => {
+app.post('/api/send-email', emailRateLimit, async (req, res) => {
   if (!transporter) {
     return res.status(503).json({
       success: false,
@@ -163,7 +192,7 @@ app.post('/api/send-email', async (req, res) => {
  * API: Contact Form
  * POST /api/contact
  */
-app.post('/api/contact', async (req, res) => {
+app.post('/api/contact', emailRateLimit, async (req, res) => {
   if (!transporter) {
     return res.status(503).json({
       success: false,
@@ -172,15 +201,23 @@ app.post('/api/contact', async (req, res) => {
   }
 
   try {
-    const { firstName, lastName, email, company, subject, message } = req.body;
+    const { firstName: rawFirst, lastName: rawLast, email: rawEmail, company: rawCompany, subject: rawSubject, message: rawMessage } = req.body;
 
     // Validation
-    if (!firstName || !lastName || !email || !subject || !message) {
+    if (!rawFirst || !rawLast || !rawEmail || !rawSubject || !rawMessage) {
       return res.status(400).json({
         success: false,
         error: 'Missing required fields'
       });
     }
+
+    // Sanitize all user-supplied values before injecting into HTML
+    const firstName = escapeHtml(rawFirst);
+    const lastName = escapeHtml(rawLast);
+    const email = escapeHtml(rawEmail);
+    const company = rawCompany ? escapeHtml(rawCompany) : '';
+    const subject = escapeHtml(rawSubject);
+    const message = escapeHtml(rawMessage);
 
     const subjectLabels = {
       exhibitor: 'Devenir exposant',
@@ -266,7 +303,7 @@ app.post('/api/contact', async (req, res) => {
  * API: Send Visitor Welcome Email
  * POST /api/send-visitor-welcome-email
  */
-app.post('/api/send-visitor-welcome-email', async (req, res) => {
+app.post('/api/send-visitor-welcome-email', emailRateLimit, async (req, res) => {
   if (!transporter) {
     return res.status(503).json({
       success: false,
@@ -275,14 +312,18 @@ app.post('/api/send-visitor-welcome-email', async (req, res) => {
   }
 
   try {
-    const { email, name, level, userId, includePaymentInstructions } = req.body;
+    const { email: rawEmail, name: rawName, level, userId, includePaymentInstructions } = req.body;
 
-    if (!email || !name) {
+    if (!rawEmail || !rawName) {
       return res.status(400).json({
         success: false,
         error: 'Missing required fields: email, name'
       });
     }
+
+    // Sanitize user-supplied values
+    const email = escapeHtml(rawEmail);
+    const name = escapeHtml(rawName);
 
     const isVIP = level === 'premium' || level === 'vip';
     const levelLabel = isVIP ? 'VIP / Premium' : 'Gratuit';
@@ -421,7 +462,7 @@ console.log('🔧 [INIT] supabaseAdmin:', supabaseAdmin ? 'CRÉÉ ✅' : 'NULL �
  * API: Delete Exhibitor (admin only)
  * DELETE /api/admin/exhibitors/:id
  */
-app.delete('/api/admin/exhibitors/:id', async (req, res) => {
+app.delete('/api/admin/exhibitors/:id', adminRateLimit, async (req, res) => {
   console.log('\n🗑️ ========== DELETE EXHIBITOR REQUEST ==========');
   console.log('📍 Params:', req.params);
   console.log('📍 Headers Authorization:', req.headers.authorization ? 'Bearer ***' + req.headers.authorization.slice(-10) : 'MANQUANT');
@@ -512,7 +553,7 @@ app.delete('/api/admin/exhibitors/:id', async (req, res) => {
     res.json({ success: true, deleted: [{ id: exhibitorTableId, company_name: companyName }] });
   } catch (error) {
     console.error('❌ Erreur inattendue:', error.message, error.stack);
-    res.status(500).json({ success: false, error: error.message, stack: error.stack });
+    res.status(500).json({ success: false, error: 'Erreur interne du serveur' });
   }
 });
 

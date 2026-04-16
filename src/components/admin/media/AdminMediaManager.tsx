@@ -17,7 +17,7 @@ const AdminMediaManager: React.FC<AdminMediaManagerProps> = ({
   maxSelections = 1
 }) => {
   const [selectedBucket, setSelectedBucket] = useState<string>('media');
-  
+
   const buckets = [
     { id: 'media', name: 'Médias généraux' },
     { id: 'products', name: 'Produits' },
@@ -43,7 +43,7 @@ const AdminMediaManager: React.FC<AdminMediaManagerProps> = ({
           </button>
         )}
       </div>
-      
+
       <div className="p-6">
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -61,7 +61,7 @@ const AdminMediaManager: React.FC<AdminMediaManagerProps> = ({
             ))}
           </select>
         </div>
-        
+
         <MediaManager
           bucket={selectedBucket}
           onSelect={onImageSelect}
@@ -73,9 +73,9 @@ const AdminMediaManager: React.FC<AdminMediaManagerProps> = ({
           className="h-[60vh] overflow-auto"
         />
       </div>
-      
+
       <div className="bg-gray-50 px-6 py-3 border-t text-sm text-gray-500">
-        Les fichiers téléchargés sont stockés dans Supabase Storage. 
+        Les fichiers téléchargés sont stockés dans Supabase Storage.
         Veillez à respecter les droits d'auteur et à n'utiliser que des images dont vous possédez les droits.
       </div>
     </div>

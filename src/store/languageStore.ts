@@ -22,14 +22,26 @@ export const supportedLanguages: Language[] = [
     code: 'en',
     name: 'English',
     nativeName: 'English',
-    flag: '🇬🇧'
-  }
+    flag: '🇬🇧',
+  },
+  {
+    code: 'ar',
+    name: 'Arabic',
+    nativeName: 'العربية',
+    flag: '🇲🇦',
+  },
+  {
+    code: 'es',
+    name: 'Spanish',
+    nativeName: 'Español',
+    flag: '🇪🇸',
+  },
 ];
 
 interface LanguageState {
   currentLanguage: string;
   isLoading: boolean;
-  
+
   // Actions
   setLanguage: (languageCode: string) => Promise<void>;
   getCurrentLanguage: () => Language;
@@ -77,10 +89,10 @@ export const useLanguageStore = create<LanguageState>()(
             console.warn('⚠️ i18next changeLanguage failed (non-blocking):', i18nError);
           }
 
-          // Mettre à jour la direction du texte pour l'arabe
-          document.documentElement.dir = 'ltr';
+          // Mettre à jour la direction du texte pour l'arabe (RTL)
+          document.documentElement.dir = languageCode === 'ar' ? 'rtl' : 'ltr';
           document.documentElement.lang = languageCode;
-          
+
           // Mettre à jour le titre de la page
           const titleKey = 'hero.title';
           const translatedTitle = translations[languageCode]?.[titleKey] || translations.fr[titleKey] || 'SIB';
@@ -89,7 +101,7 @@ export const useLanguageStore = create<LanguageState>()(
           // IMPORTANT: Mettre à jour l'état en dernier pour déclencher le re-render
           set({ currentLanguage: languageCode, isLoading: false });
           console.log('✅ Langue changée avec succès vers:', languageCode);
-          
+
         } catch (_error) {
           console.error('❌ Erreur lors du changement de langue:', _error);
           set({ isLoading: false });
@@ -109,16 +121,16 @@ export const useLanguageStore = create<LanguageState>()(
       translateText: (key: string, fallback?: string) => {
         const { currentLanguage } = get();
         const languageTranslations = translations[currentLanguage] || translations.fr;
-        
+
         // D'abord, essayer la clé telle quelle (pour 'nav.home' par exemple)
         if (key in languageTranslations) {
           return languageTranslations[key];
         }
-        
+
         // Sinon, essayer comme clé imbriquée (pour compatibilité)
         const keys = key.split('.');
         let value: unknown = languageTranslations;
-        
+
         for (const k of keys) {
           if (value && typeof value === 'object' && k in value) {
             value = (value as Record<string, unknown>)[k];
@@ -130,7 +142,7 @@ export const useLanguageStore = create<LanguageState>()(
             return fallback || key;
           }
         }
-        
+
         // Retourner la valeur si c'est une chaîne, sinon fallback ou clé
         return typeof value === 'string' ? value : (fallback || key);
       }

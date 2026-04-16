@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
 import {
-  User, 
-  Building2, 
-  Mail, 
-  Phone, 
-  Globe, 
+  User,
+  Building2,
+  Mail,
+  Phone,
+  Globe,
   MapPin,
   Edit,
   Save,
@@ -46,7 +46,7 @@ export default function ProfilePage() {
   // Charger les vraies statistiques depuis Supabase
   useEffect(() => {
     const loadStats = async () => {
-      if (!user?.id || !isSupabaseReady() || !supabase) return;
+      if (!user?.id || !isSupabaseReady() || !supabase) {return;}
       try {
         const [connectionsRes, appointmentsRes, messagesRes] = await Promise.all([
           supabase
@@ -275,17 +275,17 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="pt-16 pb-6 px-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-1">
                   {user.profile.firstName} {user.profile.lastName}
                 </h2>
                 <p className="text-gray-600 mb-2">{user.profile.position}</p>
                 <p className="text-sm text-gray-500 mb-4">{user.profile.company}</p>
-                
+
                 <div className="flex items-center justify-center space-x-2 mb-4">
                   <Badge variant="info" size="sm">
-                    {user.type === 'exhibitor' ? 'Exposant' : 
+                    {user.type === 'exhibitor' ? 'Exposant' :
                      user.type === 'partner' ? 'Partenaire' : 'Visiteur'}
                   </Badge>
                   {profileStats.connections > 0 && (
@@ -308,7 +308,7 @@ export default function ProfilePage() {
                       <span className="text-sm">LinkedIn</span>
                     </a>
                   )}
-                  
+
                   {user.profile.website && (
                     <a
                       href={user.profile.website}
@@ -356,9 +356,9 @@ export default function ProfilePage() {
                   Complétez votre profil de matching pour obtenir des recommandations personnalisées
                 </p>
                 <Link to={ROUTES.PROFILE_MATCHING}>
-                  <Button 
-                    variant="default" 
-                    size="sm" 
+                  <Button
+                    variant="default"
+                    size="sm"
                     className="w-full bg-purple-600 hover:bg-purple-700 text-white"
                   >
                     Configurer mon matching
@@ -567,7 +567,7 @@ export default function ProfilePage() {
                   <Target className="h-5 w-5 inline mr-2" />
                   Centres d'intérêt
                 </h3>
-                
+
                 {isEditing ? (
                   <div className="space-y-2">
                     {availableInterests.map((interest) => (
@@ -616,7 +616,7 @@ export default function ProfilePage() {
                   <Award className="h-5 w-5 inline mr-2" />
                   Objectifs SIB 2026
                 </h3>
-                
+
                 {isEditing ? (
                   <div className="space-y-2">
                     {availableObjectives.map((objective) => (
@@ -755,7 +755,7 @@ export default function ProfilePage() {
                   <Calendar className="h-5 w-5 inline mr-2" />
                   Informations du compte
                 </h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -788,7 +788,7 @@ export default function ProfilePage() {
                       Type de compte
                     </label>
                     <Badge variant="info">
-                      {user.type === 'exhibitor' ? 'Exposant' : 
+                      {user.type === 'exhibitor' ? 'Exposant' :
                        user.type === 'partner' ? 'Partenaire' : 'Visiteur'}
                     </Badge>
                   </div>

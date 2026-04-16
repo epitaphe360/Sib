@@ -6,11 +6,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { 
-  Award, 
-  Globe, 
-  Users, 
-  TrendingUp, 
+import {
+  Award,
+  Globe,
+  Users,
+  TrendingUp,
   CalendarDays,
   MapPin,
   ArrowRight,

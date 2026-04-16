@@ -5,14 +5,14 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { supabase } from '../../lib/supabase';
 import useAuthStore from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
-import { 
-  CreditCard, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
-  Building2, 
-  User, 
-  Users, 
+import {
+  CreditCard,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Building2,
+  User,
+  Users,
   Globe,
   FileText,
   ExternalLink,
@@ -62,59 +62,59 @@ type FilterStatus = 'all' | 'pending' | 'approved' | 'rejected' | 'completed' | 
 type FilterUserType = 'all' | 'visitor' | 'partner' | 'exhibitor';
 
 const STATUS_CONFIG = {
-  pending: { 
-    label: 'En attente', 
-    icon: Clock, 
-    bgColor: 'bg-amber-100', 
+  pending: {
+    label: 'En attente',
+    icon: Clock,
+    bgColor: 'bg-amber-100',
     textColor: 'text-amber-800',
     borderColor: 'border-amber-300'
   },
-  processing: { 
-    label: 'En cours', 
-    icon: RefreshCw, 
-    bgColor: 'bg-blue-100', 
+  processing: {
+    label: 'En cours',
+    icon: RefreshCw,
+    bgColor: 'bg-blue-100',
     textColor: 'text-blue-800',
     borderColor: 'border-blue-300'
   },
-  approved: { 
-    label: 'Approuvé', 
-    icon: CheckCircle, 
-    bgColor: 'bg-green-100', 
+  approved: {
+    label: 'Approuvé',
+    icon: CheckCircle,
+    bgColor: 'bg-green-100',
     textColor: 'text-green-800',
     borderColor: 'border-green-300'
   },
-  completed: { 
-    label: 'Complété', 
-    icon: CheckCircle, 
-    bgColor: 'bg-green-100', 
+  completed: {
+    label: 'Complété',
+    icon: CheckCircle,
+    bgColor: 'bg-green-100',
     textColor: 'text-green-800',
     borderColor: 'border-green-300'
   },
-  proof_uploaded: { 
-    label: 'Preuve recue', 
-    icon: FileText, 
-    bgColor: 'bg-indigo-100', 
+  proof_uploaded: {
+    label: 'Preuve recue',
+    icon: FileText,
+    bgColor: 'bg-indigo-100',
     textColor: 'text-indigo-800',
     borderColor: 'border-indigo-300'
   },
-  rejected: { 
-    label: 'Rejete', 
-    icon: XCircle, 
-    bgColor: 'bg-red-100', 
+  rejected: {
+    label: 'Rejete',
+    icon: XCircle,
+    bgColor: 'bg-red-100',
     textColor: 'text-red-800',
     borderColor: 'border-red-300'
   },
-  cancelled: { 
-    label: 'Annule', 
-    icon: Ban, 
-    bgColor: 'bg-gray-100', 
+  cancelled: {
+    label: 'Annule',
+    icon: Ban,
+    bgColor: 'bg-gray-100',
     textColor: 'text-gray-800',
     borderColor: 'border-gray-300'
   },
-  failed: { 
-    label: 'Echoue', 
-    icon: AlertCircle, 
-    bgColor: 'bg-red-100', 
+  failed: {
+    label: 'Echoue',
+    icon: AlertCircle,
+    bgColor: 'bg-red-100',
     textColor: 'text-red-800',
     borderColor: 'border-red-300'
   }
@@ -176,11 +176,11 @@ export default function PaymentValidationPage() {
 
       // Si on a des paiements, récupérer les infos utilisateurs séparément
       let enrichedData: PaymentRequest[] = [];
-      
+
       if (paymentsData && paymentsData.length > 0) {
         // Récupérer les user_ids uniques
         const userIds = [...new Set(paymentsData.map(p => p.user_id).filter(Boolean))];
-        
+
         // Récupérer les infos utilisateurs
         const { data: usersData, error: usersError } = await supabase
           .from('users')
@@ -223,7 +223,7 @@ export default function PaymentValidationPage() {
 
   async function handleApprove(requestId: string) {
     const notes = prompt('Notes de validation (optionnel):');
-    if (notes === null) return;
+    if (notes === null) {return;}
 
     setProcessing(requestId);
     try {
@@ -237,7 +237,7 @@ export default function PaymentValidationPage() {
       if (rpcError) {
         // Si la RPC n'existe pas, faire une mise à jour directe
         console.warn('RPC approve_payment_request non disponible, mise à jour directe');
-        
+
         const { error: updateError } = await supabase
           .from('payment_requests')
           .update({
@@ -248,7 +248,7 @@ export default function PaymentValidationPage() {
           })
           .eq('id', requestId);
 
-        if (updateError) throw updateError;
+        if (updateError) {throw updateError;}
 
         // Mettre à jour le statut utilisateur
         const request = requests.find(r => r.id === requestId);
@@ -287,7 +287,7 @@ export default function PaymentValidationPage() {
 
       if (rpcError) {
         console.warn('RPC reject_payment_request non disponible, mise à jour directe');
-        
+
         const { error: updateError } = await supabase
           .from('payment_requests')
           .update({
@@ -298,7 +298,7 @@ export default function PaymentValidationPage() {
           })
           .eq('id', requestId);
 
-        if (updateError) throw updateError;
+        if (updateError) {throw updateError;}
       }
 
       toast.success('Demande rejetée.');
@@ -313,7 +313,7 @@ export default function PaymentValidationPage() {
 
   // Filtrer par recherche
   const filteredRequests = requests.filter(req => {
-    if (!searchTerm) return true;
+    if (!searchTerm) {return true;}
     const search = searchTerm.toLowerCase();
     return (
       req.users?.name?.toLowerCase().includes(search) ||
@@ -379,7 +379,7 @@ export default function PaymentValidationPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-full font-semibold">
                 <Clock className="w-4 h-4" />
@@ -516,7 +516,7 @@ export default function PaymentValidationPage() {
               Aucune demande à afficher
             </h3>
             <p className="text-gray-500">
-              {filter !== 'all' || userTypeFilter !== 'all' 
+              {filter !== 'all' || userTypeFilter !== 'all'
                 ? 'Essayez de modifier les filtres pour voir plus de résultats.'
                 : 'Les nouvelles demandes de paiement apparaîtront ici.'}
             </p>
@@ -583,7 +583,7 @@ export default function PaymentValidationPage() {
                           <p className="font-mono font-semibold text-gray-900">{request.reference}</p>
                         </div>
                       )}
-                      
+
                       <div className="bg-gray-50 rounded-xl p-4">
                         <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Méthode de paiement</p>
                         <p className="font-semibold text-gray-900">

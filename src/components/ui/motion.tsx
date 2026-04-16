@@ -165,13 +165,13 @@ interface AnimatedCounterProps {
 export function AnimatedCounter({ value, className = '' }: AnimatedCounterProps) {
   // Extraire le nombre et le suffixe
   const match = value.match(/^([\d\s]+)(.*)/);
-  if (!match) return <span className={className}>{value}</span>;
+  if (!match) {return <span className={className}>{value}</span>;}
 
   const rawNumber = match[1].replace(/\s/g, '');
   const target = parseInt(rawNumber, 10);
   const suffix = match[2] || '';
 
-  if (isNaN(target)) return <span className={className}>{value}</span>;
+  if (isNaN(target)) {return <span className={className}>{value}</span>;}
 
   return (
     <motion.span
@@ -191,7 +191,7 @@ function CountUp({ target, suffix }: { target: number; suffix: string }) {
   const started = React.useRef(false);
 
   React.useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current) {return;}
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !started.current) {
@@ -205,7 +205,7 @@ function CountUp({ target, suffix }: { target: number; suffix: string }) {
             // easeOutQuart
             const eased = 1 - Math.pow(1 - progress, 4);
             setCount(Math.round(target * eased));
-            if (progress < 1) requestAnimationFrame(step);
+            if (progress < 1) {requestAnimationFrame(step);}
           };
           requestAnimationFrame(step);
         }

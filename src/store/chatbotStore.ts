@@ -25,7 +25,7 @@ interface ChatBotState {
     notifications: boolean;
     soundEnabled: boolean;
   };
-  
+
   // Actions
   addMessage: (message: Omit<ChatBotMessage, 'id' | 'timestamp'>) => void;
   clearMessages: () => void;
@@ -53,7 +53,7 @@ export const useChatBotStore = create<ChatBotState>((set, get) => ({
       id: Date.now().toString(),
       timestamp: new Date()
     };
-    
+
     set(state => ({
       messages: [...state.messages, newMessage]
     }));
@@ -80,7 +80,7 @@ export const useChatBotStore = create<ChatBotState>((set, get) => ({
   generateBotResponse: (userMessage, userType = 'visitor') => {
     const message = userMessage.toLowerCase();
     const responses = get().getContextualResponses(message, userType);
-    
+
     return {
       id: Date.now().toString(),
       content: responses.content,
@@ -115,10 +115,10 @@ export const useChatBotStore = create<ChatBotState>((set, get) => ({
     }
 
     if (message.includes('rendez-vous') || message.includes('rdv')) {
-      const rdvText = userType === 'visitor' 
+      const rdvText = userType === 'visitor'
         ? "Vous pouvez programmer des RDV B2B avec les exposants"
         : "Vous pouvez créer des créneaux pour recevoir des visiteurs";
-        
+
       return {
         content: `📅 ${rdvText}. Je peux vous aider à optimiser votre planning !`,
         type: 'suggestion',

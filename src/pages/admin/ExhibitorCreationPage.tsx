@@ -84,7 +84,7 @@ export default function ExhibitorCreationPage() {
           Retour au Tableau de Bord
         </Link>
       </div>
-      <ExhibitorCreationSimulator 
+      <ExhibitorCreationSimulator
         exhibitorToEdit={exhibitorData}
         editMode={!!editId}
       />

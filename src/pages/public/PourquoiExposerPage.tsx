@@ -43,14 +43,14 @@ export default function PourquoiExposerPage() {
 
   const chiffres = (() => {
     const raw = cms.stats_json;
-    if (!raw) return [
+    if (!raw) {return [
       { value: '600+', label: 'Exposants' },
       { value: '200 000+', label: 'Visiteurs' },
       { value: '35 000 m²', label: 'Surface' },
       { value: '50', label: 'Pays' },
       { value: '5', label: 'Jours' },
       { value: '10', label: 'Secteurs' },
-    ];
+    ];}
     try {
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : [];
@@ -68,12 +68,12 @@ export default function PourquoiExposerPage() {
 
   const secteurs_cles = (() => {
     const raw = cms.sectors_json;
-    if (!raw) return [
+    if (!raw) {return [
       'Gros Œuvre & Structure', 'Menuiserie & Fermeture', 'Décoration & Aménagement',
       'Climatisation & Sanitaire', 'Équipements Électriques', 'Matériels & Machines',
       'Environnement Durable', 'Formation & Institutions', 'Immobilier & Financement',
       'Technologies Numériques',
-    ];
+    ];}
     try {
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed.map((s: unknown) => String(s)) : [];

@@ -13,7 +13,7 @@ let dbInstance: IDBDatabase | null = null;
  * Initialize IndexedDB
  */
 async function initializeDB(): Promise<IDBDatabase> {
-  if (dbInstance) return dbInstance;
+  if (dbInstance) {return dbInstance;}
 
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, 1);

@@ -57,15 +57,15 @@ export default function AppointmentCalendar() {
     maxBookings: 1,
     location: ''
   });
-  
+
   // Récupérer l'ID de l'exposant depuis l'URL ou les paramètres
   const rawExhibitorId = searchParams.get('exhibitor') ||
                          location.pathname.split('/').pop() ||
                          '';
-  
+
   // Valider que c'est une UUID valide (36 caractères avec tirets)
-  const exhibitorId = (rawExhibitorId && rawExhibitorId.includes('-') && rawExhibitorId.length === 36) 
-    ? rawExhibitorId 
+  const exhibitorId = (rawExhibitorId && rawExhibitorId.includes('-') && rawExhibitorId.length === 36)
+    ? rawExhibitorId
     : '';
 
   // Mode "Mes rendez-vous" si pas d'exhibitorId
@@ -73,7 +73,7 @@ export default function AppointmentCalendar() {
 
   // Filtrer les rendez-vous pour l'utilisateur connecté seulement
   const userAppointments = appointments.filter(app => {
-    if (!authUser?.id) return false;
+    if (!authUser?.id) {return false;}
     // Pour les visiteurs: afficher leurs rendez-vous
     if (authUser.type === 'visitor') {
       return app.visitorId === authUser.id;
@@ -194,7 +194,7 @@ export default function AppointmentCalendar() {
         const slotDate = new Date(slot.date).toDateString();
         const newDate = selectedDate.toDateString();
 
-        if (slotDate !== newDate) return false;
+        if (slotDate !== newDate) {return false;}
 
         // Convertir HH:MM en minutes depuis minuit
         const timeToMinutes = (t: string) => {
@@ -259,14 +259,14 @@ export default function AppointmentCalendar() {
 
 
   const handleBookSlotImproved = async () => {
-    if (!selectedSlot) return;
-    
+    if (!selectedSlot) {return;}
+
     const slot = timeSlots.find(s => s.id === selectedSlot);
     if (!slot) {
       toast.error('Créneau non trouvé');
       return;
     }
-    
+
     try {
       const visitorId = authUser?.id || 'user1';
       const userType = authUser?.type;
@@ -305,7 +305,7 @@ export default function AppointmentCalendar() {
 
       await bookAppointment(selectedSlot, bookingMessage);
       toast.success('✅ Demande envoyée ! En attente de confirmation de l\'exposant.');
-      
+
       setShowBookingModal(false);
       setSelectedSlot(null);
       setBookingMessage('');
@@ -350,7 +350,7 @@ export default function AppointmentCalendar() {
 
   const todayAppointments = userAppointments.filter(appointment => {
     const slot = timeSlots.find(s => s.id === appointment.timeSlotId);
-    if (!slot) return false;
+    if (!slot) {return false;}
     const slotDate = new Date(slot.date);
     return slotDate.toDateString() === selectedDate.toDateString();
   });
@@ -559,7 +559,7 @@ export default function AppointmentCalendar() {
               Gérez vos créneaux et rendez-vous - Exposant #{exhibitorId}
             </p>
           </div>
-          
+
           <div className="flex-shrink-0">
             {/* Only exhibitors and partners can create slots */}
             {(authUser?.type === 'exhibitor' || authUser?.type === 'partner') ? (
@@ -589,26 +589,27 @@ export default function AppointmentCalendar() {
                       {formatDate(selectedDate)}
                     </h4>
                   </div>
-                  
-                  {/* Quick date navigation */}
+
+                  {/* Quick date navigation — jours du salon SIB 2026 */}
                   <div className="grid grid-cols-3 gap-2">
-                    {['2026-04-01', '2026-04-02', '2026-04-03'].map((dateStr, index) => {
+                    {['2026-11-25', '2026-11-27', '2026-11-29'].map((dateStr, index) => {
                       const date = new Date(dateStr + 'T00:00:00');
                       const isSelected = date.toDateString() === selectedDate.toDateString();
-                      
+                      const labels = ['25 Nov', '27 Nov', '29 Nov'];
+
                       return (
                         <button
                           key={dateStr}
                           onClick={() => setSelectedDate(date)}
                           className={`p-2 text-sm rounded-lg transition-colors flex flex-col items-center ${
-                            isSelected 
-                              ? 'bg-blue-600 text-white font-medium shadow-sm' 
+                            isSelected
+                              ? 'bg-blue-600 text-white font-medium shadow-sm'
                               : 'bg-white hover:bg-blue-50 text-gray-700 border border-gray-200'
                           }`}
                         >
                           <span className="text-xs uppercase font-semibold">Jour {index + 1}</span>
                           <span className={`${isSelected ? 'text-blue-100' : 'text-gray-500'} text-[10px]`}>
-                             {index + 1} Avr
+                            {labels[index]}
                           </span>
                         </button>
                       );
@@ -649,15 +650,15 @@ export default function AppointmentCalendar() {
                     {todaySlots.map((slot) => {
                       const MeetingIcon = getMeetingTypeIcon(slot.type);
                       const isBooked = slot.currentBookings >= slot.maxBookings;
-                      
+
                       return (
                         <motion.div
                           key={slot.id}
                           whileHover={{ scale: 1.02 }}
                           data-testid="timeslot"
                           className={`p-4 border rounded-lg transition-colors ${
-                            isBooked 
-                              ? 'border-gray-200 bg-gray-50' 
+                            isBooked
+                              ? 'border-gray-200 bg-gray-50'
                               : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer'
                           }`}
                           onClick={() => {
@@ -676,34 +677,34 @@ export default function AppointmentCalendar() {
                                   isBooked ? 'text-gray-500' : 'text-blue-600'
                                 }`} />
                               </div>
-                              
+
                               <div>
                                 <div className="flex items-center space-x-2">
                                   <span className="font-medium text-gray-900">
                                     {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
                                   </span>
-                                  <Badge 
+                                  <Badge
                                     variant={slot.type === 'virtual' ? 'info' : slot.type === 'hybrid' ? 'warning' : 'default'}
                                     size="sm"
                                   >
-                                    {slot.type === 'virtual' ? 'Virtuel' : 
+                                    {slot.type === 'virtual' ? 'Virtuel' :
                                      slot.type === 'hybrid' ? 'Hybride' : 'Présentiel'}
                                   </Badge>
                                 </div>
-                                
+
                                 <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
                                   <span className="flex items-center space-x-1">
                                     <Clock className="h-3 w-3" />
                                     <span>{slot.duration} min</span>
                                   </span>
-                                  
+
                                   {slot.location && (
                                     <span className="flex items-center space-x-1">
                                       <MapPin className="h-3 w-3" />
                                       <span>{slot.location}</span>
                                     </span>
                                   )}
-                                  
+
                                   <span className="flex items-center space-x-1">
                                     <Users className="h-3 w-3" />
                                     <span>{slot.currentBookings}/{slot.maxBookings}</span>
@@ -711,7 +712,7 @@ export default function AppointmentCalendar() {
                                 </div>
                               </div>
                             </div>
-                            
+
                             <div className="flex items-center space-x-2">
                               {isBooked ? (
                                 <Badge variant="error" size="sm">Complet</Badge>
@@ -764,7 +765,7 @@ export default function AppointmentCalendar() {
                     }
 
                     const MeetingIcon = getMeetingTypeIcon(appointment.meetingType);
-                    
+
                     return (
                       <motion.div
                         key={appointment.id}
@@ -777,28 +778,28 @@ export default function AppointmentCalendar() {
                             <div className="p-2 bg-blue-100 rounded-lg">
                               <MeetingIcon className="h-4 w-4 text-blue-600" />
                             </div>
-                            
+
                             <div>
                               <div className="flex items-center space-x-2">
                                 <span className="font-medium text-gray-900">
                                   {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
                                 </span>
-                                <Badge 
+                                <Badge
                                   variant={getStatusColor(appointment.status)}
                                   size="sm"
                                 >
                                   {getStatusLabel(appointment.status)}
                                 </Badge>
                               </div>
-                              
+
                               {appointment.message && (
                                 <p className="text-sm text-gray-600 mt-1">
                                   {appointment.message}
                                 </p>
                               )}
-                              
+
                               {appointment.meetingLink && (
-                                <a 
+                                <a
                                   href={appointment.meetingLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
@@ -809,20 +810,20 @@ export default function AppointmentCalendar() {
                               )}
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center space-x-2">
                             {appointment.status === 'pending' && (
                               <>
-                                <Button 
-                                  size="sm" 
+                                <Button
+                                  size="sm"
                                   variant="default"
                                   onClick={() => handleConfirmAppointment(appointment.id)}
                                 >
                                   <Check className="h-3 w-3 mr-1" />
                                   Confirmer
                                 </Button>
-                                <Button 
-                                  size="sm" 
+                                <Button
+                                  size="sm"
                                   variant="destructive"
                                   onClick={() => handleRejectAppointment(appointment.id)}
                                 >
@@ -831,10 +832,10 @@ export default function AppointmentCalendar() {
                                 </Button>
                               </>
                             )}
-                            
+
                             {appointment.status === 'confirmed' && (
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="destructive"
                                 onClick={() => handleCancelAppointment(appointment.id)}
                               >
@@ -869,7 +870,7 @@ export default function AppointmentCalendar() {
                     📩 Votre demande sera envoyée à l'exposant. Il pourra l'<strong>accepter</strong> ou la <strong>refuser</strong>.
                   </p>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -884,10 +885,10 @@ export default function AppointmentCalendar() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex justify-end space-x-3 mt-6">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={() => {
                       setShowBookingModal(false);
                       setSelectedSlot(null);
@@ -919,7 +920,7 @@ export default function AppointmentCalendar() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Créer un nouveau créneau
                 </h3>
-                
+
                 <div className="space-y-4">
                   {/* Information sur les dates du salon */}
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
@@ -947,7 +948,7 @@ export default function AppointmentCalendar() {
                       ⚠️ Du 25 au 29 novembre 2026 (5 jours de l'événement)
                     </p>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -960,7 +961,7 @@ export default function AppointmentCalendar() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Heure fin
@@ -973,7 +974,7 @@ export default function AppointmentCalendar() {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Type de rendez-vous
@@ -993,7 +994,7 @@ export default function AppointmentCalendar() {
                       <p><strong>Hybride:</strong> Stand + diffusion en ligne</p>
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Lieu (optionnel)
@@ -1015,7 +1016,7 @@ export default function AppointmentCalendar() {
                       </p>
                     )}
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Nombre max de réservations
@@ -1032,7 +1033,7 @@ export default function AppointmentCalendar() {
                       Recommandé: 1 pour les RDV individuels, 2-5 pour les présentations de groupe
                     </p>
                   </div>
-                  
+
                   {/* Aperçu du Créneau */}
                   <div className="bg-blue-50 p-4 rounded-lg">
                     <h4 className="font-medium text-blue-900 mb-2">Aperçu du créneau</h4>
@@ -1051,7 +1052,7 @@ export default function AppointmentCalendar() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-end space-x-3 mt-6">
                   <Button
                     variant="outline"

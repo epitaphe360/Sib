@@ -284,7 +284,7 @@ class SupabaseService {
         'scannedUserId': scannedUserId,
         if (salonId != null) 'salonId': salonId,
       },
-    ).catchError((e) {
+    ).then((_) {}).catchError((e) {
       // L'email est non bloquant : on log sans faire crasher l'app
       print('send-scan-email error (non-bloquant): $e');
     });

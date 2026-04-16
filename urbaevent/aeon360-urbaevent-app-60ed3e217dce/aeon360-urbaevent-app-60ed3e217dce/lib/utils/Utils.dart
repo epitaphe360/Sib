@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
  class Utils {
@@ -19,7 +19,7 @@ import 'package:fluttertoast/fluttertoast.dart';
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.black.withOpacity(0.5), // Custom background color
+      backgroundColor: Colors.black.withValues(alpha: 0.5), // Custom background color
       textColor: Colors.white, // Custom text color
       fontSize: 16.0, // Custom font size
       webBgColor: "#000000", // Custom background color for web

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:com.urbaevent/model/ResponseAppleData.dart';
-import 'package:com.urbaevent/utils/Const.dart';
 import 'package:com.urbaevent/utils/Preference.dart';
 import 'package:com.urbaevent/utils/Urls.dart';
 import 'package:easy_linkedin_login/easy_linkedin_login.dart';
@@ -148,8 +147,6 @@ class _SignUp extends State<SignUp> {
 
   Future<void> postAppleData(AuthorizationCredentialAppleID credential) async {
     final url = Uri.parse(Urls.baseURL + Urls.sendAppleData);
-
-    Preference preference = await Preference.getInstance();
 
     final jsonData = {
       "data": {
@@ -471,8 +468,7 @@ class _SignUp extends State<SignUp> {
                                                 },
                                               );
 
-                                              final session =
-                                                  await http.Client().post(
+                                              await http.Client().post(
                                                 signInWithAppleEndpoint,
                                               );
                                             },

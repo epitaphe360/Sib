@@ -17,19 +17,19 @@ interface AIPredictionsProps {
   title?: string;
 }
 
-export const AIPredictions: React.FC<AIPredictionsProps> = ({ 
+export const AIPredictions: React.FC<AIPredictionsProps> = ({
   predictions,
   title = '🤖 Prédictions IA'
 }) => {
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 80) return 'bg-green-100 text-green-700';
-    if (confidence >= 60) return 'bg-yellow-100 text-yellow-700';
+    if (confidence >= 80) {return 'bg-green-100 text-green-700';}
+    if (confidence >= 60) {return 'bg-yellow-100 text-yellow-700';}
     return 'bg-orange-100 text-orange-700';
   };
 
   const getTrendColor = (trend: 'up' | 'down' | 'stable') => {
-    if (trend === 'up') return 'text-green-600';
-    if (trend === 'down') return 'text-red-600';
+    if (trend === 'up') {return 'text-green-600';}
+    if (trend === 'down') {return 'text-red-600';}
     return 'text-gray-600';
   };
 
@@ -53,7 +53,7 @@ export const AIPredictions: React.FC<AIPredictionsProps> = ({
       <div className="space-y-4">
         {predictions.map((prediction, index) => {
           const growth = prediction.predicted - prediction.current;
-          
+
           let growthPercentage = 0;
           if (prediction.current > 0) {
             growthPercentage = Math.round((growth / prediction.current) * 100);
@@ -64,7 +64,7 @@ export const AIPredictions: React.FC<AIPredictionsProps> = ({
           }
 
           return (
-            <div 
+            <div
               key={index}
               className="bg-white rounded-lg p-4 border border-purple-100 hover:shadow-md transition-all"
             >
@@ -77,8 +77,8 @@ export const AIPredictions: React.FC<AIPredictionsProps> = ({
                     <h4 className="font-semibold text-gray-900">{prediction.metric}</h4>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-xs text-gray-500">Confiance:</span>
-                      <Badge 
-                        size="sm" 
+                      <Badge
+                        size="sm"
                         className={getConfidenceColor(prediction.confidence)}
                       >
                         {prediction.confidence}%
@@ -86,7 +86,7 @@ export const AIPredictions: React.FC<AIPredictionsProps> = ({
                     </div>
                   </div>
                 </div>
-                
+
                 <div className={`flex items-center gap-1 ${getTrendColor(prediction.trend)}`}>
                   <TrendingUp className="h-4 w-4" />
                   <span className="text-sm font-bold">
@@ -104,10 +104,10 @@ export const AIPredictions: React.FC<AIPredictionsProps> = ({
                   </span>
                 </div>
                 <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="absolute h-full bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full transition-all duration-1000"
-                    style={{ 
-                      width: `${Math.min(100, (prediction.predicted / Math.max(prediction.current, prediction.predicted)) * 100)}%` 
+                    style={{
+                      width: `${Math.min(100, (prediction.predicted / Math.max(prediction.current, prediction.predicted)) * 100)}%`
                     }}
                   />
                 </div>
@@ -145,7 +145,7 @@ export const useBasicPredictions = (currentStats: {
   connections?: number;
 }): Prediction[] => {
   const { appointments, views, connections } = currentStats;
-  
+
   return React.useMemo(() => {
     const predictions: Prediction[] = [];
 

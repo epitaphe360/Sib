@@ -14,7 +14,7 @@ export const partnersTranslations = {
     'partners.visit_website': 'Visiter le site',
     'partners.no_results': 'Aucun partenaire trouvé',
     'partners.count': '{{count}} partenaires',
-    
+
     // Niveaux de partenariat
     'partners.tier.organizer': 'Organisateur',
     'partners.tier.co_organizer': 'Co-organisateur',
@@ -22,7 +22,7 @@ export const partnersTranslations = {
     'partners.tier.delegated_organizer': 'Organisateur Délégué',
     'partners.tier.partner': 'Partenaire',
     'partners.tier.press_partner': 'Partenaire Presse',
-    
+
     // Catégories
     'partners.category.all': 'Toutes les catégories',
     'partners.category.education': 'Éducation & Formation',
@@ -31,14 +31,14 @@ export const partnersTranslations = {
     'partners.category.finance': 'Finance',
     'partners.category.media': 'Média',
     'partners.category.institutional': 'Institutionnel',
-    
+
     // Page profil partenaire
     'partners.profile.about': 'À propos',
     'partners.profile.benefits': 'Avantages',
     'partners.profile.media': 'Contenus médias',
     'partners.profile.contact': 'Contact',
     'partners.profile.opportunities': 'Opportunités',
-    
+
     // Dashboard partenaire
     'partners.dashboard.visibility': 'Visibilité',
     'partners.dashboard.impressions': 'Impressions',
@@ -48,7 +48,7 @@ export const partnersTranslations = {
     'partners.dashboard.roi': 'Retour sur investissement',
     'partners.dashboard.media_views': 'Vues médias',
     'partners.dashboard.download_report': 'Télécharger le rapport',
-    
+
     // Médias partenaires
     'partners.media.upload': 'Téléverser un média',
     'partners.media.manage': 'Gérer les médias',
@@ -61,7 +61,7 @@ export const partnersTranslations = {
     'partners.media.pending_approval': 'En attente d\'approbation',
     'partners.media.approved': 'Approuvé',
     'partners.media.rejected': 'Rejeté',
-    
+
     // Inscription partenaire
     'partners.signup.title': 'Devenir Partenaire',
     'partners.signup.subtitle': 'Rejoignez notre écosystème',
@@ -73,7 +73,7 @@ export const partnersTranslations = {
     'partners.signup.submit': 'Soumettre la demande',
     'partners.signup.success': 'Demande envoyée avec succès',
     'partners.signup.error': 'Erreur lors de l\'envoi',
-    
+
     // Avantages
     'partners.benefits.visibility': 'Visibilité maximale',
     'partners.benefits.networking': 'Opportunités de networking',
@@ -82,7 +82,7 @@ export const partnersTranslations = {
     'partners.benefits.booth': 'Stand au salon',
     'partners.benefits.speaking': 'Opportunités de prise de parole',
     'partners.benefits.branding': 'Placement de marque',
-    
+
     // Analyse
     'partners.analytics.overview': 'Vue d\'ensemble',
     'partners.analytics.traffic': 'Trafic',
@@ -102,7 +102,7 @@ export const partnersTranslations = {
     'partners.visit_website': 'Visit website',
     'partners.no_results': 'No partners found',
     'partners.count': '{{count}} partners',
-    
+
     // Partnership tiers
     'partners.tier.organizer': 'Organizer',
     'partners.tier.co_organizer': 'Co-organizer',
@@ -110,7 +110,7 @@ export const partnersTranslations = {
     'partners.tier.delegated_organizer': 'Delegated Organizer',
     'partners.tier.partner': 'Partner',
     'partners.tier.press_partner': 'Press Partner',
-    
+
     // Categories
     'partners.category.all': 'All categories',
     'partners.category.education': 'Education & Training',
@@ -119,14 +119,14 @@ export const partnersTranslations = {
     'partners.category.finance': 'Finance',
     'partners.category.media': 'Media',
     'partners.category.institutional': 'Institutional',
-    
+
     // Partner profile page
     'partners.profile.about': 'About',
     'partners.profile.benefits': 'Benefits',
     'partners.profile.media': 'Media content',
     'partners.profile.contact': 'Contact',
     'partners.profile.opportunities': 'Opportunities',
-    
+
     // Partner dashboard
     'partners.dashboard.visibility': 'Visibility',
     'partners.dashboard.impressions': 'Impressions',
@@ -136,7 +136,7 @@ export const partnersTranslations = {
     'partners.dashboard.roi': 'Return on investment',
     'partners.dashboard.media_views': 'Media views',
     'partners.dashboard.download_report': 'Download report',
-    
+
     // Partner media
     'partners.media.upload': 'Upload media',
     'partners.media.manage': 'Manage media',
@@ -149,7 +149,7 @@ export const partnersTranslations = {
     'partners.media.pending_approval': 'Pending approval',
     'partners.media.approved': 'Approved',
     'partners.media.rejected': 'Rejected',
-    
+
     // Partner signup
     'partners.signup.title': 'Become a Partner',
     'partners.signup.subtitle': 'Join our ecosystem',
@@ -161,7 +161,7 @@ export const partnersTranslations = {
     'partners.signup.submit': 'Submit application',
     'partners.signup.success': 'Application sent successfully',
     'partners.signup.error': 'Submission error',
-    
+
     // Benefits
     'partners.benefits.visibility': 'Maximum visibility',
     'partners.benefits.networking': 'Networking opportunities',
@@ -170,7 +170,7 @@ export const partnersTranslations = {
     'partners.benefits.booth': 'Exhibition booth',
     'partners.benefits.speaking': 'Speaking opportunities',
     'partners.benefits.branding': 'Brand placement',
-    
+
     // Analytics
     'partners.analytics.overview': 'Overview',
     'partners.analytics.traffic': 'Traffic',

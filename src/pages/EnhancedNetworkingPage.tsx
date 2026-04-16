@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useTranslation } from '../hooks/useTranslation';
 import {
   Users, Brain, MessageCircle, Calendar, Search, Filter,
-  Heart, CheckCircle, Clock, Eye, BarChart3, TrendingUp, 
+  Heart, CheckCircle, Clock, Eye, BarChart3, TrendingUp,
   Handshake, Star, Crown, Shield, QrCode, Settings,
   Network, Zap, Target, Award, Sparkles, Gauge
 } from 'lucide-react';
@@ -71,9 +71,9 @@ const EnhancedNetworkingPage: React.FC = () => {
   };
 
   const getAccessLevelColor = (userType: string, userLevel?: string): string => {
-    if (userType === 'admin') return 'from-purple-500 to-indigo-600';
-    if (userType === 'partner') return 'from-amber-500 to-orange-600';
-    if (userType === 'exhibitor') return 'from-blue-500 to-cyan-600';
+    if (userType === 'admin') {return 'from-purple-500 to-indigo-600';}
+    if (userType === 'partner') {return 'from-amber-500 to-orange-600';}
+    if (userType === 'exhibitor') {return 'from-blue-500 to-cyan-600';}
     if (userType === 'visitor') {
       switch (userLevel) {
         case 'vip': return 'from-purple-500 to-pink-600';
@@ -86,13 +86,13 @@ const EnhancedNetworkingPage: React.FC = () => {
   };
 
   const getQuotaPercentage = (used: number, total: number): number => {
-    if (total === -1) return 0; // Unlimited
+    if (total === -1) {return 0;} // Unlimited
     return total > 0 ? (used / total) * 100 : 100;
   };
 
   const getQuotaColor = (percentage: number): string => {
-    if (percentage >= 90) return 'bg-red-500';
-    if (percentage >= 70) return 'bg-amber-500';
+    if (percentage >= 90) {return 'bg-red-500';}
+    if (percentage >= 70) {return 'bg-amber-500';}
     return 'bg-green-500';
   };
 
@@ -109,11 +109,11 @@ const EnhancedNetworkingPage: React.FC = () => {
             <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
               <Network className="h-8 w-8 text-white" />
             </div>
-            
+
             <h2 className="text-2xl font-bold text-gray-900 mb-3">
               Réseautage Premium
             </h2>
-            
+
             <p className="text-gray-600 mb-6">
               {user.type === 'visitor' && user.profile.passType === 'free'
                 ? "Le réseautage n'est pas disponible avec le forfait gratuit. Mettez à niveau pour accéder aux fonctionnalités de networking professionnel."
@@ -202,7 +202,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                           {getUserTypeIcon(user.type)}
                         </div>
                         <p className="text-sm text-gray-600">
-                          {user.type === 'visitor' ? `Pass ${user.profile.passType || 'gratuit'}` : 
+                          {user.type === 'visitor' ? `Pass ${user.profile.passType || 'gratuit'}` :
                            user.type === 'partner' ? 'Partenaire' :
                            user.type === 'exhibitor' ? 'Exposant' : 'Administrateur'}
                         </p>
@@ -223,7 +223,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1">
-                        <div 
+                        <div
                           className={`h-1 rounded-full transition-all ${getQuotaColor(getQuotaPercentage(dailyUsage.connections, permissions?.maxConnectionsPerDay || 0))}`}
                           style={{ width: `${Math.min(100, getQuotaPercentage(dailyUsage.connections, permissions?.maxConnectionsPerDay || 0))}%` }}
                         />
@@ -236,7 +236,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1">
-                        <div 
+                        <div
                           className={`h-1 rounded-full transition-all ${getQuotaColor(getQuotaPercentage(dailyUsage.messages, permissions?.maxMessagesPerDay || 0))}`}
                           style={{ width: `${Math.min(100, getQuotaPercentage(dailyUsage.messages, permissions?.maxMessagesPerDay || 0))}%` }}
                         />
@@ -249,7 +249,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1">
-                        <div 
+                        <div
                           className={`h-1 rounded-full transition-all ${getQuotaColor(getQuotaPercentage(dailyUsage.meetings, permissions?.maxMeetingsPerDay || 0))}`}
                           style={{ width: `${Math.min(100, getQuotaPercentage(dailyUsage.meetings, permissions?.maxMeetingsPerDay || 0))}%` }}
                         />
@@ -319,7 +319,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                         {isLoading ? 'Analyse...' : 'Actualiser'}
                       </Button>
                     </div>
-                    
+
                     {aiInsights ? (
                       <div className="space-y-4">
                         <p className="text-gray-700">{aiInsights.summary}</p>

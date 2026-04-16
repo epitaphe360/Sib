@@ -67,10 +67,10 @@ export class StorageService {
     bucket: string = 'images',
     folder: string = ''
   ): Promise<string[]> {
-    const uploadPromises = files.map(file => 
+    const uploadPromises = files.map(file =>
       this.uploadImage(file, bucket, folder)
     );
-    
+
     return Promise.all(uploadPromises);
   }
 
@@ -90,9 +90,9 @@ export class StorageService {
     if (urlParts.length < 2) {
       throw new Error('URL invalide pour la suppression');
     }
-    
+
     const filePath = urlParts[1];
-    
+
     const { error } = await supabase!.storage
       .from(bucket)
       .remove([filePath]);
@@ -158,7 +158,7 @@ export class StorageService {
    * @returns Liste des fichiers
    */
   static async listFiles(
-    bucket: string, 
+    bucket: string,
     folder: string = ''
   ): Promise<{ name: string; url: string; size: number; createdAt: string }[]> {
     if (!supabase) {
@@ -180,7 +180,7 @@ export class StorageService {
       const { data: urlData } = supabase!.storage
         .from(bucket)
         .getPublicUrl(`${folder ? folder + '/' : ''}${file.name}`);
-      
+
       return {
         name: file.name,
         url: urlData.publicUrl,

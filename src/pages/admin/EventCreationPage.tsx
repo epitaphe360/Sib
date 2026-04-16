@@ -62,7 +62,7 @@ export default function EventCreationPage() {
   }
 
   return (
-    <EventCreationForm 
+    <EventCreationForm
       eventToEdit={eventToEdit}
       onSuccess={handleSuccess}
       onCancel={handleCancel}

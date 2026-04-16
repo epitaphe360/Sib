@@ -23,25 +23,25 @@ import type { Partner } from '../types';
 const getTierPriority = (partner: Partner): number => {
   const sponsorshipLevel = partner.sponsorshipLevel?.toLowerCase() || '';
   const partnerType = partner.partnerType?.toLowerCase() || '';
-  
+
   // Organisateurs (highest priority)
-  if (partnerType === 'organizer' || sponsorshipLevel.includes('organizer')) return 1;
-  
+  if (partnerType === 'organizer' || sponsorshipLevel.includes('organizer')) {return 1;}
+
   // Co-organisateurs
-  if (partnerType === 'co_organizer' || sponsorshipLevel.includes('co_organizer')) return 2;
-  
+  if (partnerType === 'co_organizer' || sponsorshipLevel.includes('co_organizer')) {return 2;}
+
   // Sponsor Officiel
-  if (partnerType === 'official_sponsor' || sponsorshipLevel.includes('official_sponsor')) return 3;
-  
+  if (partnerType === 'official_sponsor' || sponsorshipLevel.includes('official_sponsor')) {return 3;}
+
   // Organisateur Délégué
-  if (partnerType === 'delegated_organizer' || sponsorshipLevel.includes('delegated_organizer')) return 4;
-  
+  if (partnerType === 'delegated_organizer' || sponsorshipLevel.includes('delegated_organizer')) {return 4;}
+
   // Nos Partenaires
-  if (partnerType === 'partner') return 5;
-  
+  if (partnerType === 'partner') {return 5;}
+
   // Nos Partenaires Presse
-  if (partnerType === 'press_partner' || sponsorshipLevel.includes('press_partner')) return 6;
-  
+  if (partnerType === 'press_partner' || sponsorshipLevel.includes('press_partner')) {return 6;}
+
   // Autres (bronze, institutional, etc.)
   return 9;
 };
@@ -77,10 +77,10 @@ export const PartnersPageOptimized: React.FC = () => {
     searchFields: ['organizationName', 'sector', 'description', 'country'],
     initialSortField: 'organizationName',
     filterFn: (partner, filters) => {
-      if (filters.partnerType && partner.partnerType !== filters.partnerType) return false;
-      if (filters.verified && !partner.verified) return false;
-      if (filters.featured && !partner.featured) return false;
-      if (filters.country && partner.country !== filters.country) return false;
+      if (filters.partnerType && partner.partnerType !== filters.partnerType) {return false;}
+      if (filters.verified && !partner.verified) {return false;}
+      if (filters.featured && !partner.featured) {return false;}
+      if (filters.country && partner.country !== filters.country) {return false;}
       return true;
     },
   });
@@ -95,20 +95,20 @@ export const PartnersPageOptimized: React.FC = () => {
       logger.info('Loading partners');
 
       const data = await SupabaseService.getPartners();
-      
+
       // Trier par ordre d'importance des tiers
       const sortedData = (data || []).sort((a, b) => {
         const priorityA = getTierPriority(a);
         const priorityB = getTierPriority(b);
-        
+
         // Si même priorité, trier par ordre alphabétique
         if (priorityA === priorityB) {
           return a.organizationName.localeCompare(b.organizationName);
         }
-        
+
         return priorityA - priorityB;
       });
-      
+
       setPartners(sortedData);
 
       logger.info('Partners loaded', { count: data?.length || 0 });
@@ -181,11 +181,11 @@ export const PartnersPageOptimized: React.FC = () => {
       <div className="relative bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] pt-8 pb-24 px-4 overflow-hidden">
         {/* Pattern Zellige Subtil */}
         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
-        
+
         {/* Cercles Lumineux */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px]"></div>
-        
+
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -196,15 +196,15 @@ export const PartnersPageOptimized: React.FC = () => {
              <span className="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em]">{t('partners.catalog_label')}</span>
           </motion.div>
 
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight"
           >
             {t('partners.page_title')}
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -212,7 +212,7 @@ export const PartnersPageOptimized: React.FC = () => {
           >
             {t('partners.page_subtitle')} \u2022 <span className="text-white font-black">{totalItems} {t('partners.leaders_count')}</span>
           </motion.p>
-          
+
           {/* Barre de Recherche Premium */}
           <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-2xl p-2 rounded-3xl border border-white/10 shadow-2xl flex flex-col md:flex-row items-center gap-2">
             <div className="relative flex-1 w-full">
@@ -225,7 +225,7 @@ export const PartnersPageOptimized: React.FC = () => {
                 className="w-full pl-14 pr-6 py-4 bg-transparent text-white placeholder-blue-200/40 text-lg font-bold border-none focus:ring-0 focus:outline-none"
               />
             </div>
-            
+
             <div className="flex w-full md:w-auto p-1 gap-2">
               <div className="flex bg-white/5 p-1 rounded-2xl border border-white/5">
                 <button

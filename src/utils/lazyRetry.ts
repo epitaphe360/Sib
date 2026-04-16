@@ -40,7 +40,7 @@ export const lazyRetry = (componentImport: ComponentImporter) =>
           // Ignore storage errors
         }
         console.warn('Deployment mismatch detected. Refreshing app...');
-        
+
         // Unregister service workers before reloading
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then((registrations) => {
@@ -51,17 +51,17 @@ export const lazyRetry = (componentImport: ComponentImporter) =>
             // Silently ignore service worker cleanup errors
           });
         }
-        
+
         // Force refresh by appending a timestamp
         const url = new URL(window.location.href);
         url.searchParams.set('v', now.toString());
         window.location.replace(url.toString());
-        
+
         // Return a promise that never resolves to keep Suspense active
         // and prevent ErrorBoundary from showing the error while reloading
         return new Promise<AsyncComponent>(() => {});
       }
-      
+
       throw error;
     }
   });

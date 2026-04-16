@@ -32,7 +32,7 @@ export const commonTranslations = {
     'common.city': 'Ville',
     'common.country': 'Pays',
     'common.website': 'Site web',
-    
+
     // Article/Contenu
     'common.loading_article': 'Chargement de l\'article...',
     'common.reading_time': '{{minutes}} min de lecture',
@@ -62,12 +62,12 @@ export const commonTranslations = {
     'common.tags': 'Mots-clés',
     'common.category': 'Catégorie',
     'common.published_on': 'Publié le',
-    
+
     // Dashboard
     'common.dashboard': 'Tableau de bord',
     'common.complete_dashboard': 'Tableau de bord complet',
     'common.back_to_dashboard': 'Retour au tableau de bord',
-    
+
     // Management/Admin
     'common.management': 'Gestion',
     'common.create': 'Créer',
@@ -95,7 +95,7 @@ export const commonTranslations = {
     'common.update_error': 'Erreur lors de la mise à jour',
     'common.create_success': 'Créé avec succès',
     'common.create_error': 'Erreur lors de la création',
-    
+
     // Features/Zones
     'common.public_conferences': 'Conférences publiques',
     'common.b2b_meetings': 'Rendez-vous B2B',
@@ -112,7 +112,7 @@ export const commonTranslations = {
     'common.categories': 'Catégories',
     'common.saving': 'Enregistrement...',
     'common.saved': 'Enregistré',
-    
+
     // Toast messages - Success
     'toast.success.saved': 'Enregistré avec succès',
     'toast.success.updated': 'Mis à jour avec succès',
@@ -127,7 +127,7 @@ export const commonTranslations = {
     'toast.success.approved': 'Approuvé avec succès',
     'toast.success.rejected': 'Rejeté avec succès',
     'toast.success.completed': 'Terminé avec succès',
-    
+
     // Toast messages - Error
     'toast.error.loading': 'Erreur lors du chargement',
     'toast.error.saving': 'Erreur lors de l\'enregistrement',
@@ -143,7 +143,7 @@ export const commonTranslations = {
     'toast.error.permission': 'Permission refusée',
     'toast.error.network': 'Erreur réseau',
     'toast.error.timeout': 'Délai d\'attente dépassé',
-    
+
     // Toast messages - Info
     'toast.info.processing': 'Traitement en cours...',
     'toast.info.please_wait': 'Veuillez patienter...',
@@ -179,7 +179,7 @@ export const commonTranslations = {
     'common.city': 'City',
     'common.country': 'Country',
     'common.website': 'Website',
-    
+
     // Article/Content
     'common.loading_article': 'Loading article...',
     'common.reading_time': '{{minutes}} min read',
@@ -209,18 +209,18 @@ export const commonTranslations = {
     'common.tags': 'Tags',
     'common.category': 'Category',
     'common.published_on': 'Published on',
-    
+
     // Dashboard
     'common.dashboard': 'Dashboard',
     'common.complete_dashboard': 'Complete Dashboard',
     'common.back_to_dashboard': 'Back to dashboard',
-    
+
     // Management/Admin
     'common.management': 'Management',
     'common.create': 'Create',
     'common.saving': 'Saving...',
     'common.saved': 'Saved',
-    
+
     // Toast messages - Success
     'toast.success.saved': 'Successfully saved',
     'toast.success.updated': 'Successfully updated',
@@ -235,7 +235,7 @@ export const commonTranslations = {
     'toast.success.approved': 'Successfully approved',
     'toast.success.rejected': 'Successfully rejected',
     'toast.success.completed': 'Successfully completed',
-    
+
     // Toast messages - Error
     'toast.error.loading': 'Error loading',
     'toast. error.saving': 'Error saving',
@@ -251,7 +251,7 @@ export const commonTranslations = {
     'toast.error.permission': 'Permission denied',
     'toast.error.network': 'Network error',
     'toast.error.timeout': 'Timeout exceeded',
-    
+
     // Toast messages - Info
     'toast.info.processing': 'Processing...',
     'toast.info.please_wait': 'Please wait...',
@@ -281,7 +281,7 @@ export const commonTranslations = {
     'common.update_error': 'Error during update',
     'common.create_success': 'Successfully created',
     'common.create_error': 'Error during creation',
-    
+
     // Features/Zones
     'common.public_conferences': 'Public Conferences',
     'common.b2b_meetings': 'B2B Meetings',

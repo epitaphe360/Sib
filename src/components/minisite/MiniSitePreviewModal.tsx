@@ -19,7 +19,7 @@ export const MiniSitePreviewModal: React.FC<MiniSitePreviewModalProps> = ({
   onCancel,
   isCreating = false
 }) => {
-  if (!data) return null;
+  if (!data) {return null;}
 
   const { company, logo, description, products, socials, contact, stats } = data;
 
@@ -79,9 +79,9 @@ export const MiniSitePreviewModal: React.FC<MiniSitePreviewModalProps> = ({
               <div className="space-y-4">
                 <div className="flex items-start space-x-4">
                   {logo && (
-                    <img 
-                      src={logo} 
-                      alt={company} 
+                    <img
+                      src={logo}
+                      alt={company}
                       className="w-20 h-20 object-contain rounded-lg border"
                       onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                     />
@@ -91,7 +91,7 @@ export const MiniSitePreviewModal: React.FC<MiniSitePreviewModalProps> = ({
                     <div className="text-lg font-bold text-gray-900">{company || 'Non trouvé'}</div>
                   </div>
                 </div>
-                
+
                 <div>
                   <div className="font-semibold text-gray-700 text-sm mb-1">Description</div>
                   <div className="text-gray-900">{description || 'Aucune description trouvée'}</div>
@@ -133,9 +133,9 @@ export const MiniSitePreviewModal: React.FC<MiniSitePreviewModalProps> = ({
                     <div key={`product-${product.name || product.id}`} className="border border-gray-200 rounded-lg p-3">
                       <div className="flex items-start space-x-3">
                         {product.image && (
-                          <img 
-                            src={product.image} 
-                            alt={product.name} 
+                          <img
+                            src={product.image}
+                            alt={product.name}
                             className="w-16 h-16 object-cover rounded"
                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                           />

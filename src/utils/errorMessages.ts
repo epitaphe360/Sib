@@ -167,7 +167,7 @@ export function getUserFriendlyError(error: Error | string): UserFriendlyError {
  * Extrait un message court et clair d'une erreur
  */
 export function getErrorMessage(error: Error | string | unknown): string {
-  if (!error) return 'Une erreur est survenue';
+  if (!error) {return 'Une erreur est survenue';}
 
   if (typeof error === 'string') {
     return error;

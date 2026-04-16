@@ -49,7 +49,7 @@ export const LiveStudioDetailPage: React.FC = () => {
         .eq('type', 'live_studio')
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
       setLiveStudio(data);
     } catch (error) {
       console.error('Error loading live studio:', error);
@@ -62,8 +62,8 @@ export const LiveStudioDetailPage: React.FC = () => {
   const handleNotify = () => {
     setIsNotified(!isNotified);
     toast.success(
-      isNotified 
-        ? 'Notification désactivée' 
+      isNotified
+        ? 'Notification désactivée'
         : 'Vous serez notifié au début du live'
     );
   };
@@ -93,7 +93,7 @@ export const LiveStudioDetailPage: React.FC = () => {
   };
 
   const formatDuration = (seconds?: number) => {
-    if (!seconds) return 'N/A';
+    if (!seconds) {return 'N/A';}
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     return hours > 0 ? `${hours}h ${minutes}min` : `${minutes}min`;
@@ -142,28 +142,28 @@ export const LiveStudioDetailPage: React.FC = () => {
             {/* Video Player or Placeholder */}
             <div className="relative">
               {liveStudio.is_live ? (
-                <Badge 
-                  variant="destructive" 
+                <Badge
+                  variant="destructive"
                   className="absolute top-4 left-4 z-10 animate-pulse"
                 >
                   🔴 EN DIRECT
                 </Badge>
               ) : isUpcoming ? (
-                <Badge 
-                  variant="default" 
+                <Badge
+                  variant="default"
                   className="absolute top-4 left-4 z-10"
                 >
                   📅 À VENIR
                 </Badge>
               ) : (
-                <Badge 
-                  variant="secondary" 
+                <Badge
+                  variant="secondary"
                   className="absolute top-4 left-4 z-10"
                 >
                   🎬 REPLAY
                 </Badge>
               )}
-              
+
               {(liveStudio.is_live || liveStudio.recording_url) ? (
                 <VideoStreamPlayer
                   src={liveStudio.is_live ? liveStudio.content_url : (liveStudio.recording_url || liveStudio.content_url)}
@@ -172,7 +172,7 @@ export const LiveStudioDetailPage: React.FC = () => {
                   isLive={liveStudio.is_live}
                 />
               ) : (
-                <div 
+                <div
                   className="aspect-video bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg flex items-center justify-center"
                   style={{
                     backgroundImage: liveStudio.thumbnail_url ? `url(${liveStudio.thumbnail_url})` : undefined,
@@ -201,7 +201,7 @@ export const LiveStudioDetailPage: React.FC = () => {
                 <Radio className="h-5 w-5 text-red-600" />
                 <span className="text-sm font-medium text-gray-600">LIVE STUDIO SIB</span>
               </div>
-              
+
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
                 {liveStudio.title}
               </h1>

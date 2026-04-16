@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { SupabaseService } from '../../services/supabaseService';
@@ -14,23 +14,31 @@ import {
   Tablet,
   Plus,
   Trash2,
-  Move,
   Settings,
   ArrowLeft,
-  Edit,
+  Edit3,
   Upload,
   Globe,
   Mail,
   Phone,
   MapPin,
   Check,
-  X
+  X,
+  ChevronUp,
+  ChevronDown,
+  ExternalLink,
+  Loader2,
+  RefreshCw,
+  AlertCircle,
 } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface SectionContent {
   title?: string;
@@ -73,119 +81,158 @@ interface Section {
   order: number;
 }
 
+interface SiteSettings {
+  primaryColor: string;
+  secondaryColor: string;
+  fontFamily: string;
+  logoUrl: string;
+}
+
+// ─── Default content per type ─────────────────────────────────────────────────
+
+function getDefaultContent(type: Section['type']): SectionContent {
+  switch (type) {
+    case 'hero':
+      return { title: 'Votre titre', subtitle: 'Votre sous-titre', ctaText: 'En savoir plus', ctaLink: '#' };
+    case 'about':
+      return { title: 'À propos de nous', description: 'Décrivez votre entreprise ici...', features: ['Fonctionnalité 1', 'Fonctionnalité 2'] };
+    case 'products':
+      return { title: 'Nos produits', products: [] };
+    case 'gallery':
+      return { title: 'Galerie', images: [] };
+    case 'news':
+      return { title: 'Actualités', articles: [] };
+    case 'contact':
+      return { title: 'Contactez-nous', address: '', phone: '', email: '', website: '', hours: '' };
+    default:
+      return {};
+  }
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function MiniSiteEditor() {
   const { user } = useAuthStore();
+  const { t } = useTranslation();
   const [exhibitorId, setExhibitorId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const hasLoadedRef = useRef(false);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editingValue, setEditingValue] = useState<string>('');
-  const [sections, setSections] = useState<Section[]>([
-    {
-      id: '1',
-      type: 'hero',
-      title: 'Section Hero',
-      content: {
-        title: 'Bâtiment Solutions Inc.',
-        subtitle: 'Leading provider of integrated bâtiment management solutions',
-        backgroundImage: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200',
-        ctaText: 'Découvrir nos solutions',
-        ctaLink: '#products'
-      },
-      visible: true,
-      order: 0
-    },
-    {
-      id: '2',
-      type: 'about',
-      title: 'À propos',
-      content: {
-        title: 'Notre expertise',
-        description: 'Avec plus de 20 ans d\'expérience dans le secteur du bâtiment, nous accompagnons les bâtiments du monde entier dans leur transformation digitale.',
-        features: [
-          'Solutions innovantes',
-          'Expertise reconnue',
-          'Support 24/7',
-          'Présence internationale'
-        ]
-      },
-      visible: true,
-      order: 1
-    },
-    {
-      id: '3',
-      type: 'products',
-      title: 'Produits & Services',
-      content: {
-        title: 'Nos solutions',
-        products: [
-          {
-            id: '1',
-            name: 'Système IA Bâtiment',
-            description: 'Plateforme intelligente d\'optimisation des opérations BTP avec IA prédictive',
-            image: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=400',
-            features: ['Analytics prédictifs en temps réel', 'Automatisation IA', 'Intégration API complète'],
-            price: 'Sur devis',
-            inStock: true
-          },
-          {
-            id: '2',
-            name: 'Plateforme IoT Connectée',
-            description: 'Solution IoT de supervision et monitoring des équipements BTP',
-            image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400',
-            features: ['Capteurs intelligents', 'Maintenance prédictive', 'Alertes instantanées'],
-            price: 'À partir de 15 000€',
-            inStock: true
-          },
-          {
-            id: '3',
-            name: 'Support Premium 24/7',
-            description: 'Assistance technique dédiée et formation continue de vos équipes',
-            image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400',
-            features: ['Équipe dédiée multilingue', 'Intervention sous 2h', 'Formation personnalisée'],
-            price: '2 500€/mois',
-            inStock: true
-          }
-        ]
-      },
-      visible: true,
-      order: 2
-    },
-    {
-      id: '4',
-      type: 'contact',
-      title: 'Contact',
-      content: {
-        title: 'Contactez-nous',
-        address: '123 Bâtiment Avenue, Casablanca, Maroc',
-        phone: '',
-        email: 'contact@portsolutions.com',
-        website: 'https://portsolutions.com',
-        hours: 'Lun-Ven: 8h-18h'
-      },
-      visible: true,
-      order: 3
-    }
-  ]);
-
-  const [siteSettings, setSiteSettings] = useState({
-    primaryColor: '#1e40af',
-    secondaryColor: '#3b82f6',
-    accentColor: '#60a5fa',
+  const [sections, setSections] = useState<Section[]>([]);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>({
+    primaryColor: '#C9A84C',
+    secondaryColor: '#0F2034',
     fontFamily: 'Inter',
-    logoUrl: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=200'
+    logoUrl: '',
   });
+  const logoInputRef = useRef<HTMLInputElement>(null);
 
+  // ─── Section type definitions ──────────────────────────────────────────────
   const sectionTypes = React.useMemo(() => [
-    { type: 'hero', title: 'Section Hero', icon: Layout, description: 'Bannière d\'accueil avec titre et CTA' },
+    { type: 'hero', title: 'Section Hero', icon: Layout, description: "Bannière d'accueil avec titre et CTA" },
     { type: 'about', title: 'À propos', icon: FileText, description: 'Présentation de votre entreprise' },
-    { type: 'products', title: 'Produits', icon: Image, description: 'Catalogue de vos produits et services' },
-    { type: 'gallery', title: 'Galerie', icon: Image, description: 'Photos et vidéos de votre entreprise' },
-    { type: 'news', title: 'Actualités', icon: FileText, description: 'Dernières nouvelles et annonces' },
-    { type: 'contact', title: 'Contact', icon: Mail, description: 'Informations de contact et formulaire' }
+    { type: 'products', title: 'Produits', icon: Image, description: 'Catalogue de produits/services' },
+    { type: 'gallery', title: 'Galerie', icon: Image, description: 'Photos et médias' },
+    { type: 'news', title: 'Actualités', icon: FileText, description: 'Actualités et annonces' },
+    { type: 'contact', title: 'Contact', icon: Mail, description: 'Informations de contact' },
   ], []);
+
+  // ─── Load mini-site from DB ────────────────────────────────────────────────
+  useEffect(() => {
+    const loadMiniSite = async () => {
+      if (!user?.id) { setIsLoading(false); return; }
+      try {
+        const exhibitor = await SupabaseService.getExhibitorByUserId(user.id);
+        if (!exhibitor) { setIsLoading(false); return; }
+        setExhibitorId(exhibitor.id);
+
+        const miniSite = await SupabaseService.getMiniSite(exhibitor.id);
+        if (miniSite?.sections?.length) {
+          const loaded = (miniSite.sections as any[]).map((s, i) => ({
+            id: s.id || String(i + 1),
+            type: (s.type || 'about') as Section['type'],
+            title: s.title || '',
+            content: s.content || {},
+            visible: s.visible !== false,
+            order: s.order ?? i,
+          }));
+          setSections(loaded);
+          if (miniSite.settings) {
+            setSiteSettings(prev => ({ ...prev, ...(miniSite.settings as Partial<SiteSettings>) }));
+          }
+        } else {
+          // No mini-site yet — seed hero + contact from profile
+          const company = user.profile?.company || '';
+          const email = user.email || '';
+          const phone = (user.profile as any)?.phone || '';
+          setSections([
+            {
+              id: '1',
+              type: 'hero',
+              title: 'Section Hero',
+              content: {
+                title: company || 'Votre entreprise',
+                subtitle: 'Bienvenue sur notre mini-site SIB 2026',
+                ctaText: 'Découvrir',
+                ctaLink: '#about',
+              },
+              visible: true,
+              order: 0,
+            },
+            {
+              id: '2',
+              type: 'about',
+              title: 'À propos',
+              content: {
+                title: 'À propos de nous',
+                description: 'Présentez votre entreprise ici...',
+                features: [],
+              },
+              visible: true,
+              order: 1,
+            },
+            {
+              id: '3',
+              type: 'contact',
+              title: 'Contact',
+              content: {
+                title: 'Contactez-nous',
+                address: '',
+                phone,
+                email,
+                website: '',
+                hours: '',
+              },
+              visible: true,
+              order: 2,
+            },
+          ]);
+        }
+      } catch (err) {
+        console.error('Erreur chargement mini-site:', err);
+        toast.error('Impossible de charger le mini-site');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadMiniSite();
+  }, [user?.id]);
+
+  // Track unsaved changes — skip the initial data-load cycle
+  useEffect(() => {
+    if (!hasLoadedRef.current) {
+      if (!isLoading) {hasLoadedRef.current = true;}
+      return;
+    }
+    setHasUnsavedChanges(true);
+  }, [sections, siteSettings, isLoading]);
+
+  // ─── Handlers: sections ────────────────────────────────────────────────────
 
   const addSection = useCallback((type: Section['type']) => {
     const newSection: Section = {
@@ -194,86 +241,91 @@ export default function MiniSiteEditor() {
       title: sectionTypes.find(s => s.type === type)?.title || 'Nouvelle section',
       content: getDefaultContent(type),
       visible: true,
-      order: sections.length
+      order: 0,
     };
-    setSections(prevSections => [...prevSections, newSection]);
+    setSections(prev => {
+      const reordered = prev.map((s, i) => ({ ...s, order: i + 1 }));
+      return [{ ...newSection, order: 0 }, ...reordered];
+    });
     setActiveSection(newSection.id);
-    toast.success(`✅ SECTION AJOUTÉE — ${sectionTypes.find(s => s.type === type)?.title}`);
-  }, [sections.length, sectionTypes]);
-
-  const getDefaultContent = (type: Section['type']) => {
-    switch (type) {
-      case 'hero':
-        return {
-          title: 'Votre titre',
-          subtitle: 'Votre sous-titre',
-          backgroundImage: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200',
-          ctaText: 'En savoir plus',
-          ctaLink: '#'
-        };
-      case 'about':
-        return {
-          title: 'À propos de nous',
-          description: 'Décrivez votre entreprise ici...',
-          features: ['Nouvelle fonctionnalité 1', 'Nouvelle fonctionnalité 2']
-        };
-      case 'products':
-        return {
-          title: 'Nos produits',
-          products: []
-        };
-      case 'gallery':
-        return {
-          title: 'Galerie',
-          images: []
-        };
-      case 'news':
-        return {
-          title: 'Actualités',
-          articles: []
-        };
-      case 'contact':
-        return {
-          title: 'Contactez-nous',
-          address: 'Votre adresse',
-          phone: 'Votre téléphone',
-          email: 'votre@email.com',
-          website: 'https://votre-site.com',
-          hours: 'Vos horaires'
-        };
-      default:
-        return {};
-    }
-  };
+    toast.success(`Section "${newSection.title}" ajoutée`);
+  }, [sectionTypes]);
 
   const removeSection = useCallback((id: string) => {
-    const sectionTitle = sections.find(s => s.id === id)?.title;
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer la section "${sectionTitle}" ?`)) {
-      setSections(prevSections => {
-        const updatedSections = prevSections.filter(section => section.id !== id);
-        // Reorder remaining sections
-        return updatedSections.map((section, index) => ({
-          ...section,
-          order: index
-        }));
-      });
-      if (activeSection === id) {
-        setActiveSection(null);
-      }
-      toast.success(`Section supprimée : "${sectionTitle}". Ordre réorganisé.`);
-    }
+    const section = sections.find(s => s.id === id);
+    if (!window.confirm(`Supprimer la section "${section?.title}" ?`)) {return;}
+    setSections(prev => prev.filter(s => s.id !== id).map((s, i) => ({ ...s, order: i })));
+    if (activeSection === id) {setActiveSection(null);}
+    toast.success(`Section supprimée`);
   }, [sections, activeSection]);
 
-  const toggleSectionVisibility = useCallback((id: string) => {
-    const section = sections.find(s => s.id === id);
-    const newVisibility = !section?.visible;
+  const toggleVisibility = useCallback((id: string) => {
+    setSections(prev => prev.map(s => s.id === id ? { ...s, visible: !s.visible } : s));
+  }, []);
 
-    setSections(prevSections => prevSections.map(s =>
-      s.id === id ? { ...s, visible: newVisibility } : s
+  const moveSection = useCallback((id: string, direction: 'up' | 'down') => {
+    setSections(prev => {
+      const sorted = [...prev].sort((a, b) => a.order - b.order);
+      const idx = sorted.findIndex(s => s.id === id);
+      if (idx === -1) {return prev;}
+      const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (swapIdx < 0 || swapIdx >= sorted.length) {return prev;}
+      const newSorted = [...sorted];
+      [newSorted[idx], newSorted[swapIdx]] = [newSorted[swapIdx], newSorted[idx]];
+      return newSorted.map((s, i) => ({ ...s, order: i }));
+    });
+  }, []);
+
+  const updateSectionContent = useCallback((sectionId: string, field: string, value: unknown) => {
+    setSections(prev => prev.map(s =>
+      s.id === sectionId ? { ...s, content: { ...s.content, [field]: value } } : s
     ));
+  }, []);
 
-    toast.success(`Visibilité modifiée : ${section?.title} (${newVisibility ? 'Visible' : 'Masquée'})`);
-  }, [sections]);
+  const updateProductField = useCallback((sectionId: string, productIndex: number, field: string, value: unknown) => {
+    setSections(prev => prev.map(s => {
+      if (s.id !== sectionId || s.type !== 'products' || !s.content.products) {return s;}
+      return {
+        ...s,
+        content: {
+          ...s.content,
+          products: s.content.products.map((p, i) => i === productIndex ? { ...p, [field]: value } : p),
+        },
+      };
+    }));
+  }, []);
+
+  const addProduct = useCallback((sectionId: string) => {
+    setSections(prev => prev.map(s => {
+      if (s.id !== sectionId || s.type !== 'products') {return s;}
+      return {
+        ...s,
+        content: {
+          ...s.content,
+          products: [...(s.content.products ?? []), {
+            id: Date.now().toString(),
+            name: 'Nouveau produit',
+            description: 'Description du produit',
+            image: '',
+            features: [],
+            price: 'Sur devis',
+          }],
+        },
+      };
+    }));
+    toast.success('Produit ajouté');
+  }, []);
+
+  const removeProduct = useCallback((sectionId: string, productIndex: number) => {
+    if (!window.confirm('Supprimer ce produit ?')) {return;}
+    setSections(prev => prev.map(s => {
+      if (s.id !== sectionId || s.type !== 'products' || !s.content.products) {return s;}
+      return { ...s, content: { ...s.content, products: s.content.products.filter((_, i) => i !== productIndex) } };
+    }));
+    toast.success('Produit supprimé');
+  }, []);
+
+  // ─── Handlers: editing ─────────────────────────────────────────────────────
 
   const startEditing = useCallback((fieldKey: string, currentValue: string) => {
     setEditingField(fieldKey);
@@ -285,172 +337,59 @@ export default function MiniSiteEditor() {
     setEditingValue('');
   }, []);
 
-  const updateSectionContent = useCallback((sectionId: string, field: string, value: unknown) => {
-    setSections(prevSections => prevSections.map(section =>
-      section.id === sectionId
-        ? {
-            ...section,
-            content: {
-              ...section.content,
-              [field]: value
-            }
-          }
-        : section
-    ));
-  }, []);
-
-  const updateProductField = useCallback((sectionId: string, productIndex: number, field: string, value: unknown) => {
-    setSections(prevSections => prevSections.map(section => {
-      if (section.id === sectionId && section.type === 'products' && section.content.products) {
-        const updatedProducts = section.content.products.map((product, index) =>
-          index === productIndex ? { ...product, [field]: value } : product
-        );
-        return {
-          ...section,
-          content: {
-            ...section.content,
-            products: updatedProducts
-          }
-        };
-      }
-      return section;
-    }));
-  }, []);
-
-  const addProduct = useCallback((sectionId: string) => {
-    setSections(prevSections => prevSections.map(section => {
-      if (section.id === sectionId && section.type === 'products') {
-        const newProduct = {
-          id: Date.now().toString(),
-          name: 'Nouveau produit',
-          description: 'Description du produit',
-          image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400',
-          features: ['Fonctionnalité 1', 'Fonctionnalité 2'],
-          price: 'Sur devis'
-        };
-        return {
-          ...section,
-          content: {
-            ...section.content,
-            products: [...(section.content.products ?? []), newProduct]
-          }
-        };
-      }
-      return section;
-    }));
-    toast.success('✅ Produit ajouté.');
-  }, []);
-
-  const removeProduct = useCallback((sectionId: string, productIndex: number) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-      setSections(prevSections => prevSections.map(section => {
-        if (section.id === sectionId && section.type === 'products' && section.content.products) {
-          const updatedProducts = section.content.products.filter((_, index: number) => index !== productIndex);
-          return {
-            ...section,
-            content: {
-              ...section.content,
-              products: updatedProducts
-            }
-          };
-        }
-        return section;
-      }));
-      toast.success('Produit supprimé.');
-    }
-  }, []);
-
-  // Charger le mini-site existant au montage
-  useEffect(() => {
-    const loadMiniSite = async () => {
-      if (!user?.id) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        // D'abord récupérer l'exhibitor correspondant à l'utilisateur
-        const exhibitor = await SupabaseService.getExhibitorByUserId(user.id);
-        if (!exhibitor) {
-          console.warn('Aucun exposant trouvé pour cet utilisateur');
-          setIsLoading(false);
-          return;
-        }
-
-        setExhibitorId(exhibitor.id);
-
-        // Puis charger le mini-site avec l'exhibitor ID
-        const miniSite = await SupabaseService.getMiniSite(exhibitor.id);
-        if (miniSite && miniSite.sections) {
-          // Convertir les sections de la DB au format du composant
-          const loadedSections = miniSite.sections.map((s: any, index: number) => ({
-            id: String(index + 1),
-            type: s.type || 'about',
-            title: s.title || '',
-            content: s.content || {},
-            visible: s.visible !== false,
-            order: s.order || index
-          }));
-          setSections(loadedSections as Section[]);
-        }
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Erreur chargement mini-site:', error);
-        toast.error('Impossible de charger le mini-site');
-        setIsLoading(false);
-      }
-    };
-
-    loadMiniSite();
-  }, [user?.id]);
+  // ─── Save ─────────────────────────────────────────────────────────────────
 
   const handleSave = useCallback(async () => {
     if (!exhibitorId) {
-      toast.error('Vous devez être connecté en tant qu\'exposant pour sauvegarder');
+      toast.error('Exposant introuvable — reconnectez-vous');
       return;
     }
-
     setIsSaving(true);
     try {
-      // Préparer les données pour la sauvegarde
-      const miniSiteData = {
+      await SupabaseService.updateMiniSite(exhibitorId, {
         sections: sections.map(s => ({
+          id: s.id,
           type: s.type,
           title: s.title,
           content: s.content,
           visible: s.visible,
-          order: s.order
+          order: s.order,
         })),
-        published: true
-      };
-
-      await SupabaseService.updateMiniSite(exhibitorId, miniSiteData);
-      toast.success('💾 Mini-site sauvegardé avec succès');
-    } catch (error) {
-      console.error('Erreur sauvegarde:', error);
-      toast.error('❌ Erreur lors de la sauvegarde');
+        settings: siteSettings,
+        published: true,
+      });
+      setHasUnsavedChanges(false);
+      toast.success('Mini-site sauvegardé');
+    } catch (err) {
+      console.error('Erreur sauvegarde:', err);
+      toast.error('Erreur lors de la sauvegarde');
     } finally {
       setIsSaving(false);
     }
-  }, [exhibitorId, sections]);
+  }, [exhibitorId, sections, siteSettings]);
+
+  // ─── Preview ──────────────────────────────────────────────────────────────
 
   const handlePreview = useCallback(() => {
-    if (!user?.id) {
-      toast.error('Vous devez être connecté');
-      return;
-    }
-    toast(`👁️ Aperçu — Mode: ${previewMode}`, { icon: '👁️' });
-    window.open(`/minisite/${user.id}`, '_blank');
-  }, [previewMode, user?.id]);
+    if (!exhibitorId) { toast.error('Sauvegardez d\'abord votre mini-site'); return; }
+    window.open(`/minisite/${exhibitorId}`, '_blank');
+  }, [exhibitorId]);
 
-  const getPreviewWidth = () => {
-    switch (previewMode) {
-      case 'mobile': return 'w-80';
-      case 'tablet': return 'w-96';
-      case 'desktop': return 'w-full';
-      default: return 'w-full';
-    }
-  };
+  // ─── Logo upload ──────────────────────────────────────────────────────────
+
+  const handleLogoUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {return;}
+    if (file.size > 2 * 1024 * 1024) { toast.error('Logo trop lourd (max 2 Mo)'); return; }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      setSiteSettings(prev => ({ ...prev, logoUrl: ev.target?.result as string }));
+      toast.success('Logo mis à jour');
+    };
+    reader.readAsDataURL(file);
+  }, []);
+
+  // ─── Inline editable text ─────────────────────────────────────────────────
 
   const EditableText: React.FC<{
     value: string;
@@ -468,9 +407,9 @@ export default function MiniSiteEditor() {
           {multiline ? (
             <textarea
               value={editingValue}
-              onChange={(e) => setEditingValue(e.target.value)}
+              onChange={e => setEditingValue(e.target.value)}
               placeholder={placeholder}
-              className={`w-full px-3 py-2 border-2 border-blue-500 rounded-lg focus:outline-none bg-white ${className}`}
+              className={`w-full px-3 py-2 border-2 border-[#C9A84C] rounded-lg focus:outline-none bg-white ${className}`}
               rows={3}
               autoFocus
             />
@@ -478,30 +417,31 @@ export default function MiniSiteEditor() {
             <input
               type="text"
               value={editingValue}
-              onChange={(e) => setEditingValue(e.target.value)}
+              onChange={e => setEditingValue(e.target.value)}
               placeholder={placeholder}
-              aria-label={placeholder || "Edit field"}
-              className={`w-full px-3 py-2 border-2 border-blue-500 rounded-lg focus:outline-none bg-white ${className}`}
+              aria-label={placeholder || 'Modifier'}
+              className={`w-full px-3 py-2 border-2 border-[#C9A84C] rounded-lg focus:outline-none bg-white ${className}`}
               autoFocus
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  onChange(editingValue);
+                  setEditingField(null);
+                  setEditingValue('');
+                } else if (e.key === 'Escape') {
+                  cancelEdit();
+                }
+              }}
             />
           )}
           <div className="flex space-x-2 mt-2">
-                <Button 
-              variant="default"
-              size="sm" 
-              onClick={() => {
-                onChange(editingValue);
-                setEditingField(null);
-                setEditingValue('');
-                toast.success(`Texte modifié: "${editingValue}"`);
-              }}
+            <Button variant="default" size="sm"
+              onClick={() => { onChange(editingValue); setEditingField(null); setEditingValue(''); }}
+              className="bg-[#C9A84C] hover:bg-[#A88830] text-white"
             >
-              <Check className="h-3 w-3 mr-1" />
-              Sauver
+              <Check className="h-3 w-3 mr-1" /> Sauver
             </Button>
             <Button variant="outline" size="sm" onClick={cancelEdit}>
-              <X className="h-3 w-3 mr-1" />
-              Annuler
+              <X className="h-3 w-3 mr-1" /> Annuler
             </Button>
           </div>
         </div>
@@ -513,904 +453,694 @@ export default function MiniSiteEditor() {
         role="button"
         tabIndex={0}
         onClick={() => startEditing(fieldKey, value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            startEditing(fieldKey, value);
-          }
-        }}
-        className={`cursor-pointer hover:bg-blue-50 hover:border-blue-200 border-2 border-transparent rounded-lg p-2 transition-colors group ${className}`}
-        title={t('minisite.editor.click_to_edit')}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); startEditing(fieldKey, value); } }}
+        className={`cursor-pointer hover:bg-yellow-50 hover:outline hover:outline-2 hover:outline-[#C9A84C]/50 rounded-lg p-1 transition-all group relative ${className}`}
+        title="Cliquer pour modifier"
         aria-label="Modifier ce champ"
       >
-        {value || (
-          <span className="text-gray-400 italic">{placeholder || t('minisite.editor.click_to_edit')}</span>
-        )}
-        <Edit className="h-3 w-3 text-blue-400 inline ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+        {value || <span className="text-gray-400 italic">{placeholder || 'Cliquer pour modifier'}</span>}
+        <Edit3 className="h-3 w-3 text-[#C9A84C] absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
     );
   };
 
+  // ─── Computed ─────────────────────────────────────────────────────────────
+
+  const sortedSections = useMemo(
+    () => [...sections].sort((a, b) => a.order - b.order),
+    [sections]
+  );
+  const visibleSections = useMemo(
+    () => sortedSections.filter(s => s.visible),
+    [sortedSections]
+  );
+
+  const previewWidth = previewMode === 'mobile' ? 'max-w-sm' : previewMode === 'tablet' ? 'max-w-xl' : 'w-full';
+
+  // ─── Loading ──────────────────────────────────────────────────────────────
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-sib-bg flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-10 w-10 animate-spin text-[#C9A84C] mx-auto mb-4" />
+          <p className="text-[#0F2034] font-medium">Chargement de votre mini-site...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Render ───────────────────────────────────────────────────────────────
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-6">
+    <div className="min-h-screen bg-sib-bg">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        {/* ── Breadcrumb ── */}
+        <div className="mb-4">
           <Link to={ROUTES.DASHBOARD}>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="text-[#0F2034] hover:text-[#C9A84C]">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Retour au Tableau de Bord Exposant
+              Tableau de bord
             </Button>
           </Link>
         </div>
 
-        <div className="flex items-center justify-between mb-8">
+        {/* ── Top bar ── */}
+        <div className="bg-[#0F2034] rounded-xl px-6 py-4 flex flex-wrap items-center justify-between gap-4 mb-6 shadow-sib">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Éditeur de Mini-Site
-            </h1>
-            <p className="text-gray-600">
-              {t('minisite.editor.customize')}
-            </p>
+            <h1 className="text-xl font-bold text-white">Éditeur de Mini-Site</h1>
+            <p className="text-sm text-white/60">Personnalisez votre page exposant SIB 2026</p>
           </div>
-          
-          <div className="flex items-center space-x-4">
-            {/* Preview Mode Selector */}
-            <div className="flex items-center space-x-2 bg-white rounded-lg p-1 shadow-sm">
-              <button
-                onClick={() => {
-                  setPreviewMode('desktop');
-                  toast('🖥️ Mode Desktop sélectionné');
-                }}
-                className={`p-2 rounded ${previewMode === 'desktop' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
-              >
-                <Monitor className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => {
-                  setPreviewMode('tablet');
-                  toast('📱 Mode Tablette sélectionné');
-                }}
-                className={`p-2 rounded ${previewMode === 'tablet' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
-              >
-                <Tablet className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => {
-                  setPreviewMode('mobile');
-                  toast('📱 Mode Mobile sélectionné');
-                }}
-                className={`p-2 rounded ${previewMode === 'mobile' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
-              >
-                <Smartphone className="h-4 w-4" />
-              </button>
+
+          <div className="flex items-center gap-3">
+            {/* Preview toggle */}
+            <div className="flex items-center gap-1 bg-white/10 rounded-lg p-1">
+              {(['desktop', 'tablet', 'mobile'] as const).map(mode => {
+                const Icon = mode === 'desktop' ? Monitor : mode === 'tablet' ? Tablet : Smartphone;
+                return (
+                  <button key={mode}
+                    onClick={() => setPreviewMode(mode)}
+                    className={`p-2 rounded-md transition-colors ${previewMode === mode ? 'bg-[#C9A84C] text-white' : 'text-white/60 hover:text-white'}`}
+                    title={mode}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </button>
+                );
+              })}
             </div>
 
-            <Button variant="outline" onClick={handlePreview}>
-              <Eye className="h-4 w-4 mr-2" />
-              Prévisualiser
+            <Button variant="outline" size="sm" onClick={handlePreview}
+              className="border-white/30 text-white hover:bg-white/10">
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Aperçu
             </Button>
-            
-            <Button variant="default" onClick={handleSave} disabled={isSaving}>
-              <Save className="h-4 w-4 mr-2" />
-              {isSaving ? 'Sauvegarde...' : 'Sauvegarder'}
+
+            <Button size="sm" onClick={handleSave} disabled={isSaving}
+              className={`${hasUnsavedChanges ? 'bg-[#C9A84C] hover:bg-[#A88830]' : 'bg-green-600 hover:bg-green-700'} text-white font-semibold`}>
+              {isSaving
+                ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Sauvegarde...</>
+                : hasUnsavedChanges
+                  ? <><Save className="h-4 w-4 mr-2" />Sauvegarder</>
+                  : <><Check className="h-4 w-4 mr-2" />Sauvegardé</>}
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar - Tools */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Site Settings */}
+        {/* ── No exhibitor warning ── */}
+        {!exhibitorId && (
+          <div className="mb-6 bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-3">
+            <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0" />
+            <p className="text-sm text-amber-800">Profil exposant introuvable. Certaines fonctionnalités sont limitées.</p>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+
+          {/* ── Sidebar ── */}
+          <div className="xl:col-span-1 space-y-4">
+
+            {/* Site settings */}
             <Card>
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <Settings className="h-4 w-4 mr-2" />
+                <h3 className="font-bold text-[#0F2034] mb-4 flex items-center gap-2 text-sm">
+                  <Settings className="h-4 w-4 text-[#C9A84C]" />
                   Paramètres du site
                 </h3>
-                
                 <div className="space-y-4">
+                  {/* Primary color */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
                       Couleur principale
                     </label>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="color"
-                        value={siteSettings.primaryColor}
-                        onChange={(e) => {
-                          setSiteSettings({...siteSettings, primaryColor: e.target.value});
-                          toast.success(`Couleur principale mise à jour: ${e.target.value}`);
-                        }}
-                        aria-label="Sélecteur de couleur principale"
-                        className="w-8 h-8 rounded border border-gray-300 cursor-pointer"
+                    <div className="flex items-center gap-2">
+                      <input type="color" value={siteSettings.primaryColor}
+                        onChange={e => setSiteSettings(prev => ({ ...prev, primaryColor: e.target.value }))}
+                        aria-label="Couleur principale"
+                        className="w-9 h-9 rounded-lg border border-gray-200 cursor-pointer p-0.5"
                       />
-                      <input
-                        type="text"
-                        value={siteSettings.primaryColor}
-                        onChange={(e) => setSiteSettings({...siteSettings, primaryColor: e.target.value})}
-                        aria-label="Code couleur principale (hex)"
-                        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
+                      <input type="text" value={siteSettings.primaryColor}
+                        onChange={e => setSiteSettings(prev => ({ ...prev, primaryColor: e.target.value }))}
+                        aria-label="Code hex couleur principale"
+                        className="flex-1 px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg font-mono"
                       />
                     </div>
                   </div>
 
+                  {/* Font */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
                       Police
                     </label>
-                    <select
-                      value={siteSettings.fontFamily}
-                      onChange={(e) => {
-                        setSiteSettings({...siteSettings, fontFamily: e.target.value});
-                        toast.success(`Police mise à jour: ${e.target.value}`);
-                      }}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    <select value={siteSettings.fontFamily}
+                      onChange={e => setSiteSettings(prev => ({ ...prev, fontFamily: e.target.value }))}
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A84C]"
                     >
                       <option value="Inter">Inter</option>
                       <option value="Roboto">Roboto</option>
                       <option value="Open Sans">Open Sans</option>
                       <option value="Lato">Lato</option>
+                      <option value="Montserrat">Montserrat</option>
                     </select>
                   </div>
 
+                  {/* Logo */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
                       Logo
                     </label>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
-                      onClick={() => {
-                        const input = document.createElement('input');
-                        input.type = 'file';
-                        input.accept = 'image/*';
-                        input.onchange = (e) => {
-                          const file = (e.target as HTMLInputElement).files?.[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onload = (event) => {
-                              const result = event.target?.result as string;
-                              setSiteSettings({...siteSettings, logoUrl: result});
-                              toast.success(`Logo mis à jour: ${file.name}`);
-                            };
-                            reader.readAsDataURL(file);
-                          }
-                        };
-                        input.click();
-                      }}
-                    >
+                    {siteSettings.logoUrl && (
+                      <div className="mb-2 relative group">
+                        <img src={siteSettings.logoUrl} alt="Logo" className="h-12 w-auto max-w-full rounded border border-gray-200 object-contain" />
+                        <button
+                          onClick={() => setSiteSettings(prev => ({ ...prev, logoUrl: '' }))}
+                          className="absolute -top-1.5 -right-1.5 p-0.5 bg-red-100 text-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          title="Supprimer le logo"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    )}
+                    <input ref={logoInputRef} type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+                    <Button variant="outline" size="sm" className="w-full text-xs"
+                      onClick={() => logoInputRef.current?.click()}>
                       <Upload className="h-3 w-3 mr-1" />
-                      Changer Logo
+                      {siteSettings.logoUrl ? 'Changer' : 'Uploader'} le logo
                     </Button>
                   </div>
                 </div>
               </div>
             </Card>
 
-            {/* Add Sections */}
+            {/* Add sections */}
             <Card>
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <Plus className="h-4 w-4 mr-2" />
-                  {t('minisite.editor.add_section')}
+                <h3 className="font-bold text-[#0F2034] mb-3 flex items-center gap-2 text-sm">
+                  <Plus className="h-4 w-4 text-[#C9A84C]" />
+                  Ajouter une section
                 </h3>
-                
-                <div className="space-y-2">
-                  {sectionTypes.map((sectionType) => {
-                    return (
-                      <button
-                        key={sectionType.type}
-                        onClick={() => addSection(sectionType.type as Section['type'])}
-                        className="w-full p-3 text-left border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <sectionType.icon className="h-4 w-4 text-gray-400" />
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">
-                              {sectionType.title}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {sectionType.description}
-                            </p>
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </Card>
-
-            {/* Sections List */}
-            <Card>
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-4">
-                  Sections ({sections.length})
-                </h3>
-                
-                <div className="space-y-2">
-                  {sections.map((section) => (
-                    <div
-                      key={section.id}
-                      role="button"
-                      tabIndex={0}
-                      className={`p-3 border rounded-lg cursor-pointer transition-colors group ${
-                        activeSection === section.id
-                          ? 'border-blue-300 bg-blue-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => setActiveSection(section.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          setActiveSection(section.id);
-                        }
-                      }}
-                      aria-label={`Sélectionner la section ${section.title}`}
+                <div className="space-y-1.5">
+                  {sectionTypes.map(st => (
+                    <button key={st.type}
+                      onClick={() => addSection(st.type as Section['type'])}
+                      className="w-full p-2.5 text-left border border-gray-100 rounded-lg hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-colors group"
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Move className="h-4 w-4 text-gray-400 cursor-move" />
-                          <span className="text-sm font-medium text-gray-900">
-                            {section.title}
-                          </span>
-                        </div>
-                        
-                        <div className="flex items-center space-x-1">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleSectionVisibility(section.id);
-                            }}
-                            className={`p-1 rounded ${
-                              section.visible ? 'text-green-600' : 'text-gray-400'
-                            }`}
-                            title={section.visible ? 'Masquer la section' : 'Afficher la section'}
-                          >
-                            <Eye className="h-3 w-3" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeSection(section.id);
-                            }}
-                            className="p-1 rounded text-red-600 hover:bg-red-50"
-                            title="Supprimer la section"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
+                      <div className="flex items-center gap-2.5">
+                        <st.icon className="h-4 w-4 text-gray-400 group-hover:text-[#C9A84C] flex-shrink-0" />
+                        <div>
+                          <p className="text-xs font-semibold text-gray-800">{st.title}</p>
+                          <p className="text-xs text-gray-400">{st.description}</p>
                         </div>
                       </div>
-                      
-                      <div className="mt-2">
-                        <Badge variant="info" size="sm">
-                          {section.type}
-                        </Badge>
-                      </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
             </Card>
+
+            {/* Sections list */}
+            <Card>
+              <div className="p-4">
+                <h3 className="font-bold text-[#0F2034] mb-3 text-sm">
+                  Sections ({sections.length})
+                </h3>
+                {sections.length === 0 ? (
+                  <p className="text-xs text-gray-400 text-center py-4">Aucune section</p>
+                ) : (
+                  <div className="space-y-1.5">
+                    {sortedSections.map((section, idx) => (
+                      <div key={section.id}
+                        className={`p-2.5 border rounded-lg cursor-pointer transition-colors ${
+                          activeSection === section.id
+                            ? 'border-[#C9A84C] bg-[#C9A84C]/5'
+                            : 'border-gray-100 hover:border-gray-300'
+                        }`}
+                        onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className={`text-xs font-semibold truncate ${section.visible ? 'text-gray-800' : 'text-gray-400 line-through'}`}>
+                              {section.title}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-0.5 flex-shrink-0">
+                            <button onClick={e => { e.stopPropagation(); moveSection(section.id, 'up'); }}
+                              disabled={idx === 0}
+                              className="p-1 rounded text-gray-400 hover:text-[#C9A84C] disabled:opacity-30"
+                              title="Monter">
+                              <ChevronUp className="h-3 w-3" />
+                            </button>
+                            <button onClick={e => { e.stopPropagation(); moveSection(section.id, 'down'); }}
+                              disabled={idx === sortedSections.length - 1}
+                              className="p-1 rounded text-gray-400 hover:text-[#C9A84C] disabled:opacity-30"
+                              title="Descendre">
+                              <ChevronDown className="h-3 w-3" />
+                            </button>
+                            <button onClick={e => { e.stopPropagation(); toggleVisibility(section.id); }}
+                              className={`p-1 rounded ${section.visible ? 'text-green-500' : 'text-gray-300'}`}
+                              title={section.visible ? 'Masquer' : 'Afficher'}>
+                              <Eye className="h-3 w-3" />
+                            </button>
+                            <button onClick={e => { e.stopPropagation(); removeSection(section.id); }}
+                              className="p-1 rounded text-red-400 hover:text-red-600"
+                              title="Supprimer">
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          </div>
+                        </div>
+                        <Badge variant="info" size="sm" className="mt-1.5 text-xs">{section.type}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </Card>
           </div>
 
-          {/* Main Content - Preview */}
-          <div className="lg:col-span-3">
-            <Card className="p-6">
-              <div className="flex justify-center">
-                <div className={`${getPreviewWidth()} transition-all duration-300`}>
-                  <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-lg">
-                    {/* Preview Header */}
-                    <div className="bg-gray-100 px-4 py-2 border-b border-gray-200">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex space-x-1">
-                          <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                          <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                          <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                        </div>
-                        <div className="flex-1 bg-white rounded px-3 py-1 text-xs text-gray-500">
-                          sibs.com/exhibitor/bâtiment-solutions-inc
-                        </div>
-                      </div>
+          {/* ── Preview + Editor ── */}
+          <div className="xl:col-span-3">
+            <Card className="overflow-hidden">
+              {/* Browser chrome */}
+              <div className="bg-gray-100 border-b border-gray-200 px-4 py-2.5 flex items-center gap-3">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 bg-red-400 rounded-full" />
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full" />
+                  <div className="w-3 h-3 bg-green-400 rounded-full" />
+                </div>
+                <div className="flex-1 bg-white border border-gray-200 rounded-md px-3 py-1 text-xs text-gray-500 font-mono truncate">
+                  sibs.ma/exposant/{exhibitorId?.slice(0, 8) || 'votre-stand'}
+                </div>
+                <button onClick={handlePreview}
+                  className="p-1.5 rounded hover:bg-gray-200 text-gray-500 hover:text-gray-700 transition-colors"
+                  title="Ouvrir dans un nouvel onglet">
+                  <RefreshCw className="h-3.5 w-3.5" />
+                </button>
+              </div>
+
+              {/* Preview */}
+              <div className="p-4 bg-gray-50 overflow-auto" style={{ minHeight: '70vh' }}>
+                <div className={`${previewWidth} mx-auto transition-all duration-300`}>
+                  <div className="bg-white shadow-xl rounded-lg overflow-hidden"
+                    style={{ fontFamily: siteSettings.fontFamily }}>
+
+                    {/* Site navbar */}
+                    <div className="flex items-center justify-between px-6 py-3 border-b border-gray-100"
+                      style={{ backgroundColor: siteSettings.secondaryColor }}>
+                      {siteSettings.logoUrl
+                        ? <img src={siteSettings.logoUrl} alt="Logo" className="h-8 w-auto object-contain" />
+                        : <span className="text-white font-bold text-sm">
+                            {user?.profile?.company || 'Votre entreprise'}
+                          </span>}
                     </div>
 
-                    {/* Preview Content */}
-                    <div className="min-h-96">
-                      {sections
-                        .filter(s => s.visible)
-                        .sort((a, b) => a.order - b.order)
-                        .map((section) => (
-                          <motion.div
-                            key={section.id}
-                            role="button"
-                            tabIndex={0}
-                            className={`border-2 border-transparent hover:border-blue-300 transition-colors group ${
-                              activeSection === section.id ? 'border-blue-500' : ''
-                            }`}
+                    {/* Sections */}
+                    {visibleSections.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-24 text-gray-400">
+                        <Layout className="h-16 w-16 mb-4 opacity-30" />
+                        <p className="text-sm font-medium mb-4">Aucune section visible</p>
+                        <Button variant="default" size="sm"
+                          className="bg-[#C9A84C] hover:bg-[#A88830] text-white"
+                          onClick={() => addSection('hero')}>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Ajouter Section Hero
+                        </Button>
+                      </div>
+                    ) : (
+                      <AnimatePresence>
+                        {visibleSections.map(section => (
+                          <motion.div key={section.id}
+                            layout
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                             onClick={() => setActiveSection(section.id)}
-                            onKeyDown={(e: React.KeyboardEvent) => {
-                              if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                setActiveSection(section.id);
-                              }
-                            }}
-                            aria-label={`Prévisualiser la section ${section.title}`}
+                            className={`border-2 transition-colors cursor-pointer ${
+                              activeSection === section.id
+                                ? 'border-[#C9A84C]'
+                                : 'border-transparent hover:border-[#C9A84C]/30'
+                            }`}
                           >
-                            {/* Section Hero */}
+                            {/* Active section label */}
+                            {activeSection === section.id && (
+                              <div className="bg-[#C9A84C] px-3 py-1 text-xs text-white font-semibold">
+                                ✏️ Section active : {section.title}
+                              </div>
+                            )}
+
+                            {/* ── Hero ── */}
                             {section.type === 'hero' && (
-                              <div 
-                                className="relative h-64 bg-cover bg-center flex items-center justify-center"
-                                style={{ 
-                                  backgroundImage: section.content.backgroundImage 
-                                    ? `url(${section.content.backgroundImage})` 
-                                    : 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)'
-                                }}
-                              >
-                                <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+                              <div className="relative h-56 flex items-center justify-center"
+                                style={{
+                                  background: section.content.backgroundImage
+                                    ? `url(${section.content.backgroundImage}) center/cover`
+                                    : `linear-gradient(135deg, ${siteSettings.secondaryColor} 0%, ${siteSettings.primaryColor} 100%)`,
+                                }}>
+                                <div className="absolute inset-0 bg-black/40" />
                                 <div className="relative text-center text-white px-6 w-full">
                                   <EditableText
                                     value={section.content.title ?? ''}
-                                    onChange={(value) => updateSectionContent(section.id, 'title', value)}
+                                    onChange={v => updateSectionContent(section.id, 'title', v)}
                                     placeholder="Titre principal"
-                                    className="text-3xl font-bold mb-4 text-white"
+                                    className="text-2xl font-bold text-white mb-3"
                                     fieldKey={`${section.id}-title`}
                                   />
                                   <EditableText
                                     value={section.content.subtitle ?? ''}
-                                    onChange={(value) => updateSectionContent(section.id, 'subtitle', value)}
+                                    onChange={v => updateSectionContent(section.id, 'subtitle', v)}
                                     placeholder="Sous-titre"
                                     multiline
-                                    className="text-lg mb-6 opacity-90 text-white"
+                                    className="text-base text-white/90 mb-4"
                                     fieldKey={`${section.id}-subtitle`}
                                   />
-                                  <EditableText
-                                    value={section.content.ctaText ?? ''}
-                                    onChange={(value) => updateSectionContent(section.id, 'ctaText', value)}
-                                    placeholder="Texte du bouton"
-                                    className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors inline-block"
-                                    fieldKey={`${section.id}-cta`}
-                                  />
+                                  <div className="inline-block px-5 py-2 rounded-lg font-semibold text-sm cursor-pointer"
+                                    style={{ backgroundColor: siteSettings.primaryColor, color: '#fff' }}>
+                                    <EditableText
+                                      value={section.content.ctaText ?? ''}
+                                      onChange={v => updateSectionContent(section.id, 'ctaText', v)}
+                                      placeholder="Texte du bouton"
+                                      className="text-white font-semibold"
+                                      fieldKey={`${section.id}-cta`}
+                                    />
+                                  </div>
                                 </div>
                               </div>
                             )}
 
-                            {/* Section About */}
+                            {/* ── About ── */}
                             {section.type === 'about' && (
                               <div className="p-8">
                                 <EditableText
                                   value={section.content.title ?? ''}
-                                  onChange={(value) => updateSectionContent(section.id, 'title', value)}
-                                  placeholder="Titre de la section"
-                                  className="text-2xl font-bold text-gray-900 mb-4"
+                                  onChange={v => updateSectionContent(section.id, 'title', v)}
+                                  placeholder="Titre"
+                                  className="text-2xl font-bold text-[#0F2034] mb-4"
                                   fieldKey={`${section.id}-title`}
                                 />
                                 <EditableText
                                   value={section.content.description ?? ''}
-                                  onChange={(value) => updateSectionContent(section.id, 'description', value)}
+                                  onChange={v => updateSectionContent(section.id, 'description', v)}
                                   placeholder="Description de votre entreprise"
                                   multiline
-                                  className="text-gray-600 mb-6"
-                                  fieldKey={`${section.id}-description`}
+                                  className="text-gray-600 leading-relaxed mb-5"
+                                  fieldKey={`${section.id}-desc`}
                                 />
-                                {section.content.features && section.content.features.length > 0 && (
-                                  <div className="grid grid-cols-2 gap-4">
-                                    {section.content.features.map((feature: string, index: number) => (
-                                      <div key={`${section.id}-feature-${index}-${feature.substring(0, 10)}`} className="flex items-center space-x-2">
-                                        <div 
-                                          className="w-2 h-2 rounded-full"
-                                          style={{ backgroundColor: siteSettings.primaryColor }}
-                                        ></div>
-                                        <EditableText
-                                          value={feature}
-                                          onChange={(value) => {
-                                            const updatedFeatures = [...(section.content.features ?? [])];
-                                            updatedFeatures[index] = value;
-                                            updateSectionContent(section.id, 'features', updatedFeatures);
-                                          }}
-                                          placeholder="Caractéristique"
-                                          className="text-sm text-gray-700"
-                                          fieldKey={`${section.id}-feature-${index}`}
-                                        />
-                                      </div>
-                                    ))}
+                                {(section.content.features ?? []).map((feat, fi) => (
+                                  <div key={fi} className="flex items-center gap-2 mb-2">
+                                    <div className="w-2 h-2 rounded-full flex-shrink-0"
+                                      style={{ backgroundColor: siteSettings.primaryColor }} />
+                                    <EditableText
+                                      value={feat}
+                                      onChange={v => {
+                                        const f = [...(section.content.features ?? [])];
+                                        f[fi] = v;
+                                        updateSectionContent(section.id, 'features', f);
+                                      }}
+                                      placeholder="Fonctionnalité"
+                                      className="text-sm text-gray-700"
+                                      fieldKey={`${section.id}-feat-${fi}`}
+                                    />
+                                    <button
+                                      onClick={e => {
+                                        e.stopPropagation();
+                                        const f = (section.content.features ?? []).filter((_, i) => i !== fi);
+                                        updateSectionContent(section.id, 'features', f);
+                                      }}
+                                      className="text-red-400 hover:text-red-600 flex-shrink-0"
+                                      title="Supprimer"
+                                    >
+                                      <X className="h-3 w-3" />
+                                    </button>
                                   </div>
-                                )}
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="mt-4"
-                                  onClick={() => {
-                                    const currentFeatures = section.content.features ?? [];
-                                    const newFeatures = [...currentFeatures, 'Nouvelle fonctionnalité'];
-                                    updateSectionContent(section.id, 'features', newFeatures);
-                                    toast.success('Fonctionnalité ajoutée');
-                                  }}
-                                >
-                                  <Plus className="h-3 w-3 mr-1" />
-                                  Ajouter fonctionnalité
+                                ))}
+                                <Button variant="outline" size="sm" className="mt-3 text-xs"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    updateSectionContent(section.id, 'features', [...(section.content.features ?? []), 'Nouvelle fonctionnalité']);
+                                  }}>
+                                  <Plus className="h-3 w-3 mr-1" /> Ajouter fonctionnalité
                                 </Button>
                               </div>
                             )}
 
-                            {/* Section Products */}
+                            {/* ── Products ── */}
                             {section.type === 'products' && (
                               <div className="p-8 bg-gray-50">
-                                <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center justify-between mb-5">
                                   <EditableText
                                     value={section.content.title ?? ''}
-                                    onChange={(value) => updateSectionContent(section.id, 'title', value)}
-                                    placeholder="Titre de la section produits"
-                                    className="text-2xl font-bold text-gray-900"
+                                    onChange={v => updateSectionContent(section.id, 'title', v)}
+                                    placeholder="Titre section produits"
+                                    className="text-2xl font-bold text-[#0F2034]"
                                     fieldKey={`${section.id}-title`}
                                   />
-                                  <Button
-                                    variant="default"
-                                    size="sm"
-                                    onClick={() => addProduct(section.id)}
-                                  >
-                                    <Plus className="h-3 w-3 mr-1" />
-                                    Produit
+                                  <Button size="sm" onClick={e => { e.stopPropagation(); addProduct(section.id); }}
+                                    className="bg-[#C9A84C] hover:bg-[#A88830] text-white text-xs">
+                                    <Plus className="h-3 w-3 mr-1" /> Produit
                                   </Button>
                                 </div>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                  {section.content.products?.map((product, index: number) => (
-                                    <div key={product.id || `${section.id}-product-${index}`} className="bg-white rounded-lg p-6 shadow-sm relative group">
-                                      <button
-                                        onClick={() => removeProduct(section.id, index)}
-                                        className="absolute top-2 right-2 p-1 bg-red-100 text-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                        title="Supprimer ce produit"
-                                      >
-                                        <Trash2 className="h-3 w-3" />
-                                      </button>
-                                      
-                                      <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="w-full h-32 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-80"
-                                        onClick={() => {
-                                          const input = document.createElement('input');
-                                          input.type = 'file';
-                                          input.accept = 'image/*';
-                                          input.onchange = (e) => {
-                                            const file = (e.target as HTMLInputElement).files?.[0];
-                                            if (file) {
-                                              const reader = new FileReader();
-                                              reader.onload = (event) => {
-                                                const result = event.target?.result as string;
-                                                updateProductField(section.id, index, 'image', result);
-                                                toast.success(`Image produit mise à jour: ${file.name}`);
-                                              };
-                                              reader.readAsDataURL(file);
-                                            }
-                                          };
-                                          input.click();
-                                        }}
-                                        title="Cliquer pour changer l'image"
-                                      />
-                                      
-                                      <EditableText
-                                        value={product.name}
-                                        onChange={(value) => updateProductField(section.id, index, 'name', value)}
-                                        placeholder="Nom du produit"
-                                        className="font-semibold text-gray-900 mb-2"
-                                        fieldKey={`${section.id}-product-${index}-name`}
-                                      />
-                                      
-                                      <EditableText
-                                        value={product.description}
-                                        onChange={(value) => updateProductField(section.id, index, 'description', value)}
-                                        placeholder="Description du produit"
-                                        multiline
-                                        className="text-gray-600 text-sm mb-4"
-                                        fieldKey={`${section.id}-product-${index}-description`}
-                                      />
-                                      
-                                      <div className="flex items-center justify-between">
-                                        <EditableText
-                                          value={product.price}
-                                          onChange={(value) => updateProductField(section.id, index, 'price', value)}
-                                          placeholder="Prix"
-                                          className="text-blue-600 font-semibold"
-                                          fieldKey={`${section.id}-product-${index}-price`}
+                                {(!section.content.products || section.content.products.length === 0) ? (
+                                  <div className="text-center py-10 text-gray-400">
+                                    <Image className="h-10 w-10 mx-auto mb-3 opacity-30" />
+                                    <p className="text-sm">Aucun produit — cliquez "Produit" pour en ajouter</p>
+                                  </div>
+                                ) : (
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {section.content.products.map((prod, pi) => (
+                                      <div key={prod.id || pi} className="bg-white rounded-xl p-4 shadow-sm relative group border border-gray-100">
+                                        <button onClick={e => { e.stopPropagation(); removeProduct(section.id, pi); }}
+                                          className="absolute top-2 right-2 p-1 bg-red-50 text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                          title="Supprimer">
+                                          <Trash2 className="h-3 w-3" />
+                                        </button>
+                                        {prod.image && (
+                                          <img src={prod.image} alt={prod.name}
+                                            className="w-full h-28 object-cover rounded-lg mb-3" />
+                                        )}
+                                        <EditableText value={prod.name}
+                                          onChange={v => updateProductField(section.id, pi, 'name', v)}
+                                          placeholder="Nom du produit"
+                                          className="font-semibold text-[#0F2034] mb-1"
+                                          fieldKey={`${section.id}-prod-${pi}-name`}
                                         />
-                                        <Button
-                                          size="sm"
-                                          variant="outline"
-                                          onClick={() => {
-                                            const input = document.createElement('input');
-                                            input.type = 'file';
-                                            input.accept = 'image/*';
-                                            input.onchange = (e) => {
-                                              const file = (e.target as HTMLInputElement).files?.[0];
-                                              if (file) {
-                                                const reader = new FileReader();
-                                                reader.onload = (event) => {
-                                                  const result = event.target?.result as string;
-                                                  updateProductField(section.id, index, 'image', result);
-                                                  toast.success(`Image mise à jour: ${file.name}`);
-                                                };
-                                                reader.readAsDataURL(file);
-                                              }
-                                            };
-                                            input.click();
-                                          }}
-                                        >
-                                          <Upload className="h-3 w-3 mr-1" />
-                                          Image
-                                        </Button>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Section News */}
-                            {section.type === 'news' && (
-                              <div className="p-8 bg-gray-50">
-                                <div className="flex items-center justify-between mb-6">
-                                  <EditableText
-                                    value={section.content.title ?? ''}
-                                    onChange={(value) => updateSectionContent(section.id, 'title', value)}
-                                    placeholder="Titre de la section actualités"
-                                    className="text-2xl font-bold text-gray-900"
-                                    fieldKey={`${section.id}-title`}
-                                  />
-                                  <Button
-                                    variant="default"
-                                    size="sm"
-                                    onClick={() => {
-                                      const newArticle = {
-                                        title: 'Nouvelle actualité',
-                                        content: 'Contenu de l\'actualité...',
-                                        date: new Date().toISOString().split('T')[0],
-                                        image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=300'
-                                      };
-                                      const currentArticles = section.content.articles ?? [];
-                                      const updatedArticles = [...currentArticles, newArticle];
-                                      updateSectionContent(section.id, 'articles', updatedArticles);
-                                      toast.success('Article ajouté');
-                                    }}
-                                  >
-                                    <Plus className="h-3 w-3 mr-1" />
-                                    Article
-                                  </Button>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                  {section.content.articles?.map((article: any, index: number) => (
-                                    <div key={article.id || `${section.id}-article-${index}`} className="bg-white rounded-lg p-6 shadow-sm relative group">
-                                      <button
-                                        onClick={() => {
-                                          const currentArticles = section.content.articles ?? [];
-                                          const updatedArticles = currentArticles.filter((_: any, i: number) => i !== index);
-                                          updateSectionContent(section.id, 'articles', updatedArticles);
-                                          toast.success('Article supprimé');
-                                        }}
-                                        className="absolute top-2 right-2 p-1 bg-red-100 text-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                        title="Supprimer cet article"
-                                      >
-                                        <Trash2 className="h-3 w-3" />
-                                      </button>
-
-                                      {article.image && (
-                                        <img
-                                          src={article.image}
-                                          alt={article.title}
-                                          className="w-full h-32 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-80"
-                                          onClick={() => {
-                                            const input = document.createElement('input');
-                                            input.type = 'file';
-                                            input.accept = 'image/*';
-                                            input.onchange = (e) => {
-                                              const file = (e.target as HTMLInputElement).files?.[0];
-                                              if (file) {
-                                                const reader = new FileReader();
-                                                reader.onload = (event) => {
-                                                  const result = event.target?.result as string;
-                                                  const currentArticles = section.content.articles ?? [];
-                                                  const updatedArticles = [...currentArticles];
-                                                  updatedArticles[index] = { ...updatedArticles[index], image: result };
-                                                  updateSectionContent(section.id, 'articles', updatedArticles);
-                                                  toast.success(`Image article mise à jour: ${file.name}`);
-                                                };
-                                                reader.readAsDataURL(file);
-                                              }
-                                            };
-                                            input.click();
-                                          }}
-                                          title="Cliquer pour changer l'image"
+                                        <EditableText value={prod.description}
+                                          onChange={v => updateProductField(section.id, pi, 'description', v)}
+                                          placeholder="Description"
+                                          multiline
+                                          className="text-gray-500 text-sm mb-3"
+                                          fieldKey={`${section.id}-prod-${pi}-desc`}
                                         />
-                                      )}
-
-                                      <EditableText
-                                        value={article.title}
-                                        onChange={(value) => {
-                                          const currentArticles = section.content.articles ?? [];
-                                          const updatedArticles = [...currentArticles];
-                                          updatedArticles[index] = { ...updatedArticles[index], title: value };
-                                          updateSectionContent(section.id, 'articles', updatedArticles);
-                                        }}
-                                        placeholder="Titre de l'article"
-                                        className="font-semibold text-gray-900 mb-2"
-                                        fieldKey={`${section.id}-article-${index}-title`}
-                                      />
-
-                                      <EditableText
-                                        value={article.content}
-                                        onChange={(value) => {
-                                          const currentArticles = section.content.articles ?? [];
-                                          const updatedArticles = [...currentArticles];
-                                          updatedArticles[index] = { ...updatedArticles[index], content: value };
-                                          updateSectionContent(section.id, 'articles', updatedArticles);
-                                        }}
-                                        placeholder="Contenu de l'article"
-                                        multiline
-                                        className="text-gray-600 text-sm mb-4"
-                                        fieldKey={`${section.id}-article-${index}-content`}
-                                      />
-
-                                      <div className="flex items-center justify-between text-xs text-gray-500">
-                                        <span>{new Date(article.date).toLocaleDateString('fr-FR')}</span>
-                                        <Button
-                                          size="sm"
-                                          variant="outline"
-                                          onClick={() => {
-                                            const input = document.createElement('input');
-                                            input.type = 'file';
-                                            input.accept = 'image/*';
-                                            input.onchange = (e) => {
-                                              const file = (e.target as HTMLInputElement).files?.[0];
-                                              if (file) {
-                                                const reader = new FileReader();
-                                                reader.onload = (event) => {
-                                                  const result = event.target?.result as string;
-                                                  const currentArticles = section.content.articles ?? [];
-                                                  const updatedArticles = [...currentArticles];
-                                                  updatedArticles[index] = { ...updatedArticles[index], image: result };
-                                                  updateSectionContent(section.id, 'articles', updatedArticles);
-                                                  toast.success(`Image mise à jour: ${file.name}`);
-                                                };
-                                                reader.readAsDataURL(file);
-                                              }
-                                            };
-                                            input.click();
-                                          }}
-                                        >
-                                          <Upload className="h-3 w-3 mr-1" />
-                                          Image
-                                        </Button>
+                                        <div className="flex items-center justify-between">
+                                          <EditableText value={prod.price}
+                                            onChange={v => updateProductField(section.id, pi, 'price', v)}
+                                            placeholder="Prix"
+                                            className="font-bold text-sm"
+                                            fieldKey={`${section.id}-prod-${pi}-price`}
+                                          />
+                                          <label className="cursor-pointer">
+                                            <input type="file" accept="image/*" className="hidden"
+                                              onChange={e => {
+                                                const file = e.target.files?.[0];
+                                                if (!file) {return;}
+                                                const r = new FileReader();
+                                                r.onload = ev => updateProductField(section.id, pi, 'image', ev.target?.result as string);
+                                                r.readAsDataURL(file);
+                                              }}
+                                            />
+                                            <span className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-[#C9A84C] border border-gray-200 hover:border-[#C9A84C]/50 px-2 py-1 rounded-lg">
+                                              <Upload className="h-3 w-3" /> Image
+                                            </span>
+                                          </label>
+                                        </div>
                                       </div>
-                                    </div>
-                                  ))}
-                                </div>
-
-                                {(!section.content.articles || section.content.articles.length === 0) && (
-                                  <div className="text-center py-12 text-gray-500">
-                                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                                    <p className="mb-4">Aucun article pour le moment</p>
-                                    <Button
-                                      variant="outline"
-                                      onClick={() => {
-                                        const newArticle = {
-                                          title: 'Nouvelle actualité',
-                                          content: 'Contenu de l\'actualité...',
-                                          date: new Date().toISOString().split('T')[0],
-                                          image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=300'
-                                        };
-                                        updateSectionContent(section.id, 'articles', [newArticle]);
-                                        toast.success('Premier article ajouté');
-                                      }}
-                                    >
-                                      <Plus className="h-4 w-4 mr-2" />
-                                      Ajouter le premier article
-                                    </Button>
+                                    ))}
                                   </div>
                                 )}
                               </div>
                             )}
+
+                            {/* ── Gallery ── */}
+                            {section.type === 'gallery' && (
+                              <div className="p-8">
+                                <EditableText
+                                  value={section.content.title ?? ''}
+                                  onChange={v => updateSectionContent(section.id, 'title', v)}
+                                  placeholder="Titre galerie"
+                                  className="text-2xl font-bold text-[#0F2034] mb-5"
+                                  fieldKey={`${section.id}-title`}
+                                />
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+                                  {(section.content.images ?? []).map((img, ii) => (
+                                    <div key={ii} className="relative group aspect-square rounded-lg overflow-hidden">
+                                      <img src={img} alt="" className="w-full h-full object-cover" />
+                                      <button
+                                        onClick={e => {
+                                          e.stopPropagation();
+                                          const imgs = (section.content.images ?? []).filter((_, i) => i !== ii);
+                                          updateSectionContent(section.id, 'images', imgs);
+                                        }}
+                                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100"
+                                        title="Supprimer">
+                                        <Trash2 className="h-3 w-3" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                                <label className="cursor-pointer">
+                                  <input type="file" accept="image/*" multiple className="hidden"
+                                    onChange={e => {
+                                      const files = Array.from(e.target.files ?? []);
+                                      const existing = section.content.images ?? [];
+                                      let count = 0;
+                                      files.forEach(file => {
+                                        const r = new FileReader();
+                                        r.onload = ev => {
+                                          const newImgs = [...existing, ev.target?.result as string];
+                                          updateSectionContent(section.id, 'images', newImgs);
+                                          count++;
+                                          if (count === files.length) {toast.success(`${files.length} image(s) ajoutée(s)`);}
+                                        };
+                                        r.readAsDataURL(file);
+                                      });
+                                    }}
+                                  />
+                                  <span className="inline-flex items-center gap-2 px-4 py-2 border-2 border-dashed border-[#C9A84C]/50 rounded-xl text-sm text-[#C9A84C] hover:bg-[#C9A84C]/5 transition-colors cursor-pointer">
+                                    <Upload className="h-4 w-4" />
+                                    Ajouter des photos
+                                  </span>
+                                </label>
+                              </div>
+                            )}
+
+                            {/* ── News ── */}
+                            {section.type === 'news' && (
+                              <div className="p-8 bg-gray-50">
+                                <div className="flex items-center justify-between mb-5">
+                                  <EditableText
+                                    value={section.content.title ?? ''}
+                                    onChange={v => updateSectionContent(section.id, 'title', v)}
+                                    placeholder="Titre actualités"
+                                    className="text-2xl font-bold text-[#0F2034]"
+                                    fieldKey={`${section.id}-title`}
+                                  />
+                                  <Button size="sm" className="bg-[#C9A84C] hover:bg-[#A88830] text-white text-xs"
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      const arts = section.content.articles ?? [];
+                                      updateSectionContent(section.id, 'articles', [...arts, {
+                                        title: 'Nouvelle actualité',
+                                        content: 'Contenu...',
+                                        date: new Date().toISOString().split('T')[0],
+                                      }]);
+                                      toast.success('Article ajouté');
+                                    }}>
+                                    <Plus className="h-3 w-3 mr-1" /> Article
+                                  </Button>
+                                </div>
+                                {(!section.content.articles || section.content.articles.length === 0) ? (
+                                  <div className="text-center py-10 text-gray-400">
+                                    <FileText className="h-10 w-10 mx-auto mb-3 opacity-30" />
+                                    <p className="text-sm">Aucun article</p>
+                                  </div>
+                                ) : (
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {section.content.articles.map((art, ai) => (
+                                      <div key={ai} className="bg-white rounded-xl p-4 shadow-sm relative group border border-gray-100">
+                                        <button
+                                          onClick={e => {
+                                            e.stopPropagation();
+                                            const arts = (section.content.articles ?? []).filter((_, i) => i !== ai);
+                                            updateSectionContent(section.id, 'articles', arts);
+                                          }}
+                                          className="absolute top-2 right-2 p-1 bg-red-50 text-red-500 rounded-full opacity-0 group-hover:opacity-100"
+                                          title="Supprimer">
+                                          <Trash2 className="h-3 w-3" />
+                                        </button>
+                                        <EditableText value={art.title}
+                                          onChange={v => {
+                                            const arts = [...(section.content.articles ?? [])];
+                                            arts[ai] = { ...arts[ai], title: v };
+                                            updateSectionContent(section.id, 'articles', arts);
+                                          }}
+                                          placeholder="Titre de l'article"
+                                          className="font-semibold text-[#0F2034] mb-2"
+                                          fieldKey={`${section.id}-art-${ai}-title`}
+                                        />
+                                        <EditableText value={art.content}
+                                          onChange={v => {
+                                            const arts = [...(section.content.articles ?? [])];
+                                            arts[ai] = { ...arts[ai], content: v };
+                                            updateSectionContent(section.id, 'articles', arts);
+                                          }}
+                                          placeholder="Contenu"
+                                          multiline
+                                          className="text-gray-500 text-sm mb-3"
+                                          fieldKey={`${section.id}-art-${ai}-content`}
+                                        />
+                                        <span className="text-xs text-gray-400">
+                                          {new Date(art.date).toLocaleDateString('fr-FR')}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {/* ── Contact ── */}
                             {section.type === 'contact' && (
                               <div className="p-8">
                                 <EditableText
                                   value={section.content.title ?? ''}
-                                  onChange={(value) => updateSectionContent(section.id, 'title', value)}
-                                  placeholder="Titre de la section contact"
-                                  className="text-2xl font-bold text-gray-900 mb-6"
+                                  onChange={v => updateSectionContent(section.id, 'title', v)}
+                                  placeholder="Titre contact"
+                                  className="text-2xl font-bold text-[#0F2034] mb-6"
                                   fieldKey={`${section.id}-title`}
                                 />
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                   <div className="space-y-4">
-                                    <div className="flex items-center space-x-3">
-                                      <MapPin className="h-5 w-5 text-blue-600" />
-                                      <EditableText
-                                        value={section.content.address ?? ''}
-                                        onChange={(value) => updateSectionContent(section.id, 'address', value)}
-                                        placeholder="Adresse complète"
-                                        className="text-gray-700"
-                                        fieldKey={`${section.id}-address`}
-                                      />
-                                    </div>
-                                    
-                                    <div className="flex items-center space-x-3">
-                                      <Phone className="h-5 w-5 text-blue-600" />
-                                      <EditableText
-                                        value={section.content.phone ?? ''}
-                                        onChange={(value) => updateSectionContent(section.id, 'phone', value)}
-                                        placeholder="Numéro de téléphone"
-                                        className="text-gray-700"
-                                        fieldKey={`${section.id}-phone`}
-                                      />
-                                    </div>
-                                    
-                                    <div className="flex items-center space-x-3">
-                                      <Mail className="h-5 w-5 text-blue-600" />
-                                      <EditableText
-                                        value={section.content.email ?? ''}
-                                        onChange={(value) => updateSectionContent(section.id, 'email', value)}
-                                        placeholder="Adresse email"
-                                        className="text-gray-700"
-                                        fieldKey={`${section.id}-email`}
-                                      />
-                                    </div>
-                                    
-                                    <div className="flex items-center space-x-3">
-                                      <Globe className="h-5 w-5 text-blue-600" />
-                                      <EditableText
-                                        value={section.content.website ?? ''}
-                                        onChange={(value) => updateSectionContent(section.id, 'website', value)}
-                                        placeholder="Site web"
-                                        className="text-gray-700"
-                                        fieldKey={`${section.id}-website`}
-                                      />
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="bg-gray-100 p-4 rounded-lg">
-                                    <h4 className="font-medium text-gray-900 mb-3">Formulaire de contact</h4>
-                                    <p className="text-sm text-gray-600">
-                                      Un formulaire de contact sera automatiquement généré
-                                    </p>
-                                    <div className="mt-3 space-y-3">
-                                      <div className="flex items-center justify-between">
-                                        <span className="text-sm text-gray-700">Champ Nom</span>
-                                        <label className="relative inline-flex items-center cursor-pointer">
-                                          <input
-                                            type="checkbox"
-                                            defaultChecked
-                                            onChange={(e) => {
-                                              const checked = e.target.checked;
-                                              updateSectionContent(section.id, 'nameFieldEnabled', checked);
-                                              toast.success(`Champ Nom ${checked ? 'activé' : 'désactivé'}`);
-                                            }}
-                                            aria-label="Activer le champ Nom"
-                                            className="sr-only peer"
-                                          />
-                                          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                                        </label>
-                                      </div>
-                                      
-                                      <div className="flex items-center justify-between">
-                                        <span className="text-sm text-gray-700">Champ Téléphone</span>
-                                        <label className="relative inline-flex items-center cursor-pointer">
-                                          <input
-                                            type="checkbox"
-                                            onChange={(e) => {
-                                              const checked = e.target.checked;
-                                              updateSectionContent(section.id, 'phoneFieldEnabled', checked);
-                                              toast.success(`Champ Téléphone ${checked ? 'activé' : 'désactivé'}`);
-                                            }}
-                                            aria-label="Activer le champ Téléphone"
-                                            className="sr-only peer"
-                                          />
-                                          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                                        </label>
-                                      </div>
-                                      
-                                      <div className="flex items-center justify-between">
-                                        <span className="text-sm text-gray-700">Champ Entreprise</span>
-                                        <label className="relative inline-flex items-center cursor-pointer">
-                                          <input
-                                            type="checkbox"
-                                            defaultChecked
-                                            onChange={(e) => {
-                                              const checked = e.target.checked;
-                                              updateSectionContent(section.id, 'companyFieldEnabled', checked);
-                                              toast.success(`Champ Entreprise ${checked ? 'activé' : 'désactivé'}`);
-                                            }}
-                                            aria-label="Activer le champ Entreprise"
-                                            className="sr-only peer"
-                                          />
-                                          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                                        </label>
-                                      </div>
-                                      
-                                      <div className="flex items-center justify-between">
-                                        <span className="text-sm text-gray-700">Anti-spam (reCAPTCHA)</span>
-                                        <label className="relative inline-flex items-center cursor-pointer">
-                                          <input
-                                            type="checkbox"
-                                            defaultChecked
-                                            onChange={(e) => {
-                                              const checked = e.target.checked;
-                                              updateSectionContent(section.id, 'recaptchaEnabled', checked);
-                                              toast.success(`Anti-spam (reCAPTCHA) ${checked ? 'activé' : 'désactivé'}`);
-                                            }}
-                                            aria-label="Activer Anti-spam (reCAPTCHA)"
-                                            className="sr-only peer"
-                                          />
-                                          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                                        </label>
-                                      </div>
-                                      
-                                      <div className="mt-4 pt-3 border-t border-gray-200">
-                                        <div className="flex items-center justify-between mb-2">
-                                          <span className="text-sm font-medium text-gray-700">Email de notification</span>
-                                        </div>
-                                        <input
-                                          type="email"
-                                          value={section.content.notificationEmail ?? section.content.email ?? ''}
-                                          onChange={(e) => {
-                                            updateSectionContent(section.id, 'notificationEmail', e.target.value);
-                                          }}
-                                          placeholder="email@entreprise.com"
-                                          aria-label="Email de notification"
-                                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    {[
+                                      { Icon: MapPin, field: 'address', placeholder: 'Adresse' },
+                                      { Icon: Phone, field: 'phone', placeholder: 'Téléphone' },
+                                      { Icon: Mail, field: 'email', placeholder: 'Email' },
+                                      { Icon: Globe, field: 'website', placeholder: 'Site web' },
+                                    ].map(({ Icon, field, placeholder }) => (
+                                      <div key={field} className="flex items-start gap-3">
+                                        <Icon className="h-5 w-5 flex-shrink-0 mt-1" style={{ color: siteSettings.primaryColor }} />
+                                        <EditableText
+                                          value={(section.content[field] as string) ?? ''}
+                                          onChange={v => updateSectionContent(section.id, field, v)}
+                                          placeholder={placeholder}
+                                          className="text-gray-700 text-sm flex-1"
+                                          fieldKey={`${section.id}-${field}`}
                                         />
                                       </div>
-                                      
-                                      <div className="mt-3">
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          className="w-full"
-                                          onClick={() => {
-                                            const config = {
-                                              fields: {
-                                                name: section.content.nameFieldEnabled ?? true,
-                                                email: true, // Toujours activé
-                                                phone: section.content.phoneFieldEnabled ?? false,
-                                                company: section.content.companyFieldEnabled ?? true,
-                                                message: true // Toujours activé
-                                              },
-                                              security: {
-                                                recaptcha: section.content.recaptchaEnabled ?? true,
-                                                honeypot: true,
-                                                rateLimit: '5 messages/heure'
-                                              },
-                                              notifications: {
-                                                email: section.content.notificationEmail || section.content.email || 'contact@exemple.com',
-                                                autoReply: true,
-                                                template: 'Merci pour votre message, nous vous répondrons sous 24h.'
-                                              }
-                                            };
-
-                                            // Validation de l'email
-                                            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                                            if (!emailRegex.test(config.notifications.email)) {
-                                              toast.error('❌ Email de notification invalide');
-                                              return;
-                                            }
-
-                                            // Simulation de test de configuration
-                                            setTimeout(() => {
-                                              toast.success(`✅ Configuration testée avec succès !
-• Champs activés: ${Object.entries(config.fields).filter(([, enabled]) => enabled).map(([field]) => field).join(', ')}
-• Sécurité: ${config.security.recaptcha ? 'reCAPTCHA activé' : 'reCAPTCHA désactivé'}
-• Notifications: ${config.notifications.email}`);
-                                            }, 1000);
-
-                                            toast('🔄 Test de la configuration en cours...');
-                                          }}
-                                        >
-                                          <Settings className="h-3 w-3 mr-1" />
-                                          Tester la Configuration
-                                        </Button>
+                                    ))}
+                                  </div>
+                                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                    <h4 className="font-semibold text-gray-700 mb-3 text-sm">Formulaire de contact</h4>
+                                    <div className="space-y-2">
+                                      {['Nom', 'Email', 'Message'].map(f => (
+                                        <div key={f} className="h-8 bg-white rounded border border-gray-200 px-3 flex items-center">
+                                          <span className="text-xs text-gray-400">{f}</span>
+                                        </div>
+                                      ))}
+                                      <div className="pt-1">
+                                        <div className="h-8 rounded flex items-center justify-center text-xs font-semibold text-white"
+                                          style={{ backgroundColor: siteSettings.primaryColor }}>
+                                          Envoyer
+                                        </div>
                                       </div>
+                                    </div>
+                                    <div className="mt-3 pt-3 border-t border-gray-200">
+                                      <label className="block text-xs font-semibold text-gray-500 mb-1.5">Email de notification</label>
+                                      <input type="email"
+                                        value={section.content.notificationEmail ?? section.content.email ?? ''}
+                                        onChange={e => updateSectionContent(section.id, 'notificationEmail', e.target.value)}
+                                        placeholder="notifications@entreprise.com"
+                                        aria-label="Email de notification"
+                                        className="w-full px-2.5 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A84C]"
+                                        onClick={e => e.stopPropagation()}
+                                      />
                                     </div>
                                   </div>
                                 </div>
@@ -1418,76 +1148,42 @@ export default function MiniSiteEditor() {
                             )}
                           </motion.div>
                         ))}
-                      
-                      {sections.filter(s => s.visible).length === 0 && (
-                        <div className="flex items-center justify-center h-64 text-gray-500">
-                          <div className="text-center">
-                            <Layout className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                            <p>{t('minisite.editor.empty_state')}</p>
-                            <Button 
-                              variant="default"
-                              className="mt-4"
-                              onClick={() => addSection('hero')}
-                            >
-                              <Plus className="h-4 w-4 mr-2" />
-                              Ajouter Section Hero
-                            </Button>
-                          </div>
-                        </div>
-                      )}
+                      </AnimatePresence>
+                    )}
+
+                    {/* Site footer */}
+                    <div className="px-6 py-4 text-center text-xs text-white/60 border-t"
+                      style={{ backgroundColor: siteSettings.secondaryColor }}>
+                      © 2026 SIB — Salon International du Bâtiment
                     </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Help card */}
+            <Card className="mt-4 bg-[#0F2034]/5 border-[#0F2034]/10">
+              <div className="p-4">
+                <h3 className="text-sm font-bold text-[#0F2034] mb-3">💡 Comment utiliser l'éditeur</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-gray-600">
+                  <div>
+                    <p className="font-semibold text-[#0F2034] mb-1">✏️ Modifier le texte</p>
+                    <p>Cliquez sur n'importe quel texte dans l'aperçu pour le modifier en ligne</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-[#0F2034] mb-1">📐 Gérer les sections</p>
+                    <p>Utilisez ↑↓ pour réordonner, l'œil pour masquer, la corbeille pour supprimer</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-[#0F2034] mb-1">💾 Sauvegarder</p>
+                    <p>Le bouton devient or quand il y a des changements non sauvegardés</p>
                   </div>
                 </div>
               </div>
             </Card>
           </div>
         </div>
-
-        {/* Instructions d'utilisation */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-8"
-        >
-          <Card className="bg-blue-50 border-blue-200">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-blue-900 mb-4">
-                💡 Comment utiliser l'éditeur
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-blue-800">
-                <div>
-                  <h4 className="font-medium mb-2">✏️ Modification du texte :</h4>
-                  <ul className="space-y-1">
-                    <li>• Cliquez sur n'importe quel texte pour le modifier</li>
-                    <li>• Tapez votre nouveau contenu</li>
-                    <li>• Cliquez "Sauver" pour confirmer</li>
-                    <li>• Cliquez "Annuler" pour revenir au texte original</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-medium mb-2">🎨 Gestion des sections :</h4>
-                  <ul className="space-y-1">
-                    <li>• Ajoutez des sections depuis la sidebar</li>
-                    <li>• Cliquez sur l'œil pour masquer/afficher</li>
-                    <li>• Utilisez la corbeille pour supprimer</li>
-                    <li>• Glissez-déposez pour réorganiser</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-medium mb-2">🖼️ Images et médias :</h4>
-                  <ul className="space-y-1">
-                    <li>• Cliquez sur une image pour la changer</li>
-                    <li>• Formats supportés: JPG, PNG, WebP</li>
-                    <li>• Taille max recommandée: 2MB</li>
-                    <li>• Optimisation automatique</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </motion.div>
       </div>
     </div>
   );
-};
+}

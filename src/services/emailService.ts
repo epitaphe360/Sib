@@ -1,10 +1,10 @@
 /**
  * 📧 Email Service - Real Email Sending with Resend
- * 
+ *
  * Replaces all console.log() mocks with actual email delivery
  * Integrates with Supabase Email function (send-visitor-welcome-email)
  * which uses Resend.com API
- * 
+ *
  * Usage:
  * await EmailService.sendWelcomeEmail(user.email, user.profile.firstName, 'visitor')
  * await EmailService.sendAppointmentConfirmation(appointment)
@@ -47,7 +47,7 @@ export class EmailService {
   private static async sendViaSupabase(options: SendEmailOptions): Promise<boolean> {
     try {
       console.log('📧 Sending email via Supabase Edge Function...', options.to);
-      
+
       const { data, error } = await supabase.functions.invoke('send-template-email', {
         body: {
           to: options.to,
@@ -85,7 +85,7 @@ export class EmailService {
   ): Promise<boolean> {
     try {
       console.log('📧 Sending welcome email via send-visitor-welcome-email...');
-      
+
       // Map accountType to visitor level
       const levelMap: Record<string, string> = {
         'visitor': 'free',
@@ -95,9 +95,9 @@ export class EmailService {
         'partner': 'vip',
         'partenaire': 'vip'
       };
-      
+
       const level = levelMap[accountType.toLowerCase()] || 'free';
-      
+
       const { data, error } = await supabase.functions.invoke('send-visitor-welcome-email', {
         body: {
           email,
@@ -323,14 +323,14 @@ export class EmailService {
    * Send payment receipt email
    */
   static async sendPaymentReceipt(
-    email: string, 
-    name: string, 
-    amount: number, 
-    currency: string, 
+    email: string,
+    name: string,
+    amount: number,
+    currency: string,
     transactionId: string
   ): Promise<boolean> {
     const date = new Date().toLocaleDateString('fr-FR');
-    
+
     const html = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 40px; text-align: center; color: white;">

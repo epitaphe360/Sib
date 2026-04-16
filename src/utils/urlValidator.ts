@@ -31,7 +31,7 @@ export const validateUrl = (url: string): UrlValidationResult => {
   // Valider le format de l'URL
   try {
     const urlObj = new URL(urlToValidate);
-    
+
     // Vérifier que le protocole est http ou https
     if (!['http:', 'https:'].includes(urlObj.protocol)) {
       return {

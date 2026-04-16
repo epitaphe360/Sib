@@ -168,7 +168,7 @@ export default function ExhibitorDetailPage() {
                 Retour aux exposants
               </Button>
             </Link>
-            
+
             <div className="flex items-center space-x-3">
               <img
                 src={exhibitor.logo}
@@ -177,7 +177,7 @@ export default function ExhibitorDetailPage() {
               />
               <span className="font-bold text-gray-900">{exhibitor.companyName}</span>
             </div>
-            
+
             <div className="hidden md:flex items-center space-x-8">
               <a href="#accueil" className="text-gray-700 hover:text-blue-600 transition-colors">Accueil</a>
               <a href="#apropos" className="text-gray-700 hover:text-blue-600 transition-colors">À propos</a>
@@ -188,7 +188,7 @@ export default function ExhibitorDetailPage() {
             </div>
 
             <div className="flex items-center space-x-3">
-              <Button 
+              <Button
                 size="sm"
                 variant="default"
                 onClick={() => navigate(`/minisite/${exhibitor.id}`)}
@@ -252,7 +252,7 @@ export default function ExhibitorDetailPage() {
                 Télécharger catalogue
               </Button>
             </div>
-            
+
             {/* Stats Hero */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {heroSection?.stats?.map((stat, index) => (
@@ -294,7 +294,7 @@ export default function ExhibitorDetailPage() {
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {aboutSection?.values?.map((value: string, index: number) => {
-              if (!value) return null;
+              if (!value) {return null;}
               return (
                 <motion.div
                   key={`value-${index}`}
@@ -340,7 +340,7 @@ export default function ExhibitorDetailPage() {
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100/40 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-72 h-72 bg-gradient-to-tr from-indigo-100/30 to-transparent rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -385,7 +385,7 @@ export default function ExhibitorDetailPage() {
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
+
                     {/* Badges en haut */}
                     <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
                       <Badge className="bg-white/95 text-blue-700 shadow-lg backdrop-blur-sm">
@@ -399,17 +399,17 @@ export default function ExhibitorDetailPage() {
                       )}
                     </div>
                   </div>
-                  
+
                   {/* Contenu */}
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
                       {product.name}
                     </h3>
-                    
+
                     <p className="text-gray-600 mb-5 line-clamp-3 leading-relaxed">
                       {product.description}
                     </p>
-                    
+
                     {/* Spécifications avec icône */}
                     {product.specifications && (
                       <div className="mb-5 p-3 bg-gray-50 rounded-xl border border-gray-100">
@@ -419,11 +419,11 @@ export default function ExhibitorDetailPage() {
                         </div>
                       </div>
                     )}
-                    
+
                     {/* Actions */}
                     <div className="flex gap-3 pt-2">
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-all"
                         onClick={() => {
                           const contactSection = document.getElementById('contact');
@@ -441,8 +441,8 @@ export default function ExhibitorDetailPage() {
                         <Target className="h-4 w-4 mr-2" />
                         Devis
                       </Button>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         className="hover:bg-blue-50 hover:border-blue-300 transition-all"
                         onClick={() => {
@@ -465,7 +465,7 @@ export default function ExhibitorDetailPage() {
               </motion.div>
             ))}
           </div>
-          
+
           {/* CTA en bas de section */}
           {exhibitor.products.length > 0 && (
             <motion.div
@@ -900,7 +900,7 @@ export default function ExhibitorDetailPage() {
                     duration: '30 minutes',
                     format: 'Démonstration interactive'
                   };
-                  
+
                   toast.success(`?? Démonstration programmée pour ${demoData.company}`);
                 }}
               >
@@ -989,8 +989,8 @@ export default function ExhibitorDetailPage() {
       {/* Floating Action Button - positionné au-dessus du widget chatbot */}
       <div className="fixed bottom-24 right-6 z-50">
         <div className="flex flex-col space-y-3">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="rounded-full w-12 h-12 shadow-lg bg-white"
             title={t('ui.contact_info')}
             onClick={handleMessageClick}
@@ -1005,8 +1005,8 @@ export default function ExhibitorDetailPage() {
           >
             <Calendar className="h-5 w-5" />
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="rounded-full w-12 h-12 shadow-lg bg-white"
             onClick={() => {
               let favorites: string[] = [];

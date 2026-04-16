@@ -35,7 +35,7 @@ export const VideoStreamPlayer: React.FC<VideoStreamPlayerProps> = ({
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {return;}
 
     const updateTime = () => setCurrentTime(video.currentTime);
     const updateDuration = () => setDuration(video.duration);
@@ -92,7 +92,7 @@ export const VideoStreamPlayer: React.FC<VideoStreamPlayerProps> = ({
   };
 
   const toggleFullscreen = () => {
-    if (!containerRef.current) return;
+    if (!containerRef.current) {return;}
 
     if (!isFullscreen) {
       if (containerRef.current.requestFullscreen) {
@@ -107,11 +107,11 @@ export const VideoStreamPlayer: React.FC<VideoStreamPlayerProps> = ({
   };
 
   const formatTime = (time: number) => {
-    if (isNaN(time)) return '0:00';
+    if (isNaN(time)) {return '0:00';}
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = Math.floor(time % 60);
-    
+
     if (hours > 0) {
       return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
@@ -120,14 +120,14 @@ export const VideoStreamPlayer: React.FC<VideoStreamPlayerProps> = ({
 
   // Détecter si c'est une URL YouTube
   const isYouTube = src?.includes('youtube.com') || src?.includes('youtu.be');
-  
+
   // Convertir l'URL YouTube en format embed si nécessaire
   const getYouTubeEmbedUrl = (url: string) => {
-    if (!url) return '';
-    
+    if (!url) {return '';}
+
     // Si c'est déjà une URL embed, la retourner
-    if (url.includes('/embed/')) return url;
-    
+    if (url.includes('/embed/')) {return url;}
+
     // Extraire l'ID de la vidéo
     let videoId = '';
     if (url.includes('youtube.com/watch?v=')) {
@@ -135,12 +135,12 @@ export const VideoStreamPlayer: React.FC<VideoStreamPlayerProps> = ({
     } else if (url.includes('youtu.be/')) {
       videoId = url.split('youtu.be/')[1]?.split('?')[0];
     }
-    
+
     return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=${autoPlay ? 1 : 0}` : url;
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative bg-black rounded-lg overflow-hidden group"
       onMouseEnter={() => setShowControls(true)}
@@ -198,7 +198,7 @@ export const VideoStreamPlayer: React.FC<VideoStreamPlayerProps> = ({
 
       {/* Controls */}
       {controls && !isYouTube && (
-        <div 
+        <div
           className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 transition-opacity duration-300 ${
             showControls ? 'opacity-100' : 'opacity-0'
           }`}

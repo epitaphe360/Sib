@@ -31,7 +31,7 @@ export default function BadgePage() {
   }, [user?.id]);
 
   async function loadBadge() {
-    if (!user?.id) return;
+    if (!user?.id) {return;}
 
     try {
       setLoading(true);
@@ -47,7 +47,7 @@ export default function BadgePage() {
   }
 
   async function handleGenerateBadge() {
-    if (!user?.id) return;
+    if (!user?.id) {return;}
 
     try {
       setGenerating(true);
@@ -66,7 +66,7 @@ export default function BadgePage() {
   }
 
   async function handleDownloadBadge() {
-    if (!badgeRef.current || !badge) return;
+    if (!badgeRef.current || !badge) {return;}
 
     try {
       const html2canvas = (await import('html2canvas')).default;
@@ -248,25 +248,25 @@ export default function BadgePage() {
                     style={{ borderColor: badgeColor }}
                   />
                 ) : (
-                  <div 
+                  <div
                     className="w-28 h-28 rounded-full mx-auto mb-4 border-4 flex items-center justify-center bg-gray-100 text-gray-400"
                     style={{ borderColor: badgeColor }}
                   >
                     <User className="w-12 h-12" />
                   </div>
                 )}
-                
+
                 <div className="text-2xl font-bold text-gray-900 mb-2 leading-tight">
                   {badge.fullName}
                 </div>
-                
+
                 {badge.position && (
                   <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">
                     <Briefcase className="w-3 h-3" />
                     <span className="text-sm font-medium">{badge.position}</span>
                   </div>
                 )}
-                
+
                 {badge.companyName && (
                   <div className="flex items-center justify-center gap-1 text-gray-800 font-semibold">
                     <Building className="w-3 h-3" />

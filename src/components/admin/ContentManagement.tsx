@@ -334,7 +334,7 @@ export default function ContentManagement() {
   }, []);
 
   const handleSave = async () => {
-    if (!selectedPage) return;
+    if (!selectedPage) {return;}
     setIsSaving(true);
     setSaveStatus('idle');
     try {
@@ -359,7 +359,7 @@ export default function ContentManagement() {
         upsertPayload,
         { onConflict: conflictCol }
       );
-      if (error) throw error;
+      if (error) {throw error;}
       setAllContents((prev) => ({ ...prev, [selectedPage.slug]: normalizedContent }));
       setUpdatedDates((prev) => ({ ...prev, [selectedPage.slug]: new Date().toISOString() }));
       setSaveStatus('success');
@@ -372,7 +372,7 @@ export default function ContentManagement() {
   };
 
   const handleReset = () => {
-    if (!selectedPage) return;
+    if (!selectedPage) {return;}
     setEditValues(getPrefilledValuesForPage(selectedPage));
     setSaveStatus('idle');
   };

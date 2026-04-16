@@ -2,8 +2,7 @@ import { Calendar, Users, FileText, Zap, Crown, Handshake, Eye, MessageCircle } 
 import { QuotaSummaryCard } from '../../common/QuotaWidget';
 import { Card } from '../../ui/Card';
 import { useTranslation } from '../../../hooks/useTranslation';
-import { getPartnerQuota } from '../../../config/partnerTiers';
-import type { PartnerTier } from '../../../config/partnerTiers';
+import { getPartnerQuota, type PartnerTier } from '../../../config/partnerTiers';
 import type { ReturnType as RT } from 'react';
 import { useDashboardStats } from '../../../hooks/useDashboardStats';
 import type { Dashboard } from '../../../store/dashboardStore';

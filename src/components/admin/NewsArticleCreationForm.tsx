@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
-import { 
+import {
   ArrowLeft,
   Plus,
   Loader,
@@ -38,7 +38,7 @@ export default function NewsArticleCreationForm() {
   const [searchParams] = useSearchParams();
   const editId = searchParams.get('edit');
   const isEditMode = !!editId;
-  
+
   const [formData, setFormData] = useState<NewArticleForm>({
     title: '',
     excerpt: '',
@@ -59,7 +59,7 @@ export default function NewsArticleCreationForm() {
         if (articles.length === 0) {
            await fetchNews();
         }
-        
+
         const article = getArticleById(editId);
         if (article) {
           setFormData({
@@ -77,7 +77,7 @@ export default function NewsArticleCreationForm() {
         }
       }
     };
-    
+
     loadArticle();
   }, [isEditMode, editId, getArticleById, fetchNews, articles.length]); // Dependencies
 
@@ -96,7 +96,7 @@ export default function NewsArticleCreationForm() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    
+
     try {
       if (!user) {
         throw new Error('Utilisateur non connecté');
@@ -130,10 +130,10 @@ export default function NewsArticleCreationForm() {
         await createNewsArticle(articleData as any);
         toast.success(`?? Article publié : ${formData.title}`);
       }
-      
+
       // Rediriger vers la page des actualités
       navigate(ROUTES.ADMIN_NEWS); // Changed from ROUTES.NEWS to ADMIN_NEWS to go back to admin list
-      
+
     } catch (error) {
       setIsSubmitting(false);
       const action = isEditMode ? 'modification' : 'création';
@@ -298,7 +298,7 @@ export default function NewsArticleCreationForm() {
             {/* Métadonnées */}
             <Card className="p-6">
               <h3 className="font-semibold text-gray-900 mb-4">Métadonnées</h3>
-              
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -345,7 +345,7 @@ export default function NewsArticleCreationForm() {
             {/* Tags */}
             <Card className="p-6">
               <h3 className="font-semibold text-gray-900 mb-4">Mots-clés</h3>
-              
+
               <div className="space-y-3">
                 <div className="flex space-x-2">
                   <input
@@ -360,7 +360,7 @@ export default function NewsArticleCreationForm() {
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
-                
+
                 <div className="flex flex-wrap gap-2">
                   {formData.tags.map((tag) => (
                     <button
@@ -378,18 +378,18 @@ export default function NewsArticleCreationForm() {
             {/* Actions */}
             <Card className="p-6">
               <h3 className="font-semibold text-gray-900 mb-4">Actions</h3>
-              
+
               <div className="space-y-3">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full"
                   onClick={() => setShowPreview(!showPreview)}
                 >
                   <Eye className="h-4 w-4 mr-2" />
                   {showPreview ? 'Masquer' : 'Prévisualiser'}
                 </Button>
-                
-                <Button 
+
+                <Button
                   className="w-full"
                   onClick={handleSubmit}
                   disabled={isSubmitting || !formData.title || !formData.excerpt || !formData.content || !formData.category}
@@ -438,7 +438,7 @@ export default function NewsArticleCreationForm() {
                       className="w-full h-64 object-cover rounded-lg mb-6"
                     />
                   )}
-                  
+
                   <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                     <Badge variant="info" size="sm">
                       {formData.category}
@@ -447,19 +447,19 @@ export default function NewsArticleCreationForm() {
                     <span>{formData.readTime} min de lecture</span>
                     <span>Par {formData.author}</span>
                   </div>
-                  
+
                   <h1 className="text-3xl font-bold text-gray-900 mb-4">
                     {formData.title}
                   </h1>
-                  
+
                   <p className="text-xl text-gray-600 mb-6 italic">
                     {formData.excerpt}
                   </p>
-                  
+
                   <div className="text-gray-800 whitespace-pre-wrap">
                     {formData.content}
                   </div>
-                  
+
                   {formData.tags.length > 0 && (
                     <div className="mt-6 pt-4 border-t border-gray-200">
                       <h4 className="font-medium text-gray-900 mb-2">Mots-clés :</h4>

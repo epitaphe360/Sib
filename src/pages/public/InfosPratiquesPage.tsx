@@ -26,7 +26,7 @@ export default function InfosPratiquesPage() {
 
   const horaires = (() => {
     const raw = cms.horaires_json;
-    if (!raw) return defaultHoraires;
+    if (!raw) {return defaultHoraires;}
     try {
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed)
@@ -60,7 +60,7 @@ export default function InfosPratiquesPage() {
 
   const venirSections = (() => {
     const raw = cms.venir_json;
-    if (!raw) return null;
+    if (!raw) {return null;}
     try {
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : null;

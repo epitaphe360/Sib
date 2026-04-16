@@ -45,7 +45,7 @@ export class SpeedNetworkingService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('Error creating speed networking session:', error);
@@ -67,7 +67,7 @@ export class SpeedNetworkingService {
         .eq('id', sessionId)
         .single();
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {throw fetchError;}
 
       if (session.participants.length >= session.max_participants) {
         throw new Error('Session is full');
@@ -84,7 +84,7 @@ export class SpeedNetworkingService {
         })
         .eq('id', sessionId);
 
-      if (updateError) throw updateError;
+      if (updateError) {throw updateError;}
     } catch (error) {
       console.error('Error registering participant:', error);
       throw error;
@@ -109,7 +109,7 @@ export class SpeedNetworkingService {
     }> = [];
 
     const n = participants.length;
-    if (n < 2) return matches;
+    if (n < 2) {return matches;}
 
     // Round-robin algorithm
     const rounds = n % 2 === 0 ? n - 1 : n;
@@ -145,7 +145,7 @@ export class SpeedNetworkingService {
         .eq('id', sessionId)
         .single();
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {throw fetchError;}
 
       // Generate matches
       const matches = this.generateMatches(session.participants, session.duration);
@@ -159,7 +159,7 @@ export class SpeedNetworkingService {
         })
         .eq('id', sessionId);
 
-      if (updateError) throw updateError;
+      if (updateError) {throw updateError;}
 
       // Notify participants
       await this.notifyParticipants(sessionId, matches);
@@ -208,7 +208,7 @@ export class SpeedNetworkingService {
         .eq('id', sessionId)
         .single();
 
-      if (!session || session.status !== 'active') return null;
+      if (!session || session.status !== 'active') {return null;}
 
       const now = new Date().getTime();
       const currentMatch = session.matches.find((match: SpeedNetworkingMatch) => {
@@ -236,7 +236,7 @@ export class SpeedNetworkingService {
         .update({ status: 'completed' })
         .eq('id', sessionId);
 
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (error) {
       console.error('Error completing session:', error);
       throw error;
@@ -255,7 +255,7 @@ export class SpeedNetworkingService {
         .in('status', ['scheduled', 'active'])
         .order('start_time', { ascending: true });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('Error getting user sessions:', error);

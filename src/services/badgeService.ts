@@ -32,11 +32,11 @@ export async function getUserBadge(userId: string): Promise<UserBadge | null> {
   try {
     // Security check: verify user is authenticated and requesting their own badge
     const { data: { user: currentUser }, error: authError } = await supabase.auth.getUser();
-    
+
     if (authError || !currentUser) {
       throw new Error('Not authenticated');
     }
-    
+
     if (currentUser.id !== userId) {
       console.warn(`⚠️ SECURITY ALERT: Unauthorized badge access attempt: ${currentUser.id} trying to access ${userId}`);
       throw new Error('Unauthorized: Cannot access badge for other user');
@@ -97,11 +97,11 @@ export async function upsertUserBadge(params: {
       p_stand_number: params.standNumber || null,
     });
 
-    if (error) throw error;
-    if (!data) throw new Error('Badge RPC returned no data');
+    if (error) {throw error;}
+    if (!data) {throw new Error('Badge RPC returned no data');}
 
     const row = Array.isArray(data) ? data[0] : data;
-    if (!row) throw new Error('Badge RPC returned empty payload');
+    if (!row) {throw new Error('Badge RPC returned empty payload');}
 
     return transformBadgeFromDB(row as BadgeDBRecord);
   } catch (error) {
@@ -122,8 +122,8 @@ export async function generateBadgeFromUser(userId: string): Promise<UserBadge> 
       .eq('id', userId)
       .single();
 
-    if (userError) throw userError;
-    if (!user) throw new Error('User not found');
+    if (userError) {throw userError;}
+    if (!user) {throw new Error('User not found');}
 
     const normalizedUserType = String(user.type || '').toLowerCase();
     const allowedTypes: BadgeUserType[] = ['visitor', 'exhibitor', 'partner', 'admin'];
@@ -164,7 +164,7 @@ export async function generateBadgeFromUser(userId: string): Promise<UserBadge> 
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (exhibitorError && exhibitorError.code !== 'PGRST116') throw exhibitorError;
+      if (exhibitorError && exhibitorError.code !== 'PGRST116') {throw exhibitorError;}
 
       badgeParams.companyName = (exhibitor as any)?.company_name || user.profile?.company;
       badgeParams.position = user.profile?.position;
@@ -176,7 +176,7 @@ export async function generateBadgeFromUser(userId: string): Promise<UserBadge> 
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (partnerError && partnerError.code !== 'PGRST116') throw partnerError;
+      if (partnerError && partnerError.code !== 'PGRST116') {throw partnerError;}
 
       badgeParams.companyName = (partner as any)?.company_name || user.profile?.company;
       badgeParams.position = user.profile?.position;
@@ -242,7 +242,7 @@ export async function scanBadge(badgeCode: string): Promise<UserBadge> {
       p_badge_code: badgeCode,
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     return transformBadgeFromDB(data);
   } catch (error) {
@@ -261,7 +261,7 @@ export async function revokeBadge(badgeId: string): Promise<void> {
       .update({ status: 'revoked', updated_at: new Date().toISOString() })
       .eq('id', badgeId);
 
-    if (error) throw error;
+    if (error) {throw error;}
   } catch (error) {
     console.error('Error revoking badge:', error);
     throw error;
@@ -284,7 +284,7 @@ export async function renewBadge(badgeId: string, daysToAdd: number = 3): Promis
       .select('id, user_id, badge_code, user_type, user_level, full_name, company_name, position, email, phone, avatar_url, stand_number, access_level, valid_from, valid_until, status, qr_data, scan_count, last_scanned_at, created_at, updated_at')
       .single();
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     return transformBadgeFromDB(data);
   } catch (error) {

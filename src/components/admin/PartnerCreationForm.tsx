@@ -2,7 +2,7 @@
 import { toast } from 'sonner';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
-import { 
+import {
   ArrowLeft,
   Crown,
   User,
@@ -34,13 +34,13 @@ interface NewPartnerForm {
   country: string;
   website: string;
   description: string;
-  
+
   // Contact principal
   contactName: string;
   email: string;
   phone: string;
   position: string;
-  
+
   // Informations partenariat
   sponsorshipLevel: string;
   contractValue: string;
@@ -48,7 +48,7 @@ interface NewPartnerForm {
   establishedYear: number;
   employees: string;
   logo: string;
-  
+
   // Contrôles admin
   verified: boolean;
   featured: boolean;
@@ -65,7 +65,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuthStore();
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState<NewPartnerForm>({
     organizationName: partnerToEdit?.name || '',
     partnerType: partnerToEdit?.partner_tier || 'partner',
@@ -181,7 +181,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    
+
     try {
       if (!user) {
         throw new Error('Utilisateur non connecté');
@@ -290,13 +290,13 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
           verified: false,
           featured: false
         });
-        
+
         setCurrentStep(1);
         navigate(ROUTES.PARTNERS);
       }
-      
+
       setIsSubmitting(false);
-      
+
     } catch (error) {
       console.error(`Erreur ${editMode ? 'modification' : 'création'} partenaire:`, error);
       setIsSubmitting(false);
@@ -342,8 +342,8 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                  currentStep >= step.id 
-                    ? 'bg-purple-600 text-white border-purple-600' 
+                  currentStep >= step.id
+                    ? 'bg-purple-600 text-white border-purple-600'
                     : 'bg-white text-gray-400 border-gray-300'
                 }`}>
                   {currentStep > step.id ? (
@@ -725,8 +725,8 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                     onClick={() => {
-                      setFormData({ 
-                        ...formData, 
+                      setFormData({
+                        ...formData,
                         partnerType: type.type as 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner',
                         sponsorshipLevel: type.name,
                         contractValue: type.price
@@ -800,7 +800,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                     <Crown className={`h-4 w-4 ${formData.featured ? 'text-yellow-500' : 'text-gray-400'}`} />
                     <span className="text-sm font-medium text-gray-700">Mettre à la une</span>
                   </label>
-                  
+
                   <label className="flex items-center space-x-2 cursor-pointer bg-white p-3 border rounded-lg hover:bg-gray-50 border-gray-200 transition-colors">
                     <input
                       type="checkbox"
@@ -917,7 +917,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                     <div><strong>Site web :</strong> {formData.website}</div>
                     {formData.logo && (
                       <div>
-                        <strong>Logo :</strong> 
+                        <strong>Logo :</strong>
                         <img src={formData.logo} alt="Logo" className="h-8 mt-1 object-contain" onError={(e) => (e.currentTarget.style.display = 'none')} />
                       </div>
                     )}
@@ -963,7 +963,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
               <div className="bg-purple-50 p-4 rounded-lg">
                 <h4 className="font-medium text-purple-900 mb-2">Activation du partenariat</h4>
                 <p className="text-sm text-purple-700">
-                  Le partenaire recevra un email avec ses identifiants de connexion et l'accès 
+                  Le partenaire recevra un email avec ses identifiants de connexion et l'accès
                   à son espace partenaire sera activé immédiatement.
                 </p>
               </div>

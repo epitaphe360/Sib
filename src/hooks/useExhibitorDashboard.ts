@@ -22,7 +22,6 @@ export function useExhibitorDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [processingAppointment, setProcessingAppointment] = useState<string | null>(null);
   const [showMiniSiteSetup, setShowMiniSiteSetup] = useState(false);
-  const [showMiniSiteScrapper, setShowMiniSiteScrapper] = useState(false);
   const [isPublished, setIsPublished] = useState<boolean | null>(null);
   const [isTogglingPublish, setIsTogglingPublish] = useState(false);
   const [confirmRejectId, setConfirmRejectId] = useState<string | null>(null);
@@ -47,9 +46,9 @@ export function useExhibitorDashboard() {
     let timeoutId: ReturnType<typeof setTimeout>;
 
     const checkMiniSiteStatus = async () => {
-      if (!user?.id || user?.status !== 'active') return;
-      if (user?.type !== 'exhibitor' && (user as any)?.role !== 'exhibitor') return;
-      if (localStorage.getItem(`sibs_minisite_skipped_${user.id}`) === 'true') return;
+      if (!user?.id || user?.status !== 'active') {return;}
+      if (user?.type !== 'exhibitor' && (user as any)?.role !== 'exhibitor') {return;}
+      if (localStorage.getItem(`sibs_minisite_skipped_${user.id}`) === 'true') {return;}
 
       try {
         const { data: exhibitor } = await supabase!
@@ -72,7 +71,7 @@ export function useExhibitorDashboard() {
 
         if (flagSaysCreated || hasMiniSiteInDB) {
           if (hasMiniSiteInDB && !flagSaysCreated) {
-            // @ts-ignore – table not in generated Supabase types
+          // @ts-expect-error – table not in generated Supabase types
             await supabase!.from('users').update({ minisite_created: true }).eq('id', user.id);
           }
           return;
@@ -80,31 +79,31 @@ export function useExhibitorDashboard() {
 
         if (isMounted) {
           timeoutId = setTimeout(() => {
-            if (isMounted) setShowMiniSiteSetup(true);
+            if (isMounted) {setShowMiniSiteSetup(true);}
           }, 2000);
         }
       } catch (err) {
-        if (isMounted) console.error('Error checking minisite status:', err);
+        if (isMounted) {console.error('Error checking minisite status:', err);}
       }
     };
 
     checkMiniSiteStatus();
     return () => {
       isMounted = false;
-      if (timeoutId) clearTimeout(timeoutId);
+      if (timeoutId) {clearTimeout(timeoutId);}
     };
   }, [user?.id, user?.status]);
 
   // ─── Effect: resolve exhibitorDbId (exhibitors.id for this user) ──────────
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?.id) {return;}
     supabase!
       .from('exhibitors')
       .select('id')
       .eq('user_id', user.id)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) setExhibitorDbId((data as any).id);
+        if (data) {setExhibitorDbId((data as any).id);}
       });
   }, [user?.id]);
 
@@ -147,14 +146,14 @@ export function useExhibitorDashboard() {
 
   // ─── Effect: auto-clear error ──────────────────────────────────────────────
   useEffect(() => {
-    if (!error) return;
+    if (!error) {return;}
     const timer = setTimeout(() => setError(null), 5000);
     return () => clearTimeout(timer);
   }, [error]);
 
   // ─── Effect: dashboard data ────────────────────────────────────────────────
   useEffect(() => {
-    if (user?.status === 'pending') return;
+    if (user?.status === 'pending') {return;}
     fetchDashboard().catch((err) => {
       console.error('Erreur lors du chargement du dashboard:', err);
       setError(t('exhibitor.error_load_dashboard'));
@@ -164,7 +163,7 @@ export function useExhibitorDashboard() {
 
   // ─── Effect: publication status ───────────────────────────────────────────
   useEffect(() => {
-    if (!user || (user.type !== 'exhibitor' && (user as any).role !== 'exhibitor')) return;
+    if (!user || (user.type !== 'exhibitor' && (user as any).role !== 'exhibitor')) {return;}
 
     supabase!
       .from('exhibitors')
@@ -186,7 +185,7 @@ export function useExhibitorDashboard() {
   );
 
   const myAppointments = useMemo(() => {
-    if (!user?.id || !appointments) return [];
+    if (!user?.id || !appointments) {return [];}
     return appointments.filter((a) =>
       // exhibitorId = exhibitors.id (résolu via exhibitorDbId)
       (exhibitorDbId && a.exhibitorId === exhibitorDbId) ||
@@ -223,28 +222,37 @@ export function useExhibitorDashboard() {
   }, [activityBreakdownData, appointmentStatusData]);
 
   const receivedAppointments = myAppointments;
-  const pendingAppointments = receivedAppointments.filter((a) => a.status === 'pending');
-  const confirmedAppointments = receivedAppointments.filter((a) => a.status === 'confirmed');
-  const now = new Date();
-  const upcomingAppointments = receivedAppointments.filter(
-    (a) => (a.status === 'pending' || (!a.startTime || new Date(a.startTime) > now)) && a.status !== 'cancelled'
-  );
-  const pastAppointments = receivedAppointments.filter(
-    (a) => a.status !== 'pending' && a.startTime && new Date(a.startTime) < now
-  );
-  const cancelledAppointments = receivedAppointments.filter((a) => a.status === 'cancelled');
 
-  // ─── Filtered appointment states ───────────────────────────────────────────
-  const [filteredUpcoming, setFilteredUpcoming] = useState(upcomingAppointments);
-  const [filteredPast, setFilteredPast] = useState(pastAppointments);
-  const [filteredCancelled, setFilteredCancelled] = useState(cancelledAppointments);
+  // Memoized derived lists — no redundant state/effect needed
+  const pendingAppointments = useMemo(
+    () => receivedAppointments.filter((a) => a.status === 'pending'),
+    [receivedAppointments]
+  );
+  const confirmedAppointments = useMemo(
+    () => receivedAppointments.filter((a) => a.status === 'confirmed'),
+    [receivedAppointments]
+  );
+  const upcomingAppointments = useMemo(() => {
+    const now = new Date();
+    return receivedAppointments.filter(
+      (a) => (a.status === 'pending' || (a.startTime != null && new Date(a.startTime) > now)) && a.status !== 'cancelled'
+    );
+  }, [receivedAppointments]);
+  const pastAppointments = useMemo(() => {
+    const now = new Date();
+    return receivedAppointments.filter(
+      (a) => a.status !== 'pending' && a.startTime != null && new Date(a.startTime) < now
+    );
+  }, [receivedAppointments]);
+  const cancelledAppointments = useMemo(
+    () => receivedAppointments.filter((a) => a.status === 'cancelled'),
+    [receivedAppointments]
+  );
 
-  useEffect(() => {
-    setFilteredUpcoming(upcomingAppointments);
-    setFilteredPast(pastAppointments);
-    setFilteredCancelled(cancelledAppointments);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [upcomingAppointments.length, pastAppointments.length, cancelledAppointments.length]);
+  // ─── Aliases kept for backwards compat with consumers ─────────────────────
+  const filteredUpcoming = upcomingAppointments;
+  const filteredPast = pastAppointments;
+  const filteredCancelled = cancelledAppointments;
 
   // ─── IA predictions ────────────────────────────────────────────────────────
   const predictions = useBasicPredictions({
@@ -257,16 +265,16 @@ export function useExhibitorDashboard() {
 
   // ─── Handlers ─────────────────────────────────────────────────────────────
   const togglePublished = async () => {
-    if (!user?.id || isTogglingPublish) return;
+    if (!user?.id || isTogglingPublish) {return;}
     setIsTogglingPublish(true);
     try {
       const newStatus = !isPublished;
       const { error: err } = await supabase!
         .from('exhibitors')
-        // @ts-ignore – column not in generated Supabase types
+        // @ts-expect-error – column not in generated Supabase types
         .update({ is_published: newStatus })
         .eq('user_id', user.id);
-      if (err) throw err;
+      if (err) {throw err;}
       setIsPublished(newStatus);
       toast.success(
         newStatus ? t('exhibitor.toast_profile_visible') : t('exhibitor.toast_profile_hidden'),
@@ -412,7 +420,7 @@ export function useExhibitorDashboard() {
       },
     };
     const cfg = configs[statType];
-    if (!cfg) return;
+    if (!cfg) {return;}
 
     setModal({
       title: cfg.title,
@@ -436,14 +444,13 @@ export function useExhibitorDashboard() {
     isLoading,
     processingAppointment,
     showMiniSiteSetup, setShowMiniSiteSetup,
-    showMiniSiteScrapper, setShowMiniSiteScrapper,
     isPublished,
     isTogglingPublish,
     confirmRejectId, setConfirmRejectId,
     historyTab, setHistoryTab,
-    filteredUpcoming, setFilteredUpcoming,
-    filteredPast, setFilteredPast,
-    filteredCancelled, setFilteredCancelled,
+    filteredUpcoming,
+    filteredPast,
+    filteredCancelled,
     // external
     user,
     dashboard,

@@ -19,7 +19,7 @@ export const emailSchema = z
  */
 export const passwordSchema = z
   .string()
-  .min(12, 'Minimum 12 caractères')
+  .min(8, 'Minimum 8 caractères')
   .max(128, 'Maximum 128 caractères')
   .regex(/[A-Z]/, 'Doit contenir au moins une majuscule')
   .regex(/[a-z]/, 'Doit contenir au moins une minuscule')
@@ -54,7 +54,7 @@ export const nameSchema = z
   .string()
   .min(2, 'Minimum 2 caractères')
   .max(100, 'Maximum 100 caractères')
-  .regex(/^[a-zA-ZÀ-ÿ\s'-]+$/, 'Caractères invalides dans le nom');
+  .regex(/^[\p{L}\s'-]+$/u, 'Caractères invalides dans le nom');
 
 /**
  * Validation de description/bio

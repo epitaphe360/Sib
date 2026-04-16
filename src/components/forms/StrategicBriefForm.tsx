@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';\nimport { motion, AnimatePresence } from 'framer-motion';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
@@ -55,7 +56,7 @@ interface StrategicBriefFormProps {
 
 /**
  * StrategicBriefForm - Formulaire multi-étapes pour qualifier les prospects
- * 
+ *
  * Fonctionnalités :
  * - Validation progressive avec Zod
  * - Animations fluides entre les étapes
@@ -86,7 +87,7 @@ export const StrategicBriefForm: React.FC<StrategicBriefFormProps> = ({
 
   const handleNext = useCallback(async () => {
     const isCurrentStepValid = await trigger();
-    if (!isCurrentStepValid) return;
+    if (!isCurrentStepValid) {return;}
 
     if (currentStepIndex < STEPS.length - 2) {
       setCurrentStep(STEPS[currentStepIndex + 1].id as FormStep);

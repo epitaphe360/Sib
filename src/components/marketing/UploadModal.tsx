@@ -60,7 +60,7 @@ export default function UploadModal({ initialType = 'webinar', onUpload, onClose
     setSubmitting(true);
     const ok = await onUpload(selectedType, formData);
     setSubmitting(false);
-    if (ok) onClose();
+    if (ok) {onClose();}
   };
 
   const update = (field: keyof UploadFormData, value: string) =>

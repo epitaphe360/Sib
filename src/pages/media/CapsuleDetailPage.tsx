@@ -47,7 +47,7 @@ export const CapsuleDetailPage: React.FC = () => {
         .eq('type', 'capsule_inside')
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
       setCapsule(data);
     } catch (error) {
       console.error('Error loading capsule:', error);
@@ -84,7 +84,7 @@ export const CapsuleDetailPage: React.FC = () => {
   };
 
   const formatDuration = (seconds?: number) => {
-    if (!seconds) return 'N/A';
+    if (!seconds) {return 'N/A';}
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
@@ -130,8 +130,8 @@ export const CapsuleDetailPage: React.FC = () => {
           <div className="lg:col-span-2 space-y-6">
             {/* Video Player */}
             <div className="relative">
-              <Badge 
-                variant="default" 
+              <Badge
+                variant="default"
                 className="absolute top-4 left-4 z-10 bg-blue-600"
               >
                 🎬 Inside SIB
@@ -283,7 +283,7 @@ export const CapsuleDetailPage: React.FC = () => {
                 Des capsules vidéo exclusives pour découvrir les coulisses du salon et les acteurs clés du secteur du bâtiment.
               </p>
               <Button variant="secondary" className="w-full" asChild>
-                <Link to="/media/capsules">
+                <Link to="/media/inside-sib">
                   Voir toutes les capsules
                 </Link>
               </Button>

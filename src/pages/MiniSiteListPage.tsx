@@ -34,7 +34,7 @@ export default function MiniSiteListPage() {
     try {
       const { data, error } = await SupabaseService.getPublishedMiniSites();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const formattedData = (data || []).map((item: any) => ({
         id: item.id,

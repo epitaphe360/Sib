@@ -26,7 +26,7 @@ export function VisitorLevelGuard({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {return;}
 
     // Si c'est un visiteur
     if (user.type === 'visitor') {

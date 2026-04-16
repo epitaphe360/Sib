@@ -47,10 +47,10 @@ export default function EditionsPage() {
 
   const editions: Edition[] = (() => {
     const raw = cms.timeline_json;
-    if (!raw) return defaultEditions;
+    if (!raw) {return defaultEditions;}
     try {
       const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return defaultEditions;
+      if (!Array.isArray(parsed)) {return defaultEditions;}
       return parsed
         .map((item: any) => ({
           year: Number(item?.year),

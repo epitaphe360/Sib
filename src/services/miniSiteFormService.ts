@@ -126,7 +126,7 @@ export const VALIDATION_RULES = {
   },
   phone: {
     required: true,
-    pattern: /^[\d\s\-\+\(\)]{10,}$/,
+    pattern: /^[\d\s\-+()]{10,}$/,
     error: 'Numéro de téléphone invalide',
   },
   website: {
@@ -323,20 +323,20 @@ export function calculateCompletion(data: Partial<MiniSiteFormData>): number {
   const totalFields = 20;
   let filledFields = 0;
 
-  if (data.name?.trim()) filledFields++;
-  if (data.logo) filledFields++;
-  if (data.description?.trim()) filledFields++;
-  if (data.heroTitle?.trim()) filledFields++;
-  if (data.heroImage) filledFields++;
-  if (data.aboutDescription?.trim()) filledFields++;
-  if (data.products && data.products.length > 0) filledFields += 2;
-  if (data.galleryImages && data.galleryImages.length > 0) filledFields++;
-  if (data.teamMembers && data.teamMembers.length > 0) filledFields++;
-  if (data.certifications && data.certifications.length > 0) filledFields++;
-  if (data.articles && data.articles.length > 0) filledFields++;
-  if (data.email?.trim()) filledFields++;
-  if (data.phone?.trim()) filledFields++;
-  if (data.social && Object.keys(data.social).some(k => data.social![k as keyof typeof data.social])) filledFields++;
+  if (data.name?.trim()) {filledFields++;}
+  if (data.logo) {filledFields++;}
+  if (data.description?.trim()) {filledFields++;}
+  if (data.heroTitle?.trim()) {filledFields++;}
+  if (data.heroImage) {filledFields++;}
+  if (data.aboutDescription?.trim()) {filledFields++;}
+  if (data.products && data.products.length > 0) {filledFields += 2;}
+  if (data.galleryImages && data.galleryImages.length > 0) {filledFields++;}
+  if (data.teamMembers && data.teamMembers.length > 0) {filledFields++;}
+  if (data.certifications && data.certifications.length > 0) {filledFields++;}
+  if (data.articles && data.articles.length > 0) {filledFields++;}
+  if (data.email?.trim()) {filledFields++;}
+  if (data.phone?.trim()) {filledFields++;}
+  if (data.social && Object.keys(data.social).some(k => data.social![k as keyof typeof data.social])) {filledFields++;}
 
   return Math.round((filledFields / totalFields) * 100);
 }

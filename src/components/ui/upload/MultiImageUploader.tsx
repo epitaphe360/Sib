@@ -43,10 +43,10 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
   }, [initialImages, images]);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    
+    if (disabled) {return;}
+
     const files = e.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {return;}
 
     // Vérifier si on dépasse le nombre max d'images
     if (images.length + files.length > maxImages) {
@@ -55,52 +55,52 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
     }
 
     const fileArray = Array.from(files);
-    
+
     // Vérification de la taille et du type
     const maxSizeBytes = maxSizeMB * 1024 * 1024;
     const invalidFiles = fileArray.filter(file => {
       return file.size > maxSizeBytes || !file.type.startsWith('image/');
     });
-    
+
     if (invalidFiles.length > 0) {
       setError(`${invalidFiles.length} fichier(s) ne respectent pas les contraintes (taille max: ${maxSizeMB}MB, type: image)`);
       return;
     }
-    
+
     setIsUploading(true);
     setError(null);
     setSuccess(false);
-    
+
     try {
       // Note: Les buckets sont créés via les migrations SQL
-      
+
       // Upload des images avec simulation de progression
       const totalFiles = fileArray.length;
       let completedFiles = 0;
-      
+
       const updateProgress = () => {
         completedFiles++;
         setUploadProgress(Math.round((completedFiles / totalFiles) * 100));
       };
-      
+
       const uploadPromises = fileArray.map(async (file) => {
         const url = await StorageService.uploadImage(file, bucket, folder);
         updateProgress();
         return url;
       });
-      
+
       const newImageUrls = await Promise.all(uploadPromises);
       const updatedImages = [...images, ...newImageUrls];
-      
+
       setImages(updatedImages);
       onImagesUploaded(updatedImages);
       setSuccess(true);
-      
+
       // Masquer le message de succès après 3 secondes
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-      
+
     } catch (err: unknown) {
       console.error('Erreur upload multiple:', err);
       setError(err instanceof Error ? err.message : 'Erreur lors du téléchargement des images');
@@ -111,22 +111,22 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
   };
 
   const removeImage = async (index: number) => {
-    if (disabled) return;
-    
+    if (disabled) {return;}
+
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
       try {
         const imageToRemove = images[index];
-        
+
         // Supprimer du stockage
         if (imageToRemove.includes(bucket)) {
           await StorageService.deleteImage(imageToRemove, bucket);
         }
-        
+
         // Mettre à jour l'état
         const updatedImages = images.filter((_, i) => i !== index);
         setImages(updatedImages);
         onImagesUploaded(updatedImages);
-        
+
         if (updatedImages.length < minImages) {
           setError(`Vous devez avoir au moins ${minImages} image${minImages > 1 ? 's' : ''}`);
         } else {
@@ -153,18 +153,18 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
   const handleDrop = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
     const dragIndex = parseInt(e.dataTransfer.getData('text/plain'));
-    
-    if (dragIndex === dropIndex) return;
-    
+
+    if (dragIndex === dropIndex) {return;}
+
     const newImages = [...images];
     const draggedImage = newImages[dragIndex];
-    
+
     // Retirer l'image de sa position d'origine
     newImages.splice(dragIndex, 1);
-    
+
     // Insérer l'image à sa nouvelle position
     newImages.splice(dropIndex, 0, draggedImage);
-    
+
     setImages(newImages);
     onImagesUploaded(newImages);
   };
@@ -201,7 +201,7 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
               </div>
             </div>
           ))}
-          
+
           {images.length < maxImages && !disabled && (
             <label className="border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors aspect-square">
               <input
@@ -262,7 +262,7 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
               </div>
             </div>
           ))}
-          
+
           {images.length < maxImages && !disabled && (
             <label className="flex-shrink-0 w-40 h-40 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
               <input
@@ -294,7 +294,7 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
           )}
         </div>
       )}
-      
+
       {error && (
         <div className="text-sm text-red-500 flex items-center mt-2">
           <AlertCircle className="h-4 w-4 mr-1 flex-shrink-0" />
@@ -308,7 +308,7 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
           <span>Images mises à jour avec succès</span>
         </div>
       )}
-      
+
       {showCounter && (
         <div className="flex items-center text-xs text-gray-500 mt-1">
           <FileImage className="h-3 w-3 mr-1" />

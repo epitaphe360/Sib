@@ -49,8 +49,8 @@ export default function ExhibitorDetailPage() {
 
   useEffect(() => {
     const loadExhibitor = async () => {
-      if (!id) return;
-      
+      if (!id) {return;}
+
       setIsLoading(true);
       try {
         const data = await SupabaseService.getExhibitorById(id);
@@ -203,23 +203,23 @@ export default function ExhibitorDetailPage() {
       <div className="relative min-h-[600px] flex items-center pt-20 pb-32 overflow-hidden">
         {/* Background Sophistiqué */}
         <div className="absolute inset-0 bg-slate-950">
-          <div 
+          <div
             className="absolute inset-0 opacity-40 mix-blend-overlay scale-110"
-            style={{ 
+            style={{
               backgroundImage: 'url(https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=2000&q=80)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/80 to-[#f8fafc]" />
-          
+
           {/* Cercles de Lumière & Patterns */}
           <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[150px] translate-y-1/2 -translate-x-1/2" />
-          
+
           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
         </div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -249,7 +249,7 @@ export default function ExhibitorDetailPage() {
                   className="max-h-full max-w-full object-contain"
                 />
               </div>
-              
+
               {exhibitor.featured && (
                 <div className="absolute -top-4 -right-4 h-14 w-14 bg-gradient-to-tr from-yellow-400 to-amber-600 rounded-2xl shadow-xl flex items-center justify-center border-4 border-slate-900 rotate-12">
                   <Crown className="h-7 w-7 text-white" />
@@ -309,7 +309,7 @@ export default function ExhibitorDetailPage() {
       {/* Main Content Deluxe Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-30 pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          
+
           {/* Left Column: Essential Actions */}
           <div className="lg:col-span-4 space-y-8">
             <motion.div
@@ -319,7 +319,7 @@ export default function ExhibitorDetailPage() {
               className="bg-white rounded-[2.5rem] p-8 shadow-2xl shadow-slate-200 border border-slate-100 sticky top-24"
             >
               <div className="space-y-4">
-                <button 
+                <button
                   onClick={handleAppointmentClick}
                   className="w-full py-5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all duration-300 shadow-xl shadow-slate-200 flex items-center justify-center gap-3 group"
                 >
@@ -328,14 +328,14 @@ export default function ExhibitorDetailPage() {
                 </button>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <button 
+                  <button
                     onClick={handleContact}
                     className="py-4 bg-slate-50 hover:bg-blue-50 text-slate-900 rounded-2xl font-bold text-[11px] uppercase tracking-wider transition-all border border-slate-100 flex items-center justify-center gap-2"
                   >
                     <Mail className="h-4 w-4 text-blue-600" />
                     Contact
                   </button>
-                  <button 
+                  <button
                     onClick={handleShare}
                     className="py-4 bg-slate-50 hover:bg-slate-100 text-slate-900 rounded-2xl font-bold text-[11px] uppercase tracking-wider transition-all border border-slate-100 flex items-center justify-center gap-2"
                   >
@@ -343,8 +343,8 @@ export default function ExhibitorDetailPage() {
                     Partager
                   </button>
                 </div>
-                
-                <button 
+
+                <button
                   onClick={handleDownloadBrochure}
                   className="w-full py-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-3"
                 >
@@ -418,8 +418,8 @@ export default function ExhibitorDetailPage() {
                           key={tab.id}
                           onClick={() => setActiveTab(tab.id as any)}
                           className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all min-w-[80px] sm:min-w-[120px] ${
-                            activeTab === tab.id 
-                              ? 'bg-white text-slate-900 shadow-md' 
+                            activeTab === tab.id
+                              ? 'bg-white text-slate-900 shadow-md'
                               : 'text-slate-400 hover:text-slate-600'
                           }`}
                         >
@@ -430,8 +430,8 @@ export default function ExhibitorDetailPage() {
                 </div>
 
                 <div className="min-h-[600px] p-8">
-                  <MiniSitePreview 
-                    exhibitor={exhibitor} 
+                  <MiniSitePreview
+                    exhibitor={exhibitor}
                     activeTab={activeTab as any}
                     embedded={true}
                   />

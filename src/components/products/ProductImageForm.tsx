@@ -50,12 +50,12 @@ const ProductImageForm: React.FC<ProductImageFormProps> = ({
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm">
       <h2 className="text-xl font-semibold mb-4">{t('products.product_images')}</h2>
-      
+
       <div className="mb-6">
         <p className="text-gray-600 text-sm mb-4">
           {t('products.upload_images_desc')}
         </p>
-        
+
         <MultiImageUploader
           initialImages={images}
           onImagesUploaded={setImages}
@@ -67,13 +67,13 @@ const ProductImageForm: React.FC<ProductImageFormProps> = ({
           layout="grid"
         />
       </div>
-      
+
       {error && (
         <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm mb-4">
           {error}
         </div>
       )}
-      
+
       <div className="flex justify-end gap-3">
         {onCancel && (
           <button
@@ -85,7 +85,7 @@ const ProductImageForm: React.FC<ProductImageFormProps> = ({
             {t('common.cancel')}
           </button>
         )}
-        
+
         <button
           type="button"
           onClick={handleSave}

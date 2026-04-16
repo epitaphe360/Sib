@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
-import { 
-  Check, X, Crown, Zap, Star, Award, 
+import {
+  Check, X, Crown, Zap, Star, Award,
   Users,
   MapPin, CalendarDays, Clock, CreditCard,
   MessageCircle, Ticket, Mail,
@@ -223,8 +223,8 @@ export default function PartnerSubscriptionPage() {
               </h1>
 
               <p className="text-lg md:text-xl text-indigo-100 mb-8 leading-relaxed">
-                Associez votre marque à un événement de référence du secteur du bâtiment mondial. 
-                Bénéficiez d'une visibilité premium, de services VIP et d'opportunités de networking 
+                Associez votre marque à un événement de référence du secteur du bâtiment mondial.
+                Bénéficiez d'une visibilité premium, de services VIP et d'opportunités de networking
                 exclusives auprès des décideurs internationaux.
               </p>
 

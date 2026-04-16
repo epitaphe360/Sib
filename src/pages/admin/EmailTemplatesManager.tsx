@@ -46,17 +46,17 @@ export default function EmailTemplatesManager() {
   const loadTemplates = async () => {
     try {
       setLoading(true);
-      
+
       if (!supabase) {
         throw new Error('Supabase client not initialized');
       }
-      
+
       const { data, error } = await supabase
         .from('email_templates')
         .select('*')
         .order('name');
 
-      if (error) throw error;
+      if (error) {throw error;}
       setTemplates(data || []);
     } catch (error) {
       console.error('Erreur chargement templates:', error);
@@ -77,7 +77,7 @@ export default function EmailTemplatesManager() {
   };
 
   const handleSave = async () => {
-    if (!selectedTemplate) return;
+    if (!selectedTemplate) {return;}
 
     try {
       setSaving(true);
@@ -97,11 +97,11 @@ export default function EmailTemplatesManager() {
         } as any)
         .eq('id', selectedTemplate.id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       toast.success('✅ Template enregistré avec succès');
       loadTemplates();
-      
+
       // Mettre à jour le template sélectionné
       setSelectedTemplate({
         ...selectedTemplate,

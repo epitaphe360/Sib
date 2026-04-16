@@ -62,7 +62,7 @@ export const StatsSection: React.FC = () => {
               <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-6 sm:p-8 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-300 hover:shadow-lg hover:shadow-blue-900/20">
                 {/* Glow effect on hover */}
                 <div className={`absolute -inset-1 bg-gradient-to-br ${stat.glowColor} to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl`} />
-                
+
                 <div className="relative flex flex-col items-center text-center">
                   {/* Icon */}
                   <div className={`p-3 rounded-xl ${stat.bg} mb-4 group-hover:scale-110 transition-transform duration-300`}>

@@ -58,7 +58,7 @@ class _UpcomingEvents extends State<UpcomingEvents> {
                         height: 50,
                         child: Center(
                             child: CircularProgressIndicator(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                         ))),
                     errorWidget: (_, __, ___) => _placeholderBox(),
                   )
@@ -123,7 +123,7 @@ class _UpcomingEvents extends State<UpcomingEvents> {
       width: 141,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [ThemeColor.colorAccent, ThemeColor.colorAccent.withOpacity(0.7)],
+          colors: [ThemeColor.colorAccent, ThemeColor.colorAccent.withValues(alpha: 0.7)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

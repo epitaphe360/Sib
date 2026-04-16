@@ -8,17 +8,17 @@ interface AuthActionProps {
    * Fonction à exécuter si l'utilisateur est authentifié
    */
   onAuthenticated: () => void;
-  
+
   /**
    * Fonction à exécuter si l'utilisateur n'est pas authentifié (optionnel)
    */
   onUnauthenticated?: () => void;
-  
+
   /**
    * URL vers laquelle rediriger après authentification (optionnel)
    */
   redirectAfterAuth?: string;
-  
+
   /**
    * Enfants du composant
    */
@@ -27,10 +27,10 @@ interface AuthActionProps {
 
 /**
  * Hook personnalisé pour gérer les actions requérant l'authentification
- * 
+ *
  * @example
  * const { requireAuth } = useAuthAction();
- * 
+ *
  * const handleBookAppointment = useCallback(() => {
  *   if (!requireAuth(`/appointments?exhibitor=${id}`)) return;
  *   // Continuer avec la réservation
@@ -48,9 +48,9 @@ export function useAuthAction() {
     if (isAuthenticated && user) {
       return true;
     }
-    
+
     // Rediriger vers login avec URL de retour
-    const loginUrl = redirectUrl 
+    const loginUrl = redirectUrl
       ? `${ROUTES.LOGIN}?redirect=${encodeURIComponent(redirectUrl)}`
       : ROUTES.LOGIN;
     navigate(loginUrl);

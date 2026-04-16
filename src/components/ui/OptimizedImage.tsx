@@ -73,7 +73,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
    * Supporte les transformations d'URL Supabase Storage
    */
   const generateSrcSet = (originalSrc: string): string | undefined => {
-    if (!originalSrc || originalSrc === fallback) return undefined;
+    if (!originalSrc || originalSrc === fallback) {return undefined;}
 
     // Si c'est une URL Supabase Storage, on peut ajouter des paramètres de transformation
     if (originalSrc.includes('supabase.co/storage')) {

@@ -29,11 +29,11 @@ export const getVisitorAvatar = (appointment: Appointment): string => {
  */
 export const getVisitorFullName = (appointment: Appointment): string => {
   const name = appointment.visitor?.name;
-  
+
   if (name) {
     return name;
   }
-  
+
   return `Visiteur #${appointment.visitorId}`;
 };
 

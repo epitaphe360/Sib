@@ -50,15 +50,15 @@ export const MatchmakingDashboard: React.FC = () => {
           {t('networking.ai_reserved_premium')}
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button 
+          <Button
             onClick={() => navigate(ROUTES.VISITOR_UPGRADE)}
             className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
           >
             {t('visitor.upgrade_level')}
             <ArrowRight className="h-5 w-5 ml-2" />
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => navigate(-1)}
             className="px-8 py-3 rounded-xl border-2"
           >
@@ -70,7 +70,7 @@ export const MatchmakingDashboard: React.FC = () => {
   }
 
   const loadRecommendations = async () => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       const recs = await MatchmakingService.getRecommendations(user.id, 20);
@@ -83,7 +83,7 @@ export const MatchmakingDashboard: React.FC = () => {
   };
 
   const loadNetworkStrength = async () => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       const strength = await MatchmakingService.calculateNetworkStrength(user.id);
@@ -94,21 +94,21 @@ export const MatchmakingDashboard: React.FC = () => {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600 bg-green-100';
-    if (score >= 60) return 'text-blue-600 bg-blue-100';
-    if (score >= 40) return 'text-yellow-600 bg-yellow-100';
+    if (score >= 80) {return 'text-green-600 bg-green-100';}
+    if (score >= 60) {return 'text-blue-600 bg-blue-100';}
+    if (score >= 40) {return 'text-yellow-600 bg-yellow-100';}
     return 'text-gray-600 bg-gray-100';
   };
 
   const getScoreLabel = (score: number) => {
-    if (score >= 80) return t('networking.excellent_match');
-    if (score >= 60) return t('networking.good_match');
-    if (score >= 40) return t('networking.potential_match');
+    if (score >= 80) {return t('networking.excellent_match');}
+    if (score >= 60) {return t('networking.good_match');}
+    if (score >= 40) {return t('networking.potential_match');}
     return t('networking.low_match');
   };
 
   const handleConnect = async (targetUserId: string) => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       await MatchmakingService.sendConnectionRequest(user.id, targetUserId);
@@ -121,12 +121,12 @@ export const MatchmakingDashboard: React.FC = () => {
   };
 
   const handleMessage = (_targetUserId: string, _targetName: string) => {
-    if (!user) return;
+    if (!user) {return;}
     navigate(`/messages?userId=${_targetUserId}`);
   };
 
   const handleLike = async (targetUserId: string) => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       await MatchmakingService.likeProfile(user.id, targetUserId);
@@ -251,7 +251,7 @@ export const MatchmakingDashboard: React.FC = () => {
                         </h3>
                         <p className="text-gray-600">Secteur du sport</p>
                       </div>
-                      
+
                       {/* Score */}
                       <div className="text-right">
                         <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-semibold ${getScoreColor(match.score)}`}>

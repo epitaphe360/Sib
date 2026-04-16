@@ -49,7 +49,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
         .eq('type', 'podcast')
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
       setEpisode(data);
     } catch (error) {
       console.error('Error loading podcast episode:', error);
@@ -86,7 +86,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
   };
 
   const formatDuration = (seconds?: number) => {
-    if (!seconds) return 'N/A';
+    if (!seconds) {return 'N/A';}
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     return hours > 0 ? `${hours}h ${minutes}min` : `${minutes}min`;
@@ -148,7 +148,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                   </span>
                 )}
               </div>
-              
+
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
                 {episode.title}
               </h1>

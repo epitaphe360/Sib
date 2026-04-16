@@ -124,7 +124,7 @@ const defaultTestimonials: TestimonialCardProps[] = [
 
 export const TestimonialsSection: React.FC = () => {
   const { data: supabaseTestimonials, loading } = useSupabaseTestimonials(3);
-  
+
   // Utiliser Supabase si disponible, sinon témoignages par défaut
   const testimonials = supabaseTestimonials?.length > 0 ? supabaseTestimonials : defaultTestimonials;
 
@@ -156,7 +156,7 @@ export const TestimonialsSection: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Ce que disent nos participants
           </h2>
-          
+
           <p className="text-blue-100 text-lg max-w-2xl mx-auto">
             Découvrez les expériences des professionnels qui ont participé à SIB
           </p>

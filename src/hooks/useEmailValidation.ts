@@ -49,10 +49,10 @@ function levenshteinDistance(str1: string, str2: string): number {
 }
 
 function getSuggestion(email: string): EmailSuggestion | null {
-  if (!email || !email.includes('@')) return null;
+  if (!email || !email.includes('@')) {return null;}
 
   const [, domain] = email.split('@');
-  if (!domain) return null;
+  if (!domain) {return null;}
 
   let bestMatch = '';
   let minDistance = Infinity;

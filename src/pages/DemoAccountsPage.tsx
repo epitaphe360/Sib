@@ -23,19 +23,19 @@ export const DemoAccountsPage: React.FC = () => {
     { email: 'youssef.alami@royalairmaroc.com', password: 'TestPassword123!', label: '👤 Visiteur - Royal Air Maroc', type: 'visitor', color: '#3B82F6' },
     { email: 'sara.benjelloun@ocp.ma', password: 'TestPassword123!', label: '👤 Visiteur - OCP', type: 'visitor', color: '#3B82F6' },
     { email: 'ahmed.tazi@tangermed.ma', password: 'TestPassword123!', label: '👤 Visiteur - Groupe Atlas', type: 'visitor', color: '#3B82F6' },
-    
+
     // Exposants
     { email: 'r.senhaji@somaport.ma', password: 'TestPassword123!', label: '🏪 Exposant - Constructa Maroc', type: 'exhibitor', color: '#10B981' },
     { email: 'a.idrissi@anp.org.ma', password: 'TestPassword123!', label: '🏭 Exposant - BTP Infrastructures', type: 'exhibitor', color: '#14B8A6' },
     { email: 'f.amrani@ocpgroup.ma', password: 'TestPassword123!', label: '🏗️ Exposant - OCP Group', type: 'exhibitor', color: '#06B6D4' },
     { email: 'k.bennani@tangermed.ma', password: 'TestPassword123!', label: '🏗️ Exposant - Groupe Atlas', type: 'exhibitor', color: '#6366F1' },
-    
+
     // Partenaires
     { email: 'contact@bollore-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - MatBuild Group', type: 'partner', color: '#F59E0B' },
     { email: 'contact@msc-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - UrbanTech Maroc', type: 'partner', color: '#D97706' },
     { email: 'contact@cma-cgm.ma', password: 'TestPassword123!', label: '🤝 Partenaire - EcoBeton', type: 'partner', color: '#EAB308' },
     { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🥈 Partenaire', type: 'partner', color: '#9CA3AF' },
-    
+
     // Admin
     { email: 'admin.sib@sib.com', password: 'Admin123!', label: '⚙️ Administrateur SIB', type: 'admin', color: '#EF4444' },
   ];
@@ -43,15 +43,15 @@ export const DemoAccountsPage: React.FC = () => {
   const handleLogin = async (account: QuickAccount) => {
     setLoggingIn(account.email);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ 
-        email: account.email, 
-        password: account.password 
+      const { error } = await supabase.auth.signInWithPassword({
+        email: account.email,
+        password: account.password
       });
-      
-      if (error) throw error;
-      
+
+      if (error) {throw error;}
+
       toast.success(`✅ Connecté: ${account.label}`);
-      
+
       // Redirection selon le type
       const routes: Record<string, string> = {
         visitor: '/visitor/dashboard',
@@ -69,8 +69,8 @@ export const DemoAccountsPage: React.FC = () => {
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
+    <div style={{
+      minHeight: '100vh',
       background: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%)',
       padding: '20px'
     }}>
@@ -104,10 +104,10 @@ export const DemoAccountsPage: React.FC = () => {
         </div>
 
         {/* Grille de comptes */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-          gap: '15px' 
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: '15px'
         }}>
           {quickAccounts.map((account) => (
             <button
@@ -137,9 +137,9 @@ export const DemoAccountsPage: React.FC = () => {
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >
-              <div style={{ 
-                fontSize: '1.2rem', 
-                fontWeight: 'bold', 
+              <div style={{
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
                 color: account.color,
                 marginBottom: '8px',
                 display: 'flex',
@@ -153,15 +153,15 @@ export const DemoAccountsPage: React.FC = () => {
                 )}
                 {account.label}
               </div>
-              <div style={{ 
-                fontSize: '0.85rem', 
+              <div style={{
+                fontSize: '0.85rem',
                 color: '#94a3b8'
               }}>
                 Compte de démonstration prêt à l'emploi
               </div>
               {showPasswords && (
-                <div style={{ 
-                  fontSize: '0.8rem', 
+                <div style={{
+                  fontSize: '0.8rem',
                   color: '#64748b',
                   fontFamily: 'monospace',
                   marginTop: '4px'
@@ -174,15 +174,15 @@ export const DemoAccountsPage: React.FC = () => {
         </div>
 
         {/* Note */}
-        <div style={{ 
-          textAlign: 'center', 
+        <div style={{
+          textAlign: 'center',
           marginTop: '30px',
           padding: '15px',
           background: 'rgba(255,255,255,0.05)',
           borderRadius: '12px'
         }}>
           <p style={{ color: '#64748b', fontSize: '0.9rem' }}>
-            💡 Mot de passe par défaut: <code style={{ color: '#60a5fa' }}>Demo2026!</code> | 
+            💡 Mot de passe par défaut: <code style={{ color: '#60a5fa' }}>Demo2026!</code> |
             Admin: <code style={{ color: '#f87171' }}>Demo2026!</code>
           </p>
         </div>

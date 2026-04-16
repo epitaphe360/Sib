@@ -132,7 +132,7 @@ describe('apiHelpers', () => {
       const failFn = vi.fn().mockRejectedValue(new Error('network error'));
 
       const retryPromise = withRetry(failFn, { maxRetries: 2, initialDelayMs: 100 });
-      
+
       // Attach handler immediately to avoid unhandled rejection
       const expectPromise = expect(retryPromise).rejects.toThrow('network error');
 
@@ -235,7 +235,7 @@ describe('apiHelpers', () => {
         retry: { maxRetries: 3 },
         rateLimit: true
       });
-      
+
       await vi.advanceTimersByTimeAsync(200);
       const result = await promise;
       expect(result).toBe('success');
@@ -254,7 +254,7 @@ describe('apiHelpers', () => {
     it('should use default options', async () => {
       const successFn = vi.fn().mockResolvedValue('success');
       const promise = robustAPICall(successFn);
-      
+
       await vi.advanceTimersByTimeAsync(200);
       const result = await promise;
       expect(result).toBe('success');

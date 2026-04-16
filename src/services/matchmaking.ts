@@ -67,7 +67,7 @@ export class MatchmakingService {
       ['Bureau d\'études', 'Entreprise de construction'],
       ['Architecte', 'Bureau d\'études structure'],
     ];
-    
+
     for (const [role1, role2] of strategicPairs) {
       if ((user1.role.includes(role1) && user2.role.includes(role2)) ||
           (user1.role.includes(role2) && user2.role.includes(role1))) {
@@ -105,7 +105,7 @@ export class MatchmakingService {
         const idx1 = ALL_PHASES.indexOf(p1);
         for (const p2 of user2Phases) {
           const idx2 = ALL_PHASES.indexOf(p2);
-          if (Math.abs(idx1 - idx2) === 1) consecutiveBonus = Math.max(consecutiveBonus, 8);
+          if (Math.abs(idx1 - idx2) === 1) {consecutiveBonus = Math.max(consecutiveBonus, 8);}
         }
       }
       const phaseScore = Math.min(15, commonPhases.length * 5 + consecutiveBonus);
@@ -189,7 +189,7 @@ export class MatchmakingService {
         .select(this.USER_PROFILE_COLUMNS)
         .neq('user_id', userId);
 
-      if (usersError) throw usersError;
+      if (usersError) {throw usersError;}
 
       // Get user's interaction history
       const { data: interactions } = await supabase
@@ -232,7 +232,7 @@ export class MatchmakingService {
         .eq('user_id', userId)
         .maybeSingle();
 
-      if (error || !userProfile) throw new Error('User profile not found');
+      if (error || !userProfile) {throw new Error('User profile not found');}
 
       // Build query with filters (optimized)
       let query = supabase
@@ -250,7 +250,7 @@ export class MatchmakingService {
 
       const { data: candidates } = await query;
 
-      if (!candidates) return [];
+      if (!candidates) {return [];}
 
       // Filter by interests if specified
       let filteredCandidates = candidates;
@@ -293,7 +293,7 @@ export class MatchmakingService {
           metadata
         }]);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Update match score based on interaction
       await this.updateMatchScore(fromUserId, toUserId, type);
@@ -351,7 +351,7 @@ export class MatchmakingService {
         .eq('from_user_id', userId)
         .order('timestamp', { ascending: false });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('Error getting interaction history:', error);
@@ -397,7 +397,7 @@ export class MatchmakingService {
         .select('type, timestamp')
         .eq('from_user_id', userId);
 
-      if (!connections) return 0;
+      if (!connections) {return 0;}
 
       // Calculate based on connection types and recency
       let score = 0;

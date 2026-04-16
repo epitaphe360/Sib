@@ -38,13 +38,13 @@ export const ProfileEditor: React.FC = () => {
   };
 
   const handleImageUploaded = (newAvatarUrl: string) => {
-    if (!user) return;
+    if (!user) {return;}
     setProfileData(prev => ({ ...prev, avatar: newAvatarUrl }));
     toast.success('Avatar mis à jour. Sauvegardez pour appliquer les changements.');
   };
 
   const handleSave = async () => {
-    if (!user) return;
+    if (!user) {return;}
 
     const { avatar, ...profileDetails } = profileData;
 
@@ -59,7 +59,7 @@ export const ProfileEditor: React.FC = () => {
         const updatedUser = { ...user, profile: { ...(user.profile || {}), ...profileData } };
         useAuthStore.getState().setUser(updatedUser);
       }
-      
+
       toast.success('Profil mis à jour avec succès !');
       setIsEditing(false);
     } catch (error) {
@@ -94,9 +94,9 @@ export const ProfileEditor: React.FC = () => {
 
       <div className="flex items-center gap-6">
         <div className="relative">
-          <img 
-            src={profileData.avatar || '/default-avatar.png'} 
-            alt="Avatar" 
+          <img
+            src={profileData.avatar || '/default-avatar.png'}
+            alt="Avatar"
             className="w-24 h-24 rounded-full object-cover"
           />
           {isEditing && (

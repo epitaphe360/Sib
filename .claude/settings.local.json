@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(grep:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm audit:*)",
+      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\(Object.keys\\({...p.dependencies,...p.devDependencies}\\).filter\\(k=>k.includes\\('rate'\\)||k.includes\\('helmet'\\)||k.includes\\('dompurify'\\)\\).join\\(', '\\)\\)\")",
+      "Bash(npm install *)",
+      "Bash(cat)",
+      "Bash(bash /tmp/unused_routes.sh)"
     ]
   }
 }

@@ -44,8 +44,8 @@ export const PartnerEventsPage: React.FC = () => {
         .order('start_date', { ascending: false })
         .range(0, 49);
 
-      if (error) throw error;
-      if (data) setEvents(data as unknown as Event[]); // Cast might be needed depending on type definitions, but for now assuming it fits
+      if (error) {throw error;}
+      if (data) {setEvents(data as unknown as Event[]);} // Cast might be needed depending on type definitions, but for now assuming it fits
     } catch (error) {
       console.error('Error loading events:', error);
     } finally {
@@ -54,14 +54,14 @@ export const PartnerEventsPage: React.FC = () => {
   }
 
   const getStatusLabel = (status: string) => {
-    if (status === 'published') return t('partner.status.upcoming', 'À venir');
-    if (status === 'draft') return t('partner.status.draft', 'Brouillon');
+    if (status === 'published') {return t('partner.status.upcoming', 'À venir');}
+    if (status === 'draft') {return t('partner.status.draft', 'Brouillon');}
     return status;
   };
 
   const getStatusVariant = (status: string): 'info' | 'warning' | 'success' => {
-    if (status === 'published') return 'info';
-    if (status === 'draft') return 'warning';
+    if (status === 'published') {return 'info';}
+    if (status === 'draft') {return 'warning';}
     return 'success';
   };
 

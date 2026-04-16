@@ -41,10 +41,10 @@ export default function EspacesSibPage() {
 
   const espaces = (() => {
     const raw = cms.espaces_json;
-    if (!raw) return defaultEspaces;
+    if (!raw) {return defaultEspaces;}
     try {
       const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return defaultEspaces;
+      if (!Array.isArray(parsed)) {return defaultEspaces;}
       const icons = [Wrench, GraduationCap, Briefcase, Tv, Handshake];
       return parsed.map((item: any, idx: number) => ({
         icon: icons[idx % icons.length],

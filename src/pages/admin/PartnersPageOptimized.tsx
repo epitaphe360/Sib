@@ -48,8 +48,7 @@ import { motion } from 'framer-motion';
 import { apiService } from '../../services/apiService';
 import { useOptimizedList } from '../../hooks/useOptimizedList';
 import { exportService } from '../../services/exportService';
-import { RATE_LIMITS } from '../../middleware/rateLimiter';
-import { useRateLimit } from '../../middleware/rateLimiter';
+import { RATE_LIMITS, useRateLimit } from '../../middleware/rateLimiter';
 import { logger } from '../../lib/logger';
 
 interface Partner {
@@ -141,8 +140,8 @@ export default function PartnersPageOptimized() {
     initialSortField: 'organization_name',
     initialSortDirection: 'asc',
     filterFn: (partner, filters) => {
-      if (filters.partner_type && partner.partner_type !== filters.partner_type) return false;
-      if (filters.status && partner.status !== filters.status) return false;
+      if (filters.partner_type && partner.partner_type !== filters.partner_type) {return false;}
+      if (filters.status && partner.status !== filters.status) {return false;}
       return true;
     },
   });
@@ -211,7 +210,7 @@ export default function PartnersPageOptimized() {
   };
 
   const renderSortIcon = (field: keyof Partner) => {
-    if (sortField !== field) return null;
+    if (sortField !== field) {return null;}
     return sortDirection === 'asc' ? (
       <ChevronUp className="h-4 w-4 inline ml-1" />
     ) : (

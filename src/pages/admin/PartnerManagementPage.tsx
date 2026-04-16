@@ -57,7 +57,7 @@ export default function PartnerManagementPage() {
         }
       }
       const { data, error } = await query;
-      if (error) throw error;
+      if (error) {throw error;}
       setPartners((SupabaseService as any).mapPartners ? (SupabaseService as any).mapPartners(data) : (data || []).map((p: any) => ({
         id: p.id,
         name: p.company_name || 'Partenaire',
@@ -87,12 +87,12 @@ export default function PartnerManagementPage() {
           .from('partners')
           .delete()
           .eq('id', id);
-        
-        if (error) throw error;
-        
+
+        if (error) {throw error;}
+
         // Supprimer immédiatement du state local
         setPartners(partners.filter(p => p.id !== id));
-        
+
         toast.success('Partenaire supprimé avec succès');
         // Ensuite faire un refresh complet
         setTimeout(() => fetchPartners(), 500);
@@ -107,7 +107,7 @@ export default function PartnerManagementPage() {
     const matchesSearch = partner.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          partner.description?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesTier = filterTier === 'all' || partner.partner_tier === filterTier;
-    const matchesStatus = filterStatus === 'all' || 
+    const matchesStatus = filterStatus === 'all' ||
                          (filterStatus === 'verified' && partner.verified) ||
                          (filterStatus === 'featured' && partner.featured);
     return matchesSearch && matchesTier && matchesStatus;
@@ -126,7 +126,7 @@ export default function PartnerManagementPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('common.back_to_dashboard')}
           </Link>
-          
+
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{t('admin.partners_management')}</h1>
@@ -246,7 +246,7 @@ export default function PartnerManagementPage() {
             </h3>
             <p className="text-gray-600 mb-6">
               {searchTerm || filterTier !== 'all' || filterStatus !== 'all'
-                ? 'Essayez de modifier vos critères de recherche' 
+                ? 'Essayez de modifier vos critères de recherche'
                 : 'Commencez par créer votre premier partenaire'}
             </p>
             {!searchTerm && filterTier === 'all' && filterStatus === 'all' && (
@@ -271,8 +271,8 @@ export default function PartnerManagementPage() {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       {partner.logo && (
-                        <img 
-                          src={partner.logo} 
+                        <img
+                          src={partner.logo}
                           alt={partner.name}
                           className="w-24 h-24 object-contain mb-3 rounded bg-white border border-gray-200 p-2"
                         />
@@ -281,7 +281,7 @@ export default function PartnerManagementPage() {
                         {partner.name}
                       </h3>
                       <div className="flex gap-2 flex-wrap">
-                        <Badge 
+                        <Badge
                           variant={partner.verified ? 'success' : 'warning'}
                           className="text-xs"
                         >

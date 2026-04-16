@@ -21,7 +21,7 @@ export const MobilePreview: React.FC<MobilePreviewProps> = ({ sections, siteConf
   };
 
   const renderSection = (section: SiteSection) => {
-    if (!section.visible) return null;
+    if (!section.visible) {return null;}
 
     switch (section.type) {
       case 'hero':

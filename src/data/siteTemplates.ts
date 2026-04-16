@@ -492,7 +492,7 @@ export async function seedTemplates(supabase: any) {
       .from('site_templates')
       .upsert(siteTemplates, { onConflict: 'id' });
 
-    if (error) throw error;
+    if (error) {throw error;}
     console.log('Templates seeded successfully');
     return data;
   } catch (error) {

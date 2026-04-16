@@ -1,6 +1,5 @@
 ﻿import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:com.urbaevent/model/agent/ResponseGateList.dart';
 import 'package:com.urbaevent/ui/content_ui/agent/MyScans.dart';
@@ -28,7 +27,7 @@ class Profile extends StatefulWidget {
 
   final title;
   final subtitle;
-  ResponseUser? responseUser;
+  final ResponseUser? responseUser;
 
   Profile(this.title, this.subtitle, this.callback, this.responseUser);
 
@@ -1170,7 +1169,7 @@ class _Profile extends State<Profile> {
 }
 
 class PasswordVisibilityDialog extends StatefulWidget {
-  bool loader;
+  final bool loader;
 
   final TextEditingController _oldPasswordController;
   final TextEditingController _passwordController;
@@ -1187,7 +1186,7 @@ class PasswordVisibilityDialog extends StatefulWidget {
 class _PasswordVisibilityDialogState extends State<PasswordVisibilityDialog> {
   Future<void> changePassword() async {
     setState(() {
-      widget.loader = true;
+      _isOldPasswordVisible = false;
     });
     Preference preference = await Preference.getInstance();
 
@@ -1213,7 +1212,7 @@ class _PasswordVisibilityDialogState extends State<PasswordVisibilityDialog> {
       Utils.showToast(error.error.message);
     }
     setState(() {
-      widget.loader = false;
+      _isPasswordVisible = false;
     });
   }
 

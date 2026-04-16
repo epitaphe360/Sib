@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 class CustomBottomBarAgent extends StatefulWidget {
   final Function(int) callback;
 
-  int uiMode;
+  final int uiMode;
 
   CustomBottomBarAgent(this.uiMode, this.callback);
 
@@ -16,10 +16,12 @@ class CustomBottomBarAgent extends StatefulWidget {
 
 class _CustomBottomBar extends State<CustomBottomBarAgent> {
   int role = 3;
+  late int _uiMode;
 
   @override
   void initState() {
     super.initState();
+    _uiMode = widget.uiMode;
   }
 
   ColorFilter _getColorFilter(bool condition) {
@@ -63,12 +65,12 @@ class _CustomBottomBar extends State<CustomBottomBarAgent> {
               IconButton(
                 icon: SvgPicture.asset(
                   "assets/ic_home.svg",
-                  colorFilter: _getColorFilter(widget.uiMode == 0),
+                  colorFilter: _getColorFilter(_uiMode == 0),
                 ),
                 // Replace with your image asset path
                 onPressed: () {
                   setState(() {
-                    widget.uiMode = 0;
+                    _uiMode = 0;
                   });
                   widget.callback(0);
                 },
@@ -77,11 +79,11 @@ class _CustomBottomBar extends State<CustomBottomBarAgent> {
               if (role != 3)
                 IconButton(
                   icon: SvgPicture.asset("assets/ic_contacts.svg",
-                      colorFilter: _getColorFilter(widget.uiMode == 1)),
+                      colorFilter: _getColorFilter(_uiMode == 1)),
                   // Replace with your image asset path
                   onPressed: () {
                     setState(() {
-                      widget.uiMode = 1;
+                      _uiMode = 1;
                     });
                     widget.callback(1);
                   },
@@ -96,7 +98,7 @@ class _CustomBottomBar extends State<CustomBottomBarAgent> {
                 // Replace with your image asset path
                 onPressed: () {
                   setState(() {
-                    widget.uiMode = 2;
+                    _uiMode = 2;
                   });
                   widget.callback(2);
                 },
@@ -105,11 +107,11 @@ class _CustomBottomBar extends State<CustomBottomBarAgent> {
               if (role != 3)
                 IconButton(
                   icon: Image.asset('assets/icon_menu_qr.png',
-                      color: _getColor(widget.uiMode == 3)),
+                      color: _getColor(_uiMode == 3)),
                   // Replace with your image asset path
                   onPressed: () {
                     setState(() {
-                      widget.uiMode = 3;
+                      _uiMode = 3;
                     });
                     widget.callback(3);
                   },
@@ -117,11 +119,11 @@ class _CustomBottomBar extends State<CustomBottomBarAgent> {
               Spacer(),
               IconButton(
                 icon: Image.asset('assets/icon_profile.png',width: 23,height: 23,
-                    color: _getColor(widget.uiMode == 4)),
+                    color: _getColor(_uiMode == 4)),
                 // Replace with your image asset path
                 onPressed: () {
                   setState(() {
-                    widget.uiMode = 4;
+                    _uiMode = 4;
                   });
                   widget.callback(4);
                 },
@@ -136,3 +138,4 @@ class _CustomBottomBar extends State<CustomBottomBarAgent> {
     );
   }
 }
+

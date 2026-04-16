@@ -98,7 +98,7 @@ export default function ExhibitorSignUpPage() {
   }, [errors]);
 
   const watchedFields = watch();
-  
+
   // Auto-save functionality
   // SECURITY: Exclude password fields from localStorage
   const { loadFromLocalStorage, clearLocalStorage } = useFormAutoSave<ExhibitorSignUpFormValues>({
@@ -107,7 +107,7 @@ export default function ExhibitorSignUpPage() {
     delay: 2000,
     excludeFields: ['password', 'confirmPassword'] // Never save passwords
   });
-  
+
   // Email validation
   const { suggestion: emailSuggestion } = useEmailValidation(watchedFields.email || '');
 
@@ -290,7 +290,7 @@ export default function ExhibitorSignUpPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <motion.div 
+      <motion.div
         className="max-w-4xl w-full space-y-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -353,16 +353,16 @@ export default function ExhibitorSignUpPage() {
               <h3 className="text-xl font-semibold text-gray-900 border-b pb-3">
                 Informations sur votre entreprise
               </h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="companyName">Nom de l'entreprise *</Label>
                   <div className="relative">
                     <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input 
-                      id="companyName" 
-                      {...register('companyName')} 
-                      placeholder="Votre entreprise" 
+                    <Input
+                      id="companyName"
+                      {...register('companyName')}
+                      placeholder="Votre entreprise"
                       className="pl-10"
                       autoComplete="organization"
                     />
@@ -409,11 +409,11 @@ export default function ExhibitorSignUpPage() {
                   <Label htmlFor="website">Site web (optionnel)</Label>
                   <div className="relative">
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input 
-                      id="website" 
+                    <Input
+                      id="website"
                       type="url"
-                      {...register('website')} 
-                      placeholder="https://www.example.com" 
+                      {...register('website')}
+                      placeholder="https://www.example.com"
                       className="pl-10"
                       autoComplete="url"
                     />
@@ -424,12 +424,12 @@ export default function ExhibitorSignUpPage() {
 
               <div>
                 <Label htmlFor="companyDescription">Description de votre organisation *</Label>
-                <Textarea 
-                  id="companyDescription" 
-                  {...register('companyDescription')} 
+                <Textarea
+                  id="companyDescription"
+                  {...register('companyDescription')}
                   rows={4}
                   maxLength={MAX_DESCRIPTION_LENGTH}
-                  placeholder="Décrivez votre organisation, vos activités et vos objectifs pour SIB 2026." 
+                  placeholder="Décrivez votre organisation, vos activités et vos objectifs pour SIB 2026."
                 />
                 {errors.companyDescription && <p className="text-red-500 text-xs mt-1">{errors.companyDescription.message}</p>}
                 <p className="text-xs text-gray-500 mt-1">
@@ -447,9 +447,9 @@ export default function ExhibitorSignUpPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="firstName">Prénom *</Label>
-                  <Input 
-                    id="firstName" 
-                    {...register('firstName')} 
+                  <Input
+                    id="firstName"
+                    {...register('firstName')}
                     placeholder="Votre prénom"
                     autoComplete="given-name"
                   />
@@ -457,9 +457,9 @@ export default function ExhibitorSignUpPage() {
                 </div>
                 <div>
                   <Label htmlFor="lastName">Nom *</Label>
-                  <Input 
-                    id="lastName" 
-                    {...register('lastName')} 
+                  <Input
+                    id="lastName"
+                    {...register('lastName')}
                     placeholder="Votre nom"
                     autoComplete="family-name"
                   />
@@ -471,10 +471,10 @@ export default function ExhibitorSignUpPage() {
                 <Label htmlFor="position">Poste / Fonction *</Label>
                 <div className="relative">
                   <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <Input 
-                    id="position" 
-                    {...register('position')} 
-                    placeholder="Votre poste" 
+                  <Input
+                    id="position"
+                    {...register('position')}
+                    placeholder="Votre poste"
                     className="pl-10"
                   />
                 </div>
@@ -492,11 +492,11 @@ export default function ExhibitorSignUpPage() {
                 <Label htmlFor="email">Adresse e-mail professionnelle *</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <Input 
-                    id="email" 
-                    type="email" 
-                    {...register('email')} 
-                    placeholder="contact@votre-entreprise.com" 
+                  <Input
+                    id="email"
+                    type="email"
+                    {...register('email')}
+                    placeholder="contact@votre-entreprise.com"
                     className="pl-10"
                     autoComplete="email"
                   />
@@ -529,11 +529,11 @@ export default function ExhibitorSignUpPage() {
                 <Label htmlFor="phone">Téléphone professionnel *</Label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <Input 
-                    id="phone" 
-                    type="tel" 
-                    {...register('phone')} 
-                    placeholder="+33 1 23 45 67 89" 
+                  <Input
+                    id="phone"
+                    type="tel"
+                    {...register('phone')}
+                    placeholder="+33 1 23 45 67 89"
                     className="pl-10"
                     autoComplete="tel"
                   />
@@ -553,11 +553,11 @@ export default function ExhibitorSignUpPage() {
                   <Label htmlFor="password">Mot de passe *</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input 
-                      id="password" 
-                      type="password" 
-                      {...register('password')} 
-                      placeholder="Créez un mot de passe sécurisé" 
+                    <Input
+                      id="password"
+                      type="password"
+                      {...register('password')}
+                      placeholder="Créez un mot de passe sécurisé"
                       className="pl-10"
                       autoComplete="new-password"
                     />
@@ -569,11 +569,11 @@ export default function ExhibitorSignUpPage() {
                   <Label htmlFor="confirmPassword">Confirmer le mot de passe *</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input 
-                      id="confirmPassword" 
-                      type="password" 
-                      {...register('confirmPassword')} 
-                      placeholder="Confirmez votre mot de passe" 
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      {...register('confirmPassword')}
+                      placeholder="Confirmez votre mot de passe"
                       className="pl-10"
                       autoComplete="new-password"
                     />
@@ -586,7 +586,7 @@ export default function ExhibitorSignUpPage() {
             {/* CGU et RGPD */}
             <div className="space-y-4 border-t pt-6">
               <h3 className="text-lg font-medium text-gray-900">Conditions Générales</h3>
-              
+
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <input
@@ -635,15 +635,15 @@ export default function ExhibitorSignUpPage() {
             </div>
 
             <div className="space-y-3">
-              <Button 
-                type="submit" 
-                className="w-full" 
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={isLoading}
                 variant="default"
               >
                 {isLoading ? 'Envoi en cours...' : "Prévisualiser et soumettre"}
               </Button>
-              
+
               {watchedFields && Object.keys(watchedFields).length > 0 && (
                 <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
                   <Save className="h-3 w-3" />

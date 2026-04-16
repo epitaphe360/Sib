@@ -180,7 +180,7 @@ export function usePartnerTier() {
 export function usePartnerAccess(minimumTier?: PartnerTier, requiredTier?: PartnerTier): boolean {
   const currentTier = usePartnerTier();
 
-  if (!currentTier) return false;
+  if (!currentTier) {return false;}
 
   if (requiredTier) {
     return currentTier === requiredTier;

@@ -25,10 +25,10 @@ export default function NewsManagementPage() {
     if (window.confirm(t('common.delete_confirm', { name: title }))) {
       try {
         await deleteNewsArticle(id);
-        
+
         // Supprimer immédiatement du state local
         setArticles(articles.filter(a => a.id !== id));
-        
+
         toast.success(t('common.delete_success'));
         // Ensuite faire un refresh complet
         setTimeout(() => fetchNews(), 500);
@@ -57,7 +57,7 @@ export default function NewsManagementPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('common.back_to_dashboard')}
           </Link>
-          
+
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{t('admin.news_management')}</h1>
@@ -118,7 +118,7 @@ export default function NewsManagementPage() {
                   {articles.filter(a => {
                     const articleDate = new Date(a.publishedAt);
                     const now = new Date();
-                    return articleDate.getMonth() === now.getMonth() && 
+                    return articleDate.getMonth() === now.getMonth() &&
                            articleDate.getFullYear() === now.getFullYear();
                   }).length}
                 </p>
@@ -166,8 +166,8 @@ export default function NewsManagementPage() {
             <Eye className="h-16 w-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('admin.no_articles_found')}</h3>
             <p className="text-gray-500 mb-6">
-              {searchTerm || filterCategory !== 'all' 
-                ? t('admin.no_articles_criteria') 
+              {searchTerm || filterCategory !== 'all'
+                ? t('admin.no_articles_criteria')
                 : t('admin.create_first_article')}
             </p>
             {!searchTerm && filterCategory === 'all' && (
@@ -199,9 +199,9 @@ export default function NewsManagementPage() {
                           </Badge>
                         )}
                       </div>
-                      
+
                       <p className="text-gray-600 mb-3 line-clamp-2">{article.excerpt}</p>
-                      
+
                       <div className="flex items-center gap-4 text-sm text-gray-500">
                         <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4" />

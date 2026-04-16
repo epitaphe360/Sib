@@ -4,8 +4,8 @@ import { NetworkingRecommendation, User } from '@/types';
 import RecommendationService from '@/services/recommendationService';
 import useAuthStore from './authStore';
 import { SupabaseService } from '@/services/supabaseService';
-import { 
-  getNetworkingPermissions, 
+import {
+  getNetworkingPermissions,
   getEventAccessPermissions,
   checkDailyLimits,
   getPermissionErrorMessage,
@@ -44,15 +44,17 @@ const generateAIInsights = async (userId: string): Promise<AIInsights> => {
 
     // Récupérer tous les utilisateurs pour analyser le réseau
     const allUsers = await SupabaseService.getUsers().catch(() => []);
-    
+
     // Analyser les secteurs des connexions
     const connectedUsers = allUsers.filter(u => connections.includes(u.id));
-    const sectors = connectedUsers.map(u => u.profile?.sector).filter(Boolean);
+    const sectors = connectedUsers
+      .flatMap(u => u.profile?.sectors ?? [])
+      .filter(Boolean);
     const sectorCounts = sectors.reduce((acc, sector) => {
       acc[sector!] = (acc[sector!] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-    
+
     const topSectors = Object.entries(sectorCounts)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 3)
@@ -70,7 +72,7 @@ const generateAIInsights = async (userId: string): Promise<AIInsights> => {
     const totalConnections = connections.length;
     const totalFavorites = favorites.length;
     const pendingCount = pendingConns.length;
-    
+
     let summary = `Votre réseau compte ${totalConnections} connexion${totalConnections > 1 ? 's' : ''} active${totalConnections > 1 ? 's' : ''}`;
     if (topSectors.length > 0) {
       summary += ` principalement dans ${topSectors.length > 1 ? 'les secteurs' : 'le secteur'} ${topSectors.join(', ')}`;
@@ -164,12 +166,12 @@ interface NetworkingState {
   aiInsights: AIInsights | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // Permissions and usage tracking
   permissions: NetworkingPermissions | null;
   eventPermissions: EventAccessPermissions | null;
   dailyUsage: DailyUsage;
-  
+
   // Appointment Modal State
   showAppointmentModal: boolean;
   selectedExhibitorForRDV: User | null;
@@ -180,25 +182,25 @@ interface NetworkingState {
   fetchRecommendations: () => Promise<void>;
   generateRecommendations: (userId: string) => Promise<void>;
   markAsContacted: (recommendedUserId: string) => void;
-  
+
   // Permission-aware actions
   handleConnect: (userId: string, userName: string) => Promise<void>;
   addToFavorites: (userId: string) => Promise<void>;
   removeFromFavorites: (userId: string) => Promise<void>;
   handleMessage: (userName: string, company: string, userId?: string, navigateFn?: (path: string) => void) => void;
   handleScheduleMeeting: (userName: string, company: string) => void;
-  
+
   // Data loading
   loadConnections: () => Promise<void>;
   loadFavorites: () => Promise<void>;
   loadPendingConnections: () => Promise<void>;
   loadDailyUsage: () => Promise<void>;
-  
+
   // Permission management
   updatePermissions: () => void;
   checkActionPermission: (action: 'connect' | 'message' | 'meeting') => boolean;
   getRemainingQuota: () => { connections: number; messages: number; meetings: number };
-  
+
   // AI and insights
   loadAIInsights: () => void;
 
@@ -218,7 +220,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
   aiInsights: null,
   isLoading: false,
   error: null,
-  
+
   // Permissions and usage
   permissions: null,
   eventPermissions: null,
@@ -228,7 +230,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     meetings: 0,
     lastReset: new Date(),
   },
-  
+
   // Appointment Modal State
   showAppointmentModal: false,
   selectedExhibitorForRDV: null,
@@ -260,7 +262,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       await get().fetchRecommendations();
-      
+
       const currentRecs = get().recommendations;
       if (currentRecs.length > 0) {
         await get().loadAIInsights();
@@ -301,7 +303,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       // Créer la connexion dans Supabase
       // Note: createConnection prend seulement l'ID du destinataire, l'utilisateur courant est récupéré via auth
       const result = await SupabaseService.createConnection(userId);
-      
+
       // Mettre à jour le state local avec un objet correctement formaté
       const newPendingConnection: PendingConnection = {
         id: result?.id || `temp-${Date.now()}`,
@@ -311,16 +313,16 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
         created_at: new Date().toISOString(),
         requester: user
       };
-      
+
       set(state => ({
         pendingConnections: [...state.pendingConnections, newPendingConnection],
       }));
-      
+
       // Recharger l'usage quotidien depuis la DB
       await get().loadDailyUsage();
-      
+
       toast.success(`✅ Demande de connexion envoyée à ${userName}.`);
-      
+
       // Show remaining quota if limited
       const remaining = get().getRemainingQuota();
       if (remaining.connections > 0 && remaining.connections < 5) {
@@ -329,7 +331,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     } catch (error: unknown) {
       console.error('Erreur lors de la connexion:', error);
       const errorMessage = error instanceof Error ? error.message : String(error);
-      
+
       // Message spécifique pour connexion déjà existante
       if (errorMessage.includes('duplicate') || errorMessage.includes('déjà une demande')) {
         toast.warning(errorMessage);
@@ -403,12 +405,13 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       if (navigateFn) {
         navigateFn(`/messages?userId=${userId}`);
       } else {
-        window.location.href = `/messages?userId=${userId}`;
+        // Pas de fallback window.location.href — le appelant doit toujours fournir navigateFn
+        console.warn('[networkingStore] handleMessage appelé sans navigateFn, navigation ignorée');
       }
     } else {
       toast.success(`💬 Message envoyé à ${userName} de ${company}.`);
     }
-    
+
     // Show remaining quota
     const remaining = get().getRemainingQuota();
     if (remaining.messages > 0 && remaining.messages < 5) {
@@ -438,7 +441,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     }));
 
     toast.success(`📅 Demande de rendez-vous envoyée à ${userName} de ${company}.`);
-    
+
     // Show remaining quota
     const remaining = get().getRemainingQuota();
     if (remaining.meetings > 0 && remaining.meetings < 3) {
@@ -449,7 +452,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
   // Data loading methods
   loadConnections: async () => {
     const { user } = useAuthStore.getState();
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       const connectionsData = await SupabaseService.getUserConnections(user.id);
@@ -466,7 +469,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
 
   loadFavorites: async () => {
     const { user } = useAuthStore.getState();
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       const favorites = await SupabaseService.getUserFavorites(user.id);
@@ -484,7 +487,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
 
   loadPendingConnections: async () => {
     const { user } = useAuthStore.getState();
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       const pendingConnections = await SupabaseService.getPendingConnections(user.id);
@@ -496,7 +499,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
 
   loadDailyUsage: async () => {
     const { user } = useAuthStore.getState();
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       const quotas = await SupabaseService.getDailyQuotas(user.id);
@@ -516,18 +519,18 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
   // Permission management methods
   updatePermissions: () => {
     const { user } = useAuthStore.getState();
-    if (!user) return;
+    if (!user) {return;}
 
     const permissions = getNetworkingPermissions(user.type, user.profile?.passType || user.profile?.status || 'free');
     const eventPermissions = getEventAccessPermissions(user.type, user.profile?.passType || user.profile?.status || 'free');
-    
+
     set({ permissions, eventPermissions });
   },
 
   checkActionPermission: (action: 'connect' | 'message' | 'meeting') => {
     const { user } = useAuthStore.getState();
     const state = get();
-    
+
     if (!user || !state.permissions) {
       get().updatePermissions();
       return false;
@@ -536,19 +539,19 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     // Check basic permission
     switch (action) {
       case 'connect':
-        if (!state.permissions.canMakeConnections) return false;
+        if (!state.permissions.canMakeConnections) {return false;}
         break;
       case 'message':
-        if (!state.permissions.canSendMessages) return false;
+        if (!state.permissions.canSendMessages) {return false;}
         break;
       case 'meeting':
-        if (!state.permissions.canScheduleMeetings) return false;
+        if (!state.permissions.canScheduleMeetings) {return false;}
         break;
     }
 
     // Check daily limits
     const limits = checkDailyLimits(user.type, user.profile?.passType || user.profile?.status, state.dailyUsage);
-    
+
     switch (action) {
       case 'connect':
         return limits.canMakeConnection;
@@ -564,11 +567,11 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
   getRemainingQuota: () => {
     const { user } = useAuthStore.getState();
     const state = get();
-    
-    if (!user) return { connections: 0, messages: 0, meetings: 0 };
-    
+
+    if (!user) {return { connections: 0, messages: 0, meetings: 0 };}
+
     const limits = checkDailyLimits(user.type, user.profile?.passType || user.profile?.status, state.dailyUsage);
-    
+
     return {
       connections: limits.remainingConnections,
       messages: limits.remainingMessages,
@@ -584,7 +587,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     }
 
     set({ isLoading: true, aiInsights: null });
-    
+
     try {
       // S'assurer que les données de base sont chargées
       const state = get();
@@ -597,14 +600,14 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       if (state.pendingConnections.length === 0) {
         await state.loadPendingConnections();
       }
-      
+
       // Générer les insights
       const insights = await generateAIInsights(user.id);
       set({ aiInsights: insights, isLoading: false });
       toast.success('✨ Insights IA générés avec succès !');
     } catch (error) {
       console.error('Erreur lors de la génération des insights:', error);
-      set({ 
+      set({
         isLoading: false,
         aiInsights: {
           summary: "Une erreur s'est produite lors de l'analyse de votre réseau. Veuillez réessayer.",

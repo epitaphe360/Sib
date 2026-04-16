@@ -6,7 +6,7 @@
 // Nettoyage complet
 function cleanupAuth() {
   console.log('🧹 Nettoyage du localStorage...');
-  
+
   // Supprimer toutes les clés d'auth
   const keysToRemove = [
     'sib-auth-storage',
@@ -14,18 +14,18 @@ function cleanupAuth() {
     'supabase.auth.token',
     'supabase.auth.refreshToken'
   ];
-  
+
   keysToRemove.forEach(key => {
     if (localStorage.getItem(key)) {
       console.log(`  ❌ Suppression de: ${key}`);
       localStorage.removeItem(key);
     }
   });
-  
+
   // Nettoyer sessionStorage
   sessionStorage.clear();
   console.log('  ✅ SessionStorage nettoyé');
-  
+
   // Vérifier ce qui reste
   console.log('\n📋 Contenu localStorage restant:');
   for (let i = 0; i < localStorage.length; i++) {
@@ -34,14 +34,14 @@ function cleanupAuth() {
       console.log(`  - ${key}`);
     }
   }
-  
+
   console.log('\n✅ Nettoyage terminé! Rechargez la page (F5)');
 }
 
 // Vérifier l'état actuel
 function checkAuthStatus() {
   console.log('🔍 Vérification de l\'état d\'authentification...\n');
-  
+
   const authStorage = localStorage.getItem('sib-auth-storage');
   if (authStorage) {
     try {
@@ -51,7 +51,7 @@ function checkAuthStatus() {
       console.log('  - Email:', parsed.state?.user?.email);
       console.log('  - Type:', parsed.state?.user?.type);
       console.log('  - Nom:', parsed.state?.user?.name);
-      
+
       if (parsed.state?.user?.type === 'admin') {
         console.warn('\n⚠️ ALERTE: Type admin détecté dans localStorage!');
         console.warn('Exécutez cleanupAuth() pour nettoyer');
@@ -62,7 +62,7 @@ function checkAuthStatus() {
   } else {
     console.log('ℹ️ Aucune donnée d\'authentification dans localStorage');
   }
-  
+
   // Vérifier Supabase
   const supabaseToken = localStorage.getItem('sb-sbyizudifmqakzxjlndr-auth-token');
   if (supabaseToken) {

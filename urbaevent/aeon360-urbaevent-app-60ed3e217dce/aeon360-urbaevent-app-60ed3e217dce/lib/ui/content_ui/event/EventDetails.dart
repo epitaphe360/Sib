@@ -1460,7 +1460,7 @@ class _EventDetails extends State<EventDetails> {
                 height: 50,
                 child: Center(
                     child: CircularProgressIndicator(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                 ))),
           ),
           CustomToolbar(
@@ -1510,7 +1510,7 @@ class _EventDetails extends State<EventDetails> {
                                       height: 50,
                                       child: Center(
                                           child: CircularProgressIndicator(
-                                        color: Colors.black.withOpacity(0.2),
+                                        color: Colors.black.withValues(alpha: 0.2),
                                       ))),
                                 ),
                               ),

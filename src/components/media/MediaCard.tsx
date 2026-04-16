@@ -9,8 +9,7 @@ import { Play, Clock, Users, Calendar, Award } from 'lucide-react';
 import { Badge } from '../ui/Badge';
 import { Card } from '../ui/Card';
 import { ROUTES } from '../../lib/routes';
-import type { MediaContent } from '../../types/media';
-import { MEDIA_TYPE_LABELS, MEDIA_TYPE_ICONS } from '../../types/media';
+import { MEDIA_TYPE_LABELS, MEDIA_TYPE_ICONS, type MediaContent } from '../../types/media';
 
 interface MediaCardProps {
   media: MediaContent;
@@ -26,7 +25,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   linkTo
 }) => {
   const formatDuration = (seconds: number) => {
-    if (!seconds) return '0 min';
+    if (!seconds) {return '0 min';}
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     if (hours > 0) {
@@ -36,7 +35,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   };
 
   const formatDate = (dateString?: string) => {
-    if (!dateString) return '';
+    if (!dateString) {return '';}
     return new Date(dateString).toLocaleDateString('fr-FR', {
       day: 'numeric',
       month: 'long',

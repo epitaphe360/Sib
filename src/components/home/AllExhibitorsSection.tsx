@@ -56,7 +56,7 @@ export function AllExhibitorsSection() {
     <section className="py-12 md:py-20 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* En-tête de section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -84,7 +84,7 @@ export function AllExhibitorsSection() {
           </div>
         ) : displayedExhibitors.length > 0 ? (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -99,7 +99,7 @@ export function AllExhibitorsSection() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: index * 0.05 }}
                 >
-                  <ExhibitorCard 
+                  <ExhibitorCard
                     exhibitor={exhibitor}
                     index={index}
                     onViewDetails={handleViewDetails}
@@ -113,7 +113,7 @@ export function AllExhibitorsSection() {
             </motion.div>
 
             {/* Boutons d'action */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

@@ -3,12 +3,12 @@ import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { 
-  QrCode, 
-  Download, 
-  Calendar, 
-  Users, 
-  Crown, 
+import {
+  QrCode,
+  Download,
+  Calendar,
+  Users,
+  Crown,
   Star,
   Shield,
   Clock,
@@ -16,12 +16,12 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import useAuthStore from '../../store/authStore';
-import { 
-  generateQRCodeData, 
-  formatQRCodeForDisplay, 
+import {
+  generateQRCodeData,
+  formatQRCodeForDisplay,
   getAccessibleEvents,
   getHighestAccessLevel,
-  type EventAccess 
+  type EventAccess
 } from '../../lib/qrCodeSystem';
 import { toast } from 'sonner';
 
@@ -30,9 +30,9 @@ interface QRCodeGeneratorProps {
   showEvents?: boolean;
 }
 
-export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({ 
-  eventId, 
-  showEvents = true 
+export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
+  eventId,
+  showEvents = true
 }) => {
   const { user } = useAuthStore();
   const [selectedEventId, setSelectedEventId] = useState<string | undefined>(eventId);
@@ -41,11 +41,11 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {return;}
 
     // Get accessible events for this user
     const events = getAccessibleEvents(
-      user.type, 
+      user.type,
       user.profile?.passType || user.profile?.status || 'free'
     );
     setAccessibleEvents(events);
@@ -55,10 +55,10 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
   }, [user, selectedEventId]);
 
   const generateQRCode = () => {
-    if (!user) return;
+    if (!user) {return;}
 
     setIsGenerating(true);
-    
+
     // Simulate generation delay for better UX
     setTimeout(() => {
       const qrData = generateQRCodeData(
@@ -67,7 +67,7 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
         user.profile?.passType || user.profile?.status || 'free',
         selectedEventId
       );
-      
+
       const qrString = formatQRCodeForDisplay(qrData);
       setQrCodeData(qrString);
       setIsGenerating(false);
@@ -78,14 +78,14 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
     const canvas = document.querySelector('canvas') as HTMLCanvasElement;
     if (canvas) {
       const link = document.createElement('a');
-      const eventName = selectedEventId 
+      const eventName = selectedEventId
         ? accessibleEvents.find(e => e.eventId === selectedEventId)?.eventName || 'événement'
         : 'accès-général';
-      
+
       link.download = `qr-sib-${eventName.toLowerCase().replace(/\s+/g, '-')}.png`;
       link.href = canvas.toDataURL();
       link.click();
-      
+
       toast.success('QR Code téléchargé avec succès ! 📱');
     }
   };
@@ -120,7 +120,7 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
   }
 
   const userAccessLevel = getHighestAccessLevel(
-    user.type, 
+    user.type,
     user.profile?.passType || user.profile?.status || 'free'
   );
 
@@ -159,8 +159,8 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
             <button
               onClick={() => setSelectedEventId(undefined)}
               className={`p-3 rounded-lg border text-left transition-colors ${
-                !selectedEventId 
-                  ? 'bg-blue-50 border-blue-300 text-blue-900' 
+                !selectedEventId
+                  ? 'bg-blue-50 border-blue-300 text-blue-900'
                   : 'bg-white border-gray-200 hover:bg-gray-50'
               }`}
             >
@@ -172,14 +172,14 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
                 </div>
               </div>
             </button>
-            
+
             {accessibleEvents.map((event) => (
               <button
                 key={event.eventId}
                 onClick={() => setSelectedEventId(event.eventId)}
                 className={`p-3 rounded-lg border text-left transition-colors ${
-                  selectedEventId === event.eventId 
-                    ? 'bg-blue-50 border-blue-300 text-blue-900' 
+                  selectedEventId === event.eventId
+                    ? 'bg-blue-50 border-blue-300 text-blue-900'
                     : 'bg-white border-gray-200 hover:bg-gray-50'
                 }`}
               >
@@ -206,8 +206,8 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
                     </div>
                   </div>
                   <div className="flex flex-col items-end">
-                    <Badge 
-                      variant="default" 
+                    <Badge
+                      variant="default"
                       className={`text-xs ${getEventTypeColor(event.eventType)}`}
                     >
                       {event.eventType.toUpperCase()}
@@ -229,12 +229,12 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
         <div className="text-center">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-center">
             <QrCode className="h-5 w-5 mr-2 text-blue-600" />
-            {selectedEventId 
+            {selectedEventId
               ? `QR Code - ${accessibleEvents.find(e => e.eventId === selectedEventId)?.eventName}`
               : 'QR Code d\'Accès Général'
             }
           </h3>
-          
+
           {isGenerating ? (
             <div className="flex items-center justify-center h-64">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -257,7 +257,7 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
                   bgColor="#ffffff"
                 />
               </div>
-              
+
               <div className="text-sm text-gray-600">
                 {selectedEventId ? (
                   <>
@@ -273,16 +273,16 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
                   </>
                 )}
               </div>
-              
+
               <div className="space-y-2">
                 <Button onClick={downloadQRCode} className="w-full" variant="default">
                   <Download className="h-4 w-4 mr-2" />
                   Télécharger le QR Code
                 </Button>
-                
-                <Button 
-                  onClick={generateQRCode} 
-                  variant="outline" 
+
+                <Button
+                  onClick={generateQRCode}
+                  variant="outline"
                   className="w-full"
                   disabled={isGenerating}
                 >

@@ -1,12 +1,12 @@
 ﻿import React from 'react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
-import { 
-  Users, 
-  MessageCircle, 
-  Calendar, 
-  Brain, 
-  Globe, 
+import {
+  Users,
+  MessageCircle,
+  Calendar,
+  Brain,
+  Globe,
   ArrowRight,
   Zap,
   Target,
@@ -21,7 +21,7 @@ import { MoroccanPattern } from '../ui/MoroccanDecor';
 
 export const NetworkingSection: React.FC = () => {
   const { t } = useTranslation();
-  
+
   const features = [
     {
       icon: Brain,
@@ -134,9 +134,9 @@ export const NetworkingSection: React.FC = () => {
                   {t('home.cta_member')}
                 </Button>
               </Link>
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 className="w-full sm:w-auto"
                 onClick={() => {
                   toast.info(t('home.ai_assistant_toast'));
@@ -243,7 +243,7 @@ export const NetworkingSection: React.FC = () => {
             Prêt à développer votre réseau professionnel ?
           </h3>
           <p className="text-white/70 mb-6 max-w-2xl mx-auto">
-            Rejoignez dès maintenant la plateforme SIB et découvrez comment 
+            Rejoignez dès maintenant la plateforme SIB et découvrez comment
             l'intelligence artificielle peut transformer votre approche du réseautage.
           </p>
           <Link to={ROUTES.NETWORKING}>

@@ -19,7 +19,7 @@ export const FeaturedExhibitors: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
   const { exhibitors, fetchExhibitors, isLoading } = useExhibitorStore();
   const { t } = useTranslation();
-  
+
   // Afficher uniquement les exposants vérifiés et avec mini-site publié
   const verifiedPublished = exhibitors.filter(e => e.verified && e.miniSite?.published === true);
   const featuredExhibitors = verifiedPublished.filter(e => e.featured).slice(0, 3).length > 0
@@ -36,7 +36,7 @@ export const FeaturedExhibitors: React.FC = () => {
 
   // Charger les vraies vues depuis minisite_views pour les exposants vedettes
   useEffect(() => {
-    if (featuredExhibitors.length === 0) return;
+    if (featuredExhibitors.length === 0) {return;}
     import('../../services/supabaseService').then(({ SupabaseService }) => {
       Promise.all(
         featuredExhibitors.map(e =>
@@ -67,12 +67,12 @@ export const FeaturedExhibitors: React.FC = () => {
     // construction-industry -> categories.construction-industry
     // building-operations -> categories.building-operations
     // academic -> categories.academic
-    
+
     // Check if category matches one of our keys, otherwise return as is or fallback
     // Note: The keys in translations.ts are 'categories.institutional' etc.
     const key = `categories.${category}`;
     const value = t(key);
-    
+
     // If translation returns the key itself, it means translation is missing
     return value !== key ? value : category;
   };
@@ -214,16 +214,16 @@ export const FeaturedExhibitors: React.FC = () => {
                       </Button>
                     </Link>
                     <div className="flex space-x-2">
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         className="flex-1 justify-center"
                         onClick={() => handleAppointmentClick(exhibitor.id)}
                       >
                         <Calendar className="h-4 w-4 mr-2" />
                         {t('home.make_appointment', 'Prendre RDV')}
                       </Button>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={() => {
                           if (!isAuthenticated) {

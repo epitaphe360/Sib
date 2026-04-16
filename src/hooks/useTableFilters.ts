@@ -11,15 +11,15 @@ interface TableFiltersOptions<T> {
 }
 
 export function useTableFilters<T>(options: TableFiltersOptions<T>) {
-  const { 
-    data, 
-    searchKeys, 
-    filterConfigs = [], 
-    initialSearchTerm = '' 
+  const {
+    data,
+    searchKeys,
+    filterConfigs = [],
+    initialSearchTerm = ''
   } = options;
 
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
-  
+
   // Créer dynamiquement les états pour chaque filtre
   const [filters, setFilters] = useState<Record<string, string>>(() => {
     const initialFilters: Record<string, string> = {};
@@ -50,18 +50,18 @@ export function useTableFilters<T>(options: TableFiltersOptions<T>) {
       // Vérifier la correspondance de la recherche
       const matchesSearch = searchTerm === '' || searchKeys.some(key => {
         const value = item[key];
-        if (value === null || value === undefined) return false;
+        if (value === null || value === undefined) {return false;}
         return String(value).toLowerCase().includes(searchTerm.toLowerCase());
       });
 
       // Vérifier la correspondance de tous les filtres
       const matchesFilters = filterConfigs.every(config => {
         const filterValue = filters[String(config.key)];
-        if (!filterValue) return true; // Pas de filtre appliqué
-        
+        if (!filterValue) {return true;} // Pas de filtre appliqué
+
         const itemValue = item[config.key];
-        if (itemValue === null || itemValue === undefined) return false;
-        
+        if (itemValue === null || itemValue === undefined) {return false;}
+
         return String(itemValue) === filterValue;
       });
 
@@ -73,13 +73,13 @@ export function useTableFilters<T>(options: TableFiltersOptions<T>) {
   const getUniqueValues = (key: keyof T): string[] => {
     const values = data
       .map(item => item[key])
-      .filter((value, index, self) => 
-        value !== null && 
-        value !== undefined && 
+      .filter((value, index, self) =>
+        value !== null &&
+        value !== undefined &&
         self.indexOf(value) === index
       )
       .map(value => String(value));
-    
+
     return values.sort();
   };
 

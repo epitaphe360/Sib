@@ -53,7 +53,7 @@ export function BarChartCard({
 
   // Empty state: No data available or all values are 0
   const totalValue = data?.reduce((sum, item) => sum + (typeof item[dataKey] === 'number' ? item[dataKey] : 0), 0) || 0;
-  
+
   if (!data || data.length === 0 || totalValue === 0) {
     return (
       <motion.div

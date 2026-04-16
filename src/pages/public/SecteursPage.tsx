@@ -35,10 +35,10 @@ export default function SecteursPage() {
 
   const secteurs: Secteur[] = (() => {
     const raw = cms.secteurs_json;
-    if (!raw) return defaultSecteurs;
+    if (!raw) {return defaultSecteurs;}
     try {
       const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return defaultSecteurs;
+      if (!Array.isArray(parsed)) {return defaultSecteurs;}
       return parsed
         .map((item: any, index: number) => ({
           id: Number(item?.id ?? index + 1),

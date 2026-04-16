@@ -67,32 +67,32 @@ export const PartnerProfileEditPage: React.FC = () => {
     // Base (requis)
     companyName: '',
     description: '',
-    
+
     // Contact (optionnel)
     website: '',
     address: '',
     phone: '',
     email: '',
     country: '',
-    
+
     // Détails (optionnel)
     type: 'corporate',
     sponsorLevel: '',
     employees: '',
     founded: '',
     ceo: '',
-    
+
     // Catégories (optionnel)
     sectors: [] as string[],
     services: [] as string[],
     certifications: [] as string[],
-    
+
     // Sections riches (optionnel)
     expertise: '',
     projects: [] as Array<{ title: string; description: string; image?: string; year?: string }>,
     gallery: [] as string[],
     news: [] as Array<{ title: string; description: string; date?: string; image?: string }>,
-    
+
     // Impact (optionnel)
     metrics: {
       projectsCompleted: '',
@@ -100,13 +100,13 @@ export const PartnerProfileEditPage: React.FC = () => {
       teamSize: '',
       countriesServed: ''
     },
-    
+
     // Timeline (optionnel)
     timeline: [] as Array<{ year: string; event: string; description?: string }>,
-    
+
     // Équipe (optionnel)
     team: [] as Array<{ name: string; role: string; photo?: string; bio?: string }>,
-    
+
     logo: null as string | null
   });
 
@@ -142,12 +142,12 @@ export const PartnerProfileEditPage: React.FC = () => {
   };
 
   const handleArrayAdd = (field: 'projects' | 'news' | 'timeline' | 'team') => {
-    const newItem = 
+    const newItem =
       field === 'projects' ? { title: '', description: '', image: '', year: '' } :
       field === 'news' ? { title: '', description: '', date: '', image: '' } :
       field === 'timeline' ? { year: '', event: '', description: '' } :
       { name: '', role: '', photo: '', bio: '' };
-    
+
     setFormData(prev => ({ ...prev, [field]: [...prev[field], newItem] }));
   };
 
@@ -240,7 +240,7 @@ export const PartnerProfileEditPage: React.FC = () => {
     }
   };
 
-  const SectionHeader = ({ title, section, icon: Icon, optional = true }: { 
+  const SectionHeader = ({ title, section, icon: Icon, optional = true }: {
     title: string; section: keyof typeof expandedSections; icon: React.ElementType; optional?: boolean;
   }) => (
     <button
@@ -252,8 +252,8 @@ export const PartnerProfileEditPage: React.FC = () => {
         <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
         {optional && <span className="text-sm text-gray-500 italic">(Optionnel)</span>}
       </div>
-      {expandedSections[section] ? 
-        <ChevronUp className="h-5 w-5 text-gray-400" /> : 
+      {expandedSections[section] ?
+        <ChevronUp className="h-5 w-5 text-gray-400" /> :
         <ChevronDown className="h-5 w-5 text-gray-400" />}
     </button>
   );
@@ -318,9 +318,9 @@ export const PartnerProfileEditPage: React.FC = () => {
                       Niveau de sponsoring
                       <span className="ml-2 text-xs text-gray-500">(Défini par l'administrateur)</span>
                     </label>
-                    <input 
-                      type="text" 
-                      value={formData.sponsorLevel || "Aucun niveau défini"} 
+                    <input
+                      type="text"
+                      value={formData.sponsorLevel || "Aucun niveau défini"}
                       disabled
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
                       title="Défini par l'administrateur"
@@ -330,7 +330,7 @@ export const PartnerProfileEditPage: React.FC = () => {
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                     <textarea value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} rows={4}
-                      placeholder="Groupe construction d'excellence, leader dans le transport construction..." 
+                      placeholder="Groupe construction d'excellence, leader dans le transport construction..."
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                   </div>
                 </div>
@@ -442,7 +442,7 @@ export const PartnerProfileEditPage: React.FC = () => {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Certifications</label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">

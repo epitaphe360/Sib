@@ -55,10 +55,10 @@ export default function TelechargementPage() {
 
   const documents: DocGroup[] = (() => {
     const raw = cms.documents_json;
-    if (!raw) return defaultDocuments;
+    if (!raw) {return defaultDocuments;}
     try {
       const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return defaultDocuments;
+      if (!Array.isArray(parsed)) {return defaultDocuments;}
       return parsed.map((group: any) => ({
         year: String(group?.year ?? ''),
         label: String(group?.label ?? ''),

@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 
 
 class Progressbar extends StatelessWidget {
-  bool loader;
+  final bool loader;
 
   Progressbar(this.loader);
 
@@ -18,7 +18,7 @@ class Progressbar extends StatelessWidget {
       return Visibility(
         visible: loader,
         child: Container(
-          color: Colors.black.withOpacity(0.01),
+          color: Colors.black.withValues(alpha: 0.01),
           child: Center(
              child: Container(
 
@@ -62,7 +62,7 @@ class Progressbar extends StatelessWidget {
       return Visibility(
         visible: loader,
         child: Container(
-          color: Colors.black.withOpacity(0.01),
+          color: Colors.black.withValues(alpha: 0.01),
           child: Center(
             child: CupertinoActivityIndicator(radius: 25,)
           ),

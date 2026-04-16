@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useTranslation } from '../hooks/useTranslation';
 import { getArticleTranslationKeys } from '../utils/newsTranslations';
-import { 
-  Search, 
-  Filter, 
-  Calendar, 
-  Clock, 
+import {
+  Search,
+  Filter,
+  Calendar,
+  Clock,
   User,
   Eye,
   ExternalLink,
@@ -98,7 +98,7 @@ export default function NewsPage() {
     try {
       toast.loading(t('common.loading'), { id: 'sync-articles' });
       const result = await fetchFromOfficialSite();
-      
+
       if (result && result.success) {
         const { inserted, updated, total } = result.stats;
         toast.success(
@@ -147,7 +147,7 @@ export default function NewsPage() {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <Button
                 variant="outline"
@@ -156,7 +156,7 @@ export default function NewsPage() {
                 <Filter className="h-4 w-4 mr-2" />
                 Filtres
               </Button>
-              
+
               <Button
                 variant="outline"
                 onClick={handleRefreshFromOfficialSite}
@@ -184,8 +184,8 @@ export default function NewsPage() {
                 <button
                   onClick={() => setCategory(CONFIG.defaults.category)}
                   className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === CONFIG.defaults.category 
-                      ? 'bg-blue-100 text-blue-700' 
+                    selectedCategory === CONFIG.defaults.category
+                      ? 'bg-blue-100 text-blue-700'
                       : 'bg-white text-gray-600 hover:bg-gray-100'
                   }`}
                 >
@@ -196,8 +196,8 @@ export default function NewsPage() {
                     key={category}
                     onClick={() => setCategory(category)}
                     className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                      selectedCategory === category 
-                        ? 'bg-blue-100 text-blue-700' 
+                      selectedCategory === category
+                        ? 'bg-blue-100 text-blue-700'
                         : 'bg-white text-gray-600 hover:bg-gray-100'
                     }`}
                   >
@@ -238,13 +238,13 @@ export default function NewsPage() {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900">
-              {selectedCategory || searchTerm ? 'Résultats' : 'Toutes les Actualités'} 
+              {selectedCategory || searchTerm ? 'Résultats' : 'Toutes les Actualités'}
               ({filteredArticles.length}/{totalArticles || filteredArticles.length})
             </h2>
-            
+
             {(selectedCategory || searchTerm) && (
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => {
                   setCategory(CONFIG.defaults.category);
@@ -328,24 +328,24 @@ export default function NewsPage() {
                 Restez informé des actualités SIB
               </h3>
               <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-                Recevez les dernières nouvelles du secteur du bâtiment et les actualités 
+                Recevez les dernières nouvelles du secteur du bâtiment et les actualités
                 exclusives de SIB 2026 directement dans votre boîte mail
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                 <input type="email"
                   placeholder="votre@email.com"
                   className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
                  aria-label="votre@email.com" />
-                <Button 
+                <Button
                   variant="default"
-                  size="lg" 
+                  size="lg"
                   className="bg-white text-blue-600 hover:bg-blue-50"
                   onClick={(e) => {
                     e.preventDefault();
                     const emailInput = e.currentTarget.parentElement?.querySelector('input[type="email"]') as HTMLInputElement;
                     const email = emailInput?.value;
-                    
+
                     if (!email) {
                       toast.error('Veuillez saisir votre adresse email');
                       return;
@@ -361,7 +361,7 @@ export default function NewsPage() {
                   S'abonner
                 </Button>
               </div>
-              
+
               <p className="text-xs text-blue-200 mt-4">
                 Newsletter hebdomadaire • Désabonnement facile • Données protégées
               </p>
@@ -382,7 +382,7 @@ export default function NewsPage() {
                 <TrendingUp className="h-5 w-5 mr-2 text-orange-500" />
                 Sujets Tendance
               </h3>
-              
+
               <div className="flex flex-wrap gap-2">
                 {[
                   'Digitalisation bâtiment',

@@ -28,7 +28,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   maxVisiblePages = 7,
   className = '',
 }) => {
-  if (totalPages <= 1) return null;
+  if (totalPages <= 1) {return null;}
 
   // Calcul des pages visibles
   const getVisiblePages = (): number[] => {

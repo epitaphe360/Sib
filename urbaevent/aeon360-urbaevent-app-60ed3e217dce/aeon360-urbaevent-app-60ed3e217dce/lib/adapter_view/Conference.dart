@@ -1,5 +1,4 @@
 ﻿import 'package:cached_network_image/cached_network_image.dart';
-import 'package:com.urbaevent/utils/ThemeColor.dart';
 import 'package:com.urbaevent/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:com.urbaevent/model/events/ResponseEventConferences.dart';
@@ -56,7 +55,7 @@ class _Conference extends State<Conference> {
                       height: 50,
                       child: Center(
                           child: CircularProgressIndicator(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                       ))),
                 ),
               ),

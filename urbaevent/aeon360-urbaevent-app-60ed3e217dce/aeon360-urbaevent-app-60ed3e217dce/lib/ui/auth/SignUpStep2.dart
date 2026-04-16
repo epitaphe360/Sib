@@ -53,10 +53,7 @@ class _SignUpStep2 extends State<SignUpStep2> {
 
   String _selectedType = 'visitor'; // visitor, exhibitor, partner
 
-  final GlobalKey _anchorKey = GlobalKey();
   OverlayEntry? _overlayEntry;
-  bool isExpanded = false;
-  int _selectedIndex = -1;
   bool isChecked = false;
 
   void toggleCheckbox() {
@@ -241,40 +238,6 @@ class _SignUpStep2 extends State<SignUpStep2> {
   }
 
   Widget _buildContent() {
-    Map<String, dynamic> removeEmptyKeys(Map<String, dynamic> json) {
-      // Create a copy of the original JSON to avoid modifying it in place
-      Map<String, dynamic> result = Map.from(json);
-
-      // Create a list to store the keys to be removed
-      List<String> keysToRemove = [];
-
-      result.forEach((key, value) {
-        if (value == null) {
-          // Mark the key for removal if the value is null
-          keysToRemove.add(key);
-        }
-        if (value == "") {
-          // Mark the key for removal if the value is null
-          keysToRemove.add(key);
-        }
-        if (value == -1) {
-          // Mark the key for removal if the value is null
-          keysToRemove.add(key);
-        }
-        if (value == '-1') {
-          // Mark the key for removal if the value is null
-          keysToRemove.add(key);
-        }
-      });
-
-      // Remove the marked keys
-      keysToRemove.forEach((key) {
-        result.remove(key);
-      });
-
-      return result;
-    }
-
     Future<void> register() async {
       setState(() {
         loader = true;
@@ -331,10 +294,9 @@ class _SignUpStep2 extends State<SignUpStep2> {
 
     final _customToolbar = CustomToolbar(
         Intl.message("sign_up", name: "sign_up"), handleCallback, -1, false);
-    return WillPopScope(
-      onWillPop: () async {
-        if (_overlayEntry != null) _overlayEntry!.remove();
-        return true;
+    return PopScope(
+      onPopInvokedWithResult: (bool didPop, _) {
+        if (didPop && _overlayEntry != null) _overlayEntry!.remove();
       },
       child: Scaffold(
         appBar: null,
@@ -450,7 +412,7 @@ class _SignUpStep2 extends State<SignUpStep2> {
                                         decoration: InputDecoration(
                                           labelStyle: TextStyle(
                                               color: Colors.black
-                                                  .withOpacity(0.6)),
+                                                  .withValues(alpha: 0.6)),
                                           labelText: Intl.message(
                                               "business_sector",
                                               name: "business_sector"),
@@ -744,7 +706,7 @@ class _TypeChip extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 8),
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: selected ? ThemeColor.colorAccent.withOpacity(0.1) : Color.fromRGBO(249, 249, 255, 1),
+          color: selected ? ThemeColor.colorAccent.withValues(alpha: 0.1) : Color.fromRGBO(249, 249, 255, 1),
           borderRadius: BorderRadius.circular(25),
           border: Border.all(
             color: selected ? ThemeColor.colorAccent : Colors.transparent,

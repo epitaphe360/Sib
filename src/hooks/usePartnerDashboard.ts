@@ -17,52 +17,51 @@ export function usePartnerDashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'profile' | 'networking' | 'analytics'>('overview');
   const [processingAppointment, setProcessingAppointment] = useState<string | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [showScrapperModal, setShowScrapperModal] = useState(false);
   const [showEditorModal, setShowEditorModal] = useState(false);
   const [isPublished, setIsPublished] = useState<boolean | null>(null);
   const [isTogglingPublish, setIsTogglingPublish] = useState(false);
   const [confirmRejectId, setConfirmRejectId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user || user.type !== 'partner') return;
+    if (!user || user.type !== 'partner') {return;}
     fetchDashboard().catch((err) => console.error('Erreur chargement dashboard:', err));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
-    if (!user || user.type !== 'partner') return;
+    if (!user || user.type !== 'partner') {return;}
     fetchAppointments().catch((err) => console.error('Erreur chargement rendez-vous:', err));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
-    if (!user || user.type !== 'partner' || user.status !== 'active') return;
+    if (!user || user.type !== 'partner' || user.status !== 'active') {return;}
     supabase!.from('partner_profiles').select('id').eq('user_id', user.id).maybeSingle()
       .then(({ data, error }) => {
-        if (error && error.code !== 'PGRST116') console.error('Erreur vérification profil:', error);
+        if (error && error.code !== 'PGRST116') {console.error('Erreur vérification profil:', error);}
         setShowProfileModal(!data);
       })
       .catch((err) => console.error('Erreur:', err));
   }, [user]);
 
   useEffect(() => {
-    if (!user || user.type !== 'partner') return;
+    if (!user || user.type !== 'partner') {return;}
     supabase!.from('partners').select('is_published').eq('user_id', user.id).maybeSingle()
       .then(({ data, error }) => {
-        if (error && error.code !== 'PGRST116') console.error('Erreur statut publication:', error);
+        if (error && error.code !== 'PGRST116') {console.error('Erreur statut publication:', error);}
         setIsPublished((data as any)?.is_published ?? false);
       })
       .catch(() => setIsPublished(false));
   }, [user]);
 
   const togglePublished = async () => {
-    if (!user?.id || isTogglingPublish) return;
+    if (!user?.id || isTogglingPublish) {return;}
     setIsTogglingPublish(true);
     try {
       const newStatus = !isPublished;
-      // @ts-ignore – column not in generated Supabase types
+      // @ts-expect-error – column not in generated Supabase types
       const { error } = await supabase!.from('partners').update({ is_published: newStatus }).eq('user_id', user.id);
-      if (error) throw error;
+      if (error) {throw error;}
       setIsPublished(newStatus);
       toast.success(newStatus ? t('exhibitor.toast_profile_visible') : t('exhibitor.toast_profile_hidden'), { duration: 4000 });
     } catch (err) {
@@ -147,7 +146,6 @@ export function usePartnerDashboard() {
     activeTab, setActiveTab,
     processingAppointment,
     showProfileModal, setShowProfileModal,
-    showScrapperModal, setShowScrapperModal,
     showEditorModal, setShowEditorModal,
     isPublished, isTogglingPublish,
     confirmRejectId, setConfirmRejectId,

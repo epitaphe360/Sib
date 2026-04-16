@@ -32,7 +32,7 @@ export const useGoogleAuth = (): UseGoogleAuthReturn => {
   const signInWithGoogle = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await loginWithGoogle();
     } catch (err: unknown) {
@@ -47,7 +47,7 @@ export const useGoogleAuth = (): UseGoogleAuthReturn => {
   const signOut = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await GoogleAuthService.signOut();
       logout();

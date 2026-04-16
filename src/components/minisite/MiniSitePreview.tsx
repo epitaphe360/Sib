@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
-import { 
+import {
   Download,
   Share2,
   MessageCircle,
@@ -120,7 +120,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
   const exhibitorId = propExhibitorId || exhibitor?.id || urlExhibitorId;
   const navigate = useNavigate();
   const { articles, fetchNews } = useNewsStore();
-  
+
   const [miniSiteData, setMiniSiteData] = useState<MiniSiteData | null>(null);
   const [exhibitorData, setExhibitorData] = useState<ExhibitorData | null>(null);
   const [products, setProducts] = useState<any[]>([]);
@@ -156,24 +156,23 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
       // Charger le mini-site
       const miniSite = await SupabaseService.getMiniSite(exhibitorId);
       console.log('[MiniSite] Received site data:', miniSite);
-      
+
       // IMPORTANT: On ne bloque plus si miniSite est null - on génère un fallback
       if (!miniSite) {
-        console.warn(`[MiniSite] Site not found for ID: ${exhibitorId}, generating default structure`);
-        // Créer une structure mini-site par défaut au lieu de bloquer
+        // Fallback with SIB brand colors (not generic blue)
         setMiniSiteData({
           id: `default-${exhibitorId}`,
           exhibitor_id: exhibitorId,
           theme: {
-            primaryColor: '#1e40af',
-            secondaryColor: '#3b82f6',
-            accentColor: '#60a5fa',
-            fontFamily: 'Inter'
+            primaryColor: '#C9A84C',
+            secondaryColor: '#0F2034',
+            accentColor: '#1B365D',
+            fontFamily: 'Inter',
           },
           sections: [],
           published: true,
           views: 0,
-          last_updated: new Date().toISOString()
+          last_updated: new Date().toISOString(),
         });
       } else {
         setMiniSiteData(miniSite);
@@ -182,7 +181,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
       // Charger les informations de l'exposant
       const exhibitor = await SupabaseService.getExhibitorForMiniSite(exhibitorId);
       console.log('[MiniSite] Received exhibitor data:', exhibitor);
-      
+
       if (exhibitor) {
         setExhibitorData(exhibitor);
       } else {
@@ -190,11 +189,16 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
         // Créer des données exposant par défaut
         setExhibitorData({
           id: exhibitorId,
-          company_name: 'Exposant SIB',
+          company_name: 'Exposant SIB 2026',
           logo_url: undefined,
-          description: 'Découvrez notre stand lors du salon SIB 2026',
+          description: 'Découvrez notre stand lors du Salon International du Bâtiment 2026',
           website: undefined,
-          contact_info: {}
+          contact_info: {
+            phone: '',
+            email: '',
+            address: '',
+            social: {},
+          },
         });
       }
 
@@ -203,12 +207,13 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
       console.log('[MiniSite] Received products:', exhibitorProducts?.length);
       setProducts(exhibitorProducts);
 
-      // Incrémenter le compteur de vues
-      await SupabaseService.incrementMiniSiteViews(exhibitorId);
-
-      // Charger le vrai count depuis minisite_views (source de vérité)
+      // Incrémenter les vues en fire-and-forget (ne bloque pas le chargement)
+      // Fetch count first, then add 1 locally to avoid race condition
       const viewCount = await SupabaseService.getMiniSiteViewCount(exhibitorId);
       setRealViewCount(viewCount);
+      SupabaseService.incrementMiniSiteViews(exhibitorId).catch(() => {
+        // Silent — view count is non-critical
+      });
 
     } catch (err: any) {
       console.error('Erreur lors du chargement du mini-site:', err);
@@ -230,7 +235,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
 
   // Helper function to get section data
   const getSection = (sectionName: string) => {
-    if (!miniSiteData?.sections) return null;
+    if (!miniSiteData?.sections) {return null;}
     return miniSiteData.sections.find((s: any) => s.type === sectionName);
   };
 
@@ -396,7 +401,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {aboutSection.data.features.map((feature: any, i: number) => {
             const name = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-            if (!name) return null;
+            if (!name) {return null;}
             return (
               <div key={i} className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                 <Award className="h-5 w-5 shrink-0" style={{ color: theme.accentColor }} />
@@ -593,7 +598,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                   {aboutSection.data.features.map((feature: any, index: number) => {
                     const featureName = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-                    if (!featureName) return null;
+                    if (!featureName) {return null;}
                     return (
                       <Card key={index} className="p-6 text-center hover:shadow-lg transition-shadow">
                         <Award className="h-8 w-8 mx-auto mb-3" style={{ color: theme.accentColor }} />
@@ -670,7 +675,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
                           <ul className="space-y-2 mb-4">
                             {product.features.slice(0, 3).map((feature: any, idx: number) => {
                               const featureName = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-                              if (!featureName) return null;
+                              if (!featureName) {return null;}
                               return (
                                 <li key={idx} className="flex items-center text-sm text-gray-600">
                                   <Award className="h-4 w-4 mr-2" style={{ color: theme.accentColor }} />

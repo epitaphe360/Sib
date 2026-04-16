@@ -72,7 +72,7 @@ export default function NouveautesPage() {
 
   const parsedItems = (() => {
     const raw = cms.items_json;
-    if (!raw) return null;
+    if (!raw) {return null;}
     try {
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : null;

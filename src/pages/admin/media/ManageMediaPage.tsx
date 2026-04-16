@@ -1,9 +1,9 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../lib/routes';
-import { 
-  Search, Filter, Plus, Edit, Trash2, Eye, MoreVertical, 
-  Video, Mic, Film, Radio, Star, MessageCircle, Check, X 
+import {
+  Search, Filter, Plus, Edit, Trash2, Eye, MoreVertical,
+  Video, Mic, Film, Radio, Star, MessageCircle, Check, X
 } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
@@ -52,7 +52,7 @@ export const ManageMediaPage: React.FC = () => {
         .order('created_at', { ascending: false })
         .range(0, 49);
 
-      if (error) throw error;
+      if (error) {throw error;}
       setMedia(data || []);
     } catch (error) {
       console.error('Error loading media:', error);
@@ -67,7 +67,7 @@ export const ManageMediaPage: React.FC = () => {
 
     // Search filter
     if (searchQuery) {
-      filtered = filtered.filter(m => 
+      filtered = filtered.filter(m =>
         m.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         m.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -80,7 +80,7 @@ export const ManageMediaPage: React.FC = () => {
 
     // Status filter
     if (filterStatus !== 'all') {
-      filtered = filtered.filter(m => 
+      filtered = filtered.filter(m =>
         filterStatus === 'published' ? m.is_published : !m.is_published
       );
     }
@@ -89,7 +89,7 @@ export const ManageMediaPage: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce média ?')) return;
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce média ?')) {return;}
 
     try {
       const { error } = await supabase
@@ -97,7 +97,7 @@ export const ManageMediaPage: React.FC = () => {
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {throw error;}
       toast.success('Média supprimé avec succès');
       loadMedia();
     } catch (error) {
@@ -113,7 +113,7 @@ export const ManageMediaPage: React.FC = () => {
         .update({ is_published: !currentStatus })
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {throw error;}
       toast.success(currentStatus ? 'Média dépublié' : 'Média publié');
       loadMedia();
     } catch (error) {
@@ -292,7 +292,7 @@ export const ManageMediaPage: React.FC = () => {
                       {getMediaIcon(item.type)}
                     </div>
                   )}
-                  
+
                   {/* Status Badge */}
                   <div className="absolute top-2 right-2">
                     <Badge

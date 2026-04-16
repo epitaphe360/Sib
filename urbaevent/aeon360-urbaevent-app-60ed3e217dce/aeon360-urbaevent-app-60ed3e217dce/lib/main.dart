@@ -65,7 +65,7 @@ Future<void> setupFlutterNotifications() async {
     badge: true,
     sound: true,
   );
-  isFlutterLocalNotificationsInitialized = false;
+  isFlutterLocalNotificationsInitialized = true;
 }
 
 

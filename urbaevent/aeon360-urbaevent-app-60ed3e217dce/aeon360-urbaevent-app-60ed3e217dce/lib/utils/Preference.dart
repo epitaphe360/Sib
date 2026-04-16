@@ -1,7 +1,6 @@
 ﻿import 'dart:convert';
 import 'dart:ui';
 
-import 'package:com.urbaevent/generated/l10n.dart';
 import 'package:com.urbaevent/model/ResponseAuthRole.dart';
 import 'package:com.urbaevent/model/ResponseLogin.dart';
 import 'package:com.urbaevent/model/agent/ResponseAgentAuth.dart';
@@ -133,7 +132,7 @@ class Preference {
   }
 
   String getLanguage() {
-    Locale deviceLocale = window.locale;
+    Locale deviceLocale = PlatformDispatcher.instance.locale;
     return _preferences!.getString('lang') ?? deviceLocale.languageCode;
   }
 

@@ -9,6 +9,24 @@ import { supabase } from '../lib/supabase';
 const QR_CODE_VALIDITY_MS = 60 * 1000; // 60 secondes
 const QR_ROTATION_INTERVAL_MS = 30 * 1000; // 30 secondes
 
+// ── Nonce replay-attack prevention (in-memory, TTL = validity window) ─────────
+// NOTE: Single-instance only. For multi-tab/multi-instance protection, persist
+// to Supabase `used_nonces` table (user_id, nonce, expires_at).
+const _usedNonces = new Map<string, number>(); // nonce → expiry timestamp
+
+function _markNonceUsed(nonce: string, expiresAt: number): void {
+  _usedNonces.set(nonce, expiresAt);
+}
+
+function _isNonceUsed(nonce: string): boolean {
+  // Purge expired nonces to avoid memory leak
+  const now = Date.now();
+  for (const [n, exp] of _usedNonces) {
+    if (exp < now) {_usedNonces.delete(n);}
+  }
+  return _usedNonces.has(nonce);
+}
+
 /**
  * SECURITY: JWT Secret for QR Code signing
  * CRITICAL: Must be set in environment variables (.env)
@@ -51,7 +69,11 @@ const getJWTSecret = (): string => {
   return secret;
 };
 
-const JWT_SECRET = getJWTSecret();
+// Lazy evaluation — evaluated per-call to avoid module-load crash when
+// VITE_JWT_SECRET is missing in production (breaks DigitalBadge).
+function getSecret(): string {
+  return getJWTSecret();
+}
 
 /**
  * Interface pour un utilisateur depuis la base de données
@@ -293,9 +315,9 @@ async function decodeJWT(token: string, secret: string): Promise<QRCodePayload> 
  * Déterminer le niveau d'accès basé sur le type d'utilisateur
  */
 function getUserAccessLevel(user: User): keyof typeof ACCESS_LEVELS {
-  if (user.type === 'admin') return 'admin';
-  if (user.type === 'security') return 'security';
-  if (user.type === 'exhibitor') return 'exhibitor';
+  if (user.type === 'admin') {return 'admin';}
+  if (user.type === 'security') {return 'security';}
+  if (user.type === 'exhibitor') {return 'exhibitor';}
   if (user.type === 'partner') {
     const tier = user.partner_tier || 'partner';
     return `partner_${tier}` as keyof typeof ACCESS_LEVELS;
@@ -320,7 +342,7 @@ export async function generateSecureQRCode(userId: string): Promise<{
     // Récupérer les données utilisateur (optimized: 70% bandwidth reduction)
     const { data: user, error } = await supabase
       .from('users')
-      .select('id, email, name, type, role, visitor_level, profile, status, created_at')
+      .select('id, email, name, type, role, visitor_level, badge_number, profile, status, created_at')
       .eq('id', userId)
       .single();
 
@@ -353,7 +375,7 @@ export async function generateSecureQRCode(userId: string): Promise<{
     };
 
     // Générer le JWT
-    const token = await encodeJWT(payload, JWT_SECRET);
+    const token = await encodeJWT(payload, getSecret());
 
     return {
       qrData: token,
@@ -380,7 +402,7 @@ export async function validateQRCode(qrData: string, options?: {
 }> {
   try {
     // Décoder le JWT
-    const payload = await decodeJWT(qrData, JWT_SECRET) as QRCodePayload;
+    const payload = await decodeJWT(qrData, getSecret()) as QRCodePayload;
 
     // Vérifier l'expiration
     const now = Date.now();
@@ -399,8 +421,13 @@ export async function validateQRCode(qrData: string, options?: {
       };
     }
 
-    // Vérifier le nonce (si on a un cache des nonces utilisés)
-    // TODO: Implémenter un cache Redis/Supabase pour les nonces
+    // Vérifier le nonce — protection anti-replay
+    if (payload.nonce && _isNonceUsed(payload.nonce)) {
+      return { valid: false, reason: 'QR Code déjà utilisé (replay détecté)' };
+    }
+    if (payload.nonce) {
+      _markNonceUsed(payload.nonce, payload.exp);
+    }
 
     // Vérifier les permissions de zone si requis
     if (options?.requiredZone) {
@@ -432,9 +459,9 @@ export async function validateQRCode(qrData: string, options?: {
       }
     }
 
-    // Récupérer le niveau d'accès complet
+    // Récupérer le niveau d'accès complet — fallback sur visitor_free si clé inconnue
     const accessKey = `${payload.userType}_${payload.level}` as keyof typeof ACCESS_LEVELS;
-    const accessLevel = ACCESS_LEVELS[accessKey];
+    const accessLevel = ACCESS_LEVELS[accessKey] ?? ACCESS_LEVELS['visitor_free'];
 
     // Logger l'accès
     await logAccess({
@@ -509,7 +536,7 @@ export async function getUserAccessHistory(userId: string, limit: number = 50): 
       .order('accessed_at', { ascending: false })
       .limit(limit);
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     return data || [];
   } catch (error) {
@@ -552,7 +579,7 @@ export async function getAccessStats(options?: {
 
     const { data, error } = await query;
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     const logs = data || [];
 
@@ -594,7 +621,7 @@ export function subscribeToAccessLogs(
   callback: (log: AccessLog) => void,
   options?: { zone?: string }
 ) {
-  let query = supabase
+  const query = supabase
     .channel('access_logs_realtime')
     .on(
       'postgres_changes',

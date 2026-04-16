@@ -1,5 +1,4 @@
 ﻿import 'package:cached_network_image/cached_network_image.dart';
-import 'package:com.urbaevent/utils/ThemeColor.dart';
 import 'package:flutter/material.dart';
 import 'package:com.urbaevent/utils/Urls.dart';
 import 'package:flutter_svg/flutter_svg.dart';

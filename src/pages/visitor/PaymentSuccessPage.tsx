@@ -26,13 +26,13 @@ export default function PaymentSuccessPage() {
 
   // Helper function to refresh user data from database
   const refreshUserData = async () => {
-    if (!user) return;
+    if (!user) {return;}
     const { data } = await supabase
       .from('users')
       .select('status, visitor_level')
       .eq('id', user.id)
       .maybeSingle();
-    
+
     if (data) {
       setUser({
         ...user,
@@ -47,7 +47,7 @@ export default function PaymentSuccessPage() {
   }, [user]);
 
   async function verifyPaymentAndUpgrade() {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       setIsVerifying(true);

@@ -70,10 +70,10 @@ class RateLimiter {
    */
   getRemaining(key: string, config: RateLimitConfig): number {
     const entry = this.store.get(key);
-    if (!entry) return config.maxRequests;
+    if (!entry) {return config.maxRequests;}
 
     const now = Date.now();
-    if (now > entry.resetTime) return config.maxRequests;
+    if (now > entry.resetTime) {return config.maxRequests;}
 
     return Math.max(0, config.maxRequests - entry.count);
   }

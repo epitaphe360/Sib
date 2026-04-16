@@ -161,10 +161,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
         conversations: updatedConversations
       });
 
-      // Simulate bot response if talking to bot
-      if (conversationId === '2') {
+      // Simulate bot response if talking to a bot conversation
+      const conv = get().conversations.find(c => c.id === conversationId);
+      if (conv && isBotParticipant(conv.participants)) {
         setTimeout(() => {
-          get().sendBotMessage('Merci pour votre message. Je traite votre demande...');
+          const currentConvId = conversationId;
+          get().sendBotMessage('Merci pour votre message. Je traite votre demande...', currentConvId);
         }, 1000);
       }
     } catch (error) {
@@ -217,7 +219,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       // Check if already in list
       const exists = conversations.some(c => c.id === conversation.id);
       if (!exists) {
-        set({ 
+        set({
           conversations: [conversation, ...conversations],
           activeConversation: conversation.id
         });
@@ -234,7 +236,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   sendBotMessage: async (message) => {
     const { messages, conversations, activeConversation } = get();
-    if (!activeConversation) return;
+    if (!activeConversation) {return;}
 
     const currentUserId = useAuthStore.getState().user?.id;
     if (!currentUserId) {
@@ -256,13 +258,13 @@ export const useChatStore = create<ChatState>((set, get) => ({
       [activeConversation]: [...(messages[activeConversation] || []), botMessage]
     };
 
-    const updatedConversations = conversations.map(conv => 
-      conv.id === activeConversation 
+    const updatedConversations = conversations.map(conv =>
+      conv.id === activeConversation
         ? { ...conv, lastMessage: botMessage, updatedAt: new Date(), unreadCount: conv.unreadCount + 1 }
         : conv
     );
 
-    set({ 
+    set({
       messages: updatedMessages,
       conversations: updatedConversations
     });

@@ -236,9 +236,9 @@ export const EXHIBITOR_QUOTAS: Record<ExhibitorLevel, ExhibitorQuotaConfig> = {
  * Détermine le niveau d'exposant selon la surface du stand
  */
 export function getExhibitorLevelByArea(area: number): ExhibitorLevel {
-  if (area <= 9) return 'basic_9';
-  if (area <= 18) return 'standard_18';
-  if (area <= 36) return 'premium_36';
+  if (area <= 9) {return 'basic_9';}
+  if (area <= 18) {return 'standard_18';}
+  if (area <= 36) {return 'premium_36';}
   return 'elite_54plus';
 }
 
@@ -260,7 +260,7 @@ export function getExhibitorQuota(
   const config = getExhibitorQuotaConfig(level);
   const quota = config.quotas[quotaType];
 
-  if (typeof quota === 'boolean') return quota ? 999999 : 0;
+  if (typeof quota === 'boolean') {return quota ? 999999 : 0;}
   return quota === -1 ? 999999 : quota;
 }
 
@@ -273,7 +273,7 @@ export function calculateExhibitorRemainingQuota(
   currentUsage: number
 ): number {
   const quota = getExhibitorQuota(level, quotaType);
-  if (quota === 999999) return 999999; // illimité
+  if (quota === 999999) {return 999999;} // illimité
   return Math.max(0, quota - currentUsage);
 }
 
@@ -299,7 +299,7 @@ export function hasExhibitorAccess(
   const config = getExhibitorQuotaConfig(level);
   const quota = config.quotas[quotaType];
 
-  if (typeof quota === 'boolean') return quota;
+  if (typeof quota === 'boolean') {return quota;}
   return quota !== 0;
 }
 

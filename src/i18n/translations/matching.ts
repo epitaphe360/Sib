@@ -10,7 +10,7 @@ export const matchingTranslations = {
     'matching.my_profile': 'Mon Profil',
     'matching.matches': 'Correspondances',
     'matching.score': 'Score de compatibilité',
-    
+
     // Secteurs d'activité
     'matching.sector.port_operations': 'Exploitation & Gestion BTP',
     'matching.sector.construction_tech': 'Technologies BTP',
@@ -27,7 +27,7 @@ export const matchingTranslations = {
     'matching.sector.it': 'IT et Systèmes',
     'matching.sector.construction_services': 'Services BTP',
     'matching.sector.cargo_handling': 'Gestion des Matériaux de Construction',
-    
+
     // Centres d'intérêt
     'matching.interest.innovation': 'Innovation et R&D',
     'matching.interest.sustainability': 'Développement Durable',
@@ -39,7 +39,7 @@ export const matchingTranslations = {
     'matching.interest.cybersecurity': 'Cybersécurité',
     'matching.interest.smart_ports': 'Bâtiments Intelligents (Smart Building)',
     'matching.interest.green_tech': 'Technologies Vertes',
-    
+
     // Objectifs networking
     'matching.goal.find_clients': 'Trouver de nouveaux clients',
     'matching.goal.find_suppliers': 'Trouver des fournisseurs',
@@ -51,7 +51,7 @@ export const matchingTranslations = {
     'matching.goal.invest': 'Trouver des opportunités d\'investissement',
     'matching.goal.export': 'Développer à l\'international',
     'matching.goal.technology_transfer': 'Transfert de technologie',
-    
+
     // Types de collaboration
     'matching.collab.commercial_partnership': 'Partenariat commercial',
     'matching.collab.joint_venture': 'Joint-venture',
@@ -63,7 +63,7 @@ export const matchingTranslations = {
     'matching.collab.consortium': 'Consortium',
     'matching.collab.subcontracting': 'Sous-traitance',
     'matching.collab.investment': 'Investissement',
-    
+
     // Formulaire
     'matching.form.sectors': 'Secteurs d\'activité',
     'matching.form.interests': 'Centres d\'intérêt',
@@ -71,7 +71,7 @@ export const matchingTranslations = {
     'matching.form.collaboration_types': 'Types de collaboration recherchés',
     'matching.form.save': 'Enregistrer mon profil',
     'matching.form.update': 'Mettre à jour',
-    
+
     // Résultats
     'matching.results.title': 'Vos meilleures correspondances',
     'matching.results.no_matches': 'Aucune correspondance pour le moment',
@@ -87,7 +87,7 @@ export const matchingTranslations = {
     'matching.my_profile': 'My Profile',
     'matching.matches': 'Matches',
     'matching.score': 'Compatibility score',
-    
+
     // Sectors
     'matching.sector.port_operations': 'Construction Operations & Management',
     'matching.sector.construction_tech': 'Bâtiment Technologies',
@@ -104,7 +104,7 @@ export const matchingTranslations = {
     'matching.sector.it': 'IT and Systems',
     'matching.sector.construction_services': 'Bâtiment Services',
     'matching.sector.cargo_handling': 'Construction Materials Management',
-    
+
     // Interests
     'matching.interest.innovation': 'Innovation and R&D',
     'matching.interest.sustainability': 'Sustainability',
@@ -116,7 +116,7 @@ export const matchingTranslations = {
     'matching.interest.cybersecurity': 'Cybersecurity',
     'matching.interest.smart_ports': 'Smart Buildings & PropTech',
     'matching.interest.green_tech': 'Green Technologies',
-    
+
     // Networking goals
     'matching.goal.find_clients': 'Find new clients',
     'matching.goal.find_suppliers': 'Find suppliers',
@@ -128,7 +128,7 @@ export const matchingTranslations = {
     'matching.goal.invest': 'Find investment opportunities',
     'matching.goal.export': 'Expand internationally',
     'matching.goal.technology_transfer': 'Technology transfer',
-    
+
     // Collaboration types
     'matching.collab.commercial_partnership': 'Commercial partnership',
     'matching.collab.joint_venture': 'Joint venture',
@@ -140,7 +140,7 @@ export const matchingTranslations = {
     'matching.collab.consortium': 'Consortium',
     'matching.collab.subcontracting': 'Subcontracting',
     'matching.collab.investment': 'Investment',
-    
+
     // Form
     'matching.form.sectors': 'Business sectors',
     'matching.form.interests': 'Interests',
@@ -148,7 +148,7 @@ export const matchingTranslations = {
     'matching.form.collaboration_types': 'Desired collaboration types',
     'matching.form.save': 'Save my profile',
     'matching.form.update': 'Update',
-    
+
     // Results
     'matching.results.title': 'Your best matches',
     'matching.results.no_matches': 'No matches yet',

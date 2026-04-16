@@ -44,7 +44,7 @@ function slugify(text: string): string {
 }
 
 function formatDate(iso: string | null): string {
-  if (!iso) return '—';
+  if (!iso) {return '—';}
   return new Date(iso).toLocaleDateString('fr-FR', {
     day: '2-digit', month: 'short', year: 'numeric',
   });
@@ -78,7 +78,7 @@ export default function SalonsManagementPage() {
         .select('*')
         .order('sort_order', { ascending: true });
 
-      if (error) throw error;
+      if (error) {throw error;}
       setSalons((data || []) as Salon[]);
     } catch (err: any) {
       toast.error('Impossible de charger les salons : ' + (err.message ?? err));
@@ -101,10 +101,10 @@ export default function SalonsManagementPage() {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {return;}
     const path = `salons/${Date.now()}_${field}_${file.name}`;
     const url = await uploadImage(file, 'public', path);
-    if (url) setForm(prev => ({ ...prev, [field]: url }));
+    if (url) {setForm(prev => ({ ...prev, [field]: url }));}
   };
 
   // ── Ouvrir modal (création / édition) ────────────────────────────────────────
@@ -155,13 +155,13 @@ export default function SalonsManagementPage() {
           .from('salons')
           .update({ ...form, updated_at: new Date().toISOString() })
           .eq('id', editingSalon.id);
-        if (error) throw error;
+        if (error) {throw error;}
         toast.success('Salon mis à jour.');
       } else {
         const { error } = await supabase!
           .from('salons')
           .insert([{ ...form }]);
-        if (error) throw error;
+        if (error) {throw error;}
         toast.success('Salon créé.');
       }
       closeModal();
@@ -184,7 +184,7 @@ export default function SalonsManagementPage() {
         await supabase!.from('salons').update({ is_default: false }).neq('id', salon.id);
       }
       const { error } = await supabase!.from('salons').update(update).eq('id', salon.id);
-      if (error) throw error;
+      if (error) {throw error;}
       toast.success(`Salon ${field === 'is_active' ? (newValue ? 'activé' : 'désactivé') : (newValue ? 'défini par défaut' : 'retiré par défaut')}.`);
       await fetchSalons();
     } catch (err: any) {
@@ -197,7 +197,7 @@ export default function SalonsManagementPage() {
   const moveSalon = async (salon: Salon, direction: 'up' | 'down') => {
     const idx = salons.findIndex(s => s.id === salon.id);
     const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
-    if (swapIdx < 0 || swapIdx >= salons.length) return;
+    if (swapIdx < 0 || swapIdx >= salons.length) {return;}
     const other = salons[swapIdx];
     try {
       await Promise.all([
@@ -213,10 +213,10 @@ export default function SalonsManagementPage() {
   // ── Suppression ───────────────────────────────────────────────────────────────
 
   const handleDelete = async (salon: Salon) => {
-    if (!window.confirm(`Supprimer le salon "${salon.name}" ? Cette action est irréversible.`)) return;
+    if (!window.confirm(`Supprimer le salon "${salon.name}" ? Cette action est irréversible.`)) {return;}
     try {
       const { error } = await supabase!.from('salons').delete().eq('id', salon.id);
-      if (error) throw error;
+      if (error) {throw error;}
       toast.success('Salon supprimé.');
       await fetchSalons();
     } catch (err: any) {

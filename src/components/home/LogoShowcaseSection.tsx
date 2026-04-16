@@ -75,7 +75,7 @@ const LogoBand: React.FC<{
   speed?: number;
   fadeBg?: string;
 }> = ({ logos, reverse = false, speed = 35, fadeBg = '#f8fafc' }) => {
-  if (logos.length === 0) return null;
+  if (logos.length === 0) {return null;}
 
   // triple for seamless wrapping
   const items = [...logos, ...logos, ...logos];
@@ -126,7 +126,7 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
           setPartners(partnersData.filter(p => p.logo && p.logo.trim() !== ''));
         }
         if (type === 'exhibitors' || type === 'both') {
-          if (exhibitors.length === 0) fetchExhibitors();
+          if (exhibitors.length === 0) {fetchExhibitors();}
         }
       } catch (error) {
         console.error('Erreur lors du chargement des données:', error);

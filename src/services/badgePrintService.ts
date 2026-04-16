@@ -8,11 +8,11 @@ import { supabase } from '../lib/supabase';
 import { UserBadge } from '../types';
 import { getBadgeColor, getAccessLevelLabel } from './badgeService';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 type AnyRecord = Record<string, any>;
 
 function getClient() {
-  if (!supabase) throw new Error('Supabase client not initialized');
+  if (!supabase) {throw new Error('Supabase client not initialized');}
   return supabase;
 }
 
@@ -67,7 +67,7 @@ export async function lookupBadgeByCode(badgeCode: string): Promise<BadgeLookupR
       .eq('badge_code', badgeCode)
       .maybeSingle();
 
-    if (badgeError) throw badgeError;
+    if (badgeError) {throw badgeError;}
 
     const badge = data as AnyRecord | null;
 
@@ -166,7 +166,7 @@ export async function lookupBadgeByQRData(qrRawData: string): Promise<BadgeLooku
     // D'abord essayer par badge_code
     if (badgeCode) {
       const result = await lookupBadgeByCode(badgeCode);
-      if (result.found) return result;
+      if (result.found) {return result;}
     }
 
     // Essayer par user_id si disponible
@@ -206,7 +206,7 @@ export async function lookupBadgeByUserId(userId: string): Promise<BadgeLookupRe
       .eq('user_id', userId)
       .maybeSingle();
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     const badge = data as AnyRecord | null;
 
@@ -233,7 +233,7 @@ export async function lookupBadgeByEmail(email: string): Promise<BadgeLookupResu
       .eq('email', email.trim().toLowerCase())
       .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') throw error;
+    if (error && error.code !== 'PGRST116') {throw error;}
 
     const badge = data as AnyRecord | null;
 
@@ -273,7 +273,7 @@ export async function lookupBadgeByName(name: string): Promise<BadgeLookupResult
       .ilike('full_name', `%${name.trim()}%`)
       .limit(10);
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     const badges = (badgesData || []) as AnyRecord[];
 
@@ -305,7 +305,7 @@ export function recordPrint(record: Omit<PrintRecord, 'id'>): PrintRecord {
   history.unshift(fullRecord);
 
   // Garder max 500 enregistrements
-  if (history.length > 500) history.length = 500;
+  if (history.length > 500) {history.length = 500;}
 
   localStorage.setItem('badge_print_history', JSON.stringify(history));
   return fullRecord;
@@ -317,7 +317,7 @@ export function recordPrint(record: Omit<PrintRecord, 'id'>): PrintRecord {
 export function getPrintHistory(): PrintRecord[] {
   try {
     const raw = localStorage.getItem('badge_print_history');
-    if (!raw) return [];
+    if (!raw) {return [];}
     return JSON.parse(raw).map((r: PrintRecord) => ({
       ...r,
       printedAt: new Date(r.printedAt),

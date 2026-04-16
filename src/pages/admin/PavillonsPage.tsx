@@ -222,29 +222,29 @@ export default function PavillonsPage() {
 
   const handlePavilionAction = (pavilionId: string, action: string) => {
     const pavilion = pavilions.find(p => p.id === pavilionId);
-    
+
     switch (action) {
       case 'view':
         // Navigation vers la page publique de visualisation
         window.open(`/pavilions#${pavilionId}`, '_blank');
         break;
-      
+
       case 'edit':
         if (pavilion) {
           setEditingPavilion(pavilion);
           setShowEditModal(true);
         }
         break;
-      
+
       case 'delete':
         setShowDeleteConfirm(pavilionId);
         break;
-      
+
       case 'add-demo':
         // Navigation vers la page d'ajout de démo
         navigate(`${ROUTES.ADMIN_PAVILION_ADD_DEMO.replace(':pavilionId', pavilionId)}`);
         break;
-      
+
       default:
         console.log(`Action ${action} for pavilion ${pavilionId}`);
     }
@@ -255,18 +255,18 @@ export default function PavillonsPage() {
       case 'view':
         toast.info('Fonctionnalité de visualisation de démo à venir');
         break;
-      
+
       case 'edit':
         toast.info('Fonctionnalité d\'édition de démo à venir');
         break;
-      
+
       case 'delete':
         if (confirm('Êtes-vous sûr de vouloir supprimer ce programme de démonstration ?')) {
           toast.success('Programme de démonstration supprimé');
           // Implémenter la suppression réelle ici
         }
         break;
-      
+
       default:
         console.log(`Action ${action} for demo ${demoId}`);
     }
@@ -280,7 +280,7 @@ export default function PavillonsPage() {
   };
 
   const handleSaveEdit = (updatedPavilion: Pavilion) => {
-    setPavilions(prev => 
+    setPavilions(prev =>
       prev.map(p => p.id === updatedPavilion.id ? updatedPavilion : p)
     );
     setShowEditModal(false);

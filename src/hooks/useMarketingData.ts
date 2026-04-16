@@ -35,7 +35,7 @@ export function useMarketingData() {
         .order('created_at', { ascending: false })
         .range(0, 49);
 
-      if (error) throw error;
+      if (error) {throw error;}
       setMediaItems((data as MediaItem[]) || []);
     } catch (err) {
       console.error('Erreur chargement médias:', err);
@@ -53,7 +53,7 @@ export function useMarketingData() {
         .order('created_at', { ascending: false })
         .range(0, 49);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const articlesWithShortcode: ArticleItem[] = (data || []).map((a: any) => ({
         ...a,
@@ -93,8 +93,8 @@ export function useMarketingData() {
   const filteredMedia = useMemo(
     () =>
       mediaItems.filter((item) => {
-        if (filterType !== 'all' && item.type !== filterType) return false;
-        if (filterStatus !== 'all' && item.status !== filterStatus) return false;
+        if (filterType !== 'all' && item.type !== filterType) {return false;}
+        if (filterStatus !== 'all' && item.status !== filterStatus) {return false;}
         return true;
       }),
     [mediaItems, filterType, filterStatus],
@@ -113,7 +113,7 @@ export function useMarketingData() {
         })
         .eq('id', item.id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setMediaItems((prev) =>
         prev.map((m) => (m.id === item.id ? { ...m, status: newStatus } : m)),
@@ -128,14 +128,14 @@ export function useMarketingData() {
   }, []);
 
   const deleteMedia = useCallback(async (item: MediaItem) => {
-    if (!confirm(`Supprimer "${item.title}" ?`)) return;
+    if (!confirm(`Supprimer "${item.title}" ?`)) {return;}
     try {
       const { error } = await db
         .from('media_contents')
         .delete()
         .eq('id', item.id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setMediaItems((prev) => prev.filter((m) => m.id !== item.id));
       toast.success('🗑️ Média supprimé');
@@ -172,7 +172,7 @@ export function useMarketingData() {
           .select()
           .single();
 
-        if (error) throw error;
+        if (error) {throw error;}
 
         setMediaItems((prev) => [data as MediaItem, ...prev]);
         toast.success('✅ Média ajouté');
@@ -199,7 +199,7 @@ export function useMarketingData() {
         })
         .eq('id', article.id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setArticles((prev) =>
         prev.map((a) =>
@@ -216,14 +216,14 @@ export function useMarketingData() {
   }, []);
 
   const deleteArticle = useCallback(async (article: ArticleItem) => {
-    if (!confirm(`Supprimer "${article.title}" ?`)) return;
+    if (!confirm(`Supprimer "${article.title}" ?`)) {return;}
     try {
       const { error } = await db
         .from('news_articles')
         .delete()
         .eq('id', article.id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setArticles((prev) => prev.filter((a) => a.id !== article.id));
       toast.success('🗑️ Article supprimé');

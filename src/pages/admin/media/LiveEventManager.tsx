@@ -31,7 +31,7 @@ export const LiveEventManager: React.FC = () => {
 
   useEffect(() => {
     loadLiveEvents();
-    
+
     // Setup real-time subscription for live updates
     const subscription = supabase
       .channel('live-events')
@@ -59,9 +59,9 @@ export const LiveEventManager: React.FC = () => {
         .order('scheduled_date', { ascending: false })
         .range(0, 49);
 
-      if (error) throw error;
+      if (error) {throw error;}
       setLiveEvents(data || []);
-      
+
       // Find current live event
       const live = data?.find(e => e.is_live);
       if (live) {
@@ -81,7 +81,7 @@ export const LiveEventManager: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('media_contents')
-        .update({ 
+        .update({
           is_live: true,
           viewers_count: 0
         })
@@ -89,8 +89,8 @@ export const LiveEventManager: React.FC = () => {
         .select()
         .single();
 
-      if (error) throw error;
-      
+      if (error) {throw error;}
+
       setCurrentLive(data);
       setIsStreaming(true);
       toast.success('Live démarré !');
@@ -101,19 +101,19 @@ export const LiveEventManager: React.FC = () => {
   };
 
   const handleStopLive = async () => {
-    if (!currentLive) return;
+    if (!currentLive) {return;}
 
     try {
       const { error } = await supabase
         .from('media_contents')
-        .update({ 
+        .update({
           is_live: false,
           recording_url: currentLive.content_url // Save as recording
         })
         .eq('id', currentLive.id);
 
-      if (error) throw error;
-      
+      if (error) {throw error;}
+
       setCurrentLive(null);
       setIsStreaming(false);
       setViewersCount(0);
@@ -308,7 +308,7 @@ export const LiveEventManager: React.FC = () => {
                 .filter(e => !e.is_live)
                 .map((event) => {
                   const isUpcoming = event.scheduled_date && new Date(event.scheduled_date) > new Date();
-                  
+
                   return (
                     <div
                       key={event.id}
@@ -324,7 +324,7 @@ export const LiveEventManager: React.FC = () => {
                               <Badge variant="secondary">Passé</Badge>
                             )}
                           </div>
-                          
+
                           <p className="text-sm text-gray-600 mb-3">
                             {event.description}
                           </p>

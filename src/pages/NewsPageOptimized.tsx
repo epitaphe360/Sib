@@ -105,8 +105,8 @@ export default function NewsPageOptimized() {
     initialSortField: 'publishedAt',
     initialSortDirection: 'desc',
     filterFn: (article, filters) => {
-      if (filters.category && filters.category !== 'all' && article.category !== filters.category) return false;
-      if (filters.featured === 'true' && !article.featured) return false;
+      if (filters.category && filters.category !== 'all' && article.category !== filters.category) {return false;}
+      if (filters.featured === 'true' && !article.featured) {return false;}
       return true;
     },
   });
@@ -162,7 +162,7 @@ export default function NewsPageOptimized() {
   };
 
   const renderSortIcon = (field: string) => {
-    if (sortField !== field) return null;
+    if (sortField !== field) {return null;}
     return sortDirection === 'asc' ? (
       <ChevronUp className="h-4 w-4 inline ml-1" />
     ) : (

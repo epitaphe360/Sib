@@ -86,12 +86,12 @@ export default function BadgeScannerPage() {
   const loadScanStats = async () => {
     try {
       const { supabase } = await import('../lib/supabase');
-      
+
       // 1. Total des scans = somme de tous les scan_count
       const { data: allBadges, error: badgesError } = await supabase
         .from('user_badges')
         .select('scan_count, last_scanned_at, created_at');
-      
+
       if (badgesError) {
         console.error('Erreur chargement stats:', badgesError);
         return;
@@ -100,7 +100,7 @@ export default function BadgeScannerPage() {
       // 2. Calculer les stats
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       let totalScans = 0;
       let uniqueVisitors = 0;
       let todayScans = 0;
@@ -109,15 +109,15 @@ export default function BadgeScannerPage() {
       if (allBadges && allBadges.length > 0) {
         // Total scans = somme de tous les scan_count
         totalScans = allBadges.reduce((sum, b) => sum + (b.scan_count || 0), 0);
-        
+
         // Visiteurs uniques = badges avec au moins 1 scan
         uniqueVisitors = allBadges.filter(b => (b.scan_count || 0) > 0).length;
-        
+
         // Pour todayScans, on doit compter les scans faits aujourd'hui
         // Comme on n'a que last_scanned_at, on compte les badges scannés aujourd'hui
         // Note: Pour avoir le vrai nombre de scans aujourd'hui, il faudrait une table scan_logs
         const scannedToday = allBadges.filter(b => {
-          if (!b.last_scanned_at) return false;
+          if (!b.last_scanned_at) {return false;}
           const scanDate = new Date(b.last_scanned_at);
           return scanDate >= today;
         });
@@ -127,7 +127,7 @@ export default function BadgeScannerPage() {
         const sortedByLastScan = allBadges
           .filter(b => b.last_scanned_at && !isNaN(new Date(b.last_scanned_at).getTime()))
           .sort((a, b) => new Date(b.last_scanned_at!).getTime() - new Date(a.last_scanned_at!).getTime());
-        
+
         if (sortedByLastScan.length > 0 && sortedByLastScan[0].last_scanned_at) {
           lastScanTime = new Date(sortedByLastScan[0].last_scanned_at);
         }
@@ -139,7 +139,7 @@ export default function BadgeScannerPage() {
         uniqueVisitors,
         lastScanTime
       });
-      
+
       console.log('Stats chargées:', { totalScans, todayScans, uniqueVisitors });
     } catch (err) {
       console.error(t('badge.scanner.error_stats'), err);
@@ -233,7 +233,7 @@ export default function BadgeScannerPage() {
       console.log('Scan ignoré - traitement en cours');
       return;
     }
-    
+
     // Bloquer immédiatement les nouveaux scans
     isProcessingRef.current = true;
     console.log('QR Code scanné:', decodedText);
@@ -255,9 +255,9 @@ export default function BadgeScannerPage() {
       // - Badge statique: code simple (ex: "F29F85-81739C")
       // - Badge dynamique: JWT complet (ex: "eyJhbGciOi...")
       // - Badge JSON: parse et extrait le token/badge_code
-      
+
       let qrData = decodedText;
-      
+
       // Si c'est du JSON, extraire le token ou badge_code
       try {
         const parsed = JSON.parse(decodedText);
@@ -270,10 +270,10 @@ export default function BadgeScannerPage() {
 
       // Valider le badge (supporte statique ET dynamique)
       await validateAndRecordScan(qrData);
-      
+
       // Succès: recharger les stats depuis la DB
       await loadScanStats();
-      
+
     } catch (err: any) {
       console.error(t('badge.scanner.error_processing'), err);
       toast.error(t('badge.scanner.invalid'), {
@@ -453,8 +453,8 @@ export default function BadgeScannerPage() {
           <div className="text-center mb-6">
             {/* Photo du visiteur pour vérification d'identité */}
             {badge.avatarUrl ? (
-              <img 
-                src={badge.avatarUrl} 
+              <img
+                src={badge.avatarUrl}
                 alt={badge.fullName}
                 className="w-32 h-32 rounded-full object-cover mx-auto mb-4 border-4 border-white shadow-lg"
               />
@@ -463,7 +463,7 @@ export default function BadgeScannerPage() {
                 <User className="h-16 w-16 text-gray-400" />
               </div>
             )}
-            
+
             {isValid ? (
               <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-2" />
             ) : (

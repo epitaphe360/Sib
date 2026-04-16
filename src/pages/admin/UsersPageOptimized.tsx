@@ -46,8 +46,7 @@ import { apiService } from '../../services/apiService';
 import { Database } from '../../lib/supabase';
 import { useOptimizedList } from '../../hooks/useOptimizedList';
 import { exportService } from '../../services/exportService';
-import { RATE_LIMITS } from '../../middleware/rateLimiter';
-import { useRateLimit } from '../../middleware/rateLimiter';
+import { RATE_LIMITS, useRateLimit } from '../../middleware/rateLimiter';
 import { logger } from '../../lib/logger';
 
 // Define User type based on Supabase schema
@@ -113,14 +112,14 @@ export default function UsersPageOptimized() {
     initialSortField: 'name',
     initialSortDirection: 'asc',
     filterFn: (user, filters) => {
-      if (filters.role && user.type !== filters.role) return false;
-      if (filters.status && user.status !== filters.status) return false;
+      if (filters.role && user.type !== filters.role) {return false;}
+      if (filters.status && user.status !== filters.status) {return false;}
       return true;
     },
   });
 
   const formatDate = (dateString: string | null) => {
-    if (!dateString) return 'Jamais';
+    if (!dateString) {return 'Jamais';}
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('fr-FR', {
       day: 'numeric',
@@ -187,7 +186,7 @@ export default function UsersPageOptimized() {
   };
 
   const renderSortIcon = (field: keyof User) => {
-    if (sortField !== field) return null;
+    if (sortField !== field) {return null;}
     return sortDirection === 'asc' ? (
       <ChevronUp className="h-4 w-4 inline ml-1" />
     ) : (
@@ -310,7 +309,7 @@ export default function UsersPageOptimized() {
                   <p className="text-sm font-medium text-gray-600">Nouveaux ce mois</p>
                   <p className="text-3xl font-bold text-purple-600">
                     {users.filter(u => {
-                      if (!u.registrationDate) return false;
+                      if (!u.registrationDate) {return false;}
                       const monthAgo = new Date(Date.now() - 2592000000);
                       return new Date(u.registrationDate) > monthAgo;
                     }).length}

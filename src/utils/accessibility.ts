@@ -35,8 +35,8 @@ export function createAriaDescribedBy(
   hasError: boolean
 ): string | undefined {
   const ids: string[] = [];
-  if (hasDescription) ids.push(`${baseId}-desc`);
-  if (hasError) ids.push(`${baseId}-error`);
+  if (hasDescription) {ids.push(`${baseId}-desc`);}
+  if (hasError) {ids.push(`${baseId}-error`);}
   return ids.length > 0 ? ids.join(' ') : undefined;
 }
 
@@ -67,7 +67,7 @@ export function handleKeyboardNavigation(
   }
 ): void {
   const { key } = event;
-  
+
   switch (key) {
     case KeyboardKeys.ENTER:
       handlers.onEnter?.();
@@ -140,7 +140,7 @@ export function handleKeyboardActivation(
  * @returns tabIndex value
  */
 export function getTabIndex(disabled: boolean = false, readOnly: boolean = false): number {
-  if (disabled || readOnly) return -1;
+  if (disabled || readOnly) {return -1;}
   return 0;
 }
 

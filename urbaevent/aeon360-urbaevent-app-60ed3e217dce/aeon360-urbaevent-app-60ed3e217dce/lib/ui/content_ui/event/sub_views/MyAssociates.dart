@@ -692,7 +692,7 @@ class _MyAssociates extends State<MyAssociates> {
                 _overlayEntry?.remove();
               },
               child: Container(
-                color: Colors.black.withOpacity(0.12), // Background dim effect
+                color: Colors.black.withValues(alpha: 0.12), // Background dim effect
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
               ),
@@ -799,13 +799,15 @@ class _MyAssociates extends State<MyAssociates> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_overlayEntry != null && _overlayEntry!.mounted) {
-          _overlayEntry!.remove();
-          return false;
-        } else {
-          return true;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, _) {
+        if (!didPop) {
+          if (_overlayEntry != null && _overlayEntry!.mounted) {
+            _overlayEntry!.remove();
+          } else {
+            Navigator.of(context).pop();
+          }
         }
       },
       child: Scaffold(

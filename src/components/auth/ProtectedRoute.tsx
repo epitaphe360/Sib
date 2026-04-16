@@ -24,7 +24,7 @@ export default function ProtectedRoute({
 
   // Wait for zustand hydration + auth initialization
   useEffect(() => {
-    if (readyRef.current) return;
+    if (readyRef.current) {return;}
     const timer = setTimeout(() => {
       readyRef.current = true;
       setIsReady(true);

@@ -6,7 +6,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:com.urbaevent/model/agent/ResponseAgentAuth.dart';
 import 'package:com.urbaevent/model/agent/ResponseGateList.dart';
 import 'package:com.urbaevent/services/SupabaseService.dart';
-import 'package:com.urbaevent/ui/content_ui/agent/MyScans.dart';
 import 'package:com.urbaevent/utils/QrScannerOverlayShape.dart';
 import 'package:com.urbaevent/widgets/CustomBottomBarAgent.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -611,8 +610,11 @@ class _AgentHomePage extends State<AgentHomePage> {
       return false;
     }
 
-    return WillPopScope(
-      onWillPop: _onBackPressedOveRiding,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, _) {
+        if (!didPop) _onBackPressedOveRiding();
+      },
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Stack(
@@ -739,7 +741,7 @@ class _AgentHomePage extends State<AgentHomePage> {
                                       height: 100,
                                       child: Center(
                                           child: CircularProgressIndicator(
-                                        color: Colors.black.withOpacity(0.2),
+                                        color: Colors.black.withValues(alpha: 0.2),
                                       ))),
                                 )),
                             Expanded(
@@ -953,8 +955,8 @@ class _AgentHomePage extends State<AgentHomePage> {
   }
 
   Future<void> vibrateOnce() async {
-    var available = await Vibration.hasVibrator();
-    if (available != null) {
+    final available = await Vibration.hasVibrator();
+    if (available == true) {
       Vibration.vibrate(duration: 500);
     }
   }

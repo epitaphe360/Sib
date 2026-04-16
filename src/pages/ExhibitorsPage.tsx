@@ -22,17 +22,17 @@ export default function ExhibitorsPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { isAuthenticated, user } = useAuthStore();
-  const { 
-    filteredExhibitors, 
+  const {
+    filteredExhibitors,
     totalExhibitors,
     hasMore,
-    filters, 
-    isLoading, 
-    fetchExhibitors, 
+    filters,
+    isLoading,
+    fetchExhibitors,
     loadMoreExhibitors,
-    setFilters 
+    setFilters
   } = useExhibitorStore();
-  
+
   const [viewMode, setViewMode] = useState<keyof typeof CONFIG.viewModes>(CONFIG.viewModes.grid);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -128,11 +128,11 @@ export default function ExhibitorsPage() {
       <div className="relative bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] pt-8 pb-24 px-4 overflow-hidden">
         {/* Pattern Zellige Subtil */}
         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
-        
+
         {/* Cercles Lumineux */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px]"></div>
-        
+
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -143,15 +143,15 @@ export default function ExhibitorsPage() {
              <span className="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em]">{t('exhibitors.catalog_label')}</span>
           </motion.div>
 
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight"
           >
             {t('pages.exhibitors.title')}
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -159,7 +159,7 @@ export default function ExhibitorsPage() {
           >
             {t('pages.exhibitors.description')} • <span className="text-white font-black">{filteredExhibitors.length} {t('exhibitors.leaders_count')}</span>
           </motion.p>
-          
+
           {/* Barre de Recherche Premium */}
           <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-2xl p-2 rounded-3xl border border-white/10 shadow-2xl flex flex-col md:flex-row items-center gap-2">
             <div className="relative flex-1 w-full">
@@ -173,7 +173,7 @@ export default function ExhibitorsPage() {
                 className="w-full pl-14 pr-6 py-4 bg-transparent text-white placeholder-blue-200/40 text-lg font-bold border-none focus:ring-0 focus:outline-none"
               />
             </div>
-            
+
             <div className="flex w-full md:w-auto p-1 gap-2">
               <button
                 onClick={() => setShowFilters(!showFilters)}
@@ -184,7 +184,7 @@ export default function ExhibitorsPage() {
                 <Filter className="h-4 w-4" />
                 <span>{t('exhibitors.filters')}</span>
               </button>
-              
+
               <div className="flex bg-white/5 p-1 rounded-2xl border border-white/5">
                 <button
                   onClick={() => setViewMode(CONFIG.viewModes.grid)}
@@ -227,7 +227,7 @@ export default function ExhibitorsPage() {
                     ))}
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 ml-2">
                     {t('profile.sector')}
@@ -244,7 +244,7 @@ export default function ExhibitorsPage() {
                     ))}
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 ml-2">
                     {t('profile.location')}
@@ -285,7 +285,7 @@ export default function ExhibitorsPage() {
             ))}
           </div>
         ) : filteredExhibitors.length === 0 ? (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white rounded-2xl sm:rounded-[3rem] p-8 sm:p-16 md:p-24 text-center border-2 border-dashed border-gray-100 shadow-2xl shadow-blue-900/5 overflow-hidden relative"
@@ -301,7 +301,7 @@ export default function ExhibitorsPage() {
               <p className="text-slate-500 max-w-sm mx-auto font-medium italic mb-10">
                 {t('exhibitors.no_results_desc')}
               </p>
-              <button 
+              <button
                 onClick={() => setFilters({ search: '', category: '', sector: '', country: '' })}
                 className="px-8 py-3 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-blue-600 transition-colors shadow-xl"
               >

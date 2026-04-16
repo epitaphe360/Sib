@@ -31,8 +31,6 @@ class _ForgotPassword extends State<ForgotPassword> {
       List.generate(4, (_) => TextEditingController());
 
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _pwdController = TextEditingController();
-  TextEditingController _cnfPwdController = TextEditingController();
 
   InputDecoration buildOtpInputDecoration(bool isFilled) {
     return InputDecoration(
@@ -86,22 +84,6 @@ class _ForgotPassword extends State<ForgotPassword> {
     setState(() {
       loader = false;
     });
-  }
-
-  void _showOTPDialog() {
-    showModalBottomSheet(
-        context: context,
-        barrierColor: Colors.transparent,
-        isScrollControlled: true,
-        backgroundColor: Color.fromRGBO(235, 154, 68, 1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-        ),
-        // Set the custom shape here
-        builder: (BuildContext context) {
-          return OTPDialog(loader, _emailController, controllers,
-              _pwdController, _cnfPwdController);
-        });
   }
 
   @override
@@ -225,16 +207,11 @@ class _ForgotPassword extends State<ForgotPassword> {
 }
 
 class OTPDialog extends StatefulWidget {
-  bool loader;
-
-
-
-  List<TextEditingController> controllers =
-      List.generate(4, (_) => TextEditingController());
-
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _pwdController = TextEditingController();
-  TextEditingController _cnfPwdController = TextEditingController();
+  final bool loader;
+  final List<TextEditingController> controllers;
+  final TextEditingController _emailController;
+  final TextEditingController _pwdController;
+  final TextEditingController _cnfPwdController;
 
   OTPDialog(this.loader, this._emailController, this.controllers,
       this._pwdController, this._cnfPwdController);
@@ -327,16 +304,16 @@ class _OTPDialogState extends State<OTPDialog> {
     for (int i = 0; i < focusNode.length; i++) {
       if (focusNode[i].hasFocus) {
         // The widget has focus, so add a listener for key events.
-        RawKeyboard.instance.addListener(_handleKeyPress);
+        HardwareKeyboard.instance.addHandler(_handleKeyPress);
       } else {
         // The widget lost focus, remove the listener.
-        RawKeyboard.instance.removeListener(_handleKeyPress);
+        HardwareKeyboard.instance.removeHandler(_handleKeyPress);
       }
     }
   }
 
-  void _handleKeyPress(RawKeyEvent event) {
-    if (event is RawKeyDownEvent &&
+  bool _handleKeyPress(KeyEvent event) {
+    if (event is KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.backspace) {
       for (int i = 0; i < focusNode.length; i++) {
         if (focusNode[i].hasFocus && widget.controllers[i].text.isEmpty) {
@@ -345,6 +322,7 @@ class _OTPDialogState extends State<OTPDialog> {
         }
       }
     }
+    return false;
   }
 
   @override
@@ -352,7 +330,7 @@ class _OTPDialogState extends State<OTPDialog> {
     for (int i = 0; i < focusNode.length; i++) {
       focusNode[i].dispose();
     }
-    RawKeyboard.instance.removeListener(_handleKeyPress);
+    HardwareKeyboard.instance.removeHandler(_handleKeyPress);
     timer.cancel();
     super.dispose();
   }
@@ -404,10 +382,10 @@ class _OTPDialogState extends State<OTPDialog> {
             Container(
               margin: EdgeInsets.fromLTRB(80, 20, 80, 20),
               child: Center(
-                  child: RawKeyboardListener(
+                  child: KeyboardListener(
                 focusNode: FocusNode(),
-                onKey: (RawKeyEvent event) {
-                  if (event is RawKeyUpEvent &&
+                onKeyEvent: (KeyEvent event) {
+                  if (event is KeyUpEvent &&
                       event.logicalKey == LogicalKeyboardKey.backspace) {
                     for (int i = 0; i < focusNode.length; i++) {
                       if (focusNode[i].hasFocus &&
@@ -529,10 +507,8 @@ class _OTPDialogState extends State<OTPDialog> {
 }
 
 class PasswordVisibilityDialog extends StatefulWidget {
-  bool loader;
-
-  List<TextEditingController> controllers =
-      List.generate(4, (_) => TextEditingController());
+  final bool loader;
+  final List<TextEditingController> controllers;
   final TextEditingController _passwordController;
   final TextEditingController _cnfPasswordController;
 
@@ -546,7 +522,6 @@ class PasswordVisibilityDialog extends StatefulWidget {
 
 class _PasswordVisibilityDialogState extends State<PasswordVisibilityDialog> {
   Future<void> resetPassword() async {
-    setState(() { widget.loader = true; });
     try {
       await SupabaseService.instance.supabaseClient.auth.updateUser(
         UserAttributes(password: widget._passwordController.value.text),
@@ -561,7 +536,6 @@ class _PasswordVisibilityDialogState extends State<PasswordVisibilityDialog> {
     } catch (e) {
       Utils.showToast(e.toString());
     }
-    setState(() { widget.loader = false; });
   }
 
   bool _isPasswordVisible = false;

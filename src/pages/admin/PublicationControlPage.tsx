@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { motion } from 'framer-motion';
@@ -54,45 +54,45 @@ export default function PublicationControlPage() {
         throw new Error('Supabase client not initialized');
       }
       // Load partners
-      console.log('🔍 [PublicationControl] Chargement des partenaires...');
+      console.log('ðŸ”  [PublicationControl] Chargement des partenaires...');
       const { data: partnersData, error: partnersError } = await supabase
         .from('partners')
         .select('id, company_name, partnership_level, is_published, contact_info')
         .order('company_name');
 
-      console.log('📊 [PublicationControl] Partenaires reçus:', { 
-        count: partnersData?.length || 0, 
+      console.log('ðŸ“Š [PublicationControl] Partenaires reÃ us:', {
+        count: partnersData?.length || 0,
         error: partnersError?.message,
-        data: partnersData 
+        data: partnersData
       });
 
       if (partnersError) {
-        console.error('❌ Erreur partners:', partnersError);
+        console.error('â Œ Erreur partners:', partnersError);
         throw partnersError;
       }
       setPartners(partnersData || []);
 
       // Load exhibitors
-      console.log('🔍 [PublicationControl] Chargement des exposants...');
+      console.log('ðŸ”  [PublicationControl] Chargement des exposants...');
       const { data: exhibitorsData, error: exhibitorsError } = await supabase
         .from('exhibitors')
         .select('id, company_name, category, sector, is_published, contact_info')
         .order('company_name');
 
-      console.log('📊 [PublicationControl] Exposants reçus:', { 
-        count: exhibitorsData?.length || 0, 
+      console.log('ðŸ“Š [PublicationControl] Exposants reÃ us:', {
+        count: exhibitorsData?.length || 0,
         error: exhibitorsError?.message,
-        data: exhibitorsData 
+        data: exhibitorsData
       });
 
       if (exhibitorsError) {
-        console.error('❌ Erreur exhibitors:', exhibitorsError);
+        console.error('â Œ Erreur exhibitors:', exhibitorsError);
         throw exhibitorsError;
       }
       setExhibitors(exhibitorsData || []);
     } catch (error) {
-      console.error('❌ [PublicationControl] Error loading data:', error);
-      toast.error('Erreur lors du chargement des données');
+      console.error('â Œ [PublicationControl] Error loading data:', error);
+      toast.error('Erreur lors du chargement des donnÃ es');
     } finally {
       setLoading(false);
     }
@@ -106,18 +106,18 @@ export default function PublicationControlPage() {
       }
       const { error } = await supabase
         .from('partners')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: !currentStatus } as any)
         .eq('id', partnerId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setPartners(prev =>
         prev.map(p => (p.id === partnerId ? { ...p, is_published: !currentStatus } : p))
       );
 
       toast.success(
-        !currentStatus ? 'Partenaire publié ✅' : 'Partenaire masqué 🔒'
+        !currentStatus ? 'Partenaire publiÃ  âœ…' : 'Partenaire masquÃ  ðŸ”’'
       );
     } catch (error) {
       console.error('Error toggling partner:', error);
@@ -135,18 +135,18 @@ export default function PublicationControlPage() {
       }
       const { error } = await supabase
         .from('exhibitors')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: !currentStatus } as any)
         .eq('id', exhibitorId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setExhibitors(prev =>
         prev.map(e => (e.id === exhibitorId ? { ...e, is_published: !currentStatus } : e))
       );
 
       toast.success(
-        !currentStatus ? 'Exposant publié ✅' : 'Exposant masqué 🔒'
+        !currentStatus ? 'Exposant publiÃ  âœ…' : 'Exposant masquÃ  ðŸ”’'
       );
     } catch (error) {
       console.error('Error toggling exhibitor:', error);
@@ -157,7 +157,7 @@ export default function PublicationControlPage() {
   }
 
   async function toggleAllPartners(publish: boolean) {
-    if (!confirm(`Êtes-vous sûr de vouloir ${publish ? 'PUBLIER' : 'MASQUER'} TOUS les partenaires ?`)) {
+    if (!confirm(`ÃŠtes-vous sÃ»r de vouloir ${publish ? 'PUBLIER' : 'MASQUER'} TOUS les partenaires ?`)) {
       return;
     }
 
@@ -171,30 +171,30 @@ export default function PublicationControlPage() {
         .from('partners')
         .select('id');
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {throw fetchError;}
 
       if (!allPartners || allPartners.length === 0) {
-        toast.info('Aucun partenaire à modifier');
+        toast.info('Aucun partenaire Ã  modifier');
         setProcessing(null);
         return;
       }
 
-      console.log(`🔄 Mise à jour de ${allPartners.length} partenaires...`);
+      console.log(`ðŸ”„ Mise Ã  jour de ${allPartners.length} partenaires...`);
 
       // Update using a valid condition that matches all records
       const { error } = await supabase
         .from('partners')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: publish } as any)
         .in('id', allPartners.map((p: any) => p.id));
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       await loadData();
       toast.success(
         publish
-          ? `✅ ${allPartners.length} partenaires sont maintenant publiés`
-          : `🔒 ${allPartners.length} partenaires sont maintenant masqués`
+          ? `âœ… ${allPartners.length} partenaires sont maintenant publiÃ s`
+          : `ðŸ”’ ${allPartners.length} partenaires sont maintenant masquÃ s`
       );
     } catch (error) {
       console.error('Error toggling all partners:', error);
@@ -205,7 +205,7 @@ export default function PublicationControlPage() {
   }
 
   async function toggleAllExhibitors(publish: boolean) {
-    if (!confirm(`Êtes-vous sûr de vouloir ${publish ? 'PUBLIER' : 'MASQUER'} TOUS les exposants ?`)) {
+    if (!confirm(`ÃŠtes-vous sÃ»r de vouloir ${publish ? 'PUBLIER' : 'MASQUER'} TOUS les exposants ?`)) {
       return;
     }
 
@@ -219,30 +219,30 @@ export default function PublicationControlPage() {
         .from('exhibitors')
         .select('id');
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {throw fetchError;}
 
       if (!allExhibitors || allExhibitors.length === 0) {
-        toast.info('Aucun exposant à modifier');
+        toast.info('Aucun exposant Ã  modifier');
         setProcessing(null);
         return;
       }
 
-      console.log(`🔄 Mise à jour de ${allExhibitors.length} exposants...`);
+      console.log(`ðŸ”„ Mise Ã  jour de ${allExhibitors.length} exposants...`);
 
       // Update using a valid condition that matches all records
       const { error } = await supabase
         .from('exhibitors')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: publish } as any)
         .in('id', allExhibitors.map((e: any) => e.id));
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       await loadData();
       toast.success(
         publish
-          ? `✅ ${allExhibitors.length} exposants sont maintenant publiés`
-          : `🔒 ${allExhibitors.length} exposants sont maintenant masqués`
+          ? `âœ… ${allExhibitors.length} exposants sont maintenant publiÃ s`
+          : `ðŸ”’ ${allExhibitors.length} exposants sont maintenant masquÃ s`
       );
     } catch (error) {
       console.error('Error toggling all exhibitors:', error);
@@ -297,10 +297,10 @@ export default function PublicationControlPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Contrôle de Publication
+            ContrÃ le de Publication
           </h1>
           <p className="text-gray-600">
-            Gérez la visibilité des partenaires et exposants sur le site public
+            GÃ rez la visibilitÃ  des partenaires et exposants sur le site public
           </p>
         </div>
 
@@ -347,7 +347,7 @@ export default function PublicationControlPage() {
           <Card className="p-4 bg-green-50 border-green-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-green-700">Publiés</p>
+                <p className="text-sm text-green-700">PubliÃ s</p>
                 <p className="text-2xl font-bold text-green-900">
                   {activeTab === 'partners' ? partnersStats.published : exhibitorsStats.published}
                 </p>
@@ -359,7 +359,7 @@ export default function PublicationControlPage() {
           <Card className="p-4 bg-yellow-50 border-yellow-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-yellow-700">Masqués</p>
+                <p className="text-sm text-yellow-700">MasquÃ s</p>
                 <p className="text-2xl font-bold text-yellow-900">
                   {activeTab === 'partners' ? partnersStats.hidden : exhibitorsStats.hidden}
                 </p>
@@ -379,17 +379,17 @@ export default function PublicationControlPage() {
                     <Building2 className="h-5 w-5 text-white" />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 flex items-center">
-                    Contrôle Global PARTENAIRES
+                    ContrÃ le Global PARTENAIRES
                   </h3>
                   <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-bold">
                     {partnersStats.total} profils
                   </span>
                 </div>
                 <p className="text-sm text-gray-700 font-medium ml-12">
-                  ⚡ Activer ou désactiver <span className="font-bold text-purple-700">TOUS LES {partnersStats.total} PARTENAIRES</span> en un seul clic
+                  âš  Activer ou dÃ sactiver <span className="font-bold text-purple-700">TOUS LES {partnersStats.total} PARTENAIRES</span> en un seul clic
                 </p>
                 <p className="text-xs text-gray-500 ml-12 mt-1">
-                  ⚠️ Cette action affecte UNIQUEMENT les partenaires (pas les exposants)
+                  âš ï   Cette action affecte UNIQUEMENT les partenaires (pas les exposants)
                 </p>
               </div>
               <div className="flex space-x-3">
@@ -399,7 +399,7 @@ export default function PublicationControlPage() {
                   className="bg-green-600 hover:bg-green-700 px-6 py-3 font-bold"
                 >
                   <Eye className="h-5 w-5 mr-2" />
-                  ✓ Tout Publier ({partnersStats.total})
+                  âœ“ Tout Publier ({partnersStats.total})
                 </Button>
                 <Button
                   onClick={() => toggleAllPartners(false)}
@@ -408,7 +408,7 @@ export default function PublicationControlPage() {
                   className="border-red-300 text-red-600 hover:bg-red-50 px-6 py-3 font-bold"
                 >
                   <EyeOff className="h-5 w-5 mr-2" />
-                  🔒 Tout Masquer ({partnersStats.total})
+                  ðŸ”’ Tout Masquer ({partnersStats.total})
                 </Button>
               </div>
             </div>
@@ -425,17 +425,17 @@ export default function PublicationControlPage() {
                     <Users className="h-5 w-5 text-white" />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 flex items-center">
-                    Contrôle Global EXPOSANTS
+                    ContrÃ le Global EXPOSANTS
                   </h3>
                   <span className="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">
                     {exhibitorsStats.total} profils
                   </span>
                 </div>
                 <p className="text-sm text-gray-700 font-medium ml-12">
-                  ⚡ Activer ou désactiver <span className="font-bold text-emerald-700">TOUS LES {exhibitorsStats.total} EXPOSANTS</span> en un seul clic
+                  âš  Activer ou dÃ sactiver <span className="font-bold text-emerald-700">TOUS LES {exhibitorsStats.total} EXPOSANTS</span> en un seul clic
                 </p>
                 <p className="text-xs text-gray-500 ml-12 mt-1">
-                  ⚠️ Cette action affecte UNIQUEMENT les exposants (pas les partenaires)
+                  âš ï   Cette action affecte UNIQUEMENT les exposants (pas les partenaires)
                 </p>
               </div>
               <div className="flex space-x-3">
@@ -445,7 +445,7 @@ export default function PublicationControlPage() {
                   className="bg-green-600 hover:bg-green-700 px-6 py-3 font-bold"
                 >
                   <Eye className="h-5 w-5 mr-2" />
-                  ✓ Tout Publier ({exhibitorsStats.total})
+                  âœ“ Tout Publier ({exhibitorsStats.total})
                 </Button>
                 <Button
                   onClick={() => toggleAllExhibitors(false)}
@@ -454,7 +454,7 @@ export default function PublicationControlPage() {
                   className="border-red-300 text-red-600 hover:bg-red-50 px-6 py-3 font-bold"
                 >
                   <EyeOff className="h-5 w-5 mr-2" />
-                  🔒 Tout Masquer ({exhibitorsStats.total})
+                  ðŸ”’ Tout Masquer ({exhibitorsStats.total})
                 </Button>
               </div>
             </div>
@@ -494,7 +494,7 @@ export default function PublicationControlPage() {
                             {partner.company_name}
                           </h3>
                           <p className="text-sm text-gray-500">
-                            {partner.partnership_level} • {partner.contact_info?.email || 'N/A'}
+                            {partner.partnership_level} â   {partner.contact_info?.email || 'N/A'}
                           </p>
                         </div>
                       </div>
@@ -504,12 +504,12 @@ export default function PublicationControlPage() {
                       {partner.is_published ? (
                         <span className="flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
                           <CheckCircle className="h-4 w-4 mr-1" />
-                          Publié
+                          PubliÃ 
                         </span>
                       ) : (
                         <span className="flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
                           <AlertCircle className="h-4 w-4 mr-1" />
-                          Masqué
+                          MasquÃ 
                         </span>
                       )}
 
@@ -537,7 +537,7 @@ export default function PublicationControlPage() {
             {filteredPartners.length === 0 && (
               <Card className="p-8 text-center">
                 <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600">Aucun partenaire trouvé</p>
+                <p className="text-gray-600">Aucun partenaire trouvÃ </p>
               </Card>
             )}
           </div>
@@ -562,7 +562,7 @@ export default function PublicationControlPage() {
                             {exhibitor.company_name}
                           </h3>
                           <p className="text-sm text-gray-500">
-                            {exhibitor.category} • {exhibitor.sector} • {exhibitor.contact_info?.email || 'N/A'}
+                            {exhibitor.category} â   {exhibitor.sector} â   {exhibitor.contact_info?.email || 'N/A'}
                           </p>
                         </div>
                       </div>
@@ -572,12 +572,12 @@ export default function PublicationControlPage() {
                       {exhibitor.is_published ? (
                         <span className="flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
                           <CheckCircle className="h-4 w-4 mr-1" />
-                          Publié
+                          PubliÃ 
                         </span>
                       ) : (
                         <span className="flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
                           <AlertCircle className="h-4 w-4 mr-1" />
-                          Masqué
+                          MasquÃ 
                         </span>
                       )}
 
@@ -607,7 +607,7 @@ export default function PublicationControlPage() {
             {filteredExhibitors.length === 0 && (
               <Card className="p-8 text-center">
                 <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600">Aucun exposant trouvé</p>
+                <p className="text-gray-600">Aucun exposant trouvÃ </p>
               </Card>
             )}
           </div>

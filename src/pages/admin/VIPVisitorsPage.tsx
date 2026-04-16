@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useTranslation } from '../../hooks/useTranslation';
 import { ROUTES } from '../../lib/routes';
-import { 
-  Crown, 
-  Search, 
-  Download, 
-  Calendar, 
-  Mail, 
-  Building2, 
+import {
+  Crown,
+  Search,
+  Download,
+  Calendar,
+  Mail,
+  Building2,
   CheckCircle,
   XCircle,
   Clock,
@@ -70,11 +70,11 @@ export default function VIPVisitorsPage() {
         .in('visitor_level', ['premium', 'vip'])
         .order('created_at', { ascending: false });
 
-      if (usersError) throw usersError;
+      if (usersError) {throw usersError;}
 
       // 2. Fetch Payment info for these users
       const userIds = usersData.map(u => u.id);
-      
+
       const { data: paymentsData, error: paymentsError } = await supabase
         .from('payment_requests')
         .select('*')
@@ -120,12 +120,12 @@ export default function VIPVisitorsPage() {
         .from('payment_requests')
         .update({ status: 'approved', reviewed_at: new Date().toISOString() })
         .eq('id', paymentId);
-      if (payErr) throw payErr;
+      if (payErr) {throw payErr;}
       const { error: userErr } = await supabase
         .from('users')
         .update({ status: 'active' })
         .eq('id', userId);
-      if (userErr) throw userErr;
+      if (userErr) {throw userErr;}
       toast.success('✅ Paiement validé et compte activé');
       fetchVIPVisitors();
     } catch (err) {
@@ -143,12 +143,12 @@ export default function VIPVisitorsPage() {
         .from('payment_requests')
         .update({ status: 'rejected', reviewed_at: new Date().toISOString() })
         .eq('id', paymentId);
-      if (payErr) throw payErr;
+      if (payErr) {throw payErr;}
       const { error: userErr } = await supabase
         .from('users')
         .update({ visitor_level: 'free', status: 'pending' })
         .eq('id', userId);
-      if (userErr) throw userErr;
+      if (userErr) {throw userErr;}
       toast.success('🚫 Paiement refusé');
       fetchVIPVisitors();
     } catch (err) {
@@ -167,7 +167,7 @@ export default function VIPVisitorsPage() {
         .from('users')
         .update({ status: 'active' })
         .eq('id', userId);
-      if (error) throw error;
+      if (error) {throw error;}
       const { error: pErr } = await supabase.from('payment_requests').insert({
         user_id: userId,
         amount: 300,
@@ -176,7 +176,7 @@ export default function VIPVisitorsPage() {
         payment_method: 'manual_admin',
         reviewed_at: new Date().toISOString(),
       });
-      if (pErr) console.warn('Transaction manuelle non créée:', pErr.message);
+      if (pErr) {console.warn('Transaction manuelle non créée:', pErr.message);}
       toast.success('✅ Visiteur VIP validé manuellement');
       fetchVIPVisitors();
     } catch (err) {
@@ -195,7 +195,7 @@ export default function VIPVisitorsPage() {
         .from('users')
         .update({ visitor_level: 'free', status: 'pending' })
         .eq('id', userId);
-      if (error) throw error;
+      if (error) {throw error;}
       toast.success('🚫 Visiteur rétrogradé en Standard');
       fetchVIPVisitors();
     } catch (err) {
@@ -211,7 +211,7 @@ export default function VIPVisitorsPage() {
     try {
       await supabase.from('payment_requests').delete().eq('user_id', userId);
       const { error } = await supabase.from('users').delete().eq('id', userId);
-      if (error) throw error;
+      if (error) {throw error;}
       toast.success('🗑️ Visiteur supprimé');
       setConfirmDelete(null);
       setVisitors(prev => prev.filter(v => v.id !== userId));
@@ -223,8 +223,8 @@ export default function VIPVisitorsPage() {
     }
   };
 
-  const filteredVisitors = visitors.filter(v => 
-    v.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredVisitors = visitors.filter(v =>
+    v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     v.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     v.company?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -405,7 +405,7 @@ export default function VIPVisitorsPage() {
                   </tr>
                 ) : (
                   filteredVisitors.map((visitor) => (
-                    <motion.tr 
+                    <motion.tr
                       key={visitor.id}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -441,18 +441,18 @@ export default function VIPVisitorsPage() {
                         <div className="text-sm text-gray-500">{visitor.position || 'Visiteur'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(visitor.created_at).toLocaleDateString('fr-FR', { 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric' 
+                        {new Date(visitor.created_at).toLocaleDateString('fr-FR', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
                         })}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {(() => {
                           const p = visitor.payments?.[0];
-                          if (!p) return <Badge variant="warning"><Clock className="h-3 w-3 mr-1" />En attente</Badge>;
-                          if (p.status === 'approved') return <Badge variant="success"><CheckCircle className="h-3 w-3 mr-1" />Validé</Badge>;
-                          if (p.status === 'rejected') return <Badge variant="error"><XCircle className="h-3 w-3 mr-1" />Refusé</Badge>;
+                          if (!p) {return <Badge variant="warning"><Clock className="h-3 w-3 mr-1" />En attente</Badge>;}
+                          if (p.status === 'approved') {return <Badge variant="success"><CheckCircle className="h-3 w-3 mr-1" />Validé</Badge>;}
+                          if (p.status === 'rejected') {return <Badge variant="error"><XCircle className="h-3 w-3 mr-1" />Refusé</Badge>;}
                           return <Badge variant="warning"><Clock className="h-3 w-3 mr-1" />En attente</Badge>;
                         })()}
                       </td>

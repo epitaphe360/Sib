@@ -40,13 +40,13 @@ const ExhibitorProfileImageForm: React.FC<ExhibitorProfileImageFormProps> = ({
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm">
       <h2 className="text-xl font-semibold mb-4">Logo de l'entreprise</h2>
-      
+
       <div className="mb-6">
         <p className="text-gray-600 text-sm mb-4">
           Téléchargez le logo de votre entreprise. Il sera affiché sur votre profil,
           dans les résultats de recherche et sur votre mini-site.
         </p>
-        
+
         <ImageUploader
           initialImageUrl={initialLogoUrl}
           onImageUploaded={setLogoUrl}
@@ -56,18 +56,18 @@ const ExhibitorProfileImageForm: React.FC<ExhibitorProfileImageFormProps> = ({
           maxSizeMB={2}
           className="w-full max-w-xs mx-auto"
         />
-        
+
         <div className="mt-4 text-sm text-gray-500">
           Format recommandé : PNG ou JPG, carré, minimum 500x500 pixels
         </div>
       </div>
-      
+
       {error && (
         <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm mb-4">
           {error}
         </div>
       )}
-      
+
       <div className="flex justify-end gap-3">
         {onCancel && (
           <button
@@ -79,7 +79,7 @@ const ExhibitorProfileImageForm: React.FC<ExhibitorProfileImageFormProps> = ({
             Annuler
           </button>
         )}
-        
+
         <button
           type="button"
           onClick={handleSave}

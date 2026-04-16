@@ -40,7 +40,7 @@ const Lightbox: React.FC<LightboxProps> = ({ image, title, onClose }) => {
       >
         <X className="w-8 h-8" />
       </button>
-      
+
       <motion.div
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
@@ -64,11 +64,11 @@ const Lightbox: React.FC<LightboxProps> = ({ image, title, onClose }) => {
 export const MediaShowcaseSection: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<MediaItem | null>(null);
   const { t } = useTranslation();
-  
+
   // Essayer Supabase d'abord, puis WordPress
   const { data: supabaseMedia, loading: supabaseLoading } = useSupabaseMedia(8, 'image');
   const { data: wpMedia, loading: wpLoading } = useWordPressMedia(8);
-  
+
   const mediaItems = supabaseMedia?.length > 0 ? supabaseMedia : wpMedia;
   const loading = supabaseLoading || wpLoading;
 
@@ -155,7 +155,7 @@ export const MediaShowcaseSection: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
               {t('media.gallery_title')}
             </h2>
-            
+
             <p className="text-blue-100 text-lg max-w-2xl mx-auto">
               {t('media.gallery_desc')}
             </p>
@@ -189,7 +189,7 @@ export const MediaShowcaseSection: React.FC = () => {
                       e.currentTarget.src = 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=400';
                     }}
                   />
-                  
+
                   {/* Overlay au survol */}
                   <div className="absolute inset-0 bg-gradient-to-t from-sib-primary via-sib-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                     <p className="text-white text-sm font-semibold truncate">
@@ -214,7 +214,7 @@ export const MediaShowcaseSection: React.FC = () => {
             className="text-center"
           >
             <Link
-              to="/media-library"
+              to="/media"
               className="inline-flex items-center gap-3 bg-gradient-to-r from-sib-gold to-amber-600 text-white px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
             >
               <span>{t('media.view_gallery')}</span>

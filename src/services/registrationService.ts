@@ -139,8 +139,8 @@ export async function createAuthUser(
       }
     });
 
-    if (authError) throw authError;
-    if (!authData.user) throw new Error('Échec création utilisateur');
+    if (authError) {throw authError;}
+    if (!authData.user) {throw new Error('Échec création utilisateur');}
 
     return { userId: authData.user.id };
   } catch (error) {
@@ -206,7 +206,7 @@ export async function createUserProfile(
       .from('users')
       .insert([userRecord]);
 
-    if (userError) throw userError;
+    if (userError) {throw userError;}
 
     return { success: true };
   } catch (error) {

@@ -17,7 +17,7 @@ interface UseReferencesFilterOptions {
 
 /**
  * Hook useReferencesFilter - Filtrage et tri des références
- * 
+ *
  * Fournit :
  * - Filtrage par secteur
  * - Recherche textuelle
@@ -64,8 +64,8 @@ export const useReferencesFilter = ({ references }: UseReferencesFilterOptions) 
       case 'popular':
         results.sort((a, b) => {
           // Mettre les références en vedette en premier
-          if (a.featured && !b.featured) return -1;
-          if (!a.featured && b.featured) return 1;
+          if (a.featured && !b.featured) {return -1;}
+          if (!a.featured && b.featured) {return 1;}
           return 0;
         });
         break;

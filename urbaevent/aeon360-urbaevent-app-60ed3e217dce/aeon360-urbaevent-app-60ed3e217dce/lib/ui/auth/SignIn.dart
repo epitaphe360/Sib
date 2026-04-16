@@ -1,10 +1,8 @@
 ﻿import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:com.urbaevent/model/ResponseAppleData.dart';
-import 'package:com.urbaevent/ui/auth/EmailVerification.dart';
 import 'package:com.urbaevent/ui/auth/ForgotPassword.dart';
 import 'package:com.urbaevent/ui/content_ui/agent/AgentHomepage.dart';
 import 'package:com.urbaevent/utils/ThemeColor.dart';
@@ -13,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:com.urbaevent/dialogs/Progressbar.dart';
-import 'package:com.urbaevent/model/ResponseAuthRole.dart';
 import 'package:com.urbaevent/model/common/ResponseError.dart';
 import 'package:com.urbaevent/model/ResponseLogin.dart';
 import 'package:com.urbaevent/ui/content_ui/home/HomePage.dart';
@@ -70,8 +67,9 @@ class _SignIn extends State<SignIn> {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
+      if (googleSignInAccount == null) return null;
       final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount!.authentication;
+          await googleSignInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,

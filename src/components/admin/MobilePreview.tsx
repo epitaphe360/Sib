@@ -12,7 +12,7 @@ interface MobilePreviewProps {
 }
 
 function fmtDate(iso: string | null): string {
-  if (!iso) return '—';
+  if (!iso) {return '—';}
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
@@ -30,7 +30,7 @@ export default function MobilePreview({
       <div className="relative w-[280px] h-[560px] rounded-[2.5rem] border-[6px] border-gray-800 bg-gray-900 shadow-2xl overflow-hidden">
         {/* Notch */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-gray-800 rounded-b-2xl z-20" />
-        
+
         {/* Status bar */}
         <div className="relative z-10 flex items-center justify-between px-6 pt-2 pb-1 text-[9px] text-white/80 font-medium">
           <span>09:41</span>

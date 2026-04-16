@@ -5,7 +5,7 @@ class CustomCheckbox extends StatefulWidget {
   final bool checked;
   final Function(bool) onChanged;
   final Image checkedImage;
-  Image? uncheckedImage;
+  final Image? uncheckedImage;
 
   CustomCheckbox({
     required this.checked,

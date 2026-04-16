@@ -53,7 +53,7 @@ class _EventInformation extends State<EventInformation> {
       path: emailAddress,
     );
     try {
-      await launch(emailLaunchUri.toString());
+      await launchUrl(emailLaunchUri);
     } catch (e) {
       print(e.toString());
     }
@@ -62,7 +62,7 @@ class _EventInformation extends State<EventInformation> {
   void _launchPhone(String phoneNumber) async {
     final url = 'tel:$phoneNumber';
     try {
-      await launch(url);
+      await launchUrl(Uri.parse(url));
     } catch (e) {
       print(e.toString());
     }
@@ -117,7 +117,7 @@ class _EventInformation extends State<EventInformation> {
                                       height: 50,
                                       child: Center(
                                           child: CircularProgressIndicator(
-                                        color: Colors.black.withOpacity(0.2),
+                                        color: Colors.black.withValues(alpha: 0.2),
                                       ))),
                                 ),
                               )),
@@ -379,10 +379,10 @@ class _EventInformation extends State<EventInformation> {
                                               alignment: Alignment.center,
                                               children: [
                                                 SvgPicture.asset(
-                                                  "assets/ic_password_change.svg",
-                                                  color: Color.fromRGBO(143, 143,
-                                                      143, 0.796078431372549),
-                                                ),
+                                              "assets/ic_password_change.svg",
+                                              colorFilter: ColorFilter.mode(Color.fromRGBO(143, 143,
+                                                  143, 0.796078431372549), BlendMode.srcIn),
+                                            ),
                                                 SvgPicture.asset(
                                                   "assets/icon_phone_call.svg",
                                                   width: 15,

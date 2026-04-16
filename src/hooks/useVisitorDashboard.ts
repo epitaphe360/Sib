@@ -40,7 +40,7 @@ export function useVisitorDashboard() {
 
   // ─── Effect: visitor data ────────────────────────────────────────────────────
   useEffect(() => {
-    if (user) fetchVisitorData();
+    if (user) {fetchVisitorData();}
   }, [user, fetchVisitorData]);
 
   // ─── Effect: appointments ────────────────────────────────────────────────────
@@ -78,7 +78,7 @@ export function useVisitorDashboard() {
 
   // ─── Effect: auto-clear error ────────────────────────────────────────────────
   useEffect(() => {
-    if (!error) return;
+    if (!error) {return;}
     const t = setTimeout(() => setError(null), 5000);
     return () => clearTimeout(t);
   }, [error]);
@@ -221,8 +221,8 @@ export function useVisitorDashboard() {
 
   const getExhibitorName = useCallback(
     (appointment: { exhibitor?: { companyName?: string; name?: string }; exhibitorId?: string }) => {
-      if (appointment.exhibitor?.companyName) return appointment.exhibitor.companyName;
-      if (appointment.exhibitor?.name) return appointment.exhibitor.name;
+      if (appointment.exhibitor?.companyName) {return appointment.exhibitor.companyName;}
+      if (appointment.exhibitor?.name) {return appointment.exhibitor.name;}
       return `Exposant #${appointment.exhibitorId}`;
     },
     []
@@ -235,8 +235,8 @@ export function useVisitorDashboard() {
       .sort((a, b) => {
         const aDate = a.date || new Date(0);
         const bDate = b.date || new Date(0);
-        if (aDate > now && bDate <= now) return -1;
-        if (aDate <= now && bDate > now) return 1;
+        if (aDate > now && bDate <= now) {return -1;}
+        if (aDate <= now && bDate > now) {return 1;}
         return aDate.getTime() - bDate.getTime();
       })
       .slice(0, 5);

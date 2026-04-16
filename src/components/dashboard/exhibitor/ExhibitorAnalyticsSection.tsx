@@ -4,8 +4,7 @@ import { Badge } from '../../ui/Badge';
 import { Button } from '../../ui/Button';
 import { LineChartCard, BarChartCard, PieChartCard } from '../charts';
 import { ExhibitorConversionFunnel } from '../../common/ConversionFunnel';
-import { AIPredictions } from '../../common/AIPredictions';
-import type { Prediction } from '../../common/AIPredictions';
+import { AIPredictions, type Prediction } from '../../common/AIPredictions';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { ROUTES } from '../../../lib/routes';
 
@@ -74,7 +73,7 @@ export function ExhibitorAnalyticsSection({
       {hasRealData && (
         <LineChartCard
           title={t('dashboard.visitor_engagement_7days')}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
           data={visitorEngagementData as any}
           dataKeys={[
             { key: 'visits', color: '#3b82f6', name: t('exhibitor.analytics_visits') },
@@ -105,7 +104,7 @@ export function ExhibitorAnalyticsSection({
         {hasRealData ? (
           <BarChartCard
             title={t('exhibitor.analytics_activity_breakdown')}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
             data={activityBreakdownData as any}
             dataKey="value"
             colors={['#3b82f6', '#10b981', '#f59e0b', '#ef4444']}

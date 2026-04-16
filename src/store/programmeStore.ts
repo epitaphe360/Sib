@@ -201,11 +201,11 @@ export const useProgrammeStore = create<ProgrammeState>()(
 
       moveSession: (dayId, sessionId, direction) => set((state) => ({
         days: state.days.map(d => {
-          if (d.id !== dayId) return d;
+          if (d.id !== dayId) {return d;}
           const idx = d.sessions.findIndex(s => s.id === sessionId);
-          if (idx < 0) return d;
+          if (idx < 0) {return d;}
           const newIdx = direction === 'up' ? idx - 1 : idx + 1;
-          if (newIdx < 0 || newIdx >= d.sessions.length) return d;
+          if (newIdx < 0 || newIdx >= d.sessions.length) {return d;}
           const sessions = [...d.sessions];
           [sessions[idx], sessions[newIdx]] = [sessions[newIdx], sessions[idx]];
           return { ...d, sessions };

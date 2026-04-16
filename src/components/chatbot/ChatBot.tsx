@@ -235,7 +235,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     }
 
     if (message.includes('rendez-vous') || message.includes('rdv') || message.includes('appointment')) {
-      const rdvText = userType === 'visitor' 
+      const rdvText = userType === 'visitor'
         ? "vous pouvez programmer des RDV B2B garantis avec les exposants"
         : "En tant qu'exposant, vous pouvez créer des créneaux pour recevoir des visiteurs";
 
@@ -322,7 +322,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
             ]
           };
         }
-        
+
         if (message.includes('validation') || message.includes('compte') || message.includes('modération')) {
           return {
             id: Date.now().toString(),
@@ -372,7 +372,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
             ]
           };
         }
-        
+
         if (message.includes('statistique') || message.includes('performance') || message.includes('vue')) {
           return {
             id: Date.now().toString(),
@@ -448,7 +448,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
             ]
           };
         }
-        
+
         if (message.includes('exposant') || message.includes('recommandation') || message.includes('contact')) {
           return {
             id: Date.now().toString(),
@@ -539,7 +539,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
   };
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim()) {return;}
 
     // Ajouter le message de l'utilisateur
     const userMessage: ChatMessage = {
@@ -599,7 +599,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         'support': `❓ SUPPORT SIB\n📧 Email: Sib2026@urbacom.net\n📞 Tél: +212 6 88 50 05 00\n⏰ Lun-Ven: 9h-18h\n💬 Chat en direct disponible`,
         'contact_commercial': `💼 ÉQUIPE COMMERCIALE\n📧 Sib2026@urbacom.net\n📞 +212 6 88 50 05 00\n🤝 Partenariats & Sponsoring\n📄 Devis personnalisés`
       };
-      
+
       const message = actionMessages[action as keyof typeof actionMessages] || `?? Action: ${action}`;
       toast(message as string);
     }
@@ -612,7 +612,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     }).format(date);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <motion.div
@@ -639,7 +639,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setIsMinimized(!isMinimized)}
@@ -670,8 +670,8 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
                     className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
                   >
                     <div className={`max-w-xs ${
-                      message.isBot 
-                        ? 'bg-white border border-gray-200' 
+                      message.isBot
+                        ? 'bg-white border border-gray-200'
                         : 'bg-blue-600 text-white'
                     } rounded-lg p-3 shadow-sm`}>
                       <p className="text-sm">{message.content}</p>
@@ -756,22 +756,22 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                 </div>
-                
-                <Button 
+
+                <Button
                   variant="default"
-                  onClick={handleSendMessage} 
+                  onClick={handleSendMessage}
                   disabled={!inputMessage.trim() || isTyping}
                   size="sm"
                 >
                   <Send className="h-4 w-4" />
                 </Button>
               </div>
-              
+
               {/* Suggestions rapides */}
               <div className="mt-2 flex flex-wrap gap-1">
                 {[
                   "Aide navigation",
-                  "Mes statistiques", 
+                  "Mes statistiques",
                   "Contact support",
                   "Infos pratiques"
                 ].map((suggestion) => (

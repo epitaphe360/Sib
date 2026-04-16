@@ -28,7 +28,7 @@ export function useSupabaseContent<T = any>({
   const [error, setError] = useState<Error | null>(null);
 
   const fetchContent = async () => {
-    if (!enabled) return;
+    if (!enabled) {return;}
 
     setLoading(true);
     setError(null);
@@ -56,7 +56,7 @@ export function useSupabaseContent<T = any>({
 
       const { data: result, error: queryError } = await query;
 
-      if (queryError) throw queryError;
+      if (queryError) {throw queryError;}
 
       setData(result || []);
     } catch (err) {

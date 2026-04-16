@@ -62,7 +62,7 @@ export interface UserProfile {
   // Exhibitor specific fields
   standNumber?: string; // Numéro de stand pour les exposants
   standArea?: number; // Surface du stand en m² (9, 18, 36, 54+)
-  // Partner specific fields  
+  // Partner specific fields
   partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de partenaire SIB
 }
 
@@ -129,10 +129,10 @@ export interface ContactInfo {
   zipCode?: string;
 }
 
-export type ExhibitorCategory = 
-  | 'institutional' 
-  | 'bâtiment-industry' 
-  | 'bâtiment-operations' 
+export type ExhibitorCategory =
+  | 'institutional'
+  | 'bâtiment-industry'
+  | 'bâtiment-operations'
   | 'academic';
 
 export interface Product {
@@ -373,7 +373,7 @@ export interface RegistrationData {
   country: string;
   website?: string;
   registrationNumber?: string;
-  
+
   // Step 2: Contact Information
   firstName: string;
   lastName: string;
@@ -381,7 +381,7 @@ export interface RegistrationData {
   email: string;
   phone: string;
   linkedin?: string;
-  
+
   // Step 3: Detailed Information
   description: string;
   products: string[];
@@ -389,13 +389,13 @@ export interface RegistrationData {
   employeeCount: string;
   revenue?: string;
   certifications: string[];
-  
+
   // Step 4: Documents
   logo?: File;
   brochure?: File;
   certificate?: File;
   catalog?: File;
-  
+
   // Step 5: Objectives
   objectives: string[];
   partnershipTypes: string[];

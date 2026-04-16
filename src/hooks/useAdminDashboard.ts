@@ -30,7 +30,7 @@ export function useAdminDashboard() {
       .subscribe();
 
     return () => {
-      if (pollingRef.current) clearInterval(pollingRef.current);
+      if (pollingRef.current) {clearInterval(pollingRef.current);}
       channel?.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

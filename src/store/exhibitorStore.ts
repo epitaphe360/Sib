@@ -80,21 +80,21 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
         return exhibitor.verified && isPubliclyVisible && matchesCategory && matchesSector && matchesSearch;
       });
 
-      set({ 
+      set({
         exhibitors,
         filteredExhibitors,
         totalExhibitors: total,
         currentPage: reset ? 1 : nextPage + 1,
         hasMore: exhibitors.length < total,
-        isLoading: false 
+        isLoading: false
       });
     } catch (error: unknown) {
       console.error('Erreur lors du chargement des exposants:', error);
-      
+
       // Message d'erreur simple et clair
       const errorMessage = error instanceof Error ? error.message : String(error) || 'Erreur de connexion à la base de données';
-      
-      set({ 
+
+      set({
         exhibitors: [],
         filteredExhibitors: [],
         totalExhibitors: 0,
@@ -108,7 +108,7 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
 
   loadMoreExhibitors: async () => {
     const { isLoading, hasMore } = get();
-    if (isLoading || !hasMore) return;
+    if (isLoading || !hasMore) {return;}
     await get().fetchExhibitors(false);
   },
 
@@ -117,19 +117,19 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
 	    try {
 	      const isVerified = newStatus === 'approved';
 	      const userStatus = isVerified ? 'active' : 'rejected';
-	
+
 	      // Récupérer les données de l'exposant pour l'email
 	      const exhibitorToUpdate = get().exhibitors.find(ex => ex.id === exhibitorId);
-	      if (!exhibitorToUpdate) throw new Error('Exposant non trouvé dans le store');
-	
+	      if (!exhibitorToUpdate) {throw new Error('Exposant non trouvé dans le store');}
+
 	      // 1. Mettre à jour le statut 'verified' de l'exposant
 	      await SupabaseService.updateExhibitor(exhibitorId, {
 	        verified: isVerified,
 	      });
-	
+
 	      // 2. Mettre à jour le statut de l'utilisateur (dans la table 'users')
 	      await SupabaseService.updateUserStatus(exhibitorId, userStatus);
-	
+
 	      // 3. Envoyer l'email de validation/rejet (ne pas bloquer si échec)
 	      try {
 	        await SupabaseService.sendValidationEmail({
@@ -144,13 +144,13 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
 	        console.warn('⚠️ Email de validation non envoyé:', emailError);
 	        // Ne pas bloquer la mise à jour si l'email échoue
 	      }
-	
+
 	      set(state => {
-        const updateExhibitor = (ex: Exhibitor) => 
-          ex.id === exhibitorId 
-            ? { ...ex, verified: newStatus === 'approved' } 
+        const updateExhibitor = (ex: Exhibitor) =>
+          ex.id === exhibitorId
+            ? { ...ex, verified: newStatus === 'approved' }
             : ex;
-        
+
         return {
           exhibitors: state.exhibitors.map(updateExhibitor),
           filteredExhibitors: state.filteredExhibitors.map(updateExhibitor),
@@ -167,9 +167,9 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
   setFilters: (newFilters) => {
     const { exhibitors } = get();
     const filters = { ...get().filters, ...newFilters };
-    
+
     console.log('🔍 Filtre appliqué:', filters, `sur ${exhibitors.length} exposants`);
-    
+
     const filtered = exhibitors.filter(exhibitor => {
       const sector = exhibitor.sector || '';
       const companyName = exhibitor.companyName || '';
@@ -179,10 +179,10 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
       const matchesCategory = !filters.category || exhibitor.category === filters.category;
       // Comparaison exacte pour le secteur (au lieu de .includes())
       const matchesSector = !filters.sector || sector === filters.sector;
-      const matchesSearch = !filters.search || 
+      const matchesSearch = !filters.search ||
         companyName.toLowerCase().includes(search) ||
         description.toLowerCase().includes(search);
-      
+
       // Seuls les exposants vérifiés ET publiés sont visibles publiquement
       // La publication peut provenir soit de exhibitors.is_published soit de mini_sites.published.
       const isPubliclyVisible = exhibitor.isPublished === true || exhibitor.miniSite?.published === true;

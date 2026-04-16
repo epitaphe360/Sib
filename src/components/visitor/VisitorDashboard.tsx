@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Activity, X } from 'lucide-react';
+import { Users, Activity, X, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { DashboardSkeleton } from '../ui/Skeleton';
@@ -19,14 +19,13 @@ import {
   VisitorAvailabilityModal,
 } from './components';
 import { getVisitorQuota } from '../../config/quotas';
-import { Calendar } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default memo(function VisitorDashboard() {
   const { t } = useTranslation();
   const ctx = useVisitorDashboard();
 
-  if (ctx.isLoading) return <DashboardSkeleton />;
+  if (ctx.isLoading) {return <DashboardSkeleton />;}
 
   if (!ctx.isAuthenticated || !ctx.user) {
     return (

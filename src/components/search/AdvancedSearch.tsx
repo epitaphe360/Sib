@@ -90,7 +90,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!showSuggestions || allSuggestions.length === 0) return;
+    if (!showSuggestions || allSuggestions.length === 0) {return;}
 
     switch (e.key) {
       case 'ArrowDown':
@@ -328,7 +328,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               <div className="flex flex-wrap gap-2">
                 {Object.entries(activeFilters).map(([key, value]) => {
                   const filter = filters.find((f) => f.key === key);
-                  if (!filter) return null;
+                  if (!filter) {return null;}
 
                   return (
                     <button

@@ -51,7 +51,7 @@ export function SalonProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function loadSalons() {
       try {
-        if (!supabase) return;
+        if (!supabase) {return;}
 
         const { data, error } = await supabase
           .from('salons')
@@ -59,7 +59,7 @@ export function SalonProvider({ children }: { children: React.ReactNode }) {
           .eq('is_active', true)
           .order('sort_order', { ascending: true });
 
-        if (error || !data?.length) return;
+        if (error || !data?.length) {return;}
 
         setSalons(data as Salon[]);
 
@@ -82,7 +82,7 @@ export function SalonProvider({ children }: { children: React.ReactNode }) {
 
   const setSalonBySlug = (slug: string) => {
     const found = salons.find((s) => s.slug === slug);
-    if (found) setCurrentSalon(found);
+    if (found) {setCurrentSalon(found);}
   };
 
   return (

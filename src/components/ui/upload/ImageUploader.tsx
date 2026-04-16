@@ -44,31 +44,31 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {return;}
 
     const file = files[0];
-    
+
     // Vérification de la taille
     const maxSizeBytes = maxSizeMB * 1024 * 1024;
     if (file.size > maxSizeBytes) {
       setError(`La taille du fichier dépasse la limite de ${maxSizeMB}MB`);
       return;
     }
-    
+
     // Vérification du type
     if (!file.type.startsWith('image/')) {
       setError('Le fichier doit être une image');
       return;
     }
-    
+
     setIsUploading(true);
     setError(null);
     setSuccess(false);
-    
+
     try {
       // Upload de l'image
       const url = await StorageService.uploadImage(file, bucket, folder);
-      
+
       // Si un fichier précédent existait, le supprimer
       if (imageUrl && imageUrl.includes(bucket) && imageUrl !== initialImageUrl) {
         try {
@@ -77,16 +77,16 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           console.warn('Impossible de supprimer l\'ancienne image', err);
         }
       }
-      
+
       setImageUrl(url);
       onImageUploaded(url);
       setSuccess(true);
-      
+
       // Masquer le message de succès après 3 secondes
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-      
+
     } catch (err: unknown) {
       console.error('Erreur upload:', err);
       setError(err instanceof Error ? err.message : 'Erreur lors du téléchargement');
@@ -100,8 +100,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   };
 
   const removeImage = async () => {
-    if (disableDelete) return;
-    
+    if (disableDelete) {return;}
+
     if (imageUrl && window.confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
       setIsUploading(true);
       try {
@@ -111,7 +111,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         setImageUrl('');
         onImageUploaded('');
         setSuccess(true);
-        
+
         setTimeout(() => {
           setSuccess(false);
         }, 3000);
@@ -142,7 +142,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         onChange={handleFileChange}
         className="hidden"
       />
-      
+
       {imageUrl && showPreview ? (
         <div className={`relative group ${getAspectRatioClass()}`}>
           <img

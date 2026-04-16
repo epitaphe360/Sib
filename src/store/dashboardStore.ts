@@ -16,7 +16,7 @@ interface DashboardState {
   dashboard: Dashboard | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   fetchDashboard: () => Promise<void>;
   updateStats: (stats: Partial<DashboardStats>) => void;
@@ -32,7 +32,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     try {
       // Récupérer l'utilisateur actuel
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         throw new Error('Utilisateur non connecté');
       }
@@ -44,12 +44,12 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         .eq('id', user.id)
         .maybeSingle();
 
-      if (profileError) throw profileError;
+      if (profileError) {throw profileError;}
 
       // Calculer les statistiques RÉELLES depuis les tables (pas depuis profile.stats)
       // Les profile.stats sont des données de démo, on les ignore
       const isExhibitorOrPartner = userProfile?.role === 'exhibitor' || userProfile?.role === 'partner';
-      
+
       const stats: DashboardStats = {
         profileViews: 0,
         connections: 0,
@@ -68,7 +68,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             .from('profile_views')
             .select('*', { count: 'exact', head: true })
             .eq('viewed_user_id', user.id);
-          
+
           if (!error) {
             stats.profileViews = profileViewsCount || 0;
           }
@@ -83,7 +83,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
           .from('connections')
           .select('*', { count: 'exact', head: true })
           .or(`requester_id.eq.${user.id},addressee_id.eq.${user.id}`);
-        
+
         if (!error) {
           stats.connections = connectionsCount || 0;
         }
@@ -137,7 +137,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
           .from('conversations')
           .select('id')
           .contains('participants', [user.id]);
-        
+
         if (!error && conversations) {
           const conversationIds = conversations.map(c => c.id);
           if (conversationIds.length > 0) {
@@ -146,7 +146,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
               .select('*', { count: 'exact', head: true })
               .in('conversation_id', conversationIds)
               .not('read_by', 'cs', `{${user.id}}`);
-            
+
             if (!msgError) {
               stats.messages = messagesCount || 0;
             }
@@ -163,7 +163,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
           .from('downloads')
           .select('*', { count: 'exact', head: true })
           .eq('user_id', user.id);
-          
+
           if (!error) {
             stats.catalogDownloads = downloadsCount || 0;
           }
@@ -187,7 +187,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
               .from('minisite_views')
               .select('*', { count: 'exact', head: true })
               .eq('exhibitor_id', exhibitor.id);
-            
+
             if (!error) {
               stats.miniSiteViews = miniSiteViewsCount || 0;
             }
@@ -197,7 +197,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
               .from('products')
               .select('*', { count: 'exact', head: true })
               .eq('exhibitor_id', exhibitor.id);
-            
+
             if (!productsError) {
               stats.products = productsCount || 0;
             }
@@ -298,7 +298,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
 
         (weekActivities || []).forEach((a: { created_at: string }) => {
           const key = a.created_at.split('T')[0];
-          if (daysMap[key]) daysMap[key].interactions++;
+          if (daysMap[key]) {daysMap[key].interactions++;}
         });
       } catch (_) { /* Table non disponible */ }
 
@@ -320,7 +320,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
 
             (weekViews || []).forEach((v: { created_at: string }) => {
               const key = v.created_at.split('T')[0];
-              if (daysMap[key]) daysMap[key].visits++;
+              if (daysMap[key]) {daysMap[key].visits++;}
             });
           }
         } catch (_) { /* Table non disponible */ }
@@ -351,10 +351,10 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
       set({ dashboard, isLoading: false, error: null });
     } catch (error: unknown) {
       console.error('Erreur lors de la récupération du dashboard:', error);
-      set({ 
-        isLoading: false, 
+      set({
+        isLoading: false,
         error: error instanceof Error ? error.message : String(error) || 'Erreur lors du chargement du tableau de bord',
-        dashboard: null 
+        dashboard: null
       });
       throw error;
     }

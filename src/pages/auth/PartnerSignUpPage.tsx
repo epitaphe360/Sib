@@ -77,7 +77,7 @@ export default function PartnerSignUpPage() {
   const [language, setLanguage] = useState<Language>('fr');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isLinkedInLoading, setIsLinkedInLoading] = useState(false);
-  
+
   const t = useTranslation(language);
   const partnerSignUpSchema = useMemo(() => createPartnerSignUpSchema(t), [t]);
 
@@ -93,7 +93,7 @@ export default function PartnerSignUpPage() {
 
   // Watch les valeurs pour la progression
   const watchedFields = watch();
-  
+
   // Validation email en temps réel
   const { suggestion: emailSuggestion } = useEmailValidation(watchedFields.email || '');
 
@@ -219,7 +219,7 @@ export default function PartnerSignUpPage() {
       clearLocalStorage();
 
       toast.success(t.toastSignUpSuccess);
-      
+
       // ✅ FIX: Redirection vers le choix du mode de paiement IMPÉDIATEMENT lors de l'inscription
       // Cela évite que l'utilisateur ne se retrouve sur le tableau de bord sans avoir payé
       // Note: Cela suppose que l'auto-login a fonctionné ou qu'on utilise le userId/email pour pré-remplir
@@ -242,7 +242,7 @@ export default function PartnerSignUpPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <motion.div 
+      <motion.div
         className="max-w-4xl w-full space-y-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -401,11 +401,11 @@ export default function PartnerSignUpPage() {
                   <Label htmlFor="email">Adresse e-mail professionnelle *</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      {...register('email')} 
-                      placeholder="contact@votre-organisation.com" 
+                    <Input
+                      id="email"
+                      type="email"
+                      {...register('email')}
+                      placeholder="contact@votre-organisation.com"
                       className="pl-10"
                       autoComplete="email"
                     />
@@ -435,10 +435,10 @@ export default function PartnerSignUpPage() {
                   <Label htmlFor="phone">Téléphone *</Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input 
-                      id="phone" 
-                      {...register('phone')} 
-                      placeholder="+237 6 12 34 56 78" 
+                    <Input
+                      id="phone"
+                      {...register('phone')}
+                      placeholder="+237 6 12 34 56 78"
                       className="pl-10"
                       autoComplete="tel"
                     />
@@ -450,11 +450,11 @@ export default function PartnerSignUpPage() {
                   <Label htmlFor="password">Mot de passe *</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input 
-                      id="password" 
-                      type="password" 
-                      {...register('password')} 
-                      placeholder="Créez un mot de passe sécurisé" 
+                    <Input
+                      id="password"
+                      type="password"
+                      {...register('password')}
+                      placeholder="Créez un mot de passe sécurisé"
                       className="pl-10"
                       autoComplete="new-password"
                     />
@@ -466,11 +466,11 @@ export default function PartnerSignUpPage() {
                   <Label htmlFor="confirmPassword">Confirmer le mot de passe *</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input 
-                      id="confirmPassword" 
-                      type="password" 
-                      {...register('confirmPassword')} 
-                      placeholder="Confirmez votre mot de passe" 
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      {...register('confirmPassword')}
+                      placeholder="Confirmez votre mot de passe"
                       className="pl-10"
                       autoComplete="new-password"
                     />
@@ -483,11 +483,11 @@ export default function PartnerSignUpPage() {
             {/* Description */}
             <div>
               <Label htmlFor="companyDescription">Description de votre organisation et de vos motivations *</Label>
-              <Textarea 
-                id="companyDescription" 
-                {...register('companyDescription')} 
-                rows={4} 
-                placeholder="Décrivez votre organisation, vos activités et pourquoi vous souhaitez devenir partenaire de SIB 2026." 
+              <Textarea
+                id="companyDescription"
+                {...register('companyDescription')}
+                rows={4}
+                placeholder="Décrivez votre organisation, vos activités et pourquoi vous souhaitez devenir partenaire de SIB 2026."
               />
               {errors.companyDescription && <p className="text-red-500 text-xs mt-1">{errors.companyDescription.message}</p>}
               <p className="text-xs text-gray-500 mt-1">
@@ -498,7 +498,7 @@ export default function PartnerSignUpPage() {
             {/* CGU et RGPD */}
             <div className="space-y-4 border-t pt-6">
               <h3 className="text-lg font-medium text-gray-900">Conditions Générales</h3>
-              
+
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <input
@@ -513,7 +513,7 @@ export default function PartnerSignUpPage() {
                       <Link to={ROUTES.TERMS} target="_blank" className="text-primary-600 hover:text-primary-700 underline">
                         Conditions Générales d'Utilisation
                       </Link>
-                      {' '}* 
+                      {' '}*
                     </label>
                     {errors.acceptTerms && <p className="text-red-500 text-xs mt-1">{errors.acceptTerms.message}</p>}
                   </div>
@@ -547,16 +547,16 @@ export default function PartnerSignUpPage() {
             </div>
 
             <div className="space-y-3">
-              <Button 
-                type="submit" 
-                className="w-full" 
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={isLoading}
                 variant="default"
                 data-testid="partner-submit-button"
               >
                 {isLoading ? 'Envoi en cours...' : "Prévisualiser et soumettre"}
               </Button>
-              
+
               {watchedFields && Object.keys(watchedFields).length > 0 && (
                 <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
                   <Save className="h-3 w-3" />

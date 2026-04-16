@@ -58,7 +58,7 @@ export default function PartnerCreationPage() {
           Retour au Tableau de Bord
         </Link>
       </div>
-      <PartnerCreationForm 
+      <PartnerCreationForm
         partnerToEdit={partnerData}
         editMode={!!editId}
       />

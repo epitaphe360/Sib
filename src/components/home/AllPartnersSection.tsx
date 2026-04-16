@@ -91,7 +91,7 @@ export function AllPartnersSection() {
     <section className="py-12 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* En-tête de section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -119,7 +119,7 @@ export function AllPartnersSection() {
           </div>
         ) : displayedPartners.length > 0 ? (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -134,7 +134,7 @@ export function AllPartnersSection() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: index * 0.05 }}
                 >
-                  <PartnerCard 
+                  <PartnerCard
                     partner={partner}
                     index={index}
                     onViewDetails={() => {}}
@@ -147,7 +147,7 @@ export function AllPartnersSection() {
             </motion.div>
 
             {/* Boutons d'action */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

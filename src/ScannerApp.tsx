@@ -12,7 +12,7 @@ export default function ScannerApp() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Toaster position="top-center" />
-      
+
       {/* Simplified Header */}
       <div className="bg-blue-900 text-white p-4 shadow-md flex items-center justify-center">
         <QrCode className="h-6 w-6 mr-2" />
@@ -21,7 +21,7 @@ export default function ScannerApp() {
 
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        
+
         {/* Main Scanner Route - Protected */}
         <Route
           path="/scanner"
@@ -41,7 +41,7 @@ export default function ScannerApp() {
         <Route path="/visitor/dashboard" element={<Navigate to="/scanner" replace />} />
         <Route path="/dashboard" element={<Navigate to="/scanner" replace />} />
         <Route path="/badge" element={<Navigate to="/scanner" replace />} />
-        
+
         {/* Default Redirect */}
         <Route path="/" element={<Navigate to="/scanner" replace />} />
         <Route path="*" element={<Navigate to="/scanner" replace />} />

@@ -32,7 +32,7 @@ export const InteractionHistory: React.FC = () => {
   }, [interactions, filterType]);
 
   const loadHistory = async () => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       const history = await MatchmakingService.getInteractionHistory(user.id);

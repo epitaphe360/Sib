@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
-import { 
+import {
   Send,
   Paperclip,
   Smile,
@@ -27,7 +27,7 @@ import { supabase } from '../../lib/supabase';
 export default function ChatInterface() {
   const [searchParams] = useSearchParams();
   const targetUserId = searchParams.get('userId');
-  
+
   const {
     conversations,
     activeConversation,
@@ -57,7 +57,7 @@ export default function ChatInterface() {
   // Auto-créer conversation si userId est en paramètre
   // BUG FIX: ne plus bloquer sur conversations.length > 0
   useEffect(() => {
-    if (!targetUserId || isCreatingConversation) return;
+    if (!targetUserId || isCreatingConversation) {return;}
 
     const existingConv = conversations.find(c => c.participants.includes(targetUserId));
     if (existingConv) {
@@ -126,7 +126,7 @@ export default function ChatInterface() {
   }, [messages, activeConversation]);
 
   const handleSendMessage = async () => {
-    if (!messageInput.trim() || !activeConversation) return;
+    if (!messageInput.trim() || !activeConversation) {return;}
     await sendMessage(activeConversation, messageInput);
     setMessageInput('');
   };
@@ -290,7 +290,7 @@ export default function ChatInterface() {
                       const isBot = isBotParticipant(conversation.participants);
                       const otherParticipant = isBot ? 'Assistant SIB' : 'Sarah Johnson';
                       const isOnline = conversation.participants.some(p => onlineUsers.includes(p));
-                      
+
                       return (
                         <motion.div
                           key={conversation.id}
@@ -313,7 +313,7 @@ export default function ChatInterface() {
                                 <Circle className="absolute -bottom-1 -right-1 h-3 w-3 text-green-500 fill-current" />
                               )}
                             </div>
-                            
+
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between">
                                 <p className="text-sm font-medium text-gray-900 truncate">
@@ -325,7 +325,7 @@ export default function ChatInterface() {
                                   </Badge>
                                 )}
                               </div>
-                              
+
                               {conversation.lastMessage && (
                                 <div className="flex items-center justify-between mt-1">
                                   <p className="text-sm text-gray-600 truncate">
@@ -370,7 +370,7 @@ export default function ChatInterface() {
                           </p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         <Button variant="ghost" size="sm" title="Appel vocal">
                           <Phone className="h-4 w-4" />
@@ -391,7 +391,7 @@ export default function ChatInterface() {
                       {activeMessages.map((message) => {
                         const isBot = isBotSender(message.senderId);
                         const isCurrentUser = message.senderId === 'user1';
-                        
+
                         return (
                           <motion.div
                             key={message.id}
@@ -401,8 +401,8 @@ export default function ChatInterface() {
                             className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
                           >
                             <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                              isCurrentUser 
-                                ? 'bg-blue-600 text-white' 
+                              isCurrentUser
+                                ? 'bg-blue-600 text-white'
                                 : isBot
                                 ? 'bg-green-100 text-green-800 border border-green-200'
                                 : 'bg-gray-100 text-gray-800'
@@ -424,8 +424,8 @@ export default function ChatInterface() {
                   {/* Message Input */}
                   <div className="p-4 border-t border-gray-200">
                     <div className="flex items-center space-x-2">
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         onClick={() => {
                           const input = document.createElement('input');
@@ -439,7 +439,7 @@ export default function ChatInterface() {
                               Array.from(files).forEach(file => {
                                 // Ici vous pouvez ajouter la logique pour uploader les fichiers
                               });
-                              
+
                               // Afficher un message de confirmation
                               const fileNames = Array.from(files).map(f => f.name).join(', ');
                               toast.success(`${files.length} fichier(s) sélectionné(s): ${fileNames}\n\nUpload en cours...`);
@@ -451,7 +451,7 @@ export default function ChatInterface() {
                       >
                         <Paperclip className="h-4 w-4" />
                       </Button>
-                      
+
                       <div className="flex-1 relative">
                         <input
                           type="text"
@@ -462,10 +462,10 @@ export default function ChatInterface() {
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
-                      
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => {
                           const emojis = ['😊', '👍', '❤️', '😂', '🎉', '👏', '🔥', '💯', '🙌', '✨', '💪', '🎯', '🚀', '💡', '⭐'];
                           const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
@@ -475,7 +475,7 @@ export default function ChatInterface() {
                       >
                         <Smile className="h-4 w-4" />
                       </Button>
-                      
+
                       <Button variant="default" onClick={handleSendMessage} disabled={!messageInput.trim()}>
                         <Send className="h-4 w-4" />
                       </Button>

@@ -88,7 +88,7 @@ class _Ebadge extends State<Ebadge> {
                                 height: 50,
                                 child: Center(
                                     child: CircularProgressIndicator(
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: Colors.black.withValues(alpha: 0.2),
                                 ))),
                           ),
                         ),

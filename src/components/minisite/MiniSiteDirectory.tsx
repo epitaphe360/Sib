@@ -27,10 +27,10 @@ export default function MiniSiteDirectory() {
   const loadMinisites = async () => {
     try {
       setLoading(true);
-      
+
       // Récupérer tous les mini-sites publiés avec leurs exposants
       const { data: sites } = await SupabaseService.getPublishedMiniSites();
-      
+
       if (sites) {
         setMinisites(sites);
       }
@@ -98,7 +98,7 @@ export default function MiniSiteDirectory() {
                   <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
                     {site.company_name || 'Exposant'}
                   </h3>
-                  
+
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
                       {site.category}

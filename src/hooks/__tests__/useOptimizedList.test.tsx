@@ -168,8 +168,8 @@ describe('useOptimizedList', () => {
         useOptimizedList({
           items: mockItems,
           filterFn: (item, filters) => {
-            if (filters.minAge && item.age < filters.minAge) return false;
-            if (filters.city && item.city !== filters.city) return false;
+            if (filters.minAge && item.age < filters.minAge) {return false;}
+            if (filters.city && item.city !== filters.city) {return false;}
             return true;
           },
         })
@@ -189,7 +189,7 @@ describe('useOptimizedList', () => {
           items: mockItems,
           searchFields: ['name'],
           filterFn: (item, filters) => {
-            if (filters.city && item.city !== filters.city) return false;
+            if (filters.city && item.city !== filters.city) {return false;}
             return true;
           },
         })

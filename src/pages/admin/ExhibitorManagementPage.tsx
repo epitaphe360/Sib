@@ -86,7 +86,7 @@ export default function ExhibitorManagementPage() {
     if (window.confirm(`Êtes-vous sûr de vouloir supprimer l'exposant "${name}" ? Cette action est irréversible.`)) {
       try {
         console.log('🗑️ [DELETE] Début suppression exposant:', { id, name });
-        
+
         // Récupérer le token pour l'API admin serveur
         const { data: { session } } = await supabase.auth.getSession();
         console.log('🔑 [DELETE] Session récupérée:', {
@@ -100,10 +100,10 @@ export default function ExhibitorManagementPage() {
         if (!session?.access_token) {
           throw new Error('Pas de session active - veuillez vous reconnecter');
         }
-        
+
         const apiUrl = `/api/admin/exhibitors/${id}`;
         console.log('📡 [DELETE] Appel API:', { method: 'DELETE', url: apiUrl });
-        
+
         const response = await fetch(apiUrl, {
           method: 'DELETE',
           headers: {
@@ -111,7 +111,7 @@ export default function ExhibitorManagementPage() {
             'Content-Type': 'application/json'
           }
         });
-        
+
         console.log('📥 [DELETE] Réponse HTTP:', {
           status: response.status,
           statusText: response.statusText,
@@ -126,20 +126,20 @@ export default function ExhibitorManagementPage() {
           console.error('❌ [DELETE] Réponse non-JSON reçue:', textBody.substring(0, 500));
           throw new Error(`Le serveur a retourné du ${contentType || 'inconnu'} au lieu de JSON. L'API admin n'est peut-être pas déployée.`);
         }
-        
+
         const result = await response.json();
         console.log('📦 [DELETE] Corps de la réponse:', result);
-        
+
         if (!response.ok || !result.success) {
           console.error('❌ [DELETE] Échec:', { status: response.status, result });
           throw new Error(result.error || `Échec HTTP ${response.status}`);
         }
-        
+
         console.log('✅ [DELETE] Suppression réussie:', result.deleted);
-        
+
         // Supprimer immédiatement du state local
         setExhibitors(exhibitors.filter(e => e.id !== id));
-        
+
         toast.success('Exposant supprimé avec succès');
         setTimeout(() => fetchExhibitors(), 500);
       } catch (error: any) {
@@ -157,7 +157,7 @@ export default function ExhibitorManagementPage() {
     const matchesSearch = exhibitor.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          exhibitor.description?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === 'all' || exhibitor.category === filterCategory;
-    const matchesStatus = filterStatus === 'all' || 
+    const matchesStatus = filterStatus === 'all' ||
                          (filterStatus === 'verified' && exhibitor.verified) ||
                          (filterStatus === 'unverified' && !exhibitor.verified);
     const matchesStandArea = filterStandArea === 'all' || (exhibitor.standArea && exhibitor.standArea.toString() === filterStandArea);
@@ -177,7 +177,7 @@ export default function ExhibitorManagementPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('common.back_to_dashboard')}
           </Link>
-          
+
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{t('admin.exhibitors_management')}</h1>
@@ -309,7 +309,7 @@ export default function ExhibitorManagementPage() {
             </h3>
             <p className="text-gray-600 mb-6">
               {searchTerm || filterCategory !== 'all' || filterStatus !== 'all'
-                ? 'Essayez de modifier vos critères de recherche' 
+                ? 'Essayez de modifier vos critères de recherche'
                 : 'Commencez par créer votre premier exposant'}
             </p>
             {!searchTerm && filterCategory === 'all' && filterStatus === 'all' && (
@@ -334,8 +334,8 @@ export default function ExhibitorManagementPage() {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       {exhibitor.logo && (
-                        <img 
-                          src={exhibitor.logo} 
+                        <img
+                          src={exhibitor.logo}
                           alt={exhibitor.companyName}
                           className="w-24 h-24 object-contain mb-3 rounded bg-white border border-gray-200 p-2"
                         />
@@ -344,7 +344,7 @@ export default function ExhibitorManagementPage() {
                         {exhibitor.companyName}
                       </h3>
                       <div className="flex gap-2 flex-wrap">
-                        <Badge 
+                        <Badge
                           variant={exhibitor.verified ? 'success' : 'warning'}
                           className="text-xs"
                         >
@@ -364,7 +364,7 @@ export default function ExhibitorManagementPage() {
                       <Filter className="h-4 w-4 mr-2" />
                       Type: {exhibitor.category}
                     </div>
-                    
+
                     {(exhibitor.standNumber || exhibitor.standArea) && (
                       <div className="flex items-center text-sm font-medium bg-gray-50 text-gray-800 p-2 rounded-md">
                         <Building2 className="h-4 w-4 mr-2 text-gray-500" />

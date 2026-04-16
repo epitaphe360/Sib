@@ -45,7 +45,7 @@ export default function UserProfileView({
 
     // Rediriger vers la messagerie avec le destinataire
     navigate(`/messages?userId=${user.id}`);
-    
+
     if (onMessage) {
       onMessage(`${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''}`);
     }

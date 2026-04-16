@@ -167,7 +167,7 @@ export default function CreatePavilionForm() {
     const demoProgramErrors: { [key: number]: { title?: string } } = {};
     demoPrograms.forEach((program, index) => {
       if (!program.title.trim()) {
-        if (!demoProgramErrors[index]) demoProgramErrors[index] = {};
+        if (!demoProgramErrors[index]) {demoProgramErrors[index] = {};}
         demoProgramErrors[index].title = 'Le titre du programme est requis.';
       }
     });
@@ -181,7 +181,7 @@ export default function CreatePavilionForm() {
 
   const handleSubmit = async (data: PavilionFormData) => {
     // Validate demo programs separately
-    if (!validateDemoPrograms()) return;
+    if (!validateDemoPrograms()) {return;}
 
     setIsLoading(true);
     setErrors({});

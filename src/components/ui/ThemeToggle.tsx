@@ -1,6 +1,6 @@
 /**
  * 🌓 Theme Toggle Button
- * 
+ *
  * Beautiful toggle button for switching between light/dark modes
  * Shows sun icon for light mode, moon icon for dark mode
  */
@@ -18,8 +18,8 @@ export function ThemeToggle() {
         relative inline-flex items-center justify-center
         w-10 h-10 rounded-lg
         transition-all duration-200
-        ${isDark 
-          ? 'bg-gray-800 text-amber-400 hover:bg-gray-700' 
+        ${isDark
+          ? 'bg-gray-800 text-amber-400 hover:bg-gray-700'
           : 'bg-gray-100 text-yellow-500 hover:bg-gray-200'
         }
         focus:outline-none focus:ring-2 focus:ring-offset-2

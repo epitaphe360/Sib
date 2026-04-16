@@ -161,9 +161,9 @@ export default function AdvancedMatchingPage() {
 
   const handleSearch = async (searchQuery?: string) => {
     const q = (searchQuery ?? query).trim();
-    if (!q) return;
+    if (!q) {return;}
 
-    if (searchQuery) setQuery(searchQuery);
+    if (searchQuery) {setQuery(searchQuery);}
     setShowSuggestions(false);
     setIsSearching(true);
     setError(null);
@@ -179,8 +179,8 @@ export default function AdvancedMatchingPage() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleSearch();
-    if (e.key === 'Escape') setShowSuggestions(false);
+    if (e.key === 'Enter') {handleSearch();}
+    if (e.key === 'Escape') {setShowSuggestions(false);}
   };
 
   const handleReset = () => {

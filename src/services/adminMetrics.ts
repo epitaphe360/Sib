@@ -78,7 +78,7 @@ export class AdminMetricsService {
       try {
         const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
-        if (!METRICS_SERVER_URL) throw new Error('No metrics server URL configured');
+        if (!METRICS_SERVER_URL) {throw new Error('No metrics server URL configured');}
         const resp = await fetch(METRICS_SERVER_URL, { method: 'GET', headers });
         if (resp.ok) {
           const payload = await resp.json();
@@ -90,7 +90,7 @@ export class AdminMetricsService {
       }
     }
 
-    if (!client) return defaultMetrics;
+    if (!client) {return defaultMetrics;}
 
     // Mesurer le ping une seule fois pour ce cycle (partagé entre getDbUptime + getAvgResponseTime)
     _sharedPingMs = null;
@@ -192,7 +192,7 @@ export class AdminMetricsService {
 
   static async getPendingValidations(): Promise<number> {
     const client = (supabase as any);
-    if (!client) return defaultMetrics.pendingValidations;
+    if (!client) {return defaultMetrics.pendingValidations;}
     try {
       const res = await client.from('registration_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending');
       return (res && typeof res.count === 'number') ? res.count : defaultMetrics.pendingValidations;
@@ -204,7 +204,7 @@ export class AdminMetricsService {
 
   static async getActiveContracts(): Promise<number> {
     const client = (supabase as any);
-    if (!client) return defaultMetrics.activeContracts;
+    if (!client) {return defaultMetrics.activeContracts;}
     try {
       const res = await client.from('partners').select('id', { count: 'exact', head: true }).eq('verified', true);
       return (res && typeof res.count === 'number') ? res.count : defaultMetrics.activeContracts;
@@ -216,7 +216,7 @@ export class AdminMetricsService {
 
   static async getContentModerations(): Promise<number> {
     const client = (supabase as any);
-    if (!client) return defaultMetrics.contentModerations;
+    if (!client) {return defaultMetrics.contentModerations;}
     try {
       const res = await client.from('mini_sites').select('id', { count: 'exact', head: true }).eq('published', false);
       return (res && typeof res.count === 'number') ? res.count : defaultMetrics.contentModerations;
@@ -229,23 +229,23 @@ export class AdminMetricsService {
   // Calculer l'utilisation du stockage
   private static async calculateStorageUsage(): Promise<number> {
     const client = (supabase as any);
-    if (!client) return 0;
-    
+    if (!client) {return 0;}
+
     try {
       // Compter les fichiers uploadés (approximation)
       const { data, error } = await client.from('media_contents').select('*').limit(100);
-      
+
       if (error) {
         // Table media_contents absente ou inaccessible — pas de données de stockage disponibles
         return 0;
       }
-      
+
       if (data && Array.isArray(data)) {
         const totalBytes = data.reduce((sum: number, item: any) => sum + (item.file_size || 0), 0);
         const totalGB = totalBytes / (1024 * 1024 * 1024);
         return Math.round(totalGB * 10) / 10; // Arrondir à 1 décimale
       }
-      
+
       return 0;
     } catch (err) {
       return 0;
@@ -255,14 +255,14 @@ export class AdminMetricsService {
   // Compter les appels API (depuis page_views - table existante)
   private static async getApiCallsCount(): Promise<number> {
     const client = (supabase as any);
-    if (!client) return 0;
+    if (!client) {return 0;}
     try {
       const { count, error } = await client
         .from('page_views')
         .select('id', { count: 'exact', head: true })
         .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
-      if (error || count === null) return 0;
+      if (error || count === null) {return 0;}
       return count || 0;
     } catch {
       return 0;
@@ -272,18 +272,18 @@ export class AdminMetricsService {
   // Uptime base de données : utilise le ping partagé pour éviter une double requête
   private static async getDbUptime(): Promise<number> {
     const elapsed = _sharedPingMs;
-    if (elapsed === null) return 0;
+    if (elapsed === null) {return 0;}
     // Seuils adaptés à Supabase depuis Afrique du Nord (latence ~300-600ms normale)
-    if (elapsed < 700)  return 99.9;
-    if (elapsed < 1200) return 99.5;
-    if (elapsed < 2000) return 99.0;
+    if (elapsed < 700)  {return 99.9;}
+    if (elapsed < 1200) {return 99.5;}
+    if (elapsed < 2000) {return 99.0;}
     return 98.0;
   }
   private static async getAvgResponseTime(): Promise<number> {
     // Réutiliser le ping partagé — pas de requête supplémentaire
-    if (_sharedPingMs !== null) return _sharedPingMs;
+    if (_sharedPingMs !== null) {return _sharedPingMs;}
     const client = (supabase as any);
-    if (!client) return 45;
+    if (!client) {return 45;}
     try {
       const start = performance.now();
       await client.from('users').select('id').limit(1);
@@ -296,7 +296,7 @@ export class AdminMetricsService {
   // Exposants en ligne (actifs dans les dernières 15 minutes)
   private static async getOnlineExhibitors(): Promise<number> {
     const client = (supabase as any);
-    if (!client) return 0;
+    if (!client) {return 0;}
     try {
       const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
       const { count } = await client
@@ -314,8 +314,8 @@ export class AdminMetricsService {
   // Données de croissance utilisateurs (6 derniers mois) - OPTIMISÉ
   static async getUserGrowthData(): Promise<Array<{ name: string; users: number; exhibitors: number; visitors: number }>> {
     const client = (supabase as any);
-    if (!client) return [];
-    
+    if (!client) {return [];}
+
     try {
       const sixMonthsAgo = new Date();
       sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
@@ -338,7 +338,7 @@ export class AdminMetricsService {
         date.setMonth(date.getMonth() - i);
         const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
         const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
-        
+
         // Nom du mois dynamique (ex: "Jan", "Fév")
         const monthName = date.toLocaleDateString('fr-FR', { month: 'short' });
         const name = monthName.charAt(0).toUpperCase() + monthName.slice(1);
@@ -351,7 +351,7 @@ export class AdminMetricsService {
         const users = monthUsers.length;
         const exhibitors = monthUsers.filter(u => u.type === 'exhibitor').length;
         const visitors = monthUsers.filter(u => u.type === 'visitor').length;
-        
+
         result.push({
           name,
           users,
@@ -359,7 +359,7 @@ export class AdminMetricsService {
           visitors
         });
       }
-      
+
       return result;
     } catch (err) {
       console.error('AdminMetricsService.getUserGrowthData error', err);
@@ -383,8 +383,8 @@ export class AdminMetricsService {
   // Données de trafic hebdomadaire - OPTIMISÉ
   static async getTrafficData(): Promise<Array<{ name: string; visits: number; pageViews: number }>> {
     const client = (supabase as any);
-    if (!client) return this.buildEmptyWeekTraffic();
-    
+    if (!client) {return this.buildEmptyWeekTraffic();}
+
     try {
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -426,7 +426,7 @@ export class AdminMetricsService {
         date.setDate(date.getDate() - i);
         const startOfDay = new Date(new Date(date).setHours(0, 0, 0, 0));
         const endOfDay = new Date(new Date(date).setHours(23, 59, 59, 999));
-        
+
         const dayName = date.toLocaleDateString('fr-FR', { weekday: 'short' });
         const name = dayName.charAt(0).toUpperCase() + dayName.slice(1);
 
@@ -437,10 +437,10 @@ export class AdminMetricsService {
 
         const visits = isFromMinisite ? dayViews.length : dayViews.filter(pv => pv.unique_view === true).length;
         const pageViews = isFromMinisite ? dayViews.length * 2 : dayViews.length;
-        
+
         result.push({ name, visits, pageViews });
       }
-      
+
       return result;
     } catch (err) {
       console.error('AdminMetricsService.getTrafficData error', err);
@@ -458,8 +458,8 @@ export class AdminMetricsService {
     adminUser: string;
   }>> {
     const client = (supabase as any);
-    if (!client) return [];
-    
+    if (!client) {return [];}
+
     try {
       // Optimized: explicit columns (70% bandwidth reduction)
       const { data } = await client
@@ -467,7 +467,7 @@ export class AdminMetricsService {
         .select('id, action_type, description, created_at, severity, admin_user')
         .order('created_at', { ascending: false })
         .limit(10);
-      
+
       if (data && Array.isArray(data)) {
         return data.map((log: any) => ({
           id: log.id,
@@ -478,7 +478,7 @@ export class AdminMetricsService {
           adminUser: log.admin_user || 'System'
         }));
       }
-      
+
       return [];
     } catch (err) {
       console.error('AdminMetricsService.getRecentActivity error', err);

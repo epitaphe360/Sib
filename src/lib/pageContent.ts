@@ -17,7 +17,7 @@ export async function getPageContent(pageSlug: string, salonId?: string | null):
   }
 
   const { data, error } = await query.single();
-  if (error || !data) return {};
+  if (error || !data) {return {};}
   return (data.content as Record<string, string>) ?? {};
 }
 
@@ -32,12 +32,12 @@ export async function savePageContent(
 ): Promise<void> {
   const { data: { user } } = await supabase.auth.getUser();
   const payload: Record<string, unknown> = { page_slug: pageSlug, content, updated_by: user?.id ?? null };
-  if (salonId) payload.salon_id = salonId;
+  if (salonId) {payload.salon_id = salonId;}
   const conflictCol = salonId ? 'page_slug,salon_id' : 'page_slug';
   const { error } = await supabase
     .from('page_contents')
     .upsert(payload, { onConflict: conflictCol });
-  if (error) throw new Error(error.message);
+  if (error) {throw new Error(error.message);}
 }
 
 /**
@@ -53,6 +53,6 @@ export async function getAllPageMeta(salonId?: string | null): Promise<Array<{ p
     query = query.is('salon_id', null);
   }
   const { data, error } = await query;
-  if (error || !data) return [];
+  if (error || !data) {return [];}
   return data as Array<{ page_slug: string; content: Record<string, string>; updated_at: string }>;
 }

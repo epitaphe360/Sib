@@ -171,7 +171,7 @@ export default function HallMapPage() {
   });
 
   const getBoothOpacity = (booth: Booth) => {
-    if (activeSector === 'all' && !searchQuery) return 1;
+    if (activeSector === 'all' && !searchQuery) {return 1;}
     return filteredBooths.includes(booth) ? 1 : 0.18;
   };
 
@@ -467,7 +467,7 @@ export default function HallMapPage() {
               <div className="space-y-2">
                 {SECTORS.filter(s => s.id !== 'all').map(s => {
                   const count = BOOTHS.filter(b => b.sector === s.id && b.occupied).length;
-                  if (count === 0) return null;
+                  if (count === 0) {return null;}
                   return (
                     <button
                       key={s.id}

@@ -31,7 +31,7 @@ const MiniSiteGalleryEditor: React.FC<MiniSiteGalleryEditorProps> = ({
     try {
       await onSave(images);
       setSuccess(true);
-      
+
       // Masquer le message de succès après 3 secondes
       setTimeout(() => {
         setSuccess(false);
@@ -48,7 +48,7 @@ const MiniSiteGalleryEditor: React.FC<MiniSiteGalleryEditorProps> = ({
     <div className="bg-white p-6 rounded-lg shadow">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold">Galerie d'images</h2>
-        
+
         <button
           type="button"
           onClick={handleSave}
@@ -68,13 +68,13 @@ const MiniSiteGalleryEditor: React.FC<MiniSiteGalleryEditorProps> = ({
           )}
         </button>
       </div>
-      
+
       <div className="mb-6">
         <p className="text-gray-600 text-sm mb-4">
           Téléchargez des photos de vos produits, installations, équipe ou événements.
           Les images seront affichées dans la galerie de votre mini-site.
         </p>
-        
+
         <MultiImageUploader
           initialImages={images}
           onImagesUploaded={setImages}
@@ -85,19 +85,19 @@ const MiniSiteGalleryEditor: React.FC<MiniSiteGalleryEditorProps> = ({
           layout="grid"
         />
       </div>
-      
+
       {error && (
         <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm mb-4">
           {error}
         </div>
       )}
-      
+
       {success && (
         <div className="bg-green-50 text-green-700 p-3 rounded-md text-sm mb-4">
           Galerie enregistrée avec succès
         </div>
       )}
-      
+
       <div className="text-sm text-gray-500 mt-4">
         <p>
           <strong>Conseils pour une galerie attrayante :</strong>

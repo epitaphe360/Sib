@@ -97,7 +97,7 @@ class FeatureFlagService {
         p_user_id: userId,
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     }
 
@@ -115,7 +115,7 @@ class FeatureFlagService {
         .eq('key', flagKey)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== 'PGRST116') {throw error;}
       return data;
     } catch (error) {
       console.error('❌ Erreur getFlag:', error);
@@ -133,7 +133,7 @@ class FeatureFlagService {
         .select('id, key, name, description, is_enabled, rollout_percentage, enabled_for_users, enabled_for_roles, metadata, created_at, updated_at')
         .order('name');
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getAllFlags:', error);
@@ -168,7 +168,7 @@ class FeatureFlagService {
         .select('id, key, name, description, is_enabled, rollout_percentage, enabled_for_users, enabled_for_roles, metadata, created_at, updated_at')
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Invalider le cache
       this.cache.delete(flag.key);
@@ -195,7 +195,7 @@ class FeatureFlagService {
         .select('id, key, name, description, is_enabled, rollout_percentage, enabled_for_users, enabled_for_roles, metadata, created_at, updated_at')
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Invalider le cache
       this.cache.delete(flagKey);
@@ -217,7 +217,7 @@ class FeatureFlagService {
         .delete()
         .eq('key', flagKey);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Invalider le cache
       this.cache.delete(flagKey);

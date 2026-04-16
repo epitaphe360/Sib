@@ -1,14 +1,10 @@
-﻿import 'dart:convert';
-import 'dart:io';
-
-import 'package:com.urbaevent/adapter_view/MyScan.dart';
+﻿import 'package:com.urbaevent/adapter_view/MyScan.dart';
 import 'package:com.urbaevent/model/agent/ResponseMyScans.dart';
 import 'package:com.urbaevent/ui/content_ui/agent/AgentHomepage.dart';
 import 'package:com.urbaevent/widgets/CustomBottomBarAgent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:com.urbaevent/dialogs/Progressbar.dart';
-import 'package:com.urbaevent/ui/content_ui/home/HomePage.dart';
 import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:com.urbaevent/utils/Utils.dart';
 import 'package:com.urbaevent/widgets/CustomToolbar.dart';
@@ -24,7 +20,6 @@ class MyScans extends StatefulWidget {
 
 class _MyScans extends State<MyScans> {
   ResponseMyScans? responseMyScans;
-  List<Map<String, dynamic>> _rawScans = [];
 
   bool loader = false;
   bool isInit = false;
@@ -37,12 +32,9 @@ class _MyScans extends State<MyScans> {
       loader = true;
     });
     try {
-      final data = await SupabaseService.instance.getScannedContacts();
+      await SupabaseService.instance.getScannedContacts();
       setState(() {
         isInit = true;
-        // Transformer en ResponseMyScans si la structure le permet
-        // Pour l'instant on stocke les data brutes
-        _rawScans = data;
       });
     } catch (e) {
       Utils.showToast(e.toString());

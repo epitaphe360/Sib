@@ -59,7 +59,7 @@ export default function PartnerProfileScrapper({ partnerId, onSuccess }: Partner
   };
 
   const handleSave = async () => {
-    if (!scrapResult) return;
+    if (!scrapResult) {return;}
 
     setIsLoading(true);
     const savingToast = toast.loading('💾 Sauvegarde du profil...');

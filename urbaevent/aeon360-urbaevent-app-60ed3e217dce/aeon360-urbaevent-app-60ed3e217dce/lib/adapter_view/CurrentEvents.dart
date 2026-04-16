@@ -60,7 +60,7 @@ class _Events extends State<CurrentEvents> {
                     placeholder: (context, url) => Container(
                       alignment: Alignment.center,
                         height: 100,
-                        child: Center(child: CircularProgressIndicator(color: Colors.black.withOpacity(0.2),))),
+                        child: Center(child: CircularProgressIndicator(color: Colors.black.withValues(alpha: 0.2),))),
                     errorWidget: (_, __, ___) => _placeholderBox(),
                   )
                 : _placeholderBox(),
@@ -163,7 +163,7 @@ class _Events extends State<CurrentEvents> {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [ThemeColor.colorAccent, ThemeColor.colorAccent.withOpacity(0.7)],
+          colors: [ThemeColor.colorAccent, ThemeColor.colorAccent.withValues(alpha: 0.7)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

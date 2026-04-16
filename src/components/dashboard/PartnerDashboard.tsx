@@ -15,7 +15,6 @@ import {
   PartnerNetworkingTab,
   PartnerAnalyticsTab,
   PartnerRejectModal,
-  PartnerScrapperModal,
   PartnerEditorModal,
 } from './partner';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -122,7 +121,6 @@ export default function PartnerDashboard() {
             )}
             {ctx.activeTab === 'profile' && (
               <PartnerProfileTab
-                onOpenScrapper={() => ctx.setShowScrapperModal(true)}
                 onOpenEditor={() => ctx.setShowEditorModal(true)}
               />
             )}
@@ -162,14 +160,6 @@ export default function PartnerDashboard() {
           isOpen={ctx.showProfileModal}
           onClose={() => ctx.setShowProfileModal(false)}
           onComplete={() => ctx.setShowProfileModal(false)}
-        />
-      )}
-
-      {ctx.showScrapperModal && (
-        <PartnerScrapperModal
-          partnerId={user.id}
-          onSuccess={() => { ctx.setShowScrapperModal(false); ctx.fetchDashboard(); }}
-          onClose={() => ctx.setShowScrapperModal(false)}
         />
       )}
 

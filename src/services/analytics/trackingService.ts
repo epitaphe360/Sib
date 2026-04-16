@@ -1,6 +1,6 @@
 /**
  * Service de suivi analytique
- * 
+ *
  * Intègre Google Analytics 4 et Hotjar
  * Centralise le suivi des événements et conversions
  */
@@ -40,7 +40,7 @@ class TrackingService {
    */
   private static initializeGA4(): void {
     const gaId = process.env.REACT_APP_GA_ID;
-    if (!gaId) return;
+    if (!gaId) {return;}
 
     // Script d'initialisation GA4
     const script = document.createElement('script');
@@ -51,7 +51,7 @@ class TrackingService {
     // Configuration GA4
     (window as any).dataLayer = (window as any).dataLayer || [];
     function gtag(...args: any[]) {
-      (window as any).dataLayer.push(arguments);
+      (window as any).dataLayer.push(args);
     }
     (window as any).gtag = gtag;
     gtag('js', new Date());
@@ -63,7 +63,7 @@ class TrackingService {
    */
   private static initializeHotjar(): void {
     const hjId = process.env.REACT_APP_HOTJAR_ID;
-    if (!hjId) return;
+    if (!hjId) {return;}
 
     (window as any).hj =
       (window as any).hj ||

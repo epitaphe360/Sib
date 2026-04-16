@@ -141,8 +141,8 @@ export default function ProductEditForm({
           {productId ? 'Modifier le produit' : 'Ajouter un nouveau produit'}
         </h2>
         <div className="flex space-x-2">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={onCancel}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -161,7 +161,7 @@ export default function ProductEditForm({
           </Button>
         </div>
       </div>
-      
+
       <form className="p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Colonne gauche - Informations principales */}
@@ -170,7 +170,7 @@ export default function ProductEditForm({
               <h3 className="text-lg font-medium text-gray-900 mb-4">
                 Informations du produit
               </h3>
-              
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -201,7 +201,7 @@ export default function ProductEditForm({
                     <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
                   )}
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -240,7 +240,7 @@ export default function ProductEditForm({
                     )}
                   </div>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Spécifications techniques
@@ -270,14 +270,14 @@ export default function ProductEditForm({
               </div>
             </Card>
           </div>
-          
+
           {/* Colonne droite - Images */}
           <div className="space-y-6">
             <Card className="p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
                 Images du produit
               </h3>
-              
+
               <MultiImageUploader
                 onImagesUploaded={handleImagesUploaded}
                 currentImages={images}
@@ -287,19 +287,19 @@ export default function ProductEditForm({
                 maxSizeMB={5}
                 maxImages={8}
               />
-              
+
               <div className="mt-4 flex items-start space-x-2 text-sm text-gray-500">
                 <Info className="h-4 w-4 mt-0.5" />
                 <p>Les images seront affichées dans l'ordre de téléchargement. La première image sera l'image principale du produit.</p>
               </div>
             </Card>
-            
+
             {/* Aperçu du produit */}
             <Card className="p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
                 Aperçu
               </h3>
-              
+
               <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                 {images?.length > 0 ? (
                   <img

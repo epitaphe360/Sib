@@ -46,17 +46,17 @@ interface PartnerCardWrapperProps {
   t: (key: string) => string;
 }
 
-const PartnerCardWrapper: React.FC<PartnerCardWrapperProps> = ({ 
-  partner, 
-  viewMode, 
-  index, 
-  onViewDetails, 
-  getCategoryLabel, 
-  getCategoryColor, 
-  t 
+const PartnerCardWrapper: React.FC<PartnerCardWrapperProps> = ({
+  partner,
+  viewMode,
+  index,
+  onViewDetails,
+  getCategoryLabel,
+  getCategoryColor,
+  t
 }) => {
   const translatedContent = usePartnerTranslation(partner);
-  
+
   return (
     <PartnerCard
       partner={partner}
@@ -155,14 +155,14 @@ export default function PartnersPage() {
   }, []);
 
   const handleLoadMore = async () => {
-    if (isLoading || !hasMore) return;
+    if (isLoading || !hasMore) {return;}
     await loadPartners(false);
   };
 
   useEffect(() => {
     const filtered = partners.filter(partner => {
       const search = searchTerm.toLowerCase();
-      
+
       // Recherche dans tous les champs (FR et EN)
       const searchableFields = [
         partner.name || '',
@@ -174,7 +174,7 @@ export default function PartnersPage() {
         partner.category || '',
         partner.category_en || ''
       ].join(' ').toLowerCase();
-      
+
       const matchesSearch = searchableFields.includes(search);
       const matchesTier = !selectedTier || partner.partner_tier === selectedTier;
       const matchesCountry = !selectedCountry || partner.country === selectedCountry;
@@ -266,7 +266,7 @@ export default function PartnersPage() {
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <Button
               variant="outline"
@@ -276,7 +276,7 @@ export default function PartnersPage() {
               <Filter className="h-4 w-4 mr-2" />
               Filtres
             </Button>
-            
+
             <div className="flex border border-gray-300 rounded-lg">
               <button
                 onClick={() => setViewMode(CONFIG.viewModes.grid)}
@@ -318,7 +318,7 @@ export default function PartnersPage() {
                   ))}
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Pays

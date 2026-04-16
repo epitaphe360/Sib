@@ -17,7 +17,7 @@ export default function SalonPublicPage() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    if (!slug) return;
+    if (!slug) {return;}
     (async () => {
       setLoading(true);
       const { data, error } = await supabase

@@ -84,20 +84,20 @@ export default function VisitorFreeRegistration() {
       // 1. Vérification préalable : L'email existe-t-il déjà ?
       console.log('?? [FREE VISITOR] Vérification si email existe déjà...');
       const emailToCheck = data.email.toLowerCase().trim();
-      
+
       const { data: existingUser, error: checkError } = await supabase
         .from('users')
         .select('email, type, visitor_level')
         .eq('email', emailToCheck)
         .maybeSingle();
-      
+
       if (checkError && checkError.code !== 'PGRST116') {
         console.error('? [FREE VISITOR] Erreur lors de la vérification:', checkError);
         toast.error(t('visitor.message.email_check_error', 'Erreur lors de la vérification de l\'email. Veuillez réessayer.'));
         setIsSubmitting(false);
         return;
       }
-      
+
       if (existingUser) {
         console.warn('?? [FREE VISITOR] Email déjà existant:', existingUser);
         let accountType = 'visiteur';
@@ -106,25 +106,25 @@ export default function VisitorFreeRegistration() {
         } else if (existingUser.type === 'partner') {
           accountType = 'partenaire';
         } else if (existingUser.type === 'visitor') {
-          const level = existingUser.visitor_level === 'premium' ? 'VIP' : 
+          const level = existingUser.visitor_level === 'premium' ? 'VIP' :
                        existingUser.visitor_level === 'standard' ? 'Standard' : 'Gratuit';
           accountType = `visiteur ${level}`;
         }
-        
+
         // MESSAGE D'ERREUR CLAIR ET VISIBLE
-        toast.error(`?? ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`, 
+        toast.error(`?? ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`,
           { duration: 8000 }
         );
-        
+
         // Redirection automatique vers la page de connexion
         setTimeout(() => {
             navigate(ROUTES.LOGIN);
         }, 3000);
-        
+
         setIsSubmitting(false);
         return;
       }
-      
+
       console.log('? [FREE VISITOR] Email disponible');
 
       // 2. Créer l'utilisateur Supabase Auth avec le mot de passe de l'utilisateur
@@ -144,13 +144,13 @@ export default function VisitorFreeRegistration() {
         // Gérer le cas spécifique où l'utilisateur existe dans Auth mais pas dans public.users
         if (authError.message === 'User already registered') {
             console.warn('?? [FREE VISITOR] Email existe dans Auth mais pas dans users (compte orphelin).');
-            
+
             // Afficher un message clair avec options
             toast.error(
-              `?? ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`, 
+              `?? ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`,
               { duration: 10000 }
             );
-            
+
             // Proposer les deux options
             if (window.confirm('Voulez-vous aller à la page de connexion ?\n\nCliquez "OK" pour vous connecter\nCliquez "Annuler" pour réinitialiser votre mot de passe')) {
               // Rediriger vers login
@@ -159,13 +159,13 @@ export default function VisitorFreeRegistration() {
               // Rediriger vers mot de passe oublié
               navigate(ROUTES.FORGOT_PASSWORD);
             }
-            
+
             setIsSubmitting(false);
             return;
         }
         throw authError; // Autres erreurs
       }
-      if (!authData.user) throw new Error('Échec création utilisateur');
+      if (!authData.user) {throw new Error('Échec création utilisateur');}
 
       // 3. Créer l'entrée dans la table users
       const { error: userError } = await supabase
@@ -189,7 +189,7 @@ export default function VisitorFreeRegistration() {
           }
         }]);
 
-      if (userError) throw userError;
+      if (userError) {throw userError;}
 
       // 4. Générer badge QR automatiquement (optionnel - Edge Function peut ne pas être déployée)
       try {
@@ -202,7 +202,7 @@ export default function VisitorFreeRegistration() {
             includePhoto: false
           }
         });
-        
+
         if (badgeError) {
           console.error('? Erreur génération badge:', badgeError);
         } else {
@@ -218,7 +218,7 @@ export default function VisitorFreeRegistration() {
         console.log('?? [FREE] Envoi email de bienvenue...');
         const emailController = new AbortController();
         const emailTimeout = setTimeout(() => emailController.abort(), 5000);
-        
+
         const emailResponse = await fetch('/api/send-visitor-welcome-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -231,9 +231,9 @@ export default function VisitorFreeRegistration() {
           })
         });
         clearTimeout(emailTimeout);
-        
+
         const emailResult = await emailResponse.json();
-        
+
         if (!emailResponse.ok || !emailResult.success) {
           console.error('? Erreur envoi email:', emailResult.error);
           toast.info('?? L\'email de bienvenue n\'a pas pu être envoyé. Vérifiez votre boîte de réception plus tard.', {
@@ -254,10 +254,10 @@ export default function VisitorFreeRegistration() {
       // Succès !
       console.log('? [FREE VISITOR] Inscription réussie ! Affichage du modal de succès.');
       setShowSuccess(true);
-      
+
       // Toast de succès immédiat
       toast.success(
-        `?? ${t('visitor.message.success_title')}\n\n${t('visitor.message.success_desc')}\n\n${t('visitor.message.redirect')}`, 
+        `?? ${t('visitor.message.success_title')}\n\n${t('visitor.message.success_desc')}\n\n${t('visitor.message.redirect')}`,
         { duration: 6000 }
       );
 
@@ -377,8 +377,8 @@ export default function VisitorFreeRegistration() {
                     type="email"
                     {...register('email')}
                     className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.email 
-                        ? 'border-red-500 focus:ring-red-500' 
+                      errors.email
+                        ? 'border-red-500 focus:ring-red-500'
                         : 'border-gray-300 focus:ring-green-500'
                     }`}
                     placeholder="votre@email.com"
@@ -574,9 +574,9 @@ export default function VisitorFreeRegistration() {
                 disabled={isSubmitting}
                 className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 text-lg font-semibold rounded-lg shadow-lg transition-all duration-200 flex items-center justify-center"
                 onClick={(e) => {
-                  console.log('??? [FREE VISITOR] CLICK BOUTON', { 
-                    isSubmitting, 
-                    isValid, 
+                  console.log('??? [FREE VISITOR] CLICK BOUTON', {
+                    isSubmitting,
+                    isValid,
                     isDirty,
                     errorsCount: Object.keys(errors).length,
                     formData: watch()
@@ -633,11 +633,11 @@ export default function VisitorFreeRegistration() {
                   <div className="mx-auto w-28 h-28 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mb-6 shadow-xl">
                     <CheckCircle className="h-20 w-20 text-white animate-bounce" />
                   </div>
-                  
+
                   <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">
                     ?? {t('visitor.message.success_title')}
                   </h2>
-                  
+
                   <p className="text-lg text-gray-700 mb-6">
                     {t('visitor.message.success_desc')}
                   </p>
@@ -659,11 +659,11 @@ export default function VisitorFreeRegistration() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <p className="text-gray-600 mb-3 text-sm font-medium">
                     {t('visitor.message.redirect')}
                   </p>
-                  
+
                   <motion.div
                     className="relative h-3 bg-gray-200 rounded-full overflow-hidden"
                   >

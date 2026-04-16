@@ -151,11 +151,13 @@ class _EBadgeDetailsState extends State<EBadgeDetails> {
                   else if (_qrToken != null)
                     Container(
                       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12),
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 8, offset: const Offset(0, 2))]),
+                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 8, offset: const Offset(0, 2))]),
                       padding: const EdgeInsets.all(12),
                       child: QrImageView(
                         data: _qrToken!, version: QrVersions.auto, size: 180,
-                        foregroundColor: Colors.black, backgroundColor: Colors.white,
+                        eyeStyle: const QrEyeStyle(color: Colors.black),
+                        dataModuleStyle: const QrDataModuleStyle(color: Colors.black),
+                        backgroundColor: Colors.white,
                         errorCorrectionLevel: QrErrorCorrectLevel.M),
                     ),
                   const SizedBox(height: 24),

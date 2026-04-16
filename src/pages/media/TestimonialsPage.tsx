@@ -43,7 +43,7 @@ export const TestimonialsPage: React.FC = () => {
           <Link to={ROUTES.HOME} className="inline-flex items-center text-white/80 hover:text-white mb-6">
             {t('common.back_home') || 'Retour à l\'accueil'}
           </Link>
-          
+
           <div className="flex items-center space-x-4 mb-4">
             <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
               <MessageSquare className="w-8 h-8" />

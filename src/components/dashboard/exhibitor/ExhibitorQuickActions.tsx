@@ -1,35 +1,28 @@
-﻿import { Zap, Sparkles, Globe, Palette, User, QrCode, ArrowRight } from 'lucide-react';
+﻿import { Zap, Globe, Palette, User, QrCode, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { ROUTES } from '../../../lib/routes';
 
 interface ExhibitorQuickActionsProps {
-  onOpenScrapper: () => void;
   onOpenQR: () => void;
 }
 
-export function ExhibitorQuickActions({ onOpenScrapper, onOpenQR }: ExhibitorQuickActionsProps) {
+export function ExhibitorQuickActions({ onOpenQR }: ExhibitorQuickActionsProps) {
   const { t } = useTranslation();
 
   const actions = [
     {
-      title: t('exhibitor.quick_actions.create_minisite_ai'),
-      description: t('exhibitor.quick_actions.create_minisite_ai_desc'),
-      Icon: Sparkles,
-      action: onOpenScrapper,
+      title: t('exhibitor.quick_actions.edit_minisite'),
+      description: t('exhibitor.quick_actions.edit_minisite_desc'),
+      Icon: Palette,
+      link: ROUTES.MINISITE_EDITOR,
     },
     {
       title: t('exhibitor.quick_actions.networking_ai'),
       description: t('exhibitor.quick_actions.networking_ai_desc'),
       Icon: Globe,
       link: ROUTES.NETWORKING,
-    },
-    {
-      title: t('exhibitor.quick_actions.edit_minisite'),
-      description: t('exhibitor.quick_actions.edit_minisite_desc'),
-      Icon: Palette,
-      link: ROUTES.MINISITE_EDITOR,
     },
     {
       title: t('exhibitor.quick_actions.profile'),

@@ -1,7 +1,7 @@
 /**
  * TRANSACTION SERVICE
  * Wrapper for atomic database transaction functions
- * 
+ *
  * Ensures data consistency across multi-table operations:
  * - Appointment status updates
  * - Appointment cancellations

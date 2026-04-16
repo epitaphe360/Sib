@@ -35,11 +35,11 @@ const NewsCard: React.FC<NewsCardProps> = ({
     >
       {/* Bordure colorée marocaine */}
       <div className="absolute inset-0 bg-gradient-to-br from-red-600 via-sib-gold to-green-600 rounded-2xl rotate-1 group-hover:rotate-2 transition-transform" />
-      
+
       <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg">
         {/* Image avec overlay */}
         <div className="relative h-48 overflow-hidden">
-          <img 
+          <img
             src={featuredImage || defaultImage}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -48,30 +48,30 @@ const NewsCard: React.FC<NewsCardProps> = ({
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-sib-primary/90 via-sib-primary/50 to-transparent" />
-          
+
           {/* Badge catégorie */}
           <span className="absolute top-4 left-4 bg-sib-gold text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
             {category || 'Actualité'}
           </span>
         </div>
-        
+
         {/* Contenu */}
         <div className="p-6">
           <h3 className="font-bold text-xl mb-3 text-sib-primary group-hover:text-sib-gold transition-colors line-clamp-2">
             {title}
           </h3>
-          
+
           <p className="text-slate-600 text-sm mb-4 line-clamp-3">
             {excerpt}
           </p>
-          
+
           {/* Footer avec date et motifs */}
           <div className="flex justify-between items-center pt-4 border-t border-slate-100">
             <div className="flex items-center gap-2 text-xs text-slate-500">
               <Calendar className="w-4 h-4" />
               <span>{date}</span>
             </div>
-            
+
             {/* Motifs marocains */}
             <div className="flex gap-1">
               <div className="w-2 h-2 bg-red-600 rotate-45" />
@@ -89,7 +89,7 @@ export const LatestNewsSection: React.FC = () => {
   // Essayer d'abord Supabase, puis WordPress en fallback
   const { data: supabaseArticles, loading: supabaseLoading } = useSupabaseArticles(3);
   const { data: wpArticles, loading: wpLoading } = useWordPressArticles(3);
-  
+
   // Utiliser Supabase si disponible, sinon WordPress
   const articles = supabaseArticles?.length > 0 ? supabaseArticles : wpArticles;
   const loading = supabaseLoading || wpLoading;
@@ -141,7 +141,7 @@ export const LatestNewsSection: React.FC = () => {
               Dernières Actualités
             </span>
           </h2>
-          
+
           <p className="text-slate-600 text-lg max-w-2xl mx-auto">
             Restez informé des dernières nouvelles du Salon International du Bâtiment
           </p>

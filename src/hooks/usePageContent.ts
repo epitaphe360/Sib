@@ -17,7 +17,7 @@ export function usePageContent(pageSlug: string): Record<string, string> {
   useEffect(() => {
     let cancelled = false;
     getPageContent(pageSlug)
-      .then((data) => { if (!cancelled) setContent(data); })
+      .then((data) => { if (!cancelled) {setContent(data);} })
       .catch(() => { /* silently use hardcoded defaults */ });
     return () => { cancelled = true; };
   }, [pageSlug]);

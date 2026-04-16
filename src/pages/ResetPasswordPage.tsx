@@ -123,7 +123,7 @@ export default function ResetPasswordPage() {
         setMessage(t('resetPassword.success'));
         // Clear URL fragment for security
         try { history.replaceState({}, '', window.location.pathname); } catch (e) { console.warn(e) }
-        
+
         // Rediriger vers login après 3 secondes
         setTimeout(() => {
           navigate('/login');

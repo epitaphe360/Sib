@@ -361,17 +361,17 @@ export function checkDailyLimits(
   remainingMeetings: number;
 } {
   const permissions = getNetworkingPermissions(userType, userLevel);
-  
-  const remainingConnections = permissions.maxConnectionsPerDay === -1 
-    ? -1 
+
+  const remainingConnections = permissions.maxConnectionsPerDay === -1
+    ? -1
     : Math.max(0, permissions.maxConnectionsPerDay - currentUsage.connections);
-    
-  const remainingMessages = permissions.maxMessagesPerDay === -1 
-    ? -1 
+
+  const remainingMessages = permissions.maxMessagesPerDay === -1
+    ? -1
     : Math.max(0, permissions.maxMessagesPerDay - currentUsage.messages);
-    
-  const remainingMeetings = permissions.maxMeetingsPerDay === -1 
-    ? -1 
+
+  const remainingMeetings = permissions.maxMeetingsPerDay === -1
+    ? -1
     : Math.max(0, permissions.maxMeetingsPerDay - currentUsage.meetings);
 
   return {
@@ -393,15 +393,15 @@ export function getPermissionErrorMessage(
   action: string
 ): string {
   const permissions = getNetworkingPermissions(userType, userLevel);
-  
+
   if (userType === 'visitor' && userLevel === 'free') {
     return "🚫 Le réseautage n'est pas disponible avec le forfait gratuit. Veuillez mettre à niveau votre forfait pour accéder aux fonctionnalités de réseautage.";
   }
-  
+
   if (!permissions.canAccessNetworking) {
     return "🚫 Vous n'avez pas accès aux fonctionnalités de réseautage.";
   }
-  
+
   switch (action) {
     case 'message':
       return "📨 Vous avez atteint votre limite quotidienne de messages. Revenez demain ou mettez à niveau votre forfait.";
