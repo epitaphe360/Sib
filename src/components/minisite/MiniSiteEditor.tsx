@@ -89,6 +89,90 @@ interface SiteSettings {
   logoUrl: string;
 }
 
+const ALLOWED_SECTION_TYPES: Section['type'][] = ['hero', 'about', 'products', 'gallery', 'news', 'contact'];
+
+function normalizeSections(rawSections: unknown): Section[] {
+  if (typeof rawSections === 'string') {
+    try {
+      return normalizeSections(JSON.parse(rawSections));
+    } catch {
+      return [];
+    }
+  }
+
+  if (Array.isArray(rawSections)) {
+    return rawSections
+      .map((section, i) => {
+        const s = section as Record<string, unknown>;
+        const rawType = String(s.type || 'about') as Section['type'];
+        const type: Section['type'] = ALLOWED_SECTION_TYPES.includes(rawType) ? rawType : 'about';
+
+        return {
+          id: String(s.id || i + 1),
+          type,
+          title: String(s.title || ''),
+          content: (s.content as SectionContent) || {},
+          visible: s.visible !== false,
+          order: typeof s.order === 'number' ? s.order : i,
+        };
+      })
+      .sort((a, b) => a.order - b.order);
+  }
+
+  if (rawSections && typeof rawSections === 'object') {
+    const sectionsObject = rawSections as Record<string, unknown>;
+
+    return ALLOWED_SECTION_TYPES
+      .filter(type => sectionsObject[type] !== undefined)
+      .map((type, i) => {
+        const rawContent = sectionsObject[type];
+        const content = rawContent && typeof rawContent === 'object'
+          ? (rawContent as SectionContent)
+          : {};
+
+        const sectionTitleByType: Record<Section['type'], string> = {
+          hero: 'Section Hero',
+          about: 'À propos',
+          products: 'Produits',
+          gallery: 'Galerie',
+          news: 'Actualités',
+          contact: 'Contact',
+        };
+
+        return {
+          id: `${type}-${i + 1}`,
+          type,
+          title: String(content.title || sectionTitleByType[type]),
+          content,
+          visible: true,
+          order: i,
+        };
+      });
+  }
+
+  return [];
+}
+
+function normalizeTheme(
+  miniSite: Record<string, unknown>,
+  prev: SiteSettings
+): SiteSettings {
+  const themeCandidate = miniSite.theme;
+  const customColors = (miniSite.custom_colors as Record<string, string> | undefined) || {};
+
+  const themeObject = themeCandidate && typeof themeCandidate === 'object'
+    ? (themeCandidate as Record<string, string>)
+    : {};
+
+  return {
+    ...prev,
+    primaryColor: themeObject.primaryColor || customColors.primary || prev.primaryColor,
+    secondaryColor: themeObject.secondaryColor || customColors.secondary || prev.secondaryColor,
+    fontFamily: themeObject.fontFamily || prev.fontFamily,
+    logoUrl: String(miniSite.logo_url || prev.logoUrl || ''),
+  };
+}
+
 // ─── Default content per type ─────────────────────────────────────────────────
 
 function getDefaultContent(type: Section['type']): SectionContent {
@@ -153,25 +237,11 @@ export default function MiniSiteEditor() {
         setExhibitorId(exhibitor.id);
 
         const miniSite = await SupabaseService.getMiniSite(exhibitor.id);
-        if (miniSite?.sections?.length) {
-          const loaded = (miniSite.sections as any[]).map((s, i) => ({
-            id: s.id || String(i + 1),
-            type: (s.type || 'about') as Section['type'],
-            title: s.title || '',
-            content: s.content || {},
-            visible: s.visible !== false,
-            order: s.order ?? i,
-          }));
-          setSections(loaded);
-          if (miniSite.theme) {
-            setSiteSettings(prev => ({
-              ...prev,
-              primaryColor: miniSite.theme.primaryColor || prev.primaryColor,
-              secondaryColor: miniSite.theme.secondaryColor || prev.secondaryColor,
-              fontFamily: miniSite.theme.fontFamily || prev.fontFamily,
-              logoUrl: miniSite.logo_url || prev.logoUrl,
-            }));
-          }
+        const normalizedSections = normalizeSections(miniSite?.sections);
+
+        if (normalizedSections.length > 0) {
+          setSections(normalizedSections);
+          setSiteSettings(prev => normalizeTheme((miniSite || {}) as Record<string, unknown>, prev));
         } else {
           // No mini-site yet — seed hero + contact from profile
           const company = user.profile?.company || '';
