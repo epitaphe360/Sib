@@ -12,8 +12,8 @@ export const HeroSection: React.FC = () => {
   const { t } = useTranslation();
 
   React.useEffect(() => {
-    // Date du salon SIB 2026 (1-3 Avril 2026)
-    const salonDate = new Date('2026-04-01T09:00:00');
+    // Date du salon SIB 2026 (25-29 Novembre 2026)
+    const salonDate = new Date('2026-11-25T09:00:00');
     
     const calculateTimeLeft = () => {
       const now = new Date();
@@ -103,7 +103,7 @@ export const HeroSection: React.FC = () => {
             <div className="mb-6">
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-4">
                 <Calendar className="h-4 w-4 mr-2" />
-                1-3 Avril 2026
+                25-29 Nov. 2026
               </span>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-6">
                 {t('hero.title')}

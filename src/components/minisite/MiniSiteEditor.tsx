@@ -200,6 +200,13 @@ export default function MiniSiteEditor() {
   const { user } = useAuthStore();
   const { t } = useTranslation();
   const [exhibitorId, setExhibitorId] = useState<string | null>(null);
+  const [exhibitorProfile, setExhibitorProfile] = useState<{
+    company_name: string;
+    logo_url?: string;
+    description?: string;
+    contact_info?: Record<string, unknown>;
+    website?: string;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -236,17 +243,73 @@ export default function MiniSiteEditor() {
         if (!exhibitor) { setIsLoading(false); return; }
         setExhibitorId(exhibitor.id);
 
-        const miniSite = await SupabaseService.getMiniSite(exhibitor.id);
+        // Charger le profil exposant (données réelles: nom, logo, description, contact)
+        const [miniSite, profile] = await Promise.all([
+          SupabaseService.getMiniSite(exhibitor.id),
+          SupabaseService.getExhibitorForMiniSite(exhibitor.id),
+        ]);
+
+        // Stocker le profil pour pré-remplissage + navbar
+        if (profile) {
+          setExhibitorProfile(profile);
+          // Logo de l'exposant comme valeur par défaut
+          if (profile.logo_url) {
+            setSiteSettings(prev => ({ ...prev, logoUrl: profile.logo_url || prev.logoUrl }));
+          }
+        }
+
         const normalizedSections = normalizeSections(miniSite?.sections);
 
+        // Pré-remplir les champs vides à partir du profil exposant (même logique que le viewer)
+        const fillFromProfile = (secs: Section[]): Section[] => {
+          if (!profile) {return secs;}
+          const ci = (profile.contact_info as Record<string, string>) || {};
+          return secs.map(s => {
+            if (s.type === 'hero') {
+              return {
+                ...s,
+                content: {
+                  ...s.content,
+                  title: s.content.title || profile.company_name || '',
+                  subtitle: s.content.subtitle || (profile.description ? profile.description.slice(0, 150) : ''),
+                },
+              };
+            }
+            if (s.type === 'about') {
+              return {
+                ...s,
+                content: {
+                  ...s.content,
+                  title: s.content.title || 'À propos de nous',
+                  description: s.content.description || profile.description || '',
+                },
+              };
+            }
+            if (s.type === 'contact') {
+              return {
+                ...s,
+                content: {
+                  ...s.content,
+                  email: s.content.email || ci.email || '',
+                  phone: s.content.phone || ci.phone || '',
+                  address: s.content.address || ci.address || '',
+                  website: s.content.website || profile.website || '',
+                },
+              };
+            }
+            return s;
+          });
+        };
+
         if (normalizedSections.length > 0) {
-          setSections(normalizedSections);
+          setSections(fillFromProfile(normalizedSections));
           setSiteSettings(prev => normalizeTheme((miniSite || {}) as Record<string, unknown>, prev));
         } else {
-          // No mini-site yet — seed hero + contact from profile
-          const company = user.profile?.company || '';
-          const email = user.email || '';
-          const phone = (user.profile as any)?.phone || '';
+          // Pas de mini-site — seeder avec les vraies données du profil exposant
+          const company = profile?.company_name || user.profile?.company || '';
+          const email = (profile?.contact_info as any)?.email || user.email || '';
+          const phone = (profile?.contact_info as any)?.phone || (user.profile as any)?.phone || '';
+          const description = profile?.description || '';
           setSections([
             {
               id: '1',
@@ -254,7 +317,7 @@ export default function MiniSiteEditor() {
               title: 'Section Hero',
               content: {
                 title: company || 'Votre entreprise',
-                subtitle: 'Bienvenue sur notre mini-site SIB 2026',
+                subtitle: description ? description.slice(0, 150) : 'Bienvenue sur notre mini-site SIB 2026',
                 ctaText: 'Découvrir',
                 ctaLink: '#about',
               },
@@ -267,7 +330,7 @@ export default function MiniSiteEditor() {
               title: 'À propos',
               content: {
                 title: 'À propos de nous',
-                description: 'Présentez votre entreprise ici...',
+                description,
                 features: [],
               },
               visible: true,
@@ -282,7 +345,7 @@ export default function MiniSiteEditor() {
                 address: '',
                 phone,
                 email,
-                website: '',
+                website: profile?.website || '',
                 hours: '',
               },
               visible: true,
@@ -832,7 +895,7 @@ export default function MiniSiteEditor() {
                       {siteSettings.logoUrl
                         ? <img src={siteSettings.logoUrl} alt="Logo" className="h-8 w-auto object-contain" />
                         : <span className="text-white font-bold text-sm">
-                            {user?.profile?.company || 'Votre entreprise'}
+                            {exhibitorProfile?.company_name || user?.profile?.company || 'Votre entreprise'}
                           </span>}
                     </div>
 

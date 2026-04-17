@@ -100,7 +100,7 @@ export const Header: React.FC = memo(() => {
   const exposerMenuItems = [
     { name: t('exposer.pourquoi'), href: ROUTES.POURQUOI_EXPOSER, description: t('exposer.pourquoi_desc') },
     { name: t('exposer.espaces'), href: ROUTES.ESPACES_SIB, description: t('exposer.espaces_desc') },
-    { name: t('exposer.reserver'), href: ROUTES.EXHIBITOR_SUBSCRIPTION, description: t('exposer.reserver_desc') },
+    { name: t('exposer.reserver'), href: ROUTES.REGISTER_EXHIBITOR, description: t('exposer.reserver_desc') },
     { name: t('exposer.annuaire'), href: ROUTES.EXHIBITORS, description: t('exposer.annuaire_desc') },
   ];
 
