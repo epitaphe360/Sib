@@ -21,9 +21,26 @@ CREATE POLICY "Users can create conversations"
   FOR INSERT
   TO authenticated
   WITH CHECK (
+    participants IS NOT NULL
+    AND
     auth.uid()::text = created_by::text
     AND auth.uid()::text = ANY(participants::text[])
     AND array_length(participants, 1) >= 2
+    AND (
+      type IS DISTINCT FROM 'direct'
+      OR array_length(participants, 1) = 2
+    )
+    AND (
+      type IS DISTINCT FROM 'direct'
+      OR NOT EXISTS (
+        SELECT 1
+        FROM conversations c
+        WHERE c.type = 'direct'
+          AND array_length(c.participants, 1) = 2
+          AND c.participants @> conversations.participants
+          AND conversations.participants @> c.participants
+      )
+    )
   );
 
 -- Allow participants to update conversations (e.g. last_message_at)
@@ -33,7 +50,15 @@ CREATE POLICY "Participants can update conversations"
   FOR UPDATE
   TO authenticated
   USING (auth.uid()::text = ANY(participants::text[]))
-  WITH CHECK (auth.uid()::text = ANY(participants::text[]));
+  WITH CHECK (
+    auth.uid()::text = ANY(participants::text[])
+    AND participants IS NOT NULL
+    AND array_length(participants, 1) >= 2
+    AND (
+      type IS DISTINCT FROM 'direct'
+      OR array_length(participants, 1) = 2
+    )
+  );
 
 -- Allow admins to manage all conversations
 DROP POLICY IF EXISTS "Admins can manage all conversations" ON conversations;
