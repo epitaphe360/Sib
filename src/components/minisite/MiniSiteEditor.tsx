@@ -260,28 +260,45 @@ export default function MiniSiteEditor() {
 
         const normalizedSections = normalizeSections(miniSite?.sections);
 
-        // Pré-remplir les champs vides à partir du profil exposant (même logique que le viewer)
+        // Placeholders à ignorer (texte générique qui ne représente pas du vrai contenu)
+        const HERO_TITLE_PLACEHOLDERS = new Set(['', 'Votre titre', 'Votre entreprise', 'Title', 'titre']);
+        const HERO_SUBTITLE_PLACEHOLDERS = new Set(['', 'Votre sous-titre', 'Bienvenue sur notre mini-site SIB 2026', 'Subtitle']);
+        const ABOUT_DESC_PLACEHOLDERS = new Set(['', 'Décrivez votre entreprise ici...', 'Présentez votre entreprise ici...', 'Description de votre entreprise']);
+
+        // Pré-remplir les champs (vidés ou placeholders) avec les vraies données du profil
         const fillFromProfile = (secs: Section[]): Section[] => {
           if (!profile) {return secs;}
           const ci = (profile.contact_info as Record<string, string>) || {};
           return secs.map(s => {
             if (s.type === 'hero') {
+              const heroTitle = String(s.content.title ?? '');
+              const heroSubtitle = String(s.content.subtitle ?? '');
               return {
                 ...s,
                 content: {
                   ...s.content,
-                  title: s.content.title || profile.company_name || '',
-                  subtitle: s.content.subtitle || (profile.description ? profile.description.slice(0, 150) : ''),
+                  title: HERO_TITLE_PLACEHOLDERS.has(heroTitle.trim())
+                    ? (profile.company_name || heroTitle)
+                    : heroTitle,
+                  subtitle: HERO_SUBTITLE_PLACEHOLDERS.has(heroSubtitle.trim())
+                    ? (profile.description ? profile.description.slice(0, 200) : heroSubtitle)
+                    : heroSubtitle,
+                  ctaText: s.content.ctaText || 'Découvrir nos solutions',
                 },
               };
             }
             if (s.type === 'about') {
+              const aboutDesc = String(s.content.description ?? s.content.text ?? '');
               return {
                 ...s,
                 content: {
                   ...s.content,
-                  title: s.content.title || 'À propos de nous',
-                  description: s.content.description || profile.description || '',
+                  title: s.content.title || 'Notre expertise',
+                  description: ABOUT_DESC_PLACEHOLDERS.has(aboutDesc.trim())
+                    ? (profile.description || aboutDesc)
+                    : aboutDesc,
+                  // Garder les features existantes, sinon tableau vide
+                  features: Array.isArray(s.content.features) ? s.content.features : [],
                 },
               };
             }
@@ -983,47 +1000,69 @@ export default function MiniSiteEditor() {
                                   fieldKey={`${section.id}-title`}
                                 />
                                 <EditableText
-                                  value={section.content.description ?? ''}
+                                  value={section.content.description ?? (section.content as any).text ?? ''}
                                   onChange={v => updateSectionContent(section.id, 'description', v)}
                                   placeholder="Description de votre entreprise"
                                   multiline
-                                  className="text-gray-600 leading-relaxed mb-5"
+                                  className="text-gray-600 leading-relaxed mb-4"
                                   fieldKey={`${section.id}-desc`}
                                 />
-                                {(section.content.features ?? []).map((feat, fi) => (
-                                  <div key={fi} className="flex items-center gap-2 mb-2">
-                                    <div className="w-2 h-2 rounded-full flex-shrink-0"
-                                      style={{ backgroundColor: siteSettings.primaryColor }} />
-                                    <EditableText
-                                      value={feat}
-                                      onChange={v => {
-                                        const f = [...(section.content.features ?? [])];
-                                        f[fi] = v;
-                                        updateSectionContent(section.id, 'features', f);
-                                      }}
-                                      placeholder="Fonctionnalité"
-                                      className="text-sm text-gray-700"
-                                      fieldKey={`${section.id}-feat-${fi}`}
-                                    />
-                                    <button
-                                      onClick={e => {
-                                        e.stopPropagation();
-                                        const f = (section.content.features ?? []).filter((_, i) => i !== fi);
-                                        updateSectionContent(section.id, 'features', f);
-                                      }}
-                                      className="text-red-400 hover:text-red-600 flex-shrink-0"
-                                      title="Supprimer"
-                                    >
-                                      <X className="h-3 w-3" />
-                                    </button>
+                                {/* Badges ISO — identiques au viewer (toujours affichés) */}
+                                <div className="flex flex-wrap gap-2 mb-5">
+                                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">✓ ISO 9001</span>
+                                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">✓ ISO 27001</span>
+                                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">★ Certifié depuis 2008</span>
+                                </div>
+                                {/* Features éditables */}
+                                {(section.content.features ?? []).length === 0 ? (
+                                  <div className="grid grid-cols-2 gap-2 mb-4 opacity-50">
+                                    {['Intelligence Artificielle Bâtiment', 'Plateforme IoT intégrée', 'Support technique 24/7', 'Déploiement international'].map(f => (
+                                      <div key={f} className="flex items-center gap-2 text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-gray-300 flex-shrink-0" />
+                                        {f} <span className="ml-auto text-gray-300">(défaut)</span>
+                                      </div>
+                                    ))}
                                   </div>
-                                ))}
+                                ) : (
+                                  (section.content.features ?? []).map((feat, fi) => (
+                                    <div key={fi} className="flex items-center gap-2 mb-2">
+                                      <div className="w-2 h-2 rounded-full flex-shrink-0"
+                                        style={{ backgroundColor: siteSettings.primaryColor }} />
+                                      <EditableText
+                                        value={feat}
+                                        onChange={v => {
+                                          const f = [...(section.content.features ?? [])];
+                                          f[fi] = v;
+                                          updateSectionContent(section.id, 'features', f);
+                                        }}
+                                        placeholder="Fonctionnalité"
+                                        className="text-sm text-gray-700"
+                                        fieldKey={`${section.id}-feat-${fi}`}
+                                      />
+                                      <button
+                                        onClick={e => {
+                                          e.stopPropagation();
+                                          const f = (section.content.features ?? []).filter((_, i) => i !== fi);
+                                          updateSectionContent(section.id, 'features', f);
+                                        }}
+                                        className="text-red-400 hover:text-red-600 flex-shrink-0"
+                                        title="Supprimer"
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </button>
+                                    </div>
+                                  ))
+                                )}
                                 <Button variant="outline" size="sm" className="mt-3 text-xs"
                                   onClick={e => {
                                     e.stopPropagation();
-                                    updateSectionContent(section.id, 'features', [...(section.content.features ?? []), 'Nouvelle fonctionnalité']);
+                                    const currentFeatures = section.content.features ?? [];
+                                    const defaults = currentFeatures.length === 0
+                                      ? ['Intelligence Artificielle Bâtiment', 'Plateforme IoT intégrée', 'Support technique 24/7', 'Déploiement international']
+                                      : [...currentFeatures, 'Nouvelle fonctionnalité'];
+                                    updateSectionContent(section.id, 'features', defaults);
                                   }}>
-                                  <Plus className="h-3 w-3 mr-1" /> Ajouter fonctionnalité
+                                  <Plus className="h-3 w-3 mr-1" /> {(section.content.features ?? []).length === 0 ? 'Personnaliser les fonctionnalités' : 'Ajouter fonctionnalité'}
                                 </Button>
                               </div>
                             )}
