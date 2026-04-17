@@ -133,17 +133,16 @@ export function AdminActionsPanel({
               />
               <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
 
-                {/* Inscriptions — bouton toggle */}
-                <button className="text-left" onClick={onToggleRegistrationRequests}>
+                {/* Inscriptions — navigation vers la page dédiée */}
+                <Link to={ROUTES.ADMIN_REGISTRATION_REQUESTS}>
                   <Tile
                     Icon={ClipboardList}
                     label={t('admin.registration_requests')}
                     sub={t('admin.click_to_process')}
                     badge={pendingVal}
                     urgent={pendingVal > 0}
-                    active={showRegistrationRequests}
                   />
-                </button>
+                </Link>
 
                 {/* Validation paiements — lien, sans montants */}
                 <Link to={ROUTES.ADMIN_PAYMENT_VALIDATION}>

@@ -56,7 +56,7 @@ export const options = {
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const BASE_URL = __ENV.BASE_URL || 'http://localhost:5173';
+const BASE_URL = __ENV.BASE_URL || 'http://localhost:9324';
 const SUPABASE_URL = __ENV.SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = __ENV.SUPABASE_ANON_KEY || '';
 

@@ -53,6 +53,8 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
+  pdfx: ^2.9.2
+  screen_brightness: ^2.1.7
 
 dev_dependencies:
 

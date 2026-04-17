@@ -209,7 +209,7 @@ test.describe('🤝 Networking & Messagerie', () => {
   });
 
   test('NET-05: Page matchmaking', async ({ page }) => {
-    await checkPageLoads(page, `${BASE_URL}/networking/matchmaking`);
+    await checkPageLoads(page, `${BASE_URL}/profile/matching`);
   });
 
   test('NET-06: Historique interactions', async ({ page }) => {

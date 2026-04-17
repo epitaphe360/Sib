@@ -53,7 +53,7 @@ export default function ExhibitorDetailPage() {
     (user?.type === 'visitor' && user?.visitor_level === 'vip')
   );
   const { id } = useParams<{ id: string }>();
-  const { exhibitors, selectExhibitor, selectedExhibitor, fetchExhibitors } = useExhibitorStore();
+  const { exhibitors, selectExhibitor, selectedExhibitor, fetchExhibitors, isLoading: storeLoading } = useExhibitorStore();
   const { articles, fetchNews } = useNewsStore();
   // activeTab temporairement retiré (non utilisé)
 
@@ -101,7 +101,7 @@ export default function ExhibitorDetailPage() {
   };
 
   // Afficher loading pendant le chargement
-  if (exhibitors.length === 0) {
+  if (storeLoading && exhibitors.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -446,7 +446,7 @@ export default function ExhibitorDetailPage() {
                         size="sm"
                         className="hover:bg-blue-50 hover:border-blue-300 transition-all"
                         onClick={() => {
-                          toast.success('?? Téléchargement de la fiche technique...');
+                          toast.success('📥 Téléchargement de la fiche technique...');
                         }}
                       >
                         <Download className="h-4 w-4" />
@@ -708,7 +708,7 @@ export default function ExhibitorDetailPage() {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">Email</p>
-                      <p className="text-gray-600">contact@portsolutions.com</p>
+                      <p className="text-gray-600">{exhibitor.contactInfo?.email || 'Non renseigné'}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -717,7 +717,7 @@ export default function ExhibitorDetailPage() {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">Téléphone</p>
-                      <p className="text-gray-600"></p>
+                      <p className="text-gray-600">{exhibitor.contactInfo?.phone || 'Non renseigné'}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -726,7 +726,10 @@ export default function ExhibitorDetailPage() {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">Adresse</p>
-                      <p className="text-gray-600">123 Bâtiment Avenue, Amsterdam, Netherlands</p>
+                      <p className="text-gray-600">
+                        {[exhibitor.contactInfo?.address, exhibitor.contactInfo?.city, exhibitor.contactInfo?.country]
+                          .filter(Boolean).join(', ') || 'Non renseignée'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -864,7 +867,7 @@ export default function ExhibitorDetailPage() {
                     onClick={(e) => {
                       e.preventDefault();
 
-                      toast.success(`?? Message envoyé avec succès ! Nous vous répondrons sous 24h.`);
+                      toast.success('✉️ Message envoyé avec succès ! Nous vous répondrons sous 24h.');
                     }}
                   >
                     <Send className="h-4 w-4 mr-2" />
@@ -901,7 +904,7 @@ export default function ExhibitorDetailPage() {
                     format: 'Démonstration interactive'
                   };
 
-                  toast.success(`?? Démonstration programmée pour ${demoData.company}`);
+                  toast.success(`📅 Démonstration programmée pour ${demoData.company}`);
                 }}
               >
                 <Target className="h-5 w-5 mr-2" />
@@ -969,7 +972,7 @@ export default function ExhibitorDetailPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Building2 className="h-4 w-4" />
-                  <span>Stand {exhibitor.id === '1' ? 'A-12' : exhibitor.id === '2' ? 'B-08' : 'C-15'}</span>
+                  <span>Stand {(exhibitor as any).boothNumber || (exhibitor as any).booth_number || 'N/A'}</span>
                 </div>
               </div>
             </div>
@@ -977,7 +980,7 @@ export default function ExhibitorDetailPage() {
 
           <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 {exhibitor.companyName}. Tous droits réservés.
+              © {new Date().getFullYear()} {exhibitor.companyName}. Tous droits réservés.
             </p>
             <p className="text-sm text-gray-500 mt-4 md:mt-0">
               Propulsé par SIB 2026

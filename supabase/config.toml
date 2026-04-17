@@ -55,3 +55,6 @@ policy = "oneshot"
 enabled = false
 port = 54327
 backend = "postgres"
+[functions.generate-qr]
+verify_jwt = false
+

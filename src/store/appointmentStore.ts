@@ -535,8 +535,17 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     }
     console.log('✅ No existing appointment with this exhibitor');
 
-    // VALIDATION TEMPORELLE: Vérifier que le créneau est valide
+    // VALIDATION TEMPORELLE: Vérifier que le créneau est valide (date + heure de début)
     const slotDate = slot.date ? new Date(slot.date) : null;
+    const slotStartDateTime = slotDate
+      ? new Date(
+          slotDate.getFullYear(),
+          slotDate.getMonth(),
+          slotDate.getDate(),
+          Number((slot.startTime || '00:00').split(':')[0] || 0),
+          Number((slot.startTime || '00:00').split(':')[1] || 0)
+        )
+      : null;
     const now = new Date();
     const salonStart = new Date('2026-11-25T00:00:00');
     const salonEnd = new Date('2026-11-29T23:59:59');
@@ -546,7 +555,7 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
       throw new Error('Ce créneau n\'a pas de date valide');
     }
 
-    if (slotDate < now) {
+    if (!slotStartDateTime || slotStartDateTime < now) {
       console.log('❌ Slot is in the past!');
       throw new Error('Ce créneau est dans le passé. Veuillez choisir un créneau futur.');
     }

@@ -125,10 +125,10 @@ export default function NewsArticleCreationForm() {
 
       if (isEditMode && editId) {
         await updateNewsArticle(editId, articleData);
-        toast.success(`?? Article mis à jour : ${formData.title}`);
+        toast.success(`✏️ Article mis à jour : ${formData.title}`);
       } else {
         await createNewsArticle(articleData as any);
-        toast.success(`?? Article publié : ${formData.title}`);
+        toast.success(`✅ Article publié : ${formData.title}`);
       }
 
       // Rediriger vers la page des actualités

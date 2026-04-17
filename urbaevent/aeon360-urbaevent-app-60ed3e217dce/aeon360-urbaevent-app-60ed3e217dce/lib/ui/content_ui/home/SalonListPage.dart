@@ -1,6 +1,8 @@
 ﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:com.urbaevent/ui/content_ui/home/HomePage.dart';
+import 'package:com.urbaevent/ui/auth/SignIn.dart';
+import 'package:com.urbaevent/ui/auth/SignUp.dart';
 import 'package:com.urbaevent/utils/Const.dart';
 import 'package:com.urbaevent/utils/ThemeColor.dart';
 import 'package:flutter/material.dart';
@@ -389,7 +391,9 @@ class _SalonListPageState extends State<SalonListPage> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => SignUp()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: const Color(0xFF4598D1),
@@ -405,7 +409,9 @@ class _SalonListPageState extends State<SalonListPage> {
               const SizedBox(width: 10),
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => SignIn()));
+                  },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white,
                     side: const BorderSide(color: Colors.white54),

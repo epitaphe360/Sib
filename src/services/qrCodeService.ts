@@ -235,6 +235,21 @@ export interface QRCodePayload {
   company?: string;
 }
 
+interface QRUserFallback {
+  id?: string;
+  email?: string;
+  name?: string;
+  type?: 'visitor' | 'partner' | 'exhibitor' | 'admin' | 'security';
+  visitor_level?: string;
+  partner_tier?: string;
+  profile?: {
+    photo_url?: string;
+    company?: string;
+    organization?: string;
+  };
+  badge_number?: string;
+}
+
 /**
  * Générer un nonce aléatoire
  */
@@ -333,7 +348,7 @@ function getUserAccessLevel(user: User): keyof typeof ACCESS_LEVELS {
 /**
  * Générer un QR Code sécurisé pour un utilisateur
  */
-export async function generateSecureQRCode(userId: string): Promise<{
+export async function generateSecureQRCode(userId: string, userFallback?: QRUserFallback): Promise<{
   qrData: string;
   payload: QRCodePayload;
   expiresAt: Date;
@@ -344,10 +359,70 @@ export async function generateSecureQRCode(userId: string): Promise<{
       .from('users')
       .select('id, email, name, type, role, visitor_level, badge_number, profile, status, created_at')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
+    // Fallback robuste: si le profil users est manquant (ou bloqué RLS),
+    // on utilise les infos auth/session déjà disponibles côté client.
     if (error || !user) {
-      throw new Error('User not found');
+      const { data: authData } = await supabase.auth.getUser();
+      const authUser = authData?.user;
+
+      const mergedUser: QRUserFallback = {
+        id: userFallback?.id || authUser?.id || userId,
+        email: userFallback?.email || authUser?.email || '',
+        name:
+          userFallback?.name ||
+          (authUser?.user_metadata?.name as string) ||
+          authUser?.email ||
+          'Utilisateur',
+        type:
+          userFallback?.type ||
+          (authUser?.user_metadata?.type as QRUserFallback['type']) ||
+          'visitor',
+        visitor_level:
+          userFallback?.visitor_level ||
+          (authUser?.user_metadata?.visitor_level as string) ||
+          'free',
+        partner_tier:
+          userFallback?.partner_tier ||
+          (authUser?.user_metadata?.partner_tier as string),
+        profile: userFallback?.profile,
+        badge_number: userFallback?.badge_number,
+      };
+
+      if (!mergedUser.email) {
+        throw new Error('User not found');
+      }
+
+      const accessKey = getUserAccessLevel(mergedUser as User);
+      const accessLevel = ACCESS_LEVELS[accessKey];
+
+      const now = Date.now();
+      const expiresAt = new Date(now + QR_CODE_VALIDITY_MS);
+
+      const payload: QRCodePayload = {
+        userId: String(mergedUser.id || userId),
+        email: mergedUser.email,
+        name: mergedUser.name || mergedUser.email,
+        userType: (mergedUser.type || 'visitor') as QRCodePayload['userType'],
+        level: accessLevel.level,
+        iat: now,
+        exp: now + QR_CODE_VALIDITY_MS,
+        nonce: generateNonce(),
+        zones: accessLevel.zones,
+        events: accessLevel.events,
+        badgeNumber: mergedUser.badge_number,
+        photo: mergedUser.profile?.photo_url,
+        company: mergedUser.profile?.company || mergedUser.profile?.organization,
+      };
+
+      const token = await encodeJWT(payload, getSecret());
+
+      return {
+        qrData: token,
+        payload,
+        expiresAt,
+      };
     }
 
     // Déterminer le niveau d'accès

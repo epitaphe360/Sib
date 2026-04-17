@@ -52,6 +52,7 @@
   MINISITE_PREVIEW: '/minisite/:exhibitorId',
   ADMIN_ACTIVITY: '/admin/activity',
   ADMIN_VALIDATION: '/admin/validation',
+  ADMIN_REGISTRATION_REQUESTS: '/admin/registration-requests',
   ADMIN_MODERATION: '/admin/moderation',
   NEWS: '/news',
   NEWS_DETAIL: '/news/:id',

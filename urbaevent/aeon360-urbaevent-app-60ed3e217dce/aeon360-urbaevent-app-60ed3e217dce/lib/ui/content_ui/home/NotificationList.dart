@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:com.urbaevent/ui/content_ui/home/HomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:intl/intl.dart';
 
 class NotificationList extends StatefulWidget {
@@ -42,39 +43,17 @@ class _NotificationList extends State<NotificationList> {
   Future<void> setReadIndexForNotifications() async {
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
-      final url = Uri.parse(Urls.baseURL +
-          Urls.notificationReadIndex +
-          preference.getUserId().toString());
-      final response = await http.put(url, headers: {
-        'Authorization': 'Bearer $jwtToken'
-      }, body: {
-        "lastNotificationIndex":
-            (responseNotifications!.data!.length - 1).toString()
-      });
-
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
+    if (uuid.isNotEmpty) {
+      try {
+        await SupabaseService.instance
+            .setNotificationReadIndex(responseNotifications!.data!.length - 1);
 
         preference.getAuthRole()!.lastNotificationIndex =
             responseNotifications!.data!.length - 1;
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        setState(() {
-          loader = false;
-          preference.clearAppPreferences();
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage(Const.homeUI)),
-            (route) => false,
-          );
-        });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        debugPrint('setReadIndexForNotifications error: $e');
       }
     }
   }
@@ -82,9 +61,9 @@ class _NotificationList extends State<NotificationList> {
   Future<void> getNotifications() async {
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
+    if (uuid.isNotEmpty) {
       setState(() {
         loader = true;
       });
@@ -94,19 +73,21 @@ class _NotificationList extends State<NotificationList> {
         lastReadIndex = preference.getAuthRole()!.lastNotificationIndex!;
       }
 
-      final url = Uri.parse(Urls.baseURL + Urls.notificationList);
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
+      try {
+        final notifications = await SupabaseService.instance.getNotifications();
 
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        print('Response Notification' + response.body);
         setState(() {
           loader = false;
-          responseNotifications = ResponseNotifications.fromJson(parsedJson);
+          responseNotifications = ResponseNotifications(
+            data: notifications.map((n) {
+              return Datum(
+                id: n['id'] is int ? n['id'] : 0,
+                text: n['text'] ?? '',
+                createdAt: n['created_at'] != null ? DateTime.tryParse(n['created_at']) : null,
+                updatedAt: n['updated_at'] != null ? DateTime.tryParse(n['updated_at']) : null,
+              );
+            }).toList(),
+          );
           int unreadCount = 0;
           if (lastReadIndex > 0) {
             unreadCount =
@@ -121,23 +102,11 @@ class _NotificationList extends State<NotificationList> {
             setReadIndexForNotifications();
           });
         });
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        setState(() {
-          loader = false;
-          preference.clearAppPreferences();
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage(Const.homeUI)),
-            (route) => false,
-          );
-        });
-      } else {
+      } catch (e) {
         setState(() {
           loader = false;
         });
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+        debugPrint('getNotifications error: $e');
       }
     } else {
       setState(() {

@@ -53,7 +53,7 @@ export default function MediaDetailPage() {
 
     // Support video_url OU media_url
     const mediaUrl = media?.video_url || media?.audio_url || media?.media_url;
-    console.log('?? Play button clicked', {
+    console.log('▶️ Play button clicked', {
       video_url: media?.video_url,
       audio_url: media?.audio_url,
       media_url: media?.media_url,
@@ -74,7 +74,7 @@ export default function MediaDetailPage() {
       e.preventDefault();
       e.stopPropagation();
     }
-    console.log('?? Download button clicked', { resources_url: media?.resources_url });
+    console.log('⬇️ Download button clicked', { resources_url: media?.resources_url });
 
     if (media?.resources_url) {
       window.open(media.resources_url, '_blank');
@@ -89,7 +89,7 @@ export default function MediaDetailPage() {
       e.preventDefault();
       e.stopPropagation();
     }
-    console.log('?? Share button clicked');
+    console.log('🔗 Share button clicked');
 
     const url = window.location.href;
     if (navigator.share) {
@@ -116,7 +116,7 @@ export default function MediaDetailPage() {
       e.preventDefault();
       e.stopPropagation();
     }
-    console.log('?? Favorite button clicked');
+    console.log('❤️ Favorite button clicked');
     // Favorites feature implemented via API
     toast.success('Ajouté aux favoris');
   };

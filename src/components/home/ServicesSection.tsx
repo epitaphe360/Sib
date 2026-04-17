@@ -15,14 +15,14 @@ export function ServicesSection() {
   };
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-24 px-4 bg-[#F8F9FA] border-t" style={{ borderColor: 'rgba(231,209,146,0.3)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-[#1A1A1A] mb-4" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
             {t('services.need_help')}
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-base text-[#666] font-light">
             {t('services.help_desc')}
           </p>
         </div>
@@ -30,9 +30,9 @@ export function ServicesSection() {
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* WhatsApp */}
-          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-gray-200 flex flex-col">
-            <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mb-4">
-              <MessageCircle className="h-6 w-6 text-green-600" />
+          <div className="luxury-card p-6 flex flex-col">
+            <div className="flex items-center justify-center w-12 h-12 rounded-sm mb-4" style={{ background: 'rgba(231,209,146,0.1)', border: '0.5px solid rgba(231,209,146,0.3)' }}>
+              <MessageCircle className="h-5 w-5" style={{ color: '#C9A84C' }} />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               WhatsApp
@@ -42,16 +42,16 @@ export function ServicesSection() {
             </p>
             <Button
               onClick={handleWhatsAppClick}
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              className="w-full bg-[#C9A84C] hover:bg-[#E7D192] text-[#1A1A1A] font-medium"
             >
               {t('services.send_message')}
             </Button>
           </div>
 
           {/* Email */}
-          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-gray-200 flex flex-col">
-            <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4">
-              <Mail className="h-6 w-6 text-blue-600" />
+          <div className="luxury-card p-6 flex flex-col">
+            <div className="flex items-center justify-center w-12 h-12 rounded-sm mb-4" style={{ background: 'rgba(231,209,146,0.1)', border: '0.5px solid rgba(231,209,146,0.3)' }}>
+              <Mail className="h-5 w-5" style={{ color: '#C9A84C' }} />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               Email
@@ -60,16 +60,16 @@ export function ServicesSection() {
               {t('services.email_desc')}
             </p>
             <a href={`mailto:${emailAddress}`}>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+              <Button className="w-full bg-[#C9A84C] hover:bg-[#E7D192] text-[#1A1A1A] font-medium">
                 {t('services.send_email')}
               </Button>
             </a>
           </div>
 
           {/* Phone */}
-          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-gray-200 flex flex-col">
-            <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mb-4">
-              <Phone className="h-6 w-6 text-purple-600" />
+          <div className="luxury-card p-6 flex flex-col">
+            <div className="flex items-center justify-center w-12 h-12 rounded-sm mb-4" style={{ background: 'rgba(231,209,146,0.1)', border: '0.5px solid rgba(231,209,146,0.3)' }}>
+              <Phone className="h-5 w-5" style={{ color: '#C9A84C' }} />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               {t('services.phone')}
@@ -78,16 +78,16 @@ export function ServicesSection() {
               {t('services.phone_desc')}
             </p>
             <a href={`tel:${phoneNumber}`}>
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+              <Button className="w-full bg-[#C9A84C] hover:bg-[#E7D192] text-[#1A1A1A] font-medium">
                 {t('services.call_now')}
               </Button>
             </a>
           </div>
 
           {/* Horaires */}
-          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-gray-200 flex flex-col">
-            <div className="flex items-center justify-center w-12 h-12 bg-amber-100 rounded-lg mb-4">
-              <Clock className="h-6 w-6 text-amber-600" />
+          <div className="luxury-card p-6 flex flex-col">
+            <div className="flex items-center justify-center w-12 h-12 rounded-sm mb-4" style={{ background: 'rgba(231,209,146,0.1)', border: '0.5px solid rgba(231,209,146,0.3)' }}>
+              <Clock className="h-5 w-5" style={{ color: '#C9A84C' }} />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               {t('services.hours')}
@@ -100,8 +100,8 @@ export function ServicesSection() {
         </div>
 
         {/* CTA Banner */}
-        <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-xl p-8 text-white text-center">
-          <h3 className="text-2xl font-bold mb-3">
+        <div className="rounded-sm p-10 text-white text-center" style={{ background: 'linear-gradient(135deg, #0D0D0D 0%, #141414 100%)', border: '0.5px solid rgba(231,209,146,0.2)' }}>
+          <h3 className="text-3xl font-light mb-3" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
             {t('services.ready_to_chat')}
           </h3>
           <p className="mb-6 text-green-50 max-w-2xl mx-auto">

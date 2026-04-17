@@ -125,28 +125,29 @@ export default function ExhibitorsPage() {
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       {/* Header Premium Immersif */}
-      <div className="relative bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] pt-8 pb-24 px-4 overflow-hidden">
-        {/* Pattern Zellige Subtil */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+      <div className="relative bg-[#0A0A0A] pt-8 pb-24 px-4 overflow-hidden">
+        {/* Pattern Subtil */}
+        <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(231,209,146,0.8) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
 
-        {/* Cercles Lumineux */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px]"></div>
+        {/* Lueurs Ambiantes Or */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#E7D192]/5 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#E7D192]/3 rounded-full blur-[120px]"></div>
 
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center space-x-2 px-4 py-2 bg-white/5 backdrop-blur-xl rounded-full border border-white/10 mb-8"
+            className="inline-flex items-center space-x-2 px-4 py-2 bg-white/5 backdrop-blur-xl rounded-sm border border-[rgba(231,209,146,0.2)] mb-8"
           >
-             <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></div>
-             <span className="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em]">{t('exhibitors.catalog_label')}</span>
+             <div className="w-2 h-2 rounded-full bg-[#E7D192] animate-pulse"></div>
+             <span className="text-[10px] font-light text-[#E7D192] uppercase tracking-[0.2em]">{t('exhibitors.catalog_label')}</span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight"
+            className="text-5xl md:text-7xl font-light text-white mb-6 tracking-tight"
+            style={{ fontFamily: '"Cormorant Garamond", serif' }}
           >
             {t('pages.exhibitors.title')}
           </motion.h1>
@@ -155,15 +156,15 @@ export default function ExhibitorsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-blue-100/60 text-xl font-medium max-w-2xl mx-auto italic mb-12"
+            className="text-white/50 text-xl font-light max-w-2xl mx-auto italic mb-12"
           >
-            {t('pages.exhibitors.description')} • <span className="text-white font-black">{filteredExhibitors.length} {t('exhibitors.leaders_count')}</span>
+            {t('pages.exhibitors.description')} • <span className="text-[#E7D192] font-light">{filteredExhibitors.length} {t('exhibitors.leaders_count')}</span>
           </motion.p>
 
           {/* Barre de Recherche Premium */}
           <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-2xl p-2 rounded-3xl border border-white/10 shadow-2xl flex flex-col md:flex-row items-center gap-2">
             <div className="relative flex-1 w-full">
-              <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-blue-400" />
+              <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#E7D192]" />
               <input
                 type="text"
                 data-testid="search-input"
@@ -178,7 +179,7 @@ export default function ExhibitorsPage() {
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`flex-1 md:flex-none px-6 py-4 rounded-2xl flex items-center justify-center space-x-3 transition-all duration-300 font-black uppercase tracking-widest text-[10px] ${
-                  showFilters ? 'bg-white text-slate-900 shadow-xl' : 'bg-white/5 text-white hover:bg-white/10'
+                  showFilters ? 'bg-[#E7D192] text-[#0A0A0A] shadow-xl' : 'bg-white/5 text-white hover:bg-white/10'
                 }`}
               >
                 <Filter className="h-4 w-4" />
@@ -188,13 +189,13 @@ export default function ExhibitorsPage() {
               <div className="flex bg-white/5 p-1 rounded-2xl border border-white/5">
                 <button
                   onClick={() => setViewMode(CONFIG.viewModes.grid)}
-                  className={`p-3 rounded-xl transition-all ${viewMode === CONFIG.viewModes.grid ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+                  className={`p-3 rounded-sm transition-all ${viewMode === CONFIG.viewModes.grid ? 'bg-[#E7D192] text-[#0A0A0A] shadow-lg' : 'text-white/40 hover:text-white'}`}
                 >
                   <Grid className="h-5 w-5" />
                 </button>
                 <button
                   onClick={() => setViewMode(CONFIG.viewModes.list)}
-                  className={`p-3 rounded-xl transition-all ${viewMode === CONFIG.viewModes.list ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+                  className={`p-3 rounded-sm transition-all ${viewMode === CONFIG.viewModes.list ? 'bg-[#E7D192] text-[#0A0A0A] shadow-lg' : 'text-white/40 hover:text-white'}`}
                 >
                   <List className="h-5 w-5" />
                 </button>
@@ -218,7 +219,7 @@ export default function ExhibitorsPage() {
                   <select
                     value={filters.category}
                     onChange={(e) => setFilters({ category: e.target.value })}
-                    className="w-full px-5 py-3 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl text-slate-900 font-bold appearance-none transition-all cursor-pointer"
+                    className="w-full px-5 py-3 bg-gray-50 border-2 border-transparent focus:border-[#E7D192] rounded-sm text-slate-900 font-light appearance-none transition-all cursor-pointer"
                   >
                     {categories.map((category) => (
                       <option key={category.value} value={category.value}>
@@ -235,7 +236,7 @@ export default function ExhibitorsPage() {
                   <select
                     value={filters.sector}
                     onChange={(e) => setFilters({ sector: e.target.value })}
-                    className="w-full px-5 py-3 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl text-slate-900 font-bold appearance-none transition-all cursor-pointer"
+                    className="w-full px-5 py-3 bg-gray-50 border-2 border-transparent focus:border-[#E7D192] rounded-sm text-slate-900 font-light appearance-none transition-all cursor-pointer"
                   >
                     {sectors.map((sector) => (
                       <option key={sector.value} value={sector.value}>
@@ -254,7 +255,7 @@ export default function ExhibitorsPage() {
                     placeholder="Ex: Casablanca"
                     value={filters.country}
                     onChange={(e) => setFilters({ country: e.target.value })}
-                    className="w-full px-5 py-3 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl text-slate-900 font-bold transition-all"
+                    className="w-full px-5 py-3 bg-gray-50 border-2 border-transparent focus:border-[#E7D192] rounded-sm text-slate-900 font-light transition-all"
                   />
                 </div>
               </motion.div>
@@ -292,8 +293,8 @@ export default function ExhibitorsPage() {
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div className="relative z-10">
-              <div className="w-24 h-24 bg-blue-50 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-inner">
-                <Search className="h-10 w-10 text-blue-400" />
+              <div className="w-24 h-24 bg-[rgba(231,209,146,0.08)] rounded-sm flex items-center justify-center mx-auto mb-8 shadow-inner">
+                <Search className="h-10 w-10 text-[#E7D192]" />
               </div>
               <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">
                 {t('pages.exhibitors.no_results')}
@@ -303,7 +304,7 @@ export default function ExhibitorsPage() {
               </p>
               <button
                 onClick={() => setFilters({ search: '', category: '', sector: '', country: '' })}
-                className="px-8 py-3 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-blue-600 transition-colors shadow-xl"
+                className="px-8 py-3 bg-[#1A1A1A] text-white rounded-sm font-light uppercase tracking-widest text-xs hover:bg-[#E7D192] hover:text-[#0A0A0A] transition-colors shadow-xl"
               >
                 {t('exhibitors.reset_search')}
               </button>
@@ -340,7 +341,7 @@ export default function ExhibitorsPage() {
                 <Button
                   onClick={loadMoreExhibitors}
                   disabled={isLoading}
-                  className="px-8 py-3 bg-slate-900 hover:bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs"
+                  className="px-8 py-3 bg-[#1A1A1A] hover:bg-[#E7D192] hover:text-[#0A0A0A] text-white rounded-sm font-light uppercase tracking-widest text-xs"
                 >
                   {isLoading ? 'Chargement...' : 'Charger plus'}
                 </Button>

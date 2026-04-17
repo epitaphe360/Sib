@@ -327,7 +327,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
       // 4. Rafraîchir la liste des exposants
       await fetchExhibitors();
 
-  toast.success(`?? Exposant créé: ${newExhibitor.companyName} (ID: ${newExhibitor.id}) — utilisateur: ${newUser.email}`);
+  toast.success(`✅ Exposant créé: ${newExhibitor.companyName} (ID: ${newExhibitor.id}) — utilisateur: ${newUser.email}`);
 
       // Reset form
       setFormData({

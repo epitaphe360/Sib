@@ -41,7 +41,7 @@ class Preference {
   }
 
   // UUID (Supabase) — remplace l'int Strapi pour les nouveaux flows
-  void setUserUUID(String uuid) async {
+  Future<void> setUserUUID(String uuid) async {
     await _preferences!.setString('userUUID', uuid);
   }
 
@@ -168,5 +168,6 @@ class Preference {
     _preferences!.remove('responseLogin');
     _preferences!.remove('responseAuthRoleAgent');
     _preferences!.remove('userId');
+    _preferences!.remove('userUUID');
   }
 }

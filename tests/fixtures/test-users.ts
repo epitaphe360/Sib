@@ -29,13 +29,25 @@ export const TEST_USERS = {
     country: 'FR'
   },
 
+  visitorVip: {
+    email: 'visitor-vip@test.sib2026.ma',
+    password: TEST_PASSWORD,
+    firstName: 'Sophie',
+    lastName: 'Martin',
+    type: 'visitor',
+    company: 'Bati Conseil',
+    position: 'Directrice projets',
+    phone: '+33699887766',
+    country: 'FR'
+  },
+
   exhibitor: {
     email: 'exhibitor-9m@test.sib2026.ma',
     password: TEST_PASSWORD,
     firstName: 'Thomas',
     lastName: 'Dubois',
     type: 'exhibitor',
-    company: 'StartUp Port Innovations',
+    company: 'Atlas Build Systems',
     position: 'CEO',
     phone: '+33678901234',
     country: 'FR'
@@ -47,7 +59,7 @@ export const TEST_USERS = {
     firstName: 'Pierre',
     lastName: 'Leclerc',
     type: 'partner',
-    company: 'Maritime Museum Foundation',
+    company: 'Fondation Patrimoine Bati',
     position: 'Director',
     phone: '+33145678901',
     country: 'FR'
@@ -65,7 +77,7 @@ export const TEST_USERS = {
     phone: '+33611223344',
     country: 'FR',
     description: 'Description de test pour le visiteur avec plus de 50 caractères pour respecter la validation.',
-    objectives: ['Découvrir les innovations portuaires', 'Assister aux conférences'],
+    objectives: ['Découvrir les innovations du bâtiment', 'Assister aux conférences'],
     accountType: 'visitor'
   },
 
@@ -79,7 +91,7 @@ export const TEST_USERS = {
     position: 'CEO',
     phone: '+33655443322',
     country: 'FR',
-    sectors: ['technologie', 'logistique'],
+    sectors: ['technologie', 'construction'],
     companyDescription: 'Description de test pour exposant avec au moins 20 caractères minimum.',
     website: 'https://test-exhibitor.com'
   },
@@ -94,7 +106,7 @@ export const TEST_USERS = {
     position: 'Director',
     phone: '+33644556677',
     country: 'FR',
-    sectors: ['finance', 'services'],
+    sectors: ['institutionnel', 'services'],
     companyDescription: 'Description de test pour partenaire avec au moins 20 caractères.',
     partnershipType: 'institutional',
     website: 'https://test-partner.com'

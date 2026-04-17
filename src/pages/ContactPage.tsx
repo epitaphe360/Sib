@@ -95,7 +95,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
+    <div className="min-h-screen bg-[#F8F9FA] pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -127,7 +127,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-sm focus:ring-1 focus:ring-[#E7D192] focus:border-[#E7D192] disabled:bg-gray-100 disabled:cursor-not-allowed"
                     placeholder={t('contact.first_name')}
                   />
                 </div>
@@ -142,7 +142,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-sm focus:ring-1 focus:ring-[#E7D192] focus:border-[#E7D192] disabled:bg-gray-100 disabled:cursor-not-allowed"
                     placeholder={t('contact.last_name')}
                   />
                 </div>
@@ -159,7 +159,7 @@ export default function ContactPage() {
                   onChange={handleChange}
                   required
                   disabled={isLoading}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-sm focus:ring-1 focus:ring-[#E7D192] focus:border-[#E7D192] disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="votre.email@exemple.com"
                 />
               </div>
@@ -174,7 +174,7 @@ export default function ContactPage() {
                   value={formData.company}
                   onChange={handleChange}
                   disabled={isLoading}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-sm focus:ring-1 focus:ring-[#E7D192] focus:border-[#E7D192] disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder={t('contact.company')}
                 />
               </div>
@@ -189,7 +189,7 @@ export default function ContactPage() {
                   onChange={handleChange}
                   required
                   disabled={isLoading}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-sm focus:ring-1 focus:ring-[#E7D192] focus:border-[#E7D192] disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   <option value="">{t('contact.select_subject')}</option>
                   <option value="exhibitor">{t('contact.subject_exhibitor')}</option>
@@ -212,7 +212,7 @@ export default function ContactPage() {
                   required
                   rows={6}
                   disabled={isLoading}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-sm focus:ring-1 focus:ring-[#E7D192] focus:border-[#E7D192] disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder={t('contact.message')}
                 />
                 <p className="mt-1 text-sm text-gray-500">
@@ -222,7 +222,7 @@ export default function ContactPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700"
+                className="w-full bg-[#1A1A1A] hover:bg-[#C9A84C] text-white"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -251,8 +251,8 @@ export default function ContactPage() {
               </h2>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="bg-blue-100 p-3 rounded-lg">
-                    <MapPin className="h-6 w-6 text-blue-600" />
+                  <div className="bg-[rgba(231,209,146,0.1)] border border-[rgba(231,209,146,0.25)] p-3 rounded-sm">
+                    <MapPin className="h-6 w-6 text-[#C9A84C]" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{t('contact.address')}</h3>
@@ -265,14 +265,14 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="bg-blue-100 p-3 rounded-lg">
-                    <Mail className="h-6 w-6 text-blue-600" />
+                  <div className="bg-[rgba(231,209,146,0.1)] border border-[rgba(231,209,146,0.25)] p-3 rounded-sm">
+                    <Mail className="h-6 w-6 text-[#C9A84C]" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Email</h3>
                     <a
                       href="mailto:Sib2026@urbacom.net"
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-[#C9A84C] hover:text-[#1A1A1A] transition-colors"
                     >
                       Sib2026@urbacom.net
                     </a>
@@ -280,14 +280,14 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="bg-blue-100 p-3 rounded-lg">
-                    <Phone className="h-6 w-6 text-blue-600" />
+                  <div className="bg-[rgba(231,209,146,0.1)] border border-[rgba(231,209,146,0.25)] p-3 rounded-sm">
+                    <Phone className="h-6 w-6 text-[#C9A84C]" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{t('contact.phone')}</h3>
                     <a
                       href="tel:+212688500500"
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-[#C9A84C] hover:text-[#1A1A1A] transition-colors"
                     >
                       +212 6 88 50 05 00
                     </a>
@@ -328,7 +328,7 @@ export default function ContactPage() {
                   href="https://facebook.com/sibs2026"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="bg-[#1A1A1A] text-white p-3 rounded-sm hover:bg-[#C9A84C] transition-colors"
                 >
                   Facebook
                 </a>
@@ -336,7 +336,7 @@ export default function ContactPage() {
                   href="https://linkedin.com/company/sibs2026"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-blue-700 text-white p-3 rounded-lg hover:bg-blue-800 transition-colors"
+                  className="bg-[#1A1A1A] text-white p-3 rounded-sm hover:bg-[#C9A84C] transition-colors"
                 >
                   LinkedIn
                 </a>
@@ -344,7 +344,7 @@ export default function ContactPage() {
                   href="https://twitter.com/sibs2026"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-blue-400 text-white p-3 rounded-lg hover:bg-blue-500 transition-colors"
+                  className="bg-[#1A1A1A] text-white p-3 rounded-sm hover:bg-[#C9A84C] transition-colors"
                 >
                   Twitter
                 </a>

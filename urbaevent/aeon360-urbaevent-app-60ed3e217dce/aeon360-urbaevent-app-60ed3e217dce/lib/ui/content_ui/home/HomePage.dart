@@ -17,10 +17,11 @@ import 'package:com.urbaevent/model/ResponseContactDetails.dart';
 import 'package:com.urbaevent/model/ResponseContactList.dart' hide Meta, Pagination;
 import 'package:com.urbaevent/model/ResponseScanContact.dart';
 import 'package:com.urbaevent/model/common/ResponseError.dart';
-import 'package:com.urbaevent/model/events/ResponseEbadges.dart' hide Meta, Pagination;
+import 'package:com.urbaevent/model/events/ResponseEbadges.dart' hide Meta, Pagination, Datum;
 
 import 'package:com.urbaevent/model/events/ResponseEvents.dart';
 import 'package:com.urbaevent/model/common/ResponseUser.dart';
+import 'package:com.urbaevent/model/ResponseAuthRole.dart' as AuthModel;
 import 'package:com.urbaevent/model/events/ResponseMyEvents.dart' as Rev2;
 import 'package:com.urbaevent/ui/auth/SignIn.dart';
 import 'package:com.urbaevent/ui/auth/SignUp.dart';
@@ -28,6 +29,7 @@ import 'package:com.urbaevent/ui/content_ui/home/sub_views/EBadgeDetails.dart';
 import 'package:com.urbaevent/ui/content_ui/Event/EventDetails.dart';
 import 'package:com.urbaevent/ui/content_ui/home/NotificationList.dart';
 import 'package:com.urbaevent/ui/content_ui/home/sub_views/Profile.dart';
+import 'package:com.urbaevent/ui/content_ui/home/sub_views/FloorPlanViewer.dart';
 import 'package:com.urbaevent/ui/content_ui/home/sub_views/ProfileInformation.dart';
 import 'package:com.urbaevent/ui/content_ui/shared/WebViewScreen.dart';
 import 'package:com.urbaevent/utils/Const.dart';
@@ -63,6 +65,7 @@ class _HomePage extends State<HomePage> {
   bool isLoggedIn = false;
   int uiMode = 0;
   bool loader = false;
+  bool _homeDataLoaded = false;
   String scanResult = "";
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   TextEditingController textController = TextEditingController();
@@ -350,9 +353,9 @@ class _HomePage extends State<HomePage> {
       getEventsFailed = true;
     }
     setState(() {
-      getUserDetails();
       loader = false;
     });
+    getUserDetails();
   }
 
   void filterItems(String query) {
@@ -470,30 +473,32 @@ class _HomePage extends State<HomePage> {
   Future<void> getNotifications() async {
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
+    if (uuid.isNotEmpty) {
       if (preference.getAuthRole() != null &&
           preference.getAuthRole()!.lastNotificationIndex != null) {
         lastReadIndex = preference.getAuthRole()!.lastNotificationIndex!;
         print('Last Read Index: $lastReadIndex');
       }
 
-      final url = Uri.parse(Urls.baseURL + Urls.notificationList);
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
-
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        print('Response Notifications' + response.body);
+      try {
+        final notifications = await SupabaseService.instance.getNotifications();
         setState(() {
           loader = false;
-          responseNotifications = ResponseNotifications.fromJson(parsedJson);
+          // Build a minimal ResponseNotifications from the list
+          responseNotifications = ResponseNotifications(
+            data: notifications.map((n) {
+              return Datum(
+                id: n['id'] is int ? n['id'] : 0,
+                text: n['text'] ?? '',
+                createdAt: n['created_at'] != null ? DateTime.tryParse(n['created_at']) : null,
+                updatedAt: n['updated_at'] != null ? DateTime.tryParse(n['updated_at']) : null,
+              );
+            }).toList(),
+          );
           int unreadCount = 0;
-          if (lastReadIndex > 0) {
+          if (lastReadIndex > 0 && responseNotifications!.data != null) {
             unreadCount = responseNotifications!.data!.length - lastReadIndex;
           }
           if (unreadCount > 0) {
@@ -502,23 +507,11 @@ class _HomePage extends State<HomePage> {
             Utils.notificationCount = 0;
           }
         });
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        setState(() {
-          loader = false;
-          preference.clearAppPreferences();
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage(Const.homeUI)),
-            (route) => false,
-          );
-        });
-      } else {
+      } catch (e) {
         setState(() {
           loader = false;
         });
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+        debugPrint('getNotifications error: $e');
       }
     } else {
       setState(() {
@@ -537,18 +530,24 @@ class _HomePage extends State<HomePage> {
     }
     setState(() { isLoggedIn = true; });
     try {
-      // Save FCM token to Supabase
-      FirebaseMessaging messaging = FirebaseMessaging.instance;
-      String? fcmToken = await messaging.getToken();
-      if (fcmToken != null) {
-        final os = Platform.isAndroid ? 'android' : 'ios';
-        await SupabaseService.instance.savePushToken(fcmToken, os);
+      // Save FCM token to Supabase (safe)
+      try {
+        FirebaseMessaging messaging = FirebaseMessaging.instance;
+        String? fcmToken = await messaging.getToken();
+        if (fcmToken != null) {
+          final os = Platform.isAndroid ? 'android' : 'ios';
+          await SupabaseService.instance.savePushToken(fcmToken, os);
+        }
+      } catch (fcmError) {
+        debugPrint('FCM Token skipped due to error: $fcmError');
       }
+
       // Fetch profile from Supabase
       final profile = await SupabaseService.instance.getUserProfile(uuid);
       if (profile != null) {
         setState(() {
           _userType = (profile['type'] as String?) ?? 'visitor';
+          final now = DateTime.now();
           _responseUser = ResponseUser(
             id: 1,
             username: profile['email'] ?? '',
@@ -559,8 +558,30 @@ class _HomePage extends State<HomePage> {
             phone: profile['phone'],
             company: profile['company'],
             emailOTPConfirmed: true,
+            role: Role(
+              id: 1,
+              name: _userType,
+              description: _userType,
+              type: _userType,
+              createdAt: now,
+              updatedAt: now,
+            ),
           );
         });
+        // Save ResponseAuthRole so Profile.checkRoleAndLanguage works
+        final authRole = AuthModel.ResponseAuthRole(
+          id: 1,
+          username: profile['email'] ?? '',
+          email: profile['email'] ?? '',
+          name: profile['name'] ?? '',
+          phone: profile['phone'],
+          company: profile['company'],
+          confirmed: true,
+          blocked: false,
+          emailOTPConfirmed: true,
+          role: AuthModel.Role(id: 1, name: _userType, type: _userType),
+        );
+        await preference.saveAuthRole(authRole);
       } else {
         setState(() { isLoggedIn = false; });
       }
@@ -572,15 +593,17 @@ class _HomePage extends State<HomePage> {
       getAuthRole();
       isInit = true;
     });
-    if (_responseUser?.emailOTPConfirmed == true) {
-      getUserEventList();
-      getEbadgesList();
-    } else {
-      clearAppPreferences();
-      setState(() {
-        uiMode = Const.homeUI;
-        isLoggedIn = false;
-      });
+    if (_responseUser != null) {
+      if (_responseUser!.emailOTPConfirmed == true) {
+        getUserEventList();
+        getEbadgesList();
+      } else {
+        clearAppPreferences();
+        setState(() {
+          uiMode = Const.homeUI;
+          isLoggedIn = false;
+        });
+      }
     }
   }
 
@@ -632,38 +655,17 @@ class _HomePage extends State<HomePage> {
   }
 
   Future<void> getContactDetails(int userID) async {
-    Preference preference = await Preference.getInstance();
+    setState(() {
+      loader = true;
+    });
 
-    final jwtToken = preference.getToken();
+    try {
+      final profile = await SupabaseService.instance
+          .getContactDetails(userID.toString());
 
-    if (jwtToken.isNotEmpty) {
-      setState(() {
-        loader = true;
-      });
-
-      final url = Uri.parse(Urls.baseURL +
-          Urls.contactDetails +
-          userID.toString() +
-          Urls.contactDetailsFilter +
-          userID.toString());
-      final response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-        },
-      );
-      final parsedJson = jsonDecode(response.body);
-      if (response.statusCode == HttpStatus.ok) {
+      if (profile != null) {
         setState(() {
-          responseContactDetails = ResponseContactDetails.fromJson(parsedJson);
-
-          String stringPicUrl = "";
-          if (responseContactDetails!.avatar == null) {
-            stringPicUrl = Urls.imageURL;
-          } else {
-            stringPicUrl = Urls.imageURL + responseContactDetails!.avatar!.url!;
-          }
+          String stringPicUrl = profile['avatar_url'] ?? '';
 
           Navigator.push(
             context,
@@ -673,16 +675,16 @@ class _HomePage extends State<HomePage> {
                       title: "",
                       isMine: false,
                       avatar: stringPicUrl,
-                      name: responseContactDetails!.name ?? " ",
-                      company: responseContactDetails!.company ?? " ",
+                      name: profile['name'] ?? " ",
+                      company: profile['company'] ?? " ",
                       businessIndustry:
-                          responseContactDetails!.businessSector ?? " ",
-                      email: responseContactDetails!.email ?? " ",
-                      phoneNumber: responseContactDetails!.phone ?? " ",
+                          profile['business_sector'] ?? " ",
+                      email: profile['email'] ?? " ",
+                      phoneNumber: profile['phone'] ?? " ",
                       isUser: true),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
-                const begin = Offset(1.0, 0.0); // Slide from right
+                const begin = Offset(1.0, 0.0);
                 const end = Offset.zero;
                 const curve = Curves.easeInOut;
                 var tween = Tween(begin: begin, end: end)
@@ -693,22 +695,14 @@ class _HomePage extends State<HomePage> {
             ),
           );
         });
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        setState(() {
-          preference.clearAppPreferences();
-          isLoggedIn = false;
-          uiMode = Const.homeUI;
-        });
-      } else {
-        print('Response contact details error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
       }
-
-      setState(() {
-        loader = false;
-      });
+    } catch (e) {
+      debugPrint('getContactDetails error: $e');
     }
+
+    setState(() {
+      loader = false;
+    });
   }
 
   Future<void> getUIStates() async {
@@ -790,8 +784,15 @@ class _HomePage extends State<HomePage> {
 
   void _openWebView(String title, String path) {
     final base = ActiveSalon.webUrl ?? 'https://sib2026.vercel.app';
-    final url = '$base$path';
-    final token = SupabaseService.instance.supabaseClient.auth.currentSession?.accessToken;
+    String url = '$base$path';
+    final session = SupabaseService.instance.supabaseClient.auth.currentSession;
+    final token = session?.accessToken;
+    final refresh = session?.refreshToken;
+    
+    if (token != null && refresh != null) {
+      url += '#access_token=$token&refresh_token=$refresh&expires_in=3600&token_type=bearer&type=recovery';
+    }
+    
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -920,6 +921,55 @@ class _HomePage extends State<HomePage> {
     );
   }
 
+  Widget _buildFloorPlanSection() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => FloorPlanViewer(
+              salonName: ActiveSalon.name,
+              salonColor: const Color(0xFF4598D1),
+            ),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: const Color(0xFFE8ECF0)),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6, offset: const Offset(0, 2))],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF4598D1).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.map_outlined, color: Color(0xFF4598D1), size: 26),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Plan du Salon', style: GoogleFonts.roboto(color: const Color(0xFF0D2137), fontSize: 15, fontWeight: FontWeight.w700)),
+                  Text('Halls, stands & pavillons', style: GoogleFonts.roboto(color: const Color(0xFF64748B), fontSize: 12)),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios, color: Color(0xFFB0B8C1), size: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildNetworkingSection() {
     return GestureDetector(
       onTap: () => _openWebView('Réseautage', '/networking'),
@@ -986,8 +1036,7 @@ class _HomePage extends State<HomePage> {
           body: VisibilityDetector(
             key: Key("homePage"),
             onVisibilityChanged: (VisibilityInfo info) {
-              getUserDetails();
-              getEventList();
+              // Data loaded via initState — no extra reload needed
             },
             child: Stack(
               children: [
@@ -995,6 +1044,7 @@ class _HomePage extends State<HomePage> {
                 if (uiMode == Const.homeUI || uiMode == Const.searchEventUI)
                   HalfImageVisible(),
                 Column(
+
                   children: [
                     //Toolbar
                     if (uiMode == Const.homeUI || uiMode == Const.searchEventUI)
@@ -1121,7 +1171,10 @@ class _HomePage extends State<HomePage> {
                                                     height: 20,
                                                   ),
                                                   // Replace with your image asset path
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    textController.clear();
+                                                    filterItems('');
+                                                  },
                                                 ),
                                                 Expanded(
                                                   child: Center(
@@ -1341,8 +1394,10 @@ class _HomePage extends State<HomePage> {
                               _buildQuickAccess(),
                               // ── Médias : Webinaires / Podcasts / Live Studio ──
                               _buildMediaSection(),
-                              // ── Réseautage (VIP / Exposant / Partenaire / Admin) ──
-                              if (_userType != 'visitor')
+                              // ── Plan du salon ──
+                              _buildFloorPlanSection(),
+                              // ── Réseautage (uniquement si connecté) ──
+                              if (isLoggedIn)
                                 _buildNetworkingSection(),
                               const SizedBox(height: 16),
                               // ── Mes événements ──
@@ -1684,7 +1739,19 @@ class _HomePage extends State<HomePage> {
                       Profile(
                           'try', "", handleProfileCallbacks, _responseUser!),
                     if (uiMode == Const.profileUI && _responseUser == null)
-                      Expanded(flex: 1, child: Container()),
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(color: const Color(0xFF4598D1)),
+                              const SizedBox(height: 16),
+                              Text('Chargement du profil...', style: GoogleFonts.roboto(color: const Color(0xFF647483), fontSize: 14)),
+                            ],
+                          ),
+                        ),
+                      ),
                     if (uiMode == Const.searchEventUI &&
                         getEventsInit &&
                         filteredEvents.isNotEmpty)

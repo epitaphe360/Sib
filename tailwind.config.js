@@ -5,19 +5,28 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Palette officielle SIB — Salon International du Bâtiment
+        // Palette Ultra-Luxueuse SIB 2026 — Lumière & Matière
         sib: {
-          navy:         '#1B365D',  // Bleu architecte — couleur primaire
-          'navy-light': '#2E5984',  // Bleu moyen
-          'navy-dark':  '#0F2034',  // Bleu nuit
-          gold:         '#C9A84C',  // Or architectural — accent premium
-          'gold-light': '#E8C96A',  // Or clair
-          'gold-dark':  '#A88830',  // Or profond
-          green:        '#2D6A4F',  // Vert construction durable
+          // Navy dark for architectural hero backgrounds
+          navy:         '#1B365D',
+          'navy-light': '#2E5984',
+          'navy-dark':  '#0F2034',
+          // Champagne Gold — accent luxe principal
+          gold:         '#E7D192',
+          'gold-light': '#F0E3AA',
+          'gold-dark':  '#C9A84C',
+          // Fond et surfaces blanc albâtre
+          bg:           '#FFFFFF',
+          surface:      '#FFFFFF',
+          pearl:        '#F8F9FA',
+          // Texte Gris Anthracite
+          anthracite:   '#1A1A1A',
+          green:        '#2D6A4F',
           'green-light':'#3D8A65',
-          bg:           '#F8FBFF',  // Fond de base
-          surface:      '#FFFFFF',  // Surface cartes
-          anthracite:   '#1A2332',  // Texte principal
+          // Couleurs utilitaires
+          primary:      '#1B365D',
+          secondary:    '#2E5984',
+          orange:       '#FF6B35',
           gray: {
             50:  '#F8FAFC',
             100: '#F1F5F9',
@@ -31,32 +40,29 @@ export default {
             900: '#0F172A',
           },
         },
-        // Aliases pour rétrocompatibilité (classes bg-SIB-primary, text-SIB-gold, etc.)
+        // Aliases pour rétrocompatibilité
         'SIB-primary':   '#1B365D',
         'SIB-secondary': '#2E5984',
-        'SIB-gold':      '#C9A84C',
+        'SIB-gold':      '#E7D192',
         'SIB-accent':    '#2D6A4F',
-        // Ancien namespace conservé pour migration progressive
-        sib: {
-          primary:   '#1B365D',
-          secondary: '#2E5984',
-          gold:      '#C9A84C',
-          orange:    '#FF6B35',
-        },
-        // Luxury luxury palette — beige, tan, cream
+        // Palette luxury étendue
         luxury: {
-          cream:    '#FAF9F6',
-          beige:    '#D4C5B9',
-          tan:      '#A89878',
-          bronze:   '#8B7355',
-          charcoal: '#2B2520',
+          cream:     '#FFFFFF',
+          alabaster: '#F8F9FA',
+          pearl:     '#F4F4F2',
+          gold:      '#E7D192',
+          'gold-muted': '#C9A84C',
+          charcoal:  '#1A1A1A',
+          anthracite:'#2C2C2C',
+          smoke:     '#EEE',
         },
       },
       fontFamily: {
         sans: ['"Open Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        heading: ['"Big Shoulders Display"', '"Open Sans"', 'sans-serif'],
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        heading: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
+        serif: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
+        display: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
+        cormorant: ['"Cormorant Garamond"', 'Georgia', 'serif'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],

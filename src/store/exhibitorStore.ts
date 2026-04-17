@@ -25,6 +25,7 @@ interface ExhibitorState {
   selectExhibitor: (id: string) => void;
   updateAvailability: (exhibitorId: string, slots: TimeSlot[]) => void;
   updateExhibitorStatus: (exhibitorId: string, newStatus: 'approved' | 'rejected') => Promise<void>;
+  updateExhibitorInStore: (id: string, data: Partial<Exhibitor>) => void;
 }
 
 // Removed large inline mock dataset. The application now relies on Supabase for real data.
@@ -207,5 +208,18 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
         : exhibitor
     );
     set({ exhibitors: updatedExhibitors });
-  }
+  },
+
+  updateExhibitorInStore: (id, data) => {
+    set(state => {
+      const update = (ex: Exhibitor) => ex.id === id ? { ...ex, ...data } : ex;
+      return {
+        exhibitors: state.exhibitors.map(update),
+        filteredExhibitors: state.filteredExhibitors.map(update),
+        selectedExhibitor: state.selectedExhibitor?.id === id
+          ? { ...state.selectedExhibitor, ...data }
+          : state.selectedExhibitor,
+      };
+    });
+  },
 }));

@@ -20,6 +20,7 @@ import 'package:com.urbaevent/widgets/CustomToolbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -155,45 +156,23 @@ class _MyAssociates extends State<MyAssociates> {
       setState(() {
         loader = true;
       });
-      Preference preference = await Preference.getInstance();
 
-      final jwtToken = preference.getToken();
-      final url = Uri.parse(Urls.baseURL + Urls.users);
+      try {
+        await SupabaseService.instance.addCollaborator(
+          name: _namePController.value.text,
+          email: _emailController.value.text,
+          phone: _phoneNumberController.value.text,
+          jobPosition: _functionController.value.text,
+          salonId: Const.eventID.toString(),
+        );
 
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-        },
-        body: {
-          'event': Const.eventID.toString(),
-          'exhibitor': preference.getLoginDetails()!.user.id.toString(),
-          'name': _namePController.value.text,
-          'jobPosition': _functionController.value.text,
-          'email': _emailController.value.text,
-          'username': _emailController.value.text,
-          'phone': _phoneNumberController.value.text,
-          'confirmed': true.toString(),
-          'password': generatePassword(),
-          'type': 'collaborator',
-          'lang': 'french',
-          'role': 1.toString(),
-          'emailOTPConfirmed': true.toString()
-        },
-      );
-
-      final parsedJson = jsonDecode(response.body);
-
-      print(response.statusCode.toString() + "" + response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
         Utils.showToast(
             Intl.message("msg_associate_added", name: "msg_associate_added"));
         getAssociateList();
         Navigator.pop(context);
-      } else {
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        debugPrint('addAssociate error: $e');
+        Utils.showToast(e.toString());
       }
       setState(() {
         loader = false;
@@ -418,39 +397,25 @@ class _MyAssociates extends State<MyAssociates> {
     setState(() {
       loader = true;
     });
-    Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    try {
+      await SupabaseService.instance.updateCollaborator(
+        associateList![index].id!.toString(),
+        {
+          "name": _namePController.text.toString(),
+          "email": _emailController.text.toString(),
+          "phone": _phoneNumberController.text.toString(),
+          "job_position": _functionController.text.toString(),
+        },
+      );
 
-    if (jwtToken.isNotEmpty) {
-      final url = Uri.parse(Urls.baseURL +
-          Urls.contactDetails +
-          associateList![index].id!.toString());
-      final response = await http.put(url, headers: {
-        'Authorization': 'Bearer $jwtToken',
-      }, body: {
-        "name": _namePController.text.toString(),
-        "email": _emailController.text.toString(),
-        "username": _emailController.text.toString(),
-        "phone": _phoneNumberController.text.toString(),
-        "jobPosition": _functionController.text.toString(),
-      });
-
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        Utils.showToast(Intl.message("msg_associate_updated",
-            name: "msg_associate_updated"));
-        print('Response' + response.body);
-        Navigator.pop(context);
-        getAssociateList();
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
-      }
-    } else {
+      Utils.showToast(Intl.message("msg_associate_updated",
+          name: "msg_associate_updated"));
       Navigator.pop(context);
+      getAssociateList();
+    } catch (e) {
+      debugPrint('editCollaborator error: $e');
+      Utils.showToast(e.toString());
     }
     setState(() {
       loader = false;
@@ -461,39 +426,19 @@ class _MyAssociates extends State<MyAssociates> {
     setState(() {
       loader = true;
     });
-    Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    try {
+      await SupabaseService.instance
+          .deleteCollaborator(associateList![index].id!.toString());
 
-    if (jwtToken.isNotEmpty) {
-      final url = Uri.parse(Urls.baseURL +
-          Urls.contactDetails +
-          associateList![index].id!.toString());
-      final response = await http.put(url, headers: {
-        'Authorization': 'Bearer $jwtToken',
-      }, body: {
-        "blocked": true.toString(),
-        "confirmed": false.toString()
+      Utils.showToast(Intl.message("msg_associate_deleted",
+          name: "msg_associate_deleted"));
+      setState(() {
+        associateList!.removeAt(index);
       });
-
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        Utils.showToast(Intl.message("msg_associate_deleted",
-            name: "msg_associate_deleted"));
-        print('Response' + response.body);
-        setState(() {
-          setState(() {
-            associateList!.removeAt(index);
-          });
-        });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
-      }
-    } else {
-      Navigator.pop(context);
+    } catch (e) {
+      debugPrint('deleteCollaborator error: $e');
+      Utils.showToast(e.toString());
     }
     setState(() {
       loader = false;
@@ -504,44 +449,23 @@ class _MyAssociates extends State<MyAssociates> {
     setState(() {
       loader = true;
     });
-    Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    try {
+      final associates = await SupabaseService.instance
+          .getAssociates(Const.eventID.toString());
 
-    if (jwtToken.isNotEmpty) {
-      final url = Uri.parse(Urls.baseURL +
-          Urls.getAssociateList +
-          preference.getUserId().toString() +
-          Urls.getAssociateListFilter +
-          Const.eventID.toString());
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
-
-      print('URL Collaborator' + url.toString());
-
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        print('Response Collaborator List' + response.body);
-        setState(() {
-          final List<dynamic> jsonResponse = json.decode(response.body);
-          associateList =
-              jsonResponse.map((data) => AssociateInfo.fromJson(data)).toList();
-          for (int i = 0; i < associateList!.length; i++) {
-            if (associateList![i].blocked!) {
-              associateList!.removeAt(i);
-            }
+      setState(() {
+        associateList =
+            associates.map((data) => AssociateInfo.fromJson(data)).toList();
+        for (int i = 0; i < associateList!.length; i++) {
+          if (associateList![i].blocked!) {
+            associateList!.removeAt(i);
           }
-        });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
-      }
-    } else {
-      Navigator.pop(context);
+        }
+      });
+    } catch (e) {
+      debugPrint('getAssociateList error: $e');
+      Utils.showToast(e.toString());
     }
     setState(() {
       loader = false;
@@ -569,43 +493,29 @@ class _MyAssociates extends State<MyAssociates> {
       setState(() {
         loader = true;
       });
-      Preference preference = await Preference.getInstance();
 
-      final jwtToken = preference.getToken();
+      final bytes = await SupabaseService.instance
+          .downloadEbadge(registrationId.toString());
 
-      final url = Uri.parse(
-          Urls.baseURL + Urls.downloadEbadge + registrationId.toString());
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
-
-      if (response.statusCode == 200) {
-        // Get the application's document directory
+      if (bytes != null) {
         final appDir = await getApplicationCacheDirectory();
         final filePath = appDir.path + '/' + "Ebadge" + '.pdf';
 
-        // Create and write the file
         File file = File(filePath);
-        await file.writeAsBytes(response.bodyBytes);
+        await file.writeAsBytes(bytes);
 
-        // File saved successfully
         print('File saved to: $filePath');
         if (await file.exists()) {
           await OpenFile.open(filePath);
         } else {
           throw Exception('File does not exist at $filePath');
         }
-        setState(() {
-          loader = false;
-        });
       } else {
-        setState(() {
-          loader = false;
-        });
-        // Handle the HTTP error
-        throw Exception('Failed to download file: ${response.statusCode}');
+        throw Exception('Failed to download e-badge');
       }
+      setState(() {
+        loader = false;
+      });
     } catch (e) {
       setState(() {
         loader = false;
@@ -653,26 +563,12 @@ class _MyAssociates extends State<MyAssociates> {
     setState(() {
       loader = true;
     });
-    Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
-    final url =
-        Uri.parse(Urls.baseURL + Urls.sendAssociateEmailInvite + id.toString());
-
-    print("Url: " + url.toString());
-
-    final response = await http.post(url, headers: {
-      'Authorization': 'Bearer $jwtToken',
-    }, body: {});
-
-    print(response.statusCode.toString() + " " + response.body);
-
-    final parsedJson = jsonDecode(response.body);
-
-    if (response.statusCode == HttpStatus.ok) {
-    } else {
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
+    try {
+      await SupabaseService.instance.sendCollaboratorInvite(id.toString());
+    } catch (e) {
+      debugPrint('sendEmailInvite error: $e');
+      Utils.showToast(e.toString());
     }
     setState(() {
       loader = false;

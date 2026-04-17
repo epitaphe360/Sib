@@ -70,6 +70,7 @@ const VisitorBankTransferPage = lazyRetry(() => import('./pages/visitor/VisitorB
 const PaymentSuccessPage = lazyRetry(() => import('./pages/visitor/PaymentSuccessPage'));
 const PaymentInstructionsPage = lazyRetry(() => import('./pages/visitor/PaymentInstructionsPage'));
 const PaymentValidationPage = lazyRetry(() => import('./pages/admin/PaymentValidationPage'));
+const AdminRegistrationRequestsPage = lazyRetry(() => import('./pages/admin/AdminRegistrationRequestsPage'));
 const BadgePage = lazyRetry(() => import('./pages/BadgePage'));
 const PartnerUpgradePage = lazyRetry(() => import('./pages/PartnerUpgradePage'));
 const BadgeScannerPage = lazyRetry(() => import('./pages/BadgeScannerPage'));
@@ -393,6 +394,7 @@ const App = () => {
             <Route path={ROUTES.NEWS_DETAIL} element={<ArticleDetailPage />} />
             <Route path={ROUTES.ADMIN_DASHBOARD} element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PAYMENT_VALIDATION} element={<ProtectedRoute requiredRole="admin"><PaymentValidationPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_REGISTRATION_REQUESTS} element={<ProtectedRoute requiredRole="admin"><AdminRegistrationRequestsPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_VIP_VISITORS} element={<ProtectedRoute requiredRole="admin"><VIPVisitorsPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_USERS} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_CREATE_USER} element={<ProtectedRoute requiredRole="admin"><CreateUserPage /></ProtectedRoute>} />

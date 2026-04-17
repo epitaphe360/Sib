@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:com.urbaevent/model/agent/ResponseGateList.dart';
+import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:com.urbaevent/ui/content_ui/agent/MyScans.dart';
 import 'package:com.urbaevent/utils/Const.dart';
 import 'package:com.urbaevent/utils/LanguageProvider.dart';
@@ -69,7 +70,8 @@ class _Profile extends State<Profile> {
   Future<void> checkRoleAndLanguage() async {
     Preference preference = await Preference.getInstance();
 
-    role = preference.getAuthRole()!.role!.id!;
+    final authRole = preference.getAuthRole();
+    role = authRole?.role?.id ?? 1;
     setState(() {
       if (preference.getLanguage() == "fr") {
         selectedLang = "French";
@@ -114,43 +116,27 @@ class _Profile extends State<Profile> {
   Future<void> deleteProfilePic(int picId) async {
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
+    if (uuid.isNotEmpty) {
       setState(() {
         loader = true;
       });
 
-      final url =
-          Uri.parse(Urls.baseURL + Urls.deleteAvatar+picId.toString());
-      final response = await http.delete(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
-
-      print(url.toString());
-
-      final parsedJson = jsonDecode(response.body);
-      if (response.statusCode == HttpStatus.ok) {
+      try {
+        await SupabaseService.instance.deleteAvatar();
         setState(() {
           imageFile = null;
           stringPicUrl = "";
           isPicDeleted = true;
         });
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        setState(() {
-          preference.clearAppPreferences();
-        });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        Utils.showToast(e.toString());
       }
-    } else {
-      setState(() {
-        loader = false;
-      });
     }
+    setState(() {
+      loader = false;
+    });
   }
 
   Future<void> _showAnchoredDialog(
@@ -516,55 +502,18 @@ class _Profile extends State<Profile> {
   Future<void> getUserDetails() async {
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
-      String os;
-      final info = await PackageInfo.fromPlatform();
-      if (Platform.isAndroid) {
-        os = "android";
-      } else {
-        os = "ios";
-      }
-
-      FirebaseMessaging messaging = FirebaseMessaging.instance;
-      String? fcmToken = await messaging.getToken();
-
-      final url = Uri.parse(Urls.baseURL + Urls.userDetails);
-
-      // Add parameters to the URL
-      // Add parameters to the URL
-      final Map<String, String> params = {
-        'populate[role]': true.toString(),
-        'populate[avatar]': true.toString(),
-        'populate[businessSector]': true.toString(),
-        'os': os,
-        'appVersion': info.version,
-        'fcm': fcmToken ?? ""
-      };
-      final Uri uriWithParams = url.replace(queryParameters: params);
-      final response = await http.get(
-        uriWithParams,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
-
-      final parsedJson = jsonDecode(response.body);
-
-      print('Response User' + response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        var _responseUser = ResponseUser.fromJson(parsedJson);
-        setState(() {
-          Const.picId = _responseUser.avatar!.id;
-        });
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        setState(() {
-          preference.clearAppPreferences();
-        });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+    if (uuid.isNotEmpty) {
+      try {
+        final profile = await SupabaseService.instance.getUserProfile(uuid);
+        if (profile != null && profile['avatar_url'] != null) {
+          setState(() {
+            Const.picId = 1; // Legacy compat — avatar managed by URL now
+          });
+        }
+      } catch (e) {
+        debugPrint('getUserDetails error: $e');
       }
     }
   }
@@ -592,6 +541,7 @@ class _Profile extends State<Profile> {
   @override
   void initState() {
     super.initState();
+    checkRoleAndLanguage();
     if (widget.responseUser != null) {
       if (widget.responseUser!.avatar == null) {
         stringPicUrl = Urls.imageURL;
@@ -606,12 +556,9 @@ class _Profile extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    checkRoleAndLanguage();
-
-
 
     String userRole = " ";
-    if (widget.responseUser!.role != null) {
+    if (widget.responseUser != null && widget.responseUser!.role != null) {
       userRole = widget.responseUser!.role!.name;
     }
 
@@ -1188,28 +1135,15 @@ class _PasswordVisibilityDialogState extends State<PasswordVisibilityDialog> {
     setState(() {
       _isOldPasswordVisible = false;
     });
-    Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
-    final url = Uri.parse(Urls.baseURL + Urls.changePwd);
-    final response = await http.post(
-      url,
-      headers: {'Authorization': 'Bearer $jwtToken'},
-      body: {
-        'currentPassword': widget._oldPasswordController.value.text,
-        'password': widget._passwordController.value.text,
-        'passwordConfirmation': widget._cnfPasswordController.value.text
-      },
-    );
-
-    final parsedJson = jsonDecode(response.body);
-
-    if (response.statusCode == HttpStatus.ok) {
+    try {
+      await SupabaseService.instance.changePassword(
+        widget._passwordController.value.text,
+      );
       Utils.showToast(Intl.message("msg_pwd_changed", name: "msg_pwd_changed"));
       Navigator.pop(context);
-    } else {
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
+    } catch (e) {
+      Utils.showToast(e.toString());
     }
     setState(() {
       _isPasswordVisible = false;

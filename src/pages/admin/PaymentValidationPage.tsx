@@ -147,9 +147,11 @@ export default function PaymentValidationPage() {
     setError(null);
     try {
       // Récupérer d'abord les payment_requests
+      // SELECT * pour être compatible avec toutes les versions du schéma
+      // (la migration manuelle ajoute des colonnes absentes du schéma bootstrap)
       let query = supabase
         .from('payment_requests')
-        .select('id, user_id, amount, currency, status, payment_method, transfer_reference, transfer_date, transfer_proof_url, validated_by, validated_at, validation_notes, created_at, updated_at')
+        .select('*')
         .order('created_at', { ascending: false })
         .range(0, 49);
 
@@ -168,7 +170,12 @@ export default function PaymentValidationPage() {
       const { data: paymentsData, error: queryError } = await query;
 
       if (queryError) {
-        console.error('Erreur requête payment_requests:', queryError);
+        console.error(
+          'Erreur requête payment_requests:',
+          queryError.message,
+          `[code: ${queryError.code}]`,
+          queryError.details ?? '',
+        );
         throw queryError;
       }
 

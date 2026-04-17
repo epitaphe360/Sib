@@ -8,33 +8,25 @@ const stats = [
     icon: Building2,
     value: '600+',
     labelKey: 'stats.exhibitors',
-    color: 'text-blue-600',
-    bg: 'bg-blue-100',
-    glowColor: 'from-blue-400/30'
+    iconColor: '#E7D192',
   },
   {
     icon: Users,
-    value: '200,000+',
+    value: '200 000+',
     labelKey: 'stats.visitors',
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-100',
-    glowColor: 'from-emerald-400/30'
+    iconColor: '#E7D192',
   },
   {
     icon: Globe,
     value: '50',
     labelKey: 'stats.countries',
-    color: 'text-purple-600',
-    bg: 'bg-purple-100',
-    glowColor: 'from-purple-400/30'
+    iconColor: '#E7D192',
   },
   {
     icon: Mic2,
     value: '40+',
     labelKey: 'stats.conferences',
-    color: 'text-amber-600',
-    bg: 'bg-amber-100',
-    glowColor: 'from-amber-400/30'
+    iconColor: '#E7D192',
   }
 ];
 
@@ -42,48 +34,55 @@ export const StatsSection: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="relative py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 overflow-hidden">
-      {/* Subtle geometric background */}
-      <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
-      <div className="absolute top-0 left-0 w-96 h-96 bg-sib-gold/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+    <section className="relative py-24 bg-white overflow-hidden">
+      {/* Fine ligne dorée en haut */}
+      <div className="absolute top-0 left-0 right-0 h-[0.5px]" style={{ background: 'rgba(231,209,146,0.4)' }} />
+
+      {/* Ambient glow subtil */}
+      <div className="absolute top-0 left-1/4 w-96 h-48 opacity-[0.4]"
+        style={{ background: 'radial-gradient(ellipse at top, rgba(231,209,146,0.06) 0%, transparent 70%)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.12 }}
-              className="group"
+              transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+              className="group text-center"
             >
-              <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-6 sm:p-8 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-300 hover:shadow-lg hover:shadow-blue-900/20">
-                {/* Glow effect on hover */}
-                <div className={`absolute -inset-1 bg-gradient-to-br ${stat.glowColor} to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl`} />
+              {/* Carte glassmorphism ultra-légère */}
+              <div className="luxury-card p-8 sm:p-10 flex flex-col items-center">
+                {/* Icône */}
+                <div className="mb-5 p-3 rounded-sm"
+                  style={{ background: 'rgba(231,209,146,0.1)', border: '0.5px solid rgba(231,209,146,0.25)' }}>
+                  <stat.icon className="h-5 w-5" style={{ color: '#C9A84C' }} />
+                </div>
 
-                <div className="relative flex flex-col items-center text-center">
-                  {/* Icon */}
-                  <div className={`p-3 rounded-xl ${stat.bg} mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <stat.icon className={`h-7 w-7 ${stat.color}`} />
-                  </div>
+                {/* Valeur */}
+                <div className="text-4xl sm:text-5xl font-light mb-2 tracking-tight"
+                  style={{ fontFamily: '"Cormorant Garamond", serif', color: '#1A1A1A' }}>
+                  {stat.value}
+                </div>
 
-                  {/* Value */}
-                  <div className="text-4xl sm:text-5xl font-bold text-white mb-1 tracking-tight">
-                    {stat.value}
-                  </div>
+                {/* Ligne décorative */}
+                <div className="w-8 h-[0.5px] mb-3" style={{ background: '#E7D192' }} />
 
-                  {/* Label */}
-                  <div className="text-sm sm:text-base font-medium text-blue-100 uppercase tracking-wider">
-                    {t(stat.labelKey) || stat.labelKey.split('.')[1]}
-                  </div>
+                {/* Label */}
+                <div className="text-xs font-light tracking-[0.15em] uppercase"
+                  style={{ color: '#888' }}>
+                  {t(stat.labelKey) || stat.labelKey.split('.')[1]}
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Fine ligne dorée en bas */}
+      <div className="absolute bottom-0 left-0 right-0 h-[0.5px]" style={{ background: 'rgba(231,209,146,0.4)' }} />
     </section>
   );
 };

@@ -229,23 +229,27 @@ export default function PartnersPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-          <div className="text-center mb-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                {t('pages.partners.title')}
-              </h1>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                {t('pages.partners.description')}
-              </p>
-            </motion.div>
-          </div>
+    <div className="min-h-screen bg-[#0A0F1E] text-white">
+      {/* Hero dark luxury */}
+      <div className="relative bg-[#0A0F1E] overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/85 via-[#0A0F1E]/75 to-[#0A0F1E]" />
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(201,168,76,0.06) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#C9A84C]/40 bg-[#C9A84C]/10 text-[#E7D192] text-xs font-bold tracking-widest uppercase mb-6">
+              Partenaires & Sponsors
+            </div>
+            <h1 className="font-display text-4xl md:text-5xl font-light text-white mb-4">
+              {t('pages.partners.title')}
+            </h1>
+            <p className="text-lg text-white/55 max-w-2xl mx-auto">
+              {t('pages.partners.description')}
+            </p>
+          </motion.div>
         </div>
       </div>
 
@@ -257,36 +261,35 @@ export default function PartnersPage() {
         {/* Search and Controls */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/30" />
             <input
               type="text"
               placeholder={t('pages.partners.search')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C]/50"
             />
           </div>
 
           <div className="flex items-center space-x-4">
-            <Button
-              variant="outline"
-              size="sm"
+            <button
               onClick={() => setShowFilters(!showFilters)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-white/15 rounded-lg text-white/70 hover:border-[#C9A84C]/40 hover:text-[#E7D192] transition-colors text-sm"
             >
-              <Filter className="h-4 w-4 mr-2" />
+              <Filter className="h-4 w-4" />
               Filtres
-            </Button>
+            </button>
 
-            <div className="flex border border-gray-300 rounded-lg">
+            <div className="flex border border-white/15 rounded-lg overflow-hidden">
               <button
                 onClick={() => setViewMode(CONFIG.viewModes.grid)}
-                className={`p-2 ${viewMode === CONFIG.viewModes.grid ? 'bg-blue-50 text-blue-600' : 'text-gray-400'}`}
+                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.grid ? 'bg-[#C9A84C]/20 text-[#E7D192]' : 'text-white/40 hover:text-white/70'}`}
               >
                 <Grid className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode(CONFIG.viewModes.list)}
-                className={`p-2 ${viewMode === CONFIG.viewModes.list ? 'bg-blue-50 text-blue-600' : 'text-gray-400'}`}
+                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.list ? 'bg-[#C9A84C]/20 text-[#E7D192]' : 'text-white/40 hover:text-white/70'}`}
               >
                 <List className="h-4 w-4" />
               </button>
@@ -299,20 +302,20 @@ export default function PartnersPage() {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6 p-4 bg-gray-50 rounded-lg mb-6"
+            className="mt-6 p-4 bg-white/5 border border-white/10 rounded-xl mb-6"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
                   Niveau partenaire
                 </label>
                 <select
                   value={selectedTier}
                   onChange={(e) => setSelectedTier(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50"
                 >
                   {partnerTiers.map((tier) => (
-                    <option key={tier.value} value={tier.value}>
+                    <option key={tier.value} value={tier.value} className="bg-[#0A0F1E]">
                       {tier.label}
                     </option>
                   ))}
@@ -320,17 +323,17 @@ export default function PartnersPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
                   Pays
                 </label>
                 <select
                   value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50"
                 >
-                  <option value="">Tous les pays</option>
+                  <option value="" className="bg-[#0A0F1E]">Tous les pays</option>
                   {countries.map((country) => (
-                    <option key={country} value={country}>
+                    <option key={country} value={country} className="bg-[#0A0F1E]">
                       {country}
                     </option>
                   ))}
@@ -341,62 +344,22 @@ export default function PartnersPage() {
         )}
 
         {/* Stats - Types Partenaires SIB */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🏛️</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.organizer}</div>
-              <div className="text-xs font-semibold text-gray-600">Organisateurs</div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
+          {[
+            { count: partnerStats.organizer,           label: 'Organisateurs',     icon: '🏛️' },
+            { count: partnerStats.co_organizer,        label: 'Co-organisateurs',  icon: '🤝' },
+            { count: partnerStats.official_sponsor,    label: 'Sponsor Officiel',  icon: '⭐' },
+            { count: partnerStats.delegated_organizer, label: 'Org. Délégué',      icon: '📋' },
+            { count: partnerStats.partner,             label: 'Partenaires',       icon: '🌐' },
+            { count: partnerStats.press_partner,       label: 'Presse',            icon: '📰' },
+            { count: partnerStats.total,               label: 'Total',             icon: '🤝' },
+          ].map((stat, i) => (
+            <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+              <div className="text-2xl mb-1.5">{stat.icon}</div>
+              <div className="text-xl font-bold text-[#E7D192]">{stat.count}</div>
+              <div className="text-[10px] font-medium text-white/45 uppercase tracking-wider mt-0.5">{stat.label}</div>
             </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🤝</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.co_organizer}</div>
-              <div className="text-xs font-semibold text-gray-600">Co-organisateurs</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">⭐</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.official_sponsor}</div>
-              <div className="text-xs font-semibold text-gray-600">Sponsor Officiel</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">📋</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.delegated_organizer}</div>
-              <div className="text-xs font-semibold text-gray-600">Org. Délégué</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🌐</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.partner}</div>
-              <div className="text-xs font-semibold text-gray-600">Nos Partenaires</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">📰</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.press_partner}</div>
-              <div className="text-xs font-semibold text-gray-600">Presse</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <Handshake className="h-7 w-7 text-blue-600 mx-auto mb-1" />
-              <div className="text-xl font-bold text-gray-900">{partnerStats.total}</div>
-              <div className="text-xs font-semibold text-gray-600">Total</div>
-            </div>
-          </Card>
+          ))}
         </div>
 
         {/* Partners List - Grouped by Tier */}
@@ -404,33 +367,32 @@ export default function PartnersPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={`skeleton-${i}`} className="animate-pulse">
-                <div className="bg-white rounded-lg p-6 h-80">
-                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-20 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                <div className="bg-white/5 border border-white/8 rounded-2xl p-6 h-80">
+                  <div className="h-4 bg-white/10 rounded mb-4"></div>
+                  <div className="h-20 bg-white/10 rounded mb-4"></div>
+                  <div className="h-4 bg-white/10 rounded mb-2"></div>
+                  <div className="h-4 bg-white/10 rounded w-2/3"></div>
                 </div>
               </div>
             ))}
           </div>
         ) : filteredPartners.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="bg-gray-100 rounded-full p-6 w-24 h-24 mx-auto mb-4">
-              <Search className="h-12 w-12 text-gray-400" />
+          <div className="text-center py-16">
+            <div className="bg-white/5 border border-white/10 rounded-full p-6 w-24 h-24 mx-auto mb-4 flex items-center justify-center">
+              <Search className="h-10 w-10 text-white/30" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-display font-light text-white mb-2">
               {t('pages.partners.no_results')}
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-white/40 mb-6">
               {t('pages.partners.try_modify')}
             </p>
-            <Button variant="default" onClick={() => {
-              setSearchTerm('');
-              setSelectedTier('');
-              setSelectedCountry('');
-            }}>
+            <button
+              onClick={() => { setSearchTerm(''); setSelectedTier(''); setSelectedCountry(''); }}
+              className="inline-flex items-center gap-2 bg-[#C9A84C] text-[#0A0F1E] font-bold px-5 py-2.5 rounded-sm hover:bg-[#E7D192] transition-colors text-sm"
+            >
               {t('pages.partners.reset_filters')}
-            </Button>
+            </button>
           </div>
         ) : (
           <div className="space-y-10">
@@ -456,11 +418,11 @@ export default function PartnersPage() {
                   viewport={{ once: true }}
                 >
                   {/* Tier Section Header */}
-                  <div className={`flex items-center gap-3 mb-5 p-4 rounded-xl ${tier.bg} border ${tier.border}`}>
-                    <span className="text-3xl">{tier.emoji}</span>
+                  <div className="flex items-center gap-3 mb-5 p-4 rounded-xl border border-white/10 bg-white/5">
+                    <span className="text-2xl">{tier.emoji}</span>
                     <div>
-                      <h2 className="text-xl font-bold text-gray-900">{tier.label}</h2>
-                      <p className="text-sm text-gray-500">{tier.partners.length} partenaire{tier.partners.length > 1 ? 's' : ''}</p>
+                      <h2 className="text-lg font-display font-light text-white">{tier.label}</h2>
+                      <p className="text-xs text-white/40 uppercase tracking-wider">{tier.partners.length} partenaire{tier.partners.length > 1 ? 's' : ''}</p>
                     </div>
                   </div>
 
@@ -486,13 +448,17 @@ export default function PartnersPage() {
               ))}
 
             <div className="pt-4 flex flex-col items-center gap-3">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-white/35">
                 {partners.length} affichés sur {totalPartners} partenaires
               </p>
               {hasMore && (
-                <Button onClick={handleLoadMore} disabled={isLoading}>
+                <button
+                  onClick={handleLoadMore}
+                  disabled={isLoading}
+                  className="inline-flex items-center gap-2 border border-white/20 text-white/70 px-6 py-2.5 rounded-sm hover:bg-white/5 transition-colors text-sm disabled:opacity-50"
+                >
                   {isLoading ? 'Chargement...' : 'Charger plus'}
-                </Button>
+                </button>
               )}
             </div>
           </div>

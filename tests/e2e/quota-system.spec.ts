@@ -99,15 +99,13 @@ test.describe('Q1 — Affichage des quotas', () => {
     await page.goto(`${BASE_URL}/exhibitor/dashboard`);
     await expect(page.locator('body')).toBeVisible();
     // Le dashboard doit afficher le compteur de RDV ou la section quota
-    const quotaIndicator = page.locator(
-      '[data-testid="quota-rdv"], [data-testid="rdv-counter"], text=/10 rendez-vous|quota/i'
-    );
+    const quotaIndicator = page.locator('[data-testid="quota-rdv"], [data-testid="rdv-counter"]');
     // Si présent, vérifier ; sinon juste vérifier que la page charge
     const count = await quotaIndicator.count();
     if (count > 0) {
       await expect(quotaIndicator.first()).toBeVisible();
     } else {
-      await expect(page.locator('h1, h2').first()).toBeVisible();
+      await expect(page.getByText(/10 rendez-vous|quota/i).first()).toBeVisible();
     }
   });
 

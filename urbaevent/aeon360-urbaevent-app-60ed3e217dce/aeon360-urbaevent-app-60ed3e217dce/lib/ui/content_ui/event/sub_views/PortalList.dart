@@ -16,6 +16,7 @@ import 'package:com.urbaevent/widgets/CustomToolbar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:intl/intl.dart';
 
 class PortalList extends StatefulWidget {
@@ -36,22 +37,14 @@ class _PortalList extends State<PortalList> {
   TextEditingController textEditingController = TextEditingController();
 
   Future<void> getBusinessSector() async {
-
-    final url = Uri.parse(Urls.baseURL + Urls.businessSector);
-
-    final response = await http.get(url);
-    final parsedJson = jsonDecode(response.body);
-    if (response.statusCode == HttpStatus.ok) {
-      responseBusinessSector = ResponseBusinessSector.fromJson(parsedJson);
-      for (int i = 0; i < responseBusinessSector!.data!.length; i++) {
-        items.add(responseBusinessSector!.data![i].name!);
+    try {
+      final sectors = await SupabaseService.instance.getBusinessSectors();
+      for (int i = 0; i < sectors.length; i++) {
+        items.add(sectors[i]['name'] ?? '');
       }
-    } else {
-      print('Error' + response.body);
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
+    } catch (e) {
+      debugPrint('getBusinessSector error: $e');
     }
-
   }
 
   void filterItems(String query) {
@@ -78,25 +71,19 @@ class _PortalList extends State<PortalList> {
       loader = true;
     });
 
-    final url = Uri.parse(Urls.baseURL +
-        Urls.portalList +
-        widget.id.toString() +
-        Urls.portalListFilter1);
-    final response = await http.get(url);
+    try {
+      final exhibitors = await SupabaseService.instance
+          .getPortalExhibitors(widget.id.toString());
 
-    final parsedJson = jsonDecode(response.body);
-
-    if (response.statusCode == HttpStatus.ok) {
-      log('Response' + response.body);
       setState(() {
-        responsePortal = ResponsePortal.fromJson(parsedJson);
-        filteredPortal = ResponsePortal.fromJson(parsedJson).data!;
+        responsePortal = ResponsePortal(
+            data: exhibitors.map((e) => PortalItem.fromJson(e)).toList());
+        filteredPortal = exhibitors.map((e) => PortalItem.fromJson(e)).toList();
         filteredPortal.sort((a, b) => a.user!.company!.compareTo(b.user!.company!));
       });
-    } else {
-      print('Response Error' + response.body);
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
+    } catch (e) {
+      debugPrint('getPortalList error: $e');
+      Utils.showToast(e.toString());
     }
     setState(() {
       loader = false;
@@ -162,7 +149,10 @@ class _PortalList extends State<PortalList> {
                             height: 15,
                           ),
                           // Replace with your image asset path
-                          onPressed: () {},
+                          onPressed: () {
+                            textEditingController.clear();
+                            filterItems('');
+                          },
                         ),
                         Expanded(
                           child: Center(

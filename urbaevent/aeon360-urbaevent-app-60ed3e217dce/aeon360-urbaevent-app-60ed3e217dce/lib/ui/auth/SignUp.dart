@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:com.urbaevent/model/ResponseAppleData.dart';
+import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:com.urbaevent/utils/Preference.dart';
 import 'package:com.urbaevent/utils/Urls.dart';
 import 'package:easy_linkedin_login/easy_linkedin_login.dart';
@@ -116,56 +117,37 @@ class _SignUp extends State<SignUp> {
   }
 
   Future<void> getAppleData(AuthorizationCredentialAppleID credential) async {
-    final url = Uri.parse(Urls.baseURL +
-        Urls.getAppleData +
-        credential.userIdentifier.toString());
+    try {
+      final appleData = await SupabaseService.instance
+          .getAppleData(credential.userIdentifier.toString());
 
-    final response = await http.get(url);
+      if (appleData != null) {
+        setState(() {
+          _nameController.text = (appleData['first_name'] ?? '') +
+              " " +
+              (appleData['last_name'] ?? '');
 
-    final parsedJson = jsonDecode(response.body);
+          _emailController.text = appleData['email'].toString();
 
-    print(response.body);
-
-    if (response.statusCode == HttpStatus.ok) {
-      final responseAppleData = ResponseAppleData.fromJson(parsedJson);
-
-      setState(() {
-        _nameController.text = responseAppleData.data!.firstName.toString() +
-            " " +
-            responseAppleData.data!.lastName.toString();
-
-        _emailController.text = responseAppleData.data!.email.toString();
-
-        socialId = responseAppleData.data!.socialId.toString();
-        provider = "apple";
-        _phoneFocus.requestFocus();
-      });
-    } else {
+          socialId = appleData['social_id'].toString();
+          provider = "apple";
+          _phoneFocus.requestFocus();
+        });
+      } else {
+        postAppleData(credential);
+      }
+    } catch (_) {
       postAppleData(credential);
     }
   }
 
   Future<void> postAppleData(AuthorizationCredentialAppleID credential) async {
-    final url = Uri.parse(Urls.baseURL + Urls.sendAppleData);
-
-    final jsonData = {
-      "data": {
-        "firstName": credential.givenName,
-        "lastName": credential.familyName,
-        "email": credential.email,
-        "socialId": credential.userIdentifier.toString()
-      }
-    };
-
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(jsonData),
+    await SupabaseService.instance.saveAppleData(
+      firstName: credential.givenName ?? '',
+      lastName: credential.familyName ?? '',
+      email: credential.email ?? '',
+      socialId: credential.userIdentifier.toString(),
     );
-
-    print(response.body);
   }
 
   Future<User?> _handleSignIn() async {

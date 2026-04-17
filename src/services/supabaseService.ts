@@ -1932,6 +1932,7 @@ export class SupabaseService {
           )
         `)
         .contains('participants', [userId])
+        .order('created_at', { foreignTable: 'messages', ascending: false })
         .order('updated_at', { ascending: false });
 
       if (error) {throw error;}
@@ -2016,6 +2017,7 @@ export class SupabaseService {
       const { data: existing, error: existingError } = await safeSupabase
         .from('conversations')
         .select('*')
+        .eq('type', 'direct')
         .contains('participants', [userId1, userId2])
         .limit(1)
         .single();
@@ -2058,7 +2060,7 @@ export class SupabaseService {
     }
   }
 
-  static async sendMessage(conversationId: string, senderId: string, receiverId: string, content: string, type: 'text' | 'image' = 'text'): Promise<ChatMessage | null> {
+  static async sendMessage(conversationId: string, senderId: string, receiverId: string, content: string, type: 'text' | 'file' | 'image' | 'system' = 'text'): Promise<ChatMessage | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;

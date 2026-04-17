@@ -109,41 +109,34 @@ export const FeaturedExhibitors: React.FC = () => {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white via-green-50/20 to-white relative overflow-hidden">
-      {/* Moroccan Zellige Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.04]">
-        <div className="absolute w-full h-full" style={{
-          backgroundImage: `radial-gradient(circle, transparent 20%, #D4AF37 21%, #D4AF37 22%, transparent 23%),
-                           radial-gradient(circle, transparent 20%, #C1272D 21%, #C1272D 22%, transparent 23%),
-                           radial-gradient(circle, transparent 20%, #006233 21%, #006233 22%, transparent 23%)`,
-          backgroundSize: '80px 80px',
-          backgroundPosition: '0 0, 40px 40px, 20px 60px'
-        }} />
-      </div>
-      <MoroccanPattern className="opacity-[0.03] text-blue-400" scale={2} />
+    <section className="py-28 bg-[#F8F9FA] relative overflow-hidden">
+      {/* Grain doré ultra-subtil */}
+      <div className="absolute inset-0 opacity-[0.025]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(231,209,146,1) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
+      {/* Fine ligne dorée en haut */}
+      <div className="absolute top-0 left-0 right-0 h-[0.5px]" style={{ background: 'rgba(231,209,146,0.4)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Premium Header */}
+        {/* Header section luxe */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-20"
         >
-          <div className="inline-flex items-center justify-center px-4 py-2 mb-4 bg-blue-600 text-white rounded-full text-sm font-semibold uppercase tracking-wider shadow-lg">
-            <Users className="h-4 w-4 mr-2" />
+          <span className="luxury-badge mb-5 inline-flex items-center gap-2">
+            <Users className="h-3 w-3" />
             {t('home.featured_exhibitors_badge', 'Exposants Officiels')}
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+          </span>
+          <h2 className="text-4xl sm:text-5xl font-light text-[#1A1A1A] mb-4 mt-3"
+            style={{ fontFamily: '"Cormorant Garamond", serif' }}>
             {t('home.featured_exhibitors_title', 'Exposants à la Une')}
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base text-[#666] max-w-2xl mx-auto leading-relaxed font-light">
             {t('home.featured_exhibitors_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
           </p>
-          <div className="mt-6 flex items-center justify-center gap-2">
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full"></div>
-            <div className="h-1 w-24 bg-blue-600 rounded-full"></div>
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full"></div>
+          <div className="luxury-divider mt-6">
+            <span />
           </div>
         </motion.div>
 
@@ -255,9 +248,9 @@ export const FeaturedExhibitors: React.FC = () => {
           className="text-center"
         >
           <Link to={ROUTES.EXHIBITORS}>
-            <button className="inline-flex items-center gap-2 px-8 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-md">
+            <button className="luxury-btn group flex items-center gap-2">
               {t('home.discover_all_exhibitors', 'Découvrez tous les exposants')}
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
           </Link>
         </motion.div>

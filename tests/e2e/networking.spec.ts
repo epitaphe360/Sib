@@ -37,25 +37,25 @@ const ACCOUNTS = {
 const MOCK_PROFILES = [
   {
     id: 'mock-exhib-1',
-    company_name: 'Port Tech Industries',
-    sector: 'Technologie Portuaire',
-    description: 'Solutions de manutention innovantes',
+    company_name: 'Beton Tech Industries',
+    sector: 'Technologie BTP',
+    description: 'Solutions de chantier intelligentes',
     stand_size: '9m2',
     created_at: new Date().toISOString(),
   },
   {
     id: 'mock-exhib-2',
-    company_name: 'Maritime Logistics SA',
-    sector: 'Logistique Maritime',
-    description: 'Transport multimodal',
+    company_name: 'Structure Logistique SA',
+    sector: 'Logistique de chantier',
+    description: 'Transport et approvisionnement de matériaux',
     stand_size: '18m2',
     created_at: new Date().toISOString(),
   },
   {
     id: 'mock-exhib-3',
-    company_name: 'Green Port Solutions',
-    sector: 'Environnement',
-    description: 'Ports durables et éco-responsables',
+    company_name: 'Green Build Solutions',
+    sector: 'Construction durable',
+    description: 'Bâtiments durables et éco-responsables',
     stand_size: '36m2',
     created_at: new Date().toISOString(),
   },
@@ -149,7 +149,7 @@ test.describe('NET-1 — Accès aux pages networking', () => {
   test('NET-1-02: Page matching de profils accessible', async ({ page }) => {
     await mockExhibitorsRoute(page);
     await loginWithRetry(page, ACCOUNTS.visitorVip.email);
-    await page.goto(`${BASE_URL}/networking/matching`);
+    await page.goto(`${BASE_URL}/profile/matching`);
     await expect(page.locator('body')).toBeVisible();
   });
 
@@ -163,19 +163,19 @@ test.describe('NET-1 — Accès aux pages networking', () => {
   test('NET-1-04: Historique des interactions accessible', async ({ page }) => {
     await mockInteractionsRoute(page);
     await loginWithRetry(page, ACCOUNTS.visitorVip.email);
-    await page.goto(`${BASE_URL}/interactions`);
+    await page.goto(`${BASE_URL}/networking/history`);
     await expect(page.locator('body')).toBeVisible();
   });
 
   test('NET-1-05: Page speed networking accessible', async ({ page }) => {
     await loginWithRetry(page, ACCOUNTS.visitorVip.email);
-    await page.goto(`${BASE_URL}/networking/speed`);
+    await page.goto(`${BASE_URL}/networking/speed/demo-session`);
     await expect(page.locator('body')).toBeVisible();
   });
 
   test('NET-1-06: Page salles de networking accessible', async ({ page }) => {
     await loginWithRetry(page, ACCOUNTS.visitorVip.email);
-    await page.goto(`${BASE_URL}/networking-rooms`);
+    await page.goto(`${BASE_URL}/networking/rooms/demo-event`);
     await expect(page.locator('body')).toBeVisible();
   });
 
@@ -231,7 +231,7 @@ test.describe('NET-2 — Matching et recherche de profils', () => {
       'input[type="search"], input[placeholder*="Rechercher"], input[placeholder*="Search"]'
     );
     if (await searchInput.count() > 0) {
-      await searchInput.first().fill('Maritime');
+      await searchInput.first().fill('Beton');
       await page.waitForTimeout(1000);
     }
     await expect(page.locator('body')).toBeVisible();
@@ -240,7 +240,7 @@ test.describe('NET-2 — Matching et recherche de profils', () => {
   test('NET-2-04: Score de matching affiché pour visiteur VIP', async ({ page }) => {
     await mockExhibitorsRoute(page);
     await loginWithRetry(page, ACCOUNTS.visitorVip.email);
-    await page.goto(`${BASE_URL}/networking/matching`);
+    await page.goto(`${BASE_URL}/profile/matching`);
     await page.waitForTimeout(2000);
     await expect(page.locator('body')).toBeVisible();
   });
@@ -267,7 +267,7 @@ test.describe('NET-3 — Demandes de contact', () => {
   test('NET-3-02: Historique interactions — aucune erreur d\'affichage', async ({ page }) => {
     await mockInteractionsRoute(page);
     await loginWithRetry(page, ACCOUNTS.visitorVip.email);
-    await page.goto(`${BASE_URL}/interactions`);
+    await page.goto(`${BASE_URL}/networking/history`);
     await page.waitForTimeout(2000);
     const errorBanner = page.locator('text=/erreur|Error[^:]/i');
     expect(await errorBanner.count()).toBe(0);
@@ -276,7 +276,7 @@ test.describe('NET-3 — Demandes de contact', () => {
   test('NET-3-03: Exposant peut voir les demandes reçues', async ({ page }) => {
     await mockInteractionsRoute(page);
     await loginWithRetry(page, ACCOUNTS.exhibitor9m.email);
-    await page.goto(`${BASE_URL}/interactions`);
+    await page.goto(`${BASE_URL}/networking/history`);
     await page.waitForTimeout(1500);
     await expect(page.locator('body')).toBeVisible();
   });
@@ -335,23 +335,24 @@ test.describe('NET-5 — Speed networking + salles B2B', () => {
 
   test('NET-5-01: Page speed networking charge correctement', async ({ page }) => {
     await loginWithRetry(page, ACCOUNTS.visitorVip.email);
-    await page.goto(`${BASE_URL}/networking/speed`);
+    await page.goto(`${BASE_URL}/networking/speed/demo-session`);
     await page.waitForTimeout(2000);
     await expect(page.locator('body')).toBeVisible();
-    const title = page.locator('h1, h2').first();
-    await expect(title).toBeVisible();
+    await expect(page.locator('main, [role="main"]').first()).toBeVisible();
+    const forbiddenMsg = page.locator('text=/403|non autoris|forbidden/i');
+    expect(await forbiddenMsg.count()).toBe(0);
   });
 
   test('NET-5-02: Page salles de networking charge correctement', async ({ page }) => {
     await loginWithRetry(page, ACCOUNTS.visitorVip.email);
-    await page.goto(`${BASE_URL}/networking-rooms`);
+    await page.goto(`${BASE_URL}/networking/rooms/demo-event`);
     await page.waitForTimeout(2000);
     await expect(page.locator('body')).toBeVisible();
   });
 
   test('NET-5-03: Salles — exposant peut accéder', async ({ page }) => {
     await loginWithRetry(page, ACCOUNTS.exhibitor9m.email);
-    await page.goto(`${BASE_URL}/networking-rooms`);
+    await page.goto(`${BASE_URL}/networking/rooms/demo-event`);
     await expect(page.locator('body')).toBeVisible();
   });
 

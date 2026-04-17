@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Shield, AlertTriangle, BarChart3, FileText, Mail, Newspaper, Image, Calendar, Mic2, Building2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
-import RegistrationRequests from '../admin/RegistrationRequests';
 import { useAdminDashboard } from '../../hooks/useAdminDashboard';
 import {
   AdminHeader,
@@ -150,19 +149,6 @@ export default function AdminDashboard() {
             </motion.div>
           </div>
         </motion.div>
-
-        {ctx.showRegistrationRequests && (
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
-            <div className="rounded-2xl overflow-hidden border" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
-              <div className="px-6 py-4 border-b" style={{ background: 'rgba(201,168,76,0.06)', borderColor: 'rgba(255,255,255,0.07)' }}>
-                <span className="text-white font-bold text-sm tracking-wide">{t('admin.registration_requests')}</span>
-              </div>
-              <div className="p-6">
-                <RegistrationRequests />
-              </div>
-            </div>
-          </motion.div>
-        )}
 
         {/* Premium section divider */}
         <motion.div

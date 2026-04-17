@@ -104,9 +104,9 @@ export const FeaturedPartners: React.FC = () => {
   if (partners.length === 0) {return null;}
 
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-slate-50 relative overflow-hidden">
+    <section className="py-28 bg-white relative overflow-hidden">
       {/* Background Pattern */}
-              <MoroccanPattern className="opacity-[0.04] text-blue-400" scale={1.8} />
+      <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(231,209,146,1) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Premium Header */}
@@ -114,22 +114,21 @@ export const FeaturedPartners: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <div className="inline-flex items-center justify-center px-4 py-2 mb-4 bg-blue-600 text-white rounded-full text-sm font-semibold uppercase tracking-wider shadow-lg">
-            <Award className="h-4 w-4 mr-2" />
+          <span className="luxury-badge mb-5 inline-flex items-center gap-2">
+            <Award className="h-3 w-3" />
             {t('home.featured_partners_badge', 'Partenaires Officiels')}
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          </span>
+          <h2 className="text-4xl sm:text-5xl font-light text-[#1A1A1A] mb-4 mt-3"
+            style={{ fontFamily: '"Cormorant Garamond", serif' }}>
             {t('home.featured_partners_title', 'Partenaires à la Une')}
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base text-[#666] max-w-2xl mx-auto leading-relaxed font-light">
             {t('home.featured_partners_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
           </p>
-          <div className="mt-6 flex items-center justify-center gap-2">
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full"></div>
-            <div className="h-1 w-24 bg-blue-600 rounded-full"></div>
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full"></div>
+          <div className="luxury-divider mt-6">
+            <span />
           </div>
         </motion.div>
       </div>
@@ -149,7 +148,7 @@ export const FeaturedPartners: React.FC = () => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card hover className="h-full border-blue-100 shadow-lg hover:shadow-2xl transition-all duration-300 bg-white relative">
+              <Card hover className="h-full shadow-none hover:shadow-luxury transition-all duration-400 bg-white relative" style={{ border: '0.5px solid rgba(231,209,146,0.25)' }}>
                 <div className="flex flex-col h-full p-8">
                   {/* Badge vérifié en haut à droite */}
                   {partner.verified && (
@@ -164,7 +163,8 @@ export const FeaturedPartners: React.FC = () => {
                     <LogoWithFallback
                       src={partner.logo}
                       alt={partner.name}
-                      className="h-24 w-24 rounded-xl object-contain border border-blue-100 bg-white p-2 shadow-sm"
+                      className="h-24 w-24 rounded-sm object-contain border bg-white p-2"
+                      style={{ borderColor: 'rgba(231,209,146,0.3)' }}
                     />
                   </div>
 
@@ -173,7 +173,7 @@ export const FeaturedPartners: React.FC = () => {
                     <h3 className="font-bold text-gray-900 text-xl mb-2 leading-tight px-2">
                       {partner.name}
                     </h3>
-                    <p className="text-sm text-blue-600 font-semibold">{translateSector(partner.sector, t)}</p>
+                    <p className="text-sm font-medium" style={{ color: '#C9A84C' }}>{translateSector(partner.sector, t)}</p>
                   </div>
 
                   {/* Tier */}
@@ -228,10 +228,10 @@ export const FeaturedPartners: React.FC = () => {
 
         <div className="text-center">
           <Link to={ROUTES.PARTNERS}>
-            <Button variant="outline" size="lg" className="group">
+            <button className="luxury-btn group inline-flex items-center gap-2">
               {t('home.discover_all')}
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </button>
           </Link>
         </div>
       </div>

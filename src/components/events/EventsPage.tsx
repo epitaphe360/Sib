@@ -179,30 +179,33 @@ export default memo(function EventsPage() {
   }, [t]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#0A0F1E]">
 
-      {/* ── Hero ── */}
-      <div className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full blur-[120px] opacity-20" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-500 rounded-full blur-[100px] opacity-15" />
+      {/* ── Hero dark luxury ── */}
+      <div className="relative bg-[#0A0F1E] overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1600&q=80')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/88 via-[#0A0F1E]/75 to-[#0A0F1E]" />
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(201,168,76,0.06) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-200 mb-6">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-flex items-center gap-2 border border-[#C9A84C]/40 bg-[#C9A84C]/10 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#E7D192] mb-6">
               <Calendar className="w-3.5 h-3.5" />
               {info.eventDates}
             </span>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-white mb-4 leading-tight">
               {t('pages.events.scientific_programme')}
             </h1>
 
-            <p className="text-base sm:text-lg text-blue-200/90 max-w-3xl mx-auto mb-3 font-medium italic">
+            <p className="text-base sm:text-lg text-white/50 max-w-3xl mx-auto mb-3 italic">
               {info.eventTheme}
             </p>
 
-            <div className="flex items-center justify-center gap-2 text-sm text-blue-300/80">
+            <div className="flex items-center justify-center gap-2 text-sm text-white/35">
               <MapPin className="w-4 h-4" />
               <span>{info.eventLocation}</span>
             </div>
@@ -211,24 +214,23 @@ export default memo(function EventsPage() {
       </div>
 
       {/* ── Axes Thématiques ── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10 mb-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 mb-12">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {info.axes.map((axe, i) => {
             const Icon = axeIcons[i % axeIcons.length];
-            const color = axeColors[i % axeColors.length];
             return (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08 }}
-                className="bg-white rounded-xl shadow-md border border-slate-100 p-4 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4 text-center hover:border-[#C9A84C]/30 hover:-translate-y-0.5 transition-all"
               >
-                <div className={`w-10 h-10 mx-auto rounded-lg flex items-center justify-center mb-2 bg-${color}-50`}>
-                  <Icon className={`w-5 h-5 text-${color}-600`} />
+                <div className="w-9 h-9 mx-auto rounded-lg flex items-center justify-center mb-2 bg-[#C9A84C]/15 border border-[#C9A84C]/20">
+                  <Icon className="w-4 h-4 text-[#C9A84C]" />
                 </div>
-                <h3 className="text-xs font-bold text-slate-800 leading-tight">{axe.title}</h3>
-                <p className="text-[10px] text-slate-400 mt-0.5">{axe.description}</p>
+                <h3 className="text-xs font-bold text-white leading-tight">{axe.title}</h3>
+                <p className="text-[10px] text-white/35 mt-0.5">{axe.description}</p>
               </motion.div>
             );
           })}
@@ -244,17 +246,17 @@ export default memo(function EventsPage() {
               onClick={() => setActiveDay(i)}
               className={`flex-shrink-0 rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-left transition-all ${
                 activeDay === i
-                  ? `bg-gradient-to-r ${dayColors[i % dayColors.length]} text-white shadow-lg`
-                  : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                  ? 'bg-[#C9A84C]/20 border border-[#C9A84C]/50 text-white'
+                  : 'bg-white/5 text-white/50 border border-white/10 hover:border-white/25 hover:text-white/80'
               }`}
             >
-              <div className={`text-[10px] font-bold uppercase tracking-widest mb-0.5 ${activeDay === i ? 'text-white/70' : 'text-slate-400'}`}>
+              <div className={`text-[10px] font-bold uppercase tracking-widest mb-0.5 ${activeDay === i ? 'text-[#E7D192]/70' : 'text-white/30'}`}>
                 {day.dayLabel}
               </div>
-              <div className={`text-sm font-bold ${activeDay === i ? 'text-white' : 'text-slate-800'}`}>
+              <div className={`text-sm font-bold ${activeDay === i ? 'text-white' : 'text-white/60'}`}>
                 {day.date.split(' ').slice(0, 2).join(' ')}
               </div>
-              <div className={`text-[10px] mt-0.5 ${activeDay === i ? 'text-white/60' : 'text-slate-400'} hidden sm:block`}>
+              <div className={`text-[10px] mt-0.5 ${activeDay === i ? 'text-white/50' : 'text-white/30'} hidden sm:block`}>
                 {day.theme}
               </div>
             </button>
@@ -275,12 +277,12 @@ export default memo(function EventsPage() {
             >
               {/* Day header */}
               <div className="mb-8">
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900">{days[activeDay].date}</h2>
-                <p className="text-sm text-slate-500 mt-1">{days[activeDay].theme}</p>
+                <h2 className="text-xl sm:text-2xl font-display font-light text-white">{days[activeDay].date}</h2>
+                <p className="text-sm text-white/35 mt-1">{days[activeDay].theme}</p>
               </div>
 
               {/* Timeline */}
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 lg:p-8">
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-4 sm:p-6 lg:p-8">
                 {days[activeDay].sessions.map((session, i) => (
                   <SessionCard
                     key={session.id}
@@ -297,7 +299,7 @@ export default memo(function EventsPage() {
                   const style = typeStyles[key];
                   const Icon = typeIcons[key];
                   return (
-                    <span key={key} className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium ${style.bg} ${style.text} border ${style.border}`}>
+                    <span key={key} className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium bg-white/5 text-white/50 border border-white/10`}>
                       <Icon className="w-2.5 h-2.5" />
                       {typeLabels[key]}
                     </span>
@@ -310,13 +312,13 @@ export default memo(function EventsPage() {
       </div>
 
       {/* ── Info Banner ── */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+      <div className="bg-[#0A0A0A] border-t border-[#C9A84C]/15">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 text-center">
-          <h2 className="text-xl sm:text-2xl font-bold mb-2">{info.eventTitle}</h2>
-          <p className="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto mb-1">
+          <h2 className="font-display text-xl sm:text-2xl font-light text-white mb-2">{info.eventTitle}</h2>
+          <p className="text-white/40 text-sm sm:text-base max-w-2xl mx-auto mb-1">
             {t('pages.events.strategic_reflection')}
           </p>
-          <p className="text-blue-200/70 text-xs">
+          <p className="text-[#E7D192]/50 text-xs">
             {info.eventDates} · {info.eventLocation}
           </p>
         </div>

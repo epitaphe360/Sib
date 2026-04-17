@@ -36,7 +36,7 @@ export const AboutSalonSection: React.FC = () => {
       icon: Globe,
       title: t('about.international'),
       description: t('about.international_desc'),
-      color: 'bg-blue-100 text-blue-600'
+      color: 'bg-[#E7D192]/15 text-[#C9A84C]'
     },
     {
       icon: Users,
@@ -60,10 +60,10 @@ export const AboutSalonSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-white relative overflow-hidden">
-      {/* Subtle background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white" />
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sib-gold/5 rounded-full -translate-y-1/2 translate-x-1/3" />
+    <section className="py-28 bg-[#F8F9FA] relative overflow-hidden">
+      {/* Fine ligne dorée en haut */}
+      <div className="absolute top-0 left-0 right-0 h-[0.5px]" style={{ background: 'rgba(231,209,146,0.4)' }} />
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 60% 40% at 80% 20%, rgba(231,209,146,0.04) 0%, transparent 65%)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -75,14 +75,14 @@ export const AboutSalonSection: React.FC = () => {
             viewport={{ once: true }}
           >
             <div className="mb-8">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="bg-blue-600 p-2 rounded-lg">
-                  <Building2 className="h-6 w-6 text-white" />
+              <div className="flex items-center space-x-3 mb-5">
+                <div className="p-2 rounded-sm" style={{ background: 'rgba(231,209,146,0.15)', border: '0.5px solid rgba(231,209,146,0.4)' }}>
+                  <Building2 className="h-5 w-5" style={{ color: '#C9A84C' }} />
                 </div>
-                <span className="text-blue-600 font-semibold">{t('about.badge')}</span>
+                <span className="text-xs font-light tracking-[0.18em] uppercase" style={{ color: '#C9A84C' }}>{t('about.badge')}</span>
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                SIB 2026 — <span className="text-sib-gold">{t('home.about_subtitle')}</span>
+              <h2 className="text-3xl lg:text-5xl font-light text-[#1A1A1A] mb-6" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
+                SIB 2026 — <span style={{ color: '#C9A84C' }}>{t('home.about_subtitle')}</span>
               </h2>
               <p className="text-lg text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: t('about.desc1') }} />
               <p className="text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: t('about.desc2') }} />
@@ -118,14 +118,14 @@ export const AboutSalonSection: React.FC = () => {
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to={ROUTES.EXHIBITORS}>
-                <button className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-                  <Building2 className="h-5 w-5" />
+                <button className="luxury-btn group inline-flex items-center gap-2">
+                  <Building2 className="h-4 w-4" />
                   {t('home.discover_exhibitors_btn')}
                 </button>
               </Link>
               <Link to={ROUTES.PARTNERS}>
-                <button className="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-600 text-blue-600 rounded-xl font-semibold hover:bg-blue-50 transition-colors">
-                  <Users className="h-5 w-5" />
+                <button className="inline-flex items-center gap-2 px-7 py-3 text-xs font-light tracking-[0.12em] uppercase rounded-sm transition-all duration-300 border text-[#1A1A1A] hover:border-[#E7D192] hover:text-[#C9A84C]" style={{ borderColor: 'rgba(0,0,0,0.15)' }}>
+                  <Users className="h-4 w-4" />
                   {t('home.see_partners_btn')}
                 </button>
               </Link>
@@ -141,10 +141,11 @@ export const AboutSalonSection: React.FC = () => {
             className="relative"
           >
             {/* Main Card */}
-            <div className="relative z-10 bg-blue-600 rounded-2xl p-8 text-white shadow-xl">
+            <div className="relative z-10 rounded-sm p-8 text-white shadow-luxury"
+              style={{ background: 'linear-gradient(135deg, #141414 0%, #0A0A0A 100%)', border: '0.5px solid rgba(231,209,146,0.2)' }}>
               <div className="flex items-center gap-4 mb-6">
-                <div className="bg-sib-gold p-3 rounded-xl">
-                  <Building2 className="h-7 w-7 text-blue-600" />
+                <div className="p-3 rounded-sm" style={{ background: 'rgba(231,209,146,0.12)', border: '0.5px solid rgba(231,209,146,0.3)' }}>
+                  <Building2 className="h-6 w-6" style={{ color: '#E7D192' }} />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">
@@ -165,9 +166,10 @@ export const AboutSalonSection: React.FC = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
                     viewport={{ once: true }}
-                    className="text-center p-4 bg-white/10 rounded-xl border border-white/20"
+                    className="text-center p-4 rounded-sm border"
+                    style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(231,209,146,0.2)' }}
                   >
-                    <div className="text-2xl font-bold text-sib-gold mb-1">
+                    <div className="text-2xl font-light mb-1" style={{ fontFamily: '"Cormorant Garamond", serif', color: '#E7D192' }}>
                       {stat.number}
                     </div>
                     <div className="text-sm text-white/70">
@@ -223,21 +225,20 @@ export const AboutSalonSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
-          className="mt-16 text-center bg-blue-600 rounded-2xl p-8 text-white relative overflow-hidden"
+          className="mt-20 text-center rounded-sm p-12 text-white relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #0D0D0D 0%, #141414 100%)', border: '0.5px solid rgba(231,209,146,0.2)' }}
         >
-          {/* Motif Zellige */}
-          <MoroccanPattern className="opacity-[0.08] text-white" scale={1.2} />
           <div className="relative z-10">
-          <h3 className="text-2xl font-bold mb-4">
+          <h3 className="text-3xl font-light mb-4" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
             {t('about.cta_title')}
           </h3>
           <p className="text-white/70 mb-6 max-w-2xl mx-auto">
             {t('about.cta_desc')}
           </p>
           <Link to={ROUTES.VISITOR_SUBSCRIPTION}>
-            <button className="inline-flex items-center gap-2 px-6 py-3 bg-yellow-400 text-blue-900 rounded-xl font-semibold hover:bg-yellow-300 transition-colors">
+            <button className="luxury-btn group inline-flex items-center gap-2">
               {t('about.cta_button')}
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
           </Link>
           </div>

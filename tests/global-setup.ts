@@ -26,16 +26,16 @@ const TEST_ACCOUNTS = [
   { email: 'visitor-vip@test.sib2026.ma',  password: DEFAULT_TEST_PASSWORD, role: 'visitor', meta: { type: 'visitor', visitor_level: 'vip', first_name: 'Marie', last_name: 'Laurent', status: 'confirmed' } },
 
   // Exposants par taille de stand
-  { email: 'exhibitor-9m@test.sib2026.ma',  password: DEFAULT_TEST_PASSWORD, role: 'exhibitor', meta: { type: 'exhibitor', company_name: 'StartUp Port Innovations', stand_size: '9m2', status: 'confirmed' } },
-  { email: 'exhibitor-18m@test.sib2026.ma', password: DEFAULT_TEST_PASSWORD, role: 'exhibitor', meta: { type: 'exhibitor', company_name: 'Port Tech Solutions', stand_size: '18m2', status: 'confirmed' } },
-  { email: 'exhibitor-36m@test.sib2026.ma', password: DEFAULT_TEST_PASSWORD, role: 'exhibitor', meta: { type: 'exhibitor', company_name: 'Maritime Industrial SA', stand_size: '36m2', status: 'confirmed' } },
-  { email: 'exhibitor-54m@test.sib2026.ma', password: DEFAULT_TEST_PASSWORD, role: 'exhibitor', meta: { type: 'exhibitor', company_name: 'Grand Port Expo SARL', stand_size: '54m2', status: 'confirmed' } },
+  { email: 'exhibitor-9m@test.sib2026.ma',  password: DEFAULT_TEST_PASSWORD, role: 'exhibitor', meta: { type: 'exhibitor', company_name: 'Atlas Build Systems', stand_size: '9m2', status: 'confirmed' } },
+  { email: 'exhibitor-18m@test.sib2026.ma', password: DEFAULT_TEST_PASSWORD, role: 'exhibitor', meta: { type: 'exhibitor', company_name: 'Beton Tech Solutions', stand_size: '18m2', status: 'confirmed' } },
+  { email: 'exhibitor-36m@test.sib2026.ma', password: DEFAULT_TEST_PASSWORD, role: 'exhibitor', meta: { type: 'exhibitor', company_name: 'Maroc Structure Industrie', stand_size: '36m2', status: 'confirmed' } },
+  { email: 'exhibitor-54m@test.sib2026.ma', password: DEFAULT_TEST_PASSWORD, role: 'exhibitor', meta: { type: 'exhibitor', company_name: 'Grand Chantier Expo', stand_size: '54m2', status: 'confirmed' } },
 
   // Partenaires par tier
-  { email: 'partner-museum@test.sib2026.ma',   password: DEFAULT_TEST_PASSWORD, role: 'partner', meta: { type: 'partner', company_name: 'Maritime Museum Foundation', partnership_tier: 'museum', status: 'confirmed' } },
-  { email: 'partner-silver@test.sib2026.ma',   password: DEFAULT_TEST_PASSWORD, role: 'partner', meta: { type: 'partner', company_name: 'Silver Maritime Group', partnership_tier: 'silver', status: 'confirmed' } },
-  { email: 'partner-gold@test.sib2026.ma',     password: DEFAULT_TEST_PASSWORD, role: 'partner', meta: { type: 'partner', company_name: 'Gold Port Alliance', partnership_tier: 'gold', status: 'confirmed' } },
-  { email: 'partner-platinum@test.sib2026.ma', password: DEFAULT_TEST_PASSWORD, role: 'partner', meta: { type: 'partner', company_name: 'Platinum Shipping Corp', partnership_tier: 'platinium', status: 'confirmed' } },
+  { email: 'partner-museum@test.sib2026.ma',   password: DEFAULT_TEST_PASSWORD, role: 'partner', meta: { type: 'partner', company_name: 'Fondation Patrimoine Bati', partnership_tier: 'museum', status: 'confirmed' } },
+  { email: 'partner-silver@test.sib2026.ma',   password: DEFAULT_TEST_PASSWORD, role: 'partner', meta: { type: 'partner', company_name: 'Silver Construction Group', partnership_tier: 'silver', status: 'confirmed' } },
+  { email: 'partner-gold@test.sib2026.ma',     password: DEFAULT_TEST_PASSWORD, role: 'partner', meta: { type: 'partner', company_name: 'Gold Batiment Alliance', partnership_tier: 'gold', status: 'confirmed' } },
+  { email: 'partner-platinum@test.sib2026.ma', password: DEFAULT_TEST_PASSWORD, role: 'partner', meta: { type: 'partner', company_name: 'Platinum Build Partners', partnership_tier: 'platinium', status: 'confirmed' } },
 ];
 
 // ─── Profils public.users à synchroniser ──────────────────────────────────────

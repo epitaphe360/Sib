@@ -2,7 +2,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:com.urbaevent/model/ResponseConferenceIds.dart';
+import 'package:com.urbaevent/model/ResponseConferenceIds.dart' hide Meta, Pagination;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:com.urbaevent/adapter_view/Conference.dart';
@@ -19,6 +19,7 @@ import 'package:com.urbaevent/widgets/CustomToolbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:intl/intl.dart';
 
 import 'MySchedule.dart';
@@ -338,36 +339,16 @@ class _Conferences extends State<ConferenceList> {
     });
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
-      final url = Uri.parse(Urls.baseURL + Urls.registrations);
+    if (uuid.isNotEmpty) {
+      try {
+        await SupabaseService.instance.registerForConference(
+          salonId: widget.id.toString(),
+          conferenceId: id.toString(),
+          type: widget.type,
+        );
 
-      final jsonData = {
-        "data": {
-          "user": preference.getLoginDetails()!.user.id,
-          "event": widget.id,
-          "conference": id,
-          "type": widget.type,
-          "confirmed": true
-        }
-      };
-
-      print(jsonEncode(jsonData).toString());
-
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(jsonData),
-      );
-
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        print('Response' + response.body);
         setState(() {
           Utils.showToast(
             Intl.message("msg_reg_conference", name: "msg_reg_conference"),
@@ -375,10 +356,9 @@ class _Conferences extends State<ConferenceList> {
           isRegisteredForConference = true;
           getConferencesList();
         });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        debugPrint('registerForConference error: $e');
+        Utils.showToast(e.toString());
       }
     } else {
       Navigator.pop(context);
@@ -393,19 +373,14 @@ class _Conferences extends State<ConferenceList> {
       loader = true;
     });
 
-    final url = Uri.parse(Urls.baseURL +
-        Urls.conferencesList +
-        widget.id.toString() +
-        Urls.conferencesListFilter);
-    final response = await http.get(url);
+    try {
+      final conferences = await SupabaseService.instance
+          .getConferences(widget.id.toString());
 
-    final parsedJson = jsonDecode(response.body);
-
-    if (response.statusCode == HttpStatus.ok) {
-      print('Response' + response.body);
       setState(() {
-        responseEventConferences =
-            ResponseEventConferences.fromJson(parsedJson);
+        responseEventConferences = ResponseEventConferences(
+            data: conferences.map((c) => Datum.fromJson(c)).toList(),
+            meta: Meta(pagination: Pagination(page: 1, pageSize: conferences.length, pageCount: 1, total: conferences.length)));
       });
       if (isRegisteredForConference) {
         isRegisteredForConference = false;
@@ -416,7 +391,7 @@ class _Conferences extends State<ConferenceList> {
                 MySchedule(widget.id),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              const begin = Offset(1.0, 0.0); // Slide from right
+              const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               const curve = Curves.easeInOut;
               var tween =
@@ -427,10 +402,9 @@ class _Conferences extends State<ConferenceList> {
           ),
         );
       }
-    } else {
-      print('Response Error' + response.body);
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
+    } catch (e) {
+      debugPrint('getConferencesList error: $e');
+      Utils.showToast(e.toString());
     }
     setState(() {
       getConferencesRegistrationList();
@@ -441,28 +415,20 @@ class _Conferences extends State<ConferenceList> {
   Future<void> getConferencesRegistrationList() async {
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
+    if (uuid.isNotEmpty) {
       setState(() {
         loader = true;
       });
-      final url = Uri.parse(Urls.baseURL +
-          Urls.conferenceRegistrationList +
-          preference.getUserId().toString() +
-          Urls.conferenceRegistrationListFilter +
-          widget.id.toString());
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
 
-      final parsedJson = jsonDecode(response.body);
+      try {
+        final conferenceIds = await SupabaseService.instance
+            .getUserConferenceIds(widget.id.toString());
 
-      if (response.statusCode == HttpStatus.ok) {
-        print('Response' + response.body);
         setState(() {
-          responseConferenceIds = ResponseConferenceIds.fromJson(parsedJson);
+          responseConferenceIds = ResponseConferenceIds(
+              data: conferenceIds.map((c) => DataId(id: int.tryParse(c))).toList());
           if (responseConferenceIds!.data!.isNotEmpty) {
             for (int i = 0; i < responseEventConferences!.data.length; i++) {
               for (int j = 0; j < responseConferenceIds!.data!.length; j++) {
@@ -475,10 +441,8 @@ class _Conferences extends State<ConferenceList> {
             }
           }
         });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        debugPrint('getConferencesRegistrationList error: $e');
       }
     }
     setState(() {

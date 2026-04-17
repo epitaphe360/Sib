@@ -31,6 +31,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../home/HomePage.dart';
 import 'sub_views/Plan.dart';
 import 'package:http/http.dart' as http;
+import 'package:com.urbaevent/services/SupabaseService.dart';
 
 import 'sub_views/PortalList.dart';
 
@@ -78,43 +79,29 @@ class _EventDetails extends State<EventDetails> {
       setState(() {
         loader = true;
       });
-      Preference preference = await Preference.getInstance();
 
-      final jwtToken = preference.getToken();
+      final bytes = await SupabaseService.instance
+          .downloadEbadge(Const.registrationId.toString());
 
-      final url = Uri.parse(
-          Urls.baseURL + Urls.downloadEbadge + Const.registrationId.toString());
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
-
-      if (response.statusCode == 200) {
-        // Get the application's document directory
+      if (bytes != null) {
         final appDir = await getApplicationCacheDirectory();
         final filePath = appDir.path + '/' + widget.data.name + '.pdf';
 
-        // Create and write the file
         File file = File(filePath);
-        await file.writeAsBytes(response.bodyBytes);
+        await file.writeAsBytes(bytes);
 
-        // File saved successfully
         print('File saved to: $filePath');
         if (await file.exists()) {
           await OpenFile.open(filePath);
         } else {
           throw Exception('File does not exist at $filePath');
         }
-        setState(() {
-          loader = false;
-        });
       } else {
-        setState(() {
-          loader = false;
-        });
-        // Handle the HTTP error
-        throw Exception('Failed to download file: ${response.statusCode}');
+        throw Exception('Failed to download e-badge');
       }
+      setState(() {
+        loader = false;
+      });
     } catch (e) {
       setState(() {
         loader = false;
@@ -166,44 +153,23 @@ class _EventDetails extends State<EventDetails> {
     Preference preference = await Preference.getInstance();
 
     if (preference.getToken().isNotEmpty) {
-      final jwtToken = preference.getToken();
+      try {
+        final result = await SupabaseService.instance.registerForSalon(
+          salonId: widget.data.id.toString(),
+          type: 'visitor',
+        );
 
-      final url = Uri.parse(Urls.baseURL + Urls.registrations);
-
-      final jsonData = {
-        "data": {
-          "user": preference.getLoginDetails()!.user.id,
-          "event": widget.data.id,
-          "type": "visitor",
-          "confirmed": true
+        if (result != null) {
+          setState(() {
+            isRegisteredForEvent = true;
+            confirmed = Const.eventConfirmed;
+            Const.registrationId = result['id'] is int ? result['id'] : int.tryParse(result['id'].toString()) ?? 0;
+            requestPermission();
+          });
         }
-      };
-
-      print(jsonEncode(jsonData).toString());
-
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(jsonData),
-      );
-
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        responseEventRegistration =
-            ResponseEventRegistration.fromJson(parsedJson);
-        setState(() {
-          isRegisteredForEvent = true;
-          confirmed = Const.eventConfirmed;
-          Const.registrationId = responseEventRegistration!.data!.id!;
-          requestPermission();
-        });
-      } else {
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        debugPrint('registerToEventAsVisitor error: $e');
+        Utils.showToast(e.toString());
       }
     } else {
       Navigator.push(
@@ -211,7 +177,7 @@ class _EventDetails extends State<EventDetails> {
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => SignIn(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0); // Slide from right
+            const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
             const curve = Curves.easeInOut;
             var tween =
@@ -236,44 +202,24 @@ class _EventDetails extends State<EventDetails> {
     Preference preference = await Preference.getInstance();
 
     if (preference.getToken().isNotEmpty) {
-      final jwtToken = preference.getToken();
+      try {
+        final result = await SupabaseService.instance.registerForSalon(
+          salonId: widget.data.id.toString(),
+          type: 'exhibitor',
+        );
 
-      final url = Uri.parse(Urls.baseURL + Urls.registrations);
-
-      final jsonData = {
-        "data": {
-          "user": preference.getLoginDetails()!.user.id,
-          "event": widget.data.id,
-          "type": "exhibitor",
+        if (result != null) {
+          setState(() {
+            isRegisteredForEvent = true;
+          });
+          Utils.showDialogMessage(
+              context,
+              Intl.message("msg_notified_once_exhibitor",
+                  name: "msg_notified_once_exhibitor"));
         }
-      };
-
-      print(jsonEncode(jsonData).toString());
-
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(jsonData),
-      );
-
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        responseEventRegistration =
-            ResponseEventRegistration.fromJson(parsedJson);
-        setState(() {
-          isRegisteredForEvent = true;
-        });
-        Utils.showDialogMessage(
-            context,
-            Intl.message("msg_notified_once_exhibitor",
-                name: "msg_notified_once_exhibitor"));
-      } else {
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        debugPrint('registerToEventAsExhibitor error: $e');
+        Utils.showToast(e.toString());
       }
     } else {
       Navigator.push(
@@ -281,7 +227,7 @@ class _EventDetails extends State<EventDetails> {
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => SignIn(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0); // Slide from right
+            const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
             const curve = Curves.easeInOut;
             var tween =

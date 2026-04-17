@@ -25,9 +25,9 @@ async function main() {
       continue;
     }
 
-    // Mot de passe standardisé: Siport2026! + initiales
+    // Mot de passe standardisé: SIB2026! + initiales
     const slug = ex.company_name.replace(/[^a-zA-Z]/g, '').substring(0, 4);
-    const password = `Siport2026!${slug}`;
+    const password = `SIB2026!${slug}`;
 
     console.log(`🔄 ${ex.company_name} (${email})...`);
 
@@ -134,7 +134,7 @@ async function main() {
     const email = ex.contact_info?.email;
     if (!email) continue;
     const slug = ex.company_name.replace(/[^a-zA-Z]/g, '').substring(0, 4);
-    const password = `Siport2026!${slug}`;
+    const password = `SIB2026!${slug}`;
     console.log(`${ex.company_name.padEnd(25)} | ${email.padEnd(35)} | ${password}`);
   }
 }

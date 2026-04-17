@@ -63,9 +63,18 @@ class PushNotificationService {
       return false;
     }
 
-    // Check if configuration is present
-    if (!firebaseConfig.apiKey || firebaseConfig.apiKey === '' || firebaseConfig.projectId === 'your_project_id') {
-      console.warn('⚠️ Firebase credentials missing. Push notifications disabled.');
+    // Check if configuration is present and not a placeholder
+    // Real Firebase Web API keys always start with 'AIzaSy'
+    const KNOWN_PLACEHOLDERS = ['', 'local-dev', 'your_api_key', 'undefined', 'null'];
+    const isPlaceholderKey =
+      !firebaseConfig.apiKey ||
+      KNOWN_PLACEHOLDERS.includes(firebaseConfig.apiKey) ||
+      !firebaseConfig.apiKey.startsWith('AIzaSy') ||
+      !firebaseConfig.projectId ||
+      KNOWN_PLACEHOLDERS.includes(firebaseConfig.projectId);
+
+    if (isPlaceholderKey) {
+      console.info('ℹ️ Firebase credentials not configured (local dev). Push notifications disabled.');
       return false;
     }
 

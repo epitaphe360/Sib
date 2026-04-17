@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:com.urbaevent/dialogs/Progressbar.dart';
 import 'package:com.urbaevent/model/common/ResponseError.dart';
+import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:com.urbaevent/ui/auth/RegistrationDone.dart';
 import 'package:com.urbaevent/utils/Preference.dart';
 import 'package:com.urbaevent/utils/ThemeColor.dart';
-import 'package:com.urbaevent/utils/Urls.dart';
 import 'package:com.urbaevent/utils/Utils.dart';
 import 'package:com.urbaevent/widgets/CustomToolbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -59,20 +59,12 @@ class _EmailVerification extends State<EmailVerification> {
       loader = true;
     });
 
-    final url = Uri.parse(Urls.baseURL + Urls.resendOTP);
-    Preference preference = await Preference.getInstance();
-    final response = await http.post(
-      url,
-      body: {
-        'email': preference.getLoginDetails()!.user.email,
-      },
-    );
-
-    final parsedJson = jsonDecode(response.body);
-
-    if (response.statusCode != HttpStatus.ok) {
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
+    try {
+      Preference preference = await Preference.getInstance();
+      await SupabaseService.instance
+          .resendEmailOTP(preference.getLoginDetails()!.user.email);
+    } catch (e) {
+      Utils.showToast(e.toString());
       setState(() {
         isTimerStarted = false;
         timer.cancel();
@@ -88,43 +80,41 @@ class _EmailVerification extends State<EmailVerification> {
       loader = true;
     });
 
-    Preference preference = await Preference.getInstance();
+    try {
+      Preference preference = await Preference.getInstance();
+      final otp = controllers[0].text +
+          controllers[1].text +
+          controllers[2].text +
+          controllers[3].text;
 
-    final jwtToken = preference.getToken();
-    final url = Urls.baseURL + Urls.verifyEmailOTP;
-
-    final response = await http.post(Uri.parse(url), headers: {
-      'Authorization': 'Bearer $jwtToken'
-    }, body: {
-      'userId': preference.getLoginDetails()!.user.id.toString(),
-      'otp': controllers[0].text.toString() +
-          controllers[1].text.toString() +
-          controllers[2].text.toString() +
-          controllers[3].text.toString(),
-    });
-
-    final parsedJson = jsonDecode(response.body);
-
-    if (response.statusCode == HttpStatus.ok) {
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              RegistrationDone(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0); // Slide from right
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-        ),
+      final success = await SupabaseService.instance.verifyEmailOTP(
+        preference.getLoginDetails()!.user.email,
+        otp,
       );
-    } else {
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
+
+      if (success) {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                RegistrationDone(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              var offsetAnimation = animation.drive(tween);
+              return SlideTransition(position: offsetAnimation, child: child);
+            },
+          ),
+        );
+      } else {
+        Utils.showToast(Intl.message("invalid_otp", name: "invalid_otp"));
+      }
+    } catch (e) {
+      Utils.showToast(e.toString());
     }
     setState(() {
       loader = false;

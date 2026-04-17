@@ -1,7 +1,7 @@
 ﻿/* stylelint-disable */
 /* Autogénéré pour TailwindCSS - désactivé stylelint */
 
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
 @import './styles/darkmode.css';
 
 @tailwind base;
@@ -24,19 +24,20 @@
     --card-foreground: 0 0% 3.6%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.6%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217 91% 60%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 210 100% 50%;
-    --accent-foreground: 210 40% 98%;
+    /* Champagne Gold accent */
+    --primary: 43 63% 74%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 97%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 43 63% 74%;
+    --accent-foreground: 0 0% 10%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214 86% 90%;
-    --input: 214 86% 90%;
-    --ring: 221 83% 53%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 92%;
+    --input: 0 0% 92%;
+    --ring: 43 63% 74%;
   }
   
   html.dark {
@@ -67,18 +68,18 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Big Shoulders Display', 'Open Sans', system-ui, sans-serif;
-    letter-spacing: 0.01em;
+    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
   }
   
   body {
-    @apply text-gray-900;
-    background:
-      radial-gradient(1200px 540px at -8% -10%, rgba(212, 175, 55, 0.18), transparent 65%),
-      radial-gradient(960px 500px at 110% 8%, rgba(0, 109, 119, 0.16), transparent 60%),
-      linear-gradient(160deg, #f7fbff 0%, #eef5fb 42%, #ddebf6 100%);
+    @apply text-[#1A1A1A];
+    background: #FFFFFF;
     min-height: 100vh;
     overflow-x: hidden;
+    line-height: 1.8;
   }
 
   body::before {
@@ -87,11 +88,9 @@
     inset: 0;
     pointer-events: none;
     z-index: -1;
-    opacity: 0.25;
-    background-image:
-      linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.35) 35%, transparent 70%),
-      radial-gradient(circle at 1px 1px, rgba(14, 44, 72, 0.08) 1px, transparent 0);
-    background-size: 100% 100%, 20px 20px;
+    opacity: 0.4;
+    background-image: radial-gradient(circle at 1px 1px, rgba(231, 209, 146, 0.06) 1px, transparent 0);
+    background-size: 28px 28px;
   }
 
   html {
@@ -145,32 +144,160 @@
 }
 
 @layer components {
+  /* ═══════════════════════════════════════════
+     LUXURY DESIGN SYSTEM — SIB 2026
+     ═══════════════════════════════════════════ */
+
+  /* Carte glassmorphism ultra-légère */
+  .luxury-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 0.5px solid rgba(231, 209, 146, 0.3);
+    box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.08), 0 1px 4px -1px rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    transition: box-shadow 0.4s ease, transform 0.4s ease, border-color 0.4s ease;
+  }
+  .luxury-card:hover {
+    box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.12), 0 4px 12px -4px rgba(231, 209, 146, 0.15);
+    border-color: rgba(231, 209, 146, 0.6);
+    transform: translateY(-2px);
+  }
+
+  /* Badge luxe — or champagne */
+  .luxury-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 1rem;
+    border: 0.5px solid rgba(231, 209, 146, 0.6);
+    background: rgba(231, 209, 146, 0.08);
+    color: #C9A84C;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-radius: 4px;
+  }
+
+  /* Divider or champagne */
+  .luxury-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .luxury-divider::before,
+  .luxury-divider::after {
+    content: '';
+    flex: 1;
+    max-width: 5rem;
+    height: 0.5px;
+    background: linear-gradient(to right, transparent, rgba(231, 209, 146, 0.6));
+  }
+  .luxury-divider::after {
+    background: linear-gradient(to left, transparent, rgba(231, 209, 146, 0.6));
+  }
+  .luxury-divider span {
+    width: 5px;
+    height: 5px;
+    background: #E7D192;
+    border-radius: 50%;
+  }
+
+  /* Bouton primaire luxe */
+  .luxury-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 2rem;
+    background: #E7D192;
+    color: #1A1A1A;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 16px -4px rgba(231, 209, 146, 0.4);
+  }
+  .luxury-btn:hover {
+    background: #C9A84C;
+    box-shadow: 0 8px 24px -6px rgba(201, 168, 76, 0.5);
+    transform: translateY(-1px);
+  }
+
+  /* Titre de section luxe */
+  .luxury-section-title {
+    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    color: #1A1A1A;
+    line-height: 1.15;
+  }
+
+  /* Section padding généreux */
+  .luxury-section {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+
+  /* Fade-in-up animation */
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Ligne décorative fine */
+  .luxury-line {
+    width: 3rem;
+    height: 0.5px;
+    background: #E7D192;
+    display: inline-block;
+  }
+
+  /* ═══════════════════════════════════════════
+     COMPOSANTS EXISTANTS (rétrocompatibilité)
+     ═══════════════════════════════════════════ */
   .sib-gradient {
     background: linear-gradient(135deg, #1B365D 0%, #2E5984 50%, #4A90A4 100%);
   }
   
   .sib-text-gradient {
-    background: linear-gradient(135deg, #1B365D 0%, #4A90A4 100%);
+    background: linear-gradient(135deg, #E7D192 0%, #C9A84C 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   
   .sib-card-hover {
-    @apply hover:shadow-sib-xl hover:-translate-y-1 transition-all duration-300;
+    @apply hover:shadow-luxury-lg hover:-translate-y-1 transition-all duration-300;
   }
   
   .sib-btn-primary {
-    @apply bg-sib-primary text-white hover:bg-sib-dark focus:ring-sib-primary shadow-lg font-semibold;
+    @apply bg-sib-navy text-white hover:bg-sib-navy-dark focus:ring-sib-gold shadow-lg font-semibold;
   }
   
   .sib-btn-secondary {
-    @apply bg-sib-gold text-sib-dark hover:bg-yellow-400 focus:ring-sib-gold shadow-lg font-semibold;
+    @apply bg-sib-gold text-[#1A1A1A] shadow-lg font-medium;
   }
   
-  /* Nouveau style pour les sections principales */
   .sib-section {
-    @apply bg-white/95 backdrop-blur-sm border border-white/20;
+    @apply bg-white border border-[#EEE];
+  }
+  
+  .sib-glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 0.5px solid rgba(231, 209, 146, 0.25);
+    box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.08);
   }
   
   .dark .sib-section {
@@ -178,18 +305,11 @@
     border-color: rgba(55, 65, 81, 0.2);
   }
   
-  /* Style pour les cartes avec effet de verre */
-  .sib-glass-card {
-    @apply bg-white/90 backdrop-blur-md border border-white/30 shadow-xl;
-    box-shadow: 0 14px 32px -16px rgba(7, 28, 48, 0.45);
-  }
-  
   .dark .sib-glass-card {
     background-color: rgba(31, 41, 55, 0.9);
     border-color: rgba(55, 65, 81, 0.3);
   }
   
-  /* Dark mode for common elements */
   .dark [class*="bg-white"] {
     background-color: rgb(31, 41, 55);
   }

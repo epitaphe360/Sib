@@ -254,6 +254,11 @@ class _SignUpStep2 extends State<SignUpStep2> {
 
         if (res.user != null) {
           preference.setUserUUID(res.user!.id);
+          // Sauvegarder le token de session
+          final session = SupabaseService.instance.currentSession;
+          if (session != null) {
+            preference.setToken(session.accessToken);
+          }
           // Sauvegarder le profil étendu (entreprise, secteur, type)
           try {
             await SupabaseService.instance.updateUserProfile(res.user!.id, {

@@ -18,6 +18,7 @@ import 'package:com.urbaevent/widgets/CustomBottomBar.dart';
 import 'package:com.urbaevent/widgets/CustomToolbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:intl/intl.dart';
 
 class MySchedule extends StatefulWidget {
@@ -43,27 +44,17 @@ class _MySchedule extends State<MySchedule> {
     });
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
-      final url = Uri.parse(Urls.baseURL +
-          Urls.mySchedule +
-          preference.getUserId().toString() +
-          Urls.myScheduleListFilter1 +
-          widget.id.toString() +
-          Urls.myScheduleListFilter2);
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
+    if (uuid.isNotEmpty) {
+      try {
+        final scheduleData = await SupabaseService.instance
+            .getMySchedule(widget.id.toString());
 
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        print('Response' + response.body);
         setState(() {
-          responseSchedule = ResponseSchedule.fromJson(parsedJson);
-          filteredInfo = ResponseSchedule.fromJson(parsedJson).data!;
+          responseSchedule = ResponseSchedule(
+              data: scheduleData.map((s) => DayInfo.fromJson(s)).toList());
+          filteredInfo = scheduleData.map((s) => DayInfo.fromJson(s)).toList();
           if (responseSchedule!.data!.length > 0) {
             filteredInfo[0].index = pageIndex;
             responseSchedule!.data![0].index = pageIndex;
@@ -79,10 +70,9 @@ class _MySchedule extends State<MySchedule> {
           }
           init = true;
         });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        debugPrint('getMyScheduleList error: $e');
+        Utils.showToast(e.toString());
       }
     } else {
       Navigator.pop(context);

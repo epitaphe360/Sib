@@ -6,7 +6,7 @@ import { test, expect, type Page } from '@playwright/test';
  * Arabic/RTL, Media pages, Admin panels
  */
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:5173';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:9324';
 
 test.describe('Public Pages - Navigation & Rendering', () => {
   test('HOME: should render homepage with hero section', async ({ page }) => {
@@ -69,22 +69,22 @@ test.describe('Public Pages - Navigation & Rendering', () => {
 
 test.describe('Media Pages', () => {
   test('WEBINARS: should render webinars page', async ({ page }) => {
-    await page.goto(`${BASE_URL}/webinars`);
+    await page.goto(`${BASE_URL}/media/webinars`);
     await expect(page.locator('main')).toBeVisible();
   });
 
   test('PODCASTS: should render podcasts page', async ({ page }) => {
-    await page.goto(`${BASE_URL}/podcasts`);
+    await page.goto(`${BASE_URL}/media/podcasts`);
     await expect(page.locator('main')).toBeVisible();
   });
 
   test('LIVE_STUDIO: should render live studio page', async ({ page }) => {
-    await page.goto(`${BASE_URL}/live-studio`);
+    await page.goto(`${BASE_URL}/media/live-studio`);
     await expect(page.locator('main')).toBeVisible();
   });
 
   test('MEDIA_LIBRARY: should render media library', async ({ page }) => {
-    await page.goto(`${BASE_URL}/media-library`);
+    await page.goto(`${BASE_URL}/media`);
     await expect(page.locator('main')).toBeVisible();
   });
 });
@@ -146,7 +146,7 @@ test.describe('Navigation - Header & Footer', () => {
   test('footer should contain SIB copyright', async ({ page }) => {
     await page.goto(BASE_URL);
     const footer = page.locator('footer').first();
-    await expect(footer.locator('text=SIB')).toBeVisible();
+    await expect(footer.getByText(/SIB GLOBAL SYMPOSIUM/i)).toBeVisible();
   });
 });
 

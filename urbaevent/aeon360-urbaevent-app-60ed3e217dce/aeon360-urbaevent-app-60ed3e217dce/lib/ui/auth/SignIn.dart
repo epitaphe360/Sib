@@ -24,7 +24,6 @@ import 'package:com.urbaevent/utils/Utils.dart';
 import 'package:com.urbaevent/widgets/CustomToolbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:http/http.dart' as http;
@@ -39,7 +38,6 @@ class SignIn extends StatefulWidget {
 class _SignIn extends State<SignIn> {
   bool loader = false;
   bool _isPasswordVisible = false;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   final config = LinkedInConfig(
@@ -63,7 +61,7 @@ class _SignIn extends State<SignIn> {
     return emailRegExp.hasMatch(email);
   }
 
-  Future<User?> _handleSignIn() async {
+  Future<Map<String, dynamic>?> _handleSignIn() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
@@ -71,15 +69,12 @@ class _SignIn extends State<SignIn> {
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      final UserCredential authResult =
-          await _auth.signInWithCredential(credential);
-      final User? user = authResult.user;
-      return user;
+      return {
+        'idToken': googleSignInAuthentication.idToken,
+        'accessToken': googleSignInAuthentication.accessToken,
+        'email': googleSignInAccount.email,
+        'displayName': googleSignInAccount.displayName,
+      };
     } catch (error) {
       print(error);
       return null;
@@ -123,7 +118,7 @@ class _SignIn extends State<SignIn> {
       );
       if (res.user != null) {
         final preference = await Preference.getInstance();
-        preference.setUserUUID(res.user!.id);
+        await preference.setUserUUID(res.user!.id);
         await navigateAfterLogin();
       } else {
         Utils.showToast(Intl.message('msg_login_invalid', name: 'msg_login_invalid'));
@@ -141,196 +136,142 @@ class _SignIn extends State<SignIn> {
       loader = true;
     });
 
-    final url = Uri.parse(Urls.baseURL + Urls.socialLogin);
-    final response = await http.post(
-      url,
-      body: {
-        'identifier': user.email,
-        'provider': "linkedin",
-        'socialId': user.email,
-      },
-    );
+    try {
+      final email = user.email ?? '';
+      final result = await SupabaseService.instance.socialSignIn(
+        email: email,
+        provider: 'linkedin',
+        name: '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim(),
+        socialId: email,
+      );
 
-    final parsedJson = jsonDecode(response.body);
-
-    if (response.statusCode == HttpStatus.ok) {
-      final responseLogin = ResponseAuth.fromJson(parsedJson);
+      // Mettre à jour le profil (synchronise nom/email à chaque connexion)
+      await SupabaseService.instance.updateUserProfile(
+        result['user_id'],
+        {
+          'email': email,
+          'name': '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim(),
+          'provider': 'linkedin',
+          'type': 'visitor',
+          'status': 'active',
+        },
+      );
 
       Preference preference = await Preference.getInstance();
-      preference.setUserId(responseLogin.user.id);
-      preference.setToken(responseLogin.jwt);
-      preference.saveLogin(responseLogin);
+      await preference.setUserUUID(result['user_id']);
 
-      getAuthRole();
-    } else {
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
-      //didn't signup yet move to sign-up
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => SignUp(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0); // Slide from right
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-        ),
-      );
+      await navigateAfterLogin();
+    } catch (e) {
+      debugPrint('socialSignInLinkedIn error: $e');
+      Utils.showToast(e.toString());
     }
     setState(() {
       loader = false;
     });
   }
 
-  Future<void> socialSignInApple(String email, String socialId) async {
+  Future<void> socialSignInApple(AuthorizationCredentialAppleID credential) async {
     setState(() {
       loader = true;
     });
 
-    final url = Uri.parse(Urls.baseURL + Urls.socialLogin);
-    final response = await http.post(
-      url,
-      body: {
-        'identifier': email,
-        'provider': "apple",
-        'socialId': socialId,
-      },
-    );
+    try {
+      final identityToken = credential.identityToken;
+      if (identityToken == null || identityToken.isEmpty) {
+        throw Exception('Apple identityToken manquant');
+      }
 
-    final parsedJson = jsonDecode(response.body);
+      // Authentification directe via OAuth token Supabase
+      final authResponse =
+          await SupabaseService.instance.signInWithApple(identityToken);
 
-    if (response.statusCode == HttpStatus.ok) {
-      final responseLogin = ResponseAuth.fromJson(parsedJson);
+      if (authResponse.user != null) {
+        // Sauvegarder les données Apple (nom/email) pour la première connexion
+        final email = credential.email ??
+            authResponse.user!.email ??
+            '';
+        final firstName = credential.givenName ?? '';
+        final lastName = credential.familyName ?? '';
 
-      Preference preference = await Preference.getInstance();
-      preference.setUserId(responseLogin.user.id);
-      preference.setToken(responseLogin.jwt);
-      preference.saveLogin(responseLogin);
-
-      getAuthRole();
-    } else {
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
-      //didn't signup yet move to sign-up
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => SignUp(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0); // Slide from right
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-        ),
-      );
-    }
-    setState(() {
-      loader = false;
-    });
-  }
-
-  Future<void> getAppleData(AuthorizationCredentialAppleID credential) async {
-    final url = Uri.parse(Urls.baseURL +
-        Urls.getAppleData +
-        credential.userIdentifier.toString());
-
-    final response = await http.get(url);
-
-    final parsedJson = jsonDecode(response.body);
-
-    print('Apple Data:'+response.body);
-
-    if (response.statusCode == HttpStatus.ok) {
-      final responseAppleData = ResponseAppleData.fromJson(parsedJson);
-
-      socialSignInApple(responseAppleData.data!.email.toString(),
-          responseAppleData.data!.socialId.toString());
-    } else {
-      postAppleData(credential);
-    }
-  }
-
-  Future<void> postAppleData(AuthorizationCredentialAppleID credential) async {
-    final url = Uri.parse(Urls.baseURL + Urls.sendAppleData);
-
-    await http.post(
-      url,
-      body: {
-        "data": {
-          "firstName": credential.givenName,
-          "lastName": credential.familyName,
-          "email": credential.email,
-          "socialId": credential.userIdentifier
+        if (email.isNotEmpty) {
+          await SupabaseService.instance.saveAppleData(
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            socialId: credential.userIdentifier ?? authResponse.user!.id,
+          );
         }
-      },
-    );
 
-    socialSignInApple(
-        credential.email.toString(), credential.userIdentifier.toString());
+        // Créer/mettre à jour le profil utilisateur
+        final name = (firstName.isNotEmpty || lastName.isNotEmpty)
+            ? '$firstName $lastName'.trim()
+            : email.split('@').first;
+
+        await SupabaseService.instance.updateUserProfile(
+          authResponse.user!.id,
+          {
+            'email': email,
+            'name': name,
+            'provider': 'apple',
+            'type': 'visitor',
+            'status': 'active',
+          },
+        );
+
+        Preference preference = await Preference.getInstance();
+        await preference.setUserUUID(authResponse.user!.id);
+
+        await navigateAfterLogin();
+      } else {
+        Utils.showToast('Échec de la connexion Apple');
+      }
+    } catch (e) {
+      debugPrint('socialSignInApple error: $e');
+      Utils.showToast(e.toString());
+    }
+    setState(() {
+      loader = false;
+    });
   }
 
-  Future<void> socialSignInGoogle(User user) async {
+  Future<void> socialSignInGoogle(Map<String, dynamic> googleData) async {
     setState(() {
       loader = true;
     });
 
-    final url = Uri.parse(Urls.baseURL + Urls.socialLogin);
-    final response = await http.post(
-      url,
-      body: {
-        'identifier': user.email,
-        'provider': "google",
-        'socialId': user.uid,
-      },
-    );
+    try {
+      final idToken = googleData['idToken'] as String?;
+      if (idToken == null || idToken.isEmpty) {
+        throw Exception('Google idToken manquant');
+      }
 
-    print({
-      'identifier': user.email,
-      'provider': "google",
-      'socialId': user.uid,
-    });
+      // Authentification directe via OAuth token Supabase
+      final authResponse =
+          await SupabaseService.instance.signInWithGoogle(idToken);
 
-    final parsedJson = jsonDecode(response.body);
-
-    print(parsedJson);
-
-    if (response.statusCode == HttpStatus.ok) {
-      final responseLogin = ResponseAuth.fromJson(parsedJson);
-
-      Preference preference = await Preference.getInstance();
-      preference.setUserId(responseLogin.user.id);
-      preference.setToken(responseLogin.jwt);
-      preference.saveLogin(responseLogin);
-
-      getAuthRole();
-    } else {
-      final error = ResponseError.fromJson(parsedJson);
-      Utils.showToast(error.error.message);
-      //didn't signup yet move to sign-up
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => SignUp(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0); // Slide from right
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-            return SlideTransition(position: offsetAnimation, child: child);
+      if (authResponse.user != null) {
+        // Créer/mettre à jour le profil utilisateur dans la table users
+        await SupabaseService.instance.updateUserProfile(
+          authResponse.user!.id,
+          {
+            'email': googleData['email'] ?? authResponse.user!.email ?? '',
+            'name': googleData['displayName'] ?? '',
+            'provider': 'google',
+            'type': 'visitor',
+            'status': 'active',
           },
-        ),
-      );
+        );
+
+        Preference preference = await Preference.getInstance();
+        await preference.setUserUUID(authResponse.user!.id);
+
+        await navigateAfterLogin();
+      } else {
+        Utils.showToast('Échec de la connexion Google');
+      }
+    } catch (e) {
+      debugPrint('socialSignInGoogle error: $e');
+      Utils.showToast(e.toString());
     }
     setState(() {
       loader = false;
@@ -341,6 +282,13 @@ class _SignIn extends State<SignIn> {
   Future<void> navigateAfterLogin() async {
     final currentUser = SupabaseService.instance.currentUser;
     if (currentUser == null) return;
+
+    // Sauver le token Supabase dans les prefs pour compatibilité legacy
+    final session = SupabaseService.instance.currentSession;
+    final preference = await Preference.getInstance();
+    if (session != null) {
+      preference.setToken(session.accessToken);
+    }
 
     // Charger et sélectionner le salon actif AVANT la navigation
     await _autoSelectSalon();
@@ -503,10 +451,10 @@ class _SignIn extends State<SignIn> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    User? user = await _handleSignIn();
-                                    if (user != null) {
+                                    final googleData = await _handleSignIn();
+                                    if (googleData != null) {
                                       // Successfully signed in with Google
-                                      socialSignInGoogle(user);
+                                      socialSignInGoogle(googleData);
                                     } else {
                                       // Sign-in failed
                                       Utils.showToast("Sign In failed");
@@ -556,7 +504,7 @@ class _SignIn extends State<SignIn> {
                                         ],
                                       );
 
-                                      getAppleData(credential);
+                                      socialSignInApple(credential);
                                     },
                                   ),
                                 SizedBox(height: 10),

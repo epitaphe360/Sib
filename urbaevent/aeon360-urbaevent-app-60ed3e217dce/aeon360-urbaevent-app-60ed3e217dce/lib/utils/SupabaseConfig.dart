@@ -42,6 +42,18 @@ class SupabaseConfig {
   // Notifications push
   static const String tablePushTokens = 'push_subscriptions';
 
+  // Notifications in-app
+  static const String tableNotifications = 'notifications';
+
+  // Secteurs d'activité
+  static const String tableBusinessSectors = 'business_sectors';
+
+  // Portes (contrôle d'accès agents)
+  static const String tableGates = 'gates';
+
+  // Données Apple Sign-in
+  static const String tableAppleSocialData = 'apple_social_data';
+
   // Bucket Storage pour les avatars / médias
   static const String storageAvatarsBucket = 'avatars';
   static const String storageMediaBucket = 'media';

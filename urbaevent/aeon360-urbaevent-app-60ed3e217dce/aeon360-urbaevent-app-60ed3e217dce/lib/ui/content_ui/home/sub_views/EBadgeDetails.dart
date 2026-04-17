@@ -1,4 +1,5 @@
 ﻿import 'package:com.urbaevent/services/SupabaseService.dart';
+import 'package:com.urbaevent/ui/content_ui/home/sub_views/FullScreenBadge.dart';
 import 'package:com.urbaevent/utils/ThemeColor.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,7 +57,10 @@ class _EBadgeDetailsState extends State<EBadgeDetails> {
         setState(() { _qrToken = uid; _loadingQr = false; });
       }
     } catch (e) {
-      setState(() { _error = e.toString(); _loadingQr = false; });
+      // Fallback: If edge function fails (e.g. ES256 algo error on verify), use userId directly
+      final uid = SupabaseService.instance.currentUser?.id ?? '';
+      setState(() { _qrToken = uid; _loadingQr = false; });
+      debugPrint('QR Token generation fallback: $e');
     }
   }
 
@@ -160,7 +164,30 @@ class _EBadgeDetailsState extends State<EBadgeDetails> {
                         backgroundColor: Colors.white,
                         errorCorrectionLevel: QrErrorCorrectLevel.M),
                     ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
+                  if (confirmed == true && _qrToken != null)
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (_) => FullScreenBadge(
+                            qrData: _qrToken!,
+                            userName: widget.userName,
+                            badgeType: _getTypeLabel(type),
+                            salonName: salonName,
+                            salonColor: salonColor,
+                          ),
+                        ));
+                      },
+                      icon: const Icon(Icons.fullscreen, size: 22),
+                      label: const Text('Badge plein écran'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: salonColor,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                      ),
+                    ),
+                  const SizedBox(height: 12),
                   Image.asset('assets/line.png', width: MediaQuery.of(context).size.width - 100, fit: BoxFit.cover),
                   const SizedBox(height: 20),
                   if (confirmed == true)

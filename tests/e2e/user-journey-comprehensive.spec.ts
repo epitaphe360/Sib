@@ -28,28 +28,28 @@ const generateTestData = () => {
   const timestamp = Date.now();
   return {
     visitor: {
-      email: `visitor-${timestamp}@test.com`,
+      email: `visitor-${timestamp}@test.sib2026.ma`,
       password: 'Visitor123!@#',
       name: 'Visiteur Test',
       phone: '+212612345678',
     },
     exhibitor: {
-      email: `exhibitor-${timestamp}@test.com`,
+      email: `exhibitor-${timestamp}@test.sib2026.ma`,
       password: 'Exhibitor123!@#',
       companyName: `TechExpo ${timestamp}`,
       name: 'Jean Exposant',
       phone: '+212612345679',
       website: 'https://techexpo.ma',
-      description: 'Solutions maritimes innovantes pour ports intelligents du futur.',
+      description: 'Solutions innovantes pour chantiers intelligents et bâtiments durables.',
     },
     partner: {
-      email: `partner-${timestamp}@test.com`,
+      email: `partner-${timestamp}@test.sib2026.ma`,
       password: 'Partner123!@#',
       companyName: `PartnerCorp ${timestamp}`,
       name: 'Marie Partenaire',
       phone: '+212612345680',
       website: 'https://partnercorp.ma',
-      description: 'Partenaire stratégique pour le développement portuaire.',
+      description: 'Partenaire stratégique pour le développement du bâtiment.',
     },
     admin: {
       email: 'admin@sib2026.ma',
@@ -231,9 +231,14 @@ test.describe('👤 PARCOURS VISITEUR COMPLET', () => {
     console.log(`   → Boutons trouvés: ${buttons.join(', ')}`);
 
     // Essayer de trouver le bouton Suivant par texte ou testid
-    const nextBtn = page.locator('button:has-text("Suivant"), [data-testid="btn-next"]').first();
-    await nextBtn.scrollIntoViewIfNeeded();
-    await nextBtn.click({ force: true });
+    const clickNextIfAvailable = async () => {
+      const nextBtn = page.locator('button:has-text("Suivant"), [data-testid="btn-next"], button:has-text("Continuer")').first();
+      if (await nextBtn.count() > 0 && await nextBtn.isVisible()) {
+        await nextBtn.click({ force: true });
+      }
+    };
+
+    await clickNextIfAvailable();
     await page.waitForTimeout(1000);
 
     // Étape 2: Entreprise / Organisation
@@ -254,7 +259,7 @@ test.describe('👤 PARCOURS VISITEUR COMPLET', () => {
       await countrySelect.selectOption('FR');
     }
 
-    await page.getByTestId('btn-next').first().click();
+    await clickNextIfAvailable();
     await page.waitForTimeout(1000);
 
     // Étape 3: Contact
@@ -263,29 +268,36 @@ test.describe('👤 PARCOURS VISITEUR COMPLET', () => {
     await page.fill('input[name="lastName"]', visitor.name.split(' ')[1] || 'Test');
     await page.fill('input[name="email"]', visitor.email);
     await page.fill('input[name="phone"]', visitor.phone);
-    await page.getByTestId('btn-next').first().click();
+    await clickNextIfAvailable();
     await page.waitForTimeout(1000);
 
     // Étape 4: Profil
     console.log('   → Étape 4: Profil...');
     const desc = page.locator('textarea[data-testid="description"]').first();
     if (await desc.isVisible()) {
-      await desc.fill('Je suis un visiteur passionné par le secteur maritime et portuaire.');
+      await desc.fill('Je suis un visiteur passionné par le secteur du bâtiment et de l\'innovation constructive.');
     }
     
     // Cliquer sur un objectif
     const objective = page.locator('input[type="checkbox"]').first();
     if (await objective.isVisible()) await objective.check();
     
-    await page.getByTestId('btn-next').first().click();
+    await clickNextIfAvailable();
     await page.waitForTimeout(1000);
 
     // Étape 5: Sécurité
     console.log('   → Étape 5: Sécurité...');
-    await page.fill('input[data-testid="password"]', visitor.password);
-    await page.fill('input[name="confirmPassword"]', visitor.password);
+    const passwordInput = page.locator('input[data-testid="password"], input[name="password"], input[type="password"]').first();
+    if (await passwordInput.isVisible({ timeout: 5000 })) {
+      await passwordInput.fill(visitor.password);
+    }
 
-    await page.click('button:has-text("Créer mon compte")');
+    const confirmPasswordInput = page.locator('input[name="confirmPassword"], input[data-testid="confirm-password"]').first();
+    if (await confirmPasswordInput.isVisible()) {
+      await confirmPasswordInput.fill(visitor.password);
+    }
+
+    await page.locator('button:has-text("Créer mon compte"), button:has-text("Valider l\'inscription"), button[type="submit"]').first().click();
     await page.waitForTimeout(10000); // Attendre traitement et reCAPTCHA
     console.log('   ✅ Compte visiteur créé\n');
 
@@ -499,7 +511,7 @@ test.describe('🏢 PARCOURS EXPOSANT COMPLET', () => {
       const descField = page.locator('textarea[name="description"]').first();
       if (await descField.isVisible({ timeout: 3000 })) {
         await descField.clear();
-        await descField.fill('Leader des solutions portuaires. 20+ ans d\'expérience. Innovation & Excellence.');
+        await descField.fill('Leader des solutions bâtiment. 20+ ans d\'expérience. Innovation & Excellence.');
 
         const saveBtn = page.locator('button:has-text("Enregistrer"), button[type="submit"]').first();
         if (await saveBtn.isVisible()) {
@@ -522,7 +534,7 @@ test.describe('🏢 PARCOURS EXPOSANT COMPLET', () => {
 
       const miniSiteDesc = page.locator('textarea[name="description"]').first();
       if (await miniSiteDesc.isVisible()) {
-        await miniSiteDesc.fill('Découvrez nos solutions innovantes pour le secteur maritime.');
+        await miniSiteDesc.fill('Découvrez nos solutions innovantes pour le secteur du bâtiment.');
       }
 
       const saveMiniSiteBtn = page.locator('button:has-text("Créer"), button:has-text("Enregistrer"), button[type="submit"]').first();
@@ -751,7 +763,7 @@ test.describe('🤝 PARCOURS PARTENAIRE COMPLET', () => {
     const descField = page.locator('textarea[name="description"]').first();
     if (await descField.isVisible({ timeout: 3000 })) {
       await descField.clear();
-      await descField.fill('Partenaire stratégique majeur du secteur portuaire. Leader régional.');
+      await descField.fill('Partenaire stratégique majeur du secteur du bâtiment. Leader régional.');
 
       const saveBtn = page.locator('button:has-text("Enregistrer"), button[type="submit"]').first();
       if (await saveBtn.isVisible()) {

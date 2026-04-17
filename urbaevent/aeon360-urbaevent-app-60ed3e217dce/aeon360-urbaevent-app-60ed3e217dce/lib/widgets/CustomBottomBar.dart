@@ -28,8 +28,11 @@ class _CustomBottomBar extends State<CustomBottomBar> {
 
   Future<void> checkRole() async {
     Preference preference = await Preference.getInstance();
-    if (preference.getAuthRole() != null) {
-      role = preference.getAuthRole()!.role!.id!;
+    final authRole = preference.getAuthRole();
+    if (authRole?.role?.id != null) {
+      setState(() {
+        role = authRole!.role!.id!;
+      });
     }
   }
 

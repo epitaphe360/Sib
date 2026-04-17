@@ -7,7 +7,7 @@
 
 const http = require('http');
 
-const BASE_URL = 'http://localhost:5173';
+const BASE_URL = 'http://localhost:9324';
 const TESTS_PASSED = [];
 const TESTS_FAILED = [];
 

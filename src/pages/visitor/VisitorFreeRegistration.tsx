@@ -75,14 +75,14 @@ export default function VisitorFreeRegistration() {
   });
 
   const onSubmit = async (data: FreeVisitorForm) => {
-    console.log('?? [FREE VISITOR] Tentative soumission:', data);
+    console.log('📝 [FREE VISITOR] Tentative soumission:', data);
     setIsSubmitting(true);
 
     try {
       const fullName = `${data.firstName} ${data.lastName}`.trim();
 
       // 1. Vérification préalable : L'email existe-t-il déjà ?
-      console.log('?? [FREE VISITOR] Vérification si email existe déjà...');
+      console.log('🔍 [FREE VISITOR] Vérification si email existe déjà...');
       const emailToCheck = data.email.toLowerCase().trim();
 
       const { data: existingUser, error: checkError } = await supabase
@@ -99,7 +99,7 @@ export default function VisitorFreeRegistration() {
       }
 
       if (existingUser) {
-        console.warn('?? [FREE VISITOR] Email déjà existant:', existingUser);
+        console.warn('⚠️ [FREE VISITOR] Email déjà existant:', existingUser);
         let accountType = 'visiteur';
         if (existingUser.type === 'exhibitor') {
           accountType = 'exposant';
@@ -112,7 +112,7 @@ export default function VisitorFreeRegistration() {
         }
 
         // MESSAGE D'ERREUR CLAIR ET VISIBLE
-        toast.error(`?? ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`,
+        toast.error(`⚠️ ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`,
           { duration: 8000 }
         );
 
@@ -143,11 +143,11 @@ export default function VisitorFreeRegistration() {
       if (authError) {
         // Gérer le cas spécifique où l'utilisateur existe dans Auth mais pas dans public.users
         if (authError.message === 'User already registered') {
-            console.warn('?? [FREE VISITOR] Email existe dans Auth mais pas dans users (compte orphelin).');
+            console.warn('⚠️ [FREE VISITOR] Email existe dans Auth mais pas dans users (compte orphelin).');
 
             // Afficher un message clair avec options
             toast.error(
-              `?? ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`,
+              `⚠️ ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`,
               { duration: 10000 }
             );
 
@@ -210,12 +210,12 @@ export default function VisitorFreeRegistration() {
         }
       } catch (badgeError) {
         // Non bloquant - la fonction Edge peut ne pas être déployée en dev
-        console.warn('?? Edge Function generate-visitor-badge non déployée');
+        console.warn('⚠️ Edge Function generate-visitor-badge non déployée');
       }
 
       // 5. Envoyer email de bienvenue via le serveur Node.js (SMTP)
       try {
-        console.log('?? [FREE] Envoi email de bienvenue...');
+        console.log('📧 [FREE] Envoi email de bienvenue...');
         const emailController = new AbortController();
         const emailTimeout = setTimeout(() => emailController.abort(), 5000);
 
@@ -236,16 +236,16 @@ export default function VisitorFreeRegistration() {
 
         if (!emailResponse.ok || !emailResult.success) {
           console.error('? Erreur envoi email:', emailResult.error);
-          toast.info('?? L\'email de bienvenue n\'a pas pu être envoyé. Vérifiez votre boîte de réception plus tard.', {
+          toast.info('📧 L\'email de bienvenue n\'a pas pu être envoyé. Vérifiez votre boîte de réception plus tard.', {
             duration: 4000
           });
         } else {
           console.log('? Email de bienvenue envoyé avec succès:', emailResult.messageId);
-          toast.success(`?? ${t('visitor.message.email_sent')}`, { duration: 3000 });
+          toast.success(`⚠️ ${t('visitor.message.email_sent')}`, { duration: 3000 });
         }
       } catch (emailError) {
         // Non bloquant - le serveur peut ne pas être accessible en dev
-        console.warn('?? Erreur envoi email (non bloquant):', emailError);
+        console.warn('⚠️ Erreur envoi email (non bloquant):', emailError);
       }
 
       // NE PAS envoyer d'email de réinitialisation de mot de passe car l'utilisateur l'a déjà défini
@@ -257,7 +257,7 @@ export default function VisitorFreeRegistration() {
 
       // Toast de succès immédiat
       toast.success(
-        `?? ${t('visitor.message.success_title')}\n\n${t('visitor.message.success_desc')}\n\n${t('visitor.message.redirect')}`,
+        `⚠️ ${t('visitor.message.success_title')}\n\n${t('visitor.message.success_desc')}\n\n${t('visitor.message.redirect')}`,
         { duration: 6000 }
       );
 

@@ -393,12 +393,12 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('exposant@sibs.com', 'Sib2026!Expo', 'exhibitor')}
+                  onClick={() => handleDemoLogin('contact@acofal.ma', 'Test@123456', 'exhibitor')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 transition-colors"
                 >
                   {demoLoading === 'exhibitor' ? <Loader className="h-4 w-4 animate-spin" /> : <Store className="h-4 w-4" />}
-                  Exposant
+                  Exposant (ACOFAL)
                 </button>
                 <button
                   type="button"

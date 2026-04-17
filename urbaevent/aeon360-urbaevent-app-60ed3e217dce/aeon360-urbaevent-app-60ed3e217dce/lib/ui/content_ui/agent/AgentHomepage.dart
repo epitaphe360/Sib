@@ -382,13 +382,12 @@ class _AgentHomePage extends State<AgentHomePage> {
   Future<void> getUserDetails() async {
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
+    if (uuid.isNotEmpty) {
       setState(() {
         isLoggedIn = true;
       });
-
 
       String os;
       final info = await PackageInfo.fromPlatform();
@@ -401,34 +400,21 @@ class _AgentHomePage extends State<AgentHomePage> {
       FirebaseMessaging messaging = FirebaseMessaging.instance;
       String? fcmToken = await messaging.getToken();
 
-      final url = Uri.parse(Urls.baseURL + Urls.userDetails);
+      // Save push token via SupabaseService
+      if (fcmToken != null) {
+        await SupabaseService.instance.savePushToken(fcmToken, os);
+      }
 
-      // Add parameters to the URL
-      final Map<String, String> params = {
-        'populate[role]':true.toString(),
-        'populate[avatar]':true.toString(),
-        'populate[businessSector]':true.toString(),
-        'os': os,
-        'appVersion': info.version,
-        'fcm': fcmToken ?? ""
-      };
-      final Uri uriWithParams = url.replace(queryParameters: params);
-
-      final response = await http.get(
-        uriWithParams,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
-
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
-        setState(() {
-          _responseUser = ResponseUser.fromJson(parsedJson);
-          getAuthRole();
-        });
-      } else {
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      try {
+        final profile = await SupabaseService.instance.getUserProfile(uuid);
+        if (profile != null) {
+          setState(() {
+            _responseUser = ResponseUser.fromJson(profile);
+            getAuthRole();
+          });
+        }
+      } catch (e) {
+        debugPrint('getUserDetails error: $e');
       }
     } else {
       setState(() {
@@ -440,31 +426,21 @@ class _AgentHomePage extends State<AgentHomePage> {
   Future<void> getGateList() async {
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
+    if (uuid.isNotEmpty) {
       setState(() {
         loader = false;
       });
 
-      final url = Uri.parse(Urls.baseURL +
-          Urls.gateList +
-          responseAgentAuth!.eventControl!.id!.toString() +
-          Urls.gateListFilter);
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
+      try {
+        final gates = await SupabaseService.instance
+            .getGates(responseAgentAuth!.eventControl!.id!.toString());
 
-      final parsedJson = jsonDecode(response.body);
-
-      if (response.statusCode == HttpStatus.ok) {
         setState(() {
           loader = false;
-        });
-        print('Response Gate' + response.body);
-        setState(() {
-          responseGateList = ResponseGateList.fromJson(parsedJson);
+          responseGateList = ResponseGateList(
+              data: gates.map((g) => GateItem.fromJson(g)).toList());
           preference.setGateListResponse(responseGateList);
           if (preference.getGateItem() == null) {
             preference.saveGate(responseGateList!.data![0]);
@@ -481,10 +457,8 @@ class _AgentHomePage extends State<AgentHomePage> {
 
           init = true;
         });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        debugPrint('getGateList error: $e');
       }
     } else {
       setState(() {
@@ -507,47 +481,30 @@ class _AgentHomePage extends State<AgentHomePage> {
   Future<void> getAuthRole() async {
     Preference preference = await Preference.getInstance();
 
-    final jwtToken = preference.getToken();
+    final uuid = preference.getUserUUID();
 
-    if (jwtToken.isNotEmpty) {
+    if (uuid.isNotEmpty) {
       setState(() {
         loader = true;
       });
 
-      final url = Uri.parse(Urls.baseURL + Urls.authUserController);
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $jwtToken'},
-      );
+      try {
+        final authData = await SupabaseService.instance.getAgentAuth();
 
-      final parsedJson = jsonDecode(response.body);
+        if (authData != null) {
+          preference.saveAuthRoleAgent(ResponseAgentAuth.fromJson(authData));
+          responseAgentAuth = preference.getAuthRoleAgent();
 
-      if (response.statusCode == HttpStatus.ok) {
-        print('Response Auth' + response.body);
-
-        preference.saveAuthRoleAgent(ResponseAgentAuth.fromJson(parsedJson));
-        responseAgentAuth = preference.getAuthRoleAgent();
-
-        if (responseAgentAuth!.eventControl != null &&
-            responseAgentAuth!.eventControl!.banner != null) {
-          imageURL =
-              Urls.imageURL + responseAgentAuth!.eventControl!.banner!.url;
-        } else {
-          imageURL = Urls.imageURL;
+          if (responseAgentAuth!.eventControl != null &&
+              responseAgentAuth!.eventControl!.banner != null) {
+            imageURL =
+                responseAgentAuth!.eventControl!.banner!.url;
+          } else {
+            imageURL = Urls.imageURL;
+          }
         }
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        setState(() {
-          preference.clearAppPreferences();
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage(Const.homeUI)),
-            (route) => false,
-          );
-        });
-      } else {
-        print('Response Error' + response.body);
-        final error = ResponseError.fromJson(parsedJson);
-        Utils.showToast(error.error.message);
+      } catch (e) {
+        debugPrint('getAuthRole error: $e');
       }
       setState(() {
         getGateList();

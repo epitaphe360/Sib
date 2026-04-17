@@ -62,7 +62,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       const getWelcomeMessage = () => {
         if (!isAuthenticated) {
           return {
-            content: "?? Bonjour ! Je suis l'Assistant SIB, votre guide intelligent pour le salon. Connectez-vous pour accéder à toutes mes fonctionnalités personnalisées !",
+            content: "🤖 Bonjour ! Je suis l'Assistant SIB, votre guide intelligent pour le salon. Connectez-vous pour accéder à toutes mes fonctionnalités personnalisées !",
             quickReplies: ["Se connecter", "Découvrir SIB", "Voir les exposants", "Programme des événements"]
           };
         }
@@ -73,27 +73,27 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         switch (userType) {
           case 'admin':
             return {
-              content: `?? Bonjour ${firstName} ! En tant qu'administrateur, je peux vous aider avec la gestion de la plateforme, les métriques et la supervision des comptes.`,
+              content: `👋 Bonjour ${firstName} ! En tant qu'administrateur, je peux vous aider avec la gestion de la plateforme, les métriques et la supervision des comptes.`,
               quickReplies: ["Métriques du salon", "Comptes en attente", "Modération contenu", "Statistiques système"]
             };
           case 'exhibitor':
             return {
-              content: `?? Bonjour ${firstName} ! Je peux vous aider à optimiser votre présence au salon, gérer vos rendez-vous et améliorer votre mini-site.`,
+              content: `👋 Bonjour ${firstName} ! Je peux vous aider à optimiser votre présence au salon, gérer vos rendez-vous et améliorer votre mini-site.`,
               quickReplies: ["Optimiser mon stand", "Gérer mes RDV", "Modifier mon mini-site", "Voir mes statistiques"]
             };
           case 'partner':
             return {
-              content: `?? Bonjour ${firstName} ! En tant que partenaire, je peux vous accompagner dans la gestion de votre partenariat et l'optimisation de votre ROI.`,
+              content: `👋 Bonjour ${firstName} ! En tant que partenaire, je peux vous accompagner dans la gestion de votre partenariat et l'optimisation de votre ROI.`,
               quickReplies: ["ROI de mon partenariat", "Événements sponsorisés", "Networking VIP", "Métriques d'impact"]
             };
           case 'visitor':
             return {
-              content: `?? Bonjour ${firstName} ! Je vais vous aider à planifier votre visite, trouver les bons exposants et optimiser votre agenda SIB.`,
+              content: `👋 Bonjour ${firstName} ! Je vais vous aider à planifier votre visite, trouver les bons exposants et optimiser votre agenda SIB.`,
               quickReplies: ["Planifier ma visite", "Recommandations exposants", "Mes rendez-vous", "Programme personnalisé"]
             };
           default:
             return {
-              content: `?? Bonjour ${firstName} ! Comment puis-je vous aider aujourd'hui avec SIB 2026 ?`,
+              content: `👋 Bonjour ${firstName} ! Comment puis-je vous aider aujourd'hui avec SIB 2026 ?`,
               quickReplies: ["Aide navigation", "Informations salon", "Support technique", "Contact organisateurs"]
             };
         }
@@ -129,7 +129,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       if (message.includes('connecter') || message.includes('connexion')) {
         return {
           id: Date.now().toString(),
-          content: "?? Pour vous connecter, cliquez sur le bouton 'Connexion' en haut à droite de la page. Vous pouvez utiliser votre email ou vous connecter avec Google pour accéder à toutes les fonctionnalités SIB !",
+          content: "🔑 Pour vous connecter, cliquez sur le bouton 'Connexion' en haut à droite de la page. Vous pouvez utiliser votre email ou vous connecter avec Google pour accéder à toutes les fonctionnalités SIB !",
           isBot: true,
           timestamp,
           type: 'suggestion',
@@ -147,7 +147,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       if (message.includes('exposant') || message.includes('entreprise')) {
         return {
           id: Date.now().toString(),
-          content: "?? SIB 2026 accueille 600+ exposants internationaux de 50 pays ! Découvrez les leaders de l'industrie du bâtiment. Connectez-vous pour accéder au réseautage intelligent et aux RDV B2B.",
+          content: "🏢 SIB 2026 accueille 600+ exposants internationaux de 50 pays ! Découvrez les leaders de l'industrie du bâtiment. Connectez-vous pour accéder au réseautage intelligent et aux RDV B2B.",
           isBot: true,
           timestamp,
           type: 'suggestion',
@@ -171,7 +171,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       if (message.includes('salon') || message.includes('SIB') || message.includes('information')) {
         return {
           id: Date.now().toString(),
-          content: "?? SIB 2026 - Le plus grand salon bâtiment en Afrique ! ?? 25-29 Novembre 2026 à El Jadida, Maroc. 600+ exposants, 200 000 visiteurs de 50 pays, 20 conférences !",
+          content: "🎪 SIB 2026 - Le plus grand salon bâtiment en Afrique ! 📍 25-29 Novembre 2026 à El Jadida, Maroc. 600+ exposants, 200 000 visiteurs de 50 pays, 20 conférences !",
           isBot: true,
           timestamp,
           type: 'quick_reply',
@@ -182,7 +182,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       if (message.includes('programme') || message.includes('événement')) {
         return {
           id: Date.now().toString(),
-          content: "?? Le programme SIB comprend 20 conférences, des ateliers techniques, des sessions de networking B2B via URBA EVENT et des démonstrations. Connectez-vous pour personnaliser votre agenda !",
+          content: "📅 Le programme SIB comprend 20 conférences, des ateliers techniques, des sessions de networking B2B via URBA EVENT et des démonstrations. Connectez-vous pour personnaliser votre agenda !",
           isBot: true,
           timestamp,
           type: 'suggestion',
@@ -199,7 +199,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
 
       return {
         id: Date.now().toString(),
-        content: "?? Bonjour ! Je suis l'Assistant SIB, votre guide intelligent pour le salon. Connectez-vous pour accéder à toutes mes fonctionnalités personnalisées !",
+        content: "🤖 Bonjour ! Je suis l'Assistant SIB, votre guide intelligent pour le salon. Connectez-vous pour accéder à toutes mes fonctionnalités personnalisées !",
         isBot: true,
         timestamp,
         type: 'quick_reply',
@@ -213,7 +213,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     if (message.includes('salon') || message.includes('SIB') || message.includes('information')) {
       return {
         id: Date.now().toString(),
-        content: `?? Bonjour ${firstName} ! SIB 2026 se déroule du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI, El Jadida. C'est le rendez-vous incontournable du bâtiment en Afrique avec 600+ exposants, 200 000 visiteurs de 50 pays !`,
+        content: `🎪 Bonjour ${firstName} ! SIB 2026 se déroule du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI, El Jadida. C'est le rendez-vous incontournable du bâtiment en Afrique avec 600+ exposants, 200 000 visiteurs de 50 pays !`,
         isBot: true,
         timestamp,
         type: 'suggestion',
@@ -241,7 +241,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
 
       return {
         id: Date.now().toString(),
-        content: `?? ${firstName}, ${rdvText}. Je peux vous aider à optimiser votre planning !`,
+        content: `📅 ${firstName}, ${rdvText}. Je peux vous aider à optimiser votre planning !`,
         isBot: true,
         timestamp,
         type: 'suggestion',
@@ -265,7 +265,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     if (message.includes('réseautage') || message.includes('networking') || message.includes('contact')) {
       return {
         id: Date.now().toString(),
-        content: `?? ${firstName}, le réseautage SIB utilise l'IA pour vous recommander les meilleurs contacts ! ${userType === 'visitor' ? 'Découvrez les exposants qui correspondent à vos objectifs.' : 'Connectez-vous avec des visiteurs qualifiés.'}`,
+        content: `🤝 ${firstName}, le réseautage SIB utilise l'IA pour vous recommander les meilleurs contacts ! ${userType === 'visitor' ? 'Découvrez les exposants qui correspondent à vos objectifs.' : 'Connectez-vous avec des visiteurs qualifiés.'}`,
         isBot: true,
         timestamp,
         type: 'suggestion',
@@ -289,7 +289,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     if (message.includes('aide') || message.includes('help') || message.includes('support')) {
       return {
         id: Date.now().toString(),
-        content: `?? ${firstName}, je suis là pour vous aider ! En tant que ${userType === 'admin' ? 'administrateur' : userType === 'exhibitor' ? 'exposant' : userType === 'partner' ? 'partenaire' : 'visiteur'}, voici ce que je peux faire pour vous :`,
+        content: `💡 ${firstName}, je suis là pour vous aider ! En tant que ${userType === 'admin' ? 'administrateur' : userType === 'exhibitor' ? 'exposant' : userType === 'partner' ? 'partenaire' : 'visiteur'}, voici ce que je peux faire pour vous :`,
         isBot: true,
         timestamp,
         type: 'quick_reply',
@@ -302,7 +302,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         if (message.includes('métrique') || message.includes('statistique') || message.includes('performance')) {
           return {
             id: Date.now().toString(),
-            content: `?? ${firstName}, voici les métriques clés : 600 exposants actifs, 200 000 visiteurs inscrits, 1247 utilisateurs en ligne. Voulez-vous voir le tableau de bord complet ?`,
+            content: `📊 ${firstName}, voici les métriques clés : 600 exposants actifs, 200 000 visiteurs inscrits, 1247 utilisateurs en ligne. Voulez-vous voir le tableau de bord complet ?`,
             isBot: true,
             timestamp,
             type: 'suggestion',
@@ -326,7 +326,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         if (message.includes('validation') || message.includes('compte') || message.includes('modération')) {
           return {
             id: Date.now().toString(),
-            content: `?? ${firstName}, vous avez 12 comptes exposants en attente de validation et 8 contenus à modérer. Voulez-vous traiter ces demandes ?`,
+            content: `⚠️ ${firstName}, vous avez 12 comptes exposants en attente de validation et 8 contenus à modérer. Voulez-vous traiter ces demandes ?`,
             isBot: true,
             timestamp,
             type: 'suggestion',
@@ -352,7 +352,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         if (message.includes('stand') || message.includes('mini-site') || message.includes('optimiser')) {
           return {
             id: Date.now().toString(),
-            content: `?? ${firstName}, votre mini-site a eu 2,156 vues ! Je peux vous aider à l'optimiser pour attirer plus de visiteurs et générer plus de leads.`,
+            content: `🌐 ${firstName}, votre mini-site a eu 2,156 vues ! Je peux vous aider à l'optimiser pour attirer plus de visiteurs et générer plus de leads.`,
             isBot: true,
             timestamp,
             type: 'suggestion',
@@ -376,7 +376,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         if (message.includes('statistique') || message.includes('performance') || message.includes('vue')) {
           return {
             id: Date.now().toString(),
-            content: `?? ${firstName}, votre stand performe bien ! 2,156 vues de mini-site, 89 téléchargements de catalogue, 47 leads générés. Voulez-vous voir le détail ?`,
+            content: `📈 ${firstName}, votre stand performe bien ! 2,156 vues de mini-site, 89 téléchargements de catalogue, 47 leads générés. Voulez-vous voir le détail ?`,
             isBot: true,
             timestamp,
             type: 'suggestion',
@@ -402,7 +402,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         if (message.includes('partenariat') || message.includes('roi') || message.includes('impact')) {
           return {
             id: Date.now().toString(),
-            content: `?? ${firstName}, votre partenariat génère un excellent ROI de 285% ! 3,247 vues, 450 connexions VIP, 12 événements sponsorisés. Impressionnant !`,
+            content: `💰 ${firstName}, votre partenariat génère un excellent ROI de 285% ! 3,247 vues, 450 connexions VIP, 12 événements sponsorisés. Impressionnant !`,
             isBot: true,
             timestamp,
             type: 'suggestion',
@@ -428,7 +428,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         if (message.includes('visite') || message.includes('planifier') || message.includes('programme')) {
           return {
             id: Date.now().toString(),
-            content: `??? ${firstName}, je peux vous aider à planifier votre visite ! Vous avez accès à de nombreux avantages personnalisés.`,
+            content: `🗓️ ${firstName}, je peux vous aider à planifier votre visite ! Vous avez accès à de nombreux avantages personnalisés.`,
             isBot: true,
             timestamp,
             type: 'suggestion',
@@ -452,7 +452,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         if (message.includes('exposant') || message.includes('recommandation') || message.includes('contact')) {
           return {
             id: Date.now().toString(),
-            content: `?? ${firstName}, j'ai analysé votre profil et trouvé 12 exposants parfaitement compatibles avec vos objectifs ! Voulez-vous voir mes recommandations ?`,
+            content: `🎯 ${firstName}, j'ai analysé votre profil et trouvé 12 exposants parfaitement compatibles avec vos objectifs ! Voulez-vous voir mes recommandations ?`,
             isBot: true,
             timestamp,
             type: 'suggestion',
@@ -480,7 +480,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       switch (userType) {
         case 'admin':
           return {
-            content: `?? ${firstName}, en tant qu'administrateur, je peux vous aider avec la gestion de la plateforme, les métriques et la supervision des comptes.`,
+            content: `⚙️ ${firstName}, en tant qu'administrateur, je peux vous aider avec la gestion de la plateforme, les métriques et la supervision des comptes.`,
             suggestions: [
               { title: "Métriques système", description: "Performance globale", action: "/metrics", icon: TrendingUp },
               { title: "Validation comptes", description: "12 en attente", action: "/admin/validation", icon: CheckCircle },
@@ -489,7 +489,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
           };
         case 'exhibitor':
           return {
-            content: `?? ${firstName}, je peux vous aider à optimiser votre présence au salon, gérer vos rendez-vous et améliorer votre mini-site.`,
+            content: `🏢 ${firstName}, je peux vous aider à optimiser votre présence au salon, gérer vos rendez-vous et améliorer votre mini-site.`,
             suggestions: [
               { title: "Mon mini-site", description: "2,156 vues", action: "/minisite/editor", icon: Building2 },
               { title: "Mes RDV", description: "Gérer mon planning", action: "/appointments", icon: Calendar },
@@ -498,7 +498,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
           };
         case 'partner':
           return {
-            content: `?? ${firstName}, en tant que partenaire, je peux vous accompagner dans la gestion de votre partenariat et l'optimisation de votre ROI.`,
+            content: `🤝 ${firstName}, en tant que partenaire, je peux vous accompagner dans la gestion de votre partenariat et l'optimisation de votre ROI.`,
             suggestions: [
               { title: "ROI partenariat", description: "285% de retour", action: "/dashboard", icon: TrendingUp },
               { title: "Événements sponsorisés", description: "12 événements", action: "/events", icon: Calendar },
@@ -507,7 +507,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
           };
         case 'visitor':
           return {
-            content: `?? ${firstName}, je vais vous aider à planifier votre visite, trouver les bons exposants et optimiser votre agenda SIB.`,
+            content: `🗓️ ${firstName}, je vais vous aider à planifier votre visite, trouver les bons exposants et optimiser votre agenda SIB.`,
             suggestions: [
               { title: "Planifier ma visite", description: "Agenda personnalisé", action: "/visitor/dashboard", icon: Calendar },
               { title: "Recommandations", description: "Exposants pour vous", action: "/networking", icon: Target },
@@ -516,7 +516,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
           };
         default:
           return {
-            content: `?? ${firstName}, comment puis-je vous aider aujourd'hui avec SIB 2026 ?`,
+            content: `💬 ${firstName}, comment puis-je vous aider aujourd'hui avec SIB 2026 ?`,
             suggestions: [
               { title: "Informations salon", description: "Dates, lieu, programme", action: "/", icon: Globe },
               { title: "Voir les exposants", description: "600+ entreprises", action: "/exhibitors", icon: Building2 },
@@ -595,12 +595,12 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     } else {
       // Action personnalisée
       const actionMessages = {
-        'info_salon': `?? SIB 2026 - Salon International du Bâtiment\n?? 25-29 Novembre 2026\n?? El Jadida, Maroc\n?? 600+ exposants\n?? 200 000 visiteurs\n?? 50 pays`,
+        'info_salon': `🎪 SIB 2026 - Salon International du Bâtiment\n📅 25-29 Novembre 2026\n📍 El Jadida, Maroc\n🏢 600+ exposants\n👥 200 000 visiteurs\n🌍 50 pays`,
         'support': `❓ SUPPORT SIB\n📧 Email: Sib2026@urbacom.net\n📞 Tél: +212 6 88 50 05 00\n⏰ Lun-Ven: 9h-18h\n💬 Chat en direct disponible`,
         'contact_commercial': `💼 ÉQUIPE COMMERCIALE\n📧 Sib2026@urbacom.net\n📞 +212 6 88 50 05 00\n🤝 Partenariats & Sponsoring\n📄 Devis personnalisés`
       };
 
-      const message = actionMessages[action as keyof typeof actionMessages] || `?? Action: ${action}`;
+      const message = actionMessages[action as keyof typeof actionMessages] || `💬 Action: ${action}`;
       toast(message as string);
     }
   };

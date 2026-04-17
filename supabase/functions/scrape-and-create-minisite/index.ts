@@ -40,7 +40,7 @@ serve(async (req) => {
     // Fetch website content
     const response = await fetch(websiteUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; SIPortBot/1.0)'
+        'User-Agent': 'Mozilla/5.0 (compatible; SIBBot/1.0)'
       }
     });
 
