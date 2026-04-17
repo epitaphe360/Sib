@@ -5,6 +5,7 @@ import { ROUTES } from '../../lib/routes';
 import { ArrowLeft, TrendingUp, Eye, Heart, Share2, Clock, BarChart3 } from 'lucide-react';
 import { mediaService } from '../../services/mediaService';
 import { useAuthStore } from '../../store/authStore';
+import { toast } from 'sonner';
 import type { MediaContent } from '../../types/media';
 
 export const PartnerMediaAnalyticsPage: React.FC = () => {
@@ -37,6 +38,7 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
       calculateStats(data);
     } catch (error) {
       console.error('Erreur chargement médias:', error);
+      toast.error('Erreur lors du chargement des analytiques médias');
     } finally {
       setLoading(false);
     }
@@ -54,7 +56,7 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
     setStats({
       totalViews,
       totalLikes,
-      totalShares: Math.floor(totalViews * 0.15), // Estimation
+      totalShares: mediaList.reduce((sum, m) => sum + ((m as any).share_count || 0), 0),
       totalDuration,
       avgViewDuration: mediaList.length > 0 ? totalDuration / mediaList.length : 0,
       topMedia

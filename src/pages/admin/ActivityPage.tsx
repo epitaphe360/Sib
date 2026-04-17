@@ -27,6 +27,7 @@ import { Badge } from '../../components/ui/Badge';
 import { motion } from 'framer-motion';
 import { apiService } from '../../services/apiService';
 import { useTableFilters } from '../../hooks/useTableFilters';
+import { toast } from 'sonner';
 
 interface ActivityItem {
   id: string;
@@ -59,6 +60,7 @@ export default function ActivityPage() {
       } catch (err) {
         console.error('Error fetching activities:', err);
         setError('Failed to load activities. Please try again later.');
+        toast.error('Erreur lors du chargement des activités');
       } finally {
         setIsLoading(false);
       }

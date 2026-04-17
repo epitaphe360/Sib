@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -897,14 +897,36 @@ export default function NetworkingPage() {
                               <div className="flex items-center space-x-2 mb-1">
                                 <h4 className="font-black text-xl text-slate-900 group-hover:text-blue-600 transition-colors truncate flex items-center">
                                   <Building2 className="h-5 w-5 mr-2 opacity-70" />
-                                  {profile.profile.company || 'Compagnie non renseignée'}
+                                  {profile.profile?.company || profile.profile?.companyName || profile.name || 'Compagnie non renseignée'}
                                 </h4>
                                 {profile.visitor_level && (
                                   <LevelBadge level={profile.visitor_level} type="visitor" size="sm" />
                                 )}
                               </div>
                               <p className="text-sm font-medium text-slate-600 mb-1">{getDisplayName(profile)}</p>
-                              <p className="text-sm text-blue-600 uppercase tracking-wider font-bold">{profile.profile.position}</p>
+                              <p className="text-sm text-blue-600 uppercase tracking-wider font-bold mb-3">{profile.profile?.position || profile.type}</p>
+                              
+                              <div className="text-sm text-slate-500 line-clamp-3 leading-relaxed">
+                                {profile.profile?.bio || profile.profile?.companyDescription ? (
+                                  profile.profile.bio || profile.profile.companyDescription
+                                ) : (
+                                  <span className="italic opacity-60">Aucune description renseignée pour cette entreprise.</span>
+                                )}
+                              </div>
+                              
+                              {/* Tags supplémentaires (Secteurs, Pays) */}
+                              <div className="flex flex-wrap gap-2 mt-3 mb-2">
+                                {profile.profile?.country && (
+                                  <span className="inline-flex items-center bg-slate-100 text-slate-600 px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-tight">
+                                    📍 {profile.profile.country}
+                                  </span>
+                                )}
+                                {profile.profile?.sectors && profile.profile.sectors.slice(0, 2).map((sector: string) => (
+                                  <span key={sector} className="inline-flex items-center bg-blue-50 text-blue-600 border border-blue-100 px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-tight">
+                                    🏷️ {sector}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
 
                             {/* Raison du match */}
@@ -968,6 +990,19 @@ export default function NetworkingPage() {
                             </div>
 
                             <div className="flex items-center space-x-2">
+                              {isConnected ? (
+                                <button onClick={() => handleMessage(getDisplayName(profile), profile.profile?.company || profile.profile?.companyName || '', profile.id, navigate)} className="p-2.5 rounded-xl border bg-indigo-50 border-indigo-200 text-indigo-600 hover:bg-indigo-100 transition-all" title="Envoyer un message">
+                                  <MessageCircle className="h-5 w-5" />
+                                </button>
+                              ) : isPending ? (
+                                <button disabled className="p-2.5 rounded-xl border bg-amber-50 border-amber-200 text-amber-500 cursor-not-allowed" title="Demande en attente">
+                                  <Clock className="h-5 w-5" />
+                                </button>
+                              ) : (
+                                <button onClick={() => handleConnect(profile.id, getDisplayName(profile))} className="p-2.5 rounded-xl border bg-white border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all" title="Se connecter">
+                                  <UserPlus className="h-5 w-5" />
+                                </button>
+                              )}
                               <button
                                 onClick={() => handleFavoriteToggle(profile.id, getDisplayName(profile), isFavorite)}
                                 className={`p-2.5 rounded-xl border transition-all ${
@@ -1125,7 +1160,20 @@ export default function NetworkingPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: index * 0.05 }}
                       >
-                        <Card className="p-6 bg-white hover:shadow-2xl transition-all duration-300 border-slate-100 rounded-[2rem]">
+                        <Card className="p-6 bg-white hover:shadow-2xl transition-all duration-300 border-slate-100 rounded-[2rem] relative group">
+                          {/* Bouton Favoris */}
+                          <button
+                            onClick={() => handleFavoriteToggle(profile.id, getDisplayName(profile), isFavorite)}
+                            className={`absolute top-4 right-4 p-2.5 rounded-xl border transition-all z-10 opacity-70 group-hover:opacity-100 ${
+                              isFavorite
+                                ? 'bg-rose-50 border-rose-200 text-rose-500'
+                                : 'bg-slate-50 border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-200'
+                            }`}
+                            title={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                          >
+                            <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
+                          </button>
+                          
                           <div className="flex items-center space-x-4 mb-6">
                             <Avatar className="h-16 w-16 border-2 border-slate-100">
                               <AvatarImage src={profile.profile.avatar} />
@@ -1136,14 +1184,51 @@ export default function NetworkingPage() {
                             <div className="flex-1 min-w-0">
                               <h4 className="font-black text-slate-900 truncate flex items-center">
                                 <Building2 className="h-4 w-4 mr-1.5 opacity-70" />
-                                {profile.profile?.company || profile.profile?.companyName || 'Compagnie non renseignée'}
+                                {profile.profile?.company || profile.profile?.companyName || profile.name || 'Compagnie non renseignée'}
                               </h4>
                               <p className="text-xs font-medium text-slate-600 truncate">{getDisplayName(profile)}</p>
-                              <p className="text-xs text-blue-600 uppercase tracking-wider font-bold truncate">{profile.profile?.position || profile.type}</p>
+                              <p className="text-xs text-blue-600 uppercase tracking-wider font-bold truncate mb-2">{profile.profile?.position || profile.type}</p>
+                              
+                              <div className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                                {profile.profile?.bio || profile.profile?.companyDescription ? (
+                                  profile.profile.bio || profile.profile.companyDescription
+                                ) : (
+                                  <span className="italic opacity-60">Aucune description renseignée.</span>
+                                )}
+                              </div>
+
+                              {/* Tags (Secteurs, Pays) */}
+                              <div className="flex flex-wrap gap-1.5 mt-2">
+                                {profile.profile?.country && (
+                                  <span className="inline-flex items-center bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-tight">
+                                    📍 {profile.profile.country}
+                                  </span>
+                                )}
+                                {profile.profile?.sectors && profile.profile.sectors.slice(0, 2).map((sector: string) => (
+                                  <span key={sector} className="inline-flex items-center bg-blue-50 text-blue-600 border border-blue-100 px-1.5 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-tight">
+                                    🏷️ {sector}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
                           </div>
 
                           <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2">
+                              {isConnected ? (
+                                <button onClick={() => handleMessage(getDisplayName(profile), profile.profile?.company || profile.profile?.companyName || '', profile.id, navigate)} className="p-2 border bg-indigo-50 border-indigo-200 text-indigo-600 hover:bg-indigo-100 rounded-xl transition-all" title="Envoyer un message">
+                                  <MessageCircle className="h-5 w-5" />
+                                </button>
+                              ) : isPending ? (
+                                <button disabled className="p-2 border bg-amber-50 border-amber-200 text-amber-500 rounded-xl cursor-not-allowed" title="Demande en attente">
+                                  <Clock className="h-5 w-5" />
+                                </button>
+                              ) : (
+                                <button onClick={() => handleConnect(profile.id, getDisplayName(profile))} className="p-2 border bg-white border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 rounded-xl transition-all" title="Se connecter">
+                                  <UserPlus className="h-5 w-5" />
+                                </button>
+                              )}
+                            </div>
                             <Button
                               size="sm"
                               variant="outline"
@@ -1279,7 +1364,7 @@ export default function NetworkingPage() {
                           <div className="flex-1 min-w-0">
                             <h4 className="font-black text-slate-900 truncate flex items-center">
                               <Building2 className="h-4 w-4 mr-1.5 opacity-70" />
-                              {requester.profile?.company || requester.profile?.companyName || 'Compagnie non renseignée'}
+                              {requester.profile?.company || requester.profile?.companyName || requester.name || 'Compagnie non renseignée'}
                             </h4>
                             <p className="text-xs font-medium text-slate-600 truncate">{getDisplayName(requester)}</p>
                             <p className="text-xs font-bold text-amber-600 uppercase tracking-wider truncate">

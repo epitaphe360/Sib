@@ -1,10 +1,11 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { MapPin, Mail, Phone, Globe, Calendar, Building2, Users, Star, Rocket, Target, TrendingUp, DollarSign, Clock } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/Avatar';
 import { User, PartnerProject } from '../../types';
+import { getDisplayName, getUserInitials } from '../../utils/userHelpers';
 import AvailabilityCalendar from '../availability/AvailabilityCalendar';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
@@ -78,17 +79,17 @@ export default function UserProfileView({
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20 border-4 border-white">
-              <AvatarImage src={user?.profile?.avatar} alt={`${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''}`} />
+              <AvatarImage src={user?.profile?.avatar} alt={getDisplayName(user)} />
               <AvatarFallback className="bg-white/20 text-white text-xl font-bold">
-                {user?.profile?.firstName?.[0] || 'U'}{user?.profile?.lastName?.[0] || 'U'}
+                {getUserInitials(user)}
               </AvatarFallback>
             </Avatar>
             <div>
               <h1 className="text-2xl font-bold">
-                {user?.profile?.firstName || ''} {user?.profile?.lastName || ''}
+                {getDisplayName(user)}
               </h1>
               <p className="text-blue-100">{user?.profile?.position || ''}</p>
-              <p className="text-blue-100">{user?.profile?.company || ''}</p>
+              <p className="text-blue-100">{user?.profile?.company || user?.profile?.companyName || user?.name || ''}</p>
               <div className="flex items-center space-x-2 mt-2">
                 <Badge className={`${getUserTypeColor(user.type)} border-white/30`}>
                   {getUserTypeLabel(user.type)}

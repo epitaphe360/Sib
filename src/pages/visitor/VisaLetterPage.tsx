@@ -82,7 +82,8 @@ export default function VisaLetterPage() {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
     doc.setTextColor(80, 80, 80);
-    const refNum = `SIB2026-VISA-${Math.floor(100000 + Math.random() * 900000)}`;
+    const userSlug = user?.id ? user.id.slice(0, 6).toUpperCase() : 'GUEST';
+    const refNum = `SIB2026-VISA-${userSlug}-${Date.now().toString(36).toUpperCase()}`;
     doc.text(`El Jadida, le ${dateStr}`, marginLeft, y);
     doc.text(`Réf. : ${refNum}`, marginRight, y, { align: 'right' });
     y += 12;

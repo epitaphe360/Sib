@@ -16,7 +16,7 @@ import { Badge } from '../components/ui/Badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/Avatar';
 import { QRCodeGenerator } from '../components/qr/QRCodeGenerator';
 import { EnhancedChatInterface } from '../components/chat/EnhancedChatInterface';
-import { RecommendationList } from '../components/networking/RecommendationList';
+import RecommendationList from '../components/networking/RecommendationList';
 import { getNetworkingPermissions, getPermissionErrorMessage } from '../lib/networkingPermissions';
 
 type TabType = 'recommendations' | 'connections' | 'messages' | 'qr-access' | 'analytics';

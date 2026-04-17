@@ -192,18 +192,15 @@ export default function VisitorPaymentPage() {
     }
   };
 
-  // TEST ONLY: Simulate successful payment
-  const handleSimulateSuccess = async () => {
+  // DEV ONLY: Simulate successful payment
+  const handleSimulateSuccess = import.meta.env.DEV ? async () => {
     if (!user) {return;}
-
-    // Si l'utilisateur n'a pas de password auth, montrer le formulaire d'upgrade d'abord
     if (!user.profile?.hasPassword) {
       setShowUpgradeForm(true);
       return;
     }
-
     await completeVIPUpgrade();
-  };
+  } : undefined;
 
   // Handler pour photo upload
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -338,7 +335,7 @@ export default function VisitorPaymentPage() {
       }
 
       // Show success toast
-      toast.success(t('payment.simulatedSuccess'));
+      toast.success(t('payment.upgradeSuccess'));
 
       // Send Receipt Email
       try {
@@ -356,8 +353,8 @@ export default function VisitorPaymentPage() {
       // Navigate to success page
       navigate(ROUTES.VISITOR_PAYMENT_SUCCESS);
     } catch (err) {
-      console.error('Simulation error:', err);
-      toast.error(t('payment.simulationError'));
+      console.error('VIP upgrade error:', err);
+      toast.error(t('payment.upgradeError'));
     } finally {
       setIsProcessing(false);
     }

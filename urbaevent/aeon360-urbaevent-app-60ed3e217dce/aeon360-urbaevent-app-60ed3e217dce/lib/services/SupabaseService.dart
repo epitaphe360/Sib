@@ -45,14 +45,18 @@ class SupabaseService {
     );
     // Créer le profil dans la table users
     if (res.user != null) {
-      await _client.from(SupabaseConfig.tableUsers).upsert({
-        'id': res.user!.id,
-        'email': email,
-        'name': name,
-        'type': 'visitor',
-        'role': 'visitor',
-        'status': 'active',
-      });
+      try {
+        await _client.from(SupabaseConfig.tableUsers).upsert({
+          'id': res.user!.id,
+          'email': email,
+          'name': name,
+          'type': 'visitor',
+          'role': 'visitor',
+          'status': 'active',
+        });
+      } catch (e) {
+        print("Erreur upsert public.users ignorée (RLS ou trigger existant): $e");
+      }
     }
     return res;
   }

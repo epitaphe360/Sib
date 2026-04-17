@@ -52,7 +52,7 @@ export default function ArticleDetailPage() {
       const foundArticle = articles.find(a => a.id === id);
       if (foundArticle) {
         setArticle(foundArticle);
-        setLikes(Math.floor(Math.random() * 100) + 20);
+        setLikes((foundArticle as NewsArticle & { likes_count?: number }).likes_count ?? 0);
 
         // Articles similaires
         const related = articles

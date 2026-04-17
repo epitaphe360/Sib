@@ -265,7 +265,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     }
     set({ isLoading: true, error: null });
     try {
-      const allUsers = await SupabaseService.getUsers();
+      const allUsers = await SupabaseService.getUsers({ limit: 100 });
       const recommendations = await RecommendationService.generateRecommendations(user, allUsers);
       set({ recommendations, isLoading: false });
       get().refreshAnalytics();

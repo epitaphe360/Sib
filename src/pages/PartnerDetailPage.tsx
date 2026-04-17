@@ -510,12 +510,7 @@ export default function PartnerDetailPage() {
                 </motion.div>
               ))}
             </div>
-            ) : (
-              <Card className="p-8 text-center bg-gradient-to-br from-blue-50 to-indigo-50">
-                <BarChart3 className="h-12 w-12 mx-auto mb-3 text-blue-300" />
-                <p className="text-gray-600 font-medium">Les chiffres clés seront disponibles bientôt</p>
-              </Card>
-            )}
+            ) : null}
 
             {/* Description longue avec vidéo */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -573,14 +568,7 @@ export default function PartnerDetailPage() {
                       </div>
                     </button>
                   </div>
-                ) : (
-                  <div className="aspect-video bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
-                    <div className="text-center text-white p-6">
-                      <Sparkles className="h-12 w-12 mx-auto mb-3 opacity-80" />
-                      <p className="font-semibold">Vidéo bientôt disponible</p>
-                    </div>
-                  </div>
-                )}
+                ) : null}
               </Card>
             </div>
 
@@ -611,12 +599,7 @@ export default function PartnerDetailPage() {
                   })}
                 </div>
               </Card>
-            ) : (
-              <Card className="p-6 text-center">
-                <Heart className="h-10 w-10 mx-auto mb-3 text-red-200" />
-                <p className="text-gray-500 font-medium">Les valeurs de l'organisation seront disponibles bientôt</p>
-              </Card>
-            )}
+            ) : null}
 
             {/* Certifications & Récompenses */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -639,12 +622,7 @@ export default function PartnerDetailPage() {
                     })}
                   </div>
                 </Card>
-              ) : (
-                <Card className="p-6 text-center">
-                  <Shield className="h-10 w-10 mx-auto mb-3 text-green-200" />
-                  <p className="text-gray-500 font-medium">Les certifications seront disponibles bientôt</p>
-                </Card>
-              )}
+              ) : null}
 
               {/* Récompenses */}
               {partner.awards && partner.awards.length > 0 ? (
@@ -670,12 +648,7 @@ export default function PartnerDetailPage() {
                     })}
                   </div>
                 </Card>
-              ) : (
-                <Card className="p-6 text-center">
-                  <Award className="h-10 w-10 mx-auto mb-3 text-yellow-200" />
-                  <p className="text-gray-500 font-medium">Les récompenses seront disponibles bientôt</p>
-                </Card>
-              )}
+              ) : null}
             </div>
 
             {/* Témoignages */}
@@ -713,12 +686,7 @@ export default function PartnerDetailPage() {
                   ))}
                 </div>
               </Card>
-            ) : (
-              <Card className="p-6 text-center bg-gradient-to-br from-blue-50 to-indigo-50">
-                <Quote className="h-10 w-10 mx-auto mb-3 text-blue-200" />
-                <p className="text-gray-500 font-medium">Les témoignages seront disponibles bientôt</p>
-              </Card>
-            )}
+            ) : null}
 
             {/* Contributions SIB */}
             <Card className="p-6">
@@ -746,12 +714,7 @@ export default function PartnerDetailPage() {
                   );
                 })}
               </div>
-              ) : (
-                <div className="text-center py-6 text-gray-500">
-                  <Zap className="h-10 w-10 mx-auto mb-3 text-indigo-200" />
-                  <p className="font-medium">Les contributions seront disponibles bientôt</p>
-                </div>
-              )}
+              ) : null}
             </Card>
           </motion.div>
         )}
@@ -790,10 +753,9 @@ export default function PartnerDetailPage() {
                 <Clock className="h-5 w-5 mr-2 text-blue-600" />
                 Notre Histoire
               </h3>
-              <div className="text-center py-8">
-                <Clock className="h-10 w-10 mx-auto mb-3 text-blue-200" />
-                <p className="text-gray-500 font-medium">L'historique détaillé sera disponible bientôt</p>
-              </div>
+              {partner.establishedYear ? (
+                <p className="text-gray-600">Fondé en {partner.establishedYear}</p>
+              ) : null}
             </Card>
 
             {/* Clients référents */}
@@ -814,12 +776,7 @@ export default function PartnerDetailPage() {
                   })}
                 </div>
               </Card>
-            ) : (
-              <Card className="p-6 text-center">
-                <Briefcase className="h-10 w-10 mx-auto mb-3 text-green-200" />
-                <p className="text-gray-500 font-medium">La liste des clients sera disponible bientôt</p>
-              </Card>
-            )}
+            ) : null}
           </motion.div>
         )}
 
@@ -1018,12 +975,7 @@ export default function PartnerDetailPage() {
                         )}
                       </motion.div>
                     );
-                  }) : (
-                    <div className="text-center py-6">
-                      <Layers className="h-10 w-10 mx-auto mb-3 text-blue-200" />
-                      <p className="text-gray-500 font-medium">Les domaines d'expertise seront disponibles bientôt</p>
-                    </div>
-                  )}
+                  }) : null}
                 </div>
               </Card>
               {/* Expertise - Utiliser les vraies données de la DB */}
@@ -1066,12 +1018,7 @@ export default function PartnerDetailPage() {
                   })}
                 </div>
               </Card>
-            ) : (
-              <Card className="p-6 text-center">
-                <GraduationCap className="h-10 w-10 mx-auto mb-3 text-green-200" />
-                <p className="text-gray-500 font-medium">Les certifications seront disponibles bientôt</p>
-              </Card>
-            )}
+            ) : null}
           </motion.div>
         )}
 
@@ -1112,12 +1059,7 @@ export default function PartnerDetailPage() {
                 </motion.div>
               ))}
             </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500">
-                <Camera className="h-12 w-12 mx-auto mb-4 text-blue-200" />
-                <p className="text-gray-600 font-medium">La galerie photo sera disponible bientôt</p>
-              </div>
-            )}
+            ) : null}
           </motion.div>
         )}
 
@@ -1169,12 +1111,7 @@ export default function PartnerDetailPage() {
                 </motion.div>
               ))}
             </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500">
-                <Newspaper className="h-12 w-12 mx-auto mb-4 text-blue-200" />
-                <p className="text-gray-600 font-medium">Les actualités seront disponibles bientôt</p>
-              </div>
-            )}
+            ) : null}
           </motion.div>
         )}
 
@@ -1256,12 +1193,7 @@ export default function PartnerDetailPage() {
                 </motion.div>
               ))}
             </div>
-            ) : (
-              <Card className="p-8 text-center">
-                <Target className="h-12 w-12 mx-auto mb-3 text-blue-200" />
-                <p className="text-gray-600 font-medium">Les projets seront disponibles bientôt</p>
-              </Card>
-            )}
+            ) : null}
           </motion.div>
         )}
 

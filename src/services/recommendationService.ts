@@ -42,23 +42,15 @@ class RecommendationService {
       profile: this.ensureProfileDefaults(currentUser.profile)
     };
 
-    // Filter out the current user, users of the same company, and visitors (B2B only = exhibitors & partners)
+    // Filter out the current user, and users of the same company (B2B networking)
     const potentialMatches = allUsers.filter(
       (p) => p.id !== currentUser.id &&
              p.profile?.company !== currentUser.profile?.company &&
-             p.type !== 'visitor' && // Exclure les visiteurs (B2B = entreprises uniquement)
-             p.type !== 'admin' && // Exclure les admins
-             p.type !== 'security' && // Exclure la sécurité
-             p.type !== currentUser.type // Prioritize different user types for networking
-    );
-
-    // If no matches with different types, include same types (but still exclude visitors/admins/security)
-    const matchPool = potentialMatches.length > 0 ? potentialMatches : allUsers.filter(
-      (p) => p.id !== currentUser.id &&
-             p.type !== 'visitor' &&
              p.type !== 'admin' &&
              p.type !== 'security'
     );
+
+    const matchPool = potentialMatches;
 
     for (const potentialMatch of matchPool) {
       // Ensure potential match profile has defaults

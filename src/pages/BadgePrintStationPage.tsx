@@ -86,7 +86,13 @@ export default function BadgePrintStationPage() {
   const [badgeFormat, setBadgeFormat] = useState<BadgeFormat>('badge');
   const [printHistory, setPrintHistory] = useState<PrintRecord[]>([]);
   const [stats, setStats] = useState(getPrintStats());
-  const [stationId] = useState(() => `STATION-${Math.random().toString(36).slice(2, 6).toUpperCase()}`);
+  const [stationId] = useState(() => {
+    const stored = localStorage.getItem('badgeStationId');
+    if (stored) return stored;
+    const newId = `STATION-${Date.now().toString(36).toUpperCase()}`;
+    localStorage.setItem('badgeStationId', newId);
+    return newId;
+  });
 
   const scannerRef = useRef<Html5Qrcode | null>(null);
 

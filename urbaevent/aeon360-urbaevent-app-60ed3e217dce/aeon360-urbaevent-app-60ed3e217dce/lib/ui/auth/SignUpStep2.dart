@@ -1,6 +1,7 @@
 ﻿import 'dart:io';
 import 'dart:math';
 
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:com.urbaevent/dialogs/Progressbar.dart';
 import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:com.urbaevent/ui/content_ui/home/HomePage.dart';
@@ -290,7 +291,15 @@ class _SignUpStep2 extends State<SignUpStep2> {
           );
         }
       } catch (e) {
-        Utils.showToast(Intl.message("email_taken", name: "email_taken"));
+        if (e is AuthException) {
+          if (e.message.toLowerCase().contains("already registered") || e.message.toLowerCase().contains("already taken")) {
+            Utils.showToast(Intl.message("email_taken", name: "email_taken"));
+          } else {
+            Utils.showToast(e.message);
+          }
+        } else {
+          Utils.showToast(e.toString());
+        }
         setState(() {
           loader = false;
         });

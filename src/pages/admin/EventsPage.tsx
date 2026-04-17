@@ -9,6 +9,7 @@ import { Badge } from '../../components/ui/Badge';
 import { motion } from 'framer-motion';
 import { EventsService, Event } from '../../services/eventsService';
 import { useFilterSearch } from '../../hooks/useFilterSearch';
+import { toast } from 'sonner';
 
 export default function EventsPage() {
   const { t } = useTranslation();
@@ -60,6 +61,7 @@ export default function EventsPage() {
     } catch (err) {
       console.error('Error loading events:', err);
       setError('Failed to load events. Please try again later.');
+      toast.error('Erreur lors du chargement des événements');
     } finally {
       setIsLoading(false);
     }

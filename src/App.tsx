@@ -11,7 +11,7 @@ import { ScrollToTop } from './components/common/ScrollToTop';
 // Lazy load pages
 const HomePage = lazyRetry(() => import('./pages/HomePage'));
 const ExhibitorsPage = lazyRetry(() => import('./pages/ExhibitorsPage'));
-const NetworkingPage = lazyRetry(() => import('./pages/NetworkingPage'));
+  const NetworkingPage = lazyRetry(() => import('./pages/NetworkingPage'));
 const InteractionHistoryPage = lazyRetry(() => import('./pages/networking/InteractionHistoryPage'));
 const NetworkingRoomsPage = lazyRetry(() => import('./pages/networking/NetworkingRoomsPage'));
 const SpeedNetworkingPage = lazyRetry(() => import('./pages/networking/SpeedNetworkingPage'));
