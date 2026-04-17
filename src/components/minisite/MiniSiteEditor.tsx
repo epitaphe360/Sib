@@ -206,6 +206,7 @@ export default function MiniSiteEditor() {
     description?: string;
     contact_info?: Record<string, unknown>;
     website?: string;
+    certifications?: string[];
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -1007,12 +1008,14 @@ export default function MiniSiteEditor() {
                                   className="text-gray-600 leading-relaxed mb-4"
                                   fieldKey={`${section.id}-desc`}
                                 />
-                                {/* Badges ISO — identiques au viewer (toujours affichés) */}
-                                <div className="flex flex-wrap gap-2 mb-5">
-                                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">✓ ISO 9001</span>
-                                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">✓ ISO 27001</span>
-                                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">★ Certifié depuis 2008</span>
-                                </div>
+                                {/* Badges certifications — depuis le profil exposant */}
+                                {(exhibitorProfile?.certifications ?? []).length > 0 && (
+                                  <div className="flex flex-wrap gap-2 mb-5">
+                                    {exhibitorProfile!.certifications!.map((cert, ci) => (
+                                      <span key={ci} className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">✓ {cert}</span>
+                                    ))}
+                                  </div>
+                                )}
                                 {/* Features éditables */}
                                 {(section.content.features ?? []).length === 0 ? (
                                   <div className="grid grid-cols-2 gap-2 mb-4 opacity-50">

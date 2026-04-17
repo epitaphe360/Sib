@@ -72,6 +72,7 @@ interface ExhibitorData {
   logo_url?: string;
   description?: string;
   website?: string;
+  certifications?: string[];
   contact_info: {
     email?: string;
     phone?: string;
@@ -471,21 +472,26 @@ export default function MiniSitePreviewSimple() {
               {aboutSection?.content?.description || aboutSection?.content?.text || exhibitorData.description || 'Nous sommes fiers de présenter nos solutions innovantes à SIB 2026.'}
             </p>
 
-            {/* Certification Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <Badge className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow">
-                <Award className="h-4 w-4 mr-2" />
-                ISO 9001
-              </Badge>
-              <Badge className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow">
-                <Award className="h-4 w-4 mr-2" />
-                ISO 27001
-              </Badge>
-              <Badge className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow">
-                <Star className="h-4 w-4 mr-2" />
-                Certifié depuis 2008
-              </Badge>
-            </div>
+            {/* Certification Badges — depuis le profil exposant */}
+            {(exhibitorData?.certifications ?? []).length > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                {(exhibitorData!.certifications!).map((cert, idx) => {
+                  const badgeColors = [
+                    'bg-gradient-to-r from-green-500 to-emerald-600',
+                    'bg-gradient-to-r from-blue-500 to-cyan-600',
+                    'bg-gradient-to-r from-purple-500 to-pink-600',
+                    'bg-gradient-to-r from-orange-500 to-amber-600',
+                    'bg-gradient-to-r from-rose-500 to-red-600',
+                  ];
+                  return (
+                    <Badge key={idx} className={`px-4 py-2 ${badgeColors[idx % badgeColors.length]} text-white border-0 shadow-lg hover:shadow-xl transition-shadow`}>
+                      <Award className="h-4 w-4 mr-2" />
+                      {cert}
+                    </Badge>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Features/Values - TOUJOURS AFFICHÉES avec design amélioré */}

@@ -2483,7 +2483,7 @@ export class SupabaseService {
       // 1. Chercher d'abord dans la table exhibitors par ID
       const { data: exhibitorData, error: exhibitorError } = await safeSupabase
         .from('exhibitors')
-        .select('id, company_name, logo_url, description, website, contact_info')
+        .select('id, company_name, logo_url, description, website, contact_info, certifications')
         .eq('id', exhibitorId)
         .maybeSingle();
 
