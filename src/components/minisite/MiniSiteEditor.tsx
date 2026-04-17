@@ -37,6 +37,7 @@ import { Badge } from '../ui/Badge';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ROUTES } from '../../lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
+import type { MiniSiteSection } from '../../types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -162,8 +163,14 @@ export default function MiniSiteEditor() {
             order: s.order ?? i,
           }));
           setSections(loaded);
-          if (miniSite.settings) {
-            setSiteSettings(prev => ({ ...prev, ...(miniSite.settings as Partial<SiteSettings>) }));
+          if (miniSite.theme) {
+            setSiteSettings(prev => ({
+              ...prev,
+              primaryColor: miniSite.theme.primaryColor || prev.primaryColor,
+              secondaryColor: miniSite.theme.secondaryColor || prev.secondaryColor,
+              fontFamily: miniSite.theme.fontFamily || prev.fontFamily,
+              logoUrl: miniSite.logo_url || prev.logoUrl,
+            }));
           }
         } else {
           // No mini-site yet — seed hero + contact from profile
@@ -349,13 +356,19 @@ export default function MiniSiteEditor() {
       await SupabaseService.updateMiniSite(exhibitorId, {
         sections: sections.map(s => ({
           id: s.id,
-          type: s.type,
+          type: s.type as MiniSiteSection['type'],
           title: s.title,
           content: s.content,
           visible: s.visible,
           order: s.order,
         })),
-        settings: siteSettings,
+        theme: {
+          primaryColor: siteSettings.primaryColor,
+          secondaryColor: siteSettings.secondaryColor,
+          accentColor: siteSettings.primaryColor,
+          fontFamily: siteSettings.fontFamily,
+        },
+        logo_url: siteSettings.logoUrl || undefined,
         published: true,
       });
       setHasUnsavedChanges(false);
@@ -793,7 +806,7 @@ export default function MiniSiteEditor() {
                                 style={{
                                   background: section.content.backgroundImage
                                     ? `url(${section.content.backgroundImage}) center/cover`
-                                    : `linear-gradient(135deg, ${siteSettings.secondaryColor} 0%, ${siteSettings.primaryColor} 100%)`,
+                                    : `linear-gradient(135deg, ${siteSettings.primaryColor}, ${siteSettings.secondaryColor})`,
                                 }}>
                                 <div className="absolute inset-0 bg-black/40" />
                                 <div className="relative text-center text-white px-6 w-full">

@@ -128,12 +128,13 @@ interface ExhibitorsPageResult {
 interface MiniSiteDB {
   id: string;
   exhibitor_id: string;
-  theme: string;
+  theme: Record<string, string> | string;
   custom_colors: Record<string, string>;
   sections: MiniSiteSection[];
   published: boolean;
   views: number;
   last_updated: string;
+  logo_url?: string;
 }
 
 interface EventsPageResult {
@@ -4085,16 +4086,20 @@ export class SupabaseService {
     }
 
     const safeSupabase = supabase!;
+    const upsertPayload: Record<string, unknown> = {
+      exhibitor_id: exhibitorId,
+      theme: siteData.theme,
+      custom_colors: siteData.custom_colors,
+      sections: siteData.sections,
+      published: siteData.published,
+      last_updated: new Date().toISOString()
+    };
+    if (siteData.logo_url !== undefined) {
+      upsertPayload.logo_url = siteData.logo_url;
+    }
     const { data, error } = await (safeSupabase as any)
       .from('mini_sites')
-      .upsert({
-        exhibitor_id: exhibitorId,
-        theme: siteData.theme,
-        custom_colors: siteData.custom_colors,
-        sections: siteData.sections,
-        published: siteData.published,
-        last_updated: new Date().toISOString()
-      })
+      .upsert(upsertPayload)
       .select()
       .single();
 

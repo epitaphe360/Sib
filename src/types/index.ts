@@ -180,7 +180,7 @@ export interface MiniSite {
 
 export interface MiniSiteSection {
   id: string;
-  type: 'hero' | 'about' | 'products' | 'news' | 'gallery' | 'team' | 'certifications';
+  type: 'hero' | 'about' | 'products' | 'news' | 'gallery' | 'team' | 'certifications' | 'contact';
   title: string;
   content: unknown;
   order: number;
