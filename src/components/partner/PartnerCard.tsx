@@ -37,7 +37,7 @@ interface PartnerCardProps {
   };
   viewMode?: 'grid' | 'list';
   index?: number;
-  onViewDetails: (id: string) => void;
+  onViewDetails: (id: string, name?: string) => void;
   getCategoryLabel: (category: string) => string;
   getCategoryColor: (category: string) => 'default' | 'success' | 'warning' | 'error' | 'info';
   t: (key: string) => string;
@@ -59,8 +59,8 @@ const PartnerCard: React.FC<PartnerCardProps> = memo(({
   t
 }) => {
   const handleViewDetails = useCallback(() => {
-    onViewDetails(partner.id);
-  }, [onViewDetails, partner.id]);
+    onViewDetails(partner.id, partner.name);
+  }, [onViewDetails, partner.id, partner.name]);
 
   const handleWebsiteClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();

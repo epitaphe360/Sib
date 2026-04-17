@@ -33,7 +33,9 @@ interface PartnerDB {
   featured: boolean;
   partnership_level?: string;
   benefits?: string[];
-  contact_info?: { country?: string };
+  contact_info?: { country?: string; establishedYear?: number; employees?: string };
+  established_year?: number;
+  employees?: string;
   created_at: string;
 }
 
@@ -721,7 +723,7 @@ export class SupabaseService {
       const { data, error, count } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published`,
+          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`,
           { count: 'exact' }
         )
         // Afficher les partenaires publiés (true) OU dont is_published n'est pas renseigné (null)
@@ -749,8 +751,8 @@ export class SupabaseService {
         featured: partner.featured ?? false,
         views: 0,
         contributions: [],
-        establishedYear: 2024,
-        employees: '1-10',
+        establishedYear: partner.established_year || (partner.contact_info)?.establishedYear || 2024,
+        employees: partner.employees || (partner.contact_info)?.employees || '1-10',
         createdAt: new Date(partner.created_at),
         updatedAt: new Date(partner.created_at)
       }));
@@ -783,7 +785,7 @@ export class SupabaseService {
       const { data, error } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published`
+          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`
         )
         .or('is_published.eq.true,is_published.is.null')
         .order('featured', { ascending: false })
@@ -808,8 +810,8 @@ export class SupabaseService {
         featured: partner.featured ?? false,
         views: 0,
         contributions: [],
-        establishedYear: 2024,
-        employees: '1-10',
+        establishedYear: partner.established_year || (partner.contact_info)?.establishedYear || 2024,
+        employees: partner.employees || (partner.contact_info)?.employees || '1-10',
         createdAt: new Date(partner.created_at),
         updatedAt: new Date(partner.created_at)
       }));
@@ -834,6 +836,42 @@ export class SupabaseService {
 
     const safeSupabase = supabase!;
     try {
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
+      const rawIdentifier = decodeURIComponent(id).trim();
+      const slugAsName = rawIdentifier.replace(/-/g, ' ');
+
+      const fetchPartner = async (selectClause: string) => {
+        if (isUuid) {
+          return await safeSupabase
+            .from('partners')
+            .select(selectClause)
+            .eq('id', id)
+            .single();
+        }
+
+        // URL lisible: /partners/AMDIE ou /partners/Agence-Marocaine-...
+        const exactByName = await safeSupabase
+          .from('partners')
+          .select(selectClause)
+          .ilike('company_name', slugAsName)
+          .limit(1)
+          .maybeSingle();
+
+        if (exactByName.data) {
+          return exactByName;
+        }
+
+        // Fallback plus permissif (espaces variables)
+        const fuzzyByName = await safeSupabase
+          .from('partners')
+          .select(selectClause)
+          .ilike('company_name', slugAsName.replace(/\s+/g, '%'))
+          .limit(1)
+          .maybeSingle();
+
+        return fuzzyByName;
+      };
+
       // Récupérer les données du partenaire (colonnes core garanties + enrichies si disponibles)
       const coreSelect = `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, contributions, projects:partner_projects(*)`;
       const enrichedSelect = `${coreSelect}, mission, vision, values, certifications, awards, social_media, key_figures, testimonials, news, expertise, clients, video_url, gallery`;
@@ -842,9 +880,9 @@ export class SupabaseService {
       let error: any = null;
 
       // Tenter d'abord la requête enrichie, retomber sur le core en cas d'erreur de colonne manquante
-      const enrichedResult = await safeSupabase.from('partners').select(enrichedSelect).eq('id', id).single();
+      const enrichedResult = await fetchPartner(enrichedSelect);
       if (enrichedResult.error && (enrichedResult.error.code === 'PGRST204' || String(enrichedResult.error.message).includes('column'))) {
-        const coreResult = await safeSupabase.from('partners').select(coreSelect).eq('id', id).single();
+        const coreResult = await fetchPartner(coreSelect);
         data = coreResult.data as Record<string, any> | null;
         error = coreResult.error;
       } else {

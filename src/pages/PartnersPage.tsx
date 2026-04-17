@@ -40,7 +40,7 @@ interface PartnerCardWrapperProps {
   partner: Partner;
   viewMode: 'grid' | 'list';
   index: number;
-  onViewDetails: (id: string) => void;
+  onViewDetails: (id: string, name?: string) => void;
   getCategoryLabel: (category: string) => string;
   getCategoryColor: (category: string) => 'default' | 'success' | 'warning' | 'error' | 'info';
   t: (key: string) => string;
@@ -204,8 +204,12 @@ export default function PartnersPage() {
   }, [partners]);
 
   // ? OPTIMISÉ: useCallback pour les handlers
-  const handleViewDetails = useCallback((partnerId: string) => {
-    navigate(`/partners/${partnerId}`);
+  const handleViewDetails = useCallback((partnerId: string, partnerName?: string) => {
+    const readableSegment = (partnerName || '').trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-zA-Z0-9\-_]/g, '');
+
+    navigate(`/partners/${encodeURIComponent(readableSegment || partnerId)}`);
   }, [navigate]);
 
   const getCategoryLabel = useCallback((category: string) => {
