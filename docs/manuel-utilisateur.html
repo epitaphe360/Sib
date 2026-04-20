@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIB 2026 — Manuel Utilisateur</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --primary: #1B3A6B;
+      --accent:  #C9A84C;
+      --light:   #F5F7FA;
+      --text:    #1a1a2e;
+      --muted:   #6b7280;
+      --border:  #e5e7eb;
+      --white:   #ffffff;
+      --success: #059669;
+      --warning: #d97706;
+      --danger:  #dc2626;
+      --info:    #0ea5e9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f2f5;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 20px;
+      background: white;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+    }
+    .page:last-child { page-break-after: avoid; }
+
+    @media print {
+      body { background: white; margin: 0; }
+      .page { margin: 0; page-break-after: always; }
+      .no-print { display: none; }
+    }
+
+    /* COVER */
+    .cover {
+      background: linear-gradient(135deg, var(--primary) 0%, #0d2347 100%);
+      min-height: 297mm;
+      display: flex;
+      flex-direction: column;
+    }
+    .cover-header {
+      padding: 40px 60px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .cover-logo { font-size: 22px; font-weight: 900; color: white; letter-spacing: 3px; }
+    .cover-logo span { color: var(--accent); }
+    .cover-type {
+      background: var(--accent);
+      color: #1a1a1a;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .cover-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 60px;
+      text-align: center;
+    }
+    .cover-icon { font-size: 60px; margin-bottom: 30px; }
+    .cover-title { font-size: 42px; font-weight: 900; color: white; line-height: 1.1; margin-bottom: 16px; }
+    .cover-sub { font-size: 15px; color: rgba(255,255,255,0.6); font-weight: 300; margin-bottom: 40px; }
+    .cover-divider { width: 60px; height: 3px; background: var(--accent); margin: 0 auto 40px; }
+    .cover-toc {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 28px;
+      text-align: left;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .cover-toc-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .cover-toc-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+    }
+    .cover-toc-item:last-child { border-bottom: none; }
+    .cover-toc-num {
+      background: var(--primary);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--accent);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .cover-footer {
+      background: rgba(0,0,0,0.25);
+      padding: 16px 60px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* CHAPTER HEADER */
+    .chapter-header {
+      background: var(--primary);
+      padding: 30px 60px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .chapter-num-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #1a1a1a;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .chapter-info {}
+    .chapter-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 4px;
+    }
+    .chapter-title { font-size: 22px; font-weight: 800; }
+
+    /* CONTENT */
+    .content { padding: 30px 60px 80px; }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 24px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--light);
+    }
+    h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 18px 0 10px;
+    }
+    p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    /* STEP-BY-STEP */
+    .steps { margin: 16px 0; }
+    .step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-body {}
+    .step-title {
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+    .step-text {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* CARDS */
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+    .card-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .card-title { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 6px; }
+    .card-text { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    /* CALLOUT */
+    .callout {
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 14px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .callout-icon { font-size: 18px; flex-shrink: 0; }
+    .callout-body {}
+    .callout-title { font-weight: 700; font-size: 13px; margin-bottom: 3px; }
+    .callout-text { font-size: 12px; line-height: 1.6; }
+    .callout-info { background: #eff6ff; border: 1px solid #bfdbfe; }
+    .callout-info .callout-title { color: #1e40af; }
+    .callout-info .callout-text { color: #3b82f6; }
+    .callout-warning { background: #fffbeb; border: 1px solid #fde68a; }
+    .callout-warning .callout-title { color: #92400e; }
+    .callout-warning .callout-text { color: #b45309; }
+    .callout-success { background: #f0fdf4; border: 1px solid #a7f3d0; }
+    .callout-success .callout-title { color: #065f46; }
+    .callout-success .callout-text { color: #059669; }
+    .callout-danger { background: #fff5f5; border: 1px solid #fecaca; }
+    .callout-danger .callout-title { color: #991b1b; }
+    .callout-danger .callout-text { color: #dc2626; }
+
+    /* FEATURE LIST */
+    .feature-list { list-style: none; }
+    .feature-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text);
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list li::before {
+      content: "✓";
+      color: var(--success);
+      font-weight: 700;
+      font-size: 11px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    /* SCREENSHOT PLACEHOLDER */
+    .screen-mock {
+      background: var(--light);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 14px 0;
+      min-height: 100px;
+    }
+    .screen-mock-bar {
+      background: var(--primary);
+      border-radius: 6px 6px 0 0;
+      padding: 8px 14px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin: -20px -20px 16px;
+    }
+    .screen-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+    .screen-url {
+      background: rgba(255,255,255,0.15);
+      border-radius: 4px;
+      padding: 3px 12px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.7);
+      flex: 1;
+    }
+    .screen-content {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      padding: 10px;
+      font-style: italic;
+    }
+
+    /* FIELD */
+    .field {
+      margin-bottom: 12px;
+    }
+    .field-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .field-required { color: #dc2626; font-size: 12px; }
+    .field-input {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--muted);
+      width: 100%;
+    }
+    .field-hint { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 14px 0; }
+    thead th {
+      background: var(--primary);
+      color: white;
+      padding: 9px 12px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    tbody td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    tbody tr:nth-child(even) { background: var(--light); }
+
+    /* BADGE */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .badge-gold { background: #fef9ee; color: #92400e; border: 1px solid #fde68a; }
+    .badge-blue { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .badge-green { background: #f0fdf4; color: #065f46; border: 1px solid #a7f3d0; }
+    .badge-red { background: #fff5f5; color: #991b1b; border: 1px solid #fecaca; }
+
+    /* TWO COL */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    /* PAGE FOOTER */
+    .page-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--light);
+      border-top: 1px solid var(--border);
+      padding: 10px 60px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .page-footer strong { color: var(--primary); }
+
+    /* PRINT BUTTON */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .section-tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #1a1a1a;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .highlight-box {
+      background: linear-gradient(90deg, #eff6ff, #f0fdf4);
+      border: 1.5px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 14px 0;
+    }
+    .highlight-box-title { font-weight: 700; font-size: 13px; color: var(--primary); margin-bottom: 6px; }
+    .highlight-box-text { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    .role-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      margin: 3px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .nav-item-active {
+      background: var(--primary);
+      color: white;
+    }
+    .nav-item-normal {
+      background: var(--light);
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Imprimer en PDF</button>
+
+<!-- ==================== COUVERTURE ==================== -->
+<div class="page cover">
+  <div class="cover-header">
+    <div class="cover-logo">SIB<span>.</span>2026</div>
+    <div class="cover-type">Manuel Utilisateur</div>
+  </div>
+  <div class="cover-body">
+    <div class="cover-icon">📖</div>
+    <div class="cover-title">Manuel<br>Utilisateur</div>
+    <div class="cover-sub">Guide complet de la Plateforme Digitale SIB 2026</div>
+    <div class="cover-divider"></div>
+    <div class="cover-toc">
+      <div class="cover-toc-title">Table des Matières</div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">1</div>
+        Premiers pas — Inscription & Connexion
+      </div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">2</div>
+        Espace Visiteur — Navigation & Fonctionnalités
+      </div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">3</div>
+        Espace Exposant — Profil & Mini-Site
+      </div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">4</div>
+        Networking & Rendez-vous B2B
+      </div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">5</div>
+        Espace Partenaire & Sponsor
+      </div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">6</div>
+        Administration de la Plateforme
+      </div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">7</div>
+        Paiements & Abonnements
+      </div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">8</div>
+        Badges Numériques & Check-in
+      </div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">9</div>
+        Médiathèque & Événements
+      </div>
+      <div class="cover-toc-item">
+        <div class="cover-toc-num">10</div>
+        FAQ & Résolution de Problèmes
+      </div>
+    </div>
+  </div>
+  <div class="cover-footer">
+    <span>SIB 2026 — Salon International du Bâtiment · El Jadida, Maroc</span>
+    <span>Avril 2026 — v1.0</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 1 — INSCRIPTION ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">1</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 1</div>
+      <div class="chapter-title">Premiers pas — Inscription & Connexion</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <h2>Créer un compte</h2>
+    <p>La plateforme SIB 2026 propose trois types de comptes : Visiteur, Exposant et Partenaire. Le processus d'inscription varie légèrement selon le profil choisi.</p>
+
+    <div class="callout callout-info">
+      <div class="callout-icon">ℹ️</div>
+      <div class="callout-body">
+        <div class="callout-title">Accès à l'inscription</div>
+        <div class="callout-text">Rendez-vous sur <strong>sib2026.ma</strong> puis cliquez sur le bouton <strong>"S'inscrire"</strong> dans la barre de navigation, ou accédez directement à la page de sélection de profil.</div>
+      </div>
+    </div>
+
+    <h3>Étapes d'inscription — Visiteur</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Choisir le type de visite</div>
+          <div class="step-text">Sélectionnez <strong>"Visiteur gratuit"</strong> pour un accès de base, ou <strong>"Visiteur VIP"</strong> (300 EUR) pour l'accès complet avec lettre de visa et badge personnalisé.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Remplir le formulaire d'inscription</div>
+          <div class="step-text">Prénom, nom, email professionnel, mot de passe, pays, secteur d'activité, intitulé de poste. Tous les champs marqués <span style="color:#dc2626;">*</span> sont obligatoires.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Vérifier votre email</div>
+          <div class="step-text">Un email de confirmation est envoyé à l'adresse indiquée. Cliquez sur le lien de vérification dans les 24h. Vérifiez vos spams si nécessaire.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Attendre la validation admin</div>
+          <div class="step-text">L'équipe SIB 2026 examine votre dossier. Vous recevrez un email de confirmation d'activation du compte sous 24-48h ouvrées.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Accéder à votre espace personnel</div>
+          <div class="step-text">Une fois validé, connectez-vous pour accéder à votre tableau de bord personnalisé, votre badge numérique et toutes les fonctionnalités.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Se connecter à la plateforme</h2>
+
+    <div class="two-col">
+      <div>
+        <h3>Connexion email / mot de passe</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Accéder à la page de connexion</div>
+              <div class="step-text">Cliquez sur <strong>"Se connecter"</strong> dans la navigation principale.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Saisir vos identifiants</div>
+              <div class="step-text">Email et mot de passe enregistrés lors de l'inscription.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Valider la connexion</div>
+              <div class="step-text">Cliquez sur <strong>"Se connecter"</strong>. Vous êtes redirigé vers votre tableau de bord.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>Connexion via Google</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Cliquer sur "Continuer avec Google"</div>
+              <div class="step-text">Sur la page de connexion, utilisez le bouton Google OAuth.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Choisir votre compte Google</div>
+              <div class="step-text">Sélectionnez votre compte Google dans la fenêtre popup.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Connexion automatique</div>
+              <div class="step-text">Si le compte Google est associé, connexion directe. Sinon, un compte est créé automatiquement.</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout callout-success" style="margin-top:10px;">
+          <div class="callout-icon">🔐</div>
+          <div class="callout-body">
+            <div class="callout-title">Mot de passe oublié ?</div>
+            <div class="callout-text">Cliquez sur <strong>"Mot de passe oublié"</strong> sur la page de connexion. Un lien de réinitialisation vous est envoyé par email. Le lien expire après 1 heure.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <div class="callout-title">Session automatique</div>
+        <div class="callout-text">Par mesure de sécurité, votre session expire automatiquement après <strong>30 minutes d'inactivité</strong>. Vous serez invité à vous reconnecter. Pensez à sauvegarder vos modifications avant de quitter la page.</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 1 — Inscription & Connexion</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 2 — ESPACE VISITEUR ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">2</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 2</div>
+      <div class="chapter-title">Espace Visiteur</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <div class="callout callout-info">
+      <div class="callout-icon">👤</div>
+      <div class="callout-body">
+        <div class="callout-title">Qui est concerné ?</div>
+        <div class="callout-text">Toute personne souhaitant visiter le Salon International du Bâtiment — professionnels du secteur, acheteurs, investisseurs, journalistes, étudiants.</div>
+      </div>
+    </div>
+
+    <h2>Tableau de bord Visiteur</h2>
+    <p>Après connexion, votre tableau de bord affiche un résumé de votre activité : rendez-vous à venir, recommandations d'exposants, événements du jour et accès rapide à votre badge.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="section-tag">Gratuit</div>
+        <div class="card-title" style="margin-top:8px;">Visiteur Standard</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Navigation catalogue exposants</li>
+          <li>Consultation des événements et conférences</li>
+          <li>Badge numérique de base</li>
+          <li>Accès médiathèque publique</li>
+          <li>Plan interactif de l'exposition</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color: var(--accent); border-width: 2px;">
+        <div class="section-tag" style="background: var(--accent);">VIP — 300 EUR</div>
+        <div class="card-title" style="margin-top:8px;">Visiteur VIP</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Tout le contenu Visiteur Standard +</li>
+          <li>Matching IA prioritaire avec exposants</li>
+          <li>Badge VIP personnalisé premium</li>
+          <li>Lettre de visa officielle SIB 2026</li>
+          <li>Networking avancé et speed dating B2B</li>
+          <li>Support client prioritaire</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Fonctionnalités du profil visiteur</h2>
+
+    <h3>Compléter votre profil</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Accéder aux paramètres du profil</div>
+          <div class="step-text">Menu → Mon Compte → Paramètres, ou cliquez sur votre avatar en haut à droite.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Renseigner vos informations professionnelles</div>
+          <div class="step-text">Photo de profil, biographie, secteur d'activité, centres d'intérêt, réseaux sociaux. Un profil complet améliore votre score de matching.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Sauvegarder</div>
+          <div class="step-text">Cliquez sur <strong>"Enregistrer les modifications"</strong>. Les changements sont appliqués immédiatement.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3>Accéder à votre badge numérique</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Menu → Mon Badge</div>
+              <div class="step-text">Votre badge avec QR code unique s'affiche à l'écran.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Télécharger en PDF</div>
+              <div class="step-text">Bouton <strong>"Télécharger mon badge"</strong> pour sauvegarder en PDF ou imprimer.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Utiliser sur site</div>
+              <div class="step-text">Présentez le QR code du badge aux agents de sécurité pour accéder au salon.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>Lettre de visa (VIP uniquement)</h3>
+        <div class="callout callout-warning">
+          <div class="callout-icon">✈️</div>
+          <div class="callout-body">
+            <div class="callout-title">Disponible pour les visiteurs VIP</div>
+            <div class="callout-text">La lettre d'invitation officielle pour les démarches de visa est accessible depuis <strong>Mon Compte → Lettre de Visa</strong>. Elle est générée automatiquement avec vos informations validées.</div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:16px;">Mise à niveau vers VIP</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Tableau de bord → Mettre à niveau</div>
+              <div class="step-text">Bouton "Passer en VIP" sur votre espace visiteur.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Choisir le mode de paiement</div>
+              <div class="step-text">PayPal, CMI (carte marocaine) ou virement bancaire.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 2 — Espace Visiteur</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 3 — ESPACE EXPOSANT ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">3</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 3</div>
+      <div class="chapter-title">Espace Exposant — Profil & Mini-Site</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <h2>Configurer votre profil exposant</h2>
+    <p>En tant qu'exposant, votre profil est votre vitrine numérique au sein du catalogue SIB 2026. Un profil complet et soigné maximise votre visibilité auprès des visiteurs.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Accéder à Mon Profil</div>
+          <div class="step-text">Tableau de bord → Mon Profil → Modifier le profil.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Informations de base</div>
+          <div class="step-text">Nom de l'entreprise, logo (recommandé : PNG 400x400px), description de l'activité, secteur, pays, coordonnées, site web.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Certifications et labels</div>
+          <div class="step-text">Ajoutez vos certifications ISO, labels qualité ou distinctions sectorielles. Elles apparaîtront sur votre profil et mini-site.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Définir vos disponibilités</div>
+          <div class="step-text">Configurez vos créneaux de disponibilité pour les rendez-vous B2B via le planning de disponibilités.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Créer votre Mini-Site</h2>
+    <p>Le mini-site est une page web complète dédiée à votre entreprise, accessible depuis le catalogue exposants et via une URL unique personnalisée.</p>
+
+    <div class="callout callout-success">
+      <div class="callout-icon">🏗️</div>
+      <div class="callout-body">
+        <div class="callout-title">Éditeur sans code</div>
+        <div class="callout-text">L'éditeur drag-and-drop ne nécessite aucune compétence technique. Ajoutez, réorganisez et personnalisez les sections en quelques clics. Votre mini-site est publié instantanément.</div>
+      </div>
+    </div>
+
+    <h3>Sections disponibles dans l'éditeur</h3>
+    <div class="card-grid-3">
+      <div class="card">
+        <div class="card-title">🎯 Section Hero</div>
+        <div class="card-text">Image de bannière principale, titre accrocheur, sous-titre et bouton d'action. Première impression de votre marque.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">ℹ️ À Propos</div>
+        <div class="card-text">Histoire de l'entreprise, valeurs, chiffres clés. Texte riche avec formatage.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📦 Produits</div>
+        <div class="card-text">Catalogue de vos produits et services avec photos, descriptions et prix.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📰 Actualités</div>
+        <div class="card-text">Vos dernières nouvelles, lancements de produits, communiqués de presse.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🖼️ Galerie</div>
+        <div class="card-text">Portfolio photos de vos réalisations, produits, équipe et stand salon.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">👥 Équipe</div>
+        <div class="card-text">Présentez vos collaborateurs clés avec photo, poste et coordonnées.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🏅 Certifications</div>
+        <div class="card-text">Badges et logos de vos certifications ISO, labels et distinctions.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📞 Contact</div>
+        <div class="card-text">Formulaire de contact, adresse, numéros de téléphone, carte de localisation.</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:14px;">Personnaliser le thème de votre mini-site</h3>
+    <div class="two-col">
+      <div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Paramètres du thème</div>
+              <div class="step-text">Dans l'éditeur, cliquez sur <strong>"Thème"</strong> pour ouvrir le panneau de personnalisation.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Couleurs de marque</div>
+              <div class="step-text">Choisissez votre couleur primaire, secondaire et accent. Entrez le code hexadécimal ou utilisez le sélecteur visuel.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Publier</div>
+              <div class="step-text">Cliquez sur <strong>"Publier le mini-site"</strong> pour le rendre visible dans le catalogue et sur votre URL.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="callout callout-info">
+          <div class="callout-icon">🔗</div>
+          <div class="callout-body">
+            <div class="callout-title">URL de votre mini-site</div>
+            <div class="callout-text">Votre mini-site est accessible à l'adresse :<br><strong>sib2026.ma/mini-sites/[votre-identifiant]</strong><br><br>Partagez ce lien sur vos supports de communication avant le salon.</div>
+          </div>
+        </div>
+        <div class="callout callout-success" style="margin-top:10px;">
+          <div class="callout-icon">📊</div>
+          <div class="callout-body">
+            <div class="callout-title">Statistiques de votre mini-site</div>
+            <div class="callout-text">Tableau de bord → Mini-Site → Statistiques : nombre de vues, visiteurs uniques, sections les plus consultées.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 3 — Espace Exposant</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 4 — NETWORKING & RDV ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">4</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 4</div>
+      <div class="chapter-title">Networking & Rendez-vous B2B</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <h2>Système de Matching par Intelligence Artificielle</h2>
+    <p>L'algorithme de matching analyse votre profil (secteur, intérêts, objectifs de visite) et le compare à celui des exposants et visiteurs pour vous proposer les rencontres les plus pertinentes.</p>
+
+    <div class="highlight-box">
+      <div class="highlight-box-title">Comment le matching fonctionne</div>
+      <div class="highlight-box-text">L'algorithme calcule un <strong>score de compatibilité</strong> basé sur : le secteur d'activité, les intérêts déclarés, les objectifs de visite, l'historique d'interactions. Plus votre profil est complet, plus les recommandations sont précises. Les intérêts mutuels sont automatiquement détectés pour maximiser les opportunités B2B.</div>
+    </div>
+
+    <h3>Accéder aux recommandations de matching</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Tableau de bord → Networking</div>
+          <div class="step-text">La section Networking affiche vos recommandations personnalisées triées par score de compatibilité.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Explorer les profils suggérés</div>
+          <div class="step-text">Cliquez sur un profil pour voir les détails, le score de compatibilité et les intérêts communs.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Envoyer un message ou prendre rendez-vous</div>
+          <div class="step-text">Depuis le profil, envoyez un message via la messagerie interne ou proposez directement un créneau de rendez-vous.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Prendre un rendez-vous B2B</h2>
+
+    <div class="two-col">
+      <div>
+        <h3>Réserver un créneau</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Trouver l'exposant ou visiteur</div>
+              <div class="step-text">Via le catalogue exposants, le matching, ou la recherche.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Cliquer sur "Prendre rendez-vous"</div>
+              <div class="step-text">Disponible sur chaque profil exposant dans le catalogue.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Sélectionner le créneau</div>
+              <div class="step-text">Le calendrier affiche les créneaux disponibles de l'exposant. Choisissez le jour et l'heure.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Confirmer</div>
+              <div class="step-text">Saisissez l'objet de la réunion et confirmez. Vous recevrez une confirmation par email.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>Gérer vos rendez-vous</h3>
+        <div class="callout callout-info">
+          <div class="callout-icon">📅</div>
+          <div class="callout-body">
+            <div class="callout-title">Tableau de bord → Mes Rendez-vous</div>
+            <div class="callout-text">Retrouvez tous vos rendez-vous (à venir, passés, annulés) avec les coordonnées de votre interlocuteur et l'objet de la réunion.</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <div class="card-title">Actions sur un rendez-vous</div>
+          <ul class="feature-list" style="margin-top:8px;">
+            <li>Accepter ou refuser une demande reçue</li>
+            <li>Annuler un rendez-vous confirmé (avec motif)</li>
+            <li>Contacter l'interlocuteur par messagerie</li>
+            <li>Ajouter au calendrier (.ics export)</li>
+            <li>Laisser une évaluation après la réunion</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Messagerie Interne</h2>
+    <p>La messagerie interne permet d'échanger directement avec les exposants, visiteurs et membres de l'équipe SIB — sans partager vos informations de contact personnelles.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Démarrer une conversation</div>
+        <div class="card-text">Depuis n'importe quel profil, cliquez sur <strong>"Envoyer un message"</strong>. La conversation est visible dans votre espace Messagerie (icône dans la navigation).</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Pièces jointes</div>
+        <div class="card-text">Partagez des documents, présentations ou fiches produits directement dans la conversation. Formats supportés : PDF, images, Office.</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 4 — Networking & Rendez-vous B2B</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 5 — PARTENAIRE ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">5</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 5</div>
+      <div class="chapter-title">Espace Partenaire & Sponsor</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <h2>Niveaux de partenariat</h2>
+    <table>
+      <thead>
+        <tr><th>Niveau</th><th>Avantages principaux</th><th>Visibilité</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-gold">Organisateur</span></td>
+          <td>Accès complet · Co-branding · Espace dédié</td>
+          <td>Maximum</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-gold">Co-organisateur</span></td>
+          <td>Accès étendu · Visibilité premium · Médias illimités</td>
+          <td>Très haute</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">Sponsor officiel</span></td>
+          <td>Dashboard analytics · Leads qualifiés · Upload médias</td>
+          <td>Haute</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">Org. délégué</span></td>
+          <td>Espace partenaire · Analytics basiques · Médias limités</td>
+          <td>Moyenne</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">Partenaire presse</span></td>
+          <td>Accréditation presse · Accès contenus exclusifs</td>
+          <td>Sectorielle</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">Partenaire général</span></td>
+          <td>Logo catalogue · Profil basique · 2 médias</td>
+          <td>Standard</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Tableau de bord Partenaire</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">📊 Analytics & ROI</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Trafic généré sur votre profil</li>
+          <li>Nombre de leads capturés</li>
+          <li>Vues de vos contenus médias</li>
+          <li>Comparaison vs éditions précédentes</li>
+          <li>Export rapport PDF / Excel</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🎬 Gestion des Médias</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Upload de vidéos et podcasts</li>
+          <li>Catégorisation du contenu</li>
+          <li>Statut de validation (en attente/approuvé)</li>
+          <li>Analytics par contenu (vues, durée)</li>
+          <li>Bibliothèque de vos médias publiés</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:16px;">Uploader un contenu média</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Médias → Ajouter un contenu</div>
+          <div class="step-text">Depuis votre espace partenaire, accédez à la section Médias.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Choisir la catégorie</div>
+          <div class="step-text">Webinaire, Podcast, Capsule, Live Studio, Best Moments ou Témoignage.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Renseigner les métadonnées</div>
+          <div class="step-text">Titre, description, miniature, tags, langue du contenu, salon associé.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Soumettre pour validation</div>
+          <div class="step-text">Le contenu est examiné par l'équipe admin avant publication. Délai : 24-48h ouvrées.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3>Gestion des Leads</h3>
+        <div class="card">
+          <div class="card-text">Votre espace Leads centralise les visiteurs ayant manifesté de l'intérêt pour votre entreprise (visite profil, demande de contact, rendez-vous). Exportez vos leads au format Excel pour votre CRM.</div>
+        </div>
+      </div>
+      <div>
+        <h3>Satisfaction & Support</h3>
+        <div class="card">
+          <div class="card-text">Un canal de support prioritaire est accessible depuis votre espace partenaire. Vous pouvez également soumettre des évaluations et retours d'expérience depuis l'onglet Satisfaction.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 5 — Espace Partenaire</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 6 — ADMINISTRATION ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">6</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 6</div>
+      <div class="chapter-title">Administration de la Plateforme</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <div class="callout callout-danger">
+      <div class="callout-icon">🔐</div>
+      <div class="callout-body">
+        <div class="callout-title">Accès réservé aux administrateurs</div>
+        <div class="callout-text">Ce chapitre est destiné exclusivement à l'équipe organisatrice SIB 2026 disposant des droits administrateurs. L'accès non autorisé est bloqué par le système de sécurité.</div>
+      </div>
+    </div>
+
+    <h2>Tableau de bord Admin</h2>
+    <p>Le tableau de bord administrateur centralise toutes les métriques en temps réel : nombre d'inscrits par rôle, paiements en attente, contenu en attente de modération et activité globale de la plateforme.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Valider un compte utilisateur</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Admin → Validation des comptes</div>
+              <div class="step-text">Liste de tous les comptes en attente de validation.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Examiner le dossier</div>
+              <div class="step-text">Cliquez sur un compte pour voir les informations fournies lors de l'inscription.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Approuver ou rejeter</div>
+              <div class="step-text">Bouton <strong>"Approuver"</strong> (passe le compte en pending_payment) ou <strong>"Rejeter"</strong> avec motif. L'utilisateur est notifié par email automatiquement.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>Valider un paiement</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Admin → Validation des paiements</div>
+              <div class="step-text">Liste des virements bancaires en attente d'approbation.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Vérifier le justificatif</div>
+              <div class="step-text">Téléchargez et vérifiez le reçu bancaire uploadé par l'utilisateur.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Approuver → Compte actif</div>
+              <div class="step-text">Bouton <strong>"Approuver le paiement"</strong>. Le compte passe à l'état actif et l'utilisateur reçoit la confirmation.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Gestion du contenu</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Articles & Actualités</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Admin → Actualités → Créer un article</li>
+          <li>Éditeur de texte riche avec images</li>
+          <li>Programmer la publication</li>
+          <li>Publier / dépublier sans supprimer</li>
+          <li>Catégoriser par salon ou thème</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Événements & Conférences</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Admin → Événements → Créer un événement</li>
+          <li>Date, heure, lieu, nombre de places</li>
+          <li>Ajout des intervenants (speakers)</li>
+          <li>Gestion des inscriptions</li>
+          <li>Envoi de rappels aux inscrits</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:14px;">Scanner QR & Contrôle d'accès (sur site)</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Accéder au scanner</div>
+          <div class="step-text">Admin → Scanner QR — Sur tablette ou smartphone, le scanner s'ouvre dans le navigateur.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Scanner le badge participant</div>
+          <div class="step-text">Pointez l'appareil photo vers le QR code sur le badge du participant.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Résultat instantané</div>
+          <div class="step-text"><strong>Vert</strong> = accès autorisé | <strong>Rouge</strong> = accès refusé (compte inactif ou invalide). Les check-ins sont enregistrés automatiquement.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 6 — Administration</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 7 — PAIEMENTS ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">7</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 7</div>
+      <div class="chapter-title">Paiements & Abonnements</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <h2>Modes de paiement disponibles</h2>
+
+    <div class="card-grid">
+      <div class="card" style="border-top: 3px solid #003087;">
+        <div class="card-title">💳 PayPal — International</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Paiement en EUR uniquement</li>
+          <li>Carte bancaire VISA / Mastercard / Amex</li>
+          <li>Compte PayPal existant accepté</li>
+          <li>Confirmation immédiate et automatique</li>
+          <li>Reçu envoyé par email PayPal</li>
+          <li>Sécurisé par chiffrement PayPal</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 3px solid #b91c1c;">
+        <div class="card-title">🏦 CMI — Maroc</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Paiement en MAD uniquement</li>
+          <li>Cartes bancaires marocaines (CIH, Attijariwafa, etc.)</li>
+          <li>Visa et Mastercard émises au Maroc</li>
+          <li>Confirmation immédiate et automatique</li>
+          <li>Reçu envoyé par email de la plateforme</li>
+          <li>Gateway CMI certifié PCI-DSS</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="border-top: 3px solid var(--success); margin-top: 14px;">
+      <div class="card-title">📄 Virement bancaire — Manuel</div>
+      <div class="two-col" style="margin-top:10px;">
+        <div>
+          <ul class="feature-list">
+            <li>Accepté en EUR et MAD</li>
+            <li>Coordonnées bancaires fournies après inscription</li>
+            <li>Upload du justificatif de virement obligatoire</li>
+            <li>Validation manuelle par l'équipe admin</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="feature-list">
+            <li>Délai de validation : 24-72h ouvrées</li>
+            <li>Notification email dès validation</li>
+            <li>Idéal pour les paiements entreprise</li>
+            <li>Bon de commande disponible sur demande</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Procédure de paiement par virement bancaire</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Choisir "Virement bancaire" dans le flux de paiement</div>
+          <div class="step-text">Lors de l'étape de paiement de votre inscription, sélectionnez "Virement bancaire".</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Recevoir les coordonnées bancaires</div>
+          <div class="step-text">Les coordonnées du compte SIB 2026 (IBAN, BIC, banque, référence de virement) sont affichées à l'écran et envoyées par email.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Effectuer le virement</div>
+          <div class="step-text">Depuis votre banque, effectuez le virement en mentionnant impérativement la <strong>référence fournie</strong> dans le libellé.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Uploader le justificatif</div>
+          <div class="step-text">Depuis votre espace → Paiement → Uploader le justificatif. Formats acceptés : PDF, JPG, PNG (max 5 Mo).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Attendre la validation</div>
+          <div class="step-text">L'équipe SIB 2026 vérifie le virement et active votre compte. Vous recevez un email de confirmation avec votre badge numérique.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <div class="callout-title">Important : référence de virement</div>
+        <div class="callout-text">Toujours indiquer la référence de paiement fournie par la plateforme dans le libellé du virement. Sans cette référence, la validation peut être retardée significativement. La référence ressemble à : <strong>SIB2026-[ID]-[DATE]</strong></div>
+      </div>
+    </div>
+
+    <h2>Statuts de paiement</h2>
+    <table>
+      <thead>
+        <tr><th>Statut</th><th>Signification</th><th>Action requise</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="badge badge-blue">En attente</span></td><td>Justificatif non encore uploadé</td><td>Uploader le reçu bancaire</td></tr>
+        <tr><td><span class="badge" style="background:#fff7ed;color:#92400e;border:1px solid #fde68a;">En révision</span></td><td>L'admin examine le justificatif</td><td>Attendre la validation (24-72h)</td></tr>
+        <tr><td><span class="badge badge-green">Approuvé</span></td><td>Paiement validé, compte actif</td><td>Aucune — vous avez accès complet</td></tr>
+        <tr><td><span class="badge badge-red">Rejeté</span></td><td>Justificatif non valide</td><td>Contacter le support ou re-soumettre</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 7 — Paiements & Abonnements</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 8 — BADGES ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">8</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 8</div>
+      <div class="chapter-title">Badges Numériques & Check-in</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <h2>Votre badge numérique</h2>
+    <p>Chaque participant (visiteur, exposant, partenaire) reçoit un badge numérique unique contenant ses informations professionnelles et un QR code sécurisé utilisé pour le contrôle d'accès sur site.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Accéder et télécharger votre badge</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Menu → Mon Badge Digital</div>
+              <div class="step-text">Disponible dès que votre compte est actif (après validation admin).</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Affichage du badge</div>
+              <div class="step-text">Votre badge avec nom, entreprise, rôle, photo et QR code unique s'affiche à l'écran.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Télécharger en PDF</div>
+              <div class="step-text">Cliquez sur <strong>"Télécharger mon badge"</strong> pour sauvegarder sur votre appareil ou imprimer.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Badge mobile</div>
+              <div class="step-text">Conservez le badge sur votre téléphone. Présentez l'écran aux agents de contrôle à l'entrée du salon.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>Contenu du badge</h3>
+        <div class="card" style="margin-bottom:12px;">
+          <div class="card-title">Badge Standard</div>
+          <ul class="feature-list" style="margin-top:8px;">
+            <li>Nom et prénom</li>
+            <li>Entreprise et poste</li>
+            <li>Pays d'origine</li>
+            <li>QR code unique sécurisé</li>
+            <li>Logo SIB 2026</li>
+            <li>Dates du salon</li>
+          </ul>
+        </div>
+        <div class="card" style="border-color: var(--accent); border-width: 2px;">
+          <div class="card-title" style="color:var(--accent);">Badge VIP ✦</div>
+          <ul class="feature-list" style="margin-top:8px;">
+            <li>Tout le contenu Standard +</li>
+            <li>Indicateur VIP visible</li>
+            <li>Photo de profil</li>
+            <li>Design premium doré</li>
+            <li>Accès aux zones VIP</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Système de Check-in (Personnel sur site)</h2>
+
+    <div class="callout callout-info">
+      <div class="callout-icon">📱</div>
+      <div class="callout-body">
+        <div class="callout-title">Pour le personnel de sécurité</div>
+        <div class="callout-text">Le scanner QR est accessible depuis n'importe quel appareil avec navigateur : tablette, smartphone ou PC. Accès : <strong>/security/scanner</strong> — Connexion requise avec compte sécurité/admin.</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3>Processus de vérification</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Ouvrir le scanner</div>
+              <div class="step-text">Accéder à Admin → Scanner QR. Autoriser l'accès à la caméra si demandé.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Scanner le QR code</div>
+              <div class="step-text">Pointer la caméra vers le badge du participant. La lecture est automatique.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Lire le résultat</div>
+              <div class="step-text"><strong style="color:var(--success);">VERT = Accès autorisé</strong> — Profil affiché.<br><strong style="color:var(--danger);">ROUGE = Accès refusé</strong> — Compte inactif ou invalide.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>Station d'impression (Admin)</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Admin → Station d'impression</div>
+              <div class="step-text">Interface dédiée à l'impression des badges sur site.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Rechercher le participant</div>
+              <div class="step-text">Par nom, email ou numéro d'inscription.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Imprimer le badge</div>
+              <div class="step-text">Cliquez sur "Imprimer". Le badge s'imprime sur imprimante de badges connectée.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 8 — Badges Numériques & Check-in</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 9 — MÉDIATHÈQUE ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">9</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 9</div>
+      <div class="chapter-title">Médiathèque & Événements</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <h2>Accéder à la Médiathèque</h2>
+    <p>La médiathèque SIB 2026 regroupe l'ensemble des contenus vidéo, audio et éditoriaux liés au salon. Elle est accessible depuis le menu principal de la plateforme.</p>
+
+    <div class="card-grid-3">
+      <div class="card">
+        <div class="card-title">🎬 Webinaires</div>
+        <div class="card-text">Sessions thématiques enregistrées sur les tendances du bâtiment. Replay disponible après chaque session live.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎙️ Podcasts SIB Talks</div>
+        <div class="card-text">Interviews d'experts, dirigeants et innovateurs du secteur. Format audio disponible en streaming ou téléchargement.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📱 Capsules</div>
+        <div class="card-text">Formats courts (2-5 min) pour découvrir les exposants, innovations et coulisses du salon.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎤 Live Studio</div>
+        <div class="card-text">Rencontres avec les leaders du secteur, animées en direct depuis le salon.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">✨ Best Moments</div>
+        <div class="card-text">Compilation des moments forts, cérémonies et temps forts des éditions précédentes.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">💬 Témoignages</div>
+        <div class="card-text">Retours d'expérience vidéo des exposants et partenaires satisfaits.</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:16px;">Filtrer et rechercher dans la médiathèque</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Accéder à la Médiathèque</div>
+          <div class="step-text">Depuis la navigation principale → Médias, ou accédez directement à la catégorie souhaitée.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Utiliser les filtres</div>
+          <div class="step-text">Filtrez par catégorie, salon (SIB/SIR/SIP/BTP/SIE), date de publication ou langue.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Visionner le contenu</div>
+          <div class="step-text">Le lecteur vidéo intégré s'ouvre dans la page. Contrôles : lecture, pause, volume, plein écran, vitesse de lecture.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>S'inscrire à un événement</h2>
+
+    <div class="two-col">
+      <div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Agenda → Événements</div>
+              <div class="step-text">Naviguez le programme complet du salon avec les conférences, ateliers et sessions de networking.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Sélectionner un événement</div>
+              <div class="step-text">Cliquez sur l'événement pour voir les détails : intervenant, durée, salle, nombre de places restantes.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">S'inscrire</div>
+              <div class="step-text">Bouton <strong>"S'inscrire"</strong>. Confirmation email envoyée automatiquement.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Exporter vers votre agenda</div>
+              <div class="step-text">Téléchargez le fichier .ics pour ajouter l'événement à votre calendrier (Outlook, Google Calendar).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="callout callout-warning" style="margin-top:0;">
+          <div class="callout-icon">📍</div>
+          <div class="callout-body">
+            <div class="callout-title">Places limitées</div>
+            <div class="callout-text">Les sessions populaires affichent le nombre de places restantes en temps réel. Inscrivez-vous rapidement pour les conférences phares. Vous pouvez vous désinscrire jusqu'à 24h avant le début.</div>
+          </div>
+        </div>
+
+        <div class="callout callout-success" style="margin-top:10px;">
+          <div class="callout-icon">🔔</div>
+          <div class="callout-body">
+            <div class="callout-title">Rappels automatiques</div>
+            <div class="callout-text">Vous recevez un email de rappel 24h et 1h avant chaque événement auquel vous êtes inscrit. Activez les notifications push pour les rappels sur mobile.</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <div class="card-title">Mes Événements inscrits</div>
+          <div class="card-text">Retrouvez tous vos événements inscrits dans votre tableau de bord → Mon Agenda. Vue calendrier ou liste avec possibilité de désincription.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 9 — Médiathèque & Événements</span>
+  </div>
+</div>
+
+<!-- ==================== CHAPITRE 10 — FAQ ==================== -->
+<div class="page">
+  <div class="chapter-header">
+    <div class="chapter-num-badge">10</div>
+    <div class="chapter-info">
+      <div class="chapter-label">Chapitre 10</div>
+      <div class="chapter-title">FAQ & Résolution de Problèmes</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <h2>Questions fréquentes</h2>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-title">Je n'ai pas reçu l'email de confirmation</div>
+      <div class="card-text">1) Vérifiez votre dossier <strong>Spam / Courrier indésirable</strong>. 2) Attendez 5 minutes (délai normal). 3) Si toujours absent, cliquez sur <strong>"Renvoyer l'email de confirmation"</strong> sur la page de connexion. 4) Contactez le support si le problème persiste.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-title">Mon compte est bloqué après plusieurs tentatives de connexion</div>
+      <div class="card-text">Le système bloque temporairement un compte après 5 tentatives échouées (protection anti-brute force). Attendez 15 minutes puis réessayez. Utilisez <strong>"Mot de passe oublié"</strong> si vous avez oublié votre mot de passe.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-title">Ma session s'est terminée automatiquement et j'ai perdu mes modifications</div>
+      <div class="card-text">La session expire après 30 minutes d'inactivité. Pensez à sauvegarder régulièrement en cours d'édition (bouton "Enregistrer" ou Ctrl+S). La plateforme affiche un avertissement 5 minutes avant l'expiration.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-title">Mon paiement par virement est en attente depuis plus de 72h</div>
+      <div class="card-text">1) Vérifiez que vous avez bien uploadé le justificatif sur la plateforme. 2) Vérifiez que la référence de virement était mentionnée dans le libellé. 3) Contactez le support à <strong>contact@sib2026.ma</strong> avec votre justificatif en pièce jointe.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-title">Je ne vois pas les recommandations de matching</div>
+      <div class="card-text">Le matching nécessite un profil complet. Complétez au minimum : secteur d'activité, centres d'intérêt, objectifs de visite, et description professionnelle. Plus votre profil est détaillé, plus les recommandations sont précises.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-title">Mon mini-site n'est pas visible dans le catalogue</div>
+      <div class="card-text">Vérifiez dans l'éditeur que votre mini-site est bien en statut <strong>"Publié"</strong>. Si c'est le cas et qu'il n'apparaît pas, un délai de 5 à 10 minutes peut être nécessaire pour l'indexation. Contactez le support si le problème persiste après 30 minutes.</div>
+    </div>
+
+    <h2>Contacter le Support</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">📧 Email Support</div>
+        <div class="card-text"><strong>contact@sib2026.ma</strong><br>Réponse sous 24-48h ouvrées.<br>Incluez votre email de compte, la description du problème et des captures d'écran si possible.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">💬 Chat sur la plateforme</div>
+        <div class="card-text">Icône de chat en bas à droite de toutes les pages. Disponible pendant les heures ouvrées. Pour les partenaires VIP : support prioritaire avec temps de réponse réduit.</div>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:14px;">
+      <div class="callout-icon">🌐</div>
+      <div class="callout-body">
+        <div class="callout-title">Changer la langue de l'interface</div>
+        <div class="callout-text">Le sélecteur de langue est disponible dans la navigation principale (en haut de page). Trois langues disponibles : <strong>Français</strong> (FR) · <strong>Anglais</strong> (EN) · <strong>Arabe</strong> (AR avec support RTL). La langue est sauvegardée automatiquement dans votre profil.</div>
+      </div>
+    </div>
+
+    <div class="callout callout-success" style="margin-top:10px;">
+      <div class="callout-icon">📱</div>
+      <div class="callout-body">
+        <div class="callout-title">Application Mobile UrbaEvent</div>
+        <div class="callout-text">Téléchargez l'application mobile <strong>UrbaEvent</strong> sur l'App Store (iOS) ou Google Play (Android) pour accéder à toutes les fonctionnalités du salon depuis votre smartphone. Notifications push activées pour les rappels de rendez-vous et événements.</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Manuel Utilisateur</span>
+    <span>Chapitre 10 — FAQ & Support</span>
+  </div>
+</div>
+
+<!-- ==================== BACK COVER ==================== -->
+<div class="page cover" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+  <div style="padding:60px;">
+    <div style="font-size:50px;margin-bottom:24px;">📖</div>
+    <div class="cover-logo" style="font-size:36px;margin-bottom:16px;">SIB<span>.</span>2026</div>
+    <div style="font-size:20px;color:rgba(255,255,255,0.7);font-weight:300;margin-bottom:8px;">Manuel Utilisateur</div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:40px;">Version 1.0 — Avril 2026</div>
+    <div class="cover-divider"></div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:2.2;margin-bottom:40px;">
+      25 – 29 Novembre 2026<br>
+      Parc d'Exposition Mohammed VI · El Jadida, Maroc<br>
+      <strong style="color:var(--accent);">sib2026.ma</strong>
+    </div>
+    <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;">
+      <div class="cover-pill">contact@sib2026.ma</div>
+      <div class="cover-pill">+212 (0) X XX XX XX XX</div>
+      <div class="cover-pill">sib2026.ma</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -9,6 +9,11 @@
 .history
 .svn/
 
+# Variables d'environnement — NE JAMAIS COMMITTER
+assets/.env
+.env
+.env.*
+
 # IntelliJ related
 *.iml
 *.ipr

@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIB 2026 — Présentation de la Plateforme Digitale</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    :root {
+      --primary: #1B3A6B;
+      --accent:  #C9A84C;
+      --light:   #F5F7FA;
+      --text:    #1a1a2e;
+      --muted:   #6b7280;
+      --border:  #e5e7eb;
+      --white:   #ffffff;
+      --success: #059669;
+      --info:    #0ea5e9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ===== PAGE BREAKS ===== */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 0;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+    }
+    .page:last-child { page-break-after: avoid; }
+
+    @media print {
+      body { margin: 0; }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        page-break-after: always;
+      }
+      .no-print { display: none; }
+    }
+
+    /* ===== COVER PAGE ===== */
+    .cover {
+      background: linear-gradient(150deg, var(--primary) 0%, #0d2347 60%, #162040 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0;
+    }
+
+    .cover-top {
+      padding: 50px 60px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .cover-logo {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: white;
+    }
+    .cover-logo span { color: var(--accent); }
+
+    .cover-badge {
+      background: var(--accent);
+      color: #1a1a2e;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .cover-hero {
+      padding: 0 60px;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+
+    .cover-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .cover-title {
+      font-size: 46px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .cover-subtitle {
+      font-size: 18px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 40px;
+    }
+
+    .cover-divider {
+      width: 80px;
+      height: 3px;
+      background: var(--accent);
+      margin: 0 auto 40px;
+    }
+
+    .cover-stats {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+    }
+
+    .cover-stat {
+      text-align: center;
+    }
+    .cover-stat-num {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+    }
+    .cover-stat-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    .cover-visual {
+      background: rgba(255,255,255,0.04);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 24px 60px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cover-pill {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .cover-footer {
+      background: rgba(0,0,0,0.25);
+      padding: 18px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* ===== SECTION HEADER ===== */
+    .section-header {
+      background: linear-gradient(90deg, var(--primary) 0%, #1e4d8c 100%);
+      padding: 36px 60px;
+      color: white;
+    }
+    .section-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 28px;
+      font-weight: 800;
+    }
+    .section-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 8px;
+    }
+
+    /* ===== CONTENT ===== */
+    .content {
+      padding: 40px 60px;
+    }
+    .content-sm { padding: 24px 60px 40px; }
+
+    /* ===== CARDS ===== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      background: var(--white);
+    }
+    .card-accent { border-left: 4px solid var(--accent); }
+    .card-primary { border-left: 4px solid var(--primary); }
+    .card-success { border-left: 4px solid var(--success); }
+    .card-info { border-left: 4px solid var(--info); }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .icon-gold { background: #fef9ee; }
+    .icon-blue { background: #eff6ff; }
+    .icon-green { background: #f0fdf4; }
+    .icon-purple { background: #faf5ff; }
+    .icon-red { background: #fff5f5; }
+    .icon-teal { background: #f0fdfa; }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .card-text {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ===== FEATURE LIST ===== */
+    .feature-list {
+      list-style: none;
+    }
+    .feature-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list li::before {
+      content: "✓";
+      color: var(--success);
+      font-weight: 700;
+      font-size: 12px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    /* ===== TABLE ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    thead th {
+      background: var(--primary);
+      color: white;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    thead th:first-child { border-radius: 8px 0 0 0; }
+    thead th:last-child { border-radius: 0 8px 0 0; }
+    tbody tr:nth-child(even) { background: var(--light); }
+    tbody td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    tbody tr:hover { background: #eef2ff; }
+    .check { color: var(--success); font-weight: 700; }
+    .dash { color: var(--border); }
+
+    /* ===== TAGS ===== */
+    .tag {
+      display: inline-block;
+      background: #eff6ff;
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      margin: 2px;
+    }
+    .tag-gold {
+      background: #fef9ee;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+    .tag-green {
+      background: #f0fdf4;
+      color: #065f46;
+      border-color: #a7f3d0;
+    }
+
+    /* ===== ROLE CHART ===== */
+    .role-tree {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 28px;
+      margin: 16px 0;
+    }
+    .role-root {
+      background: var(--primary);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    .role-branch {
+      padding-left: 30px;
+      border-left: 2px solid var(--border);
+      margin-left: 20px;
+    }
+    .role-item {
+      padding: 7px 14px;
+      margin: 5px 0;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .role-admin { background: #fef2f2; color: #991b1b; }
+    .role-partner { background: #fef9ee; color: #78350f; }
+    .role-exhibitor { background: #eff6ff; color: #1e40af; }
+    .role-visitor { background: #f0fdf4; color: #065f46; }
+    .role-security { background: #f5f3ff; color: #5b21b6; }
+
+    /* ===== ARCHITECTURE BOX ===== */
+    .arch-box {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .arch-layer {
+      padding: 16px 22px;
+      border-bottom: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .arch-layer:last-child { border-bottom: none; }
+    .arch-layer-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      min-width: 80px;
+      color: var(--muted);
+    }
+    .arch-layer-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .arch-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .arch-layer-client { background: #eff6ff; }
+    .arch-layer-api { background: #f0fdf4; }
+    .arch-layer-data { background: #fef9ee; }
+
+    /* ===== PAYMENT FLOW ===== */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .flow-step {
+      background: var(--primary);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .flow-arrow {
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .flow-step-muted {
+      background: var(--light);
+      color: var(--muted);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+    }
+    .flow-step-success {
+      background: #f0fdf4;
+      color: var(--success);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid #a7f3d0;
+    }
+
+    /* ===== STAT BOXES ===== */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .stat-box {
+      background: var(--light);
+      border-radius: 10px;
+      padding: 18px 14px;
+      text-align: center;
+    }
+    .stat-box-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      display: block;
+    }
+    .stat-box-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline {
+      border-left: 3px solid var(--primary);
+      padding-left: 24px;
+      margin: 16px 0;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -31px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid white;
+      outline: 2px solid var(--primary);
+    }
+    .timeline-title {
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .timeline-text {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ===== HIGHLIGHT BOX ===== */
+    .highlight {
+      background: linear-gradient(135deg, #1B3A6B 0%, #1e4d8c 100%);
+      border-radius: 12px;
+      padding: 28px;
+      color: white;
+      margin: 16px 0;
+    }
+    .highlight h3 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .highlight p {
+      font-size: 13px;
+      opacity: 0.8;
+      line-height: 1.7;
+    }
+    .highlight-gold {
+      background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+    }
+
+    /* ===== FOOTER ===== */
+    .page-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--primary);
+      color: rgba(255,255,255,0.6);
+      font-size: 10px;
+      padding: 10px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .page-footer strong { color: var(--accent); }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+
+    .mb-4 { margin-bottom: 16px; }
+    .mb-6 { margin-bottom: 24px; }
+    .mt-4 { margin-top: 16px; }
+    .gap-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    /* Print button */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .print-btn:hover { background: #1e4d8c; }
+
+    .salon-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+    .salon-badge {
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      padding: 8px 16px;
+      text-align: center;
+      min-width: 70px;
+    }
+    .salon-badge-code {
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--primary);
+      display: block;
+    }
+    .salon-badge-name {
+      font-size: 9px;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .security-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .security-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .security-label {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .security-desc {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .media-card {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+    }
+    .media-card-header {
+      background: var(--primary);
+      color: white;
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .media-card-body {
+      padding: 12px 14px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .integrations-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .integration-item {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .integration-name {
+      font-weight: 700;
+      font-size: 13px;
+      margin: 8px 0 4px;
+    }
+    .integration-role {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .integration-logo {
+      font-size: 26px;
+    }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Imprimer en PDF</button>
+
+<!-- ==================== PAGE 1 — COVER ==================== -->
+<div class="page cover">
+  <div class="cover-top">
+    <div class="cover-logo">SIB<span>.</span>2026</div>
+    <div class="cover-badge">Confidentiel Client</div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-eyebrow">Plateforme Digitale Officielle</div>
+    <div class="cover-title">Salon International<br>du Bâtiment</div>
+    <div class="cover-subtitle">20ème édition — 25 au 29 Novembre 2026<br>Parc d'Exposition Mohammed VI · El Jadida, Maroc</div>
+    <div class="cover-divider"></div>
+    <div class="cover-stats">
+      <div class="cover-stat">
+        <span class="cover-stat-num">130+</span>
+        <div class="cover-stat-label">Pages & Fonctions</div>
+      </div>
+      <div class="cover-stat">
+        <span class="cover-stat-num">6</span>
+        <div class="cover-stat-label">Rôles Utilisateurs</div>
+      </div>
+      <div class="cover-stat">
+        <span class="cover-stat-num">5</span>
+        <div class="cover-stat-label">Salons Supportés</div>
+      </div>
+      <div class="cover-stat">
+        <span class="cover-stat-num">3</span>
+        <div class="cover-stat-label">Langues</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-visual">
+    <div class="cover-pill">React 18 + TypeScript</div>
+    <div class="cover-pill">Supabase PostgreSQL</div>
+    <div class="cover-pill">Intelligence Artificielle</div>
+    <div class="cover-pill">Paiements Multi-devises</div>
+    <div class="cover-pill">Badges Numériques</div>
+    <div class="cover-pill">Networking B2B</div>
+    <div class="cover-pill">Mini-Site Builder</div>
+    <div class="cover-pill">Application Mobile</div>
+  </div>
+
+  <div class="cover-footer">
+    <span>SIB 2026 — Présentation de la Plateforme Digitale</span>
+    <span>Avril 2026</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 2 — SOMMAIRE & VUE D'ENSEMBLE ==================== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title">Vue d'ensemble de la Plateforme</div>
+    <div class="section-desc">Un écosystème digital complet pour orchestrer un salon international de grande envergure</div>
+  </div>
+  <div class="content">
+    <div class="highlight mb-6">
+      <h3>Un écosystème digital unique au Maroc</h3>
+      <p>SIB 2026 est bien plus qu'un simple site web. C'est une plateforme digitale complète qui centralise l'inscription des participants, la gestion des exposants, le networking B2B assisté par IA, les paiements multidevises, la médiathèque, la gestion de contenu et le suivi analytique en temps réel — dans un seul environnement intégré, multilingue et sécurisé.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <span class="stat-box-num">130+</span>
+        <div class="stat-box-label">Pages & Routes</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-box-num">6</span>
+        <div class="stat-box-label">Rôles Utilisateurs</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-box-num">5</span>
+        <div class="stat-box-label">Salons Multi-formats</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-box-num">3</span>
+        <div class="stat-box-label">Langues (FR/EN/AR)</div>
+      </div>
+    </div>
+
+    <h2>Écosystème Multi-Salon UrbaEvent</h2>
+    <p>La plateforme supporte nativement 5 salons distincts sous la bannière UrbaEvent :</p>
+
+    <div class="salon-row">
+      <div class="salon-badge">
+        <span class="salon-badge-code">SIB</span>
+        <span class="salon-badge-name">Bâtiment</span>
+      </div>
+      <div class="salon-badge">
+        <span class="salon-badge-code">SIR</span>
+        <span class="salon-badge-name">Immobilier</span>
+      </div>
+      <div class="salon-badge">
+        <span class="salon-badge-code">SIP</span>
+        <span class="salon-badge-name">Promotion</span>
+      </div>
+      <div class="salon-badge">
+        <span class="salon-badge-code">BTP</span>
+        <span class="salon-badge-name">Travaux Publics</span>
+      </div>
+      <div class="salon-badge">
+        <span class="salon-badge-code">SIE</span>
+        <span class="salon-badge-name">Environnement</span>
+      </div>
+    </div>
+
+    <h2 class="mt-4">Architecture Technique</h2>
+    <div class="arch-box">
+      <div class="arch-layer arch-layer-client">
+        <div class="arch-layer-label">Client</div>
+        <div class="arch-layer-items">
+          <div class="arch-item">Web App React 18</div>
+          <div class="arch-item">Mobile Flutter iOS/Android</div>
+          <div class="arch-item">CDN Vercel (mondial)</div>
+        </div>
+      </div>
+      <div class="arch-layer arch-layer-api">
+        <div class="arch-layer-label">API</div>
+        <div class="arch-layer-items">
+          <div class="arch-item">Express.js (Railway)</div>
+          <div class="arch-item">Supabase Edge Functions (Deno)</div>
+          <div class="arch-item">RLS PostgreSQL</div>
+        </div>
+      </div>
+      <div class="arch-layer arch-layer-data">
+        <div class="arch-layer-label">Services</div>
+        <div class="arch-layer-items">
+          <div class="arch-item">Supabase Auth + DB + Storage</div>
+          <div class="arch-item">Firebase OAuth + Push</div>
+          <div class="arch-item">PayPal / CMI</div>
+          <div class="arch-item">Resend Email</div>
+          <div class="arch-item">Sentry Monitoring</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Plateforme Digitale</span>
+    <span>Page 2</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3 — RÔLES UTILISATEURS ==================== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title">Rôles & Espaces Utilisateurs</div>
+    <div class="section-desc">6 profils distincts avec des espaces personnalisés, des permissions granulaires et des workflows dédiés</div>
+  </div>
+  <div class="content-sm">
+    <div class="card-grid mb-4">
+      <div class="card card-accent">
+        <div class="card-icon icon-red">👑</div>
+        <div class="card-title">Administrateur</div>
+        <div class="card-text">Accès complet à la plateforme. Validation des comptes, approbation des paiements, modération du contenu, gestion des utilisateurs, analytics et configuration système.</div>
+      </div>
+      <div class="card card-primary">
+        <div class="card-icon icon-purple">📊</div>
+        <div class="card-title">Marketing / Staff</div>
+        <div class="card-text">Accès au dashboard analytics, gestion CMS des pages statiques, modération des contenus médias. Scanner QR pour le contrôle d'accès sur site.</div>
+      </div>
+    </div>
+
+    <div class="card-grid mb-4">
+      <div class="card card-accent">
+        <div class="card-icon icon-gold">🤝</div>
+        <div class="card-title">Partenaire / Sponsor (6 niveaux)</div>
+        <div class="card-text">Organisateur · Co-organisateur · Sponsor officiel · Organisateur délégué · Partenaire presse · Partenaire général. Dashboard dédié avec ROI, leads, médias et analytics.</div>
+      </div>
+      <div class="card card-primary">
+        <div class="card-icon icon-blue">🏢</div>
+        <div class="card-title">Exposant</div>
+        <div class="card-text">Profil entreprise complet, éditeur de mini-site drag-and-drop, gestion des rendez-vous B2B, planning de disponibilités et accès aux contacts visiteurs intéressés.</div>
+      </div>
+    </div>
+
+    <div class="card card-success mb-4">
+      <div class="card-icon icon-green">👤</div>
+      <div class="card-title">Visiteur (3 niveaux d'accès)</div>
+      <div class="card-text">
+        <strong>Gratuit :</strong> Navigation, catalogue exposants, événements de base.<br>
+        <strong>Premium :</strong> Networking avancé, matching IA prioritaire.<br>
+        <strong>VIP (300 EUR) :</strong> Toutes fonctionnalités + lettre de visa officielle + badge personnalisé + support prioritaire.
+      </div>
+    </div>
+
+    <h2>Tableau des permissions</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fonctionnalité</th>
+          <th>Visiteur</th>
+          <th>Exposant</th>
+          <th>Partenaire</th>
+          <th>Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Navigation pages publiques</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Profil personnel</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Networking & matching IA</td><td class="check">✓</td><td class="check">✓</td><td class="dash">—</td><td class="check">✓</td></tr>
+        <tr><td>Rendez-vous B2B</td><td class="check">✓</td><td class="check">✓</td><td class="dash">—</td><td class="check">✓</td></tr>
+        <tr><td>Mini-site builder exposant</td><td class="dash">—</td><td class="check">✓</td><td class="dash">—</td><td class="check">✓</td></tr>
+        <tr><td>Upload & gestion médias</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Analytics avancés & ROI</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Lettre de visa officielle</td><td>VIP seul</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+        <tr><td>Validation comptes & paiements</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+        <tr><td>Scanner QR & check-in</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Plateforme Digitale</span>
+    <span>Page 3</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 4 — FONCTIONNALITÉS CLÉS 1 ==================== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title">Fonctionnalités Clés — Partie 1</div>
+    <div class="section-desc">Authentification, paiements, networking et mini-site builder</div>
+  </div>
+  <div class="content-sm">
+
+    <div class="two-col mb-4">
+      <div>
+        <h3>Authentification & Inscription</h3>
+        <ul class="feature-list">
+          <li>Inscription multi-rôle avec formulaires dédiés</li>
+          <li>Google OAuth via Firebase</li>
+          <li>Vérification d'email obligatoire</li>
+          <li>Réinitialisation de mot de passe sécurisée</li>
+          <li>Session timeout automatique (30 min)</li>
+          <li>reCAPTCHA v3 anti-bot sur formulaires</li>
+          <li>Journal d'audit de toutes les actions</li>
+          <li>Rate limiting sur les tentatives de connexion</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Cycle de vie d'un compte</h3>
+        <div class="flow" style="flex-direction:column; align-items:flex-start; gap:6px;">
+          <div class="flow-step">Inscription soumise</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step-muted">En attente validation admin</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step-muted">En attente de paiement</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step-success">Compte actif ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Paiements & Abonnements</h3>
+    <div class="card-grid-3 mb-4">
+      <div class="card card-accent">
+        <div class="card-icon icon-blue">💳</div>
+        <div class="card-title">PayPal</div>
+        <div class="card-text">Paiements internationaux en EUR. Carte bancaire ou compte PayPal. Confirmation automatique.</div>
+      </div>
+      <div class="card card-primary">
+        <div class="card-icon icon-gold">🏦</div>
+        <div class="card-title">CMI Maroc</div>
+        <div class="card-text">Cartes bancaires marocaines en MAD. Visa & Mastercard. Intégration gateway CMI.</div>
+      </div>
+      <div class="card card-success">
+        <div class="card-icon icon-green">📄</div>
+        <div class="card-title">Virement bancaire</div>
+        <div class="card-text">Upload du justificatif de paiement. Validation manuelle par l'administrateur.</div>
+      </div>
+    </div>
+
+    <h3>Networking & Matching par Intelligence Artificielle</h3>
+    <div class="card-grid mb-4">
+      <div>
+        <ul class="feature-list">
+          <li>Algorithme de matching avancé avec score de compatibilité</li>
+          <li>Détection d'intérêts mutuels et recommandations bidirectionnelles</li>
+          <li>Historique complet des interactions entre participants</li>
+          <li>Salles de networking B2B programmées</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="feature-list">
+          <li>Speed networking — sessions courtes et intensives</li>
+          <li>Planificateur de rendez-vous avec créneaux synchronisés</li>
+          <li>Messagerie interne temps réel entre participants</li>
+          <li>Score de compatibilité visible par secteur d'activité</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Mini-Site Builder Exposant</h3>
+    <div class="two-col">
+      <div>
+        <ul class="feature-list">
+          <li>Éditeur drag-and-drop par sections modulaires</li>
+          <li>Sections : Hero · À propos · Produits · Galerie</li>
+          <li>Sections : Équipe · Certifications · Contact</li>
+          <li>Personnalisation complète des couleurs de marque</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="feature-list">
+          <li>Prévisualisation temps réel desktop & mobile</li>
+          <li>URL personnalisée et pérenne par exposant</li>
+          <li>Statistiques d'audience et compteur de vues</li>
+          <li>Export PDF du mini-site complet</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Plateforme Digitale</span>
+    <span>Page 4</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 5 — FONCTIONNALITÉS CLÉS 2 ==================== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title">Fonctionnalités Clés — Partie 2</div>
+    <div class="section-desc">Médiathèque, badges numériques, événements, analytics et gestion de contenu</div>
+  </div>
+  <div class="content-sm">
+
+    <h3>Médiathèque — 6 Catégories de Contenu</h3>
+    <div class="card-grid-3 mb-4">
+      <div class="media-card">
+        <div class="media-card-header">🎬 Webinaires</div>
+        <div class="media-card-body">Replays de sessions thématiques en accès libre ou restreint par rôle.</div>
+      </div>
+      <div class="media-card">
+        <div class="media-card-header">🎙️ Podcasts SIB Talks</div>
+        <div class="media-card-body">Interviews d'experts du secteur du bâtiment et de l'immobilier.</div>
+      </div>
+      <div class="media-card">
+        <div class="media-card-header">📱 Capsules Inside SIB</div>
+        <div class="media-card-body">Formats courts et dynamiques pour réseaux sociaux.</div>
+      </div>
+      <div class="media-card">
+        <div class="media-card-header">🎤 Live Studio</div>
+        <div class="media-card-body">Meet The Leaders — rencontres avec les dirigeants du secteur.</div>
+      </div>
+      <div class="media-card">
+        <div class="media-card-header">✨ Best Moments</div>
+        <div class="media-card-body">Moments forts et highlights des éditions précédentes.</div>
+      </div>
+      <div class="media-card">
+        <div class="media-card-header">💬 Témoignages</div>
+        <div class="media-card-body">Vidéos témoignages des partenaires et exposants.</div>
+      </div>
+    </div>
+
+    <div class="two-col mb-4">
+      <div>
+        <h3>Badges Numériques & Check-in</h3>
+        <ul class="feature-list">
+          <li>Badge numérique avec QR code unique par participant</li>
+          <li>Station d'impression admin dédiée</li>
+          <li>Scanner QR pour contrôle d'accès en temps réel</li>
+          <li>Vérification instantanée : accès valide ou refusé</li>
+          <li>Suivi des check-ins par jour et par zone</li>
+          <li>Export PDF du badge individuel</li>
+          <li>Badge VIP avec design personnalisé premium</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Gestion des Événements</h3>
+        <ul class="feature-list">
+          <li>Programme complet avec agenda interactif</li>
+          <li>Inscription individuelle par session</li>
+          <li>Gestion des intervenants (biographies, photos)</li>
+          <li>Calendrier exportable en .ics</li>
+          <li>Live events — streaming vidéo intégré</li>
+          <li>Compteur de places en temps réel</li>
+          <li>Notifications de rappel automatiques</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3>Analytics & Reporting</h3>
+        <ul class="feature-list">
+          <li>Dashboard métriques en temps réel</li>
+          <li>Trafic segmenté par type d'utilisateur</li>
+          <li>Statistiques de conversion & inscription</li>
+          <li>ROI partenaires avec tableaux dédiés</li>
+          <li>Export Excel et PDF des rapports</li>
+          <li>Logs d'activité filtrables par admin</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Gestion de Contenu (CMS)</h3>
+        <ul class="feature-list">
+          <li>Création et édition d'articles de presse</li>
+          <li>Publication / dépublication sans suppression</li>
+          <li>Modération du contenu par l'équipe admin</li>
+          <li>Gestion des accréditations presse</li>
+          <li>Pages statiques entièrement éditables</li>
+          <li>Templates d'emails personnalisables</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Plateforme Digitale</span>
+    <span>Page 5</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 6 — ADMINISTRATION ==================== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-title">Panneau d'Administration</div>
+    <div class="section-desc">Un centre de contrôle complet pour piloter l'intégralité de la plateforme</div>
+  </div>
+  <div class="content-sm">
+    <div class="highlight mb-4">
+      <h3>Contrôle total depuis un seul tableau de bord</h3>
+      <p>L'administrateur dispose d'un accès centralisé à toutes les opérations : validation des inscriptions, approbation des paiements, modération des contenus, gestion des exposants et partenaires, analytics en temps réel, et configuration avancée de la plateforme.</p>
+    </div>
+
+    <div class="card-grid mb-4">
+      <div class="card card-accent">
+        <div class="card-title">Gestion des Utilisateurs</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Liste complète de tous les comptes</li>
+          <li>Validation / rejet des demandes d'inscription</li>
+          <li>Suspension et réactivation de comptes</li>
+          <li>Création manuelle de comptes admin</li>
+          <li>Import en masse d'exposants (CSV/Excel)</li>
+        </ul>
+      </div>
+      <div class="card card-primary">
+        <div class="card-title">Validation des Paiements</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Révision des justificatifs de virement</li>
+          <li>Approbation ou rejet avec notification</li>
+          <li>Historique complet des transactions</li>
+          <li>Suivi statuts : en attente → validé / rejeté</li>
+          <li>Notifications email automatiques</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card-grid mb-4">
+      <div class="card card-success">
+        <div class="card-title">Gestion du Contenu</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Création et édition d'articles & actualités</li>
+          <li>Gestion des événements et conférences</li>
+          <li>Gestion des pavillons et plan d'exposition</li>
+          <li>Gestion des intervenants (speakers)</li>
+          <li>Modération des contenus partenaires</li>
+        </ul>
+      </div>
+      <div class="card card-info">
+        <div class="card-title">Outils & Configuration</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Templates d'emails éditables en ligne</li>
+          <li>Station d'impression de badges</li>
+          <li>Contrôle de visibilité des publications</li>
+          <li>Accréditations presse</li>
+          <li>Logs d'activité & journal d'audit</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Flux de validation des inscriptions</h3>
+    <div class="flow">
+      <div class="flow-step">Inscription reçue</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step-muted">Notification admin</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step-muted">Révision dossier</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step-muted">Demande paiement</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step-muted">Vérif. justificatif</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step-success">Compte activé ✓</div>
+    </div>
+
+    <h3 style="margin-top:16px;">Emails & Communications</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Emails automatiques</div>
+        <div class="card-text">Bienvenue, confirmation d'inscription, demande de paiement, approbation/rejet, rappels de rendez-vous, confirmations d'événements.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Templates personnalisables</div>
+        <div class="card-text">Tous les templates d'emails sont modifiables depuis l'interface admin sans intervention technique. Design cohérent avec la charte graphique du salon.</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Plateforme Digitale</span>
+    <span>Page 6</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 7 — SÉCURITÉ & INTÉGRATIONS ==================== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-title">Sécurité & Intégrations</div>
+    <div class="section-desc">Une infrastructure de sécurité multicouche et des intégrations de classe entreprise</div>
+  </div>
+  <div class="content-sm">
+
+    <h3>Mesures de Sécurité Implémentées</h3>
+    <div class="two-col mb-4">
+      <div>
+        <div class="security-item">
+          <div class="security-icon">🔒</div>
+          <div>
+            <div class="security-label">Row Level Security (RLS)</div>
+            <div class="security-desc">Politiques de sécurité au niveau base de données sur 100% des tables. Chaque utilisateur ne voit que ses propres données.</div>
+          </div>
+        </div>
+        <div class="security-item">
+          <div class="security-icon">🔑</div>
+          <div>
+            <div class="security-label">JWT & Sessions</div>
+            <div class="security-desc">Tokens signés Supabase avec expiration automatique. Session timeout 30 min d'inactivité.</div>
+          </div>
+        </div>
+        <div class="security-item">
+          <div class="security-icon">🤖</div>
+          <div>
+            <div class="security-label">reCAPTCHA v3</div>
+            <div class="security-desc">Protection anti-bot sur tous les formulaires publics. Détection invisible des comportements suspects.</div>
+          </div>
+        </div>
+        <div class="security-item">
+          <div class="security-icon">🛡️</div>
+          <div>
+            <div class="security-label">Rate Limiting</div>
+            <div class="security-desc">Limitation des tentatives de connexion et d'envoi d'emails. Protection contre les attaques par force brute.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="security-item">
+          <div class="security-icon">🌐</div>
+          <div>
+            <div class="security-label">HTTPS forcé</div>
+            <div class="security-desc">Chiffrement TLS en production sur Vercel et Railway. Redirection automatique HTTP → HTTPS.</div>
+          </div>
+        </div>
+        <div class="security-item">
+          <div class="security-icon">🧹</div>
+          <div>
+            <div class="security-label">Protection XSS</div>
+            <div class="security-desc">DOMPurify appliqué sur tout contenu utilisateur affiché. Prévention des injections de scripts malveillants.</div>
+          </div>
+        </div>
+        <div class="security-item">
+          <div class="security-icon">🔐</div>
+          <div>
+            <div class="security-label">CORS Whitelist</div>
+            <div class="security-desc">Origines autorisées strictement contrôlées. Aucun accès cross-origin non autorisé.</div>
+          </div>
+        </div>
+        <div class="security-item">
+          <div class="security-icon">📋</div>
+          <div>
+            <div class="security-label">Journal d'audit</div>
+            <div class="security-desc">Traçabilité complète de toutes les actions administratives. Consultable et filtrable depuis l'interface.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Intégrations Cloud & Services Tiers</h3>
+    <div class="integrations-grid">
+      <div class="integration-item">
+        <div class="integration-logo">🗄️</div>
+        <div class="integration-name">Supabase</div>
+        <div class="integration-role">BDD PostgreSQL · Auth · Storage · Edge Functions</div>
+      </div>
+      <div class="integration-item">
+        <div class="integration-logo">🔥</div>
+        <div class="integration-name">Firebase</div>
+        <div class="integration-role">Google OAuth · Push Notifications (FCM)</div>
+      </div>
+      <div class="integration-item">
+        <div class="integration-logo">▲</div>
+        <div class="integration-name">Vercel</div>
+        <div class="integration-role">Frontend CDN mondial · Auto-deploy GitHub</div>
+      </div>
+      <div class="integration-item">
+        <div class="integration-logo">🚂</div>
+        <div class="integration-name">Railway</div>
+        <div class="integration-role">Backend Node.js · Auto-deploy · Nixpacks</div>
+      </div>
+      <div class="integration-item">
+        <div class="integration-logo">💙</div>
+        <div class="integration-name">PayPal</div>
+        <div class="integration-role">Paiements internationaux EUR</div>
+      </div>
+      <div class="integration-item">
+        <div class="integration-logo">🇲🇦</div>
+        <div class="integration-name">CMI</div>
+        <div class="integration-role">Cartes bancaires marocaines MAD</div>
+      </div>
+      <div class="integration-item">
+        <div class="integration-logo">📧</div>
+        <div class="integration-name">Resend</div>
+        <div class="integration-role">Email transactionnel haute délivrabilité</div>
+      </div>
+      <div class="integration-item">
+        <div class="integration-logo">🐛</div>
+        <div class="integration-name">Sentry</div>
+        <div class="integration-role">Monitoring erreurs production temps réel</div>
+      </div>
+      <div class="integration-item">
+        <div class="integration-logo">🤖</div>
+        <div class="integration-name">reCAPTCHA</div>
+        <div class="integration-role">Protection anti-bot v3 (Google)</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Plateforme Digitale</span>
+    <span>Page 7</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 8 — STACK TECH & DÉPLOIEMENT ==================== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <div class="section-title">Stack Technologique & Déploiement</div>
+    <div class="section-desc">Technologies modernes, éprouvées et scalables pour une plateforme de niveau entreprise</div>
+  </div>
+  <div class="content-sm">
+
+    <div class="two-col mb-4">
+      <div>
+        <div class="gap-label">Frontend Web</div>
+        <table>
+          <thead><tr><th>Technologie</th><th>Rôle</th></tr></thead>
+          <tbody>
+            <tr><td><strong>React 18</strong></td><td>Framework UI</td></tr>
+            <tr><td><strong>TypeScript 5.5</strong></td><td>Typage statique</td></tr>
+            <tr><td><strong>Vite 6</strong></td><td>Build ultra-rapide</td></tr>
+            <tr><td><strong>TailwindCSS</strong></td><td>Styles utilitaires</td></tr>
+            <tr><td><strong>shadcn/ui</strong></td><td>Composants accessibles</td></tr>
+            <tr><td><strong>Zustand</strong></td><td>State management (14 stores)</td></tr>
+            <tr><td><strong>React Router 6</strong></td><td>Navigation SPA</td></tr>
+            <tr><td><strong>Framer Motion</strong></td><td>Animations fluides</td></tr>
+            <tr><td><strong>i18next</strong></td><td>Internationalisation FR/EN/AR</td></tr>
+            <tr><td><strong>jsPDF + html2canvas</strong></td><td>Génération PDF & badges</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="gap-label">Backend & Infra</div>
+        <table>
+          <thead><tr><th>Technologie</th><th>Rôle</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Express.js 5</strong></td><td>Serveur API REST</td></tr>
+            <tr><td><strong>Node.js 18+</strong></td><td>Runtime JavaScript</td></tr>
+            <tr><td><strong>PostgreSQL 15</strong></td><td>Base de données</td></tr>
+            <tr><td><strong>Supabase</strong></td><td>BaaS complet</td></tr>
+            <tr><td><strong>Firebase</strong></td><td>Auth + Push</td></tr>
+            <tr><td><strong>Resend</strong></td><td>Email transactionnel</td></tr>
+            <tr><td><strong>Vercel</strong></td><td>CDN frontend</td></tr>
+            <tr><td><strong>Railway</strong></td><td>Backend hébergé</td></tr>
+            <tr><td><strong>Playwright</strong></td><td>Tests E2E automatisés</td></tr>
+            <tr><td><strong>Sentry</strong></td><td>Monitoring production</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>Application Mobile Flutter (UrbaEvent)</h3>
+    <div class="card-grid mb-4">
+      <div class="card">
+        <div class="card-title">Framework & Langages</div>
+        <div class="card-text">Flutter 3+ / Dart — Application cross-platform native iOS & Android. Capacitor pour le packaging final sur les stores mobiles.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Fonctionnalités mobiles</div>
+        <div class="card-text">Authentification Firebase, push notifications FCM, accès au même backend Supabase, internationalisation FR/EN, synchronisation temps réel.</div>
+      </div>
+    </div>
+
+    <h3>Pipeline de déploiement continu (CI/CD)</h3>
+    <div class="flow">
+      <div class="flow-step">Développement local</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step-muted">git push → GitHub</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step-muted">GitHub Actions (tests)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step-muted">Auto-deploy Vercel</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step-success">Production live ✓</div>
+    </div>
+
+    <div class="card-grid mt-4">
+      <div class="card card-accent">
+        <div class="card-title">Disponibilité & Performance</div>
+        <div class="card-text">Infrastructure Vercel avec CDN mondial assurant une disponibilité 99.9% et des temps de chargement optimaux depuis le Maroc et l'international.</div>
+      </div>
+      <div class="card card-primary">
+        <div class="card-title">Scalabilité</div>
+        <div class="card-text">Architecture serverless scalable automatiquement lors des pics de trafic. Supabase PostgreSQL avec connexions poolées pour absorber des milliers d'utilisateurs simultanés.</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Plateforme Digitale</span>
+    <span>Page 8</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 9 — INTERNATIONALISATION & QUALITÉ ==================== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">08</div>
+    <div class="section-title">Qualité, Tests & Internationalisation</div>
+    <div class="section-desc">Une plateforme multilingue, testée et prête pour la production internationale</div>
+  </div>
+  <div class="content-sm">
+
+    <div class="two-col mb-4">
+      <div>
+        <h3>Support Multilingue</h3>
+        <div class="card card-accent" style="margin-bottom:12px;">
+          <div class="card-title">Français (FR) — Complet</div>
+          <div class="card-text">Langue principale de la plateforme. Toutes les pages, messages d'erreur, emails et interfaces admin sont entièrement traduits.</div>
+        </div>
+        <div class="card card-primary" style="margin-bottom:12px;">
+          <div class="card-title">Anglais (EN) — Complet</div>
+          <div class="card-text">Traduction complète pour les visiteurs et exposants internationaux. Détection automatique selon le navigateur.</div>
+        </div>
+        <div class="card card-success">
+          <div class="card-title">Arabe (AR) — Partiel + RTL</div>
+          <div class="card-text">Support direction droite-à-gauche (RTL) avec adaptation CSS automatique. Traduction en cours pour les pages principales.</div>
+        </div>
+      </div>
+      <div>
+        <h3>Stratégie de Tests</h3>
+        <div class="gap-label" style="margin-top:0;">Tests End-to-End (Playwright)</div>
+        <ul class="feature-list" style="margin-bottom:16px;">
+          <li>Authentification complète (login, signup, OAuth)</li>
+          <li>Réservation et gestion de rendez-vous B2B</li>
+          <li>Networking et algorithme de matching</li>
+          <li>Flux de paiement PayPal, CMI et virement</li>
+          <li>Administration : validation, modération</li>
+          <li>Tableaux de bord par rôle utilisateur</li>
+          <li>Dashboard marketing et analytics</li>
+          <li>Système de quotas visiteurs</li>
+          <li>Calendrier public et exports .ics</li>
+        </ul>
+        <div class="gap-label">Tests unitaires (Vitest)</div>
+        <ul class="feature-list">
+          <li>Services métier (paiement, matching, email)</li>
+          <li>Composants UI critiques</li>
+          <li>Hooks personnalisés</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Accessibilité & Standards</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">WCAG & Accessibilité</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Skip links pour la navigation clavier</li>
+          <li>Focus traps dans les modales</li>
+          <li>Labels ARIA sur les éléments interactifs</li>
+          <li>Contraste de couleurs optimisé</li>
+          <li>Error boundaries pour la stabilité</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Performance & SEO</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Build optimisé avec Vite 6 (code splitting)</li>
+          <li>Images optimisées et lazy loading</li>
+          <li>CDN Vercel pour assets statiques</li>
+          <li>URLs SEO-friendly pour mini-sites</li>
+          <li>Monitoring Sentry pour alertes production</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Plateforme Digitale</span>
+    <span>Page 9</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 10 — RÉSUMÉ EXÉCUTIF ==================== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">09</div>
+    <div class="section-title">Résumé Exécutif</div>
+    <div class="section-desc">Valeur ajoutée et avantages compétitifs de la plateforme SIB 2026</div>
+  </div>
+  <div class="content-sm">
+
+    <div class="highlight mb-4">
+      <h3>Une plateforme de classe mondiale pour le premier salon du bâtiment au Maroc</h3>
+      <p>SIB 2026 représente la digitalisation complète d'un salon international de grande envergure. La plateforme centralise tous les flux opérationnels — inscriptions, paiements, networking, médias, badges — dans un écosystème cohérent et sécurisé, offrant une expérience exceptionnelle à tous les acteurs du salon.</p>
+    </div>
+
+    <div class="card-grid-3 mb-4">
+      <div class="card card-accent">
+        <div class="card-icon icon-gold">🚀</div>
+        <div class="card-title">Time-to-Market Rapide</div>
+        <div class="card-text">Déploiement continu automatisé. Mise en production en quelques minutes via GitHub → Vercel → Railway.</div>
+      </div>
+      <div class="card card-primary">
+        <div class="card-icon icon-blue">📈</div>
+        <div class="card-title">Scalabilité Sans Limite</div>
+        <div class="card-text">Architecture serverless qui s'adapte automatiquement aux pics de trafic sans intervention manuelle.</div>
+      </div>
+      <div class="card card-success">
+        <div class="card-icon icon-green">🔒</div>
+        <div class="card-title">Sécurité Entreprise</div>
+        <div class="card-text">7 couches de sécurité : RLS, JWT, reCAPTCHA, rate limiting, CORS, XSS, HTTPS. Conformité RGPD.</div>
+      </div>
+    </div>
+
+    <div class="card-grid mb-4">
+      <div class="card">
+        <div class="card-title">Pour les Visiteurs</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Inscription simple en quelques minutes</li>
+          <li>Badge numérique avec QR code immédiat</li>
+          <li>Matching IA avec exposants pertinents</li>
+          <li>Planning personnalisé de rendez-vous</li>
+          <li>Accès à tous les contenus médias</li>
+          <li>Application mobile iOS & Android</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Pour les Exposants</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Mini-site professionnel sans code</li>
+          <li>Gestion des rendez-vous en ligne</li>
+          <li>Visibilité accrue dans le catalogue</li>
+          <li>Analytics de performance du profil</li>
+          <li>Messagerie directe avec visiteurs</li>
+          <li>Export des contacts et leads</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Pour les Partenaires & Sponsors</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Dashboard ROI dédié par niveau</li>
+          <li>Upload et gestion des médias propres</li>
+          <li>Analytics d'audience en temps réel</li>
+          <li>Capture de leads qualifiés</li>
+          <li>Visibilité premium selon le tier</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Pour les Organisateurs (Admin)</div>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li>Vision 360° sur tous les participants</li>
+          <li>Gestion des paiements centralisée</li>
+          <li>Contrôle total sur le contenu publié</li>
+          <li>Suivi des check-ins en temps réel</li>
+          <li>Rapports exportables à la demande</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span><strong>SIB 2026</strong> — Plateforme Digitale</span>
+    <span>Page 10</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 11 — BACK COVER ==================== -->
+<div class="page cover" style="justify-content:center; align-items:center; text-align:center;">
+  <div style="padding:60px;">
+    <div class="cover-logo" style="font-size:40px; margin-bottom:24px;">SIB<span>.</span>2026</div>
+    <div style="font-size:16px; color:rgba(255,255,255,0.6); margin-bottom:40px; font-weight:300;">Plateforme Digitale Officielle du Salon International du Bâtiment</div>
+    <div class="cover-divider"></div>
+    <div style="font-size:13px; color:rgba(255,255,255,0.5); margin-bottom:40px; line-height:2;">
+      25 – 29 Novembre 2026<br>
+      Parc d'Exposition Mohammed VI<br>
+      El Jadida, Maroc
+    </div>
+    <div style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap; margin-bottom:50px;">
+      <div class="cover-pill">sib2026.ma</div>
+      <div class="cover-pill">React 18 · TypeScript · Supabase</div>
+      <div class="cover-pill">Vercel · Railway · Firebase</div>
+    </div>
+    <div style="font-size:11px; color:rgba(255,255,255,0.3);">
+      Document confidentiel — Présentation technique plateforme SIB 2026 · Avril 2026
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

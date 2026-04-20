@@ -1,13 +1,15 @@
-﻿/// Configuration Supabase pour l'app SIB / SIB
-/// Remplace les constantes Strapi de Urls.dart
+﻿import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+/// Configuration Supabase pour l'app SIB 2026
+/// Les clés sont chargées depuis assets/.env (non commité dans git)
 class SupabaseConfig {
   // ──────────────────────────────────────────────────────────────────
-  // Supabase project credentials
-  // Valeurs à remplacer depuis le Dashboard Supabase > Settings > API
+  // Supabase project credentials — lues depuis .env
   // ──────────────────────────────────────────────────────────────────
-  static const String supabaseUrl = 'https://sbyizudifmqakzxjlndr.supabase.co';
-  static const String supabaseAnonKey =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieWl6dWRpZm1xYWt6eGpsbmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MTg3MDEsImV4cCI6MjA5MTQ5NDcwMX0.yyD0fROU_oSkfgkiRbWXwyoZm3YthCCQSj7pM7HHSVg';
+  static String get supabaseUrl =>
+      dotenv.env['SUPABASE_URL'] ?? 'https://sbyizudifmqakzxjlndr.supabase.co';
+  static String get supabaseAnonKey =>
+      dotenv.env['SUPABASE_ANON_KEY'] ?? '';
 
   // ──────────────────────────────────────────────────────────────────
   // Noms des tables Supabase (équivalent endpoints Strapi)

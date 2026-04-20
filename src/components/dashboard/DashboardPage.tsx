@@ -1,10 +1,12 @@
 ﻿import { memo } from 'react';
+import { Navigate } from 'react-router-dom';
 import useAuthStore from '../../store/authStore';
 import AdminDashboard from './AdminDashboard';
 import ExhibitorDashboard from './ExhibitorDashboard';
 import PartnerDashboard from './PartnerDashboard';
 import VisitorDashboard from '../visitor/VisitorDashboard';
 import { useTranslation } from '../../hooks/useTranslation';
+import { ROUTES } from '../../lib/routes';
 
 // OPTIMIZATION: Memoized DashboardPage to prevent re-renders
 export default memo(function DashboardPage() {
@@ -40,6 +42,8 @@ export default memo(function DashboardPage() {
       return <PartnerDashboard />;
     case 'visitor':
       return <VisitorDashboard />;
+    case 'marketing':
+      return <Navigate to={ROUTES.MARKETING_DASHBOARD} replace />;
     default:
       return (
         <div className="min-h-screen flex items-center justify-center px-6 bg-transparent">

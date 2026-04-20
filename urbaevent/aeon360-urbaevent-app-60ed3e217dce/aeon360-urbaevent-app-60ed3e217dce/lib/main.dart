@@ -1,5 +1,7 @@
 ﻿import 'package:com.urbaevent/firebase_options.dart';
+import 'package:com.urbaevent/ui/legal/RgpdConsentPage.dart';
 import 'package:com.urbaevent/utils/LanguageProvider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:com.urbaevent/utils/ThemeColor.dart';
 import 'package:com.urbaevent/utils/SalonBranding.dart';
 import 'package:com.urbaevent/utils/SupabaseConfig.dart';
@@ -77,6 +79,8 @@ late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // Charger les variables d'environnement avant tout
+  await dotenv.load(fileName: 'assets/.env');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // ── Initialisation Supabase ──────────────────────────────────────
@@ -119,7 +123,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: languageProvider.locale,
       debugShowCheckedModeBanner: false,
-      title: 'UNFM',
+      title: 'SIB 2026',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: ThemeColor.colorAccent,
@@ -155,6 +159,19 @@ class _IntroPageState extends State<IntroPage> {
   }
 
   Future<void> checkFirstLogin() async {
+    // ── RGPD : afficher le consentement si pas encore accepté ────────
+    final rgpdAccepted = await RgpdConsentPage.hasAccepted();
+    if (!rgpdAccepted && mounted) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => RgpdConsentPage(
+            onAccepted: () => Navigator.pop(context),
+          ),
+        ),
+      );
+    }
+
     Preference preference = await Preference.getInstance();
     if (preference.getFirstCheck()) {
       preference.setFirstCheck(false);

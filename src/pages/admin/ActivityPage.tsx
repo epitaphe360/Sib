@@ -25,9 +25,9 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { motion } from 'framer-motion';
-import { apiService } from '../../services/apiService';
 import { useTableFilters } from '../../hooks/useTableFilters';
 import { toast } from 'sonner';
+import { supabase } from '../../lib/supabase';
 
 interface ActivityItem {
   id: string;
@@ -50,13 +50,118 @@ export default function ActivityPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await apiService.getAll('activities');
-        // Enrichir les données avec la sévérité calculée
-        const enrichedData = (data as ActivityItem[]).map(activity => ({
-          ...activity,
-          severity: getSeverityFromType(activity.activity_type)
-        }));
-        setActivities(enrichedData);
+        if (!supabase) throw new Error('Supabase non configuré');
+
+        // Construire un journal d'activité synthétique depuis les vraies tables
+        const [usersRes, appointmentsRes, paymentsRes, eventsRes] = await Promise.allSettled([
+          supabase
+            .from('users')
+            .select('id, name, email, type, status, created_at')
+            .order('created_at', { ascending: false })
+            .limit(30),
+          supabase
+            .from('appointments')
+            .select('id, exhibitor_id, visitor_id, status, created_at, meeting_type')
+            .order('created_at', { ascending: false })
+            .limit(20),
+          supabase
+            .from('payment_requests')
+            .select('id, user_id, amount, currency, status, created_at')
+            .order('created_at', { ascending: false })
+            .limit(20),
+          supabase
+            .from('events')
+            .select('id, title, event_date, created_at')
+            .order('created_at', { ascending: false })
+            .limit(10),
+        ]);
+
+        const synthetic: ActivityItem[] = [];
+
+        // Inscriptions utilisateurs
+        if (usersRes.status === 'fulfilled' && usersRes.value.data) {
+          usersRes.value.data.forEach((u) => {
+            synthetic.push({
+              id: `user-${u.id}`,
+              user_id: u.id,
+              activity_type: 'user_registration',
+              description: `Nouvelle inscription : ${u.name || u.email} (${u.type})`,
+              created_at: u.created_at,
+              metadata: {},
+              severity: u.status === 'active' ? 'success' : 'info',
+            });
+          });
+        }
+
+        // Rendez-vous
+        if (appointmentsRes.status === 'fulfilled' && appointmentsRes.value.data) {
+          appointmentsRes.value.data.forEach((a) => {
+            synthetic.push({
+              id: `appt-${a.id}`,
+              user_id: a.visitor_id || '',
+              activity_type: 'appointment_created',
+              description: `Rendez-vous ${a.meeting_type || ''} — statut : ${a.status}`,
+              created_at: a.created_at,
+              metadata: {},
+              severity: a.status === 'cancelled' ? 'warning' : 'info',
+            });
+          });
+        }
+
+        // Paiements
+        if (paymentsRes.status === 'fulfilled' && paymentsRes.value.data) {
+          paymentsRes.value.data.forEach((p) => {
+            synthetic.push({
+              id: `pay-${p.id}`,
+              user_id: p.user_id || '',
+              activity_type: p.status === 'approved' ? 'payment_approved' : p.status === 'rejected' ? 'payment_rejected' : 'payment_pending',
+              description: `Paiement ${p.amount} ${p.currency} — ${p.status}`,
+              created_at: p.created_at,
+              metadata: {},
+              severity: p.status === 'approved' ? 'success' : p.status === 'rejected' ? 'error' : 'warning',
+            });
+          });
+        }
+
+        // Événements créés
+        if (eventsRes.status === 'fulfilled' && eventsRes.value.data) {
+          eventsRes.value.data.forEach((e) => {
+            synthetic.push({
+              id: `evt-${e.id}`,
+              user_id: '',
+              activity_type: 'event_created',
+              description: `Événement créé : ${e.title}`,
+              created_at: e.created_at,
+              metadata: {},
+              severity: 'info',
+            });
+          });
+        }
+
+        // Tenter aussi la vraie table activities (non bloquant)
+        try {
+          const { data: realActivities } = await supabase
+            .from('activities')
+            .select('id, user_id, activity_type, description, is_public, created_at')
+            .order('created_at', { ascending: false })
+            .limit(50);
+          if (realActivities && realActivities.length > 0) {
+            realActivities.forEach((a) => {
+              synthetic.push({
+                ...a,
+                metadata: {},
+                severity: getSeverityFromType(a.activity_type),
+              });
+            });
+          }
+        } catch {
+          // table peut ne pas exister, non bloquant
+        }
+
+        // Trier par date décroissante
+        synthetic.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+        setActivities(synthetic);
       } catch (err) {
         console.error('Error fetching activities:', err);
         setError('Failed to load activities. Please try again later.');
@@ -73,13 +178,17 @@ export default function ActivityPage() {
     switch (type) {
       case 'security_alert':
       case 'system_error':
+      case 'payment_rejected':
         return 'error';
       case 'user_suspension':
       case 'api_rate_limit':
       case 'content_moderation_warning':
+      case 'payment_pending':
         return 'warning';
       case 'exhibitor_validation':
       case 'system_backup_success':
+      case 'payment_approved':
+      case 'user_registration':
         return 'success';
       default:
         return 'info';
@@ -119,10 +228,16 @@ export default function ActivityPage() {
     switch (type) {
       case 'user_login': return UserCheck;
       case 'user_logout': return UserX;
+      case 'user_registration': return Users;
       case 'exhibitor_validation': return Building2;
       case 'content_moderation': return FileText;
       case 'security_alert': return Shield;
       case 'system_error': return AlertTriangle;
+      case 'appointment_created': return Calendar;
+      case 'payment_approved': return UserCheck;
+      case 'payment_rejected': return UserX;
+      case 'payment_pending': return AlertTriangle;
+      case 'event_created': return Calendar;
       default: return Activity;
     }
   };
@@ -151,7 +266,13 @@ export default function ActivityPage() {
       user_suspension: 'Suspension utilisateur',
       api_rate_limit: 'Limite API atteinte',
       content_moderation_warning: 'Avertissement modération',
-      system_backup_success: 'Sauvegarde réussie'
+      system_backup_success: 'Sauvegarde réussie',
+      user_registration: 'Inscription utilisateur',
+      appointment_created: 'Rendez-vous créé',
+      payment_approved: 'Paiement approuvé',
+      payment_rejected: 'Paiement refusé',
+      payment_pending: 'Paiement en attente',
+      event_created: 'Événement créé',
     };
     return labels[type] || type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };

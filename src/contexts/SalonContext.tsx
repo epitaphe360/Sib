@@ -17,6 +17,7 @@ export interface Salon {
   is_default: boolean;
   sort_order: number;
   config: Record<string, unknown>;
+  floor_plan_url: string | null;
   created_at: string;
   updated_at: string;
 }

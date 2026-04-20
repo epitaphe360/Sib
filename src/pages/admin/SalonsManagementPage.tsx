@@ -30,6 +30,7 @@ const emptyForm = (): Omit<Salon, 'id' | 'created_at' | 'updated_at'> => ({
   is_default: false,
   sort_order: 0,
   config: {},
+  floor_plan_url: null,
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -130,6 +131,7 @@ export default function SalonsManagementPage() {
       is_default: salon.is_default,
       sort_order: salon.sort_order,
       config: salon.config,
+      floor_plan_url: salon.floor_plan_url ?? null,
     });
     setShowModal(true);
   };
@@ -611,6 +613,30 @@ export default function SalonsManagementPage() {
                         onChange={e => handleImageChange('cover_url', e)}
                       />
                     </div>
+                  </div>
+
+                  {/* URL Plan du salon */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Plan du salon (URL PDF ou image)
+                    </label>
+                    <input
+                      type="url"
+                      value={form.floor_plan_url ?? ''}
+                      onChange={e => setForm(prev => ({ ...prev, floor_plan_url: e.target.value || null }))}
+                      placeholder="https://sib2026.ma/plan.pdf"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    {form.floor_plan_url && (
+                      <a
+                        href={form.floor_plan_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 hover:underline mt-1 inline-block"
+                      >
+                        Aperçu du plan ↗
+                      </a>
+                    )}
                   </div>
 
                   {/* Toggles */}

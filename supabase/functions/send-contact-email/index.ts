@@ -119,7 +119,7 @@ Deno.serve(async (req: Request) => {
 
               <div class="footer">
                 <p><strong>SIB 2026</strong><br>
-                Salon International des Ports et de la Logistique<br>
+                Salon International du Bâtiment<br>
                 5-7 Février 2026 • El Jadida, Maroc</p>
                 <p style="font-size: 12px; color: #9ca3af;">Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.</p>
               </div>

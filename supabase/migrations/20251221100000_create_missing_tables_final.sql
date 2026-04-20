@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS salon_config (
   end_date timestamptz DEFAULT '2026-06-18T18:00:00Z',
   location text DEFAULT 'Casablanca, Maroc',
   venue text DEFAULT 'Palais des Expositions - SAFEX',
-  description text DEFAULT 'Salon International des Ports',
+  description text DEFAULT 'Salon International du Bâtiment',
   logo_url text,
   banner_url text,
   website_url text DEFAULT 'https://sib2026.ma',
@@ -88,7 +88,7 @@ CREATE POLICY "Admin can manage salon config" ON salon_config
 
 -- Insert default salon config if not exists
 INSERT INTO salon_config (name, edition, description)
-SELECT 'SIB 2026', '2026', 'Salon International des Ports - Maroc'
+SELECT 'SIB 2026', '2026', 'Salon International du Bâtiment - Maroc'
 WHERE NOT EXISTS (SELECT 1 FROM salon_config LIMIT 1);
 
 -- =====================================================

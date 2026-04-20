@@ -15,7 +15,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  type: 'exhibitor' | 'partner' | 'visitor' | 'admin' | 'security';
+  type: 'exhibitor' | 'partner' | 'visitor' | 'admin' | 'security' | 'marketing';
   visitor_level?: 'free' | 'premium' | 'vip';
   partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de partenaire SIB
   profile: UserProfile;

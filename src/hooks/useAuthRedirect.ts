@@ -84,6 +84,8 @@ export function getPostLoginRedirectUrl(userType?: string, targetUrl?: string): 
       return ROUTES.PARTNER_DASHBOARD;
     case 'admin':
       return ROUTES.ADMIN_DASHBOARD;
+    case 'marketing':
+      return ROUTES.MARKETING_DASHBOARD;
     case 'visitor':
     default:
       return ROUTES.VISITOR_DASHBOARD;

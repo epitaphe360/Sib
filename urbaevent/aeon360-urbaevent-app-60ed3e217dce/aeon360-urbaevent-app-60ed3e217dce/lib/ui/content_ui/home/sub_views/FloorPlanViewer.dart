@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart';
+import 'package:http/http.dart' as http;
+import '../SalonListPage.dart';
 
 /// Affiche le plan général du salon en PDF zoomable et pannable.
 class FloorPlanViewer extends StatefulWidget {
@@ -33,13 +35,28 @@ class _FloorPlanViewerState extends State<FloorPlanViewer> {
 
   Future<void> _loadPdf() async {
     try {
-      // Copier l'asset PDF dans un fichier temporaire
-      final data = await rootBundle.load('assets/plan_sib_2026.pdf');
-      final dir = await getTemporaryDirectory();
-      final file = File('${dir.path}/plan_sib_2026.pdf');
-      await file.writeAsBytes(data.buffer.asUint8List());
+      final remoteUrl = ActiveSalon.floorPlanUrl;
+      late PdfDocument doc;
 
-      final doc = await PdfDocument.openFile(file.path);
+      if (remoteUrl != null && remoteUrl.isNotEmpty) {
+        // Télécharger depuis l'URL Supabase Storage (ou tout lien public)
+        final response = await http.get(Uri.parse(remoteUrl));
+        if (response.statusCode != 200) {
+          throw Exception('HTTP ${response.statusCode} lors du téléchargement du plan');
+        }
+        final dir = await getTemporaryDirectory();
+        final file = File('${dir.path}/plan_salon_remote.pdf');
+        await file.writeAsBytes(response.bodyBytes);
+        doc = await PdfDocument.openFile(file.path);
+      } else {
+        // Fallback : asset local embarqué dans l'APK
+        final data = await rootBundle.load('assets/plan_sib_2026.pdf');
+        final dir = await getTemporaryDirectory();
+        final file = File('${dir.path}/plan_sib_2026.pdf');
+        await file.writeAsBytes(data.buffer.asUint8List());
+        doc = await PdfDocument.openFile(file.path);
+      }
+
       setState(() {
         _pdfController = PdfControllerPinch(document: Future.value(doc));
         _loading = false;

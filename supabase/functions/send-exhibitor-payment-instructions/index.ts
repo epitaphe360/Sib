@@ -248,7 +248,7 @@ function getPaymentInstructionHTML(data: PaymentInstructionRequest): string {
     <!-- Header -->
     <div class="header">
       <div class="logo">⚓ SIB 2026</div>
-      <p class="subtitle">Salon International des Ports & Services Maritimes</p>
+      <p class="subtitle">Salon International du Bâtiment</p>
       <p class="subtitle">5-7 Février 2026 • Casablanca, Maroc</p>
     </div>
 
@@ -398,7 +398,7 @@ function getPaymentInstructionHTML(data: PaymentInstructionRequest): string {
     <!-- Footer -->
     <div class="footer">
       <p style="margin-bottom: 10px;">
-        <strong>SIB 2026</strong> - Salon International des Ports & Services Maritimes
+        <strong>SIB 2026</strong> - Salon International du Bâtiment
       </p>
       <p style="margin: 5px 0;">
         5-7 Février 2026 • Mohammed VI Exhibition Center • Casablanca, Maroc

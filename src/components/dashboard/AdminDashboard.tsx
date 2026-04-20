@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Shield, AlertTriangle, BarChart3, FileText, Mail, Newspaper, Image, Calendar, Mic2, Building2 } from 'lucide-react';
+import { Shield, AlertTriangle, BarChart3, FileText, Mail, Newspaper, Image, Calendar, Mic2, Building2, Settings, Bell } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
 import { useAdminDashboard } from '../../hooks/useAdminDashboard';
@@ -130,6 +130,8 @@ export default function AdminDashboard() {
                 { to: ROUTES.ADMIN_EVENTS,          Icon: Calendar,   label: 'Programme',       sub: 'Gerer le programme scientifique' },
                 { to: ROUTES.ADMIN_SPEAKERS,        Icon: Mic2,       label: 'Intervenants',    sub: 'Gerer les speakers du salon' },
                 { to: ROUTES.ADMIN_SALONS,          Icon: Building2,  label: 'Salons',          sub: 'Gerer les editions du salon' },
+                { to: ROUTES.ADMIN_CONFIG,          Icon: Settings,   label: 'Configuration',   sub: 'APIs, SMTP, Firebase, Stripe' },
+                { to: ROUTES.ADMIN_PUSH_NOTIFICATIONS, Icon: Bell,     label: 'Notifications Push', sub: 'Alertes temps réel app mobile' },
               ] as const).map(({ to, Icon, label, sub }) => (
                 <motion.div
                   key={label}

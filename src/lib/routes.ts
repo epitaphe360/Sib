@@ -64,6 +64,7 @@
   ADMIN_PAVILION_ADD_DEMO: '/admin/pavilion/:pavilionId/add-demo',
   ADMIN_CONTENT: '/admin/content',
   ADMIN_EMAIL_TEMPLATES: '/admin/email-templates',
+  ADMIN_CONFIG: '/admin/config',
   CONTACT: '/contact',
   CONTACT_SUCCESS: '/contact/success',
   PARTNERSHIP: '/partnership',
@@ -90,6 +91,8 @@
   // Pages admin manquantes
   ADMIN_PARTNERS: '/admin/partners',
   ADMIN_MEDIA: '/admin/media',
+  ADMIN_SALONS: '/admin/salons',
+  ADMIN_PUSH_NOTIFICATIONS: '/admin/push-notifications',
   ADMIN_EXHIBITORS_LIST: '/admin/exhibitors-list',
   ADMIN_USERS_LIST: '/admin/users-list',
   ADMIN_PUBLICATION_CONTROL: '/admin/publication-control',

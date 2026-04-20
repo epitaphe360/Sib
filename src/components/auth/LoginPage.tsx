@@ -52,8 +52,7 @@ export default function LoginPage() {
 
     if (user?.type === 'security' || user?.email === 'service-clientele@sibs.com') {
       navigate(ROUTES.BADGE_PRINT_STATION);
-    } else if (user?.email === 'marketing@sibs.com') {
-      // Le compte marketing redirige vers son dashboard dédié
+    } else if (user?.type === 'marketing' || user?.email === 'marketing@sibs.com') {
       navigate(ROUTES.MARKETING_DASHBOARD);
     } else if (user?.type === 'admin') {
       navigate(ROUTES.ADMIN_DASHBOARD);
@@ -375,7 +374,7 @@ export default function LoginPage() {
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('admin@sibs.com', 'Sib2026!Admin', 'admin')}
+                  onClick={() => handleDemoLogin('admin-test@test.sib2026.ma', 'Test@123456', 'admin')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 transition-colors"
                 >
@@ -384,7 +383,7 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('partenaire@sibs.com', 'Sib2026!Partner', 'partner')}
+                  onClick={() => handleDemoLogin('partner-gold@test.sib2026.ma', 'Test@123456', 'partner')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 transition-colors"
                 >
@@ -393,16 +392,16 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('contact@acofal.ma', 'Test@123456', 'exhibitor')}
+                  onClick={() => handleDemoLogin('exhibitor-9m@test.sib2026.ma', 'Test@123456', 'exhibitor')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 transition-colors"
                 >
                   {demoLoading === 'exhibitor' ? <Loader className="h-4 w-4 animate-spin" /> : <Store className="h-4 w-4" />}
-                  Exposant (ACOFAL)
+                  Exposant
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('marketing@sibs.com', 'Sib2026!Marketing', 'marketing')}
+                  onClick={() => handleDemoLogin('marketing@sibs.com', 'Test@123456', 'marketing')}
                   disabled={demoLoading !== null || isLoading}
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 transition-colors"
                 >
@@ -411,12 +410,12 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDemoLogin('visitor-free@test.sib2026.ma', 'Admin123!', 'visitor')}
+                  onClick={() => handleDemoLogin('visitor-free@test.sib2026.ma', 'Test@123456', 'visitor')}
                   disabled={demoLoading !== null || isLoading}
                   className="col-span-2 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 disabled:opacity-50 transition-colors"
                 >
                   {demoLoading === 'visitor' ? <Loader className="h-4 w-4 animate-spin" /> : <Users className="h-4 w-4" />}
-                  Visiteur
+                  Visiteur Gratuit
                 </button>
               </div>
             </div>

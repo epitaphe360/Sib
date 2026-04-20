@@ -50,6 +50,8 @@ dependencies:
   # ── Supabase (remplace Strapi) ──────────────────────────────────────
   supabase_flutter: ^2.5.9
   flutter_dotenv: ^5.2.1
+  # ── Analytics ────────────────────────────────────────────────────────
+  firebase_analytics: ^10.7.0
 
   flutter_localizations:
     sdk: flutter
@@ -77,6 +79,7 @@ flutter:
   # the material Icons class.
   assets:
     - assets/
+    - assets/.env
 
   generate: true
   uses-material-design: true

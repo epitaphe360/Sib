@@ -79,7 +79,7 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
     <p style="font-size: 18px; margin-top: 0;">Bonjour <strong>{{name}}</strong>,</p>
 
     <p style="font-size: 16px;">
-      Félicitations ! Votre inscription gratuite au <strong>Salon International des Ports et de la Logistique Maritime (SIB) 2026</strong> a été confirmée avec succès.
+      Félicitations ! Votre inscription gratuite au <strong>Salon International du Bâtiment (SIB) 2026</strong> a été confirmée avec succès.
     </p>
 
     <div style="background: white; border-left: 4px solid #22c55e; padding: 20px; margin: 25px 0; border-radius: 5px;">
@@ -114,7 +114,7 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
 </html>',
   'Bonjour {{name}},
 
-Félicitations ! Votre inscription gratuite au Salon International des Ports et de la Logistique Maritime (SIB) 2026 a été confirmée avec succès.
+Félicitations ! Votre inscription gratuite au Salon International du Bâtiment (SIB) 2026 a été confirmée avec succès.
 
 VOTRE PASS GRATUIT INCLUT :
 - Accès au salon SIB 2026

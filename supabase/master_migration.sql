@@ -9870,7 +9870,7 @@ CREATE TABLE IF NOT EXISTS salon_config (
   end_date timestamptz DEFAULT '2026-06-18T18:00:00Z',
   location text DEFAULT 'Casablanca, Maroc',
   venue text DEFAULT 'Palais des Expositions - SAFEX',
-  description text DEFAULT 'Salon International des Ports',
+  description text DEFAULT 'Salon International du Bâtiment',
   logo_url text,
   banner_url text,
   website_url text DEFAULT 'https://sib2026.ma',
@@ -9903,7 +9903,7 @@ CREATE POLICY "Admin can manage salon config" ON salon_config
 
 -- Insert default salon config if not exists
 INSERT INTO salon_config (name, edition, description)
-SELECT 'SIB 2026', '2026', 'Salon International des Ports - Maroc'
+SELECT 'SIB 2026', '2026', 'Salon International du Bâtiment - Maroc'
 WHERE NOT EXISTS (SELECT 1 FROM salon_config LIMIT 1);
 
 -- =====================================================
@@ -18134,7 +18134,7 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
     <p style="font-size: 18px; margin-top: 0;">Bonjour <strong>{{name}}</strong>,</p>
 
     <p style="font-size: 16px;">
-      Félicitations ! Votre inscription gratuite au <strong>Salon International des Ports et de la Logistique Maritime (SIB) 2026</strong> a été confirmée avec succès.
+      Félicitations ! Votre inscription gratuite au <strong>Salon International du Bâtiment (SIB) 2026</strong> a été confirmée avec succès.
     </p>
 
     <div style="background: white; border-left: 4px solid #22c55e; padding: 20px; margin: 25px 0; border-radius: 5px;">
@@ -18169,7 +18169,7 @@ INSERT INTO email_templates (template_key, name, description, subject, html_cont
 </html>',
   'Bonjour {{name}},
 
-Félicitations ! Votre inscription gratuite au Salon International des Ports et de la Logistique Maritime (SIB) 2026 a été confirmée avec succès.
+Félicitations ! Votre inscription gratuite au Salon International du Bâtiment (SIB) 2026 a été confirmée avec succès.
 
 VOTRE PASS GRATUIT INCLUT :
 - Accès au salon SIB 2026

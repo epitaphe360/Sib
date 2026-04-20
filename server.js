@@ -441,8 +441,272 @@ app.get('/api/health', (req, res) => {
 });
 
 // ============================================
-// ADMIN API: Delete exhibitor (bypasses RLS)
+// PAIEMENT — PayPal
 // ============================================
+
+/**
+ * Crée une commande PayPal et retourne l'URL d'approbation
+ * POST /api/payment/paypal/create-order
+ */
+app.post('/api/payment/paypal/create-order', async (req, res) => {
+  const { userId, visitorName, email, amount, currency, description } = req.body;
+  if (!userId || !amount) return res.status(400).json({ error: 'userId et amount requis' });
+
+  const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+  const PAYPAL_SECRET = process.env.PAYPAL_SECRET;
+  const PAYPAL_SANDBOX = process.env.PAYPAL_SANDBOX !== 'false';
+  const baseUrl = PAYPAL_SANDBOX
+    ? 'https://api-m.sandbox.paypal.com'
+    : 'https://api-m.paypal.com';
+
+  if (!PAYPAL_CLIENT_ID || !PAYPAL_SECRET) {
+    return res.status(500).json({ error: 'PayPal non configuré (variables PAYPAL_CLIENT_ID / PAYPAL_SECRET manquantes)' });
+  }
+
+  try {
+    // 1) Obtenir un token d'accès PayPal
+    const tokenRes = await fetch(`${baseUrl}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}`).toString('base64'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'grant_type=client_credentials',
+    });
+    const tokenData = await tokenRes.json();
+    const accessToken = tokenData.access_token;
+
+    // 2) Créer la commande PayPal
+    const orderRes = await fetch(`${baseUrl}/v2/checkout/orders`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        intent: 'CAPTURE',
+        purchase_units: [{
+          amount: { currency_code: currency || 'EUR', value: amount },
+          description: description || 'Pass VIP SIB 2026',
+          custom_id: userId,
+        }],
+        application_context: {
+          brand_name: 'SIB 2026',
+          return_url: `${process.env.RAILWAY_URL || 'https://sib-production.up.railway.app'}/api/payment/paypal/success`,
+          cancel_url: `${process.env.RAILWAY_URL || 'https://sib-production.up.railway.app'}/api/payment/paypal/cancel`,
+        },
+      }),
+    });
+    const order = await orderRes.json();
+    const approvalLink = order.links?.find(l => l.rel === 'approve');
+
+    res.json({
+      orderId: order.id,
+      approvalUrl: approvalLink?.href || '',
+    });
+  } catch (err) {
+    console.error('PayPal create-order error:', err);
+    res.status(500).json({ error: 'Erreur création commande PayPal' });
+  }
+});
+
+/**
+ * Capture (finalise) un paiement PayPal approuvé
+ * POST /api/payment/paypal/capture/:orderId
+ */
+app.post('/api/payment/paypal/capture/:orderId', async (req, res) => {
+  const { orderId } = req.params;
+  const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+  const PAYPAL_SECRET = process.env.PAYPAL_SECRET;
+  const PAYPAL_SANDBOX = process.env.PAYPAL_SANDBOX !== 'false';
+  const baseUrl = PAYPAL_SANDBOX
+    ? 'https://api-m.sandbox.paypal.com'
+    : 'https://api-m.paypal.com';
+
+  try {
+    const tokenRes = await fetch(`${baseUrl}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}`).toString('base64'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'grant_type=client_credentials',
+    });
+    const { access_token } = await tokenRes.json();
+
+    const captureRes = await fetch(`${baseUrl}/v2/checkout/orders/${orderId}/capture`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${access_token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const capture = await captureRes.json();
+    const captured = capture.status === 'COMPLETED';
+
+    if (captured) {
+      // Mettre à jour Supabase (pass_type = 'vip')
+      const userId = capture.purchase_units?.[0]?.payments?.captures?.[0]?.custom_id;
+      if (userId && supabaseAdmin) {
+        await supabaseAdmin.from('users').update({
+          pass_type: 'vip',
+          payment_method: 'paypal',
+          payment_order_id: orderId,
+          payment_date: new Date().toISOString(),
+        }).eq('id', userId);
+      }
+    }
+
+    res.json({ success: captured, status: capture.status });
+  } catch (err) {
+    console.error('PayPal capture error:', err);
+    res.status(500).json({ error: 'Erreur capture PayPal' });
+  }
+});
+
+app.get('/api/payment/paypal/success', (req, res) => {
+  res.send('<h2>Paiement PayPal confirmé. Retour à l\'application...</h2>');
+});
+app.get('/api/payment/paypal/cancel', (req, res) => {
+  res.send('<h2>Paiement annulé. Retour à l\'application...</h2>');
+});
+
+// ============================================
+// PAIEMENT — CMI (Centre Monétique Interbancaire)
+// ============================================
+
+/**
+ * Génère les paramètres et l'URL de paiement CMI
+ * POST /api/payment/cmi/create-order
+ */
+app.post('/api/payment/cmi/create-order', async (req, res) => {
+  const { userId, visitorName, email, amount, currency, description } = req.body;
+  if (!userId || !amount) return res.status(400).json({ error: 'userId et amount requis' });
+
+  const CMI_MERCHANT_ID = process.env.CMI_MERCHANT_ID;
+  const CMI_STORE_KEY = process.env.CMI_STORE_KEY;
+  const CMI_URL = process.env.CMI_URL || 'https://payment.cmi.co.ma/fim/est3Dgate';
+
+  if (!CMI_MERCHANT_ID || !CMI_STORE_KEY) {
+    return res.status(500).json({ error: 'CMI non configuré (variables CMI_MERCHANT_ID / CMI_STORE_KEY manquantes)' });
+  }
+
+  const orderId = `SIB2026-${userId.substring(0, 8)}-${Date.now()}`;
+  const callbackUrl = `${process.env.RAILWAY_URL || 'https://sib-production.up.railway.app'}/api/payment/cmi/callback`;
+  const okUrl = `${process.env.RAILWAY_URL || 'https://sib-production.up.railway.app'}/api/payment/cmi/success`;
+  const failUrl = `${process.env.RAILWAY_URL || 'https://sib-production.up.railway.app'}/api/payment/cmi/fail`;
+
+  try {
+    const crypto = await import('crypto');
+    // Construction de la chaîne de hachage CMI (format officiel)
+    const params = {
+      clientid: CMI_MERCHANT_ID,
+      amount: parseFloat(amount).toFixed(2),
+      currency: currency === 'MAD' ? '504' : '978',
+      oid: orderId,
+      okurl: okUrl,
+      failurl: failUrl,
+      callbackUrl,
+      BillToEmail: email,
+      BillToName: escapeHtml(visitorName),
+      storetype: '3d_pay_hosting',
+      trantype: 'PreAuth',
+      refreshtime: '5',
+      lang: 'fr',
+      encoding: 'UTF-8',
+      rnd: Date.now().toString(),
+    };
+
+    // Hash HMAC-SHA512 selon spec CMI
+    const sortedKeys = Object.keys(params).sort();
+    const hashStr = sortedKeys.map(k => params[k]).join('|') + '|' + CMI_STORE_KEY;
+    const hash = crypto.default.createHash('sha512').update(hashStr).digest('base64');
+
+    // Construire l'URL avec les paramètres
+    const urlParams = new URLSearchParams({ ...params, HASH: hash });
+    const paymentUrl = `${CMI_URL}?${urlParams.toString()}`;
+
+    res.json({ orderId, paymentUrl });
+  } catch (err) {
+    console.error('CMI create-order error:', err);
+    res.status(500).json({ error: 'Erreur création commande CMI' });
+  }
+});
+
+app.post('/api/payment/cmi/callback', async (req, res) => {
+  // CMI envoie une confirmation POST après le paiement
+  const { oid, Response, AuthCode, mdStatus } = req.body;
+  if (Response === 'Approved' || mdStatus === '1') {
+    // Extraire le userId depuis l'orderId (format SIB2026-{userId8chars}-{timestamp})
+    if (supabaseAdmin && oid) {
+      const parts = oid.split('-');
+      if (parts.length >= 2) {
+        const userPrefix = parts[1];
+        const { data: users } = await supabaseAdmin
+          .from('users').select('id').ilike('id', `${userPrefix}%`).limit(1);
+        if (users?.[0]) {
+          await supabaseAdmin.from('users').update({
+            pass_type: 'vip',
+            payment_method: 'cmi',
+            payment_order_id: oid,
+            payment_date: new Date().toISOString(),
+          }).eq('id', users[0].id);
+        }
+      }
+    }
+    res.send('ACTION=POSTAUTH');
+  } else {
+    res.send('ACTION=FAIL');
+  }
+});
+
+app.get('/api/payment/cmi/status/:orderId', async (req, res) => {
+  const { orderId } = req.params;
+  if (!supabaseAdmin) return res.json({ status: 'unknown' });
+  // Vérifier dans Supabase si l'order a été traité
+  const { data } = await supabaseAdmin
+    .from('users')
+    .select('pass_type, payment_order_id')
+    .eq('payment_order_id', orderId)
+    .single();
+  res.json({ status: data?.pass_type === 'vip' ? 'paid' : 'pending' });
+});
+
+app.get('/api/payment/cmi/success', (req, res) => {
+  res.send('<h2>Paiement accepté. Retour à l\'application SIB 2026...</h2>');
+});
+app.get('/api/payment/cmi/fail', (req, res) => {
+  res.send('<h2>Paiement refusé. Retour à l\'application SIB 2026...</h2>');
+});
+
+// ============================================
+// PAIEMENT — Activation VIP (commun)
+// ============================================
+
+/**
+ * Active le Pass VIP d'un utilisateur après paiement confirmé
+ * POST /api/payment/activate-vip
+ */
+app.post('/api/payment/activate-vip', async (req, res) => {
+  const { userId, paymentMethod, orderId, activatedAt } = req.body;
+  if (!userId) return res.status(400).json({ error: 'userId requis' });
+  if (!supabaseAdmin) return res.status(500).json({ error: 'Supabase non configuré' });
+
+  try {
+    const { error } = await supabaseAdmin.from('users').update({
+      pass_type: 'vip',
+      payment_method: paymentMethod,
+      payment_order_id: orderId,
+      payment_date: activatedAt || new Date().toISOString(),
+    }).eq('id', userId);
+
+    if (error) throw error;
+    res.json({ success: true });
+  } catch (err) {
+    console.error('activate-vip error:', err);
+    res.status(500).json({ error: 'Erreur activation VIP' });
+  }
+});
 
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;

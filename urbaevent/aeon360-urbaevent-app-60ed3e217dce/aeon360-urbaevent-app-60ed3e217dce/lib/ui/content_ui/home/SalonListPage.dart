@@ -861,6 +861,7 @@ class ActiveSalon {
     return d != null ? DateTime.tryParse(d) : null;
   }
   static String? get webUrl => _current?['web_url'] as String?;
+  static String? get floorPlanUrl => _current?['floor_plan_url'] as String?;
 }
 
 
