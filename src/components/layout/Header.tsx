@@ -115,24 +115,18 @@ export const Header: React.FC = memo(() => {
     { name: t('media.library'), href: ROUTES.MEDIA_LIBRARY, description: t('media.library_desc'), icon: Play },
   ] : [];
   return (
-    <header className="fixed top-0 left-0 right-0 z-[200] transition-all duration-500 bg-white/90 sm:bg-white/75 backdrop-blur-xl border-b border-slate-200/60 shadow-[0_8px_26px_-18px_rgba(15,35,64,0.5)]" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-      {/* Pattern Zellige Subtil en fond */}
-      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #0f172a 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex justify-between items-center h-16 sm:h-20 xl:h-28">
+    <header className="fixed top-0 left-0 right-0 z-[200] transition-all duration-300 bg-white/85 backdrop-blur-xl backdrop-saturate-150 border-b border-neutral-200/80 dark:bg-neutral-900/85 dark:border-neutral-800/80" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+      <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
+        <div className="flex justify-between items-center h-16 sm:h-18 xl:h-20">
           
-          {/* Logo Premium */}
+          {/* Logo */}
           <Link to={ROUTES.HOME} className="flex-shrink-0 flex items-center group">
-            <div className="relative">
-              <div className="absolute -inset-2 bg-blue-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative h-12 sm:h-16 xl:h-20 w-auto flex items-center rounded-lg px-1 sm:px-3 py-1">
-                <img
-                  src="/logo-sib2026.png"
-                  alt="SIB - Salon International du Bâtiment"
-                  className="h-10 sm:h-14 xl:h-16 w-auto object-contain"
-                />
-              </div>
+            <div className="relative h-10 sm:h-12 xl:h-14 w-auto flex items-center transition-transform duration-300 group-hover:scale-[1.02]">
+              <img
+                src="/logo-sib2026.png"
+                alt="SIB - Salon International du Bâtiment"
+                className="h-9 sm:h-11 xl:h-12 w-auto object-contain"
+              />
             </div>
           </Link>
 
@@ -143,39 +137,39 @@ export const Header: React.FC = memo(() => {
               <Link
                 key={item.name}
                 to={item.href}
-                className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all group whitespace-nowrap"
+                className="relative px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all group whitespace-nowrap"
               >
                 {item.name}
-                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </Link>
             ))}
             
             {/* Divider Vertical Minimaliste */}
-            <div className="w-[1px] h-5 bg-slate-200 mx-0.5 xl:mx-1" />
+            <div className="w-[1px] h-5 bg-neutral-200 dark:bg-neutral-700 mx-2" />
 
             {/* Event Dropdown Premium */}
             <div className="relative" onMouseEnter={() => setIsEventMenuOpen(true)} onMouseLeave={() => setIsEventMenuOpen(false)}>
               <button
-                className="px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+                className="px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all flex items-center gap-1 group whitespace-nowrap"
               >
                 <span>{t('nav.event')}</span>
-                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
               
               {/* Dropdown Content */}
               {isEventMenuOpen && (
-                <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                <div className="absolute left-0 mt-0 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800 py-2 z-[250]">
                   {eventMenuItems.map((item) => (
                     <Link
                       key={item.name}
                       to={item.href}
-                      className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group"
+                      className="flex items-start px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors group"
                       onMouseEnter={() => setIsEventMenuOpen(true)}
                       onMouseLeave={() => setIsEventMenuOpen(false)}
                     >
                       <div>
-                        <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
+                        <div className="font-semibold text-neutral-900 dark:text-neutral-100">{item.name}</div>
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                       </div>
                     </Link>
                   ))}
@@ -186,26 +180,26 @@ export const Header: React.FC = memo(() => {
             {/* Participate Dropdown Premium */}
             <div className="relative" onMouseEnter={() => setIsParticipateMenuOpen(true)} onMouseLeave={() => setIsParticipateMenuOpen(false)}>
               <button
-                className="px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+                className="px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all flex items-center gap-1 group whitespace-nowrap"
               >
                 <span>{t('nav.participate')}</span>
-                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
               
               {/* Dropdown Content */}
               {isParticipateMenuOpen && (
-                <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                <div className="absolute left-0 mt-0 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800 py-2 z-[250]">
                   {participateMenuItems.map((item) => (
                     <Link
                       key={item.name}
                       to={item.href}
-                      className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group"
+                      className="flex items-start px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors group"
                       onMouseEnter={() => setIsParticipateMenuOpen(true)}
                       onMouseLeave={() => setIsParticipateMenuOpen(false)}
                     >
                       <div>
-                        <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
+                        <div className="font-semibold text-neutral-900 dark:text-neutral-100">{item.name}</div>
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                       </div>
                     </Link>
                   ))}
@@ -215,30 +209,30 @@ export const Header: React.FC = memo(() => {
             {mediaVisible && (
             <div className="relative" onMouseEnter={() => setIsMediaMenuOpen(true)} onMouseLeave={() => setIsMediaMenuOpen(false)}>
               <button
-                className="px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+                className="px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all flex items-center gap-1 group whitespace-nowrap"
               >
-                <Video className="w-3 h-3 xl:w-3.5 xl:h-3.5 text-blue-500" />
+                <Video className="w-3 h-3 xl:w-3.5 xl:h-3.5 text-primary-600 dark:text-primary-400" />
                 <span>{t('media.menu_title')}</span>
-                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
               
               {/* Dropdown Content */}
               {isMediaMenuOpen && (
-                <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                <div className="absolute left-0 mt-0 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800 py-2 z-[250]">
                   {mediaMenuItems.map((item) => {
                     const Icon = item.icon;
                     return (
                       <Link
                         key={item.name}
                         to={item.href}
-                        className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group"
+                        className="flex items-start px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors group"
                         onMouseEnter={() => setIsMediaMenuOpen(true)}
                         onMouseLeave={() => setIsMediaMenuOpen(false)}
                       >
-                        <Icon className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-slate-400 group-hover:text-blue-600" />
+                        <Icon className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-neutral-400 group-hover:text-primary-600" />
                         <div>
-                          <div className="font-semibold text-slate-900">{item.name}</div>
-                          <div className="text-xs text-slate-500">{item.description}</div>
+                          <div className="font-semibold text-neutral-900 dark:text-neutral-100">{item.name}</div>
+                          <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                         </div>
                       </Link>
                     );
@@ -251,10 +245,10 @@ export const Header: React.FC = memo(() => {
             {/* Contact Link */}
             <Link
               to="/contact"
-              className="px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-semibold uppercase tracking-normal xl:tracking-wide text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 group whitespace-nowrap"
+              className="px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all flex items-center gap-1 group whitespace-nowrap"
             >
               <span>{t('nav.contact')}</span>
-              <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
             </Link>
           </nav>
 
@@ -268,14 +262,14 @@ export const Header: React.FC = memo(() => {
             {isAuthenticated ? (
               <>
               {/* Notifications - masqué sur mobile */}
-              <button data-testid="notifications-button" className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative">
+              <button data-testid="notifications-button" className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors relative">
                 <Bell className="h-5 w-5" />
                 </button>
 
                 {/* Messages - masqué sur mobile */}
                 <Link 
                   to={ROUTES.MESSAGES} 
-                  className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative"
+                  className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors relative"
                 >
                   <MessageCircle className="h-5 w-5" />
                 </Link>
@@ -283,7 +277,7 @@ export const Header: React.FC = memo(() => {
                 {/* Calendar - masqué sur mobile */}
                 <Link aria-label="Calendar" 
                   to={ROUTES.APPOINTMENTS} 
-                  className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+                  className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors"
                 >
                   <Calendar className="h-5 w-5" />
                 </Link>
@@ -293,72 +287,72 @@ export const Header: React.FC = memo(() => {
                   <button
                     onClick={toggleProfile}
                     data-testid="user-menu"
-                    className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex items-center space-x-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                   >
-                    <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <div className="h-8 w-8 bg-primary-600 rounded-full flex items-center justify-center">
                       <User className="h-4 w-4 text-white" />
                     </div>
-                    <span className="hidden md:block text-sm font-medium text-gray-700">
+                    <span className="hidden md:block text-sm font-medium text-neutral-700 dark:text-neutral-200">
                       {user?.profile?.firstName || t('nav.my_account')}
                     </span>
                   </button>
 
                   {isProfileOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-[250]">
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-900 rounded-xl shadow-lg border border-neutral-200 dark:border-neutral-800 py-1 z-[250]">
                       {/* Menu Admin */}
                       {user?.type === 'admin' && (
                         <>
                           <Link
                             to={ROUTES.PROFILE}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.admin_profile')}
                           </Link>
                           <Link
                             to={ROUTES.DASHBOARD}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.admin_dashboard')}
                           </Link>
                           <Link
                             to={ROUTES.ADMIN_PAYMENT_VALIDATION}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.payment_validation')}
                           </Link>
                           <Link
                             to={ROUTES.METRICS}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.metrics')}
                           </Link>
                           <Link
                             to="/security/scanner"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🔍 {t('nav.qr_scanner')}
                           </Link>
                           <Link
                             to="/badge/print-station"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🖨️ {t('nav.badge_print')}
                           </Link>
                           <Link
                             to="/badge/digital"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🎫 {t('nav.digital_badge')}
                           </Link>
                           <hr className="my-1" />
-                          <div className="px-4 py-2 text-xs text-red-600 font-medium">
+                          <div className="px-4 py-2 text-xs text-danger-500 font-medium uppercase tracking-wider">
                             {t('nav.admin_zone')}
                           </div>
                         </>
@@ -369,56 +363,56 @@ export const Header: React.FC = memo(() => {
                         <>
                           <Link
                             to={ROUTES.PROFILE}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_profile')}
                           </Link>
                           <Link
                             to={ROUTES.DASHBOARD}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.exhibitor_dashboard')}
                           </Link>
                           <Link
                             to={ROUTES.NETWORKING}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.b2b_networking')}
                           </Link>
                           <Link
                             to={ROUTES.ADVANCED_MATCHING}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-1"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-1"
                             onClick={closeProfile}
                           >
                             🤖 Matching IA Avancé
                           </Link>
                           <Link
                             to={ROUTES.MINISITE_EDITOR}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.minisite_editor')}
                           </Link>
                           <Link
                             to={ROUTES.CALENDAR}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_slots')}
                           </Link>
                           <Link
                             to={ROUTES.CHAT}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.messages')}
                           </Link>
                           <Link
                             to="/badge/digital"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🎫 {t('nav.digital_badge')}
@@ -431,35 +425,35 @@ export const Header: React.FC = memo(() => {
                         <>
                           <Link
                             to={ROUTES.PROFILE}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_profile')}
                           </Link>
                           <Link
                             to={ROUTES.DASHBOARD}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.partner_dashboard')}
                           </Link>
                           <Link
                             to={ROUTES.NETWORKING}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.vip_networking')}
                           </Link>
                           <Link
                             to="/partner/payment-selection"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             💳 {t('nav.partner_subscription')}
                           </Link>
                           <Link
                             to="/badge/digital"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🎫 {t('nav.digital_badge')}
@@ -472,28 +466,28 @@ export const Header: React.FC = memo(() => {
                         <>
                           <Link
                             to={ROUTES.PROFILE}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_profile')}
                           </Link>
                           <Link
                             to={ROUTES.VISITOR_DASHBOARD}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.visitor_dashboard')}
                           </Link>
                           <Link
                             to={ROUTES.VISITOR_SETTINGS}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.visitor_settings')}
                           </Link>
                           <Link
                             to={ROUTES.APPOINTMENTS}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_appointments')}
@@ -501,7 +495,7 @@ export const Header: React.FC = memo(() => {
                           {!isFreeVisitor && (
                             <Link
                               to={ROUTES.ADVANCED_MATCHING}
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                               onClick={closeProfile}
                             >
                               🤖 Matching IA Avancé
@@ -509,7 +503,7 @@ export const Header: React.FC = memo(() => {
                           )}
                           <Link
                             to="/badge/digital"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🎫 {t('nav.digital_badge')}
@@ -520,7 +514,7 @@ export const Header: React.FC = memo(() => {
                       <hr className="my-1" />
                       <button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                        className="block w-full text-left px-4 py-2 text-sm text-danger-500 hover:bg-danger-50 dark:hover:bg-danger-500/10"
                       >
                         {t('nav.logout')}
                       </button>
@@ -532,19 +526,19 @@ export const Header: React.FC = memo(() => {
               // ✅ CRITICAL: Afficher un loader pendant l'initialisation de l'authentification
               <div className="flex items-center space-x-3">
                 <div className="animate-pulse flex items-center space-x-2">
-                  <div className="h-8 w-24 bg-gray-200 rounded"></div>
-                  <div className="h-8 w-28 bg-gray-200 rounded"></div>
+                  <div className="h-8 w-24 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
+                  <div className="h-8 w-28 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center gap-2">
                 <Link to={ROUTES.LOGIN}>
-                  <Button variant="outline" size="sm" className="border-sib-primary text-sib-primary hover:bg-sib-primary hover:text-white">
+                  <Button variant="ghost" size="sm">
                     {t('nav.login')}
                   </Button>
                 </Link>
                 <Link to={ROUTES.VISITOR_SUBSCRIPTION}>
-                  <Button size="sm" className="bg-sib-primary hover:bg-sib-dark text-white">
+                  <Button variant="primary" size="sm">
                     {t('nav.register')}
                   </Button>
                 </Link>
@@ -554,7 +548,7 @@ export const Header: React.FC = memo(() => {
             {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600"
+              className="lg:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400"
               aria-label="Menu"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -573,7 +567,7 @@ export const Header: React.FC = memo(() => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden border-t border-gray-200 py-4 max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain bg-white relative z-[220]" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="lg:hidden border-t border-neutral-200 dark:border-neutral-800 py-4 max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain bg-white relative z-[220]" style={{ WebkitOverflowScrolling: 'touch' }}>
             <div className="space-y-2 pb-6">
               {/* Language & Theme on mobile */}
               <div className="flex items-center gap-3 px-3 py-2 lg:hidden">
@@ -584,15 +578,15 @@ export const Header: React.FC = memo(() => {
               {/* Raccourcis rapides mobile (quand authentifié) */}
               {isAuthenticated && (
                 <div className="flex items-center gap-2 px-3 py-2 sm:hidden border-b border-gray-200 pb-3">
-                  <Link to={ROUTES.MESSAGES} onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 rounded-lg text-sm text-gray-700">
+                  <Link to={ROUTES.MESSAGES} onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm text-neutral-700 dark:text-neutral-200">
                     <MessageCircle className="h-4 w-4" />
                     <span>{t('nav.messages')}</span>
                   </Link>
-                  <Link to={ROUTES.APPOINTMENTS} onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 rounded-lg text-sm text-gray-700">
+                  <Link to={ROUTES.APPOINTMENTS} onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm text-neutral-700 dark:text-neutral-200">
                     <Calendar className="h-4 w-4" />
                     <span>{t('nav.calendar')}</span>
                   </Link>
-                  <button onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 rounded-lg text-sm text-gray-700 relative">
+                  <button onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm text-neutral-700 dark:text-neutral-200 relative">
                     <Bell className="h-4 w-4" />
                   </button>
                 </div>
@@ -603,7 +597,7 @@ export const Header: React.FC = memo(() => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
+                  className="block px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
                   onClick={closeMenu}
                 >
                   {item.name}
@@ -611,45 +605,45 @@ export const Header: React.FC = memo(() => {
               ))}
 
               {/* Mobile Event Menu */}
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <div className="px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <div className="border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-2">
+                <div className="px-3 py-3 min-h-[44px] text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">
                   {t('nav.event')}
                 </div>
                 {eventMenuItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}
-                    className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="block px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
                     onClick={closeMenu}
                   >
                     <div>{item.name}</div>
-                    <div className="text-xs text-gray-500">{item.description}</div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                   </Link>
                 ))}
               </div>
 
               {/* Mobile Participate Menu */}
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <div className="px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <div className="border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-2">
+                <div className="px-3 py-3 min-h-[44px] text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">
                   {t('nav.participate')}
                 </div>
                 {participateMenuItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}
-                    className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="block px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
                     onClick={closeMenu}
                   >
                     <div>{item.name}</div>
-                    <div className="text-xs text-gray-500">{item.description}</div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                   </Link>
                 ))}
               </div>
 
               {/* Mobile Media Menu */}
               {mediaVisible && mediaMenuItems.length > 0 && (
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <div className="px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
+              <div className="border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-2">
+                <div className="px-3 py-3 min-h-[44px] text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest flex items-center">
                   <Video className="w-4 h-4 mr-2" />
                   {t('media.menu_title')}
                 </div>
@@ -659,13 +653,13 @@ export const Header: React.FC = memo(() => {
                     <Link
                       key={item.name}
                       to={item.href}
-                      className="flex items-start px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
+                      className="flex items-start px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
                       onClick={closeMenu}
                     >
                       <Icon className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" />
                       <div>
                         <div>{item.name}</div>
-                        <div className="text-xs text-gray-500">{item.description}</div>
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                       </div>
                     </Link>
                   );
@@ -674,10 +668,10 @@ export const Header: React.FC = memo(() => {
               )}
 
               {/* Mobile Contact Link */}
-              <div className="border-t border-gray-200 pt-2 mt-2">
+              <div className="border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-2">
                 <Link
                   to="/contact"
-                  className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
+                  className="block px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors font-medium"
                   onClick={closeMenu}
                 >
                   {t('nav.contact')}
