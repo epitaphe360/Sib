@@ -1,15 +1,18 @@
 /**
- * Section Galerie Média sur la HomePage
- * Affiche photos/vidéos depuis Supabase (ou WordPress en fallback)
+ * SIB 2026 — MediaShowcaseSection
+ * Galerie media, grille masonry-like, lightbox epure.
  */
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Image as ImageIcon, X, ArrowRight } from 'lucide-react';
+import { Expand, X, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSupabaseMedia } from '../../hooks/useSupabaseContent';
 import { useWordPressMedia } from '../../hooks/useWordPressContent';
 import { useTranslation } from '../../hooks/useTranslation';
+import { Button } from '../ui/Button';
+import { SmartImage } from '../ui/SmartImage';
+import { IMAGES } from '../../lib/images';
 
 interface MediaItem {
   id: string | number;
@@ -19,208 +22,143 @@ interface MediaItem {
   alt?: string;
 }
 
-interface LightboxProps {
-  image: string;
-  title: string;
-  onClose: () => void;
-}
-
-const Lightbox: React.FC<LightboxProps> = ({ image, title, onClose }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center p-4"
+const Lightbox: React.FC<{ image: string; title: string; onClose: () => void }> = ({ image, title, onClose }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+    onClick={onClose}
+  >
+    <button
       onClick={onClose}
+      className="absolute top-6 right-6 h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+      aria-label="Fermer"
     >
-      <button
-        onClick={onClose}
-        className="absolute top-6 right-6 text-white hover:text-sib-gold transition-colors"
-      >
-        <X className="w-8 h-8" />
-      </button>
-      
-      <motion.div
-        initial={{ scale: 0.8 }}
-        animate={{ scale: 1 }}
-        exit={{ scale: 0.8 }}
-        onClick={(e) => e.stopPropagation()}
-        className="max-w-6xl w-full"
-      >
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-auto max-h-[80vh] object-contain rounded-lg shadow-2xl"
-        />
-        {title && (
-          <p className="text-white text-center mt-4 text-lg">{title}</p>
-        )}
-      </motion.div>
+      <X className="w-5 h-5" />
+    </button>
+    <motion.div
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.95, opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      onClick={(e) => e.stopPropagation()}
+      className="max-w-6xl w-full"
+    >
+      <img
+        src={image}
+        alt={title}
+        className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl"
+      />
+      {title && (
+        <p className="text-white/90 text-center mt-4 text-base font-medium tracking-wide">{title}</p>
+      )}
     </motion.div>
-  );
-};
+  </motion.div>
+);
 
 export const MediaShowcaseSection: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<MediaItem | null>(null);
   const { t } = useTranslation();
-  
-  // Essayer Supabase d'abord, puis WordPress
+
   const { data: supabaseMedia, loading: supabaseLoading } = useSupabaseMedia(8, 'image');
   const { data: wpMedia, loading: wpLoading } = useWordPressMedia(8);
-  
+
   const mediaItems = supabaseMedia?.length > 0 ? supabaseMedia : wpMedia;
   const loading = supabaseLoading || wpLoading;
 
-  // Médias par défaut si aucune source disponible
   const defaultMedia: MediaItem[] = [
-    {
-      id: 1,
-      title: 'Chantier de construction',
-      url: 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=800',
-      alt: 'Chantier de construction'
-    },
-    {
-      id: 2,
-      title: 'Architecture moderne',
-      url: 'https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg?w=800',
-      alt: 'Architecture moderne'
-    },
-    {
-      id: 3,
-      title: 'Gros œuvre BTP',
-      url: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?w=800',
-      alt: 'Gros œuvre BTP'
-    },
-    {
-      id: 4,
-      title: 'Matériaux de construction',
-      url: 'https://images.pexels.com/photos/1370704/pexels-photo-1370704.jpeg?w=800',
-      alt: 'Matériaux de construction'
-    },
-    {
-      id: 5,
-      title: 'Design & Architecture',
-      url: 'https://images.pexels.com/photos/2760243/pexels-photo-2760243.jpeg?w=800',
-      alt: 'Design et Architecture'
-    },
-    {
-      id: 6,
-      title: 'Structure métallique',
-      url: 'https://images.pexels.com/photos/277667/pexels-photo-277667.jpeg?w=800',
-      alt: 'Structure métallique'
-    },
-    {
-      id: 7,
-      title: 'Innovation BTP',
-      url: 'https://images.pexels.com/photos/1117452/pexels-photo-1117452.jpeg?w=800',
-      alt: 'Innovation BTP'
-    },
-    {
-      id: 8,
-      title: 'Salon professionnel',
-      url: 'https://images.pexels.com/photos/1640147/pexels-photo-1640147.jpeg?w=800',
-      alt: 'Salon professionnel du bâtiment'
-    }
+    { id: 1, title: 'Architecture', url: IMAGES.hero.architecture, alt: 'Architecture moderne' },
+    { id: 2, title: 'Chantier', url: IMAGES.hero.construction, alt: 'Chantier' },
+    { id: 3, title: 'Rencontre B2B', url: IMAGES.business.meeting, alt: 'Rencontre B2B' },
+    { id: 4, title: 'Exposition', url: IMAGES.events.expo, alt: 'Exposition' },
+    { id: 5, title: 'Matériaux', url: IMAGES.materials.steel, alt: 'Matériaux' },
+    { id: 6, title: 'Design', url: IMAGES.hero.design, alt: 'Design' },
+    { id: 7, title: 'Innovation', url: IMAGES.tech.innovation, alt: 'Innovation' },
+    { id: 8, title: 'Conférence', url: IMAGES.events.conference, alt: 'Conférence' },
   ];
 
   const displayMedia = mediaItems || defaultMedia;
 
   return (
     <>
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-sib-primary to-blue-900 relative overflow-hidden">
-        {/* Pattern lumineux */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-            backgroundSize: '32px 32px'
-          }} />
-        </div>
+      <section className="relative py-20 lg:py-24 bg-primary-900 overflow-hidden">
+        {/* Subtle accent glow */}
+        <div className="absolute -top-40 right-0 h-96 w-96 rounded-full bg-accent-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-40 left-0 h-96 w-96 rounded-full bg-primary-500/10 blur-3xl pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
-          {/* En-tête */}
+        <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-14 max-w-2xl mx-auto"
           >
-            <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg mb-6">
-              <ImageIcon className="w-6 h-6 text-sib-gold" />
-              <span className="text-sm font-bold text-white uppercase tracking-wider">
-                {t('media.gallery_badge')}
-              </span>
+            <div className="sib-kicker mb-4 justify-center !text-accent-500">
+              {t('media.gallery_badge')}
             </div>
-
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white tracking-tight mb-4">
               {t('media.gallery_title')}
             </h2>
-            
-            <p className="text-blue-100 text-lg max-w-2xl mx-auto">
+            <p className="text-base lg:text-lg text-white/70 leading-relaxed">
               {t('media.gallery_desc')}
             </p>
           </motion.div>
 
-          {/* Grid de médias */}
+          {/* Grid */}
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="aspect-square bg-white/10 rounded-xl animate-pulse" />
+                <div key={i} className="aspect-square bg-white/5 rounded-2xl animate-pulse" />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
               {displayMedia.map((item: any, index: number) => (
-                <motion.div
+                <motion.button
+                  type="button"
                   key={item.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="relative aspect-square overflow-hidden rounded-xl group cursor-pointer shadow-lg"
+                  transition={{ duration: 0.5, delay: index * 0.04 }}
+                  className="group relative aspect-square overflow-hidden rounded-2xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 focus:ring-offset-primary-900"
                   onClick={() => setSelectedImage(item)}
                 >
-                  <img
-                    src={item.thumbnail || item.url || 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=400'}
-                    alt={item.alt || item.title || 'Image du salon'}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      e.currentTarget.src = 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=400';
-                    }}
+                  <SmartImage
+                    source={item.thumbnail || item.url || IMAGES.business.meeting}
+                    aspect="1/1"
+                    rounded="none"
+                    zoom
+                    imgClassName="transition-transform duration-700 group-hover:scale-110"
                   />
-                  
-                  {/* Overlay au survol */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-sib-primary via-sib-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                    <p className="text-white text-sm font-semibold truncate">
+
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary-900/85 via-primary-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                    <p className="text-white text-sm font-semibold truncate tracking-tight">
                       {item.title}
                     </p>
                   </div>
 
-                  {/* Icône agrandir */}
-                  <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ImageIcon className="w-4 h-4 text-white" />
+                  {/* Expand icon */}
+                  <div className="absolute top-3 right-3 h-8 w-8 rounded-lg bg-white/15 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Expand className="w-3.5 h-3.5 text-white" />
                   </div>
-                </motion.div>
+                </motion.button>
               ))}
             </div>
           )}
 
-          {/* Bouton Voir toute la galerie */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <Link
-              to="/media-library"
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-sib-gold to-amber-600 text-white px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
-            >
-              <span>{t('media.view_gallery')}</span>
-              <ArrowRight className="w-5 h-5" />
+          <div className="text-center">
+            <Link to="/media-library">
+              <Button variant="accent" size="lg" className="group">
+                {t('media.view_gallery')}
+                <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 
