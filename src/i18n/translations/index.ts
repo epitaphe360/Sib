@@ -68,10 +68,25 @@ export const allTranslations = mergeTranslations(
   visitorTranslations
 );
 
+// Après fusion, s'assurer que les langues cibles (en, ar) contiennent
+// toutes les clés (fallback vers le français). Cela évite les clés manquantes
+// à l'exécution et permet d'ajouter l'arabe progressivement.
+['en', 'ar'].forEach((lang) => {
+  if (!allTranslations[lang]) {
+    allTranslations[lang] = {} as Record<string, string>;
+  }
+  Object.keys(allTranslations.fr || {}).forEach((key) => {
+    if (!(key in allTranslations[lang])) {
+      // copier la valeur FR comme placeholder
+      allTranslations[lang][key] = allTranslations.fr[key];
+    }
+  });
+});
+
 /**
  * Langues supportées
  */
-export const supportedLanguages = ['fr', 'en'] as const;
+export const supportedLanguages = ['fr', 'en', 'ar'] as const;
 export type SupportedLanguage = typeof supportedLanguages[number];
 
 /**
