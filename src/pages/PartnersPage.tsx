@@ -1,8 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, Grid2x2 as Grid, List, Handshake } from 'lucide-react';
+import { Search, Filter, Grid2x2 as Grid, List, Handshake, Sparkles } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
 import { motion } from 'framer-motion';
 import { CONFIG } from '../lib/config';
 import { SupabaseService } from '../services/supabaseService';
@@ -12,6 +11,8 @@ import { usePartnerTranslation } from '../hooks/usePartnerTranslation';
 import { COUNTRIES } from '../data/countries';
 import PartnerCard from '../components/partner/PartnerCard';
 import { LogoShowcaseSection } from '../components/home/LogoShowcaseSection';
+import { SmartImage } from '../components/ui/SmartImage';
+import { IMAGES } from '../lib/images';
 
 interface Partner {
   id: string;
@@ -228,65 +229,110 @@ export default function PartnersPage() {
     return colors[category] || 'default';
   }, []);
 
+  const statCards: { key: keyof typeof partnerStats; label: string; icon?: any }[] = [
+    { key: 'organizer', label: 'Organisateurs' },
+    { key: 'co_organizer', label: 'Co-organisateurs' },
+    { key: 'official_sponsor', label: 'Sponsor Officiel' },
+    { key: 'delegated_organizer', label: 'Org. Délégué' },
+    { key: 'partner', label: 'Nos Partenaires' },
+    { key: 'press_partner', label: 'Presse' },
+    { key: 'total', label: 'Total', icon: Handshake },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-          <div className="text-center mb-8">
+    <div className="min-h-screen bg-white dark:bg-neutral-950">
+      {/* Hero */}
+      <section className="relative overflow-hidden pt-14 pb-16 lg:pt-20 lg:pb-20">
+        <div className="absolute inset-0 -z-10">
+          <SmartImage
+            source={IMAGES.business.handshake}
+            aspect="auto"
+            rounded="none"
+            priority
+            className="h-full w-full"
+            imgClassName="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary-900/92 via-primary-900/88 to-primary-900/95" />
+          <div className="absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-accent-500/15 blur-[120px]" />
+        </div>
+
+        <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto">
             <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 mb-8"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-accent-500" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90">
+                Partenaires SIB
+              </span>
+            </motion.div>
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.05 }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.05] mb-6"
             >
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                {t('pages.partners.title')}
-              </h1>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                {t('pages.partners.description')}
-              </p>
-            </motion.div>
+              {t('pages.partners.title')}
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.12 }}
+              className="text-base lg:text-lg text-white/75 leading-relaxed"
+            >
+              {t('pages.partners.description')}
+            </motion.p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Logo Showcase Section - Bande défilante des logos partenaires */}
+      {/* Logo showcase */}
       <LogoShowcaseSection type="partners" />
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and Controls */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+      <div className="max-w-container mx-auto px-6 lg:px-8 py-12">
+        {/* Search & controls */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
             <input
               type="text"
               placeholder={t('pages.partners.search')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full h-10 pl-10 pr-4 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg text-sm text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all"
             />
           </div>
-          
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <Filter className="h-4 w-4 mr-2" />
+
+          <div className="flex items-center gap-2">
+            <Button variant="secondary" size="sm" onClick={() => setShowFilters(!showFilters)}>
+              <Filter className="h-3.5 w-3.5 mr-1.5" />
               Filtres
             </Button>
-            
-            <div className="flex border border-gray-300 rounded-lg">
+            <div className="flex border border-neutral-200 dark:border-neutral-800 rounded-lg bg-white dark:bg-neutral-900 p-1">
               <button
+                type="button"
                 onClick={() => setViewMode(CONFIG.viewModes.grid)}
-                className={`p-2 ${viewMode === CONFIG.viewModes.grid ? 'bg-blue-50 text-blue-600' : 'text-gray-400'}`}
+                aria-label="Grid"
+                className={`h-8 w-8 rounded-md flex items-center justify-center transition-all ${
+                  viewMode === CONFIG.viewModes.grid
+                    ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
+                    : 'text-neutral-400 hover:text-neutral-600'
+                }`}
               >
                 <Grid className="h-4 w-4" />
               </button>
               <button
+                type="button"
                 onClick={() => setViewMode(CONFIG.viewModes.list)}
-                className={`p-2 ${viewMode === CONFIG.viewModes.list ? 'bg-blue-50 text-blue-600' : 'text-gray-400'}`}
+                aria-label="List"
+                className={`h-8 w-8 rounded-md flex items-center justify-center transition-all ${
+                  viewMode === CONFIG.viewModes.list
+                    ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
+                    : 'text-neutral-400 hover:text-neutral-600'
+                }`}
               >
                 <List className="h-4 w-4" />
               </button>
@@ -294,45 +340,39 @@ export default function PartnersPage() {
           </div>
         </div>
 
-        {/* Filters */}
         {showFilters && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6 p-4 bg-gray-50 rounded-lg mb-6"
+            className="mb-6 p-5 bg-neutral-50 dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-[0.15em] mb-2">
                   Niveau partenaire
                 </label>
                 <select
                   value={selectedTier}
                   onChange={(e) => setSelectedTier(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full h-10 px-3 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 focus:border-primary-600 focus:ring-2 focus:ring-primary-600/20 rounded-lg text-sm text-neutral-900 dark:text-white transition-all"
                 >
                   {partnerTiers.map((tier) => (
-                    <option key={tier.value} value={tier.value}>
-                      {tier.label}
-                    </option>
+                    <option key={tier.value} value={tier.value}>{tier.label}</option>
                   ))}
                 </select>
               </div>
-              
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-[0.15em] mb-2">
                   Pays
                 </label>
                 <select
                   value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full h-10 px-3 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 focus:border-primary-600 focus:ring-2 focus:ring-primary-600/20 rounded-lg text-sm text-neutral-900 dark:text-white transition-all"
                 >
                   <option value="">Tous les pays</option>
                   {countries.map((country) => (
-                    <option key={country} value={country}>
-                      {country}
-                    </option>
+                    <option key={country} value={country}>{country}</option>
                   ))}
                 </select>
               </div>
@@ -340,113 +380,80 @@ export default function PartnersPage() {
           </motion.div>
         )}
 
-        {/* Stats - Types Partenaires SIB */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🏛️</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.organizer}</div>
-              <div className="text-xs font-semibold text-gray-600">Organisateurs</div>
+        {/* Stats */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-10">
+          {statCards.map(({ key, label, icon: Icon }) => (
+            <div
+              key={key}
+              className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-shadow"
+            >
+              {Icon && (
+                <div className="mx-auto mb-2 h-8 w-8 rounded-lg bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center">
+                  <Icon className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+                </div>
+              )}
+              <div className="text-xl font-bold text-neutral-900 dark:text-white tabular-nums">
+                {partnerStats[key]}
+              </div>
+              <div className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mt-0.5">
+                {label}
+              </div>
             </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🤝</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.co_organizer}</div>
-              <div className="text-xs font-semibold text-gray-600">Co-organisateurs</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">⭐</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.official_sponsor}</div>
-              <div className="text-xs font-semibold text-gray-600">Sponsor Officiel</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">📋</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.delegated_organizer}</div>
-              <div className="text-xs font-semibold text-gray-600">Org. Délégué</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">🌐</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.partner}</div>
-              <div className="text-xs font-semibold text-gray-600">Nos Partenaires</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <div className="text-3xl mb-1">📰</div>
-              <div className="text-xl font-bold text-gray-900">{partnerStats.press_partner}</div>
-              <div className="text-xs font-semibold text-gray-600">Presse</div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-4 text-center">
-              <Handshake className="h-7 w-7 text-blue-600 mx-auto mb-1" />
-              <div className="text-xl font-bold text-gray-900">{partnerStats.total}</div>
-              <div className="text-xs font-semibold text-gray-600">Total</div>
-            </div>
-          </Card>
+          ))}
         </div>
 
-        {/* Partners List - Grouped by Tier */}
+        {/* Partners list grouped by tier */}
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map(i => (
+            {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={`skeleton-${i}`} className="animate-pulse">
-                <div className="bg-white rounded-lg p-6 h-80">
-                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-20 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 h-80 border border-neutral-200 dark:border-neutral-800">
+                  <div className="h-4 bg-neutral-100 dark:bg-neutral-800 rounded mb-4" />
+                  <div className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded mb-4" />
+                  <div className="h-4 bg-neutral-100 dark:bg-neutral-800 rounded mb-2" />
+                  <div className="h-4 bg-neutral-100 dark:bg-neutral-800 rounded w-2/3" />
                 </div>
               </div>
             ))}
           </div>
         ) : filteredPartners.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="bg-gray-100 rounded-full p-6 w-24 h-24 mx-auto mb-4">
-              <Search className="h-12 w-12 text-gray-400" />
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl p-12 text-center border border-dashed border-neutral-200 dark:border-neutral-800">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center">
+              <Search className="h-7 w-7 text-primary-600 dark:text-primary-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2 tracking-tight">
               {t('pages.partners.no_results')}
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6">
               {t('pages.partners.try_modify')}
             </p>
-            <Button variant="default" onClick={() => {
-              setSearchTerm('');
-              setSelectedTier('');
-              setSelectedCountry('');
-            }}>
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedTier('');
+                setSelectedCountry('');
+              }}
+            >
               {t('pages.partners.reset_filters')}
             </Button>
           </div>
         ) : (
-          <div className="space-y-10">
+          <div className="space-y-12">
             {[
-              { key: 'organizer',           label: 'Organisateurs',         emoji: '🏛️', gradient: 'from-yellow-600 to-amber-700',   border: 'border-yellow-200', bg: 'bg-yellow-50' },
-              { key: 'co_organizer',        label: 'Co-organisateurs',      emoji: '🤝', gradient: 'from-amber-500 to-yellow-600',  border: 'border-amber-200',  bg: 'bg-amber-50' },
-              { key: 'official_sponsor',    label: 'Sponsor Officiel',      emoji: '⭐', gradient: 'from-blue-600 to-blue-800',     border: 'border-blue-200',   bg: 'bg-blue-50' },
-              { key: 'delegated_organizer', label: 'Organisateur Délégué',  emoji: '📋', gradient: 'from-green-600 to-emerald-700', border: 'border-green-200',  bg: 'bg-green-50' },
-              { key: 'partner',             label: 'Nos Partenaires',       emoji: '🌐', gradient: 'from-purple-500 to-indigo-600', border: 'border-purple-200', bg: 'bg-purple-50' },
-              { key: 'press_partner',       label: 'Nos Partenaires Presse',emoji: '📰', gradient: 'from-red-600 to-rose-700',      border: 'border-red-200',    bg: 'bg-red-50' },
+              { key: 'organizer', label: 'Organisateurs', accent: 'warning' },
+              { key: 'co_organizer', label: 'Co-organisateurs', accent: 'warning' },
+              { key: 'official_sponsor', label: 'Sponsor Officiel', accent: 'info' },
+              { key: 'delegated_organizer', label: 'Organisateur Délégué', accent: 'success' },
+              { key: 'partner', label: 'Nos Partenaires', accent: 'default' },
+              { key: 'press_partner', label: 'Nos Partenaires Presse', accent: 'error' },
             ]
-              .map(tier => ({
+              .map((tier) => ({
                 ...tier,
-                partners: filteredPartners.filter(p => p.partner_tier === tier.key)
+                partners: filteredPartners.filter((p) => p.partner_tier === tier.key),
               }))
-              .filter(tier => tier.partners.length > 0)
+              .filter((tier) => tier.partners.length > 0)
               .map((tier) => (
                 <motion.section
                   key={tier.key}
@@ -455,20 +462,24 @@ export default function PartnersPage() {
                   transition={{ duration: 0.5 }}
                   viewport={{ once: true }}
                 >
-                  {/* Tier Section Header */}
-                  <div className={`flex items-center gap-3 mb-5 p-4 rounded-xl ${tier.bg} border ${tier.border}`}>
-                    <span className="text-3xl">{tier.emoji}</span>
+                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-neutral-200 dark:border-neutral-800">
                     <div>
-                      <h2 className="text-xl font-bold text-gray-900">{tier.label}</h2>
-                      <p className="text-sm text-gray-500">{tier.partners.length} partenaire{tier.partners.length > 1 ? 's' : ''}</p>
+                      <div className="sib-kicker mb-2">
+                        {tier.partners.length} partenaire{tier.partners.length > 1 ? 's' : ''}
+                      </div>
+                      <h2 className="text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">
+                        {tier.label}
+                      </h2>
                     </div>
                   </div>
 
-                  {/* Tier Partner Cards */}
-                  <div className={viewMode === CONFIG.viewModes.grid
-                    ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-                    : 'space-y-6'
-                  }>
+                  <div
+                    className={
+                      viewMode === CONFIG.viewModes.grid
+                        ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+                        : 'space-y-6'
+                    }
+                  >
                     {tier.partners.map((partner, index) => (
                       <PartnerCardWrapper
                         key={partner.id}
@@ -485,12 +496,12 @@ export default function PartnersPage() {
                 </motion.section>
               ))}
 
-            <div className="pt-4 flex flex-col items-center gap-3">
-              <p className="text-sm text-gray-500">
+            <div className="pt-6 flex flex-col items-center gap-3">
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 font-medium">
                 {partners.length} affichés sur {totalPartners} partenaires
               </p>
               {hasMore && (
-                <Button onClick={handleLoadMore} disabled={isLoading}>
+                <Button variant="primary" size="lg" onClick={handleLoadMore} disabled={isLoading}>
                   {isLoading ? 'Chargement...' : 'Charger plus'}
                 </Button>
               )}

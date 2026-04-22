@@ -76,6 +76,8 @@ export const IMAGES = {
     construction2:    { id: 'photo-1503387762-592deb58ef4e', alt: 'Équipe de chantier BTP', credit: 'Unsplash' },
     /** Plan architectural, blueprints */
     blueprints:       { id: 'photo-1503387837-b154d5074bd2', alt: 'Plans architecturaux', credit: 'Unsplash' },
+    /** Design intérieur / aménagement */
+    design:           { id: 'photo-1586023492125-27b2c045efd7', alt: 'Intérieur design contemporain', credit: 'Unsplash' },
   },
 
   /* Networking / business */
@@ -113,6 +115,7 @@ export const IMAGES = {
     casablanca:       { id: 'photo-1553178431-04e5a9fa2f8d', alt: 'Casablanca moderne', credit: 'Unsplash' },
     mosque:           { id: 'photo-1548018560-c7196548e84d', alt: 'Architecture traditionnelle', credit: 'Unsplash' },
     port:             { id: 'photo-1568674749775-96b32edbdba5', alt: 'Port maritime', credit: 'Unsplash' },
+    eljadida:         { id: 'photo-1539020140153-e479b8c22e70', alt: 'El Jadida', credit: 'Unsplash' },
   },
 
   /* Événements / conférences */
@@ -121,6 +124,8 @@ export const IMAGES = {
     audience:         { id: 'photo-1540575467063-178a50c2df87', alt: 'Public d\'une conférence', credit: 'Unsplash' },
     workshop:         { id: 'photo-1552664730-d307ca884978', alt: 'Atelier professionnel', credit: 'Unsplash' },
     keynote:          { id: 'photo-1475721027785-f74eccf877e2', alt: 'Keynote', credit: 'Unsplash' },
+    conference:       { id: 'photo-1475721027785-f74eccf877e2', alt: 'Conférence', credit: 'Unsplash' },
+    expo:             { id: 'photo-1511795409834-ef04bbd61622', alt: 'Salon professionnel', credit: 'Unsplash' },
   },
 
   /* Tech / innovation */
@@ -129,6 +134,7 @@ export const IMAGES = {
     digital:          { id: 'photo-1519389950473-47ba0277781c', alt: 'Outils numériques', credit: 'Unsplash' },
     data:             { id: 'photo-1551288049-bebda4e38f71', alt: 'Données et graphiques', credit: 'Unsplash' },
     bim:              { id: 'photo-1581091226825-a6a2a5aee158', alt: 'Modélisation BIM', credit: 'Unsplash' },
+    innovation:       { id: 'photo-1518770660439-4636190af475', alt: 'Innovation technologique', credit: 'Unsplash' },
   },
 
   /* Abstract / patterns / fonds */

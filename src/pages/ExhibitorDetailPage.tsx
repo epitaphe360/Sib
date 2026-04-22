@@ -127,25 +127,12 @@ export default function ExhibitorDetailPage() {
     toast.success('Téléchargement de la brochure démarré');
   };
 
-  if (isLoading) {
+  if (isLoading || !exhibitor) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-neutral-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Chargement de l'exposant...
-          </h3>
-        </div>
-      </div>
-    );
-  }
-
-  if (!exhibitor) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-neutral-200 dark:border-neutral-800 border-t-primary-600 mx-auto mb-4" />
+          <h3 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 tracking-tight">
             Chargement de l'exposant...
           </h3>
         </div>
@@ -165,11 +152,11 @@ export default function ExhibitorDetailPage() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'institutional': return 'bg-purple-100 text-purple-600';
-      case 'bâtiment-industry': return 'bg-blue-100 text-blue-600';
-      case 'bâtiment-operations': return 'bg-green-100 text-green-600';
-      case 'academic': return 'bg-orange-100 text-orange-600';
-      default: return 'bg-gray-100 text-gray-600';
+      case 'institutional': return 'bg-accent-500/15 text-accent-500';
+      case 'bâtiment-industry': return 'bg-primary-500/20 text-primary-300';
+      case 'bâtiment-operations': return 'bg-success-500/20 text-success-300';
+      case 'academic': return 'bg-warning-500/20 text-warning-300';
+      default: return 'bg-white/10 text-white/80';
     }
   };
 
@@ -186,73 +173,70 @@ export default function ExhibitorDetailPage() {
   const CategoryIcon = getCategoryIcon(exhibitor.category);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
-      {/* Banner de validation pour les profils non publiés */}
+    <div className="min-h-screen bg-white dark:bg-neutral-950">
+      {/* Banner pour profils non publiés */}
       {exhibitor.isPublished === false && (
-        <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 px-4 shadow-lg">
-          <div className="max-w-7xl mx-auto flex items-center justify-center space-x-3">
-            <AlertCircle className="h-6 w-6 flex-shrink-0" />
-            <p className="text-base font-semibold text-center">
-              ⚠️ Fiche en cours de validation - Ce profil n'est pas encore visible publiquement
+        <div className="bg-warning-500 text-white py-3 px-4 shadow-sm">
+          <div className="max-w-container mx-auto flex items-center justify-center gap-3">
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
+            <p className="text-sm font-semibold text-center">
+              Fiche en cours de validation — ce profil n'est pas encore visible publiquement
             </p>
           </div>
         </div>
       )}
 
-      {/* Hero Banner Ultra-Premium */}
-      <div className="relative min-h-[600px] flex items-center pt-20 pb-32 overflow-hidden">
-        {/* Background Sophistiqué */}
-        <div className="absolute inset-0 bg-slate-950">
-          <div 
-            className="absolute inset-0 opacity-40 mix-blend-overlay scale-110"
-            style={{ 
+      {/* Hero */}
+      <div className="relative min-h-[520px] flex items-end pt-24 pb-28 overflow-hidden">
+        <div className="absolute inset-0 bg-primary-900">
+          <div
+            className="absolute inset-0 opacity-30 mix-blend-overlay"
+            style={{
               backgroundImage: 'url(https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=2000&q=80)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/80 to-[#f8fafc]" />
-          
-          {/* Cercles de Lumière & Patterns */}
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[150px] translate-y-1/2 -translate-x-1/2" />
-          
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-primary-900/60 via-primary-900/85 to-white dark:to-neutral-950" />
+          <div className="absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-accent-500/15 blur-[120px]" />
         </div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+
+        <div className="relative max-w-container mx-auto px-6 lg:px-8 w-full">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="mb-12"
+            className="mb-10"
           >
-            <Link to={ROUTES.EXHIBITORS} className="group inline-flex items-center space-x-3 text-white/50 hover:text-white transition-all">
-              <div className="p-2 rounded-full bg-white/5 border border-white/10 group-hover:bg-white/10">
-                <ArrowLeft className="h-5 w-5" />
+            <Link
+              to={ROUTES.EXHIBITORS}
+              className="group inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors"
+            >
+              <div className="h-9 w-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-white/15 transition-colors">
+                <ArrowLeft className="h-4 w-4" />
               </div>
-              <span className="font-bold text-sm uppercase tracking-widest">Retour au Catalogue</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em]">Retour au catalogue</span>
             </Link>
           </motion.div>
 
-          <div className="flex flex-col lg:flex-row items-end gap-12">
-            {/* Logo avec traitement de luxe */}
+          <div className="flex flex-col lg:flex-row items-end gap-10">
+            {/* Logo */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="relative shrink-0"
             >
-              <div className="absolute -inset-4 bg-gradient-to-tr from-blue-500/20 to-indigo-500/20 rounded-[3rem] blur-2xl" />
-              <div className="relative h-56 w-56 rounded-[2.5rem] bg-white p-6 shadow-2xl border border-white/10 overflow-hidden flex items-center justify-center">
+              <div className="absolute -inset-4 bg-accent-500/20 rounded-3xl blur-2xl" />
+              <div className="relative h-44 w-44 rounded-2xl bg-white p-5 shadow-xl border border-white/20 overflow-hidden flex items-center justify-center">
                 <img
                   src={exhibitor.logo || 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=200'}
                   alt={exhibitor.companyName}
                   className="max-h-full max-w-full object-contain"
                 />
               </div>
-              
+
               {exhibitor.featured && (
-                <div className="absolute -top-4 -right-4 h-14 w-14 bg-gradient-to-tr from-yellow-400 to-amber-600 rounded-2xl shadow-xl flex items-center justify-center border-4 border-slate-900 rotate-12">
-                  <Crown className="h-7 w-7 text-white" />
+                <div className="absolute -top-3 -right-3 h-11 w-11 bg-accent-500 rounded-xl shadow-lg flex items-center justify-center border-2 border-primary-900">
+                  <Crown className="h-5 w-5 text-white" />
                 </div>
               )}
             </motion.div>
@@ -262,42 +246,38 @@ export default function ExhibitorDetailPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="space-y-6"
+                className="space-y-5"
               >
-                <div className="flex flex-wrap items-center gap-4">
-                  <div className="px-4 py-1.5 rounded-full bg-blue-600/20 border border-blue-500/20 text-blue-300 text-[10px] font-black uppercase tracking-[0.2em] flex items-center">
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mr-2 animate-pulse" />
-                    SIB 2026 OFFICIAL
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-accent-500 text-[11px] font-semibold uppercase tracking-[0.2em]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse" />
+                    SIB 2026 Official
                   </div>
-                  <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] flex items-center shadow-lg border-2 border-white/10 ${getCategoryColor(exhibitor.category).replace('bg-', 'bg-opacity-90 bg-')}`}>
-                    <CategoryIcon className="h-3 w-3 mr-2" />
+                  <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.2em] border border-white/15 ${getCategoryColor(exhibitor.category)}`}>
+                    <CategoryIcon className="h-3 w-3" />
                     {getCategoryLabel(exhibitor.category)}
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <h1 className="text-5xl lg:text-7xl font-black text-white tracking-tighter leading-none flex items-center gap-4">
-                    {exhibitor.companyName}
-                    {exhibitor.verified && (
-                      <CheckCircle className="h-10 w-10 text-blue-500 fill-blue-500/10" />
-                    )}
-                  </h1>
-                </div>
+                <h1 className="text-4xl lg:text-6xl font-bold text-white tracking-tight leading-[1.05] flex flex-wrap items-center gap-3">
+                  {exhibitor.companyName}
+                  {exhibitor.verified && (
+                    <CheckCircle className="h-8 w-8 text-accent-500" />
+                  )}
+                </h1>
 
-                <div className="flex flex-wrap items-center gap-6">
+                <div className="flex flex-wrap items-center gap-5 text-white/70">
                   {exhibitor.contactInfo?.city && (
-                    <div className="flex items-center space-x-3 text-white/60 font-bold">
-                      <div className="h-8 w-8 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                        <MapPin className="h-4 w-4 text-blue-400" />
-                      </div>
-                      <span className="text-lg">{exhibitor.contactInfo.city}, {exhibitor.contactInfo.country}</span>
+                    <div className="inline-flex items-center gap-2 text-sm font-medium">
+                      <MapPin className="h-4 w-4 text-accent-500" />
+                      <span>
+                        {exhibitor.contactInfo.city}, {exhibitor.contactInfo.country}
+                      </span>
                     </div>
                   )}
-                  <div className="flex items-center space-x-3 text-white/60 font-bold">
-                    <div className="h-8 w-8 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                      <TrendingUp className="h-4 w-4 text-emerald-400" />
-                    </div>
-                    <span className="text-lg">{exhibitor.sector}</span>
+                  <div className="inline-flex items-center gap-2 text-sm font-medium">
+                    <TrendingUp className="h-4 w-4 text-accent-500" />
+                    <span>{exhibitor.sector}</span>
                   </div>
                 </div>
               </motion.div>
@@ -306,87 +286,94 @@ export default function ExhibitorDetailPage() {
         </div>
       </div>
 
-      {/* Main Content Deluxe Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-30 pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          
-          {/* Left Column: Essential Actions */}
-          <div className="lg:col-span-4 space-y-8">
+      {/* Main content */}
+      <div className="max-w-container mx-auto px-6 lg:px-8 -mt-16 relative z-30 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Left Column: Actions */}
+          <div className="lg:col-span-4 space-y-6">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-[2.5rem] p-8 shadow-2xl shadow-slate-200 border border-slate-100 sticky top-24"
+              className="bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-xl border border-neutral-200 dark:border-neutral-800 sticky top-24"
             >
-              <div className="space-y-4">
-                <button 
+              <div className="space-y-3">
+                <Button
+                  variant="primary"
+                  size="lg"
                   onClick={handleAppointmentClick}
-                  className="w-full py-5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all duration-300 shadow-xl shadow-slate-200 flex items-center justify-center gap-3 group"
+                  className="w-full group"
                 >
-                  <Calendar className="h-5 w-5 text-blue-400 group-hover:scale-110 transition-transform" />
+                  <Calendar className="mr-1 h-4 w-4" />
                   Planifier un RDV B2B
-                </button>
+                </Button>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <button 
-                    onClick={handleContact}
-                    className="py-4 bg-slate-50 hover:bg-blue-50 text-slate-900 rounded-2xl font-bold text-[11px] uppercase tracking-wider transition-all border border-slate-100 flex items-center justify-center gap-2"
-                  >
-                    <Mail className="h-4 w-4 text-blue-600" />
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="secondary" size="md" onClick={handleContact}>
+                    <Mail className="mr-1 h-3.5 w-3.5" />
                     Contact
-                  </button>
-                  <button 
-                    onClick={handleShare}
-                    className="py-4 bg-slate-50 hover:bg-slate-100 text-slate-900 rounded-2xl font-bold text-[11px] uppercase tracking-wider transition-all border border-slate-100 flex items-center justify-center gap-2"
-                  >
-                    <Share2 className="h-4 w-4" />
+                  </Button>
+                  <Button variant="secondary" size="md" onClick={handleShare}>
+                    <Share2 className="mr-1 h-3.5 w-3.5" />
                     Partager
-                  </button>
+                  </Button>
                 </div>
-                
-                <button 
-                  onClick={handleDownloadBrochure}
-                  className="w-full py-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-3"
-                >
-                  <Download className="h-4 w-4" />
-                  Brochure PDF (Digital)
-                </button>
+
+                <Button variant="outline" size="md" onClick={handleDownloadBrochure} className="w-full">
+                  <Download className="mr-1 h-3.5 w-3.5" />
+                  Brochure PDF
+                </Button>
+
+                <Button variant="ghost" size="md" onClick={handleMessageClick} className="w-full">
+                  <MessageCircle className="mr-1 h-3.5 w-3.5" />
+                  Envoyer un message
+                </Button>
               </div>
 
-              {/* Quick Connect & Presence */}
-              <div className="mt-10 pt-8 border-t border-slate-100 space-y-6">
+              {/* Localisation & contact */}
+              <div className="mt-7 pt-6 border-t border-neutral-100 dark:border-neutral-800 space-y-5">
                 <div>
-                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Emplacement Salon</h4>
-                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <div className="h-12 w-12 rounded-xl bg-white shadow-sm flex items-center justify-center">
-                      <Shield className="h-6 w-6 text-blue-600" />
+                  <div className="sib-kicker mb-3">Emplacement salon</div>
+                  <div className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-xl border border-neutral-100 dark:border-neutral-700">
+                    <div className="h-10 w-10 rounded-lg bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center">
+                      <Shield className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                     </div>
                     <div>
-                      <div className="text-xs font-black text-slate-900 uppercase">Stand {exhibitor.boothNumber || 'Zone A-42'}</div>
-                      <div className="text-[10px] font-bold text-slate-500">Pavillon Principal</div>
+                      <div className="text-sm font-semibold text-neutral-900 dark:text-white tracking-tight">
+                        Stand {exhibitor.boothNumber || 'Zone A-42'}
+                      </div>
+                      <div className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Pavillon principal
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3">
-                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Contact Direct</h4>
-                  <div className="space-y-3">
+                <div>
+                  <div className="sib-kicker mb-3">Contact direct</div>
+                  <div className="space-y-2.5">
                     {exhibitor.contactInfo?.email && (
-                      <div className="flex items-center gap-3 text-sm font-bold text-slate-600">
-                        <Mail className="h-4 w-4 text-slate-300" />
-                        {exhibitor.contactInfo.email}
+                      <div className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
+                        <Mail className="h-4 w-4 text-neutral-400" />
+                        <span className="truncate">{exhibitor.contactInfo.email}</span>
                       </div>
                     )}
                     {exhibitor.contactInfo?.phone && (
-                      <div className="flex items-center gap-3 text-sm font-bold text-slate-600">
-                        <Phone className="h-4 w-4 text-slate-300" />
-                        {exhibitor.contactInfo.phone}
+                      <div className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
+                        <Phone className="h-4 w-4 text-neutral-400" />
+                        <span>{exhibitor.contactInfo.phone}</span>
                       </div>
                     )}
                     {exhibitor.website && (
-                      <a href={exhibitor.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm font-bold text-blue-600 hover:underline">
-                        <Globe className="h-4 w-4 text-blue-300" />
+                      <a
+                        href={exhibitor.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 font-medium hover:underline"
+                      >
+                        <Globe className="h-4 w-4" />
                         Visiter le site web
+                        <ExternalLink className="h-3 w-3" />
                       </a>
                     )}
                   </div>
@@ -395,51 +382,46 @@ export default function ExhibitorDetailPage() {
             </motion.div>
           </div>
 
-          {/* Right Column: Dynamic Tabs & Details */}
+          {/* Right Column: Tabs */}
           <div className="lg:col-span-8">
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="space-y-8"
+              className="space-y-6"
             >
-              {/* Mini-Site Deluxe Container */}
-              <div className="bg-white rounded-[3rem] p-1 shadow-2xl shadow-slate-200 border border-slate-100 overflow-hidden">
-                <div className="p-8 pb-0">
-                   <div className="bg-slate-50 p-2 rounded-2xl flex items-center gap-2 mb-8 overflow-x-auto scrollbar-hide">
-                      {[
-                        { id: 'overview', label: 'Vue d\'ensemble' },
-                        { id: 'projects', label: 'Produits' },
-                        { id: 'impact', label: 'À propos' },
-                        { id: 'contact', label: 'Contact' },
-                        { id: 'minisite', label: 'Mini-site' }
-                      ].map((tab) => (
-                        <button
-                          key={tab.id}
-                          onClick={() => setActiveTab(tab.id as any)}
-                          className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all min-w-[80px] sm:min-w-[120px] ${
-                            activeTab === tab.id 
-                              ? 'bg-white text-slate-900 shadow-md' 
-                              : 'text-slate-400 hover:text-slate-600'
-                          }`}
-                        >
-                          {tab.label}
-                        </button>
-                      ))}
-                   </div>
+              <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+                <div className="p-6 pb-0">
+                  <div className="bg-neutral-50 dark:bg-neutral-800 p-1 rounded-xl flex items-center gap-1 mb-6 overflow-x-auto scrollbar-hide">
+                    {[
+                      { id: 'overview', label: "Vue d'ensemble" },
+                      { id: 'projects', label: 'Produits' },
+                      { id: 'impact', label: 'À propos' },
+                      { id: 'contact', label: 'Contact' },
+                      { id: 'minisite', label: 'Mini-site' },
+                    ].map((tab) => (
+                      <button
+                        type="button"
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id as any)}
+                        className={`flex-1 h-10 px-4 rounded-lg text-[11px] font-semibold uppercase tracking-wider transition-all min-w-[100px] ${
+                          activeTab === tab.id
+                            ? 'bg-white dark:bg-neutral-900 text-primary-600 dark:text-primary-400 shadow-sm'
+                            : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="min-h-[600px] p-8">
-                  <MiniSitePreview 
-                    exhibitor={exhibitor} 
-                    activeTab={activeTab as any}
-                    embedded={true}
-                  />
+                <div className="min-h-[520px] p-6 pt-2">
+                  <MiniSitePreview exhibitor={exhibitor} activeTab={activeTab as any} embedded={true} />
                 </div>
               </div>
             </motion.div>
           </div>
-
         </div>
       </div>
     </div>
