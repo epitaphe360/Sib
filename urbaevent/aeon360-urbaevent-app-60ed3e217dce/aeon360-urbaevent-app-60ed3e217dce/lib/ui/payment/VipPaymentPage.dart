@@ -40,15 +40,15 @@ class _VipPaymentPageState extends State<VipPaymentPage> {
   }
 
   Future<void> _checkVipStatus() async {
+    if (!mounted) return;
     try {
       final data = await Supabase.instance.client
           .from(SupabaseConfig.tableUsers)
           .select('pass_type')
           .eq('id', widget.userId)
           .single();
-      if (mounted) {
-        setState(() => _isVip = data['pass_type'] == 'vip');
-      }
+      if (!mounted) return;
+      setState(() => _isVip = data['pass_type'] == 'vip');
     } catch (_) {}
   }
 

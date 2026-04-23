@@ -40,13 +40,16 @@ class _EmailVerification extends State<EmailVerification> {
 
   bool isTimerStarted = false;
 
-  late Timer timer;
+  Timer? timer;
   late Duration countdownDuration;
 
   Future<void> getEmailString() async {
     Preference preference = await Preference.getInstance();
+    if (!mounted) return;
+    final loginDetails = preference.getLoginDetails();
+    if (loginDetails == null) return;
     setState(() {
-      email = Utils.obfuscateEmail(preference.getLoginDetails()!.user.email);
+      email = Utils.obfuscateEmail(loginDetails.user.email);
     });
   }
 
@@ -61,18 +64,26 @@ class _EmailVerification extends State<EmailVerification> {
 
     try {
       Preference preference = await Preference.getInstance();
+      final loginDetails = preference.getLoginDetails();
+      if (loginDetails == null) {
+        throw Exception('Session expirée');
+      }
       await SupabaseService.instance
-          .resendEmailOTP(preference.getLoginDetails()!.user.email);
+          .resendEmailOTP(loginDetails.user.email);
     } catch (e) {
       Utils.showToast(e.toString());
+      if (mounted) {
+        setState(() {
+          isTimerStarted = false;
+          timer?.cancel();
+        });
+      }
+    }
+    if (mounted) {
       setState(() {
-        isTimerStarted = false;
-        timer.cancel();
+        loader = false;
       });
     }
-    setState(() {
-      loader = false;
-    });
   }
 
   Future<void> verifyEmailOTP() async {
@@ -82,16 +93,21 @@ class _EmailVerification extends State<EmailVerification> {
 
     try {
       Preference preference = await Preference.getInstance();
+      final loginDetails = preference.getLoginDetails();
+      if (loginDetails == null) {
+        throw Exception('Session expirée');
+      }
       final otp = controllers[0].text +
           controllers[1].text +
           controllers[2].text +
           controllers[3].text;
 
       final success = await SupabaseService.instance.verifyEmailOTP(
-        preference.getLoginDetails()!.user.email,
+        loginDetails.user.email,
         otp,
       );
 
+      if (!mounted) return;
       if (success) {
         Navigator.push(
           context,
@@ -116,9 +132,11 @@ class _EmailVerification extends State<EmailVerification> {
     } catch (e) {
       Utils.showToast(e.toString());
     }
-    setState(() {
-      loader = false;
-    });
+    if (mounted) {
+      setState(() {
+        loader = false;
+      });
+    }
   }
 
   void handleCallback() {
@@ -126,13 +144,17 @@ class _EmailVerification extends State<EmailVerification> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(Duration(seconds: 1), (t) {
+      if (!mounted) {
+        t.cancel();
+        return;
+      }
       setState(() {
         if (countdownDuration.inSeconds > 0) {
           countdownDuration -= Duration(seconds: 1);
         } else {
           isTimerStarted = false;
-          timer.cancel();
+          t.cancel();
         }
       });
     });
@@ -147,7 +169,13 @@ class _EmailVerification extends State<EmailVerification> {
 
   @override
   void dispose() {
-    timer.cancel();
+    timer?.cancel();
+    for (final c in controllers) {
+      c.dispose();
+    }
+    for (final f in focusNode) {
+      f.dispose();
+    }
     super.dispose();
   }
 

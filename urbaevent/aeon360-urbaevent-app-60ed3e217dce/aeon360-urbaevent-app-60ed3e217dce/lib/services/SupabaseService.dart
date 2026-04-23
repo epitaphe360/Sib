@@ -1,6 +1,7 @@
 ﻿import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:com.urbaevent/utils/SupabaseConfig.dart';
 
@@ -55,7 +56,7 @@ class SupabaseService {
           'status': 'active',
         });
       } catch (e) {
-        print("Erreur upsert public.users ignorée (RLS ou trigger existant): $e");
+        debugPrint("Erreur upsert public.users ignorée (RLS ou trigger existant): $e");
       }
     }
     return res;
@@ -314,7 +315,7 @@ class SupabaseService {
       },
     ).then((_) {}).catchError((e) {
       // L'email est non bloquant : on log sans faire crasher l'app
-      print('send-scan-email error (non-bloquant): $e');
+      debugPrint('send-scan-email error (non-bloquant): $e');
     });
   }
 
@@ -347,7 +348,7 @@ class SupabaseService {
         'device_type': platform,
       }, onConflict: 'user_id,endpoint');
     } catch (e) {
-      print('savePushToken error: $e');
+      debugPrint('savePushToken error: $e');
     }
   }
 

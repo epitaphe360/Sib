@@ -21,12 +21,14 @@ class _Events extends State<CurrentEvents> {
 
   String _resolveImageUrl() {
     // Priorité 1 : presentationUrl (utilisé pour stocker cover_url Supabase)
-    if (widget._datum.presentationUrl != null && widget._datum.presentationUrl!.isNotEmpty) {
-      return widget._datum.presentationUrl!;
+    final presentationUrl = widget._datum.presentationUrl;
+    if (presentationUrl != null && presentationUrl.isNotEmpty) {
+      return presentationUrl;
     }
     // Priorité 2 : banner URL classique (ancien Strapi)
-    if (widget._datum.banner != null && widget._datum.banner!.url.isNotEmpty) {
-      final url = widget._datum.banner!.url;
+    final banner = widget._datum.banner;
+    if (banner != null && banner.url.isNotEmpty) {
+      final url = banner.url;
       return url.startsWith('http') ? url : 'https://sbyizudifmqakzxjlndr.supabase.co/storage/v1$url';
     }
     return '';

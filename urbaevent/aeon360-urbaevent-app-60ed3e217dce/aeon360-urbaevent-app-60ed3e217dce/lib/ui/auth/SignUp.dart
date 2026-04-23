@@ -2,6 +2,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:com.urbaevent/model/ResponseAppleData.dart';
 import 'package:com.urbaevent/services/SupabaseService.dart';
 import 'package:com.urbaevent/utils/Preference.dart';
@@ -167,26 +168,30 @@ class _SignUp extends State<SignUp> {
       final User? user = authResult.user;
       return user;
     } catch (error) {
-      print(error);
+      debugPrint('Google sign-in error: $error');
       return null;
     }
   }
 
   Future<void> downloadAndSaveImage(String imageUrl) async {
     try {
-      final response = await http.get(Uri.parse(imageUrl));
+      final response = await http
+          .get(Uri.parse(imageUrl))
+          .timeout(const Duration(seconds: 15));
       if (response.statusCode == 200) {
         final Directory appDirectory = await getApplicationDocumentsDirectory();
         final String filePath = '${appDirectory.path}/my_image.jpg';
         imageFile = File(filePath);
         await imageFile!.writeAsBytes(response.bodyBytes);
 
-        print('Image downloaded and saved to: $filePath');
+        debugPrint('Image downloaded and saved to: $filePath');
       } else {
-        print('Failed to download image: ${response.statusCode}');
+        debugPrint('Failed to download image: ${response.statusCode}');
       }
+    } on SocketException catch (e) {
+      debugPrint('Network error downloading image: $e');
     } catch (e) {
-      print('Error downloading image: $e');
+      debugPrint('Error downloading image: $e');
     }
   }
 

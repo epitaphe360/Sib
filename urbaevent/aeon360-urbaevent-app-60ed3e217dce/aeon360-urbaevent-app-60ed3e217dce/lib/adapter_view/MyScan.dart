@@ -30,17 +30,20 @@ class _MyScan extends State<MyScan> {
 
   Future<void> getType() async {
     Preference preference = await Preference.getInstance();
+    if (!mounted) return;
+    final rawType = widget.datum.type ?? '';
+    final lowerType = rawType.toLowerCase();
     setState(() {
       if(preference.getLanguage()=="fr"){
-        if(widget.datum.type!.toLowerCase()=="visitor") {
+        if(lowerType=="visitor") {
           type= "Visiteur";
-        }else if(widget.datum.type!.toLowerCase()=="exhibitor"){
+        }else if(lowerType=="exhibitor"){
           type= "Exposant";
         }else{
-          type=widget.datum.type!;
+          type=rawType;
         }
       }else{
-        type=widget.datum.type!;
+        type=rawType;
       }
     });
   }
@@ -48,8 +51,10 @@ class _MyScan extends State<MyScan> {
   @override
   Widget build(BuildContext context) {
     String imgUrl = "";
-    if (widget.datum.user!.avatar != null) {
-      imgUrl = Urls.imageURL + widget.datum.user!.avatar!.url!;
+    final user = widget.datum.user;
+    final avatarUrl = user?.avatar?.url;
+    if (avatarUrl != null) {
+      imgUrl = Urls.imageURL + avatarUrl;
     } else {
       imgUrl = Urls.imageURL;
     }

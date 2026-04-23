@@ -61,6 +61,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+  /// Wrapper safe : exécute setState seulement si le widget est mounted.
+  /// Évite les "setState() called after dispose()" sur les callbacks async.
+  void _safeSetState(VoidCallback fn) {
+    if (mounted) setState(fn);
+  }
+
   bool showSearchView = false;
   bool isLoggedIn = false;
   int uiMode = 0;
@@ -522,13 +528,14 @@ class _HomePage extends State<HomePage> {
 
   Future<void> getUserDetails() async {
     Preference preference = await Preference.getInstance();
+    if (!mounted) return;
     final uuid = preference.getUserUUID();
     if (uuid.isEmpty) {
-      setState(() { isLoggedIn = false; });
-      setState(() { getAuthRole(); isInit = true; });
+      _safeSetState(() { isLoggedIn = false; });
+      _safeSetState(() { getAuthRole(); isInit = true; });
       return;
     }
-    setState(() { isLoggedIn = true; });
+    _safeSetState(() { isLoggedIn = true; });
     try {
       // Save FCM token to Supabase (safe)
       try {
@@ -544,6 +551,7 @@ class _HomePage extends State<HomePage> {
 
       // Fetch profile from Supabase
       final profile = await SupabaseService.instance.getUserProfile(uuid);
+      if (!mounted) return;
       if (profile != null) {
         setState(() {
           _userType = (profile['type'] as String?) ?? 'visitor';
@@ -583,13 +591,16 @@ class _HomePage extends State<HomePage> {
         );
         await preference.saveAuthRole(authRole);
       } else {
-        setState(() { isLoggedIn = false; });
+        _safeSetState(() { isLoggedIn = false; });
       }
     } catch (e) {
       debugPrint('getUserDetails error: $e');
-      setState(() { isLoggedIn = false; });
+      if (mounted) {
+        Utils.showToast('Impossible de charger votre profil.');
+      }
+      _safeSetState(() { isLoggedIn = false; });
     }
-    setState(() {
+    _safeSetState(() {
       getAuthRole();
       isInit = true;
     });
@@ -610,16 +621,19 @@ class _HomePage extends State<HomePage> {
   Future<void> getContactList() async {
     try {
       await SupabaseService.instance.getScannedContacts();
-      setState(() {
+      _safeSetState(() {
         contactItemList = [];
       });
     } catch (e) {
       debugPrint('getContactList error: $e');
+      if (mounted) {
+        Utils.showToast('Impossible de charger les contacts.');
+      }
     }
   }
 
   Future<void> getUserEventList() async {
-    setState(() { loader = true; });
+    _safeSetState(() { loader = true; });
     try {
       await SupabaseService.instance.getUserRegistrations();
       // registrations are available; rendering handled via userResponseEvents
@@ -631,19 +645,20 @@ class _HomePage extends State<HomePage> {
     } catch (e) {
       debugPrint('getUserEventList error: $e');
     }
-    setState(() { loader = false; });
+    _safeSetState(() { loader = false; });
   }
 
   Future<void> addUserToContact(List<String> strResult) async {
-    setState(() { loader = true; });
+    _safeSetState(() { loader = true; });
     try {
       await SupabaseService.instance.saveScan(
         scannedUserId: strResult[0],
         salonId: strResult.length > 1 ? strResult[1] : null,
       );
+      if (!mounted) return;
       Utils.showToast(Intl.message("contact_added_successfully",
           name: "contact_added_successfully"));
-      setState(() {
+      _safeSetState(() {
         uiMode = Const.myContactsUI;
         getContactList();
       });
@@ -651,7 +666,7 @@ class _HomePage extends State<HomePage> {
       Utils.showToast(e.toString());
       Timer(Duration(seconds: 3), () { scanResult = ""; });
     }
-    setState(() { loader = false; });
+    _safeSetState(() { loader = false; });
   }
 
   Future<void> getContactDetails(int userID) async {
@@ -663,6 +678,7 @@ class _HomePage extends State<HomePage> {
       final profile = await SupabaseService.instance
           .getContactDetails(userID.toString());
 
+      if (!mounted) return;
       if (profile != null) {
         setState(() {
           String stringPicUrl = profile['avatar_url'] ?? '';
@@ -700,7 +716,7 @@ class _HomePage extends State<HomePage> {
       debugPrint('getContactDetails error: $e');
     }
 
-    setState(() {
+    _safeSetState(() {
       loader = false;
     });
   }
@@ -736,6 +752,7 @@ class _HomePage extends State<HomePage> {
     if (!isLoggedIn) return;
     try {
       final badges = await SupabaseService.instance.getMyEbadges();
+      if (!mounted) return;
       // Si aucun badge et salon actif dispo → créer automatiquement l'inscription
       if (badges.isEmpty) {
         final salonId = ActiveSalon.current?['id'] as String?;
@@ -744,12 +761,12 @@ class _HomePage extends State<HomePage> {
             salonId: salonId,
             type: _userType,
           );
-          setState(() { _myEbadges = [reg]; });
+          _safeSetState(() { _myEbadges = [reg]; });
         } else {
-          setState(() { _myEbadges = []; });
+          _safeSetState(() { _myEbadges = []; });
         }
       } else {
-        setState(() { _myEbadges = badges; });
+        _safeSetState(() { _myEbadges = badges; });
       }
     } catch (e) {
       debugPrint('getEbadgesList error: $e');
