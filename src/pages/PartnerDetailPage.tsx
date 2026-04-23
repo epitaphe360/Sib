@@ -288,9 +288,9 @@ export default function PartnerDetailPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed': return 'Terminé';
-      case 'active': return 'En cours';
-      case 'planned': return 'Planifié';
+      case 'completed': return t('partner.detail.status.completed');
+      case 'active': return t('partner.detail.status.active');
+      case 'planned': return t('partner.detail.status.planned');
       default: return status;
     }
   };
@@ -312,8 +312,8 @@ export default function PartnerDetailPage() {
     } else {
       // Fallback: copier le lien dans le presse-papiers
       navigator.clipboard.writeText(shareData.url)
-        .then(() => toast.success('Lien copié dans le presse-papiers !'))
-        .catch(() => toast.error('Impossible de copier le lien'));
+        .then(() => toast.success(t('partner.detail.link_copied')))
+        .catch(() => toast.error(t('partner.detail.copy_error')));
     }
   };
 
@@ -325,7 +325,7 @@ export default function PartnerDetailPage() {
           <div className="max-w-7xl mx-auto flex items-center justify-center space-x-3">
             <AlertCircle className="h-6 w-6 flex-shrink-0" />
             <p className="text-base font-semibold text-center">
-              ?? Fiche en cours de validation - Ce profil n'est pas encore visible publiquement
+              {t('partner.detail.validation_warning')}
             </p>
           </div>
         </div>
@@ -338,7 +338,7 @@ export default function PartnerDetailPage() {
             <Link to={ROUTES.PARTNERS}>
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour aux partenaires
+                {t('partner.detail.back_to_partners')}
               </Button>
             </Link>
           </div>
@@ -391,14 +391,14 @@ export default function PartnerDetailPage() {
                     className="flex items-center space-x-2 text-blue-600 hover:text-blue-700"
                   >
                     <Globe className="h-4 w-4" />
-                    <span>Site officiel</span>
+                    <span>{t('partner.detail.official_site')}</span>
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 )}
 
                 <Button variant="default" size="sm" onClick={handleContact}>
                   <MessageCircle className="h-4 w-4 mr-2" />
-                  Contacter
+                  {t('partner.detail.contact_btn')}
                 </Button>
 
                 <Button variant="default" size="sm" onClick={handleShare}>
@@ -447,13 +447,13 @@ export default function PartnerDetailPage() {
         <div className="mb-8 overflow-x-auto">
           <nav className="flex space-x-2 md:space-x-4 min-w-max pb-2">
             {[
-              { id: 'overview', label: 'Vue d\'ensemble', icon: Eye },
-              { id: 'about', label: 'À propos', icon: Building2 },
-              { id: 'expertise', label: 'Expertise', icon: Lightbulb },
-              { id: 'projects', label: 'Projets', icon: Target },
-              { id: 'gallery', label: 'Galerie', icon: ImageIcon },
-              { id: 'news', label: 'Actualités', icon: BookOpen },
-              { id: 'contact', label: 'Contact', icon: MessageCircle }
+              { id: 'overview', label: t('partner.detail.tab_overview'), icon: Eye },
+              { id: 'about', label: t('partner.detail.tab_about'), icon: Building2 },
+              { id: 'expertise', label: t('partner.detail.tab_expertise'), icon: Lightbulb },
+              { id: 'projects', label: t('partner.detail.tab_projects'), icon: Target },
+              { id: 'gallery', label: t('partner.detail.tab_gallery'), icon: ImageIcon },
+              { id: 'news', label: t('partner.detail.tab_news'), icon: BookOpen },
+              { id: 'contact', label: t('partner.detail.tab_contact'), icon: MessageCircle }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -517,7 +517,7 @@ export default function PartnerDetailPage() {
               <Card className="lg:col-span-2 p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                   <Building2 className="h-5 w-5 mr-2 text-blue-600" />
-                  Qui sommes-nous ?
+                  {t('partner.detail.who_we_are')}
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg mb-6">
                   {partner.longDescription || partner.description}
@@ -529,7 +529,7 @@ export default function PartnerDetailPage() {
                     <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
                       <div className="flex items-center mb-2">
                         <Target className="h-5 w-5 text-blue-600 mr-2" />
-                        <h4 className="font-semibold text-blue-900">Notre Mission</h4>
+                        <h4 className="font-semibold text-blue-900">{t('partner.detail.our_mission')}</h4>
                       </div>
                       <p className="text-sm text-blue-800">{partner.mission}</p>
                     </div>
@@ -538,7 +538,7 @@ export default function PartnerDetailPage() {
                     <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border border-purple-100">
                       <div className="flex items-center mb-2">
                         <Eye className="h-5 w-5 text-purple-600 mr-2" />
-                        <h4 className="font-semibold text-purple-900">Notre Vision</h4>
+                        <h4 className="font-semibold text-purple-900">{t('partner.detail.our_vision')}</h4>
                       </div>
                       <p className="text-sm text-purple-800">{partner.vision}</p>
                     </div>
@@ -563,8 +563,8 @@ export default function PartnerDetailPage() {
                         <Play className="h-8 w-8 text-blue-600 ml-1" />
                       </div>
                       <div className="absolute bottom-4 left-4 right-4 text-white">
-                        <p className="font-medium">Découvrez {partner.name}</p>
-                        <p className="text-sm text-white/80">Vidéo de présentation</p>
+                        <p className="font-medium">{t('partner.detail.presentation_discover').replace('{{name}}', partner.name)}</p>
+                        <p className="text-sm text-white/80">{t('partner.detail.presentation_video')}</p>
                       </div>
                     </button>
                   </div>
@@ -577,7 +577,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Heart className="h-5 w-5 mr-2 text-red-500" />
-                  Nos Valeurs
+                  {t('partner.detail.our_values')}
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   {partner.values.map((value, index) => {
@@ -608,7 +608,7 @@ export default function PartnerDetailPage() {
                 <Card className="p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
                     <Shield className="h-5 w-5 mr-2 text-green-600" />
-                    Certifications
+                    {t('partner.detail.certifications')}
                   </h3>
                   <div className="space-y-3">
                     {partner.certifications.map((cert, idx) => {
@@ -629,7 +629,7 @@ export default function PartnerDetailPage() {
                 <Card className="p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
                     <Award className="h-5 w-5 mr-2 text-yellow-600" />
-                    Récompenses
+                    {t('partner.detail.awards')}
                   </h3>
                   <div className="space-y-3">
                     {partner.awards.map((award, idx) => {
@@ -656,7 +656,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Quote className="h-5 w-5 mr-2 text-blue-600" />
-                  Ce que disent nos partenaires
+                  {t('partner.detail.testimonials_title')}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {partner.testimonials.map((testimonial, index) => (
@@ -692,7 +692,7 @@ export default function PartnerDetailPage() {
             <Card className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                 <Handshake className="h-5 w-5 mr-2 text-indigo-600" />
-                Contributions au Salon SIB 2026
+                {t('partner.detail.contributions_title')}
               </h3>
               {partner.contributions && partner.contributions.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -727,20 +727,20 @@ export default function PartnerDetailPage() {
             className="space-y-8"
           >
             <Card className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">À propos de {partner.name}</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('partner.detail.about_title').replace('{{name}}', partner.name)}</h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-6">{partner.longDescription || partner.description}</p>
 
                 {partner.mission && (
                   <div className="my-8 p-6 bg-blue-50 rounded-2xl border-l-4 border-blue-500">
-                    <h3 className="text-lg font-bold text-blue-900 mb-2">Notre Mission</h3>
+                    <h3 className="text-lg font-bold text-blue-900 mb-2">{t('partner.detail.our_mission')}</h3>
                     <p className="text-blue-800">{partner.mission}</p>
                   </div>
                 )}
 
                 {partner.vision && (
                   <div className="my-8 p-6 bg-purple-50 rounded-2xl border-l-4 border-purple-500">
-                    <h3 className="text-lg font-bold text-purple-900 mb-2">Notre Vision</h3>
+                    <h3 className="text-lg font-bold text-purple-900 mb-2">{t('partner.detail.our_vision')}</h3>
                     <p className="text-purple-800">{partner.vision}</p>
                   </div>
                 )}
@@ -751,10 +751,10 @@ export default function PartnerDetailPage() {
             <Card className="p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Clock className="h-5 w-5 mr-2 text-blue-600" />
-                Notre Histoire
+                {t('partner.detail.our_history')}
               </h3>
               {partner.establishedYear ? (
-                <p className="text-gray-600">Fondé en {partner.establishedYear}</p>
+                <p className="text-gray-600">{t('partner.detail.founded_in').replace('{{year}}', String(partner.establishedYear))}</p>
               ) : null}
             </Card>
 
@@ -763,7 +763,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Briefcase className="h-5 w-5 mr-2 text-green-600" />
-                  Ils nous font confiance
+                  {t('partner.detail.clients_title')}
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {partner.clients.map((client, idx) => {
@@ -792,7 +792,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Layers className="h-5 w-5 mr-2 text-blue-600" />
-                  Nos Domaines d'Expertise
+                  {t('partner.detail.expertise_title')}
                 </h3>
                 <div className="space-y-4">
                   {(partner.expertise || []).length > 0 ? (partner.expertise || []).map((exp, index) => {
@@ -1004,7 +1004,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <GraduationCap className="h-5 w-5 mr-2 text-green-600" />
-                  Certifications & Accréditations
+                  {t('partner.detail.certif_accred')}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {partner.certifications.map((cert, idx) => {
@@ -1030,7 +1030,7 @@ export default function PartnerDetailPage() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Galerie Photos</h2>
+              <h2 className="text-2xl font-bold text-gray-900">{t('partner.detail.gallery_title')}</h2>
               {partner.gallery?.length > 0 && <Badge variant="info">{partner.gallery.length} photos</Badge>}
             </div>
 
@@ -1070,7 +1070,7 @@ export default function PartnerDetailPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Dernières Actualités</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('partner.detail.news_title')}</h2>
 
             {partner.news && partner.news.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1104,7 +1104,7 @@ export default function PartnerDetailPage() {
                           setShowNewsModal(true);
                         }}
                       >
-                        Lire plus <ChevronRight className="h-4 w-4 ml-1" />
+                        {t('partner.detail.read_more')} <ChevronRight className="h-4 w-4 ml-1" />
                       </Button>
                     </div>
                   </Card>
@@ -1122,7 +1122,7 @@ export default function PartnerDetailPage() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Nos Projets</h2>
+              <h2 className="text-2xl font-bold text-gray-900">{t('partner.detail.projects_title')}</h2>
               {partner.projects?.length > 0 && <Badge variant="success">{partner.projects.length} projets</Badge>}
             </div>
             {partner.projects && partner.projects.length > 0 ? (
@@ -1186,7 +1186,7 @@ export default function PartnerDetailPage() {
                         onClick={() => handleViewProjectDetails(project)}
                       >
                         <Eye className="h-4 w-4 mr-2" />
-                        Voir les détails
+                        {t('partner.detail.view_details')}
                       </Button>
                     </div>
                   </Card>
@@ -1205,12 +1205,12 @@ export default function PartnerDetailPage() {
           >
             <Card className="p-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-8">
-                Informations de Contact
+                {t('partner.detail.contact_info_title')}
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                  <h4 className="font-semibold text-gray-900 text-lg">Coordonnées</h4>
+                  <h4 className="font-semibold text-gray-900 text-lg">{t('partner.detail.contact_coordinates')}</h4>
 
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
@@ -1270,7 +1270,7 @@ export default function PartnerDetailPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 text-lg mb-4">Contact SIB</h4>
+                  <h4 className="font-semibold text-gray-900 text-lg mb-4">{t('partner.detail.contact_sib')}</h4>
                   <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
                     <div className="flex items-center space-x-4 mb-4">
                       <div className="h-14 w-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
@@ -1298,7 +1298,7 @@ export default function PartnerDetailPage() {
                       onClick={handleContact}
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />
-                      Envoyer un message
+                      {t('partner.detail.send_message')}
                     </Button>
                   </div>
                 </div>

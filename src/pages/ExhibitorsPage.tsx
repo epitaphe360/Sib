@@ -335,7 +335,7 @@ export default function ExhibitorsPage() {
 
             <div className="mt-10 flex flex-col items-center gap-4">
               <p className="text-sm text-slate-500 font-semibold">
-                {filteredExhibitors.length} affichés sur {totalExhibitors} exposants
+                {t('exhibitors.page.displayed_count').replace('{{shown}}', String(filteredExhibitors.length)).replace('{{total}}', String(totalExhibitors))}
               </p>
               {hasMore && (
                 <Button
@@ -343,7 +343,7 @@ export default function ExhibitorsPage() {
                   disabled={isLoading}
                   className="px-8 py-3 bg-[#1A1A1A] hover:bg-[#E7D192] hover:text-[#0A0A0A] text-white rounded-sm font-light uppercase tracking-widest text-xs"
                 >
-                  {isLoading ? 'Chargement...' : 'Charger plus'}
+                  {isLoading ? t('exhibitors.page.loading') : t('exhibitors.page.load_more')}
                 </Button>
               )}
             </div>

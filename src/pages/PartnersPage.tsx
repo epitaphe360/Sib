@@ -188,12 +188,12 @@ export default function PartnersPage() {
   // ? OPTIMISÉ: Mémoriser les tiers pour éviter recréation
   const partnerTiers = useMemo(() => [
     { value: '', label: t('pages.partners.filter_tier') },
-    { value: 'organizer', label: 'Organisateurs' },
-    { value: 'co_organizer', label: 'Co-organisateurs' },
-    { value: 'official_sponsor', label: 'Sponsor Officiel' },
-    { value: 'delegated_organizer', label: 'Organisateur Délégué' },
-    { value: 'partner', label: 'Nos Partenaires' },
-    { value: 'press_partner', label: 'Nos Partenaires Presse' },
+    { value: 'organizer', label: t('partners.page.organizers') },
+    { value: 'co_organizer', label: t('partners.page.co_organizers') },
+    { value: 'official_sponsor', label: t('partners.page.official_sponsors') },
+    { value: 'delegated_organizer', label: t('partners.page.delegated_organizers') },
+    { value: 'partner', label: t('partners.page.partners_section') },
+    { value: 'press_partner', label: t('partners.page.press_partners') },
   ], [t]);
 
   // ? OPTIMISÉ: Mémoriser les pays
@@ -245,7 +245,7 @@ export default function PartnersPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#C9A84C]/40 bg-[#C9A84C]/10 text-[#E7D192] text-xs font-bold tracking-widest uppercase mb-6">
-              Partenaires & Sponsors
+              {t('partners.page.badge')}
             </div>
             <h1 className="font-display text-4xl md:text-5xl font-light text-white mb-4">
               {t('pages.partners.title')}
@@ -281,7 +281,7 @@ export default function PartnersPage() {
               className="inline-flex items-center gap-2 px-4 py-2.5 border border-white/15 rounded-lg text-white/70 hover:border-[#C9A84C]/40 hover:text-[#E7D192] transition-colors text-sm"
             >
               <Filter className="h-4 w-4" />
-              Filtres
+              {t('partners.page.filters_btn')}
             </button>
 
             <div className="flex border border-white/15 rounded-lg overflow-hidden">
@@ -311,7 +311,7 @@ export default function PartnersPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
-                  Niveau partenaire
+                  {t('partners.page.tier_level')}
                 </label>
                 <select
                   value={selectedTier}
@@ -328,14 +328,14 @@ export default function PartnersPage() {
 
               <div>
                 <label className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
-                  Pays
+                  {t('partners.page.country_label')}
                 </label>
                 <select
                   value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
                   className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50"
                 >
-                  <option value="" className="bg-[#0A0F1E]">Tous les pays</option>
+                  <option value="" className="bg-[#0A0F1E]">{t('partners.page.all_countries')}</option>
                   {countries.map((country) => (
                     <option key={country} value={country} className="bg-[#0A0F1E]">
                       {country}
@@ -350,13 +350,13 @@ export default function PartnersPage() {
         {/* Stats - Types Partenaires SIB */}
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
           {[
-            { count: partnerStats.organizer,           label: 'Organisateurs',     icon: '🏛️' },
-            { count: partnerStats.co_organizer,        label: 'Co-organisateurs',  icon: '🤝' },
-            { count: partnerStats.official_sponsor,    label: 'Sponsor Officiel',  icon: '⭐' },
-            { count: partnerStats.delegated_organizer, label: 'Org. Délégué',      icon: '📋' },
-            { count: partnerStats.partner,             label: 'Partenaires',       icon: '🌐' },
-            { count: partnerStats.press_partner,       label: 'Presse',            icon: '📰' },
-            { count: partnerStats.total,               label: 'Total',             icon: '🤝' },
+            { count: partnerStats.organizer,           label: t('partners.page.organizers'),               icon: '🏛️' },
+            { count: partnerStats.co_organizer,        label: t('partners.page.co_organizers'),            icon: '🤝' },
+            { count: partnerStats.official_sponsor,    label: t('partners.page.official_sponsors'),        icon: '⭐' },
+            { count: partnerStats.delegated_organizer, label: t('partners.page.delegated_organizers_short'), icon: '📋' },
+            { count: partnerStats.partner,             label: t('partners.page.partners_section'),         icon: '🌐' },
+            { count: partnerStats.press_partner,       label: t('partners.page.press'),                    icon: '📰' },
+            { count: partnerStats.total,               label: t('partners.page.total'),                    icon: '🤝' },
           ].map((stat, i) => (
             <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
               <div className="text-2xl mb-1.5">{stat.icon}</div>
@@ -401,12 +401,12 @@ export default function PartnersPage() {
         ) : (
           <div className="space-y-10">
             {[
-              { key: 'organizer',           label: 'Organisateurs',         emoji: '🏛️', gradient: 'from-yellow-600 to-amber-700',   border: 'border-yellow-200', bg: 'bg-yellow-50' },
-              { key: 'co_organizer',        label: 'Co-organisateurs',      emoji: '🤝', gradient: 'from-amber-500 to-yellow-600',  border: 'border-amber-200',  bg: 'bg-amber-50' },
-              { key: 'official_sponsor',    label: 'Sponsor Officiel',      emoji: '⭐', gradient: 'from-blue-600 to-blue-800',     border: 'border-blue-200',   bg: 'bg-blue-50' },
-              { key: 'delegated_organizer', label: 'Organisateur Délégué',  emoji: '📋', gradient: 'from-green-600 to-emerald-700', border: 'border-green-200',  bg: 'bg-green-50' },
-              { key: 'partner',             label: 'Nos Partenaires',       emoji: '🌐', gradient: 'from-purple-500 to-indigo-600', border: 'border-purple-200', bg: 'bg-purple-50' },
-              { key: 'press_partner',       label: 'Nos Partenaires Presse',emoji: '📰', gradient: 'from-red-600 to-rose-700',      border: 'border-red-200',    bg: 'bg-red-50' },
+              { key: 'organizer',           label: t('partners.page.organizers'),           emoji: '🏛️', gradient: 'from-yellow-600 to-amber-700',   border: 'border-yellow-200', bg: 'bg-yellow-50' },
+              { key: 'co_organizer',        label: t('partners.page.co_organizers'),        emoji: '🤝', gradient: 'from-amber-500 to-yellow-600',  border: 'border-amber-200',  bg: 'bg-amber-50' },
+              { key: 'official_sponsor',    label: t('partners.page.official_sponsors'),    emoji: '⭐', gradient: 'from-blue-600 to-blue-800',     border: 'border-blue-200',   bg: 'bg-blue-50' },
+              { key: 'delegated_organizer', label: t('partners.page.delegated_organizers'), emoji: '📋', gradient: 'from-green-600 to-emerald-700', border: 'border-green-200',  bg: 'bg-green-50' },
+              { key: 'partner',             label: t('partners.page.partners_section'),     emoji: '🌐', gradient: 'from-purple-500 to-indigo-600', border: 'border-purple-200', bg: 'bg-purple-50' },
+              { key: 'press_partner',       label: t('partners.page.press_partners'),       emoji: '📰', gradient: 'from-red-600 to-rose-700',      border: 'border-red-200',    bg: 'bg-red-50' },
             ]
               .map(tier => ({
                 ...tier,
@@ -426,7 +426,7 @@ export default function PartnersPage() {
                     <span className="text-2xl">{tier.emoji}</span>
                     <div>
                       <h2 className="text-lg font-display font-light text-white">{tier.label}</h2>
-                      <p className="text-xs text-white/40 uppercase tracking-wider">{tier.partners.length} partenaire{tier.partners.length > 1 ? 's' : ''}</p>
+                      <p className="text-xs text-white/40 uppercase tracking-wider">{tier.partners.length} {tier.partners.length > 1 ? t('partners.page.partner_plural') : t('partners.page.partner_singular')}</p>
                     </div>
                   </div>
 
@@ -453,7 +453,7 @@ export default function PartnersPage() {
 
             <div className="pt-4 flex flex-col items-center gap-3">
               <p className="text-sm text-white/35">
-                {partners.length} affichés sur {totalPartners} partenaires
+                {t('partners.page.displayed_count').replace('{{shown}}', String(partners.length)).replace('{{total}}', String(totalPartners))}
               </p>
               {hasMore && (
                 <button
@@ -461,7 +461,7 @@ export default function PartnersPage() {
                   disabled={isLoading}
                   className="inline-flex items-center gap-2 border border-white/20 text-white/70 px-6 py-2.5 rounded-sm hover:bg-white/5 transition-colors text-sm disabled:opacity-50"
                 >
-                  {isLoading ? 'Chargement...' : 'Charger plus'}
+                  {isLoading ? t('partners.page.loading') : t('partners.page.load_more')}
                 </button>
               )}
             </div>
