@@ -460,67 +460,69 @@ export default function SubscriptionPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-
-      {/* ═══════════════════════════════════════════════════════════════
-          SECTION 1 : HERO WORDPRESS
-          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative bg-gradient-to-br from-sib-primary via-blue-800 to-indigo-900 text-white overflow-hidden">
-        <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
-        <div className="absolute inset-0 opacity-[0.08]">
-          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-sib-gold rounded-full" />
-          <div className="absolute top-20 right-20 w-24 h-24 border-4 border-white rotate-45 transform" />
-          <div className="absolute bottom-20 left-1/4 w-40 h-40 border-4 border-sib-gold" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
+    <div className="min-h-screen bg-white dark:bg-neutral-950">
+      {/* Hero */}
+      <section className="relative bg-primary-900 text-white overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-accent-500/15 blur-[120px]" />
+          <div className="absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-primary-500/20 blur-[120px]" />
+          <div
+            className="absolute inset-0 opacity-[0.04]"
+            style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+              backgroundSize: '28px 28px',
+            }}
+          />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
+        <div className="max-w-container mx-auto px-6 lg:px-8 py-20 lg:py-24 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7 }}
             >
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
-                <Anchor className="w-4 h-4 text-sib-gold" />
-                <span className="text-sm font-semibold text-sib-gold uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 mb-6">
+                <Anchor className="h-3.5 w-3.5 text-accent-500" />
+                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90">
                   {t('sub.hero.badge')}
                 </span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.05] tracking-tight">
                 {t('sub.hero.title1')}{' '}
-                <span className="text-sib-gold">{t('sub.hero.titleHighlight1')}</span> {t('sub.hero.title2')}{' '}
-                <span className="text-sib-gold">{t('sub.hero.titleHighlight2')}</span>
+                <span className="sib-text-gradient bg-gradient-to-r from-accent-500 to-accent-300">
+                  {t('sub.hero.titleHighlight1')}
+                </span>{' '}
+                {t('sub.hero.title2')}{' '}
+                <span className="sib-text-gradient bg-gradient-to-r from-accent-500 to-accent-300">
+                  {t('sub.hero.titleHighlight2')}
+                </span>
               </h1>
 
-              <p className="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed">
+              <p className="text-base lg:text-lg text-white/75 mb-8 leading-relaxed">
                 {t('sub.hero.desc')}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  size="lg"
-                  onClick={() => handleSubscribe('visitor-free')}
-                  className="bg-sib-gold text-sib-primary hover:bg-yellow-400 font-bold text-lg px-8"
-                >
-                  <Ticket className="mr-2 h-5 w-5" />
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button variant="accent" size="lg" onClick={() => handleSubscribe('visitor-free')}>
+                  <Ticket className="mr-1 h-4 w-4" />
                   {t('sub.hero.badgeBtn')}
                 </Button>
                 <Button
+                  variant="secondary"
                   size="lg"
-                  variant="outline"
                   onClick={() => handleSubscribe('visitor-vip')}
-                  className="border-white text-white hover:bg-white/10 font-semibold"
+                  className="bg-white/10 border-white/20 text-white hover:bg-white/15"
                 >
-                  <Crown className="mr-2 h-5 w-5" />
+                  <Crown className="mr-1 h-4 w-4" />
                   {t('sub.hero.vipBtn')}
                 </Button>
               </div>
             </motion.div>
 
-            {/* Stats Cards */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
               className="grid grid-cols-2 gap-4"
@@ -531,10 +533,14 @@ export default function SubscriptionPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center hover:bg-white/15 transition-all"
+                  className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center transition-all hover:bg-white/10"
                 >
-                  <div className="text-3xl md:text-4xl font-bold text-sib-gold mb-2">{stat.number}</div>
-                  <div className="text-sm text-blue-200">{stat.label}</div>
+                  <div className="text-3xl lg:text-4xl font-bold text-accent-500 mb-1.5 tabular-nums tracking-tight">
+                    {stat.number}
+                  </div>
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-white/70">
+                    {stat.label}
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
