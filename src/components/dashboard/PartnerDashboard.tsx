@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Shield, CreditCard, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
 import { ErrorMessage, LoadingMessage } from '../common/ErrorMessage';
@@ -25,21 +24,22 @@ export default function PartnerDashboard() {
   const { t } = useTranslation();
   const { user } = ctx;
 
-  // ── Early returns (before render) ────────────────────────────────────────
   if (user?.status === 'pending_payment') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 text-center space-y-6">
-          <div className="mx-auto w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
-            <CreditCard className="w-12 h-12 text-orange-600" />
+      <div className="min-h-screen bg-white dark:bg-neutral-950 flex items-center justify-center p-6">
+        <div className="max-w-xl w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm p-10 text-center space-y-5">
+          <div className="mx-auto h-14 w-14 rounded-2xl bg-warning-50 dark:bg-warning-500/10 flex items-center justify-center">
+            <CreditCard className="h-7 w-7 text-warning-600 dark:text-warning-500" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">{t('partner.activation_required')}</h2>
-          <p className="text-lg text-gray-600">{t('partner.payment_validation_needed')}</p>
-          <div className="pt-4 flex justify-center gap-4">
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">
+            {t('partner.activation_required')}
+          </h2>
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            {t('partner.payment_validation_needed')}
+          </p>
+          <div className="pt-2 flex justify-center">
             <Link to="/partner/payment-selection">
-              <Button className="bg-gradient-to-r from-indigo-600 to-indigo-600 text-white px-8 py-4 rounded-xl text-lg">
-                {t('partner.finalize_payment')}
-              </Button>
+              <Button variant="primary" size="lg">{t('partner.finalize_payment')}</Button>
             </Link>
           </div>
         </div>
@@ -49,28 +49,32 @@ export default function PartnerDashboard() {
 
   if (!user || user.type !== 'partner') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 flex items-center justify-center p-4">
-        <Card className="p-8 text-center bg-white rounded-2xl shadow-2xl max-w-md w-full">
-          <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
-            <Shield className="h-10 w-10 text-white" />
+      <div className="min-h-screen bg-white dark:bg-neutral-950 flex items-center justify-center p-6">
+        <div className="text-center max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm p-8">
+          <div className="h-14 w-14 mx-auto mb-5 rounded-2xl bg-danger-50 dark:bg-danger-500/10 flex items-center justify-center">
+            <Shield className="h-7 w-7 text-danger-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('partner.access_denied')}</h2>
-          <p className="text-gray-600 mb-6">{t('partner.reserved_partners')}</p>
+          <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-2 tracking-tight">
+            {t('partner.access_denied')}
+          </h2>
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6 leading-relaxed">
+            {t('partner.reserved_partners')}
+          </p>
           <Link to={ROUTES.DASHBOARD}>
-            <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+            <Button variant="primary" size="md" className="w-full">
               {t('common.back_to_dashboard')}
             </Button>
           </Link>
-        </Card>
+        </div>
       </div>
     );
   }
 
   if (ctx.isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 p-6">
-        <div className="max-w-7xl mx-auto text-center py-12">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 p-6">
+        <div className="max-w-container mx-auto text-center py-14">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-neutral-200 dark:border-neutral-800 border-t-primary-600 mx-auto mb-4" />
           <LoadingMessage message="Chargement du tableau de bord partenaire..." />
         </div>
       </div>
@@ -79,11 +83,11 @@ export default function PartnerDashboard() {
 
   if (!ctx.dashboard && ctx.dashboardError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 flex items-center justify-center p-4">
-        <div className="text-center max-w-md bg-white rounded-2xl shadow-2xl p-8">
+      <div className="min-h-screen bg-white dark:bg-neutral-950 flex items-center justify-center p-6">
+        <div className="text-center max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm p-8">
           <ErrorMessage message={ctx.dashboardError} />
-          <Button onClick={() => ctx.fetchDashboard()} className="mt-4 bg-gradient-to-r from-purple-600 to-pink-600">
-            <Activity className="h-4 w-4 mr-2" />
+          <Button variant="primary" size="md" onClick={() => ctx.fetchDashboard()} className="mt-5">
+            <Activity className="h-4 w-4 mr-1.5" />
             Réessayer
           </Button>
         </div>
@@ -92,7 +96,7 @@ export default function PartnerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <PartnerHeader
         user={user}
         partnerTier={ctx.partnerTier}
@@ -101,7 +105,7 @@ export default function PartnerDashboard() {
         onTogglePublish={ctx.togglePublished}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div className="max-w-container mx-auto px-6 lg:px-8 pb-20">
         <PartnerTabNav activeTab={ctx.activeTab} onTabChange={ctx.setActiveTab} />
 
         <AnimatePresence mode="wait">

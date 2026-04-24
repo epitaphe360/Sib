@@ -104,33 +104,24 @@ export const FeaturedPartners: React.FC = () => {
   if (partners.length === 0) return null;
 
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-slate-50 relative overflow-hidden">
-      {/* Background Pattern */}
-      <MoroccanPattern className="opacity-[0.04] text-blue-600" scale={1.8} />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Premium Header */}
+    <section className="relative py-20 lg:py-24 bg-white dark:bg-neutral-950 overflow-hidden">
+      <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-14 max-w-2xl mx-auto"
         >
-          <div className="inline-flex items-center justify-center px-4 py-2 mb-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full text-sm font-semibold uppercase tracking-wider shadow-lg">
-            <Award className="h-4 w-4 mr-2" />
+          <div className="sib-kicker mb-4 justify-center">
             {t('home.featured_partners_badge', 'Partenaires Officiels')}
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white tracking-tight mb-4">
             {t('home.featured_partners_title', 'Partenaires à la Une')}
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base lg:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
             {t('home.featured_partners_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
           </p>
-          <div className="mt-6 flex items-center justify-center gap-2">
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full"></div>
-            <div className="h-1 w-24 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-500 rounded-full"></div>
-            <div className="h-1 w-12 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full"></div>
-          </div>
         </motion.div>
       </div>
 
@@ -139,82 +130,84 @@ export const FeaturedPartners: React.FC = () => {
         <LogoShowcaseSection type="partners" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {partners.map((partner, index) => (
             <motion.div
               key={partner.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.08 }}
+              viewport={{ once: true, margin: '-50px' }}
             >
-              <Card hover className="h-full border-blue-200 shadow-lg hover:shadow-2xl transition-all duration-300 bg-white relative">
-                <div className="flex flex-col h-full p-8">
-                  {/* Badge vérifié en haut à droite */}
+              <Card hover className="h-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                {/* Accent bar top */}
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-accent-500/0 via-accent-500 to-accent-500/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                <div className="flex flex-col h-full p-7">
                   {partner.verified && (
-                    <Badge variant="success" size="sm" className="absolute top-4 right-4 flex items-center">
-                      <CheckCircle className="h-3 w-3 mr-1" />
+                    <Badge variant="success" size="sm" dot className="absolute top-4 right-4">
                       {t('home.verified')}
                     </Badge>
                   )}
 
-                  {/* Logo centré */}
-                  <div className="flex justify-center mb-6">
-                    <LogoWithFallback
-                      src={partner.logo}
-                      alt={partner.name}
-                      className="h-40 w-40 rounded-2xl object-contain border-2 border-blue-100 bg-white p-4 shadow-md"
-                    />
+                  {/* Logo */}
+                  <div className="flex justify-center mb-5">
+                    <div className="h-28 w-28 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center p-4 transition-transform duration-500 hover:scale-105">
+                      <LogoWithFallback
+                        src={partner.logo}
+                        alt={partner.name}
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
                   </div>
 
-                  {/* Nom et secteur centrés */}
-                  <div className="text-center mb-4">
-                    <h3 className="font-bold text-gray-900 text-xl mb-2 leading-tight px-2">
+                  {/* Nom et secteur */}
+                  <div className="text-center mb-3">
+                    <h3 className="font-semibold text-neutral-900 dark:text-white text-lg mb-1.5 leading-tight">
                       {partner.name}
                     </h3>
-                    <p className="text-sm text-blue-600 font-semibold">{translateSector(partner.sector, t)}</p>
+                    <p className="text-xs text-primary-600 dark:text-primary-400 font-medium uppercase tracking-wider">
+                      {translateSector(partner.sector, t)}
+                    </p>
                   </div>
 
                   {/* Tier */}
                   <div className="flex justify-center mb-4">
-                    <Badge variant={getTierColor(partner.partner_tier)} className="uppercase tracking-wider font-bold">
-                      <Award className="h-3 w-3 mr-1" />
+                    <Badge variant={getTierColor(partner.partner_tier)} size="sm">
                       {getTierLabel(partner.partner_tier)}
                     </Badge>
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-600 text-sm line-clamp-4 mb-6 flex-grow text-center leading-relaxed">
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3 mb-5 flex-grow text-center leading-relaxed">
                     {partner.description}
                   </p>
 
                   {/* Stats */}
-                  <div className="flex items-center justify-center space-x-6 mb-6 text-sm text-gray-500 border-t border-gray-100 pt-4">
-                    <div className="flex items-center">
-                      <Eye className="h-4 w-4 mr-1 text-gray-400" />
+                  <div className="flex items-center justify-center gap-5 mb-5 text-xs text-neutral-500 dark:text-neutral-400 border-t border-neutral-100 dark:border-neutral-800 pt-4">
+                    <div className="flex items-center gap-1.5">
+                      <Eye className="h-3.5 w-3.5" />
                       <span>{partner.views || 0} {t('home.views', 'vues')}</span>
                     </div>
-                    <div className="flex items-center">
-                      <Handshake className="h-4 w-4 mr-1 text-gray-400" />
+                    <div className="flex items-center gap-1.5">
+                      <Handshake className="h-3.5 w-3.5" />
                       <span>{partner.contributions?.length || 0} {t('home.benefits', 'avantages')}</span>
                     </div>
                   </div>
 
                   {/* Actions */}
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2">
                     <Button
-                      variant="outline"
+                      variant="secondary"
                       size="sm"
-                      className="w-full"
                       onClick={() => navigate(`${ROUTES.PARTNERS}/${partner.id}`)}
                     >
-                      {t('home.see_profile', 'Voir le Profil')}
+                      {t('home.see_profile', 'Profil')}
                     </Button>
                     <Button
                       variant="primary"
                       size="sm"
-                      className="w-full"
                       onClick={() => navigate(`${ROUTES.CONTACT}?subject=Partenariat with ${partner.name}`)}
                     >
                       {t('home.contact_partner', 'Contacter')}
@@ -228,9 +221,9 @@ export const FeaturedPartners: React.FC = () => {
 
         <div className="text-center">
           <Link to={ROUTES.PARTNERS}>
-            <Button variant="outline" size="lg" className="group">
+            <Button variant="secondary" size="lg" className="group">
               {t('home.discover_all')}
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
         </div>

@@ -44,8 +44,7 @@ export default memo(function ExhibitorDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <ExhibitorHeader
         user={ctx.user}
         isPublished={ctx.isPublished}
@@ -54,8 +53,7 @@ export default memo(function ExhibitorDashboard() {
         onTogglePublish={ctx.togglePublished}
       />
 
-      <div className="max-w-7xl mx-auto px-4 py-8 -mt-6">
-
+      <div className="max-w-container mx-auto px-6 lg:px-8 py-8 -mt-6">
         {(ctx.error || ctx.dashboardError) && (
           <ErrorMessage
             message={ctx.error || ctx.dashboardError || 'Une erreur est survenue'}
@@ -67,26 +65,30 @@ export default memo(function ExhibitorDashboard() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between gap-4"
+            className="mb-6 bg-white dark:bg-neutral-900 border border-warning-200 dark:border-warning-500/30 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm"
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-100 rounded-xl">
-                <Calendar className="h-5 w-5 text-amber-600" />
+              <div className="h-10 w-10 rounded-lg bg-warning-50 dark:bg-warning-500/10 flex items-center justify-center">
+                <Calendar className="h-5 w-5 text-warning-600 dark:text-warning-500" />
               </div>
               <div>
-                <p className="font-bold text-amber-900 text-sm">
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white tracking-tight">
                   {ctx.pendingAppointments.length}{' '}
                   {ctx.pendingAppointments.length === 1
                     ? t('exhibitor.alert_pending_singular')
                     : t('exhibitor.alert_pending_plural')}
                 </p>
-                <p className="text-xs text-amber-700">{t('exhibitor.alert_pending_hint')}</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5">
+                  {t('exhibitor.alert_pending_hint')}
+                </p>
               </div>
             </div>
             <Button
+              variant="primary"
               size="sm"
-              className="bg-amber-500 hover:bg-amber-600 text-white font-bold shrink-0"
-              onClick={() => document.getElementById('appointments-section')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() =>
+                document.getElementById('appointments-section')?.scrollIntoView({ behavior: 'smooth' })
+              }
             >
               {t('exhibitor.alert_pending_cta')} →
             </Button>
@@ -103,41 +105,38 @@ export default memo(function ExhibitorDashboard() {
                 label: t('exhibitor.quota_b2b'),
                 current: ctx.confirmedAppointments.length,
                 limit: getExhibitorQuota(ctx.exhibitorLevel, 'appointments'),
-                icon: <Calendar className="h-4 w-4 text-gray-400" />,
+                icon: <Calendar className="h-4 w-4 text-neutral-400" />,
               },
               {
                 label: t('exhibitor.quota_team'),
                 current: 0,
                 limit: getExhibitorQuota(ctx.exhibitorLevel, 'teamMembers'),
-                icon: <Users className="h-4 w-4 text-gray-400" />,
+                icon: <Users className="h-4 w-4 text-neutral-400" />,
               },
               {
                 label: t('exhibitor.quota_demo'),
                 current: 0,
                 limit: getExhibitorQuota(ctx.exhibitorLevel, 'demoSessions'),
-                icon: <Award className="h-4 w-4 text-gray-400" />,
+                icon: <Award className="h-4 w-4 text-neutral-400" />,
               },
               {
                 label: t('exhibitor.quota_scans'),
                 current: 0,
                 limit: getExhibitorQuota(ctx.exhibitorLevel, 'leadScans'),
-                icon: <Scan className="h-4 w-4 text-gray-400" />,
+                icon: <Scan className="h-4 w-4 text-neutral-400" />,
               },
               {
                 label: t('exhibitor.quota_media'),
                 current: ctx.dashboardStats?.catalogDownloads?.value || 0,
                 limit: getExhibitorQuota(ctx.exhibitorLevel, 'mediaUploads'),
-                icon: <FileText className="h-4 w-4 text-gray-400" />,
+                icon: <FileText className="h-4 w-4 text-neutral-400" />,
               },
             ]}
             upgradeLink={undefined}
           />
         </div>
 
-        <ExhibitorStatsGrid
-          dashboardStats={ctx.dashboardStats}
-          onStatClick={ctx.handleStatClick}
-        />
+        <ExhibitorStatsGrid dashboardStats={ctx.dashboardStats} onStatClick={ctx.handleStatClick} />
 
         <ExhibitorCalendarSection
           userId={ctx.user?.id || ''}
@@ -177,7 +176,6 @@ export default memo(function ExhibitorDashboard() {
         />
 
         <ExhibitorInfoSection />
-
       </div>
 
       {ctx.showQRModal && (
@@ -214,24 +212,33 @@ export default memo(function ExhibitorDashboard() {
       )}
 
       {ctx.showMiniSiteScrapper && ctx.user?.id && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            exit={{ opacity: 0, scale: 0.96 }}
+            className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl border border-neutral-200 dark:border-neutral-800 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
           >
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-2xl flex items-center justify-between z-10">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg">
-                  <Sparkles className="h-6 w-6 text-white" />
+            <div className="sticky top-0 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 p-6 rounded-t-2xl flex items-center justify-between z-10">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-lg bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center">
+                  <Sparkles className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Create Mini-Site with AI</h2>
-                  <p className="text-sm text-gray-600">Automatically generate your mini-site from your website</p>
+                  <h2 className="text-lg font-bold text-neutral-900 dark:text-white tracking-tight">
+                    Create Mini-Site with AI
+                  </h2>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5">
+                    Automatically generate your mini-site from your website
+                  </p>
                 </div>
               </div>
-              <Button variant="outline" onClick={() => ctx.setShowMiniSiteScrapper(false)} className="rounded-full">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => ctx.setShowMiniSiteScrapper(false)}
+                aria-label="Fermer"
+              >
                 ✕
               </Button>
             </div>

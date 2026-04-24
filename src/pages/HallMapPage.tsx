@@ -178,53 +178,62 @@ export default function HallMapPage() {
   const occupiedCount = booths.filter(b => b.occupied).length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       {/* Header */}
-      <div className="bg-white border-b sticky top-16 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 sticky top-16 z-10 shadow-sm">
+        <div className="max-w-container mx-auto px-6 lg:px-8 py-5">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <LayoutGrid className="h-6 w-6 text-blue-600" />
-                Plan Interactif des Halls — SIB 2026
+              <div className="sib-kicker mb-2">
+                <LayoutGrid className="h-3 w-3" />
+                Plan des halls
+              </div>
+              <h1 className="text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">
+                SIB 2026 — Casablanca Exhibition Center
               </h1>
-              <p className="text-gray-500 text-sm mt-0.5">
-                Casablanca Exhibition Center · 3–6 Février 2026 · {isLoadingBooths ? 'Chargement...' : `${occupiedCount}/${booths.length} stands occupés`}
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 font-medium">
+                3–6 Février 2026 ·{' '}
+                {isLoadingBooths ? 'Chargement...' : `${occupiedCount}/${booths.length} stands occupés`}
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => setZoom(z => Math.max(0.4, z - 0.15))}>
+              <Button variant="secondary" size="sm" onClick={() => setZoom((z) => Math.max(0.4, z - 0.15))} aria-label="Zoom out">
                 <ZoomOut className="h-4 w-4" />
               </Button>
-              <span className="text-sm text-gray-600 w-12 text-center">{Math.round(zoom * 100)}%</span>
-              <Button variant="outline" size="sm" onClick={() => setZoom(z => Math.min(2.5, z + 0.15))}>
+              <span className="text-sm text-neutral-600 dark:text-neutral-400 w-12 text-center tabular-nums">
+                {Math.round(zoom * 100)}%
+              </span>
+              <Button variant="secondary" size="sm" onClick={() => setZoom((z) => Math.min(2.5, z + 0.15))} aria-label="Zoom in">
                 <ZoomIn className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="sm" onClick={() => { setZoom(1); setPanX(0); setPanY(0); }}>
+              <Button variant="ghost" size="sm" onClick={() => { setZoom(1); setPanX(0); setPanY(0); }}>
                 Reset
               </Button>
             </div>
           </div>
 
           {/* Search & Filters */}
-          <div className="mt-3 flex flex-col sm:flex-row gap-3">
+          <div className="mt-4 flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1 max-w-xs">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
               <input
                 type="text"
                 placeholder="Rechercher un exposant..."
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-10 pl-10 pr-4 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all"
               />
             </div>
             <div className="flex items-center gap-2 overflow-x-auto pb-1">
-              {SECTORS.map(s => (
+              {SECTORS.map((s) => (
                 <button
+                  type="button"
                   key={s.id}
                   onClick={() => setActiveSector(s.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors border ${
-                    activeSector === s.id ? 'border-transparent text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border-gray-200'
+                  className={`h-9 px-3.5 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition-all border ${
+                    activeSector === s.id
+                      ? 'border-transparent text-white shadow-sm'
+                      : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:border-primary-600 border-neutral-200 dark:border-neutral-700'
                   }`}
                   style={activeSector === s.id ? { backgroundColor: s.color } : {}}
                 >
@@ -236,12 +245,12 @@ export default function HallMapPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
+      <div className="max-w-container mx-auto px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-6">
 
         {/* SVG Map */}
         <div className="flex-1 min-w-0">
           <div
-            className="bg-white rounded-xl shadow-sm border overflow-hidden"
+            className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 overflow-hidden"
             style={{ cursor: isPanning ? 'grabbing' : 'grab' }}
             onMouseDown={e => { setIsPanning(true); setPanStart({ x: e.clientX - panX, y: e.clientY - panY }); }}
             onMouseMove={e => { if (isPanning) { setPanX(e.clientX - panStart.x); setPanY(e.clientY - panStart.y); } }}
@@ -323,20 +332,20 @@ export default function HallMapPage() {
           </div>
 
           {/* Legend */}
-          <div className="mt-4 bg-white rounded-xl shadow-sm border p-4">
-            <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2 text-sm">
-              <Info className="h-4 w-4 text-gray-400" /> Légende
+          <div className="mt-4 bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-5">
+            <h3 className="font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2 text-sm tracking-tight">
+              <Info className="h-4 w-4 text-neutral-400" /> Légende
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {SECTORS.filter(s => s.id !== 'all').map(s => (
+              {SECTORS.filter((s) => s.id !== 'all').map((s) => (
                 <div key={s.id} className="flex items-center gap-2 text-xs">
-                  <div className="w-4 h-4 rounded-sm flex-shrink-0" style={{ backgroundColor: s.color }} />
-                  <span className="text-gray-600">{s.label}</span>
+                  <div className="w-3.5 h-3.5 rounded-sm flex-shrink-0" style={{ backgroundColor: s.color }} />
+                  <span className="text-neutral-600 dark:text-neutral-400">{s.label}</span>
                 </div>
               ))}
               <div className="flex items-center gap-2 text-xs">
-                <div className="w-4 h-4 rounded-sm bg-gray-200 border border-gray-300 flex-shrink-0" />
-                <span className="text-gray-400">Disponible</span>
+                <div className="w-3.5 h-3.5 rounded-sm bg-neutral-200 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 flex-shrink-0" />
+                <span className="text-neutral-400">Disponible</span>
               </div>
             </div>
           </div>
@@ -489,9 +498,13 @@ export default function HallMapPage() {
           </Card>
 
           {/* Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-xs text-blue-700 space-y-1">
-            <p className="font-semibold">💡 Navigation</p>
-            <p>Cliquez sur un stand pour voir les détails. Faites glisser la carte pour la déplacer, utilisez les boutons +/- pour zoomer.</p>
+          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-900/40 rounded-2xl p-4 text-xs text-primary-800 dark:text-primary-200 space-y-1.5">
+            <p className="font-semibold flex items-center gap-1.5 tracking-tight">
+              <Info className="h-3.5 w-3.5" /> Navigation
+            </p>
+            <p className="leading-relaxed">
+              Cliquez sur un stand pour voir les détails. Faites glisser la carte pour la déplacer, utilisez les boutons +/− pour zoomer.
+            </p>
           </div>
         </div>
       </div>

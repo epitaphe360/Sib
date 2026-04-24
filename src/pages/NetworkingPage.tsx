@@ -518,75 +518,63 @@ export default function NetworkingPage() {
   }
 
   return (
-    <div className="bg-slate-50 min-h-screen">
-      {/* Hero Section Simplifiée - RESPONSIVE AMÉLIORÉ */}
-      <div className="relative min-h-[30vh] sm:min-h-[40vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900/90 via-indigo-900/80 to-slate-900/90">
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-center">
+    <div className="bg-neutral-50 dark:bg-neutral-950 min-h-screen">
+      {/* Hero */}
+      <div className="relative flex items-center justify-center overflow-hidden py-16 lg:py-20 bg-primary-900">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-accent-500/15 blur-[120px]" />
+          <div className="absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-primary-500/20 blur-[120px]" />
+          <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '28px 28px' }} />
+        </div>
+        <div className="relative z-20 max-w-container mx-auto px-6 lg:px-8 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.7 }}
           >
-            <div className="inline-flex items-center space-x-1.5 sm:space-x-2 bg-blue-500/10 backdrop-blur-md border border-blue-500/20 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-6">
-              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" />
-              <span className="text-blue-200 text-xs sm:text-sm font-medium tracking-wide uppercase">Propulsé par l'IA SIB</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 mb-6">
+              <Sparkles className="h-3.5 w-3.5 text-accent-500" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90">Propulsé par l'IA SIB</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 sm:mb-6 tracking-tight px-2">
-              Réseautage <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-cyan-400">Intelligent</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 tracking-tight leading-[1.05]">
+              Réseautage{' '}
+              <span className="sib-text-gradient bg-gradient-to-r from-accent-500 to-accent-300">
+                Intelligent
+              </span>
             </h1>
 
-            <p className="text-base sm:text-lg md:text-xl text-blue-100/80 max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Connectez-vous avec les leaders de l'industrie du bâtiment mondiale
+            <p className="text-base lg:text-lg text-white/75 max-w-2xl mx-auto leading-relaxed">
+              Connectez-vous avec les leaders de l'industrie du bâtiment mondiale.
             </p>
           </motion.div>
         </div>
-
-        {/* Transition douce vers le contenu */}
-        <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-t from-slate-50 to-transparent z-30"></div>
       </div>
 
-      {/* Navigation Sticky avec Glassmorphism - RESPONSIVE AMÉLIORÉ */}
-      <div className="sticky top-0 z-50 bg-white/70 backdrop-blur-2xl border-b border-slate-200/50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-          <div className="flex items-center justify-center py-2 sm:py-4">
-            <nav className="flex items-center space-x-0.5 sm:space-x-1 md:space-x-2 bg-slate-100/50 p-1 sm:p-1.5 rounded-xl sm:rounded-2xl border border-slate-200/50 overflow-x-auto max-w-full">
+      {/* Sticky tab bar */}
+      <div className="sticky top-0 z-50 bg-white/85 dark:bg-neutral-900/85 backdrop-blur-xl border-b border-neutral-200 dark:border-neutral-800 shadow-sm">
+        <div className="max-w-container mx-auto px-4 lg:px-8">
+          <div className="flex items-center justify-center py-3">
+            <nav className="flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800 p-1 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-x-auto max-w-full">
               {[
-                { id: 'recommendations', label: 'IA Match', icon: Brain, color: 'blue' },
-                { id: 'search', label: 'Recherche', icon: Search, color: 'emerald' },
-                { id: 'connections', label: 'Réseau', icon: Users, color: 'indigo' },
-                { id: 'favorites', label: 'Favoris', icon: Heart, color: 'rose' },
-                { id: 'insights', label: 'Analyses', icon: TrendingUp, color: 'amber' }
+                { id: 'recommendations', label: 'IA Match', icon: Brain },
+                { id: 'search', label: 'Recherche', icon: Search },
+                { id: 'connections', label: 'Réseau', icon: Users },
+                { id: 'favorites', label: 'Favoris', icon: Heart },
+                { id: 'insights', label: 'Analyses', icon: TrendingUp },
               ].map((tab) => (
                 <button
                   key={tab.id}
+                  type="button"
                   onClick={() => setActiveTab(tab.id as keyof typeof CONFIG.tabIds)}
-                  className={`relative flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 whitespace-nowrap ${
+                  className={`relative inline-flex items-center gap-1.5 h-9 px-3 md:px-4 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'bg-white text-slate-900 shadow-md'
-                      : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
+                      ? 'bg-white dark:bg-neutral-900 text-primary-600 dark:text-primary-400 shadow-sm'
+                      : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
                   }`}
                 >
-                  <tab.icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0 ${
-                    activeTab === tab.id
-                      ? tab.color === 'blue' ? 'text-blue-600' :
-                        tab.color === 'emerald' ? 'text-emerald-600' :
-                        tab.color === 'indigo' ? 'text-indigo-600' :
-                        tab.color === 'rose' ? 'text-rose-600' : 'text-amber-600'
-                      : ''
-                  }`} />
+                  <tab.icon className="h-3.5 w-3.5 flex-shrink-0" />
                   <span className="hidden sm:inline">{tab.label}</span>
-                  {activeTab === tab.id && (
-                    <motion.div
-                      layoutId="activeTabIndicator"
-                      className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
-                        tab.color === 'blue' ? 'bg-blue-600' :
-                        tab.color === 'emerald' ? 'bg-emerald-600' :
-                        tab.color === 'indigo' ? 'bg-indigo-600' :
-                        tab.color === 'rose' ? 'bg-rose-600' : 'bg-amber-600'
-                      }`}
-                    />
-                  )}
                 </button>
               ))}
             </nav>

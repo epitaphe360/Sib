@@ -5,22 +5,19 @@ import {
   Lock,
   Eye,
   EyeOff,
-  Anchor,
   AlertCircle,
   Loader,
   Shield,
   Building2,
   Store,
-  BarChart2
+  BarChart2,
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
-import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import useAuthStore from '../../store/authStore';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { useTranslation } from '../../hooks/useTranslation';
-import { MoroccanPattern, MoroccanArch } from '../ui/MoroccanDecor';
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -197,12 +194,19 @@ export default function LoginPage() {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sib-primary via-sib-secondary to-sib-accent flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background Pattern */}
-      <MoroccanPattern className="opacity-10" color="white" scale={1.5} />
-      
-      {/* Decorative Arch at bottom */}
-      <MoroccanArch className="text-white/10" />
+    <div className="min-h-screen bg-primary-900 flex items-center justify-center py-12 px-6 relative overflow-hidden">
+      {/* Ambient glows */}
+      <div className="absolute inset-0 pointer-events-none -z-0">
+        <div className="absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-accent-500/15 blur-[120px]" />
+        <div className="absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-primary-500/20 blur-[120px]" />
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+            backgroundSize: '28px 28px',
+          }}
+        />
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -210,53 +214,42 @@ export default function LoginPage() {
         transition={{ duration: 0.6 }}
         className="max-w-md w-full relative z-10"
       >
-        <Card className="p-8 border-t-4 border-t-sib-gold shadow-2xl backdrop-blur-sm bg-white/95">
-          {/* Logo and Title */}
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-2xl p-8">
+          {/* Logo and title */}
           <div className="text-center mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <img 
-                src="/logo-sib2026.png" 
-                alt="SIB Logo" 
-                className="h-20 w-auto object-contain"
+            <div className="flex items-center justify-center mb-5">
+              <img
+                src="/logo-sib2026.png"
+                alt="SIB Logo"
+                className="h-16 w-auto object-contain"
                 onError={(e) => {
-                  // Fallback to icon if image fails to load
                   e.currentTarget.style.display = 'none';
-                  const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                  if (fallback) fallback.style.display = 'flex';
                 }}
               />
-              <div className="items-center justify-center space-x-2 hidden">
-                <div className="bg-blue-600 p-3 rounded-lg">
-                  <Anchor className="h-8 w-8 text-white" />
-                </div>
-                <div>
-                  <span className="text-2xl font-bold text-gray-900">SIB</span>
-                  <span className="text-sm text-gray-500 block leading-none">2026</span>
-                </div>
-              </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <div className="sib-kicker mb-3 justify-center">SIB 2026</div>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2 tracking-tight">
               {t('login.title')}
             </h2>
-            <p className="text-gray-600">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
               {t('login.subtitle')}
             </p>
           </div>
 
-          {/* Error Message */}
+          {/* Error */}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+              className="mb-5 p-4 bg-danger-50 dark:bg-danger-500/10 border border-danger-200 dark:border-danger-500/30 rounded-xl"
             >
-              <div className="flex items-start space-x-2">
-                <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2">
+                <AlertCircle className="h-4 w-4 text-danger-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-red-700 text-sm">{error}</p>
+                  <p className="text-danger-700 dark:text-danger-300 text-sm">{error}</p>
                   {error.includes('Identifiants incorrects') && (
-                    <p className="text-red-600 text-xs mt-2">
-                      💡 Nouveau visiteur ? Vérifiez vos emails pour définir votre mot de passe avant de vous connecter.
+                    <p className="text-danger-600 dark:text-danger-400 text-xs mt-2 leading-relaxed">
+                      Nouveau visiteur ? Vérifiez vos emails pour définir votre mot de passe avant de vous connecter.
                     </p>
                   )}
                 </div>
@@ -264,20 +257,20 @@ export default function LoginPage() {
             </motion.div>
           )}
 
-          {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
                 {t('login.email')}
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full h-11 pl-10 pr-4 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all"
                   placeholder="votre@email.com"
                   required
                 />
@@ -285,60 +278,55 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
                 {t('login.password')}
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full h-11 pl-10 pr-11 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all"
                   placeholder="••••••••"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors"
+                  aria-label={showPassword ? 'Masquer' : 'Afficher'}
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
+              <label className="inline-flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300 cursor-pointer">
                 <input
                   id="remember-me"
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 rounded border-neutral-300 dark:border-neutral-600 text-primary-600 focus:ring-primary-600/30"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                  {t('login.remember_me')}
-                </label>
-              </div>
+                {t('login.remember_me')}
+              </label>
 
               <Link
                 to={ROUTES.FORGOT_PASSWORD}
-                className="text-sm text-blue-600 hover:text-blue-500"
+                className="text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline"
               >
                 {t('login.forgot_password')}
               </Link>
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
+            <Button type="submit" variant="primary" size="lg" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  <Loader className="animate-spin h-4 w-4 mr-2" />
+                  <Loader className="animate-spin h-4 w-4 mr-1.5" />
                   {t('login.connecting')}
                 </>
               ) : (
@@ -349,70 +337,55 @@ export default function LoginPage() {
 
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
               {t('login.noAccount')}{' '}
               <Link
                 to={ROUTES.VISITOR_SUBSCRIPTION}
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-semibold text-primary-600 dark:text-primary-400 hover:underline"
               >
                 {t('login.createAccount')}
               </Link>
             </p>
           </div>
 
-          {/* Raccourcis connexion rapide - uniquement en mode démo */}
+          {/* Demo logins */}
           {showDemoLogins && (
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200" />
+                  <div className="w-full border-t border-neutral-200 dark:border-neutral-800" />
                 </div>
                 <div className="relative flex justify-center text-xs">
-                  <span className="px-2 bg-white text-gray-400">⚡ Connexion rapide</span>
+                  <span className="px-3 bg-white dark:bg-neutral-900 text-neutral-500 dark:text-neutral-400 uppercase tracking-wider font-semibold">
+                    Connexion rapide
+                  </span>
                 </div>
               </div>
               <div className="mt-3 grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleDemoLogin('admin@sibs.com', 'Sib2026!Admin', 'admin')}
-                  disabled={demoLoading !== null || isLoading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 transition-colors"
-                >
-                  {demoLoading === 'admin' ? <Loader className="h-4 w-4 animate-spin" /> : <Shield className="h-4 w-4" />}
-                  Admin
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDemoLogin('partenaire@sibs.com', 'Sib2026!Partner', 'partner')}
-                  disabled={demoLoading !== null || isLoading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 transition-colors"
-                >
-                  {demoLoading === 'partner' ? <Loader className="h-4 w-4 animate-spin" /> : <Building2 className="h-4 w-4" />}
-                  Partenaire
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDemoLogin('exposant@sibs.com', 'Sib2026!Expo', 'exhibitor')}
-                  disabled={demoLoading !== null || isLoading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 transition-colors"
-                >
-                  {demoLoading === 'exhibitor' ? <Loader className="h-4 w-4 animate-spin" /> : <Store className="h-4 w-4" />}
-                  Exposant
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDemoLogin('marketing@sibs.com', 'Sib2026!Marketing', 'marketing')}
-                  disabled={demoLoading !== null || isLoading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 transition-colors"
-                >
-                  {demoLoading === 'marketing' ? <Loader className="h-4 w-4 animate-spin" /> : <BarChart2 className="h-4 w-4" />}
-                  Marketing
-                </button>
+                {[
+                  { k: 'admin', email: 'admin@sibs.com', pwd: 'Sib2026!Admin', label: 'Admin', Icon: Shield, variant: 'primary' },
+                  { k: 'partner', email: 'partenaire@sibs.com', pwd: 'Sib2026!Partner', label: 'Partenaire', Icon: Building2, variant: 'accent' },
+                  { k: 'exhibitor', email: 'exposant@sibs.com', pwd: 'Sib2026!Expo', label: 'Exposant', Icon: Store, variant: 'primary' },
+                  { k: 'marketing', email: 'marketing@sibs.com', pwd: 'Sib2026!Marketing', label: 'Marketing', Icon: BarChart2, variant: 'secondary' },
+                ].map(({ k, email, pwd, label, Icon, variant }) => (
+                  <Button
+                    key={k}
+                    type="button"
+                    variant={variant as any}
+                    size="sm"
+                    onClick={() => handleDemoLogin(email, pwd, k)}
+                    disabled={demoLoading !== null || isLoading}
+                    className="w-full justify-center"
+                  >
+                    {demoLoading === k ? <Loader className="h-3.5 w-3.5 animate-spin" /> : <Icon className="h-3.5 w-3.5 mr-1.5" />}
+                    {label}
+                  </Button>
+                ))}
               </div>
             </div>
           )}
-        </Card>
+        </div>
       </motion.div>
     </div>
   );
-};
+}

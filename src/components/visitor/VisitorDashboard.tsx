@@ -31,17 +31,22 @@ export default memo(function VisitorDashboard() {
 
   if (!ctx.isAuthenticated || !ctx.user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md border border-gray-100">
-            <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-SIB-primary to-SIB-secondary rounded-full flex items-center justify-center">
-              <Users className="h-10 w-10 text-SIB-gold" />
+      <div className="min-h-screen bg-white dark:bg-neutral-950 flex items-center justify-center p-6">
+        <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+          <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm p-8 max-w-md">
+            <div className="h-14 w-14 mx-auto mb-5 rounded-2xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center">
+              <Users className="h-7 w-7 text-primary-600 dark:text-primary-400" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('visitor.unauthorized_access')}</h3>
-            <p className="text-gray-600 mb-6">{t('visitor.please_login')}</p>
+            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2 tracking-tight">
+              {t('visitor.unauthorized_access')}
+            </h3>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6 leading-relaxed">
+              {t('visitor.please_login')}
+            </p>
             <Link to={ROUTES.LOGIN}>
-              <Button className="w-full bg-gradient-to-r from-SIB-primary to-SIB-secondary hover:from-SIB-secondary hover:to-SIB-primary text-white">
-                <Activity className="h-4 w-4 mr-2" />{t('nav.login')}
+              <Button variant="primary" size="md" className="w-full">
+                <Activity className="h-4 w-4 mr-1.5" />
+                {t('nav.login')}
               </Button>
             </Link>
           </div>
@@ -56,8 +61,8 @@ export default memo(function VisitorDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+      <div className="max-w-container mx-auto px-6 lg:px-8 py-10">
 
         {/* Pending payment banner */}
         {ctx.user.status === 'pending_payment' && <VisitorPendingPaymentBanner />}
@@ -92,15 +97,24 @@ export default memo(function VisitorDashboard() {
 
         {/* Error banner */}
         {ctx.error && (
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
-            className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-lg">
-            <div className="flex items-center">
-              <X className="h-5 w-5 text-red-400 flex-shrink-0" />
-              <p className="ml-3 text-red-800 text-sm font-medium flex-1">{ctx.error}</p>
-              <button onClick={() => ctx.setError(null)} className="ml-auto text-red-600 hover:text-red-800">
-                <X className="h-5 w-5" />
-              </button>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="mb-6 p-4 bg-white dark:bg-neutral-900 border border-danger-200 dark:border-danger-500/30 rounded-2xl shadow-sm flex items-center gap-3"
+          >
+            <div className="h-9 w-9 rounded-lg bg-danger-50 dark:bg-danger-500/10 flex items-center justify-center shrink-0">
+              <X className="h-4 w-4 text-danger-600" />
             </div>
+            <p className="flex-1 text-sm font-medium text-neutral-800 dark:text-neutral-200">{ctx.error}</p>
+            <button
+              type="button"
+              onClick={() => ctx.setError(null)}
+              className="h-8 w-8 rounded-lg flex items-center justify-center text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              aria-label="Fermer"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </motion.div>
         )}
 
@@ -183,22 +197,25 @@ function VisitorFreeQRDashboard({ user }: { user: any }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700">
+    <div className="min-h-screen bg-primary-900">
       {/* Header */}
-      <div className="bg-white/10 backdrop-blur-sm border-b border-white/20 px-4 py-4">
+      <div className="bg-white/5 backdrop-blur-md border-b border-white/10 px-6 py-4">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-white p-2 rounded-lg">
-              <Users className="h-6 w-6 text-green-600" />
+            <div className="bg-white h-10 w-10 rounded-xl flex items-center justify-center">
+              <Users className="h-5 w-5 text-primary-600" />
             </div>
             <div>
-              <span className="text-white font-bold text-lg">SIB 2026</span>
-              <p className="text-green-200 text-xs">Pass Visiteur Gratuit</p>
+              <span className="text-white font-semibold text-base tracking-tight">SIB 2026</span>
+              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-accent-500 mt-0.5">
+                Pass Visiteur Gratuit
+              </p>
             </div>
           </div>
           <button
+            type="button"
             onClick={handleLogout}
-            className="flex items-center gap-2 text-green-200 hover:text-white transition-colors text-sm"
+            className="inline-flex items-center gap-2 h-9 px-3 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors text-sm"
           >
             <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">Se déconnecter</span>
@@ -207,92 +224,85 @@ function VisitorFreeQRDashboard({ user }: { user: any }) {
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-10">
-        {/* Welcome */}
+      <div className="max-w-2xl mx-auto px-6 py-12">
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h1 className="text-2xl font-bold text-white">
-            Bienvenue, {visitorName} !
+          <h1 className="text-3xl font-bold text-white tracking-tight">
+            Bienvenue, {visitorName}
           </h1>
-          <p className="text-green-200 mt-1">
-            Votre badge d'accès au salon SIB 2026
-          </p>
+          <p className="text-white/70 mt-2 text-sm">Votre badge d'accès au salon SIB 2026</p>
         </motion.div>
 
-        {/* QR Code Card */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl shadow-2xl overflow-hidden mb-6"
+          className="bg-white rounded-2xl shadow-2xl border border-white/20 overflow-hidden mb-6"
         >
-          <div className="bg-green-600 px-6 py-4 text-center">
+          <div className="bg-primary-700 px-6 py-5 text-center">
             <div className="flex items-center justify-center gap-2 text-white">
-              <QrCode className="h-5 w-5" />
-              <span className="font-semibold text-lg">Mon E-Badge QR Code</span>
+              <QrCode className="h-4 w-4 text-accent-500" />
+              <span className="text-sm font-semibold uppercase tracking-[0.18em]">Mon E-Badge QR Code</span>
             </div>
-            <p className="text-green-100 text-sm mt-1">
-              Présentez ce badge à l'entrée du salon
-            </p>
+            <p className="text-white/75 text-xs mt-1.5">Présentez ce badge à l'entrée du salon</p>
           </div>
 
           <div className="p-8 text-center">
             <div className="inline-flex flex-col items-center">
-              <div className="bg-gray-50 border-2 border-green-100 rounded-xl p-6 mb-4">
-                <QrCode className="h-32 w-32 text-green-700 opacity-30" />
+              <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-6 mb-5">
+                <QrCode className="h-28 w-28 text-primary-700 opacity-30" />
               </div>
-              <p className="text-gray-500 text-sm mb-2">
+              <p className="text-neutral-500 text-sm mb-4">
                 Cliquez ci-dessous pour afficher votre QR code complet
               </p>
             </div>
 
-            <div className="space-y-3 mt-2">
+            <div className="space-y-2 mt-2">
               <Link to={ROUTES.BADGE} className="block">
-                <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 text-base font-semibold shadow-lg hover:shadow-xl transition-all">
-                  <QrCode className="h-5 w-5 mr-2" />
+                <Button variant="primary" size="lg" className="w-full">
+                  <QrCode className="h-4 w-4 mr-1.5" />
                   Voir et télécharger mon E-Badge
                 </Button>
               </Link>
               <Link to={ROUTES.BADGE_DIGITAL} className="block">
-                <Button variant="outline" className="w-full border-green-300 text-green-700 hover:bg-green-50 py-3">
-                  <Download className="h-4 w-4 mr-2" />
+                <Button variant="secondary" size="md" className="w-full">
+                  <Download className="h-4 w-4 mr-1.5" />
                   Badge numérique téléchargeable
                 </Button>
               </Link>
             </div>
           </div>
 
-          <div className="bg-gray-50 px-6 py-4 border-t border-gray-100">
-            <div className="flex items-center gap-3 text-sm text-gray-600">
-              <div className="h-2 w-2 rounded-full bg-green-500 flex-shrink-0" />
-              <span>Email : <strong>{user?.email}</strong></span>
+          <div className="bg-neutral-50 px-6 py-4 border-t border-neutral-100 space-y-1.5">
+            <div className="flex items-center gap-2 text-xs text-neutral-600">
+              <div className="h-1.5 w-1.5 rounded-full bg-success-500 flex-shrink-0" />
+              <span>Email : <strong className="text-neutral-900">{user?.email}</strong></span>
             </div>
-            <div className="flex items-center gap-3 text-sm text-gray-600 mt-1">
-              <div className="h-2 w-2 rounded-full bg-green-500 flex-shrink-0" />
-              <span>Niveau : <strong>Pass Gratuit</strong></span>
+            <div className="flex items-center gap-2 text-xs text-neutral-600">
+              <div className="h-1.5 w-1.5 rounded-full bg-success-500 flex-shrink-0" />
+              <span>Niveau : <strong className="text-neutral-900">Pass Gratuit</strong></span>
             </div>
           </div>
         </motion.div>
 
-        {/* Upgrade CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-gradient-to-r from-yellow-500 to-amber-500 rounded-xl p-5 text-center shadow-lg"
+          className="relative overflow-hidden rounded-2xl p-6 text-center bg-gradient-to-br from-accent-600 to-accent-500 border border-accent-500/40"
         >
-          <div className="flex items-center justify-center gap-2 text-white font-bold text-base mb-1">
-            <Star className="h-5 w-5" />
+          <div className="flex items-center justify-center gap-2 text-white font-semibold mb-1.5 tracking-tight">
+            <Star className="h-4 w-4" />
             Passez au niveau Standard ou VIP
           </div>
-          <p className="text-yellow-100 text-sm mb-3">
-            Accédez au networking, aux rendez-vous B2B, aux conférences et bien plus
+          <p className="text-white/90 text-xs mb-4 leading-relaxed">
+            Accédez au networking, aux rendez-vous B2B, aux conférences et bien plus.
           </p>
           <Link to={ROUTES.VISITOR_UPGRADE}>
-            <Button className="bg-white text-amber-600 hover:bg-yellow-50 font-semibold px-6">
+            <Button variant="secondary" size="md" className="bg-white text-accent-700 hover:bg-white/95 border-0">
               Découvrir les offres Premium
             </Button>
           </Link>

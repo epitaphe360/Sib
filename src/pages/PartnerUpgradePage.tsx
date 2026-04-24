@@ -43,33 +43,38 @@ export default function PartnerUpgradePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white dark:bg-neutral-950">
+      {/* Hero */}
+      <div className="relative bg-primary-900 text-white py-16 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-accent-500/15 blur-[120px]" />
+          <div className="absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-primary-500/20 blur-[120px]" />
+        </div>
+        <div className="relative max-w-container mx-auto px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center"
+            className="text-center max-w-2xl mx-auto"
           >
-            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <Crown className="h-5 w-5" />
-              <span className="font-medium">Niveau actuel: {currentConfig.displayName}</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 mb-6">
+              <Crown className="h-3.5 w-3.5 text-accent-500" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90">
+                Niveau actuel : {currentConfig.displayName}
+              </span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Développez votre visibilité
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight leading-[1.05]">
+              Développez votre <span className="sib-text-gradient bg-gradient-to-r from-accent-500 to-accent-300">visibilité</span>
             </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Choisissez le niveau partenaire qui correspond à vos ambitions et
-              maximisez votre présence au SIB 2026
+            <p className="text-base lg:text-lg text-white/75 leading-relaxed">
+              Choisissez le niveau partenaire qui correspond à vos ambitions et maximisez votre présence au SIB 2026.
             </p>
           </motion.div>
         </div>
       </div>
 
       {/* Tier Comparison */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-container mx-auto px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {PARTNER_TIER_ORDER.map((tierId, index) => {
             const tier = PARTNER_TIERS[tierId];
@@ -254,30 +259,36 @@ export default function PartnerUpgradePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white"
+          className="mt-16 relative overflow-hidden rounded-2xl p-10 lg:p-14 bg-gradient-to-br from-primary-900 to-primary-700 border border-primary-800 text-white"
         >
-          <div className="text-center max-w-3xl mx-auto">
-            <TrendingUp className="h-12 w-12 mx-auto mb-4" />
-            <h2 className="text-3xl font-bold mb-4">
+          <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-accent-500/20 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-primary-500/20 blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 text-center max-w-3xl mx-auto">
+            <div className="h-14 w-14 mx-auto mb-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center">
+              <TrendingUp className="h-6 w-6 text-accent-500" />
+            </div>
+            <div className="sib-kicker mb-3 justify-center !text-accent-500">ROI Partenaire</div>
+            <h2 className="text-2xl lg:text-3xl font-bold mb-4 tracking-tight">
               Maximisez votre retour sur investissement
             </h2>
-            <p className="text-lg text-blue-100 mb-6">
-              En moyenne, nos partenaires Gold et Platinum génèrent 5x leur investissement
-              en nouveaux contrats et opportunités business grâce au SIB 2026.
+            <p className="text-white/80 mb-10 leading-relaxed">
+              En moyenne, nos partenaires Gold et Platinum génèrent 5× leur investissement en nouveaux contrats et
+              opportunités business grâce au SIB 2026.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
-              <div>
-                <div className="text-4xl font-bold">500+</div>
-                <div className="text-blue-200 text-sm">Visiteurs qualifiés</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold">150+</div>
-                <div className="text-blue-200 text-sm">Rendez-vous B2B</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold">5x</div>
-                <div className="text-blue-200 text-sm">ROI moyen</div>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { value: '500+', label: 'Visiteurs qualifiés' },
+                { value: '150+', label: 'Rendez-vous B2B' },
+                { value: '5×', label: 'ROI moyen' },
+              ].map((s) => (
+                <div key={s.label} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5">
+                  <div className="text-3xl lg:text-4xl font-bold tabular-nums tracking-tight">{s.value}</div>
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-accent-500 mt-1.5">
+                    {s.label}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </motion.div>
