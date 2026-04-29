@@ -1,7 +1,6 @@
 ﻿import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:com.urbaevent/utils/SupabaseConfig.dart';
 
@@ -56,7 +55,7 @@ class SupabaseService {
           'status': 'active',
         });
       } catch (e) {
-        debugPrint("Erreur upsert public.users ignorée (RLS ou trigger existant): $e");
+        print("Erreur upsert public.users ignorée (RLS ou trigger existant): $e");
       }
     }
     return res;
@@ -203,19 +202,46 @@ class SupabaseService {
   // E-BADGES / INSCRIPTIONS
   // ──────────────────────────────────────────────────────────────────
 
-  /// Récupère la liste des e-badges (inscriptions) de l'utilisateur connecté.
-  /// Retourne les données avec les infos du salon associé.
+  /// Récupère la liste des e-badges de l'utilisateur connecté depuis user_badges.
+  /// Transforme les données pour correspondre au format attendu par l'UI.
   Future<List<Map<String, dynamic>>> getMyEbadges() async {
     final userId = currentUser?.id;
     if (userId == null) return [];
 
     final res = await _client
-        .from(SupabaseConfig.tableRegistrations)
-        .select('*, salon:salons(*)')
+        .from('user_badges')
+        .select('*')
         .eq('user_id', userId)
         .order('created_at', ascending: false);
 
-    return List<Map<String, dynamic>>.from(res);
+    // Récupérer les infos du salon actif pour l'affichage
+    Map<String, dynamic> salonInfo = {
+      'name': 'Salon International du Bâtiment (SIB)',
+      'location': 'Parc d\'Exposition Mohammed VI - EL JADIDA',
+      'date_debut': '2026-11-25',
+      'date_fin': '2026-11-29',
+      'primary_color': '#4598D1',
+    };
+    try {
+      final salons = await _client
+          .from('salons')
+          .select('id,name,location,date_debut,date_fin,primary_color')
+          .eq('is_active', true)
+          .limit(1);
+      if ((salons as List).isNotEmpty) {
+        salonInfo = Map<String, dynamic>.from(salons[0]);
+      }
+    } catch (_) {}
+
+    return List<Map<String, dynamic>>.from(res).map((badge) {
+      return {
+        ...badge,
+        'type': badge['user_type'] ?? badge['access_level'] ?? 'visitor',
+        'confirmed': badge['status'] == 'active',
+        'salon': salonInfo,
+        'salon_id': salonInfo['id'],
+      };
+    }).toList();
   }
 
   /// Crée ou récupère l'inscription de l'utilisateur pour un salon.
@@ -315,7 +341,7 @@ class SupabaseService {
       },
     ).then((_) {}).catchError((e) {
       // L'email est non bloquant : on log sans faire crasher l'app
-      debugPrint('send-scan-email error (non-bloquant): $e');
+      print('send-scan-email error (non-bloquant): $e');
     });
   }
 
@@ -348,7 +374,7 @@ class SupabaseService {
         'device_type': platform,
       }, onConflict: 'user_id,endpoint');
     } catch (e) {
-      debugPrint('savePushToken error: $e');
+      print('savePushToken error: $e');
     }
   }
 

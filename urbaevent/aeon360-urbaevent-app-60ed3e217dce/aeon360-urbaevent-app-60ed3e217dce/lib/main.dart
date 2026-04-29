@@ -1,4 +1,5 @@
-﻿import 'package:com.urbaevent/firebase_options.dart';
+﻿import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:com.urbaevent/firebase_options.dart';
 import 'package:com.urbaevent/utils/LanguageProvider.dart';
 import 'package:com.urbaevent/utils/ThemeColor.dart';
 import 'package:com.urbaevent/utils/SalonBranding.dart';
@@ -77,6 +78,14 @@ late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  // ── Chargement des variables d'environnement ─────────────────
+  try {
+    await dotenv.load(fileName: 'assets/.env');
+  } catch (_) {
+    // Fichier absent : les valeurs par défaut de SupabaseConfig seront utilisées
+  }
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // ── Initialisation Supabase ──────────────────────────────────────
@@ -84,22 +93,18 @@ Future<void> main() async {
     url: SupabaseConfig.supabaseUrl,
     anonKey: SupabaseConfig.supabaseAnonKey,
   );
-  // ── Branding dynamique depuis la table salons ─────────────────
-  await SalonBranding.load();
+  // ── Branding dynamique depuis la table salons (avec timeout 5s) ──
+  await SalonBranding.load().timeout(
+    const Duration(seconds: 5),
+    onTimeout: () {},
+  );
   Preference preference = await Preference.getInstance();
   Intl.defaultLocale = preference.getLanguage();
   await initializeMessages(preference.getLanguage());
   // Set the background messaging handler early on, as a named top-level function
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  try {
-    await FirebaseMessaging.instance.requestPermission();
-    final notifStatus = await Permission.notification.request();
-    if (notifStatus.isPermanentlyDenied) {
-      debugPrint('Notification permission permanently denied');
-    }
-  } catch (e) {
-    debugPrint('Permission request failed: $e');
-  }
+  await FirebaseMessaging.instance.requestPermission();
+  await Permission.notification.request();
 
   runApp(
     ChangeNotifierProvider(
@@ -163,15 +168,14 @@ class _IntroPageState extends State<IntroPage> {
 
   Future<void> checkFirstLogin() async {
     Preference preference = await Preference.getInstance();
-    if (!mounted) return;
     if (preference.getFirstCheck()) {
       preference.setFirstCheck(false);
       setState(() {
         isInit = true;
       });
     } else {
-      final authRole = preference.getAuthRole();
-      if (authRole != null && authRole.role?.id == 3) {
+      if (preference.getAuthRole() != null &&
+          preference.getAuthRole()!.role!.id == 3) {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => AgentHomePage(Const.homeUI)),

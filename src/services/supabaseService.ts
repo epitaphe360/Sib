@@ -461,6 +461,7 @@ export class SupabaseService {
           verified,
           featured,
           stand_number,
+          is_published,
           contact_info,
           mini_site:mini_sites!mini_sites_exhibitor_id_fkey(published)
         `,

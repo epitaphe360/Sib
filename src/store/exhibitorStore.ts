@@ -80,8 +80,7 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
           companyName.toLowerCase().includes(search) ||
           description.toLowerCase().includes(search);
 
-        const isPubliclyVisible = exhibitor.isPublished === true || exhibitor.miniSite?.published === true;
-        return exhibitor.verified && isPubliclyVisible && matchesCategory && matchesSector && matchesSearch;
+        return exhibitor.verified && matchesCategory && matchesSector && matchesSearch;
       });
 
       set({

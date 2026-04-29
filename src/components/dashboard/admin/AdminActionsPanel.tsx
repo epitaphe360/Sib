@@ -43,13 +43,13 @@ function Tile({ Icon, label, sub, badge, urgent, active }: TileProps) {
   return (
     <motion.div
       variants={tileVariants}
-      whileHover={{ y: -4, scale: 1.03, boxShadow: urgent ? '0 0 24px rgba(201,168,76,0.2)' : '0 0 20px rgba(255,255,255,0.08)' }}
+      whileHover={{ y: -4, scale: 1.03, boxShadow: urgent ? '0 0 24px rgba(201,168,76,0.2)' : '0 4px 16px rgba(30,58,95,0.1)' }}
       whileTap={{ scale: 0.96 }}
       className="flex flex-col items-center justify-center gap-4 p-6 rounded-2xl transition-all cursor-pointer select-none relative"
       style={{
-        background: urgent ? 'rgba(201,168,76,0.07)' : active ? 'rgba(201,168,76,0.05)' : 'rgba(255,255,255,0.03)',
-        border: urgent ? '1px solid rgba(201,168,76,0.45)' : active ? '1px solid rgba(201,168,76,0.3)' : '1px solid rgba(255,255,255,0.07)',
-        backdropFilter: 'blur(16px)',
+        background: urgent ? 'rgba(201,168,76,0.07)' : active ? 'rgba(201,168,76,0.04)' : '#ffffff',
+        border: urgent ? '1px solid rgba(201,168,76,0.45)' : active ? '1px solid rgba(201,168,76,0.3)' : '1px solid rgba(30,58,95,0.1)',
+        boxShadow: '0 1px 4px rgba(30,58,95,0.05)',
       }}
     >
       {/* Badge urgence */}
@@ -61,13 +61,13 @@ function Tile({ Icon, label, sub, badge, urgent, active }: TileProps) {
 
       {/* Icône grande */}
       <div className={`p-4 rounded-2xl ${urgent ? 'bg-[#C9A84C]/20' : 'bg-white/6'}`}>
-        <Icon className={`h-11 w-11 ${urgent ? 'text-[#C9A84C]' : 'text-white/60'}`} />
+        <Icon className={`h-11 w-11 ${urgent ? 'text-[#C9A84C]' : 'text-[#1e3a5f]/50'}`} />
       </div>
 
       {/* Texte */}
       <div className="text-center">
-        <div className="text-sm font-bold leading-tight" style={{ color: urgent ? '#C9A84C' : 'rgba(255,255,255,0.82)' }}>{label}</div>
-        {sub && <div className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>{sub}</div>}
+        <div className="text-sm font-bold leading-tight" style={{ color: urgent ? '#C9A84C' : '#1e3a5f' }}>{label}</div>
+        {sub && <div className="text-xs mt-1 text-gray-500">{sub}</div>}
       </div>
     </motion.div>
   );
@@ -76,11 +76,11 @@ function Tile({ Icon, label, sub, badge, urgent, active }: TileProps) {
 // ─── Titre de section ────────────────────────────────────────────────────
 function SectionTitle({ icon, label, sub }: { icon: React.ReactNode; label: string; sub?: string }) {
   return (
-    <div className="flex items-center gap-4 mb-6 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+    <div className="flex items-center gap-4 mb-6 pb-4" style={{ borderBottom: '1px solid rgba(30,58,95,0.08)' }}>
       <span>{icon}</span>
       <div>
         <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#C9A84C', letterSpacing: '0.15em' }}>{label}</h3>
-        {sub && <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.3)' }}>{sub}</p>}
+        {sub && <p className="text-xs mt-1 text-gray-500">{sub}</p>}
       </div>
     </div>
   );
@@ -103,7 +103,7 @@ export function AdminActionsPanel({
       <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ delay: 0.05 }}>
         <div
           className="rounded-2xl overflow-hidden"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)' }}
+          style={{ background: '#ffffff', border: '1px solid rgba(30,58,95,0.1)', boxShadow: '0 2px 12px rgba(30,58,95,0.06)' }}
         >
 
           {/* Header navy animé */}

@@ -80,8 +80,8 @@ class _AgentHomePage extends State<AgentHomePage> {
     });
     try {
       await SupabaseService.instance.saveScan(
-        scannedUserId: strList[2].toString(),
-        salonId: strList[1].toString(),
+        scannedUserId: strList[0].toString(),
+        salonId: strList.length > 1 ? strList[1].toString() : null,
       );
     } catch (e) {
       Utils.showToast(e.toString());
@@ -942,9 +942,10 @@ class _AgentHomePage extends State<AgentHomePage> {
                                     scanResult = code!;
                                     try {
                                       vibrateOnce();
+                                      // Format attendu: userId|salonId
                                       List<String> strResult =
-                                      scanResult.split("-");
-                                      if (strResult.length > 2) {
+                                      scanResult.split("|");
+                                      if (strResult.isNotEmpty && strResult[0].length > 8) {
                                         addUserToScan(strResult);
                                       } else {
                                         Utils.showToast(Intl.message(

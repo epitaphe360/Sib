@@ -37,30 +37,14 @@ class _EBadgeDetailsState extends State<EBadgeDetails> {
     setState(() { _loadingQr = true; _error = null; });
     try {
       final reg = widget.registration;
-      final salonId = reg['salon_id'] as String?;
-      final regId = reg['id'] as String;
-      final existingToken = reg['qr_token'] as String?;
-      final expiresAtStr = reg['qr_expires_at'] as String?;
-      if (existingToken != null && expiresAtStr != null) {
-        final expiresAt = DateTime.tryParse(expiresAtStr);
-        if (expiresAt != null && expiresAt.isAfter(DateTime.now())) {
-          setState(() { _qrToken = existingToken; _loadingQr = false; });
-          return;
-        }
-      }
-      if (salonId != null) {
-        final token = await SupabaseService.instance.refreshQrToken(
-          registrationId: regId, salonId: salonId);
-        setState(() { _qrToken = token; _loadingQr = false; });
-      } else {
-        final uid = SupabaseService.instance.currentUser?.id ?? '';
-        setState(() { _qrToken = uid; _loadingQr = false; });
-      }
+      final salonId = reg['salon_id'] as String? ?? '';
+      final uid = SupabaseService.instance.currentUser?.id ?? '';
+      // Format: userId|salonId — le | ne peut jamais apparaître dans un UUID
+      setState(() { _qrToken = '$uid|$salonId'; _loadingQr = false; });
     } catch (e) {
-      // Fallback: If edge function fails (e.g. ES256 algo error on verify), use userId directly
       final uid = SupabaseService.instance.currentUser?.id ?? '';
       setState(() { _qrToken = uid; _loadingQr = false; });
-      debugPrint('QR Token generation fallback: $e');
+      debugPrint('QR Token error: $e');
     }
   }
 

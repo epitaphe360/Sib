@@ -753,21 +753,7 @@ class _HomePage extends State<HomePage> {
     try {
       final badges = await SupabaseService.instance.getMyEbadges();
       if (!mounted) return;
-      // Si aucun badge et salon actif dispo → créer automatiquement l'inscription
-      if (badges.isEmpty) {
-        final salonId = ActiveSalon.current?['id'] as String?;
-        if (salonId != null) {
-          final reg = await SupabaseService.instance.registerForSalon(
-            salonId: salonId,
-            type: _userType,
-          );
-          _safeSetState(() { _myEbadges = [reg]; });
-        } else {
-          _safeSetState(() { _myEbadges = []; });
-        }
-      } else {
-        _safeSetState(() { _myEbadges = badges; });
-      }
+      _safeSetState(() { _myEbadges = badges; });
     } catch (e) {
       debugPrint('getEbadgesList error: $e');
     }
@@ -1859,9 +1845,10 @@ class _HomePage extends State<HomePage> {
                                     scanResult = code!;
                                     try {
                                       vibrateOnce();
+                                      // Format attendu: userId|salonId
                                       List<String> strResult =
-                                          scanResult.split("-");
-                                      if (strResult.length > 1) {
+                                          scanResult.split("|");
+                                      if (strResult.isNotEmpty && strResult[0].length > 8) {
                                         addUserToContact(strResult);
                                       } else {
                                         Utils.showToast(Intl.message(

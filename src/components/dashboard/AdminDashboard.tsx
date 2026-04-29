@@ -65,7 +65,10 @@ export default function AdminDashboard() {
   }
 
   return (
-      <div className="min-h-screen" style={{ background: 'radial-gradient(ellipse at 50% -5%, #0f2240 0%, #07101e 55%, #04080f 100%)' }}>
+      <div className="min-h-screen" style={{
+        backgroundColor: '#f8fafc',
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%231e3a5f' stroke-opacity='0.055' stroke-width='0.8' d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath stroke='%231e3a5f' stroke-opacity='0.04' stroke-width='0.6' d='M30 10L50 30L30 50L10 30Z'/%3E%3Cpath stroke='%23C9A84C' stroke-opacity='0.06' stroke-width='0.6' d='M30 18L42 30L30 42L18 30Z'/%3E%3Ccircle cx='30' cy='30' r='2.5' fill='%231e3a5f' fill-opacity='0.04'/%3E%3Ccircle cx='0' cy='0' r='2' fill='%23C9A84C' fill-opacity='0.06'/%3E%3Ccircle cx='60' cy='0' r='2' fill='%23C9A84C' fill-opacity='0.06'/%3E%3Ccircle cx='0' cy='60' r='2' fill='%23C9A84C' fill-opacity='0.06'/%3E%3Ccircle cx='60' cy='60' r='2' fill='%23C9A84C' fill-opacity='0.06'/%3E%3C/g%3E%3C/svg%3E\")",
+      }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         <AdminHeader
@@ -82,10 +85,10 @@ export default function AdminDashboard() {
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="my-12 flex items-center gap-4 origin-left"
+          className="my-8 flex items-center gap-4 origin-left"
         >
           <div className="w-2 h-2 rounded" style={{ background: '#C9A84C' }} />
-          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, rgba(201,168,76,0.5), transparent)' }} />
+          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, rgba(30,58,95,0.2), transparent)' }} />
         </motion.div>
 
         <AdminActionsPanel
@@ -104,13 +107,13 @@ export default function AdminDashboard() {
           className="mb-8"
         >
           <div
-            className="rounded-2xl border p-5"
-            style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(16px)' }}
+            className="rounded-2xl border p-5 bg-white"
+            style={{ borderColor: 'rgba(30,58,95,0.1)', boxShadow: '0 1px 8px rgba(30,58,95,0.06)' }}
           >
             <div className="flex items-center justify-between mb-5">
               <div>
-                <h3 className="text-base font-bold text-white tracking-wide uppercase" style={{ letterSpacing: '0.08em' }}>Accès CMS</h3>
-                <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>Gestion complète du contenu et des templates</p>
+                <h3 className="text-base font-bold text-[#1e3a5f] tracking-wide uppercase" style={{ letterSpacing: '0.08em' }}>Accès CMS</h3>
+                <p className="text-xs mt-1 text-gray-500">Gestion complète du contenu et des templates</p>
               </div>
               <div className="w-8 h-0.5 rounded-full" style={{ background: '#C9A84C' }} />
             </div>
@@ -137,12 +140,12 @@ export default function AdminDashboard() {
                   whileHover={{ y: -4, scale: 1.03, boxShadow: '0 0 24px rgba(201,168,76,0.18)' }}
                   whileTap={{ scale: 0.97 }}
                 >
-                  <Link to={to} className="block p-4 rounded-xl h-full transition-colors" style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.35)'; (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.05)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}
+                  <Link to={to} className="block p-4 rounded-xl h-full transition-colors bg-gray-50" style={{ border: '1px solid rgba(30,58,95,0.08)' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.4)'; (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.06)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(30,58,95,0.08)'; (e.currentTarget as HTMLElement).style.background = '#f8fafc'; }}
                   >
-                    <div className="flex items-center gap-2 font-semibold text-sm text-white/80"><Icon className="h-4 w-4" style={{ color: '#C9A84C' }} /> {label}</div>
-                    <p className="text-xs mt-1.5" style={{ color: 'rgba(255,255,255,0.35)' }}>{sub}</p>
+                    <div className="flex items-center gap-2 font-semibold text-sm text-[#1e3a5f]"><Icon className="h-4 w-4" style={{ color: '#C9A84C' }} /> {label}</div>
+                    <p className="text-xs mt-1.5 text-gray-500">{sub}</p>
                   </Link>
                 </motion.div>
               ))}
@@ -156,10 +159,10 @@ export default function AdminDashboard() {
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="my-12 flex items-center gap-4 origin-left"
+          className="my-8 flex items-center gap-4 origin-left"
         >
           <div className="w-2 h-2 rounded" style={{ background: '#C9A84C' }} />
-          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, rgba(201,168,76,0.5), transparent)' }} />
+          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, rgba(30,58,95,0.2), transparent)' }} />
         </motion.div>
 
         <AdminMetricsGrid adminMetrics={adminMetrics as any} t={t} />
@@ -185,7 +188,7 @@ export default function AdminDashboard() {
 
         {/* Métriques détaillées — navy sobre */}
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.4 }} className="mb-4">
-          <div className="bg-[#0F2034] rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #0f2034 100%)', boxShadow: '0 4px 16px rgba(30,58,95,0.18)' }}>
             <div className="flex items-center gap-4">
               <div className="p-3 rounded-xl bg-[#C9A84C]/15 border border-[#C9A84C]/30">
                 <BarChart3 className="h-6 w-6 text-[#C9A84C]" />
