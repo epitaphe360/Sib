@@ -10,10 +10,9 @@ import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import {
-  runAdvancedMatching,
   QUICK_SEARCH_SUGGESTIONS,
-  type MatchingResponse,
 } from '../services/advancedMatchingService';
+import { runAIMatching, type AIMatchingResponse } from '../services/aiMatchingService';
 import { ROUTES } from '../lib/routes';
 
 // ─── Composant score ring ──────────────────────────────────────────────────────
@@ -150,7 +149,7 @@ export default function AdvancedMatchingPage() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [response, setResponse] = useState<MatchingResponse | null>(null);
+  const [response, setResponse] = useState<AIMatchingResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -169,7 +168,7 @@ export default function AdvancedMatchingPage() {
     setError(null);
 
     try {
-      const result = await runAdvancedMatching(q, 20);
+      const result = await runAIMatching(q);
       setResponse(result);
     } catch (err) {
       setError('Erreur lors du matching. Veuillez réessayer.');
@@ -341,11 +340,17 @@ export default function AdvancedMatchingPage() {
             >
               {/* Méta résultats */}
               <div className="flex items-center justify-between mb-4">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 flex items-center gap-2">
                   <strong>{response.results.length}</strong> résultat{response.results.length !== 1 ? 's' : ''} sur{' '}
                   <strong>{response.totalCandidates}</strong> exposants analysés
                   {' '}
                   <span className="text-gray-400">({response.durationMs}ms)</span>
+                  {response.usedAI && (
+                    <span className="inline-flex items-center gap-1 text-xs bg-violet-100 text-violet-700 border border-violet-200 rounded-full px-2 py-0.5 ml-1">
+                      <Sparkles className="h-3 w-3" />
+                      IA vectorielle
+                    </span>
+                  )}
                 </p>
                 <button
                   onClick={handleReset}

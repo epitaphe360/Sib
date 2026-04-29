@@ -23,13 +23,13 @@ const statusConfig = {
 export const SystemHealthPanel: React.FC<SystemHealthPanelProps> = memo(({ healthItems }) => {
   return (
     <div
-      className="rounded-2xl overflow-hidden"
-      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(16px)' }}
+      className="rounded-2xl overflow-hidden bg-white shadow-sm"
+      style={{ border: '1px solid rgba(30,58,95,0.1)' }}
     >
       {/* Header */}
       <div
         className="px-6 py-4 flex items-center justify-between"
-        style={{ background: 'rgba(201,168,76,0.05)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+        style={{ background: 'rgba(201,168,76,0.05)', borderBottom: '1px solid rgba(30,58,95,0.08)' }}
       >
         <div className="flex items-center gap-3">
           <motion.div
@@ -38,7 +38,7 @@ export const SystemHealthPanel: React.FC<SystemHealthPanelProps> = memo(({ healt
           >
             <Wifi className="h-5 w-5" style={{ color: '#C9A84C' }} />
           </motion.div>
-          <span className="text-white font-bold text-sm tracking-wide">État du Système</span>
+          <span className="text-[#1e3a5f] font-bold text-sm tracking-wide">État du Système</span>
         </div>
         <span className="text-xs" style={{ color: 'rgba(201,168,76,0.6)' }}>Santé globale</span>
       </div>
@@ -53,22 +53,22 @@ export const SystemHealthPanel: React.FC<SystemHealthPanelProps> = memo(({ healt
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.08 }}
               className="p-3 rounded-xl transition-all"
-              style={{ border: '1px solid rgba(255,255,255,0.06)' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.2)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+              style={{ border: '1px solid rgba(30,58,95,0.06)' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.25)'; (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.03)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(30,58,95,0.06)'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <cfg.Icon className="h-4 w-4" style={{ color: 'rgba(255,255,255,0.25)' }} />
-                  <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>{item.name}</span>
+                  <cfg.Icon className="h-4 w-4 text-gray-400" />
+                  <span className="text-sm font-semibold text-gray-700">{item.name}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>{item.value}</span>
+                  <span className="text-xs text-gray-500">{item.value}</span>
                   <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${cfg.badge}`}>{cfg.label}</span>
                 </div>
               </div>
               {/* Barre de progression */}
-              <div className="h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
+              <div className="h-1 rounded-full overflow-hidden bg-gray-100">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: cfg.width }}

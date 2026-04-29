@@ -1,4 +1,4 @@
-﻿import { Zap, Globe, Palette, User, QrCode, ArrowRight } from 'lucide-react';
+﻿import { Zap, Globe, Palette, User, QrCode, ArrowRight, Network, Brain } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../../hooks/useTranslation';
@@ -19,10 +19,18 @@ export function ExhibitorQuickActions({ onOpenQR }: ExhibitorQuickActionsProps) 
       link: ROUTES.MINISITE_EDITOR,
     },
     {
-      title: t('exhibitor.quick_actions.networking_ai'),
-      description: t('exhibitor.quick_actions.networking_ai_desc'),
-      Icon: Globe,
+      title: t('exhibitor.quick_actions.advanced_networking'),
+      description: t('exhibitor.quick_actions.advanced_networking_desc'),
+      Icon: Network,
       link: ROUTES.NETWORKING,
+      highlight: true,
+    },
+    {
+      title: t('exhibitor.quick_actions.ai_matching'),
+      description: t('exhibitor.quick_actions.ai_matching_desc'),
+      Icon: Brain,
+      link: ROUTES.ADVANCED_MATCHING,
+      highlight: true,
     },
     {
       title: t('exhibitor.quick_actions.profile'),
@@ -54,10 +62,20 @@ export function ExhibitorQuickActions({ onOpenQR }: ExhibitorQuickActionsProps) 
               <motion.div
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.97 }}
-                className="flex items-start gap-4 p-4 bg-white rounded-xl border-2 border-sib-gray-100 hover:border-[#C9A84C]/50 hover:shadow-sib transition-all cursor-pointer group"
+                className={`flex items-start gap-4 p-4 rounded-xl border-2 hover:shadow-sib transition-all cursor-pointer group ${
+                  (action as any).highlight
+                    ? 'bg-gradient-to-br from-[#1B365D]/5 to-[#C9A84C]/10 border-[#C9A84C]/40 hover:border-[#C9A84C]/70'
+                    : 'bg-white border-sib-gray-100 hover:border-[#C9A84C]/50'
+                }`}
               >
-                <div className="flex-shrink-0 p-3 rounded-xl bg-[#1B365D]/8 group-hover:bg-[#C9A84C]/15 transition-colors">
-                  <action.Icon className="h-6 w-6 text-[#1B365D] group-hover:text-[#A88830] transition-colors" />
+                <div className={`flex-shrink-0 p-3 rounded-xl transition-colors ${
+                  (action as any).highlight
+                    ? 'bg-[#C9A84C]/20 group-hover:bg-[#C9A84C]/30'
+                    : 'bg-[#1B365D]/8 group-hover:bg-[#C9A84C]/15'
+                }`}>
+                  <action.Icon className={`h-6 w-6 transition-colors ${
+                    (action as any).highlight ? 'text-[#C9A84C]' : 'text-[#1B365D] group-hover:text-[#A88830]'
+                  }`} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-bold text-sm text-[#0F2034] group-hover:text-[#1B365D] transition-colors leading-tight mb-1">

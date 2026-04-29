@@ -13,6 +13,21 @@ import { Exhibitor } from '../../types';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useSalon } from '../../contexts/SalonContext';
 
+const CATEGORY_LABELS: Record<string, string> = {
+  'construction_industry': 'Industrie du Bâtiment',
+  'port-industry': 'Industrie du Bâtiment',
+  'bâtiment-industry': 'Industrie du Bâtiment',
+  'port-operations': 'Exploitation & Gestion',
+  'bâtiment-operations': 'Exploitation & Gestion',
+  'institutional': 'Institutionnel',
+  'academic': 'Académique',
+  'material': 'Matériaux',
+  'equipment': 'Équipements',
+  'services': 'Services',
+  'technology': 'Technologies',
+};
+const getCategoryLabel = (cat: string) => CATEGORY_LABELS[cat] ?? 'Industrie du Bâtiment';
+
 export default function ExhibitorManagementPage() {
   const { t } = useTranslation();
   const { currentSalon } = useSalon();
@@ -265,7 +280,7 @@ export default function ExhibitorManagementPage() {
               >
                 <option value="all">Tous les types d'abonnement</option>
                 {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat} value={cat}>{getCategoryLabel(cat)}</option>
                 ))}
               </select>
             </div>
@@ -362,7 +377,7 @@ export default function ExhibitorManagementPage() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm font-medium bg-blue-50 text-blue-800 p-2 rounded-md">
                       <Filter className="h-4 w-4 mr-2" />
-                      Type: {exhibitor.category}
+                      {getCategoryLabel(exhibitor.category)}
                     </div>
 
                     {(exhibitor.standNumber || exhibitor.standArea) && (

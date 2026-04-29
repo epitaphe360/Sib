@@ -92,20 +92,21 @@ export default function NouveautesPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0A0F1E]">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16 overflow-hidden">
-        <div className="container mx-auto px-4 text-center">
+      <div className="relative min-h-[40vh] bg-[#0A0F1E] flex items-center overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80')] bg-cover bg-center opacity-15" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/80 via-[#0A0F1E]/40 to-[#0A0F1E]" />
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(201,168,76,0.06) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="relative z-10 container mx-auto px-4 py-20 text-center">
           <HeroReveal>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#E7D192] text-sm font-semibold mb-5">
               {getCms('hero_badge', 'SIB 2026')}
             </span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display text-white">{cms.hero_title || 'Nouveautés'}</h1>
           </HeroReveal>
           <HeroReveal delay={0.15}>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Nouveautés'}</h1>
-          </HeroReveal>
-          <HeroReveal delay={0.3}>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
+            <p className="text-lg text-white/60 max-w-2xl mx-auto">
               {cms.hero_subtitle || 'Découvrez les innovations et les changements majeurs de cette 20ème édition du SIB.'}
             </p>
           </HeroReveal>
@@ -117,12 +118,12 @@ export default function NouveautesPage() {
         <StaggerReveal slow className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {nouveautes.map((item, i) => (
             <StaggerItem key={i}>
-              <HoverCard className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
-                <div className={`w-14 h-14 rounded-xl ${item.color} flex items-center justify-center mb-5`}>
-                  <item.icon className="w-7 h-7" />
+              <HoverCard className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 h-full hover:border-[#C9A84C]/30 transition-colors">
+                <div className="w-14 h-14 rounded-xl bg-[#C9A84C]/15 border border-[#C9A84C]/20 flex items-center justify-center mb-5">
+                  <item.icon className="w-7 h-7 text-[#C9A84C]" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-white/60 leading-relaxed">{item.desc}</p>
               </HoverCard>
             </StaggerItem>
           ))}

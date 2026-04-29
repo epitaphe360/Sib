@@ -315,6 +315,60 @@ ON CONFLICT (id) DO UPDATE SET
   name = 'Admin Test SIB',
   updated_at = NOW();
 
+-- Admin Jalil (jal18@live.fr / J@lil123)
+DO $$
+DECLARE
+  v_uid UUID;
+BEGIN
+  SELECT id INTO v_uid FROM auth.users WHERE email = 'jal18@live.fr';
+  IF v_uid IS NULL THEN
+    v_uid := gen_random_uuid();
+    INSERT INTO auth.users (
+      instance_id, id, aud, role, email, encrypted_password,
+      email_confirmed_at, raw_app_meta_data, raw_user_meta_data,
+      is_super_admin, created_at, updated_at,
+      confirmation_token, email_change, email_change_token_new, recovery_token
+    ) VALUES (
+      '00000000-0000-0000-0000-000000000000',
+      v_uid, 'authenticated', 'authenticated',
+      'jal18@live.fr',
+      crypt('J@lil123', gen_salt('bf')),
+      NOW(),
+      '{"provider":"email","providers":["email"]}',
+      '{}',
+      false, NOW(), NOW(), '', '', '', ''
+    );
+    RAISE NOTICE 'Créé auth user : jal18@live.fr';
+  ELSE
+    UPDATE auth.users
+    SET encrypted_password = crypt('J@lil123', gen_salt('bf')),
+        email_confirmed_at = COALESCE(email_confirmed_at, NOW()),
+        updated_at = NOW()
+    WHERE id = v_uid;
+    RAISE NOTICE 'Mis à jour auth user : jal18@live.fr';
+  END IF;
+END
+$$;
+
+INSERT INTO public.users (id, email, name, type, status, is_active, profile, created_at, updated_at)
+SELECT
+  au.id,
+  'jal18@live.fr',
+  'Jalil Admin',
+  'admin',
+  'active',
+  true,
+  '{"firstName":"Jalil","lastName":"Admin","country":"MA"}'::jsonb,
+  NOW(), NOW()
+FROM auth.users au
+WHERE au.email = 'jal18@live.fr'
+ON CONFLICT (id) DO UPDATE SET
+  type = 'admin',
+  status = 'active',
+  is_active = true,
+  name = 'Jalil Admin',
+  updated_at = NOW();
+
 -- ─────────────────────────────────────────────────────────────────────
 -- VÉRIFICATION FINALE
 -- ─────────────────────────────────────────────────────────────────────

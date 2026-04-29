@@ -71,7 +71,10 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
         const description = exhibitor.description || '';
         const search = filters.search.toLowerCase();
 
-        const matchesCategory = !filters.category || exhibitor.category === filters.category;
+        // Normalise port-* vers bâtiment-* pour le filtrage
+        const normalizeCategory = (cat: string) =>
+          cat === 'port-industry' ? 'bâtiment-industry' : cat === 'port-operations' ? 'bâtiment-operations' : cat;
+        const matchesCategory = !filters.category || normalizeCategory(exhibitor.category) === filters.category;
         const matchesSector = !filters.sector || sector === filters.sector;
         const matchesSearch = !filters.search ||
           companyName.toLowerCase().includes(search) ||
@@ -177,7 +180,10 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
       const description = exhibitor.description || '';
       const search = filters.search.toLowerCase();
 
-      const matchesCategory = !filters.category || exhibitor.category === filters.category;
+      // Normalise port-* vers bâtiment-* pour le filtrage
+      const normalizeCategory = (cat: string) =>
+        cat === 'port-industry' ? 'bâtiment-industry' : cat === 'port-operations' ? 'bâtiment-operations' : cat;
+      const matchesCategory = !filters.category || normalizeCategory(exhibitor.category) === filters.category;
       // Comparaison exacte pour le secteur (au lieu de .includes())
       const matchesSector = !filters.sector || sector === filters.sector;
       const matchesSearch = !filters.search ||

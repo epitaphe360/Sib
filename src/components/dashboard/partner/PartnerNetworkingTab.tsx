@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Calendar, Share2 } from 'lucide-react';
+import { Calendar, Share2, Clock, MapPin } from 'lucide-react';
 import { Badge } from '../../ui/Badge';
 import { Card } from '../../ui/Card';
 import { Button } from '../../ui/Button';
@@ -11,6 +11,10 @@ import PublicAvailabilityCalendar from '../../calendar/PublicAvailabilityCalenda
 interface PendingAppointment {
   id: string;
   message?: string;
+  slotDate?: string | null;
+  slotStartTime?: string | null;
+  slotEndTime?: string | null;
+  slotLocation?: string | null;
   [key: string]: unknown;
 }
 
@@ -79,6 +83,28 @@ export function PartnerNetworkingTab({
                       <p className="text-sm text-slate-500 break-words">{app.message || t('partner.no_message')}</p>
                     </div>
                   </div>
+                  {(app.slotDate || app.slotStartTime) && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {app.slotDate && (
+                        <span className="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 text-xs font-semibold px-3 py-1.5 rounded-lg border border-indigo-100">
+                          <Calendar className="h-3.5 w-3.5" />
+                          {new Date(app.slotDate).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'long' })}
+                        </span>
+                      )}
+                      {app.slotStartTime && (
+                        <span className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-lg border border-amber-100">
+                          <Clock className="h-3.5 w-3.5" />
+                          {app.slotStartTime.substring(0, 5)}{app.slotEndTime ? ` – ${app.slotEndTime.substring(0, 5)}` : ''}
+                        </span>
+                      )}
+                      {app.slotLocation && (
+                        <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-semibold px-3 py-1.5 rounded-lg border border-emerald-100">
+                          <MapPin className="h-3.5 w-3.5" />
+                          {app.slotLocation}
+                        </span>
+                      )}
+                    </div>
+                  )}
                   <div className="flex gap-2">
                     <Button
                       size="sm"

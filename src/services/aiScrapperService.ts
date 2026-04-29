@@ -5,6 +5,7 @@
  * COÛT: GPT-4o-mini = $0.15/1M tokens (le plus rentable qualité/prix)
  * USAGE: ~500 tokens par scrapping = $0.000075 par profil
  */
+import DOMPurify from 'dompurify';
 
 interface ScrapResult {
   success: boolean;
@@ -176,7 +177,7 @@ class AIScrapperService {
 
       // Nettoyer le HTML: enlever scripts, styles, etc.
       const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = data.contents;
+      tempDiv.innerHTML = DOMPurify.sanitize(data.contents);
 
       // Supprimer les éléments inutiles
       const selectorsToRemove = ['script', 'style', 'noscript', 'iframe', 'nav', 'footer'];

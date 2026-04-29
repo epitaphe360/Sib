@@ -1,5 +1,6 @@
 ﻿
 import { useState, useEffect, useMemo } from 'react';
+import { useRegistrationControl } from '../../hooks/useRegistrationControl';
 import { useNavigate, Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -71,6 +72,7 @@ type PartnerSignUpFormValues = z.infer<ReturnType<typeof createPartnerSignUpSche
 export default function PartnerSignUpPage() {
   const navigate = useNavigate();
   const { signUp, loginWithGoogle, loginWithLinkedIn } = useAuthStore();
+  const { isOpen: regOpen, isLoading: regCheckLoading } = useRegistrationControl('partner');
   const [isLoading, setIsLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [validatedFormData, setValidatedFormData] = useState<PartnerSignUpFormValues | null>(null);
@@ -240,6 +242,125 @@ export default function PartnerSignUpPage() {
     }
   };
 
+  // ─── Chargement de l'état d'inscription partenaire ──────────────────────────
+  if (regCheckLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f]/95 to-[#1e3a5f]/85 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 rounded-full border-4 border-[#C9A84C]/30 border-t-[#C9A84C] animate-spin" />
+          <p className="text-blue-100 text-sm">Chargement…</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Page « Partenariats complets » si inscriptions clôturées ────────────────
+  if (!regOpen) return (
+    <div className="min-h-screen bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f]/95 to-[#1e3a5f]/85 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        className="max-w-2xl w-full"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header logo */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center gap-3 mb-4">
+            <div className="bg-white p-3 rounded-lg shadow-lg">
+              <img src="/logo-sib2026.png" alt="SIB 2026" className="h-10 w-10 object-contain" />
+            </div>
+            <div className="text-left">
+              <div className="text-2xl font-bold text-white">SIB 2026</div>
+              <div className="text-xs text-blue-100">Salon International du Bâtiment</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Carte « Partenariats complets » */}
+        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          {/* Bandeau or */}
+          <div className="bg-gradient-to-r from-[#C9A84C] via-[#e8c96a] to-[#C9A84C] h-2" />
+
+          <div className="p-8 sm:p-10 text-center">
+            {/* Icône */}
+            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-[#1e3a5f] to-[#2a4f82] rounded-full flex items-center justify-center mb-6 shadow-lg">
+              <Crown className="h-10 w-10 text-[#C9A84C]" />
+            </div>
+
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C] mb-4">
+              <span className="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse" />
+              <span className="text-xs font-bold text-[#1e3a5f] uppercase tracking-wider">Partenariats clôturés</span>
+            </div>
+
+            {/* Titre */}
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1e3a5f] mb-3">
+              Les partenariats sont complets
+            </h1>
+
+            <p className="text-gray-600 text-base mb-6 leading-relaxed max-w-lg mx-auto">
+              Merci de l'intérêt porté au SIB 2026 !<br />
+              <strong className="text-[#1e3a5f]">L'ensemble des formules de partenariat a été attribué</strong> pour cette édition.
+            </p>
+
+            {/* Alternatives */}
+            <div className="bg-[#1e3a5f]/5 rounded-xl p-5 mb-6 text-left">
+              <p className="font-semibold text-[#1e3a5f] mb-3 text-sm">Vous pouvez tout de même :</p>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#C9A84C] mt-0.5">→</span>
+                  <span><strong>Demander à être mis en liste d'attente</strong> en cas de désistement</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#C9A84C] mt-0.5">→</span>
+                  <span><strong>Vous inscrire comme visiteur professionnel</strong> pour assister au salon</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#C9A84C] mt-0.5">→</span>
+                  <span><strong>Réserver une formule pour SIB 2027</strong> et bénéficier d'un tarif préférentiel</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Boutons */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a
+                href="mailto:Sib2026@urbacom.net?subject=Liste%20d'attente%20partenariat%20SIB%202026"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold text-sm transition-colors shadow-md"
+              >
+                <Mail className="h-4 w-4" />
+                Liste d'attente
+              </a>
+              <a
+                href="/register/visitor"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#C9A84C] hover:bg-[#b8973d] text-white font-semibold text-sm transition-colors shadow-md"
+              >
+                <User className="h-4 w-4" />
+                S'inscrire comme visiteur
+              </a>
+            </div>
+
+            {/* Contact */}
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <p className="text-xs text-gray-500">
+                Pour toute demande spécifique, contactez-nous à{' '}
+                <a href="mailto:Sib2026@urbacom.net" className="text-[#1e3a5f] font-semibold hover:underline">Sib2026@urbacom.net</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Lien retour */}
+        <div className="text-center mt-6">
+          <a href="/" className="text-blue-100 text-sm hover:text-white transition-colors inline-flex items-center gap-1">
+            ← Retour à l'accueil
+          </a>
+        </div>
+      </motion.div>
+    </div>
+  );
+
+  // ─── Formulaire d'inscription partenaire (inscriptions ouvertes) ───
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <motion.div

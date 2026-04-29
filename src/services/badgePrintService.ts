@@ -80,8 +80,7 @@ export async function lookupBadgeByCode(badgeCode: string): Promise<BadgeLookupR
       .from('users')
       .select(`
         id, name, email, type, visitor_level, profile,
-        exhibitors:exhibitors!exhibitors_user_id_fkey(company_name, sector, stand_number, logo_url),
-        partners:partners!partners_user_id_fkey(company_name, partner_type, logo_url)
+        exhibitors:exhibitors!exhibitors_user_id_fkey(company_name, sector, stand_number, logo_url)
       `)
       .eq('id', badge.user_id)
       .single();
@@ -90,6 +89,17 @@ export async function lookupBadgeByCode(badgeCode: string): Promise<BadgeLookupR
 
     if (userError) {
       console.warn('User not found for badge:', userError);
+    }
+
+    // Récupérer les infos partenaire séparément (évite l'erreur FK PostgREST)
+    let partnerData: AnyRecord | null = null;
+    if (badge.user_id) {
+      const { data: pData } = await db
+        .from('partners')
+        .select('company_name, partner_type, logo_url')
+        .eq('user_id', badge.user_id)
+        .maybeSingle();
+      partnerData = pData as AnyRecord | null;
     }
 
     const transformedBadge: UserBadge = {
@@ -133,10 +143,10 @@ export async function lookupBadgeByCode(badgeCode: string): Promise<BadgeLookupR
         standNumber: user.exhibitors[0].stand_number,
         logoUrl: user.exhibitors[0].logo_url,
       } : null,
-      partner: user?.partners?.[0] ? {
-        companyName: user.partners[0].company_name,
-        partnerType: user.partners[0].partner_type,
-        logoUrl: user.partners[0].logo_url,
+      partner: partnerData ? {
+        companyName: partnerData.company_name,
+        partnerType: partnerData.partner_type,
+        logoUrl: partnerData.logo_url,
       } : null,
     };
   } catch (error) {
@@ -267,22 +277,45 @@ export async function lookupBadgeByEmail(email: string): Promise<BadgeLookupResu
 export async function lookupBadgeByName(name: string): Promise<BadgeLookupResult[]> {
   try {
     const db = getClient();
+    const term = name.trim();
+
+    // Chercher par nom de personne OU par nom d'entreprise
     const { data: badgesData, error } = await db
       .from('user_badges')
       .select('*')
-      .ilike('full_name', `%${name.trim()}%`)
+      .or(`full_name.ilike.%${term}%,company_name.ilike.%${term}%`)
       .limit(10);
 
     if (error) {throw error;}
 
-    const badges = (badgesData || []) as AnyRecord[];
+    // Fallback : chercher aussi dans la table users (profile firstName/lastName)
+    let allBadges = (badgesData || []) as AnyRecord[];
 
-    if (badges.length === 0) {
+    if (allBadges.length === 0) {
+      // Tenter via users → user_badges
+      const { data: usersData } = await db
+        .from('users')
+        .select('id')
+        .or(`name.ilike.%${term}%`)
+        .limit(10);
+
+      if (usersData && usersData.length > 0) {
+        const userIds = (usersData as AnyRecord[]).map((u) => u.id);
+        const { data: byUserId } = await db
+          .from('user_badges')
+          .select('*')
+          .in('user_id', userIds)
+          .limit(10);
+        allBadges = (byUserId || []) as AnyRecord[];
+      }
+    }
+
+    if (allBadges.length === 0) {
       return [{ found: false, badge: null, user: null, error: 'Aucun badge trouvé' }];
     }
 
     const results: BadgeLookupResult[] = [];
-    for (const badge of badges) {
+    for (const badge of allBadges) {
       const result = await lookupBadgeByCode(badge.badge_code);
       results.push(result);
     }

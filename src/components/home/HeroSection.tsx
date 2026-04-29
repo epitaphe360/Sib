@@ -49,28 +49,7 @@ export const HeroSection: React.FC = () => {
 
   return (
     <>
-      {/* Bannière Sous l'égide du Ministère */}
-      <div className="bg-white py-8 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-xl md:text-2xl font-serif italic text-gray-600 mb-6">
-            Sous l'égide du
-          </p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-            <img
-              src="/logo-ministere.png"
-              alt="Royaume du Maroc - Ministère de l'Équipement et de l'Eau"
-              className="h-24 md:h-32 w-auto object-contain transition-transform hover:scale-105 duration-300"
-              onError={(e) => {
-                const target = e.currentTarget;
-                target.onerror = null;
-                target.src = '/logo-ministere.svg';
-              }}
-            />
-          </div>
-        </div>
-      </div>
-
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white overflow-hidden min-h-[90vh] flex items-center">
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white overflow-hidden min-h-screen flex items-center">
       {/* Moroccan Zellige Pattern Background */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -247,8 +226,8 @@ export const HeroSection: React.FC = () => {
               <div className="absolute -inset-4 bg-SIB-gold/20 rounded-t-[10rem] rounded-b-2xl blur-xl" />
               <div className="relative rounded-t-[10rem] rounded-b-2xl overflow-hidden border-4 border-white/20 shadow-2xl aspect-[4/3]">
                 <img
-                  src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Chantier de construction moderne"
+                  src="https://sib.ma/backend/uploads/home_banner1_copie_77cbe633a7.jpg"
+                  alt="Salon International du Bâtiment SIB 2026"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-SIB-primary/60 to-transparent" />
@@ -322,6 +301,27 @@ export const HeroSection: React.FC = () => {
         </svg>
       </div>
     </section>
+
+      {/* Bannière Sous l'égide du Ministère */}
+      <div className="bg-white py-8 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <p className="text-xl md:text-2xl font-serif italic text-gray-600 mb-6">
+            Sous l'égide du
+          </p>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+            <img
+              src="/logo-ministere.png"
+              alt="Royaume du Maroc - Ministère de l'Équipement et de l'Eau"
+              className="h-24 md:h-32 w-auto object-contain transition-transform hover:scale-105 duration-300"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null;
+                target.src = '/logo-ministere.svg';
+              }}
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 };

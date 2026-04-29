@@ -76,7 +76,14 @@ const ExhibitorCardComponent: React.FC<ExhibitorCardProps> = ({
         {/* Category & Sector */}
         <div className="flex flex-wrap gap-2 mb-3">
           <span className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-            {exhibitor.category}
+            {{
+              'institutional': 'Institutionnel',
+              'bâtiment-industry': 'Industrie du Bâtiment',
+              'port-industry': 'Industrie du Bâtiment',
+              'bâtiment-operations': 'Exploitation & Gestion',
+              'port-operations': 'Exploitation & Gestion',
+              'academic': 'Académique',
+            }[exhibitor.category] || 'Industrie du Bâtiment'}
           </span>
           <span className="px-3 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">
             {exhibitor.sector}

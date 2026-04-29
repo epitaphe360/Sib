@@ -35,7 +35,7 @@ const PAGES: PageDef[] = [
     fields: [
       { key: 'hero_badge', label: 'Bandeau hero', type: 'text', placeholder: "20ème Édition — 40 ans d'excellence" },
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Salon International du Bâtiment' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Depuis 1986, le SIB est le rendez-vous incontournable...' },
+      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: "Depuis 1986, le SIB s'impose comme le rendez-vous incontournable du bâtiment, des matériaux et de la construction en Afrique. Pour sa 20ᵉ édition, le SIB 2026 célèbre 40 ans d'histoire, d'innovation et de rencontres." },
       { key: 'hero_date', label: 'Hero — Date', type: 'text', placeholder: '25 – 29 Novembre 2026' },
       { key: 'hero_location', label: 'Hero — Lieu', type: 'text', placeholder: "Parc d'Exposition Mohammed VI, El Jadida" },
       { key: 'hero_hours', label: 'Hero — Horaires', type: 'text', placeholder: '9h00 – 19h00' },
@@ -115,7 +115,7 @@ const PAGES: PageDef[] = [
     slug: 'secteurs-activites',
     title: 'Secteurs d\'Activités',
     Icon: Layers,
-    route: ROUTES.SECTEURS_ACTIVITES,
+    route: ROUTES.SECTEURS,
     fields: [
       { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: "10 secteurs d'activité" },
       { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Secteurs d\'Activités' },

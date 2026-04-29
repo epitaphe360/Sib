@@ -121,18 +121,75 @@ export class AdminMetricsService {
       await Promise.all([
         runCount('users', client.from('users').select('id', { count: 'exact', head: true })),
         runCount('activeUsers', client.from('users').select('id', { count: 'exact', head: true }).eq('status', 'active')),
-        runCount('exhibitors', client.from('users').select('id', { count: 'exact', head: true }).eq('type', 'exhibitor')),
-        runCount('partners', client.from('users').select('id', { count: 'exact', head: true }).eq('type', 'partner')),
+        runCount('exhibitors', client.from('exhibitors').select('id', { count: 'exact', head: true })),
+        runCount('partners', client.from('partners').select('id', { count: 'exact', head: true })),
         runCount('visitors', client.from('users').select('id', { count: 'exact', head: true }).eq('type', 'visitor')),
         runCount('events', client.from('events').select('id', { count: 'exact', head: true })),
         runCount('pendingValidations', client.from('registration_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending')),
         runCount('activeContracts', client.from('partners').select('id', { count: 'exact', head: true }).eq('verified', true)),
         runCount('contentModerations', client.from('mini_sites').select('id', { count: 'exact', head: true }).eq('published', false)),
-        runCount('connections', client.from('connections').select('id', { count: 'exact', head: true })),
-        runCount('appointments', client.from('appointments').select('id', { count: 'exact', head: true })),
-        runCount('messages', client.from('messages').select('id', { count: 'exact', head: true })),
-        runCount('downloads', client.from('downloads').select('id', { count: 'exact', head: true }))
       ]);
+
+      // Engagement metrics: metrics-server (service role → bypass RLS) → RPC → direct queries
+      let engagementCounts = { appointments: 0, messages: 0, connections: 0, downloads: 0 };
+
+      // 1. Try metrics-server first (uses service role key → bypasses RLS)
+      let metricsServerEngagement: Record<string, number> | null = null;
+      if (METRICS_SERVER_URL) {
+        try {
+          const metricsSecret = (import.meta.env.VITE_METRICS_SECRET as string) || '';
+          const msHeaders: Record<string, string> = { 'Content-Type': 'application/json' };
+          if (metricsSecret) { msHeaders['Authorization'] = `Bearer ${metricsSecret}`; }
+          const msResp = await fetch(METRICS_SERVER_URL, { method: 'GET', headers: msHeaders, signal: AbortSignal.timeout(3000) });
+          if (msResp.ok) {
+            const msPayload = await msResp.json();
+            metricsServerEngagement = msPayload.metrics || msPayload;
+          }
+        } catch (_) { /* metrics-server not running — fallback */ }
+      }
+
+      if (metricsServerEngagement) {
+        engagementCounts = {
+          appointments: (metricsServerEngagement['totalAppointments'] as number) ?? 0,
+          messages:     (metricsServerEngagement['totalMessages']     as number) ?? 0,
+          connections:  (metricsServerEngagement['totalConnections']  as number) ?? 0,
+          downloads:    0,
+        };
+        // Patch results with fresh server counts for other metrics too
+        if (metricsServerEngagement['totalUsers'])       results['users']              = metricsServerEngagement['totalUsers'] as number;
+        if (metricsServerEngagement['totalExhibitors'])  results['exhibitors']         = metricsServerEngagement['totalExhibitors'] as number;
+        if (metricsServerEngagement['totalPartners'])    results['partners']           = metricsServerEngagement['totalPartners'] as number;
+        if (metricsServerEngagement['totalVisitors'])    results['visitors']           = metricsServerEngagement['totalVisitors'] as number;
+        if (metricsServerEngagement['pendingValidations']) results['pendingValidations'] = metricsServerEngagement['pendingValidations'] as number;
+      } else {
+        // 2. Fallback: RPC SECURITY DEFINER (nécessite migration _003)
+        try {
+          const { data: engData, error: engError } = await client.rpc('get_admin_engagement_metrics');
+          if (!engError && engData) {
+            engagementCounts = {
+              appointments: engData.appointments ?? 0,
+              messages:     engData.messages    ?? 0,
+              connections:  engData.connections  ?? 0,
+              downloads:    engData.downloads    ?? 0,
+            };
+          } else {
+            // 3. Dernier recours: requêtes directes (bloquées par RLS sans migration _003)
+            const [apptRes, msgRes, connRes] = await Promise.all([
+              client.from('appointments').select('id', { count: 'exact', head: true }),
+              client.from('messages').select('id', { count: 'exact', head: true }),
+              client.from('connections').select('id', { count: 'exact', head: true }),
+            ]);
+            engagementCounts = {
+              appointments: typeof apptRes?.count === 'number' ? apptRes.count : 0,
+              messages:     typeof msgRes?.count  === 'number' ? msgRes.count  : 0,
+              connections:  typeof connRes?.count === 'number' ? connRes.count : 0,
+              downloads:    0,
+            };
+          }
+        } catch (err) {
+          console.warn('AdminMetricsService: engagement fallback failed', err);
+        }
+      }
 
       // OPTIMIZATION: Exécuter toutes les requêtes secondaires en parallèle
       const [
@@ -170,10 +227,10 @@ export class AdminMetricsService {
         activeContracts: (results['activeContracts'] ?? 0),
         contentModerations: (results['contentModerations'] ?? 0),
         onlineExhibitors,
-        totalConnections: (results['connections'] ?? 0),
-        totalAppointments: (results['appointments'] ?? 0),
-        totalMessages: (results['messages'] ?? 0),
-        totalDownloads: (results['downloads'] ?? 0),
+        totalConnections: engagementCounts.connections,
+        totalAppointments: engagementCounts.appointments,
+        totalMessages: engagementCounts.messages,
+        totalDownloads: engagementCounts.downloads,
         userGrowthData,
         trafficData,
         recentActivity
@@ -460,22 +517,48 @@ export class AdminMetricsService {
     const client = (supabase as any);
     if (!client) {return [];}
 
+    const mapLog = (log: any) => ({
+      id: log.id,
+      type: log.action_type || 'system_alert',
+      description: log.description || 'Action système',
+      timestamp: new Date(log.created_at),
+      severity: log.severity || 'info',
+      adminUser: log.admin_user || 'System'
+    });
+
     try {
-      // Optimized: explicit columns (70% bandwidth reduction)
-      const { data } = await client
+      // Essayer le RPC synthétique qui agrège users + appointments + connections + messages + admin_logs
+      const { data: rpcData, error: rpcError } = await client.rpc('get_admin_recent_activity');
+      if (!rpcError && Array.isArray(rpcData) && rpcData.length > 0) {
+        return rpcData.map(mapLog);
+      }
+
+      // Fallback : admin_logs uniquement
+      const { data: logsData } = await client
         .from('admin_logs')
         .select('id, action_type, description, created_at, severity, admin_user')
         .order('created_at', { ascending: false })
+        .limit(15);
+
+      if (logsData && Array.isArray(logsData) && logsData.length > 0) {
+        return logsData.map(mapLog);
+      }
+
+      // Fallback ultime : inscriptions récentes
+      const { data: usersData } = await client
+        .from('users')
+        .select('id, name, email, created_at, type')
+        .order('created_at', { ascending: false })
         .limit(10);
 
-      if (data && Array.isArray(data)) {
-        return data.map((log: any) => ({
-          id: log.id,
-          type: log.action_type || 'system_alert',
-          description: log.description || 'Action système',
-          timestamp: new Date(log.created_at),
-          severity: log.severity || 'info',
-          adminUser: log.admin_user || 'System'
+      if (usersData && Array.isArray(usersData)) {
+        return usersData.map((u: any) => ({
+          id: u.id,
+          type: 'user_registration',
+          description: `Nouvelle inscription : ${u.name || u.email || 'Utilisateur'} (${u.type || 'visiteur'})`,
+          timestamp: new Date(u.created_at),
+          severity: 'success',
+          adminUser: 'System'
         }));
       }
 

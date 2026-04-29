@@ -69,17 +69,20 @@ export default function EditionsPage() {
   })();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0A0F1E]">
       {/* Hero */}
       <HeroReveal>
-      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
+      <div className="relative min-h-[40vh] bg-[#0A0F1E] flex items-center overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1400&q=80')] bg-cover bg-center opacity-12" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/80 via-[#0A0F1E]/40 to-[#0A0F1E]" />
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(201,168,76,0.06) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="relative z-10 container mx-auto px-4 py-20 text-center">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#E7D192] text-sm font-semibold mb-5">
             {getCms('hero_badge', "40 ans d'histoire")}
           </span>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Nos Éditions'}</h1>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            {cms.hero_subtitle || 'Depuis 1986, le SIB accompagne l\'essor du secteur du bâtiment au Maroc et en Afrique.'}
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display text-white">{cms.hero_title || 'Nos Éditions'}</h1>
+          <p className="text-lg text-white/60 max-w-2xl mx-auto">
+            {cms.hero_subtitle || "Depuis 1986, le SIB accompagne l'essor du secteur du bâtiment au Maroc et en Afrique."}
           </p>
         </div>
       </div>
@@ -91,18 +94,18 @@ export default function EditionsPage() {
         <div className="max-w-4xl mx-auto">
           <div className="relative">
             {/* Vertical line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-sib-gold via-sib-navy/30 to-gray-200" />
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#C9A84C] via-white/10 to-transparent" />
 
             <div className="space-y-6">
-              {editions.map((ed, i) => {
+              {editions.map((ed) => {
                 const isCurrent = ed.year === 2026;
                 return (
                   <div key={ed.year} className="relative flex gap-6">
                     {/* Dot */}
                     <div className={`relative z-10 w-16 h-16 flex-shrink-0 rounded-full flex items-center justify-center text-sm font-bold ${
                       isCurrent
-                        ? 'bg-sib-gold text-sib-navy shadow-lg shadow-sib-gold/30'
-                        : 'bg-white border-2 border-gray-200 text-gray-700'
+                        ? 'bg-[#C9A84C] text-[#0A0F1E] shadow-lg shadow-[#C9A84C]/30'
+                        : 'bg-white/5 border border-white/20 text-white/60'
                     }`}>
                       {ed.year}
                     </div>
@@ -110,34 +113,34 @@ export default function EditionsPage() {
                     {/* Content */}
                     <div className={`flex-1 rounded-xl p-6 ${
                       isCurrent
-                        ? 'bg-sib-navy text-white shadow-lg'
-                        : 'bg-white border border-gray-100 shadow-sm'
+                        ? 'bg-[#C9A84C]/10 border border-[#C9A84C]/30'
+                        : 'bg-white/5 border border-white/10'
                     }`}>
                       <div className="flex flex-wrap items-center gap-3 mb-1">
-                        <span className={`text-lg font-bold ${isCurrent ? 'text-sib-gold' : 'text-sib-navy'}`}>
+                        <span className={`text-lg font-bold ${isCurrent ? 'text-[#E7D192]' : 'text-white/80'}`}>
                           {ed.edition} Édition
                         </span>
                         {isCurrent && (
-                          <span className="px-2 py-0.5 rounded-full bg-sib-gold/20 text-sib-gold text-xs font-semibold">
+                          <span className="px-2 py-0.5 rounded-full bg-[#C9A84C]/20 text-[#E7D192] text-xs font-semibold border border-[#C9A84C]/30">
                             À venir
                           </span>
                         )}
                       </div>
 
                       {ed.theme && (
-                        <p className={`text-sm font-medium mb-2 ${isCurrent ? 'text-white/80' : 'text-gray-700'} italic`}>
+                        <p className={`text-sm font-medium mb-2 ${isCurrent ? 'text-white/70' : 'text-white/50'} italic`}>
                           « {ed.theme} »
                         </p>
                       )}
 
                       <div className="flex flex-wrap gap-4 text-sm">
                         {ed.dates && (
-                          <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/70' : 'text-gray-500'}`}>
+                          <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/60' : 'text-white/40'}`}>
                             <Calendar className="w-4 h-4" /> {ed.dates}
                           </span>
                         )}
                         {ed.lieu && (
-                          <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/70' : 'text-gray-500'}`}>
+                          <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/60' : 'text-white/40'}`}>
                             📍 {ed.lieu}
                           </span>
                         )}
@@ -145,19 +148,19 @@ export default function EditionsPage() {
 
                       <div className="flex flex-wrap gap-4 text-sm mt-1">
                         {ed.exposants && (
-                          <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/70' : 'text-gray-500'}`}>
+                          <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/60' : 'text-white/40'}`}>
                             <Building2 className="w-4 h-4" /> {ed.exposants} exposants
                           </span>
                         )}
                         {ed.visiteurs && (
-                          <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/70' : 'text-gray-500'}`}>
+                          <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/60' : 'text-white/40'}`}>
                             <Users className="w-4 h-4" /> {ed.visiteurs} visiteurs
                           </span>
                         )}
                       </div>
 
                       {ed.highlight && (
-                        <p className={`mt-2 text-sm ${isCurrent ? 'text-white/60' : 'text-gray-400'}`}>
+                        <p className={`mt-2 text-sm ${isCurrent ? 'text-[#C9A84C]/80' : 'text-white/30'}`}>
                           ★ {ed.highlight}
                         </p>
                       )}

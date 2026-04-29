@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Calendar, Plus, Users, MapPin, Video, Globe, Save, X,
   Clock, Trash2, Edit, Grid3x3, List,
@@ -10,6 +10,7 @@ import { Button } from '../ui/Button';
 import { TimeSlot } from '../../types';
 import { toast } from 'sonner';
 import { SupabaseService } from '../../services/supabaseService';
+import { useAppointmentStore } from '../../store/appointmentStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getMinSlotDate, getMaxSlotDate } from '../../config/salonInfo';
 import { BulkSlotGenerator } from './BulkSlotGenerator';
@@ -26,6 +27,7 @@ export default function PublicAvailabilityCalendar({
   standalone = true
 }: PublicAvailabilityCalendarProps) {
   const { t } = useTranslation();
+  const { appointments, fetchAppointments } = useAppointmentStore();
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -52,6 +54,7 @@ export default function PublicAvailabilityCalendar({
 
   useEffect(() => {
     fetchTimeSlots();
+    fetchAppointments().catch(() => {/* silently ignore */});
   }, [userId]);
 
   // Populate form when editing an existing slot
@@ -254,10 +257,26 @@ export default function PublicAvailabilityCalendar({
 
 
 
+  // Map slotId → appointments (pending/confirmed) pour afficher indicateurs
+  const appointmentsBySlot = useMemo(() => {
+    const map = new Map<string, { pending: number; confirmed: number }>();
+    appointments.forEach(apt => {
+      const slotId = (apt as any).time_slot_id || apt.timeSlotId;
+      if (!slotId) return;
+      const existing = map.get(slotId) || { pending: 0, confirmed: 0 };
+      if (apt.status === 'pending') existing.pending++;
+      else if (apt.status === 'confirmed') existing.confirmed++;
+      map.set(slotId, existing);
+    });
+    return map;
+  }, [appointments]);
+
   const weekDays = [
-    new Date('2026-04-01T00:00:00'),
-    new Date('2026-04-02T00:00:00'),
-    new Date('2026-04-03T00:00:00')
+    new Date('2026-11-25T00:00:00'),
+    new Date('2026-11-26T00:00:00'),
+    new Date('2026-11-27T00:00:00'),
+    new Date('2026-11-28T00:00:00'),
+    new Date('2026-11-29T00:00:00'),
   ];
   const weekSlots = timeSlots.filter(slot => {
     const slotDate = parseLocalDate(slot.date);
@@ -475,12 +494,32 @@ export default function PublicAvailabilityCalendar({
                                 {slot.startTime}–{slot.endTime}
                               </span>
                             </div>
-                            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded shrink-0 ml-1 ${
+                          <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded shrink-0 ml-1 ${
                               isFull ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'
                             }`}>
                               {isFull ? 'Complet' : `${slot.maxBookings - slot.currentBookings} dispo.`}
                             </span>
                           </div>
+
+                          {/* Indicateurs RDV en attente/confirmé */}
+                          {(() => {
+                            const appts = appointmentsBySlot.get(slot.id);
+                            if (!appts) return null;
+                            return (
+                              <div className="flex flex-wrap gap-1 px-2 pb-1">
+                                {appts.pending > 0 && (
+                                  <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-md border border-amber-200">
+                                    ⏳ {appts.pending} en attente
+                                  </span>
+                                )}
+                                {appts.confirmed > 0 && (
+                                  <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-green-100 text-green-700 px-1.5 py-0.5 rounded-md border border-green-200">
+                                    ✓ {appts.confirmed} confirmé{appts.confirmed > 1 ? 's' : ''}
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
 
                           {/* Ligne localisation */}
                           {slot.location && (

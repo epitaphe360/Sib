@@ -59,6 +59,7 @@ export default function MetricsPage() {
     totalUsers: 0,
     totalExhibitors: 0,
     totalVisitors: 0,
+    totalPartners: 0,
     totalEvents: 0,
     totalAppointments: 0,
     totalMessages: 0,
@@ -84,6 +85,7 @@ export default function MetricsPage() {
           totalUsers: adminData.totalUsers,
           totalExhibitors: adminData.totalExhibitors,
           totalVisitors: adminData.totalVisitors,
+          totalPartners: adminData.totalPartners,
           totalEvents: adminData.totalEvents,
           totalAppointments: adminData.totalAppointments,
           totalMessages: adminData.totalMessages,
@@ -184,6 +186,17 @@ export default function MetricsPage() {
       bgColor: 'bg-orange-100',
       trend: 'up',
       trendValue: '+5%'
+    },
+    {
+      title: 'Partenaires',
+      value: loading ? '...' : adminMetrics.totalPartners.toString(),
+      target: '50',
+      progress: loading ? 0 : Math.round((adminMetrics.totalPartners / 50) * 100),
+      icon: Handshake,
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-100',
+      trend: 'up',
+      trendValue: '+8%'
     }
   ];
 
@@ -529,8 +542,8 @@ export default function MetricsPage() {
                         <div className="text-xs text-gray-600">Conférences</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-gray-400">
-                          N/A
+                        <div className="text-2xl font-bold text-gray-900">
+                          {pavilion.satisfaction > 0 ? `${pavilion.satisfaction}%` : '—'}
                         </div>
                         <div className="text-xs text-gray-600">Satisfaction</div>
                       </div>

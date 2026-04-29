@@ -333,7 +333,11 @@ const resources = {
           profile: 'Mon Profil Exposant',
           profile_desc: 'Mettez à jour vos informations',
           qr_code: 'QR Code Stand',
-          qr_code_desc: 'Générez votre QR code personnalisé'
+          qr_code_desc: 'Générez votre QR code personnalisé',
+          advanced_networking: 'Réseautage Avancé',
+          advanced_networking_desc: 'Explorez et connectez-vous avec des contacts qualifiés',
+          ai_matching: 'Matching IA',
+          ai_matching_desc: 'Trouvez les meilleurs partenaires grâce à l\'intelligence artificielle'
         },
         header: {
           published_tooltip_hide: 'Cliquez pour masquer votre profil',
@@ -1817,7 +1821,11 @@ const resources = {
           profile: 'My Exhibitor Profile',
           profile_desc: 'Update your information',
           qr_code: 'Booth QR Code',
-          qr_code_desc: 'Generate your personalized QR code'
+          qr_code_desc: 'Generate your personalized QR code',
+          advanced_networking: 'Advanced Networking',
+          advanced_networking_desc: 'Explore and connect with qualified contacts',
+          ai_matching: 'AI Matching',
+          ai_matching_desc: 'Find the best partners using artificial intelligence'
         },
         header: {
           published_tooltip_hide: 'Click to hide your profile',

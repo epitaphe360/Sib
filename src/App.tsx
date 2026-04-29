@@ -98,8 +98,6 @@ const CreateUserPage = lazyRetry(() => import('./pages/admin/CreateUserPage'));
 const AdminPartnersPage = lazyRetry(() => import('./pages/admin/PartnersPage'));
 const MarketingDashboard = lazyRetry(() => import('./pages/MarketingDashboard'));
 const PublicationControlPage = lazyRetry(() => import('./pages/admin/PublicationControlPage'));
-const SalonsManagementPage = lazyRetry(() => import('./pages/admin/SalonsManagementPage'));
-const PushNotificationsPage = lazyRetry(() => import('./pages/admin/PushNotificationsPage'));
 
 // New pages for footer links
 const ContactPage = lazyRetry(() => import('./pages/ContactPage'));
@@ -414,8 +412,6 @@ const App = () => {
             <Route path={ROUTES.ADMIN_PUBLICATION_CONTROL} element={<ProtectedRoute requiredRole="admin"><PublicationControlPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_MEDIA} element={<ProtectedRoute requiredRole="admin"><MediaManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_USERS_LIST} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_SALONS} element={<ProtectedRoute requiredRole="admin"><SalonsManagementPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_PUSH_NOTIFICATIONS} element={<ProtectedRoute requiredRole="admin"><PushNotificationsPage /></ProtectedRoute>} />
 
             {/* New routes for footer links */}
             <Route path={ROUTES.CONTACT} element={<ContactPage />} />

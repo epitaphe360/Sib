@@ -18,6 +18,7 @@ const defaultOrganisateurs = [
 
 export default function PresentationPage() {
   const [showMore, setShowMore] = React.useState(false);
+  const [videoPlaying, setVideoPlaying] = React.useState(false);
   const cms = usePageContent('presentation');
 
   const getCms = (key: string, fallback: string) => {
@@ -136,33 +137,60 @@ export default function PresentationPage() {
           <div className="grid lg:grid-cols-2 gap-8 lg:items-stretch">
             <ScrollReveal variant={fadeRight}>
               <div className="relative h-full min-h-[420px] rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-white/10 backdrop-blur-sm">
-                <img
-                  src="/parc-exposition-eljadida.jpg"
-                  alt="Parc d'Exposition Mohammed VI - El Jadida"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-blue-900/20 to-transparent" />
+                {videoPlaying ? (
+                  <iframe
+                    src="https://www.youtube.com/embed/Q5WupuWDju0?autoplay=1&rel=0&modestbranding=1"
+                    title="SIB 2026 — Présentation officielle"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+                  />
+                ) : (
+                  <>
+                    <img
+                      src="/parc-exposition-eljadida.jpg"
+                      alt="Parc d'Exposition Mohammed VI - El Jadida"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-blue-900/20 to-transparent" />
 
-                <div className="absolute top-5 left-5 rounded-full bg-sib-gold/90 text-sib-navy px-4 py-1.5 text-sm font-semibold shadow-lg">
+                    {/* Bouton play */}
+                    <button
+                      onClick={() => setVideoPlaying(true)}
+                      className="absolute inset-0 flex items-center justify-center group"
+                      aria-label="Lancer la vidéo"
+                    >
+                      <div className="w-16 h-16 rounded-full bg-white/20 border-2 border-white/60 flex items-center justify-center backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:bg-white/30 shadow-xl">
+                        <svg className="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </button>
+                  </>
+                )}
+
+                <div className="absolute top-5 left-5 z-10 rounded-full bg-sib-gold/90 text-sib-navy px-4 py-1.5 text-sm font-semibold shadow-lg pointer-events-none">
                   {getCms('image_badge_date', '25-29 Novembre 2026')}
                 </div>
 
-                <div className="absolute bottom-5 left-5 right-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="bg-white/90 rounded-xl px-3 py-2 shadow">
-                    <div className="flex items-center gap-2 text-sib-navy font-semibold text-sm">
-                      <MapPin className="w-4 h-4 text-sib-gold" />
-                      {getCms('image_location_label', 'Emplacement')}
+                {!videoPlaying && (
+                  <div className="absolute bottom-5 left-5 right-5 z-10 grid grid-cols-1 sm:grid-cols-2 gap-3 pointer-events-none">
+                    <div className="bg-white/90 rounded-xl px-3 py-2 shadow">
+                      <div className="flex items-center gap-2 text-sib-navy font-semibold text-sm">
+                        <MapPin className="w-4 h-4 text-sib-gold" />
+                        {getCms('image_location_label', 'Emplacement')}
+                      </div>
+                      <p className="text-xs text-slate-600">{getCms('image_location_value', "Parc d'Exposition Mohammed VI - EL JADIDA")}</p>
                     </div>
-                    <p className="text-xs text-slate-600">{getCms('image_location_value', "Parc d'Exposition Mohammed VI - EL JADIDA")}</p>
-                  </div>
-                  <div className="bg-white/90 rounded-xl px-3 py-2 shadow">
-                    <div className="flex items-center gap-2 text-sib-navy font-semibold text-sm">
-                      <Calendar className="w-4 h-4 text-sib-gold" />
-                      {getCms('image_date_label', 'Date')}
+                    <div className="bg-white/90 rounded-xl px-3 py-2 shadow">
+                      <div className="flex items-center gap-2 text-sib-navy font-semibold text-sm">
+                        <Calendar className="w-4 h-4 text-sib-gold" />
+                        {getCms('image_date_label', 'Date')}
+                      </div>
+                      <p className="text-xs text-slate-600">{getCms('image_date_value', 'Du 25 au 29 Novembre 2026')}</p>
                     </div>
-                    <p className="text-xs text-slate-600">{getCms('image_date_value', 'Du 25 au 29 Novembre 2026')}</p>
                   </div>
-                </div>
+                )}
               </div>
             </ScrollReveal>
 

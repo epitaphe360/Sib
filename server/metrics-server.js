@@ -38,6 +38,19 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const app = express();
 app.use(express.json({ limit: '1mb' }));
 
+// CORS: allow Vite dev server and local origins only
+app.use((req, res, next) => {
+  const origin = req.headers.origin || '';
+  const allowed = /^https?:\/\/localhost(:\d+)?$/.test(origin) || /^https?:\/\/127\.0\.0\.1(:\d+)?$/.test(origin);
+  if (allowed) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-metrics-secret');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  }
+  if (req.method === 'OPTIONS') { return res.status(204).end(); }
+  next();
+});
+
 app.get('/metrics', async (req, res) => {
   // Use Authorization header instead of query parameter for security
   const authHeader = req.headers.authorization || req.headers['x-metrics-secret'];
@@ -57,7 +70,10 @@ app.get('/metrics', async (req, res) => {
       eventsResult,
       pendingValidationsResult,
       activeContractsResult,
-      contentModerationsResult
+      contentModerationsResult,
+      appointmentsResult,
+      messagesResult,
+      connectionsResult
     ] = await Promise.all([
       supabase.from('users').select('id', { count: 'exact', head: true }),
       supabase.from('users').select('id', { count: 'exact', head: true }).eq('status', 'active'),
@@ -67,7 +83,10 @@ app.get('/metrics', async (req, res) => {
       supabase.from('events').select('id', { count: 'exact', head: true }),
       supabase.from('exhibitors').select('id', { count: 'exact', head: true }).eq('verified', false),
       supabase.from('exhibitors').select('id', { count: 'exact', head: true }).eq('featured', true),
-      supabase.from('mini_sites').select('id', { count: 'exact', head: true }).eq('published', false)
+      supabase.from('mini_sites').select('id', { count: 'exact', head: true }).eq('published', false),
+      supabase.from('appointments').select('id', { count: 'exact', head: true }),
+      supabase.from('messages').select('id', { count: 'exact', head: true }),
+      supabase.from('connections').select('id', { count: 'exact', head: true })
     ]);
 
     const metrics = {
@@ -79,7 +98,10 @@ app.get('/metrics', async (req, res) => {
       totalEvents: eventsResult.count || 0,
       pendingValidations: pendingValidationsResult.count || 0,
       activeContracts: activeContractsResult.count || 0,
-      contentModerations: contentModerationsResult.count || 0
+      contentModerations: contentModerationsResult.count || 0,
+      totalAppointments: appointmentsResult.count || 0,
+      totalMessages: messagesResult.count || 0,
+      totalConnections: connectionsResult.count || 0
     };
 
     res.json({ metrics });

@@ -1,4 +1,5 @@
 ﻿import { toast } from 'sonner';
+import { sanitizeArticleContent } from '../utils/sanitizeHtml';
 import { useTranslation } from '../hooks/useTranslation';
 import { useArticleTranslation } from '../hooks/useArticleTranslation';
 import { getArticleTranslationKeys } from '../utils/newsTranslations';
@@ -292,7 +293,7 @@ export default function ArticleDetailPage() {
               prose-ul:space-y-2 prose-li:text-gray-700
               prose-blockquote:border-l-4 prose-blockquote:border-blue-600 prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:bg-blue-50 prose-blockquote:rounded-r-lg
               prose-img:rounded-xl prose-img:shadow-lg prose-img:mx-auto"
-            dangerouslySetInnerHTML={{ __html: translatedArticle.content }}
+            dangerouslySetInnerHTML={{ __html: sanitizeArticleContent(translatedArticle.content) }}
           />
 
             {article.sourceUrl && (

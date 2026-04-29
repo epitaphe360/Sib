@@ -212,7 +212,7 @@ export function VisitorNetworkingHub({
                       <>
                         {filteredUpcoming.filter((a) => a.status === 'pending').length > 0 && (
                           <div className="space-y-4">
-                            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-amber-400/80 mb-4 px-2">{t('visitor.new_invitations')}</h4>
+                            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-amber-400/80 mb-4 px-2">{t('visitor.pending_requests', 'Demandes en attente de confirmation')}</h4>
                             {filteredUpcoming.filter((a) => a.status === 'pending').map((app, index) => (
                               <motion.div key={app.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}
                                 className="group bg-white/10 hover:bg-white/15 border border-white/5 hover:border-white/20 p-6 rounded-3xl transition-all duration-300">
@@ -224,23 +224,20 @@ export function VisitorNetworkingHub({
                                     <div>
                                       <div className="flex items-center gap-2 mb-1">
                                         <span className="font-bold text-lg">{getExhibitorName(app)}</span>
-                                        <span className="px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-black uppercase rounded-full border border-amber-500/20">{t('visitor.action_required')}</span>
+                                        <span className="px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-black uppercase rounded-full border border-amber-500/20">{t('visitor.awaiting_confirmation', 'En attente de confirmation')}</span>
                                       </div>
                                       <p className="text-indigo-100/60 text-sm italic">"{app.message || t('visitor.no_message')}"</p>
                                     </div>
                                   </div>
                                   <div className="flex gap-3">
-                                    <Button onClick={() => handleAccept(app.id)}
-                                      onKeyDown={(e) => handleKeyboardNavigation(e, { onEnter: () => handleAccept(app.id), onSpace: () => handleAccept(app.id) })}
-                                      className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl px-6"
-                                      aria-label={`${t('actions.accept')} ${t('visitor.appointment_with')} ${getExhibitorName(app)}`}>
-                                      {t('actions.accept')}
-                                    </Button>
+                                    {/* Le visiteur ne peut PAS auto-confirmer sa propre demande.
+                                        Seul l'exposant/partenaire peut accepter ou refuser.
+                                        Le visiteur peut uniquement annuler sa demande. */}
                                     <Button variant="destructive" onClick={() => handleReject(app.id)}
                                       onKeyDown={(e) => handleKeyboardNavigation(e, { onEnter: () => handleReject(app.id), onSpace: () => handleReject(app.id) })}
                                       className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl"
-                                      aria-label={`${t('actions.reject')} ${t('visitor.appointment_with')} ${getExhibitorName(app)}`}>
-                                      {t('actions.reject')}
+                                      aria-label={`${t('actions.cancel_request', 'Annuler la demande')} ${t('visitor.appointment_with')} ${getExhibitorName(app)}`}>
+                                      {t('actions.cancel_request', 'Annuler la demande')}
                                     </Button>
                                   </div>
                                 </div>

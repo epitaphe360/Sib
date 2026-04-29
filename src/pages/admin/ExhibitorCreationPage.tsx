@@ -24,7 +24,7 @@ export default function ExhibitorCreationPage() {
     try {
       const { data, error } = await supabase!
         .from('exhibitors')
-        .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, contact_info, created_at, updated_at')
+        .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, is_published, stand_number, contact_info, created_at, updated_at')
         .eq('id', id)
         .maybeSingle();
 
@@ -53,6 +53,7 @@ export default function ExhibitorCreationPage() {
         website: data.website,
         verified: data.verified,
         featured: data.featured,
+        isPublished: data.is_published ?? false,
         standNumber: data.stand_number,
         contactInfo: data.contact_info || {},
       });

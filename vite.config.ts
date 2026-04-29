@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { VitePWA } from 'vite-plugin-pwa';
 
 // Load local env files so process.env contains values during Vite config evaluation
 dotenv.config({ path: path.resolve(__dirname, '.env') });
@@ -67,7 +68,95 @@ if (envLines.length > 0 && isRailwayRuntime) {
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/',
-  plugins: [react()],
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      manifest: {
+        name: 'SIB 2026 — Salon International du Bâtiment',
+        short_name: 'SIB 2026',
+        description: 'Plateforme officielle du Salon International du Bâtiment Maroc 2026',
+        theme_color: '#1B4332',
+        background_color: '#ffffff',
+        display: 'standalone',
+        orientation: 'portrait',
+        start_url: '/',
+        scope: '/',
+        lang: 'fr',
+        icons: [
+          { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+        ],
+        screenshots: [
+          { src: 'screenshots/mobile.png', sizes: '390x844', type: 'image/png', form_factor: 'narrow' },
+        ],
+        categories: ['business', 'productivity'],
+      },
+      workbox: {
+        // Stratégies de cache par type de ressource
+        runtimeCaching: [
+          {
+            // Page d'accueil et pages statiques — NetworkFirst (toujours essayer le réseau)
+            urlPattern: /^https:\/\/.*\/(|home|exhibitors|partners|news|hall-map)$/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages-cache',
+              expiration: { maxEntries: 30, maxAgeSeconds: 24 * 60 * 60 },
+              networkTimeoutSeconds: 3,
+            },
+          },
+          {
+            // Images exposants/partenaires — CacheFirst (chargement instantané)
+            urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/.*\.(png|jpg|jpeg|webp|svg)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'exhibitor-images',
+              expiration: { maxEntries: 200, maxAgeSeconds: 7 * 24 * 60 * 60 },
+            },
+          },
+          {
+            // API Supabase — NetworkFirst avec fallback cache
+            urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/.*/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'supabase-api',
+              expiration: { maxEntries: 100, maxAgeSeconds: 5 * 60 },
+              networkTimeoutSeconds: 5,
+            },
+          },
+          {
+            // Fonts Google — CacheFirst
+            urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts',
+              expiration: { maxEntries: 20, maxAgeSeconds: 365 * 24 * 60 * 60 },
+            },
+          },
+          {
+            // Assets Vite (JS/CSS hashés) — CacheFirst permanent
+            urlPattern: /\/assets\/.+\.[a-f0-9]{8}\.(js|css)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'static-assets',
+              expiration: { maxEntries: 60, maxAgeSeconds: 30 * 24 * 60 * 60 },
+            },
+          },
+        ],
+        // Précache des pages shell critiques
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api\//, /^\/supabase\//],
+        skipWaiting: true,
+        clientsClaim: true,
+      },
+      devOptions: {
+        // Désactiver le SW en dev pour éviter les conflits HMR
+        enabled: false,
+      },
+    }),
+  ],
   server: {
     host: '0.0.0.0',
     port: 9323,

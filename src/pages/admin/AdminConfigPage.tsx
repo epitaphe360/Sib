@@ -8,7 +8,7 @@ import {
   Settings, Database, Mail, Key, Globe, CreditCard, Bell,
   CheckCircle, XCircle, Eye, EyeOff, Save, RefreshCw,
   AlertTriangle, Server, Shield, Smartphone, ChevronDown,
-  ChevronUp, Copy, Check, Loader2, Info, ExternalLink
+  ChevronUp, Copy, Check, Loader2, Info, ExternalLink, Sparkles
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
@@ -165,6 +165,24 @@ const CONFIG_SECTIONS: ConfigSection[] = [
     fields: [
       { key: 'RESEND_API_KEY', label: 'Resend API Key', placeholder: 're_...', type: 'password', required: false, hint: 'Commence par re_ — obtenu dans Resend → API Keys → Create API Key. Gratuit jusqu\'à 100 emails/jour.', docUrl: 'https://resend.com/api-keys' },
       { key: 'RESEND_FROM_EMAIL', label: 'Email expéditeur Resend', placeholder: 'noreply@sib2026.ma', type: 'email', required: false, hint: 'Doit être sur un domaine vérifié dans Resend, sinon utilisez onboarding@resend.dev pour les tests' },
+    ],
+  },
+  {
+    id: 'ai',
+    label: 'Intelligence Artificielle (OpenAI)',
+    icon: Sparkles,
+    color: '#10A37F',
+    description: 'Clé OpenAI pour le matching B2B intelligent (vectorisation des fiches exposants + recherche sémantique)',
+    howToGet: [
+      { step: 1, title: 'Créer un compte OpenAI', detail: 'Allez sur platform.openai.com et créez un compte (ou connectez-vous). Ajoutez une carte bancaire dans Billing pour activer l’API.', url: 'https://platform.openai.com/signup' },
+      { step: 2, title: 'Générer une clé API', detail: 'Allez sur platform.openai.com/api-keys → « Create new secret key » → nommez-la « SIB 2026 » → copiez immédiatement la clé sk-... (elle ne sera plus visible ensuite).', url: 'https://platform.openai.com/api-keys' },
+      { step: 3, title: 'Coûts estimés', detail: 'Modèle utilisé : text-embedding-3-small (~$0.02 / 1M tokens). Pour 1000 exposants : moins de $0.01. Pour les recherches utilisateurs : ~$0.0001 par requête.' },
+      { step: 4, title: 'Après avoir collé la clé', detail: 'Lancez la commande « node scripts/generate-exhibitor-embeddings.cjs » dans un terminal pour vectoriser tous les exposants existants. Sans cela, le matching IA tombera en mode local (BTP).' },
+    ],
+    fields: [
+      { key: 'OPENAI_API_KEY', label: 'Clé API OpenAI', placeholder: 'sk-...', type: 'password', required: false, hint: 'Commence par sk- — utilisée par la fonction Edge match-exhibitors et le script de génération d’embeddings. Si vide, le matching utilise un fallback local BTP.', docUrl: 'https://platform.openai.com/api-keys' },
+      { key: 'AI_MATCHING_ENABLED', label: 'Activer le matching IA (true/false)', placeholder: 'true', type: 'text', required: false, hint: 'true = utiliser l’IA + fallback local | false = uniquement scoring BTP local. Mettre false si quota OpenAI épuisé.' },
+      { key: 'AI_MATCH_THRESHOLD', label: 'Seuil de similarité (0.0 à 1.0)', placeholder: '0.3', type: 'number', required: false, hint: 'Score minimum pour qu’un exposant soit considéré pertinent. 0.3 = large | 0.5 = strict | 0.7 = très strict' },
     ],
   },
   {

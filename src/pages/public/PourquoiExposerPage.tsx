@@ -96,22 +96,25 @@ export default function PourquoiExposerPage() {
     { icon: Award, title: cms.arg_6_title || 'Édition anniversaire 40 ans', desc: cms.arg_6_desc || "Plus d'espace, plus d'exposants, des zones thématiques repensées et des espaces de démonstration interactifs." },
   ];
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0A0F1E]">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-20 overflow-hidden">
-        <div className="container mx-auto px-4 text-center">
+      <div className="relative min-h-[50vh] bg-[#0A0F1E] flex items-center overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1400&q=80')] bg-cover bg-center opacity-15" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/80 via-[#0A0F1E]/40 to-[#0A0F1E]" />
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(201,168,76,0.06) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="relative z-10 container mx-auto px-4 py-24 text-center">
           <HeroReveal>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Pourquoi Exposer au SIB ?'}</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display text-white">{cms.hero_title || 'Pourquoi Exposer au SIB ?'}</h1>
           </HeroReveal>
           <HeroReveal delay={0.15}>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto mb-8">
-              {cms.hero_subtitle || 'Le rendez-vous incontournable du bâtiment en Afrique. Participez à l\'édition anniversaire des 40 ans du SIB aux côtés de 600 exposants et 200 000 visiteurs professionnels.'}
+            <p className="text-xl text-white/60 max-w-3xl mx-auto mb-8">
+              {cms.hero_subtitle || "Le rendez-vous incontournable du bâtiment en Afrique. Participez à l'édition anniversaire des 40 ans du SIB aux côtés de 600 exposants et 200 000 visiteurs professionnels."}
             </p>
           </HeroReveal>
           <HeroReveal delay={0.3}>
             <Link
               to={ROUTES.EXHIBITOR_SUBSCRIPTION}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-sib-gold text-sib-navy rounded-lg font-bold text-lg hover:bg-sib-gold/90 transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#C9A84C] text-[#0A0F1E] rounded-lg font-bold text-lg hover:bg-[#E7D192] transition-all duration-300 hover:scale-105 transform shadow-lg"
             >
               <TrendingUp className="w-5 h-5" />
               {getCms('hero_cta', 'Réservez votre stand')}
@@ -121,13 +124,13 @@ export default function PourquoiExposerPage() {
       </div>
 
       {/* Chiffres */}
-      <div className="container mx-auto px-4 -mt-10">
+      <div className="container mx-auto px-4 -mt-10 relative z-10">
         <StaggerReveal className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {chiffres.map((c) => (
             <StaggerItem key={c.label}>
-              <HoverCard className="bg-white rounded-xl shadow-lg p-5 text-center border border-gray-100 h-full">
-                <AnimatedCounter value={c.value} className="text-2xl font-bold text-sib-navy block" />
-                <div className="text-sm text-gray-500 mt-1">{c.label}</div>
+              <HoverCard className="bg-white/5 backdrop-blur-sm rounded-xl p-5 text-center border border-white/10 h-full hover:border-[#C9A84C]/30 transition-colors">
+                <AnimatedCounter value={c.value} className="text-2xl font-bold text-[#E7D192] block" />
+                <div className="text-sm text-white/50 mt-1">{c.label}</div>
               </HoverCard>
             </StaggerItem>
           ))}
@@ -137,19 +140,19 @@ export default function PourquoiExposerPage() {
       {/* Arguments */}
       <div className="container mx-auto px-4 py-16">
         <ScrollReveal>
-          <h2 className="text-3xl font-bold text-sib-navy mb-10 text-center font-display">
+          <h2 className="text-3xl font-bold text-white mb-10 text-center font-display">
             {getCms('reasons_title', "6 raisons d'exposer")}
           </h2>
         </ScrollReveal>
         <StaggerReveal slow className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {arguments_exposer.map((arg, i) => (
             <StaggerItem key={i}>
-              <HoverCard className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
-                <div className="w-14 h-14 rounded-xl bg-sib-gold/10 flex items-center justify-center mb-5">
-                  <arg.icon className="w-7 h-7 text-sib-gold" />
+              <HoverCard className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 h-full hover:border-[#C9A84C]/30 transition-colors">
+                <div className="w-14 h-14 rounded-xl bg-[#C9A84C]/15 border border-[#C9A84C]/20 flex items-center justify-center mb-5">
+                  <arg.icon className="w-7 h-7 text-[#C9A84C]" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{arg.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{arg.desc}</p>
+                <h3 className="text-xl font-bold text-white mb-3">{arg.title}</h3>
+                <p className="text-white/60 leading-relaxed">{arg.desc}</p>
               </HoverCard>
             </StaggerItem>
           ))}
@@ -157,17 +160,17 @@ export default function PourquoiExposerPage() {
       </div>
 
       {/* Secteurs */}
-      <div className="bg-sib-navy/5 py-16">
+      <div className="border-t border-white/5 py-16">
         <div className="container mx-auto px-4">
           <ScrollReveal>
-            <h2 className="text-3xl font-bold text-sib-navy mb-8 text-center font-display">
+            <h2 className="text-3xl font-bold text-white mb-8 text-center font-display">
               {getCms('sectors_title', 'Secteurs représentés')}
             </h2>
           </ScrollReveal>
           <StaggerReveal className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
             {secteurs_cles.map((s) => (
               <StaggerItem key={s}>
-                <span className="inline-block px-4 py-2 bg-white rounded-full border border-gray-200 text-sm font-medium text-gray-700 shadow-sm hover:shadow-md hover:border-sib-gold/50 transition-all duration-300 cursor-default">
+                <span className="inline-block px-4 py-2 bg-white/5 rounded-full border border-white/10 text-sm font-medium text-white/70 hover:border-[#C9A84C]/40 hover:text-white transition-all duration-300 cursor-default">
                   {s}
                 </span>
               </StaggerItem>
@@ -177,17 +180,17 @@ export default function PourquoiExposerPage() {
       </div>
 
       {/* CTA */}
-      <div className="bg-sib-gold py-16">
+      <div className="bg-[#C9A84C]/10 border-t border-[#C9A84C]/20 py-16">
         <div className="container mx-auto px-4 text-center">
           <ScrollReveal variant={scaleUp}>
-            <Eye className="w-12 h-12 text-sib-navy mx-auto mb-4" />
-            <h3 className="text-3xl font-bold text-sib-navy mb-4 font-display">{getCms('cta_title', 'Prêt à exposer ?')}</h3>
-            <p className="text-sib-navy/70 max-w-xl mx-auto mb-8">
+            <Eye className="w-12 h-12 text-[#C9A84C] mx-auto mb-4" />
+            <h3 className="text-3xl font-bold text-white mb-4 font-display">{getCms('cta_title', 'Prêt à exposer ?')}</h3>
+            <p className="text-white/60 max-w-xl mx-auto mb-8">
               {getCms('cta_text', 'Réservez votre stand dès maintenant et bénéficiez des meilleurs emplacements pour la 20ème édition du SIB.')}
             </p>
             <Link
               to={ROUTES.EXHIBITOR_SUBSCRIPTION}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-sib-navy text-white rounded-lg font-bold text-lg hover:bg-sib-navy/90 transition-all duration-300 hover:scale-105 transform"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#C9A84C] text-[#0A0F1E] rounded-lg font-bold text-lg hover:bg-[#E7D192] transition-all duration-300 hover:scale-105 transform"
             >
               {getCms('cta_button', 'Demander un devis')}
             </Link>

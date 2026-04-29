@@ -4,7 +4,13 @@ import {
   Search,
   Filter,
   Grid,
-  List
+  List,
+  X,
+  Calendar,
+  Clock,
+  MapPin,
+  CheckCircle,
+  MessageCircle
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useExhibitorStore } from '../store/exhibitorStore';
@@ -17,6 +23,8 @@ import toast from 'react-hot-toast';
 import ExhibitorCard from '../components/exhibitor/ExhibitorCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogoShowcaseSection } from '../components/home/LogoShowcaseSection';
+import { useAppointmentStore } from '../store/appointmentStore';
+import { isDateInSalonRange } from '../config/salonInfo';
 
 export default function ExhibitorsPage() {
   const navigate = useNavigate();
@@ -35,6 +43,17 @@ export default function ExhibitorsPage() {
 
   const [viewMode, setViewMode] = useState<keyof typeof CONFIG.viewModes>(CONFIG.viewModes.grid);
   const [showFilters, setShowFilters] = useState(false);
+
+  // ─── Modal RDV ───
+  const [rdvExhibitorId, setRdvExhibitorId] = useState<string | null>(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+  const [appointmentMessage, setAppointmentMessage] = useState('');
+  const [isBookingInProgress, setIsBookingInProgress] = useState(false);
+  const { timeSlots, fetchTimeSlots, appointments, fetchAppointments } = useAppointmentStore();
+  const rdvExhibitor = useMemo(
+    () => filteredExhibitors.find(e => e.id === rdvExhibitorId) ?? null,
+    [filteredExhibitors, rdvExhibitorId]
+  );
 
   useEffect(() => {
     fetchExhibitors(true);
@@ -73,17 +92,21 @@ export default function ExhibitorsPage() {
     const labels = {
       'institutional': t('pages.exhibitors.category_institutional'),
       'bâtiment-industry': t('pages.exhibitors.category_port_industry'),
+      'port-industry': t('pages.exhibitors.category_port_industry'),
       'bâtiment-operations': t('pages.exhibitors.category_operations'),
+      'port-operations': t('pages.exhibitors.category_operations'),
       'academic': t('pages.exhibitors.category_academic')
     };
-    return labels[category as keyof typeof labels] || category;
+    return labels[category as keyof typeof labels] || 'Industrie du Bâtiment';
   }, [t]);
 
   const getCategoryColor = useCallback((category: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {
     const colors: Record<string, 'default' | 'success' | 'warning' | 'error' | 'info'> = {
       'institutional': 'success',
       'bâtiment-industry': 'error',
+      'port-industry': 'error',
       'bâtiment-operations': 'info',
+      'port-operations': 'info',
       'academic': 'warning'
     };
     return colors[category] || 'default';
@@ -95,17 +118,17 @@ export default function ExhibitorsPage() {
   }, [navigate]);
 
   const handleScheduleAppointment = useCallback((exhibitorId: string) => {
-    // Récupérer l'état actuel du store directement
     const currentAuthState = useAuthStore.getState();
-
     if (!currentAuthState.isAuthenticated || !currentAuthState.user) {
-      // Rediriger vers la page de connexion avec redirection vers les RDV
-      navigate(`${ROUTES.LOGIN}?redirect=${encodeURIComponent(`${ROUTES.APPOINTMENTS}?exhibitor=${exhibitorId}`)}`);
-    } else {
-      // Rediriger directement vers la page des RDV avec l'ID de l'exposant
-      navigate(`${ROUTES.APPOINTMENTS}?exhibitor=${exhibitorId}`);
+      navigate(`${ROUTES.LOGIN}?redirect=${encodeURIComponent(`${ROUTES.EXHIBITORS}/${exhibitorId}`)}`);
+      return;
     }
-  }, [navigate]);
+    setSelectedTimeSlot('');
+    setAppointmentMessage('');
+    setRdvExhibitorId(exhibitorId);
+    fetchTimeSlots(exhibitorId);
+    fetchAppointments().catch(() => {});
+  }, [navigate, fetchTimeSlots, fetchAppointments]);
 
   const canChat = isAuthenticated && (
     user?.type === 'exhibitor' ||
@@ -122,7 +145,24 @@ export default function ExhibitorsPage() {
     navigate(`/messages?exhibitorId=${exhibitorId}`);
   }, [canChat, navigate]);
 
+  const handleConfirmAppointment = async () => {
+    if (!selectedTimeSlot) return;
+    setIsBookingInProgress(true);
+    try {
+      const appointmentStore = useAppointmentStore.getState();
+      await appointmentStore.bookAppointment(selectedTimeSlot, appointmentMessage);
+      toast.success('Demande de rendez-vous envoyée !');
+      await fetchAppointments();
+      setRdvExhibitorId(null);
+    } catch (err: any) {
+      toast.error(err?.message || 'Erreur lors de la réservation');
+    } finally {
+      setIsBookingInProgress(false);
+    }
+  };
+
   return (
+    <>
     <div className="min-h-screen bg-[#f8fafc]">
       {/* Header Premium Immersif */}
       <div className="relative bg-[#0A0A0A] pt-8 pb-24 px-4 overflow-hidden">
@@ -351,6 +391,142 @@ export default function ExhibitorsPage() {
         )}
       </div>
     </div>
+
+    {/* ─── MODAL RDV ─── */}
+    {rdvExhibitorId && rdvExhibitor && (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          {/* Header */}
+          <div className="bg-gradient-to-br from-[#1e3a5f] to-blue-700 text-white p-6 rounded-t-2xl sticky top-0 z-10">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-bold">Prendre RDV avec {rdvExhibitor.companyName}</h3>
+                <p className="text-blue-200 text-sm mt-0.5">Sélectionnez un créneau disponible</p>
+              </div>
+              <button onClick={() => setRdvExhibitorId(null)} className="p-2 hover:bg-white/20 rounded-lg transition-colors">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          <div className="p-6 space-y-5">
+            {/* Créneaux horaires */}
+            {(() => {
+              const filteredSlots = timeSlots.filter(slot => {
+                if (slot.available === false) return false;
+                if (!slot.date) return false;
+                return isDateInSalonRange(new Date(slot.date as any));
+              });
+
+              if (filteredSlots.length === 0) return (
+                <div className="text-center py-10 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                  <Calendar className="h-10 w-10 text-gray-300 mx-auto mb-2" />
+                  <p className="text-gray-500 font-medium">Aucun créneau disponible</p>
+                  <p className="text-sm text-gray-400 mt-1">Veuillez réessayer plus tard ou contacter l'exposant</p>
+                </div>
+              );
+
+              return (
+                <div>
+                  <label className="block text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-blue-600" />
+                    Choisir un créneau horaire
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-72 overflow-y-auto p-1">
+                    {filteredSlots.map(slot => {
+                      const isSelected = selectedTimeSlot === slot.id;
+                      const booked = appointments.find(a => a.timeSlotId === slot.id && a.visitorId === user?.id);
+                      const dateLabel = new Date(slot.date as any).toLocaleDateString('fr-FR', {
+                        weekday: 'long', day: '2-digit', month: 'long'
+                      });
+                      return (
+                        <button
+                          key={slot.id}
+                          disabled={!!booked}
+                          onClick={() => !booked && setSelectedTimeSlot(slot.id)}
+                          className={`p-3 border-2 rounded-xl text-left transition-all relative ${
+                            booked
+                              ? 'border-green-200 bg-green-50 opacity-70 cursor-not-allowed'
+                              : isSelected
+                              ? 'border-[#1e3a5f] bg-blue-50 shadow-md'
+                              : 'border-gray-200 hover:border-blue-300 hover:shadow'
+                          }`}
+                        >
+                          <div className="font-semibold text-gray-800 capitalize text-xs mb-1">{dateLabel}</div>
+                          <div className="flex items-center gap-1 text-blue-600 font-bold text-sm">
+                            <Clock className="h-3.5 w-3.5" />
+                            {slot.startTime} – {slot.endTime}
+                          </div>
+                          {slot.location && (
+                            <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />{slot.location}
+                            </div>
+                          )}
+                          <div className="text-xs text-gray-400 mt-1">
+                            {slot.currentBookings || 0}/{slot.maxBookings} réservé(s)
+                          </div>
+                          {booked && (
+                            <span className={`absolute top-2 right-2 text-xs text-white px-2 py-0.5 rounded-full font-bold ${
+                              booked.status === 'confirmed' ? 'bg-green-500' : 'bg-yellow-500'
+                            }`}>
+                              {booked.status === 'confirmed' ? 'Confirmé' : 'En attente'}
+                            </span>
+                          )}
+                          {isSelected && !booked && (
+                            <CheckCircle className="absolute top-2 right-2 h-4 w-4 text-[#1e3a5f]" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Message optionnel */}
+            <div>
+              <label className="block text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <MessageCircle className="h-4 w-4 text-blue-600" />
+                Message (optionnel)
+              </label>
+              <textarea
+                value={appointmentMessage}
+                onChange={e => setAppointmentMessage(e.target.value)}
+                placeholder="Décrivez brièvement l'objet de votre rendez-vous..."
+                rows={3}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] focus:border-[#1e3a5f] resize-none text-sm"
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3 pt-2 border-t border-gray-100">
+              <button
+                onClick={handleConfirmAppointment}
+                disabled={!selectedTimeSlot || isBookingInProgress}
+                className={`flex-1 h-12 rounded-xl font-bold text-sm transition-colors ${
+                  selectedTimeSlot && !isBookingInProgress
+                    ? 'bg-[#1e3a5f] text-white hover:bg-[#163055]'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                }`}
+              >
+                {isBookingInProgress ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                    Envoi en cours...
+                  </span>
+                ) : selectedTimeSlot ? 'Envoyer la demande' : 'Sélectionnez un créneau'}
+              </button>
+              <button
+                onClick={() => setRdvExhibitorId(null)}
+                className="px-6 h-12 border-2 border-gray-200 rounded-xl font-medium text-sm hover:bg-gray-50 transition-colors"
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 };
-

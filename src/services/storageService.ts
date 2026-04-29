@@ -22,45 +22,21 @@ export class StorageService {
       throw new Error('Supabase non configuré. Veuillez configurer vos variables d\'environnement Supabase.');
     }
 
-    // DEBUG: Logs avant validation
-    console.log('🔍 [UPLOAD DEBUG] Fichier reçu:', {
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      lastModified: file.lastModified,
-      constructor: file.constructor.name
-    });
-
-    // DÉSACTIVATION TEMPORAIRE DE LA VALIDATION pour debug
-    // La validation pourrait corrompre le fichier
-    /*
     try {
       await validateImage(file, 10); // Max 10MB
-      console.log('✅ [UPLOAD DEBUG] Validation réussie');
     } catch (error) {
-      console.error('❌ [UPLOAD DEBUG] Validation échouée:', error);
       if (error instanceof FileValidationError) {
         throw new Error(`Validation du fichier échouée : ${error.message}`);
       }
       throw error;
     }
-    */
-    console.log('⚠️ [UPLOAD DEBUG] Validation désactivée pour debug');
 
     // Générer un nom de fichier unique avec l'extension validée
     const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
     const fileName = `${uuidv4()}.${fileExt}`;
     const filePath = folder ? `${folder}/${fileName}` : fileName;
 
-    // DEBUG: Logs avant upload
     const contentType = file.type || 'image/jpeg';
-    console.log('📤 [UPLOAD DEBUG] Upload vers Supabase:', {
-      bucket,
-      filePath,
-      contentType,
-      fileSize: file.size,
-      fileType: file.type
-    });
 
     // Télécharger le fichier avec le contentType explicite
     const { data, error } = await supabase.storage
@@ -72,15 +48,8 @@ export class StorageService {
       });
 
     if (error) {
-      console.error('❌ [UPLOAD DEBUG] Erreur Supabase:', {
-        message: error.message,
-        statusCode: error.statusCode,
-        error: error
-      });
       throw error;
     }
-
-    console.log('✅ [UPLOAD DEBUG] Upload réussi:', data);
 
     // Récupérer l'URL publique
     const { data: urlData } = supabase.storage

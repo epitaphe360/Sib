@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Calendar, Clock, User, MapPin, Video, Globe, CheckCircle, XCircle, AlertCircle, ChevronLeft, ChevronRight, Sparkles, CalendarDays, Users } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Calendar, Clock, User, MapPin, Video, Globe, CheckCircle, XCircle, AlertCircle, Sparkles, CalendarDays, Users } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Appointment } from '../../types';
 import { useAppointmentStore } from '../../store/appointmentStore';
 import useAuthStore from '../../store/authStore';
+import { SALON_DATE_RANGE } from '../../config/salonInfo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 
@@ -26,7 +27,6 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
     isLoading
   } = useAppointmentStore();
 
-  const [selectedWeek, setSelectedWeek] = useState(new Date('2026-04-01T00:00:00'));
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all');
 
   useEffect(() => {
@@ -105,35 +105,15 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
     }
   };
 
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'virtual': return <Video className="w-4 h-4" />;
-      case 'in-person': return <MapPin className="w-4 h-4" />;
-      case 'hybrid': return <Globe className="w-4 h-4" />;
-      default: return <User className="w-4 h-4" />;
-    }
-  };
-
-  const getWeekDays = (date: Date) => {
-    return [
-      new Date('2026-04-01T00:00:00'),
-      new Date('2026-04-02T00:00:00'),
-      new Date('2026-04-03T00:00:00')
-    ];
-  };
-
-  const weekDays = getWeekDays(selectedWeek);
+  // Jours réels du salon SIB 2026 : 25 au 29 novembre 2026
+  const weekDays = useMemo(() => {
+    return Array.from({ length: SALON_DATE_RANGE.endDay - SALON_DATE_RANGE.startDay + 1 }, (_, i) =>
+      new Date(SALON_DATE_RANGE.year, SALON_DATE_RANGE.month, SALON_DATE_RANGE.startDay + i)
+    );
+  }, []);
   // Pour cette démo, on simule que les appointments ont des timeSlots
   // Dans une vraie implémentation, il faudrait faire un join avec les timeSlots
   const weekAppointments = getFilteredAppointments();
-
-  const getAppointmentTitle = () => {
-    if (userType === 'visitor') {
-      return `RDV avec Exposant`;
-    } else {
-      return `RDV avec Visiteur`;
-    }
-  };
 
   return (
     <div className={`${standalone ? 'min-h-screen bg-[#f8fafc] p-4 md:p-8' : 'p-0 bg-transparent'}`} data-testid="personal-appointments-calendar">
@@ -234,12 +214,20 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
         </div>
 
         {/* Grille Temporelle Premium */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6">
           {weekDays.map((day, index) => {
             const dayAppointments = weekAppointments.filter(appointment => {
-              const slot = timeSlots.find(s => s.id === appointment.timeSlotId);
-              if (!slot) {return false;}
-              const slotDate = new Date(slot.date);
+              // Priority: use slotDate embedded by getAppointments() (avoids timeSlots store lookup)
+              const rawDate = (appointment as any).slotDate ||
+                              (appointment as any).slot_date ||
+                              appointment.date;
+              if (!rawDate) {
+                // Fallback: look in timeSlots store
+                const slot = timeSlots.find(s => s.id === appointment.timeSlotId);
+                if (!slot) {return false;}
+                return new Date(slot.date).toDateString() === day.toDateString();
+              }
+              const slotDate = typeof rawDate === 'string' ? new Date(rawDate + 'T00:00:00') : new Date(rawDate);
               return slotDate.toDateString() === day.toDateString();
             });
             const isToday = day.toDateString() === new Date().toDateString();
@@ -275,7 +263,9 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                         isToday || hasAppointments ? 'text-white' : 'text-gray-900'
                       }`}>
                         {day.getDate()}
-                        <span className="text-base font-bold opacity-40 uppercase tracking-widest">AVR</span>
+                        <span className="text-base font-bold opacity-40 uppercase tracking-widest">
+                          {day.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '').toUpperCase()}
+                        </span>
                       </div>
                     </div>
                     {isToday && (
@@ -290,8 +280,11 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                 <div className="p-6 space-y-4 flex-1 bg-gradient-to-b from-transparent to-gray-50/30">
                   <AnimatePresence mode="popLayout">
                     {dayAppointments.length > 0 ? dayAppointments.map((appointment, aptIndex) => {
-                      const slot = timeSlots.find(s => s.id === appointment.timeSlotId);
-                      const displayTime = slot ? slot.startTime : 'TBD';
+                      const displayTime = (appointment as any).slotStartTime ||
+                                         (appointment as any).slot_start_time ||
+                                         appointment.startTime ||
+                                         (() => { const s = timeSlots.find(sl => sl.id === appointment.timeSlotId); return s?.startTime; })() ||
+                                         'TBD';
 
                       return (
                         <motion.div
@@ -325,7 +318,9 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                               appointment.status === 'pending' ? 'bg-amber-500 text-white border-amber-500/20' :
                               'bg-red-500 text-white border-red-500/20'
                             }`}>
-                              {appointment.status}
+                              {appointment.status === 'confirmed' ? 'Confirmé' :
+                               appointment.status === 'pending' ? 'En attente' :
+                               appointment.status === 'cancelled' ? 'Annulé' : appointment.status}
                             </div>
                           </div>
 
@@ -334,7 +329,11 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                               <div className="p-1.5 bg-gray-100 rounded-lg">
                                  <User className="w-4 h-4 text-blue-500" />
                               </div>
-                              <span>{getAppointmentTitle()}</span>
+                              <span>
+                                {userType === 'visitor'
+                                  ? (appointment.exhibitor?.companyName || appointment.exhibitor?.name || 'Exposant')
+                                  : (appointment.visitor?.name || 'Visiteur')}
+                              </span>
                             </div>
                             {appointment.meetingLink && (
                               <div className="flex items-center gap-3 text-xs font-bold text-blue-600 bg-blue-50/50 p-3 rounded-2xl border border-blue-100/50">

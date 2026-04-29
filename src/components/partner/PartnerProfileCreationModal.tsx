@@ -68,13 +68,11 @@ export default function PartnerProfileCreationModal({
         .upsert({
           user_id: user.id,
           company_name: formData.companyName,
-          type: formData.type,
-          country: formData.country,
+          contact_name: user.name || formData.companyName,
+          contact_email: user.email || '',
           description: formData.description,
           website: formData.website,
-          years_of_experience: formData.yearsOfExperience,
-          employees: formData.employees,
-          active_projects: formData.activeProjects,
+          country: formData.country,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }, {

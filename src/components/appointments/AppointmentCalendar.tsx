@@ -74,15 +74,11 @@ export default function AppointmentCalendar() {
   // Filtrer les rendez-vous pour l'utilisateur connecté seulement
   const userAppointments = appointments.filter(app => {
     if (!authUser?.id) {return false;}
-    // Pour les visiteurs: afficher leurs rendez-vous
-    if (authUser.type === 'visitor') {
-      return app.visitorId === authUser.id;
-    }
-    // Pour les exposants: afficher les rendez-vous qu'ils reçoivent
-    if (authUser.type === 'exhibitor') {
-      return app.exhibitorId === authUser.id;
-    }
-    return false;
+    const uid = authUser.id;
+    // Vérifier si l'utilisateur est visiteur ou exposant dans ce rendez-vous
+    const isVisitor = app.visitorId === uid || (app as any).visitor_id === uid;
+    const isExhibitor = app.exhibitorId === uid || (app as any).exhibitorUserId === uid;
+    return isVisitor || isExhibitor;
   });
 
   // Vérification d'authentification

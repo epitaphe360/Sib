@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { User, Mail, Phone, MapPin, Briefcase, Loader, CheckCircle, Anchor, Lock, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Briefcase, Loader, CheckCircle, Lock, Eye, EyeOff } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -51,14 +51,22 @@ export default function VisitorFreeRegistration() {
   const navigate = useNavigate();
 
   const sectors = [
-    { value: 'Autorité urbaine', label: t('visitor.sector.authority') },
-    { value: 'Transport & mobilité', label: t('visitor.sector.transport') },
-    { value: 'Logistique', label: t('visitor.sector.logistics') },
-    { value: 'Consulting', label: t('visitor.sector.consulting') },
-    { value: 'Technologie', label: t('visitor.sector.technology') },
+    { value: 'Architecture & Design', label: t('visitor.sector.architecture') },
+    { value: 'Construction & Génie Civil', label: t('visitor.sector.construction') },
+    { value: 'Matériaux de Construction', label: t('visitor.sector.materials') },
+    { value: 'Immobilier & Promotion', label: t('visitor.sector.realestate') },
+    { value: 'Électricité & Énergie', label: t('visitor.sector.electric') },
+    { value: 'Plomberie & Sanitaire', label: t('visitor.sector.plumbing') },
+    { value: 'Menuiserie & Bois', label: t('visitor.sector.woodwork') },
+    { value: 'Carrelage & Revêtements', label: t('visitor.sector.tiles') },
+    { value: 'Peinture & Décoration', label: t('visitor.sector.paint') },
+    { value: 'Climatisation & Chauffage', label: t('visitor.sector.hvac') },
+    { value: 'Équipements & Outillage', label: t('visitor.sector.equipment') },
+    { value: 'Bureau d\'Études & Consulting', label: t('visitor.sector.consulting') },
+    { value: 'Technologie & BIM', label: t('visitor.sector.technology') },
     { value: 'Étudiant', label: t('visitor.sector.student') },
     { value: 'Média/Presse', label: t('visitor.sector.media') },
-    { value: 'Institutionnel', label: t('visitor.sector.institutional') },
+    { value: 'Institutionnel / Administration', label: t('visitor.sector.institutional') },
     { value: 'Autre', label: t('visitor.sector.other') }
   ];
 
@@ -71,7 +79,19 @@ export default function VisitorFreeRegistration() {
     watch
   } = useForm<FreeVisitorForm>({
     resolver: zodResolver(freeVisitorSchema),
-    mode: 'onChange'
+    mode: 'onChange',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      country: '',
+      sector: '',
+      position: '',
+      company: '',
+      password: '',
+      confirmPassword: '',
+    }
   });
 
   const onSubmit = async (data: FreeVisitorForm) => {
@@ -111,16 +131,18 @@ export default function VisitorFreeRegistration() {
           accountType = `visiteur ${level}`;
         }
 
-        // MESSAGE D'ERREUR CLAIR ET VISIBLE
-        toast.error(`⚠️ ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`,
-          { duration: 8000 }
+        toast.error(
+          `Un compte ${accountType} existe déjà avec l'adresse ${data.email}. Veuillez vous connecter.`,
+          {
+            duration: 6000,
+            action: {
+              label: 'Se connecter',
+              onClick: () => navigate(ROUTES.LOGIN),
+            },
+          }
         );
 
-        // Redirection automatique vers la page de connexion
-        setTimeout(() => {
-            navigate(ROUTES.LOGIN);
-        }, 3000);
-
+        setTimeout(() => navigate(ROUTES.LOGIN), 4000);
         setIsSubmitting(false);
         return;
       }
@@ -144,22 +166,16 @@ export default function VisitorFreeRegistration() {
         // Gérer le cas spécifique où l'utilisateur existe dans Auth mais pas dans public.users
         if (authError.message === 'User already registered') {
             console.warn('⚠️ [FREE VISITOR] Email existe dans Auth mais pas dans users (compte orphelin).');
-
-            // Afficher un message clair avec options
             toast.error(
-              `⚠️ ${t('visitor.message.account_exists')}\n\n${t('visitor.message.account_exists_desc')}`,
-              { duration: 10000 }
+              `Un compte existe déjà avec l'adresse ${data.email}. Veuillez vous connecter ou réinitialiser votre mot de passe.`,
+              {
+                duration: 8000,
+                action: {
+                  label: 'Se connecter',
+                  onClick: () => navigate(ROUTES.LOGIN),
+                },
+              }
             );
-
-            // Proposer les deux options
-            if (window.confirm('Voulez-vous aller à la page de connexion ?\n\nCliquez "OK" pour vous connecter\nCliquez "Annuler" pour réinitialiser votre mot de passe')) {
-              // Rediriger vers login
-              navigate(ROUTES.LOGIN);
-            } else {
-              // Rediriger vers mot de passe oublié
-              navigate(ROUTES.FORGOT_PASSWORD);
-            }
-
             setIsSubmitting(false);
             return;
         }
@@ -167,29 +183,49 @@ export default function VisitorFreeRegistration() {
       }
       if (!authData.user) {throw new Error('Échec création utilisateur');}
 
-      // 3. Créer l'entrée dans la table users
-      const { error: userError } = await supabase
-        .from('users')
-        .insert([{
-          id: authData.user.id,
-          email: data.email,
-          name: fullName,
-          type: 'visitor',
-          visitor_level: 'free', // ? EXPLICITE
-          status: 'active', // ? Visiteur FREE actif immédiatement (pas de validation nécessaire)
-          profile: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phone: data.phone,
-            country: data.country,
-            businessSector: data.sector,
-            position: data.position || '',
-            company: data.company || '',
-            hasPassword: true // Compte FREE avec mot de passe défini
+      // Détection email enumeration protection de Supabase :
+      // quand l'email existe déjà dans auth, Supabase renvoie un faux user avec identities = []
+      if (authData.user.identities && authData.user.identities.length === 0) {
+        console.warn('⚠️ [FREE VISITOR] Email déjà enregistré dans auth (identities vide).');
+        toast.error(
+          `Un compte existe déjà avec l'adresse ${data.email}. Vous allez être redirigé vers la page de connexion.`,
+          {
+            duration: 6000,
+            action: {
+              label: 'Se connecter',
+              onClick: () => navigate(ROUTES.LOGIN),
+            },
           }
-        }]);
+        );
+        setTimeout(() => navigate(ROUTES.LOGIN), 4000);
+        setIsSubmitting(false);
+        return;
+      }
 
-      if (userError) {throw userError;}
+      // 3. Créer l'entrée dans la table users via RPC SECURITY DEFINER
+      // (contourne le RLS quand la session n'est pas encore active après signUp avec confirmation email)
+      const { error: userError } = await supabase.rpc('register_new_user', {
+        p_id: authData.user.id,
+        p_email: data.email.toLowerCase().trim(),
+        p_name: fullName,
+        p_type: 'visitor',
+        p_visitor_level: 'free',
+        p_status: 'active',
+        p_profile: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+          country: data.country,
+          businessSector: data.sector,
+          position: data.position || '',
+          company: data.company || '',
+          hasPassword: true
+        }
+      });
+
+      if (userError) {
+        throw new Error(userError.message || userError.details || userError.hint || `Erreur DB [${userError.code}]`);
+      }
 
       // 4. Générer badge QR automatiquement (optionnel - Edge Function peut ne pas être déployée)
       try {
@@ -267,15 +303,21 @@ export default function VisitorFreeRegistration() {
       }, 3000);
 
     } catch (error: any) {
-      console.error('Erreur inscription:', error);
-      toast.error(error.message || 'Erreur lors de l\'inscription');
+      // Extraire le message depuis un PostgrestError Supabase ou une Error standard
+      const msg: string =
+        error?.message ||
+        error?.error_description ||
+        (error?.code ? `[${error.code}] ${error?.details ?? error?.hint ?? 'Erreur inconnue'}` : null) ||
+        'Erreur lors de l\'inscription';
+      console.error('Erreur inscription:', msg, error);
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f]/95 to-[#1e3a5f]/85 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <motion.div
@@ -284,26 +326,26 @@ export default function VisitorFreeRegistration() {
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="bg-white p-3 rounded-lg">
-              <Anchor className="h-8 w-8 text-green-600" />
+            <div className="bg-white p-3 rounded-lg shadow">
+              <img src="/logo-sib2026.png" alt="SIB" className="h-8 w-8 object-contain" />
             </div>
             <div>
               <span className="text-2xl font-bold text-white">SIB</span>
-              <span className="text-sm text-green-200 block leading-none">2026</span>
+              <span className="text-sm text-blue-100 block leading-none">2026</span>
             </div>
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
             {t('visitor.registration.free.title')}
           </h1>
-          <p className="text-green-100">
+          <p className="text-blue-100">
             {t('visitor.registration.free.subtitle')}
           </p>
-          <div className="mt-4 inline-flex items-center space-x-2 bg-green-800 px-4 py-2 rounded-full">
-            <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_access')}</span>
-            <span className="text-green-200">•</span>
-            <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_qr')}</span>
-            <span className="text-green-200">•</span>
-            <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_free')}</span>
+          <div className="mt-4 inline-flex items-center space-x-2 bg-[#1e3a5f]/60 px-4 py-2 rounded-full">
+            <span className="text-blue-100 text-sm">🎫 {t('visitor.registration.free.badge_access')}</span>
+            <span className="text-[#C9A84C]">•</span>
+            <span className="text-blue-100 text-sm">📱 {t('visitor.registration.free.badge_qr')}</span>
+            <span className="text-[#C9A84C]">•</span>
+            <span className="text-blue-100 text-sm">✅ {t('visitor.registration.free.badge_free')}</span>
           </div>
         </motion.div>
 
@@ -313,7 +355,7 @@ export default function VisitorFreeRegistration() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="p-8">
+          <Card className="p-8 !bg-white dark:!bg-white !border-gray-200 dark:!border-gray-200">
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error('? [FREE VISITOR] Erreurs validation:', errors);
               toast.error(t('visitor.validation.check_errors', 'Veuillez corriger les erreurs surlignées en rouge'));
@@ -334,7 +376,7 @@ export default function VisitorFreeRegistration() {
                       id="firstName"
                       type="text"
                       {...register('firstName')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-900"
                       placeholder={t('visitor.form.firstname')}
                     />
                   </div>
@@ -353,7 +395,7 @@ export default function VisitorFreeRegistration() {
                       id="lastName"
                       type="text"
                       {...register('lastName')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-900"
                       placeholder={t('visitor.form.lastname')}
                     />
                   </div>
@@ -376,7 +418,7 @@ export default function VisitorFreeRegistration() {
                     id="email"
                     type="email"
                     {...register('email')}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 bg-white text-gray-900 ${
                       errors.email
                         ? 'border-red-500 focus:ring-red-500'
                         : 'border-gray-300 focus:ring-green-500'
@@ -406,7 +448,7 @@ export default function VisitorFreeRegistration() {
                       id="phone"
                       type="tel"
                       {...register('phone')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-900"
                       placeholder="+33 1 23 45 67 89"
                     />
                   </div>
@@ -424,7 +466,7 @@ export default function VisitorFreeRegistration() {
                     <select
                       id="country"
                       {...register('country')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none bg-white"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none bg-white text-gray-900"
                     >
                       <option value="">Sélectionnez</option>
                       {COUNTRIES.map((country) => (
@@ -448,7 +490,7 @@ export default function VisitorFreeRegistration() {
                 <select
                   id="sector"
                   {...register('sector')}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-900"
                 >
                   <option value="">Sélectionnez</option>
                   {sectors.map((sector) => (
@@ -472,7 +514,7 @@ export default function VisitorFreeRegistration() {
                       id="position"
                       type="text"
                       {...register('position')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-900"
                       placeholder="Ex: Ingénieur"
                     />
                   </div>
@@ -486,7 +528,7 @@ export default function VisitorFreeRegistration() {
                     id="company-field"
                     type="text"
                     {...register('company')}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-900"
                     placeholder={t('visitor.form.company')}
                   />
                 </div>
@@ -503,7 +545,7 @@ export default function VisitorFreeRegistration() {
                     <input
                       type={showPassword ? "text" : "password"}
                       {...register('password')}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-900"
                       placeholder="••••••••"
                     />
                     <button
@@ -528,7 +570,7 @@ export default function VisitorFreeRegistration() {
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       {...register('confirmPassword')}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-900"
                       placeholder="••••••••"
                     />
                     <button
@@ -621,40 +663,40 @@ export default function VisitorFreeRegistration() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.5 }}
                 transition={{ type: "spring", duration: 0.5 }}
-                className="bg-gradient-to-br from-white to-green-50 rounded-2xl shadow-2xl p-10 w-full max-w-lg text-center border-4 border-green-500 relative overflow-hidden"
+                className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-2xl p-10 w-full max-w-lg text-center border-4 border-[#C9A84C] relative overflow-hidden"
               >
                 {/* Confetti Effect Background */}
                 <div className="absolute inset-0 opacity-10 pointer-events-none">
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 animate-pulse" />
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1e3a5f] via-[#C9A84C]/30 to-[#1e3a5f]/50 animate-pulse" />
                 </div>
 
                 {/* Content */}
                 <div className="relative z-10">
-                  <div className="mx-auto w-28 h-28 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mb-6 shadow-xl">
+                  <div className="mx-auto w-28 h-28 bg-gradient-to-br from-[#1e3a5f] to-[#C9A84C] rounded-full flex items-center justify-center mb-6 shadow-xl">
                     <CheckCircle className="h-20 w-20 text-white animate-bounce" />
                   </div>
 
                   <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">
-                    ?? {t('visitor.message.success_title')}
+                    🎉 {t('visitor.message.success_title')}
                   </h2>
 
                   <p className="text-lg text-gray-700 mb-6">
                     {t('visitor.message.success_desc')}
                   </p>
 
-                  <div className="bg-white border-2 border-green-500 p-5 rounded-xl mb-6 text-left shadow-lg">
-                    <p className="font-bold text-green-800 mb-3 text-center">? Compte créé avec succès !</p>
+                  <div className="bg-white border-2 border-[#C9A84C] p-5 rounded-xl mb-6 text-left shadow-lg">
+                    <p className="font-bold text-[#1e3a5f] mb-3 text-center">✅ Compte créé avec succès !</p>
                     <div className="text-gray-700 text-sm space-y-2">
                       <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-[#C9A84C] mr-2 mt-0.5 flex-shrink-0" />
                         <span>Compte enregistré : <strong>{watch('email')}</strong></span>
                       </div>
                       <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-[#C9A84C] mr-2 mt-0.5 flex-shrink-0" />
                         <span>Vous êtes maintenant connecté</span>
                       </div>
                       <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-[#C9A84C] mr-2 mt-0.5 flex-shrink-0" />
                         <span>Accès immédiat à votre espace visiteur</span>
                       </div>
                     </div>
@@ -671,7 +713,7 @@ export default function VisitorFreeRegistration() {
                       initial={{ width: 0 }}
                       animate={{ width: '100%' }}
                       transition={{ duration: 3, ease: "linear" }}
-                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-full"
+                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#1e3a5f] via-[#C9A84C] to-[#1e3a5f] rounded-full"
                     />
                   </motion.div>
                 </div>

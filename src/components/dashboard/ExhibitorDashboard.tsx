@@ -17,6 +17,7 @@ import {
   ExhibitorQRModal,
   ExhibitorRejectModal,
   ExhibitorGenericModal,
+  ExhibitorProductsSection,
 } from './exhibitor';
 
 import { Button } from '../ui/Button';
@@ -150,7 +151,6 @@ export default memo(function ExhibitorDashboard() {
           receivedAppointments={ctx.receivedAppointments}
           confirmedAppointments={ctx.confirmedAppointments}
           miniSiteViews={ctx.dashboardStats?.miniSiteViews?.value || 0}
-          predictions={ctx.predictions}
         />
 
         <ExhibitorQuickActions
@@ -171,6 +171,8 @@ export default memo(function ExhibitorDashboard() {
           activities={ctx.dashboard?.recentActivity || []}
           onViewAll={ctx.handleViewAllActivities}
         />
+
+        <ExhibitorProductsSection exhibitorDbId={ctx.exhibitorDbId} exhibitorName={ctx.user?.companyName || ctx.user?.name} />
 
         <ExhibitorInfoSection />
 

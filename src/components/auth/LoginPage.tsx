@@ -12,7 +12,8 @@ import {
   Building2,
   Store,
   BarChart2,
-  Users
+  Users,
+  Zap
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { Card } from '../ui/Card';
@@ -90,6 +91,21 @@ export default function LoginPage() {
         }
         redirectToDashboard(user);
       }
+    } catch (err: any) {
+      setError(err.message || t('login.connectionError'));
+    } finally {
+      setDemoLoading(null);
+    }
+  };
+
+  const handleDemoLoginWithRedirect = async (demoEmail: string, demoPassword: string, key: string, redirectTo: string) => {
+    setError('');
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setDemoLoading(key);
+    try {
+      await login(demoEmail, demoPassword, { rememberMe: true });
+      navigate(redirectTo, { replace: true });
     } catch (err: any) {
       setError(err.message || t('login.connectionError'));
     } finally {
@@ -412,10 +428,19 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => handleDemoLogin('visitor-free@test.sib2026.ma', 'Test@123456', 'visitor')}
                   disabled={demoLoading !== null || isLoading}
-                  className="col-span-2 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 disabled:opacity-50 transition-colors"
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 disabled:opacity-50 transition-colors"
                 >
                   {demoLoading === 'visitor' ? <Loader className="h-4 w-4 animate-spin" /> : <Users className="h-4 w-4" />}
                   Visiteur Gratuit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDemoLoginWithRedirect('visitor-free@test.sib2026.ma', 'Test@123456', 'matching', ROUTES.PROFILE_MATCHING)}
+                  disabled={demoLoading !== null || isLoading}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-50 transition-colors"
+                >
+                  {demoLoading === 'matching' ? <Loader className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
+                  Matching IA
                 </button>
               </div>
             </div>

@@ -28,10 +28,12 @@ export function AllExhibitorsSection() {
     const labels = {
       'institutional': t('pages.exhibitors.category_institutional'),
       'bâtiment-industry': t('pages.exhibitors.category_port_industry'),
+      'port-industry': t('pages.exhibitors.category_port_industry'),
       'bâtiment-operations': t('pages.exhibitors.category_operations'),
+      'port-operations': t('pages.exhibitors.category_operations'),
       'academic': t('pages.exhibitors.category_academic')
     };
-    return labels[category as keyof typeof labels] || category;
+    return labels[category as keyof typeof labels] || 'Industrie du Bâtiment';
   }, [t]);
 
   const getCategoryColor = useCallback((category: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {

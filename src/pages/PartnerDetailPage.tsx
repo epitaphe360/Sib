@@ -61,6 +61,7 @@ import LogoWithFallback from '../components/ui/LogoWithFallback';
 import { motion } from 'framer-motion';
 import { CONFIG } from '../lib/config';
 import { SupabaseService } from '../services/supabaseService';
+import { useAuthStore } from '../store/authStore';
 
 interface Project {
   id: string;
@@ -139,6 +140,7 @@ interface Partner {
 export default function PartnerDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const { user } = useAuthStore();
   const [partner, setPartner] = useState<Partner | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedNews, setSelectedNews] = useState<{ title: string; date: Date; excerpt: string; image?: string } | null>(null);
@@ -319,8 +321,8 @@ export default function PartnerDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Banner de validation pour les profils non publiés */}
-      {partner.is_published === false && (
+      {/* Banner de validation — visible UNIQUEMENT par le propriétaire ou un admin */}
+      {partner.is_published === false && user && (user.id === (partner as any).userId || user.id === (partner as any).user_id || user.type === 'admin') && (
         <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 px-4 shadow-lg">
           <div className="max-w-7xl mx-auto flex items-center justify-center space-x-3">
             <AlertCircle className="h-6 w-6 flex-shrink-0" />

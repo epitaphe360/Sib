@@ -686,13 +686,38 @@ app.get('/api/payment/cmi/fail', (req, res) => {
 /**
  * Active le Pass VIP d'un utilisateur après paiement confirmé
  * POST /api/payment/activate-vip
+ * Requiert un token JWT valide — l'utilisateur ne peut activer que son propre VIP
  */
 app.post('/api/payment/activate-vip', async (req, res) => {
   const { userId, paymentMethod, orderId, activatedAt } = req.body;
   if (!userId) return res.status(400).json({ error: 'userId requis' });
   if (!supabaseAdmin) return res.status(500).json({ error: 'Supabase non configuré' });
 
+  // Vérification JWT obligatoire
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Token d\'authentification requis' });
+  }
+  const token = authHeader.replace('Bearer ', '');
+
   try {
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Token invalide ou expiré' });
+    }
+
+    // L'utilisateur ne peut activer que son propre compte (sauf admin)
+    const { data: profile } = await supabaseAdmin
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    const isAdmin = profile?.role === 'admin';
+    if (!isAdmin && user.id !== userId) {
+      return res.status(403).json({ error: 'Accès refusé' });
+    }
+
     const { error } = await supabaseAdmin.from('users').update({
       pass_type: 'vip',
       payment_method: paymentMethod,

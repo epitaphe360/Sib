@@ -163,10 +163,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
       // Simulate bot response if talking to a bot conversation
       const conv = get().conversations.find(c => c.id === conversationId);
-      if (conv && isBotParticipant(conv.participants)) {
+      if (conv && conv.participants.includes(BOT_ID)) {
         setTimeout(() => {
-          const currentConvId = conversationId;
-          get().sendBotMessage('Merci pour votre message. Je traite votre demande...', currentConvId);
+          get().sendBotMessage('Merci pour votre message. Je traite votre demande...');
         }, 1000);
       }
     } catch (error) {
@@ -184,6 +183,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
       console.warn('⚠️ Cannot mark as read: no authenticated user');
       return;
     }
+
+    // Early exit: if unreadCount is already 0, no state update needed (avoids creating new array reference → prevents re-render loops)
+    const conv = conversations.find(c => c.id === conversationId);
+    if (!conv || conv.unreadCount === 0) {return;}
 
     // Marquer comme lus dans la base de données
     try {

@@ -92,11 +92,11 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
         transition={{ duration: 0.5 }}
       >
         <div>
-          <h2 className="text-3xl md:text-4xl font-serif font-bold flex items-center gap-4 mb-2" style={{ color: 'rgba(255,255,255,0.98)' }}>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold flex items-center gap-4 mb-2 text-[#1e3a5f]">
             <TrendingUp className="h-8 w-8" style={{ color: '#C9A84C' }} />
             {t('admin.platform_statistics')}
           </h2>
-          <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.40)' }}>
+          <p className="text-sm leading-relaxed text-gray-500">
             Indicateurs clés de performance • Mis à jour en temps réel
           </p>
         </div>
@@ -131,8 +131,8 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
             <div
               className="relative rounded-2xl border p-8 h-full flex flex-col shadow-luxury backdrop-blur-md"
               style={{
-                background: 'rgba(255,255,255,0.04)',
-                borderColor: 'rgba(255,255,255,0.08)',
+                background: 'rgba(255,255,255,0.95)',
+                borderColor: 'rgba(30,58,95,0.1)',
               }}
             >
               {/* Top accent bar */}
@@ -157,16 +157,16 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
 
               {/* Label + description */}
               <div>
-                <h3 className="text-sm font-bold uppercase tracking-wider mb-1" style={{ color: 'rgba(255,255,255,0.85)', letterSpacing: '0.08em' }}>
+                <h3 className="text-sm font-bold uppercase tracking-wider mb-1 text-[#1e3a5f]" style={{ letterSpacing: '0.08em' }}>
                   {label}
                 </h3>
-                <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.40)' }}>
+                <p className="text-xs leading-relaxed text-gray-500">
                   {description}
                 </p>
               </div>
 
               {/* Bottom divider */}
-              <div className="mt-6 pt-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }} />
+              <div className="mt-6 pt-6 border-t border-[#1e3a5f]/08" />
 
               {/* Trend badge */}
               <div className="flex items-center gap-1.5 text-xs mt-4 font-medium" style={{ color }}>

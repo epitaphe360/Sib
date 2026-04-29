@@ -66,6 +66,23 @@ interface Exhibitor {
   logo?: string;
 }
 
+const CATEGORY_LABELS: Record<string, string> = {
+  'construction_industry': 'Industrie du Bâtiment',
+  'port-industry': 'Industrie du Bâtiment',
+  'bâtiment-industry': 'Industrie du Bâtiment',
+  'port-operations': 'Exploitation & Gestion',
+  'bâtiment-operations': 'Exploitation & Gestion',
+  'institutional': 'Institutionnel',
+  'academic': 'Académique',
+  'material': 'Matériaux',
+  'equipment': 'Équipements',
+  'services': 'Services',
+  'technology': 'Technologies',
+  'N/A': 'Non défini',
+};
+
+const getCategoryLabel = (cat: string) => CATEGORY_LABELS[cat] ?? 'Industrie du Bâtiment';
+
 export default function ExhibitorsPageOptimized() {
   const { t } = useTranslation();
   const [exhibitors, setExhibitors] = useState<Exhibitor[]>([]);
@@ -335,7 +352,7 @@ export default function ExhibitorsPageOptimized() {
               >
                 <option value="">Toutes les catégories</option>
                 {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
+                  <option key={category} value={category}>{getCategoryLabel(category)}</option>
                 ))}
               </select>
 
@@ -406,7 +423,7 @@ export default function ExhibitorsPageOptimized() {
                         <h3 className="text-lg font-semibold text-gray-900 mb-1">
                           {exhibitor.company_name}
                         </h3>
-                        <p className="text-sm text-gray-600 mb-2">{exhibitor.category}</p>
+                        <p className="text-sm text-gray-600 mb-2">{getCategoryLabel(exhibitor.category)}</p>
                         {getStatusBadge(exhibitor.status)}
                       </div>
                       <div className="ml-4">
@@ -525,7 +542,7 @@ export default function ExhibitorsPageOptimized() {
                           </div>
                         </td>
                         <td className="py-4 px-4">
-                          <span className="text-sm text-gray-900">{exhibitor.category}</span>
+                          <span className="text-sm text-gray-900">{getCategoryLabel(exhibitor.category)}</span>
                         </td>
                         <td className="py-4 px-4">
                           <div className="flex items-center text-sm text-gray-600">

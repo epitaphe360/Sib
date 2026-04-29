@@ -75,10 +75,14 @@ export function useAdminDashboard() {
   const getActivityIcon = (type: string) => {
     switch (type) {
       case 'account_validation': return UserCheck;
+      case 'user_registration':  return UserCheck;
       case 'content_moderation': return FileText;
-      case 'system_alert': return AlertTriangle;
-      case 'user_management': return Users;
-      case 'security': return Shield;
+      case 'system_alert':       return AlertTriangle;
+      case 'user_management':    return Users;
+      case 'security':           return Shield;
+      case 'appointment_created':return Activity;
+      case 'connection_made':    return Users;
+      case 'message_sent':       return Activity;
       default: return Activity;
     }
   };

@@ -138,6 +138,7 @@ export default function ProfilePage() {
     company: user?.profile.company || '',
     position: user?.profile.position || '',
     phone: user?.profile.phone || '',
+    country: user?.profile.country || '',
     linkedin: user?.profile.linkedin || '',
     website: user?.profile.website || '',
     bio: user?.profile.bio || '',
@@ -161,6 +162,7 @@ export default function ProfilePage() {
       company: user?.profile.company || '',
       position: user?.profile.position || '',
       phone: user?.profile.phone || '',
+      country: user?.profile.country || '',
       linkedin: user?.profile.linkedin || '',
       website: user?.profile.website || '',
       bio: user?.profile.bio || '',
@@ -286,7 +288,8 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-center space-x-2 mb-4">
                   <Badge variant="info" size="sm">
                     {user.type === 'exhibitor' ? 'Exposant' :
-                     user.type === 'partner' ? 'Partenaire' : 'Visiteur'}
+                     user.type === 'partner' ? 'Partenaire' :
+                     user.type === 'admin' ? 'Administrateur' : 'Visiteur'}
                   </Badge>
                   {profileStats.connections > 0 && (
                     <Badge variant="success" size="sm">
@@ -455,6 +458,11 @@ export default function ProfilePage() {
                       <Mail className="h-4 w-4 text-gray-400" />
                       <p className="text-gray-900">{user.email}</p>
                     </div>
+                    {isEditing && (
+                      <p className="text-xs text-gray-400 mt-1">
+                        L'email ne peut pas être modifié ici. Contactez un administrateur pour changer d'adresse email.
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -515,10 +523,20 @@ export default function ProfilePage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Pays
                     </label>
-                    <div className="flex items-center space-x-2">
-                      <MapPin className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">{user.profile.country}</p>
-                    </div>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.country}
+                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Ex: MA, FR, ES..."
+                      />
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <MapPin className="h-4 w-4 text-gray-400" />
+                        <p className="text-gray-900">{user.profile.country || 'Non renseigné'}</p>
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -789,7 +807,8 @@ export default function ProfilePage() {
                     </label>
                     <Badge variant="info">
                       {user.type === 'exhibitor' ? 'Exposant' :
-                       user.type === 'partner' ? 'Partenaire' : 'Visiteur'}
+                       user.type === 'partner' ? 'Partenaire' :
+                       user.type === 'admin' ? 'Administrateur' : 'Visiteur'}
                     </Badge>
                   </div>
 

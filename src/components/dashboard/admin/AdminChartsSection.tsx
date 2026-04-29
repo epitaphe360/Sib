@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { TrendingUp, BarChart3 } from 'lucide-react';
+import { TrendingUp } from 'lucide-react';
 import { LineChartCard, BarChartCard, PieChartCard } from '../charts';
 import { useTranslation } from '../../../hooks/useTranslation';
 
@@ -86,12 +86,7 @@ export function AdminChartsSection({
             height={320}
             loading={isLoading}
           />
-          {!hasActivityData && !isLoading && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 rounded-2xl">
-              <BarChart3 className="h-10 w-10 text-gray-300 mb-2" />
-              <p className="text-sm text-gray-400">{t('exhibitor.analytics_no_activity')}</p>
-            </div>
-          )}
+
         </motion.div>
       </div>
 

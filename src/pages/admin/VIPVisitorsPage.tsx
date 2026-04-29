@@ -16,7 +16,12 @@ import {
   Eye,
   FileText,
   ArrowLeft,
-  Trash2
+  Trash2,
+  Phone,
+  Globe,
+  User,
+  CreditCard,
+  X
 } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -32,6 +37,7 @@ interface VIPVisitor {
   position?: string;
   created_at: string;
   visitor_level: string;
+  status?: string;
   profile?: {
     country?: string;
     phone?: string;
@@ -54,6 +60,7 @@ export default function VIPVisitorsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [processing, setProcessing] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  const [profileDrawer, setProfileDrawer] = useState<VIPVisitor | null>(null);
 
   useEffect(() => {
     fetchVIPVisitors();
@@ -99,6 +106,7 @@ export default function VIPVisitorsPage() {
           position: user.profile?.position,
           created_at: user.created_at,
           visitor_level: user.visitor_level,
+          status: user.status,
           profile: user.profile,
           payments: userPayments
         };
@@ -261,6 +269,194 @@ export default function VIPVisitorsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      {/* Profile Drawer */}
+      {profileDrawer && (
+        <div className="fixed inset-0 z-50 flex">
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/40" onClick={() => setProfileDrawer(null)} />
+          {/* Panel */}
+          <div className="relative ml-auto w-full max-w-md bg-white shadow-2xl flex flex-col h-full overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between p-5 border-b border-gray-200 bg-gradient-to-r from-yellow-50 to-orange-50">
+              <div className="flex items-center gap-3">
+                <Crown className="h-5 w-5 text-yellow-600" />
+                <h2 className="text-lg font-bold text-gray-900">Profil Visiteur VIP</h2>
+              </div>
+              <button onClick={() => setProfileDrawer(null)} className="p-1.5 rounded-full hover:bg-gray-200 transition-colors">
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Avatar + Name */}
+            <div className="flex flex-col items-center gap-3 py-6 px-5 border-b border-gray-100">
+              {profileDrawer.profile?.photoUrl ? (
+                <img src={profileDrawer.profile.photoUrl} alt="" className="h-20 w-20 rounded-full object-cover ring-4 ring-yellow-200" />
+              ) : (
+                <div className="h-20 w-20 rounded-full bg-yellow-100 ring-4 ring-yellow-200 flex items-center justify-center">
+                  <span className="text-yellow-700 font-bold text-2xl">{profileDrawer.name.charAt(0).toUpperCase()}</span>
+                </div>
+              )}
+              <div className="text-center">
+                <p className="text-xl font-bold text-gray-900">{profileDrawer.name}</p>
+                <span className={`inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium mt-1 ${
+                  profileDrawer.visitor_level === 'vip' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'
+                }`}>
+                  <Crown className="h-3 w-3" />
+                  {profileDrawer.visitor_level?.toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            {/* Details */}
+            <div className="p-5 space-y-4 flex-1">
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Informations personnelles</h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 text-sm">
+                  <Mail className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-gray-400">Email</p>
+                    <p className="font-medium text-gray-800">{profileDrawer.email}</p>
+                  </div>
+                </div>
+                {profileDrawer.profile?.phone && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <Phone className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                    <div>
+                      <p className="text-xs text-gray-400">Téléphone</p>
+                      <p className="font-medium text-gray-800">{profileDrawer.profile.phone}</p>
+                    </div>
+                  </div>
+                )}
+                {profileDrawer.company && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <Building2 className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                    <div>
+                      <p className="text-xs text-gray-400">Société</p>
+                      <p className="font-medium text-gray-800">{profileDrawer.company}</p>
+                    </div>
+                  </div>
+                )}
+                {profileDrawer.position && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <User className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                    <div>
+                      <p className="text-xs text-gray-400">Poste</p>
+                      <p className="font-medium text-gray-800">{profileDrawer.position}</p>
+                    </div>
+                  </div>
+                )}
+                {profileDrawer.profile?.country && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <Globe className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                    <div>
+                      <p className="text-xs text-gray-400">Pays</p>
+                      <p className="font-medium text-gray-800">{profileDrawer.profile.country}</p>
+                    </div>
+                  </div>
+                )}
+                <div className="flex items-center gap-3 text-sm">
+                  <Calendar className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-gray-400">Inscrit le</p>
+                    <p className="font-medium text-gray-800">{new Date(profileDrawer.created_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payments */}
+              <div className="pt-4 border-t border-gray-100">
+                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Transactions</h3>
+                {profileDrawer.payments && profileDrawer.payments.length > 0 ? (
+                  <div className="space-y-2">
+                    {profileDrawer.payments.map((pay) => (
+                      <div key={pay.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2.5">
+                        <div className="flex items-center gap-2">
+                          <CreditCard className="h-4 w-4 text-gray-400" />
+                          <div>
+                            <p className="text-sm font-semibold text-gray-800">{pay.amount} {pay.currency}</p>
+                            <p className="text-xs text-gray-400">{pay.payment_method || 'virement'} · {new Date(pay.created_at).toLocaleDateString('fr-FR')}</p>
+                          </div>
+                        </div>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                          pay.status === 'approved' ? 'bg-green-100 text-green-700' :
+                          pay.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                          'bg-yellow-100 text-yellow-700'
+                        }`}>
+                          {pay.status === 'approved' ? 'Validé' : pay.status === 'rejected' ? 'Refusé' : 'En attente'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-400 italic">Aucune transaction enregistrée</p>
+                )}
+              </div>
+
+              {/* Statut actuel */}
+              <div className="pt-4 border-t border-gray-100">
+                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Statut du compte</h3>
+                <span className={`inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full font-medium ${
+                  profileDrawer.status === 'active' ? 'bg-green-100 text-green-700' :
+                  profileDrawer.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                  'bg-yellow-100 text-yellow-700'
+                }`}>
+                  {profileDrawer.status === 'active' ? <CheckCircle className="h-4 w-4" /> :
+                   profileDrawer.status === 'rejected' ? <XCircle className="h-4 w-4" /> :
+                   <Clock className="h-4 w-4" />}
+                  {profileDrawer.status === 'active' ? 'Compte actif' :
+                   profileDrawer.status === 'rejected' ? 'Compte refusé' :
+                   'En attente de validation'}
+                </span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            {(() => {
+              const p = profileDrawer.payments?.[0];
+              const isProcessing = processing === profileDrawer.id;
+              const isApproved = p?.status === 'approved' || (!p && profileDrawer.status === 'active');
+              const isRejected = p?.status === 'rejected';
+              return (
+                <div className="p-5 border-t border-gray-200 bg-gray-50 flex gap-3">
+                  {!isApproved && (
+                    <button
+                      disabled={isProcessing}
+                      onClick={async () => {
+                        if (p) await validatePayment(p.id, profileDrawer.id);
+                        else await validateVisitorDirectly(profileDrawer.id);
+                        setProfileDrawer(prev => prev ? { ...prev, status: 'active' } : null);
+                      }}
+                      className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white text-sm font-medium py-2.5 rounded-lg transition-colors"
+                    >
+                      <CheckCircle className="h-4 w-4" />
+                      {isProcessing ? 'En cours...' : 'Valider'}
+                    </button>
+                  )}
+                  {!isRejected && (
+                    <button
+                      disabled={isProcessing}
+                      onClick={async () => {
+                        if (p) await rejectPayment(p.id, profileDrawer.id);
+                        else await rejectVisitorDirectly(profileDrawer.id);
+                        setProfileDrawer(null);
+                      }}
+                      className="flex-1 flex items-center justify-center gap-2 border border-red-300 hover:bg-red-50 disabled:opacity-50 text-red-600 text-sm font-medium py-2.5 rounded-lg transition-colors"
+                    >
+                      <XCircle className="h-4 w-4" />
+                      {isProcessing ? 'En cours...' : 'Refuser'}
+                    </button>
+                  )}
+                  {isApproved && !isRejected && (
+                    <p className="flex-1 text-center text-sm text-green-600 font-medium flex items-center justify-center gap-1">
+                      <CheckCircle className="h-4 w-4" /> Visiteur déjà validé
+                    </p>
+                  )}
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto">
         {/* Back Button */}
         <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6">
@@ -450,9 +646,10 @@ export default function VIPVisitorsPage() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {(() => {
                           const p = visitor.payments?.[0];
-                          if (!p) {return <Badge variant="warning"><Clock className="h-3 w-3 mr-1" />En attente</Badge>;}
-                          if (p.status === 'approved') {return <Badge variant="success"><CheckCircle className="h-3 w-3 mr-1" />Validé</Badge>;}
-                          if (p.status === 'rejected') {return <Badge variant="error"><XCircle className="h-3 w-3 mr-1" />Refusé</Badge>;}
+                          if (p?.status === 'approved' || (!p && visitor.status === 'active')) {
+                            return <Badge variant="success"><CheckCircle className="h-3 w-3 mr-1" />Validé</Badge>;
+                          }
+                          if (p?.status === 'rejected') {return <Badge variant="error"><XCircle className="h-3 w-3 mr-1" />Refusé</Badge>;}
                           return <Badge variant="warning"><Clock className="h-3 w-3 mr-1" />En attente</Badge>;
                         })()}
                       </td>
@@ -476,8 +673,19 @@ export default function VIPVisitorsPage() {
                           const isProcessing = processing === visitor.id;
                           return (
                             <div className="flex items-center gap-2 flex-wrap">
+                              {/* Voir Profil */}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setProfileDrawer(visitor)}
+                                className="border-blue-300 text-blue-600 hover:bg-blue-50"
+                                title="Voir le profil complet"
+                              >
+                                <Eye className="h-3 w-3 mr-1" />
+                                Profil
+                              </Button>
                               {/* Valider */}
-                              {p?.status !== 'approved' && (
+                              {p?.status !== 'approved' && !(p === undefined && visitor.status === 'active') && (
                                 <Button
                                   variant="default"
                                   size="sm"

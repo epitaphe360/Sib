@@ -187,10 +187,14 @@ export function useExhibitorDashboard() {
   const myAppointments = useMemo(() => {
     if (!user?.id || !appointments) {return [];}
     return appointments.filter((a) =>
-      // exhibitorId = exhibitors.id (résolu via exhibitorDbId)
+      // Cas 1: champ brut exhibitor_id (= exhibitors.id) matche exhibitorDbId
+      (exhibitorDbId && (a as any).exhibitor_id === exhibitorDbId) ||
+      // Cas 2: exhibitorId transformé (= users.id) matche exhibitorDbId
       (exhibitorDbId && a.exhibitorId === exhibitorDbId) ||
-      // fallback: exhibitor_id == users.id (si FK directe)
+      // Cas 3: exhibitorUserId transformé (= users.id) matche user.id
       (a as any).exhibitorUserId === user.id ||
+      // Cas 4: exhibitorId transformé (= users.id) matche user.id
+      a.exhibitorId === user.id ||
       (a as any).exhibitor?.user_id === user.id ||
       (a as any).exhibitor?.id === user.id
     );
@@ -233,15 +237,17 @@ export function useExhibitorDashboard() {
     [receivedAppointments]
   );
   const upcomingAppointments = useMemo(() => {
-    const now = new Date();
+    // Inclure pending ET confirmed (avec ou sans startTime)
+    // Un RDV confirmed sans startTime est toujours "à venir" tant que le salon n'a pas eu lieu
     return receivedAppointments.filter(
-      (a) => (a.status === 'pending' || (a.startTime != null && new Date(a.startTime) > now)) && a.status !== 'cancelled'
+      (a) => a.status === 'pending' || a.status === 'confirmed'
     );
   }, [receivedAppointments]);
   const pastAppointments = useMemo(() => {
     const now = new Date();
     return receivedAppointments.filter(
-      (a) => a.status !== 'pending' && a.startTime != null && new Date(a.startTime) < now
+      (a) => a.status === 'completed' ||
+             (a.status !== 'pending' && a.status !== 'cancelled' && a.startTime != null && new Date(a.startTime) < now)
     );
   }, [receivedAppointments]);
   const cancelledAppointments = useMemo(
@@ -474,6 +480,7 @@ export function useExhibitorDashboard() {
     cancelledAppointments,
     predictions,
     exhibitorLevel,
+    exhibitorDbId,
     // handlers
     togglePublished,
     handleAccept,

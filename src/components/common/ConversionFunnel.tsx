@@ -22,12 +22,10 @@ export const ConversionFunnel: React.FC<ConversionFunnelProps> = ({
 
   const stagesWithRates = useMemo(() => {
     return stages.map((stage, index) => {
-      // Avoid division by zero: if first stage is 0, rate is 0 unless it's the first stage itself
+      // Use maxValue as base so funnel works even if stage[0] is 0
       let rate = 0;
-      if (index === 0) {
-        rate = 100;
-      } else if (stages[0].count > 0) {
-        rate = Math.round((stage.count / stages[0].count) * 100);
+      if (maxValue > 0) {
+        rate = Math.round((stage.count / maxValue) * 100);
       }
 
       const dropoff = index > 0 ? stages[index - 1].count - stage.count : 0;
@@ -58,15 +56,6 @@ export const ConversionFunnel: React.FC<ConversionFunnelProps> = ({
       <div className="space-y-4">
         {stagesWithRates.map((stage, index) => (
           <div key={stage.stage}>
-            {/* Indicateur de perte entre étapes */}
-            {index > 0 && stage.dropoff > 0 && (
-              <div className="flex items-center justify-center my-2">
-                <div className="text-xs text-red-600 bg-red-50 px-3 py-1 rounded-full">
-                  ↓ -{stage.dropoffRate}% ({stage.dropoff} perdus)
-                </div>
-              </div>
-            )}
-
             {/* Étape du funnel */}
             <div className="relative">
               <div className="flex items-center justify-between mb-2">
@@ -109,7 +98,7 @@ export const ConversionFunnel: React.FC<ConversionFunnelProps> = ({
       <div className="mt-6 pt-6 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
         <div>
           <div className="text-2xl font-bold text-gray-900">
-            {stagesWithRates[0].count.toLocaleString()}
+            {maxValue.toLocaleString()}
           </div>
           <div className="text-xs text-gray-500">Entrées totales</div>
         </div>

@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect, useMemo } from 'react';
+import { useRegistrationControl } from '../../hooks/useRegistrationControl';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -70,6 +71,7 @@ type ExhibitorSignUpFormValues = z.infer<ReturnType<typeof createExhibitorSignUp
 export default function ExhibitorSignUpPage() {
   const navigate = useNavigate();
   const { signUp, loginWithGoogle, loginWithLinkedIn } = useAuthStore();
+  const { isOpen: regOpen, isLoading: regCheckLoading } = useRegistrationControl();
   const [isLoading, setIsLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [language, setLanguage] = useState<Language>('fr');
@@ -288,6 +290,143 @@ export default function ExhibitorSignUpPage() {
     }
   };
 
+  // ─── Chargement de l'état d'inscription ────────────────────────────────────
+  if (regCheckLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f]/95 to-[#1e3a5f]/85 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 rounded-full border-4 border-[#C9A84C]/30 border-t-[#C9A84C] animate-spin" />
+          <p className="text-blue-100 text-sm">Chargement…</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Page « Stands complets » si inscriptions clôturées ──────────────────
+  if (!regOpen) return (
+    <div className="min-h-screen bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f]/95 to-[#1e3a5f]/85 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        className="max-w-2xl w-full"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header logo */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center gap-3 mb-4">
+            <div className="bg-white p-3 rounded-lg shadow-lg">
+              <img src="/logo-sib2026.png" alt="SIB 2026" className="h-10 w-10 object-contain" />
+            </div>
+            <div className="text-left">
+              <div className="text-2xl font-bold text-white">SIB 2026</div>
+              <div className="text-xs text-blue-100">Salon International du Bâtiment</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Carte "Stands complets" */}
+        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          {/* Bandeau or */}
+          <div className="bg-gradient-to-r from-[#C9A84C] via-[#e8c96a] to-[#C9A84C] h-2" />
+
+          <div className="p-8 sm:p-10 text-center">
+            {/* Icône */}
+            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-[#1e3a5f] to-[#2a4f82] rounded-full flex items-center justify-center mb-6 shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-[#C9A84C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+
+            {/* Badge "Complet" */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C] mb-4">
+              <span className="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse" />
+              <span className="text-xs font-bold text-[#1e3a5f] uppercase tracking-wider">Inscriptions clôturées</span>
+            </div>
+
+            {/* Titre */}
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1e3a5f] mb-3 font-display">
+              Tous les stands ont été vendus
+            </h1>
+
+            <p className="text-gray-600 text-base mb-6 leading-relaxed max-w-lg mx-auto">
+              Merci de l'engouement remarquable autour du SIB 2026 !
+              <br />
+              <strong className="text-[#1e3a5f]">L'ensemble des stands disponibles a été attribué</strong> et nous ne pouvons malheureusement plus accepter de nouvelles inscriptions exposant pour cette édition.
+            </p>
+
+            {/* Liste d'options alternatives */}
+            <div className="bg-[#1e3a5f]/5 rounded-xl p-5 mb-6 text-left">
+              <p className="font-semibold text-[#1e3a5f] mb-3 text-sm flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#C9A84C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Vous pouvez tout de même :
+              </p>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#C9A84C] mt-0.5">→</span>
+                  <span><strong>Demander à être mis en liste d'attente</strong> en cas de désistement</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#C9A84C] mt-0.5">→</span>
+                  <span><strong>Vous inscrire comme visiteur professionnel</strong> pour ne rien manquer du salon</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#C9A84C] mt-0.5">→</span>
+                  <span><strong>Découvrir nos formules sponsoring</strong> pour gagner en visibilité autrement</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#C9A84C] mt-0.5">→</span>
+                  <span><strong>Réserver dès maintenant pour SIB 2027</strong> et bénéficier d'un tarif préférentiel</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Boutons d'action */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a
+                href="mailto:Sib2026@urbacom.net?subject=Liste%20d'attente%20stand%20SIB%202026"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold text-sm transition-colors shadow-md"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Liste d'attente
+              </a>
+              <a
+                href="/register/visitor"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#C9A84C] hover:bg-[#b8973d] text-white font-semibold text-sm transition-colors shadow-md"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                S'inscrire comme visiteur
+              </a>
+            </div>
+
+            {/* Contact */}
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <p className="text-xs text-gray-500">
+                Pour toute demande spécifique, contactez-nous au{' '}
+                <a href="tel:+212688500500" className="text-[#1e3a5f] font-semibold hover:underline">+212 6 88 50 05 00</a>
+                {' '}ou par email à{' '}
+                <a href="mailto:Sib2026@urbacom.net" className="text-[#1e3a5f] font-semibold hover:underline">Sib2026@urbacom.net</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Lien retour */}
+        <div className="text-center mt-6">
+          <a href="/" className="text-blue-100 text-sm hover:text-white transition-colors inline-flex items-center gap-1">
+            ← Retour à l'accueil
+          </a>
+        </div>
+      </motion.div>
+    </div>
+  );
+
+  // ─── Formulaire d'inscription (inscriptions ouvertes) ───
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
@@ -322,6 +461,39 @@ export default function ExhibitorSignUpPage() {
           <p className="mt-2 text-sm text-gray-600">
             Rejoignez notre écosystème et présentez vos produits et services.
           </p>
+        </div>
+
+        {/* Note d'information : processus d'inscription complet */}
+        <div className="rounded-xl border-l-4 border-[#C9A84C] bg-gradient-to-r from-[#1e3a5f]/5 to-transparent px-5 py-4">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 mt-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#C9A84C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-[#1e3a5f] mb-1">
+                Inscription complète en 6 étapes
+              </p>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                Votre demande d'inscription comprend la sélection de l'abonnement, les informations entreprise,
+                vos coordonnées personnelles, le contact, la sécurité du compte et l'acceptation des conditions.
+                <strong className="text-[#1e3a5f]"> Comptez environ 8 à 10 minutes</strong> pour finaliser votre dossier.
+                Vos données sont enregistrées à chaque étape et votre compte sera activé après validation par notre équipe sous 48h.
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white text-[#1e3a5f] text-xs font-medium border border-[#C9A84C]/30">
+                  ✓ Données chiffrées
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white text-[#1e3a5f] text-xs font-medium border border-[#C9A84C]/30">
+                  ✓ Validation sous 48h
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white text-[#1e3a5f] text-xs font-medium border border-[#C9A84C]/30">
+                  ✓ Support 7j/7
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Indicateur de progression */}
