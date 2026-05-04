@@ -58,7 +58,7 @@ export function useThrottle<T extends (...args: any[]) => any>(
   return useCallback(
     (...args: Parameters<T>) => {
       const now = Date.now();
-      
+
       if (now - lastRun.current >= delay) {
         callback(...args);
         lastRun.current = now;

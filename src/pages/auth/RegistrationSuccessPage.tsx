@@ -10,7 +10,7 @@ export default function RegistrationSuccessPage() {
   const location = useLocation();
   const { t } = useTranslation();
   const [countdown, setCountdown] = useState(5);
-  
+
   const accountType = (location.state as any)?.accountType || 'visitor';
   const email = (location.state as any)?.email || '';
   const nextPath = (location.state as any)?.nextPath || '';

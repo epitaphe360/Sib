@@ -123,7 +123,7 @@ export default function PressAccreditationPage() {
               {/* Informations personnelles */}
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-900 border-b pb-2">Informations Personnelles</h3>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
                   <div className="relative">
@@ -185,7 +185,7 @@ export default function PressAccreditationPage() {
               {/* Informations professionnelles */}
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-900 border-b pb-2">Média & Profession</h3>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nom du Média *</label>
                   <div className="relative">

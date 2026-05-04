@@ -17,9 +17,9 @@ const lines = content.split('\n');
 
 // Find start/end of each language section
 lines.forEach((line, idx) => {
-  if (line.match(/^\s+fr:\s*{/)) languages.fr.start = idx;
-  if (line.match(/^\s+en:\s*{/)) languages.en.start = idx;
-  if (line.match(/^\s+ar:\s*{/)) languages.ar.start = idx;
+  if (line.match(/^\s+fr:\s*{/)) {languages.fr.start = idx;}
+  if (line.match(/^\s+en:\s*{/)) {languages.en.start = idx;}
+  if (line.match(/^\s+ar:\s*{/)) {languages.ar.start = idx;}
 });
 
 // Find end of sections

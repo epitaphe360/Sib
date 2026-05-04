@@ -1,7 +1,7 @@
 /**
  * API Endpoint pour récupérer un article par son ID
  * Compatible avec WordPress et Elementor Pro
- * 
+ *
  * Usage: GET /api/articles/[id]
  * Returns: JSON avec les données de l'article
  */
@@ -70,9 +70,9 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json(response);
   } catch (error: any) {
     console.error('API Error:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Internal server error',
-      message: error.message 
+      message: error.message
     });
   }
 }

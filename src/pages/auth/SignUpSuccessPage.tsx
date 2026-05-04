@@ -34,7 +34,7 @@ export default function SignUpSuccessPage() {
   const qrValue = `https://urbaevent.com/badge/${uveCode}`;
 
   useEffect(() => {
-    if (accountType !== 'visitor') return;
+    if (accountType !== 'visitor') {return;}
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -59,7 +59,7 @@ export default function SignUpSuccessPage() {
 
   const handleDownloadQR = () => {
     const svgEl = qrRef.current?.querySelector('svg');
-    if (!svgEl) return;
+    if (!svgEl) {return;}
     const svgData = new XMLSerializer().serializeToString(svgEl);
     const blob = new Blob([svgData], { type: 'image/svg+xml' });
     const url = URL.createObjectURL(blob);

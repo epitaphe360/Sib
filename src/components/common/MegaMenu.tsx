@@ -28,7 +28,7 @@ interface MegaMenuProps {
 
 /**
  * MegaMenu - Composant de navigation principal avec menu déroulant
- * 
+ *
  * Fonctionnalités :
  * - Menu déroulant avec sous-services
  * - Responsive design (drawer sur mobile)

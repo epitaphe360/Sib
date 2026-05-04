@@ -127,10 +127,10 @@ export default function ExhibitorsPageOptimized() {
     initialSortField: 'company_name',
     initialSortDirection: 'asc',
     filterFn: (exhibitor, filters) => {
-      if (filters.category && exhibitor.category !== filters.category) return false;
-      if (filters.status && exhibitor.status !== filters.status) return false;
-      if (filters.verified === 'true' && !exhibitor.verified) return false;
-      if (filters.verified === 'false' && exhibitor.verified) return false;
+      if (filters.category && exhibitor.category !== filters.category) {return false;}
+      if (filters.status && exhibitor.status !== filters.status) {return false;}
+      if (filters.verified === 'true' && !exhibitor.verified) {return false;}
+      if (filters.verified === 'false' && exhibitor.verified) {return false;}
       return true;
     },
   });
@@ -183,7 +183,7 @@ export default function ExhibitorsPageOptimized() {
   };
 
   const renderSortIcon = (field: keyof Exhibitor) => {
-    if (sortField !== field) return null;
+    if (sortField !== field) {return null;}
     return sortDirection === 'asc' ? (
       <ChevronUp className="h-4 w-4 inline ml-1" />
     ) : (
@@ -412,8 +412,8 @@ export default function ExhibitorsPageOptimized() {
                       </div>
                       <div className="ml-4">
                         {exhibitor.logo ? (
-                          <img 
-                            src={exhibitor.logo} 
+                          <img
+                            src={exhibitor.logo}
                             alt={exhibitor.company_name}
                             className="h-16 w-16 rounded-lg object-contain bg-white border border-gray-200"
                             onError={(e) => {

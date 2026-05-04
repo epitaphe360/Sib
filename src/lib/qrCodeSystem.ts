@@ -189,7 +189,7 @@ export function canAccessEvent(
   eventId: string
 ): { canAccess: boolean; reason?: string; event?: EventAccess } {
   const event = salonEvents.find(e => e.eventId === eventId);
-  
+
   if (!event) {
     return { canAccess: false, reason: 'Événement non trouvé.' };
   }
@@ -208,7 +208,7 @@ export function canAccessEvent(
   switch (event.eventType) {
     case 'public':
       return { canAccess: true, event };
-      
+
     case 'premium':
       if (userType === 'partner' || userType === 'exhibitor') {
         return { canAccess: true, event };
@@ -229,13 +229,13 @@ export function canAccessEvent(
         return { canAccess: true, event };
       }
       return { canAccess: false, reason: 'Accès VIP requis.', event };
-      
+
     case 'partner':
       if (userType === 'partner') {
         return { canAccess: true, event };
       }
       return { canAccess: false, reason: 'Réservé aux partenaires.', event };
-      
+
     case 'gala':
       if (userType === 'partner') {
         return { canAccess: true, event };
@@ -247,7 +247,7 @@ export function canAccessEvent(
         return { canAccess: true, event };
       }
       return { canAccess: false, reason: 'Invité VIP requis pour le gala.', event };
-      
+
     default:
       return { canAccess: false, reason: 'Type d\'événement non reconnu.', event };
   }
@@ -285,7 +285,7 @@ export function validateQRCode(qrData: QRCodeData): { valid: boolean; reason?: s
   // Validate signature (simplified validation)
   const expectedDataString = `${qrData.userId}-${qrData.userType}-${qrData.accessLevel}-${qrData.eventId || 'general'}-${qrData.validUntil.toISOString()}`;
   const expectedSignature = btoa(expectedDataString).slice(0, 16);
-  
+
   if (qrData.signature !== expectedSignature) {
     return { valid: false, reason: 'QR code non valide ou corrompu.' };
   }
@@ -334,10 +334,10 @@ export function parseQRCodeFromDisplay(qrString: string): QRCodeData | null {
 export function getHighestAccessLevel(
   userType: 'admin' | 'partner' | 'exhibitor' | 'visitor',
   userLevel: string
-): { 
-  level: string; 
-  description: string; 
-  capabilities: string[] 
+): {
+  level: string;
+  description: string;
+  capabilities: string[]
 } {
   switch (userType) {
     case 'admin':

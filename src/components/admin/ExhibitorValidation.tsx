@@ -21,15 +21,15 @@ interface ExhibitorApplication {
 }
 
 export default function ExhibitorValidation() {
-  const { 
-    exhibitors, 
-    isLoading, 
+  const {
+    exhibitors,
+    isLoading,
     isUpdating,
     error,
-    fetchExhibitors, 
-    updateExhibitorStatus 
+    fetchExhibitors,
+    updateExhibitorStatus
   } = useExhibitorStore();
-  
+
   const [selectedApplication, setSelectedApplication] = useState<ExhibitorApplication | null>(null);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function ExhibitorValidation() {
           {applications.filter(app => app.status === 'pending').length} pending applications
         </div>
       </div>
-      
+
       {error && <div className="p-4 bg-red-100 text-red-700 border border-red-200 rounded-lg">{error}</div>}
 
       <div className="grid gap-6">
@@ -126,7 +126,7 @@ export default function ExhibitorValidation() {
                   <Eye className="w-4 h-4" />
                   Review
                 </Button>
-                
+
                 {application.status === 'pending' && (
                   <>
                     <Button
@@ -192,7 +192,7 @@ export default function ExhibitorValidation() {
               </div>
 
               {/* ... modal content ... */}
-              
+
                 {selectedApplication.status === 'pending' && (
                   <div className="flex gap-3 pt-4 border-t">
                     <Button

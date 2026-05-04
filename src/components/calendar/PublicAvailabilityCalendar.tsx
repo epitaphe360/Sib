@@ -44,7 +44,7 @@ export default function PublicAvailabilityCalendar({
 
   // Helper pour parser une date string (YYYY-MM-DD) en Date locale sans décalage UTC
   const parseLocalDate = (dateStr: string | Date): Date => {
-    if (dateStr instanceof Date) return dateStr;
+    if (dateStr instanceof Date) {return dateStr;}
     // Format YYYY-MM-DD -> créer une date à minuit heure locale
     const [year, month, day] = String(dateStr).split('T')[0].split('-').map(Number);
     return new Date(year, month - 1, day);
@@ -69,7 +69,7 @@ export default function PublicAvailabilityCalendar({
         } else {
           dateObj = new Date();
         }
-        
+
         const year = dateObj.getFullYear();
         const month = String(dateObj.getMonth() + 1).padStart(2, '0');
         const day = String(dateObj.getDate()).padStart(2, '0');
@@ -102,7 +102,7 @@ export default function PublicAvailabilityCalendar({
 
   const handleAddTimeSlot = async () => {
     console.log('🔵 handleAddTimeSlot appelé', { newSlot, isLoading });
-    
+
     if (!newSlot.date || !newSlot.startTime || !newSlot.endTime) {
       toast.error('Veuillez remplir tous les champs requis');
       console.log('❌ Champs manquants:', { date: newSlot.date, startTime: newSlot.startTime, endTime: newSlot.endTime });
@@ -134,7 +134,7 @@ export default function PublicAvailabilityCalendar({
       // Pas de validation de chevauchement ou duplication
 
       let result: TimeSlot | undefined;
-      
+
       if (selectedSlot) {
         // MODE MODIFICATION: Update existing slot
         console.log('🔄 Modification du créneau:', selectedSlot.id);
@@ -147,9 +147,9 @@ export default function PublicAvailabilityCalendar({
           maxBookings: newSlot.maxBookings || 1,
           location: newSlot.location || undefined
         });
-        
+
         toast.success('✅ Créneau modifié avec succès');
-        if (result) setTimeSlots(prev => prev.map(s => s.id === selectedSlot.id ? result! : s));
+        if (result) {setTimeSlots(prev => prev.map(s => s.id === selectedSlot.id ? result! : s));}
       } else {
         // MODE CRÉATION: Create new slot
         console.log('➕ Création d\'un nouveau créneau');
@@ -165,9 +165,9 @@ export default function PublicAvailabilityCalendar({
         });
 
         toast.success('✅ Créneau ajouté avec succès');
-        if (result) setTimeSlots(prev => [...prev, result!]);
+        if (result) {setTimeSlots(prev => [...prev, result!]);}
       }
-      
+
       resetForm();
       setShowAddModal(false);
     } catch (error: any) {
@@ -204,15 +204,15 @@ export default function PublicAvailabilityCalendar({
 
   const handleToggleSlotStatus = async (e: React.MouseEvent, slot: TimeSlot) => {
     e.stopPropagation();
-    
+
     const isFull = slot.currentBookings >= slot.maxBookings;
     let newMax = slot.maxBookings;
-    
+
     if (isFull) {
-        if (!confirm(`Le créneau est complet (${slot.currentBookings}/${slot.maxBookings}). Voulez-vous augmenter la capacité à ${slot.currentBookings + 1} pour le réouvrir ?`)) return;
+        if (!confirm(`Le créneau est complet (${slot.currentBookings}/${slot.maxBookings}). Voulez-vous augmenter la capacité à ${slot.currentBookings + 1} pour le réouvrir ?`)) {return;}
         newMax = slot.currentBookings + 1;
     } else {
-        if (!confirm(`Voulez-vous fermer ce créneau ? (Capacité réduite à ${slot.currentBookings})`)) return;
+        if (!confirm(`Voulez-vous fermer ce créneau ? (Capacité réduite à ${slot.currentBookings})`)) {return;}
         newMax = slot.currentBookings;
     }
 
@@ -227,7 +227,7 @@ export default function PublicAvailabilityCalendar({
   };
 
   const handleDeleteSlot = async (slotId: string) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce créneau ?')) return;
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce créneau ?')) {return;}
 
     try {
       await SupabaseService.deleteTimeSlot(slotId);
@@ -376,7 +376,7 @@ export default function PublicAvailabilityCalendar({
                   </Button>
                 </>
               )}
-              
+
               {/* Toggle Vue */}
               <div className="flex items-center bg-slate-700 rounded-lg p-0.5">
                 <button
@@ -453,7 +453,7 @@ export default function PublicAvailabilityCalendar({
                           slot.type === 'virtual' ? 'border-l-blue-400' :
                           slot.type === 'in-person' ? 'border-l-emerald-400' :
                           'border-l-amber-400';
-                        
+
                         return (
                         <motion.div
                           key={slot.id}
@@ -571,7 +571,7 @@ export default function PublicAvailabilityCalendar({
               weekSlots
                 .sort((a, b) => {
                   const dateCompare = new Date(a.date).getTime() - new Date(b.date).getTime();
-                  if (dateCompare !== 0) return dateCompare;
+                  if (dateCompare !== 0) {return dateCompare;}
                   return a.startTime.localeCompare(b.startTime);
                 })
                 .map((slot) => (
@@ -585,8 +585,8 @@ export default function PublicAvailabilityCalendar({
                     <div className="flex items-center space-x-6 flex-1">
                       <div className={`p-4 rounded-2xl shadow-lg transform group-hover:scale-110 transition-transform ${
                         slot.currentBookings >= slot.maxBookings ? 'bg-red-500 text-white' :
-                        slot.type === 'virtual' ? 'bg-blue-600 text-white' : 
-                        slot.type === 'in-person' ? 'bg-emerald-600 text-white' : 
+                        slot.type === 'virtual' ? 'bg-blue-600 text-white' :
+                        slot.type === 'in-person' ? 'bg-emerald-600 text-white' :
                         'bg-amber-500 text-white shadow-amber-100'
                       }`}>
                         {getTypeIcon(slot.type)}
@@ -603,8 +603,8 @@ export default function PublicAvailabilityCalendar({
                           </span>
                           <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
                             slot.currentBookings >= slot.maxBookings ? 'border-red-200 text-red-600 bg-white' :
-                            slot.type === 'virtual' ? 'border-blue-200 text-blue-600 bg-blue-50' : 
-                            slot.type === 'in-person' ? 'border-emerald-200 text-emerald-600 bg-emerald-50' : 
+                            slot.type === 'virtual' ? 'border-blue-200 text-blue-600 bg-blue-50' :
+                            slot.type === 'in-person' ? 'border-emerald-200 text-emerald-600 bg-emerald-50' :
                             'border-amber-200 text-amber-600 bg-amber-50'
                           }`}>
                             {slot.currentBookings >= slot.maxBookings ? 'COMPLET' : (slot.type === 'virtual' ? 'Virtuel' : slot.type === 'in-person' ? 'Présentiel' : 'Hybride')}

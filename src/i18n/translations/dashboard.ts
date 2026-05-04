@@ -10,7 +10,7 @@ export const dashboardTranslations = {
     'dashboard.overview': 'Vue d\'ensemble',
     'dashboard.statistics': 'Statistiques',
     'dashboard.recent_activity': 'Activité récente',
-    
+
     // Statistiques communes
     'dashboard.stats.total': 'Total',
     'dashboard.stats.active': 'Actifs',
@@ -19,7 +19,7 @@ export const dashboardTranslations = {
     'dashboard.stats.growth': 'Croissance',
     'dashboard.stats.vs_last_month': 'vs mois dernier',
     'dashboard.stats.vs_last_week': 'vs semaine dernière',
-    
+
     // Dashboard Visiteur
     'dashboard.visitor.title': 'Tableau de bord Visiteur',
     'dashboard.visitor.welcome': 'Bienvenue sur votre espace visiteur',
@@ -34,7 +34,7 @@ export const dashboardTranslations = {
     'dashboard.visitor.browse_exhibitors': 'Parcourir les exposants',
     'dashboard.visitor.my_badge': 'Mon badge',
     'dashboard.visitor.upgrade_vip': 'Passer VIP',
-    
+
     // Dashboard Exposant
     'dashboard.exhibitor.title': 'Tableau de bord Exposant',
     'dashboard.exhibitor.welcome': 'Bienvenue sur votre espace exposant',
@@ -50,7 +50,7 @@ export const dashboardTranslations = {
     'dashboard.exhibitor.edit_profile': 'Modifier le profil',
     'dashboard.exhibitor.manage_schedule': 'Gérer l\'agenda',
     'dashboard.exhibitor.view_analytics': 'Voir les analyses',
-    
+
     // Dashboard Partenaire
     'dashboard.partner.title': 'Tableau de bord Partenaire',
     'dashboard.partner.welcome': 'Bienvenue sur votre espace partenaire',
@@ -64,7 +64,7 @@ export const dashboardTranslations = {
     'dashboard.partner.benefits': 'Avantages',
     'dashboard.partner.upload_media': 'Téléverser un média',
     'dashboard.partner.view_report': 'Voir le rapport',
-    
+
     // Dashboard Admin
     'dashboard.admin.title': 'Tableau de bord Administrateur',
     'dashboard.admin.welcome': 'Bienvenue Admin',
@@ -82,7 +82,7 @@ export const dashboardTranslations = {
     'dashboard.admin.manage_content': 'Gérer le contenu',
     'dashboard.admin.view_analytics': 'Voir les analyses',
     'dashboard.admin.settings': 'Paramètres',
-    
+
     // Admin - Gestion Articles/News
     'admin.news_management': 'Gestion des articles',
     'admin.manage_news_desc': 'Gérer et publier les actualités',
@@ -99,7 +99,7 @@ export const dashboardTranslations = {
     'admin.view_article': 'Voir l\'article',
     'admin.edit_article': 'Modifier l\'article',
     'admin.delete_article': 'Supprimer l\'article',
-    
+
     // Cartes de statistiques
     'dashboard.card.appointments': 'Rendez-vous',
     'dashboard.card.views': 'Vues',
@@ -115,7 +115,7 @@ export const dashboardTranslations = {
     'dashboard.overview': 'Overview',
     'dashboard.statistics': 'Statistics',
     'dashboard.recent_activity': 'Recent activity',
-    
+
     // Common statistics
     'dashboard.stats.total': 'Total',
     'dashboard.stats.active': 'Active',
@@ -124,7 +124,7 @@ export const dashboardTranslations = {
     'dashboard.stats.growth': 'Growth',
     'dashboard.stats.vs_last_month': 'vs last month',
     'dashboard.stats.vs_last_week': 'vs last week',
-    
+
     // Visitor Dashboard
     'dashboard.visitor.title': 'Visitor Dashboard',
     'dashboard.visitor.welcome': 'Welcome to your visitor space',
@@ -139,7 +139,7 @@ export const dashboardTranslations = {
     'dashboard.visitor.browse_exhibitors': 'Browse exhibitors',
     'dashboard.visitor.my_badge': 'My badge',
     'dashboard.visitor.upgrade_vip': 'Upgrade to VIP',
-    
+
     // Exhibitor Dashboard
     'dashboard.exhibitor.title': 'Exhibitor Dashboard',
     'dashboard.exhibitor.welcome': 'Welcome to your exhibitor space',
@@ -155,7 +155,7 @@ export const dashboardTranslations = {
     'dashboard.exhibitor.edit_profile': 'Edit profile',
     'dashboard.exhibitor.manage_schedule': 'Manage schedule',
     'dashboard.exhibitor.view_analytics': 'View analytics',
-    
+
     // Partner Dashboard
     'dashboard.partner.title': 'Partner Dashboard',
     'dashboard.partner.welcome': 'Welcome to your partner space',
@@ -169,7 +169,7 @@ export const dashboardTranslations = {
     'dashboard.partner.benefits': 'Benefits',
     'dashboard.partner.upload_media': 'Upload media',
     'dashboard.partner.view_report': 'View report',
-    
+
     // Admin Dashboard
     'dashboard.admin.title': 'Administrator Dashboard',
     'dashboard.admin.welcome': 'Welcome Admin',
@@ -187,7 +187,7 @@ export const dashboardTranslations = {
     'dashboard.admin.manage_content': 'Manage content',
     'dashboard.admin.view_analytics': 'View analytics',
     'dashboard.admin.settings': 'Settings',
-    
+
     // Admin - News Management
     'admin.news_management': 'News Management',
     'admin.manage_news_desc': 'Manage and publish news articles',
@@ -204,7 +204,7 @@ export const dashboardTranslations = {
     'admin.view_article': 'View article',
     'admin.edit_article': 'Edit article',
     'admin.delete_article': 'Delete article',
-    
+
     // Statistics cards
     'dashboard.card.appointments': 'Appointments',
     'dashboard.card.views': 'Views',

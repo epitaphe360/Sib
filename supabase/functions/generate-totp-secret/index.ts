@@ -40,7 +40,7 @@ Deno.serve(async (req: Request) => {
       .eq('id', userId)
       .single();
 
-    if (userError) throw userError;
+    if (userError) {throw userError;}
 
     // Generate TOTP secret
     const totp = new OTPAuth.TOTP({

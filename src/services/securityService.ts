@@ -1,9 +1,9 @@
 /**
  * 🔐 Security Service - Server-side Validation via RPC Functions
- * 
+ *
  * This service calls Supabase RPC functions to validate operations
  * on the server-side, preventing client-side bypass attacks.
- * 
+ *
  * Functions:
  * - validateAppointmentQuota: Check user's remaining quota
  * - canCreateTimeSlot: Verify user role permission
@@ -61,7 +61,7 @@ export const SecurityService = {
         }
       );
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (!data || data.length === 0) {
         return {
@@ -108,7 +108,7 @@ export const SecurityService = {
         }
       );
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (!data || data.length === 0) {
         return {
@@ -163,7 +163,7 @@ export const SecurityService = {
         }
       );
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (!data || data.length === 0) {
         return {
@@ -209,7 +209,7 @@ export const SecurityService = {
         }
       );
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (!data || data.length === 0) {
         return {
@@ -270,7 +270,7 @@ export const SecurityService = {
         }
       );
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (!data || data.length === 0) {
         return {

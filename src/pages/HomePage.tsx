@@ -15,25 +15,25 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Section Hero */}
       <HeroSection />
-      
+
       {/* Section Stats */}
       <StatsSection />
-      
+
       {/* À propos de SIB */}
       <AboutSalonSection />
-      
+
       {/* Partenaires à la Une - Titre + Bande défilante + 3 Fiches */}
       <FeaturedPartners />
-      
+
       {/* Exposants à la une */}
       <FeaturedExhibitors />
-      
+
       {/* Logo Showcase Exposants */}
       <LogoShowcaseSection type="exhibitors" />
-      
+
       {/* Section Networking */}
       <NetworkingSection />
-      
+
       {/* Section Services */}
       <ServicesSection />
     </div>

@@ -128,10 +128,10 @@ export const PartnerSupportPage: React.FC = () => {
     const resolved = t('partSupport.statusResolved');
     const pending = t('partSupport.statusPending');
     const closed = t('partSupport.statusClosed');
-    if (status === inProgress) return 'text-blue-600 bg-blue-50';
-    if (status === resolved) return 'text-green-600 bg-green-50';
-    if (status === pending) return 'text-yellow-600 bg-yellow-50';
-    if (status === closed) return 'text-gray-600 bg-gray-50';
+    if (status === inProgress) {return 'text-blue-600 bg-blue-50';}
+    if (status === resolved) {return 'text-green-600 bg-green-50';}
+    if (status === pending) {return 'text-yellow-600 bg-yellow-50';}
+    if (status === closed) {return 'text-gray-600 bg-gray-50';}
     return 'text-gray-600 bg-gray-50';
   };
 

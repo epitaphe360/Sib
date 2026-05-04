@@ -293,9 +293,9 @@ async function decodeJWT(token: string, secret: string): Promise<QRCodePayload> 
  * Déterminer le niveau d'accès basé sur le type d'utilisateur
  */
 function getUserAccessLevel(user: User): keyof typeof ACCESS_LEVELS {
-  if (user.type === 'admin') return 'admin';
-  if (user.type === 'security') return 'security';
-  if (user.type === 'exhibitor') return 'exhibitor';
+  if (user.type === 'admin') {return 'admin';}
+  if (user.type === 'security') {return 'security';}
+  if (user.type === 'exhibitor') {return 'exhibitor';}
   if (user.type === 'partner') {
     const tier = user.partner_tier || 'museum';
     return `partner_${tier}` as keyof typeof ACCESS_LEVELS;
@@ -509,7 +509,7 @@ export async function getUserAccessHistory(userId: string, limit: number = 50): 
       .order('accessed_at', { ascending: false })
       .limit(limit);
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     return data || [];
   } catch (error) {
@@ -552,7 +552,7 @@ export async function getAccessStats(options?: {
 
     const { data, error } = await query;
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     const logs = data || [];
 
@@ -594,7 +594,7 @@ export function subscribeToAccessLogs(
   callback: (log: AccessLog) => void,
   options?: { zone?: string }
 ) {
-  let query = supabase
+  const query = supabase
     .channel('access_logs_realtime')
     .on(
       'postgres_changes',

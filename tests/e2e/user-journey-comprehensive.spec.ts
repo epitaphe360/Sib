@@ -80,7 +80,7 @@ const setupConsoleMonitoring = (page: any) => {
   page.on('pageerror', (err) => {
     console.log(`[PAGE ERROR] ${err.message}`);
   });
-  
+
   page.on('requestfailed', (request) => {
     if (request.url().includes(BASE_URL) || request.url().includes('supabase')) {
       console.log(`[REQUEST FAILED] ${request.method()} ${request.url()} - ${request.failure()?.errorText}`);
@@ -222,10 +222,10 @@ test.describe('👤 PARCOURS VISITEUR COMPLET', () => {
       await visitorCard.click();
       console.log('   → Carte Visiteur cliquée');
     }
-    
+
     await page.waitForTimeout(1000);
     console.log(`   → URL actuelle: ${page.url()}`);
-    
+
     // DEBUG: Lister les boutons
     const buttons = await page.locator('button').allTextContents();
     console.log(`   → Boutons trouvés: ${buttons.join(', ')}`);
@@ -243,7 +243,7 @@ test.describe('👤 PARCOURS VISITEUR COMPLET', () => {
     if (await compInput.isVisible()) {
       await compInput.fill(visitor.company || 'Indépendant');
     }
-    
+
     const sectorSelect = page.locator('select[name="sector"]').first();
     if (await sectorSelect.isVisible()) {
       await sectorSelect.selectOption('Technologie');
@@ -272,11 +272,11 @@ test.describe('👤 PARCOURS VISITEUR COMPLET', () => {
     if (await desc.isVisible()) {
       await desc.fill('Je suis un visiteur passionné par le secteur maritime et portuaire.');
     }
-    
+
     // Cliquer sur un objectif
     const objective = page.locator('input[type="checkbox"]').first();
-    if (await objective.isVisible()) await objective.check();
-    
+    if (await objective.isVisible()) {await objective.check();}
+
     await page.getByTestId('btn-next').first().click();
     await page.waitForTimeout(1000);
 
@@ -399,37 +399,37 @@ test.describe('🏢 PARCOURS EXPOSANT COMPLET', () => {
 
     // Remplir le formulaire complet (tous les champs sur la même page)
     console.log('   → Remplissage formulaire complet...');
-    
+
     // Section Entreprise
     await page.fill('#companyName', exhibitor.companyName);
     await page.waitForTimeout(300);
-    
+
     // Secteurs - MultiSelect avec input de recherche
     console.log('   → Sélection secteurs...');
     const sectorsInput = page.locator('input[placeholder*="Sélectionnez vos secteurs"]').first();
     await sectorsInput.waitFor({ state: 'visible', timeout: 5000 });
-    
+
     // Sélectionner 2 secteurs via le champ de recherche
     const sectorsToSelect = ['Technologie', 'Finance'];
     for (const sector of sectorsToSelect) {
       await sectorsInput.click();
       await sectorsInput.fill(sector);
       await page.waitForTimeout(300);
-      
+
       // Cliquer sur l'option dans le dropdown
       const sectorOption = page.locator(`button:has-text("${sector}")`).first();
       await sectorOption.waitFor({ state: 'visible', timeout: 5000 });
       await sectorOption.click();
       await page.waitForTimeout(300);
     }
-    
+
     // Pays - avec attente et débogage
     console.log('   → Sélection du pays...');
     const countryTrigger = page.locator('#country');
     await countryTrigger.scrollIntoViewIfNeeded();
     await countryTrigger.click();
     await page.waitForTimeout(1000);
-    
+
     // Attendre que les options soient visibles
     const marocOption = page.getByRole('option', { name: /Maroc/i }).first();
     await marocOption.waitFor({ state: 'visible', timeout: 5000 });
@@ -654,11 +654,11 @@ test.describe('🤝 PARCOURS PARTENAIRE COMPLET', () => {
 
     // Remplir le formulaire complet (tous les champs sur la même page)
     console.log('   → Remplissage formulaire complet...');
-    
+
     // Section Organisation
     await page.fill('#companyName', partner.companyName);
     await page.waitForTimeout(300);
-    
+
     // Secteurs - cliquer sur le MultiSelect
     const partnerSectorsButton = page.locator('button').filter({ hasText: /Sélectionnez/i }).first();
     if (await partnerSectorsButton.isVisible()) {
@@ -668,7 +668,7 @@ test.describe('🤝 PARCOURS PARTENAIRE COMPLET', () => {
       await page.waitForTimeout(200);
       await page.keyboard.press('Escape');
     }
-    
+
     // Pays
     await page.locator('#country').click();
     await page.waitForTimeout(500);
@@ -694,7 +694,7 @@ test.describe('🤝 PARCOURS PARTENAIRE COMPLET', () => {
     // Section Détails
     await page.fill('#companyDescription', partner.description);
     await page.waitForTimeout(300);
-    
+
     // Type de partenariat
     const partnershipSelect = page.locator('#partnershipType');
     if (await partnershipSelect.isVisible()) {

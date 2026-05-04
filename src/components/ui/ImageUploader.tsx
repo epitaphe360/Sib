@@ -39,7 +39,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {return;}
 
     // Vérifier le type de fichier
     if (!file.type.startsWith('image/')) {
@@ -87,9 +87,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
       // Télécharger l'image
       const imageUrl = await StorageService.uploadImage(file, bucketName, folderName);
-      
+
       console.log('✅ [IMAGE UPLOADER] Upload réussi:', imageUrl);
-      
+
       // Mise à jour réussie
       clearInterval(progressInterval);
       setUploadProgress(100);
@@ -132,7 +132,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   return (
     <div className={`w-full ${className}`}>
       {label && <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>}
-      
+
       <div
         onClick={handleClick}
         className={`
@@ -151,7 +151,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           accept="image/*"
           className="hidden"
         />
-        
+
         {previewUrl ? (
           // Aperçu de l'image
           <div className="relative w-full h-full flex justify-center">

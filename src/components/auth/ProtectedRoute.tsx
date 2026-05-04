@@ -24,7 +24,7 @@ export default function ProtectedRoute({
 
   // Wait ONE tick for zustand hydration - only once
   useEffect(() => {
-    if (readyRef.current) return;
+    if (readyRef.current) {return;}
     const timer = setTimeout(() => {
       readyRef.current = true;
       setIsReady(true);

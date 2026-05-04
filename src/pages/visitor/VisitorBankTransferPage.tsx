@@ -74,7 +74,7 @@ export default function VisitorBankTransferPage() {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // @ts-ignore - Supabase type inference limitation
       setPaymentRequest(data as VisitorPaymentRequest);
@@ -137,7 +137,7 @@ export default function VisitorBankTransferPage() {
             upsert: false
           });
 
-        if (uploadError) throw uploadError;
+        if (uploadError) {throw uploadError;}
 
         const { data: urlData } = supabase.storage
           .from('payment-proofs')
@@ -150,7 +150,7 @@ export default function VisitorBankTransferPage() {
       if (!supabase) {
         throw new Error('Supabase client not initialized');
       }
-      
+
       const { error: updateError } = await supabase
         .from('payment_requests')
         // @ts-ignore - Supabase type inference limitation
@@ -162,11 +162,11 @@ export default function VisitorBankTransferPage() {
         } as any)
         .eq('id', requestId);
 
-      if (updateError) throw updateError;
+      if (updateError) {throw updateError;}
 
       toast.success('Justificatif envoyé avec succès !');
       toast.info('Votre paiement sera validé sous 2-5 jours ouvrés');
-      
+
       // Recharger les données
       await loadPaymentRequest();
     } catch (error) {
@@ -179,7 +179,7 @@ export default function VisitorBankTransferPage() {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {return;}
 
     // Vérifier le type de fichier
     const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];

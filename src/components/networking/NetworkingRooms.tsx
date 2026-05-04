@@ -37,7 +37,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
     loadRooms();
     const unsubscribe = subscribeToRoomUpdates();
     return () => {
-      if (unsubscribe) unsubscribe();
+      if (unsubscribe) {unsubscribe();}
     };
   }, [eventId]);
 
@@ -54,7 +54,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
         .order('sector', { ascending: true })
         .range(0, 49);
 
-      if (error) throw error;
+      if (error) {throw error;}
       setRooms(data || []);
     } catch (error) {
       console.error('Error loading rooms:', error);
@@ -112,7 +112,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
 
     try {
       const room = rooms.find(r => r.id === roomId);
-      if (!room) return;
+      if (!room) {return;}
 
       if (room.participants.length >= room.capacity) {
         toast.error('Cette salle est pleine');
@@ -136,7 +136,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
         })
         .eq('id', roomId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setCurrentRoom(roomId);
       toast.success(`Vous avez rejoint ${room.name}`);
@@ -147,11 +147,11 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
   };
 
   const handleLeaveRoom = async (roomId: string) => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       const room = rooms.find(r => r.id === roomId);
-      if (!room) return;
+      if (!room) {return;}
 
       const { error } = await supabase
         .from('networking_rooms')
@@ -160,7 +160,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
         })
         .eq('id', roomId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (currentRoom === roomId) {
         setCurrentRoom(null);
@@ -175,10 +175,10 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
 
   const getRoomStatusColor = (room: NetworkingRoom) => {
     const occupancy = (room.participants.length / room.capacity) * 100;
-    
-    if (room.status === 'closed') return 'bg-gray-500';
-    if (occupancy >= 90) return 'bg-red-500';
-    if (occupancy >= 60) return 'bg-yellow-500';
+
+    if (room.status === 'closed') {return 'bg-gray-500';}
+    if (occupancy >= 90) {return 'bg-red-500';}
+    if (occupancy >= 60) {return 'bg-yellow-500';}
     return 'bg-green-500';
   };
 

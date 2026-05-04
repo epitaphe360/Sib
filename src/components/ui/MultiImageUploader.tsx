@@ -32,7 +32,7 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {return;}
 
     // Vérifier le nombre maximum d'images
     if (images.length + files.length > maxImages) {
@@ -47,33 +47,33 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
       // Note: Les buckets sont créés via les migrations SQL
 
       const uploadPromises: Promise<string>[] = [];
-      
+
       // Vérifier chaque fichier avant de le télécharger
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        
+
         // Vérifier le type de fichier
         if (!file.type.startsWith('image/')) {
           throw new Error(t('upload.file_not_image', { name: file.name }));
         }
-        
+
         // Vérifier la taille du fichier
         const maxSize = maxSizeMB * 1024 * 1024; // en octets
         if (file.size > maxSize) {
           throw new Error(t('upload.image_too_large', { name: file.name, max: maxSizeMB }));
         }
-        
+
         uploadPromises.push(StorageService.uploadImage(file, bucketName, folderName));
       }
-      
+
       // Télécharger toutes les images en parallèle
       const newImageUrls = await Promise.all(uploadPromises);
-      
+
       // Ajouter les nouvelles images à la liste existante
       const updatedImages = [...images, ...newImageUrls];
       setImages(updatedImages);
       onImagesUploaded(updatedImages);
-      
+
     } catch (err) {
       setError(err instanceof Error ? err.message : t('upload.upload_error'));
       console.error('Erreur de téléchargement:', err);
@@ -99,7 +99,7 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
   return (
     <div className={`w-full ${className}`}>
       {label && <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>}
-      
+
       <div className="border-2 border-gray-300 rounded-lg p-4">
         {/* Grille d'images */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
@@ -112,7 +112,7 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
               />
               <button
                 onClick={() => handleRemoveImage(index)}
-                className="absolute top-1 right-1 bg-red-500 text-white p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-full 
+                className="absolute top-1 right-1 bg-red-500 text-white p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-full
                            opacity-0 group-hover:opacity-100 transition-opacity"
                 title={t('minisite.delete_image')}
               >
@@ -120,12 +120,12 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
               </button>
             </div>
           ))}
-          
+
           {/* Bouton d'ajout */}
           {images.length < maxImages && (
             <div
               onClick={handleAddClick}
-              className="border-2 border-dashed border-gray-300 rounded flex items-center justify-center 
+              className="border-2 border-dashed border-gray-300 rounded flex items-center justify-center
                          bg-gray-50 hover:bg-gray-100 cursor-pointer aspect-square transition-colors"
             >
               {isUploading ? (
@@ -136,7 +136,7 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
             </div>
           )}
         </div>
-        
+
         {/* Message d'erreur */}
         {error && (
           <div className="mt-2 flex items-center text-red-600">
@@ -144,12 +144,12 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
             <span className="text-sm">{error}</span>
           </div>
         )}
-        
+
         {/* Info sur le nombre d'images */}
         <div className="text-xs text-gray-500 mt-2">
           {t('upload.images_count', { current: images.length, max: maxImages, size: maxSizeMB })}
         </div>
-        
+
         <input
           type="file"
           ref={fileInputRef}

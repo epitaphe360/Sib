@@ -83,8 +83,8 @@ class ExportService {
       data.forEach((item) => {
         const row = fields.map((field) => {
           const value = this.getNestedValue(item, field);
-          if (value === null || value === undefined) return null;
-          if (typeof value === 'number') return value;
+          if (value === null || value === undefined) {return null;}
+          if (typeof value === 'number') {return value;}
           return String(value);
         });
         wsData.push(row);

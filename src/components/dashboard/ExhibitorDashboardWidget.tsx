@@ -16,11 +16,11 @@ const ExhibitorDashboardWidget: React.FC = memo(() => {
     }
   }, [user, dashboard, fetchDashboard]);
 
-  if (!user) return <div>{t('dashboard.login_to_see_stats')}</div>;
-  
+  if (!user) {return <div>{t('dashboard.login_to_see_stats')}</div>;}
+
   // Show loading state mostly on initial load
-  if (isLoading && !dashboard) return <div>{t('common.loading')}</div>;
-  
+  if (isLoading && !dashboard) {return <div>{t('common.loading')}</div>;}
+
   // Safe default stats
   const stats = dashboard?.stats || {
       miniSiteViews: 0,

@@ -18,20 +18,20 @@ export default function SignupConfirmationPage() {
 
   // Messages personnalisés selon le type
   const getTitle = () => {
-    if (userType === 'exhibitor') return 'Inscription Exposant Réussie !';
-    if (userType === 'partner') return 'Inscription Partenaire Réussie !';
-    if (userLevel === 'free' && needsPassword) return '📧 Badge Gratuit + Définition Mot de Passe';
-    if (userLevel === 'free') return 'Badge Gratuit Envoyé !';
-    if (userLevel === 'premium') return 'Inscription VIP Réussie !';
+    if (userType === 'exhibitor') {return 'Inscription Exposant Réussie !';}
+    if (userType === 'partner') {return 'Inscription Partenaire Réussie !';}
+    if (userLevel === 'free' && needsPassword) {return '📧 Badge Gratuit + Définition Mot de Passe';}
+    if (userLevel === 'free') {return 'Badge Gratuit Envoyé !';}
+    if (userLevel === 'premium') {return 'Inscription VIP Réussie !';}
     return 'Inscription réussie !';
   };
 
   const getDescription = () => {
-    if (userType === 'exhibitor') return 'Votre demande de compte exposant a été enregistrée';
-    if (userType === 'partner') return 'Votre demande de compte partenaire a été enregistrée';
-    if (userLevel === 'free' && needsPassword) return 'Votre badge gratuit vous a été envoyé + un email pour définir votre mot de passe';
-    if (userLevel === 'free') return 'Votre badge d\'accès gratuit vous a été envoyé par email';
-    if (userLevel === 'premium') return 'Votre compte VIP a été créé avec succès';
+    if (userType === 'exhibitor') {return 'Votre demande de compte exposant a été enregistrée';}
+    if (userType === 'partner') {return 'Votre demande de compte partenaire a été enregistrée';}
+    if (userLevel === 'free' && needsPassword) {return 'Votre badge gratuit vous a été envoyé + un email pour définir votre mot de passe';}
+    if (userLevel === 'free') {return 'Votre badge d\'accès gratuit vous a été envoyé par email';}
+    if (userLevel === 'premium') {return 'Votre compte VIP a été créé avec succès';}
     return 'Votre compte a été créé avec succès';
   };
 
@@ -60,7 +60,7 @@ export default function SignupConfirmationPage() {
         }
       ];
     }
-    
+
     if (userLevel === 'free') {
       return [
         {
@@ -238,7 +238,7 @@ export default function SignupConfirmationPage() {
                     Validation en cours
                   </h4>
                   <p className="text-sm text-amber-700">
-                    Votre demande de compte {userType === 'exhibitor' ? 'exposant' : 'partenaire'} sera examinée par notre équipe dans les 24-48 heures. 
+                    Votre demande de compte {userType === 'exhibitor' ? 'exposant' : 'partenaire'} sera examinée par notre équipe dans les 24-48 heures.
                     Vous recevrez un email de confirmation une fois votre compte validé.
                   </p>
                 </div>
@@ -261,7 +261,7 @@ export default function SignupConfirmationPage() {
                     Badge envoyé par email
                   </h4>
                   <p className="text-sm text-green-700">
-                    Votre badge d'accès gratuit avec QR code a été envoyé à votre adresse email. 
+                    Votre badge d'accès gratuit avec QR code a été envoyé à votre adresse email.
                     Imprimez-le ou affichez-le sur votre smartphone à l'entrée du salon.
                   </p>
                 </div>

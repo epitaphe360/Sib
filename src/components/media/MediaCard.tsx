@@ -26,7 +26,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   linkTo
 }) => {
   const formatDuration = (seconds: number) => {
-    if (!seconds) return '0 min';
+    if (!seconds) {return '0 min';}
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     if (hours > 0) {
@@ -36,7 +36,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   };
 
   const formatDate = (dateString?: string) => {
-    if (!dateString) return '';
+    if (!dateString) {return '';}
     return new Date(dateString).toLocaleDateString('fr-FR', {
       day: 'numeric',
       month: 'long',

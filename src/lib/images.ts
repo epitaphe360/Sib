@@ -46,7 +46,7 @@ export function img(
     q: String(quality),
     w: String(width),
   });
-  if (height) params.set('h', String(height));
+  if (height) {params.set('h', String(height));}
   return `${UNSPLASH}/${src.id}?${params.toString()}`;
 }
 

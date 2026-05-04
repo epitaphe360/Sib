@@ -8,7 +8,7 @@ interface UseFormSubmitOptions {
 
 /**
  * Hook useFormSubmit - Gestion centralisée de la soumission des formulaires
- * 
+ *
  * Fournit :
  * - Gestion du chargement
  * - Gestion des erreurs

@@ -52,7 +52,7 @@ export const PartnerMediaPage: React.FC = () => {
 
   useEffect(() => {
     const fetchMentions = async () => {
-      if (!user) return;
+      if (!user) {return;}
       try {
         // Récupère le partner_id de l'utilisateur connecté
         const { data: partnerData } = await supabase
@@ -69,7 +69,7 @@ export const PartnerMediaPage: React.FC = () => {
           .eq('partner_id', partnerData.id)
           .order('mention_date', { ascending: false });
 
-        if (!error && data) setMentions(data as MediaMention[]);
+        if (!error && data) {setMentions(data as MediaMention[]);}
       } catch {
         // table peut ne pas exister encore — afficher état vide
       } finally {

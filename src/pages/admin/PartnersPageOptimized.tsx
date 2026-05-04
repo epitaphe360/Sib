@@ -141,8 +141,8 @@ export default function PartnersPageOptimized() {
     initialSortField: 'organization_name',
     initialSortDirection: 'asc',
     filterFn: (partner, filters) => {
-      if (filters.partner_type && partner.partner_type !== filters.partner_type) return false;
-      if (filters.status && partner.status !== filters.status) return false;
+      if (filters.partner_type && partner.partner_type !== filters.partner_type) {return false;}
+      if (filters.status && partner.status !== filters.status) {return false;}
       return true;
     },
   });
@@ -210,7 +210,7 @@ export default function PartnersPageOptimized() {
   };
 
   const renderSortIcon = (field: keyof Partner) => {
-    if (sortField !== field) return null;
+    if (sortField !== field) {return null;}
     return sortDirection === 'asc' ? (
       <ChevronUp className="h-4 w-4 inline ml-1" />
     ) : (

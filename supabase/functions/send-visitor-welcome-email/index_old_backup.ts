@@ -39,7 +39,7 @@ interface EmailTemplate {
 async function getEmailTemplate(level: 'free' | 'vip'): Promise<EmailTemplate | null> {
   try {
     const template_key = level === 'free' ? 'visitor_welcome_free' : 'visitor_welcome_vip'
-    
+
     const { data, error } = await supabase
       .from('email_templates')
       .select('subject, html_content, text_content')
@@ -64,12 +64,12 @@ async function getEmailTemplate(level: 'free' | 'vip'): Promise<EmailTemplate | 
  */
 function replaceVariables(content: string, variables: Record<string, string>): string {
   let result = content
-  
+
   Object.entries(variables).forEach(([key, value]) => {
     const regex = new RegExp(`{{${key}}}`, 'g')
     result = result.replace(regex, value)
   })
-  
+
   return result
 }
 
@@ -98,9 +98,9 @@ serve(async (req) => {
     if (!template) {
       console.error('❌ Template non trouvé ou inactif')
       return new Response(
-        JSON.stringify({ 
-          error: 'Template not found', 
-          message: `Aucun template actif trouvé pour le niveau: ${level}` 
+        JSON.stringify({
+          error: 'Template not found',
+          message: `Aucun template actif trouvé pour le niveau: ${level}`
         }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
@@ -122,9 +122,9 @@ serve(async (req) => {
 
     // Envoyer via SMTP
     console.log(`📧 Envoi email via SMTP à ${email} (niveau: ${level})...`)
-    
+
     const client = new SmtpClient()
-    
+
     try {
       // Connexion au serveur SMTP
       await client.connectTLS({
@@ -146,7 +146,7 @@ serve(async (req) => {
       })
 
       console.log(`✅ Email envoyé avec succès à ${email} (${level})`)
-      
+
       // Fermeture de la connexion
       await client.close()
     } catch (smtpError) {

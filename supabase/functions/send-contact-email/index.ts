@@ -20,7 +20,7 @@ interface ContactEmailRequest {
  * Escape HTML to prevent XSS attacks
  */
 function escapeHtml(text: string | undefined | null): string {
-  if (!text) return '';
+  if (!text) {return '';}
   return String(text)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')

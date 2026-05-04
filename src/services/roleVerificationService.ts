@@ -80,7 +80,7 @@ export class RoleVerificationService {
       }
 
       // Allow active users OR pending_payment users if explicitly allowed
-      const validStatus = data.status === 'active' || 
+      const validStatus = data.status === 'active' ||
                          (data.status === 'pending_payment' && allowPendingPayment);
 
       return {

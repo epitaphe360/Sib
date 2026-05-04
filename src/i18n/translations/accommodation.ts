@@ -25,7 +25,7 @@ export const accommodationTranslations = {
     'accommodation.details': 'Détails & Tarifs',
     'accommodation.amenities': 'Équipements',
     'accommodation.location': 'Localisation',
-    
+
     // Amenities
     'accommodation.amenity_wifi': 'Wi-Fi Haut Débit',
     'accommodation.amenity_parking': 'Parking Gratuit',
@@ -54,7 +54,7 @@ export const accommodationTranslations = {
     'accommodation.dist.4km': '4 km du salon',
     'accommodation.dist.2km': '2 km du salon',
     'accommodation.dist.2.5km': '2.5 km du salon',
-    
+
     // Room Types
     'accommodation.room.deluxe_single': 'Chambre Deluxe Single',
     'accommodation.room.deluxe_double': 'Chambre Deluxe Double',
@@ -116,7 +116,7 @@ export const accommodationTranslations = {
     'accommodation.dist.4km': '4 km from venue',
     'accommodation.dist.2km': '2 km from venue',
     'accommodation.dist.2.5km': '2.5 km from venue',
-    
+
     // Room Types
     'accommodation.room.deluxe_single': 'Deluxe Room Single',
     'accommodation.room.deluxe_double': 'Deluxe Room Double',

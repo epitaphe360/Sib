@@ -48,7 +48,7 @@ export const CreateMediaPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title || !formData.type) {
       toast.error('Veuillez remplir tous les champs obligatoires');
       return;
@@ -190,8 +190,8 @@ export const CreateMediaPage: React.FC = () => {
               />
             </div>
 
-            {(formData.type === 'webinar' || formData.type === 'capsule_inside' || 
-              formData.type === 'live_studio' || formData.type === 'best_moments' || 
+            {(formData.type === 'webinar' || formData.type === 'capsule_inside' ||
+              formData.type === 'live_studio' || formData.type === 'best_moments' ||
               formData.type === 'testimonial') && (
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">

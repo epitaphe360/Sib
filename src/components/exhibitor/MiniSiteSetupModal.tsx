@@ -62,7 +62,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
 
       // Use AI Scrapper Service directly
       toast.loading('🔍 Analyse de votre site web en cours...', { id: 'scraping' });
-      
+
       const scrapResult = await aiScrapperService.scrapExhibitorMiniSite(websiteUrl);
 
       if (!scrapResult.success) {
@@ -79,7 +79,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
         .eq('id', userId)
         .single();
 
-      if (userError) throw userError;
+      if (userError) {throw userError;}
 
       // Update user with scraped data
       const updateData: any = {
@@ -110,7 +110,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
           .select('id')
           .eq('user_id', userId)
           .maybeSingle();
-        
+
         const targetExhibitorId = exhibitor?.id || userId; // Fallback to userId if no exhibitor entry
 
         const products = scrapResult.data.products.map((product: any) => ({
@@ -136,7 +136,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
       console.error('Error creating auto mini-site:', error);
       toast.dismiss('scraping');
       toast.dismiss('creating');
-      
+
       // Handle specific errors
       if (error?.message?.includes('API key')) {
         toast.error(
@@ -208,7 +208,7 @@ export const MiniSiteSetupModal: React.FC<MiniSiteSetupModalProps> = ({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <AnimatePresence>

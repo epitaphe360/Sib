@@ -19,7 +19,7 @@ export const exhibitorsTranslations = {
     'exhibitors.unsave': 'Retirer des favoris',
     'exhibitors.no_results': 'Aucun exposant trouvé',
     'exhibitors.count': '{{count}} exposants',
-    
+
     // Catégories
     'exhibitors.category.all': 'Toutes les catégories',
     'exhibitors.category.institutional': 'Institutionnel',
@@ -29,13 +29,13 @@ export const exhibitorsTranslations = {
     'exhibitors.category.technology': 'Technologie',
     'exhibitors.category.automation': 'Automatisation',
     'exhibitors.category.equipment': 'Équipement',
-    
+
     // Niveaux de stand
     'exhibitors.level.basic_9': '9m² Basique',
     'exhibitors.level.standard_18': '18m² Standard',
     'exhibitors.level.premium_36': '36m² Premium',
     'exhibitors.level.elite_54': '54m²+ Élite',
-    
+
     // Page de détail
     'exhibitors.detail.about': 'À propos',
     'exhibitors.detail.products': 'Produits & Services',
@@ -53,14 +53,14 @@ export const exhibitorsTranslations = {
     'exhibitors.detail.minisite': 'Mini-site',
     'exhibitors.detail.brochures': 'Brochures',
     'exhibitors.detail.videos': 'Vidéos',
-    
+
     // Produits
     'exhibitors.products.title': 'Produits & Services',
     'exhibitors.products.view_all': 'Voir tous les produits',
     'exhibitors.products.request_info': 'Demander des informations',
     'exhibitors.products.download_catalog': 'Télécharger le catalogue',
     'exhibitors.products.no_products': 'Aucun produit disponible',
-    
+
     // Rendez-vous
     'exhibitors.appointment.title': 'Réserver un rendez-vous',
     'exhibitors.appointment.select_date': 'Sélectionner une date',
@@ -72,7 +72,7 @@ export const exhibitorsTranslations = {
     'exhibitors.appointment.confirm': 'Confirmer le rendez-vous',
     'exhibitors.appointment.success': 'Rendez-vous confirmé !',
     'exhibitors.appointment.error': 'Erreur lors de la réservation',
-    
+
     // Profil exposant (pour l'exposant lui-même)
     'exhibitors.profile.edit': 'Modifier le profil',
     'exhibitors.profile.preview': 'Prévisualiser',
@@ -88,7 +88,7 @@ export const exhibitorsTranslations = {
     'exhibitors.profile.add_member': 'Ajouter un membre',
     'exhibitors.profile.save_changes': 'Enregistrer les modifications',
     'exhibitors.profile.changes_saved': 'Modifications enregistrées',
-    
+
     // Mini-site
     'exhibitors.minisite.create': 'Créer un mini-site',
     'exhibitors.minisite.edit': 'Modifier le mini-site',
@@ -115,7 +115,7 @@ export const exhibitorsTranslations = {
     'exhibitors.unsave': 'Remove from favorites',
     'exhibitors.no_results': 'No exhibitors found',
     'exhibitors.count': '{{count}} exhibitors',
-    
+
     // Categories
     'exhibitors.category.all': 'All categories',
     'exhibitors.category.institutional': 'Institutional',
@@ -125,13 +125,13 @@ export const exhibitorsTranslations = {
     'exhibitors.category.technology': 'Technology',
     'exhibitors.category.automation': 'Automation',
     'exhibitors.category.equipment': 'Equipment',
-    
+
     // Booth levels
     'exhibitors.level.basic_9': '9m² Basic',
     'exhibitors.level.standard_18': '18m² Standard',
     'exhibitors.level.premium_36': '36m² Premium',
     'exhibitors.level.elite_54': '54m²+ Elite',
-    
+
     // Detail page
     'exhibitors.detail.about': 'About',
     'exhibitors.detail.products': 'Products & Services',
@@ -149,14 +149,14 @@ export const exhibitorsTranslations = {
     'exhibitors.detail.minisite': 'Mini-site',
     'exhibitors.detail.brochures': 'Brochures',
     'exhibitors.detail.videos': 'Videos',
-    
+
     // Products
     'exhibitors.products.title': 'Products & Services',
     'exhibitors.products.view_all': 'View all products',
     'exhibitors.products.request_info': 'Request information',
     'exhibitors.products.download_catalog': 'Download catalog',
     'exhibitors.products.no_products': 'No products available',
-    
+
     // Appointments
     'exhibitors.appointment.title': 'Book an appointment',
     'exhibitors.appointment.select_date': 'Select a date',
@@ -168,7 +168,7 @@ export const exhibitorsTranslations = {
     'exhibitors.appointment.confirm': 'Confirm appointment',
     'exhibitors.appointment.success': 'Appointment confirmed!',
     'exhibitors.appointment.error': 'Booking error',
-    
+
     // Exhibitor profile (for the exhibitor themselves)
     'exhibitors.profile.edit': 'Edit profile',
     'exhibitors.profile.preview': 'Preview',
@@ -184,7 +184,7 @@ export const exhibitorsTranslations = {
     'exhibitors.profile.add_member': 'Add member',
     'exhibitors.profile.save_changes': 'Save changes',
     'exhibitors.profile.changes_saved': 'Changes saved',
-    
+
     // Mini-site
     'exhibitors.minisite.create': 'Create mini-site',
     'exhibitors.minisite.edit': 'Edit mini-site',

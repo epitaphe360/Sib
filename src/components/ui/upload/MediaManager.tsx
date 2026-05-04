@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StorageService } from '../../../services/storage/storageService';
-import { 
-  FilePlus, 
-  FileText, 
-  FileImage, 
-  File as FileIcon, 
-  Download, 
-  Loader2, 
-  Search, 
-  Trash2, 
+import {
+  FilePlus,
+  FileText,
+  FileImage,
+  File as FileIcon,
+  Download,
+  Loader2,
+  Search,
+  Trash2,
   Upload,
   FolderPlus,
   GridIcon,
@@ -65,30 +65,30 @@ const MediaManager: React.FC<MediaManagerProps> = ({
   const loadFiles = useCallback(async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       // Note: Les buckets sont créés via les migrations SQL
-      
+
       // Charger les fichiers
       const fileList = await StorageService.listFiles(bucket, currentFolder);
-      
+
       // Convertir en format MediaFile avec type de fichier
       const mediaFiles: MediaFile[] = fileList.map(file => {
         let type: 'image' | 'document' | 'other' = 'other';
         const extension = file.name.split('.').pop()?.toLowerCase();
-        
+
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(extension || '')) {
           type = 'image';
         } else if (['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt'].includes(extension || '')) {
           type = 'document';
         }
-        
+
         return {
           ...file,
           type
         };
       });
-      
+
       setFiles(mediaFiles);
     } catch (err: unknown) {
       console.error('Erreur lors du chargement des fichiers:', err);
@@ -104,20 +104,20 @@ const MediaManager: React.FC<MediaManagerProps> = ({
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {return;}
 
     setUploading(true);
-    
+
     try {
       const fileArray = Array.from(files);
-      
+
       // Télécharger chaque fichier
-      const uploadPromises = fileArray.map(file => 
+      const uploadPromises = fileArray.map(file =>
         StorageService.uploadImage(file, bucket, currentFolder)
       );
-      
+
       await Promise.all(uploadPromises);
-      
+
       // Recharger la liste des fichiers
       await loadFiles();
     } catch (err: unknown) {
@@ -129,8 +129,8 @@ const MediaManager: React.FC<MediaManagerProps> = ({
   };
 
   const handleFileDelete = async (file: MediaFile) => {
-    if (!allowDelete) return;
-    
+    if (!allowDelete) {return;}
+
     if (window.confirm(`Êtes-vous sûr de vouloir supprimer "${file.name}" ?`)) {
       try {
         await StorageService.deleteImage(file.url, bucket);
@@ -143,12 +143,12 @@ const MediaManager: React.FC<MediaManagerProps> = ({
   };
 
   const handleFileSelect = (file: MediaFile) => {
-    if (!onSelect) return;
-    
+    if (!onSelect) {return;}
+
     // Si le fichier est déjà sélectionné, le désélectionner
     if (selectedFiles.includes(file.url)) {
       setSelectedFiles(prev => prev.filter(url => url !== file.url));
-    } 
+    }
     // Sinon, l'ajouter aux sélections (si possible)
     else {
       if (maxSelections === 1) {
@@ -167,25 +167,25 @@ const MediaManager: React.FC<MediaManagerProps> = ({
   const handleCreateFolder = () => {
     const folderName = prompt('Nom du dossier:');
     if (folderName && folderName.trim() !== '') {
-      const newFolder = currentFolder 
+      const newFolder = currentFolder
         ? `${currentFolder}/${folderName.trim()}`
         : folderName.trim();
-      
+
       setCurrentFolder(newFolder);
     }
   };
 
   const handleNavigateUp = () => {
-    if (!currentFolder) return;
-    
+    if (!currentFolder) {return;}
+
     const parts = currentFolder.split('/');
     parts.pop();
     setCurrentFolder(parts.join('/'));
   };
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    if (bytes < 1024) {return `${bytes} B`;}
+    if (bytes < 1024 * 1024) {return `${(bytes / 1024).toFixed(1)} KB`;}
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
@@ -203,15 +203,15 @@ const MediaManager: React.FC<MediaManagerProps> = ({
   // Filtrer les fichiers en fonction de la recherche et des filtres actifs
   const filteredFiles = files.filter(file => {
     // Filtrer par type de fichier
-    if (file.type === 'image' && !activeFilters.images) return false;
-    if (file.type === 'document' && !activeFilters.documents) return false;
-    if (file.type === 'other' && !activeFilters.other) return false;
-    
+    if (file.type === 'image' && !activeFilters.images) {return false;}
+    if (file.type === 'document' && !activeFilters.documents) {return false;}
+    if (file.type === 'other' && !activeFilters.other) {return false;}
+
     // Filtrer par recherche
     if (searchQuery && !file.name.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
-    
+
     return true;
   });
 
@@ -221,7 +221,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
       <div className="flex flex-wrap gap-3 items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           {currentFolder && (
-            <button 
+            <button
               type="button"
               onClick={handleNavigateUp}
               className="text-gray-600 hover:text-gray-900 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded"
@@ -233,7 +233,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
             {currentFolder ? `/${currentFolder}` : '/'}
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <div className="relative">
             <Search className="h-4 w-4 absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -245,7 +245,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          
+
           <div className="flex border rounded-md overflow-hidden">
             <button
               type="button"
@@ -262,7 +262,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
               <List className="h-4 w-4" />
             </button>
           </div>
-          
+
           {showUploadButton && (
             <label className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer flex items-center gap-1">
               <Upload className="h-4 w-4" />
@@ -276,7 +276,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
               />
             </label>
           )}
-          
+
           {allowFolderCreation && (
             <button
               type="button"
@@ -289,7 +289,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
           )}
         </div>
       </div>
-      
+
       {/* Filtres */}
       <div className="flex gap-2 mb-4">
         <button
@@ -317,7 +317,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
           <span>Autres</span>
         </button>
       </div>
-      
+
       {/* Contenu */}
       {loading ? (
         <div className="flex justify-center items-center h-40">
@@ -336,15 +336,15 @@ const MediaManager: React.FC<MediaManagerProps> = ({
       ) : viewType === 'grid' ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {filteredFiles.map(file => (
-            <div 
+            <div
               key={file.url}
               className={`border rounded-md overflow-hidden hover:shadow-md transition-shadow relative group ${selectedFiles.includes(file.url) ? 'ring-2 ring-blue-500' : ''}`}
               onClick={() => handleFileSelect(file)}
             >
               {file.type === 'image' ? (
                 <div className="aspect-square bg-gray-100">
-                  <img 
-                    src={file.url} 
+                  <img
+                    src={file.url}
                     alt={file.name}
                     className="w-full h-full object-cover"
                   />
@@ -354,21 +354,21 @@ const MediaManager: React.FC<MediaManagerProps> = ({
                   {getFileIcon(file)}
                 </div>
               )}
-              
+
               <div className="p-2 text-xs truncate">{file.name}</div>
-              
+
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                <a 
-                  href={file.url} 
-                  download 
-                  target="_blank" 
+                <a
+                  href={file.url}
+                  download
+                  target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
                   className="bg-blue-500 text-white p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md hover:bg-blue-600"
                 >
                   <Download className="h-3 w-3" />
                 </a>
-                
+
                 {allowDelete && (
                   <button
                     type="button"
@@ -409,7 +409,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredFiles.map(file => (
-                <tr 
+                <tr
                   key={file.url}
                   className={`hover:bg-gray-50 cursor-pointer ${selectedFiles.includes(file.url) ? 'bg-blue-50' : ''}`}
                   onClick={() => handleFileSelect(file)}
@@ -431,17 +431,17 @@ const MediaManager: React.FC<MediaManagerProps> = ({
                   </td>
                   <td className="px-4 py-2 whitespace-nowrap text-sm text-right">
                     <div className="flex justify-end gap-1">
-                      <a 
-                        href={file.url} 
-                        download 
-                        target="_blank" 
+                      <a
+                        href={file.url}
+                        download
+                        target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
                         className="bg-blue-500 text-white p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md hover:bg-blue-600"
                       >
                         <Download className="h-3 w-3" />
                       </a>
-                      
+
                       {allowDelete && (
                         <button
                           type="button"
@@ -462,7 +462,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
           </table>
         </div>
       )}
-      
+
       {/* Téléchargement en cours */}
       {uploading && (
         <div className="mt-4 bg-blue-50 text-blue-700 p-3 rounded-md text-sm flex items-center gap-2">
@@ -470,7 +470,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
           <span>Téléchargement en cours...</span>
         </div>
       )}
-      
+
       {/* Compteur de sélection (si mode multi-sélection) */}
       {maxSelections > 1 && (
         <div className="mt-4 text-xs text-gray-500">

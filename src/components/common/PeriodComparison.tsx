@@ -24,11 +24,11 @@ export const PeriodComparison: React.FC<PeriodComparisonProps> = ({
 }) => {
   const { growth, growthPercentage, trend } = useMemo(() => {
     const growth = currentPeriod.value - previousPeriod.value;
-    const growthPercentage = previousPeriod.value === 0 
+    const growthPercentage = previousPeriod.value === 0
       ? (currentPeriod.value > 0 ? 100 : 0)
       : Math.round((growth / previousPeriod.value) * 100);
-    
-    const trend: 'up' | 'down' | 'neutral' = 
+
+    const trend: 'up' | 'down' | 'neutral' =
       growth > 0 ? 'up' : growth < 0 ? 'down' : 'neutral';
 
     return { growth, growthPercentage, trend };
@@ -39,7 +39,7 @@ export const PeriodComparison: React.FC<PeriodComparisonProps> = ({
   const trendBgColor = trend === 'up' ? 'bg-green-100' : trend === 'down' ? 'bg-red-100' : 'bg-gray-100';
 
   const formatValue = (value: number) => {
-    if (format === 'percentage') return `${value}%`;
+    if (format === 'percentage') {return `${value}%`;}
     return value.toLocaleString();
   };
 
@@ -57,7 +57,7 @@ export const PeriodComparison: React.FC<PeriodComparisonProps> = ({
             <p className="text-sm text-gray-500">{currentPeriod.label}</p>
           </div>
         </div>
-        
+
         <div className={`flex items-center gap-1 px-3 py-1 ${trendBgColor} rounded-full`}>
           <TrendIcon className={`h-4 w-4 ${trendColor}`} />
           <span className={`text-sm font-bold ${trendColor}`}>
@@ -84,10 +84,10 @@ export const PeriodComparison: React.FC<PeriodComparisonProps> = ({
             <span>{formatValue(previousPeriod.value)}</span>
           </div>
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div 
+            <div
               className={`h-full ${trend === 'up' ? 'bg-green-500' : trend === 'down' ? 'bg-red-500' : 'bg-gray-400'} rounded-full transition-all duration-500`}
-              style={{ 
-                width: `${previousPeriod.value === 0 ? 0 : Math.min(100, (currentPeriod.value / previousPeriod.value) * 100)}%` 
+              style={{
+                width: `${previousPeriod.value === 0 ? 0 : Math.min(100, (currentPeriod.value / previousPeriod.value) * 100)}%`
               }}
             />
           </div>

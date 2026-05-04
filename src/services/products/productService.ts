@@ -128,16 +128,16 @@ export class ProductService {
 
     // Télécharger les images si fournies
     let imageUrls: string[] = [];
-    
+
     if (imageFiles && imageFiles.length > 0) {
       try {
         // Note: Les buckets sont créés via les migrations SQL
-        
+
         // Générer un ID temporaire pour le dossier (sera remplacé par l'ID réel après création)
         const tempId = crypto.randomUUID();
         imageUrls = await StorageService.uploadMultipleImages(
-          imageFiles, 
-          'products', 
+          imageFiles,
+          'products',
           `${exhibitorId}/${tempId}`
         );
       } catch (err) {
@@ -228,7 +228,7 @@ export class ProductService {
 
     // Récupérer le produit actuel
     const currentProduct = await this.getProductById(productId);
-    
+
     // Gérer les images à supprimer
     let remainingImages = [...currentProduct.images];
     if (imagesToDelete && imagesToDelete.length > 0) {
@@ -236,20 +236,20 @@ export class ProductService {
       await Promise.all(
         imagesToDelete.map(url => StorageService.deleteImage(url, 'products'))
       ).catch(err => console.error('Erreur lors de la suppression des images:', err));
-      
+
       // Filtrer les images restantes
       remainingImages = currentProduct.images.filter(url => !imagesToDelete.includes(url));
     }
-    
+
     // Télécharger les nouvelles images
     let newImageUrls: string[] = [];
     if (newImageFiles && newImageFiles.length > 0) {
       try {
         // Note: Les buckets sont créés via les migrations SQL
-        
+
         newImageUrls = await StorageService.uploadMultipleImages(
-          newImageFiles, 
-          'products', 
+          newImageFiles,
+          'products',
           `${exhibitorId}/${productId}`
         );
       } catch (err) {
@@ -257,7 +257,7 @@ export class ProductService {
         throw err;
       }
     }
-    
+
     // Combiner les images restantes et les nouvelles images
     const updatedImages = [...remainingImages, ...newImageUrls];
 
@@ -267,14 +267,14 @@ export class ProductService {
     };
 
     // Copier les autres champs en convertissant la nomenclature
-    if (updates.name !== undefined) updateData.name = updates.name;
-    if (updates.description !== undefined) updateData.description = updates.description;
-    if (updates.category !== undefined) updateData.category = updates.category;
-    if (updates.specifications !== undefined) updateData.specifications = updates.specifications;
-    if (updates.price !== undefined) updateData.price = updates.price;
-    if (updates.featured !== undefined) updateData.featured = updates.featured;
-    if (updates.technicalSpecs !== undefined) updateData.technical_specs = updates.technicalSpecs;
-    
+    if (updates.name !== undefined) {updateData.name = updates.name;}
+    if (updates.description !== undefined) {updateData.description = updates.description;}
+    if (updates.category !== undefined) {updateData.category = updates.category;}
+    if (updates.specifications !== undefined) {updateData.specifications = updates.specifications;}
+    if (updates.price !== undefined) {updateData.price = updates.price;}
+    if (updates.featured !== undefined) {updateData.featured = updates.featured;}
+    if (updates.technicalSpecs !== undefined) {updateData.technical_specs = updates.technicalSpecs;}
+
     // Mettre à jour le produit
     const { data, error } = await supabase
       .from('products')
@@ -285,14 +285,14 @@ export class ProductService {
 
     if (error) {
       console.error('Erreur lors de la mise à jour du produit:', error);
-      
+
       // En cas d'erreur, supprimer les nouvelles images téléchargées
       if (newImageUrls.length > 0) {
         await Promise.all(
           newImageUrls.map(url => StorageService.deleteImage(url, 'products'))
         ).catch(err => console.error('Erreur lors de la suppression des nouvelles images:', err));
       }
-      
+
       throw error;
     }
 
@@ -321,7 +321,7 @@ export class ProductService {
 
     // Récupérer le produit pour obtenir les URLs des images
     const product = await this.getProductById(productId);
-    
+
     // Supprimer le produit de la base de données
     const { error } = await supabase
       .from('products')
@@ -332,7 +332,7 @@ export class ProductService {
       console.error('Erreur lors de la suppression du produit:', error);
       throw error;
     }
-    
+
     // Supprimer les images du stockage
     if (product.images && product.images.length > 0) {
       await Promise.all(
@@ -358,30 +358,30 @@ export class ProductService {
     if (!supabase) {
       throw new Error('Supabase non configuré');
     }
-    
+
     const newUrls: string[] = [];
-    
+
     for (const url of imageUrls) {
       try {
         // Extraire le chemin et le nom de fichier de l'URL
         const urlParts = url.split('products/');
-        if (urlParts.length < 2) continue;
-        
+        if (urlParts.length < 2) {continue;}
+
         const filePath = urlParts[1];
         const fileName = filePath.split('/').pop();
-        if (!fileName) continue;
-        
+        if (!fileName) {continue;}
+
         // Définir le nouveau chemin
         const newPath = `${exhibitorId}/${productId}/${fileName}`;
-        
+
         // Déplacer le fichier
         await StorageService.moveFile('products', filePath, newPath);
-        
+
         // Générer la nouvelle URL
         const { data: urlData } = supabase!.storage
           .from('products')
           .getPublicUrl(newPath);
-        
+
         newUrls.push(urlData.publicUrl);
       } catch (err) {
         console.error('Erreur lors du déplacement d\'une image:', err);
@@ -389,7 +389,7 @@ export class ProductService {
         newUrls.push(url);
       }
     }
-    
+
     return newUrls;
   }
 

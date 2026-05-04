@@ -12,7 +12,7 @@ export const authTranslations = {
     'auth.login.forgot_password': 'Mot de passe oublié ?',
     'auth.login.no_account': 'Pas encore de compte ?',
     'auth.login.register': 'S\'inscrire',
-    
+
     // Pages d'inscription
     'auth.register': 'Inscription',
     'auth.register.title': 'Créer un compte',
@@ -20,7 +20,7 @@ export const authTranslations = {
     'auth.register.button': 'S\'inscrire',
     'auth.register.have_account': 'Vous avez déjà un compte ?',
     'auth.register.login': 'Se connecter',
-    
+
     // Champs de formulaire
     'auth.field.email': 'Adresse email',
     'auth.field.password': 'Mot de passe',
@@ -29,7 +29,7 @@ export const authTranslations = {
     'auth.field.last_name': 'Nom',
     'auth.field.company': 'Entreprise',
     'auth.field.phone': 'Téléphone',
-    
+
     // Mot de passe
     'auth.password.forgot': 'Mot de passe oublié',
     'auth.password.reset': 'Réinitialiser le mot de passe',
@@ -39,7 +39,7 @@ export const authTranslations = {
     'auth.password.strength.medium': 'Moyen',
     'auth.password.strength.strong': 'Fort',
     'auth.password.strength.very_strong': 'Très fort',
-    
+
     // Messages d'erreur
     'auth.error.invalid_credentials': 'Email ou mot de passe incorrect',
     'auth.error.email_exists': 'Cet email est déjà utilisé',
@@ -49,18 +49,18 @@ export const authTranslations = {
     'auth.error.invalid_email': 'Email invalide',
     'auth.error.account_disabled': 'Compte désactivé',
     'auth.error.too_many_attempts': 'Trop de tentatives. Réessayez plus tard',
-    
+
     // Messages de succès
     'auth.success.registered': 'Inscription réussie !',
     'auth.success.logged_in': 'Connexion réussie',
     'auth.success.password_reset': 'Mot de passe réinitialisé',
     'auth.success.email_sent': 'Email envoyé avec succès',
-    
+
     // OAuth
     'auth.oauth.google': 'Continuer avec Google',
     'auth.oauth.linkedin': 'Continuer avec LinkedIn',
     'auth.oauth.or': 'OU',
-    
+
     // Statuts de compte
     'auth.status.pending': 'En attente de validation',
     'auth.status.active': 'Actif',
@@ -76,7 +76,7 @@ export const authTranslations = {
     'auth.login.forgot_password': 'Forgot password?',
     'auth.login.no_account': 'Don\'t have an account?',
     'auth.login.register': 'Register',
-    
+
     // Registration pages
     'auth.register': 'Registration',
     'auth.register.title': 'Create an account',
@@ -84,7 +84,7 @@ export const authTranslations = {
     'auth.register.button': 'Register',
     'auth.register.have_account': 'Already have an account?',
     'auth.register.login': 'Log in',
-    
+
     // Form fields
     'auth.field.email': 'Email address',
     'auth.field.password': 'Password',
@@ -93,7 +93,7 @@ export const authTranslations = {
     'auth.field.last_name': 'Last name',
     'auth.field.company': 'Company',
     'auth.field.phone': 'Phone',
-    
+
     // Password
     'auth.password.forgot': 'Forgot password',
     'auth.password.reset': 'Reset password',
@@ -103,7 +103,7 @@ export const authTranslations = {
     'auth.password.strength.medium': 'Medium',
     'auth.password.strength.strong': 'Strong',
     'auth.password.strength.very_strong': 'Very strong',
-    
+
     // Error messages
     'auth.error.invalid_credentials': 'Invalid email or password',
     'auth.error.email_exists': 'This email is already in use',
@@ -113,18 +113,18 @@ export const authTranslations = {
     'auth.error.invalid_email': 'Invalid email',
     'auth.error.account_disabled': 'Account disabled',
     'auth.error.too_many_attempts': 'Too many attempts. Try again later',
-    
+
     // Success messages
     'auth.success.registered': 'Registration successful!',
     'auth.success.logged_in': 'Logged in successfully',
     'auth.success.password_reset': 'Password reset successfully',
     'auth.success.email_sent': 'Email sent successfully',
-    
+
     // OAuth
     'auth.oauth.google': 'Continue with Google',
     'auth.oauth.linkedin': 'Continue with LinkedIn',
     'auth.oauth.or': 'OR',
-    
+
     // Account statuses
     'auth.status.pending': 'Pending validation',
     'auth.status.active': 'Active',

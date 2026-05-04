@@ -48,7 +48,7 @@ export function PieChartCard({
 
   // Empty state: No data available or all values are 0
   const total = data.reduce((sum, item) => sum + item.value, 0);
-  
+
   if (!data || data.length === 0 || total === 0) {
     return (
       <motion.div
@@ -74,7 +74,7 @@ export function PieChartCard({
   }
 
   const renderLabel = (entry: any) => {
-    if (!showPercentage) return '';
+    if (!showPercentage) {return '';}
     const percent = total === 0 ? '0.0' : ((entry.value / total) * 100).toFixed(1);
     return `${percent}%`;
   };

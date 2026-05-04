@@ -4,7 +4,7 @@ import { trackingService } from '../services/analytics/trackingService';
 
 /**
  * Hook useAnalytics - Intégration des services d'analytique
- * 
+ *
  * Fournit :
  * - Suivi automatique des pages
  * - Suivi des événements

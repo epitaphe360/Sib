@@ -18,7 +18,7 @@ interface MiniSiteWizardProps {
 export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
   const { user } = useAuthStore();
   const { t } = useTranslation();
-  
+
   const steps = [
     { label: t('minisite.step_company'), key: 'company', type: 'text', placeholder: t('minisite.placeholder_company') },
     { label: t('minisite.step_logo'), key: 'logo', type: 'file', placeholder: '' },
@@ -27,7 +27,7 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
     { label: t('minisite.step_products'), key: 'products', type: 'textarea', placeholder: t('minisite.placeholder_products') },
     { label: t('minisite.step_socials'), key: 'socials', type: 'text', placeholder: t('minisite.placeholder_socials') },
   ];
-  
+
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<any>({});
   const [loading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
   const handleNext = () => {
     setStep(s => Math.min(s + 1, steps.length - 1));
   };
-  
+
   const handlePrev = () => {
     setStep(s => Math.max(s - 1, 0));
   };
@@ -61,7 +61,7 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
     const url = e.target.value;
     setImportUrl(url);
     setUrlError(null);
-    
+
     if (url.trim().length > 0) {
       const validation = validateUrl(url);
       if (!validation.isValid) {
@@ -83,22 +83,22 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
     }
 
     setLoading(true);
-    
+
     try {
       // Domain extraction (used in error messages below via extractDomain)
-      
+
       // Appel au service de scraping
       const generated = await AiAgentService.generate(validation.normalizedUrl || importUrl);
-      
+
       // Stocker les données scrapées
       setScrapedData(generated);
-      
+
       // Afficher la prévisualisation
       setShowPreview(true);
-      
+
     } catch (aiError: any) {
       console.error('❌ Erreur agent IA:', aiError);
-      
+
       // Messages d'erreur plus explicites
       if (aiError.message?.includes('timeout')) {
         setError(t('minisite.timeout_error', { domain: extractDomain(importUrl) }));
@@ -116,8 +116,8 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
 
   // Confirmation de création depuis la prévisualisation
   const handleConfirmCreation = async () => {
-    if (!scrapedData) return;
-    
+    if (!scrapedData) {return;}
+
     setIsCreating(true);
     setError(null);
 
@@ -166,8 +166,8 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
 
       setSuccess(true);
       setShowPreview(false);
-      if (onSuccess) onSuccess();
-      
+      if (onSuccess) {onSuccess();}
+
     } catch (e: any) {
       console.error('❌ Erreur création mini-site:', e);
       setError(e?.message || t('minisite.creation_error'));
@@ -184,10 +184,10 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
       setForm({
         company: scrapedData.company || '',
         description: scrapedData.description || '',
-        products: Array.isArray(scrapedData.products) 
+        products: Array.isArray(scrapedData.products)
           ? scrapedData.products.map((p: any) => p.name).join('\n')
           : '',
-        socials: Array.isArray(scrapedData.socials) 
+        socials: Array.isArray(scrapedData.socials)
           ? scrapedData.socials.join(', ')
           : ''
       });
@@ -200,7 +200,7 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
   const handleManualSubmit = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const miniSiteData = {
         theme: form.theme || 'modern',
@@ -241,7 +241,7 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
       }
 
       setSuccess(true);
-      if (onSuccess) onSuccess();
+      if (onSuccess) {onSuccess();}
 
     } catch (e: any) {
       console.error('❌ Erreur création mini-site:', e);
@@ -270,19 +270,19 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
     <>
       <Card className="max-w-lg mx-auto p-8 mt-8">
         <div className="mb-6 text-xl font-bold text-center">{t('minisite.wizard_title')}</div>
-        
+
         {/* Mode automatique avec URL prioritaire */}
         <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <label className="block font-medium mb-2 text-blue-800">
             {t('minisite.auto_creation_title')}
           </label>
-          <input 
-            type="url" 
+          <input
+            type="url"
             className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-200 ${
               urlError ? 'border-red-500' : 'border-blue-300'
             }`}
-            placeholder={t('minisite.placeholder_url')} 
-            value={importUrl} 
+            placeholder={t('minisite.placeholder_url')}
+            value={importUrl}
             onChange={handleUrlChange}
             disabled={loading}
             data-testid="input-website-url"
@@ -297,9 +297,9 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
             {t('minisite.ai_info')}
           </div>
           {importUrl && !urlError && (
-            <Button 
-              onClick={handleAutoGenerate} 
-              disabled={loading} 
+            <Button
+              onClick={handleAutoGenerate}
+              disabled={loading}
               className="w-full mt-3 bg-blue-600 hover:bg-blue-700"
               data-testid="button-auto-generate"
             >
@@ -333,45 +333,45 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
           <div className="text-center text-gray-500 mb-4 text-sm">
             {t('minisite.manual_alternative')}
           </div>
-          
+
           <form onSubmit={e => { e.preventDefault(); step === steps.length - 1 ? handleManualSubmit() : handleNext(); }}>
             <div className="mb-4">
               <label className="block font-medium mb-2">{current.label}</label>
               {current.type === 'text' && (
-                <Input 
-                  name={current.key} 
-                  value={form[current.key] || ''} 
-                  onChange={handleChange} 
-                  placeholder={current.placeholder} 
-                  required 
+                <Input
+                  name={current.key}
+                  value={form[current.key] || ''}
+                  onChange={handleChange}
+                  placeholder={current.placeholder}
+                  required
                   data-testid={`input-${current.key}`}
                 />
               )}
               {current.type === 'textarea' && (
-                <Textarea 
-                  name={current.key} 
-                  value={form[current.key] || ''} 
-                  onChange={handleChange} 
-                  placeholder={current.placeholder} 
-                  required 
+                <Textarea
+                  name={current.key}
+                  value={form[current.key] || ''}
+                  onChange={handleChange}
+                  placeholder={current.placeholder}
+                  required
                   data-testid={`textarea-${current.key}`}
                 />
               )}
               {current.type === 'file' && (
-                <Input 
-                  name={current.key} 
-                  type="file" 
-                  onChange={handleChange} 
-                  multiple={current.multiple} 
+                <Input
+                  name={current.key}
+                  type="file"
+                  onChange={handleChange}
+                  multiple={current.multiple}
                   data-testid={`file-${current.key}`}
                 />
               )}
             </div>
             <div className="flex justify-between mt-6">
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={handlePrev} 
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handlePrev}
                 disabled={step === 0 || loading}
                 data-testid="button-previous"
               >
@@ -380,8 +380,8 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
               {step < steps.length - 1 ? (
                 <Button type="submit" disabled={loading} data-testid="button-next">{t('minisite.button_next')}</Button>
               ) : (
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={loading}
                   data-testid="button-manual-generate"
                 >

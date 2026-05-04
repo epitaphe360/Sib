@@ -17,11 +17,11 @@ import { describe, it, expect, beforeAll } from 'vitest';
 // ============================================
 
 describe('📅 Configuration Dates Événement', () => {
-  it('Les dates doivent être 1-3 Avril 2026', async () => {
+  it('Les dates doivent être 25-29 Novembre 2026', async () => {
     const { DEFAULT_SALON_CONFIG } = await import('../src/config/salonInfo');
 
-    expect(DEFAULT_SALON_CONFIG.dates.start).toBe('1 Avril 2026');
-    expect(DEFAULT_SALON_CONFIG.dates.end).toBe('3 Avril 2026');
+    expect(DEFAULT_SALON_CONFIG.dates.start).toBe('25 Novembre 2026');
+    expect(DEFAULT_SALON_CONFIG.dates.end).toBe('29 Novembre 2026');
   });
 
   it('Le nom de l\'événement doit être SIB 2026', async () => {
@@ -30,10 +30,10 @@ describe('📅 Configuration Dates Événement', () => {
     expect(DEFAULT_SALON_CONFIG.name).toBe('SIB 2026');
   });
 
-  it('Le lieu doit être Casablanca, Maroc', async () => {
+  it('Le lieu doit être El Jadida, Maroc', async () => {
     const { DEFAULT_SALON_CONFIG } = await import('../src/config/salonInfo');
 
-    expect(DEFAULT_SALON_CONFIG.location.city).toBe('Casablanca');
+    expect(DEFAULT_SALON_CONFIG.location.city).toBe('El Jadida');
     expect(DEFAULT_SALON_CONFIG.location.country).toBe('Maroc');
   });
 });
@@ -807,10 +807,10 @@ describe('📊 Analytique & Métriques', () => {
     const premiumPerms = getNetworkingPermissions('visitor', 'premium');
 
     let featuresDifference = 0;
-    if (!freePerms.canAccessNetworking && premiumPerms.canAccessNetworking) featuresDifference++;
-    if (!freePerms.canSendMessages && premiumPerms.canSendMessages) featuresDifference++;
-    if (!freePerms.canMakeConnections && premiumPerms.canMakeConnections) featuresDifference++;
-    if (!freePerms.canScheduleMeetings && premiumPerms.canScheduleMeetings) featuresDifference++;
+    if (!freePerms.canAccessNetworking && premiumPerms.canAccessNetworking) {featuresDifference++;}
+    if (!freePerms.canSendMessages && premiumPerms.canSendMessages) {featuresDifference++;}
+    if (!freePerms.canMakeConnections && premiumPerms.canMakeConnections) {featuresDifference++;}
+    if (!freePerms.canScheduleMeetings && premiumPerms.canScheduleMeetings) {featuresDifference++;}
 
     expect(featuresDifference).toBeGreaterThan(0); // Il y a une valeur ajoutée
   });

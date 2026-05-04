@@ -32,7 +32,7 @@ const InteractiveVenueMap: React.FC = () => {
   const generateBoothPosition = (standNumber: string): BoothPosition | null => {
     // Extraire le numéro du stand (ex: "A1" -> 1, "B2" -> 2)
     const match = standNumber.match(/([A-Z])(\d+)/);
-    if (!match) return null;
+    if (!match) {return null;}
 
     const [, row, number] = match;
     const rowIndex = row.charCodeAt(0) - 'A'.charCodeAt(0);
@@ -67,7 +67,7 @@ const InteractiveVenueMap: React.FC = () => {
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Plan de l'Événement</h2>
-      
+
       <div className="relative overflow-auto border border-gray-300 rounded-lg" style={{ height: '600px' }}>
         <svg
           width="1200"
@@ -96,10 +96,10 @@ const InteractiveVenueMap: React.FC = () => {
 
           {/* Afficher les stands des exposants */}
           {exhibitors.map((exhibitor) => {
-            if (!exhibitor.standNumber) return null;
+            if (!exhibitor.standNumber) {return null;}
 
             const position = generateBoothPosition(exhibitor.standNumber);
-            if (!position) return null;
+            if (!position) {return null;}
 
             const isSelected = selectedBooth === exhibitor.id;
 
@@ -225,7 +225,7 @@ const InteractiveVenueMap: React.FC = () => {
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           {(() => {
             const exhibitor = exhibitors.find((e) => e.id === selectedBooth);
-            if (!exhibitor) return null;
+            if (!exhibitor) {return null;}
 
             return (
               <div className="flex items-start gap-4">

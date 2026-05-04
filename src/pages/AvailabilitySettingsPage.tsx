@@ -6,12 +6,12 @@ import AvailabilityManager from '@/components/availability/AvailabilityManager';
 import PersonalAppointmentsCalendar from '@/components/calendar/PersonalAppointmentsCalendar';
 import { useAppointmentStore } from '@/store/appointmentStore';
 import { toast } from 'sonner';
-import { 
-  Calendar, Clock, BarChart3, 
+import {
+  Calendar, Clock, BarChart3,
   CheckCircle, XCircle
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { 
+import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart as RePieChart, Pie, Cell
 } from 'recharts';
@@ -28,7 +28,7 @@ export default function AvailabilitySettingsPage() {
     }
   }, [user, fetchAppointments, fetchTimeSlots]);
 
-  if (!user) return null;
+  if (!user) {return null;}
 
   // Stats for Appointments
   const confirmedApps = appointments.filter(a => a.status === 'confirmed').length;
@@ -81,7 +81,7 @@ export default function AvailabilitySettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+
         {/* Header Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Gestion Calendaire Avancée</h1>
@@ -92,12 +92,12 @@ export default function AvailabilitySettingsPage() {
 
         {/* Content Sections - Vertical Layout */}
         <div className="space-y-12">
-          
+
           {/* SECTION 1: Gestion des Disponibilités */}
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <AvailabilityManager 
-              userId={user.id} 
-              userType={user.type as any} 
+            <AvailabilityManager
+              userId={user.id}
+              userType={user.type as any}
               onAvailabilityUpdate={() => {
                 fetchTimeSlots(user.id);
                 toast.success("Disponibilités mises à jour");
@@ -244,8 +244,8 @@ export default function AvailabilitySettingsPage() {
                       <span className="text-sm font-medium text-gray-500">{item.value * 100}%</span>
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-2.5">
-                      <div 
-                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-500" 
+                      <div
+                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-500"
                         style={{ width: `${item.value * 100}%` }}
                       />
                     </div>

@@ -58,7 +58,7 @@ export default function LogoWithFallback({
 
     // Preload image using JavaScript Image object (NOT lazy loaded)
     const img = new Image();
-    
+
     // Timeout: if image hasn't loaded in 8 seconds, show fallback
     timeoutRef.current = setTimeout(() => {
       setStatus('error');

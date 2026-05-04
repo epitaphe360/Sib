@@ -118,7 +118,7 @@ export const Header: React.FC = memo(() => {
     <header className="fixed top-0 left-0 right-0 z-[200] transition-all duration-300 bg-white/85 backdrop-blur-xl backdrop-saturate-150 border-b border-neutral-200/80 dark:bg-neutral-900/85 dark:border-neutral-800/80" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-center h-16 sm:h-18 xl:h-20">
-          
+
           {/* Logo */}
           <Link to={ROUTES.HOME} className="flex-shrink-0 flex items-center group">
             <div className="relative h-10 sm:h-12 xl:h-14 w-auto flex items-center transition-transform duration-300 group-hover:scale-[1.02]">
@@ -143,7 +143,7 @@ export const Header: React.FC = memo(() => {
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </Link>
             ))}
-            
+
             {/* Divider Vertical Minimaliste */}
             <div className="w-[1px] h-5 bg-neutral-200 dark:bg-neutral-700 mx-2" />
 
@@ -155,7 +155,7 @@ export const Header: React.FC = memo(() => {
                 <span>{t('nav.event')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
-              
+
               {/* Dropdown Content */}
               {isEventMenuOpen && (
                 <div className="absolute left-0 mt-0 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800 py-2 z-[250]">
@@ -185,7 +185,7 @@ export const Header: React.FC = memo(() => {
                 <span>{t('nav.participate')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
-              
+
               {/* Dropdown Content */}
               {isParticipateMenuOpen && (
                 <div className="absolute left-0 mt-0 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800 py-2 z-[250]">
@@ -215,7 +215,7 @@ export const Header: React.FC = memo(() => {
                 <span>{t('media.menu_title')}</span>
                 <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
-              
+
               {/* Dropdown Content */}
               {isMediaMenuOpen && (
                 <div className="absolute left-0 mt-0 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800 py-2 z-[250]">
@@ -267,16 +267,16 @@ export const Header: React.FC = memo(() => {
                 </button>
 
                 {/* Messages - masqué sur mobile */}
-                <Link 
-                  to={ROUTES.MESSAGES} 
+                <Link
+                  to={ROUTES.MESSAGES}
                   className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors relative"
                 >
                   <MessageCircle className="h-5 w-5" />
                 </Link>
 
                 {/* Calendar - masqué sur mobile */}
-                <Link aria-label="Calendar" 
-                  to={ROUTES.APPOINTMENTS} 
+                <Link aria-label="Calendar"
+                  to={ROUTES.APPOINTMENTS}
                   className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors"
                 >
                   <Calendar className="h-5 w-5" />
@@ -591,7 +591,7 @@ export const Header: React.FC = memo(() => {
                   </button>
                 </div>
               )}
-              
+
               {/* Navigation principale */}
               {navigation.map((item) => (
                 <Link

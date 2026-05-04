@@ -36,7 +36,7 @@ export function VisitorAnalyticsSection({
   predictions,
 }: VisitorAnalyticsSectionProps) {
   const { t } = useTranslation();
-  if (userLevel === 'free') return null;
+  if (userLevel === 'free') {return null;}
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-8">

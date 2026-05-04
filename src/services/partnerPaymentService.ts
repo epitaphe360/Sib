@@ -374,7 +374,7 @@ export async function getPartnerBankTransferRequests(userId: string): Promise<an
       .eq('payment_method', 'bank_transfer')
       .order('created_at', { ascending: false });
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     return data || [];
   } catch (error) {
@@ -401,7 +401,7 @@ export async function approvePartnerBankTransfer(
       .eq('id', requestId)
       .single();
 
-    if (fetchError) throw fetchError;
+    if (fetchError) {throw fetchError;}
 
     // ✅ FIX P0-5: Validation du montant avant approbation
     const expectedAmount = PARTNER_BILLING[request.requested_level as PartnerTier].amount;
@@ -429,7 +429,7 @@ export async function approvePartnerBankTransfer(
       })
       .eq('id', requestId);
 
-    if (updateRequestError) throw updateRequestError;
+    if (updateRequestError) {throw updateRequestError;}
 
     // Mettre à jour le tier du partenaire
     const { error: updateUserError } = await supabase
@@ -440,7 +440,7 @@ export async function approvePartnerBankTransfer(
       })
       .eq('id', request.user_id);
 
-    if (updateUserError) throw updateUserError;
+    if (updateUserError) {throw updateUserError;}
 
     // Créer une notification
     await supabase.from('notifications').insert({
@@ -477,7 +477,7 @@ export async function rejectPartnerBankTransfer(
       .eq('id', requestId)
       .single();
 
-    if (fetchError) throw fetchError;
+    if (fetchError) {throw fetchError;}
 
     // Mettre à jour le statut
     const { error: updateError } = await supabase
@@ -490,7 +490,7 @@ export async function rejectPartnerBankTransfer(
       })
       .eq('id', requestId);
 
-    if (updateError) throw updateError;
+    if (updateError) {throw updateError;}
 
     // Créer une notification
     await supabase.from('notifications').insert({

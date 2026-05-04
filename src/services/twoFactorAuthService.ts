@@ -45,7 +45,7 @@ class TwoFactorAuthService {
         body: { userId },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Sauvegarder le secret (non vérifié)
       await supabase
@@ -87,7 +87,7 @@ class TwoFactorAuthService {
         body: { userId, token },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (!data.valid) {
         await this.incrementFailedAttempts(userId);
@@ -138,7 +138,7 @@ class TwoFactorAuthService {
         body: { userId, token },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (!data.valid) {
         await this.incrementFailedAttempts(userId);
@@ -208,7 +208,7 @@ class TwoFactorAuthService {
         body: { userId, count },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Sauvegarder les codes hashés
       await supabase
@@ -235,7 +235,7 @@ class TwoFactorAuthService {
         body: { userId, code },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (data.valid) {
         await auditService.log({
@@ -263,7 +263,7 @@ class TwoFactorAuthService {
         body: { userId, phone },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       await auditService.log({
         userId,
@@ -289,7 +289,7 @@ class TwoFactorAuthService {
         body: { userId, code },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (!data.valid) {
         await this.incrementFailedAttempts(userId);
@@ -387,7 +387,7 @@ class TwoFactorAuthService {
         body: { userId, email },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       await auditService.log({
         userId,
@@ -413,7 +413,7 @@ class TwoFactorAuthService {
         body: { userId, code },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       if (!data.valid) {
         await this.incrementFailedAttempts(userId);
@@ -455,7 +455,7 @@ class TwoFactorAuthService {
         .eq('user_id', userId)
         .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== 'PGRST116') {throw error;}
       return data;
     } catch (error) {
       console.error('❌ Erreur get2FAConfig:', error);

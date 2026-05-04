@@ -36,7 +36,7 @@ interface MiniSiteScrapResult {
     tagline: string;
     logo?: string;
     description: string;
-    
+
     // HÉRO
     heroTitle?: string;
     heroSubtitle?: string;
@@ -45,7 +45,7 @@ interface MiniSiteScrapResult {
       text: string;
       link: string;
     };
-    
+
     // PRÉSENTATION
     aboutTitle?: string;
     aboutDescription?: string;
@@ -56,7 +56,7 @@ interface MiniSiteScrapResult {
       label: string;
       value: string;
     }>;
-    
+
     // PRODUITS/SERVICES
     products: Array<{
       name: string;
@@ -67,10 +67,10 @@ interface MiniSiteScrapResult {
       price?: string;
     }>;
     services: string[];
-    
+
     // RÉALISATIONS
     achievements: string[];
-    
+
     // ÉQUIPE
     teamMembers?: Array<{
       name: string;
@@ -82,13 +82,13 @@ interface MiniSiteScrapResult {
       linkedin?: string;
       phone?: string;
     }>;
-    
+
     // GALERIE
     gallery?: Array<{
       url: string;
       description?: string;
     }>;
-    
+
     // CERTIFICATIONS
     certifications?: Array<{
       name: string;
@@ -97,7 +97,7 @@ interface MiniSiteScrapResult {
       logo?: string;
       description?: string;
     }>;
-    
+
     // ARTICLES/ACTUALITÉS
     articles?: Array<{
       title: string;
@@ -107,7 +107,7 @@ interface MiniSiteScrapResult {
       date: string;
       category: string;
     }>;
-    
+
     // RÉSEAUX SOCIAUX
     socialLinks?: {
       linkedin?: string;
@@ -117,7 +117,7 @@ interface MiniSiteScrapResult {
       youtube?: string;
       whatsapp?: string;
     };
-    
+
     // CONTACT
     contactInfo: {
       email: string;
@@ -125,7 +125,7 @@ interface MiniSiteScrapResult {
       address?: string;
       website?: string;
     };
-    
+
     // PERSONNALISATION
     theme?: 'modern' | 'classic' | 'dark' | 'vibrant';
     colors?: {
@@ -669,7 +669,7 @@ PRIORITÉ: Précision et honnêteté > Complétude`;
     htmlContent: string,
     initialData: any
   ): Promise<any> {
-    if (!this.apiKey) return initialData;
+    if (!this.apiKey) {return initialData;}
 
     try {
       const prompt = `# EXTRACTION COMPLÉMENTAIRE - MODE STRICT
@@ -782,13 +782,13 @@ Cherche dans le HTML:
 
     // Ajouter les images additionnelles
     if (enhanced.additionalImages?.length > 0) {
-      if (!merged.gallery) merged.gallery = [];
+      if (!merged.gallery) {merged.gallery = [];}
       enhanced.additionalImages.forEach((img: any) => {
         const url = typeof img === 'string' ? img : img.url;
         if (url && !merged.gallery.some((g: any) => g.url === url)) {
-          merged.gallery.push({ 
-            url, 
-            description: img.alt || img.context || null 
+          merged.gallery.push({
+            url,
+            description: img.alt || img.context || null
           });
         }
       });
@@ -796,7 +796,7 @@ Cherche dans le HTML:
 
     // Legacy format support
     if (enhanced.images?.length > 0) {
-      if (!merged.gallery) merged.gallery = [];
+      if (!merged.gallery) {merged.gallery = [];}
       enhanced.images.forEach((url: string) => {
         if (!merged.gallery.some((img: any) => img.url === url)) {
           merged.gallery.push({ url, description: null });
@@ -805,15 +805,15 @@ Cherche dans le HTML:
     }
 
     // Améliorer contacts
-    if (!merged.contactInfo) merged.contactInfo = {};
-    
+    if (!merged.contactInfo) {merged.contactInfo = {};}
+
     if (enhanced.emails?.length > 0 && !merged.contactInfo.email) {
       merged.contactInfo.email = enhanced.emails[0];
     }
     if (enhanced.missingEmails?.length > 0 && !merged.contactInfo.email) {
       merged.contactInfo.email = enhanced.missingEmails[0];
     }
-    
+
     if (enhanced.phones?.length > 0 && !merged.contactInfo.phone) {
       merged.contactInfo.phone = enhanced.phones[0];
     }
@@ -824,7 +824,7 @@ Cherche dans le HTML:
     // Améliorer certifications
     const certNames = enhanced.certifications || enhanced.certificationsNames || [];
     if (certNames.length > 0) {
-      if (!merged.certifications) merged.certifications = [];
+      if (!merged.certifications) {merged.certifications = [];}
       certNames.forEach((name: string) => {
         if (!merged.certifications.some((c: any) => c.name === name)) {
           merged.certifications.push({
@@ -858,23 +858,23 @@ Cherche dans le HTML:
 
     // Améliorer réseaux sociaux (nouveau format)
     if (enhanced.socialMediaLinks) {
-      if (!merged.socialLinks) merged.socialLinks = {};
+      if (!merged.socialLinks) {merged.socialLinks = {};}
       Object.keys(enhanced.socialMediaLinks).forEach(key => {
         if (enhanced.socialMediaLinks[key] && !merged.socialLinks[key]) {
           merged.socialLinks[key] = enhanced.socialMediaLinks[key];
         }
       });
     }
-    
+
     // Legacy format
     if (enhanced.additionalLinks) {
-      if (!merged.socialLinks) merged.socialLinks = {};
+      if (!merged.socialLinks) {merged.socialLinks = {};}
       Object.assign(merged.socialLinks, enhanced.additionalLinks);
     }
 
     // Améliorer articles/news
     if (enhanced.newsItems?.length > 0) {
-      if (!merged.articles) merged.articles = [];
+      if (!merged.articles) {merged.articles = [];}
       enhanced.newsItems.forEach((news: any) => {
         if (!merged.articles.some((a: any) => a.title === news.title)) {
           merged.articles.push({
@@ -900,7 +900,7 @@ Cherche dans le HTML:
         };
       }
     }
-    
+
     // Legacy format
     if (enhanced.colorScheme?.length >= 3 && !merged.colors) {
       merged.colors = {

@@ -18,7 +18,7 @@ export interface NavigationState {
 
 /**
  * Store de navigation - Gestion centralisée de l'état de navigation
- * 
+ *
  * Utilise Zustand pour une gestion d'état légère et performante
  * Persist middleware pour sauvegarder l'état dans localStorage
  */

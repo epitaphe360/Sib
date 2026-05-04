@@ -39,7 +39,7 @@ class SearchService {
         limit_results: filters?.limit || 20,
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur search:', error);
@@ -73,7 +73,7 @@ class SearchService {
           is_active: true,
         });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur indexContent:', error);
@@ -92,7 +92,7 @@ class SearchService {
         .eq('entity_type', entityType)
         .eq('entity_id', entityId);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur removeFromIndex:', error);
@@ -111,7 +111,7 @@ class SearchService {
         .eq('entity_type', entityType)
         .eq('entity_id', entityId);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur deactivateInIndex:', error);
@@ -130,7 +130,7 @@ class SearchService {
         .eq('entity_type', entityType)
         .eq('entity_id', entityId);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur reactivateInIndex:', error);
@@ -218,7 +218,7 @@ class SearchService {
         .eq('is_active', true)
         .limit(limit);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Extraire les titres uniques
       const suggestions = [...new Set(data?.map((item) => item.title) || [])];
@@ -259,7 +259,7 @@ class SearchService {
         .from('search_index')
         .upsert(records);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur bulkIndex:', error);
@@ -278,7 +278,7 @@ class SearchService {
         .eq('type', 'exhibitor')
         .eq('status', 'active');
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const items = (exhibitors || []).map((exhibitor) => ({
         entityType: 'exhibitor',
@@ -306,7 +306,7 @@ class SearchService {
         .from('events')
         .select('id, title, description, tags');
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const items = (events || []).map((event) => ({
         entityType: 'event',
@@ -335,7 +335,7 @@ class SearchService {
         .select('id, title, content, tags')
         .eq('published', true);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const items = (articles || []).map((article) => ({
         entityType: 'news_article',
@@ -364,7 +364,7 @@ class SearchService {
         .select('id, title, description, tags')
         .eq('status', 'published');
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const items = (media || []).map((item) => ({
         entityType: 'media_content',

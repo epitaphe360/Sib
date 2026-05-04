@@ -20,7 +20,7 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
 
   useEffect(() => {
     const loadTimeSlots = async () => {
-      if (!isSupabaseReady() || !supabase) return;
+      if (!isSupabaseReady() || !supabase) {return;}
       setIsLoading(true);
       try {
         // Trouver le profil exposant associé à cet utilisateur
@@ -42,7 +42,7 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
           .order('slot_date', { ascending: true })
           .order('start_time', { ascending: true });
 
-        if (error) throw error;
+        if (error) {throw error;}
 
         const slots: TimeSlot[] = (data || []).map((row: any) => ({
           id: row.id,
@@ -59,7 +59,7 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
         }));
 
         setTimeSlots(slots);
-        if (slots.length > 0) setSelectedDate(slots[0].date);
+        if (slots.length > 0) {setSelectedDate(slots[0].date);}
       } catch (err) {
         console.error('Erreur lors du chargement des créneaux:', err);
         setTimeSlots([]);
@@ -114,7 +114,7 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
   };
 
   const handleBookSlot = async (slot: TimeSlot) => {
-    if (!showBooking) return;
+    if (!showBooking) {return;}
 
     setIsLoading(true);
     try {
@@ -133,7 +133,7 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
             p_meeting_type: slot.type || 'in-person',
           });
 
-          if (error) throw error;
+          if (error) {throw error;}
           if (data && (data as any).success === false) {
             throw new Error((data as any).error || 'Réservation impossible');
           }
@@ -241,13 +241,13 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
               // Vérifier si le créneau est complet (toutes les places réservées)
               const isFullyBooked = (slot.currentBookings || 0) >= (slot.maxBookings || 1);
               const hasBookings = (slot.currentBookings || 0) > 0;
-              
+
               return (
               <div
                 key={slot.id}
                 className={`flex items-center justify-between p-4 border rounded-lg transition-colors ${
-                  isFullyBooked 
-                    ? 'border-red-200 bg-red-50' 
+                  isFullyBooked
+                    ? 'border-red-200 bg-red-50'
                     : hasBookings
                     ? 'border-orange-200 bg-orange-50'
                     : 'border-gray-200 hover:bg-gray-50'

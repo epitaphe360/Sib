@@ -7,9 +7,9 @@ interface ChatBotToggleProps {
   hasUnreadMessages?: boolean;
 }
 
-export const ChatBotToggle: React.FC<ChatBotToggleProps> = ({ 
-  onClick, 
-  hasUnreadMessages = false 
+export const ChatBotToggle: React.FC<ChatBotToggleProps> = ({
+  onClick,
+  hasUnreadMessages = false
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -33,7 +33,7 @@ export const ChatBotToggle: React.FC<ChatBotToggleProps> = ({
         {/* Icône principale */}
         <div className="relative">
           <Bot className="h-6 w-6" />
-          
+
           {/* Animation sparkles */}
           {isHovered && (
             <motion.div

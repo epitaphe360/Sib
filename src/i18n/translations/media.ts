@@ -15,7 +15,7 @@ export const mediaTranslations = {
     'media.download': 'Télécharger',
     'media.share': 'Partager',
     'media.no_results': 'Aucun média trouvé',
-    
+
     // Types de médias
     'media.type.webinar': 'Webinaire',
     'media.type.podcast': 'Podcast',
@@ -25,7 +25,7 @@ export const mediaTranslations = {
     'media.type.moment': 'Best Moment',
     'media.type.testimonial': 'Témoignage',
     'media.type.article': 'Article',
-    
+
     // Webinaires
     'media.webinar.title': 'Webinaires',
     'media.webinar.subtitle': 'Webinaires sponsorisés en replay',
@@ -34,7 +34,7 @@ export const mediaTranslations = {
     'media.webinar.recorded': 'Enregistré le',
     'media.webinar.watch': 'Regarder',
     'media.webinar.replay': 'Voir le replay',
-    
+
     // Podcasts
     'media.podcast.title': 'Podcasts',
     'media.podcast.subtitle': 'SIB Talks - Épisodes audio',
@@ -42,7 +42,7 @@ export const mediaTranslations = {
     'media.podcast.season': 'Saison {{number}}',
     'media.podcast.listen': 'Écouter',
     'media.podcast.subscribe': 'S\'abonner',
-    
+
     // Podcast specific NEW
     'media.podcast.page_title': 'SIB Talks',
     'media.podcast.page_subtitle': 'Écoutez les voix qui façonnent l\'industrie du bâtiment',
@@ -50,15 +50,15 @@ export const mediaTranslations = {
     'media.podcast.search_placeholder': 'Rechercher un épisode...',
     'media.podcast.no_results': 'Aucun podcast trouvé',
     'media.action.listen_now': 'Écouter maintenant',
-    
+
     // Stats
     'media.stats.total_episodes': 'Total Épisodes',
     'media.stats.listens': 'Écoutes',
     'media.stats.hours': 'Heures de contenu',
     'media.stats.listening': 'écoutes',
-    
+
     'media.filter.all_categories': 'Toutes les catégories',
-    
+
     // Capsules Inside
     'media.capsule.title': 'Capsules Inside',
     'media.capsule.subtitle': 'Capsules vidéo Inside SIB',
@@ -69,7 +69,7 @@ export const mediaTranslations = {
     'media.capsule.removed_from_favorites': 'Retiré des favoris',
     'media.capsule.added_to_favorites': 'Ajouté aux favoris',
     'media.capsule.link_copied': 'Lien copié dans le presse-papier',
-    
+
     // Live Studio
     'media.live.title': 'Live Studio',
     'media.live.subtitle': 'Meet The Leaders - Interviews live',
@@ -77,12 +77,12 @@ export const mediaTranslations = {
     'media.live.now': 'En direct',
     'media.live.watch_live': 'Regarder en direct',
     'media.live.guests': 'Invités',
-    
+
     // Best Moments
     'media.moment.title': 'Best Moments',
     'media.moment.subtitle': 'Les moments forts de l\'événement',
     'media.moment.highlights': 'Temps forts',
-    
+
     // Témoignages
     'media.testimonial.title': 'Témoignages',
     'media.testimonial.subtitle': 'Découvrez les retours d\'expérience de nos partenaires',
@@ -92,7 +92,7 @@ export const mediaTranslations = {
     'media.testimonial.search_placeholder': 'Rechercher un témoignage...',
     'media.testimonial.no_results': 'Aucun témoignage trouvé',
     'media.testimonial.no_results_desc': 'De nouveaux témoignages seront ajoutés prochainement',
-    
+
     // Détails média
     'media.detail.views': 'Vues',
     'media.detail.likes': 'J\'aime',
@@ -103,7 +103,7 @@ export const mediaTranslations = {
     'media.detail.category': 'Catégorie',
     'media.detail.tags': 'Tags',
     'media.detail.related': 'Contenus similaires',
-    
+
     // Actions
     'media.action.play': 'Lire',
     'media.action.pause': 'Pause',
@@ -118,7 +118,7 @@ export const mediaTranslations = {
     'media.action.speed': 'Vitesse',
     'media.action.quality': 'Qualité',
     'media.action.captions': 'Sous-titres',
-    
+
     // Upload (pour partenaires)
     'media.upload.title': 'Téléverser un média',
     'media.upload.drag_drop': 'Glisser-déposer ou cliquer pour sélectionner',
@@ -130,7 +130,7 @@ export const mediaTranslations = {
     'media.upload.success': 'Média téléversé avec succès',
     'media.upload.error': 'Erreur lors du téléversement',
     'media.upload.pending_approval': 'En attente d\'approbation',
-    
+
     // Filtres
     'media.filter.type': 'Type',
     'media.filter.date': 'Date',
@@ -139,7 +139,7 @@ export const mediaTranslations = {
     'media.filter.popular': 'Populaires',
     'media.filter.recent': 'Récents',
     'media.filter.featured': 'En vedette',
-    
+
     // Messages d'erreur
     'media.error.loading': 'Erreur lors du chargement',
     'media.error.loading_media': 'Erreur chargement médias',
@@ -153,7 +153,7 @@ export const mediaTranslations = {
     'media.error.loading_testimonial': 'Erreur lors du chargement du témoignage',
     'media.error.loading_best_moments': 'Erreur chargement best moments',
     'media.error.loading_capsules': 'Erreur chargement capsules',
-    
+
     // Messages de succès
     'media.success.link_copied': 'Lien copié dans le presse-papier',
     'media.success.play': 'Lecture en cours...',
@@ -161,13 +161,13 @@ export const mediaTranslations = {
     'media.success.shared': 'Partagé avec succès',
     'media.success.favorited': 'Ajouté aux favoris',
     'media.success.saved': 'Enregistré',
-    
+
     // Messages d'info
     'media.info.audio_unavailable': 'Audio non disponible pour ce podcast',
     'media.info.url_unavailable': 'URL du média non disponible',
     'media.info.no_resources': 'Aucune ressource disponible pour ce média',
     'media.info.try_filter': 'Essayez de modifier vos filtres de recherche',
-    
+
     // Découvrir plus
     'media.discover_more': 'Découvrez d\'autres contenus exclusifs...',
     'media.discover_more_episodes': 'Découvrez d\'autres épisodes de ce podcast...',
@@ -186,7 +186,7 @@ export const mediaTranslations = {
     'media.download': 'Download',
     'media.share': 'Share',
     'media.no_results': 'No media found',
-    
+
     // Media types
     'media.type.webinar': 'Webinar',
     'media.type.podcast': 'Podcast',
@@ -196,7 +196,7 @@ export const mediaTranslations = {
     'media.type.moment': 'Best Moment',
     'media.type.testimonial': 'Testimonial',
     'media.type.article': 'Article',
-    
+
     // Webinars
     'media.webinar.title': 'Webinars',
     'media.webinar.subtitle': 'Sponsored webinar replays',
@@ -205,7 +205,7 @@ export const mediaTranslations = {
     'media.webinar.recorded': 'Recorded on',
     'media.webinar.watch': 'Watch',
     'media.webinar.replay': 'Watch replay',
-    
+
     // Podcasts
     'media.podcast.title': 'Podcasts',
     'media.podcast.subtitle': 'SIB Talks - Audio episodes',
@@ -213,7 +213,7 @@ export const mediaTranslations = {
     'media.podcast.season': 'Season {{number}}',
     'media.podcast.listen': 'Listen',
     'media.podcast.subscribe': 'Subscribe',
-    
+
     // Podcast specific NEW
     'media.podcast.page_title': 'SIB Talks',
     'media.podcast.page_subtitle': 'Listen to the voices shaping the construction industry',
@@ -221,13 +221,13 @@ export const mediaTranslations = {
     'media.podcast.search_placeholder': 'Search for an episode...',
     'media.podcast.no_results': 'No podcasts found',
     'media.action.listen_now': 'Listen now',
-    
+
     // Stats
     'media.stats.total_episodes': 'Total Episodes',
     'media.stats.listens': 'Listens',
     'media.stats.hours': 'Content Hours',
     'media.stats.listening': 'listens',
-    
+
     'media.filter.all_categories': 'All categories',
 
     'media.capsule.not_found': 'Capsule not found',
@@ -240,7 +240,7 @@ export const mediaTranslations = {
     'media.capsule.title': 'Inside Capsules',
     'media.capsule.subtitle': 'Inside SIB video capsules',
     'media.capsule.featured': 'Featured',
-    
+
     // Live Studio
     'media.live.title': 'Live Studio',
     'media.live.subtitle': 'Meet The Leaders - Live interviews',
@@ -248,12 +248,12 @@ export const mediaTranslations = {
     'media.live.now': 'Live now',
     'media.live.watch_live': 'Watch live',
     'media.live.guests': 'Guests',
-    
+
     // Best Moments
     'media.moment.title': 'Best Moments',
     'media.moment.subtitle': 'Event highlights',
     'media.moment.highlights': 'Highlights',
-    
+
     // Testimonials
     'media.testimonial.title': 'Testimonials',
     'media.testimonial.subtitle': 'Discover feedback from our partners',
@@ -263,7 +263,7 @@ export const mediaTranslations = {
     'media.testimonial.search_placeholder': 'Search testomonial...',
     'media.testimonial.no_results': 'No testimonials found',
     'media.testimonial.no_results_desc': 'New testimonials will be added soon',
-    
+
     // Media details
     'media.detail.views': 'Views',
     'media.detail.likes': 'Likes',
@@ -274,7 +274,7 @@ export const mediaTranslations = {
     'media.detail.category': 'Category',
     'media.detail.tags': 'Tags',
     'media.detail.related': 'Related content',
-    
+
     // Actions
     'media.action.play': 'Play',
     'media.action.pause': 'Pause',
@@ -289,7 +289,7 @@ export const mediaTranslations = {
     'media.action.speed': 'Speed',
     'media.action.quality': 'Quality',
     'media.action.captions': 'Captions',
-    
+
     // Upload (for partners)
     'media.upload.title': 'Upload media',
     'media.upload.drag_drop': 'Drag and drop or click to select',
@@ -301,7 +301,7 @@ export const mediaTranslations = {
     'media.upload.success': 'Media uploaded successfully',
     'media.upload.error': 'Upload error',
     'media.upload.pending_approval': 'Pending approval',
-    
+
     // Filters
     'media.filter.type': 'Type',
     'media.filter.date': 'Date',
@@ -310,7 +310,7 @@ export const mediaTranslations = {
     'media.filter.popular': 'Popular',
     'media.filter.recent': 'Recent',
     'media.filter.featured': 'Featured',
-    
+
     // Error messages
     'media.error.loading': 'Error loading',
     'media.error.loading_media': 'Error loading media',
@@ -324,7 +324,7 @@ export const mediaTranslations = {
     'media.error.loading_testimonial': 'Error loading testimonial',
     'media.error.loading_best_moments': 'Error loading best moments',
     'media.error.loading_capsules': 'Error loading capsules',
-    
+
     // Success messages
     'media.success.link_copied': 'Link copied to clipboard',
     'media.success.play': 'Playing...',
@@ -332,13 +332,13 @@ export const mediaTranslations = {
     'media.success.shared': 'Shared successfully',
     'media.success.favorited': 'Added to favorites',
     'media.success.saved': 'Saved',
-    
+
     // Info messages
     'media.info.audio_unavailable': 'Audio not available for this podcast',
     'media.info.url_unavailable': 'Media URL not available',
     'media.info.no_resources': 'No resources available for this media',
     'media.info.try_filter': 'Try modifying your search filters',
-    
+
     // Discover more
     'media.discover_more': 'Discover other exclusive content...',
     'media.discover_more_episodes': 'Discover other episodes from this podcast...',

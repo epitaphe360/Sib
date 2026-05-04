@@ -36,8 +36,8 @@ export const ProgressSteps: React.FC<ProgressStepsProps> = ({ steps }) => {
         {steps.map((step, index) => (
           <div key={step.id} className="flex flex-col items-center flex-1">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-              step.completed 
-                ? 'bg-green-500 border-green-500 text-white' 
+              step.completed
+                ? 'bg-green-500 border-green-500 text-white'
                 : 'bg-white border-gray-300 text-gray-400'
             }`}>
               {step.completed ? <Check className="h-5 w-5" /> : <span>{index + 1}</span>}

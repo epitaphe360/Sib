@@ -163,14 +163,14 @@ export default function ProfileMatchingPage() {
           {t('auth.premium_required')}
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button 
+          <Button
             onClick={() => navigate(ROUTES.VISITOR_UPGRADE)}
             className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg"
           >
             {t('common.upgrade')}
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => navigate(-1)}
             className="px-8 py-3 rounded-xl border-2"
           >
@@ -211,14 +211,14 @@ export default function ProfileMatchingPage() {
       bio: 5
     };
 
-    if (formData.sectors.length > 0) score += weights.sectors;
-    if (formData.interests.length > 0) score += weights.interests;
-    if (formData.objectives.length > 0) score += weights.objectives;
-    if (formData.collaborationTypes.length > 0) score += weights.collaborationTypes;
-    if (formData.country) score += weights.country;
-    if (formData.company) score += weights.company;
-    if (formData.companySize) score += weights.companySize;
-    if (formData.bio && formData.bio.length > 20) score += weights.bio;
+    if (formData.sectors.length > 0) {score += weights.sectors;}
+    if (formData.interests.length > 0) {score += weights.interests;}
+    if (formData.objectives.length > 0) {score += weights.objectives;}
+    if (formData.collaborationTypes.length > 0) {score += weights.collaborationTypes;}
+    if (formData.country) {score += weights.country;}
+    if (formData.company) {score += weights.company;}
+    if (formData.companySize) {score += weights.companySize;}
+    if (formData.bio && formData.bio.length > 20) {score += weights.bio;}
 
     setCompletionPercentage(score);
   }, [formData]);
@@ -264,7 +264,7 @@ export default function ProfileMatchingPage() {
           sectors: currentUser.profile.sectors?.length,
           bio: currentUser.profile.bio?.substring(0, 50)
         });
-        
+
         setFormData({
           sectors: currentUser.profile.sectors || [],
           interests: currentUser.profile.interests || [],
@@ -278,7 +278,7 @@ export default function ProfileMatchingPage() {
       }
 
       toast.success(t('form.success.updated'));
-      
+
       // Redirection vers la page réseau avec déclenchement automatique de la génération
       setTimeout(() => {
         navigate(ROUTES.NETWORKING + '?generate=true');

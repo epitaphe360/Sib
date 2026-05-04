@@ -154,7 +154,7 @@
   BEST_MOMENTS_DETAIL: '/media/best-moments/:id',
   TESTIMONIALS: '/media/testimonials',
   TESTIMONIAL_DETAIL: '/media/testimonial/:id',
-  
+
   // Admin Media Management
   ADMIN_MEDIA_CREATE: '/admin/media/create',
   ADMIN_MEDIA_MANAGE: '/admin/media/manage',
@@ -182,7 +182,7 @@
 
   // UrbaEvent - Sélection multi-salons
   SALON_SELECTION: '/salons',
-  SALON_SIB: '/',
+  SALON_SIB: '/salon/sib',
   SALON_SIR: '/salon/sir',
   SALON_SIP: '/salon/sip',
   SALON_BTP: '/salon/btp',

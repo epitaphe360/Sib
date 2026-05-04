@@ -216,7 +216,7 @@ serve(async (req) => {
         .select()
         .single()
 
-      if (error) throw error
+      if (error) {throw error}
       badgeData = data
     } else {
       // Créer un nouveau badge
@@ -236,7 +236,7 @@ serve(async (req) => {
         .select()
         .single()
 
-      if (error) throw error
+      if (error) {throw error}
       badgeData = data
     }
 

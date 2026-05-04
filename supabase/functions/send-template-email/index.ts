@@ -71,7 +71,7 @@ Deno.serve(async (req: Request) => {
 
     // Connexion au serveur SMTP
     const client = new SmtpClient()
-    
+
     try {
       await client.connectTLS({
         hostname: SMTP_CONFIG.hostname,
@@ -84,7 +84,7 @@ Deno.serve(async (req: Request) => {
 
       // Préparation des destinataires
       const recipients = Array.isArray(to) ? to : [to]
-      
+
       // Envoi de l'email à chaque destinataire
       for (const recipient of recipients) {
         await client.send({

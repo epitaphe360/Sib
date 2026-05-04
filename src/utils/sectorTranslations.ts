@@ -4,8 +4,8 @@
  */
 
 export const getSectorTranslationKey = (sector: string | undefined): string => {
-  if (!sector) return 'sector.other';
-  
+  if (!sector) {return 'sector.other';}
+
   const sectorMap: Record<string, string> = {
     'Technology': 'sector.technology',
     'technology': 'sector.technology',
@@ -20,19 +20,19 @@ export const getSectorTranslationKey = (sector: string | undefined): string => {
     'Exploitation & Gestion': 'sector.operations_management',
     'exploitation & gestion': 'sector.operations_management',
   };
-  
+
   return sectorMap[sector] || sector; // Return original if no mapping found
 };
 
 export const translateSector = (sector: string | undefined, t: (key: string) => string): string => {
-  if (!sector) return '';
-  
+  if (!sector) {return '';}
+
   const key = getSectorTranslationKey(sector);
-  
+
   // Try to translate the key, if it exists in translations
   // If not, return the original sector name
   const translated = t(key);
-  
+
   // If translation returns the same key (meaning it doesn't exist), return original sector
   return translated === key ? sector : translated;
 };

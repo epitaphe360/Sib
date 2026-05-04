@@ -70,8 +70,8 @@ export function WhatsAppFloatingWidget({
     return null;
   }
 
-  const positionClasses = position === 'bottom-right' 
-    ? `right-${offsetSide} bottom-${offsetBottom}` 
+  const positionClasses = position === 'bottom-right'
+    ? `right-${offsetSide} bottom-${offsetBottom}`
     : `left-${offsetSide} bottom-${offsetBottom}`;
 
   return (
@@ -100,7 +100,7 @@ export function WhatsAppFloatingWidget({
           title={t('whatsapp.contact_whatsapp')}
         >
           <MessageCircle className="h-7 w-7" />
-          
+
           {/* Pulse animation */}
           <span className="absolute inset-0 rounded-full bg-green-500 animate-pulse opacity-75"></span>
         </button>

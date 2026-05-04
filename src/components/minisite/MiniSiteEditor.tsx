@@ -486,9 +486,9 @@ export default function MiniSiteEditor() {
             />
           )}
           <div className="flex space-x-2 mt-2">
-                <Button 
+                <Button
               variant="default"
-              size="sm" 
+              size="sm"
               onClick={() => {
                 onChange(editingValue);
                 setEditingField(null);
@@ -553,7 +553,7 @@ export default function MiniSiteEditor() {
               {t('minisite.editor.customize')}
             </p>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             {/* Preview Mode Selector */}
             <div className="flex items-center space-x-2 bg-white rounded-lg p-1 shadow-sm">
@@ -590,7 +590,7 @@ export default function MiniSiteEditor() {
               <Eye className="h-4 w-4 mr-2" />
               Prévisualiser
             </Button>
-            
+
             <Button variant="default" onClick={handleSave} disabled={isSaving}>
               <Save className="h-4 w-4 mr-2" />
               {isSaving ? 'Sauvegarde...' : 'Sauvegarder'}
@@ -608,7 +608,7 @@ export default function MiniSiteEditor() {
                   <Settings className="h-4 w-4 mr-2" />
                   Paramètres du site
                 </h3>
-                
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -696,7 +696,7 @@ export default function MiniSiteEditor() {
                   <Plus className="h-4 w-4 mr-2" />
                   {t('minisite.editor.add_section')}
                 </h3>
-                
+
                 <div className="space-y-2">
                   {sectionTypes.map((sectionType) => {
                     return (
@@ -729,7 +729,7 @@ export default function MiniSiteEditor() {
                 <h3 className="font-semibold text-gray-900 mb-4">
                   Sections ({sections.length})
                 </h3>
-                
+
                 <div className="space-y-2">
                   {sections.map((section) => (
                     <div
@@ -757,7 +757,7 @@ export default function MiniSiteEditor() {
                             {section.title}
                           </span>
                         </div>
-                        
+
                         <div className="flex items-center space-x-1">
                           <button
                             onClick={(e) => {
@@ -771,7 +771,7 @@ export default function MiniSiteEditor() {
                           >
                             <Eye className="h-3 w-3" />
                           </button>
-                          
+
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -784,7 +784,7 @@ export default function MiniSiteEditor() {
                           </button>
                         </div>
                       </div>
-                      
+
                       <div className="mt-2">
                         <Badge variant="info" size="sm">
                           {section.type}
@@ -841,11 +841,11 @@ export default function MiniSiteEditor() {
                           >
                             {/* Section Hero */}
                             {section.type === 'hero' && (
-                              <div 
+                              <div
                                 className="relative h-64 bg-cover bg-center flex items-center justify-center"
-                                style={{ 
-                                  backgroundImage: section.content.backgroundImage 
-                                    ? `url(${section.content.backgroundImage})` 
+                                style={{
+                                  backgroundImage: section.content.backgroundImage
+                                    ? `url(${section.content.backgroundImage})`
                                     : 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)'
                                 }}
                               >
@@ -899,7 +899,7 @@ export default function MiniSiteEditor() {
                                   <div className="grid grid-cols-2 gap-4">
                                     {section.content.features.map((feature: string, index: number) => (
                                       <div key={`${section.id}-feature-${index}-${feature.substring(0, 10)}`} className="flex items-center space-x-2">
-                                        <div 
+                                        <div
                                           className="w-2 h-2 rounded-full"
                                           style={{ backgroundColor: siteSettings.primaryColor }}
                                         ></div>
@@ -955,7 +955,7 @@ export default function MiniSiteEditor() {
                                     Produit
                                   </Button>
                                 </div>
-                                
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                   {section.content.products?.map((product, index: number) => (
                                     <div key={product.id || `${section.id}-product-${index}`} className="bg-white rounded-lg p-6 shadow-sm relative group">
@@ -966,7 +966,7 @@ export default function MiniSiteEditor() {
                                       >
                                         <Trash2 className="h-3 w-3" />
                                       </button>
-                                      
+
                                       <img
                                         src={product.image}
                                         alt={product.name}
@@ -991,7 +991,7 @@ export default function MiniSiteEditor() {
                                         }}
                                         title="Cliquer pour changer l'image"
                                       />
-                                      
+
                                       <EditableText
                                         value={product.name}
                                         onChange={(value) => updateProductField(section.id, index, 'name', value)}
@@ -999,7 +999,7 @@ export default function MiniSiteEditor() {
                                         className="font-semibold text-gray-900 mb-2"
                                         fieldKey={`${section.id}-product-${index}-name`}
                                       />
-                                      
+
                                       <EditableText
                                         value={product.description}
                                         onChange={(value) => updateProductField(section.id, index, 'description', value)}
@@ -1008,7 +1008,7 @@ export default function MiniSiteEditor() {
                                         className="text-gray-600 text-sm mb-4"
                                         fieldKey={`${section.id}-product-${index}-description`}
                                       />
-                                      
+
                                       <div className="flex items-center justify-between">
                                         <EditableText
                                           value={product.price}
@@ -1222,7 +1222,7 @@ export default function MiniSiteEditor() {
                                   className="text-2xl font-bold text-gray-900 mb-6"
                                   fieldKey={`${section.id}-title`}
                                 />
-                                
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                   <div className="space-y-4">
                                     <div className="flex items-center space-x-3">
@@ -1235,7 +1235,7 @@ export default function MiniSiteEditor() {
                                         fieldKey={`${section.id}-address`}
                                       />
                                     </div>
-                                    
+
                                     <div className="flex items-center space-x-3">
                                       <Phone className="h-5 w-5 text-blue-600" />
                                       <EditableText
@@ -1246,7 +1246,7 @@ export default function MiniSiteEditor() {
                                         fieldKey={`${section.id}-phone`}
                                       />
                                     </div>
-                                    
+
                                     <div className="flex items-center space-x-3">
                                       <Mail className="h-5 w-5 text-blue-600" />
                                       <EditableText
@@ -1257,7 +1257,7 @@ export default function MiniSiteEditor() {
                                         fieldKey={`${section.id}-email`}
                                       />
                                     </div>
-                                    
+
                                     <div className="flex items-center space-x-3">
                                       <Globe className="h-5 w-5 text-blue-600" />
                                       <EditableText
@@ -1269,7 +1269,7 @@ export default function MiniSiteEditor() {
                                       />
                                     </div>
                                   </div>
-                                  
+
                                   <div className="bg-gray-100 p-4 rounded-lg">
                                     <h4 className="font-medium text-gray-900 mb-3">Formulaire de contact</h4>
                                     <p className="text-sm text-gray-600">
@@ -1293,7 +1293,7 @@ export default function MiniSiteEditor() {
                                           <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                                         </label>
                                       </div>
-                                      
+
                                       <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-700">Champ Téléphone</span>
                                         <label className="relative inline-flex items-center cursor-pointer">
@@ -1310,7 +1310,7 @@ export default function MiniSiteEditor() {
                                           <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                                         </label>
                                       </div>
-                                      
+
                                       <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-700">Champ Entreprise</span>
                                         <label className="relative inline-flex items-center cursor-pointer">
@@ -1328,7 +1328,7 @@ export default function MiniSiteEditor() {
                                           <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                                         </label>
                                       </div>
-                                      
+
                                       <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-700">Anti-spam (reCAPTCHA)</span>
                                         <label className="relative inline-flex items-center cursor-pointer">
@@ -1346,7 +1346,7 @@ export default function MiniSiteEditor() {
                                           <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                                         </label>
                                       </div>
-                                      
+
                                       <div className="mt-4 pt-3 border-t border-gray-200">
                                         <div className="flex items-center justify-between mb-2">
                                           <span className="text-sm font-medium text-gray-700">Email de notification</span>
@@ -1362,7 +1362,7 @@ export default function MiniSiteEditor() {
                                           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
                                       </div>
-                                      
+
                                       <div className="mt-3">
                                         <Button
                                           variant="outline"
@@ -1418,13 +1418,13 @@ export default function MiniSiteEditor() {
                             )}
                           </motion.div>
                         ))}
-                      
+
                       {sections.filter(s => s.visible).length === 0 && (
                         <div className="flex items-center justify-center h-64 text-gray-500">
                           <div className="text-center">
                             <Layout className="h-12 w-12 mx-auto mb-4 opacity-50" />
                             <p>{t('minisite.editor.empty_state')}</p>
-                            <Button 
+                            <Button
                               variant="default"
                               className="mt-4"
                               onClick={() => addSection('hero')}

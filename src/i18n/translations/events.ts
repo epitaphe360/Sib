@@ -19,7 +19,7 @@ export const eventsTranslations = {
     'events.cancelled': 'Annulé',
     'events.no_results': 'Aucun événement trouvé',
     'events.count': '{{count}} événements',
-    
+
     // Types d'événements
     'events.type.all': 'Tous les types',
     'events.type.conference': 'Conférence',
@@ -31,7 +31,7 @@ export const eventsTranslations = {
     'events.type.demo': 'Démonstration',
     'events.type.meeting': 'Réunion',
     'events.type.keynote': 'Keynote',
-    
+
     // Détails événement
     'events.detail.date': 'Date',
     'events.detail.time': 'Horaire',
@@ -47,7 +47,7 @@ export const eventsTranslations = {
     'events.detail.materials': 'Supports',
     'events.detail.language': 'Langue',
     'events.detail.target_audience': 'Public cible',
-    
+
     // Inscription
     'events.register.title': 'S\'inscrire à l\'événement',
     'events.register.confirm': 'Confirmer l\'inscription',
@@ -57,14 +57,14 @@ export const eventsTranslations = {
     'events.register.full_message': 'Cet événement est complet',
     'events.register.deadline_passed': 'Date limite dépassée',
     'events.register.already_registered': 'Vous êtes déjà inscrit',
-    
+
     // Filtres
     'events.filter.date': 'Date',
     'events.filter.type': 'Type',
     'events.filter.location': 'Lieu',
     'events.filter.language': 'Langue',
     'events.filter.free_seats': 'Places disponibles',
-    
+
     // Mes événements
     'events.my_events': 'Mes événements',
     'events.my_registrations': 'Mes inscriptions',
@@ -72,13 +72,13 @@ export const eventsTranslations = {
     'events.share': 'Partager',
     'events.reminder': 'Rappel',
     'events.set_reminder': 'Définir un rappel',
-    
+
     // Programme scientifique
     'events.program.scientific': 'Programme Scientifique',
     'events.program.business': 'Programme Business',
     'events.program.social': 'Programme Social',
     'events.program.download': 'Télécharger le programme',
-    
+
     // Statuts
     'events.status.scheduled': 'Programmé',
     'events.status.in_progress': 'En cours',
@@ -88,13 +88,13 @@ export const eventsTranslations = {
     'events.status.confirmed': 'Confirmé',
     'events.status.pending': 'En attente',
     'events.status.draft': 'Brouillon',
-    
+
     // Admin
     'events.admin.manage': 'Gérer les événements',
     'events.admin.create': 'Créer un événement',
     'events.admin.edit': 'Modifier l\'événement',
     'events.admin.loading_error': 'Échec du chargement des événements. Veuillez réessayer plus tard.',
-    
+
     // Notifications
     'events.notification.starts_soon': 'L\'événement commence dans {{time}}',
     'events.notification.reminder': 'Rappel : {{event}} demain à {{time}}',
@@ -117,7 +117,7 @@ export const eventsTranslations = {
     'events.cancelled': 'Cancelled',
     'events.no_results': 'No events found',
     'events.count': '{{count}} events',
-    
+
     // Event types
     'events.type.all': 'All types',
     'events.type.conference': 'Conference',
@@ -129,7 +129,7 @@ export const eventsTranslations = {
     'events.type.demo': 'Demonstration',
     'events.type.meeting': 'Meeting',
     'events.type.keynote': 'Keynote',
-    
+
     // Event details
     'events.detail.date': 'Date',
     'events.detail.time': 'Time',
@@ -145,7 +145,7 @@ export const eventsTranslations = {
     'events.detail.materials': 'Materials',
     'events.detail.language': 'Language',
     'events.detail.target_audience': 'Target audience',
-    
+
     // Registration
     'events.register.title': 'Register for event',
     'events.register.confirm': 'Confirm registration',
@@ -155,14 +155,14 @@ export const eventsTranslations = {
     'events.register.full_message': 'This event is full',
     'events.register.deadline_passed': 'Deadline passed',
     'events.register.already_registered': 'Already registered',
-    
+
     // Filters
     'events.filter.date': 'Date',
     'events.filter.type': 'Type',
     'events.filter.location': 'Location',
     'events.filter.language': 'Language',
     'events.filter.free_seats': 'Available seats',
-    
+
     // My events
     'events.my_events': 'My events',
     'events.my_registrations': 'My registrations',
@@ -170,13 +170,13 @@ export const eventsTranslations = {
     'events.share': 'Share',
     'events.reminder': 'Reminder',
     'events.set_reminder': 'Set reminder',
-    
+
     // Programs
     'events.program.scientific': 'Scientific Program',
     'events.program.business': 'Business Program',
     'events.program.social': 'Social Program',
     'events.program.download': 'Download program',
-    
+
     // Statuses
     'events.status.scheduled': 'Scheduled',
     'events.status.in_progress': 'In progress',
@@ -184,7 +184,7 @@ export const eventsTranslations = {
     'events.status.confirmed': 'Confirmed',
     'events.status.pending': 'Pending',
     'events.status.draft': 'Draft',
-    
+
     // Admin
     'events.admin.manage': 'Manage events',
     'events.admin.create': 'Create event',
@@ -192,7 +192,7 @@ export const eventsTranslations = {
     'events.admin.loading_error': 'Failed to load events. Please try again later.',
     'events.status.cancelled': 'Cancelled',
     'events.status.postponed': 'Postponed',
-    
+
     // Notifications
     'events.notification.starts_soon': 'Event starts in {{time}}',
     'events.notification.reminder': 'Reminder: {{event}} tomorrow at {{time}}',

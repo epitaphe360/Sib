@@ -6,7 +6,7 @@ import { User, NetworkingRecommendation, UserProfile } from '../types';
  * Calculates the intersection of two string arrays.
  */
 const getIntersection = (arr1: string[], arr2: string[]): string[] => {
-  if (!arr1 || !arr2) return [];
+  if (!arr1 || !arr2) {return [];}
   const set1 = new Set(arr1.map(item => item.toLowerCase()));
   return arr2.filter(item => set1.has(item.toLowerCase()));
 };
@@ -86,7 +86,7 @@ class RecommendationService {
 
     // Filter out the current user, users of the same company, and visitors (B2B only = exhibitors & partners)
     const potentialMatches = allUsers.filter(
-      (p) => p.id !== currentUser.id && 
+      (p) => p.id !== currentUser.id &&
              p.profile?.company !== currentUser.profile?.company &&
              p.type !== 'visitor' && // Exclure les visiteurs (B2B = entreprises uniquement)
              p.type !== 'admin' && // Exclure les admins
@@ -114,7 +114,7 @@ class RecommendationService {
       // REDUCED threshold - accept all matches with positive score
       // Users with rich profiles get higher scores but all users can be recommended
       const threshold = 10; // Very low threshold to ensure recommendations even with empty profiles
-      
+
       if (score > threshold) {
         recommendations.push({
           id: `${currentUser.id}-${potentialMatch.id}`,
@@ -310,7 +310,7 @@ class RecommendationService {
 
     fields.forEach(field => {
       totalFields++;
-      if (field) completeness++;
+      if (field) {completeness++;}
     });
 
     return completeness / totalFields;

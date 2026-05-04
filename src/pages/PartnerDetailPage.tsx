@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useTranslation } from '../hooks/useTranslation';
 import { ROUTES } from '../lib/routes';
 import { getEmbedUrl } from '../utils/videoUtils';
-import { 
+import {
   ArrowLeft,
   ExternalLink,
   MapPin,
@@ -155,17 +155,17 @@ export default function PartnerDetailPage() {
 
   useEffect(() => {
     const loadPartner = async () => {
-      if (!id) return;
-      
+      if (!id) {return;}
+
       setIsLoading(true);
       setError(null);
-      
+
       try {
         const data = await SupabaseService.getPartnerById(id);
         if (data) {
           setPartner(data);
           // Incrémenter les vues
-          SupabaseService.incrementPartnerViews(id).catch(err => 
+          SupabaseService.incrementPartnerViews(id).catch(err =>
             console.error("Erreur incrémentation vues partenaire:", err)
           );
         } else {
@@ -206,11 +206,11 @@ export default function PartnerDetailPage() {
             {t('partner.notFound', 'Partenaire non disponible')}
           </h2>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            {error === "Partenaire non trouvé" 
+            {error === "Partenaire non trouvé"
               ? t('partner.notFoundDesc', "Ce partenaire n'a pas encore complété son profil ou n'est pas encore visible publiquement. Revenez bientôt pour découvrir notre réseau de partenaires !")
               : error || t('partner.notFoundGeneric', "Le partenaire que vous recherchez n'existe pas ou a été supprimé.")}
           </p>
-          
+
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to={ROUTES.PARTNERS}>
@@ -226,7 +226,7 @@ export default function PartnerDetailPage() {
               </Button>
             </Link>
           </div>
-          
+
           {/* Message informatif */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
@@ -353,7 +353,7 @@ export default function PartnerDetailPage() {
               alt={partner.name}
               className="h-48 w-48 rounded-xl object-contain border-2 border-gray-200 bg-white p-4 shadow-sm"
             />
-            
+
             <div className="flex-1">
               <div className="flex items-center space-x-3 mb-2">
                 <h1 className="text-3xl font-bold text-gray-900">
@@ -363,7 +363,7 @@ export default function PartnerDetailPage() {
                   <CheckCircle className="h-6 w-6 text-blue-500" />
                 )}
               </div>
-              
+
               <div className="flex items-center space-x-4 mb-4">
                 <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getTypeColor(partner.type)}`}>
                   <TypeIcon className="h-4 w-4 mr-2" />
@@ -377,11 +377,11 @@ export default function PartnerDetailPage() {
                   <span>{partner.country}</span>
                 </div>
               </div>
-              
+
               <p className="text-gray-600 mb-6 max-w-3xl">
                 {partner.description}
               </p>
-              
+
               <div className="flex items-center space-x-4">
                 {partner.website && (
                   <a
@@ -395,23 +395,23 @@ export default function PartnerDetailPage() {
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 )}
-                
+
                 <Button variant="default" size="sm" onClick={handleContact}>
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Contacter
                 </Button>
-                
+
                 <Button variant="default" size="sm" onClick={handleShare}>
                   <Share2 className="h-4 w-4 mr-2" />
                   Partager
                 </Button>
               </div>
-              
+
               {/* Réseaux sociaux */}
               {partner.socialMedia && (
                 <div className="flex items-center space-x-3 mt-4">
                   {partner.socialMedia.linkedin && (
-                    <a href={partner.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" 
+                    <a href={partner.socialMedia.linkedin} target="_blank" rel="noopener noreferrer"
                        className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors">
                       <Linkedin className="h-4 w-4" />
                     </a>
@@ -527,7 +527,7 @@ export default function PartnerDetailPage() {
                 <p className="text-gray-700 leading-relaxed text-lg mb-6">
                   {partner.longDescription || partner.description}
                 </p>
-                
+
                 {/* Mission & Vision */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                   {partner.mission && (
@@ -559,7 +559,7 @@ export default function PartnerDetailPage() {
                       onClick={() => setShowVideoModal(true)}
                       className="absolute inset-0 flex items-center justify-center group"
                     >
-                      <img 
+                      <img
                         src={partner.gallery?.[0] || partner.logo || ''}
                         alt="Video thumbnail"
                         className="absolute inset-0 w-full h-full object-cover opacity-70"
@@ -698,8 +698,8 @@ export default function PartnerDetailPage() {
                       <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
                       <div className="flex items-center">
                         {testimonial.avatar && (
-                          <img 
-                            src={testimonial.avatar} 
+                          <img
+                            src={testimonial.avatar}
                             alt={testimonial.author}
                             className="w-12 h-12 rounded-full mr-3 object-cover"
                           />
@@ -733,8 +733,8 @@ export default function PartnerDetailPage() {
                     ? ((contribution as any).name || (contribution as any).description || JSON.stringify(contribution))
                     : String(contribution);
                   return (
-                  <motion.div 
-                    key={idx} 
+                  <motion.div
+                    key={idx}
                     whileHover={{ scale: 1.02 }}
                     className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100 cursor-pointer"
                   >
@@ -767,14 +767,14 @@ export default function PartnerDetailPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">À propos de {partner.name}</h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-6">{partner.longDescription || partner.description}</p>
-                
+
                 {partner.mission && (
                   <div className="my-8 p-6 bg-blue-50 rounded-2xl border-l-4 border-blue-500">
                     <h3 className="text-lg font-bold text-blue-900 mb-2">Notre Mission</h3>
                     <p className="text-blue-800">{partner.mission}</p>
                   </div>
                 )}
-                
+
                 {partner.vision && (
                   <div className="my-8 p-6 bg-purple-50 rounded-2xl border-l-4 border-purple-500">
                     <h3 className="text-lg font-bold text-purple-900 mb-2">Notre Vision</h3>
@@ -840,7 +840,7 @@ export default function PartnerDetailPage() {
                 <div className="space-y-4">
                   {(partner.expertise || []).length > 0 ? (partner.expertise || []).map((exp, index) => {
                     const isExpanded = expandedExpertise[index] || false;
-                    
+
                     // Descriptions génériques basées sur les domaines courants
                     const getExpertiseDescription = (title: string) => {
                       const lowerTitle = title.toLowerCase();
@@ -989,7 +989,7 @@ export default function PartnerDetailPage() {
                       // Fallback intelligent basé sur le contexte du partenaire
                       return `Expertise reconnue en ${title.toLowerCase()} au service de l'excellence et de l'innovation dans le secteur.`;
                     };
-                    
+
                     return (
                       <motion.div
                         key={exp}
@@ -1007,7 +1007,7 @@ export default function PartnerDetailPage() {
                           <ChevronRight className={`h-5 w-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
                         </div>
                         {isExpanded && (
-                          <motion.p 
+                          <motion.p
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
@@ -1086,7 +1086,7 @@ export default function PartnerDetailPage() {
               <h2 className="text-2xl font-bold text-gray-900">Galerie Photos</h2>
               {partner.gallery?.length > 0 && <Badge variant="info">{partner.gallery.length} photos</Badge>}
             </div>
-            
+
             {partner.gallery && partner.gallery.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {partner.gallery.map((image, index) => (
@@ -1129,7 +1129,7 @@ export default function PartnerDetailPage() {
             className="space-y-6"
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Dernières Actualités</h2>
-            
+
             {partner.news && partner.news.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {partner.news.map((news, index) => (
@@ -1153,9 +1153,9 @@ export default function PartnerDetailPage() {
                       </span>
                       <h3 className="text-lg font-bold text-gray-900 mt-2 mb-3">{news.title}</h3>
                       <p className="text-gray-600 text-sm">{news.excerpt}</p>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         className="mt-4 text-blue-600 hover:text-blue-700 hover:bg-blue-50 cursor-pointer"
                         onClick={() => {
                           setSelectedNews(news);
@@ -1217,11 +1217,11 @@ export default function PartnerDetailPage() {
                       <h3 className="text-xl font-semibold text-gray-900 mb-3">
                         {project.name}
                       </h3>
-                      
+
                       <p className="text-gray-600 mb-4 line-clamp-2">
                         {project.description}
                       </p>
-                      
+
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 p-3 bg-gray-50 rounded-lg">
                         <div className="text-center">
                           <div className="text-lg font-bold text-blue-600">
@@ -1242,8 +1242,8 @@ export default function PartnerDetailPage() {
                           <div className="text-xs text-gray-600">ROI</div>
                         </div>
                       </div>
-                      
-                      <Button 
+
+                      <Button
                         variant="default"
                         className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                         onClick={() => handleViewProjectDetails(project)}
@@ -1275,11 +1275,11 @@ export default function PartnerDetailPage() {
               <h3 className="text-2xl font-bold text-gray-900 mb-8">
                 Informations de Contact
               </h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <h4 className="font-semibold text-gray-900 text-lg">Coordonnées</h4>
-                  
+
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
                       <div className="p-3 bg-blue-100 rounded-lg">
@@ -1290,7 +1290,7 @@ export default function PartnerDetailPage() {
                         <p className="font-medium text-gray-900">{partner.name}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
                       <div className="p-3 bg-green-100 rounded-lg">
                         <MapPin className="h-5 w-5 text-green-600" />
@@ -1300,7 +1300,7 @@ export default function PartnerDetailPage() {
                         <p className="font-medium text-gray-900">{partner.country}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
                       <div className="p-3 bg-purple-100 rounded-lg">
                         <Phone className="h-5 w-5 text-purple-600" />
@@ -1310,7 +1310,7 @@ export default function PartnerDetailPage() {
                         <p className="font-medium text-gray-900">+212 5 22 XX XX XX</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
                       <div className="p-3 bg-orange-100 rounded-lg">
                         <Mail className="h-5 w-5 text-orange-600" />
@@ -1320,7 +1320,7 @@ export default function PartnerDetailPage() {
                         <p className="font-medium text-gray-900">contact@{partner?.name?.toLowerCase().replace(/\s+/g, '') || 'contact'}.com</p>
                       </div>
                     </div>
-                    
+
                     {partner.website && (
                       <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
                         <div className="p-3 bg-indigo-100 rounded-lg">
@@ -1336,7 +1336,7 @@ export default function PartnerDetailPage() {
                     )}
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="font-semibold text-gray-900 text-lg mb-4">Contact SIB</h4>
                   <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
@@ -1359,9 +1359,9 @@ export default function PartnerDetailPage() {
                         +212 5 22 XX XX XX
                       </p>
                     </div>
-                    
-                    <Button 
-                      variant="default" 
+
+                    <Button
+                      variant="default"
                       className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-600"
                       onClick={handleContact}
                     >
@@ -1405,8 +1405,8 @@ export default function PartnerDetailPage() {
 
       {/* Modal Article / News */}
       {showNewsModal && selectedNews && (
-        <div 
-          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" 
+        <div
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
           onClick={() => setShowNewsModal(false)}
         >
           <motion.div
@@ -1432,7 +1432,7 @@ export default function PartnerDetailPage() {
                 </button>
               </div>
             )}
-            
+
             {/* Contenu de l'article */}
             <div className="p-6">
               {!selectedNews.image && (
@@ -1443,7 +1443,7 @@ export default function PartnerDetailPage() {
                   <ArrowLeft className="h-5 w-5 text-gray-600" />
                 </button>
               )}
-              
+
               <div className="flex items-center gap-2 mb-4">
                 <Badge variant="primary" className="bg-blue-100 text-blue-700">
                   <BookOpen className="h-3 w-3 mr-1" />
@@ -1453,27 +1453,27 @@ export default function PartnerDetailPage() {
                   {formatDate(new Date(selectedNews.date))}
                 </span>
               </div>
-              
+
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 {selectedNews.title}
               </h2>
-              
+
               <div className="prose prose-blue max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-4">
                   {selectedNews.excerpt}
                 </p>
-                
+
                 {/* Contenu étendu généré */}
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Cette actualité témoigne de l'engagement continu de {partner.name} dans l'innovation et le développement du secteur du bâtiment. 
+                  Cette actualité témoigne de l'engagement continu de {partner.name} dans l'innovation et le développement du secteur du bâtiment.
                   Notre équipe travaille sans relâche pour apporter des solutions innovantes qui répondent aux défis actuels du secteur de la construction.
                 </p>
-                
+
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Ce projet s'inscrit dans notre stratégie globale de transformation digitale et de développement durable, 
+                  Ce projet s'inscrit dans notre stratégie globale de transformation digitale et de développement durable,
                   en ligne avec notre mission : "{partner.mission?.substring(0, 100)}..."
                 </p>
-                
+
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mt-6">
                   <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
                     <Sparkles className="h-4 w-4 mr-2 text-blue-600" />
@@ -1495,7 +1495,7 @@ export default function PartnerDetailPage() {
                   </ul>
                 </div>
               </div>
-              
+
               {/* Actions */}
               <div className="flex items-center justify-between mt-6 pt-6 border-t">
                 <div className="flex items-center gap-4">
@@ -1504,7 +1504,7 @@ export default function PartnerDetailPage() {
                     Partager
                   </Button>
                 </div>
-                <Button 
+                <Button
                   variant="default"
                   className="bg-gradient-to-r from-blue-600 to-indigo-600"
                   onClick={() => setShowNewsModal(false)}
@@ -1631,7 +1631,7 @@ export default function PartnerDetailPage() {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Équipe:</span>
                       <span className="font-medium">
-                        {selectedProject.status === 'completed' ? '45 experts' : 
+                        {selectedProject.status === 'completed' ? '45 experts' :
                          selectedProject.status === 'active' ? '32 experts' : '15 experts'}
                       </span>
                     </div>
@@ -1647,33 +1647,33 @@ export default function PartnerDetailPage() {
                         <span className="font-medium">{selectedProject.kpis.progress}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
+                        <div
                           className="bg-blue-600 h-2 rounded-full transition-all duration-500"
                           style={{ width: `${selectedProject.kpis.progress}%` }}
                         />
                       </div>
                     </div>
-                    
+
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span className="text-gray-600">Satisfaction</span>
                         <span className="font-medium">{selectedProject.kpis.satisfaction}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
+                        <div
                           className="bg-green-600 h-2 rounded-full transition-all duration-500"
                           style={{ width: `${selectedProject.kpis.satisfaction}%` }}
                         />
                       </div>
                     </div>
-                    
+
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span className="text-gray-600">ROI</span>
                         <span className="font-medium">{selectedProject.kpis.roi}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
+                        <div
                           className="bg-purple-600 h-2 rounded-full transition-all duration-500"
                           style={{ width: `${Math.min(selectedProject.kpis.roi, 100)}%` }}
                         />
@@ -1775,7 +1775,7 @@ export default function PartnerDetailPage() {
                   <Share2 className="h-4 w-4 mr-2" />
                   Partager
                 </Button>
-                <Button 
+                <Button
                   variant="default"
                   onClick={() => {
                     if (selectedProject) {
@@ -1824,7 +1824,7 @@ TÉMOIGNAGE CLIENT
 Rapport généré le ${new Date().toLocaleDateString('fr-FR')}
 ==============================================
                       `;
-                      
+
                       // Créer et télécharger le fichier
                       const blob = new Blob([report], { type: 'text/plain' });
                       const url = URL.createObjectURL(blob);
@@ -1835,7 +1835,7 @@ Rapport généré le ${new Date().toLocaleDateString('fr-FR')}
                       link.click();
                       document.body.removeChild(link);
                       URL.revokeObjectURL(url);
-                      
+
                       toast.success('Rapport téléchargé avec succès');
                     }
                   }}

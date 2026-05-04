@@ -176,9 +176,9 @@ const ExhibitorCard: React.FC<ExhibitorCardProps> = memo(({
         {/* En-tête avec Motif Zellige */}
         <div className="relative h-32 bg-gradient-to-br from-slate-900 to-blue-900 overflow-hidden">
           <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
-          
+
           <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl"></div>
-          
+
           <div className="absolute top-4 right-4 flex items-center space-x-2 z-10">
             {exhibitor.featured && (
               <div className="p-1.5 bg-amber-500 rounded-lg shadow-lg shadow-amber-900/20">
@@ -252,7 +252,7 @@ const ExhibitorCard: React.FC<ExhibitorCardProps> = memo(({
               <MapPin className="h-4 w-4 mr-2 text-blue-500" />
               {exhibitor.country || 'International'}
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <Link
                 to={`/minisite/${exhibitor.id}`}

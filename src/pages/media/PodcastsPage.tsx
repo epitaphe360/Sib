@@ -61,7 +61,7 @@ export const PodcastsPage: React.FC = () => {
           <Link to={ROUTES.HOME} className="inline-flex items-center text-white/80 hover:text-white mb-6">
             {t('common.back_home') || 'Retour à l\'accueil'}
           </Link>
-          
+
           <div className="flex items-center space-x-4 mb-4">
             <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
               <Mic className="w-8 h-8" />
@@ -122,7 +122,7 @@ export const PodcastsPage: React.FC = () => {
             </div>
             <p className="text-gray-700 mb-6">{featuredPodcast.description}</p>
             <div className="flex items-center space-x-6">
-              <Button 
+              <Button
                 className="bg-purple-600 hover:bg-purple-700"
                 onClick={() => {
                   if (featuredPodcast.media_url) {

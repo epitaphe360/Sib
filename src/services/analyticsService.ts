@@ -64,7 +64,7 @@ class AnalyticsService {
           session_id: event.session_id || null,
         }]);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Tracker aussi dans Google Analytics / Mixpanel
       if (analytics) {
@@ -94,7 +94,7 @@ class AnalyticsService {
         .gte('created_at', startDate)
         .lte('created_at', endDate);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Calculer les métriques
       const sessionIds = new Set(events?.map(e => e.session_id).filter(Boolean) || []);
@@ -157,7 +157,7 @@ class AnalyticsService {
 
     events.forEach(event => {
       const sid = event.session_id;
-      if (!sid) return;
+      if (!sid) {return;}
 
       const time = new Date(event.created_at).getTime();
       const current = sessionTimes.get(sid);
@@ -176,7 +176,7 @@ class AnalyticsService {
       ({ start, end }) => (end - start) / 1000 // en secondes
     );
 
-    if (durations.length === 0) return 0;
+    if (durations.length === 0) {return 0;}
 
     const total = durations.reduce((sum, d) => sum + d, 0);
     return Math.round(total / durations.length);
@@ -225,7 +225,7 @@ class AnalyticsService {
         .gte('created_at', startDate)
         .lte('created_at', endDate);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Compter les vues par page
       const pageViews = new Map<string, number>();
@@ -258,7 +258,7 @@ class AnalyticsService {
         .gte('created_at', startDate)
         .lte('created_at', endDate);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Compter par type
       const eventCounts = new Map<string, number>();
@@ -294,7 +294,7 @@ class AnalyticsService {
         .lte('created_at', endDate)
         .not('user_id', 'is', null);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const userIds = [...new Set(events?.map(e => e.user_id) || [])];
 
@@ -451,7 +451,7 @@ class AnalyticsService {
   async exportAndDownload(options: ExportOptions): Promise<boolean> {
     try {
       const blob = await this.exportData(options);
-      if (!blob) return false;
+      if (!blob) {return false;}
 
       const ext = options.format;
       const date = new Date().toISOString().split('T')[0];

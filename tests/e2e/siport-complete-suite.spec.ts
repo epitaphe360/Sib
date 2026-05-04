@@ -1,9 +1,9 @@
 /**
  * 🎯 SIB 2026 - Suite de Tests E2E Complète
- * 
+ *
  * Ce fichier unique regroupe TOUS les scénarios de test de l'application.
  * Mise à jour: 28 Janvier 2026
- * 
+ *
  * Comptes synchronisés avec: supabase/migrations/20251224000002_seed_demo_data.sql
  * Routes synchronisées avec: src/lib/routes.ts
  */
@@ -39,7 +39,7 @@ async function loginWithRetry(page: Page, email: string) {
     await page.fill('input[type="email"]', email);
     await page.fill('input[type="password"]', password);
     await page.click('button[type="submit"]');
-    
+
     try {
       await page.waitForURL(/dashboard/, { timeout: 10000 });
       return true;
@@ -60,7 +60,7 @@ async function checkPageLoads(page: Page, url: string) {
 // 1. AUTHENTIFICATION & COMPTES
 // ============================================================================
 test.describe('🔐 Authentification & Comptes', () => {
-  
+
   test('AUTH-01: Page connexion accessible', async ({ page }) => {
     await page.goto(`${BASE_URL}/login`);
     await expect(page.locator('input[type="email"]')).toBeVisible();
@@ -133,7 +133,7 @@ test.describe('🔐 Authentification & Comptes', () => {
 // 2. DASHBOARDS PAR TYPE D'UTILISATEUR
 // ============================================================================
 test.describe('📊 Dashboards', () => {
-  
+
   test('DASH-01: Dashboard visiteur', async ({ page }) => {
     await loginWithRetry(page, TEST_ACCOUNTS.visitor.email);
     await checkPageLoads(page, `${BASE_URL}/visitor/dashboard`);
@@ -165,7 +165,7 @@ test.describe('📊 Dashboards', () => {
 // 3. RENDEZ-VOUS & CALENDRIER
 // ============================================================================
 test.describe('📅 Rendez-vous & Calendrier', () => {
-  
+
   test.beforeEach(async ({ page }) => {
     await loginWithRetry(page, TEST_ACCOUNTS.visitor.email);
   });
@@ -187,7 +187,7 @@ test.describe('📅 Rendez-vous & Calendrier', () => {
 // 4. NETWORKING & MESSAGERIE
 // ============================================================================
 test.describe('🤝 Networking & Messagerie', () => {
-  
+
   test.beforeEach(async ({ page }) => {
     await loginWithRetry(page, TEST_ACCOUNTS.visitor.email);
   });
@@ -221,7 +221,7 @@ test.describe('🤝 Networking & Messagerie', () => {
 // 5. ÉVÉNEMENTS
 // ============================================================================
 test.describe('🎪 Événements', () => {
-  
+
   test('EVT-01: Page événements publique', async ({ page }) => {
     await checkPageLoads(page, `${BASE_URL}/events`);
   });
@@ -241,7 +241,7 @@ test.describe('🎪 Événements', () => {
 // 6. EXPOSANTS & MINI-SITES
 // ============================================================================
 test.describe('🏢 Exposants & Mini-Sites', () => {
-  
+
   test('MINI-01: Liste exposants publique', async ({ page }) => {
     await checkPageLoads(page, `${BASE_URL}/exhibitors`);
   });
@@ -270,7 +270,7 @@ test.describe('🏢 Exposants & Mini-Sites', () => {
 // 7. PARTENAIRES
 // ============================================================================
 test.describe('🤝 Partenaires', () => {
-  
+
   test('PART-01: Liste partenaires publique', async ({ page }) => {
     await checkPageLoads(page, `${BASE_URL}/partners`);
   });
@@ -315,7 +315,7 @@ test.describe('🤝 Partenaires', () => {
 // 8. PAIEMENTS & ABONNEMENTS
 // ============================================================================
 test.describe('💳 Paiements & Abonnements', () => {
-  
+
   test('PAY-01: Page abonnements visiteur', async ({ page }) => {
     await checkPageLoads(page, `${BASE_URL}/visitor/subscription`);
   });
@@ -340,7 +340,7 @@ test.describe('💳 Paiements & Abonnements', () => {
 // 9. ADMINISTRATION
 // ============================================================================
 test.describe('⚙️ Administration', () => {
-  
+
   test.beforeEach(async ({ page }) => {
     await loginWithRetry(page, TEST_ACCOUNTS.admin.email);
   });
@@ -418,7 +418,7 @@ test.describe('⚙️ Administration', () => {
 // 10. PAGES PUBLIQUES
 // ============================================================================
 test.describe('📄 Pages Publiques', () => {
-  
+
   test('PAGE-01: Page d\'accueil', async ({ page }) => {
     await page.goto(BASE_URL);
     await expect(page).toHaveTitle(/SIB/i);
@@ -473,7 +473,7 @@ test.describe('📄 Pages Publiques', () => {
 // 11. MÉDIATHÈQUE
 // ============================================================================
 test.describe('📺 Médiathèque', () => {
-  
+
   test('MEDIA-01: Bibliothèque média', async ({ page }) => {
     await checkPageLoads(page, `${BASE_URL}/media`);
   });
@@ -507,7 +507,7 @@ test.describe('📺 Médiathèque', () => {
 // 12. UI/UX & RESPONSIVE
 // ============================================================================
 test.describe('🎨 UI/UX & Responsive', () => {
-  
+
   test('UI-01: Navigation header', async ({ page }) => {
     await page.goto(BASE_URL);
     await expect(page.locator('nav, header').first()).toBeVisible();
@@ -551,7 +551,7 @@ test.describe('🎨 UI/UX & Responsive', () => {
   test('UI-08: Pas de débordement horizontal', async ({ page }) => {
     await page.goto(BASE_URL);
     await page.waitForTimeout(2000);
-    
+
     const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
     const windowWidth = await page.evaluate(() => window.innerWidth);
     expect(bodyWidth).toBeLessThanOrEqual(windowWidth + 50);
@@ -562,7 +562,7 @@ test.describe('🎨 UI/UX & Responsive', () => {
 // 13. SÉCURITÉ & PERMISSIONS
 // ============================================================================
 test.describe('🔒 Sécurité & Permissions', () => {
-  
+
   test('SEC-01: Redirection dashboard non connecté', async ({ page }) => {
     await page.goto(`${BASE_URL}/dashboard`);
     await page.waitForTimeout(3000);
@@ -592,7 +592,7 @@ test.describe('🔒 Sécurité & Permissions', () => {
 // 14. BADGE & QR CODE
 // ============================================================================
 test.describe('🎫 Badge & QR Code', () => {
-  
+
   test('BADGE-01: Page badge', async ({ page }) => {
     await loginWithRetry(page, TEST_ACCOUNTS.visitor.email);
     await checkPageLoads(page, `${BASE_URL}/badge`);
@@ -613,7 +613,7 @@ test.describe('🎫 Badge & QR Code', () => {
 // 15. PERFORMANCE
 // ============================================================================
 test.describe('⚡ Performance', () => {
-  
+
   test('PERF-01: Page accueil < 15s', async ({ page }) => {
     const start = Date.now();
     await page.goto(BASE_URL);
@@ -650,7 +650,7 @@ test.describe('⚡ Performance', () => {
 // 16. MARKETING DASHBOARD
 // ============================================================================
 test.describe('📈 Marketing', () => {
-  
+
   test('MKT-01: Dashboard marketing', async ({ page }) => {
     await loginWithRetry(page, TEST_ACCOUNTS.admin.email);
     await checkPageLoads(page, `${BASE_URL}/marketing/dashboard`);

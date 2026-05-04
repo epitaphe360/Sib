@@ -10,7 +10,7 @@ export const BANK_TRANSFER_INFO = {
   iban: 'MA64 007 780 000413200000498 25',
   bic: 'BCMAMAMC',
   domiciliation: 'CASA MY IDRISS 1ER',
-  
+
   // Montants
   amounts: {
     premium: {

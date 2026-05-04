@@ -59,7 +59,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <AlertTriangle className="h-8 w-8 text-red-500 mr-3" />
               <h1 className="text-2xl font-bold text-gray-900">{i18n.t('errors.oops')}</h1>
             </div>
-            
+
             <p className="text-gray-700 mb-6">
               {i18n.t('errors.unexpected_error')}
             </p>
@@ -71,7 +71,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 <pre className="text-xs text-red-700 whitespace-pre-wrap font-mono mb-4">
                   {this.state.error.toString()}
                 </pre>
-                
+
                 {this.state.errorInfo && (
                   <details>
                     <summary className="text-xs font-bold text-red-800 cursor-pointer mb-2">{i18n.t('errors.view_stack_trace')}</summary>

@@ -61,7 +61,7 @@ export const UrbaEventNav: React.FC = memo(() => {
   }, [logout, navigate]);
 
   const getDashboardRoute = () => {
-    if (!user) return ROUTES.LOGIN;
+    if (!user) {return ROUTES.LOGIN;}
     switch (user.type) {
       case 'admin': return ROUTES.ADMIN_DASHBOARD;
       case 'exhibitor': return ROUTES.EXHIBITOR_DASHBOARD;

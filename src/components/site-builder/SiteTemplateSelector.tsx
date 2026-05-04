@@ -44,7 +44,7 @@ export const SiteTemplateSelector: React.FC<SiteTemplateSelectorProps> = ({ onSe
         .order('popularity', { ascending: false })
         .range(0, 49);
 
-      if (error) throw error;
+      if (error) {throw error;}
       setTemplates(data || []);
     } catch (error) {
       console.error('Error loading templates:', error);
@@ -150,7 +150,7 @@ export const SiteTemplateSelector: React.FC<SiteTemplateSelectorProps> = ({ onSe
                         {categories.find(c => c.id === template.category)?.icon || '🎨'}
                       </div>
                     )}
-                    
+
                     {/* Overlay on hover */}
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex items-center justify-center">
                       <Button

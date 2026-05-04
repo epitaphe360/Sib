@@ -27,7 +27,7 @@ export default memo(function VisitorDashboard() {
   const { t } = useTranslation();
   const ctx = useVisitorDashboard();
 
-  if (ctx.isLoading) return <DashboardSkeleton />;
+  if (ctx.isLoading) {return <DashboardSkeleton />;}
 
   if (!ctx.isAuthenticated || !ctx.user) {
     return (

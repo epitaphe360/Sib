@@ -7,12 +7,12 @@ import { toast } from 'sonner';
 export const LanguageSelector: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  
+
   // Sélecteurs individuels pour une meilleure réactivité
   const currentLanguage = useLanguageStore((state) => state.currentLanguage);
   const isLoading = useLanguageStore((state) => state.isLoading);
   const setLanguage = useLanguageStore((state) => state.setLanguage);
-  
+
   // Trouver la langue actuelle
   const currentLang = supportedLanguages.find(lang => lang.code === currentLanguage) || supportedLanguages[0];
 
@@ -38,7 +38,7 @@ export const LanguageSelector: React.FC = () => {
       console.log('🌍 Changing language to:', languageCode);
       await setLanguage(languageCode);
       setIsOpen(false);
-      
+
       // Notification de succès avec Sonner
       const newLang = supportedLanguages.find(lang => lang.code === languageCode);
       if (newLang) {
@@ -47,10 +47,10 @@ export const LanguageSelector: React.FC = () => {
           position: 'top-right'
         });
       }
-      
+
       // Forcer un re-render de l'application
       window.dispatchEvent(new Event('languagechange'));
-      
+
     } catch (error) {
       console.error('Erreur changement de langue:', error);
       toast.error('Erreur lors du changement de langue');
@@ -98,11 +98,11 @@ export const LanguageSelector: React.FC = () => {
                 Sélectionnez votre langue préférée
               </p>
             </div>
-            
+
             <div className="py-2">
               {supportedLanguages.map((language) => {
                 const isSelected = language.code === currentLanguage;
-                
+
                 return (
                   <button
                     key={language.code}
@@ -123,7 +123,7 @@ export const LanguageSelector: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     {isSelected && (
                       <Check className="h-4 w-4 text-sib-primary" />
                     )}
@@ -131,7 +131,7 @@ export const LanguageSelector: React.FC = () => {
                 );
               })}
             </div>
-            
+
             <div className="px-4 py-2 border-t border-sib-gray-100">
               <p className="text-xs text-sib-gray-500">
                 💡 Les traductions sont appliquées instantanément

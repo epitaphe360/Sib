@@ -13,7 +13,7 @@ let skipped = 0;
 
 allPages.forEach((filePath) => {
   let content = fs.readFileSync(filePath, 'utf-8');
-  
+
   // Check if already has useTranslation
   if (content.includes('useTranslation')) {
     skipped++;

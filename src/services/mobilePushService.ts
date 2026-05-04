@@ -137,7 +137,7 @@ class MobilePushService {
           onConflict: 'user_id,endpoint'
         });
 
-      if (error) throw error;
+      if (error) {throw error;}
       console.log('✅ Push token saved to database');
     } catch (error) {
       console.error('❌ Error saving push token:', error);

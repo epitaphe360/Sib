@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Send, 
-  Paperclip, 
-  Smile, 
-  Phone, 
-  Video, 
-  MoreVertical, 
+import {
+  Send,
+  Paperclip,
+  Smile,
+  Phone,
+  Video,
+  MoreVertical,
   Search,
   Star,
   Archive,
@@ -36,11 +36,11 @@ import { ChatMessage, ChatConversation } from '../../types';
 interface EnhancedChatMessage extends ChatMessage {
   reactions?: { emoji: string; userId: string; userName: string }[];
   isEncrypted?: boolean;
-  attachments?: { 
-    name: string; 
-    url: string; 
-    size: string; 
-    type: string; 
+  attachments?: {
+    name: string;
+    url: string;
+    size: string;
+    type: string;
   }[];
 }
 
@@ -54,8 +54,8 @@ interface EnhancedChatConversation extends ChatConversation {
 export const EnhancedChatInterface: React.FC = () => {
   const { user } = useAuthStore();
   const { permissions } = useNetworkingStore();
-  const { 
-    conversations: chatConversations, 
+  const {
+    conversations: chatConversations,
     activeConversation: activeChatConversation,
     messages: chatMessages,
     isLoading: chatLoading,
@@ -74,7 +74,7 @@ export const EnhancedChatInterface: React.FC = () => {
   const [isTyping, setIsTyping] = useState<Record<string, boolean>>({});
   const [enhancedFeatures, setEnhancedFeatures] = useState<Record<string, { isPinned: boolean; isArchived: boolean; priority: string }>>({});
   const isBotId = (participantId: string) => participantId === 'sib-bot';
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -105,7 +105,7 @@ export const EnhancedChatInterface: React.FC = () => {
   }
 
   const handleSendMessage = async () => {
-    if (!messageInput.trim() || !activeChatConversation || !user) return;
+    if (!messageInput.trim() || !activeChatConversation || !user) {return;}
 
     // Check daily limits
     const remaining = useNetworkingStore.getState().getRemainingQuota();
@@ -117,13 +117,13 @@ export const EnhancedChatInterface: React.FC = () => {
     try {
       await sendChatMessage(activeChatConversation, messageInput);
       setMessageInput('');
-      
+
       // Update networking store usage
       useNetworkingStore.getState().handleMessage(
-        `Utilisateur ${activeChatConversation}`, 
+        `Utilisateur ${activeChatConversation}`,
         'Conversation'
       );
-      
+
       // Simulate typing indicator
       setIsTyping(prev => ({ ...prev, [activeChatConversation]: true }));
       setTimeout(() => {
@@ -143,7 +143,7 @@ export const EnhancedChatInterface: React.FC = () => {
   };
 
   const addReaction = (messageId: string, emoji: string) => {
-    if (!user || !activeChatConversation) return;
+    if (!user || !activeChatConversation) {return;}
 
     // This would normally be handled by the backend
     // For now, we'll just show a toast
@@ -168,7 +168,7 @@ export const EnhancedChatInterface: React.FC = () => {
         isArchived: !prev[conversationId]?.isArchived
       }
     }));
-    
+
     if (activeChatConversation === conversationId) {
       const remainingConversations = chatConversations.filter(c => c.id !== conversationId);
       if (remainingConversations.length > 0) {
@@ -187,13 +187,13 @@ export const EnhancedChatInterface: React.FC = () => {
       const isOnline = onlineUsers.includes(participantId);
       return {
         id: participantId,
-          name: isBotId(participantId) ? 'Assistant SIB' : 
-              participantId === 'user2' ? 'Contact Professionnel' : 
+          name: isBotId(participantId) ? 'Assistant SIB' :
+              participantId === 'user2' ? 'Contact Professionnel' :
               `Utilisateur ${participantId.substring(0, 8)}`,
-          avatar: isBotId(participantId) ? 
+          avatar: isBotId(participantId) ?
                'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=100' :
                undefined,
-          type: isBotId(participantId) ? 'bot' : 
+          type: isBotId(participantId) ? 'bot' :
               participantId === 'user2' ? 'partner' : 'visitor',
         online: isOnline
       };
@@ -201,17 +201,17 @@ export const EnhancedChatInterface: React.FC = () => {
   }));
 
   const filteredConversations = enhancedConversations.filter(conv => {
-    if (selectedFilter === 'unread' && conv.unreadCount === 0) return false;
-    if (selectedFilter === 'pinned' && !conv.isPinned) return false;
-    if (selectedFilter === 'archived' && !conv.isArchived) return false;
-    if (selectedFilter === 'all' && conv.isArchived) return false;
-    
+    if (selectedFilter === 'unread' && conv.unreadCount === 0) {return false;}
+    if (selectedFilter === 'pinned' && !conv.isPinned) {return false;}
+    if (selectedFilter === 'archived' && !conv.isArchived) {return false;}
+    if (selectedFilter === 'all' && conv.isArchived) {return false;}
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       return conv.participants.some(p => p.name.toLowerCase().includes(query)) ||
              conv.lastMessage?.content.toLowerCase().includes(query);
     }
-    
+
     return true;
   });
 
@@ -256,7 +256,7 @@ export const EnhancedChatInterface: React.FC = () => {
               <Plus className="h-4 w-4" />
             </Button>
           </div>
-          
+
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -268,7 +268,7 @@ export const EnhancedChatInterface: React.FC = () => {
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
-          
+
           {/* Filters */}
           <div className="flex space-x-1 mt-3">
             {(['all', 'unread', 'pinned', 'archived'] as const).map((filter) => (
@@ -300,7 +300,7 @@ export const EnhancedChatInterface: React.FC = () => {
           ) : (
             filteredConversations.map((conversation) => {
               const otherParticipant = conversation.participants.find((p: any) => p.id !== user?.id);
-              if (!otherParticipant) return null;
+              if (!otherParticipant) {return null;}
 
               return (
                 <motion.div
@@ -329,7 +329,7 @@ export const EnhancedChatInterface: React.FC = () => {
                         {getUserTypeIcon(otherParticipant.type)}
                       </div>
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
@@ -349,11 +349,11 @@ export const EnhancedChatInterface: React.FC = () => {
                           </span>
                         </div>
                       </div>
-                      
+
                       <p className="text-sm text-gray-600 truncate mt-1">
                         {conversation.lastMessage?.content || 'Aucun message'}
                       </p>
-                      
+
                       <div className="flex items-center justify-between mt-2">
                         <div className="flex items-center space-x-1">
                           {conversation.lastMessage?.reactions?.map((reaction, index) => (
@@ -413,7 +413,7 @@ export const EnhancedChatInterface: React.FC = () => {
                     ) : null;
                   })()}
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   <Button size="sm" variant="ghost">
                     <Phone className="h-4 w-4" />
@@ -448,12 +448,12 @@ export const EnhancedChatInterface: React.FC = () => {
                       className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
                     >
                       <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg relative group ${
-                        isCurrentUser 
-                          ? 'bg-blue-600 text-white rounded-br-none' 
+                        isCurrentUser
+                          ? 'bg-blue-600 text-white rounded-br-none'
                           : 'bg-gray-100 text-gray-900 rounded-bl-none'
                       }`}>
                         <p className="text-sm">{message.content}</p>
-                        
+
                         {(message as any).attachments && (message as any).attachments.length > 0 && (
                           <div className="mt-2 space-y-1">
                             {(message as any).attachments.map((attachment: any, index: number) => (
@@ -465,7 +465,7 @@ export const EnhancedChatInterface: React.FC = () => {
                             ))}
                           </div>
                         )}
-                        
+
                         <div className="flex items-center justify-between mt-1">
                           <span className="text-xs opacity-75">
                             {formatTime(message.timestamp)}
@@ -479,7 +479,7 @@ export const EnhancedChatInterface: React.FC = () => {
                             )}
                           </div>
                         </div>
-                        
+
                         {/* Reactions (Enhanced feature) */}
                         {(message as any).reactions && (message as any).reactions.length > 0 && (
                           <div className="absolute -bottom-6 left-0 flex space-x-1">
@@ -494,7 +494,7 @@ export const EnhancedChatInterface: React.FC = () => {
                             ))}
                           </div>
                         )}
-                        
+
                         {/* Quick Reaction */}
                         <div className="absolute top-0 right-0 transform translate-x-8 opacity-0 group-hover:opacity-100 transition-opacity">
                           <div className="flex space-x-1">
@@ -514,7 +514,7 @@ export const EnhancedChatInterface: React.FC = () => {
                   );
                 })}
               </AnimatePresence>
-              
+
               {activeChatConversation && isTyping[activeChatConversation] && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -530,7 +530,7 @@ export const EnhancedChatInterface: React.FC = () => {
                   </div>
                 </motion.div>
               )}
-              
+
               <div ref={messagesEndRef} />
             </div>
 
@@ -544,15 +544,15 @@ export const EnhancedChatInterface: React.FC = () => {
                   className="hidden"
                   multiple
                 />
-                
-                <Button 
-                  size="sm" 
+
+                <Button
+                  size="sm"
                   variant="ghost"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <Paperclip className="h-4 w-4" />
                 </Button>
-                
+
                 <div className="flex-1 relative">
                   <textarea
                     value={messageInput}
@@ -564,16 +564,16 @@ export const EnhancedChatInterface: React.FC = () => {
                     style={{ minHeight: '40px', maxHeight: '120px' }}
                   />
                 </div>
-                
-                <Button 
-                  size="sm" 
+
+                <Button
+                  size="sm"
                   variant="ghost"
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                 >
                   <Smile className="h-4 w-4" />
                 </Button>
-                
-                <Button 
+
+                <Button
                   onClick={handleSendMessage}
                   disabled={!messageInput.trim()}
                   className="px-4 py-2"
@@ -581,7 +581,7 @@ export const EnhancedChatInterface: React.FC = () => {
                   <Send className="h-4 w-4" />
                 </Button>
               </div>
-              
+
               {/* Usage Info */}
               <div className="mt-2 text-xs text-gray-500 text-center">
                 Messages restants aujourd'hui : {useNetworkingStore.getState().getRemainingQuota().messages === -1 ? '∞' : useNetworkingStore.getState().getRemainingQuota().messages}

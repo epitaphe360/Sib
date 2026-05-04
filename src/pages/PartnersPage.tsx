@@ -47,17 +47,17 @@ interface PartnerCardWrapperProps {
   t: (key: string) => string;
 }
 
-const PartnerCardWrapper: React.FC<PartnerCardWrapperProps> = ({ 
-  partner, 
-  viewMode, 
-  index, 
-  onViewDetails, 
-  getCategoryLabel, 
-  getCategoryColor, 
-  t 
+const PartnerCardWrapper: React.FC<PartnerCardWrapperProps> = ({
+  partner,
+  viewMode,
+  index,
+  onViewDetails,
+  getCategoryLabel,
+  getCategoryColor,
+  t
 }) => {
   const translatedContent = usePartnerTranslation(partner);
-  
+
   return (
     <PartnerCard
       partner={partner}
@@ -156,14 +156,14 @@ export default function PartnersPage() {
   }, []);
 
   const handleLoadMore = async () => {
-    if (isLoading || !hasMore) return;
+    if (isLoading || !hasMore) {return;}
     await loadPartners(false);
   };
 
   useEffect(() => {
     const filtered = partners.filter(partner => {
       const search = searchTerm.toLowerCase();
-      
+
       // Recherche dans tous les champs (FR et EN)
       const searchableFields = [
         partner.name || '',
@@ -175,7 +175,7 @@ export default function PartnersPage() {
         partner.category || '',
         partner.category_en || ''
       ].join(' ').toLowerCase();
-      
+
       const matchesSearch = searchableFields.includes(search);
       const matchesTier = !selectedTier || partner.partner_tier === selectedTier;
       const matchesCountry = !selectedCountry || partner.country === selectedCountry;

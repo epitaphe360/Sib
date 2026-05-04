@@ -10,7 +10,7 @@ export const badgeTranslations = {
     'badge.download': 'Télécharger',
     'badge.print': 'Imprimer',
     'badge.qr_code': 'Code QR',
-    
+
     // Scanner
     'badge.scanner.title': 'Scanner de Badges',
     'badge.scanner.subtitle': 'Scannez les badges des visiteurs',
@@ -29,7 +29,7 @@ export const badgeTranslations = {
     'badge.scanner.error_stats': 'Erreur chargement stats',
     'badge.scanner.expired': 'Badge expiré',
     'badge.scanner.inactive': 'Badge inactif',
-    
+
     // Impression
     'badge.print.title': 'Station d\'Impression',
     'badge.print.subtitle': 'Imprimez votre badge sur place',
@@ -43,7 +43,7 @@ export const badgeTranslations = {
     'badge.print.error_printing': 'Erreur impression',
     'badge.print.error_camera': 'Erreur caméra',
     'badge.print.camera_activated': 'Caméra activée — Présentez un QR code',
-    
+
     // Informations
     'badge.info.name': 'Nom',
     'badge.info.company': 'Entreprise',
@@ -51,7 +51,7 @@ export const badgeTranslations = {
     'badge.info.type': 'Type de badge',
     'badge.info.valid': 'Valide',
     'badge.info.expires': 'Expire le',
-    
+
     // Types
     'badge.type.visitor': 'Visiteur',
     'badge.type.visitor_vip': 'Visiteur VIP',
@@ -68,7 +68,7 @@ export const badgeTranslations = {
     'badge.download': 'Download',
     'badge.print': 'Print',
     'badge.qr_code': 'QR Code',
-    
+
     // Scanner
     'badge.scanner.title': 'Badge Scanner',
     'badge.scanner.subtitle': 'Scan visitor badges',
@@ -87,7 +87,7 @@ export const badgeTranslations = {
     'badge.scanner.error_stats': 'Error loading stats',
     'badge.scanner.expired': 'Badge expired',
     'badge.scanner.inactive': 'Badge inactive',
-    
+
     // Printing
     'badge.print.title': 'Print Station',
     'badge.print.subtitle': 'Print your badge on-site',
@@ -101,7 +101,7 @@ export const badgeTranslations = {
     'badge.print.error_printing': 'Print error',
     'badge.print.error_camera': 'Camera error',
     'badge.print.camera_activated': 'Camera activated — Present a QR code',
-    
+
     // Information
     'badge.info.name': 'Name',
     'badge.info.company': 'Company',
@@ -109,7 +109,7 @@ export const badgeTranslations = {
     'badge.info.type': 'Badge type',
     'badge.info.valid': 'Valid',
     'badge.info.expires': 'Expires on',
-    
+
     // Types
     'badge.type.visitor': 'Visitor',
     'badge.type.visitor_vip': 'VIP Visitor',

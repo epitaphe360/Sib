@@ -4,12 +4,12 @@
  */
 
 import React, { useRef, useState, useEffect } from 'react';
-import { 
-  Play, 
-  Pause, 
-  Volume2, 
-  VolumeX, 
-  Maximize, 
+import {
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Maximize,
   Settings,
   SkipBack,
   SkipForward
@@ -45,7 +45,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {return;}
 
     const handleTimeUpdate = () => {
       setCurrentTime(video.currentTime);
@@ -92,7 +92,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const togglePlay = () => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {return;}
 
     if (isPlaying) {
       video.pause();
@@ -104,7 +104,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const toggleMute = () => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {return;}
 
     video.muted = !isMuted;
     setIsMuted(!isMuted);
@@ -112,10 +112,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {return;}
 
     const newVolume = parseFloat(e.target.value);
-    if (isNaN(newVolume)) return;
+    if (isNaN(newVolume)) {return;}
     video.volume = newVolume;
     setVolume(newVolume);
     setIsMuted(newVolume === 0);
@@ -123,24 +123,24 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {return;}
 
     const newTime = parseFloat(e.target.value);
-    if (isNaN(newTime)) return;
+    if (isNaN(newTime)) {return;}
     video.currentTime = newTime;
     setCurrentTime(newTime);
   };
 
   const skip = (seconds: number) => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {return;}
 
     video.currentTime = Math.max(0, Math.min(video.currentTime + seconds, duration));
   };
 
   const toggleFullscreen = () => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {return;}
 
     if (document.fullscreenElement) {
       document.exitFullscreen();
@@ -150,7 +150,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const formatTime = (seconds: number) => {
-    if (!seconds || isNaN(seconds)) return '0:00';
+    if (!seconds || isNaN(seconds)) {return '0:00';}
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -159,7 +159,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div 
+    <div
       className={`relative bg-black rounded-lg overflow-hidden group ${className}`}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
@@ -194,7 +194,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       )}
 
       {/* Controls Overlay */}
-      <div 
+      <div
         className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 transition-opacity duration-300 ${
           showControls || !isPlaying ? 'opacity-100' : 'opacity-0'
         }`}

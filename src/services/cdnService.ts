@@ -45,7 +45,7 @@ class CDNService {
         .eq('is_active', true)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== 'PGRST116') {throw error;}
 
       this.config = data;
     } catch (error) {
@@ -104,15 +104,15 @@ class CDNService {
    * Cloudflare Images URL
    */
   private getCloudflareImageUrl(url: string, options?: CDNImageOptions): string {
-    if (!this.config) return url;
+    if (!this.config) {return url;}
 
     const params: string[] = [];
 
-    if (options?.width) params.push(`width=${options.width}`);
-    if (options?.height) params.push(`height=${options.height}`);
-    if (options?.quality) params.push(`quality=${options.quality}`);
-    if (options?.format && options.format !== 'auto') params.push(`format=${options.format}`);
-    if (options?.fit) params.push(`fit=${options.fit}`);
+    if (options?.width) {params.push(`width=${options.width}`);}
+    if (options?.height) {params.push(`height=${options.height}`);}
+    if (options?.quality) {params.push(`quality=${options.quality}`);}
+    if (options?.format && options.format !== 'auto') {params.push(`format=${options.format}`);}
+    if (options?.fit) {params.push(`fit=${options.fit}`);}
 
     const queryString = params.join(',');
     return `${this.config.cdn_url}/${queryString}/${encodeURIComponent(url)}`;
@@ -122,15 +122,15 @@ class CDNService {
    * Cloudinary URL
    */
   private getCloudinaryImageUrl(url: string, options?: CDNImageOptions): string {
-    if (!this.config) return url;
+    if (!this.config) {return url;}
 
     const transformations: string[] = [];
 
-    if (options?.width) transformations.push(`w_${options.width}`);
-    if (options?.height) transformations.push(`h_${options.height}`);
-    if (options?.quality) transformations.push(`q_${options.quality}`);
-    if (options?.format && options.format !== 'auto') transformations.push(`f_${options.format}`);
-    if (options?.fit) transformations.push(`c_${options.fit}`);
+    if (options?.width) {transformations.push(`w_${options.width}`);}
+    if (options?.height) {transformations.push(`h_${options.height}`);}
+    if (options?.quality) {transformations.push(`q_${options.quality}`);}
+    if (options?.format && options.format !== 'auto') {transformations.push(`f_${options.format}`);}
+    if (options?.fit) {transformations.push(`c_${options.fit}`);}
 
     const transformation = transformations.join(',');
     const encodedUrl = encodeURIComponent(url);
@@ -142,15 +142,15 @@ class CDNService {
    * Imgix URL
    */
   private getImgixImageUrl(url: string, options?: CDNImageOptions): string {
-    if (!this.config) return url;
+    if (!this.config) {return url;}
 
     const params = new URLSearchParams();
 
-    if (options?.width) params.append('w', options.width.toString());
-    if (options?.height) params.append('h', options.height.toString());
-    if (options?.quality) params.append('q', options.quality.toString());
-    if (options?.format && options.format !== 'auto') params.append('fm', options.format);
-    if (options?.fit) params.append('fit', options.fit);
+    if (options?.width) {params.append('w', options.width.toString());}
+    if (options?.height) {params.append('h', options.height.toString());}
+    if (options?.quality) {params.append('q', options.quality.toString());}
+    if (options?.format && options.format !== 'auto') {params.append('fm', options.format);}
+    if (options?.fit) {params.append('fit', options.fit);}
 
     // Auto WebP si supporté
     if (this.config.webp_conversion) {
@@ -164,13 +164,13 @@ class CDNService {
    * BunnyCDN URL
    */
   private getBunnyImageUrl(url: string, options?: CDNImageOptions): string {
-    if (!this.config) return url;
+    if (!this.config) {return url;}
 
     const params = new URLSearchParams();
 
-    if (options?.width) params.append('width', options.width.toString());
-    if (options?.height) params.append('height', options.height.toString());
-    if (options?.quality) params.append('quality', options.quality.toString());
+    if (options?.width) {params.append('width', options.width.toString());}
+    if (options?.height) {params.append('height', options.height.toString());}
+    if (options?.quality) {params.append('quality', options.quality.toString());}
 
     return `${this.config.cdn_url}?url=${encodeURIComponent(url)}&${params.toString()}`;
   }
@@ -234,7 +234,7 @@ class CDNService {
         },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur purgeCache:', error);
@@ -250,7 +250,7 @@ class CDNService {
     requests_served: number;
     cache_hit_rate: number;
   } | null> {
-    if (!this.config) return null;
+    if (!this.config) {return null;}
 
     try {
       // Appeler l'Edge Function pour récupérer les stats
@@ -260,7 +260,7 @@ class CDNService {
         },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('❌ Erreur getCDNStats:', error);

@@ -39,7 +39,7 @@ interface EmailTemplate {
 async function getEmailTemplate(level: 'free' | 'vip'): Promise<EmailTemplate | null> {
   try {
     const template_key = level === 'free' ? 'visitor_welcome_free' : 'visitor_welcome_vip'
-    
+
     const { data, error } = await supabase
       .from('email_templates')
       .select('subject, html_content, text_content')
@@ -64,12 +64,12 @@ async function getEmailTemplate(level: 'free' | 'vip'): Promise<EmailTemplate | 
  */
 function replaceVariables(content: string, variables: Record<string, string>): string {
   let result = content
-  
+
   Object.entries(variables).forEach(([key, value]) => {
     const regex = new RegExp(`{{${key}}}`, 'g')
     result = result.replace(regex, value)
   })
-  
+
   return result
 }
 
@@ -98,9 +98,9 @@ serve(async (req) => {
     if (!template) {
       console.error('❌ Template non trouvé ou inactif')
       return new Response(
-        JSON.stringify({ 
-          error: 'Template not found', 
-          message: `Aucun template actif trouvé pour le niveau: ${level}` 
+        JSON.stringify({
+          error: 'Template not found',
+          message: `Aucun template actif trouvé pour le niveau: ${level}`
         }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
@@ -122,7 +122,7 @@ serve(async (req) => {
 
     // Envoyer via SMTP
     console.log(`📧 Envoi email via SMTP à ${email} (niveau: ${level})...`)
-    
+
     try {
       const client = new SMTPClient({
         connection: {
@@ -147,11 +147,11 @@ serve(async (req) => {
       })
 
       console.log(`✅ Email envoyé avec succès à ${email} (${level})`)
-      
+
       await client.close()
     } catch (smtpError) {
       console.error('❌ Erreur SMTP port 465, tentative port 587...', smtpError.message)
-      
+
       // Fallback: essayer port 587 avec STARTTLS
       try {
         const client2 = new SMTPClient({

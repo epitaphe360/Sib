@@ -45,7 +45,7 @@ export const PartnerMediaUploadPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user) {return;}
 
     setLoading(true);
     try {
@@ -57,7 +57,7 @@ export const PartnerMediaUploadPage: React.FC = () => {
         view_count: 0,
         like_count: 0
       });
-      
+
       toast.success('Média soumis avec succès ! Il sera visible après validation par l\'équipe SIB.');
       navigate('/partner/media');
     } catch (error) {
@@ -85,7 +85,7 @@ export const PartnerMediaUploadPage: React.FC = () => {
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">Soumettre un Média</h1>
           <p className="mt-2 text-gray-600">Partagez vos contenus avec la communauté SIB</p>
-          
+
           {/* Avertissement validation */}
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <div className="flex items-start">
@@ -95,7 +95,7 @@ export const PartnerMediaUploadPage: React.FC = () => {
                   Validation requise
                 </h3>
                 <p className="text-sm text-blue-700">
-                  Votre média sera soumis à l'équipe SIB pour validation avant d'être publié. 
+                  Votre média sera soumis à l'équipe SIB pour validation avant d'être publié.
                   Vous serez notifié une fois la validation effectuée.
                 </p>
               </div>

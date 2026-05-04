@@ -34,9 +34,9 @@ const MediaManagerPage: React.FC = () => {
           <h2 className="text-lg font-semibold mb-2">Image sélectionnée</h2>
           <div className="flex items-center gap-4">
             <div className="w-32 h-32 border rounded-md overflow-hidden">
-              <img 
-                src={selectedImage} 
-                alt="Selected" 
+              <img
+                src={selectedImage}
+                alt="Selected"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -65,7 +65,7 @@ const MediaManagerPage: React.FC = () => {
         </div>
       )}
 
-      <AdminMediaManager 
+      <AdminMediaManager
         onImageSelect={handleImageSelect}
         title={t('admin_media.manager_title')}
         showUploadButton={true}

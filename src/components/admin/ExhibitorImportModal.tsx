@@ -58,7 +58,7 @@ export function ExhibitorImportModal({ onClose, onSuccess }: Props) {
       .split(/\r?\n/)
       .filter((line) => line.trim().length > 0);
 
-    if (lines.length === 0) return [];
+    if (lines.length === 0) {return [];}
 
     const parseLine = (line: string): string[] => {
       const values: string[] = [];
@@ -137,17 +137,17 @@ export function ExhibitorImportModal({ onClose, onSuccess }: Props) {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
-    if (f) parseFile(f);
+    if (f) {parseFile(f);}
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const f = e.dataTransfer.files?.[0];
-    if (f) parseFile(f);
+    if (f) {parseFile(f);}
   };
 
   const handleImport = async () => {
-    if (!file || errors.length > 0 || rows.length === 0) return;
+    if (!file || errors.length > 0 || rows.length === 0) {return;}
 
     setImporting(true);
     const importResult: ImportResult = { success: 0, errors: [] };

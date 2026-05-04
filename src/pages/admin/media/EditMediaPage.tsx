@@ -68,7 +68,7 @@ export const EditMediaPage: React.FC = () => {
   }, [id]);
 
   const loadMedia = async () => {
-    if (!id) return;
+    if (!id) {return;}
 
     try {
       setLoading(true);
@@ -78,7 +78,7 @@ export const EditMediaPage: React.FC = () => {
         .eq('id', id)
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setMedia(data);
       setFormData({
@@ -106,7 +106,7 @@ export const EditMediaPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!id) return;
+    if (!id) {return;}
     if (!formData.title || !formData.type) {
       toast.error('Veuillez remplir tous les champs obligatoires');
       return;
@@ -147,7 +147,7 @@ export const EditMediaPage: React.FC = () => {
         })
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       toast.success('Média mis à jour avec succès !');
       navigate(ROUTES.ADMIN_MEDIA_MANAGE);

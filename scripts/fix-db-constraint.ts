@@ -16,10 +16,10 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function fixConstraint() {
   console.log('Attempting to fix payment_requests constraint...');
-  
+
   // We can't run arbitrary SQL via the client unless we have an RPC
   // Let's check if we can use the REST API to find if there's an RPC
-  
+
   const sql = `
     ALTER TABLE public.payment_requests 
     DROP CONSTRAINT IF EXISTS payment_requests_requested_level_check;
@@ -31,7 +31,7 @@ async function fixConstraint() {
 
   console.log('Please run the following SQL in your Supabase SQL Editor:');
   console.log(sql);
-  
+
   // Try to run it via RPC if it exists
   try {
     const { error } = await supabase.rpc('exec_sql', { sql_query: sql });

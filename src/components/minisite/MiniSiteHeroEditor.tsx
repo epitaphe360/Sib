@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Card } from '../ui/Card';
-import { 
+import {
   Info,
   File,
   Link as LinkIcon
@@ -27,10 +27,10 @@ interface MiniSiteHeroEditorProps {
   }) => void;
 }
 
-export default function MiniSiteHeroEditor({ 
-  exhibitorId, 
-  initialData, 
-  onDataChange 
+export default function MiniSiteHeroEditor({
+  exhibitorId,
+  initialData,
+  onDataChange
 }: MiniSiteHeroEditorProps) {
   const [formData, setFormData] = useState({
     title: '',
@@ -72,7 +72,7 @@ export default function MiniSiteHeroEditor({
       <h2 className="text-xl font-semibold text-gray-900 mb-4">
         Section d'en-tête (Hero)
       </h2>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Colonne gauche - Formulaire */}
         <div className="space-y-4">
@@ -88,7 +88,7 @@ export default function MiniSiteHeroEditor({
               placeholder="ex: Solutions innovantes pour les bâtiments"
              aria-label="ex: Solutions innovantes pour les bâtiments" />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Sous-titre
@@ -101,7 +101,7 @@ export default function MiniSiteHeroEditor({
               placeholder="ex: Leader dans l'optimisation des opérations BTP"
              aria-label="ex: Leader dans l" />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Description
@@ -115,7 +115,7 @@ export default function MiniSiteHeroEditor({
               placeholder="Décrivez brièvement votre entreprise et ses activités..."
             />
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -134,7 +134,7 @@ export default function MiniSiteHeroEditor({
                  aria-label="ex: Découvrir nos solutions" />
               </div>
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Lien du bouton
@@ -153,7 +153,7 @@ export default function MiniSiteHeroEditor({
               </div>
             </div>
           </div>
-          
+
           <div className="pt-4">
             <ImageUploader
               onImageUploaded={handleBackgroundImageUploaded}
@@ -163,7 +163,7 @@ export default function MiniSiteHeroEditor({
               label="Image d'arrière-plan"
               maxSizeMB={5}
             />
-            
+
             <p className="text-sm text-gray-500 mt-2 flex items-start">
               <Info className="h-4 w-4 mr-1 mt-0.5 flex-shrink-0" />
               <span>
@@ -173,41 +173,41 @@ export default function MiniSiteHeroEditor({
             </p>
           </div>
         </div>
-        
+
         {/* Colonne droite - Aperçu */}
         <div>
           <h3 className="text-lg font-medium text-gray-900 mb-4">
             Aperçu
           </h3>
-          
+
           <div className="relative h-64 rounded-lg overflow-hidden shadow-lg">
             {/* Arrière-plan */}
-            <div 
+            <div
               className="absolute inset-0 bg-cover bg-center"
-              style={{ 
-                backgroundImage: formData.backgroundImage 
-                  ? `url(${formData.backgroundImage})` 
+              style={{
+                backgroundImage: formData.backgroundImage
+                  ? `url(${formData.backgroundImage})`
                   : 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)'
               }}
             >
               {/* Overlay sombre pour la lisibilité */}
               <div className="absolute inset-0 bg-black bg-opacity-40"></div>
             </div>
-            
+
             {/* Contenu */}
             <div className="relative h-full p-6 flex flex-col justify-center">
               <h1 className="text-2xl font-bold text-white mb-2">
                 {formData.title || 'Titre principal'}
               </h1>
-              
+
               <h2 className="text-lg text-white opacity-90 mb-4">
                 {formData.subtitle || 'Sous-titre'}
               </h2>
-              
+
               <p className="text-sm text-white opacity-80 mb-6 line-clamp-2">
                 {formData.description || 'Description de votre entreprise et de ses activités...'}
               </p>
-              
+
               <div>
                 <span className="inline-block px-4 py-2 bg-white text-blue-600 rounded-lg font-medium text-sm">
                   {formData.ctaText || 'Bouton d\'action'}
@@ -215,12 +215,12 @@ export default function MiniSiteHeroEditor({
               </div>
             </div>
           </div>
-          
+
           <div className="mt-6">
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               Conseils pour une section d'en-tête efficace
             </h3>
-            
+
             <ul className="space-y-2 text-sm text-gray-600 list-disc pl-5">
               <li>Utilisez un titre court et percutant qui reflète votre activité principale</li>
               <li>Le sous-titre doit compléter le titre et apporter une précision</li>

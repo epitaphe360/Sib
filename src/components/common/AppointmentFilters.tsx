@@ -65,7 +65,7 @@ export const AppointmentFilters: React.FC<AppointmentFiltersProps> = ({
     // Tri
     filtered.sort((a, b) => {
       let comparison = 0;
-      
+
       switch (sortBy) {
         case 'date':
           comparison = new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
@@ -127,7 +127,7 @@ export const AppointmentFilters: React.FC<AppointmentFiltersProps> = ({
             </button>
           )}
         </div>
-        
+
         <Button
           variant="outline"
           onClick={() => setShowFilters(!showFilters)}
@@ -138,8 +138,8 @@ export const AppointmentFilters: React.FC<AppointmentFiltersProps> = ({
           <Filter className="h-4 w-4 mr-2" />
           Filtres
           {activeFiltersCount > 0 && (
-            <Badge 
-              variant="error" 
+            <Badge
+              variant="error"
               className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
             >
               {activeFiltersCount}

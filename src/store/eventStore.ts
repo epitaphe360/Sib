@@ -48,7 +48,7 @@ export const useEventStore = create<EventState>((set, get) => ({
         limit: state.pageSize,
         offset,
       });
-      
+
       // Assurer que la date est un objet Date pour le tri et l'affichage
       const processedPageEvents = items.map(event => ({
         ...event,
@@ -60,14 +60,14 @@ export const useEventStore = create<EventState>((set, get) => ({
         : [...state.events, ...processedPageEvents.filter(event => !state.events.some(existing => existing.id === event.id))];
 
       const featuredEvents = processedEvents.filter(event => event.featured);
-      
-      set({ 
+
+      set({
         events: processedEvents,
         featuredEvents,
         totalEvents: total,
         currentPage: reset ? 1 : nextPage + 1,
         hasMore: processedEvents.length < total,
-        isLoading: false 
+        isLoading: false
       });
     } catch (error) {
       // Erreur réseau silencieuse - ne pas afficher dans la console pendant les tests
@@ -89,7 +89,7 @@ export const useEventStore = create<EventState>((set, get) => ({
 
   loadMoreEvents: async () => {
     const { isLoading, hasMore } = get();
-    if (isLoading || !hasMore) return;
+    if (isLoading || !hasMore) {return;}
     await get().fetchEvents(false);
   },
 
@@ -101,7 +101,7 @@ export const useEventStore = create<EventState>((set, get) => ({
 
     try {
       await SupabaseService.registerForEvent(eventId, user.id);
-      
+
       // Mettre à jour l'état local
       set(state => ({
         registeredEvents: [...state.registeredEvents, eventId],
@@ -128,7 +128,7 @@ export const useEventStore = create<EventState>((set, get) => ({
 
     try {
       await SupabaseService.unregisterFromEvent(eventId, user.id);
-      
+
       // Mettre à jour l'état local
       set(state => ({
         registeredEvents: state.registeredEvents.filter(id => id !== eventId),
@@ -170,7 +170,7 @@ export const useEventStore = create<EventState>((set, get) => ({
     try {
       const registrations = await SupabaseService.getUserEventRegistrations(user.id);
       const registeredEventIds = registrations.map(reg => reg.event_id);
-      
+
       set({
         userEventRegistrations: registrations,
         registeredEvents: registeredEventIds

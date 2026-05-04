@@ -59,9 +59,9 @@ export const ExhibitorsPageOptimized: React.FC = () => {
     searchFields: ['companyName', 'sector', 'description'],
     initialSortField: 'companyName',
     filterFn: (exhibitor, filters) => {
-      if (filters.category && exhibitor.category !== filters.category) return false;
-      if (filters.verified && !exhibitor.verified) return false;
-      if (filters.featured && !exhibitor.featured) return false;
+      if (filters.category && exhibitor.category !== filters.category) {return false;}
+      if (filters.verified && !exhibitor.verified) {return false;}
+      if (filters.featured && !exhibitor.featured) {return false;}
       return true;
     },
   });

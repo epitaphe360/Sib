@@ -8,13 +8,13 @@ export const SUPPORT_CONFIG = {
     number: '+33766504580', // Numéro WhatsApp de support
     message: 'Bonjour, je souhaiterais entrer en contact avec votre équipe commerciale',
   },
-  
+
   // Email
   email: 'contact@sib.ma',
-  
+
   // Téléphone
   phone: '+212688500500',
-  
+
   // Horaires d'ouverture
   hours: {
     weekdays: '9h00 - 18h00', // Lundi à Vendredi

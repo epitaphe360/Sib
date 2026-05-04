@@ -74,7 +74,7 @@ export function ExhibitorAnalyticsSection({
       {hasRealData && (
         <LineChartCard
           title={t('dashboard.visitor_engagement_7days')}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
           data={visitorEngagementData as any}
           dataKeys={[
             { key: 'visits', color: '#3b82f6', name: t('exhibitor.analytics_visits') },
@@ -105,7 +105,7 @@ export function ExhibitorAnalyticsSection({
         {hasRealData ? (
           <BarChartCard
             title={t('exhibitor.analytics_activity_breakdown')}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
             data={activityBreakdownData as any}
             dataKey="value"
             colors={['#3b82f6', '#10b981', '#f59e0b', '#ef4444']}

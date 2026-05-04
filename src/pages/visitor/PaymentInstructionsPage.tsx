@@ -50,7 +50,7 @@ export default function PaymentInstructionsPage() {
           .eq('user_id', user?.id)
           .maybeSingle();
 
-        if (request) setPaymentRequest(request);
+        if (request) {setPaymentRequest(request);}
       }
 
       setLoading(false);
@@ -78,7 +78,7 @@ export default function PaymentInstructionsPage() {
         })
         .eq('id', requestId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       toast.success(t('payment.success.proofSubmitted'));
       loadData();
@@ -169,24 +169,24 @@ export default function PaymentInstructionsPage() {
             <Building2 className="w-5 h-5 text-blue-600" />
             {t('payment.bank.title')}
           </h2>
-          
+
           <div className="space-y-4">
             <div className="p-3 bg-gray-50 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">{t('payment.bank.bankName')}</div>
               <div className="font-medium">{bankInfo.bankName}</div>
             </div>
-            
+
             <div className="p-3 bg-gray-50 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">{t('payment.bank.accountHolder')}</div>
               <div className="font-medium">{bankInfo.accountHolder}</div>
             </div>
-            
+
             <div className="p-3 bg-gray-50 rounded-lg relative group cursor-pointer" onClick={() => copyToClipboard(bankInfo.iban)}>
               <div className="text-xs text-gray-500 mb-1">{t('payment.bank.iban')}</div>
               <div className="font-mono font-medium break-all">{bankInfo.iban}</div>
               <Copy className="w-4 h-4 text-gray-400 absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            
+
             <div className="p-3 bg-gray-50 rounded-lg relative group cursor-pointer" onClick={() => copyToClipboard(bankInfo.bic)}>
               <div className="text-xs text-gray-500 mb-1">{t('payment.bank.bic')}</div>
               <div className="font-mono font-medium">{bankInfo.bic}</div>

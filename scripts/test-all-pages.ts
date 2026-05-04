@@ -73,13 +73,13 @@ class PageTester {
     console.log('🚀 Initialisation du navigateur...');
     this.browser = await chromium.launch({ headless: false });
     this.page = await this.browser.newPage();
-    
+
     // Capturer les erreurs console
     this.setupConsoleListeners();
   }
 
   private setupConsoleListeners() {
-    if (!this.page) return;
+    if (!this.page) {return;}
 
     const currentErrors: ErrorReport[] = [];
 
@@ -119,7 +119,7 @@ class PageTester {
   }
 
   async login(accountType: keyof typeof TEST_ACCOUNTS) {
-    if (!this.page) throw new Error('Page not initialized');
+    if (!this.page) {throw new Error('Page not initialized');}
 
     const account = TEST_ACCOUNTS[accountType];
     console.log(`🔐 Connexion en tant que ${accountType}...`);
@@ -132,8 +132,8 @@ class PageTester {
   }
 
   async logout() {
-    if (!this.page) return;
-    
+    if (!this.page) {return;}
+
     try {
       await this.page.goto(`${this.baseUrl}/logout`, { waitUntil: 'networkidle' });
       await this.page.waitForTimeout(1000);
@@ -147,10 +147,10 @@ class PageTester {
   }
 
   async testPage(route: typeof ROUTES_TO_TEST[0]): Promise<TestResult> {
-    if (!this.page) throw new Error('Page not initialized');
+    if (!this.page) {throw new Error('Page not initialized');}
 
     console.log(`\n📄 Test de la page: ${route.name} (${route.path})`);
-    
+
     const startTime = Date.now();
     const errors: ErrorReport[] = [];
     const url = `${this.baseUrl}${route.path}`;
@@ -160,9 +160,9 @@ class PageTester {
       (this.page as any)._currentErrors = [];
 
       // Naviguer vers la page
-      await this.page.goto(url, { 
+      await this.page.goto(url, {
         waitUntil: 'domcontentloaded',
-        timeout: 30000 
+        timeout: 30000
       });
 
       // Attendre que la page soit chargée
@@ -184,7 +184,7 @@ class PageTester {
       const result: TestResult = {
         page: route.name,
         url,
-        status: errors.filter(e => e.type === 'error').length > 0 ? 'error' : 
+        status: errors.filter(e => e.type === 'error').length > 0 ? 'error' :
                 errors.length > 0 ? 'warning' : 'success',
         errors,
         loadTime,
@@ -192,7 +192,7 @@ class PageTester {
       };
 
       this.results.push(result);
-      
+
       console.log(`  ✅ Status: ${result.status}`);
       console.log(`  ⏱️  Temps de chargement: ${loadTime}ms`);
       console.log(`  🐛 Erreurs: ${errors.filter(e => e.type === 'error').length}`);
@@ -223,7 +223,7 @@ class PageTester {
   }
 
   async testCommonInteractions(route: typeof ROUTES_TO_TEST[0]) {
-    if (!this.page) return;
+    if (!this.page) {return;}
 
     try {
       // Tester le scroll
@@ -363,7 +363,7 @@ class PageTester {
       md += `- **URL:** ${result.url}\n`;
       md += `- **Status:** ${result.status}\n`;
       md += `- **Temps de chargement:** ${result.loadTime}ms\n`;
-      
+
       if (result.errors.length > 0) {
         md += `- **Erreurs (${result.errors.length}):**\n`;
         result.errors.forEach((err: any) => {
@@ -394,7 +394,7 @@ class PageTester {
     // Grouper les erreurs par type
     const errorsByType = errors.reduce((acc, err) => {
       const key = err.message.split(':')[0] || 'Other';
-      if (!acc[key]) acc[key] = [];
+      if (!acc[key]) {acc[key] = [];}
       acc[key].push(err);
       return acc;
     }, {} as Record<string, ErrorReport[]>);

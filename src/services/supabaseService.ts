@@ -307,7 +307,7 @@ export class SupabaseService {
             .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, contact_info, created_at, updated_at')
             .eq('user_id', userData.id)
             .maybeSingle();
-          
+
           if (!exhibitorError && exhibitorResult) {
             exhibitorData = exhibitorResult;
           } else if (exhibitorError) {
@@ -329,7 +329,7 @@ export class SupabaseService {
             .from('partner_projects')
             .select('id, user_id, partner_id, name, description, sectors, status, created_at')
             .eq('user_id', userData.id);
-          
+
           if (!projectsError && projectsData) {
             projects = projectsData;
           } else {
@@ -339,14 +339,14 @@ export class SupabaseService {
               .select('id')
               .eq('user_id', userData.id)
               .single();
-            
+
             if (partnerData) {
               // Optimized: Select only necessary columns
               const { data: fallbackProjects } = await safeSupabase
                 .from('partner_projects')
                 .select('id, user_id, partner_id, name, description, sectors, status, created_at')
                 .eq('partner_id', partnerData.id);
-              
+
               if (fallbackProjects) {
                 projects = fallbackProjects;
               }
@@ -371,7 +371,7 @@ export class SupabaseService {
   }
 
   static async deleteUser(userId: string): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
     const safeSupabase = supabase!;
     try {
       // Soft-delete: marquer l'utilisateur comme supprimé
@@ -379,7 +379,7 @@ export class SupabaseService {
         .from('users')
         .update({ status: 'deleted', updated_at: new Date().toISOString() })
         .eq('id', userId);
-      if (error) throw new Error(`Erreur suppression utilisateur ${userId}: ${error.message}`);
+      if (error) {throw new Error(`Erreur suppression utilisateur ${userId}: ${error.message}`);}
     } catch (error) {
       console.error(`Erreur deleteUser ${userId}:`, error);
       throw error;
@@ -387,7 +387,7 @@ export class SupabaseService {
   }
 
   static async updateUser(userId: string, userData: Partial<User>): Promise<User | null> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
     try {
@@ -410,11 +410,11 @@ export class SupabaseService {
 
       // ✅ Étape 2: Construire les données à mettre à jour
       const updateData: Record<string, any> = {};
-      if (userData.name !== undefined) updateData.name = userData.name;
-      if (userData.email !== undefined) updateData.email = userData.email;
-      if (userData.type !== undefined) updateData.type = userData.type;
-      if (userData.status !== undefined) updateData.status = userData.status;
-      if (userData.profile !== undefined) updateData.profile = userData.profile;
+      if (userData.name !== undefined) {updateData.name = userData.name;}
+      if (userData.email !== undefined) {updateData.email = userData.email;}
+      if (userData.type !== undefined) {updateData.type = userData.type;}
+      if (userData.status !== undefined) {updateData.status = userData.status;}
+      if (userData.profile !== undefined) {updateData.profile = userData.profile;}
 
       updateData.updated_at = new Date().toISOString();
 
@@ -447,7 +447,7 @@ export class SupabaseService {
   }
 
   static async createSimpleRegistrationRequest(userId: string, requestType: 'exhibitor' | 'partner'): Promise<RegistrationRequest | null> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
     try {
@@ -461,7 +461,7 @@ export class SupabaseService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return data;
     } catch (error) {
@@ -695,7 +695,7 @@ export class SupabaseService {
         .order('partner_type')
         .range(offset, offset + limit - 1);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const items = (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
@@ -752,7 +752,7 @@ export class SupabaseService {
         .eq('is_published', true) // Filtrer uniquement les partenaires publiés
         .order('partner_type');
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
@@ -792,7 +792,7 @@ export class SupabaseService {
   }
 
   static async getPartnerById(id: string): Promise<any | null> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
     try {
@@ -814,8 +814,8 @@ export class SupabaseService {
         error = enrichedResult.error;
       }
 
-      if (error) throw error;
-      if (!data) return null;
+      if (error) {throw error;}
+      if (!data) {return null;}
 
       // Transformer les projets de la DB vers le format UI
       const dbProjects = (data.projects || []).map((p: Record<string, unknown>) => ({
@@ -845,7 +845,7 @@ export class SupabaseService {
 
       // Utiliser les données de la base de données, avec fallback sur les données générées
       const fallbackData = this.getEnrichedPartnerData(data.id, data.company_name, data.sector);
-      
+
       // Vérifier si les données enrichies existent dans la base
       const hasDbEnrichedData = data.mission || data.vision || (data.values_list && data.values_list.length > 0);
 
@@ -959,7 +959,7 @@ export class SupabaseService {
       const { data, error } = await safeSupabase
         .rpc("get_recommendations_for_user", { p_user_id: userId, p_limit: limit });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return (data || []).map((rec: Recommendation) => ({
         itemId: rec.item_id,
@@ -974,16 +974,16 @@ export class SupabaseService {
 
   // ==================== TRANSFORMATION METHODS ====================
   private static transformUserDBToUser(userDB: UserDB | null): User | null {
-    if (!userDB) return null;
-    
+    if (!userDB) {return null;}
+
     // Check both column and profile for visitor_level
     // Cast profile as any to access visitor_level if it's not in UserProfile type explicitly
     const profileLevel = (userDB.profile as any)?.visitor_level;
     const effectiveLevel = userDB.visitor_level || profileLevel;
 
     // Enrichir le profil avec les données d'exhibitor si disponibles
-    let enrichedProfile = { ...userDB.profile } as any || {};
-    
+    const enrichedProfile = { ...userDB.profile } as any || {};
+
     // Si c'est un exhibitor et qu'on a les données d'exhibitor, enrichir le profil
     if (userDB.type === 'exhibitor' && userDB.exhibitor) {
       enrichedProfile.standArea = userDB.exhibitor.stand_area || enrichedProfile.standArea || 9;
@@ -1101,7 +1101,7 @@ export class SupabaseService {
     // Valider les dates avant de les convertir
     const startTime = eventDB.event_date || eventDB.start_time || eventDB.start_date; // Fallback pour compatibilité
     const endTime = eventDB.end_time || eventDB.end_date;
-    
+
     if (!startTime) {
       console.warn('Event sans start_time:', eventDB.id);
       // Utiliser une date par défaut
@@ -1127,7 +1127,7 @@ export class SupabaseService {
         endTime: defaultDate.toISOString()
       };
     }
-    
+
     const startDate = new Date(startTime);
     let endDate: Date;
 
@@ -1139,7 +1139,7 @@ export class SupabaseService {
     } else {
       endDate = new Date(endTime || startTime);
     }
-    
+
     // Vérifier que les dates sont valides
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
       console.warn('Event avec dates invalides:', eventDB.id, startTime, endTime);
@@ -1193,32 +1193,32 @@ export class SupabaseService {
 
   // ==================== AUTHENTICATION ====================
   static async signUp(email: string, password: string, userData: UserSignupData): Promise<User | null> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
     try {
       // 1. Créer l'utilisateur dans Supabase Auth
       console.log('📝 Tentative de création utilisateur:', { email, type: userData.type });
-      
+
       const signUpOptions: any = {
         data: {
           name: userData.name,
           type: userData.type
         }
       };
-      
+
       const { data: authData, error: authError } = await safeSupabase.auth.signUp({
         email,
         password,
         options: signUpOptions
       });
 
-      console.log('📝 Réponse signUp:', { 
-        user: authData?.user?.id, 
+      console.log('📝 Réponse signUp:', {
+        user: authData?.user?.id,
         email: authData?.user?.email,
         confirmed: authData?.user?.email_confirmed_at,
         session: !!authData?.session,
-        error: authError 
+        error: authError
       });
 
       if (authError) {
@@ -1281,7 +1281,7 @@ export class SupabaseService {
         console.error('❌ Aucun utilisateur retourné par Auth');
         return null;
       }
-      
+
       // ⚠️ Vérifier si l'email n'est pas confirmé
       if (!authData.user.email_confirmed_at) {
         console.warn('⚠️ Email non confirmé! Session:', authData.session ? 'OUI' : 'NON');
@@ -1334,7 +1334,7 @@ export class SupabaseService {
   }
 
   static async signIn(email: string, password: string, options?: { rememberMe?: boolean }): Promise<User | null> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
 
@@ -1347,7 +1347,7 @@ export class SupabaseService {
 
       if (authError) {
         console.error('❌ Erreur auth signIn:', authError);
-        
+
         // Améliorer le message d'erreur selon le type
         if (authError.message?.includes('Invalid login credentials')) {
           // Vérifier si l'utilisateur existe dans la DB
@@ -1356,7 +1356,7 @@ export class SupabaseService {
             .select('email, status, type, visitor_level')
             .eq('email', email.toLowerCase().trim())
             .maybeSingle();
-          
+
           if (existingUser) {
             // L'utilisateur existe mais ne peut pas se connecter
             // Probablement un problème de confirmation d'email ou mot de passe incorrect
@@ -1369,11 +1369,11 @@ export class SupabaseService {
             throw new Error('Aucun compte trouvé avec cet email. Veuillez d\'abord créer un compte.');
           }
         }
-        
+
         throw authError;
       }
 
-      if (!data.user) return null;
+      if (!data.user) {return null;}
 
       // ✅ Note: Supabase persiste automatiquement les sessions dans localStorage par défaut
       // L'option rememberMe est enregistrée pour référence future (ex: logout automatique)
@@ -1436,7 +1436,7 @@ export class SupabaseService {
 
   // ==================== REAL IMPLEMENTATIONS ====================
   static async createMiniSite(exhibitorId: string, miniSiteData: MiniSiteData): Promise<MiniSiteDB | null> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
     try {
@@ -1544,7 +1544,7 @@ export class SupabaseService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Marquer que le mini-site a été créé dans le profil utilisateur
       try {
@@ -1564,25 +1564,25 @@ export class SupabaseService {
   }
 
   static async updateEvent(eventId: string, eventData: Partial<Event>): Promise<Event> {
-    if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+    if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
 
     const safeSupabase = supabase!;
     try {
       const updateData: Record<string, unknown> = {};
 
-      if (eventData.title !== undefined) updateData.title = eventData.title;
-      if (eventData.description !== undefined) updateData.description = eventData.description;
-      if (eventData.type !== undefined) updateData.event_type = eventData.type;
-      if (eventData.startDate !== undefined) updateData.start_date = eventData.startDate.toISOString();
-      if (eventData.endDate !== undefined) updateData.end_date = eventData.endDate.toISOString();
-      if (eventData.location !== undefined) updateData.location = eventData.location;
-      if (eventData.pavilionId !== undefined) updateData.pavilion_id = eventData.pavilionId;
-      if (eventData.organizerId !== undefined) updateData.organizer_id = eventData.organizerId;
-      if (eventData.capacity !== undefined) updateData.capacity = eventData.capacity;
-      if (eventData.featured !== undefined) updateData.is_featured = eventData.featured;
-      if (eventData.imageUrl !== undefined) updateData.image_url = eventData.imageUrl;
-      if (eventData.registrationUrl !== undefined) updateData.registration_url = eventData.registrationUrl;
-      if (eventData.tags !== undefined) updateData.tags = eventData.tags;
+      if (eventData.title !== undefined) {updateData.title = eventData.title;}
+      if (eventData.description !== undefined) {updateData.description = eventData.description;}
+      if (eventData.type !== undefined) {updateData.event_type = eventData.type;}
+      if (eventData.startDate !== undefined) {updateData.start_date = eventData.startDate.toISOString();}
+      if (eventData.endDate !== undefined) {updateData.end_date = eventData.endDate.toISOString();}
+      if (eventData.location !== undefined) {updateData.location = eventData.location;}
+      if (eventData.pavilionId !== undefined) {updateData.pavilion_id = eventData.pavilionId;}
+      if (eventData.organizerId !== undefined) {updateData.organizer_id = eventData.organizerId;}
+      if (eventData.capacity !== undefined) {updateData.capacity = eventData.capacity;}
+      if (eventData.featured !== undefined) {updateData.is_featured = eventData.featured;}
+      if (eventData.imageUrl !== undefined) {updateData.image_url = eventData.imageUrl;}
+      if (eventData.registrationUrl !== undefined) {updateData.registration_url = eventData.registrationUrl;}
+      if (eventData.tags !== undefined) {updateData.tags = eventData.tags;}
 
       updateData.updated_at = new Date().toISOString();
 
@@ -1593,7 +1593,7 @@ export class SupabaseService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return this.transformEventDBToEvent(data);
     } catch (error) {
@@ -1604,7 +1604,7 @@ export class SupabaseService {
   }
 
   static async deleteEvent(eventId: string): Promise<void> {
-    if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+    if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
 
     const safeSupabase = supabase!;
     try {
@@ -1613,7 +1613,7 @@ export class SupabaseService {
         .delete()
         .eq('id', eventId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 	    } catch (error) {
 	      const errorMessage = error instanceof Error ? error.message : `Erreur inconnue lors de la suppression de l'événement ${eventId}`;
 	      console.error(`Erreur lors de la suppression de l'événement ${eventId}:`, errorMessage);
@@ -1622,7 +1622,7 @@ export class SupabaseService {
   }
 
   static async createEvent(eventData: Omit<Event, 'id' | 'registered'>): Promise<Event> {
-    if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+    if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
 
     // Validation des dates
     if (!eventData.startDate || !eventData.endDate) {
@@ -1657,7 +1657,7 @@ export class SupabaseService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return this.transformEventDBToEvent(data);
     } catch (error) {
@@ -1668,7 +1668,7 @@ export class SupabaseService {
   }
 
   static async getEvents(): Promise<Event[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
 
     const safeSupabase = supabase!;
     try {
@@ -1677,7 +1677,7 @@ export class SupabaseService {
         .select('*')
         .order('event_date', { ascending: true });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return (data || []).map((event: EventDB) => this.transformEventDBToEvent(event));
     } catch (error) {
@@ -1693,7 +1693,7 @@ export class SupabaseService {
     limit?: number;
     offset?: number;
   }): Promise<EventsPageResult> {
-    if (!this.checkSupabaseConnection()) return { items: [], total: 0 };
+    if (!this.checkSupabaseConnection()) {return { items: [], total: 0 };}
 
     const safeSupabase = supabase!;
     const limit = options?.limit ?? 20;
@@ -1706,7 +1706,7 @@ export class SupabaseService {
         .order('event_date', { ascending: true })
         .range(offset, offset + limit - 1);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return {
         items: (data || []).map((event: EventDB) => this.transformEventDBToEvent(event)),
@@ -1721,7 +1721,7 @@ export class SupabaseService {
   }
 
   static async registerForEvent(eventId: string, userId: string): Promise<boolean> {
-    if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+    if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
 
     const safeSupabase = supabase!;
     try {
@@ -1744,7 +1744,7 @@ export class SupabaseService {
         .eq('id', eventId)
         .single();
 
-      if (eventError) throw eventError;
+      if (eventError) {throw eventError;}
 
       if (event.capacity && event.registered >= event.capacity) {
         throw new Error('Événement complet');
@@ -1759,7 +1759,7 @@ export class SupabaseService {
           status: 'confirmed'
         }]);
 
-      if (insertError) throw insertError;
+      if (insertError) {throw insertError;}
 
       // Incrémenter le compteur
       const { error: updateError } = await safeSupabase
@@ -1767,7 +1767,7 @@ export class SupabaseService {
         .update({ registered: (event.registered || 0) + 1 })
         .eq('id', eventId);
 
-      if (updateError) throw updateError;
+      if (updateError) {throw updateError;}
 
       return true;
     } catch (error) {
@@ -1777,7 +1777,7 @@ export class SupabaseService {
   }
 
   static async getUserEventRegistrations(userId: string): Promise<any[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
 
     const safeSupabase = supabase!;
     try {
@@ -1786,7 +1786,7 @@ export class SupabaseService {
         .select('*')
         .eq('user_id', userId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return data || [];
     } catch (error) {
@@ -1799,7 +1799,7 @@ export class SupabaseService {
   }
 
   static async unregisterFromEvent(eventId: string, userId: string): Promise<boolean> {
-    if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+    if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
 
     const safeSupabase = supabase!;
     try {
@@ -1822,7 +1822,7 @@ export class SupabaseService {
         .eq('event_id', eventId)
         .eq('user_id', userId);
 
-      if (deleteError) throw deleteError;
+      if (deleteError) {throw deleteError;}
 
       // Décrémenter le compteur
       const { data: event } = await safeSupabase
@@ -1846,7 +1846,7 @@ export class SupabaseService {
   }
 
   static async isUserRegisteredForEvent(eventId: string, userId: string): Promise<boolean> {
-    if (!this.checkSupabaseConnection()) return false;
+    if (!this.checkSupabaseConnection()) {return false;}
 
     const safeSupabase = supabase!;
     try {
@@ -1864,7 +1864,7 @@ export class SupabaseService {
   }
 
   static async getConversations(userId: string): Promise<ChatConversation[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
 
     const safeSupabase = supabase!;
     try {
@@ -1896,7 +1896,7 @@ export class SupabaseService {
         .contains('participants', [userId])
         .order('updated_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return (data || []).map((conv: ChatConversationDB) => {
         const lastMessage = conv.messages?.[0];
@@ -1942,8 +1942,8 @@ export class SupabaseService {
   }
 
   static async getMessages(conversationId: string): Promise<ChatMessage[]> {
-    if (!this.checkSupabaseConnection()) return [];
-    
+    if (!this.checkSupabaseConnection()) {return [];}
+
     const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
@@ -1951,9 +1951,9 @@ export class SupabaseService {
         .select('*')
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true });
-        
-      if (error) throw error;
-      
+
+      if (error) {throw error;}
+
       return (data || []).map((msg: Record<string, unknown>) => ({
         id: msg.id,
         senderId: msg.sender_id,
@@ -1970,8 +1970,8 @@ export class SupabaseService {
   }
 
   static async createConversation(userId1: string, userId2: string): Promise<ChatConversation | null> {
-    if (!this.checkSupabaseConnection()) return null;
-    
+    if (!this.checkSupabaseConnection()) {return null;}
+
     const safeSupabase = supabase!;
     try {
       // Check if conversation already exists
@@ -2005,7 +2005,7 @@ export class SupabaseService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return {
         id: data.id,
@@ -2021,8 +2021,8 @@ export class SupabaseService {
   }
 
   static async sendMessage(conversationId: string, senderId: string, receiverId: string, content: string, type: 'text' | 'image' = 'text'): Promise<ChatMessage | null> {
-    if (!this.checkSupabaseConnection()) return null;
-    
+    if (!this.checkSupabaseConnection()) {return null;}
+
     const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
@@ -2036,9 +2036,9 @@ export class SupabaseService {
         }])
         .select()
         .single();
-        
-      if (error) throw error;
-      
+
+      if (error) {throw error;}
+
       return {
         id: data.id,
         senderId: data.sender_id,
@@ -2060,7 +2060,7 @@ export class SupabaseService {
    * @param userId - ID de l'utilisateur qui lit les messages
    */
   static async markMessagesAsRead(conversationId: string, userId: string): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
 
     const safeSupabase = supabase!;
     try {
@@ -2071,7 +2071,7 @@ export class SupabaseService {
         .eq('receiver_id', userId)
         .is('read_at', null);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
     } catch (error) {
       console.error('Erreur lors du marquage des messages comme lus:', error);
@@ -2080,7 +2080,7 @@ export class SupabaseService {
   }
 
   static async getMiniSite(exhibitorId: string): Promise<any | null> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
     try {
@@ -2142,7 +2142,7 @@ export class SupabaseService {
         if (error) {
           console.warn('[MiniSite] Erreur:', error.message);
         }
-        
+
         // FALLBACK: Si l'exposant existe mais n'a pas de mini-site dans la table 'mini_sites',
         // on retourne une structure par défaut pour éviter l'erreur 404/406.
         // On vérifie d'abord si l'ID correspond à un exposant valide.
@@ -2151,7 +2151,7 @@ export class SupabaseService {
           .select('id, user_id, company_name')
           .or(`id.eq.${exhibitorId},user_id.eq.${exhibitorId}`)
           .maybeSingle();
-          
+
         if (exhibitorCheck) {
              console.log('[MiniSite] Exposant trouvé sans mini-site (Custom). Génération structure par défaut.');
              return {
@@ -2207,7 +2207,7 @@ export class SupabaseService {
   }
 
   static async getExhibitorProducts(exhibitorId: string): Promise<Product[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
 
     const safeSupabase = supabase!;
     try {
@@ -2217,8 +2217,8 @@ export class SupabaseService {
         .select('*')
         .eq('exhibitor_id', exhibitorId);
 
-      if (productsError) throw productsError;
-      
+      if (productsError) {throw productsError;}
+
       // Si on trouve des produits, les retourner
       if (productsData && productsData.length > 0) {
         return productsData.map((p: ProductDB) => ({
@@ -2251,9 +2251,9 @@ export class SupabaseService {
         .select('*')
         .eq('exhibitor_id', exhibitorData.id);
 
-      if (productsByExhibitorError) throw productsByExhibitorError;
-      if (productsByExhibitorError) throw productsByExhibitorError;
-      
+      if (productsByExhibitorError) {throw productsByExhibitorError;}
+      if (productsByExhibitorError) {throw productsByExhibitorError;}
+
       return (productsByExhibitor || []).map((p: ProductDB) => ({
         id: p.id,
         exhibitorId: p.exhibitor_id,
@@ -2272,7 +2272,7 @@ export class SupabaseService {
   }
 
   static async getMiniSiteViewCount(exhibitorId: string): Promise<number> {
-    if (!this.checkSupabaseConnection()) return 0;
+    if (!this.checkSupabaseConnection()) {return 0;}
     const safeSupabase = supabase!;
     try {
       const { count } = await safeSupabase
@@ -2286,7 +2286,7 @@ export class SupabaseService {
   }
 
   static async incrementMiniSiteViews(exhibitorId: string): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
 
     const safeSupabase = supabase!;
     try {
@@ -2308,7 +2308,7 @@ export class SupabaseService {
   }
 
   static async incrementPartnerViews(partnerId: string): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
 
     const safeSupabase = supabase!;
     try {
@@ -2318,7 +2318,7 @@ export class SupabaseService {
         p_partner_id: partnerId
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (error) {
        console.warn('Erreur incrementPartnerViews:', error);
        // Fallback manual increment if RPC missing
@@ -2328,7 +2328,7 @@ export class SupabaseService {
            .select('views')
            .eq('id', partnerId)
            .single();
-         
+
          if (partner) {
            await safeSupabase
              .from('partners')
@@ -2342,7 +2342,7 @@ export class SupabaseService {
   }
 
   static async getPublishedMiniSites(): Promise<{ data: any[] | null; error: any }> {
-    if (!this.checkSupabaseConnection()) return { data: null, error: 'Supabase non connecté' };
+    if (!this.checkSupabaseConnection()) {return { data: null, error: 'Supabase non connecté' };}
 
     const safeSupabase = supabase!;
     try {
@@ -2352,7 +2352,7 @@ export class SupabaseService {
         .select('id, exhibitor_id, theme, view_count, published, updated_at, logo_url')
         .eq('published', true);
 
-      if (minisitesError) throw minisitesError;
+      if (minisitesError) {throw minisitesError;}
 
       if (!minisites || minisites.length === 0) {
         return { data: [], error: null };
@@ -2397,7 +2397,7 @@ export class SupabaseService {
   }
 
   static async getExhibitorForMiniSite(exhibitorId: string): Promise<any | null> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
     try {
@@ -2480,7 +2480,7 @@ export class SupabaseService {
   }
 
   static async getExhibitorByUserId(userId: string): Promise<any | null> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
     try {
@@ -2490,7 +2490,7 @@ export class SupabaseService {
         .eq('user_id', userId)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return data;
     } catch (error) {
@@ -2500,21 +2500,21 @@ export class SupabaseService {
   }
 
 	  static async updateExhibitor(exhibitorId: string, data: Partial<Exhibitor>): Promise<void> {
-	    if (!this.checkSupabaseConnection()) return;
-	
+	    if (!this.checkSupabaseConnection()) {return;}
+
 	    const safeSupabase = supabase!;
 	    try {
 	      const updateData: Record<string, any> = {};
-	      if (data.companyName !== undefined) updateData.company_name = data.companyName;
-	      if (data.category !== undefined) updateData.category = data.category;
-	      if (data.sector !== undefined) updateData.sector = data.sector;
-	      if (data.description !== undefined) updateData.description = data.description;
-	      if (data.verified !== undefined) updateData.verified = data.verified;
-	      if (data.featured !== undefined) updateData.featured = data.featured;
-	      if (data.website !== undefined) updateData.website = data.website;
-	      if (data.logo !== undefined) updateData.logo_url = data.logo;
-	      if (data.contactInfo !== undefined) updateData.contact_info = data.contactInfo;
-	      if (data.standNumber !== undefined) updateData.stand_number = data.standNumber;
+	      if (data.companyName !== undefined) {updateData.company_name = data.companyName;}
+	      if (data.category !== undefined) {updateData.category = data.category;}
+	      if (data.sector !== undefined) {updateData.sector = data.sector;}
+	      if (data.description !== undefined) {updateData.description = data.description;}
+	      if (data.verified !== undefined) {updateData.verified = data.verified;}
+	      if (data.featured !== undefined) {updateData.featured = data.featured;}
+	      if (data.website !== undefined) {updateData.website = data.website;}
+	      if (data.logo !== undefined) {updateData.logo_url = data.logo;}
+	      if (data.contactInfo !== undefined) {updateData.contact_info = data.contactInfo;}
+	      if (data.standNumber !== undefined) {updateData.stand_number = data.standNumber;}
 	      // Note: stand_area et is_published ne sont pas des colonnes existantes dans la table exhibitors
 	      // if (data.standArea !== undefined) updateData.stand_area = data.standArea;
 	      // if (data.isPublished !== undefined) updateData.is_published = data.isPublished;
@@ -2529,9 +2529,9 @@ export class SupabaseService {
 	        .update(updateData)
 	        .eq('id', exhibitorId)
 	        .select('id');
-	        
-	      if (error) throw error;
-	      
+
+	      if (error) {throw error;}
+
 	      // Vérifier si l'update a réellement modifié des lignes
 	      if (!updatedData || updatedData.length === 0) {
 	        throw new Error('Mise à jour échouée - vérifiez les permissions');
@@ -2541,9 +2541,9 @@ export class SupabaseService {
 	      throw error;
 	    }
 	  }
-	
+
 	  static async updateUserStatus(userId: string, status: User['status']): Promise<void> {
-	    if (!this.checkSupabaseConnection()) return;
+	    if (!this.checkSupabaseConnection()) {return;}
 
 	    const safeSupabase = supabase!;
 	    try {
@@ -2553,7 +2553,7 @@ export class SupabaseService {
 	        .update({ status })
 	        .eq('id', userId);
 
-	      if (error) throw error;
+	      if (error) {throw error;}
 	    } catch (error) {
 	      console.error(`❌ Erreur mise à jour statut utilisateur ${userId}:`, error);
 	      throw error;
@@ -2570,7 +2570,7 @@ export class SupabaseService {
 	    companyName: string;
 	    success: boolean;
 	  } | null> {
-	    if (!this.checkSupabaseConnection()) return null;
+	    if (!this.checkSupabaseConnection()) {return null;}
 
 	    const safeSupabase = supabase!;
 	    try {
@@ -2580,7 +2580,7 @@ export class SupabaseService {
 	          p_new_status: newStatus
 	        });
 
-	      if (error) throw error;
+	      if (error) {throw error;}
 
 	      const result = data?.[0];
 
@@ -2611,7 +2611,7 @@ export class SupabaseService {
 	    partnerName: string;
 	    success: boolean;
 	  } | null> {
-	    if (!this.checkSupabaseConnection()) return null;
+	    if (!this.checkSupabaseConnection()) {return null;}
 
 	    const safeSupabase = supabase!;
 	    try {
@@ -2621,7 +2621,7 @@ export class SupabaseService {
 	          p_new_status: newStatus
 	        });
 
-	      if (error) throw error;
+	      if (error) {throw error;}
 
 	      const result = data?.[0];
 
@@ -2643,7 +2643,7 @@ export class SupabaseService {
 	  }
 
 	  static async createExhibitorProfile(userId: string, userData: Record<string, unknown>): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
 
     const safeSupabase = supabase!;
     try {
@@ -2662,7 +2662,7 @@ export class SupabaseService {
           }
         }]);
 
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (error) {
       console.error('❌ Erreur création profil exposant:', error);
       throw error;
@@ -2670,7 +2670,7 @@ export class SupabaseService {
   }
 
   static async createPartnerProfile(userId: string, userData: Record<string, unknown>): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
 
     const safeSupabase = supabase!;
     try {
@@ -2686,13 +2686,13 @@ export class SupabaseService {
           website: userData.profile.website || ''
         }]);
 
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (error) {
       console.error('❌ Erreur création profil partenaire:', error);
 	      throw error;
 	    }
 	  }
-	
+
 	  static async sendValidationEmail(userData: {
 	    email: string;
 	    firstName: string;
@@ -2700,24 +2700,24 @@ export class SupabaseService {
 	    companyName: string;
 	    status: 'approved' | 'rejected';
 	  }): Promise<void> {
-	    if (!this.checkSupabaseConnection()) return;
-	
+	    if (!this.checkSupabaseConnection()) {return;}
+
 	    const safeSupabase = supabase!;
-	
+
 	    try {
 	      const { data, error } = await safeSupabase.functions.invoke('send-validation-email', {
 	        body: userData
 	      });
-	
-	      if (error) throw error;
+
+	      if (error) {throw error;}
 	    } catch (error) {
 	      console.error(`❌ Erreur lors de l\`envoi de l\`email de validation:`, error);
 	      throw error;
 	    }
 	  }
-	
+
 	  static async sendRegistrationEmail(userData: Record<string, unknown>): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
 
     const safeSupabase = supabase!;
 
@@ -2726,7 +2726,7 @@ export class SupabaseService {
         body: userData
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (error) {
       console.error('❌ Erreur lors de l\'envoi de l\'email:', error);
       throw error;
@@ -2756,7 +2756,7 @@ export class SupabaseService {
         },
         body: JSON.stringify(contactData),
       });
-      
+
       if (!response.ok) {
         const err = await response.json().catch(() => ({}));
         console.error('❌ Failed to send contact email:', err);
@@ -2824,8 +2824,8 @@ export class SupabaseService {
     location?: string;
     limit?: number;
   }): Promise<User[]> {
-    if (!this.checkSupabaseConnection()) return [];
-    
+    if (!this.checkSupabaseConnection()) {return [];}
+
     const safeSupabase = supabase!;
     try {
       // Optimized: Select only necessary columns instead of *
@@ -2836,7 +2836,7 @@ export class SupabaseService {
       const hasSearchTerm = filters.searchTerm && filters.searchTerm.trim();
       const hasSector = filters.sector && filters.sector.trim();
       const hasLocation = filters.location && filters.location.trim();
-      
+
       // Exclure visiteurs et admins si aucun type spécifié
       if (!filters.userType && !hasSector) {
         // Par défaut, seuls les exposants et partenaires (entreprises B2B)
@@ -2882,11 +2882,11 @@ export class SupabaseService {
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Filtrer les résultats côté client pour s'assurer d'avoir des données valides
       const transformedUsers = (data || []).map(this.transformUserDBToUser);
-      
+
       const users = transformedUsers.filter(u => u && (u.profile?.firstName || u.profile?.company || u.profile?.companyName || u.name));
 
       return users;
@@ -2900,7 +2900,7 @@ export class SupabaseService {
    * Récupère les recommandations de networking pour un utilisateur
    */
   static async getRecommendations(userId: string, limit: number = 10): Promise<User[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
 
     const safeSupabase = supabase!;
     try {
@@ -2910,7 +2910,7 @@ export class SupabaseService {
         .eq('user_id', userId)
         .limit(limit);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       return (data || []).map((rec: Record<string, unknown>) => this.transformUserDBToUser(rec.recommended_user));
     } catch (error) {
@@ -2923,7 +2923,7 @@ export class SupabaseService {
    * Envoie une demande de connexion
    */
 	  static async createNotification(userId: string, message: string, type: 'connection' | 'event' | 'message' | 'system'): Promise<void> {
-	    if (!this.checkSupabaseConnection()) return;
+	    if (!this.checkSupabaseConnection()) {return;}
 
 	    const safeSupabase = supabase!;
 	    try {
@@ -2934,8 +2934,8 @@ export class SupabaseService {
 	               type === 'event' ? 'Événement' :
 	               type === 'message' ? 'Nouveau message' : 'Notification',
 	        message: message,
-	        type: type === 'connection' ? 'info' : 
-	              type === 'event' ? 'info' : 
+	        type: type === 'connection' ? 'info' :
+	              type === 'event' ? 'info' :
 	              type === 'message' ? 'info' : 'info',
 	        category: type,
 	        is_read: false
@@ -2944,10 +2944,10 @@ export class SupabaseService {
 	      console.error('❌ Erreur création notification:', error);
 	    }
 	  }
-	
+
 	  static async sendConnectionRequest(fromUserId: string, toUserId: string): Promise<boolean> {
-	    if (!this.checkSupabaseConnection()) return false;
-	
+	    if (!this.checkSupabaseConnection()) {return false;}
+
 	    const safeSupabase = supabase!;
 	    try {
 	      const { error } = await safeSupabase.from('connections').insert([{
@@ -2955,25 +2955,25 @@ export class SupabaseService {
 	        addressee_id: toUserId,
 	        status: 'pending'
 	      }]);
-	
-	      if (error) throw error;
-	
+
+	      if (error) {throw error;}
+
 	      // Envoyer une notification au destinataire
 	      this.createNotification(toUserId, 'Vous avez reçu une demande de connexion.', 'connection');
-	
+
 	      return true;
 	    } catch (error) {
 	      console.error('Erreur lors de l\'envoi de la demande de connexion:', error);
 	      return false;
 	    }
 	  }
-	
+
 	  /**
 	   * Accepte une demande de connexion
 	   */
 	  static async acceptConnectionRequest(connectionId: string): Promise<boolean> {
-	    if (!this.checkSupabaseConnection()) return false;
-	
+	    if (!this.checkSupabaseConnection()) {return false;}
+
 	    const safeSupabase = supabase!;
 	    try {
 	      const { data, error } = await safeSupabase
@@ -2982,13 +2982,13 @@ export class SupabaseService {
 	        .eq('id', connectionId)
 	        .select('requester_id, addressee_id')
 	        .single();
-	
-	      if (error) throw error;
-	
+
+	      if (error) {throw error;}
+
 	      // Envoyer une notification à l'expéditeur
 	      const requesterId = data.requester_id;
 	      this.createNotification(requesterId, 'Votre demande de connexion a été acceptée !', 'connection');
-	
+
 	      return true;
 	    } catch (error) {
 	      console.error('Erreur lors de l\'acceptation de la demande:', error);
@@ -3000,17 +3000,17 @@ export class SupabaseService {
 	   * Refuse une demande de connexion
 	   */
 	  static async rejectConnectionRequest(connectionId: string): Promise<boolean> {
-	    if (!this.checkSupabaseConnection()) return false;
-	
+	    if (!this.checkSupabaseConnection()) {return false;}
+
 	    const safeSupabase = supabase!;
 	    try {
 	      const { error } = await safeSupabase
 	        .from('connections')
 	        .delete()
 	        .eq('id', connectionId);
-	
-	      if (error) throw error;
-	
+
+	      if (error) {throw error;}
+
 	      return true;
 	    } catch (error) {
 	      console.error('Erreur lors du refus de la demande:', error);
@@ -3022,7 +3022,7 @@ export class SupabaseService {
    * Récupère les connexions d'un utilisateur
    */
   static async getConnections(userId: string): Promise<User[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
 
     const safeSupabase = supabase!;
     try {
@@ -3033,13 +3033,13 @@ export class SupabaseService {
         .eq('status', 'accepted')
         .or(`requester_id.eq.${userId},addressee_id.eq.${userId}`);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
-      const connectedUserIds = (connections || []).map((conn: Record<string, unknown>) => 
+      const connectedUserIds = (connections || []).map((conn: Record<string, unknown>) =>
         conn.requester_id === userId ? conn.addressee_id : conn.requester_id
       );
 
-      if (connectedUserIds.length === 0) return [];
+      if (connectedUserIds.length === 0) {return [];}
 
       // On récupère les profils de ces utilisateurs
       const { data: users, error: usersError } = await safeSupabase
@@ -3047,7 +3047,7 @@ export class SupabaseService {
         .select('*')
         .in('id', connectedUserIds);
 
-      if (usersError) throw usersError;
+      if (usersError) {throw usersError;}
 
       return (users || []).map(this.transformUserDBToUser);
     } catch (error) {
@@ -3058,8 +3058,8 @@ export class SupabaseService {
 
   // ==================== TIME SLOTS ====================
   static async getTimeSlotsByExhibitor(exhibitorIdOrUserId: string): Promise<TimeSlot[]> {
-    if (!this.checkSupabaseConnection()) return [];
-    
+    if (!this.checkSupabaseConnection()) {return [];}
+
     // Validate UUID format (must be 36 chars with hyphens)
     if (!exhibitorIdOrUserId || !exhibitorIdOrUserId.includes('-') || exhibitorIdOrUserId.length !== 36) {
       console.warn('[TIME_SLOTS] Invalid ID format:', exhibitorIdOrUserId);
@@ -3098,7 +3098,7 @@ export class SupabaseService {
             .eq('exhibitor_id', exhibitor.id)
             .order('slot_date', { ascending: true })
             .order('start_time', { ascending: true });
-          
+
           data = result.data;
           error = result.error;
         }
@@ -3111,14 +3111,14 @@ export class SupabaseService {
 
       // Helper pour parser une date sans décalage UTC
       const parseLocalDate = (dateStr: string | Date): string => {
-        if (!dateStr) return '';
+        if (!dateStr) {return '';}
         // Garder juste la partie YYYY-MM-DD pour éviter le décalage UTC
         return String(dateStr).split('T')[0];
       };
 
       // Helper pour parser une date string en Date locale
       const parseLocalDateToDate = (dateStr: string | Date): Date => {
-        if (dateStr instanceof Date) return dateStr;
+        if (dateStr instanceof Date) {return dateStr;}
         const [year, month, day] = String(dateStr).split('T')[0].split('-').map(Number);
         return new Date(year, month - 1, day);
       };
@@ -3179,17 +3179,17 @@ export class SupabaseService {
 
 
   static async createTimeSlotsBulk(slotsData: Omit<TimeSlot, 'id' | 'currentBookings' | 'available'>[]): Promise<TimeSlot[]> {
-     if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+     if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
     const safeSupabase = supabase!;
 
-    if (slotsData.length === 0) return [];
+    if (slotsData.length === 0) {return [];}
 
     try {
         console.log(`[BULK_CREATE] Processing ${slotsData.length} slots...`);
 
         // Résoudre l'exhibitor_id (on suppose que tous les slots sont pour le même user)
         let resolvedExhibitorId: string | null = null;
-        let userId = (slotsData[0] as any).userId;
+        const userId = (slotsData[0] as any).userId;
 
         if (userId) {
              const { data: exhibitor } = await safeSupabase
@@ -3197,7 +3197,7 @@ export class SupabaseService {
                 .select('id')
                 .eq('user_id', userId)
                 .maybeSingle();
-            
+
             if (exhibitor) {
                 resolvedExhibitorId = exhibitor.id;
             } else {
@@ -3209,11 +3209,11 @@ export class SupabaseService {
                     .insert({ user_id: userId, company_name: user?.name || 'Exposant', category: 'institutional', sector: 'General', description: 'Auto-created' })
                     .select('id')
                     .single();
-                  if (newExhibitor) resolvedExhibitorId = newExhibitor.id;
+                  if (newExhibitor) {resolvedExhibitorId = newExhibitor.id;}
             }
         }
 
-        if (!resolvedExhibitorId) throw new Error('Failed to resolve exhibitor ID');
+        if (!resolvedExhibitorId) {throw new Error('Failed to resolve exhibitor ID');}
 
         // Préparer les données DB
         const dbSlots = slotsData.map(slot => ({
@@ -3234,10 +3234,10 @@ export class SupabaseService {
             .insert(dbSlots)
             .select();
 
-        if (error) throw error;
-        
+        if (error) {throw error;}
+
         console.log(`[BULK_CREATE] Successfully created ${data?.length} slots`);
-        
+
         return data.map((dbSlot: any) => ({
             id: dbSlot.id,
             exhibitorId: dbSlot.exhibitor_id,
@@ -3259,7 +3259,7 @@ export class SupabaseService {
   }
 
   static async createTimeSlot(slotData: Omit<TimeSlot, 'id' | 'currentBookings' | 'available'>): Promise<TimeSlot> {
-    if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+    if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
     const safeSupabase = supabase!;
     try {
       // Validation: la date ne doit pas être dans le passé
@@ -3276,7 +3276,7 @@ export class SupabaseService {
 
       // Résoudre l'exhibitor_id depuis le userId si nécessaire
       let exhibitorId = (slotData as unknown as Record<string, unknown>).exhibitorId || null;
-      
+
       if (!exhibitorId) {
         const userId = (slotData as unknown as Record<string, unknown>).userId;
         if (userId) {
@@ -3286,26 +3286,26 @@ export class SupabaseService {
             .select('id')
             .eq('user_id', userId)
             .maybeSingle();
-          
+
           if (exhError || !exhibitor) {
             console.warn('⚠️ [CREATE_SLOT] Exhibitor introuvable pour userId:', userId, 'création automatique...');
-            
+
             // Créer automatiquement l'exhibitor si il n'existe pas
             const { data: user } = await safeSupabase
               .from('users')
               .select('id, email, name, profile')
               .eq('id', userId)
               .single();
-            
+
             if (!user) {
               throw new Error(`Utilisateur ${userId} introuvable`);
             }
-            
+
             const companyName = user.profile?.company || user.profile?.companyName || user.name || 'Exposant';
-            const userName = user.profile?.firstName && user.profile?.lastName 
-              ? `${user.profile.firstName} ${user.profile.lastName}` 
+            const userName = user.profile?.firstName && user.profile?.lastName
+              ? `${user.profile.firstName} ${user.profile.lastName}`
               : user.name || 'Contact';
-            
+
             const { data: newExhibitor, error: createError } = await safeSupabase
               .from('exhibitors')
               .insert({
@@ -3320,12 +3320,12 @@ export class SupabaseService {
               })
               .select('id')
               .single();
-            
+
             if (createError || !newExhibitor) {
               console.error('❌ [CREATE_SLOT] Erreur création auto exhibitor:', createError);
               throw new Error(`Impossible de créer le profil exposant pour ${userId}`);
             }
-            
+
             exhibitorId = newExhibitor.id;
             console.log('✅ [CREATE_SLOT] Exhibitor créé automatiquement:', { userId, exhibitorId });
           } else {
@@ -3398,7 +3398,7 @@ export class SupabaseService {
 
       // Helper pour parser une date sans décalage UTC
       const parseLocalDateString = (dateStr: string | Date): Date => {
-        if (dateStr instanceof Date) return dateStr;
+        if (dateStr instanceof Date) {return dateStr;}
         // Format YYYY-MM-DD -> créer une date à minuit heure locale
         const [year, month, day] = String(dateStr).split('T')[0].split('-').map(Number);
         return new Date(year, month - 1, day);
@@ -3437,9 +3437,9 @@ export class SupabaseService {
   }
 
   static async updateTimeSlot(slotId: string, updateData: Partial<TimeSlot>): Promise<TimeSlot> {
-    if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+    if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
     const safeSupabase = supabase!;
-    
+
     const updates: Record<string, any> = {};
     if (updateData.date) {
         const d = new Date(updateData.date);
@@ -3448,12 +3448,12 @@ export class SupabaseService {
         const day = String(d.getDate()).padStart(2, '0');
         updates.slot_date = `${year}-${month}-${day}`;
     }
-    if (updateData.startTime) updates.start_time = updateData.startTime;
-    if (updateData.endTime) updates.end_time = updateData.endTime;
-    if (updateData.maxBookings !== undefined) updates.max_bookings = updateData.maxBookings;
-    if (updateData.type) updates.type = updateData.type;
-    if (updateData.location !== undefined) updates.location = updateData.location;
-    
+    if (updateData.startTime) {updates.start_time = updateData.startTime;}
+    if (updateData.endTime) {updates.end_time = updateData.endTime;}
+    if (updateData.maxBookings !== undefined) {updates.max_bookings = updateData.maxBookings;}
+    if (updateData.type) {updates.type = updateData.type;}
+    if (updateData.location !== undefined) {updates.location = updateData.location;}
+
     const { data, error } = await safeSupabase
       .from('time_slots')
       .update(updates)
@@ -3461,10 +3461,10 @@ export class SupabaseService {
       .select()
       .single();
 
-    if (error) throw error;
-    
+    if (error) {throw error;}
+
     const parseLocalDateString = (dateStr: string | Date): Date => {
-        if (dateStr instanceof Date) return dateStr;
+        if (dateStr instanceof Date) {return dateStr;}
         const [year, month, day] = String(dateStr).split('T')[0].split('-').map(Number);
         return new Date(year, month - 1, day);
     };
@@ -3485,14 +3485,14 @@ export class SupabaseService {
   }
 
   static async deleteTimeSlot(slotId: string): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
     const safeSupabase = supabase!;
     try {
       const { error } = await safeSupabase
         .from('time_slots')
         .delete()
         .eq('id', slotId);
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (error) {
       console.error('Erreur lors de la suppression du créneau horaire:', error);
     }
@@ -3503,7 +3503,7 @@ export class SupabaseService {
 
   // ==================== APPOINTMENTS ====================
   static async getAppointments(): Promise<Appointment[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
     const safeSupabase = supabase!;
     try {
       // 1. Fetch appointments raw
@@ -3516,8 +3516,8 @@ export class SupabaseService {
          console.warn("Error fetching appointments raw:", error.message);
          throw error;
       }
-      
-      if (!appointmentsRaw || appointmentsRaw.length === 0) return [];
+
+      if (!appointmentsRaw || appointmentsRaw.length === 0) {return [];}
 
       const visitorIds = [...new Set(appointmentsRaw.map(a => a.visitor_id))];
       const exhibitorIds = [...new Set(appointmentsRaw.map(a => a.exhibitor_id))];
@@ -3546,10 +3546,10 @@ export class SupabaseService {
 
           return {
             ...apt,
-            visitor: visitor ? { 
-                id: visitor.id, 
-                name: visitor.name, 
-                email: visitor.email 
+            visitor: visitor ? {
+                id: visitor.id,
+                name: visitor.name,
+                email: visitor.email
             } : undefined,
             exhibitor: (profile || exhibitorRow) ? {
                 id: resolvedExhibitorUserId,
@@ -3572,7 +3572,7 @@ export class SupabaseService {
   }
 
   static async updateAppointmentStatus(appointmentId: string, status: string): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
     const safeSupabase = supabase!;
     try {
       const { error } = await safeSupabase
@@ -3583,7 +3583,7 @@ export class SupabaseService {
         })
         .eq('id', appointmentId);
 
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (error) {
       console.error(`❌ Erreur mise à jour statut rendez-vous ${appointmentId}:`, error);
       throw error;
@@ -3597,7 +3597,7 @@ export class SupabaseService {
     message?: string;
     meetingType?: string;
   }): Promise<any> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
 
     const safeSupabase = supabase!;
     try {
@@ -3608,7 +3608,7 @@ export class SupabaseService {
         .eq('id', appointmentData.visitorId)
         .single();
 
-      if (visitorError) throw visitorError;
+      if (visitorError) {throw visitorError;}
 
       if (visitorData?.visitor_level === 'free') {
         throw new Error('Les visiteurs de niveau Free n\'ont pas accès aux rendez-vous. Veuillez passer au niveau Premium ou VIP pour réserver des rendez-vous.');
@@ -3624,7 +3624,7 @@ export class SupabaseService {
           p_meeting_type: appointmentData.meetingType || 'in-person'
         });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // La fonction RPC retourne un tableau avec un seul élément
       const result = data?.[0];
@@ -3644,7 +3644,7 @@ export class SupabaseService {
         .eq('id', result.appointment_id)
         .single();
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {throw fetchError;}
 
       return appointment;
     } catch (error) {
@@ -3751,7 +3751,7 @@ export class SupabaseService {
       }])
       .select()
       .single();
-    if (error) throw error;
+    if (error) {throw error;}
     return this.mapUserFromDB(data);
   }
 
@@ -3782,7 +3782,7 @@ export class SupabaseService {
       .select(`*, user:users!exhibitors_user_id_fkey(*), products:products!fk_products_exhibitor(*), mini_site:mini_sites!mini_sites_exhibitor_id_fkey(*)`)
       .single();
 
-    if (error) throw error;
+    if (error) {throw error;}
     return this.mapExhibitorFromDB(data);
   }
 
@@ -3794,7 +3794,7 @@ export class SupabaseService {
     }
 
     const safeSupabase = supabase!;
-    
+
     // Prepare data matching the actual database schema
     const dbData = {
       company_name: partnerData.organizationName || partnerData.name, // Reverted to company_name
@@ -3857,19 +3857,19 @@ export class SupabaseService {
     }
 
     const safeSupabase = supabase!;
-    
+
     const dbData: any = {};
-    if (partnerData.organizationName) dbData.company_name = partnerData.organizationName;
-    if (partnerData.partnerType) dbData.partner_type = partnerData.partnerType;
-    if (partnerData.sector) dbData.sector = partnerData.sector;
-    if (partnerData.description) dbData.description = partnerData.description;
-    if (partnerData.website) dbData.website = partnerData.website;
-    if (partnerData.logo) dbData.logo_url = partnerData.logo;
-    if (partnerData.verified !== undefined) dbData.verified = partnerData.verified;
-    if (partnerData.featured !== undefined) dbData.featured = partnerData.featured;
-    if (partnerData.sponsorshipLevel) dbData.partnership_level = partnerData.sponsorshipLevel;
-    if (partnerData.isPublished !== undefined) dbData.is_published = partnerData.isPublished;
-    if (partnerData.country) dbData.country = partnerData.country;
+    if (partnerData.organizationName) {dbData.company_name = partnerData.organizationName;}
+    if (partnerData.partnerType) {dbData.partner_type = partnerData.partnerType;}
+    if (partnerData.sector) {dbData.sector = partnerData.sector;}
+    if (partnerData.description) {dbData.description = partnerData.description;}
+    if (partnerData.website) {dbData.website = partnerData.website;}
+    if (partnerData.logo) {dbData.logo_url = partnerData.logo;}
+    if (partnerData.verified !== undefined) {dbData.verified = partnerData.verified;}
+    if (partnerData.featured !== undefined) {dbData.featured = partnerData.featured;}
+    if (partnerData.sponsorshipLevel) {dbData.partnership_level = partnerData.sponsorshipLevel;}
+    if (partnerData.isPublished !== undefined) {dbData.is_published = partnerData.isPublished;}
+    if (partnerData.country) {dbData.country = partnerData.country;}
 
     const { error } = await (safeSupabase as any)
       .from('partners')
@@ -3908,7 +3908,7 @@ export class SupabaseService {
 
     // Récupérer le token de session de l'utilisateur connecté
     const { data: { session } } = await safeSupabase.auth.getSession();
-    
+
     if (!session?.access_token) {
       throw new Error('Session expirée - reconnectez-vous');
     }
@@ -3934,7 +3934,7 @@ export class SupabaseService {
     } catch (fetchError: any) {
       // Fallback: essayer directement via Supabase (si RLS le permet)
       console.warn('API admin non disponible, tentative directe...', fetchError.message);
-      
+
       const { data, error } = await (safeSupabase as any)
         .from('exhibitors')
         .delete()
@@ -3944,7 +3944,7 @@ export class SupabaseService {
       if (error) {
         throw new Error(error.message);
       }
-      
+
       if (!data || data.length === 0) {
         throw new Error('Suppression impossible - permissions insuffisantes. Contactez un administrateur.');
       }
@@ -3973,7 +3973,7 @@ export class SupabaseService {
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {throw error;}
     return this.mapProductFromDB(data);
   }
 
@@ -3998,14 +3998,14 @@ export class SupabaseService {
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {throw error;}
     return data;
   }
 
   // ==================== REGISTRATION REQUESTS ====================
 
   static async getRegistrationRequests(status?: 'pending' | 'approved' | 'rejected'): Promise<any[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
     const safeSupabase = supabase!;
     try {
       let query = (safeSupabase as any).from('registration_requests').select('*');
@@ -4013,7 +4013,7 @@ export class SupabaseService {
         query = query.eq('status', status);
       }
       const { data, error } = await query.order('created_at', { ascending: false });
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('Error fetching registration requests:', error);
@@ -4027,7 +4027,7 @@ export class SupabaseService {
     reviewedBy: string,
     rejectionReason?: string
   ): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
     const safeSupabase = supabase!;
     try {
       // Step 1: Get the user_id from the registration request
@@ -4037,7 +4037,7 @@ export class SupabaseService {
         .eq('id', requestId)
         .single();
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {throw fetchError;}
 
       // Step 2: Update the registration request
       const updateData: any = {
@@ -4052,7 +4052,7 @@ export class SupabaseService {
         .from('registration_requests')
         .update(updateData)
         .eq('id', requestId);
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Step 3: CRITICAL FIX - Also update the user's status
       if (request?.user_id) {
@@ -4121,7 +4121,7 @@ export class SupabaseService {
         }])
         .select()
         .single();
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('Error creating registration request:', error);
@@ -4135,12 +4135,12 @@ export class SupabaseService {
    * Create a new connection between users
    */
   static async createConnection(addresseeId: string, message?: string): Promise<any> {
-    if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+    if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
     const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) {throw new Error('User not authenticated');}
 
       const { data, error } = await safeSupabase
         .from('connections')
@@ -4180,13 +4180,13 @@ export class SupabaseService {
    * Get all connections for a user (accepted connections only)
    */
   static async getUserConnections(userId?: string): Promise<any[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
     const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
       const targetUserId = userId || user?.id;
-      if (!targetUserId) return [];
+      if (!targetUserId) {return [];}
 
       // Avoid complex nested selects which can fail if relationships are not configured.
       // Instead fetch connections, then fetch related users and merge locally.
@@ -4197,18 +4197,18 @@ export class SupabaseService {
         .eq('status', 'accepted')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {throw error;}
       const rows = data || [];
 
       const userIds = Array.from(new Set(rows.flatMap((r: any) => [r.requester_id, r.addressee_id]).filter(Boolean)));
-      if (userIds.length === 0) return [];
+      if (userIds.length === 0) {return [];}
 
       const { data: usersData, error: usersError } = await safeSupabase
         .from('users')
         .select('id, name, email, type, profile')
         .in('id', userIds);
 
-      if (usersError) throw usersError;
+      if (usersError) {throw usersError;}
 
       const usersMap: Record<string, any> = (usersData || []).reduce((acc: any, u: any) => {
         acc[u.id] = this.transformUserDBToUser(u);
@@ -4230,12 +4230,12 @@ export class SupabaseService {
    * Add entity to user favorites
    */
   static async addFavorite(entityType: string, entityId: string): Promise<any> {
-    if (!this.checkSupabaseConnection()) throw new Error('Supabase not connected');
+    if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
     const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) {throw new Error('User not authenticated');}
 
       const { data, error } = await safeSupabase
         .from('user_favorites')
@@ -4276,12 +4276,12 @@ export class SupabaseService {
    * Remove entity from user favorites
    */
   static async removeFavorite(entityType: string, entityId: string): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
     const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) {throw new Error('User not authenticated');}
 
       const { error } = await safeSupabase
         .from('user_favorites')
@@ -4290,7 +4290,7 @@ export class SupabaseService {
         .eq('entity_type', entityType)
         .eq('entity_id', entityId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Create activity log
       await this.createActivityLog(
@@ -4311,13 +4311,13 @@ export class SupabaseService {
    * Get user's favorites
    */
   static async getUserFavorites(userId?: string): Promise<any[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
     const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
       const targetUserId = userId || user?.id;
-      if (!targetUserId) return [];
+      if (!targetUserId) {return [];}
 
       const { data, error } = await safeSupabase
         .from('user_favorites')
@@ -4325,7 +4325,7 @@ export class SupabaseService {
         .eq('user_id', targetUserId)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       // Log structured error for debugging
@@ -4350,13 +4350,13 @@ export class SupabaseService {
    * Get pending connection requests for user (both sent and received)
    */
   static async getPendingConnections(userId?: string): Promise<any[]> {
-    if (!this.checkSupabaseConnection()) return [];
+    if (!this.checkSupabaseConnection()) {return [];}
     const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
       const targetUserId = userId || user?.id;
-      if (!targetUserId) return [];
+      if (!targetUserId) {return [];}
 
       // Fetch both pending connections sent by user AND received by user
       const { data, error } = await safeSupabase
@@ -4366,19 +4366,19 @@ export class SupabaseService {
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {throw error;}
       const rows = data || [];
-      
+
       // Get all user IDs involved (both requesters and addressees)
       const userIds = Array.from(new Set(rows.flatMap((r: any) => [r.requester_id, r.addressee_id]).filter(Boolean)));
-      if (userIds.length === 0) return rows;
+      if (userIds.length === 0) {return rows;}
 
       const { data: usersData, error: usersError } = await safeSupabase
         .from('users')
         .select('id, name, email, type, profile')
         .in('id', userIds);
 
-      if (usersError) throw usersError;
+      if (usersError) {throw usersError;}
 
       const usersMap: Record<string, any> = (usersData || []).reduce((acc: any, u: any) => {
         acc[u.id] = this.transformUserDBToUser(u);
@@ -4400,13 +4400,13 @@ export class SupabaseService {
    * Get daily quotas for user (connections, appointments, etc.)
    */
   static async getDailyQuotas(userId?: string): Promise<any> {
-    if (!this.checkSupabaseConnection()) return null;
+    if (!this.checkSupabaseConnection()) {return null;}
     const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
       const targetUserId = userId || user?.id;
-      if (!targetUserId) return null;
+      if (!targetUserId) {return null;}
 
       // Get user to check their level/tier
       const { data: userData, error: userError } = await safeSupabase
@@ -4415,7 +4415,7 @@ export class SupabaseService {
         .eq('id', targetUserId)
         .single();
 
-      if (userError) throw userError;
+      if (userError) {throw userError;}
 
       // Get today's start time
       const today = new Date();
@@ -4428,7 +4428,7 @@ export class SupabaseService {
         .eq('user_id', targetUserId)
         .gte('created_at', today.toISOString());
 
-      if (quotaError) throw quotaError;
+      if (quotaError) {throw quotaError;}
 
       // Calculate limits based on user level
       let limits = {
@@ -4519,7 +4519,7 @@ export class SupabaseService {
     entityId?: string,
     metadata?: any
   ): Promise<void> {
-    if (!this.checkSupabaseConnection()) return;
+    if (!this.checkSupabaseConnection()) {return;}
     const safeSupabase = supabase!;
 
     try {

@@ -35,35 +35,35 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const getFileType = (file: File): 'image' | 'video' | 'audio' | 'document' => {
-    if (file.type.startsWith('image/')) return 'image';
-    if (file.type.startsWith('video/')) return 'video';
-    if (file.type.startsWith('audio/')) return 'audio';
+    if (file.type.startsWith('image/')) {return 'image';}
+    if (file.type.startsWith('video/')) {return 'video';}
+    if (file.type.startsWith('audio/')) {return 'audio';}
     return 'document';
   };
 
   const getFileIcon = (type: string) => {
-    if (type.startsWith('image/')) return <ImageIcon className="h-6 w-6" />;
-    if (type.startsWith('video/')) return <Video className="h-6 w-6" />;
-    if (type.startsWith('audio/')) return <Music className="h-6 w-6" />;
+    if (type.startsWith('image/')) {return <ImageIcon className="h-6 w-6" />;}
+    if (type.startsWith('video/')) {return <Video className="h-6 w-6" />;}
+    if (type.startsWith('audio/')) {return <Music className="h-6 w-6" />;}
     return <File className="h-6 w-6" />;
   };
 
   const validateFile = (file: File): string | null => {
     const fileType = getFileType(file);
-    
+
     if (!allowedTypes.includes(fileType)) {
       return `Type de fichier non autorisé: ${fileType}`;
     }
-    
+
     if (file.size > maxSize * 1024 * 1024) {
       return `Fichier trop volumineux (max ${maxSize}MB)`;
     }
-    
+
     return null;
   };
 
   const handleFileSelect = (selectedFiles: FileList | null) => {
-    if (!selectedFiles) return;
+    if (!selectedFiles) {return;}
 
     const newFiles: UploadFile[] = [];
     const fileArray = Array.from(selectedFiles);
@@ -75,7 +75,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
 
     for (const file of fileArray) {
       const error = validateFile(file);
-      
+
       if (error) {
         toast.error(error);
         continue;
@@ -94,7 +94,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
 
   const handleUpload = async () => {
     const filesToUpload = files.filter(f => f.status === 'pending');
-    
+
     if (filesToUpload.length === 0) {
       toast.error('Aucun fichier à uploader');
       return;
@@ -102,8 +102,8 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
 
     try {
       // Update status to uploading
-      setFiles(prev => prev.map(f => 
-        filesToUpload.find(u => u.id === f.id) 
+      setFiles(prev => prev.map(f =>
+        filesToUpload.find(u => u.id === f.id)
           ? { ...f, status: 'uploading' as const, progress: 0 }
           : f
       ));
@@ -117,19 +117,19 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
           ? { ...f, status: 'success' as const, progress: 100, url: URL.createObjectURL(f.file) }
           : f
       ));
-      
+
       toast.success('Fichiers uploadés avec succès !');
-      
+
       // Call onComplete if provided
       const urls = files.filter(f => f.status === 'success' && f.url).map(f => f.url!);
       onComplete?.(urls);
-      
+
     } catch (error) {
       console.error('Upload error:', error);
       toast.error('Erreur lors de l\'upload');
-      
-      setFiles(prev => prev.map(f => 
-        f.status === 'uploading' 
+
+      setFiles(prev => prev.map(f =>
+        f.status === 'uploading'
           ? { ...f, status: 'error' as const, error: 'Upload failed' }
           : f
       ));
@@ -157,8 +157,8 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    if (bytes < 1024) {return bytes + ' B';}
+    if (bytes < 1024 * 1024) {return (bytes / 1024).toFixed(1) + ' KB';}
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
@@ -171,8 +171,8 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
         className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-          isDragging 
-            ? 'border-blue-500 bg-blue-50' 
+          isDragging
+            ? 'border-blue-500 bg-blue-50'
             : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
         }`}
       >
@@ -211,15 +211,15 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
           </div>
 
           {files.map((uploadFile) => (
-            <div 
-              key={uploadFile.id} 
+            <div
+              key={uploadFile.id}
               className="bg-white border border-gray-200 rounded-lg p-4"
             >
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 text-gray-400">
                   {getFileIcon(uploadFile.file.type)}
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <p className="text-sm font-medium text-gray-900 truncate">
@@ -240,7 +240,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                       </button>
                     </div>
                   </div>
-                  
+
                   <p className="text-xs text-gray-500 mb-2">
                     {formatFileSize(uploadFile.file.size)}
                   </p>

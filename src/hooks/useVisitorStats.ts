@@ -29,7 +29,7 @@ export const useVisitorStats = (): VisitorStats => {
   // Récupérer les vraies données de bookmarks et messages depuis la DB
   useEffect(() => {
     const fetchRealData = async () => {
-      if (!user?.id) return;
+      if (!user?.id) {return;}
 
       try {
         // Récupérer le nombre de favoris
@@ -58,7 +58,7 @@ export const useVisitorStats = (): VisitorStats => {
   return useMemo(() => {
     // ✅ PRIORITÉ 1: Lire depuis user.profile.stats si disponible
     const profileStats = user?.profile?.stats;
-    
+
     if (profileStats && typeof profileStats === 'object') {
       // Utiliser les stats du profil si elles existent
       return {
@@ -94,7 +94,7 @@ export const useVisitorStats = (): VisitorStats => {
 
     // Calcul des connexions basé sur les exposants uniques
     const connectionsCount = uniqueExhibitors.size;
-    
+
     // Utiliser les vraies données de la DB au lieu de calculs fictifs
     const exhibitorsCount = uniqueExhibitors.size || 0;
 

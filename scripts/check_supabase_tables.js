@@ -46,7 +46,7 @@ async function checkTable(supabaseUrl, supabaseKey, table) {
   for (const t of TABLES) {
     // small delay to avoid throttling
     await new Promise(r => setTimeout(r, 150));
-    // eslint-disable-next-line no-await-in-loop
+     
     const r = await checkTable(supabaseUrl, supabaseKey, t);
     results.push(r);
   }

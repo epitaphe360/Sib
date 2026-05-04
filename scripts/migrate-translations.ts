@@ -37,21 +37,21 @@ interface Translations {
 function readOldTranslations(filePath: string): Translations {
   try {
     const content = readFileSync(filePath, 'utf-8');
-    
+
     // Extraire l'objet allTranslations
     const match = content.match(/export const allTranslations = ({[\s\S]*?});/);
     if (!match) {
       throw new Error('Impossible de trouver allTranslations');
     }
-    
+
     // Évaluer (attention : à utiliser uniquement pour migration)
     const translationsString = match[1];
-    // Cette méthode est simplifiée - dans la vraie migration, 
+    // Cette méthode est simplifiée - dans la vraie migration,
     // utilisez un parser AST comme @babel/parser
-    
+
     console.log('⚠️ Note: Ce script nécessite une implémentation complète avec un parser AST');
     console.log('📝 Pour l\'instant, faites la migration manuellement en suivant le guide');
-    
+
     return {};
   } catch (error) {
     console.error('❌ Erreur lors de la lecture:', error);
@@ -64,18 +64,18 @@ function readOldTranslations(filePath: string): Translations {
  */
 function groupTranslationsByDomain(translations: Translations): Record<string, Translations> {
   const grouped: Record<string, Translations> = {};
-  
+
   // Initialiser les groupes
   Object.keys(domains).forEach(domain => {
     grouped[domain] = { fr: {}, en: {} };
   });
   grouped['other'] = { fr: {}, en: {} };
-  
+
   // Grouper chaque clé selon son préfixe
   Object.keys(translations).forEach(lang => {
     Object.keys(translations[lang]).forEach(key => {
       let found = false;
-      
+
       for (const [domain, prefixes] of Object.entries(domains)) {
         if (prefixes.some(prefix => key.startsWith(prefix))) {
           grouped[domain][lang][key] = translations[lang][key];
@@ -83,13 +83,13 @@ function groupTranslationsByDomain(translations: Translations): Record<string, T
           break;
         }
       }
-      
+
       if (!found) {
         grouped['other'][lang][key] = translations[lang][key];
       }
     });
   });
-  
+
   return grouped;
 }
 
@@ -103,7 +103,7 @@ function generateTranslationFile(domain: string, translations: Translations): st
 
 export const ${domain}Translations = ${JSON.stringify(translations, null, 2).replace(/"([^"]+)":/g, '$1:')};
 `;
-  
+
   return content;
 }
 
@@ -112,11 +112,11 @@ export const ${domain}Translations = ${JSON.stringify(translations, null, 2).rep
  */
 function displayStats(grouped: Record<string, Translations>) {
   console.log('\n📊 Statistiques de migration:\n');
-  
+
   Object.entries(grouped).forEach(([domain, translations]) => {
     const frKeys = Object.keys(translations.fr || {}).length;
     const enKeys = Object.keys(translations.en || {}).length;
-    
+
     if (frKeys > 0 || enKeys > 0) {
       console.log(`${domain.padEnd(20)} | FR: ${String(frKeys).padStart(4)} clés | EN: ${String(enKeys).padStart(4)} clés`);
     }

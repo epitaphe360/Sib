@@ -20,7 +20,7 @@ export interface FilterState {
 
 /**
  * Store de filtrage - Gestion centralisée des filtres de références
- * 
+ *
  * Permet :
  * - Filtrage par secteur
  * - Recherche textuelle

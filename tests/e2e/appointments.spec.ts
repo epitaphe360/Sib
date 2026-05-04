@@ -85,7 +85,7 @@ async function loginWithRetry(page: Page, email: string): Promise<boolean> {
 
 async function mockSlotsRoute(page: Page, slots = buildMockSlots(3)) {
   await page.route('**/rest/v1/appointment_slots*', route => {
-    if (route.request().method() !== 'GET') return route.continue();
+    if (route.request().method() !== 'GET') {return route.continue();}
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -106,7 +106,7 @@ async function mockQuota(page: Page, available = true) {
 
 async function mockAppointmentsRoute(page: Page, appointments = [MOCK_APPOINTMENT]) {
   await page.route('**/rest/v1/b2b_appointments*', route => {
-    if (route.request().method() !== 'GET') return route.continue();
+    if (route.request().method() !== 'GET') {return route.continue();}
     route.fulfill({
       status: 200,
       contentType: 'application/json',

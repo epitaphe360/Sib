@@ -38,7 +38,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
         .order('created_at', { ascending: false })
         .range(0, 49);
 
-      if (error) throw error;
+      if (error) {throw error;}
       setImages(data || []);
     } catch (error) {
       console.error('Error loading images:', error);
@@ -50,7 +50,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {return;}
 
     setUploading(true);
     const uploadedImages: Image[] = [];
@@ -74,7 +74,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
           .from('site-images')
           .upload(fileName, file);
 
-        if (uploadError) throw uploadError;
+        if (uploadError) {throw uploadError;}
 
         // Get public URL
         const { data: urlData } = supabase.storage
@@ -93,7 +93,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
           .select()
           .single();
 
-        if (dbError) throw dbError;
+        if (dbError) {throw dbError;}
         uploadedImages.push(imageData);
       }
 
@@ -108,7 +108,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
   };
 
   const handleDelete = async (image: Image) => {
-    if (!confirm('Supprimer cette image ?')) return;
+    if (!confirm('Supprimer cette image ?')) {return;}
 
     try {
       // Delete from storage
@@ -116,7 +116,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
         .from('site-images')
         .remove([image.storage_path]);
 
-      if (storageError) throw storageError;
+      if (storageError) {throw storageError;}
 
       // Delete from database
       const { error: dbError } = await supabase
@@ -124,7 +124,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
         .delete()
         .eq('id', image.id);
 
-      if (dbError) throw dbError;
+      if (dbError) {throw dbError;}
 
       setImages(images.filter(img => img.id !== image.id));
       toast.success('Image supprimée');
@@ -139,8 +139,8 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
   );
 
   const formatSize = (bytes: number) => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    if (bytes < 1024) {return bytes + ' B';}
+    if (bytes < 1024 * 1024) {return (bytes / 1024).toFixed(1) + ' KB';}
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 

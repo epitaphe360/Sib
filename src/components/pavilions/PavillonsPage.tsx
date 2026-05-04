@@ -328,7 +328,7 @@ const pavilions: Pavilion[] = [
 export default function PavillonsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  
+
   // Handler functions for pavilion actions
   const handleVirtualTour = (pavilion: Pavilion) => {
     navigate(`${ROUTES.HALL_MAP}?pavilion=${encodeURIComponent(pavilion.id)}`);
@@ -379,7 +379,7 @@ export default function PavillonsPage() {
           .select('sector')
           .eq('verified', true);
 
-        if (error || !data) return;
+        if (error || !data) {return;}
 
         const countByPavilion: Record<string, number> = {
           digitalization: 0,
@@ -577,7 +577,7 @@ export default function PavillonsPage() {
                             <Calendar className="h-5 w-5 mr-2 text-indigo-600" />
                             Programmes de Démonstration ({pavilion.demoPrograms.length})
                           </h4>
-                          
+
                           <div className="space-y-4">
                             {pavilion.demoPrograms.map((program) => {
                               const DemoIcon = getDemoTypeIcon(program.type);
@@ -587,7 +587,7 @@ export default function PavillonsPage() {
                                     <div className="bg-indigo-100 p-2 rounded-lg">
                                       <DemoIcon className="h-5 w-5 text-indigo-600" />
                                     </div>
-                                    
+
                                     <div className="flex-1">
                                       <div className="flex items-start justify-between mb-2">
                                         <div>
@@ -607,7 +607,7 @@ export default function PavillonsPage() {
                                             </div>
                                           </div>
                                         </div>
-                                        
+
                                         <div className="text-right">
                                           <Badge className={`${getDemoTypeColor(program.type)} text-xs`}>
                                             {getDemoTypeLabel(program.type)}
@@ -617,9 +617,9 @@ export default function PavillonsPage() {
                                           </div>
                                         </div>
                                       </div>
-                                      
+
                                       <p className="text-sm text-gray-600 mb-3">{program.description}</p>
-                                      
+
                                       <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-2">
                                           <User className="h-4 w-4 text-gray-400" />
@@ -627,7 +627,7 @@ export default function PavillonsPage() {
                                           <span className="text-sm text-gray-500">•</span>
                                           <span className="text-sm text-gray-700">{program.company}</span>
                                         </div>
-                                        
+
                                         <div className="flex space-x-2">
                                           {program.tags.map((tag) => (
                                             <Badge key={tag} variant="default" size="sm" className="text-xs">
