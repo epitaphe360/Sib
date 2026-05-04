@@ -22,8 +22,14 @@ export const supportedLanguages: Language[] = [
     code: 'en',
     name: 'English',
     nativeName: 'English',
-    flag: '🇬🇧'
-  }
+    flag: '🇬🇧',
+  },
+  {
+    code: 'ar',
+    name: 'Arabic',
+    nativeName: 'العربية',
+    flag: '🇸🇦',
+  },
 ];
 
 interface LanguageState {
@@ -78,7 +84,7 @@ export const useLanguageStore = create<LanguageState>()(
           }
 
           // Mettre à jour la direction du texte pour l'arabe
-          document.documentElement.dir = 'ltr';
+          document.documentElement.dir = languageCode === 'ar' ? 'rtl' : 'ltr';
           document.documentElement.lang = languageCode;
           
           // Mettre à jour le titre de la page

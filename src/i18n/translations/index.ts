@@ -71,7 +71,7 @@ export const allTranslations = mergeTranslations(
 /**
  * Langues supportées
  */
-export const supportedLanguages = ['fr', 'en'] as const;
+export const supportedLanguages = ['fr', 'en', 'ar'] as const;
 export type SupportedLanguage = typeof supportedLanguages[number];
 
 /**
