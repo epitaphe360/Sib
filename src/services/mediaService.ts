@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Service pour gérer les contenus médias
  * Webinaires, Podcasts, Capsules vidéo, Live Studio, etc.
  * Updated: 2024-12-22 - Force redeploy
@@ -467,7 +467,7 @@ export class MediaService {
   }
 
   /**
-   * Récupérer les médias d'un partenaire
+   * Récupérer les médias d'un sponsor
    */
   static async getPartnerMedia(partnerId: string): Promise<MediaContent[]> {
     try {

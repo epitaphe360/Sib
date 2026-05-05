@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Calendar, MapPin, Users, Building2, Home,
@@ -37,7 +37,7 @@ const SALON_DATA = {
     ],
     highlights: [
       'Plus de 180 promoteurs et agences immobilières',
-      'Zone financement & banques partenaires',
+      'Zone financement & banques sponsors',
       'Espaces logements sociaux et moyen standing',
       'Village startup PropTech & FinTech',
     ],
@@ -372,7 +372,7 @@ export default function SalonPage({ salonId }: SalonPageProps) {
                   { level: 1, label: 'Visiteur Standard', icon: Users, color: '#4598D1' },
                   { level: 2, label: 'Visiteur VIP', icon: Star, color: '#FFD700' },
                   { level: 3, label: 'Exposant', icon: Award, color: '#EB9A44' },
-                  { level: 4, label: 'Partenaire', icon: Shield, color: '#4CAF50' },
+                  { level: 4, label: 'Sponsor', icon: Shield, color: '#4CAF50' },
                 ].map((lvl) => (
                   <div
                     key={lvl.level}

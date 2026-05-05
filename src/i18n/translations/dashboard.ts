@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour les tableaux de bord
  */
 
@@ -51,9 +51,9 @@ export const dashboardTranslations = {
     'dashboard.exhibitor.manage_schedule': 'Gérer l\'agenda',
     'dashboard.exhibitor.view_analytics': 'Voir les analyses',
 
-    // Dashboard Partenaire
-    'dashboard.partner.title': 'Tableau de bord Partenaire',
-    'dashboard.partner.welcome': 'Bienvenue sur votre espace partenaire',
+    // Dashboard Sponsor
+    'dashboard.partner.title': 'Tableau de bord Sponsor',
+    'dashboard.partner.welcome': 'Bienvenue sur votre espace sponsor',
     'dashboard.partner.visibility': 'Visibilité',
     'dashboard.partner.impressions': 'Impressions',
     'dashboard.partner.clicks': 'Clics',
@@ -71,7 +71,7 @@ export const dashboardTranslations = {
     'dashboard.admin.total_users': 'Utilisateurs totaux',
     'dashboard.admin.exhibitors': 'Exposants',
     'dashboard.admin.visitors': 'Visiteurs',
-    'dashboard.admin.partners': 'Partenaires',
+    'dashboard.admin.partners': 'Sponsors',
     'dashboard.admin.registrations': 'Inscriptions',
     'dashboard.admin.today': 'Aujourd\'hui',
     'dashboard.admin.this_week': 'Cette semaine',

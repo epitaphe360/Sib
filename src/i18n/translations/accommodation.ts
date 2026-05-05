@@ -1,13 +1,13 @@
-/**
+﻿/**
  * Traductions pour la page Hébergement
  */
 
 export const accommodationTranslations = {
   fr: {
-    'accommodation.title': 'Hébergement & Hôtels Partenaires',
+    'accommodation.title': 'Hébergement & Hôtels Sponsors',
     'accommodation.subtitle': 'Profitez de tarifs préférentiels négociés exclusivement pour les participants du SIB',
-    'accommodation.badge': 'Hôtels Partenaires',
-    'accommodation.hotels_partners': 'Hôtels Partenaires',
+    'accommodation.badge': 'Hôtels Sponsors',
+    'accommodation.hotels_partners': 'Hôtels Sponsors',
     'accommodation.vip_discount': 'Reduction VIP',
     'accommodation.april_dates': 'Novembre 2026',
     'accommodation.vip_advantage_title': 'Avantages VIP & Premium',
@@ -15,7 +15,7 @@ export const accommodationTranslations = {
     'accommodation.vip_benefit_1': 'Tarifs réduits jusqu\'à -20% sur le tarif public',
     'accommodation.vip_benefit_2': 'Surclassement selon disponibilité',
     'accommodation.vip_benefit_3': 'Navette gratuite vers le lieu du salon',
-    'accommodation.featured_partner': 'Partenaire Premium',
+    'accommodation.featured_partner': 'Sponsor Premium',
     'accommodation.standard_rate': 'Tarif Standard',
     'accommodation.vip_rate': 'Tarif VIP SIB',
     'accommodation.per_night': 'par nuit',

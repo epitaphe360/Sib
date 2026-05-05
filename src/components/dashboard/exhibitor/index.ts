@@ -10,3 +10,5 @@ export { ExhibitorQRModal } from './ExhibitorQRModal';
 export { ExhibitorRejectModal } from './ExhibitorRejectModal';
 export { ExhibitorGenericModal } from './ExhibitorGenericModal';
 export { default as ExhibitorProductsSection } from './ExhibitorProductsSection';
+export { ExhibitorProgrammeSection } from './ExhibitorProgrammeSection';
+export { ExhibitorScannedVisitors } from './ExhibitorScannedVisitors';

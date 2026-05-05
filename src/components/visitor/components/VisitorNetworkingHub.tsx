@@ -1,4 +1,4 @@
-import { Calendar, Users, Clock, MapPin, X, Award, Download, CalendarPlus } from 'lucide-react';
+﻿import { Calendar, Users, Clock, MapPin, X, Award, Download, CalendarPlus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '../../ui/Button';
@@ -231,7 +231,7 @@ export function VisitorNetworkingHub({
                                   </div>
                                   <div className="flex gap-3">
                                     {/* Le visiteur ne peut PAS auto-confirmer sa propre demande.
-                                        Seul l'exposant/partenaire peut accepter ou refuser.
+                                        Seul l'exposant/sponsor peut accepter ou refuser.
                                         Le visiteur peut uniquement annuler sa demande. */}
                                     <Button variant="destructive" onClick={() => handleReject(app.id)}
                                       onKeyDown={(e) => handleKeyboardNavigation(e, { onEnter: () => handleReject(app.id), onSpace: () => handleReject(app.id) })}

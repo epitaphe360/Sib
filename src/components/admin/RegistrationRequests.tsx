@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -34,11 +34,7 @@ export default function RegistrationRequests() {
   const [rejectionReason, setRejectionReason] = useState('');
   const { user } = useAuthStore();
 
-  useEffect(() => {
-    fetchRequests();
-  }, [filter]);
-
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await SupabaseService.getRegistrationRequests(
@@ -51,7 +47,11 @@ export default function RegistrationRequests() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
 
   const handleApprove = async (request: RegistrationRequest) => {
     if (!user) {return;}
@@ -142,7 +142,7 @@ export default function RegistrationRequests() {
   const getTypeBadge = (type: string) => {
     const labels = {
       exhibitor: 'Exposant',
-      partner: 'Partenaire',
+      partner: 'Sponsor',
       visitor: 'Visiteur'
     };
     return <Badge variant="info">{labels[type as keyof typeof labels] || type}</Badge>;
@@ -156,7 +156,7 @@ export default function RegistrationRequests() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Demandes d'Inscription</h2>
           <p className="text-gray-600 mt-1">
-            Gérez les demandes d'inscription des exposants et partenaires
+            Gérez les demandes d'inscription des exposants et sponsors
           </p>
         </div>
         {pendingCount > 0 && (

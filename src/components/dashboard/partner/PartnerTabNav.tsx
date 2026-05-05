@@ -1,20 +1,21 @@
-import { Calendar, TrendingUp, Edit, LayoutDashboard } from 'lucide-react';
+import { Calendar, TrendingUp, Edit, LayoutDashboard, Package } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 
-type Tab = 'overview' | 'profile' | 'networking' | 'analytics';
+export type PartnerTab = 'overview' | 'profile' | 'networking' | 'analytics' | 'services';
 
 interface PartnerTabNavProps {
-  activeTab: Tab;
-  onTabChange: (tab: Tab) => void;
+  activeTab: PartnerTab;
+  onTabChange: (tab: PartnerTab) => void;
 }
 
 export function PartnerTabNav({ activeTab, onTabChange }: PartnerTabNavProps) {
   const { t } = useTranslation();
   const tabs = [
-    { id: 'overview' as Tab, label: t('partner.tabs.overview'), icon: LayoutDashboard },
-    { id: 'profile' as Tab, label: t('partner.tabs.profile'), icon: Edit },
-    { id: 'networking' as Tab, label: t('partner.tabs.networking'), icon: Calendar },
-    { id: 'analytics' as Tab, label: t('partner.tabs.analytics'), icon: TrendingUp },
+    { id: 'overview' as PartnerTab, label: t('partner.tabs.overview'), icon: LayoutDashboard },
+    { id: 'profile' as PartnerTab, label: t('partner.tabs.profile'), icon: Edit },
+    { id: 'networking' as PartnerTab, label: t('partner.tabs.networking'), icon: Calendar },
+    { id: 'analytics' as PartnerTab, label: t('partner.tabs.analytics'), icon: TrendingUp },
+    { id: 'services' as PartnerTab, label: 'Services SIB', icon: Package },
   ];
   return (
     <div className="bg-white p-1.5 rounded-2xl shadow-md border border-gray-100 mb-8 flex flex-col md:flex-row gap-1 w-full">

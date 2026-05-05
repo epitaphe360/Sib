@@ -1,4 +1,4 @@
-import { Card } from '../components/ui/Card';
+﻿import { Card } from '../components/ui/Card';
 import { useTranslation } from '../hooks/useTranslation';
 
 export default function TermsPage() {
@@ -31,7 +31,7 @@ export default function TermsPage() {
             <ul className="list-disc pl-6 text-gray-700 mb-6">
               <li>Exposants et visiteurs du Salon International du Bâtiment</li>
               <li>Professionnels du secteur du bâtiment et de la construction</li>
-              <li>Partenaires et prestataires de services</li>
+              <li>Sponsors et prestataires de services</li>
             </ul>
 
             <h2 className="text-2xl font-bold text-gray-900 mb-6">3. Conditions d'Inscription</h2>

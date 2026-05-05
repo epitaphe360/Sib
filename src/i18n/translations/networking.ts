@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour le networking et rendez-vous B2B
  */
 
@@ -15,7 +15,7 @@ export const networkingTranslations = {
     'networking.error.search': 'Erreur lors de la recherche',
     'networking.error.profile_not_found': 'Profil utilisateur non trouvé',
     'networking.error.login_required': 'Connexion requise pour prendre rendez-vous',
-    'networking.error.duplicate_appointment': 'Vous avez déjà un rendez-vous avec cet exposant/partenaire',
+    'networking.error.duplicate_appointment': 'Vous avez déjà un rendez-vous avec cet exposant/sponsor',
     'networking.error.no_exhibitor': 'Aucun exposant sélectionné',
     'networking.error.no_slot': 'Veuillez sélectionner un créneau horaire',
     'networking.error.slot_taken': 'Ce créneau vient d\'être réservé par quelqu\'un d\'autre. Veuillez en choisir un autre.',

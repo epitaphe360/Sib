@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour la gestion des badges
  */
 
@@ -56,7 +56,7 @@ export const badgeTranslations = {
     'badge.type.visitor': 'Visiteur',
     'badge.type.visitor_vip': 'Visiteur VIP',
     'badge.type.exhibitor': 'Exposant',
-    'badge.type.partner': 'Partenaire',
+    'badge.type.partner': 'Sponsor',
     'badge.type.staff': 'Équipe',
     'badge.type.press': 'Presse',
     'badge.type.speaker': 'Intervenant',

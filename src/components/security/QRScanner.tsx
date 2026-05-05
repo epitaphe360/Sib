@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -21,6 +21,7 @@ import {
   ACCESS_LEVELS,
   QRCodePayload
 } from '../../services/qrCodeService';
+import { getZones, ControlZone } from '../../services/zonesService';
 
 interface ScanResult {
   valid: boolean;
@@ -35,20 +36,22 @@ export default function QRScanner() {
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [selectedZone, setSelectedZone] = useState<string>('exhibition_hall');
   const [recentScans, setRecentScans] = useState<ScanResult[]>([]);
+  const [zones, setZones] = useState<ControlZone[]>([]);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const resultTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Charger les zones depuis le service (localStorage)
+  useEffect(() => {
+    const loadedZones = getZones();
+    setZones(loadedZones);
+    // Si la zone sélectionnée n'existe plus, prendre la première
+    if (!loadedZones.find(z => z.id === selectedZone)) {
+      setSelectedZone(loadedZones[0]?.id ?? '');
+    }
+  }, []);
+
   // Zones disponibles pour la sélection
-  const zones = [
-    { id: 'public', name: 'Zone Publique', icon: '🌐' },
-    { id: 'exhibition_hall', name: 'Hall d\'Exposition', icon: '🏛️' },
-    { id: 'vip_lounge', name: 'Salon VIP', icon: '⭐' },
-    { id: 'networking_area', name: 'Zone Networking', icon: '🤝' },
-    { id: 'backstage', name: 'Backstage', icon: '🎭' },
-    { id: 'partner_area', name: 'Zone Partenaires', icon: '💼' },
-    { id: 'exhibitor_area', name: 'Zone Exposants', icon: '🏢' },
-    { id: 'technical_area', name: 'Zone Technique', icon: '🔧' }
-  ];
+  const zonesLegacy = zones.length > 0 ? zones : [];
 
   // Démarrer le scanner
   const startScanning = async () => {
@@ -195,7 +198,7 @@ export default function QRScanner() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               disabled={isScanning}
             >
-              {zones.map((zone) => (
+              {zonesLegacy.map((zone) => (
                 <option key={zone.id} value={zone.id}>
                   {zone.icon} {zone.name}
                 </option>

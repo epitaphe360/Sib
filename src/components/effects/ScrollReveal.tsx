@@ -33,7 +33,7 @@ export function ScrollReveal({
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el) {return;}
 
     const targets = staggerChildren ? Array.from(el.children) : [el];
 

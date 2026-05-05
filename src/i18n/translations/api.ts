@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour la documentation API
  */
 
@@ -50,8 +50,8 @@ export const apiTranslations = {
     'api.endpoints.exhibitors_desc': 'Liste et détails des exposants',
     'api.endpoints.events': 'Événements',
     'api.endpoints.events_desc': 'Conférences, ateliers et programmes',
-    'api.endpoints.partners': 'Partenaires',
-    'api.endpoints.partners_desc': 'Organisations partenaires',
+    'api.endpoints.partners': 'Sponsors',
+    'api.endpoints.partners_desc': 'Organisations sponsors',
     'api.endpoints.media': 'Médias',
     'api.endpoints.media_desc': 'Webinaires, podcasts, vidéos',
     'api.endpoints.appointments': 'Rendez-vous',

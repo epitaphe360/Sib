@@ -1,7 +1,6 @@
 import { useState, memo, useMemo, useEffect } from 'react';
 import {
   Calendar,
-  Clock,
   MapPin,
   Users,
   Mic2,
@@ -17,12 +16,16 @@ import {
   Shield,
   GraduationCap,
   Waves,
-  Target
+  Target,
+  CheckCircle2,
+  Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useProgrammeStore, type SessionType, type ProgrammeInfo, type DayProgram } from '../../store/programmeStore';
 import { getPageContent } from '../../lib/pageContent';
+import { useProgrammeRegistration } from '../../hooks/useProgrammeRegistration';
+import { useAuthStore } from '../../store/authStore';
 
 /* ═══════════════════════════════════════════════════ */
 /*  Static icon mapping for axes                       */
@@ -66,12 +69,56 @@ const typeLabelKeys: Record<SessionType, string> = {
 
 const dayColors = ['from-blue-600 to-blue-800', 'from-indigo-600 to-purple-700', 'from-emerald-600 to-teal-700', 'from-orange-600 to-red-700', 'from-pink-600 to-fuchsia-700'];
 
+/* ─── Session Registration Button ─── */
+const SessionRegisterButton: React.FC<Readonly<{ sessionId: string }>> = ({ sessionId }) => {
+  const { isRegistered, count, isLoading, register, unregister } = useProgrammeRegistration(sessionId);
+
+  const handleClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isRegistered) {
+      await unregister();
+    } else {
+      await register();
+    }
+  };
+
+  if (isRegistered) {
+    return (
+      <button
+        onClick={handleClick}
+        disabled={isLoading}
+        className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-red-500/15 hover:text-red-400 hover:border-red-500/30 transition-colors disabled:opacity-50"
+        title="Cliquer pour se désinscrire"
+      >
+        {isLoading
+          ? <Loader2 className="w-3 h-3 animate-spin" />
+          : <CheckCircle2 className="w-3 h-3" />}
+        Inscrit ({count})
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={isLoading}
+      className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-[#C9A84C]/10 text-[#E7D192] border border-[#C9A84C]/30 hover:bg-[#C9A84C]/20 transition-colors disabled:opacity-50"
+    >
+      {isLoading
+        ? <Loader2 className="w-3 h-3 animate-spin" />
+        : <Calendar className="w-3 h-3" />}
+      S'inscrire {count > 0 && `(${count})`}
+    </button>
+  );
+};
+
 /* ─── Session Card ─── */
 const SessionCard: React.FC<{
-  session: { time: string; title: string; type: SessionType; speakers: string[]; description: string };
+  session: { id: string; time: string; title: string; type: SessionType; speakers: string[]; description: string };
   index: number;
   typeLabel: string;
-}> = ({ session, index, typeLabel }) => {
+  isLoggedIn: boolean;
+}> = ({ session, index, typeLabel, isLoggedIn }) => {
   const [open, setOpen] = useState(false);
   const style = typeStyles[session.type];
   const Icon = typeIcons[session.type];
@@ -135,6 +182,11 @@ const SessionCard: React.FC<{
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Bouton inscription — visible pour tous les types de profil connectés */}
+        {isLoggedIn && session.type !== 'pause' && (
+          <SessionRegisterButton sessionId={session.id} />
+        )}
       </div>
     </motion.div>
   );
@@ -146,6 +198,7 @@ const SessionCard: React.FC<{
 
 export default memo(function EventsPage() {
   const { t } = useTranslation();
+  const { user } = useAuthStore();
   const { days: storeDays, info: storeInfo } = useProgrammeStore();
   const [activeDay, setActiveDay] = useState(0);
   // Données publiées depuis Supabase (override le store local si disponibles)
@@ -289,6 +342,7 @@ export default memo(function EventsPage() {
                     session={session}
                     index={i}
                     typeLabel={typeLabels[session.type]}
+                    isLoggedIn={!!user}
                   />
                 ))}
               </div>

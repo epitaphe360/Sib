@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslation } from '../hooks/useTranslation';
@@ -203,7 +203,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                         </div>
                         <p className="text-sm text-gray-600">
                           {user.type === 'visitor' ? `Pass ${user.profile.passType || 'gratuit'}` :
-                           user.type === 'partner' ? 'Partenaire' :
+                           user.type === 'partner' ? 'Sponsor' :
                            user.type === 'exhibitor' ? 'Exposant' : 'Administrateur'}
                         </p>
                       </div>

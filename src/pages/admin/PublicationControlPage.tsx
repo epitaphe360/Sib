@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { motion } from 'framer-motion';
@@ -54,13 +54,13 @@ export default function PublicationControlPage() {
         throw new Error('Supabase client not initialized');
       }
       // Load partners
-      console.log('🔍  [PublicationControl] Chargement des partenaires...');
+      console.log('🔍  [PublicationControl] Chargement des sponsors...');
       const { data: partnersData, error: partnersError } = await supabase
         .from('partners')
         .select('id, company_name, partnership_level, is_published, contact_info')
         .order('company_name');
 
-      console.log('📊 [PublicationControl] Partenaires reçus:', {
+      console.log('📊 [PublicationControl] Sponsors reçus:', {
         count: partnersData?.length || 0,
         error: partnersError?.message,
         data: partnersData
@@ -117,7 +117,7 @@ export default function PublicationControlPage() {
       );
 
       toast.success(
-        !currentStatus ? 'Partenaire publié ✅' : 'Partenaire masqué 🔒'
+        !currentStatus ? 'Sponsor publié ✅' : 'Sponsor masqué 🔒'
       );
     } catch (error) {
       console.error('Error toggling partner:', error);
@@ -157,7 +157,7 @@ export default function PublicationControlPage() {
   }
 
   async function toggleAllPartners(publish: boolean) {
-    if (!confirm(`Êtes-vous sûr de vouloir ${publish ? 'PUBLIER' : 'MASQUER'} TOUS les partenaires ?`)) {
+    if (!confirm(`Êtes-vous sûr de vouloir ${publish ? 'PUBLIER' : 'MASQUER'} TOUS les sponsors ?`)) {
       return;
     }
 
@@ -174,12 +174,12 @@ export default function PublicationControlPage() {
       if (fetchError) {throw fetchError;}
 
       if (!allPartners || allPartners.length === 0) {
-        toast.info('Aucun partenaire à modifier');
+        toast.info('Aucun sponsor à modifier');
         setProcessing(null);
         return;
       }
 
-      console.log(`🔄 Mise à jour de ${allPartners.length} partenaires...`);
+      console.log(`🔄 Mise à jour de ${allPartners.length} sponsors...`);
 
       // Update using a valid condition that matches all records
       const { error } = await supabase
@@ -193,8 +193,8 @@ export default function PublicationControlPage() {
       await loadData();
       toast.success(
         publish
-          ? `✅ ${allPartners.length} partenaires sont maintenant publiés`
-          : `🔒 ${allPartners.length} partenaires sont maintenant masqués`
+          ? `✅ ${allPartners.length} sponsors sont maintenant publiés`
+          : `🔒 ${allPartners.length} sponsors sont maintenant masqués`
       );
     } catch (error) {
       console.error('Error toggling all partners:', error);
@@ -300,7 +300,7 @@ export default function PublicationControlPage() {
             Contrôle de Publication
           </h1>
           <p className="text-gray-600">
-            Gérez la visibilité des partenaires et exposants sur le site public
+            Gérez la visibilité des sponsors et exposants sur le site public
           </p>
         </div>
 
@@ -315,7 +315,7 @@ export default function PublicationControlPage() {
             }`}
           >
             <Building2 className="h-5 w-5 mr-2" />
-            Partenaires ({partnersStats.total})
+            Sponsors ({partnersStats.total})
           </button>
           <button
             onClick={() => setActiveTab('exhibitors')}
@@ -389,7 +389,7 @@ export default function PublicationControlPage() {
                   ⚠ Activer ou désactiver <span className="font-bold text-purple-700">TOUS LES {partnersStats.total} PARTENAIRES</span> en un seul clic
                 </p>
                 <p className="text-xs text-gray-500 ml-12 mt-1">
-                  ⚠️   Cette action affecte UNIQUEMENT les partenaires (pas les exposants)
+                  ⚠️   Cette action affecte UNIQUEMENT les sponsors (pas les exposants)
                 </p>
               </div>
               <div className="flex space-x-3">
@@ -435,7 +435,7 @@ export default function PublicationControlPage() {
                   ⚠ Activer ou désactiver <span className="font-bold text-emerald-700">TOUS LES {exhibitorsStats.total} EXPOSANTS</span> en un seul clic
                 </p>
                 <p className="text-xs text-gray-500 ml-12 mt-1">
-                  ⚠️   Cette action affecte UNIQUEMENT les exposants (pas les partenaires)
+                  ⚠️   Cette action affecte UNIQUEMENT les exposants (pas les sponsors)
                 </p>
               </div>
               <div className="flex space-x-3">
@@ -537,7 +537,7 @@ export default function PublicationControlPage() {
             {filteredPartners.length === 0 && (
               <Card className="p-8 text-center">
                 <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600">Aucun partenaire trouvé</p>
+                <p className="text-gray-600">Aucun sponsor trouvé</p>
               </Card>
             )}
           </div>

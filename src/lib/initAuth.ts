@@ -16,22 +16,66 @@ export function isAuthInitialized(): boolean {
  * Initialize auth state from Supabase session
  * Call this at app startup to restore user session
  */
+async function verifyAdminProfile(userProfile: Awaited<ReturnType<typeof SupabaseService.getUserByEmail>>) {
+  if (userProfile?.type !== 'admin') { return true; }
+  const { data: dbUser, error: dbError } = await supabase
+    .from('users')
+    .select('type, email')
+    .eq('id', userProfile.id)
+    .single();
+  if (dbError || !dbUser || (dbUser as any).type !== 'admin') {
+    console.error('[AUTH] Tentative de connexion admin non autorisee!');
+    return false;
+  }
+  return true;
+}
+
+function cleanupCorruptedStorage() {
+  const storedAuth = localStorage.getItem('sib-auth-storage');
+  if (!storedAuth) { return; }
+  try {
+    JSON.parse(storedAuth);
+  } catch {
+    console.error('[AUTH] localStorage corrompu, nettoyage...');
+    localStorage.removeItem('sib-auth-storage');
+  }
+}
+
+function handleNoActiveSession() {
+  const storedUser = useAuthStore.getState().user;
+  const createdAtDate = storedUser?.createdAt ? new Date(storedUser.createdAt) : null;
+  const createdAt = createdAtDate && !Number.isNaN(createdAtDate.getTime()) ? createdAtDate.getTime() : 0;
+  const wasJustCreated = (Date.now() - createdAt) < 5000;
+  if (useAuthStore.getState().isAuthenticated && !wasJustCreated) {
+    console.warn('[AUTH] Session invalide ou expiree detectee au demarrage, nettoyage du store...');
+    useAuthStore.getState().logout();
+  }
+}
+
+async function restoreUserProfile(email: string) {
+  const userProfile = await SupabaseService.getUserByEmail(email);
+  if (!userProfile) {
+    console.warn('[AUTH] Profil utilisateur introuvable, deconnexion...');
+    useAuthStore.getState().logout();
+    return;
+  }
+  const adminOk = await verifyAdminProfile(userProfile);
+  if (!adminOk) {
+    useAuthStore.getState().logout();
+    return;
+  }
+  useAuthStore.setState({
+    user: userProfile,
+    token: userProfile.id,
+    isAuthenticated: true,
+    isLoading: false
+  });
+}
+
 export async function initializeAuth() {
   try {
-    // ✅ CRITICAL: Set isLoading pendant l'initialisation
     useAuthStore.setState({ isLoading: true });
-
-    // CRITICAL: Verifier et nettoyer le localStorage si donnees invalides
-    const storedAuth = localStorage.getItem('sib-auth-storage');
-    if (storedAuth) {
-      try {
-        // Vérifie que le JSON est valide
-        JSON.parse(storedAuth);
-      } catch (e) {
-        console.error('[AUTH] localStorage corrompu, nettoyage...');
-        localStorage.removeItem('sib-auth-storage');
-      }
-    }
+    cleanupCorruptedStorage();
 
     if (!supabase) {
       console.warn('[AUTH] Supabase non configure');
@@ -40,12 +84,10 @@ export async function initializeAuth() {
       return;
     }
 
-    // Check if there is an active Supabase session
     const { data: { session }, error } = await supabase.auth.getSession();
 
     if (error) {
       console.error('[AUTH] Erreur verification session:', error);
-      // En cas erreur, nettoyer le store pour eviter les sessions fantomes
       if (useAuthStore.getState().isAuthenticated) {
         console.warn('[AUTH] Erreur session Supabase, nettoyage du store...');
         useAuthStore.getState().logout();
@@ -55,75 +97,17 @@ export async function initializeAuth() {
       return;
     }
 
-    if (!session?.user) {
-      // No active session
-      // CRITICAL FIX: If store thinks we are logged in, but Supabase says no, we must logout
-      // This prevents ghost sessions where localStorage has data but the token is invalid
-      // EXCEPTION: Don't logout if user was just created (within last 5 seconds)
-      const storedUser = useAuthStore.getState().user;
-      const createdAtDate = storedUser?.createdAt ? new Date(storedUser.createdAt) : null;
-      const createdAt = createdAtDate && !isNaN(createdAtDate.getTime()) ? createdAtDate.getTime() : 0;
-      const now = Date.now();
-      const wasJustCreated = (now - createdAt) < 5000; // Within 5 seconds
-
-      if (useAuthStore.getState().isAuthenticated && !wasJustCreated) {
-        console.warn('[AUTH] Session invalide ou expiree detectee au demarrage, nettoyage du store...');
-        useAuthStore.getState().logout();
-      } else if (wasJustCreated) {
-        console.log('[AUTH] Utilisateur récemment créé, pas de déconnexion');
-      }
-      console.log('[AUTH] Aucune session active');
+    if (!session?.user?.email) {
+      handleNoActiveSession();
       authInitialized = true;
       useAuthStore.setState({ isLoading: false });
       return;
     }
 
-    // Get full user profile from database
-    if (!session.user.email) {
-      console.warn('[AUTH] Session sans email, impossible de récupérer le profil');
-      authInitialized = true;
-      useAuthStore.setState({ isLoading: false });
-      return;
-    }
-
-    const userProfile = await SupabaseService.getUserByEmail(session.user.email);
-
-    if (userProfile) {
-      // CRITICAL: Verification supplementaire pour les admins
-      if (userProfile.type === 'admin') {
-        // Verifier que utilisateur est reellement admin dans la DB
-        const { data: dbUser, error: dbError } = await supabase
-          .from('users')
-          .select('type, email')
-          .eq('id', userProfile.id)
-          .single();
-
-        if (dbError || !dbUser || (dbUser as any).type !== 'admin') {
-          console.error('[AUTH] Tentative de connexion admin non autorisee!');
-          useAuthStore.getState().logout();
-          authInitialized = true;
-          useAuthStore.setState({ isLoading: false });
-          return;
-        }
-      }
-
-      // Restore auth state in store
-      console.log('✅ [AUTH] Utilisateur restauré:', userProfile.name);
-      useAuthStore.setState({
-        user: userProfile,
-        token: userProfile.id,
-        isAuthenticated: true,
-        isLoading: false
-      });
-    } else {
-      console.warn('[AUTH] Profil utilisateur introuvable, deconnexion...');
-      useAuthStore.getState().logout();
-    }
-
+    await restoreUserProfile(session.user.email);
     authInitialized = true;
   } catch (error) {
     console.error('[AUTH] Erreur initialisation auth:', error);
-    // En cas erreur fatale, nettoyer le store
     useAuthStore.getState().logout();
     authInitialized = true;
     useAuthStore.setState({ isLoading: false });

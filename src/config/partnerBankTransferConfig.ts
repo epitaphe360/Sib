@@ -1,5 +1,5 @@
-/**
- * Informations bancaires pour les virements Partenaires et Exposants
+﻿/**
+ * Informations bancaires pour les virements Sponsors et Exposants
  * Configuration des montants selon le tier de sponsoring SIB 2026
  * Silver (200K MAD) / Gold (350K MAD) / Officiel (500K MAD)
  */
@@ -37,8 +37,8 @@ export const PARTNER_BANK_TRANSFER_INFO = {
       amount: 500000,
       currency: 'MAD' as const,
       tier: 'official_sponsor' as PartnerTier,
-      displayName: 'Sponsor Officiel',
-      description: 'Visibilité maximale — Partenaire stratégique (500 000 MAD)',
+      displayName: 'Partenaire Officiel',
+      description: 'Visibilité maximale — Sponsor stratégique (500 000 MAD)',
       features: ['Logo sur tous les supports', '1 000 invitations', '4 bannières web', 'Habillage façade', 'Rubans badges', 'Catalogue 4ème couverture', 'Conférence de presse']
     },
     delegated_organizer: {
@@ -62,7 +62,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
       currency: 'MAD' as const,
       tier: 'press_partner' as PartnerTier,
       displayName: 'Partenaire Presse',
-      description: 'Partenaire presse officiel',
+      description: 'Partenaire Presse officiel',
       features: ['Accréditation presse', 'Espace presse dédié']
     }
   },
@@ -70,7 +70,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
   // Instructions de virement (multilingue)
   instructions: {
     fr: {
-      title: 'Instructions de virement bancaire pour partenaires',
+      title: 'Instructions de virement bancaire pour sponsors',
       steps: [
         'Effectuez le virement depuis votre compte professionnel',
         'Montant exact selon le tier choisi (voir ci-dessus)',
@@ -90,7 +90,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
         'Pour les virements internationaux, des frais bancaires peuvent s\'appliquer',
         'Les virements SEPA (Europe) sont généralement traités en 1-2 jours',
         'Les virements SWIFT internationaux peuvent prendre 3-5 jours',
-        'En cas de question, contactez notre service partenaires'
+        'En cas de question, contactez notre service sponsors'
       ]
     },
     en: {
@@ -143,7 +143,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
     }
   },
 
-  // Contact support partenaires
+  // Contact support sponsors
   support: {
     email: 'Sib2026@urbacom.net',
     phone: '+212 6 88 50 05 00',
@@ -157,7 +157,7 @@ export const PARTNER_BANK_TRANSFER_INFO = {
 };
 
 /**
- * Générer la référence de paiement pour un partenaire
+ * Générer la référence de paiement pour un sponsor
  * Format: SIB-PARTNER-{USER_ID_SHORT}-{TIER}-{TIMESTAMP}
  */
 export function generatePartnerPaymentReference(
@@ -173,7 +173,7 @@ export function generatePartnerPaymentReference(
 }
 
 /**
- * Valider le format d'une référence de paiement partenaire
+ * Valider le format d'une référence de paiement sponsor
  */
 export function validatePartnerPaymentReference(reference: string): boolean {
   const pattern = /^SIB-PARTNER-[A-F0-9]{8}-(ORG|CO_|OFF|DEL|PAR|PRE)-[A-F0-9]{8}-\d{6}$/;

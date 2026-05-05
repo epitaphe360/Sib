@@ -92,16 +92,16 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
         transition={{ duration: 0.5 }}
       >
         <div>
-          <h2 className="text-3xl md:text-4xl font-serif font-bold flex items-center gap-4 mb-2 text-[#1e3a5f]">
-            <TrendingUp className="h-8 w-8" style={{ color: '#C9A84C' }} />
+          <h2 className="text-3xl md:text-4xl font-serif font-bold flex items-center gap-4 mb-2 text-gray-900">
+            <TrendingUp className="h-8 w-8 text-indigo-500" />
             {t('admin.platform_statistics')}
           </h2>
           <p className="text-sm leading-relaxed text-gray-500">
             Indicateurs clés de performance • Mis à jour en temps réel
           </p>
         </div>
-        <span className="flex items-center gap-2 text-xs px-4 py-2 rounded-full font-medium" style={{ color: '#C9A84C', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.3)' }}>
-          <span className="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse" />
+        <span className="flex items-center gap-2 text-xs px-4 py-2 rounded-full font-medium text-indigo-700 bg-indigo-100 border border-indigo-200">
+          <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
           EN DIRECT
         </span>
       </motion.div>

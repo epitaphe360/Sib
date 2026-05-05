@@ -13,6 +13,7 @@ import { User, Mail, Phone, MapPin, Briefcase, Loader, Lock, Upload, Crown, Came
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { motion } from 'framer-motion';
+import { MoroccanPattern } from '../../components/ui/MoroccanDecor';
 import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
 import { COUNTRIES } from '../../data/countries';
@@ -180,7 +181,7 @@ export default function VisitorVIPRegistration() {
         if (existingUser.type === 'exhibitor') {
           accountType = 'exposant';
         } else if (existingUser.type === 'partner') {
-          accountType = 'partenaire';
+          accountType = 'sponsor';
         } else if (existingUser.type === 'visitor') {
           const level = existingUser.visitor_level === 'premium' ? 'VIP' :
                        existingUser.visitor_level === 'standard' ? 'Standard' : 'Gratuit';
@@ -410,12 +411,9 @@ export default function VisitorVIPRegistration() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-blue-950 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-0 opacity-20" style={{
-        backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,215,0,0.08) 35px, rgba(255,215,0,0.08) 70px),
-                         repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(0,128,0,0.08) 35px, rgba(0,128,0,0.08) 70px)`
-      }} />
-      <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-sib-gold/20 blur-3xl" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 py-12 px-4 sm:px-6 lg:px-8">
+      <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
+      <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-[#52B847]/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
 
       <div className="max-w-3xl mx-auto">
@@ -426,7 +424,7 @@ export default function VisitorVIPRegistration() {
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="bg-sib-gold p-3 rounded-lg shadow-lg shadow-sib-gold/30">
+            <div className="bg-amber-400 p-3 rounded-lg shadow-lg shadow-amber-400/30">
               <Crown className="h-8 w-8 text-gray-900" />
             </div>
             <div>
@@ -441,11 +439,11 @@ export default function VisitorVIPRegistration() {
             Accès complet au salon avec badge photo sécurisé
           </p>
           <div className="mt-4 inline-flex items-center space-x-3 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-full">
-            <span className="text-sib-gold font-semibold">RDV B2B Illimités</span>
+            <span className="text-amber-300 font-semibold">RDV B2B Illimités</span>
             <span className="text-white/60">•</span>
-            <span className="text-sib-gold font-semibold">Gala exclusif</span>
+            <span className="text-amber-300 font-semibold">Gala exclusif</span>
             <span className="text-white/60">•</span>
-            <span className="text-sib-gold font-semibold">Networking premium</span>
+            <span className="text-amber-300 font-semibold">Networking premium</span>
           </div>
         </motion.div>
 

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Progress } from '../ui/Progress';
 import { Badge } from '../ui/Badge';
@@ -124,7 +124,7 @@ export function LevelBadge({ level, type, showIcon = true, size = 'md' }: LevelB
 
   const getConfig = () => {
     if (type === 'visitor') {
-      return level === 'premium' || level === 'vip'
+      return level === 'vip'
         ? { label: 'VIP Pass', color: 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white', icon: '👑' }
         : { label: 'FREE Pass', color: 'bg-gray-500 text-white', icon: '🎫' };
     }
@@ -133,10 +133,11 @@ export function LevelBadge({ level, type, showIcon = true, size = 'md' }: LevelB
       const configs: Record<string, any> = {
         organizer: { label: 'Organisateurs', color: 'bg-gradient-to-r from-yellow-600 to-yellow-800 text-white', icon: '🏛️' },
         co_organizer: { label: 'Co-organisateurs', color: 'bg-gradient-to-r from-amber-600 to-amber-800 text-white', icon: '🤝' },
-        official_sponsor: { label: 'Sponsor Officiel', color: 'bg-gradient-to-r from-blue-600 to-blue-800 text-white', icon: '⭐' },
+        official_sponsor: { label: 'Partenaire Officiel', color: 'bg-gradient-to-r from-blue-600 to-blue-800 text-white', icon: '⭐' },
         delegated_organizer: { label: 'Organisateur Délégué', color: 'bg-gradient-to-r from-green-600 to-green-800 text-white', icon: '📋' },
         partner: { label: 'Nos Partenaires', color: 'bg-gradient-to-r from-purple-600 to-purple-800 text-white', icon: '🌐' },
-        press_partner: { label: 'Nos Partenaires Presse', color: 'bg-gradient-to-r from-red-600 to-red-800 text-white', icon: '📰' }
+        press_partner: { label: 'Sponsor Média', color: 'bg-gradient-to-r from-red-600 to-red-800 text-white', icon: '📰' },
+        media_partner: { label: 'Sponsor Média', color: 'bg-gradient-to-r from-red-700 to-red-900 text-white', icon: '🎙️' }
       };
       return configs[level] || configs.partner;
     }

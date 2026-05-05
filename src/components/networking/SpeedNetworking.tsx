@@ -215,7 +215,7 @@ export const SpeedNetworking: React.FC<SpeedNetworkingProps> = ({ sessionId }) =
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-semibold mb-1">
-                      {currentMatch.user2_profile?.company || 'Partenaire'}
+                      {currentMatch.user2_profile?.company || 'Sponsor'}
                     </h3>
                     <p className="text-gray-600">
                       {currentMatch.user2_profile?.role || 'Professionnel'}

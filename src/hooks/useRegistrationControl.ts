@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 
@@ -11,7 +11,7 @@ const SETTING_KEYS: Record<RegistrationType, string> = {
 
 const LABELS: Record<RegistrationType, { open: string; close: string }> = {
   exhibitor: { open: '✅ Inscriptions exposant ouvertes', close: '🔒 Inscriptions exposant clôturées' },
-  partner: { open: '✅ Inscriptions partenaire ouvertes', close: '🔒 Inscriptions partenaire clôturées' },
+  partner: { open: '✅ Inscriptions sponsor ouvertes', close: '🔒 Inscriptions sponsor clôturées' },
 };
 
 export function useRegistrationControl(type: RegistrationType = 'exhibitor') {
@@ -31,7 +31,7 @@ export function useRegistrationControl(type: RegistrationType = 'exhibitor') {
         .eq('key', settingKey)
         .maybeSingle();
 
-      if (error && error.code !== '42P01') throw error;
+      if (error && error.code !== '42P01') {throw error;}
       // Si la clé n'existe pas encore → fermé par défaut
       setIsOpen(data?.value === 'true');
     } catch {
@@ -53,7 +53,7 @@ export function useRegistrationControl(type: RegistrationType = 'exhibitor') {
           { onConflict: 'key' }
         );
 
-      if (error) throw error;
+      if (error) {throw error;}
       setIsOpen(newValue);
       toast.success(newValue ? labels.open : labels.close);
     } catch (err) {

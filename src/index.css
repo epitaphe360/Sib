@@ -1,6 +1,9 @@
 ﻿/* stylelint-disable */
 /* Autogénéré pour TailwindCSS - désactivé stylelint */
 
+/* Supprime les entêtes/pieds natifs du navigateur à l'impression (URL, date, n° page) */
+@page { margin: 0mm; }
+
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
 @import './styles/darkmode.css';
 
@@ -281,7 +284,8 @@
   }
   
   .sib-btn-primary {
-    @apply bg-sib-navy text-white hover:bg-sib-navy-dark focus:ring-sib-gold shadow-lg font-semibold;
+    @apply text-white hover:opacity-90 focus:ring-sib-gold shadow-lg font-semibold;
+    background-color: #009FE3;
   }
   
   .sib-btn-secondary {

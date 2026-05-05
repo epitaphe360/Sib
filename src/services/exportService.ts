@@ -4,7 +4,7 @@
  * Génération professionnelle de rapports
  */
 
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { logger } from '../lib/logger';
@@ -66,7 +66,7 @@ class ExportService {
   }
 
   /**
-   * Export to Excel (XLSX via SheetJS)
+   * Export to Excel (ExcelJS — sans vulnérabilités)
    */
   async exportToExcel<T extends Record<string, any>>(
     data: T[],
@@ -79,7 +79,16 @@ class ExportService {
       const fields = options.fields || Object.keys(data[0] || {});
 
       // Build worksheet rows
-      const wsData: (string | number | null)[][] = [headers];
+      const wb = new ExcelJS.Workbook();
+      const ws = wb.addWorksheet(options.title || 'Export');
+
+      // Header row
+      ws.addRow(headers);
+      ws.getRow(1).font = { bold: true };
+      ws.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2563EB' } };
+      ws.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+
+      // Data rows
       data.forEach((item) => {
         const row = fields.map((field) => {
           const value = this.getNestedValue(item, field);
@@ -87,13 +96,10 @@ class ExportService {
           if (typeof value === 'number') {return value;}
           return String(value);
         });
-        wsData.push(row);
+        ws.addRow(row);
       });
 
-      const ws = XLSX.utils.aoa_to_sheet(wsData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, options.title || 'Export');
-      const buf = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
+      const buf = await wb.xlsx.writeBuffer();
       const blob = new Blob([buf], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
@@ -327,11 +333,11 @@ class ExportService {
     }));
 
     const blob = await this.exportByFormat(data, format, {
-      filename: `partenaires_${Date.now()}`,
-      title: 'Liste des Partenaires - sib 2026',
+      filename: `sponsors_${Date.now()}`,
+      title: 'Liste des Sponsors - sib 2026',
     });
 
-    this.download(blob, `partenaires_${Date.now()}.${format}`);
+    this.download(blob, `sponsors_${Date.now()}.${format}`);
   }
 
   /**
@@ -392,7 +398,7 @@ class ExportService {
     const data = [
       { 'Métrique': 'Visiteurs Total', 'Valeur': stats.totalVisitors },
       { 'Métrique': 'Exposants Total', 'Valeur': stats.totalExhibitors },
-      { 'Métrique': 'Partenaires Total', 'Valeur': stats.totalPartners },
+      { 'Métrique': 'Sponsors Total', 'Valeur': stats.totalPartners },
       { 'Métrique': 'Rendez-vous Total', 'Valeur': stats.totalAppointments },
       { 'Métrique': 'Rendez-vous Confirmés', 'Valeur': stats.confirmedAppointments },
       { 'Métrique': 'Pages Vues', 'Valeur': stats.pageViews },

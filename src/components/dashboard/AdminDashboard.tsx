@@ -20,15 +20,15 @@ export default function AdminDashboard() {
   // ── Early returns ─────────────────────────────────────────────────────────
   if (!user || user.type !== 'admin') {
     return (
-      <div className="min-h-screen bg-sib-bg flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="p-4 bg-[#1B365D]/10 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-            <Shield className="h-8 w-8 text-[#1B365D]" />
+          <div className="p-4 bg-indigo-100 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+            <Shield className="h-8 w-8 text-indigo-700" />
           </div>
-          <h2 className="text-lg font-semibold text-[#0F2034] mb-2">{t('dashboard.restricted_access')}</h2>
-          <p className="text-sib-gray-500 mb-6">{t('dashboard.restricted_message')}</p>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">{t('dashboard.restricted_access')}</h2>
+          <p className="text-gray-500 mb-6">{t('dashboard.restricted_message')}</p>
           <Link to={ROUTES.DASHBOARD}>
-            <Button variant="default" className="bg-[#1B365D] hover:bg-[#0F2034]">{t('dashboard.back_to_dashboard')}</Button>
+            <Button variant="default" className="bg-indigo-700 hover:bg-indigo-800">{t('dashboard.back_to_dashboard')}</Button>
           </Link>
         </div>
       </div>
@@ -37,13 +37,13 @@ export default function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-sib-bg p-6">
+      <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto animate-pulse space-y-6">
-          <div className="h-40 bg-[#1B365D]/10 rounded-2xl" />
+          <div className="h-40 bg-indigo-100 rounded-2xl" />
           <div className="grid grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map(i => <div key={`sk-${i}`} className="h-28 bg-sib-gray-100 rounded-xl" />)}
+            {[1, 2, 3, 4].map(i => <div key={`sk-${i}`} className="h-28 bg-gray-100 rounded-xl" />)}
           </div>
-          <div className="h-56 bg-sib-gray-100 rounded-xl" />
+          <div className="h-56 bg-gray-100 rounded-xl" />
         </div>
       </div>
     );
@@ -51,12 +51,12 @@ export default function AdminDashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-sib-bg flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <AlertTriangle className="h-10 w-10 text-[#C9A84C] mx-auto mb-4" />
-          <h2 className="text-lg font-semibold text-[#0F2034] mb-2">{t('dashboard.metrics_error')}</h2>
-          <p className="text-sib-gray-500 mb-6">{error}</p>
-          <Button variant="default" className="bg-[#1B365D] hover:bg-[#0F2034]" onClick={() => fetchMetrics()}>
+          <AlertTriangle className="h-10 w-10 text-amber-500 mx-auto mb-4" />
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">{t('dashboard.metrics_error')}</h2>
+          <p className="text-gray-500 mb-6">{error}</p>
+          <Button variant="default" className="bg-indigo-700 hover:bg-indigo-800" onClick={() => fetchMetrics()}>
             {t('dashboard.retry')}
           </Button>
         </div>
@@ -65,10 +65,7 @@ export default function AdminDashboard() {
   }
 
   return (
-      <div className="min-h-screen" style={{
-        backgroundColor: '#f8fafc',
-        backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%231e3a5f' stroke-opacity='0.055' stroke-width='0.8' d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath stroke='%231e3a5f' stroke-opacity='0.04' stroke-width='0.6' d='M30 10L50 30L30 50L10 30Z'/%3E%3Cpath stroke='%23C9A84C' stroke-opacity='0.06' stroke-width='0.6' d='M30 18L42 30L30 42L18 30Z'/%3E%3Ccircle cx='30' cy='30' r='2.5' fill='%231e3a5f' fill-opacity='0.04'/%3E%3Ccircle cx='0' cy='0' r='2' fill='%23C9A84C' fill-opacity='0.06'/%3E%3Ccircle cx='60' cy='0' r='2' fill='%23C9A84C' fill-opacity='0.06'/%3E%3Ccircle cx='0' cy='60' r='2' fill='%23C9A84C' fill-opacity='0.06'/%3E%3Ccircle cx='60' cy='60' r='2' fill='%23C9A84C' fill-opacity='0.06'/%3E%3C/g%3E%3C/svg%3E\")",
-      }}>
+      <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         <AdminHeader
@@ -87,8 +84,8 @@ export default function AdminDashboard() {
           transition={{ duration: 0.8 }}
           className="my-8 flex items-center gap-4 origin-left"
         >
-          <div className="w-2 h-2 rounded" style={{ background: '#C9A84C' }} />
-          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, rgba(30,58,95,0.2), transparent)' }} />
+          <div className="w-2 h-2 rounded bg-indigo-400" />
+          <div className="flex-1 h-px bg-gradient-to-r from-indigo-200 to-transparent" />
         </motion.div>
 
         <AdminActionsPanel
@@ -107,15 +104,14 @@ export default function AdminDashboard() {
           className="mb-8"
         >
           <div
-            className="rounded-2xl border p-5 bg-white"
-            style={{ borderColor: 'rgba(30,58,95,0.1)', boxShadow: '0 1px 8px rgba(30,58,95,0.06)' }}
+            className="rounded-2xl border border-gray-100 p-5 bg-white shadow-sm"
           >
             <div className="flex items-center justify-between mb-5">
               <div>
-                <h3 className="text-base font-bold text-[#1e3a5f] tracking-wide uppercase" style={{ letterSpacing: '0.08em' }}>Accès CMS</h3>
+                <h3 className="text-base font-bold text-indigo-900 tracking-wide uppercase" style={{ letterSpacing: '0.08em' }}>Accès CMS</h3>
                 <p className="text-xs mt-1 text-gray-500">Gestion complète du contenu et des templates</p>
               </div>
-              <div className="w-8 h-0.5 rounded-full" style={{ background: '#C9A84C' }} />
+              <div className="w-8 h-0.5 rounded-full bg-indigo-300" />
             </div>
 
             <motion.div
@@ -140,11 +136,11 @@ export default function AdminDashboard() {
                   whileHover={{ y: -4, scale: 1.03, boxShadow: '0 0 24px rgba(201,168,76,0.18)' }}
                   whileTap={{ scale: 0.97 }}
                 >
-                  <Link to={to} className="block p-4 rounded-xl h-full transition-colors bg-gray-50" style={{ border: '1px solid rgba(30,58,95,0.08)' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.4)'; (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.06)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(30,58,95,0.08)'; (e.currentTarget as HTMLElement).style.background = '#f8fafc'; }}
+                  <Link to={to} className="block p-4 rounded-xl h-full transition-colors bg-gray-50 border border-gray-100"
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(99,102,241,0.4)'; (e.currentTarget as HTMLElement).style.background = 'rgba(99,102,241,0.05)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgb(243,244,246)'; (e.currentTarget as HTMLElement).style.background = '#f8fafc'; }}
                   >
-                    <div className="flex items-center gap-2 font-semibold text-sm text-[#1e3a5f]"><Icon className="h-4 w-4" style={{ color: '#C9A84C' }} /> {label}</div>
+                    <div className="flex items-center gap-2 font-semibold text-sm text-indigo-900"><Icon className="h-4 w-4 text-indigo-500" /> {label}</div>
                     <p className="text-xs mt-1.5 text-gray-500">{sub}</p>
                   </Link>
                 </motion.div>
@@ -161,8 +157,8 @@ export default function AdminDashboard() {
           transition={{ duration: 0.8 }}
           className="my-8 flex items-center gap-4 origin-left"
         >
-          <div className="w-2 h-2 rounded" style={{ background: '#C9A84C' }} />
-          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, rgba(30,58,95,0.2), transparent)' }} />
+          <div className="w-2 h-2 rounded bg-indigo-400" />
+          <div className="flex-1 h-px bg-gradient-to-r from-indigo-200 to-transparent" />
         </motion.div>
 
         <AdminMetricsGrid adminMetrics={adminMetrics as any} t={t} />
@@ -188,20 +184,20 @@ export default function AdminDashboard() {
 
         {/* Métriques détaillées — navy sobre */}
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.4 }} className="mb-4">
-          <div className="rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #0f2034 100%)', boxShadow: '0 4px 16px rgba(30,58,95,0.18)' }}>
+          <div className="rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-br from-indigo-600 to-indigo-800 shadow-lg">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-[#C9A84C]/15 border border-[#C9A84C]/30">
-                <BarChart3 className="h-6 w-6 text-[#C9A84C]" />
+              <div className="p-3 rounded-xl bg-white/15 border border-white/25">
+                <BarChart3 className="h-6 w-6 text-white" />
               </div>
               <div>
                 <h3 className="text-white font-heading font-bold">{t('admin.detailed_metrics')}</h3>
-                <p className="text-slate-400 text-sm">{t('admin.detailed_metrics_desc')}</p>
+                <p className="text-white/70 text-sm">{t('admin.detailed_metrics_desc')}</p>
               </div>
             </div>
             <Link to={ROUTES.METRICS}>
               <Button
                 variant="outline"
-                className="border-[#C9A84C]/40 text-[#C9A84C] hover:bg-[#C9A84C]/10 bg-transparent whitespace-nowrap"
+                className="border-white/30 text-white hover:bg-white hover:text-indigo-700 bg-transparent whitespace-nowrap"
               >
                 <BarChart3 className="h-4 w-4 mr-2" />
                 {t('admin.full_metrics')}

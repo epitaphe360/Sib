@@ -1,6 +1,7 @@
-import { AnimatePresence, motion } from 'framer-motion';
+﻿import { AnimatePresence, motion } from 'framer-motion';
 import { Shield, CreditCard, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { RentalBanner } from '../common/RentalBanner';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
@@ -14,10 +15,12 @@ import {
   PartnerProfileTab,
   PartnerNetworkingTab,
   PartnerAnalyticsTab,
+  PartnerServicesTab,
   PartnerRejectModal,
   PartnerEditorModal,
 } from './partner';
 import { useTranslation } from '../../hooks/useTranslation';
+import { ProgrammeRegistrationsSection } from '../programme/ProgrammeRegistrationsSection';
 
 export default function PartnerDashboard() {
   const ctx = usePartnerDashboard();
@@ -46,7 +49,7 @@ export default function PartnerDashboard() {
     );
   }
 
-  if (!user || user.type !== 'partner') {
+  if (user?.type !== 'partner') {
     return (
       <div className="min-h-screen bg-sib-bg flex items-center justify-center p-4">
         <Card className="p-8 text-center bg-white rounded-2xl shadow-2xl max-w-md w-full">
@@ -70,7 +73,7 @@ export default function PartnerDashboard() {
       <div className="min-h-screen bg-sib-bg p-6">
         <div className="max-w-7xl mx-auto text-center py-12">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#1B365D] mx-auto mb-4"></div>
-          <LoadingMessage message="Chargement du tableau de bord partenaire..." />
+          <LoadingMessage message="Chargement du tableau de bord sponsor..." />
         </div>
       </div>
     );
@@ -101,6 +104,9 @@ export default function PartnerDashboard() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="pt-6">
+          <RentalBanner variant="compact" to="/partner/rental" />
+        </div>
         <PartnerTabNav activeTab={ctx.activeTab} onTabChange={ctx.setActiveTab} />
 
         <AnimatePresence mode="wait">
@@ -142,8 +148,15 @@ export default function PartnerDashboard() {
                 roiMetricsData={ctx.roiMetricsData}
               />
             )}
+            {ctx.activeTab === 'services' && (
+              <PartnerServicesTab />
+            )}
           </motion.div>
         </AnimatePresence>
+
+        {/* Mes sessions du programme — visible depuis tous les onglets */}
+        <ProgrammeRegistrationsSection accent="amber" />
+
       </div>
 
       {/* ── Modals ── */}

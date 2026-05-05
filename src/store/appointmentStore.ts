@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { Appointment, TimeSlot } from '../types';
 import { SupabaseService } from '../services/supabaseService';
 import { supabase as supabaseClient, isSupabaseReady } from '../lib/supabase';
@@ -524,14 +524,14 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     }
     console.log('✅ ExhibitorId is valid');
 
-    // NOUVELLE RÈGLE: Vérifier qu'on n'a pas déjà un RDV avec cet exposant/partenaire
+    // NOUVELLE RÈGLE: Vérifier qu'on n'a pas déjà un RDV avec cet exposant/sponsor
     console.log('🔍 Checking if user already has appointment with this exhibitor...');
     const hasExistingAppointment = appointments.some(
       a => a.visitorId === visitorId && a.exhibitorId === exhibitorIdForSlot && a.status !== 'cancelled'
     );
     if (hasExistingAppointment) {
       console.log('❌ User already has appointment with this exhibitor!');
-      throw new Error('Vous avez déjà un rendez-vous avec cet exposant/partenaire');
+      throw new Error('Vous avez déjà un rendez-vous avec cet exposant/sponsor');
     }
     console.log('✅ No existing appointment with this exhibitor');
 
@@ -612,13 +612,13 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     logger.info('[appointmentStore] Booking successful', { appointmentId: result.appointment_id });
 
     // Success! Update local state with server data
-    // STATUS: 'pending' - Le RDV est en attente de confirmation par l'exposant/partenaire
+    // STATUS: 'pending' - Le RDV est en attente de confirmation par l'exposant/sponsor
     const newAppointment: Appointment = {
       id: result.appointment_id,
       exhibitorId: exhibitorIdForSlot,
       visitorId,
       timeSlotId,
-      status: 'pending', // En attente de confirmation par l'exposant/partenaire
+      status: 'pending', // En attente de confirmation par l'exposant/sponsor
       message,
       createdAt: new Date(),
       meetingType: 'in-person'

@@ -34,7 +34,11 @@ export default defineConfig({
       '**/e2e/**',
       '**/tests/e2e/**',
       'tests/*.spec.ts',
-      '**/*.spec.ts'
+      '**/*.spec.ts',
+      // Exclure le cache Trunk (outil de linting externe) qui pollue les résultats
+      '**/AppData/**',
+      '**/.cache/trunk/**',
+      '**/trunk/**',
     ]
   },
   resolve: {

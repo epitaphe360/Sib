@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { SupabaseService } from '../services/supabaseService';
 import { supabase } from '../lib/supabase';
@@ -210,7 +210,7 @@ const useAuthStore = create<AuthState>()(
       }
 
 
-      // Créer demande d'inscription pour exposants et partenaires
+      // Créer demande d'inscription pour exposants et sponsors
       if (userType === 'exhibitor' || userType === 'partner') {
 
         // ✅ Ne pas bloquer l'inscription si la création de demande échoue (erreur RLS possible)
@@ -304,7 +304,7 @@ const useAuthStore = create<AuthState>()(
         });
       }
 
-      // Créer une demande d'inscription pour exposants et partenaires
+      // Créer une demande d'inscription pour exposants et sponsors
       if (userType === 'exhibitor' || userType === 'partner') {
         await SupabaseService.createRegistrationRequest({
           userType: userType,

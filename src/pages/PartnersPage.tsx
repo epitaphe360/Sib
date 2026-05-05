@@ -1,11 +1,13 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
+﻿import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Filter, Grid2x2 as Grid, List, Handshake } from 'lucide-react';
+import { MoroccanPattern } from '../components/ui/MoroccanDecor';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { motion } from 'framer-motion';
 import { CONFIG } from '../lib/config';
 import { SupabaseService } from '../services/supabaseService';
+import { supabase } from '../lib/supabase';
 import type { PartnerTier } from '../config/partnerTiers';
 import { useTranslation } from '../hooks/useTranslation';
 import { usePartnerTranslation } from '../hooks/usePartnerTranslation';
@@ -34,8 +36,8 @@ interface Partner {
   employees: string;
 }
 
-// Les partenaires sont maintenant chargés depuis Supabase
-// Composant wrapper pour gérer la traduction de chaque partenaire
+// Les sponsors sont maintenant chargés depuis Supabase
+// Composant wrapper pour gérer la traduction de chaque sponsor
 interface PartnerCardWrapperProps {
   partner: Partner;
   viewMode: 'grid' | 'list';
@@ -129,7 +131,7 @@ export default function PartnersPage() {
         setHasMore(merged.length < total);
         recomputePartnerStats(merged);
       } catch (error) {
-        console.error('Erreur lors du chargement des partenaires:', error);
+        console.error('Erreur lors du chargement des sponsors:', error);
         setPartners([]);
         setFilteredPartners([]);
         setTotalPartners(0);
@@ -153,6 +155,26 @@ export default function PartnersPage() {
   useEffect(() => {
     loadPartners(true);
   }, []);
+
+  // Rechargement automatique quand un admin modifie la publication d'un partenaire
+  const reloadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (!supabase) return;
+    const channel = supabase
+      .channel('partners-publication')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'partners' }, () => {
+        // Debounce : évite plusieurs rechargements simultanés
+        if (reloadTimerRef.current) clearTimeout(reloadTimerRef.current);
+        reloadTimerRef.current = setTimeout(() => {
+          loadPartners(true);
+        }, 500);
+      })
+      .subscribe();
+    return () => {
+      if (reloadTimerRef.current) clearTimeout(reloadTimerRef.current);
+      supabase.removeChannel(channel);
+    };
+  }, [loadPartners]);
 
   const handleLoadMore = async () => {
     if (isLoading || !hasMore) {return;}
@@ -233,31 +255,29 @@ export default function PartnersPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0A0F1E] text-white">
-      {/* Hero dark luxury */}
-      <div className="relative bg-[#0A0F1E] overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80')" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/85 via-[#0A0F1E]/75 to-[#0A0F1E]" />
-        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(201,168,76,0.06) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero indigo */}
+      <div className="relative bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 overflow-hidden">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 -right-16 w-80 h-80 bg-[#52B847]/20 rounded-full blur-3xl pointer-events-none" />
+        <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#C9A84C]/40 bg-[#C9A84C]/10 text-[#E7D192] text-xs font-bold tracking-widest uppercase mb-6">
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/25 bg-white/15 backdrop-blur-sm text-white text-xs font-bold tracking-widest uppercase mb-6">
+              <span className="w-2 h-2 rounded-full bg-[#52B847] animate-pulse" />
               {t('partners.page.badge')}
             </div>
-            <h1 className="font-display text-4xl md:text-5xl font-light text-white mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
               {t('pages.partners.title')}
             </h1>
-            <p className="text-lg text-white/55 max-w-2xl mx-auto">
+            <p className="text-lg text-white/80 max-w-2xl mx-auto">
               {t('pages.partners.description')}
             </p>
           </motion.div>
         </div>
       </div>
 
-      {/* Logo Showcase Section - Bande défilante des logos partenaires */}
+      {/* Logo Showcase Section - Bande défilante des logos sponsors */}
       <LogoShowcaseSection type="partners" />
 
       {/* Main Content */}
@@ -265,35 +285,35 @@ export default function PartnersPage() {
         {/* Search and Controls */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/30" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
               placeholder={t('pages.partners.search')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C]/50"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 shadow-sm"
             />
           </div>
 
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 border border-white/15 rounded-lg text-white/70 hover:border-[#C9A84C]/40 hover:text-[#E7D192] transition-colors text-sm"
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg text-gray-600 hover:border-indigo-400 hover:text-indigo-700 transition-colors text-sm bg-white shadow-sm"
             >
               <Filter className="h-4 w-4" />
               {t('partners.page.filters_btn')}
             </button>
 
-            <div className="flex border border-white/15 rounded-lg overflow-hidden">
+            <div className="flex border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
               <button
                 onClick={() => setViewMode(CONFIG.viewModes.grid)}
-                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.grid ? 'bg-[#C9A84C]/20 text-[#E7D192]' : 'text-white/40 hover:text-white/70'}`}
+                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.grid ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-gray-600'}`}
               >
                 <Grid className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode(CONFIG.viewModes.list)}
-                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.list ? 'bg-[#C9A84C]/20 text-[#E7D192]' : 'text-white/40 hover:text-white/70'}`}
+                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.list ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-gray-600'}`}
               >
                 <List className="h-4 w-4" />
               </button>
@@ -306,20 +326,20 @@ export default function PartnersPage() {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6 p-4 bg-white/5 border border-white/10 rounded-xl mb-6"
+            className="mt-6 p-4 bg-white border border-gray-200 rounded-xl mb-6 shadow-sm"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+                <label className="block text-xs font-medium text-gray-500 uppercase tracking-widest mb-2">
                   {t('partners.page.tier_level')}
                 </label>
                 <select
                   value={selectedTier}
                   onChange={(e) => setSelectedTier(e.target.value)}
-                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50"
+                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-300"
                 >
                   {partnerTiers.map((tier) => (
-                    <option key={tier.value} value={tier.value} className="bg-[#0A0F1E]">
+                    <option key={tier.value} value={tier.value}>
                       {tier.label}
                     </option>
                   ))}
@@ -327,17 +347,17 @@ export default function PartnersPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+                <label className="block text-xs font-medium text-gray-500 uppercase tracking-widest mb-2">
                   {t('partners.page.country_label')}
                 </label>
                 <select
                   value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50"
+                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-300"
                 >
-                  <option value="" className="bg-[#0A0F1E]">{t('partners.page.all_countries')}</option>
+                  <option value="">{t('partners.page.all_countries')}</option>
                   {countries.map((country) => (
-                    <option key={country} value={country} className="bg-[#0A0F1E]">
+                    <option key={country} value={country}>
                       {country}
                     </option>
                   ))}
@@ -347,7 +367,7 @@ export default function PartnersPage() {
           </motion.div>
         )}
 
-        {/* Stats - Types Partenaires SIB */}
+        {/* Stats - Types Sponsors SIB */}
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
           {[
             { count: partnerStats.organizer,           label: t('partners.page.organizers'),               icon: '🏛️' },
@@ -358,10 +378,10 @@ export default function PartnersPage() {
             { count: partnerStats.press_partner,       label: t('partners.page.press'),                    icon: '📰' },
             { count: partnerStats.total,               label: t('partners.page.total'),                    icon: '🤝' },
           ].map((stat, i) => (
-            <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+            <div key={i} className="bg-white border border-gray-100 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl mb-1.5">{stat.icon}</div>
-              <div className="text-xl font-bold text-[#E7D192]">{stat.count}</div>
-              <div className="text-[10px] font-medium text-white/45 uppercase tracking-wider mt-0.5">{stat.label}</div>
+              <div className="text-xl font-bold text-indigo-600">{stat.count}</div>
+              <div className="text-[10px] font-medium text-gray-500 uppercase tracking-wider mt-0.5">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -382,18 +402,18 @@ export default function PartnersPage() {
           </div>
         ) : filteredPartners.length === 0 ? (
           <div className="text-center py-16">
-            <div className="bg-white/5 border border-white/10 rounded-full p-6 w-24 h-24 mx-auto mb-4 flex items-center justify-center">
-              <Search className="h-10 w-10 text-white/30" />
+            <div className="bg-gray-100 border border-gray-200 rounded-full p-6 w-24 h-24 mx-auto mb-4 flex items-center justify-center">
+              <Search className="h-10 w-10 text-gray-400" />
             </div>
-            <h3 className="text-lg font-display font-light text-white mb-2">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">
               {t('pages.partners.no_results')}
             </h3>
-            <p className="text-white/40 mb-6">
+            <p className="text-gray-500 mb-6">
               {t('pages.partners.try_modify')}
             </p>
             <button
               onClick={() => { setSearchTerm(''); setSelectedTier(''); setSelectedCountry(''); }}
-              className="inline-flex items-center gap-2 bg-[#C9A84C] text-[#0A0F1E] font-bold px-5 py-2.5 rounded-sm hover:bg-[#E7D192] transition-colors text-sm"
+              className="inline-flex items-center gap-2 bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-700 transition-colors text-sm"
             >
               {t('pages.partners.reset_filters')}
             </button>
@@ -422,11 +442,11 @@ export default function PartnersPage() {
                   viewport={{ once: true }}
                 >
                   {/* Tier Section Header */}
-                  <div className="flex items-center gap-3 mb-5 p-4 rounded-xl border border-white/10 bg-white/5">
+                  <div className="flex items-center gap-3 mb-5 p-4 rounded-xl border border-gray-200 bg-white shadow-sm">
                     <span className="text-2xl">{tier.emoji}</span>
                     <div>
-                      <h2 className="text-lg font-display font-light text-white">{tier.label}</h2>
-                      <p className="text-xs text-white/40 uppercase tracking-wider">{tier.partners.length} {tier.partners.length > 1 ? t('partners.page.partner_plural') : t('partners.page.partner_singular')}</p>
+                      <h2 className="text-lg font-bold text-gray-900">{tier.label}</h2>
+                      <p className="text-xs text-gray-500 uppercase tracking-wider">{tier.partners.length} {tier.partners.length > 1 ? t('partners.page.partner_plural') : t('partners.page.partner_singular')}</p>
                     </div>
                   </div>
 
@@ -452,14 +472,14 @@ export default function PartnersPage() {
               ))}
 
             <div className="pt-4 flex flex-col items-center gap-3">
-              <p className="text-sm text-white/35">
+              <p className="text-sm text-gray-500">
                 {t('partners.page.displayed_count').replace('{{shown}}', String(partners.length)).replace('{{total}}', String(totalPartners))}
               </p>
               {hasMore && (
                 <button
                   onClick={handleLoadMore}
                   disabled={isLoading}
-                  className="inline-flex items-center gap-2 border border-white/20 text-white/70 px-6 py-2.5 rounded-sm hover:bg-white/5 transition-colors text-sm disabled:opacity-50"
+                  className="inline-flex items-center gap-2 border border-gray-200 text-gray-600 bg-white px-6 py-2.5 rounded-lg hover:border-indigo-400 hover:text-indigo-700 transition-colors text-sm disabled:opacity-50 shadow-sm"
                 >
                   {isLoading ? t('partners.page.loading') : t('partners.page.load_more')}
                 </button>

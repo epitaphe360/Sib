@@ -1,4 +1,4 @@
-
+﻿
 import { useState, useEffect } from 'react';
 import { Calendar, Clock, Plus, Trash2, Save, X, Users } from 'lucide-react';
 import { Card } from '../ui/Card';
@@ -425,7 +425,7 @@ export default function AvailabilityManager({ userId, userType, onAvailabilityUp
               Gestion des créneaux obligatoire
             </h4>
             <p className="text-sm text-blue-700">
-              En tant qu'{userType === 'partner' ? 'partenaire' : 'exposant'}, vous devez définir vos créneaux de disponibilité
+              En tant qu'{userType === 'partner' ? 'sponsor' : 'exposant'}, vous devez définir vos créneaux de disponibilité
               pour permettre aux autres participants de prendre rendez-vous. Ces créneaux apparaîtront dans votre profil
               et seront visibles lors des recommandations IA.
             </p>

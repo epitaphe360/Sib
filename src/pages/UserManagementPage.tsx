@@ -187,7 +187,7 @@ export default function UserManagementPage() {
   const getUserTypeLabel = (type: string) => {
     switch (type) {
       case 'exhibitor': return 'Exposant';
-      case 'partner': return 'Partenaire';
+      case 'partner': return 'Sponsor';
       case 'visitor': return 'Visiteur';
       case 'admin': return 'Administrateur';
       default: return type;
@@ -415,7 +415,7 @@ export default function UserManagementPage() {
             <div className="text-2xl font-bold text-gray-900 mb-1">
               {userStats.partners}
             </div>
-            <div className="text-sm text-gray-600">Partenaires</div>
+            <div className="text-sm text-gray-600">Sponsors</div>
           </Card>
 
           <Card className="text-center p-6">
@@ -496,7 +496,7 @@ export default function UserManagementPage() {
                     >
                       <option value="">Tous les types</option>
                       <option value="exhibitor">Exposants</option>
-                      <option value="partner">Partenaires</option>
+                      <option value="partner">Sponsors</option>
                       <option value="visitor">Visiteurs</option>
                       <option value="admin">Administrateurs</option>
                     </select>
@@ -817,7 +817,7 @@ export default function UserManagementPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="visitor">Visiteur</option>
                     <option value="exhibitor">Exposant</option>
-                    <option value="partner">Partenaire</option>
+                    <option value="partner">Sponsor</option>
                     <option value="admin">Administrateur</option>
                   </select>
                 </div>

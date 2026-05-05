@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -180,7 +180,7 @@ export const PartnerActivityPage: React.FC = () => {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  {t('partner.activity.title', 'Activité Partenaire')}
+                  {t('partner.activity.title', 'Activité Sponsor')}
                 </h1>
                 <p className="text-gray-600">
                   {t('partner.activity.subtitle', 'Suivez toutes vos interactions et engagements SIB')}

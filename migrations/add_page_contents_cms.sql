@@ -39,13 +39,14 @@ CREATE TRIGGER trg_page_contents_updated_at
 ALTER TABLE public.page_contents ENABLE ROW LEVEL SECURITY;
 
 -- Tout le monde peut lire (pages publiques)
+DROP POLICY IF EXISTS "page_contents_public_read" ON public.page_contents;
 CREATE POLICY "page_contents_public_read"
   ON public.page_contents
   FOR SELECT
   USING (true);
 
 -- Seuls les admins peuvent créer / modifier / supprimer
--- (is_admin doit avoir SET row_security = off — voir fix-rls-recursion-users.sql)
+DROP POLICY IF EXISTS "page_contents_admin_write" ON public.page_contents;
 CREATE POLICY "page_contents_admin_write"
   ON public.page_contents
   FOR ALL

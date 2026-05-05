@@ -1,7 +1,7 @@
 ﻿import { PartnerTier } from '../config/partnerTiers';
 
 /**
- * Types pour le système partenaire
+ * Types pour le système sponsor
  */
 
 export interface PartnerProfile {

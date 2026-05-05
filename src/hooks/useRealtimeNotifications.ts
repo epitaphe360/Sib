@@ -2,12 +2,11 @@
  * Hook de notifications temps réel — RDV + messages — SIB 2026
  * Se branche sur realtimeService et affiche des toasts sonner.
  */
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { realtimeService, type AppointmentNotification } from '../services/realtimeService';
 import useAuthStore from '../store/authStore';
 import { Bell, CalendarCheck, CalendarX, Calendar } from 'lucide-react';
-import React from 'react';
 
 const NOTIF_LABELS: Record<AppointmentNotification['type'], { title: string; icon: React.FC<{ className?: string }> }> = {
   appointment_request: { title: 'Nouvelle demande de RDV', icon: Calendar },
@@ -21,7 +20,7 @@ export function useRealtimeNotifications() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?.id) {return;}
 
     // Préparer un son discret (beep natif via Web Audio API)
     const playBeep = () => {

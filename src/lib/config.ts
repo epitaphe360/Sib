@@ -78,9 +78,9 @@ export const CONFIG = {
 
   // Partnership types
   partnershipTypes: {
-    premium: 'Partenaire Premium',
-    technical: 'Partenaire Technique',
-    media: 'Partenaire Média'
+    premium: 'Sponsor Premium',
+    technical: 'Sponsor Technique',
+    media: 'Sponsor Média'
   },
 
   // API endpoints

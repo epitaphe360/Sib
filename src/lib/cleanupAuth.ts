@@ -73,12 +73,9 @@ function checkAuthStatus() {
 }
 
 // Export pour utilisation dans console
-if (typeof window !== 'undefined') {
-  (window as any).cleanupAuth = cleanupAuth;
-  (window as any).checkAuthStatus = checkAuthStatus;
-  console.log('✅ Fonctions disponibles:');
-  console.log('  - checkAuthStatus() : Vérifier l\'état actuel');
-  console.log('  - cleanupAuth() : Nettoyer complètement');
+if (globalThis.window !== undefined) {
+  (globalThis as any).cleanupAuth = cleanupAuth;
+  (globalThis as any).checkAuthStatus = checkAuthStatus;
 }
 
 export { cleanupAuth, checkAuthStatus };

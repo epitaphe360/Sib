@@ -47,6 +47,7 @@
   ADMIN_CREATE_EVENT: '/admin/create-event',
   ADMIN_EVENTS: '/admin/events',
   ADMIN_VIP_VISITORS: '/admin/vip-visitors',
+  ADMIN_SECURITY_ZONES: '/admin/security-zones',
   ADMIN_CREATE_NEWS: '/admin/create-news',
   ADMIN_NEWS: '/admin/news',
   MINISITE_PREVIEW: '/minisite/:exhibitorId',
@@ -65,6 +66,7 @@
   ADMIN_CONTENT: '/admin/content',
   ADMIN_EMAIL_TEMPLATES: '/admin/email-templates',
   ADMIN_CONFIG: '/admin/config',
+  ADMIN_BADGE_CONFIG: '/admin/badge-config',
   CONTACT: '/contact',
   CONTACT_SUCCESS: '/contact/success',
   PARTNERSHIP: '/partnership',
@@ -77,7 +79,7 @@
   VENUE: '/venue',
   ACCOMMODATION: '/hebergement',
 
-  // Pages partenaires
+  // Pages sponsors
   PARTNER_ACTIVITY: '/partner/activity',
   PARTNER_ANALYTICS: '/partner/analytics',
   PARTNER_EVENTS: '/partner/events',
@@ -93,9 +95,11 @@
   ADMIN_MEDIA: '/admin/media',
   ADMIN_SALONS: '/admin/salons',
   ADMIN_PUSH_NOTIFICATIONS: '/admin/push-notifications',
+  ADMIN_VISA_LETTERS: '/admin/visa-letters',
   ADMIN_EXHIBITORS_LIST: '/admin/exhibitors-list',
   ADMIN_USERS_LIST: '/admin/users-list',
   ADMIN_PUBLICATION_CONTROL: '/admin/publication-control',
+  ADMIN_STAND_COLLABORATORS: '/admin/stand-collaborators',
 
   // Pages erreur
   UNAUTHORIZED: '/unauthorized',
@@ -162,6 +166,7 @@
   // Admin Media Management
   ADMIN_MEDIA_CREATE: '/admin/media/create',
   ADMIN_MEDIA_MANAGE: '/admin/media/manage',
+  ADMIN_MEDIA_LIBRARY: '/admin/media/library',
   ADMIN_MEDIA_EDIT: '/admin/media/edit/:id',
   ADMIN_LIVE_EVENTS: '/admin/live-events',
   ADMIN_LIVE_EVENT_CREATE: '/admin/live-events/create',
@@ -206,6 +211,37 @@
   // Pages statiques - Visiter
   POURQUOI_VISITER: '/pourquoi-visiter',
   INFOS_PRATIQUES: '/infos-pratiques',
+
+  // MODULE 1 — Collaborateurs de stand
+  EXHIBITOR_TEAM: '/exhibitor/team',
+  PARTNER_TEAM: '/partner/team',
+  TEAM_BADGES_PRINT: '/print/badges-equipe',
+
+  // MODULE 2 — Lettres d'invitation
+  INVITATION_LETTER: '/invitation-letter',
+  EXHIBITOR_INVITATION_LETTER: '/exhibitor/invitation-letter',
+  PARTNER_INVITATION_LETTER: '/partner/invitation-letter',
+  ADMIN_INVITATIONS: '/admin/invitations',
+
+  // MODULE 3 — Location de matériel
+  RENTAL_CATALOG: '/rental',
+  RENTAL_CHECKOUT: '/rental/checkout',
+  RENTAL_PAYMENT_SUCCESS: '/rental/payment-success',
+  EXHIBITOR_RENTAL: '/exhibitor/rental',
+  PARTNER_RENTAL: '/partner/rental',
+  ADMIN_RENTAL: '/admin/rental',
+
+  // MODULE 6 — Sponsor Média
+  REGISTER_MEDIA_PARTNER: '/register/media-partner',
+  MEDIA_PARTNER_DASHBOARD: '/media-partner/dashboard',
+
+  // Exposant — pages dédiées
+  EXHIBITOR_SCANS: '/exhibitor/scans',
+  EXHIBITOR_TEAM: '/exhibitor/team',
+
+  // Sponsor — pages dédiées
+  PARTNER_SCANS: '/partner/scans',
+  PARTNER_TEAM: '/partner/team',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

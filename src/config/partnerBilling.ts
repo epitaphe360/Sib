@@ -1,7 +1,7 @@
 ﻿/**
- * ✅ SINGLE SOURCE OF TRUTH pour les montants et configurations partenaires
+ * ✅ SINGLE SOURCE OF TRUTH pour les montants et configurations sponsors
  *
- * Ce fichier est la SEULE source de vérité pour tous les montants partenaires.
+ * Ce fichier est la SEULE source de vérité pour tous les montants sponsors.
  * Tous les autres fichiers DOIVENT importer depuis ici.
  *
  * ⚠️ NE PAS dupliquer les montants ailleurs - toujours importer depuis ce fichier
@@ -10,8 +10,8 @@
  */
 
 /**
- * Configuration des types de partenaires SIB Maroc
- * 6 types : Organisateurs, Co-organisateurs, Sponsor Officiel,
+ * Configuration des types de sponsors SIB Maroc
+ * 6 types : Organisateurs, Co-organisateurs, Partenaire Officiel,
  *           Organisateur Délégué, Nos Partenaires, Nos Partenaires Presse
  */
 
@@ -21,7 +21,8 @@ export type PartnerTier =
   | 'official_sponsor'
   | 'delegated_organizer'
   | 'partner'
-  | 'press_partner';
+  | 'press_partner'
+  | 'media_partner';
 
 export interface PartnerBillingConfig {
   tier: PartnerTier;
@@ -47,7 +48,7 @@ export interface PartnerBillingConfig {
 }
 
 /**
- * ✅ SOURCE UNIQUE DE VÉRITÉ - Configuration complète des tiers partenaires
+ * ✅ SOURCE UNIQUE DE VÉRITÉ - Configuration complète des tiers sponsors
  *
  * Tous les montants, quotas et fonctionnalités sont définis ici
  */
@@ -82,11 +83,11 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
     tier: 'official_sponsor',
     amount: 0,
     currency: 'USD',
-    displayName: 'Sponsor Officiel',
-    description: 'Sponsor officiel du Salon International du Bâtiment',
+    displayName: 'Partenaire Officiel',
+    description: 'Partenaire Officiel du Salon International du Bâtiment',
     features: ['Logo 1ère ligne partout', 'Stand premium', 'RDV B2B illimités', 'Supports officiels'],
     quotas: { appointments: -1, eventRegistrations: -1, mediaUploads: 200, teamMembers: 20, standsAllowed: 3, promotionalEmails: -1, showcaseProducts: 100, analyticsAccess: true, leadExports: -1 },
-    exclusivePerks: ['Mention "Sponsor Officiel"', 'Espace VIP dédié'],
+    exclusivePerks: ['Mention "Partenaire Officiel"', 'Espace VIP dédié'],
     color: '#1B6CA8',
     icon: '⭐',
   },
@@ -109,10 +110,10 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
     amount: 0,
     currency: 'USD',
     displayName: 'Nos Partenaires',
-    description: 'Partenaire du Salon International du Bâtiment',
+    description: 'Sponsor du Salon International du Bâtiment',
     features: ['Logo sur le site', 'Listing catalogue', 'Stand exposition', 'Accès conférences'],
     quotas: { appointments: 30, eventRegistrations: 10, mediaUploads: 20, teamMembers: 5, standsAllowed: 1, promotionalEmails: 5, showcaseProducts: 15, analyticsAccess: false, leadExports: 10 },
-    exclusivePerks: ['Badge "Partenaire SIB"', 'Logo supports imprimés', 'Networking professionnel'],
+    exclusivePerks: ['Badge "Sponsor SIB"', 'Logo supports imprimés', 'Networking professionnel'],
     color: '#6A5ACD',
     icon: '🌐',
   },
@@ -121,25 +122,38 @@ export const PARTNER_BILLING: Record<PartnerTier, PartnerBillingConfig> = {
     tier: 'press_partner',
     amount: 0,
     currency: 'USD',
-    displayName: 'Nos Partenaires Presse',
-    description: 'Partenaire presse officiel du Salon International du Bâtiment',
+    displayName: 'Sponsor Média',
+    description: 'Sponsor média officiel du Salon International du Bâtiment',
     features: ['Accréditation presse officielle', 'Accès toutes conférences', 'Espace presse', 'Diffusion communiqués SIB'],
     quotas: { appointments: 10, eventRegistrations: 10, mediaUploads: 50, teamMembers: 5, standsAllowed: 0, promotionalEmails: 10, showcaseProducts: 0, analyticsAccess: false, leadExports: 5 },
-    exclusivePerks: ['Badge "Partenaire Presse SIB"', 'Interviews exclusives', 'Contenu en avant-première'],
+    exclusivePerks: ['Badge "Sponsor Média SIB"', 'Interviews exclusives', 'Contenu en avant-première'],
     color: '#DC143C',
     icon: '📰',
+  },
+
+  media_partner: {
+    tier: 'media_partner',
+    amount: 0,
+    currency: 'USD',
+    displayName: 'Sponsor Média',
+    description: 'Accréditation Sponsor Média — TV, Radio, Presse écrite, Web',
+    features: ['Badge Sponsor Média', 'Accès zone presse', 'Accès conférences', 'Interviews exclusives'],
+    quotas: { appointments: 5, eventRegistrations: 10, mediaUploads: 100, teamMembers: 3, standsAllowed: 0, promotionalEmails: 5, showcaseProducts: 0, analyticsAccess: false, leadExports: 0 },
+    exclusivePerks: ['Accréditation officielle', 'Salle de presse dédiée', 'Contenu en avant-première'],
+    color: '#B22222',
+    icon: '🎙️',
   },
 };
 
 /**
- * Obtenir la configuration complète d'un type partenaire
+ * Obtenir la configuration complète d'un type sponsor
  */
 export function getPartnerBilling(tier: PartnerTier): PartnerBillingConfig {
   return PARTNER_BILLING[tier];
 }
 
 /**
- * Vérifier si un type partenaire existe
+ * Vérifier si un type sponsor existe
  */
 export function isValidPartnerTier(tier: string): tier is PartnerTier {
   return tier in PARTNER_BILLING;

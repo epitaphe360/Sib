@@ -64,7 +64,7 @@ export function VisitorHeader({
               <div className="flex justify-end">
                 <LevelBadge level={userLevel} type="visitor" size="lg" />
               </div>
-              {(userLevel === 'premium' || userLevel === 'vip') && (
+              {userLevel === 'vip' && (
                 <span className="sr-only" data-testid="vip-badge">VIP Premium Badge Active</span>
               )}
             </div>
@@ -79,7 +79,7 @@ export function VisitorHeader({
                     {remaining}/{getVisitorQuota(userLevel)}
                     <span className="sr-only" data-testid="quota-info">Quota {getVisitorQuota(userLevel)} {t('visitor.b2b_appointments')}</span>
                   </div>
-                  {(userLevel === 'premium' || userLevel === 'vip') && getVisitorQuota(userLevel) === 10 && (
+                  {userLevel === 'vip' && getVisitorQuota(userLevel) === 10 && (
                     <div className="text-xs text-[#C9A84C] mt-1">✓ 10 {t('visitor.b2b_appointments')} Premium</div>
                   )}
                 </div>

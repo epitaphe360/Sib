@@ -1,7 +1,7 @@
 ﻿/**
- * Configuration des types de partenaires SIB Maroc
+ * Configuration des types de sponsors SIB Maroc
  * 6 catégories : Organisateurs, Co-organisateurs, Sponsor Officiel,
- *                Organisateur Délégué, Nos Partenaires, Nos Partenaires Presse
+ *                Organisateur Délégué, Nos Sponsors, Nos Sponsors Presse
  */
 
 export type PartnerTier =
@@ -103,8 +103,8 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
 
   official_sponsor: {
     id: 'official_sponsor',
-    name: 'Sponsor Officiel',
-    displayName: 'Sponsor Officiel',
+    name: 'Partenaire Officiel',
+    displayName: 'Partenaire Officiel',
     price: 0,
     color: '#1B6CA8',
     icon: '⭐',
@@ -120,14 +120,14 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
       leadExports: -1,
     },
     features: [
-      'Sponsor principal du salon',
+      'Partenaire principal du salon',
       'Logo en 1ère ligne partout',
       'Stand exposition premium',
       'Rendez-vous B2B illimités',
       'Visibilité sur tous les supports officiels',
     ],
     exclusivePerks: [
-      'Mention "Sponsor Officiel" sur tous les supports',
+      'Mention "Partenaire Officiel" sur tous les supports',
       'Espace VIP dédié',
       'Présence dans les communications officielles',
     ],
@@ -229,12 +229,12 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
 };
 
 /**
- * Récupère la configuration d'un niveau partenaire
+ * Récupère la configuration d'un niveau sponsor
 
   strategic: {
     id: 'strategic' as PartnerTier,
     name: 'Stratégique',
-    displayName: 'Partenaire Stratégique',
+    displayName: 'Sponsor Stratégique',
     price: 120000,
     color: '#16213e',
     icon: '🎯',
@@ -250,7 +250,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
       leadExports: -1,
     },
     features: [
-      'Partenaire stratégique officiel',
+      'Sponsor stratégique officiel',
       'Logo en 1ère ligne',
       'Stand exposition VIP (4 stands)',
       'Rendez-vous B2B illimités',
@@ -266,7 +266,7 @@ export const PARTNER_TIERS: Record<PartnerTier, PartnerTierConfig> = {
   },
 
 /**
- * Récupère la configuration d'un type partenaire
+ * Récupère la configuration d'un type sponsor
  */
 export function getPartnerTierConfig(tier: PartnerTier | string): PartnerTierConfig {
   return PARTNER_TIERS[tier as PartnerTier] || PARTNER_TIERS.partner;
@@ -285,7 +285,7 @@ export function getPartnerQuota(tier: PartnerTier | string, quotaType: keyof Par
 }
 
 /**
- * Vérifie si un partenaire a accès à une fonctionnalité
+ * Vérifie si un sponsor a accès à une fonctionnalité
  */
 export function hasPartnerAccess(tier: PartnerTier | string, quotaType: keyof PartnerTierConfig['quotas']): boolean {
   const config = getPartnerTierConfig(tier);
@@ -296,7 +296,7 @@ export function hasPartnerAccess(tier: PartnerTier | string, quotaType: keyof Pa
 }
 
 /**
- * Calcule le quota restant pour un partenaire
+ * Calcule le quota restant pour un sponsor
  */
 export function calculatePartnerRemainingQuota(
   tier: PartnerTier | string,
@@ -309,7 +309,7 @@ export function calculatePartnerRemainingQuota(
 }
 
 /**
- * Retourne la liste des types partenaires dans l'ordre d'affichage
+ * Retourne la liste des types sponsors dans l'ordre d'affichage
  */
 export function getPartnerTiersSorted(): PartnerTierConfig[] {
   const order: PartnerTier[] = [
@@ -366,7 +366,7 @@ export function getPartnerTierIndex(tier: PartnerTier | string): number {
 }
 
 /**
- * Compare deux niveaux partenaires
+ * Compare deux niveaux sponsors
  */
 export function canUpgradeTo(currentTier: PartnerTier | string, targetTier: PartnerTier): boolean {
   const current = PARTNER_TIERS[currentTier as PartnerTier];

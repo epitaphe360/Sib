@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   Lock, ArrowRight, Calendar, MapPin, Users, Building2,
@@ -162,7 +162,7 @@ const ACCREDITATION_LEVELS = [
   },
   {
     level: 4,
-    title: 'Partenaire',
+    title: 'Sponsor',
     color: '#4CAF50',
     bg: '#E8F5E9',
     icon: Shield,
@@ -510,7 +510,7 @@ export default function SalonSelectionPage() {
             <div className="grid grid-cols-2 gap-3">
               {[
                 { v: '10+', l: 'Ans d\'expérience' },
-                { v: '200+', l: 'Partenaires' },
+                { v: '200+', l: 'Sponsors' },
                 { v: '85%', l: 'Exposants fidèles' },
                 { v: '40+', l: 'Pays représentés' },
               ].map((s) => (

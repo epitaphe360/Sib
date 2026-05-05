@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -77,7 +77,7 @@ const registrationSchema = z.object({
   message: "Les mots de passe ne correspondent pas",
   path: ["confirmPassword"],
 }).refine((data) => {
-  // Téléphone obligatoire pour exposants et partenaires
+  // Téléphone obligatoire pour exposants et sponsors
   if ((data.accountType === 'exhibitor' || data.accountType === 'partner') && (!data.phone || data.phone.length < 8)) {
     return false;
   }
@@ -91,7 +91,7 @@ const registrationSchema = z.object({
   }
   return true;
 }, {
-  message: "Nom de l'entreprise requis pour les exposants et partenaires",
+  message: "Nom de l'entreprise requis pour les exposants et sponsors",
   path: ["companyName"],
 }).refine((data) => {
   if ((data.accountType === 'exhibitor' || data.accountType === 'partner') && (!data.position || data.position.length < 2)) {
@@ -99,19 +99,19 @@ const registrationSchema = z.object({
   }
   return true;
 }, {
-  message: "Poste requis pour les exposants et partenaires",
+  message: "Poste requis pour les exposants et sponsors",
   path: ["position"],
 }).refine((data) => {
-  // Description obligatoire uniquement pour exposants et partenaires
+  // Description obligatoire uniquement pour exposants et sponsors
   if ((data.accountType === 'exhibitor' || data.accountType === 'partner') && (!data.description || data.description.length < 50)) {
     return false;
   }
   return true;
 }, {
-  message: "Description requise (minimum 50 caractères) pour les exposants et partenaires",
+  message: "Description requise (minimum 50 caractères) pour les exposants et sponsors",
   path: ["description"],
 }).refine((data) => {
-  // Objectifs obligatoires uniquement pour exposants et partenaires
+  // Objectifs obligatoires uniquement pour exposants et sponsors
   if ((data.accountType === 'exhibitor' || data.accountType === 'partner') && (!data.objectives || data.objectives.length < 1)) {
     return false;
   }
@@ -253,8 +253,8 @@ export default function RegisterPage() {
     },
     {
       value: 'partner',
-      title: 'Partenaire',
-      description: 'Sponsor ou partenaire officiel',
+      title: 'Sponsor',
+      description: 'Sponsor ou sponsor officiel',
       icon: Globe,
       color: 'bg-amber-50 text-sib-gold border-sib-gold'
     },
@@ -292,7 +292,7 @@ export default function RegisterPage() {
       'Identifier des solutions pour mon entreprise',
       'Participer aux événements networking'
     ] : [
-      'Trouver de nouveaux partenaires',
+      'Trouver de nouveaux sponsors',
       'Développer mon réseau',
       'Présenter mes innovations',
       'Identifier des fournisseurs',
@@ -343,12 +343,12 @@ export default function RegisterPage() {
         }
       }
       if (currentStep === 3) {
-        // Téléphone obligatoire pour exposants/partenaires
+        // Téléphone obligatoire pour exposants/sponsors
         if (watchedAccountType !== 'visitor') {
           const phoneValue = watch('phone');
           if (!phoneValue || phoneValue.length < 8) {
             setError('phone', { message: 'Numéro de téléphone requis (minimum 8 caractères)' });
-            console.warn('❌ [INSCRIPTION] Erreur téléphone manquant (exposant/partenaire)');
+            console.warn('❌ [INSCRIPTION] Erreur téléphone manquant (exposant/sponsor)');
             return;
           }
         }
@@ -388,7 +388,7 @@ export default function RegisterPage() {
           if (existingUser) {
             console.warn('⚠️ [INSCRIPTION - Étape 3] Email déjà existant:', existingUser);
             const roleLabel = existingUser.role === 'exhibitor' ? 'exposant' :
-                             existingUser.role === 'partner' ? 'partenaire' : 'visiteur';
+                             existingUser.role === 'partner' ? 'sponsor' : 'visiteur';
 
             setError('email', {
               type: 'manual',
@@ -490,7 +490,7 @@ export default function RegisterPage() {
       if (existingUser) {
         console.warn('⚠️ [INSCRIPTION] Email déjà existant dans la table users');
         const roleLabel = existingUser.role === 'exhibitor' ? 'exposant' :
-                         existingUser.role === 'partner' ? 'partenaire' : 'visiteur';
+                         existingUser.role === 'partner' ? 'sponsor' : 'visiteur';
         toast.error(`⚠️ Cet email est déjà enregistré en tant que ${roleLabel}. Connectez-vous pour accéder à votre compte.`);
 
         // Mettre une erreur sur le champ email
@@ -537,7 +537,7 @@ export default function RegisterPage() {
         const { EmailService } = await import('../../services/emailService');
         const firstName = data.firstName || data.accountType;
         const accountTypeLabel = data.accountType === 'visitor' ? 'visiteur' :
-                                data.accountType === 'exhibitor' ? 'exposant' : 'partenaire';
+                                data.accountType === 'exhibitor' ? 'exposant' : 'sponsor';
 
         await EmailService.sendWelcomeEmail(data.email, firstName, accountTypeLabel);
         console.log('✅ [INSCRIPTION] Email de bienvenue envoyé');
@@ -546,9 +546,9 @@ export default function RegisterPage() {
         // Non-blocking error - registration is already complete
       }
 
-      // Si c'est un exposant ou partenaire, afficher un toast indiquant validation admin requise
+      // Si c'est un exposant ou sponsor, afficher un toast indiquant validation admin requise
       if (data.accountType && data.accountType !== 'visitor') {
-        const label = data.accountType === 'exhibitor' ? 'exposant' : 'partenaire';
+        const label = data.accountType === 'exhibitor' ? 'exposant' : 'sponsor';
         console.log(`ℹ️ [INSCRIPTION] Compte ${label} - validation admin requise`);
         toast.success(`Inscription réussie — votre compte ${label} sera activé par un administrateur. Vous recevrez un email une fois validé.`);
       }

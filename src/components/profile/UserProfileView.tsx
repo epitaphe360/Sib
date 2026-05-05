@@ -55,7 +55,7 @@ export default function UserProfileView({
   const getUserTypeLabel = (type: string) => {
     switch (type) {
       case 'exhibitor': return 'Exposant';
-      case 'partner': return 'Partenaire';
+      case 'partner': return 'Sponsor';
       case 'visitor': return 'Visiteur';
       case 'admin': return 'Administrateur';
       default: return type;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -215,7 +215,7 @@ export const PartnerProfileEditPage: React.FC = () => {
         toast.error('Utilisateur non connecté');
       }
     } catch (err) {
-      console.error('Erreur sauvegarde profil partenaire:', err);
+      console.error('Erreur sauvegarde profil sponsor:', err);
       toast.error('Erreur lors de la sauvegarde. Veuillez réessayer.');
     } finally {
       setIsSaving(false);
@@ -271,7 +271,7 @@ export const PartnerProfileEditPage: React.FC = () => {
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Profil Partenaire</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Profil Sponsor</h1>
               <p className="text-gray-600 mt-2">Complétez votre profil progressivement - seul le nom est obligatoire</p>
             </div>
             <div className="text-right">

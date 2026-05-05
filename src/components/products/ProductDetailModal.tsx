@@ -38,12 +38,12 @@ export default function ProductDetailModal({ product, exhibitorName, onClose }: 
   }, [product?.id]);
 
   React.useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') {onClose();} };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  if (!product) return null;
+  if (!product) {return null;}
 
   const images = product.images?.filter(Boolean) || [];
   const hasDiscount = product.originalPrice && product.price && product.originalPrice > product.price;

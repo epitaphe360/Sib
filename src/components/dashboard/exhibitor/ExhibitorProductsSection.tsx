@@ -295,7 +295,7 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
   useEffect(() => { loadProducts(); }, [loadProducts]);
 
   const handleSave = async (form: ProductFormState) => {
-    if (!exhibitorDbId) return;
+    if (!exhibitorDbId) {return;}
     setIsSaving(true);
     const payload: Record<string, unknown> = {
       exhibitor_id: exhibitorDbId,

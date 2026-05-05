@@ -1,7 +1,8 @@
 ﻿import React, { useEffect, useState, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toast } from 'sonner';
-import { Download, Printer, RefreshCw, AlertTriangle, CheckCircle, XCircle, Scan, Calendar, User, Briefcase, Building } from 'lucide-react';
+import { Download, Printer, RefreshCw, AlertTriangle, CheckCircle, XCircle, Scan, Calendar, User, Briefcase, Building, FileText } from 'lucide-react';
+import PrintableBadgeA4 from '../components/badge/PrintableBadgeA4';
 import useAuthStore from '../store/authStore';
 import { useTranslation } from '../hooks/useTranslation';
 import {
@@ -15,6 +16,10 @@ import { UserBadge } from '../types';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 
+function handlePrintBadge() {
+  globalThis.print();
+}
+
 export default function BadgePage() {
   const { user } = useAuthStore();
   const { t } = useTranslation();
@@ -22,7 +27,14 @@ export default function BadgePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [showA4, setShowA4] = useState(false);
   const badgeRef = useRef<HTMLDivElement>(null);
+  const a4Ref = useRef<HTMLDivElement>(null);
+
+  function handlePrintA4() {
+    setShowA4(true);
+    setTimeout(() => { globalThis.print(); }, 300);
+  }
 
   useEffect(() => {
     if (user?.id) {
@@ -84,7 +96,7 @@ export default function BadgePage() {
           a.download = `badge-${badge.badgeCode}.png`;
           document.body.appendChild(a);
           a.click();
-          document.body.removeChild(a);
+          a.remove();
           URL.revokeObjectURL(url);
           toast.success(t('badge.badge_downloaded'));
         }
@@ -93,10 +105,6 @@ export default function BadgePage() {
       console.error('Error downloading badge:', err);
       toast.error(t('badge.download_error'));
     }
-  }
-
-  function handlePrintBadge() {
-    window.print();
   }
 
   if (loading) {
@@ -127,23 +135,23 @@ export default function BadgePage() {
       <style>
         {`
           @media print {
-            body * {
-              visibility: hidden;
+            body * { visibility: hidden; }
+            #printable-badge-a4, #printable-badge-a4 * { visibility: visible; }
+            #printable-badge-a4 {
+              position: fixed;
+              top: 0; left: 0;
+              width: 297mm;
+              background: #fff !important;
             }
-            .badge-container, .badge-container * {
-              visibility: visible;
-            }
+            .badge-container, .badge-container * { visibility: visible; }
             .badge-container {
               position: absolute;
-              left: 50%;
-              top: 50%;
+              left: 50%; top: 50%;
               transform: translate(-50%, -50%);
               box-shadow: none !important;
               border: 1px solid #ccc !important;
             }
-            .no-print {
-              display: none !important;
-            }
+            .no-print { display: none !important; }
           }
         `}
       </style>
@@ -206,6 +214,14 @@ export default function BadgePage() {
             >
               <Printer className="w-4 h-4 mr-2" />
               {t('badge.print')}
+            </Button>
+            <Button
+              onClick={handlePrintA4}
+              variant="outline"
+              className="border-indigo-600 text-indigo-700 hover:bg-indigo-50"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Imprimer Badge A4
             </Button>
             <Button
               onClick={handleGenerateBadge}
@@ -295,7 +311,7 @@ export default function BadgePage() {
               {/* QR Code */}
               <div className="text-center p-6 bg-white">
                 <div className="inline-block p-4 bg-white rounded-xl border border-gray-200 shadow-inner">
-                  <QRCodeCanvas value={qrData} size={160} level="H" includeMargin={false} />
+                  <QRCodeCanvas value={qrData} size={160} level="H" marginSize={4} />
                 </div>
                 <div className="text-xs text-gray-400 mt-2 font-mono">
                   ID: {badge.badgeCode}
@@ -314,6 +330,25 @@ export default function BadgePage() {
               </div>
             </div>
           </div>
+
+          {/* Badge A4 bifold */}
+          {showA4 && (
+            <div className="mt-8" ref={a4Ref}>
+              <div className="no-print flex items-center justify-between mb-3">
+                <h2 className="text-xl font-bold text-gray-900">📄 Badge A4 bifold — 4 faces</h2>
+                <Button
+                  onClick={() => setShowA4(false)}
+                  variant="ghost"
+                  className="text-gray-500"
+                >
+                  Masquer
+                </Button>
+              </div>
+              <div className="overflow-x-auto">
+                <PrintableBadgeA4 badge={badge} />
+              </div>
+            </div>
+          )}
 
           {/* Instructions & Stats Grid */}
           <div className="no-print grid md:grid-cols-2 gap-6">

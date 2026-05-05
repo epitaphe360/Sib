@@ -1,0 +1,631 @@
+#!/usr/bin/env python3
+"""
+Génère les sections Arabe (AR) et Espagnol (ES) dans translations.ts
+basées sur les clés de la section FR.
+"""
+import re
+
+with open('src/store/translations.ts', 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Extraire toutes les clés-valeurs FR
+en_pos = content.find('\n  en: {')
+fr_section = content[content.find('\n  fr: {')+1:en_pos]
+
+# Parser les paires clé-valeur
+fr_pairs = re.findall(r"'([^']+)'\s*:\s*'((?:[^'\\]|\\.)*)'", fr_section)
+print(f"Clés FR extraites: {len(fr_pairs)}")
+
+# Dictionnaire de traductions AR (Arabe marocain/standard)
+# Format: clé_partielle → traduction AR
+AR_TRANSLATIONS = {
+    # Navigation
+    'nav.home': 'الرئيسية',
+    'nav.exhibitors': 'العارضون',
+    'nav.partners': 'الشركاء',
+    'nav.networking': 'التواصل',
+    'nav.event': 'الحدث',
+    'nav.participate': 'المشاركة',
+    'nav.contact': 'اتصل بنا',
+    'nav.pavilions': 'الأجنحة',
+    'nav.events': 'الفعاليات',
+    'nav.news': 'الأخبار',
+    'nav.information': 'المعلومات',
+    'nav.accommodation': 'الإقامة',
+    'nav.subscriptions': 'الاشتراكات',
+    'nav.dashboard': 'لوحة التحكم',
+    'nav.appointments': 'المواعيد',
+    'nav.programme': 'البرنامج',
+    'nav.map': 'الخريطة',
+    'nav.faq': 'الأسئلة الشائعة',
+    'nav.profile': 'الملف الشخصي',
+    'nav.settings': 'الإعدادات',
+    'nav.logout': 'تسجيل الخروج',
+    'nav.login': 'تسجيل الدخول',
+    'nav.register': 'إنشاء حساب',
+    'nav.my_space': 'فضائي',
+    'nav.exhibitor_space': 'فضاء العارض',
+    'nav.visitor_space': 'فضاء الزائر',
+    'nav.partner_space': 'فضاء الشريك',
+    # Common
+    'common.loading': 'جارٍ التحميل...',
+    'common.error': 'خطأ',
+    'common.success': 'نجاح',
+    'common.cancel': 'إلغاء',
+    'common.confirm': 'تأكيد',
+    'common.save': 'حفظ',
+    'common.edit': 'تعديل',
+    'common.delete': 'حذف',
+    'common.close': 'إغلاق',
+    'common.back': 'رجوع',
+    'common.next': 'التالي',
+    'common.previous': 'السابق',
+    'common.submit': 'إرسال',
+    'common.search': 'بحث',
+    'common.filter': 'تصفية',
+    'common.sort': 'ترتيب',
+    'common.view': 'عرض',
+    'common.download': 'تحميل',
+    'common.upload': 'رفع',
+    'common.share': 'مشاركة',
+    'common.copy': 'نسخ',
+    'common.print': 'طباعة',
+    'common.refresh': 'تحديث',
+    'common.yes': 'نعم',
+    'common.no': 'لا',
+    'common.ok': 'موافق',
+    'common.apply': 'تطبيق',
+    'common.reset': 'إعادة تعيين',
+    'common.clear': 'مسح',
+    'common.all': 'الكل',
+    'common.none': 'لا شيء',
+    'common.other': 'أخرى',
+    'common.more': 'المزيد',
+    'common.less': 'أقل',
+    'common.show': 'إظهار',
+    'common.hide': 'إخفاء',
+    'common.add': 'إضافة',
+    'common.remove': 'إزالة',
+    'common.update': 'تحديث',
+    'common.create': 'إنشاء',
+    'common.new': 'جديد',
+    'common.old': 'قديم',
+    'common.date': 'التاريخ',
+    'common.time': 'الوقت',
+    'common.name': 'الاسم',
+    'common.email': 'البريد الإلكتروني',
+    'common.phone': 'الهاتف',
+    'common.address': 'العنوان',
+    'common.city': 'المدينة',
+    'common.country': 'البلد',
+    'common.website': 'الموقع الإلكتروني',
+    'common.description': 'الوصف',
+    'common.title': 'العنوان',
+    'common.status': 'الحالة',
+    'common.type': 'النوع',
+    'common.category': 'الفئة',
+    'common.contact': 'اتصل بنا',
+    'common.read_more': 'اقرأ المزيد',
+    'common.see_more': 'شاهد المزيد',
+    'common.see_all': 'شاهد الكل',
+    'common.go_back': 'العودة',
+    'common.required': 'مطلوب',
+    'common.optional': 'اختياري',
+    'common.active': 'نشط',
+    'common.inactive': 'غير نشط',
+    'common.pending': 'قيد الانتظار',
+    'common.approved': 'موافق عليه',
+    'common.rejected': 'مرفوض',
+    'common.draft': 'مسودة',
+    'common.published': 'منشور',
+    'common.archived': 'مؤرشف',
+    'common.delete_confirm': 'هل أنت متأكد من أنك تريد الحذف؟',
+    'common.published_articles': 'المقالات المنشورة',
+    'common.reading_time': '{{minutes}} دقيقة للقراءة',
+    'common.requestAudit': 'طلب تدقيق',
+    'common.selected': '{{count}} محدد(ة)',
+    # Auth
+    'auth.login': 'تسجيل الدخول',
+    'auth.logout': 'تسجيل الخروج',
+    'auth.register': 'إنشاء حساب',
+    'auth.email': 'البريد الإلكتروني',
+    'auth.password': 'كلمة المرور',
+    'auth.forgot_password': 'نسيت كلمة المرور؟',
+    'auth.reset_password': 'إعادة تعيين كلمة المرور',
+    'auth.confirm_password': 'تأكيد كلمة المرور',
+    'auth.first_name': 'الاسم الأول',
+    'auth.last_name': 'اسم العائلة',
+    'auth.company': 'الشركة',
+    'auth.welcome': 'مرحبًا',
+    'auth.welcome_back': 'مرحبًا بعودتك',
+    'auth.sign_in': 'تسجيل الدخول',
+    'auth.sign_up': 'إنشاء حساب',
+    'auth.or': 'أو',
+    'auth.google': 'الدخول بـ Google',
+    'auth.already_account': 'لديك حساب بالفعل؟',
+    'auth.no_account': 'ليس لديك حساب؟',
+    # Dashboard
+    'dashboard.title': 'لوحة التحكم',
+    'dashboard.welcome': 'مرحبًا، {{name}}',
+    'dashboard.overview': 'نظرة عامة',
+    'dashboard.statistics': 'الإحصائيات',
+    'dashboard.recent_activity': 'النشاط الأخير',
+    'dashboard.quick_actions': 'الإجراءات السريعة',
+    # Exhibitors
+    'exhibitors.title': 'العارضون',
+    'exhibitors.search': 'البحث عن عارض',
+    'exhibitors.filter': 'تصفية العارضين',
+    'exhibitors.category': 'الفئة',
+    'exhibitors.pavilion': 'الجناح',
+    'exhibitors.stand': 'الجناح رقم',
+    'exhibitors.contact': 'الاتصال',
+    'exhibitors.website': 'الموقع',
+    'exhibitors.products': 'المنتجات',
+    'exhibitors.services': 'الخدمات',
+    # Partners
+    'partners.title': 'الشركاء',
+    'partners.sponsors': 'الرعاة',
+    'partners.media': 'شركاء الإعلام',
+    # Events
+    'events.title': 'الفعاليات',
+    'events.upcoming': 'الفعاليات القادمة',
+    'events.past': 'الفعاليات الماضية',
+    'events.date': 'التاريخ',
+    'events.time': 'الوقت',
+    'events.location': 'الموقع',
+    'events.register': 'التسجيل',
+    'events.registered': 'مسجل',
+    'events.full': 'مكتمل',
+    'events.free': 'مجاني',
+    # Forms
+    'form.required': 'هذا الحقل مطلوب',
+    'form.invalid_email': 'بريد إلكتروني غير صالح',
+    'form.min_length': 'الحد الأدنى {{min}} حرف',
+    'form.max_length': 'الحد الأقصى {{max}} حرف',
+    'form.submit': 'إرسال',
+    'form.cancel': 'إلغاء',
+    'form.save': 'حفظ',
+    'form.reset': 'إعادة تعيين',
+    'form.error.max_items': 'الحد الأقصى {{max}} عناصر مسموح بها',
+    # Errors
+    'errors.general': 'حدث خطأ. يرجى المحاولة مجددًا.',
+    'errors.network': 'خطأ في الشبكة. تحقق من اتصالك.',
+    'errors.unauthorized': 'غير مصرح لك بهذا الإجراء.',
+    'errors.not_found': 'الصفحة المطلوبة غير موجودة.',
+    'errors.server': 'خطأ في الخادم. يرجى المحاولة لاحقًا.',
+    'errors.contact_support_resolve': 'تواصل مع الدعم لحل هذه المشكلة',
+    'errors.unknown_user_type': 'نوع مستخدم غير معروف',
+    # Visitor
+    'visitor.title': 'الزائر',
+    'visitor.register': 'تسجيل كزائر',
+    'visitor.vip': 'زائر VIP',
+    'visitor.free': 'زائر مجاني',
+    'visitor.upgrade': 'الترقية إلى VIP',
+    'visitor.quota_reached': 'تم الوصول إلى الحصة',
+    'visitor.pending_requests': 'الطلبات المعلقة',
+    'visitor.awaiting_confirmation': 'في انتظار التأكيد',
+    'visitor.access_ai_matching': 'الوصول إلى مطابقة الذكاء الاصطناعي',
+    'visitor.ai_matching_title': 'مطابقة الذكاء الاصطناعي',
+    'visitor.ai_matching_desc': 'ابحث عن جهات الاتصال ذات الصلة بمساعدة الذكاء الاصطناعي',
+    'visitor.sector.architecture': 'الهندسة المعمارية',
+    'visitor.sector.construction': 'البناء',
+    'visitor.sector.electric': 'الكهرباء',
+    'visitor.sector.equipment': 'المعدات',
+    'visitor.sector.hvac': 'التكييف والتدفئة',
+    'visitor.sector.interior': 'التصميم الداخلي',
+    'visitor.sector.landscaping': 'تنسيق الحدائق',
+    'visitor.sector.plumbing': 'السباكة',
+    'visitor.sector.real_estate': 'العقارات',
+    'visitor.sector.renovation': 'التجديد',
+    'visitor.sector.security': 'الأمن',
+    'visitor.sector.smart_home': 'المنزل الذكي',
+    'visitor.sector.sustainability': 'التنمية المستدامة',
+    'visitor.sector.technology': 'التكنولوجيا',
+    'visitor.sector.transport': 'النقل',
+    'visitor.sector.utilities': 'الخدمات العامة',
+    'visitor.sector.wood': 'الخشب / النجارة',
+    'visitor.sector.other': 'أخرى',
+    # Partner
+    'partner.title': 'الشريك',
+    'partner.access_ai_matching': 'الوصول إلى مطابقة الذكاء الاصطناعي',
+    'partner.access_networking': 'الوصول إلى التواصل',
+    'partner.activity.subtitle': 'نشاطك الأخير على المنصة',
+    'partner.advanced_networking': 'التواصل المتقدم',
+    'partner.advanced_networking_desc': 'وسّع شبكتك المهنية',
+    'partner.ai_matching': 'مطابقة الذكاء الاصطناعي',
+    'partner.ai_matching_desc': 'اعثر على أفضل الفرص بمساعدة الذكاء الاصطناعي',
+    'partner.back_to_dashboard': 'العودة إلى لوحة التحكم',
+    'partner.events.subtitle': 'الفعاليات التي تشارك فيها',
+    'partner.no_recent_activity': 'لا يوجد نشاط حديث',
+    'partner.pending_requests': 'الطلبات المعلقة',
+    # Payment
+    'payment.title': 'الدفع',
+    'payment.amount': 'المبلغ',
+    'payment.method': 'طريقة الدفع',
+    'payment.card': 'بطاقة ائتمان',
+    'payment.bank_transfer': 'تحويل بنكي',
+    'payment.paypal': 'PayPal',
+    'payment.success': 'تم الدفع بنجاح',
+    'payment.failed': 'فشل الدفع',
+    'payment.pending': 'الدفع قيد المعالجة',
+    'payment.upgradeError': 'خطأ أثناء الترقية',
+    'payment.upgradeSuccess': 'تمت الترقية بنجاح',
+    # Upload
+    'upload.file_not_image': 'الملف المحدد ليس صورة',
+    'upload.image_too_large': 'الصورة تتجاوز الحجم الأقصى المسموح به',
+    'upload.images_count': '{{count}} صورة',
+    'upload.max_images_error': 'الحد الأقصى {{max}} صور مسموح بها',
+    # Networking
+    'networking.title': 'التواصل',
+    'networking.connect': 'اتصال',
+    'networking.message': 'رسالة',
+    'networking.request_sent': 'تم إرسال الطلب',
+    'networking.request_accepted': 'تم قبول الطلب',
+    'networking.request_rejected': 'تم رفض الطلب',
+    'networking.error.quota_reached_limit': 'تم الوصول إلى حصة الاتصالات',
+    'networking.search.results_found': '{{count}} نتيجة وُجدت',
+    'networking.success.request_sent': 'تم إرسال طلب الاتصال',
+    # Appointments
+    'appointments.title': 'المواعيد',
+    'appointments.book': 'حجز موعد',
+    'appointments.cancel': 'إلغاء الموعد',
+    'appointments.meeting_with': 'اجتماع مع {{name}}',
+    # Actions
+    'actions.cancel_request': 'إلغاء الطلب',
+    # Home
+    'home.featured_exhibitors_badge': 'عارضون مميزون',
+    'home.featured_partners_badge': 'شركاء مميزون',
+    'home.no_exhibitors_yet': 'لا يوجد عارضون حتى الآن',
+    # Countdown
+    'countdown.opening_description': 'العد التنازلي حتى افتتاح المعرض',
+    'countdown.share_text': 'شارك هذا الحدث',
+    # Quota
+    'quota.remaining': '{{count}} حصة متبقية',
+    'quota.remaining_plural': '{{count}} حصص متبقية',
+    # Minisite
+    'minisite.preview.more_products': 'عرض المزيد من المنتجات',
+    # Hero
+    'hero.title': 'السلون الدولي للبناء',
+    'hero.subtitle': 'المعرض الدولي للبناء والعقارات',
+    'hero.cta.visitor': 'تسجيل كزائر',
+    'hero.cta.exhibitor': 'التسجيل كعارض',
+    'hero.edition': 'الدورة {{year}}',
+    # Stats
+    'stats.b2b': 'اجتماع B2B',
+    'stats.surface': 'متر مربع',
+    # About
+    'about.surface_stat': '{{value}} متر مربع',
+}
+
+# Dictionnaire ES (Espagnol)
+ES_TRANSLATIONS = {
+    # Navigation
+    'nav.home': 'Inicio',
+    'nav.exhibitors': 'Expositores',
+    'nav.partners': 'Socios',
+    'nav.networking': 'Networking',
+    'nav.event': 'Evento',
+    'nav.participate': 'Participar',
+    'nav.contact': 'Contacto',
+    'nav.pavilions': 'Pabellones',
+    'nav.events': 'Eventos',
+    'nav.news': 'Noticias',
+    'nav.information': 'Información',
+    'nav.accommodation': 'Alojamiento',
+    'nav.subscriptions': 'Suscripciones',
+    'nav.dashboard': 'Panel de control',
+    'nav.appointments': 'Citas',
+    'nav.programme': 'Programa',
+    'nav.map': 'Mapa',
+    'nav.faq': 'Preguntas frecuentes',
+    'nav.profile': 'Perfil',
+    'nav.settings': 'Configuración',
+    'nav.logout': 'Cerrar sesión',
+    'nav.login': 'Iniciar sesión',
+    'nav.register': 'Registrarse',
+    'nav.my_space': 'Mi espacio',
+    'nav.exhibitor_space': 'Espacio expositor',
+    'nav.visitor_space': 'Espacio visitante',
+    'nav.partner_space': 'Espacio socio',
+    # Common
+    'common.loading': 'Cargando...',
+    'common.error': 'Error',
+    'common.success': 'Éxito',
+    'common.cancel': 'Cancelar',
+    'common.confirm': 'Confirmar',
+    'common.save': 'Guardar',
+    'common.edit': 'Editar',
+    'common.delete': 'Eliminar',
+    'common.close': 'Cerrar',
+    'common.back': 'Volver',
+    'common.next': 'Siguiente',
+    'common.previous': 'Anterior',
+    'common.submit': 'Enviar',
+    'common.search': 'Buscar',
+    'common.filter': 'Filtrar',
+    'common.sort': 'Ordenar',
+    'common.view': 'Ver',
+    'common.download': 'Descargar',
+    'common.upload': 'Subir',
+    'common.share': 'Compartir',
+    'common.copy': 'Copiar',
+    'common.print': 'Imprimir',
+    'common.refresh': 'Actualizar',
+    'common.yes': 'Sí',
+    'common.no': 'No',
+    'common.ok': 'Aceptar',
+    'common.apply': 'Aplicar',
+    'common.reset': 'Restablecer',
+    'common.clear': 'Limpiar',
+    'common.all': 'Todo',
+    'common.none': 'Ninguno',
+    'common.other': 'Otro',
+    'common.more': 'Más',
+    'common.less': 'Menos',
+    'common.show': 'Mostrar',
+    'common.hide': 'Ocultar',
+    'common.add': 'Agregar',
+    'common.remove': 'Eliminar',
+    'common.update': 'Actualizar',
+    'common.create': 'Crear',
+    'common.new': 'Nuevo',
+    'common.old': 'Antiguo',
+    'common.date': 'Fecha',
+    'common.time': 'Hora',
+    'common.name': 'Nombre',
+    'common.email': 'Correo electrónico',
+    'common.phone': 'Teléfono',
+    'common.address': 'Dirección',
+    'common.city': 'Ciudad',
+    'common.country': 'País',
+    'common.website': 'Sitio web',
+    'common.description': 'Descripción',
+    'common.title': 'Título',
+    'common.status': 'Estado',
+    'common.type': 'Tipo',
+    'common.category': 'Categoría',
+    'common.contact': 'Contacto',
+    'common.read_more': 'Leer más',
+    'common.see_more': 'Ver más',
+    'common.see_all': 'Ver todo',
+    'common.go_back': 'Volver',
+    'common.required': 'Obligatorio',
+    'common.optional': 'Opcional',
+    'common.active': 'Activo',
+    'common.inactive': 'Inactivo',
+    'common.pending': 'Pendiente',
+    'common.approved': 'Aprobado',
+    'common.rejected': 'Rechazado',
+    'common.draft': 'Borrador',
+    'common.published': 'Publicado',
+    'common.archived': 'Archivado',
+    'common.delete_confirm': '¿Está seguro de que desea eliminar?',
+    'common.published_articles': 'Artículos publicados',
+    'common.reading_time': '{{minutes}} min de lectura',
+    'common.requestAudit': 'Solicitar auditoría',
+    'common.selected': '{{count}} seleccionado(s)',
+    # Auth
+    'auth.login': 'Iniciar sesión',
+    'auth.logout': 'Cerrar sesión',
+    'auth.register': 'Registrarse',
+    'auth.email': 'Correo electrónico',
+    'auth.password': 'Contraseña',
+    'auth.forgot_password': '¿Olvidó su contraseña?',
+    'auth.reset_password': 'Restablecer contraseña',
+    'auth.confirm_password': 'Confirmar contraseña',
+    'auth.first_name': 'Nombre',
+    'auth.last_name': 'Apellido',
+    'auth.company': 'Empresa',
+    'auth.welcome': 'Bienvenido',
+    'auth.welcome_back': 'Bienvenido de nuevo',
+    'auth.sign_in': 'Iniciar sesión',
+    'auth.sign_up': 'Registrarse',
+    'auth.or': 'o',
+    'auth.google': 'Continuar con Google',
+    'auth.already_account': '¿Ya tiene una cuenta?',
+    'auth.no_account': '¿No tiene una cuenta?',
+    # Dashboard
+    'dashboard.title': 'Panel de control',
+    'dashboard.welcome': 'Bienvenido, {{name}}',
+    'dashboard.overview': 'Resumen',
+    'dashboard.statistics': 'Estadísticas',
+    'dashboard.recent_activity': 'Actividad reciente',
+    'dashboard.quick_actions': 'Acciones rápidas',
+    # Exhibitors
+    'exhibitors.title': 'Expositores',
+    'exhibitors.search': 'Buscar expositor',
+    'exhibitors.filter': 'Filtrar expositores',
+    'exhibitors.category': 'Categoría',
+    'exhibitors.pavilion': 'Pabellón',
+    'exhibitors.stand': 'Stand n.°',
+    'exhibitors.contact': 'Contacto',
+    'exhibitors.website': 'Sitio web',
+    'exhibitors.products': 'Productos',
+    'exhibitors.services': 'Servicios',
+    # Partners
+    'partners.title': 'Socios',
+    'partners.sponsors': 'Patrocinadores',
+    'partners.media': 'Socios de medios',
+    # Events
+    'events.title': 'Eventos',
+    'events.upcoming': 'Próximos eventos',
+    'events.past': 'Eventos pasados',
+    'events.date': 'Fecha',
+    'events.time': 'Hora',
+    'events.location': 'Ubicación',
+    'events.register': 'Inscribirse',
+    'events.registered': 'Inscrito',
+    'events.full': 'Completo',
+    'events.free': 'Gratis',
+    # Forms
+    'form.required': 'Este campo es obligatorio',
+    'form.invalid_email': 'Correo electrónico no válido',
+    'form.min_length': 'Mínimo {{min}} caracteres',
+    'form.max_length': 'Máximo {{max}} caracteres',
+    'form.submit': 'Enviar',
+    'form.cancel': 'Cancelar',
+    'form.save': 'Guardar',
+    'form.reset': 'Restablecer',
+    'form.error.max_items': 'Máximo {{max}} elementos permitidos',
+    # Errors
+    'errors.general': 'Se produjo un error. Inténtelo de nuevo.',
+    'errors.network': 'Error de red. Compruebe su conexión.',
+    'errors.unauthorized': 'No está autorizado para esta acción.',
+    'errors.not_found': 'La página solicitada no existe.',
+    'errors.server': 'Error del servidor. Inténtelo más tarde.',
+    'errors.contact_support_resolve': 'Contacte con el soporte para resolver este problema',
+    'errors.unknown_user_type': 'Tipo de usuario desconocido',
+    # Visitor
+    'visitor.title': 'Visitante',
+    'visitor.register': 'Registrarse como visitante',
+    'visitor.vip': 'Visitante VIP',
+    'visitor.free': 'Visitante gratuito',
+    'visitor.upgrade': 'Actualizar a VIP',
+    'visitor.quota_reached': 'Cuota alcanzada',
+    'visitor.pending_requests': 'Solicitudes pendientes',
+    'visitor.awaiting_confirmation': 'Esperando confirmación',
+    'visitor.access_ai_matching': 'Acceder al matching de IA',
+    'visitor.ai_matching_title': 'Matching de IA',
+    'visitor.ai_matching_desc': 'Encuentre contactos relevantes con IA',
+    'visitor.sector.architecture': 'Arquitectura',
+    'visitor.sector.construction': 'Construcción',
+    'visitor.sector.electric': 'Electricidad',
+    'visitor.sector.equipment': 'Equipamiento',
+    'visitor.sector.hvac': 'HVAC / Climatización',
+    'visitor.sector.interior': 'Diseño de interiores',
+    'visitor.sector.landscaping': 'Jardinería',
+    'visitor.sector.plumbing': 'Fontanería',
+    'visitor.sector.real_estate': 'Inmobiliaria',
+    'visitor.sector.renovation': 'Renovación',
+    'visitor.sector.security': 'Seguridad',
+    'visitor.sector.smart_home': 'Hogar inteligente',
+    'visitor.sector.sustainability': 'Sostenibilidad',
+    'visitor.sector.technology': 'Tecnología',
+    'visitor.sector.transport': 'Transporte',
+    'visitor.sector.utilities': 'Servicios públicos',
+    'visitor.sector.wood': 'Madera / Carpintería',
+    'visitor.sector.other': 'Otro',
+    # Partner
+    'partner.title': 'Socio',
+    'partner.access_ai_matching': 'Acceder al matching de IA',
+    'partner.access_networking': 'Acceder al networking',
+    'partner.activity.subtitle': 'Su actividad reciente en la plataforma',
+    'partner.advanced_networking': 'Networking avanzado',
+    'partner.advanced_networking_desc': 'Amplíe su red profesional',
+    'partner.ai_matching': 'Matching de IA',
+    'partner.ai_matching_desc': 'Encuentre las mejores oportunidades con IA',
+    'partner.back_to_dashboard': 'Volver al panel de control',
+    'partner.events.subtitle': 'Eventos en los que participa',
+    'partner.no_recent_activity': 'Sin actividad reciente',
+    'partner.pending_requests': 'Solicitudes pendientes',
+    # Payment
+    'payment.title': 'Pago',
+    'payment.amount': 'Importe',
+    'payment.method': 'Método de pago',
+    'payment.card': 'Tarjeta de crédito',
+    'payment.bank_transfer': 'Transferencia bancaria',
+    'payment.paypal': 'PayPal',
+    'payment.success': 'Pago realizado con éxito',
+    'payment.failed': 'Pago fallido',
+    'payment.pending': 'Pago en proceso',
+    'payment.upgradeError': 'Error al actualizar',
+    'payment.upgradeSuccess': 'Actualización exitosa',
+    # Upload
+    'upload.file_not_image': 'El archivo seleccionado no es una imagen',
+    'upload.image_too_large': 'La imagen supera el tamaño máximo permitido',
+    'upload.images_count': '{{count}} imagen(es)',
+    'upload.max_images_error': 'Máximo {{max}} imágenes permitidas',
+    # Networking
+    'networking.title': 'Networking',
+    'networking.connect': 'Conectar',
+    'networking.message': 'Mensaje',
+    'networking.request_sent': 'Solicitud enviada',
+    'networking.request_accepted': 'Solicitud aceptada',
+    'networking.request_rejected': 'Solicitud rechazada',
+    'networking.error.quota_reached_limit': 'Cuota de conexiones alcanzada',
+    'networking.search.results_found': '{{count}} resultado(s) encontrado(s)',
+    'networking.success.request_sent': 'Solicitud de conexión enviada',
+    # Appointments
+    'appointments.title': 'Citas',
+    'appointments.book': 'Reservar cita',
+    'appointments.cancel': 'Cancelar cita',
+    'appointments.meeting_with': 'Reunión con {{name}}',
+    # Actions
+    'actions.cancel_request': 'Cancelar solicitud',
+    # Home
+    'home.featured_exhibitors_badge': 'Expositores destacados',
+    'home.featured_partners_badge': 'Socios destacados',
+    'home.no_exhibitors_yet': 'Sin expositores aún',
+    # Countdown
+    'countdown.opening_description': 'Cuenta atrás hasta la apertura de la feria',
+    'countdown.share_text': 'Comparte este evento',
+    # Quota
+    'quota.remaining': '{{count}} cuota restante',
+    'quota.remaining_plural': '{{count}} cuotas restantes',
+    # Minisite
+    'minisite.preview.more_products': 'Ver más productos',
+    # Hero
+    'hero.title': 'Salón Internacional de la Construcción',
+    'hero.subtitle': 'La feria internacional de construcción e inmobiliaria',
+    'hero.cta.visitor': 'Registrarse como visitante',
+    'hero.cta.exhibitor': 'Registrarse como expositor',
+    'hero.edition': 'Edición {{year}}',
+    # Stats
+    'stats.b2b': 'reunión B2B',
+    'stats.surface': 'metro cuadrado',
+    # About
+    'about.surface_stat': '{{value}} m²',
+}
+
+# Générer les sections AR et ES
+def build_section(lang_code, translations_dict, all_fr_pairs):
+    """Construit une section de traduction en utilisant le dict fourni, et FR comme fallback."""
+    lines = [f'\n  {lang_code}: {{']
+    
+    for key, fr_val in all_fr_pairs:
+        # Chercher traduction dans le dict
+        translated = translations_dict.get(key)
+        
+        if translated:
+            # Échapper les apostrophes
+            translated = translated.replace("\\", "\\\\").replace("'", "\\'")
+        else:
+            # Fallback: utiliser la valeur FR (sera identifiée comme à traduire)
+            translated = fr_val
+        
+        lines.append(f"    '{key}': '{translated}',")
+    
+    lines.append('  }')
+    return '\n'.join(lines)
+
+print("Génération de la section AR...")
+ar_section = build_section('ar', AR_TRANSLATIONS, fr_pairs)
+ar_key_count = len(re.findall(r"'[^']+'\s*:", ar_section))
+print(f"AR: {ar_key_count} clés générées")
+
+print("Génération de la section ES...")
+es_section = build_section('es', ES_TRANSLATIONS, fr_pairs)
+es_key_count = len(re.findall(r"'[^']+'\s*:", es_section))
+print(f"ES: {es_key_count} clés générées")
+
+# Calculer combien de clés ont été vraiment traduites
+ar_translated = sum(1 for key, fr_val in fr_pairs if key in AR_TRANSLATIONS)
+es_translated = sum(1 for key, fr_val in fr_pairs if key in ES_TRANSLATIONS)
+print(f"\nAR: {ar_translated} clés traduites ({round(ar_translated/len(fr_pairs)*100,1)}%), reste en FR: {len(fr_pairs)-ar_translated}")
+print(f"ES: {es_translated} clés traduites ({round(es_translated/len(fr_pairs)*100,1)}%), reste en FR: {len(fr_pairs)-es_translated}")
+
+# Insérer les nouvelles sections dans le fichier
+# Trouver la fin de la section EN (avant });)
+# Le fichier se termine par "  }\n\n};\n"
+end_marker = '\n};\n'
+insert_pos = content.rfind(end_marker)
+
+if insert_pos != -1:
+    new_content = content[:insert_pos] + ',\n' + ar_section + ',\n' + es_section + '\n};\n'
+    
+    with open('src/store/translations.ts', 'w', encoding='utf-8') as f:
+        f.write(new_content)
+    print("\n✅ Sections AR et ES insérées dans translations.ts")
+else:
+    print("❌ Impossible de trouver l'emplacement d'insertion")
+    print(f"Contenu de fin: {repr(content[-100:])}")

@@ -193,7 +193,7 @@ export default function VisitorRegistrationChoice() {
                      Rendez-vous B2B ILLIMITÉS
                   </p>
                   <p className="text-xs text-gray-700">
-                    Planifiez autant de meetings stratégiques que vous le souhaitez avec les exposants et partenaires du salon.
+                    Planifiez autant de meetings stratégiques que vous le souhaitez avec les exposants et sponsors du salon.
                   </p>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Service d'impression de badges papier
  * Utilisé par le stand "Service Clientèle" pour imprimer des badges physiques
  * après scan du QR code d'un participant
@@ -91,7 +91,7 @@ export async function lookupBadgeByCode(badgeCode: string): Promise<BadgeLookupR
       console.warn('User not found for badge:', userError);
     }
 
-    // Récupérer les infos partenaire séparément (évite l'erreur FK PostgREST)
+    // Récupérer les infos sponsor séparément (évite l'erreur FK PostgREST)
     let partnerData: AnyRecord | null = null;
     if (badge.user_id) {
       const { data: pData } = await db

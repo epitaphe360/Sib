@@ -593,7 +593,7 @@ export default function VisitorProfileSettings() {
                         </div>
                       )}
 
-                      {user?.visitor_level === 'premium' && (
+                      {user?.visitor_level === 'vip' && (
                         <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg">
                           <div className="flex items-center space-x-3">
                             <CheckCircle className="h-5 w-5 text-green-600" />

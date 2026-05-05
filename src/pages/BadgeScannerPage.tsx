@@ -359,7 +359,7 @@ export default function BadgeScannerPage() {
 
       console.log('✅ Badge validé avec succès:', scanned);
 
-      // Enregistrer le lead si l'utilisateur est un exposant/partenaire
+      // Enregistrer le lead si l'utilisateur est un exposant/sponsor
       if (user && (user.type === 'exhibitor' || user.type === 'partner')) {
         await recordLead(user.id, scanned);
       }
@@ -387,7 +387,7 @@ export default function BadgeScannerPage() {
   };
 
   /**
-   * Enregistre un lead pour les exposants/partenaires
+   * Enregistre un lead pour les exposants/sponsors
    */
   const recordLead = async (scannerId: string, badge: ScannedBadge) => {
     try {
@@ -416,6 +416,7 @@ export default function BadgeScannerPage() {
    * Sons de feedback
    */
   const playSuccessSound = () => {
+    // eslint-disable-next-line no-secrets/no-secrets
     const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTWO1vPReSwF');
     audio.volume = 0.3;
     audio.play().catch(console.warn);

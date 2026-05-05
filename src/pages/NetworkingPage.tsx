@@ -40,7 +40,7 @@ export default function NetworkingPage() {
   const { user, isAuthenticated } = useAuthStore();
 
   // Bloquer l'accès UNIQUEMENT pour les visiteurs de niveau "free"
-  // Les exposants, partenaires et autres utilisateurs ont accès complet
+  // Les exposants, sponsors et autres utilisateurs ont accès complet
   React.useEffect(() => {
     console.log('🔍 NetworkingPage - user check:', {
       isAuthenticated,
@@ -48,7 +48,7 @@ export default function NetworkingPage() {
       visitorLevel: user?.visitor_level
     });
 
-    // Bloquer UNIQUEMENT les visiteurs free (pas les exposants ni les partenaires)
+    // Bloquer UNIQUEMENT les visiteurs free (pas les exposants ni les sponsors)
     if (isAuthenticated && user?.type === 'visitor' && user?.visitor_level === 'free') {
       console.log('❌ Access blocked: free visitor');
       toast.error(t('networking.restricted'), {
@@ -805,7 +805,7 @@ export default function NetworkingPage() {
                 </div>
                 <h3 className="text-3xl font-black text-slate-900 mb-4">Activez votre Réseau IA</h3>
                 <p className="text-slate-500 mb-10 max-w-xl mx-auto text-lg">
-                  Notre intelligence artificielle analyse vos compétences et vos objectifs pour vous présenter les partenaires les plus pertinents.
+                  Notre intelligence artificielle analyse vos compétences et vos objectifs pour vous présenter les sponsors les plus pertinents.
                 </p>
 
                 {/* Appel à compléter le profil */}
@@ -905,7 +905,7 @@ export default function NetworkingPage() {
                               </div>
                               <p className="text-sm font-medium text-slate-600 mb-1">{getDisplayName(profile)}</p>
                               <p className="text-sm text-blue-600 uppercase tracking-wider font-bold mb-3">{profile.profile?.position || profile.type}</p>
-                              
+
                               <div className="text-sm text-slate-500 line-clamp-3 leading-relaxed">
                                 {profile.profile?.bio || profile.profile?.companyDescription ? (
                                   profile.profile.bio || profile.profile.companyDescription
@@ -913,7 +913,7 @@ export default function NetworkingPage() {
                                   <span className="italic opacity-60">Aucune description renseignée pour cette entreprise.</span>
                                 )}
                               </div>
-                              
+
                               {/* Tags supplémentaires (Secteurs, Pays) */}
                               <div className="flex flex-wrap gap-2 mt-3 mb-2">
                                 {profile.profile?.country && (
@@ -1042,7 +1042,7 @@ export default function NetworkingPage() {
                 </div>
                 <div className="text-center md:text-left">
                   <h2 className="text-4xl font-black text-slate-900 mb-2">Explorateur de Réseau</h2>
-                  <p className="text-slate-500 text-lg">Trouvez les partenaires stratégiques parmi des milliers de profils vérifiés.</p>
+                  <p className="text-slate-500 text-lg">Trouvez les sponsors stratégiques parmi des milliers de profils vérifiés.</p>
                 </div>
               </div>
             </div>
@@ -1093,7 +1093,7 @@ export default function NetworkingPage() {
                   >
                     <option value="">Toutes entreprises</option>
                     <option value="exhibitor">Exposant</option>
-                    <option value="partner">Partenaire</option>
+                    <option value="partner">Sponsor</option>
                   </select>
                 </div>
                 <div className="space-y-3">
@@ -1173,7 +1173,7 @@ export default function NetworkingPage() {
                           >
                             <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
                           </button>
-                          
+
                           <div className="flex items-center space-x-4 mb-6">
                             <Avatar className="h-16 w-16 border-2 border-slate-100">
                               <AvatarImage src={profile.profile.avatar} />
@@ -1188,7 +1188,7 @@ export default function NetworkingPage() {
                               </h4>
                               <p className="text-xs font-medium text-slate-600 truncate">{getDisplayName(profile)}</p>
                               <p className="text-xs text-blue-600 uppercase tracking-wider font-bold truncate mb-2">{profile.profile?.position || profile.type}</p>
-                              
+
                               <div className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                                 {profile.profile?.bio || profile.profile?.companyDescription ? (
                                   profile.profile.bio || profile.profile.companyDescription
@@ -1281,7 +1281,7 @@ export default function NetworkingPage() {
                 </div>
                 <h3 className="text-2xl font-black text-slate-900 mb-4">Aucun résultat trouvé</h3>
                 <p className="text-slate-500 mb-10 max-w-md mx-auto">
-                  Essayez d'autres mots-clés ou ajustez vos filtres de recherche pour trouver des partenaires.
+                  Essayez d'autres mots-clés ou ajustez vos filtres de recherche pour trouver des sponsors.
                 </p>
                 <Button variant="outline" onClick={() => setSearchTerm('')} className="rounded-xl">
                   Effacer la recherche

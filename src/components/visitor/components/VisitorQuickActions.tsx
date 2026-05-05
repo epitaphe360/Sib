@@ -1,4 +1,4 @@
-import { Network, Calendar, Target, ArrowRight, TrendingUp, Brain } from 'lucide-react';
+﻿import { Network, Calendar, Target, ArrowRight, TrendingUp, Brain } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card } from '../../ui/Card';
@@ -55,7 +55,7 @@ export function VisitorQuickActions({ userLevel, remaining }: VisitorQuickAction
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900">{t('visitor.ai_matching_title', 'Matching IA')}</h3>
-              <p className="text-gray-600 text-sm mt-1">{t('visitor.ai_matching_desc', 'Trouvez les exposants et partenaires les plus pertinents pour vous.')}</p>
+              <p className="text-gray-600 text-sm mt-1">{t('visitor.ai_matching_desc', 'Trouvez les exposants et sponsors les plus pertinents pour vous.')}</p>
             </div>
           </div>
           <div className="space-y-2">

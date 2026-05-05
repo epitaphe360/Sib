@@ -109,7 +109,7 @@ class OfflineSyncService {
 
   /** Sync d'un scan unique vers Supabase */
   private async syncSingle(scan: PendingScan): Promise<void> {
-    if (!supabase) throw new Error('Supabase non disponible');
+    if (!supabase) {throw new Error('Supabase non disponible');}
 
     await supabase.from('badge_scans').insert({
       id: scan.id,
@@ -133,7 +133,7 @@ class OfflineSyncService {
 
     try {
       const pending = await dbGetPending();
-      if (pending.length === 0) return { synced: 0, failed: 0 };
+      if (pending.length === 0) {return { synced: 0, failed: 0 };}
 
       for (const scan of pending) {
         try {
@@ -182,11 +182,11 @@ class OfflineSyncService {
 
     // Retry toutes les 30 secondes
     this.syncTimer = setInterval(() => {
-      if (navigator.onLine) this.syncPending();
+      if (navigator.onLine) {this.syncPending();}
     }, 30_000);
 
     // Sync initiale au démarrage
-    if (navigator.onLine) this.syncPending();
+    if (navigator.onLine) {this.syncPending();}
   }
 
   stopSync(): void {

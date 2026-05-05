@@ -1,6 +1,9 @@
 import React from 'react';
-import { MessageCircle, Mail, Phone, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { MessageCircle, Mail, Phone, Clock, Package } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { RentalBanner } from '../common/RentalBanner';
+import { ROUTES } from '../../lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export function ServicesSection() {
@@ -100,6 +103,11 @@ export function ServicesSection() {
         </div>
 
         {/* CTA Banner */}
+        <div className="mb-8">
+          <RentalBanner variant="hero" />
+        </div>
+
+        {/* CTA Banner contact */}
         <div className="rounded-sm p-10 text-white text-center" style={{ background: 'linear-gradient(135deg, #0D0D0D 0%, #141414 100%)', border: '0.5px solid rgba(231,209,146,0.2)' }}>
           <h3 className="text-3xl font-light mb-3" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
             {t('services.ready_to_chat')}

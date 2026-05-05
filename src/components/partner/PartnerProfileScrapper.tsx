@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Globe, Sparkles, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -314,7 +314,7 @@ export default function PartnerProfileScrapper({ partnerId, onSuccess }: Partner
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-2">Profil sauvegardé!</h3>
           <p className="text-gray-600 mb-6">
-            Votre profil partenaire a été mis à jour avec succès
+            Votre profil sponsor a été mis à jour avec succès
           </p>
           <Button
             onClick={() => setStep('input')}

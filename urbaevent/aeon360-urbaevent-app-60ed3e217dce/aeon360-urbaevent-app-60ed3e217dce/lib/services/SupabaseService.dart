@@ -320,18 +320,36 @@ class SupabaseService {
   Future<void> saveScan({
     required String scannedUserId,
     String? salonId,
+    String? location,
+    String badgeType = 'visitor',
   }) async {
     final userId = currentUser?.id;
     if (userId == null) throw Exception('Non authentifié');
 
-    await _client.from(SupabaseConfig.tableContacts).upsert({
-      'user_id': userId,
-      'connected_user_id': scannedUserId,
-      'salon_id': salonId,
-      'source': 'badge_scan',
+    // ── 1. Écriture dans badge_scans (lu par le dashboard web exposant) ──
+    final scanId =
+        'scan_${DateTime.now().millisecondsSinceEpoch}_${userId.substring(0, 6)}';
+    await _client.from('badge_scans').insert({
+      'id': scanId,
+      'visitor_id': scannedUserId,
+      'scanned_by': userId,
+      'scanned_at': DateTime.now().toUtc().toIso8601String(),
+      'location': location,
+      'badge_type': badgeType,
     });
 
-    // Envoyer un email au visiteur scanné (fire-and-forget, ne bloque pas l'UI)
+    // ── 2. Écriture dans connections (réseau de contacts) ──
+    try {
+      await _client.from(SupabaseConfig.tableContacts).upsert({
+        'requester_id': userId,
+        'addressee_id': scannedUserId,
+        'status': 'accepted',
+      }, onConflict: 'requester_id,addressee_id');
+    } catch (_) {
+      // non bloquant
+    }
+
+    // ── 3. Email fire-and-forget ──
     _client.functions.invoke(
       'send-scan-email',
       body: {
@@ -340,7 +358,6 @@ class SupabaseService {
         if (salonId != null) 'salonId': salonId,
       },
     ).then((_) {}).catchError((e) {
-      // L'email est non bloquant : on log sans faire crasher l'app
       print('send-scan-email error (non-bloquant): $e');
     });
   }

@@ -1,11 +1,11 @@
-import { User, UserProfile } from '../types';
+﻿import { User, UserProfile } from '../types';
 
 const COMPLEMENTARY_OBJECTIVES: Record<string, string[]> = {
-  'Trouver de nouveaux partenaires': ['Développer mon réseau', 'Présenter mes innovations'],
-  'Développer mon réseau': ['Trouver de nouveaux partenaires', 'Rencontrer des investisseurs'],
+  'Trouver de nouveaux sponsors': ['Développer mon réseau', 'Présenter mes innovations'],
+  'Développer mon réseau': ['Trouver de nouveaux sponsors', 'Rencontrer des investisseurs'],
   'Présenter mes innovations': ['Découvrir les innovations BTP', 'Identifier des fournisseurs'],
   'Identifier des fournisseurs': ['Présenter mes innovations', 'Explorer de nouveaux marchés'],
-  'Explorer de nouveaux marchés': ['Trouver de nouveaux partenaires'],
+  'Explorer de nouveaux marchés': ['Trouver de nouveaux sponsors'],
   'Rencontrer des investisseurs': ['Présenter mes innovations'],
   'Découvrir les innovations BTP': ['Présenter mes innovations'],
 };

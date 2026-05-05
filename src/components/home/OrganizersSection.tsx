@@ -1,5 +1,5 @@
-/**
- * Section Organisateurs & Partenaires Institutionnels
+﻿/**
+ * Section Organisateurs & Sponsors Institutionnels
  * Données officielles SIB : MHPV, AMDIE, FMC, FNBTP, URBACOM
  */
 
@@ -11,7 +11,7 @@ interface OrganizerItem {
   name: string;
   acronym: string;
   description: string;
-  category: 'tutelle' | 'partenaire' | 'organisateur';
+  category: 'tutelle' | 'sponsor' | 'organisateur';
 }
 
 const organizers: OrganizerItem[] = [
@@ -30,25 +30,25 @@ const organizers: OrganizerItem[] = [
     category: 'tutelle',
   },
   {
-    role: 'Partenaire Co-organisateur',
+    role: 'Sponsor Co-organisateur',
     name: 'Agence Marocaine de Développement des Investissements et des Exportations',
     acronym: 'AMDIE',
     description: 'Promotion des investissements & exportations au Maroc',
-    category: 'partenaire',
+    category: 'sponsor',
   },
   {
-    role: 'Partenaire Co-organisateur',
+    role: 'Sponsor Co-organisateur',
     name: 'Fédération des Industries des Matériaux de Construction',
     acronym: 'FMC',
     description: 'Représentant des industriels du bâtiment au Maroc',
-    category: 'partenaire',
+    category: 'sponsor',
   },
   {
-    role: 'Partenaire Co-organisateur',
+    role: 'Sponsor Co-organisateur',
     name: 'Fédération Nationale du Bâtiment et des Travaux Publics',
     acronym: 'FNBTP',
     description: 'Fédération des entrepreneurs BTP marocains',
-    category: 'partenaire',
+    category: 'sponsor',
   },
   {
     role: 'Organisateur Délégué',
@@ -65,8 +65,8 @@ const categoryMeta: Record<OrganizerItem['category'], { label: string; accentCla
     accentClass: 'text-sib-gold',
     borderClass: 'border-sib-gold/25',
   },
-  partenaire: {
-    label: 'Partenaire',
+  sponsor: {
+    label: 'Sponsor',
     accentClass: 'text-sib-primary',
     borderClass: 'border-sib-primary/15',
   },
@@ -92,7 +92,7 @@ export const OrganizersSection: React.FC = () => {
           className="text-center mb-12"
         >
           <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 text-sib-gold">
-            Partenaires & Organisateurs
+            Sponsors & Organisateurs
           </p>
           <h2 className="font-heading font-bold text-3xl sm:text-4xl text-gray-900 uppercase tracking-wide">
             Sous l'égide des Institutions
@@ -131,7 +131,7 @@ export const OrganizersSection: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Grille partenaires */}
+        {/* Grille sponsors */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {organizers.slice(2).map((org, i) => {
             const meta = categoryMeta[org.category];

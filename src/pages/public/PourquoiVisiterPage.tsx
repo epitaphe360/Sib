@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Lightbulb, Network, GraduationCap, Gift, TrendingUp, Globe, MapPin, Calendar, Clock, Train, Car, Plane } from 'lucide-react';
+import { Lightbulb, Network, GraduationCap, Gift, TrendingUp, Globe, MapPin, Calendar, Clock, Train, Car, Plane, ArrowRight } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { usePageContent } from '../../hooks/usePageContent';
-import {
-  ScrollReveal, StaggerReveal, StaggerItem, HoverCard,
-  HeroReveal, fadeUp, fadeLeft, scaleUp,
-} from '../../components/ui/motion';
+import { motion } from 'framer-motion';
+import { MoroccanPattern } from '../../components/ui/MoroccanDecor';
 
 const arguments_visiter = [
   { icon: Lightbulb, title: 'Découvrir les innovations', desc: 'Le salon offre une réponse complète aux besoins des particuliers et des professionnels dans un espace et un temps maîtrisé.' },
@@ -107,111 +105,162 @@ export default function PourquoiVisiterPage() {
     { icon: TrendingUp, title: cms.arg_5_title || 'Faire son choix & concrétiser', desc: cms.arg_5_desc || "La meilleure manière de s'informer, de faire son choix et de concrétiser dans les meilleures conditions tout investissement du secteur du BTP." },
     { icon: Globe, title: cms.arg_6_title || '600 exposants, 50 pays', desc: cms.arg_6_desc || 'Découvrez 1 500 marques venues de 50 pays avec 600 exposants, répartis sur 35 000 m².' },
   ];
+  // Couleurs SIB par carte
+  const argColors = ['bg-[#00AEEF]', 'bg-[#52B847]', 'bg-[#00AEEF]', 'bg-[#52B847]', 'bg-[#E63329]', 'bg-[#00AEEF]'];
+  const transportColors = ['bg-[#52B847]', 'bg-[#00AEEF]', 'bg-[#00AEEF]', 'bg-[#E63329]'];
+  const infoColors = ['bg-[#00AEEF]', 'bg-[#52B847]', 'bg-[#E63329]', 'bg-[#52B847]'];
+  const infoTextColors = ['text-[#00AEEF]', 'text-[#52B847]', 'text-[#E63329]', 'text-[#52B847]'];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-20 overflow-hidden">
-        <div className="container mx-auto px-4 text-center">
-          <HeroReveal>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Pourquoi Visiter le SIB ?'}</h1>
-          </HeroReveal>
-          <HeroReveal delay={0.15}>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto mb-8">
+    <div className="min-h-screen bg-white">
+
+      {/* ── HERO ── */}
+      <section className="relative bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 text-white py-20 overflow-hidden">
+        {/* Orbes animés */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-16 w-80 h-80 bg-[#00AEEF]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#52B847]/10 rounded-full blur-3xl pointer-events-none" />
+        <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 text-xs font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest">
+              🎫 Entrée gratuite — SIB 2026
+            </span>
+            <h1 className="text-4xl md:text-5xl font-black mb-5 leading-tight">
+              {cms.hero_title || <>Pourquoi Visiter <span className="text-[#52B847]">le SIB</span> ?</>}
+            </h1>
+            <p className="text-lg text-white/80 max-w-3xl mx-auto mb-8">
               {cms.hero_subtitle || '5 jours pour découvrir, apprendre et connecter avec les acteurs majeurs du bâtiment au Maroc et en Afrique.'}
             </p>
-          </HeroReveal>
-          <HeroReveal delay={0.3}>
             <Link
               to={ROUTES.BADGE}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-sib-gold text-sib-navy rounded-lg font-bold text-lg hover:bg-sib-gold/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#52B847] text-white rounded-xl font-bold text-base hover:bg-[#3D9B35] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
               {getCms('hero_cta', 'Obtenez votre badge gratuit')}
+              <ArrowRight className="h-5 w-5" />
             </Link>
-          </HeroReveal>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
-      {/* Arguments */}
-      <div className="container mx-auto px-4 py-16">
-        <ScrollReveal>
-          <h2 className="text-3xl font-bold text-sib-navy mb-10 text-center font-display">
-            {getCms('reasons_title', '6 bonnes raisons de visiter')}
-          </h2>
-        </ScrollReveal>
-        <StaggerReveal slow className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {arguments_visiter.map((arg, i) => (
-            <StaggerItem key={i}>
-              <HoverCard className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
-                <div className="w-14 h-14 rounded-xl bg-sib-navy/10 flex items-center justify-center mb-5">
-                  <arg.icon className="w-7 h-7 text-sib-navy" />
+      {/* ── 6 RAISONS ── */}
+      <section className="py-16 md:py-20 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,_rgba(0,174,239,0.05),_transparent_60%)] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+              {getCms('reasons_title', <><span style={{ color: '#00AEEF' }}>6 bonnes raisons</span> de visiter</>)}
+            </h2>
+            <p className="text-gray-500 max-w-2xl mx-auto">Le salon incontournable du bâtiment en Afrique du Nord</p>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {arguments_visiter.map((arg, i) => (
+              <motion.div
+                key={arg.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 overflow-hidden"
+              >
+                <div className={`h-1.5 w-full ${argColors[i]}`} />
+                <div className="p-6">
+                  <div className={`${argColors[i]} p-3 rounded-xl inline-flex mb-4`}>
+                    <arg.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-base font-bold text-gray-900 mb-2">{arg.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{arg.desc}</p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{arg.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{arg.desc}</p>
-              </HoverCard>
-            </StaggerItem>
-          ))}
-        </StaggerReveal>
-      </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* Infos pratiques */}
-      <div className="bg-sib-gold/10 py-16">
-        <div className="container mx-auto px-4">
-          <ScrollReveal>
-            <h2 className="text-3xl font-bold text-sib-navy mb-8 text-center font-display">
+      {/* ── INFOS PRATIQUES ── */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
               {getCms('infos_title', 'Infos Pratiques')}
             </h2>
-          </ScrollReveal>
-          <StaggerReveal className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {infos_pratiques.map((info) => (
-              <StaggerItem key={info.label}>
-                <HoverCard className="bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100 h-full">
-                  <info.icon className="w-8 h-8 text-sib-gold mx-auto mb-3" />
-                  <div className="text-sm font-semibold text-gray-500 mb-1">{info.label}</div>
-                  <div className="font-bold text-gray-900">{info.value}</div>
-                </HoverCard>
-              </StaggerItem>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {infos_pratiques.map((info, i) => (
+              <motion.div
+                key={info.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+              >
+                <div className={`h-1.5 w-full ${infoColors[i]}`} />
+                <div className="p-6 text-center">
+                  <div className={`${infoColors[i]} p-3 rounded-xl inline-flex mb-4`}>
+                    <info.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{info.label}</div>
+                  <div className={`font-bold text-sm ${infoTextColors[i]}`}>{info.value}</div>
+                </div>
+              </motion.div>
             ))}
-          </StaggerReveal>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Transport */}
-      <div className="container mx-auto px-4 py-16">
-        <ScrollReveal>
-          <h2 className="text-3xl font-bold text-sib-navy mb-8 text-center font-display">
-            {getCms('transport_title', "Comment s'y rendre ?")}
-          </h2>
-        </ScrollReveal>
-        <StaggerReveal className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-          {transports.map((t, i) => (
-            <StaggerItem key={i}>
-              <HoverCard className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm h-full">
-                <t.icon className="w-8 h-8 text-sib-navy mb-4" />
-                <h3 className="font-bold text-gray-900 mb-2">{t.title}</h3>
-                <p className="text-sm text-gray-600 whitespace-pre-line">{t.desc}</p>
-              </HoverCard>
-            </StaggerItem>
-          ))}
-        </StaggerReveal>
-      </div>
+      {/* ── TRANSPORT ── */}
+      <section className="py-16 md:py-20 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_80%,_rgba(82,184,71,0.05),_transparent_60%)] pointer-events-none" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {getCms('transport_title', "Comment s'y rendre ?")}
+            </h2>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {transports.map((t, i) => (
+              <motion.div
+                key={t.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 overflow-hidden"
+              >
+                <div className={`h-1.5 w-full ${transportColors[i]}`} />
+                <div className="p-6">
+                  <div className={`${transportColors[i]} p-3 rounded-xl inline-flex mb-4`}>
+                    <t.icon className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-sm mb-2">{t.title}</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed">{t.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* CTA */}
-      <div className="bg-sib-navy text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <ScrollReveal variant={scaleUp}>
-            <h3 className="text-3xl font-bold mb-4 font-display">{getCms('cta_title', 'Prêt à visiter ?')}</h3>
-            <p className="text-white/70 max-w-xl mx-auto mb-8">
+      {/* ── CTA ── */}
+      <section className="py-16 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h3 className="text-3xl font-bold mb-4">{getCms('cta_title', 'Prêt à visiter ?')}</h3>
+            <p className="text-white/75 max-w-xl mx-auto mb-8">
               {getCms('cta_text', "L'entrée est gratuite. Inscrivez-vous dès maintenant pour obtenir votre badge électronique.")}
             </p>
             <Link
               to={ROUTES.BADGE}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-sib-gold text-sib-navy rounded-lg font-bold text-lg hover:bg-sib-gold/90 transition-all duration-300 hover:scale-105 transform"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#52B847] text-white rounded-xl font-bold text-base hover:bg-[#3D9B35] transition-all duration-300 shadow-lg hover:scale-105"
             >
               {getCms('cta_button', "S'inscrire gratuitement")}
+              <ArrowRight className="h-5 w-5" />
             </Link>
-          </ScrollReveal>
+          </motion.div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

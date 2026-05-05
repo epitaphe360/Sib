@@ -20,7 +20,7 @@ export function usePresence(): UsePresenceReturn {
   const [onlineUsers, setOnlineUsers] = useState<Record<string, PresenceUser>>({});
 
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?.id) {return;}
 
     // Rejoindre le canal de présence
     realtimeService.joinPresence(

@@ -16,7 +16,7 @@ export function Magnetic({ children, strength = 0.4, className = '' }: MagneticP
 
   const handleMove = (e: MouseEvent<HTMLDivElement>) => {
     const el = ref.current;
-    if (!el) return;
+    if (!el) {return;}
     const rect = el.getBoundingClientRect();
     const x = (e.clientX - rect.left - rect.width / 2) * strength;
     const y = (e.clientY - rect.top - rect.height / 2) * strength;
@@ -25,7 +25,7 @@ export function Magnetic({ children, strength = 0.4, className = '' }: MagneticP
 
   const handleLeave = () => {
     const el = ref.current;
-    if (!el) return;
+    if (!el) {return;}
     gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
   };
 

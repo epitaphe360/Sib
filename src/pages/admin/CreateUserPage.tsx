@@ -50,7 +50,7 @@ export default function CreateUserPage() {
   const userTypes = [
     { value: 'visitor', label: 'Visiteur', icon: UserIcon },
     { value: 'exhibitor', label: 'Exposant', icon: Building2 },
-    { value: 'partner', label: 'Partenaire', icon: Crown },
+    { value: 'partner', label: 'Sponsor', icon: Crown },
     { value: 'admin', label: 'Administrateur', icon: Shield }
   ];
 

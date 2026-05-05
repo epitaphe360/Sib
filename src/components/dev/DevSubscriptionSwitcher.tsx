@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -121,16 +121,6 @@ export default function DevSubscriptionSwitcher() {
                     FREE
                   </Button>
                   <Button
-                    onClick={() => updateUserLevel('visitor', 'premium')}
-                    disabled={isUpdating}
-                    variant={currentRole === 'visitor' && currentLevel === 'premium' ? 'primary' : 'outline'}
-                    size="sm"
-                    className="flex items-center justify-center gap-1"
-                  >
-                    <Star className="h-3 w-3" />
-                    PREMIUM
-                  </Button>
-                  <Button
                     onClick={() => updateUserLevel('visitor', 'vip')}
                     disabled={isUpdating}
                     variant={currentRole === 'visitor' && currentLevel === 'vip' ? 'primary' : 'outline'}
@@ -197,7 +187,7 @@ export default function DevSubscriptionSwitcher() {
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Handshake className="h-4 w-4 text-purple-600" />
-                  <h4 className="font-semibold text-gray-900">Partenaire</h4>
+                  <h4 className="font-semibold text-gray-900">Sponsor</h4>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <Button
@@ -208,7 +198,7 @@ export default function DevSubscriptionSwitcher() {
                     className="flex items-center justify-center gap-1"
                   >
                     <Award className="h-3 w-3 text-indigo-500" />
-                    Partenaire
+                    Sponsor
                   </Button>
                   <Button
                     onClick={() => updateUserLevel('partner', 'official_sponsor')}

@@ -753,6 +753,13 @@ function getSupabaseClient(): ReturnType<typeof createClient<Database>> | null {
       persistSession: true,
       detectSessionInUrl: true
     },
+    realtime: {
+      // Heartbeat toutes les 25 s (< timeout serveur de 30 s) pour éviter les
+      // déconnexions intempestives et les boucles de reconnexion Phoenix Socket
+      heartbeatIntervalMs: 25_000,
+      // Reconnexion après 10 s max (évite les bursts de reconnexion en cascade)
+      reconnectAfterMs: (tries: number) => Math.min(tries * 1000, 10_000),
+    },
     global: {
       headers: {
         'Accept': 'application/json'

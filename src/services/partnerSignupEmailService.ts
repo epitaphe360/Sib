@@ -1,5 +1,5 @@
-/**
- * Service pour envoyer l'email d'instructions de paiement après inscription partenaire
+﻿/**
+ * Service pour envoyer l'email d'instructions de paiement après inscription sponsor
  */
 
 import { supabase } from '../lib/supabase';
@@ -14,7 +14,7 @@ export interface PartnerSignupEmailData {
 
 /**
  * Crée une demande de paiement et envoie l'email d'instructions bancaires
- * Appelé automatiquement après inscription d'un partenaire
+ * Appelé automatiquement après inscription d'un sponsor
  */
 export async function sendPartnerPaymentInstructions(
   data: PartnerSignupEmailData

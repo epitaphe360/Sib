@@ -1,4 +1,4 @@
-import { useEffect, ReactNode } from 'react';
+﻿import { useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import useAuthStore from '../../store/authStore';
@@ -16,7 +16,7 @@ interface PartnerTierGuardProps {
 }
 
 /**
- * Guard pour prot�ger les routes selon le niveau partenaire
+ * Guard pour prot�ger les routes selon le niveau sponsor
  *
  * Utilisation:
  * - requiredTier: Niveau exact requis
@@ -58,18 +58,18 @@ export function PartnerTierGuard({
       return;
     }
 
-    // V�rifier que l'utilisateur est un partenaire
+    // V�rifier que l'utilisateur est un sponsor
     if (user.type !== 'partner') {
       if (showToast) {
         toast.error('Acc�s refus�', {
-          description: 'Cette page est r�serv�e aux partenaires.'
+          description: 'Cette page est r�serv�e aux sponsors.'
         });
       }
       navigate(ROUTES.UNAUTHORIZED, { replace: true });
       return;
     }
 
-    // R�cup�rer le niveau partenaire (depuis le profil ou la base de donn�es)
+    // R�cup�rer le niveau sponsor (depuis le profil ou la base de donn�es)
     const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'partner') as PartnerTier;
 
     // V�rification du niveau requis exact
@@ -78,7 +78,7 @@ export function PartnerTierGuard({
 
       if (showToast) {
         toast.error('Acc�s r�serv�', {
-          description: customMessage || `Cette fonctionnalit� est r�serv�e aux partenaires ${requiredConfig.displayName}.`,
+          description: customMessage || `Cette fonctionnalit� est r�serv�e aux sponsors ${requiredConfig.displayName}.`,
           action: {
             label: 'Voir les offres',
             onClick: () => navigate(ROUTES.PARTNER_PROFILE)
@@ -162,7 +162,7 @@ export function PartnerTierGuard({
 }
 
 /**
- * Hook pour v�rifier le niveau partenaire
+ * Hook pour v�rifier le niveau sponsor
  */
 export function usePartnerTier() {
   const { user } = useAuthStore();

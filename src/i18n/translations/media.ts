@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour les contenus médias
  */
 
@@ -85,10 +85,10 @@ export const mediaTranslations = {
 
     // Témoignages
     'media.testimonial.title': 'Témoignages',
-    'media.testimonial.subtitle': 'Découvrez les retours d\'expérience de nos partenaires',
+    'media.testimonial.subtitle': 'Découvrez les retours d\'expérience de nos sponsors',
     'media.testimonial.company': 'Entreprise',
     'media.testimonial.role': 'Fonction',
-    'media.testimonial.satisfaction': 'De partenaires satisfaits',
+    'media.testimonial.satisfaction': 'De sponsors satisfaits',
     'media.testimonial.search_placeholder': 'Rechercher un témoignage...',
     'media.testimonial.no_results': 'Aucun témoignage trouvé',
     'media.testimonial.no_results_desc': 'De nouveaux témoignages seront ajoutés prochainement',
@@ -119,7 +119,7 @@ export const mediaTranslations = {
     'media.action.quality': 'Qualité',
     'media.action.captions': 'Sous-titres',
 
-    // Upload (pour partenaires)
+    // Upload (pour sponsors)
     'media.upload.title': 'Téléverser un média',
     'media.upload.drag_drop': 'Glisser-déposer ou cliquer pour sélectionner',
     'media.upload.select_type': 'Sélectionner le type',

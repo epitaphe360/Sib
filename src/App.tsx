@@ -45,6 +45,9 @@ const VisitorProfileSettings = lazyRetry(() => import('./components/visitor/Visi
 const AdminDashboard = lazyRetry(() => import('./components/dashboard/AdminDashboard'));
 const EmailTemplatesManager = lazyRetry(() => import('./pages/admin/EmailTemplatesManager'));
 const ExhibitorDashboard = lazyRetry(() => import('./components/dashboard/ExhibitorDashboard'));
+const ExhibitorScansPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorScansPage'));
+const ExhibitorTeamPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorTeamPage'));
+const PartnerScansPage = lazyRetry(() => import('./pages/partner/PartnerScansPage'));
 const PartnerDashboard = lazyRetry(() => import('./components/dashboard/PartnerDashboard'));
 const ExhibitorValidation = lazyRetry(() => import('./components/admin/ExhibitorValidation'));
 const ModerationPanel = lazyRetry(() => import('./components/admin/ModerationPanel'));
@@ -126,6 +129,8 @@ const PartnerSupportPageComponent = lazyRetry(() => import('./pages/partners/Par
 // Admin media approval
 const PartnerMediaApprovalPage = lazyRetry(() => import('./pages/admin/PartnerMediaApprovalPage'));
 const VIPVisitorsPage = lazyRetry(() => import('./pages/admin/VIPVisitorsPage'));
+const SecurityZonesPage = lazyRetry(() => import('./pages/admin/SecurityZonesPage'));
+const AdminVisaLettersPage = lazyRetry(() => import('./pages/admin/AdminVisaLettersPage'));
 
 // Error pages
 const UnauthorizedPage = lazyRetry(() => import('./pages/UnauthorizedPage'));
@@ -162,6 +167,7 @@ const MediaDetailPage = lazyRetry(() => import('./pages/media/MediaDetailPage'))
 
 // Admin Media pages
 const MediaManagementPage = lazyRetry(() => import('./pages/admin/media/MediaManagementPage'));
+const AdminMediaLibraryPage = lazyRetry(() => import('./pages/admin/media/MediaLibraryPage'));
 const CreateMediaPage = lazyRetry(() => import('./pages/admin/media/CreateMediaPage'));
 const EditMediaPage = lazyRetry(() => import('./pages/admin/media/EditMediaPage'));
 
@@ -169,6 +175,21 @@ const EditMediaPage = lazyRetry(() => import('./pages/admin/media/EditMediaPage'
 const PartnerMediaUploadPage = lazyRetry(() => import('./pages/partners/PartnerMediaUploadPage'));
 const PartnerMediaAnalyticsPage = lazyRetry(() => import('./pages/partners/PartnerMediaAnalyticsPage'));
 const PartnerMediaLibraryPage = lazyRetry(() => import('./pages/partners/PartnerMediaLibraryPage'));
+
+// ── SIB 2026 Nouveaux Modules ──────────────────────────────────────────────
+const ExhibitorTeamPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorTeamPage'));const TeamBadgesPrintPage = lazyRetry(() => import('./pages/exhibitor/TeamBadgesPrintPage'));const InvitationLetterPage = lazyRetry(() => import('./pages/InvitationLetterPage'));
+const RentalCatalogPage = lazyRetry(() => import('./pages/RentalCatalogPage'));
+const RentalCheckoutPage = lazyRetry(() => import('./pages/rental/RentalCheckoutPage'));
+const RentalPaymentSuccessPage = lazyRetry(() => import('./pages/rental/RentalPaymentSuccessPage'));
+const AdminInvitationsPage = lazyRetry(() => import('./pages/admin/AdminInvitationsPage'));
+const AdminRentalPage = lazyRetry(() => import('./pages/admin/AdminRentalPage'));
+const AdminStandCollaboratorsPage = lazyRetry(() => import('./pages/admin/AdminStandCollaboratorsPage'));
+const AdminConfigPage = lazyRetry(() => import('./pages/admin/AdminConfigPage'));
+const AdminBadgeConfigPage = lazyRetry(() => import('./pages/admin/AdminBadgeConfigPage'));
+const PushNotificationsPage = lazyRetry(() => import('./pages/admin/PushNotificationsPage'));
+const SalonsManagementPage = lazyRetry(() => import('./pages/admin/SalonsManagementPage'));
+const MediaPartnerDashboard = lazyRetry(() => import('./components/dashboard/MediaPartnerDashboard'));
+const MediaPartnerSignUpPage = lazyRetry(() => import('./pages/auth/MediaPartnerSignUpPage'));
 const MatchmakingDashboard = lazyRetry(() => import('./components/networking/MatchmakingDashboard').then((m) => ({ default: m.MatchmakingDashboard })));
 const LiveEventManager = lazyRetry(() => import('./pages/admin/media/LiveEventManager').then((m) => ({ default: m.LiveEventManager })));
 const ChatBot = lazyRetry(() => import('./components/chatbot/ChatBot').then((m) => ({ default: m.ChatBot })));
@@ -190,7 +211,11 @@ const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salo
 
 function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
+  const isPrintRoute = location.pathname.startsWith('/print/');
   const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
+  if (isPrintRoute) {
+    return <>{children}</>;
+  }
   return (
     <div className="min-h-screen flex flex-col">
       <SkipToContent />
@@ -216,6 +241,8 @@ if (import.meta.env.DEV) {
 const App = () => {
   const [isChatBotOpen, setIsChatBotOpen] = React.useState(false);
   const { currentLanguage } = useLanguageStore();
+  const location = useLocation();
+  const isPrintRoute = location.pathname.startsWith('/print/');
 
   // Tracking des visites de pages pour le trafic hebdomadaire (admin dashboard)
   usePageTracking();
@@ -328,13 +355,15 @@ const App = () => {
             <Route path={`${ROUTES.EXHIBITOR_PROFILE}/edit`} element={<ProtectedRoute requiredRole="exhibitor"><ProfileEdit /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_PROFILE_EDIT} element={<ProtectedRoute requiredRole="exhibitor"><ProfileEdit /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_DASHBOARD} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorDashboard /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_SCANS} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorScansPage /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_TEAM} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorTeamPage /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_DASHBOARD} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><VisitorDashboard /></ProtectedRoute>} />
             {/* Partner routes - NEW */}
             <Route path={ROUTES.PARTNER_DASHBOARD} element={<ProtectedRoute requiredRole="partner"><PartnerDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_PROFILE} element={<ProtectedRoute requiredRole="partner"><ProfilePage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_SETTINGS} element={<ProtectedRoute requiredRole="partner"><VisitorProfileSettings /></ProtectedRoute>} />
 
-            {/* Pages partenaires détaillées */}
+            {/* Pages sponsors détaillées */}
             <Route path={ROUTES.PARTNER_ACTIVITY} element={<ProtectedRoute requiredRole="partner"><PartnerActivityPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_ANALYTICS} element={<ProtectedRoute requiredRole="partner"><PartnerAnalyticsPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_EVENTS} element={<ProtectedRoute requiredRole="partner"><PartnerEventsPage /></ProtectedRoute>} />
@@ -344,6 +373,8 @@ const App = () => {
             <Route path={ROUTES.PARTNER_PROFILE_EDIT} element={<ProtectedRoute requiredRole="partner"><PartnerProfileEditPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_SATISFACTION} element={<ProtectedRoute requiredRole="partner"><PartnerSatisfactionPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_SUPPORT_PAGE} element={<ProtectedRoute requiredRole="partner"><PartnerSupportPageComponent /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_SCANS} element={<ProtectedRoute requiredRole="partner"><PartnerScansPage /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_TEAM} element={<ProtectedRoute requiredRole="partner"><ExhibitorTeamPage userType="partner" /></ProtectedRoute>} />
 
             {/* Pages erreur */}
             <Route path={ROUTES.UNAUTHORIZED} element={<UnauthorizedPage />} />
@@ -396,6 +427,8 @@ const App = () => {
             <Route path={ROUTES.ADMIN_PAYMENT_VALIDATION} element={<ProtectedRoute requiredRole="admin"><PaymentValidationPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_REGISTRATION_REQUESTS} element={<ProtectedRoute requiredRole="admin"><AdminRegistrationRequestsPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_VIP_VISITORS} element={<ProtectedRoute requiredRole="admin"><VIPVisitorsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SECURITY_ZONES} element={<ProtectedRoute requiredRole="admin"><SecurityZonesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_VISA_LETTERS} element={<ProtectedRoute requiredRole="admin"><AdminVisaLettersPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_USERS} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_CREATE_USER} element={<ProtectedRoute requiredRole="admin"><CreateUserPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PARTNERS} element={<ProtectedRoute requiredRole="admin"><AdminPartnersPage /></ProtectedRoute>} />
@@ -410,8 +443,34 @@ const App = () => {
             <Route path={ROUTES.ADMIN_PARTNERS_MANAGE} element={<ProtectedRoute requiredRole="admin"><PartnerManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.MARKETING_DASHBOARD} element={<ProtectedRoute requiredRole={["admin", "marketing"]}><MarketingDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PUBLICATION_CONTROL} element={<ProtectedRoute requiredRole="admin"><PublicationControlPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_MEDIA} element={<ProtectedRoute requiredRole="admin"><MediaManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_MEDIA} element={<ProtectedRoute requiredRole="admin"><AdminMediaLibraryPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_USERS_LIST} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminConfigPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_BADGE_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminBadgeConfigPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_PUSH_NOTIFICATIONS} element={<ProtectedRoute requiredRole="admin"><PushNotificationsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SALONS} element={<ProtectedRoute requiredRole="admin"><SalonsManagementPage /></ProtectedRoute>} />
+
+            {/* ── SIB 2026 Nouveaux Modules ─────────────────────────────── */}            {/* Impression badges — accessible depuis session auth active */}
+            <Route path={ROUTES.TEAM_BADGES_PRINT} element={<TeamBadgesPrintPage />} />            {/* Exposant */}
+            <Route path={ROUTES.EXHIBITOR_TEAM} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorTeamPage /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_INVITATION_LETTER} element={<ProtectedRoute requiredRole="exhibitor"><InvitationLetterPage userType="exhibitor" /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_RENTAL} element={<ProtectedRoute requiredRole="exhibitor"><RentalCatalogPage userType="exhibitor" /></ProtectedRoute>} />
+            {/* Sponsor / Sponsor */}
+            <Route path={ROUTES.PARTNER_TEAM} element={<ProtectedRoute requiredRole="partner"><ExhibitorTeamPage userType="partner" /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_INVITATION_LETTER} element={<ProtectedRoute requiredRole="partner"><InvitationLetterPage userType="partner" /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_RENTAL} element={<ProtectedRoute requiredRole="partner"><RentalCatalogPage userType="partner" /></ProtectedRoute>} />
+            {/* Sponsor Média */}
+            <Route path={ROUTES.REGISTER_MEDIA_PARTNER} element={<MediaPartnerSignUpPage />} />
+            <Route path={ROUTES.MEDIA_PARTNER_DASHBOARD} element={<ProtectedRoute requiredRole="partner"><MediaPartnerDashboard /></ProtectedRoute>} />
+            {/* Admin */}
+            <Route path={ROUTES.ADMIN_INVITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminInvitationsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_RENTAL} element={<ProtectedRoute requiredRole="admin"><AdminRentalPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_STAND_COLLABORATORS} element={<ProtectedRoute requiredRole="admin"><AdminStandCollaboratorsPage /></ProtectedRoute>} />
+
+            {/* Catalogue location public */}
+            <Route path={ROUTES.RENTAL_CATALOG} element={<RentalCatalogPage />} />
+            <Route path={ROUTES.RENTAL_CHECKOUT} element={<ProtectedRoute><RentalCheckoutPage /></ProtectedRoute>} />
+            <Route path={ROUTES.RENTAL_PAYMENT_SUCCESS} element={<ProtectedRoute><RentalPaymentSuccessPage /></ProtectedRoute>} />
 
             {/* New routes for footer links */}
             <Route path={ROUTES.CONTACT} element={<ContactPage />} />
@@ -449,6 +508,7 @@ const App = () => {
 
             {/* Admin Media routes - protected */}
             <Route path={ROUTES.ADMIN_MEDIA_MANAGE} element={<ProtectedRoute requiredRole="admin"><MediaManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_MEDIA_LIBRARY} element={<ProtectedRoute requiredRole="admin"><AdminMediaLibraryPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_MEDIA_CREATE} element={<ProtectedRoute requiredRole="admin"><CreateMediaPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_MEDIA_EDIT} element={<ProtectedRoute requiredRole="admin"><EditMediaPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PARTNER_MEDIA_APPROVAL} element={<ProtectedRoute requiredRole="admin"><PartnerMediaApprovalPage /></ProtectedRoute>} />
@@ -480,7 +540,7 @@ const App = () => {
             <Route path={ROUTES.NOT_FOUND} element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
               <p className="text-xl text-gray-600 mb-8">Page non trouvée</p>
-              <Link to={ROUTES.HOME} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700" aria-label="Retour à l'accueil">
+              <Link to={ROUTES.HOME} className="px-6 py-3 bg-sib-brand text-white rounded-lg hover:bg-sib-brand-dark" aria-label="Retour à l'accueil">
                 Retour à l'accueil
               </Link>
             </div>} />
@@ -489,15 +549,16 @@ const App = () => {
             <Route path="*" element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
               <p className="text-xl text-gray-600 mb-8">Page non trouvée</p>
-              <Link to={ROUTES.HOME} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700" aria-label="Retour à l'accueil">
+              <Link to={ROUTES.HOME} className="px-6 py-3 bg-sib-brand text-white rounded-lg hover:bg-sib-brand-dark" aria-label="Retour à l'accueil">
                 Retour à l'accueil
               </Link>
             </div>} />
           </Routes>
         </Suspense>
       </AppShell>
-      <Footer />
+      {!isPrintRoute && <Footer />}
 
+      {!isPrintRoute && (
       <Suspense fallback={null}>
         {/* ChatBot */}
         <ChatBot
@@ -524,6 +585,7 @@ const App = () => {
         {/* Dev Tools - Subscription Switcher (Development Only) */}
         {import.meta.env.DEV && <DevSubscriptionSwitcher />}
       </Suspense>
+      )}
 
       <Toaster position="top-right" />
     </ErrorBoundary>

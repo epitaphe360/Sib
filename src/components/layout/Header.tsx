@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect, memo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+﻿import React, { useState, useCallback, useEffect, memo } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Menu,
   X,
@@ -28,11 +28,12 @@ export const Header: React.FC = memo(() => {
   const [isSalonMenuOpen, setIsSalonMenuOpen] = useState(false);
   const [isExposerMenuOpen, setIsExposerMenuOpen] = useState(false);
   const [isVisiterMenuOpen, setIsVisiterMenuOpen] = useState(false);
-  const [isPartenairesMenuOpen, setIsPartenairesMenuOpen] = useState(false);
+  const [isSponsorsMenuOpen, setIsSponsorsMenuOpen] = useState(false);
   const [isMediaMenuOpen, setIsMediaMenuOpen] = useState(false);
   const { user, isAuthenticated, isLoading, logout } = useAuthStore();
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
 
   // ✅ CRITICAL: Ne pas afficher "Se connecter" pendant l'initialisation
   const authReady = isAuthInitialized() && !isLoading;
@@ -44,7 +45,7 @@ export const Header: React.FC = memo(() => {
     setIsSalonMenuOpen(false);
     setIsExposerMenuOpen(false);
     setIsVisiterMenuOpen(false);
-    setIsPartenairesMenuOpen(false);
+    setIsSponsorsMenuOpen(false);
     setIsMediaMenuOpen(false);
   }, [location.pathname]);
 
@@ -71,15 +72,16 @@ export const Header: React.FC = memo(() => {
   const toggleSalonMenu = useCallback(() => setIsSalonMenuOpen(prev => !prev), []);
   const toggleExposerMenu = useCallback(() => setIsExposerMenuOpen(prev => !prev), []);
   const toggleVisiterMenu = useCallback(() => setIsVisiterMenuOpen(prev => !prev), []);
-  const togglePartenairesMenu = useCallback(() => setIsPartenairesMenuOpen(prev => !prev), []);
+  const toggleSponsorsMenu = useCallback(() => setIsSponsorsMenuOpen(prev => !prev), []);
   const toggleMediaMenu = useCallback(() => setIsMediaMenuOpen(prev => !prev), []);
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
   const closeProfile = useCallback(() => setIsProfileOpen(false), []);
 
-  const handleLogout = useCallback(() => {
-    logout();
+  const handleLogout = useCallback(async () => {
+    await logout();
     setIsProfileOpen(false);
-  }, [logout]);
+    navigate(ROUTES.HOME);
+  }, [logout, navigate]);
 
   const isFreeVisitor = user?.type === 'visitor' && (user?.visitor_level === 'free' || !user?.visitor_level);
 
@@ -117,9 +119,9 @@ export const Header: React.FC = memo(() => {
   // ══════════════════════════════════════════════
   // MENU : PARTENAIRES
   // ══════════════════════════════════════════════
-  const partenairesMenuItems = [
-    { name: t('partenaires.devenir'), href: ROUTES.PARTNER_SUBSCRIPTION, description: t('partenaires.devenir_desc') },
-    { name: t('partenaires.annuaire'), href: ROUTES.PARTNERS, description: t('partenaires.annuaire_desc') },
+  const sponsorsMenuItems = [
+    { name: t('sponsors.devenir'), href: ROUTES.PARTNER_SUBSCRIPTION, description: t('sponsors.devenir_desc') },
+    { name: t('sponsors.annuaire'), href: ROUTES.PARTNERS, description: t('sponsors.annuaire_desc') },
   ];
 
   // ══════════════════════════════════════════════
@@ -222,15 +224,15 @@ export const Header: React.FC = memo(() => {
               )}
             </div>
 
-            {/* Partenaires ▼ */}
-            <div className="relative" onMouseEnter={() => setIsPartenairesMenuOpen(true)} onMouseLeave={() => setIsPartenairesMenuOpen(false)}>
+            {/* Sponsors ▼ */}
+            <div className="relative" onMouseEnter={() => setIsSponsorsMenuOpen(true)} onMouseLeave={() => setIsSponsorsMenuOpen(false)}>
               <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap">
                 <span>{t('nav.partners')}</span>
                 <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </button>
-              {isPartenairesMenuOpen && (
+              {isSponsorsMenuOpen && (
                 <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
-                  {partenairesMenuItems.map((item) => (
+                  {sponsorsMenuItems.map((item) => (
                     <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
                       <div>
                         <div className="font-semibold text-slate-900">{item.name}</div>
@@ -337,7 +339,7 @@ export const Header: React.FC = memo(() => {
                     data-testid="user-menu"
                     className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   >
-                    <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-full flex items-center justify-center" style={{backgroundColor: '#009FE3'}}>
                       <User className="h-4 w-4 text-white" />
                     </div>
                     <span className="hidden md:block text-sm font-medium text-gray-700">
@@ -468,7 +470,7 @@ export const Header: React.FC = memo(() => {
                         </>
                       )}
 
-                      {/* Menu Partenaire */}
+                      {/* Menu Sponsor */}
                       {user?.type === 'partner' && (
                         <>
                           <Link
@@ -682,13 +684,13 @@ export const Header: React.FC = memo(() => {
                 ))}
               </div>
 
-              {/* ══ Partenaires ══ */}
+              {/* ══ Sponsors ══ */}
               <div className="border-b border-gray-200 pb-2">
-                <button onClick={togglePartenairesMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <button onClick={toggleSponsorsMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('nav.partners')}
-                  <span className={`transition-transform ${isPartenairesMenuOpen ? 'rotate-180' : ''}`}>▾</span>
+                  <span className={`transition-transform ${isSponsorsMenuOpen ? 'rotate-180' : ''}`}>▾</span>
                 </button>
-                {isPartenairesMenuOpen && partenairesMenuItems.map((item) => (
+                {isSponsorsMenuOpen && sponsorsMenuItems.map((item) => (
                   <Link key={item.name} to={item.href} className="block px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
                     <div>{item.name}</div>
                     <div className="text-xs text-gray-500">{item.description}</div>

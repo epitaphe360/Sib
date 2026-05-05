@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
@@ -30,11 +30,11 @@ export const DemoAccountsPage: React.FC = () => {
     { email: 'f.amrani@ocpgroup.ma', password: 'TestPassword123!', label: '🏗️ Exposant - OCP Group', type: 'exhibitor', color: '#06B6D4' },
     { email: 'k.bennani@tangermed.ma', password: 'TestPassword123!', label: '🏗️ Exposant - Groupe Atlas', type: 'exhibitor', color: '#6366F1' },
 
-    // Partenaires
-    { email: 'contact@bollore-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - MatBuild Group', type: 'partner', color: '#F59E0B' },
-    { email: 'contact@msc-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - UrbanTech Maroc', type: 'partner', color: '#D97706' },
-    { email: 'contact@cma-cgm.ma', password: 'TestPassword123!', label: '🤝 Partenaire - EcoBeton', type: 'partner', color: '#EAB308' },
-    { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🥈 Partenaire', type: 'partner', color: '#9CA3AF' },
+    // Sponsors
+    { email: 'contact@bollore-maroc.ma', password: 'TestPassword123!', label: '🤝 Sponsor - MatBuild Group', type: 'partner', color: '#F59E0B' },
+    { email: 'contact@msc-maroc.ma', password: 'TestPassword123!', label: '🤝 Sponsor - UrbanTech Maroc', type: 'partner', color: '#D97706' },
+    { email: 'contact@cma-cgm.ma', password: 'TestPassword123!', label: '🤝 Sponsor - EcoBeton', type: 'partner', color: '#EAB308' },
+    { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🥈 Sponsor', type: 'partner', color: '#9CA3AF' },
 
     // Admin
     { email: 'admin.sib@sib.com', password: 'Admin123!', label: '⚙️ Administrateur SIB', type: 'admin', color: '#EF4444' },

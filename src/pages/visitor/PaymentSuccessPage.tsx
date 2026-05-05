@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -44,9 +44,9 @@ export default function PaymentSuccessPage() {
 
   useEffect(() => {
     verifyPaymentAndUpgrade();
-  }, [user]);
+  }, [verifyPaymentAndUpgrade]);
 
-  async function verifyPaymentAndUpgrade() {
+  const verifyPaymentAndUpgrade = useCallback(async () => {
     if (!user) {return;}
 
     try {
@@ -115,7 +115,7 @@ export default function PaymentSuccessPage() {
     } finally {
       setIsVerifying(false);
     }
-  }
+  }, [user, t, refreshUserData]);
 
   if (isVerifying) {
     return (
@@ -208,7 +208,7 @@ export default function PaymentSuccessPage() {
                 {t('payment.success.description')}
               </p>
               <div className="inline-block bg-green-50 border border-green-200 rounded-lg p-4">
-                <p className="text-sm text-green-800" dangerouslySetInnerHTML={{ __html: t('payment.success.emailSent', { email: user?.email || '' }) }} />
+                <p className="text-sm text-green-800" dangerouslySetInnerHTML={{ __html: t('payment.success.emailSent', { email: (user?.email || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') }) }} />
               </div>
             </motion.div>
 

@@ -262,10 +262,10 @@ export default function PublicAvailabilityCalendar({
     const map = new Map<string, { pending: number; confirmed: number }>();
     appointments.forEach(apt => {
       const slotId = (apt as any).time_slot_id || apt.timeSlotId;
-      if (!slotId) return;
+      if (!slotId) {return;}
       const existing = map.get(slotId) || { pending: 0, confirmed: 0 };
-      if (apt.status === 'pending') existing.pending++;
-      else if (apt.status === 'confirmed') existing.confirmed++;
+      if (apt.status === 'pending') {existing.pending++;}
+      else if (apt.status === 'confirmed') {existing.confirmed++;}
       map.set(slotId, existing);
     });
     return map;
@@ -504,7 +504,7 @@ export default function PublicAvailabilityCalendar({
                           {/* Indicateurs RDV en attente/confirmé */}
                           {(() => {
                             const appts = appointmentsBySlot.get(slot.id);
-                            if (!appts) return null;
+                            if (!appts) {return null;}
                             return (
                               <div className="flex flex-wrap gap-1 px-2 pb-1">
                                 {appts.pending > 0 && (

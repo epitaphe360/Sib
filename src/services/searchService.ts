@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Service de recherche full-text
  * Recherche avancée dans tous les contenus de la plateforme
  */
@@ -179,7 +179,7 @@ class SearchService {
   }
 
   /**
-   * Rechercher des partenaires
+   * Rechercher des sponsors
    */
   async searchPartners(query: string, limit?: number): Promise<SearchResult[]> {
     return this.search(query, {

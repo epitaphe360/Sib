@@ -27,12 +27,12 @@ export default function PartnerCreationPage() {
       if (partner) {
         setPartnerData(partner);
       } else {
-        toast.error('Partenaire non trouvé');
+        toast.error('Sponsor non trouvé');
         navigate(ROUTES.ADMIN_PARTNERS_MANAGE);
       }
     } catch (error) {
-      console.error('Erreur chargement partenaire:', error);
-      toast.error('Impossible de charger le partenaire');
+      console.error('Erreur chargement sponsor:', error);
+      toast.error('Impossible de charger le sponsor');
       navigate(ROUTES.ADMIN_PARTNERS_MANAGE);
     } finally {
       setIsLoading(false);

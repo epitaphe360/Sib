@@ -10,9 +10,9 @@ export function HeroBuilding3D() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {return;}
     const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) {return;}
 
     let angle = 0;
     let rafId: number;
@@ -117,10 +117,10 @@ export function HeroBuilding3D() {
       for (const p of particles) {
         p.x += p.vx;
         p.y += p.vy;
-        if (p.x < 0) p.x = W;
-        if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H;
-        if (p.y > H) p.y = 0;
+        if (p.x < 0) {p.x = W;}
+        if (p.x > W) {p.x = 0;}
+        if (p.y < 0) {p.y = H;}
+        if (p.y > H) {p.y = 0;}
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = '#E7D192';

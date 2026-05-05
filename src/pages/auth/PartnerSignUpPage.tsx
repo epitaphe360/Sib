@@ -242,7 +242,7 @@ export default function PartnerSignUpPage() {
     }
   };
 
-  // ─── Chargement de l'état d'inscription partenaire ──────────────────────────
+  // ─── Chargement de l'état d'inscription sponsor ──────────────────────────
   if (regCheckLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f]/95 to-[#1e3a5f]/85 flex items-center justify-center">
@@ -255,7 +255,7 @@ export default function PartnerSignUpPage() {
   }
 
   // ─── Page « Partenariats complets » si inscriptions clôturées ────────────────
-  if (!regOpen) return (
+  if (!regOpen) {return (
     <div className="min-h-screen bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f]/95 to-[#1e3a5f]/85 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
         className="max-w-2xl w-full"
@@ -358,9 +358,9 @@ export default function PartnerSignUpPage() {
         </div>
       </motion.div>
     </div>
-  );
+  );}
 
-  // ─── Formulaire d'inscription partenaire (inscriptions ouvertes) ───
+  // ─── Formulaire d'inscription sponsor (inscriptions ouvertes) ───
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
@@ -427,7 +427,7 @@ export default function PartnerSignUpPage() {
                       <SelectContent>
                         <SelectItem value="silver">🥈 Sponsor Silver (200 000 MAD)</SelectItem>
                         <SelectItem value="gold">🥇 Sponsor Gold (350 000 MAD)</SelectItem>
-                        <SelectItem value="official_sponsor">⭐ Sponsor Officiel (500 000 MAD)</SelectItem>
+                        <SelectItem value="official_sponsor">⭐ Partenaire Officiel (500 000 MAD)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -608,7 +608,7 @@ export default function PartnerSignUpPage() {
                 id="companyDescription"
                 {...register('companyDescription')}
                 rows={4}
-                placeholder="Décrivez votre organisation, vos activités et pourquoi vous souhaitez devenir partenaire de SIB 2026."
+                placeholder="Décrivez votre organisation, vos activités et pourquoi vous souhaitez devenir sponsor de SIB 2026."
               />
               {errors.companyDescription && <p className="text-red-500 text-xs mt-1">{errors.companyDescription.message}</p>}
               <p className="text-xs text-gray-500 mt-1">

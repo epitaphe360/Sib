@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+﻿import { useState, useEffect, useMemo } from 'react';
 import { Calendar, Clock, User, MapPin, Video, Globe, CheckCircle, XCircle, AlertCircle, Sparkles, CalendarDays, Users } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -46,7 +46,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
       // Pour les visiteurs : rendez-vous qu'ils ont demandés
       filteredByUser = appointments.filter(apt => apt.visitorId === user.id);
     } else {
-      // Pour les exposants/partenaires : rendez-vous qu'ils reçoivent
+      // Pour les exposants/sponsors : rendez-vous qu'ils reçoivent
       filteredByUser = appointments.filter(apt => apt.exhibitorId === user.id);
     }
 

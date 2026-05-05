@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Service de génération et validation de QR Codes sécurisés
  * Utilise JWT avec rotation automatique pour une sécurité maximale
  */
@@ -121,10 +121,10 @@ export const ACCESS_LEVELS = {
     events: ['public_conferences', 'vip_events', 'workshops', 'gala']
   },
 
-  // Partenaires
+  // Sponsors
   partner: {
     level: 'partner',
-    displayName: '🤝 Partenaire',
+    displayName: '🤝 Sponsor',
     color: '#3F51B5',
     zones: ['public', 'exhibition_hall', 'partner_area', 'stand'],
     events: ['public_conferences', 'partner_meetings']

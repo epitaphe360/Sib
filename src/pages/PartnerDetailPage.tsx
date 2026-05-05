@@ -135,7 +135,7 @@ interface Partner {
   gallery?: string[];
 }
 
-// Les données du partenaire sont maintenant chargées depuis Supabase
+// Les données du sponsor sont maintenant chargées depuis Supabase
 
 export default function PartnerDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -168,14 +168,14 @@ export default function PartnerDetailPage() {
           setPartner(data);
           // Incrémenter les vues
           SupabaseService.incrementPartnerViews(id).catch(err =>
-            console.error("Erreur incrémentation vues partenaire:", err)
+            console.error("Erreur incrémentation vues sponsor:", err)
           );
         } else {
-          setError("Partenaire non trouvé");
+          setError("Sponsor non trouvé");
         }
       } catch (err) {
-        console.error("Erreur chargement partenaire:", err);
-        setError("Erreur lors du chargement du partenaire");
+        console.error("Erreur chargement sponsor:", err);
+        setError("Erreur lors du chargement du sponsor");
       } finally {
         setIsLoading(false);
       }
@@ -190,7 +190,7 @@ export default function PartnerDetailPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Chargement du partenaire...
+            Chargement du sponsor...
           </h3>
         </div>
       </div>
@@ -205,12 +205,12 @@ export default function PartnerDetailPage() {
             <Handshake className="h-10 w-10 text-white" />
           </div>
           <h2 className="text-2xl font-bold mb-3 text-gray-800">
-            {t('partner.notFound', 'Partenaire non disponible')}
+            {t('partner.notFound', 'Sponsor non disponible')}
           </h2>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            {error === "Partenaire non trouvé"
-              ? t('partner.notFoundDesc', "Ce partenaire n'a pas encore complété son profil ou n'est pas encore visible publiquement. Revenez bientôt pour découvrir notre réseau de partenaires !")
-              : error || t('partner.notFoundGeneric', "Le partenaire que vous recherchez n'existe pas ou a été supprimé.")}
+            {error === "Sponsor non trouvé"
+              ? t('partner.notFoundDesc', "Ce sponsor n'a pas encore complété son profil ou n'est pas encore visible publiquement. Revenez bientôt pour découvrir notre réseau de sponsors !")
+              : error || t('partner.notFoundGeneric', "Le sponsor que vous recherchez n'existe pas ou a été supprimé.")}
           </p>
 
           {/* Actions */}
@@ -218,7 +218,7 @@ export default function PartnerDetailPage() {
             <Link to={ROUTES.PARTNERS}>
               <Button variant="outline" className="group w-full sm:w-auto">
                 <ArrowLeft className="h-4 w-4 mr-2 transition-transform group-hover:-translate-x-1" />
-                {t('partner.backToList', 'Voir tous les partenaires')}
+                {t('partner.backToList', 'Voir tous les sponsors')}
               </Button>
             </Link>
             <Link to={ROUTES.HOME}>
@@ -232,9 +232,9 @@ export default function PartnerDetailPage() {
           {/* Message informatif */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
-              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous êtes partenaire ?')}</span>
+              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous êtes sponsor ?')}</span>
               <br />
-              {t('partner.completeProfile', 'Complétez votre profil depuis votre tableau de bord pour apparaître dans notre annuaire des partenaires.')}
+              {t('partner.completeProfile', 'Complétez votre profil depuis votre tableau de bord pour apparaître dans notre annuaire des sponsors.')}
             </p>
           </div>
         </Card>
@@ -945,7 +945,7 @@ export default function PartnerDetailPage() {
                       if (lowerTitle.includes('compétitivité') || lowerTitle.includes('export') || lowerTitle.includes('marché')) {
                         return "Accompagnement des entreprises dans leur développement commercial, à l'export et sur les marchés internationaux.";
                       }
-                      // Fallback intelligent basé sur le contexte du partenaire
+                      // Fallback intelligent basé sur le contexte du sponsor
                       return `Expertise reconnue en ${title.toLowerCase()} au service de l'excellence et de l'innovation dans le secteur.`;
                     };
 
@@ -1651,9 +1651,9 @@ export default function PartnerDetailPage() {
                 </div>
               </div>
 
-              {/* Partenaires du Projet */}
+              {/* Sponsors du Projet */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Partenaires du Projet</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Sponsors du Projet</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.partners.map((partnerName: string) => (
                     <Badge key={partnerName} variant="success" size="sm">

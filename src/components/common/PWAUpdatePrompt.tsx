@@ -25,10 +25,10 @@ export function PWAUpdatePrompt() {
 
   // Réinitialiser le dismiss si une nouvelle mise à jour arrive
   useEffect(() => {
-    if (needRefresh) setDismissed(false);
+    if (needRefresh) {setDismissed(false);}
   }, [needRefresh]);
 
-  if (!needRefresh || dismissed) return null;
+  if (!needRefresh || dismissed) {return null;}
 
   return (
     <AnimatePresence>

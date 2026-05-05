@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { CheckCircle, Eye, ArrowRight, Award, Handshake } from 'lucide-react';
@@ -47,7 +47,7 @@ export const FeaturedPartners: React.FC = () => {
 
         setPartners(sorted.slice(0, 3));
       } catch (error) {
-        console.error('Erreur lors du chargement des partenaires:', error);
+        console.error('Erreur lors du chargement des sponsors:', error);
       } finally {
         setIsLoading(false);
       }
@@ -60,7 +60,7 @@ export const FeaturedPartners: React.FC = () => {
     const labels: Record<string, string> = {
       'organizer': 'Organisateurs',
       'co_organizer': 'Co-organisateurs',
-      'official_sponsor': 'Sponsor Officiel',
+      'official_sponsor': 'Partenaire Officiel',
       'delegated_organizer': 'Organisateur Délégué',
       'partner': 'Nos Partenaires',
       'press_partner': 'Nos Partenaires Presse'
@@ -118,11 +118,11 @@ export const FeaturedPartners: React.FC = () => {
         >
           <span className="luxury-badge mb-5 inline-flex items-center gap-2">
             <Award className="h-3 w-3" />
-            {t('home.featured_partners_badge', 'Partenaires Officiels')}
+            {t('home.featured_partners_badge', 'Sponsors Officiels')}
           </span>
           <h2 className="text-4xl sm:text-5xl font-light text-[#1A1A1A] mb-4 mt-3"
             style={{ fontFamily: '"Cormorant Garamond", serif' }}>
-            {t('home.featured_partners_title', 'Partenaires à la Une')}
+            {t('home.featured_partners_title', 'Sponsors à la Une')}
           </h2>
           <p className="text-base text-[#666] max-w-2xl mx-auto leading-relaxed font-light">
             {t('home.featured_partners_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
@@ -133,7 +133,7 @@ export const FeaturedPartners: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Bande défilante des logos partenaires */}
+      {/* Bande défilante des logos sponsors */}
       <div className="mb-12">
         <LogoShowcaseSection type="partners" />
       </div>

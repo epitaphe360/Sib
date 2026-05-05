@@ -56,7 +56,7 @@ export function AllPartnersSection() {
         }));
         setPartners(mappedPartners);
       } catch (error) {
-        console.error('Erreur lors du chargement des partenaires:', error);
+        console.error('Erreur lors du chargement des sponsors:', error);
         setPartners([]);
       } finally {
         setIsLoading(false);

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour les messages d'erreur système
  */
 
@@ -81,8 +81,8 @@ export const errorsTranslations = {
 
     // Erreurs de chargement spécifiques
     'error.loading.exhibitor': 'Erreur lors du chargement de l\'exposant',
-    'error.loading.partner': 'Erreur lors du chargement du partenaire',
-    'error.loading.partners': 'Erreur lors du chargement des partenaires',
+    'error.loading.partner': 'Erreur lors du chargement du sponsor',
+    'error.loading.partners': 'Erreur lors du chargement des sponsors',
     'error.loading.event': 'Erreur chargement événement',
     'error.loading.events': 'Erreur lors du chargement des événements',
     'error.loading.exhibitors': 'Erreur lors du chargement des exposants',

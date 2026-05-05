@@ -146,7 +146,6 @@ export const secureStorage = {
     if (isLocalStorageAvailable()) {
       try {
         localStorage.setItem(key, value);
-        console.log(`✅ [localStorage] Set: ${key}`);
         return;
       } catch (error) {
         console.warn(`⚠️ localStorage.setItem failed for ${key}, falling back to IndexedDB`, error);
@@ -156,7 +155,6 @@ export const secureStorage = {
     // Fallback to IndexedDB
     try {
       await setInIndexedDB(key, value);
-      console.log(`✅ [IndexedDB] Set: ${key}`);
     } catch (error) {
       console.error('❌ Both localStorage and IndexedDB failed:', error);
       throw error;
@@ -172,7 +170,6 @@ export const secureStorage = {
       try {
         const value = localStorage.getItem(key);
         if (value) {
-          console.log(`✅ [localStorage] Get: ${key}`);
           return value;
         }
       } catch (error) {
@@ -183,9 +180,6 @@ export const secureStorage = {
     // Fallback to IndexedDB
     try {
       const value = await getFromIndexedDB(key);
-      if (value) {
-        console.log(`✅ [IndexedDB] Get: ${key}`);
-      }
       return value;
     } catch (error) {
       console.error('❌ Both localStorage and IndexedDB failed:', error);
@@ -201,7 +195,6 @@ export const secureStorage = {
     if (isLocalStorageAvailable()) {
       try {
         localStorage.removeItem(key);
-        console.log(`✅ [localStorage] Removed: ${key}`);
       } catch (error) {
         console.warn(`⚠️ localStorage.removeItem failed for ${key}`, error);
       }
@@ -210,7 +203,6 @@ export const secureStorage = {
     // Remove from IndexedDB
     try {
       await removeFromIndexedDB(key);
-      console.log(`✅ [IndexedDB] Removed: ${key}`);
     } catch (error) {
       console.warn(`⚠️ IndexedDB.removeItem failed for ${key}`, error);
     }

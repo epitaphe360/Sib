@@ -71,7 +71,7 @@ const AVAILABLE_INTERESTS = [
 
 // Objectifs de participation
 const AVAILABLE_OBJECTIVES = [
-  'Trouver de nouveaux partenaires',
+  'Trouver de nouveaux sponsors',
   'Développer mon réseau',
   'Présenter mes innovations',
   'Identifier des fournisseurs',

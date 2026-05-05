@@ -1,18 +1,21 @@
-/**
+﻿/**
  * AdminConfigPage – Gestion centralisée des APIs et paramètres de l'application
  * Permet à l'administrateur de configurer toutes les clés API depuis le dashboard
  */
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Settings, Database, Mail, Key, Globe, CreditCard, Bell,
   CheckCircle, XCircle, Eye, EyeOff, Save, RefreshCw,
   AlertTriangle, Server, Shield, Smartphone, ChevronDown,
-  ChevronUp, Copy, Check, Loader2, Info, ExternalLink, Sparkles
+  ChevronUp, Copy, Check, Loader2, Info, ExternalLink, Sparkles,
+  ToggleLeft, ToggleRight, Users, UserCheck, Lock, Unlock, ArrowLeft
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { Button } from '../../components/ui/Button';
+import { ROUTES } from '../../lib/routes';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -458,12 +461,21 @@ function ConfigSectionCard({
 
 // ─── Page principale ──────────────────────────────────────────────────────────
 
+// ─── Contrôle des inscriptions ──────────────────────────────────────────────
+
+interface RegControl {
+  exhibitor: boolean;
+  partner: boolean;
+}
+
 export default function AdminConfigPage() {
   const [config, setConfig] = useState<AppConfig>({});
   const [saving, setSaving] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [testingEmail, setTestingEmail] = useState(false);
   const [testingDb, setTestingDb] = useState(false);
+  const [regControl, setRegControl] = useState<RegControl>({ exhibitor: false, partner: false });
+  const [savingReg, setSavingReg] = useState<'exhibitor' | 'partner' | null>(null);
 
   // Charger la config depuis Supabase
   const loadConfig = useCallback(async () => {
@@ -487,6 +499,10 @@ export default function AdminConfigPage() {
         configMap[key] = value;
       });
       setConfig(configMap);
+      setRegControl({
+        exhibitor: configMap['exhibitor_registration_open'] === 'true',
+        partner: configMap['partner_registration_open'] === 'true',
+      });
     } catch {
       toast.error('Erreur lors du chargement de la configuration');
     } finally {
@@ -505,7 +521,7 @@ export default function AdminConfigPage() {
   const handleSave = async (sectionId: string) => {
     setSaving(sectionId);
     const section = CONFIG_SECTIONS.find(s => s.id === sectionId);
-    if (!section) return;
+    if (!section) {return;}
 
     try {
       const upserts = section.fields
@@ -560,12 +576,34 @@ export default function AdminConfigPage() {
     setTestingDb(true);
     try {
       const { error } = await supabase.from('users').select('id').limit(1);
-      if (error) throw error;
+      if (error) {throw error;}
       toast.success('✅ Connexion Supabase opérationnelle');
     } catch (err: unknown) {
       toast.error(`❌ Erreur Supabase: ${err instanceof Error ? err.message : 'Connexion échouée'}`);
     } finally {
       setTestingDb(false);
+    }
+  };
+
+  const handleToggleReg = async (type: 'exhibitor' | 'partner') => {
+    const key = type === 'exhibitor' ? 'exhibitor_registration_open' : 'partner_registration_open';
+    const newValue = !regControl[type];
+    setSavingReg(type);
+    try {
+      const { error } = await (supabase as any)
+        .from('app_settings')
+        .upsert(
+          { key, value: String(newValue), updated_at: new Date().toISOString() },
+          { onConflict: 'key' }
+        );
+      if (error) { throw error; }
+      setRegControl(prev => ({ ...prev, [type]: newValue }));
+      const label = type === 'exhibitor' ? 'Inscriptions Exposants' : 'Inscriptions Sponsors';
+      toast.success(newValue ? `✅ ${label} ouvertes` : `🔒 ${label} clôturées`);
+    } catch (err: unknown) {
+      toast.error(`Erreur: ${err instanceof Error ? err.message : 'Inconnue'}`);
+    } finally {
+      setSavingReg(null);
     }
   };
 
@@ -582,6 +620,9 @@ export default function AdminConfigPage() {
       style={{ background: 'radial-gradient(ellipse at 50% -5%, #0f2240 0%, #07101e 55%, #04080f 100%)' }}
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-white/60 hover:text-white mb-8">
+          <ArrowLeft className="w-4 h-4 mr-2" /> Retour au Tableau de Bord
+        </Link>
 
         {/* Header */}
         <motion.div
@@ -674,6 +715,81 @@ export default function AdminConfigPage() {
               Pour une sécurité maximale en production, utilisez également les variables d'environnement Railway.
             </div>
           </div>
+        </motion.div>
+
+        {/* ─── Contrôle des Inscriptions ─── */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="mb-6 p-5 rounded-2xl"
+          style={{ background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.25)' }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg" style={{ background: 'rgba(201,168,76,0.15)' }}>
+              <Shield className="h-5 w-5" style={{ color: '#C9A84C' }} />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-white">Contrôle des Inscriptions</h3>
+              <p className="text-xs text-white/40">Ouvrez ou fermez les inscriptions exposants et sponsors en temps réel</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Toggle Exposants */}
+            {(['exhibitor', 'partner'] as const).map((type) => {
+              const isOpen = regControl[type];
+              const isSaving = savingReg === type;
+              const label = type === 'exhibitor' ? 'Inscriptions Exposants' : 'Inscriptions Sponsors';
+              const Icon = type === 'exhibitor' ? Users : UserCheck;
+              const closedMsg = type === 'exhibitor'
+                ? 'Tous les stands ont été vendus'
+                : 'Inscriptions sponsors fermées';
+              return (
+                <div
+                  key={type}
+                  className="p-4 rounded-xl flex items-center justify-between gap-4"
+                  style={{
+                    background: isOpen ? 'rgba(62,207,142,0.08)' : 'rgba(239,68,68,0.07)',
+                    border: `1px solid ${isOpen ? 'rgba(62,207,142,0.25)' : 'rgba(239,68,68,0.2)'}`,
+                  }}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      className="p-2 rounded-lg flex-shrink-0"
+                      style={{ background: isOpen ? 'rgba(62,207,142,0.15)' : 'rgba(239,68,68,0.12)' }}
+                    >
+                      <Icon className="h-4 w-4" style={{ color: isOpen ? '#3ECF8E' : '#EF4444' }} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-white">{label}</p>
+                      <p className="text-xs truncate" style={{ color: isOpen ? '#3ECF8E' : '#EF4444' }}>
+                        {isOpen ? '✅ Ouvertes' : `🔒 ${closedMsg}`}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleToggleReg(type)}
+                    disabled={isSaving}
+                    className="flex-shrink-0 transition-transform hover:scale-105 disabled:opacity-50"
+                    title={isOpen ? 'Cliquer pour fermer' : 'Cliquer pour ouvrir'}
+                  >
+                    {isSaving
+                      ? <Loader2 className="h-9 w-9 animate-spin" style={{ color: '#C9A84C' }} />
+                      : isOpen
+                        ? <ToggleRight className="h-9 w-9" style={{ color: '#3ECF8E' }} />
+                        : <ToggleLeft className="h-9 w-9" style={{ color: '#EF4444' }} />
+                    }
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          <p className="mt-3 text-xs text-white/30 flex items-center gap-1.5">
+            <Info className="h-3.5 w-3.5" />
+            Le changement est instantané — les pages d'inscription exposent le message correspondant en temps réel.
+          </p>
         </motion.div>
 
         {/* Sections */}

@@ -1,4 +1,4 @@
-import { supabase, isSupabaseReady } from '../lib/supabase';
+﻿import { supabase, isSupabaseReady } from '../lib/supabase';
 import { User, Exhibitor, Partner, Product, Appointment, Event, ChatMessage, ChatConversation, MiniSiteSection, ExhibitorCategory, ContactInfo, TimeSlot, UserProfile } from '../types';
 
 // Interfaces pour les données de base de données
@@ -279,7 +279,7 @@ export class SupabaseService {
         }
       }
 
-      // Si c'est un partenaire, on tente de récupérer ses projets séparément
+      // Si c'est un sponsor, on tente de récupérer ses projets séparément
       // pour éviter les erreurs de jointure si la relation n'est pas détectée par PostgREST
       let projects: PartnerProject[] = [];
       if (userData.type === 'partner') {
@@ -314,7 +314,7 @@ export class SupabaseService {
             }
           }
         } catch (e) {
-          console.warn('⚠️ Erreur lors de la récupération des projets partenaire:', e);
+          console.warn('⚠️ Erreur lors de la récupération des projets sponsor:', e);
         }
       }
 
@@ -672,7 +672,7 @@ export class SupabaseService {
     offset?: number;
   }): Promise<PartnersPageResult> {
     if (!this.checkSupabaseConnection()) {
-      console.warn('⚠️ Supabase non configuré - aucun partenaire disponible');
+      console.warn('⚠️ Supabase non configuré - aucun sponsor disponible');
       return { items: [], total: 0 };
     }
 
@@ -688,7 +688,7 @@ export class SupabaseService {
           `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`,
           { count: 'exact' }
         )
-        // Afficher les partenaires publiés (true) OU dont is_published n'est pas renseigné (null)
+        // Afficher les sponsors publiés (true) OU dont is_published n'est pas renseigné (null)
         .or('is_published.eq.true,is_published.is.null')
         .order('featured', { ascending: false })
         .order('partner_type')
@@ -698,12 +698,12 @@ export class SupabaseService {
 
       const items = (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
-        name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
+        name: typeof partner.company_name === 'string' ? partner.company_name : 'Sponsor',
         partner_tier: SupabaseService.normalizePartnerTier(
           typeof partner.partner_type === 'string' ? partner.partner_type : null,
           partner.partnership_level
         ),
-        category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
+        category: (typeof partner.partner_type === 'object') ? 'Sponsor' : (partner.partner_type || 'partner'),
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
         description: typeof partner.description === 'string' ? partner.description : '',
         logo: partner.logo_url,
@@ -723,13 +723,13 @@ export class SupabaseService {
     } catch (error) {
       try {
         const errorInfo = error as ErrorInfo & { hint?: string };
-        console.error('Erreur lors de la récupération paginée des partenaires:', {
+        console.error('Erreur lors de la récupération paginée des sponsors:', {
           message: errorInfo?.message || String(error),
           details: errorInfo?.details || errorInfo?.hint || null,
           raw: JSON.stringify(error)
         });
       } catch (e) {
-        console.error('Erreur lors de la récupération paginée des partenaires (raw):', error);
+        console.error('Erreur lors de la récupération paginée des sponsors (raw):', error);
       }
       return { items: [], total: 0 };
     }
@@ -737,7 +737,7 @@ export class SupabaseService {
 
   static async getPartners(): Promise<PartnerUI[]> {
     if (!this.checkSupabaseConnection()) {
-      console.warn('⚠️ Supabase non configuré - aucun partenaire disponible');
+      console.warn('⚠️ Supabase non configuré - aucun sponsor disponible');
       return [];
     }
 
@@ -757,12 +757,12 @@ export class SupabaseService {
 
       return (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
-        name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
+        name: typeof partner.company_name === 'string' ? partner.company_name : 'Sponsor',
         partner_tier: SupabaseService.normalizePartnerTier(
           typeof partner.partner_type === 'string' ? partner.partner_type : null,
           partner.partnership_level
         ),
-        category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
+        category: (typeof partner.partner_type === 'object') ? 'Sponsor' : (partner.partner_type || 'partner'),
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
         description: typeof partner.description === 'string' ? partner.description : '',
         logo: partner.logo_url,
@@ -781,13 +781,13 @@ export class SupabaseService {
       // Log détaillé pour faciliter le debug (message, details, hint si disponibles)
       try {
         const errorInfo = error as ErrorInfo & { hint?: string };
-        console.error('Erreur lors de la récupération des partenaires:', {
+        console.error('Erreur lors de la récupération des sponsors:', {
           message: errorInfo?.message || String(error),
           details: errorInfo?.details || errorInfo?.hint || null,
           raw: JSON.stringify(error)
         });
       } catch (e) {
-        console.error('Erreur lors de la récupération des partenaires (raw):', error);
+        console.error('Erreur lors de la récupération des sponsors (raw):', error);
       }
       return [];
     }
@@ -834,7 +834,7 @@ export class SupabaseService {
         return fuzzyByName;
       };
 
-      // Récupérer les données du partenaire (colonnes core garanties + enrichies si disponibles)
+      // Récupérer les données du sponsor (colonnes core garanties + enrichies si disponibles)
       const coreSelect = `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, contributions, projects:partner_projects(*)`;
       const enrichedSelect = `${coreSelect}, mission, vision, values, certifications, awards, social_media, key_figures, testimonials, news, expertise, clients, video_url, gallery`;
 
@@ -886,12 +886,12 @@ export class SupabaseService {
 
       return {
         id: data.id,
-        name: typeof data.company_name === 'string' ? data.company_name : 'Partenaire',
+        name: typeof data.company_name === 'string' ? data.company_name : 'Sponsor',
         type: typeof data.partner_type === 'string' ? data.partner_type : 'gold',
         sponsorshipLevel: (typeof data.partnership_level === 'object' && data.partnership_level !== null)
           ? ((data.partnership_level as any).level || (data.partnership_level as any).name || 'silver')
           : (typeof data.partnership_level === 'string' ? data.partnership_level : (typeof data.partner_type === 'string' ? data.partner_type : 'silver')),
-        category: (typeof data.partner_type === 'object') ? 'Partenaire' : data.partner_type,
+        category: (typeof data.partner_type === 'object') ? 'Sponsor' : data.partner_type,
         sector: typeof data.sector === 'string' ? data.sector : 'Bâtiment',
         description: typeof data.description === 'string' ? data.description : '',
         longDescription: typeof data.description === 'string' ? data.description : fallbackData.longDescription,
@@ -947,7 +947,7 @@ export class SupabaseService {
         gallery: data.gallery || fallbackData.gallery,
       };
     } catch (error) {
-      console.error('Erreur lors de la récupération du partenaire:', error);
+      console.error('Erreur lors de la récupération du sponsor:', error);
       return null;
     }
   }
@@ -1364,7 +1364,7 @@ export class SupabaseService {
       }
 
 
-      // 3. Si c'est un exposant ou partenaire, créer l'entrée correspondante
+      // 3. Si c'est un exposant ou sponsor, créer l'entrée correspondante
       if (userData.type === 'exhibitor') {
         await this.createExhibitorProfile(authData.user.id, userData);
       } else if (userData.type === 'partner') {
@@ -1720,7 +1720,8 @@ export class SupabaseService {
       const { data, error } = await safeSupabase
         .from('events')
         .select('*')
-        .order('event_date', { ascending: true });
+        .order('event_date', { ascending: true })
+        .limit(500);
 
       if (error) {throw error;}
 
@@ -2461,7 +2462,6 @@ export class SupabaseService {
       }
 
       // 2. Fallback: chercher dans exhibitor_profiles par user_id (structure legacy)
-      console.log('[MiniSite] Pas trouvé dans exhibitors, recherche dans exhibitor_profiles...');
       const { data: profileData, error: _profileError } = await safeSupabase
         .from('exhibitor_profiles')
         .select('user_id, company_name, logo_url, description, website, phone, email')
@@ -2469,7 +2469,7 @@ export class SupabaseService {
         .maybeSingle();
 
       if (profileData) {
-        console.log('[MiniSite] Exposant trouvé dans exhibitor_profiles:', profileData.company_name);
+        console.log('[MiniSite] ✅ Exposant trouvé dans exhibitor_profiles:', profileData.company_name);
         // Mapper les champs pour correspondre à la structure attendue
         return {
           id: profileData.user_id,
@@ -2485,7 +2485,6 @@ export class SupabaseService {
       }
 
       // 3. Fallback: chercher dans users si c'est un exposant
-      console.log('[MiniSite] Pas trouvé dans exhibitor_profiles, recherche dans users...');
       const { data: userData } = await safeSupabase
         .from('users')
         .select('id, name, email')
@@ -2506,7 +2505,6 @@ export class SupabaseService {
       }
 
       // 4. DERNIER FALLBACK: Vérifier via exhibitors.user_id au lieu de exhibitors.id
-      console.log('[MiniSite] Pas trouvé via ID, recherche via user_id dans exhibitors...');
       const { data: exhibitorByUserId } = await safeSupabase
         .from('exhibitors')
         .select('id, user_id, company_name, logo_url, description, website, contact_info')
@@ -2518,7 +2516,7 @@ export class SupabaseService {
         return exhibitorByUserId;
       }
 
-      console.warn('[MiniSite] ❌ AUCUN exposant trouvé pour ID:', exhibitorId);
+      console.debug('[MiniSite] Aucun exposant trouvé pour ID:', exhibitorId);
       return null;
     } catch (error) {
       console.error('Erreur récupération exposant pour mini-site:', error);
@@ -2672,7 +2670,7 @@ export class SupabaseService {
 	      const result = data?.[0];
 
 	      if (!result?.success) {
-	        throw new Error('Échec de la validation du partenaire');
+	        throw new Error('Échec de la validation du sponsor');
 	      }
 
 	      return {
@@ -2683,7 +2681,7 @@ export class SupabaseService {
 	        success: result.success
 	      };
 	    } catch (error) {
-	      console.error(`❌ Erreur validation partenaire ${partnerId}:`, error);
+	      console.error(`❌ Erreur validation sponsor ${partnerId}:`, error);
 	      throw error;
 	    }
 	  }
@@ -2723,7 +2721,7 @@ export class SupabaseService {
       const { error } = await safeSupabase
         .from('partners')
         .insert([{
-          id: userId, // Utilise l'ID utilisateur comme ID partenaire
+          id: userId, // Utilise l'ID utilisateur comme ID sponsor
           user_id: userId,
           company_name: (userData.profile as any)?.company,
           partner_type: (userData.profile as any)?.partnerType || 'institutional',
@@ -2734,7 +2732,7 @@ export class SupabaseService {
 
       if (error) {throw error;}
     } catch (error) {
-      console.error('❌ Erreur création profil partenaire:', error);
+      console.error('❌ Erreur création profil sponsor:', error);
 	      throw error;
 	    }
 	  }
@@ -2877,7 +2875,7 @@ export class SupabaseService {
       // Optimized: Select only necessary columns instead of *
       let query = safeSupabase.from('users').select('id, email, name, type, profile, status, created_at');
 
-      // Par défaut, afficher uniquement les exposants et partenaires (B2B)
+      // Par défaut, afficher uniquement les exposants et sponsors (B2B)
       // Pas les visiteurs ni les admins
       const hasSearchTerm = filters.searchTerm && filters.searchTerm.trim();
       const hasSector = filters.sector && filters.sector.trim();
@@ -2885,7 +2883,7 @@ export class SupabaseService {
 
       // Exclure visiteurs et admins si aucun type spécifié
       if (!filters.userType && !hasSector) {
-        // Par défaut, seuls les exposants et partenaires (entreprises B2B)
+        // Par défaut, seuls les exposants et sponsors (entreprises B2B)
         query = query.in('type', ['exhibitor', 'partner']);
       }
 
@@ -3924,21 +3922,28 @@ export class SupabaseService {
     const tierData: any = {};
     if (partnerData.partnerType) {
       tierData.partner_type = partnerData.partnerType;
-      tierData.partner_tier = partnerData.partnerType;
+      tierData.partnership_level = partnerData.partnerType; // priorité sur l'ancienne valeur
     }
     if (partnerData.sponsorshipLevel) {tierData.sponsorship_level = partnerData.sponsorshipLevel;}
 
     if (Object.keys(tierData).length > 0) {
-      // Tenter via RPC admin (contourne le trigger) — si la fonction n'existe pas, ignorer silencieusement
+      // Tenter via RPC admin (contourne le trigger enforce_sponsorship_level_admin_only)
       const { error: rpcError } = await (safeSupabase as any).rpc('admin_update_partner_tier', {
         p_partner_id: partnerId,
         p_partner_type: tierData.partner_type ?? null,
-        p_partner_tier: tierData.partner_tier ?? null,
+        p_partner_tier: null,
         p_sponsorship_level: tierData.sponsorship_level ?? null,
       });
 
-      if (rpcError && !rpcError.message?.includes('Could not find the function')) {
-        console.warn('Tier update skipped (trigger protection):', rpcError.message);
+      if (rpcError) {
+        // Fallback : update direct uniquement sur les colonnes existantes
+        const { error: directError } = await (safeSupabase as any)
+          .from('partners')
+          .update({ partner_type: tierData.partner_type, partnership_level: tierData.partnership_level })
+          .eq('id', partnerId);
+        if (directError) {
+          console.warn('Tier update failed:', directError.message);
+        }
       }
     }
   }
@@ -4077,7 +4082,9 @@ export class SupabaseService {
       if (status) {
         query = query.eq('status', status);
       }
-      const { data, error } = await query.order('created_at', { ascending: false });
+      const { data, error } = await query
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) {throw error;}
       return data || [];
     } catch (error) {

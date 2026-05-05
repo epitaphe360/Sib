@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -122,7 +122,7 @@ const STATUS_CONFIG = {
 
 const USER_TYPE_CONFIG = {
   visitor: { label: 'Visiteur', icon: User, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-  partner: { label: 'Partenaire', icon: Users, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+  partner: { label: 'Sponsor', icon: Users, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
   exhibitor: { label: 'Exposant', icon: Building2, color: 'text-orange-600', bgColor: 'bg-orange-50' },
   admin: { label: 'Admin', icon: Globe, color: 'text-purple-600', bgColor: 'bg-purple-50' }
 };
@@ -260,9 +260,13 @@ export default function PaymentValidationPage() {
         // Mettre à jour le statut utilisateur
         const request = requests.find(r => r.id === requestId);
         if (request?.user_id) {
+          const userUpdate: Record<string, unknown> = { status: 'active', payment_status: 'paid' };
+          if (request.users?.type === 'visitor') {
+            userUpdate.visitor_level = 'vip';
+          }
           await supabase
             .from('users')
-            .update({ status: 'active', payment_status: 'paid' })
+            .update(userUpdate)
             .eq('id', request.user_id);
         }
       }
@@ -467,7 +471,7 @@ export default function PaymentValidationPage() {
                 {[
                   { value: 'all', label: 'Tous', icon: Globe },
                   { value: 'visitor', label: 'Visiteurs', icon: User },
-                  { value: 'partner', label: 'Partenaires', icon: Users },
+                  { value: 'partner', label: 'Sponsors', icon: Users },
                   { value: 'exhibitor', label: 'Exposants', icon: Building2 }
                 ].map(({ value, label, icon: Icon }) => (
                   <button
@@ -613,7 +617,7 @@ export default function PaymentValidationPage() {
 
                       {request.metadata?.partnerTier && (
                         <div className="bg-gray-50 rounded-xl p-4">
-                          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Niveau Partenaire</p>
+                          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Niveau Sponsor</p>
                           <p className="font-semibold text-gray-900">
                             {request.metadata.partnerTier === 'gold' && '🥇 Sponsor Gold'}
                             {request.metadata.partnerTier === 'silver' && '🥈 Sponsor Silver'}

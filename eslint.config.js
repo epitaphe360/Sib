@@ -3,6 +3,8 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
+import security from 'eslint-plugin-security';
+import noSecrets from 'eslint-plugin-no-secrets';
 
 export default tseslint.config(
   { ignores: ['dist', 'android', 'ios', 'coverage', 'public', 'node_modules', '**/*.d.ts'] },
@@ -45,6 +47,18 @@ export default tseslint.config(
       'eqeqeq': ['error', 'always', { null: 'ignore' }],
       'curly': ['error', 'all'],
       'no-trailing-spaces': 'warn',
+    },
+  },
+  // SECURITY: Détection vulnérabilités (gratuit, sans compte)
+  {
+    files: ['**/*.{ts,tsx,js,mjs,cjs}'],
+    plugins: {
+      security,
+      'no-secrets': noSecrets,
+    },
+    rules: {
+      ...security.configs.recommended.rules,
+      'no-secrets/no-secrets': ['error', { tolerance: 4.5, ignoreContent: ['data:image/', 'data:font/', 'data:application/'] }],
     },
   },
   // Node.js scripts and config files

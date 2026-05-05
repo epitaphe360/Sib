@@ -45,7 +45,7 @@ export const PartnerNetworkingPage: React.FC = () => {
         setSentMessages(sentRes.count ?? 0);
         setReceivedMessages(receivedRes.count ?? 0);
       } catch (err) {
-        console.error('Erreur chargement stats messages partenaire:', err);
+        console.error('Erreur chargement stats messages sponsor:', err);
       }
     };
     loadMessageStats();

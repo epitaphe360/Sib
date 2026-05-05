@@ -7,7 +7,11 @@ export default {
       colors: {
         // Palette Ultra-Luxueuse SIB 2026 — Lumière & Matière
         sib: {
-          // Navy dark for architectural hero backgrounds
+          // Bleu SIB — couleur officielle du logo
+          brand:        '#009FE3',
+          'brand-dark':  '#0077B6',
+          'brand-light': '#29C6F6',
+          // Navy dark (réservé aux titres sur fond blanc)
           navy:         '#1B365D',
           'navy-light': '#2E5984',
           'navy-dark':  '#0F2034',
@@ -24,8 +28,8 @@ export default {
           green:        '#2D6A4F',
           'green-light':'#3D8A65',
           // Couleurs utilitaires
-          primary:      '#1B365D',
-          secondary:    '#2E5984',
+          primary:      '#009FE3',
+          secondary:    '#0077B6',
           orange:       '#FF6B35',
           gray: {
             50:  '#F8FAFC',

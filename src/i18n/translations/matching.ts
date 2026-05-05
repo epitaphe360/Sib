@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour le matching de profils et networking
  */
 
@@ -43,7 +43,7 @@ export const matchingTranslations = {
     // Objectifs networking
     'matching.goal.find_clients': 'Trouver de nouveaux clients',
     'matching.goal.find_suppliers': 'Trouver des fournisseurs',
-    'matching.goal.find_partners': 'Trouver de nouveaux partenaires',
+    'matching.goal.find_partners': 'Trouver de nouveaux sponsors',
     'matching.goal.develop_network': 'Développer mon réseau',
     'matching.goal.present_innovations': 'Présenter mes innovations',
     'matching.goal.learn': 'Apprendre et se former',

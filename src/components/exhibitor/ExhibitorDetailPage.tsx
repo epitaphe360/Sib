@@ -45,7 +45,7 @@ export default function ExhibitorDetailPage() {
   const { isAuthenticated, user } = useAuthStore();
   const { t } = useTranslation();
 
-  // Chat interne : exposants, partenaires, visiteurs VIP uniquement
+  // Chat interne : exposants, sponsors, visiteurs VIP uniquement
   const canChat = isAuthenticated && (
     user?.type === 'exhibitor' ||
     user?.type === 'partner' ||
@@ -90,7 +90,7 @@ export default function ExhibitorDetailPage() {
       return;
     }
     if (!canChat) {
-      toast.error('La messagerie est réservée aux exposants, partenaires et visiteurs VIP');
+      toast.error('La messagerie est réservée aux exposants, sponsors et visiteurs VIP');
       return;
     }
     if (selectedExhibitor?.userId) {
@@ -607,7 +607,7 @@ export default function ExhibitorDetailPage() {
               Témoignages Clients
             </h2>
             <p className="text-lg text-gray-600">
-              Ce que disent nos partenaires de nos solutions
+              Ce que disent nos sponsors de nos solutions
             </p>
           </motion.div>
 

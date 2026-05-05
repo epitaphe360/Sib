@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -173,7 +173,7 @@ export default function SalonPublicPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {[
             { label: 'Exposants', desc: 'Découvrez les entreprises participantes', href: ROUTES.EXHIBITORS, Icon: Building2 },
-            { label: 'Partenaires', desc: 'Nos partenaires institutionnels et privés', href: ROUTES.PARTNERS, Icon: Users },
+            { label: 'Sponsors', desc: 'Nos sponsors institutionnels et privés', href: ROUTES.PARTNERS, Icon: Users },
             { label: 'Programme', desc: 'Conférences, ateliers et événements', href: ROUTES.EVENTS, Icon: Calendar },
           ].map(({ label, desc, href, Icon }) => (
             <Link key={label} to={href}>

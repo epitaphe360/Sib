@@ -6,7 +6,7 @@ import { ROUTES } from '../../lib/routes';
 
 interface VisitorLevelGuardProps {
   children: React.ReactNode;
-  requiredLevel?: 'premium' | 'vip';
+  requiredLevel?: 'vip';
   fallbackRoute?: string;
   showToast?: boolean;
 }
@@ -18,7 +18,7 @@ interface VisitorLevelGuardProps {
  */
 export function VisitorLevelGuard({
   children,
-  requiredLevel = 'premium',
+  requiredLevel = 'vip',
   fallbackRoute = ROUTES.BADGE,
   showToast = true
 }: VisitorLevelGuardProps) {
@@ -73,6 +73,6 @@ export function useIsFreeVisitor(): boolean {
  */
 export function useIsVipVisitor(): boolean {
   const { user } = useAuthStore();
-  return user?.type === 'visitor' && (user.visitor_level === 'premium' || user.visitor_level === 'vip');
+  return user?.type === 'visitor' && user.visitor_level === 'vip';
 }
 

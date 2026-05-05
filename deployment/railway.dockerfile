@@ -68,6 +68,10 @@ COPY --from=builder /app/server.js ./
 # Use npm install as fallback if npm ci fails due to lock file sync issues
 RUN npm ci --omit=dev || npm install --omit=dev
 
+# Sécurité : exécuter en tant qu'utilisateur non-root
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
 # Exposer le port
 EXPOSE 5000
 

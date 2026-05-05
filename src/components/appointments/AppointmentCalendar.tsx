@@ -150,7 +150,7 @@ export default function AppointmentCalendar() {
     try {
       // CRITICAL: Only exhibitors can create slots (security check)
       if (authUser?.type !== 'exhibitor' && authUser?.type !== 'partner') {
-        toast.error('Seuls les exposants et partenaires peuvent créer des créneaux');
+        toast.error('Seuls les exposants et sponsors peuvent créer des créneaux');
         return;
       }
 
@@ -267,7 +267,7 @@ export default function AppointmentCalendar() {
       const visitorId = authUser?.id || 'user1';
       const userType = authUser?.type;
 
-      // Les exposants et partenaires peuvent toujours réserver sans restriction de quota visiteur
+      // Les exposants et sponsors peuvent toujours réserver sans restriction de quota visiteur
       const isExhibitorOrPartner = userType === 'exhibitor' || userType === 'partner';
 
       if (!isExhibitorOrPartner) {

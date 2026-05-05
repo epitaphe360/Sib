@@ -50,7 +50,7 @@ export default function ActivityPage() {
       setIsLoading(true);
       setError(null);
       try {
-        if (!supabase) throw new Error('Supabase non configuré');
+        if (!supabase) {throw new Error('Supabase non configuré');}
 
         // Construire un journal d'activité synthétique depuis les vraies tables
         const [usersRes, appointmentsRes, paymentsRes, eventsRes] = await Promise.allSettled([

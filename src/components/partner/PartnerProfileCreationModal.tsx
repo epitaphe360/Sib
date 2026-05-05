@@ -62,7 +62,7 @@ export default function PartnerProfileCreationModal({
     setIsSubmitting(true);
 
     try {
-      // Créer ou mettre à jour le profil partenaire
+      // Créer ou mettre à jour le profil sponsor
       const { error } = await supabase
         .from('partner_profiles')
         .upsert({
@@ -81,7 +81,7 @@ export default function PartnerProfileCreationModal({
 
       if (error) {throw error;}
 
-      toast.success('Profil partenaire créé avec succès !');
+      toast.success('Profil sponsor créé avec succès !');
       onComplete();
       onClose();
     } catch (error) {
@@ -101,10 +101,10 @@ export default function PartnerProfileCreationModal({
         <DialogHeader>
           <DialogTitle className="text-xl font-bold flex items-center gap-2">
             <Building2 className="h-5 w-5 text-primary-600" />
-            Créer votre Profil Partenaire
+            Créer votre Profil Sponsor
           </DialogTitle>
           <DialogDescription className="text-sm">
-            Complétez votre profil pour apparaître dans l'annuaire des partenaires SIB 2026
+            Complétez votre profil pour apparaître dans l'annuaire des sponsors SIB 2026
           </DialogDescription>
         </DialogHeader>
 

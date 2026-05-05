@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { Dashboard, DashboardStats, Activity } from '../types';
 import { supabase } from '../lib/supabase';
 
@@ -207,10 +207,10 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         }
       }
 
-      // Compter les vues pour les partenaires
+      // Compter les vues pour les sponsors
       if (userProfile?.role === 'partner' || userProfile?.type === 'partner') {
         try {
-          // D'abord trouver l'ID du partenaire associé à cet utilisateur
+          // D'abord trouver l'ID du sponsor associé à cet utilisateur
           const { data: partner } = await supabase
             .from('partners')
             .select('id, views')
@@ -218,12 +218,12 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             .maybeSingle();
 
           if (partner) {
-            // Pour les partenaires, on utilise soit une table de vues, soit la colonne views
+            // Pour les sponsors, on utilise soit une table de vues, soit la colonne views
             // Si la colonne views existe, on l'utilise
             stats.miniSiteViews = partner.views || 0;
           }
         } catch (err) {
-          console.log('Erreur chargement vues partenaire');
+          console.log('Erreur chargement vues sponsor');
         }
       }
 

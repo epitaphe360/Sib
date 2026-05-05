@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Données de démonstration pour les créneaux horaires du salon SIB 2026
  * Ces créneaux sont pré-configurés pour les 5 jours du salon (25-29 novembre 2026)
  */
@@ -13,7 +13,7 @@ const generateSlotId = (prefix: string, index: number): string => {
 };
 
 /**
- * Créneaux de démonstration pour les partenaires
+ * Créneaux de démonstration pour les sponsors
  * Ces créneaux couvrent les 5 jours du salon avec différents types de rendez-vous
  */
 export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [

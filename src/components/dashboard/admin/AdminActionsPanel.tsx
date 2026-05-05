@@ -1,13 +1,18 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   AlertCircle,
   ClipboardList, CreditCard, FileText,
   Building2, Handshake, Crown, Users,
-  Calendar, Newspaper, LayoutGrid,
-  Video, Mail, BarChart3,
+  Calendar, LayoutGrid,
+  Video, BarChart3, Image as ImageIcon,
   Power, ChevronRight,
+  Package, UserPlus,
+  ActivitySquare, CheckSquare, ShieldAlert, Mic,
+  MapPin,
+  Globe,
+  BadgeCheck,
 } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
 
@@ -37,51 +42,60 @@ interface TileProps {
   badge?: number | null;
   urgent?: boolean;
   active?: boolean;
+  color?: string;   // accent hex
 }
 
-function Tile({ Icon, label, sub, badge, urgent, active }: TileProps) {
+function Tile({ Icon, label, sub, badge, urgent, active, color = '#6366f1' }: TileProps) {
+  const accentColor = urgent ? '#f59e0b' : color;
   return (
     <motion.div
       variants={tileVariants}
-      whileHover={{ y: -4, scale: 1.03, boxShadow: urgent ? '0 0 24px rgba(201,168,76,0.2)' : '0 4px 16px rgba(30,58,95,0.1)' }}
+      whileHover={{ y: -5, scale: 1.04, boxShadow: `0 8px 28px ${accentColor}30` }}
       whileTap={{ scale: 0.96 }}
-      className="flex flex-col items-center justify-center gap-4 p-6 rounded-2xl transition-all cursor-pointer select-none relative"
+      className="flex flex-col items-center justify-center gap-3 p-5 rounded-2xl transition-all cursor-pointer select-none relative overflow-hidden"
       style={{
-        background: urgent ? 'rgba(201,168,76,0.07)' : active ? 'rgba(201,168,76,0.04)' : '#ffffff',
-        border: urgent ? '1px solid rgba(201,168,76,0.45)' : active ? '1px solid rgba(201,168,76,0.3)' : '1px solid rgba(30,58,95,0.1)',
-        boxShadow: '0 1px 4px rgba(30,58,95,0.05)',
+        background: urgent ? `${accentColor}0f` : active ? `${accentColor}08` : '#ffffff',
+        border: `1px solid ${accentColor}25`,
+        boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
       }}
     >
-      {/* Badge urgence */}
+      {/* Subtle top accent stripe */}
+      <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl" style={{ background: accentColor }} />
+
+      {/* Badge */}
       {badge != null && badge > 0 && (
-        <span className="absolute top-3 right-3 bg-[#C9A84C] text-[#0F2034] text-xs font-bold px-2 py-1 rounded-full min-w-[24px] text-center leading-tight">
+        <span className="absolute top-3 right-3 text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[22px] text-center leading-tight" style={{ background: accentColor }}>
           {badge}
         </span>
       )}
 
-      {/* Icône grande */}
-      <div className={`p-4 rounded-2xl ${urgent ? 'bg-[#C9A84C]/20' : 'bg-white/6'}`}>
-        <Icon className={`h-11 w-11 ${urgent ? 'text-[#C9A84C]' : 'text-[#1e3a5f]/50'}`} />
+      {/* Icône */}
+      <div className="p-3 rounded-xl" style={{ background: `${accentColor}18`, border: `1px solid ${accentColor}30` }}>
+        <Icon className="h-9 w-9" style={{ color: accentColor }} />
       </div>
 
       {/* Texte */}
       <div className="text-center">
-        <div className="text-sm font-bold leading-tight" style={{ color: urgent ? '#C9A84C' : '#1e3a5f' }}>{label}</div>
-        {sub && <div className="text-xs mt-1 text-gray-500">{sub}</div>}
+        <div className="text-sm font-bold leading-tight text-gray-800">{label}</div>
+        {sub && <div className="text-xs mt-0.5 text-gray-500">{sub}</div>}
       </div>
     </motion.div>
   );
 }
 
 // ─── Titre de section ────────────────────────────────────────────────────
-function SectionTitle({ icon, label, sub }: { icon: React.ReactNode; label: string; sub?: string }) {
+function SectionTitle({ icon, label, sub, color = '#6366f1' }: { icon: React.ReactNode; label: string; sub?: string; color?: string }) {
   return (
-    <div className="flex items-center gap-4 mb-6 pb-4" style={{ borderBottom: '1px solid rgba(30,58,95,0.08)' }}>
-      <span>{icon}</span>
-      <div>
-        <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#C9A84C', letterSpacing: '0.15em' }}>{label}</h3>
-        {sub && <p className="text-xs mt-1 text-gray-500">{sub}</p>}
+    <div className="flex items-center gap-3 mb-5">
+      <span
+        className="flex items-center justify-center w-8 h-8 rounded-lg flex-shrink-0"
+        style={{ background: `${color}18`, border: `1px solid ${color}30` }}
+      >{icon}</span>
+      <div className="flex-1">
+        <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color, letterSpacing: '0.15em' }}>{label}</h3>
+        {sub && <p className="text-xs mt-0.5 text-gray-400">{sub}</p>}
       </div>
+      <div className="h-px flex-1 ml-2" style={{ background: `linear-gradient(to right, ${color}30, transparent)` }} />
     </div>
   );
 }
@@ -89,8 +103,8 @@ function SectionTitle({ icon, label, sub }: { icon: React.ReactNode; label: stri
 // ─── Composant principal ─────────────────────────────────────────────────
 export function AdminActionsPanel({
   adminMetrics: m,
-  showRegistrationRequests,
-  onToggleRegistrationRequests,
+  showRegistrationRequests: _showRegistrationRequests,
+  onToggleRegistrationRequests: _onToggleRegistrationRequests,
   t,
 }: AdminActionsPanelProps) {
   const metrics = m as any;
@@ -106,17 +120,16 @@ export function AdminActionsPanel({
           style={{ background: '#ffffff', border: '1px solid rgba(30,58,95,0.1)', boxShadow: '0 2px 12px rgba(30,58,95,0.06)' }}
         >
 
-          {/* Header navy animé */}
-          <div
-            className="bg-[#0F2034] px-8 py-5 flex items-center justify-between animate-gradient-x"
-            style={{ background: 'linear-gradient(90deg, #0F2034, #1B365D, #0F2034)', backgroundSize: '300% auto' }}
-          >
-            <div className="flex items-center gap-4">
-              <Power className="h-6 w-6 text-[#C9A84C]" />
+          {/* Header indigo gradient */}
+          <div className="px-8 py-5 flex items-center justify-between bg-gradient-to-r from-indigo-600 to-indigo-700">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-white/15 border border-white/25">
+                <Power className="h-5 w-5 text-white" />
+              </div>
               <span className="text-white font-semibold text-base">Actions &amp; Navigation</span>
             </div>
             {totalUrgent > 0 && (
-              <span className="bg-[#C9A84C] text-[#0F2034] text-xs font-bold px-3 py-1.5 rounded-full">
+              <span className="bg-amber-400 text-amber-900 text-xs font-bold px-3 py-1.5 rounded-full animate-pulse">
                 {totalUrgent} en attente
               </span>
             )}
@@ -127,63 +140,49 @@ export function AdminActionsPanel({
             {/* ── URGENCES ─────────────────────────────────────────── */}
             <div>
               <SectionTitle
-                icon={<AlertCircle className="h-5 w-5 text-[#C9A84C]" />}
+                icon={<AlertCircle className="h-4 w-4" style={{ color: '#f59e0b' }} />}
                 label="Urgences"
                 sub="Actions nécessitant une réponse"
+                color="#f59e0b"
               />
-              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
-
-                {/* Inscriptions — navigation vers la page dédiée */}
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Link to={ROUTES.ADMIN_REGISTRATION_REQUESTS}>
-                  <Tile
-                    Icon={ClipboardList}
-                    label={t('admin.registration_requests')}
-                    sub={t('admin.click_to_process')}
-                    badge={pendingVal}
-                    urgent={pendingVal > 0}
-                  />
+                  <Tile Icon={ClipboardList} label={t('admin.registration_requests')} sub={t('admin.click_to_process')} badge={pendingVal} urgent={pendingVal > 0} color="#f59e0b" />
                 </Link>
-
-                {/* Validation paiements — lien, sans montants */}
                 <Link to={ROUTES.ADMIN_PAYMENT_VALIDATION}>
-                  <Tile
-                    Icon={CreditCard}
-                    label={t('admin.payment_validation')}
-                    sub="Activer les tableaux de bord"
-                  />
+                  <Tile Icon={CreditCard} label={t('admin.payment_validation')} sub="Activer les tableaux de bord" color="#f59e0b" />
                 </Link>
-
-                {/* Modération */}
                 <Link to={ROUTES.ADMIN_PUBLICATION_CONTROL}>
-                  <Tile
-                    Icon={FileText}
-                    label={t('admin.content_moderation')}
-                    sub={t('admin.required_actions')}
-                    badge={pendingMod}
-                    urgent={pendingMod > 0}
-                  />
+                  <Tile Icon={FileText} label={t('admin.content_moderation')} sub={t('admin.required_actions')} badge={pendingMod} urgent={pendingMod > 0} color="#f59e0b" />
+                </Link>
+                <Link to={ROUTES.ADMIN_VISA_LETTERS}>
+                  <Tile Icon={Globe} label="Lettres Visa" sub="Demandes d'invitation" color="#f59e0b" />
                 </Link>
               </motion.div>
             </div>
 
-            {/* ── PARTICIPANTS ─────────────────────────────────────── */}
+            {/* ── GESTION PARTICIPANTS ──────────────────────────────── */}
             <div>
               <SectionTitle
-                icon={<Users className="h-5 w-5 text-[#1B365D]" />}
-                label="Participants"
+                icon={<Users className="h-4 w-4" style={{ color: '#6366f1' }} />}
+                label="Gestion Participants"
+                color="#6366f1"
               />
-              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <Link to={ROUTES.ADMIN_EXHIBITORS}>
-                  <Tile Icon={Building2} label="Exposants" sub={`${metrics.totalExhibitors || 0} inscrits`} />
+                  <Tile Icon={Building2} label="Gestion Exposants" sub={`${metrics.totalExhibitors || 0} inscrits`} color="#6366f1" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PARTNERS_MANAGE}>
-                  <Tile Icon={Handshake} label="Partenaires" sub={`${metrics.totalPartners || 0} actifs`} />
+                  <Tile Icon={Handshake} label="Gestion Sponsors" sub={`${metrics.totalPartners || 0} actifs`} color="#6366f1" />
                 </Link>
                 <Link to={ROUTES.ADMIN_VIP_VISITORS}>
-                  <Tile Icon={Crown} label={t('admin.vip_visitors_management')} sub={t('admin.view_list')} />
+                  <Tile Icon={Crown} label={t('admin.vip_visitors_management')} sub={t('admin.view_list')} color="#6366f1" />
                 </Link>
                 <Link to={ROUTES.ADMIN_USERS}>
-                  <Tile Icon={Users} label={t('admin.users_label')} sub={`${metrics.totalUsers || 0} comptes`} />
+                  <Tile Icon={Users} label={t('admin.users_label')} sub={`${metrics.totalUsers || 0} comptes`} color="#6366f1" />
+                </Link>
+                <Link to={ROUTES.ADMIN_PRESS_ACCREDITATIONS}>
+                  <Tile Icon={Mic} label="Gestion Presse Média" sub="Journalistes & médias" color="#6366f1" />
                 </Link>
               </motion.div>
             </div>
@@ -191,18 +190,16 @@ export function AdminActionsPanel({
             {/* ── CONTENU ──────────────────────────────────────────── */}
             <div>
               <SectionTitle
-                icon={<Calendar className="h-5 w-5 text-[#1B365D]" />}
+                icon={<Calendar className="h-4 w-4" style={{ color: '#10b981' }} />}
                 label="Contenu"
+                color="#10b981"
               />
-              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Link to={ROUTES.ADMIN_EVENTS}>
-                  <Tile Icon={Calendar} label="Événements" sub={`${metrics.totalEvents || 0} programmés`} />
-                </Link>
-                <Link to={ROUTES.ADMIN_NEWS}>
-                  <Tile Icon={Newspaper} label="Articles" sub="Actualités du salon" />
+                  <Tile Icon={Calendar} label="Événements" sub={`${metrics.totalEvents || 0} programmés`} color="#10b981" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PAVILIONS}>
-                  <Tile Icon={LayoutGrid} label="Pavillons" sub={`${metrics.totalExhibitors || 0} stands`} />
+                  <Tile Icon={LayoutGrid} label="Pavillons" sub={`${metrics.totalExhibitors || 0} stands`} color="#10b981" />
                 </Link>
               </motion.div>
             </div>
@@ -210,18 +207,64 @@ export function AdminActionsPanel({
             {/* ── MÉDIAS & STATS ───────────────────────────────────── */}
             <div>
               <SectionTitle
-                icon={<Video className="h-5 w-5 text-[#1B365D]" />}
-                label="Médias &amp; Statistiques"
+                icon={<Video className="h-4 w-4" style={{ color: '#8b5cf6' }} />}
+                label="Médias & Statistiques"
+                color="#8b5cf6"
               />
-              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Link to={ROUTES.ADMIN_MEDIA_MANAGE}>
-                  <Tile Icon={Video} label="Médias" sub="Bibliothèque" />
+                  <Tile Icon={Video} label="Gestion Media" sub="Bibliothèque" color="#8b5cf6" />
                 </Link>
-                <Link to={ROUTES.ADMIN_EMAIL_TEMPLATES}>
-                  <Tile Icon={Mail} label="Templates email" sub="Communications" />
+                <Link to={ROUTES.ADMIN_MEDIA_LIBRARY}>
+                  <Tile Icon={ImageIcon} label="Bibliothèque Images & Vidéos" sub="Photos · Vidéos · Assets" color="#8b5cf6" />
                 </Link>
                 <Link to={ROUTES.METRICS}>
-                  <Tile Icon={BarChart3} label="Statistiques" sub="Métriques plateforme" />
+                  <Tile Icon={BarChart3} label="Statistiques" sub="Métriques plateforme" color="#8b5cf6" />
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* ── NOUVEAUX MODULES ─────────────────────────────────── */}
+            <div>
+              <SectionTitle
+                icon={<Package className="h-4 w-4" style={{ color: '#0ea5e9' }} />}
+                label="Nouveaux Modules"
+                sub="Fonctionnalités SIB 2026"
+                color="#0ea5e9"
+              />
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <Link to={ROUTES.ADMIN_RENTAL}>
+                  <Tile Icon={Package} label="Location Matériel" sub="Stock & Commandes" color="#0ea5e9" />
+                </Link>
+                <Link to={ROUTES.ADMIN_STAND_COLLABORATORS}>
+                  <Tile Icon={UserPlus} label="Collaborateurs Stand" sub="Gestion équipes" color="#0ea5e9" />
+                </Link>
+                <Link to={ROUTES.ADMIN_BADGE_CONFIG}>
+                  <Tile Icon={BadgeCheck} label="Badge A4" sub="Personnalisation bifold" color="#0ea5e9" />
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* ── AUDIT & VALIDATION ───────────────────────────────── */}
+            <div>
+              <SectionTitle
+                icon={<ShieldAlert className="h-4 w-4" style={{ color: '#ef4444' }} />}
+                label="Audit & Validation"
+                sub="Suivi et contrôle qualité"
+                color="#ef4444"
+              />
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <Link to={ROUTES.ADMIN_ACTIVITY}>
+                  <Tile Icon={ActivitySquare} label="Journal d'Activité" sub="Audit complet" color="#ef4444" />
+                </Link>
+                <Link to={ROUTES.ADMIN_VALIDATION}>
+                  <Tile Icon={CheckSquare} label="Validation Comptes" sub="Approuver / Rejeter" badge={(metrics as any).pendingValidations || null} urgent={(metrics as any).pendingValidations > 0} color="#ef4444" />
+                </Link>
+                <Link to={ROUTES.ADMIN_MODERATION}>
+                  <Tile Icon={ShieldAlert} label="Modération" sub="Contenu signalé" badge={(metrics as any).contentModerations || null} urgent={(metrics as any).contentModerations > 0} color="#ef4444" />
+                </Link>
+                <Link to={ROUTES.ADMIN_SECURITY_ZONES}>
+                  <Tile Icon={MapPin} label="Zones de Contrôle" sub="Ajouter / Modifier" color="#ef4444" />
                 </Link>
               </motion.div>
             </div>
@@ -229,22 +272,21 @@ export function AdminActionsPanel({
             {/* ── CONTRÔLE TOTAL ───────────────────────────────────── */}
             <Link to={ROUTES.ADMIN_PUBLICATION_CONTROL}>
               <motion.div
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.02, boxShadow: '0 8px 32px rgba(99,102,241,0.2)' }}
                 whileTap={{ scale: 0.97 }}
-              className="flex items-center justify-between px-8 py-5 rounded-2xl transition-all"
-              style={{ background: 'rgba(201,168,76,0.07)', border: '1px solid rgba(201,168,76,0.25)' }}
-              onHoverStart={e => ((e.target as HTMLElement).closest('.control-btn') as HTMLElement | null)?.style && ((e.target as HTMLElement).closest('.control-btn') as any)?.style.setProperty('border-color', 'rgba(201,168,76,0.5)')}
+                className="flex items-center justify-between px-8 py-5 rounded-2xl transition-all bg-gradient-to-r from-indigo-50 to-purple-50"
+                style={{ border: '1px solid rgba(99,102,241,0.2)' }}
               >
                 <div className="flex items-center gap-5">
-                  <div className="p-4 rounded-xl bg-[#C9A84C]/15 border border-[#C9A84C]/30">
-                    <Power className="h-6 w-6 text-[#C9A84C]" />
+                  <div className="p-4 rounded-xl bg-indigo-100 border border-indigo-200">
+                    <Power className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
-                    <div className="font-bold text-lg">{t('admin.total_control')}</div>
-                    <div className="text-slate-400 text-xs mt-1">Contrôle publication et accès complet</div>
+                    <div className="font-bold text-lg text-indigo-900">{t('admin.total_control')}</div>
+                    <div className="text-indigo-400 text-xs mt-1">Contrôle publication et accès complet</div>
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-[#C9A84C]/70" />
+                <ChevronRight className="h-5 w-5 text-indigo-400" />
               </motion.div>
             </Link>
 

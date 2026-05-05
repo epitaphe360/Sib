@@ -51,7 +51,7 @@ app.use(express.json({ limit: '1mb' }));
 // Configuration de la base de données locale (PostgreSQL)
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('localhost') ? false : { rejectUnauthorized: false }
+  ssl: process.env.DATABASE_URL?.includes('localhost') ? false : { rejectUnauthorized: process.env.NODE_ENV === 'production' }
 });
 
 // Configuration Supabase (pour production)
@@ -172,7 +172,7 @@ app.post('/api/auth/login', async (req, res) => {
       const { data: userProfile, error: profileError } = await supabase
         .from('users')
         .select('*')
-        .eq('email', email)
+        .eq('email', email.toLowerCase())
         .single();
         
       if (profileError || !userProfile) {

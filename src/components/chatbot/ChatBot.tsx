@@ -83,7 +83,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
             };
           case 'partner':
             return {
-              content: `👋 Bonjour ${firstName} ! En tant que partenaire, je peux vous accompagner dans la gestion de votre partenariat et l'optimisation de votre ROI.`,
+              content: `👋 Bonjour ${firstName} ! En tant que sponsor, je peux vous accompagner dans la gestion de votre partenariat et l'optimisation de votre ROI.`,
               quickReplies: ["ROI de mon partenariat", "Événements sponsorisés", "Networking VIP", "Métriques d'impact"]
             };
           case 'visitor':
@@ -289,7 +289,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     if (message.includes('aide') || message.includes('help') || message.includes('support')) {
       return {
         id: Date.now().toString(),
-        content: `💡 ${firstName}, je suis là pour vous aider ! En tant que ${userType === 'admin' ? 'administrateur' : userType === 'exhibitor' ? 'exposant' : userType === 'partner' ? 'partenaire' : 'visiteur'}, voici ce que je peux faire pour vous :`,
+        content: `💡 ${firstName}, je suis là pour vous aider ! En tant que ${userType === 'admin' ? 'administrateur' : userType === 'exhibitor' ? 'exposant' : userType === 'partner' ? 'sponsor' : 'visiteur'}, voici ce que je peux faire pour vous :`,
         isBot: true,
         timestamp,
         type: 'quick_reply',
@@ -498,7 +498,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
           };
         case 'partner':
           return {
-            content: `🤝 ${firstName}, en tant que partenaire, je peux vous accompagner dans la gestion de votre partenariat et l'optimisation de votre ROI.`,
+            content: `🤝 ${firstName}, en tant que sponsor, je peux vous accompagner dans la gestion de votre partenariat et l'optimisation de votre ROI.`,
             suggestions: [
               { title: "ROI partenariat", description: "285% de retour", action: "/dashboard", icon: TrendingUp },
               { title: "Événements sponsorisés", description: "12 événements", action: "/events", icon: Calendar },

@@ -1,5 +1,5 @@
 ﻿/**
- * Hook pour gérer la traduction des partenaires
+ * Hook pour gérer la traduction des sponsors
  * Retourne le contenu traduit mot par mot selon la langue active
  */
 
@@ -14,7 +14,7 @@ export interface TranslatedPartner {
 }
 
 /**
- * Hook pour obtenir le partenaire dans la langue courante
+ * Hook pour obtenir le sponsor dans la langue courante
  * Utilise les colonnes *_en de la DB si disponibles, sinon fallback sur FR
  */
 export function usePartnerTranslation(partner: any): TranslatedPartner {

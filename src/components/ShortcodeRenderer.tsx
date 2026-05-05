@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -30,11 +30,7 @@ export function ShortcodeRenderer({ content }: ShortcodeProps) {
   const [renderedContent, setRenderedContent] = useState<React.ReactNode[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    parseAndRenderShortcodes();
-  }, [content]);
-
-  const parseAndRenderShortcodes = async () => {
+  const parseAndRenderShortcodes = useCallback(async () => {
     setLoading(true);
 
     // Regex pour détecter les shortcodes [article id="..."]
@@ -100,7 +96,11 @@ export function ShortcodeRenderer({ content }: ShortcodeProps) {
 
     setRenderedContent(parts);
     setLoading(false);
-  };
+  }, [content]);
+
+  useEffect(() => {
+    parseAndRenderShortcodes();
+  }, [parseAndRenderShortcodes]);
 
   const loadArticles = async (ids: string[]): Promise<ArticleData[]> => {
     try {

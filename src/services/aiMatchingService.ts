@@ -47,7 +47,7 @@ function mergeWithLocalScores(
 
   return aiResults.map(ai => {
     const local = localMap.get(ai.id);
-    if (!local) return ai;
+    if (!local) {return ai;}
 
     // Score combiné : 70% sémantique + 30% BTP tags
     const combined = Math.round(ai.score * 0.7 + local.score * 0.3);

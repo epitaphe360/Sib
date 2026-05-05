@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, CheckCircle, Clock, ArrowRight, RefreshCw } from 'lucide-react';
@@ -19,7 +19,7 @@ export default function SignupConfirmationPage() {
   // Messages personnalisés selon le type
   const getTitle = () => {
     if (userType === 'exhibitor') {return 'Inscription Exposant Réussie !';}
-    if (userType === 'partner') {return 'Inscription Partenaire Réussie !';}
+    if (userType === 'partner') {return 'Inscription Sponsor Réussie !';}
     if (userLevel === 'free' && needsPassword) {return '📧 Badge Gratuit + Définition Mot de Passe';}
     if (userLevel === 'free') {return 'Badge Gratuit Envoyé !';}
     if (userLevel === 'premium') {return 'Inscription VIP Réussie !';}
@@ -28,7 +28,7 @@ export default function SignupConfirmationPage() {
 
   const getDescription = () => {
     if (userType === 'exhibitor') {return 'Votre demande de compte exposant a été enregistrée';}
-    if (userType === 'partner') {return 'Votre demande de compte partenaire a été enregistrée';}
+    if (userType === 'partner') {return 'Votre demande de compte sponsor a été enregistrée';}
     if (userLevel === 'free' && needsPassword) {return 'Votre badge gratuit vous a été envoyé + un email pour définir votre mot de passe';}
     if (userLevel === 'free') {return 'Votre badge d\'accès gratuit vous a été envoyé par email';}
     if (userLevel === 'premium') {return 'Votre compte VIP a été créé avec succès';}
@@ -238,7 +238,7 @@ export default function SignupConfirmationPage() {
                     Validation en cours
                   </h4>
                   <p className="text-sm text-amber-700">
-                    Votre demande de compte {userType === 'exhibitor' ? 'exposant' : 'partenaire'} sera examinée par notre équipe dans les 24-48 heures.
+                    Votre demande de compte {userType === 'exhibitor' ? 'exposant' : 'sponsor'} sera examinée par notre équipe dans les 24-48 heures.
                     Vous recevrez un email de confirmation une fois votre compte validé.
                   </p>
                 </div>

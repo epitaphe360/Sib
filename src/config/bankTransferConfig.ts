@@ -76,7 +76,7 @@ export const BANK_TRANSFER_INFO = {
 export function generatePaymentReference(userId: string, requestId: string): string {
   const userShort = userId.substring(0, 8).toUpperCase();
   const requestShort = requestId.substring(0, 8).toUpperCase();
-  const timestamp = Date.now().toString().substring(-6);
+  const timestamp = Date.now().toString().slice(-6);
   return `SIB-${userShort}-${requestShort}-${timestamp}`;
 }
 

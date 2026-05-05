@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -44,7 +44,7 @@ export const PartnerLeadsPage: React.FC = () => {
 
   async function loadConnections() {
     try {
-      // Charger les connexions du partenaire
+      // Charger les connexions du sponsor
       const { data, error } = await supabase
         .from('connections')
         .select(`
@@ -98,7 +98,7 @@ export const PartnerLeadsPage: React.FC = () => {
     })),
     leadSources: [
       { source: t('partner.leads.sources.events', 'Événements SIB'), count: 34, percentage: 38 },
-      { source: t('partner.leads.sources.networking', 'Networking Partenaires'), count: 28, percentage: 31 },
+      { source: t('partner.leads.sources.networking', 'Networking Sponsors'), count: 28, percentage: 31 },
       { source: t('partner.leads.sources.referrals', 'Références Clients'), count: 15, percentage: 17 },
       { source: t('partner.leads.sources.marketing', 'Campagnes Marketing'), count: 12, percentage: 14 }
     ],

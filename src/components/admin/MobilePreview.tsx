@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Clock, Smartphone } from 'lucide-react';
+﻿import { MapPin, Calendar, Clock, Smartphone } from 'lucide-react';
 
 interface MobilePreviewProps {
   name: string;
@@ -160,7 +160,7 @@ export default function MobilePreview({
 
           {/* Sections preview */}
           <div className="px-3 py-3 space-y-2">
-            {['Exposants', 'Programme', 'Partenaires'].map(section => (
+            {['Exposants', 'Programme', 'Sponsors'].map(section => (
               <div key={section} className="flex items-center justify-between p-2.5 rounded-lg bg-gray-50 border border-gray-100">
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'rgba(201,168,76,0.1)' }}>

@@ -1,26 +1,26 @@
-/**
- * Traductions pour les partenaires
+﻿/**
+ * Traductions pour les sponsors
  */
 
 export const partnersTranslations = {
   fr: {
-    // Pages partenaires
-    'partners.title': 'Partenaires',
+    // Pages sponsors
+    'partners.title': 'Sponsors',
     'partners.subtitle': 'Les organisations qui soutiennent SIB 2026',
-    'partners.search': 'Chercher un partenaire',
-    'partners.all': 'Tous les partenaires',
+    'partners.search': 'Chercher un sponsor',
+    'partners.all': 'Tous les sponsors',
     'partners.view_details': 'Voir les détails',
     'partners.contact': 'Contacter',
     'partners.visit_website': 'Visiter le site',
-    'partners.no_results': 'Aucun partenaire trouvé',
-    'partners.count': '{{count}} partenaires',
+    'partners.no_results': 'Aucun sponsor trouvé',
+    'partners.count': '{{count}} sponsors',
 
     // Niveaux de partenariat
     'partners.tier.organizer': 'Organisateur',
     'partners.tier.co_organizer': 'Co-organisateur',
-    'partners.tier.official_sponsor': 'Sponsor Officiel',
+    'partners.tier.official_sponsor': 'Partenaire Officiel',
     'partners.tier.delegated_organizer': 'Organisateur Délégué',
-    'partners.tier.partner': 'Partenaire',
+    'partners.tier.partner': 'Sponsor',
     'partners.tier.press_partner': 'Partenaire Presse',
 
     // Catégories
@@ -32,14 +32,14 @@ export const partnersTranslations = {
     'partners.category.media': 'Média',
     'partners.category.institutional': 'Institutionnel',
 
-    // Page profil partenaire
+    // Page profil sponsor
     'partners.profile.about': 'À propos',
     'partners.profile.benefits': 'Avantages',
     'partners.profile.media': 'Contenus médias',
     'partners.profile.contact': 'Contact',
     'partners.profile.opportunities': 'Opportunités',
 
-    // Dashboard partenaire
+    // Dashboard sponsor
     'partners.dashboard.visibility': 'Visibilité',
     'partners.dashboard.impressions': 'Impressions',
     'partners.dashboard.clicks': 'Clics',
@@ -49,7 +49,7 @@ export const partnersTranslations = {
     'partners.dashboard.media_views': 'Vues médias',
     'partners.dashboard.download_report': 'Télécharger le rapport',
 
-    // Médias partenaires
+    // Médias sponsors
     'partners.media.upload': 'Téléverser un média',
     'partners.media.manage': 'Gérer les médias',
     'partners.media.type': 'Type de média',
@@ -62,14 +62,14 @@ export const partnersTranslations = {
     'partners.media.approved': 'Approuvé',
     'partners.media.rejected': 'Rejeté',
 
-    // Inscription partenaire
-    'partners.signup.title': 'Devenir Partenaire',
+    // Inscription sponsor
+    'partners.signup.title': 'Devenir Sponsor',
     'partners.signup.subtitle': 'Rejoignez notre écosystème',
     'partners.signup.organization': 'Informations sur l\'organisation',
     'partners.signup.contact': 'Contact principal',
     'partners.signup.partnership_type': 'Type de partenariat souhaité',
     'partners.signup.description': 'Description de votre organisation',
-    'partners.signup.motivation': 'Pourquoi devenir partenaire ?',
+    'partners.signup.motivation': 'Pourquoi devenir sponsor ?',
     'partners.signup.submit': 'Soumettre la demande',
     'partners.signup.success': 'Demande envoyée avec succès',
     'partners.signup.error': 'Erreur lors de l\'envoi',

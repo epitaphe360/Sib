@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Calendar, Users, FileText, Award, Scan } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { QRCodeCanvas as QRCode } from 'qrcode.react';
 
 import { useExhibitorDashboard } from '../../hooks/useExhibitorDashboard';
 import {
@@ -18,20 +17,25 @@ import {
   ExhibitorRejectModal,
   ExhibitorGenericModal,
   ExhibitorProductsSection,
+  ExhibitorScannedVisitors,
 } from './exhibitor';
 
 import { Button } from '../ui/Button';
 import { DashboardSkeleton } from '../ui/Skeleton';
 import { ErrorMessage } from '../common/ErrorMessage';
+import { RentalBanner } from '../common/RentalBanner';
+import { ROUTES } from '../../lib/routes';
 import { QuotaSummaryCard } from '../common/QuotaWidget';
 import { MiniSiteSetupModal } from '../exhibitor/MiniSiteSetupModal';
-import { ROUTES } from '../../lib/routes';
+import { DynamicBadge } from '../badge/DynamicBadge';
 import { getExhibitorQuota } from '../../config/exhibitorQuotas';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default memo(function ExhibitorDashboard() {
   const { t } = useTranslation();
   const ctx = useExhibitorDashboard();
+  const [showBadgeModal, setShowBadgeModal] = React.useState(false);
+  const [scansOpen, setScansOpen] = React.useState(false);
 
   if (ctx.user?.status === 'pending') {
     return <Navigate to={ROUTES.PENDING_ACCOUNT} replace />;
@@ -132,9 +136,16 @@ export default memo(function ExhibitorDashboard() {
           />
         </div>
 
+        <RentalBanner variant="compact" to={ROUTES.EXHIBITOR_RENTAL} />
+
         <ExhibitorStatsGrid
           dashboardStats={ctx.dashboardStats}
           onStatClick={ctx.handleStatClick}
+        />
+
+        <ExhibitorQuickActions
+          onOpenQR={() => ctx.setShowQRModal(true)}
+          onOpenBadge={() => setShowBadgeModal(true)}
         />
 
         <ExhibitorCalendarSection
@@ -153,10 +164,6 @@ export default memo(function ExhibitorDashboard() {
           miniSiteViews={ctx.dashboardStats?.miniSiteViews?.value || 0}
         />
 
-        <ExhibitorQuickActions
-          onOpenQR={() => ctx.setShowQRModal(true)}
-        />
-
         <ExhibitorAppointmentSection
           upcomingAppointments={ctx.upcomingAppointments}
           pastAppointments={ctx.pastAppointments}
@@ -168,11 +175,16 @@ export default memo(function ExhibitorDashboard() {
         />
 
         <ExhibitorActivitySection
-          activities={ctx.dashboard?.recentActivity || []}
+          activities={(ctx.dashboard?.recentActivity ?? []).map(a => ({ ...a, timestamp: a.timestamp.toISOString() }))}
           onViewAll={ctx.handleViewAllActivities}
         />
 
-        <ExhibitorProductsSection exhibitorDbId={ctx.exhibitorDbId} exhibitorName={ctx.user?.companyName || ctx.user?.name} />
+        <ExhibitorProductsSection exhibitorDbId={ctx.exhibitorDbId} exhibitorName={ctx.user?.profile?.company ?? ctx.user?.name} />
+
+        <ExhibitorScannedVisitors
+          isExpanded={scansOpen}
+          onToggle={() => setScansOpen(v => !v)}
+        />
 
         <ExhibitorInfoSection />
 
@@ -181,10 +193,17 @@ export default memo(function ExhibitorDashboard() {
       {ctx.showQRModal && (
         <ExhibitorQRModal
           user={ctx.user}
-          qrCodeRef={ctx.qrCodeRef as React.RefObject<InstanceType<typeof QRCode>>}
+          qrCodeRef={ctx.qrCodeRef}
           isDownloadingQR={ctx.isDownloadingQR}
           onDownload={ctx.downloadQRCode}
           onClose={() => ctx.setShowQRModal(false)}
+        />
+      )}
+
+      {showBadgeModal && (
+        <DynamicBadge
+          user={ctx.user}
+          onClose={() => setShowBadgeModal(false)}
         />
       )}
 

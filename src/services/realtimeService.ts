@@ -46,13 +46,15 @@ class RealtimeService {
   private appointmentListeners: AppointmentListener[] = [];
   private presenceChannel: RealtimeChannel | null = null;
   private globalChannel: RealtimeChannel | null = null;
+  private presenceTimer: ReturnType<typeof setTimeout> | null = null;
+  private globalChannelTimer: ReturnType<typeof setTimeout> | null = null;
 
   /**
    * Abonne aux nouveaux messages d'une conversation.
    * Retourne une fonction de désabonnement.
    */
   subscribeToConversation(conversationId: string, onMessage: MessageListener): () => void {
-    if (!supabase) return () => {};
+    if (!supabase) {return () => {};}
 
     // Ajouter le listener
     const existing = this.messageListeners.get(conversationId) || [];
@@ -107,26 +109,36 @@ class RealtimeService {
    * Diffuse le statut online de l'utilisateur courant.
    */
   joinPresence(userId: string, name: string, type: string): void {
-    if (!supabase || this.presenceChannel) return;
+    if (!supabase || this.presenceChannel) {return;}
+    // Debounce : annule si leavePresence() arrive avant 150 ms (React StrictMode)
+    if (this.presenceTimer) {clearTimeout(this.presenceTimer);}
+    this.presenceTimer = setTimeout(() => {
+      this.presenceTimer = null;
+      if (!supabase || this.presenceChannel) {return;}
+      this._startPresence(userId, name, type);
+    }, 150);
+  }
 
+  private _startPresence(userId: string, name: string, type: string): void {
+    if (!supabase) {return;}
     this.presenceChannel = supabase.channel('presence:global', {
       config: { presence: { key: userId } },
     });
 
     this.presenceChannel
       .on('presence', { event: 'sync' }, () => {
-        if (!this.presenceChannel) return;
+        if (!this.presenceChannel) {return;}
         const state = this.presenceChannel.presenceState<PresenceUser>();
         this.presenceListeners.forEach(l => l(state as Record<string, PresenceUser>));
       })
       .on('presence', { event: 'join' }, ({ newPresences }) => {
-        if (!this.presenceChannel) return;
+        if (!this.presenceChannel) {return;}
         const state = this.presenceChannel.presenceState<PresenceUser>();
         this.presenceListeners.forEach(l => l(state as Record<string, PresenceUser>));
         void newPresences; // used by listeners via state
       })
       .on('presence', { event: 'leave' }, () => {
-        if (!this.presenceChannel) return;
+        if (!this.presenceChannel) {return;}
         const state = this.presenceChannel.presenceState<PresenceUser>();
         this.presenceListeners.forEach(l => l(state as Record<string, PresenceUser>));
       })
@@ -144,15 +156,20 @@ class RealtimeService {
   }
 
   async setPresenceStatus(status: 'online' | 'busy' | 'away'): Promise<void> {
-    if (!this.presenceChannel) return;
+    if (!this.presenceChannel) {return;}
     const state = this.presenceChannel.presenceState<PresenceUser>();
     const current = Object.values(state).flat()[0];
-    if (!current) return;
+    if (!current) {return;}
     await this.presenceChannel.track({ ...current, status, lastSeen: new Date().toISOString() });
   }
 
   leavePresence(): void {
-    if (!this.presenceChannel || !supabase) return;
+    // Annuler le debounce si la connexion n'est pas encore établie
+    if (this.presenceTimer) {
+      clearTimeout(this.presenceTimer);
+      this.presenceTimer = null;
+    }
+    if (!this.presenceChannel || !supabase) {return;}
     supabase.removeChannel(this.presenceChannel);
     this.presenceChannel = null;
   }
@@ -168,7 +185,13 @@ class RealtimeService {
    * S'abonne aux notifications de RDV pour un utilisateur.
    */
   subscribeToAppointments(userId: string, onNotif: AppointmentListener): () => void {
-    if (!supabase) return () => {};
+    if (!supabase) {return () => {};}
+
+    // Annuler toute destruction en attente (React StrictMode : unmount → remount < 150 ms)
+    if (this.globalChannelTimer) {
+      clearTimeout(this.globalChannelTimer);
+      this.globalChannelTimer = null;
+    }
 
     this.appointmentListeners.push(onNotif);
 
@@ -186,10 +209,10 @@ class RealtimeService {
           (payload) => {
             const row = payload.new as Record<string, string>;
             let type: AppointmentNotification['type'] = 'appointment_request';
-            if (payload.eventType === 'INSERT') type = 'appointment_request';
-            else if (row.status === 'confirmed') type = 'appointment_accepted';
-            else if (row.status === 'rejected') type = 'appointment_rejected';
-            else if (row.status === 'cancelled') type = 'appointment_cancelled';
+            if (payload.eventType === 'INSERT') {type = 'appointment_request';}
+            else if (row.status === 'confirmed') {type = 'appointment_accepted';}
+            else if (row.status === 'rejected') {type = 'appointment_rejected';}
+            else if (row.status === 'cancelled') {type = 'appointment_cancelled';}
 
             const notif: AppointmentNotification = {
               type,
@@ -207,8 +230,14 @@ class RealtimeService {
     return () => {
       this.appointmentListeners = this.appointmentListeners.filter(l => l !== onNotif);
       if (this.appointmentListeners.length === 0 && this.globalChannel && supabase) {
-        supabase.removeChannel(this.globalChannel);
-        this.globalChannel = null;
+        // Debounce : annule si un nouvel abonné arrive dans les 150 ms (React StrictMode)
+        this.globalChannelTimer = setTimeout(() => {
+          this.globalChannelTimer = null;
+          if (this.appointmentListeners.length === 0 && this.globalChannel && supabase) {
+            supabase.removeChannel(this.globalChannel);
+            this.globalChannel = null;
+          }
+        }, 150);
       }
     };
   }
@@ -217,7 +246,7 @@ class RealtimeService {
    * Retourne les IDs des utilisateurs actuellement en ligne.
    */
   getOnlineUserIds(): string[] {
-    if (!this.presenceChannel) return [];
+    if (!this.presenceChannel) {return [];}
     const state = this.presenceChannel.presenceState<PresenceUser>();
     return Object.values(state)
       .flat()
@@ -226,12 +255,14 @@ class RealtimeService {
 
   /** Nettoie tous les channels (logout / démontage app) */
   cleanup(): void {
-    if (!supabase) return;
+    if (!supabase) {return;}
+    if (this.presenceTimer) {clearTimeout(this.presenceTimer); this.presenceTimer = null;}
+    if (this.globalChannelTimer) {clearTimeout(this.globalChannelTimer); this.globalChannelTimer = null;}
     this.channels.forEach(ch => supabase!.removeChannel(ch));
     this.channels.clear();
     this.messageListeners.clear();
-    if (this.presenceChannel) supabase.removeChannel(this.presenceChannel);
-    if (this.globalChannel) supabase.removeChannel(this.globalChannel);
+    if (this.presenceChannel) {supabase.removeChannel(this.presenceChannel);}
+    if (this.globalChannel) {supabase.removeChannel(this.globalChannel);}
     this.presenceChannel = null;
     this.globalChannel = null;
     this.presenceListeners = [];

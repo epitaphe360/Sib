@@ -62,7 +62,7 @@ export default function PushNotificationsPage() {
   // ── Compter les appareils cibles ──────────────────────────────────────────
 
   const fetchRecipientCount = async (aud: Audience) => {
-    if (!supabase) return;
+    if (!supabase) {return;}
     setRecipientCount(null);
     try {
       const { count } = await supabase
@@ -77,7 +77,7 @@ export default function PushNotificationsPage() {
   // ── Historique ────────────────────────────────────────────────────────────
 
   const fetchHistory = async () => {
-    if (!supabase) return;
+    if (!supabase) {return;}
     setIsLoadingHistory(true);
     try {
       const { data } = await supabase
@@ -111,7 +111,7 @@ export default function PushNotificationsPage() {
           sentAt: new Date().toISOString(),
         },
       });
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Log dans la table historique (best-effort)
       await supabase.from('push_notification_logs').insert({

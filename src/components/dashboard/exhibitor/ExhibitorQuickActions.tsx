@@ -1,4 +1,4 @@
-﻿import { Zap, Globe, Palette, User, QrCode, ArrowRight, Network, Brain } from 'lucide-react';
+﻿import { Zap, Palette, User, QrCode, ArrowRight, Network, Brain, Users, Package, FileText, BadgeCheck, CalendarDays } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../../hooks/useTranslation';
@@ -6,9 +6,10 @@ import { ROUTES } from '../../../lib/routes';
 
 interface ExhibitorQuickActionsProps {
   onOpenQR: () => void;
+  onOpenBadge?: () => void;
 }
 
-export function ExhibitorQuickActions({ onOpenQR }: ExhibitorQuickActionsProps) {
+export function ExhibitorQuickActions({ onOpenQR, onOpenBadge }: Readonly<ExhibitorQuickActionsProps>) {
   const { t } = useTranslation();
 
   const actions = [
@@ -43,6 +44,52 @@ export function ExhibitorQuickActions({ onOpenQR }: ExhibitorQuickActionsProps) 
       description: t('exhibitor.quick_actions.qr_code_desc'),
       Icon: QrCode,
       action: onOpenQR,
+    },
+    // ── Nouveaux modules SIB 2026 ──
+    {
+      title: 'Mon Équipe Stand',
+      description: 'Gérez vos collaborateurs et leurs badges',
+      Icon: Users,
+      link: ROUTES.EXHIBITOR_TEAM,
+      highlight: true,
+    },
+    {
+      title: 'Mon Badge',
+      description: 'Affichez et imprimez votre badge SIB 2026',
+      Icon: BadgeCheck,
+      action: onOpenBadge ?? onOpenQR,
+    },
+    {
+      title: 'Location Matériel',
+      description: 'Mobilier, audiovisuel, structure pour votre stand',
+      Icon: Package,
+      link: ROUTES.EXHIBITOR_RENTAL,
+    },
+    {
+      title: 'Lettre d\'Invitation',
+      description: 'Demandez une lettre pour vos visiteurs étrangers',
+      Icon: FileText,
+      link: ROUTES.EXHIBITOR_INVITATION_LETTER,
+    },
+    {
+      title: 'Programme & Séminaires',
+      description: 'Inscrivez-vous aux conférences et séminaires SIB 2026',
+      Icon: CalendarDays,
+      link: ROUTES.EVENTS,
+      highlight: true,
+    },
+    {
+      title: 'Visiteurs Scannés',
+      description: 'Consultez et exportez les QR codes collectés par votre équipe',
+      Icon: QrCode,
+      link: ROUTES.EXHIBITOR_SCANS,
+      highlight: true,
+    },
+    {
+      title: 'Éditer mon Profil',
+      description: 'Mettez à jour les informations de votre entreprise',
+      Icon: User,
+      link: ROUTES.EXHIBITOR_PROFILE,
     },
   ];
 

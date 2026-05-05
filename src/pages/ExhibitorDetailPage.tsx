@@ -1,4 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
+import { RentalBanner } from '../components/common/RentalBanner';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
 import {
@@ -91,7 +92,7 @@ export default function ExhibitorDetailPage() {
   };
 
   const handleConfirmAppointment = async () => {
-    if (!selectedTimeSlot) return;
+    if (!selectedTimeSlot) {return;}
     setIsBookingInProgress(true);
     try {
       const appointmentStore = useAppointmentStore.getState();
@@ -338,6 +339,7 @@ export default function ExhibitorDetailPage() {
 
           {/* Colonne gauche — actions & contact */}
           <div className="lg:col-span-4 space-y-6">
+            <RentalBanner variant="sidebar" />
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -804,18 +806,18 @@ export default function ExhibitorDetailPage() {
             {/* Créneaux horaires */}
             {(() => {
               const filteredSlots = timeSlots.filter(slot => {
-                if (slot.available === false) return false;
-                if (!slot.date) return false;
+                if (slot.available === false) {return false;}
+                if (!slot.date) {return false;}
                 return isDateInSalonRange(new Date(slot.date as any));
               });
 
-              if (filteredSlots.length === 0) return (
+              if (filteredSlots.length === 0) {return (
                 <div className="text-center py-10 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
                   <Calendar className="h-10 w-10 text-gray-300 mx-auto mb-2" />
                   <p className="text-gray-500 font-medium">Aucun créneau disponible</p>
                   <p className="text-sm text-gray-400 mt-1">Veuillez réessayer plus tard ou contacter l'exposant</p>
                 </div>
-              );
+              );}
 
               return (
                 <div>

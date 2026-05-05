@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -9,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { Save, Eye, Code, Type, Mail, ArrowLeft } from 'lucide-react';
+import { ROUTES } from '@/lib/routes';
 
 interface EmailTemplate {
   id: string;
@@ -137,10 +139,10 @@ export default function EmailTemplatesManager() {
   return (
     <div className="container mx-auto p-6 max-w-7xl">
       <div className="mb-6">
-        <Button variant="ghost" onClick={() => window.history.back()}>
+        <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Retour
-        </Button>
+          Retour au Tableau de Bord
+        </Link>
       </div>
 
       <div className="mb-6">

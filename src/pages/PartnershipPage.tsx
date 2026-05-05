@@ -1,4 +1,4 @@
-import { Card } from '../components/ui/Card';
+﻿import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useTranslation } from '../hooks/useTranslation';
 import { Handshake, Star, TrendingUp, Users } from 'lucide-react';
@@ -31,7 +31,7 @@ export default function PartnershipPage() {
               <Star className="h-8 w-8 text-blue-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              Partenaire Premium
+              Sponsor Premium
             </h3>
             <p className="text-gray-600 mb-6">
               Visibilité maximale avec logo sur tous les supports de communication et présence dans les zones VIP.
@@ -43,7 +43,7 @@ export default function PartnershipPage() {
               <li>• Stand dédié dans les pavillons</li>
             </ul>
             <Button onClick={handleContact} className="w-full">
-              Devenir Partenaire Premium
+              Devenir Sponsor Premium
             </Button>
           </Card>
 
@@ -52,7 +52,7 @@ export default function PartnershipPage() {
               <TrendingUp className="h-8 w-8 text-green-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              Partenaire Technique
+              Sponsor Technique
             </h3>
             <p className="text-gray-600 mb-6">
               Participez aux conférences techniques et démontrez votre expertise auprès des professionnels du secteur.
@@ -64,7 +64,7 @@ export default function PartnershipPage() {
               <li>• Support marketing personnalisé</li>
             </ul>
             <Button onClick={handleContact} variant="outline" className="w-full">
-              Devenir Partenaire Technique
+              Devenir Sponsor Technique
             </Button>
           </Card>
 
@@ -73,7 +73,7 @@ export default function PartnershipPage() {
               <Users className="h-8 w-8 text-purple-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              Partenaire Média
+              Sponsor Média
             </h3>
             <p className="text-gray-600 mb-6">
               Couvrez l'événement et bénéficiez d'un accès privilégié aux informations et aux intervenants.
@@ -85,7 +85,7 @@ export default function PartnershipPage() {
               <li>• Photos et vidéos officielles</li>
             </ul>
             <Button onClick={handleContact} variant="outline" className="w-full">
-              Devenir Partenaire Média
+              Devenir Sponsor Média
             </Button>
           </Card>
         </div>
@@ -114,7 +114,7 @@ export default function PartnershipPage() {
                 Retour sur Investissement
               </h3>
               <p className="text-gray-600 mb-4">
-                Nos partenaires bénéficient d'un ROI démontré grâce à notre stratégie marketing ciblée.
+                Nos sponsors bénéficient d'un ROI démontré grâce à notre stratégie marketing ciblée.
               </p>
               <ul className="text-gray-600 space-y-2">
                 <li>• Génération de leads qualifiés</li>

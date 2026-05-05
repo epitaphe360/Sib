@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Traductions pour la navigation
  */
 
@@ -6,7 +6,7 @@ export const navigationTranslations = {
   fr: {
     'nav.home': 'Accueil',
     'nav.exhibitors': 'Exposants',
-    'nav.partners': 'Partenaires',
+    'nav.partners': 'Sponsors',
     'nav.networking': 'Réseautage',
     'nav.event': 'Événement',
     'nav.participate': 'Participer',

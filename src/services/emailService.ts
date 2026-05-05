@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 📧 Email Service - Real Email Sending with Resend
  *
  * Replaces all console.log() mocks with actual email delivery
@@ -93,7 +93,7 @@ export class EmailService {
         'exhibitor': 'premium',
         'exposant': 'premium',
         'partner': 'vip',
-        'partenaire': 'vip'
+        'sponsor': 'vip'
       };
 
       const level = levelMap[accountType.toLowerCase()] || 'free';

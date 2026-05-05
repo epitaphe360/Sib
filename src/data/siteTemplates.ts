@@ -1,4 +1,4 @@
-// Site Templates Data
+﻿// Site Templates Data
 // This file contains pre-configured templates for the site builder
 
 import type { SiteTemplate } from '../types/site-builder';
@@ -20,7 +20,7 @@ export const siteTemplates: SiteTemplate[] = [
         visible: true,
         content: {
           title: 'Excellence & Innovation',
-          subtitle: 'Votre partenaire de confiance depuis 20 ans',
+          subtitle: 'Votre sponsor de confiance depuis 20 ans',
           backgroundImage: '',
           ctaText: 'Découvrir nos services',
           ctaLink: '#services'

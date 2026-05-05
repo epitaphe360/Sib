@@ -1,4 +1,4 @@
-export interface QRCodeData {
+﻿export interface QRCodeData {
   userId: string;
   userType: 'admin' | 'partner' | 'exhibitor' | 'visitor';
   accessLevel: 'basic' | 'premium' | 'vip' | 'partner' | 'exhibitor';
@@ -72,10 +72,10 @@ const salonEvents: EventAccess[] = [
   },
   {
     eventId: 'partner-roundtable',
-    eventName: 'Table Ronde Partenaires : Avenir des Bâtiments Intelligents',
+    eventName: 'Table Ronde Sponsors : Avenir des Bâtiments Intelligents',
     eventType: 'partner',
     requiredLevel: 'partner',
-    description: 'Discussion stratégique réservée aux partenaires sur les investissements et innovations.',
+    description: 'Discussion stratégique réservée aux sponsors sur les investissements et innovations.',
     startTime: new Date('2026-02-06T14:00:00'),
     endTime: new Date('2026-02-06T16:30:00'),
     location: 'Salle Executive',
@@ -234,7 +234,7 @@ export function canAccessEvent(
       if (userType === 'partner') {
         return { canAccess: true, event };
       }
-      return { canAccess: false, reason: 'Réservé aux partenaires.', event };
+      return { canAccess: false, reason: 'Réservé aux sponsors.', event };
 
     case 'gala':
       if (userType === 'partner') {
@@ -353,14 +353,14 @@ export function getHighestAccessLevel(
       };
 
     case 'partner': {
-      const partnerLevel = userLevel === 'official_sponsor' ? 'Sponsor Officiel' :
+      const partnerLevel = userLevel === 'official_sponsor' ? 'Partenaire Officiel' :
                           userLevel === 'gold' ? 'Sponsor Gold' :
-                          userLevel === 'silver' ? 'Sponsor Silver' : 'Partenaire';
+                          userLevel === 'silver' ? 'Sponsor Silver' : 'Sponsor';
       return {
         level: partnerLevel,
-        description: 'Accès privilégié aux événements partenaires et networking exclusif.',
+        description: 'Accès privilégié aux événements sponsors et networking exclusif.',
         capabilities: [
-          'Événements partenaires exclusifs',
+          'Événements sponsors exclusifs',
           'Networking premium illimité',
           'Accès lounge exécutif',
           'Priorité sur les rendez-vous',

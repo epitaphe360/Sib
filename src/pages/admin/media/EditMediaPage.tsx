@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Video, Mic, Film, Radio, Star, MessageCircle, Save, Loader } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
@@ -54,7 +54,7 @@ export const EditMediaPage: React.FC = () => {
   const categoriesByType: Record<string, string[]> = {
     testimonial: [
       'Exposant',
-      'Partenaire',
+      'Sponsor',
       'Visiteur Professionnel',
       'Institutionnel / Officiel',
       'Presse'

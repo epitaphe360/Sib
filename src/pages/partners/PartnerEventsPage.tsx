@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -80,14 +80,14 @@ export const PartnerEventsPage: React.FC = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{t('partner.events.title', 'Événements Sponsorisés')}</h1>
-              <p className="text-gray-600">{t('partner.events.subtitle', 'Gérez vos événements partenaires et suivez leur impact')}</p>
+              <p className="text-gray-600">{t('partner.events.subtitle', 'Gérez vos événements sponsors et suivez leur impact')}</p>
             </div>
           </div>
 
           <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
             <div className="flex items-center space-x-2">
               <Crown className="h-5 w-5 text-purple-600" />
-              <span className="text-purple-800 font-medium">{t('partner.events.program', 'Programme Événements Partenaires')}</span>
+              <span className="text-purple-800 font-medium">{t('partner.events.program', 'Programme Événements Sponsors')}</span>
               <Badge className="bg-purple-100 text-purple-800" size="sm">
                 {t('partner.priority', 'Prioritaire')}
               </Badge>

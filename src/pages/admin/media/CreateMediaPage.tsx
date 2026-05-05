@@ -1,335 +1,483 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Video, Mic, Film, Radio, Star, MessageCircle, Save } from 'lucide-react';
+import {
+  ArrowLeft, Video, Mic, Film, Radio, Star, MessageCircle, Save, X,
+  Plus, Tag, Clock, Image, Link2, User, Briefcase, Building2, Trash2,
+  Eye, FileText,
+} from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
 import { mediaService } from '../../../services/mediaService';
 import { toast } from 'sonner';
-import { useTranslation } from '../../../hooks/useTranslation';
 import type { MediaType } from '../../../types/media';
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+interface Speaker {
+  name: string;
+  title: string;
+  company: string;
+  photo_url: string;
+}
+
+// ─── Config types ─────────────────────────────────────────────────────────────
+const MEDIA_TYPES = [
+  { value: 'webinar',        label: 'Webinaire',              icon: Video,          bg: 'bg-blue-50',   border: 'border-blue-500',   text: 'text-blue-700',   icon_color: 'text-blue-500'   },
+  { value: 'podcast',        label: 'Podcast SIB Talks',      icon: Mic,            bg: 'bg-purple-50', border: 'border-purple-500', text: 'text-purple-700', icon_color: 'text-purple-500' },
+  { value: 'capsule_inside', label: 'Capsule Inside SIB',     icon: Film,           bg: 'bg-green-50',  border: 'border-green-500',  text: 'text-green-700',  icon_color: 'text-green-500'  },
+  { value: 'live_studio',    label: 'Live Studio',            icon: Radio,          bg: 'bg-red-50',    border: 'border-red-500',    text: 'text-red-700',    icon_color: 'text-red-500'    },
+  { value: 'best_moments',   label: 'Best Moments',           icon: Star,           bg: 'bg-amber-50',  border: 'border-amber-500',  text: 'text-amber-700',  icon_color: 'text-amber-500'  },
+  { value: 'testimonial',    label: 'Témoignage',             icon: MessageCircle,  bg: 'bg-pink-50',   border: 'border-pink-500',   text: 'text-pink-700',   icon_color: 'text-pink-500'   },
+] as const;
+
+const CATEGORIES_BY_TYPE: Record<string, string[]> = {
+  testimonial: ['Exposant', 'Sponsor', 'Visiteur Professionnel', 'Institutionnel / Officiel', 'Presse'],
+  default: [
+    'Bâtiment & Construction', 'Innovation BTP', 'Matériaux & Produits',
+    'Architecture & Design', 'Énergie & Durabilité', 'Réglementation',
+    'Financement Immobilier', 'Technologies BTP',
+  ],
+};
+
+function durationToSeconds(h: string, m: string, s: string) {
+  return (Number.parseInt(h) || 0) * 3600 + (Number.parseInt(m) || 0) * 60 + (Number.parseInt(s) || 0);
+}
+
+function getYoutubeId(url: string) {
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?/\s]{11})/);
+  return m ? m[1] : null;
+}
+
+// ─── Section wrapper ──────────────────────────────────────────────────────────
+function Section({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="px-6 py-4 bg-[#0F2034]/3 border-b border-gray-100 flex items-center gap-3">
+        <span className="text-[#C9A84C]">{icon}</span>
+        <h3 className="font-bold text-[#0F2034] text-sm uppercase tracking-wide">{title}</h3>
+      </div>
+      <div className="p-6">{children}</div>
+    </div>
+  );
+}
+
+// ─── Page principale ──────────────────────────────────────────────────────────
 export const CreateMediaPage: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    type: 'webinar' as MediaType,
-    title: '',
-    description: '',
-    thumbnail_url: '',
-    video_url: '',
-    audio_url: '',
-    duration: 0,
-    category: '',
-    tags: '',
-    speakers: '',
-    status: 'draft' as 'draft' | 'published' | 'archived'
-  });
 
-  const mediaTypes = [
-    { value: 'webinar', label: 'Webinaire', icon: Video, color: 'blue' },
-    { value: 'podcast', label: 'Podcast SIB Talks', icon: Mic, color: 'purple' },
-    { value: 'capsule_inside', label: 'Capsule Inside SIB', icon: Film, color: 'green' },
-    { value: 'live_studio', label: 'Live Studio - Meet The Leaders', icon: Radio, color: 'red' },
-    { value: 'best_moments', label: 'Best Moments', icon: Star, color: 'yellow' },
-    { value: 'testimonial', label: 'Témoignage', icon: MessageCircle, color: 'pink' }
-  ];
+  // Form fields
+  const [type, setType] = useState<MediaType>('webinar');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [thumbnailUrl, setThumbnailUrl] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
+  const [audioUrl, setAudioUrl] = useState('');
+  const [durH, setDurH] = useState('0');
+  const [durM, setDurM] = useState('0');
+  const [durS, setDurS] = useState('0');
+  const [category, setCategory] = useState('');
+  const [status, setStatus] = useState<'draft' | 'published' | 'archived'>('draft');
+  const [publishedAt, setPublishedAt] = useState('');
 
-  const categoriesByType: Record<string, string[]> = {
-    testimonial: [
-      'Exposant',
-      'Partenaire',
-      'Visiteur Professionnel',
-      'Institutionnel / Officiel',
-      'Presse'
-    ],
-    default: [
-      'Bâtiment & Construction',
-      'Innovation BTP',
-      'Matériaux & Produits',
-      'Architecture & Design',
-      'Énergie & Durabilité',
-      'Réglementation',
-      'Financement Immobilier',
-      'Technologies BTP'
-    ]
+  // Tags
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
+
+  // Speakers
+  const [speakers, setSpeakers] = useState<Speaker[]>([]);
+
+  const categories = CATEGORIES_BY_TYPE[type] ?? CATEGORIES_BY_TYPE.default;
+  const hasVideo = ['webinar', 'capsule_inside', 'live_studio', 'best_moments', 'testimonial'].includes(type);
+  const hasPodcast = type === 'podcast';
+  const ytId = hasVideo ? getYoutubeId(videoUrl) : null;
+
+  // Tags handlers
+  const addTag = () => {
+    const t = tagInput.trim();
+    if (t && !tags.includes(t)) setTags(prev => [...prev, t]);
+    setTagInput('');
   };
-  const categories = categoriesByType[formData.type] ?? categoriesByType.default;
+  const removeTag = (t: string) => setTags(prev => prev.filter(x => x !== t));
+
+  // Speaker handlers
+  const addSpeaker = () => setSpeakers(prev => [...prev, { name: '', title: '', company: '', photo_url: '' }]);
+  const updateSpeaker = (i: number, field: keyof Speaker, val: string) =>
+    setSpeakers(prev => prev.map((s, idx) => idx === i ? { ...s, [field]: val } : s));
+  const removeSpeaker = (i: number) => setSpeakers(prev => prev.filter((_, idx) => idx !== i));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!formData.title || !formData.type) {
-      toast.error('Veuillez remplir tous les champs obligatoires');
-      return;
-    }
-
+    if (!title.trim()) { toast.error('Le titre est obligatoire'); return; }
     setLoading(true);
     try {
-      // Parse speakers JSON if provided
-      let speakersArray = [];
-      if (formData.speakers) {
-        try {
-          speakersArray = JSON.parse(formData.speakers);
-        } catch {
-          toast.error('Format JSON des speakers invalide');
-          setLoading(false);
-          return;
-        }
-      }
-
-      // Parse tags
-      const tagsArray = formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [];
-
+      const validSpeakers = speakers.filter(s => s.name.trim());
       await mediaService.createMedia({
-        type: formData.type,
-        title: formData.title,
-        description: formData.description,
-        thumbnail_url: formData.thumbnail_url || undefined,
-        video_url: formData.video_url || undefined,
-        audio_url: formData.audio_url || undefined,
-        duration: formData.duration || undefined,
-        category: formData.category || undefined,
-        tags: tagsArray,
-        speakers: speakersArray,
-        status: formData.status
-      });
-
-      toast.success('Média créé avec succès !');
+        type,
+        title: title.trim(),
+        description,
+        thumbnail_url: thumbnailUrl || undefined,
+        video_url: videoUrl || undefined,
+        audio_url: audioUrl || undefined,
+        duration: durationToSeconds(durH, durM, durS) || undefined,
+        category: category || undefined,
+        tags,
+        speakers: validSpeakers,
+        status,
+        ...(publishedAt ? { published_at: new Date(publishedAt).toISOString() } : {}),
+      } as any);
+      toast.success('✅ Média créé avec succès !');
       navigate(ROUTES.ADMIN_MEDIA_MANAGE);
-    } catch (error) {
-      console.error('Erreur création média:', error);
+    } catch (err) {
+      console.error(err);
       toast.error('Erreur lors de la création du média');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const selectedTypeInfo = mediaTypes.find(t => t.value === formData.type);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
         {/* Header */}
         <div className="mb-8">
-          <Link to={ROUTES.ADMIN_MEDIA_MANAGE} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour à la gestion des médias
+          <Link to={ROUTES.ADMIN_MEDIA_MANAGE} className="inline-flex items-center text-[#1B365D] hover:text-[#C9A84C] mb-4 text-sm font-medium transition-colors">
+            <ArrowLeft className="w-4 h-4 mr-1.5" /> Retour à la médiathèque
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Créer un Nouveau Média</h1>
-          <p className="mt-2 text-gray-600">Ajoutez du contenu webinaire, podcast, capsule vidéo, etc.</p>
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-[#0F2034] rounded-xl">
+              <Video className="w-7 h-7 text-[#C9A84C]" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-[#0F2034]">Créer un nouveau média</h1>
+              <p className="text-gray-500 text-sm mt-0.5">Webinaire, podcast, capsule vidéo, témoignage…</p>
+            </div>
+          </div>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
-          {/* Type Selection */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Type de Média <span className="text-red-500">*</span>
-            </label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {mediaTypes.map((type) => {
-                const Icon = type.icon;
-                const isSelected = formData.type === type.value;
+        <form onSubmit={handleSubmit} className="space-y-6">
+
+          {/* ── Type ── */}
+          <Section title="Type de média" icon={<Film className="w-4 h-4" />}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {MEDIA_TYPES.map(mt => {
+                const Icon = mt.icon;
+                const sel = type === mt.value;
                 return (
                   <button
-                    key={type.value}
+                    key={mt.value}
                     type="button"
-                    onClick={() => handleChange('type', type.value)}
-                    className={`p-4 rounded-xl border-2 transition-all ${
-                      isSelected
-                        ? `border-${type.color}-500 bg-${type.color}-50`
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    onClick={() => { setType(mt.value as MediaType); setCategory(''); }}
+                    className={`p-4 rounded-xl border-2 transition-all text-center ${sel ? `${mt.bg} ${mt.border}` : 'border-gray-200 hover:border-gray-300 bg-white'}`}
                   >
-                    <Icon className={`w-6 h-6 mx-auto mb-2 ${isSelected ? `text-${type.color}-600` : 'text-gray-400'}`} />
-                    <div className={`text-sm font-medium ${isSelected ? `text-${type.color}-900` : 'text-gray-700'}`}>
-                      {type.label}
-                    </div>
+                    <Icon className={`w-6 h-6 mx-auto mb-2 ${sel ? mt.icon_color : 'text-gray-400'}`} />
+                    <div className={`text-xs font-semibold leading-tight ${sel ? mt.text : 'text-gray-600'}`}>{mt.label}</div>
                   </button>
                 );
               })}
             </div>
-          </div>
+          </Section>
 
-          {/* Title */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Titre <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) => handleChange('title', e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder={t('admin_media.create_title_example')}
-              required
-            />
-          </div>
-
-          {/* Description */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Description
-            </label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => handleChange('description', e.target.value)}
-              rows={4}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder={t('admin_media.create_description_placeholder')}
-            />
-          </div>
-
-          {/* URLs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                URL Thumbnail
-              </label>
-              <input
-                type="url"
-                value={formData.thumbnail_url}
-                onChange={(e) => handleChange('thumbnail_url', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="https://..."
-              />
-            </div>
-
-            {(formData.type === 'webinar' || formData.type === 'capsule_inside' ||
-              formData.type === 'live_studio' || formData.type === 'best_moments' ||
-              formData.type === 'testimonial') && (
+          {/* ── Infos générales ── */}
+          <Section title="Informations générales" icon={<FileText className="w-4 h-4" />}>
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  URL Vidéo
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Titre <span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                  placeholder="Ex : Construction durable au Maroc - Webinaire SIB 2026"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Description</label>
+                <textarea
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  rows={4}
+                  placeholder="Décrivez le contenu de ce média…"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-sm resize-none"
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                    {type === 'testimonial' ? 'Profil du témoin' : 'Catégorie'}
+                  </label>
+                  <select
+                    value={category}
+                    onChange={e => setCategory(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-sm bg-white"
+                  >
+                    <option value="">Sélectionner…</option>
+                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Statut de publication</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {([
+                      { value: 'draft',     label: 'Brouillon', cls: 'border-gray-400 bg-gray-50 text-gray-700' },
+                      { value: 'published', label: 'Publié',    cls: 'border-green-500 bg-green-50 text-green-700' },
+                      { value: 'archived',  label: 'Archivé',   cls: 'border-slate-400 bg-slate-50 text-slate-600' },
+                    ] as const).map(s => (
+                      <button
+                        key={s.value}
+                        type="button"
+                        onClick={() => setStatus(s.value)}
+                        className={`py-2 px-1 rounded-lg border-2 text-xs font-semibold transition-colors ${status === s.value ? s.cls : 'border-gray-200 text-gray-500 hover:border-gray-300 bg-white'}`}
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {status === 'published' && (
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Date de publication</label>
+                  <input
+                    type="datetime-local"
+                    value={publishedAt}
+                    onChange={e => setPublishedAt(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-sm"
+                  />
+                </div>
+              )}
+            </div>
+          </Section>
+
+          {/* ── Médias & URLs ── */}
+          <Section title="Médias & URLs" icon={<Link2 className="w-4 h-4" />}>
+            <div className="space-y-4">
+              {/* Thumbnail */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                  <Image className="w-3.5 h-3.5 inline mr-1" />URL de la miniature (thumbnail)
                 </label>
                 <input
                   type="url"
-                  value={formData.video_url}
-                  onChange={(e) => handleChange('video_url', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://..."
+                  value={thumbnailUrl}
+                  onChange={e => setThumbnailUrl(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-sm"
                 />
+                {thumbnailUrl && (
+                  <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
+                    <img
+                      src={thumbnailUrl}
+                      alt="Aperçu"
+                      className="w-full h-full object-cover"
+                      onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
+                    <span className="absolute top-1 right-1 bg-black/50 text-white text-xs px-2 py-0.5 rounded flex items-center gap-1">
+                      <Eye className="w-3 h-3" /> Aperçu
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
 
-            {formData.type === 'podcast' && (
+              {/* Video URL */}
+              {hasVideo && (
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                    <Video className="w-3.5 h-3.5 inline mr-1" />URL Vidéo (YouTube, Vimeo, direct…)
+                  </label>
+                  <input
+                    type="url"
+                    value={videoUrl}
+                    onChange={e => setVideoUrl(e.target.value)}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-sm"
+                  />
+                  {ytId && (
+                    <div className="mt-2 rounded-lg overflow-hidden border border-gray-200 aspect-video">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${ytId}`}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        title="Aperçu YouTube"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Audio URL */}
+              {hasPodcast && (
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                    <Mic className="w-3.5 h-3.5 inline mr-1" />URL Audio (Spotify, SoundCloud, MP3…)
+                  </label>
+                  <input
+                    type="url"
+                    value={audioUrl}
+                    onChange={e => setAudioUrl(e.target.value)}
+                    placeholder="https://soundcloud.com/..."
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-sm"
+                  />
+                </div>
+              )}
+
+              {/* Duration */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  URL Audio
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                  <Clock className="w-3.5 h-3.5 inline mr-1" />Durée
                 </label>
-                <input
-                  type="url"
-                  value={formData.audio_url}
-                  onChange={(e) => handleChange('audio_url', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://..."
-                />
+                <div className="flex items-center gap-2">
+                  {[
+                    { val: durH, set: setDurH, label: 'h', max: 23 },
+                    { val: durM, set: setDurM, label: 'min', max: 59 },
+                    { val: durS, set: setDurS, label: 'sec', max: 59 },
+                  ].map(({ val, set, label, max }) => (
+                    <div key={label} className="flex items-center gap-1">
+                      <input
+                        type="number"
+                        value={val}
+                        onChange={e => set(e.target.value)}
+                        min={0}
+                        max={max}
+                        className="w-16 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 text-sm text-center"
+                      />
+                      <span className="text-xs text-gray-500 font-medium">{label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            )}
-          </div>
-
-          {/* Duration & Category */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Durée (secondes)
-              </label>
-              <input
-                type="number"
-                value={formData.duration}
-                onChange={(e) => handleChange('duration', parseInt(e.target.value))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder={t('admin_media.duration_example')}
-                min="0"
-              />
             </div>
+          </Section>
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                {formData.type === 'testimonial' ? 'Profil du témoin' : 'Catégorie'}
-              </label>
-              <select
-                value={formData.category}
-                onChange={(e) => handleChange('category', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          {/* ── Tags ── */}
+          <Section title="Tags" icon={<Tag className="w-4 h-4" />}>
+            <div className="flex gap-2 mb-3">
+              <input
+                type="text"
+                value={tagInput}
+                onChange={e => setTagInput(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
+                placeholder="Ex: BTP, Innovation, Maroc…"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-sm"
+              />
+              <button
+                type="button"
+                onClick={addTag}
+                className="px-4 py-2 bg-[#0F2034] hover:bg-[#1B365D] text-[#C9A84C] rounded-lg text-sm font-semibold transition-colors flex items-center gap-1"
               >
-                <option value="">Sélectionner...</option>
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+                <Plus className="w-4 h-4" /> Ajouter
+              </button>
             </div>
-          </div>
+            {tags.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {tags.map(tag => (
+                  <span key={tag} className="flex items-center gap-1.5 bg-[#0F2034]/8 text-[#0F2034] text-xs font-semibold px-3 py-1.5 rounded-full border border-[#0F2034]/15">
+                    {tag}
+                    <button type="button" onClick={() => removeTag(tag)} className="text-gray-400 hover:text-red-500 transition-colors">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-gray-400">Aucun tag ajouté. Appuyez sur Entrée ou cliquez "Ajouter".</p>
+            )}
+          </Section>
 
-          {/* Tags */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Tags (séparés par des virgules)
-            </label>
-            <input
-              type="text"
-              value={formData.tags}
-              onChange={(e) => handleChange('tags', e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder={t('admin_media.tags_example')}
-            />
-          </div>
+          {/* ── Intervenants ── */}
+          <Section title="Intervenants / Speakers" icon={<User className="w-4 h-4" />}>
+            <div className="space-y-4">
+              {speakers.map((sp, i) => (
+                <div key={i} className="bg-gray-50 rounded-xl p-4 border border-gray-200 relative">
+                  <button
+                    type="button"
+                    onClick={() => removeSpeaker(i)}
+                    className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                  <div className="font-semibold text-xs text-[#0F2034] mb-3">Intervenant {i + 1}</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                      <input
+                        value={sp.name}
+                        onChange={e => updateSpeaker(i, 'name', e.target.value)}
+                        placeholder="Nom complet *"
+                        className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-400"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                      <input
+                        value={sp.title}
+                        onChange={e => updateSpeaker(i, 'title', e.target.value)}
+                        placeholder="Titre / Fonction"
+                        className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-400"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                      <input
+                        value={sp.company}
+                        onChange={e => updateSpeaker(i, 'company', e.target.value)}
+                        placeholder="Entreprise / Organisation"
+                        className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-400"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Image className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                      <input
+                        type="url"
+                        value={sp.photo_url}
+                        onChange={e => updateSpeaker(i, 'photo_url', e.target.value)}
+                        placeholder="URL photo (optionnel)"
+                        className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-400"
+                      />
+                    </div>
+                  </div>
+                  {sp.photo_url && (
+                    <div className="mt-2 flex items-center gap-2">
+                      <img src={sp.photo_url} alt={sp.name} className="w-8 h-8 rounded-full object-cover border border-gray-200" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                      <span className="text-xs text-gray-400">Aperçu photo</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addSpeaker}
+                className="w-full py-3 border-2 border-dashed border-gray-300 hover:border-[#C9A84C] hover:bg-yellow-50/50 rounded-xl text-sm font-medium text-gray-500 hover:text-[#0F2034] transition-all flex items-center justify-center gap-2"
+              >
+                <Plus className="w-4 h-4" /> Ajouter un intervenant
+              </button>
+            </div>
+          </Section>
 
-          {/* Speakers (JSON) */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Speakers (Format JSON)
-            </label>
-            <textarea
-              value={formData.speakers}
-              onChange={(e) => handleChange('speakers', e.target.value)}
-              rows={4}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-              placeholder='[{"name": "John Doe", "title": "CEO", "company": "Example Corp", "photo_url": "https://..."}]'
-            />
-            <p className="mt-1 text-xs text-gray-500">Format: Array JSON avec name, title, company, photo_url</p>
-          </div>
-
-          {/* Status */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Statut
-            </label>
-            <select
-              value={formData.status}
-              onChange={(e) => handleChange('status', e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="draft">Brouillon</option>
-              <option value="published">Publié</option>
-              <option value="archived">Archivé</option>
-            </select>
-          </div>
-
-          {/* Actions */}
-          <div className="flex gap-4 pt-6 border-t border-gray-200">
+          {/* ── Actions ── */}
+          <div className="flex gap-4">
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg transition-all disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#0F2034] hover:bg-[#1B365D] text-white rounded-xl font-semibold transition-colors shadow-sm disabled:opacity-50"
             >
-              <Save className="w-5 h-5" />
-              {loading ? 'Création...' : 'Créer le Média'}
+              {loading ? (
+                <><span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> Création…</>
+              ) : (
+                <><Save className="w-4 h-4" /> Créer le média</>
+              )}
             </button>
             <Link to={ROUTES.ADMIN_MEDIA_MANAGE} className="flex-1">
               <button
                 type="button"
-                className="w-full inline-flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-all"
+                className="w-full flex items-center justify-center gap-2 py-3 border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl font-semibold transition-colors"
               >
-                <X className="w-5 h-5" />
-                Annuler
+                <X className="w-4 h-4" /> Annuler
               </button>
             </Link>
           </div>
+
         </form>
       </div>
     </div>

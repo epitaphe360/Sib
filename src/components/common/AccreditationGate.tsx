@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
@@ -10,7 +10,7 @@ import { ROUTES } from '../../lib/routes';
  * 1 – Visiteur Standard : catalogue, plan, programme, E-Badge
  * 2 – Visiteur VIP      : + networking, zones VIP, conférences privées
  * 3 – Exposant          : + stats, Lead Scanner, RDV B2B
- * 4 – Partenaire        : + matching B2B prioritaire, annuaire, stats multi-salons
+ * 4 – Sponsor        : + matching B2B prioritaire, annuaire, stats multi-salons
  */
 export type AccreditationLevel = 1 | 2 | 3 | 4;
 
@@ -58,7 +58,7 @@ const LEVEL_LABELS: Record<AccreditationLevel, string> = {
   1: 'Visiteur Standard',
   2: 'Visiteur VIP',
   3: 'Exposant',
-  4: 'Partenaire',
+  4: 'Sponsor',
 };
 
 const LEVEL_COLORS: Record<AccreditationLevel, string> = {

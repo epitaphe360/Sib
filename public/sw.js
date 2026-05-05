@@ -32,7 +32,6 @@ const API_CACHE_PATTERNS = [
 // ─── Install ──────────────────────────────────────────────────────────────────
 
 self.addEventListener('install', (event) => {
-  console.log('[SW] SIB 2026 service worker installing...');
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(STATIC_ASSETS).catch((err) => {
@@ -45,16 +44,12 @@ self.addEventListener('install', (event) => {
 // ─── Activate ────────────────────────────────────────────────────────────────
 
 self.addEventListener('activate', (event) => {
-  console.log('[SW] SIB 2026 service worker activating...');
   event.waitUntil(
     caches.keys().then((names) =>
       Promise.all(
         names
           .filter((n) => n !== CACHE_NAME && n !== API_CACHE_NAME)
-          .map((n) => {
-            console.log('[SW] Removing old cache:', n);
-            return caches.delete(n);
-          })
+          .map((n) => caches.delete(n))
       )
     ).then(() => self.clients.claim())
   );

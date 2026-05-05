@@ -63,7 +63,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
         name: 'Marie Dubois',
         company: 'Bâtiment Solutions Inc.',
         rating: 5,
-        comment: 'Partenaire exceptionnel, toujours à l\'écoute et très réactif. La qualité des événements est remarquable.',
+        comment: 'Sponsor exceptionnel, toujours à l\'écoute et très réactif. La qualité des événements est remarquable.',
         date: '2024-01-15'
       },
       {
@@ -102,7 +102,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
     improvements: [
       {
         category: 'Communication',
-        suggestion: 'Augmenter la fréquence des newsletters partenaires',
+        suggestion: 'Augmenter la fréquence des newsletters sponsors',
         priority: 'high',
         status: 'planned'
       },
@@ -176,7 +176,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
                 Satisfaction Partenariat
               </h1>
               <p className="text-gray-600">
-                Découvrez ce que pensent nos partenaires de leur expérience SIB
+                Découvrez ce que pensent nos sponsors de leur expérience SIB
               </p>
             </div>
           </div>
@@ -184,7 +184,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <div className="flex items-center space-x-2">
               <Crown className="h-5 w-5 text-green-600" />
-              <span className="text-green-800 font-medium">Programme de Satisfaction Partenaires</span>
+              <span className="text-green-800 font-medium">Programme de Satisfaction Sponsors</span>
               <Badge className="bg-green-100 text-green-800" size="sm">
                 Données en Temps Réel
               </Badge>
@@ -200,7 +200,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
               <div className="text-3xl font-bold text-gray-900 mb-1">
                 {loading ? <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto" /> : realStats.verifiedPartners}
               </div>
-              <div className="text-gray-600 text-sm">Partenaires vérifiés</div>
+              <div className="text-gray-600 text-sm">Sponsors vérifiés</div>
             </div>
           </Card>
 

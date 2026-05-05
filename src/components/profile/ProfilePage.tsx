@@ -288,7 +288,7 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-center space-x-2 mb-4">
                   <Badge variant="info" size="sm">
                     {user.type === 'exhibitor' ? 'Exposant' :
-                     user.type === 'partner' ? 'Partenaire' :
+                     user.type === 'partner' ? 'Sponsor' :
                      user.type === 'admin' ? 'Administrateur' : 'Visiteur'}
                   </Badge>
                   {profileStats.connections > 0 && (
@@ -807,7 +807,7 @@ export default function ProfilePage() {
                     </label>
                     <Badge variant="info">
                       {user.type === 'exhibitor' ? 'Exposant' :
-                       user.type === 'partner' ? 'Partenaire' :
+                       user.type === 'partner' ? 'Sponsor' :
                        user.type === 'admin' ? 'Administrateur' : 'Visiteur'}
                     </Badge>
                   </div>

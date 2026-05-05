@@ -156,11 +156,11 @@ export class AdminMetricsService {
           downloads:    0,
         };
         // Patch results with fresh server counts for other metrics too
-        if (metricsServerEngagement['totalUsers'])       results['users']              = metricsServerEngagement['totalUsers'] as number;
-        if (metricsServerEngagement['totalExhibitors'])  results['exhibitors']         = metricsServerEngagement['totalExhibitors'] as number;
-        if (metricsServerEngagement['totalPartners'])    results['partners']           = metricsServerEngagement['totalPartners'] as number;
-        if (metricsServerEngagement['totalVisitors'])    results['visitors']           = metricsServerEngagement['totalVisitors'] as number;
-        if (metricsServerEngagement['pendingValidations']) results['pendingValidations'] = metricsServerEngagement['pendingValidations'] as number;
+        if (metricsServerEngagement['totalUsers'])       {results['users']              = metricsServerEngagement['totalUsers'] as number;}
+        if (metricsServerEngagement['totalExhibitors'])  {results['exhibitors']         = metricsServerEngagement['totalExhibitors'] as number;}
+        if (metricsServerEngagement['totalPartners'])    {results['partners']           = metricsServerEngagement['totalPartners'] as number;}
+        if (metricsServerEngagement['totalVisitors'])    {results['visitors']           = metricsServerEngagement['totalVisitors'] as number;}
+        if (metricsServerEngagement['pendingValidations']) {results['pendingValidations'] = metricsServerEngagement['pendingValidations'] as number;}
       } else {
         // 2. Fallback: RPC SECURITY DEFINER (nécessite migration _003)
         try {

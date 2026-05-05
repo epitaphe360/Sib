@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FocusTrap } from '@/components/accessibility/FocusTrap';
 
 interface DialogProps {
   open?: boolean;
@@ -36,13 +37,16 @@ interface DialogFooterProps {
 const DialogContext = React.createContext<{
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  titleId: string;
 }>({
   open: false,
   onOpenChange: () => {},
+  titleId: '',
 });
 
 export function Dialog({ open = false, onOpenChange, children }: DialogProps) {
   const [internalOpen, setInternalOpen] = React.useState(open);
+  const titleId = React.useId();
 
   React.useEffect(() => {
     setInternalOpen(open);
@@ -54,7 +58,7 @@ export function Dialog({ open = false, onOpenChange, children }: DialogProps) {
   }, [onOpenChange]);
 
   return (
-    <DialogContext.Provider value={{ open: internalOpen, onOpenChange: handleOpenChange }}>
+    <DialogContext.Provider value={{ open: internalOpen, onOpenChange: handleOpenChange, titleId }}>
       {children}
     </DialogContext.Provider>
   );
@@ -77,7 +81,7 @@ export function DialogTrigger({ children, asChild }: { children: React.ReactNode
 }
 
 export function DialogContent({ className, children }: DialogContentProps) {
-  const { open, onOpenChange } = React.useContext(DialogContext);
+  const { open, onOpenChange, titleId } = React.useContext(DialogContext);
 
   if (!open) {return null;}
 
@@ -90,22 +94,28 @@ export function DialogContent({ className, children }: DialogContentProps) {
       />
 
       {/* Content */}
-      <div
-        className={cn(
-          'relative z-50 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-lg bg-white p-6 shadow-xl',
-          'animate-in fade-in-0 zoom-in-95',
-          className
-        )}
-      >
-        <button
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-          onClick={() => onOpenChange(false)}
+      <FocusTrap active onEscape={() => onOpenChange(false)}>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+          className={cn(
+            'relative z-50 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-lg bg-white p-6 shadow-xl',
+            'animate-in fade-in-0 zoom-in-95',
+            className
+          )}
         >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </button>
-        {children}
-      </div>
+          <button
+            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            onClick={() => onOpenChange(false)}
+            aria-label="Fermer"
+          >
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </button>
+          {children}
+        </div>
+      </FocusTrap>
     </div>
   );
 }
@@ -119,8 +129,9 @@ export function DialogHeader({ className, children }: DialogHeaderProps) {
 }
 
 export function DialogTitle({ className, children }: DialogTitleProps) {
+  const { titleId } = React.useContext(DialogContext);
   return (
-    <h2 className={cn('text-lg font-semibold leading-none tracking-tight', className)}>
+    <h2 id={titleId} className={cn('text-lg font-semibold leading-none tracking-tight', className)}>
       {children}
     </h2>
   );

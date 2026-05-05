@@ -11,13 +11,32 @@
   created_at: string;
 }
 
+// MODULE 1: Collaborateur de stand
+export interface StandCollaborator {
+  id: string;
+  owner_id: string;
+  owner_type: 'exhibitor' | 'partner';
+  exhibitor_id?: string;
+  partner_id?: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone?: string;
+  position: string;
+  auth_user_id?: string;
+  status: 'active' | 'inactive' | 'pending';
+  credentials_sent_at?: string;
+  badge_generated: boolean;
+  created_at: string;
+}
+
 export interface User {
   id: string;
   email: string;
   name: string;
-  type: 'exhibitor' | 'partner' | 'visitor' | 'admin' | 'security' | 'marketing';
-  visitor_level?: 'free' | 'premium' | 'vip';
-  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de partenaire SIB
+  type: 'exhibitor' | 'partner' | 'visitor' | 'admin' | 'security' | 'marketing' | 'media_partner';
+  visitor_level?: 'free' | 'vip';
+  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner' | 'media_partner'; // Type de sponsor SIB
   profile: UserProfile;
   status: 'pending' | 'active' | 'suspended' | 'rejected' | 'pending_payment';
   projects?: PartnerProject[];
@@ -63,7 +82,7 @@ export interface UserProfile {
   standNumber?: string; // Numéro de stand pour les exposants
   standArea?: number; // Surface du stand en m² (9, 18, 36, 54+)
   // Partner specific fields
-  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de partenaire SIB
+  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de sponsor SIB
 }
 
 export interface Exhibitor {
@@ -96,7 +115,7 @@ export interface Partner {
   userId: string;
   organizationName: string;
   organizationName_en?: string; // English translation
-  partnerType: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner';
+  partnerType: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner' | 'media_partner';
   sector: string;
   sector_en?: string; // English translation
   country: string;

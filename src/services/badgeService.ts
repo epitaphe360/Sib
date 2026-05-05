@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+﻿import { supabase } from '../lib/supabase';
 import { UserBadge } from '../types';
 import { getDisplayName } from '@/utils/userHelpers';
 
@@ -21,7 +21,7 @@ interface BadgeDBRecord {
 
 /**
  * Service de gestion des badges utilisateurs avec QR code
- * Supporte tous les types d'utilisateurs: visiteurs, exposants, partenaires
+ * Supporte tous les types d'utilisateurs: visiteurs, exposants, sponsors
  */
 
 /**
@@ -356,7 +356,7 @@ export function getBadgeColor(accessLevel: string): string {
     case 'partner_silver':
       return '#C0C0C0'; // Argent
     case 'partner_official_sponsor':
-      return '#E0E0E0'; // Sponsor Officiel
+      return '#E0E0E0'; // Partenaire Officiel
     case 'partner_organizer':
       return '#6f42c1'; // Violet
     case 'visitor_free':
@@ -384,13 +384,13 @@ export function getAccessLevelLabel(accessLevel: string): string {
     case 'visitor_free':
       return 'Visiteur';
     case 'partner':
-      return 'Partenaire';
+      return 'Sponsor';
     case 'partner_silver':
       return 'Sponsor Silver';
     case 'partner_gold':
       return 'Sponsor Gold';
     case 'partner_official_sponsor':
-      return 'Sponsor Officiel';
+      return 'Partenaire Officiel';
     case 'partner_organizer':
       return 'Organisateur';
     case 'standard':

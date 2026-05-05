@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import {
@@ -157,9 +157,9 @@ export default function PartnerMediaApprovalPage() {
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Validation Médias Partenaires</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Validation Médias Sponsors</h1>
               <p className="mt-2 text-gray-600">
-                Approuvez ou rejetez les médias soumis par les partenaires
+                Approuvez ou rejetez les médias soumis par les sponsors
               </p>
             </div>
             <div className="flex items-center space-x-4">
@@ -196,7 +196,7 @@ export default function PartnerMediaApprovalPage() {
             <div className="p-12 text-center">
               <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Aucun média en attente</h3>
-              <p className="text-gray-600">Tous les médias partenaires ont été traités</p>
+              <p className="text-gray-600">Tous les médias sponsors ont été traités</p>
             </div>
           </Card>
         ) : (

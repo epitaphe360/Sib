@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Activity, X, Calendar } from 'lucide-react';
+import { Users, Activity, X, Calendar, BookOpen, FileText, Crown, BookMarked, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { DashboardSkeleton } from '../ui/Skeleton';
@@ -20,6 +20,7 @@ import {
 } from './components';
 import { getVisitorQuota } from '../../config/quotas';
 import { useTranslation } from '../../hooks/useTranslation';
+import { ProgrammeRegistrationsSection } from '../programme/ProgrammeRegistrationsSection';
 
 export default memo(function VisitorDashboard() {
   const { t } = useTranslation();
@@ -81,7 +82,7 @@ export default memo(function VisitorDashboard() {
         </motion.div>
 
         {/* VIP benefits */}
-        {(ctx.userLevel === 'premium' || ctx.userLevel === 'vip') && <VisitorVIPBenefits />}
+        {ctx.userLevel === 'vip' && <VisitorVIPBenefits />}
 
         {/* Error banner */}
         {ctx.error && (
@@ -109,6 +110,40 @@ export default memo(function VisitorDashboard() {
         {/* Quick actions */}
         <VisitorQuickActions userLevel={ctx.userLevel} remaining={ctx.remaining} />
 
+        {/* Accès rapides — fonctionnalités supplémentaires */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mb-8">
+          <div className="bg-white rounded-xl shadow-sib border border-sib-gray-100 overflow-hidden">
+            <div className="bg-[#0F2034] px-6 py-4 flex items-center gap-3">
+              <BookMarked className="h-4 w-4 text-[#C9A84C]" />
+              <span className="text-white font-semibold text-sm">Accès Rapides</span>
+            </div>
+            <div className="p-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <Link to={ROUTES.EVENTS} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
+                <Calendar className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
+                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Programme & Séminaires</span>
+              </Link>
+              <Link to={ROUTES.CATALOG} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
+                <Search className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
+                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Catalogue Exposants</span>
+              </Link>
+              <Link to={ROUTES.VISITOR_VISA_LETTER} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
+                <FileText className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
+                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Lettre de Visa</span>
+              </Link>
+              <Link to={ROUTES.NEWS} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
+                <BookOpen className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
+                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Actualités</span>
+              </Link>
+              {ctx.userLevel === 'free' && (
+                <Link to={ROUTES.VISITOR_UPGRADE} className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-[#C9A84C]/40 bg-[#C9A84C]/5 hover:bg-[#C9A84C]/10 transition-all group text-center">
+                  <Crown className="h-6 w-6 text-[#C9A84C]" />
+                  <span className="text-xs font-bold text-[#A88830]">Passer VIP</span>
+                </Link>
+              )}
+            </div>
+          </div>
+        </motion.div>
+
         {/* Analytics */}
         <VisitorAnalyticsSection
           userLevel={ctx.userLevel}
@@ -124,6 +159,9 @@ export default memo(function VisitorDashboard() {
 
         {/* Communication cards */}
         <VisitorCommunicationCards userLevel={ctx.userLevel} />
+
+        {/* Mes sessions du programme */}
+        <ProgrammeRegistrationsSection accent="indigo" />
 
         {/* Networking hub */}
         <VisitorNetworkingHub

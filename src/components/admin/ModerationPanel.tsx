@@ -70,7 +70,7 @@ export default function ModerationPanel() {
         const items: PendingContent[] = (data || []).map((row: any) => ({
           id: row.id,
           exhibitorId: row.created_by_id || '',
-          exhibitorName: row.partner_company || row.creator_name || 'Partenaire inconnu',
+          exhibitorName: row.partner_company || row.creator_name || 'Sponsor inconnu',
           sectionType: row.type || 'media',
           sectionTitle: row.title || 'Contenu média',
           content: {

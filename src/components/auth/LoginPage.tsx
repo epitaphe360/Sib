@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Mail,
@@ -81,7 +81,7 @@ export default function LoginPage() {
 
       if (user) {
         // 🔴 CRITICAL: Block VIP visitors who haven't paid
-        if (user.type === 'visitor' && (user.visitor_level === 'vip' || user.visitor_level === 'premium') && user.status === 'pending_payment') {
+        if (user.type === 'visitor' && user.visitor_level === 'vip' && user.status === 'pending_payment') {
           await supabase.auth.signOut();
           setError(t('login.paymentRequired'));
           setTimeout(() => {
@@ -130,7 +130,7 @@ export default function LoginPage() {
       const { user } = useAuthStore.getState();
 
       // 🔴 CRITICAL: Block VIP visitors who haven't paid
-      if (user?.type === 'visitor' && (user?.visitor_level === 'vip' || user?.visitor_level === 'premium') && user?.status === 'pending_payment') {
+      if (user?.type === 'visitor' && user?.visitor_level === 'vip' && user?.status === 'pending_payment') {
         // Log out immediately
         await supabase.auth.signOut();
 
@@ -404,7 +404,7 @@ export default function LoginPage() {
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 transition-colors"
                 >
                   {demoLoading === 'partner' ? <Loader className="h-4 w-4 animate-spin" /> : <Building2 className="h-4 w-4" />}
-                  Partenaire
+                  Sponsor
                 </button>
                 <button
                   type="button"

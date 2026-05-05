@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ✅ FIX P0-4: Service unifié d'inscription
  *
  * Centralise la logique commune entre:
@@ -337,7 +337,7 @@ export async function registerUser(
       password = data.password;
       hasPassword = true;
     } else if (data.type === 'partner' && data.password) {
-      // Partenaire: mot de passe fourni
+      // Sponsor: mot de passe fourni
       password = data.password;
       hasPassword = true;
     } else {

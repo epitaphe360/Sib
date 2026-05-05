@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import {
@@ -188,7 +188,7 @@ export default function MetricsPage() {
       trendValue: '+5%'
     },
     {
-      title: 'Partenaires',
+      title: 'Sponsors',
       value: loading ? '...' : adminMetrics.totalPartners.toString(),
       target: '50',
       progress: loading ? 0 : Math.round((adminMetrics.totalPartners / 50) * 100),

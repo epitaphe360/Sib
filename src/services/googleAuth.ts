@@ -176,7 +176,7 @@ export class GoogleAuthService {
         .select('*')
         .eq('email', email)
         .maybeSingle();
-      if (error) throw error;
+      if (error) {throw error;}
       return data as User | null;
     } catch (error) {
       console.error('Erreur vérification utilisateur:', error);
@@ -208,7 +208,7 @@ export class GoogleAuthService {
           updated_at: new Date().toISOString()
         })
         .eq('id', existingUser.id);
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (error) {
       console.error('Erreur mise à jour utilisateur:', error);
     }
@@ -237,7 +237,7 @@ export class GoogleAuthService {
         })
         .select()
         .single();
-      if (error) throw error;
+      if (error) {throw error;}
       return (data as User) ?? newUser;
     } catch (error) {
       console.error('Erreur création utilisateur:', error);

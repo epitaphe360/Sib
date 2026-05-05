@@ -176,7 +176,7 @@ export default function PartnerBankTransferPage() {
         if (admins && admins.length > 0) {
           const notifications = admins.map(admin => ({
             user_id: admin.id,
-            title: 'Nouveau justificatif de paiement partenaire',
+            title: 'Nouveau justificatif de paiement sponsor',
             message: `${user?.companyName || user?.firstName + ' ' + user?.lastName} a soumis un justificatif de paiement pour validation.`,
             type: 'info',
             created_at: new Date().toISOString()

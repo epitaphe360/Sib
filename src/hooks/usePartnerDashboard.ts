@@ -14,7 +14,7 @@ export function usePartnerDashboard() {
   const dashboardStats = useDashboardStats();
   const { appointments, fetchAppointments, updateAppointmentStatus, cancelAppointment } = useAppointmentStore();
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'profile' | 'networking' | 'analytics'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'profile' | 'networking' | 'analytics' | 'services'>('overview');
   const [processingAppointment, setProcessingAppointment] = useState<string | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showEditorModal, setShowEditorModal] = useState(false);

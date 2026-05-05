@@ -13,6 +13,7 @@ import { User, Mail, Phone, MapPin, Briefcase, Loader, CheckCircle, Lock, Eye, E
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MoroccanPattern } from '../../components/ui/MoroccanDecor';
 import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
 import { COUNTRIES } from '../../data/countries';
@@ -124,7 +125,7 @@ export default function VisitorFreeRegistration() {
         if (existingUser.type === 'exhibitor') {
           accountType = 'exposant';
         } else if (existingUser.type === 'partner') {
-          accountType = 'partenaire';
+          accountType = 'sponsor';
         } else if (existingUser.type === 'visitor') {
           const level = existingUser.visitor_level === 'premium' ? 'VIP' :
                        existingUser.visitor_level === 'standard' ? 'Standard' : 'Gratuit';
@@ -317,8 +318,9 @@ export default function VisitorFreeRegistration() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f]/95 to-[#1e3a5f]/85 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 py-12 px-4 sm:px-6 lg:px-8">
+      <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
+      <div className="max-w-2xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -340,7 +342,7 @@ export default function VisitorFreeRegistration() {
           <p className="text-blue-100">
             {t('visitor.registration.free.subtitle')}
           </p>
-          <div className="mt-4 inline-flex items-center space-x-2 bg-[#1e3a5f]/60 px-4 py-2 rounded-full">
+          <div className="mt-4 inline-flex items-center space-x-2 bg-white/15 backdrop-blur-sm border border-white/25 px-4 py-2 rounded-full">
             <span className="text-blue-100 text-sm">🎫 {t('visitor.registration.free.badge_access')}</span>
             <span className="text-[#C9A84C]">•</span>
             <span className="text-blue-100 text-sm">📱 {t('visitor.registration.free.badge_qr')}</span>
