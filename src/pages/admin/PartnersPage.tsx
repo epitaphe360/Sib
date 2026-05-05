@@ -92,7 +92,7 @@ export default function PartnersPage() {
       setPartners(formattedData as Partner[]);
     } catch (err) {
       console.error('Error fetching partners:', err);
-      setError('Échec du chargement des sponsors. Veuillez réessayer.');
+      setError('Échec du chargement des partenaires. Veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }
@@ -129,9 +129,9 @@ export default function PartnersPage() {
     const badges = {
       organizer: { label: 'Organisateur', color: 'bg-purple-100 text-purple-800' },
       co_organizer: { label: 'Co-Organisateur', color: 'bg-indigo-100 text-indigo-800' },
-      official_sponsor: { label: 'Partenaire Officiel', color: 'bg-yellow-100 text-yellow-800' },
+      official_sponsor: { label: 'Sponsor Officiel', color: 'bg-yellow-100 text-yellow-800' },
       delegated_organizer: { label: 'Org. Délégué', color: 'bg-blue-100 text-blue-800' },
-      partner: { label: 'Sponsor', color: 'bg-gray-100 text-gray-600' },
+      partner: { label: 'Partenaire', color: 'bg-gray-100 text-gray-600' },
       press_partner: { label: 'Partenaire Presse', color: 'bg-orange-100 text-orange-800' }
     };
     const badge = badges[type as keyof typeof badges] || badges.silver;
@@ -188,20 +188,17 @@ export default function PartnersPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-4">
-            <span className="mr-1">←</span> Retour au Tableau de Bord
-          </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Gestion des Sponsors</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Gestion des Partenaires</h1>
               <p className="text-gray-600 mt-2">
-                Administration complète des sponsors et sponsors SIB
+                Administration complète des partenaires et sponsors SIB
               </p>
             </div>
             <Link to={ROUTES.ADMIN_CREATE_PARTNER}>
               <Button variant="default">
                 <Plus className="h-4 w-4 mr-2" />
-                Créer Sponsor
+                Créer Partenaire
               </Button>
             </Link>
           </div>
@@ -213,7 +210,7 @@ export default function PartnersPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Sponsors</p>
+                  <p className="text-sm font-medium text-gray-600">Total Partenaires</p>
                   <p className="text-3xl font-bold text-gray-900">{partners.length}</p>
                 </div>
                 <Crown className="h-8 w-8 text-blue-600" />
@@ -288,7 +285,7 @@ export default function PartnersPage() {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Rechercher un sponsor..."
+                    placeholder="Rechercher un partenaire..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -308,9 +305,9 @@ export default function PartnersPage() {
                     <option value="">Tous les types</option>
                     <option value="organizer">Organisateur</option>
                     <option value="co_organizer">Co-Organisateur</option>
-                    <option value="official_sponsor">Partenaire Officiel</option>
+                    <option value="official_sponsor">Sponsor Officiel</option>
                     <option value="delegated_organizer">Org. Délégué</option>
-                    <option value="partner">Sponsor</option>
+                    <option value="partner">Partenaire</option>
                     <option value="press_partner">Partenaire Presse</option>
                   </select>
                 </div>
@@ -349,7 +346,7 @@ export default function PartnersPage() {
         <Card>
           <div className="p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Sponsors ({filteredPartners.length})
+              Partenaires ({filteredPartners.length})
             </h2>
 
             <div className="overflow-x-auto">

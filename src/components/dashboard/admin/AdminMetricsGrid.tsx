@@ -4,7 +4,7 @@ import { Users, Building2, Award, UserCheck, TrendingUp, ArrowUpRight } from 'lu
 
 interface AdminMetricsGridProps {
   adminMetrics: Record<string, number | unknown>;
-  t: (key: string, params?: Record<string, unknown>) => string;
+  t: (key: string, params?: Record<string, string | number> | string) => string;
 }
 
 // ── Compteur animé déclenché à l'entrée dans le viewport ──────────────────
