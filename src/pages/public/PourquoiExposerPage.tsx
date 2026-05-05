@@ -1,37 +1,11 @@
-﻿import React from 'react';
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { TrendingUp, Users, Globe, Target, BarChart3, Handshake, Eye, Award } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { usePageContent } from '../../hooks/usePageContent';
 import {
   ScrollReveal, StaggerReveal, StaggerItem, HoverCard,
-  AnimatedCounter, HeroReveal, fadeUp, scaleUp,
+  AnimatedCounter, HeroReveal, scaleUp,
 } from '../../components/ui/motion';
-
-const arguments_exposer_static = [
-  { icon: Users, title: '200 000+ visiteurs', desc: 'Architectes, ingénieurs, promoteurs, décideurs publics et privés venus du Maroc, d\'Afrique et du monde entier.' },
-  { icon: Globe, title: '50 pays représentés', desc: '600 exposants et 1 500 marques internationales réunis sur 35 000 m² : pavillons nationaux et délégations institutionnelles.' },
-  { icon: Target, title: 'Visibilité renforcée', desc: 'Plan média international ambitieux, présence digitale soutenue, couverture presse et vidéos diffusées sur SIB TV et les plateformes officielles.' },
-  { icon: BarChart3, title: '300 rencontres B2B', desc: 'Des échanges ciblés organisés via URBA EVENT, la plateforme digitale connectée du salon. Chaque stand devient un espace de connexion.' },
-  { icon: Handshake, title: '80% de reconduction', desc: 'Un taux de fidélisation exceptionnel, reflet de la confiance des exposants et de la qualité du salon.' },
-  { icon: Award, title: 'Édition anniversaire', desc: 'Pour ses 40 ans, le SIB franchit un cap : plus d\'espace, plus d\'exposants, des zones thématiques repensées et des espaces de démonstration interactifs.' },
-];
-
-const secteurs_cles = [
-  'Gros Œuvre & Structure', 'Menuiserie & Fermeture', 'Décoration & Aménagement',
-  'Climatisation & Sanitaire', 'Équipements Électriques', 'Matériels & Machines',
-  'Environnement Durable', 'Formation & Institutions', 'Immobilier & Financement',
-  'Technologies Numériques',
-];
-
-const chiffres = [
-  { value: '600+', label: 'Exposants' },
-  { value: '200 000+', label: 'Visiteurs' },
-  { value: '35 000 m²', label: 'Surface' },
-  { value: '50', label: 'Pays' },
-  { value: '5', label: 'Jours' },
-  { value: '10', label: 'Secteurs' },
-];
 
 export default function PourquoiExposerPage() {
   const cms = usePageContent('pourquoi-exposer');
@@ -76,7 +50,7 @@ export default function PourquoiExposerPage() {
     ];}
     try {
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed.map((s: unknown) => String(s)) : [];
+      return Array.isArray(parsed) ? parsed.map(String) : [];
     } catch {
       return [
         'Gros Œuvre & Structure', 'Menuiserie & Fermeture', 'Décoration & Aménagement',
@@ -142,8 +116,8 @@ export default function PourquoiExposerPage() {
           </h2>
         </ScrollReveal>
         <StaggerReveal slow className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {arguments_exposer.map((arg, i) => (
-            <StaggerItem key={i}>
+          {arguments_exposer.map((arg) => (
+            <StaggerItem key={arg.title}>
               <HoverCard className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
                 <div className="w-14 h-14 rounded-xl bg-sib-gold/10 flex items-center justify-center mb-5">
                   <arg.icon className="w-7 h-7 text-sib-gold" />

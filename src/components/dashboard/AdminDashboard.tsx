@@ -18,7 +18,7 @@ export default function AdminDashboard() {
   const { user, t, isLoading, error, fetchMetrics, adminMetrics } = ctx;
 
   // ── Early returns ─────────────────────────────────────────────────────────
-  if (!user || user.type !== 'admin') {
+  if (user?.type !== 'admin') {
     return (
       <div className="min-h-screen bg-sib-bg flex items-center justify-center">
         <div className="text-center">

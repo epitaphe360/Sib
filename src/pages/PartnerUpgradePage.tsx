@@ -1,7 +1,5 @@
-﻿import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+﻿import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useTranslation } from '../hooks/useTranslation';
 import {
   Crown,
   Check,
@@ -11,7 +9,6 @@ import {
   Users,
   Calendar,
   FileText,
-  Mail,
   BarChart,
   Award,
   Zap
@@ -29,16 +26,12 @@ import {
 
 export default function PartnerUpgradePage() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const { user } = useAuthStore();
-  const [selectedTier, setSelectedTier] = useState<PartnerTier | null>(null);
 
   const currentTier = (user?.partner_tier || user?.profile?.partner_tier || 'partner') as PartnerTier;
   const currentConfig = getPartnerTierConfig(currentTier);
 
   const handleUpgrade = (targetTier: PartnerTier) => {
-    setSelectedTier(targetTier);
-    // Navigate to payment page with tier information
     navigate(`/partner/payment-selection?tier=${targetTier}`);
   };
 
@@ -61,7 +54,7 @@ export default function PartnerUpgradePage() {
               Développez votre visibilité
             </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Choisissez le niveau sponsor qui correspond à vos ambitions et
+              Choisissez le niveau partenaire qui correspond à vos ambitions et
               maximisez votre présence au SIB 2026
             </p>
           </motion.div>
@@ -262,7 +255,7 @@ export default function PartnerUpgradePage() {
               Maximisez votre retour sur investissement
             </h2>
             <p className="text-lg text-blue-100 mb-6">
-              En moyenne, Nos Partenaires Gold et Officiel génèrent 5x leur investissement
+              En moyenne, nos sponsors Gold et Officiel génèrent 5x leur investissement
               en nouveaux contrats et opportunités business grâce au SIB 2026.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
@@ -285,13 +278,13 @@ export default function PartnerUpgradePage() {
         {/* Testimonials */}
         <div className="mt-16">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Ce que disent Nos Partenaires
+            Ce que disent nos partenaires
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                tier: 'Partenaire Officiel',
+                tier: 'Sponsor Officiel',
                 company: 'TechCorp International',
                 quote: "Le sponsoring officiel nous a permis d'obtenir une visibilité exceptionnelle. 87 rendez-vous qualifiés en 5 jours!",
                 author: 'Jean Dupont, CEO'
@@ -347,7 +340,7 @@ export default function PartnerUpgradePage() {
               },
               {
                 q: "Les analytics sont-elles en temps réel?",
-                a: "Pour Silver et Gold, les analytics sont mises à jour toutes les heures. Le Partenaire Officiel bénéficie d'analytics en temps réel avec IA."
+                a: "Pour Silver et Gold, les analytics sont mises à jour toutes les heures. Le Sponsor Officiel bénéficie d'analytics en temps réel avec IA."
               }
             ].map((faq) => (
               <Card key={faq.q} className="p-6">

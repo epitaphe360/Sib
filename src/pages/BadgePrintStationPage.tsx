@@ -183,7 +183,7 @@ export default function BadgePrintStationPage() {
         }
         toast.info(`${results.filter(r => r.found).length} résultat(s) trouvé(s)`);
       }
-    } catch (err) {
+    } catch {
       toast.error('Erreur de recherche');
     } finally {
       setIsSearching(false);
@@ -198,7 +198,7 @@ export default function BadgePrintStationPage() {
       const result = await lookupBadgeByQRData(JSON.stringify({ code: badge.badgeCode }));
       setLookupResult(result);
       toast.success(t('badge.print.generated'));
-    } catch (err) {
+    } catch {
       toast.error('Erreur lors de la génération du badge');
     } finally {
       setIsGenerating(false);
@@ -287,7 +287,7 @@ export default function BadgePrintStationPage() {
       display: flex;
       flex-direction: ${isCard ? 'row' : 'column'};
       align-items: center;
-      gap: ${isCard ? '3mm' : '3mm'};
+      gap: 3mm;
       height: calc(100% - ${isCard ? '6mm' : '12mm'});
     }
     .avatar {
@@ -375,16 +375,16 @@ export default function BadgePrintStationPage() {
       </div>
       <div class="qr-section">
         <img class="qr-code" src="${qrDataURL}" alt="QR Code" />
-        ${!isCard ? `<div class="badge-code">${badge.badgeCode}</div>` : ''}
+        ${isCard ? '' : `<div class="badge-code">${badge.badgeCode}</div>`}
       </div>
-      ${!isCard ? `
+      ${isCard ? '' : `
         <div class="footer">
           <div>25 - 29 Novembre 2026 • El Jadida, Maroc</div>
           <div style="margin-top: 0.5mm">
             Valide du ${new Date(badge.validFrom).toLocaleDateString('fr-FR')} au ${new Date(badge.validUntil).toLocaleDateString('fr-FR')}
           </div>
         </div>
-      ` : ''}
+      `}
     </div>
   </div>
 </body>
@@ -702,7 +702,9 @@ export default function BadgePrintStationPage() {
                         <div className="space-y-2 max-h-96 overflow-y-auto">
                           {searchResults.map((result, idx) => (
                             <div
-                              key={idx}
+                              key={result.badge?.badgeCode ?? String(idx)}
+                              role="button"
+                              tabIndex={0}
                               className={`p-3 rounded-lg border cursor-pointer transition-colors ${
                                 lookupResult === result
                                   ? 'border-blue-500 bg-blue-50'
@@ -710,6 +712,11 @@ export default function BadgePrintStationPage() {
                               }`}
                               onClick={() => {
                                 if (result.found && result.badge) {
+                                  setLookupResult(result);
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if ((e.key === 'Enter' || e.key === ' ') && result.found && result.badge) {
                                   setLookupResult(result);
                                 }
                               }}
@@ -908,7 +915,9 @@ export default function BadgePrintStationPage() {
               </div>
 
               <div className="p-6">
-                {lookupResult?.found && lookupResult.badge ? (
+                {(() => {
+                  if (lookupResult?.found && lookupResult.badge) {
+                    return (
                   <div className="space-y-4">
                     {/* Badge visuel en aperçu */}
                     <div className="flex justify-center">
@@ -1000,7 +1009,10 @@ export default function BadgePrintStationPage() {
                       </Button>
                     </div>
                   </div>
-                ) : lookupResult && !lookupResult.found ? (
+                    );
+                  }
+                  if (lookupResult && !lookupResult.found) {
+                    return (
                   <div className="text-center py-8 space-y-3">
                     <div className="w-16 h-16 mx-auto rounded-full bg-amber-50 flex items-center justify-center">
                       <AlertTriangle className="w-8 h-8 text-amber-500" />
@@ -1025,7 +1037,9 @@ export default function BadgePrintStationPage() {
                       Recommencer
                     </Button>
                   </div>
-                ) : (
+                    );
+                  }
+                  return (
                   <div className="text-center py-12">
                     <div className="w-20 h-20 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4">
                       <QrCode className="w-10 h-10 text-gray-300" />
@@ -1037,7 +1051,8 @@ export default function BadgePrintStationPage() {
                       Scannez un QR code ou recherchez un participant
                     </p>
                   </div>
-                )}
+                  );
+                })()}
               </div>
             </Card>
 

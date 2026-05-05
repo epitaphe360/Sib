@@ -2,30 +2,28 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  Search, Brain, Sparkles, ArrowLeft, Clock, Target,
-  Building2, Globe, MapPin, ExternalLink, ChevronRight,
+  Search, Brain, Sparkles, ArrowLeft, Target,
+  Building2, Globe, ExternalLink, ChevronRight,
   Zap, Info, X, RotateCcw
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import {
+  runAdvancedMatching,
   QUICK_SEARCH_SUGGESTIONS,
+  type MatchingResponse,
 } from '../services/advancedMatchingService';
-import { runAIMatching, type AIMatchingResponse } from '../services/aiMatchingService';
-import { ROUTES } from '../lib/routes';
-
 // ─── Composant score ring ──────────────────────────────────────────────────────
 
-function ScoreRing({ score }: { score: number }) {
+function ScoreRing({ score }: Readonly<{ score: number }>) {
   const radius = 20;
   const circumference = 2 * Math.PI * radius;
   const dash = (score / 100) * circumference;
 
-  const color =
-    score >= 70 ? '#10b981' :
-    score >= 45 ? '#f59e0b' :
-    '#6b7280';
+  let color = '#6b7280';
+  if (score >= 70) { color = '#10b981'; }
+  else if (score >= 45) { color = '#f59e0b'; }
 
   return (
     <div className="relative w-14 h-14 flex-shrink-0 flex items-center justify-center">
@@ -53,11 +51,11 @@ function ResultCard({
   result,
   index,
   onViewProfile,
-}: {
+}: Readonly<{
   result: MatchingResponse['results'][0];
   index: number;
   onViewProfile: (id: string) => void;
-}) {
+}>) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -102,9 +100,9 @@ function ResultCard({
 
             {/* Raisons du match */}
             <div className="flex flex-wrap gap-1.5 mt-3">
-              {result.matchReasons.map((reason, i) => (
+              {result.matchReasons.map((reason) => (
                 <span
-                  key={i}
+                  key={reason}
                   className="inline-flex items-center text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-2.5 py-0.5 gap-1"
                 >
                   <Target className="h-2.5 w-2.5" />
@@ -149,7 +147,7 @@ export default function AdvancedMatchingPage() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [response, setResponse] = useState<AIMatchingResponse | null>(null);
+  const [response, setResponse] = useState<MatchingResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -168,9 +166,9 @@ export default function AdvancedMatchingPage() {
     setError(null);
 
     try {
-      const result = await runAIMatching(q);
+      const result = await runAdvancedMatching(q, 20);
       setResponse(result);
-    } catch (err) {
+    } catch {
       setError('Erreur lors du matching. Veuillez réessayer.');
     } finally {
       setIsSearching(false);
@@ -289,9 +287,9 @@ export default function AdvancedMatchingPage() {
                       s.toLowerCase().includes(query.toLowerCase())
                     )
                     .slice(0, 8)
-                    .map((suggestion, i) => (
+                    .map((suggestion) => (
                       <button
-                        key={i}
+                        key={suggestion}
                         onMouseDown={() => handleSearch(suggestion)}
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 flex items-center gap-2 transition-colors"
                       >
@@ -315,8 +313,8 @@ export default function AdvancedMatchingPage() {
             >
               <Info className="h-4 w-4 text-blue-500 flex-shrink-0" />
               <span className="text-xs text-blue-600 font-medium">IA a compris :</span>
-              {response.extractedTagLabels.map((label, i) => (
-                <Badge key={i} variant="info" className="text-xs">
+              {response.extractedTagLabels.map((label) => (
+                <Badge key={label} variant="info" className="text-xs">
                   {label}
                 </Badge>
               ))}
@@ -340,17 +338,11 @@ export default function AdvancedMatchingPage() {
             >
               {/* Méta résultats */}
               <div className="flex items-center justify-between mb-4">
-                <p className="text-sm text-gray-600 flex items-center gap-2">
-                  <strong>{response.results.length}</strong> résultat{response.results.length !== 1 ? 's' : ''} sur{' '}
+                <p className="text-sm text-gray-600">
+                  <strong>{response.results.length}</strong> résultat{response.results.length === 1 ? '' : 's'} sur{' '}
                   <strong>{response.totalCandidates}</strong> exposants analysés
                   {' '}
                   <span className="text-gray-400">({response.durationMs}ms)</span>
-                  {response.usedAI && (
-                    <span className="inline-flex items-center gap-1 text-xs bg-violet-100 text-violet-700 border border-violet-200 rounded-full px-2 py-0.5 ml-1">
-                      <Sparkles className="h-3 w-3" />
-                      IA vectorielle
-                    </span>
-                  )}
                 </p>
                 <button
                   onClick={handleReset}
@@ -404,8 +396,8 @@ export default function AdvancedMatchingPage() {
                 { icon: Search, title: 'Recherche libre', desc: 'Écrivez comme vous parleriez à un expert' },
                 { icon: Brain, title: 'Analyse IA', desc: 'Dictionnaire BTP de 200+ synonymes' },
                 { icon: Target, title: 'Résultats optimaux', desc: 'Top 20 exposants avec score de pertinence' },
-              ].map(({ icon: Icon, title, desc }, i) => (
-                <div key={i} className="bg-white rounded-xl p-4 border border-gray-100">
+              ].map(({ icon: Icon, title, desc }) => (
+                <div key={title} className="bg-white rounded-xl p-4 border border-gray-100">
                   <div className="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center mb-3">
                     <Icon className="h-4 w-4 text-blue-600" />
                   </div>
