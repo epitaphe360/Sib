@@ -55,8 +55,7 @@ import {
   BadgeLookupResult,
   PrintRecord,
 } from '../services/badgePrintService';
-import { generateBadgeFromUser } from '../services/badgeService';
-import { getBadgeColor, getAccessLevelLabel } from '../services/badgeService';
+import { generateBadgeFromUser, getBadgeColor, getAccessLevelLabel } from '../services/badgeService';
 import PrintableBadge from '../components/badge/PrintableBadge';
 
 type Tab = 'scanner' | 'search' | 'history' | 'stats';

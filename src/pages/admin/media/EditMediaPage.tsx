@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+
 import { ArrowLeft, Video, Mic, Film, Radio, Star, MessageCircle, Save, Loader } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ROUTES } from '../../../lib/routes';
 import { mediaService } from '../../../services/mediaService';
 import { supabase } from '../../../lib/supabase';

@@ -76,11 +76,11 @@ export default function VisitorBankTransferPage() {
 
       if (error) {throw error;}
 
-      // @ts-ignore - Supabase type inference limitation
+      // @ts-expect-error - Supabase type inference limitation
       setPaymentRequest(data as VisitorPaymentRequest);
-      // @ts-ignore - Supabase type inference limitation
+      // @ts-expect-error - Supabase type inference limitation
       if (data && 'transfer_reference' in data && data.transfer_reference) {
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         setTransferReference(data.transfer_reference as string);
       } else {
         // Générer une référence si elle n'existe pas
@@ -90,14 +90,14 @@ export default function VisitorBankTransferPage() {
         if (supabase) {
           await supabase
             .from('payment_requests')
-            // @ts-ignore - Supabase type inference limitation
+            // @ts-expect-error - Supabase type inference limitation
             .update({ transfer_reference: ref })
             .eq('id', requestId);
         }
       }
-      // @ts-ignore - Supabase type inference limitation
+      // @ts-expect-error - Supabase type inference limitation
       if (data && 'transfer_proof_url' in data && data.transfer_proof_url) {
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         setProofUrl(data.transfer_proof_url as string);
       }
     } catch (error) {
@@ -153,7 +153,7 @@ export default function VisitorBankTransferPage() {
 
       const { error: updateError } = await supabase
         .from('payment_requests')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({
           transfer_reference: transferReference,
           transfer_proof_url: finalProofUrl,

@@ -174,7 +174,6 @@ import { initializeAuth } from './lib/initAuth';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { useAuthStore } from './store/authStore';
-import { useLocation } from 'react-router-dom';
 import { UrbaEventNav } from './components/layout/UrbaEventNav';
 
 const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];

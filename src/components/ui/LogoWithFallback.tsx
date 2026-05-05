@@ -11,7 +11,7 @@ interface LogoWithFallbackProps {
 function generatePlaceholder(name: string): string {
   try {
     // Extraire uniquement les caractères ASCII pour éviter btoa/SVG Unicode errors
-    const asciiName = name.replace(/[^\x00-\x7F]/g, '');
+    const asciiName = name.replace(/[\u0080-\uFFFF]/g, '');
     const rawInitials = (asciiName.length > 0 ? asciiName : 'P')
       .split(' ')
       .map(word => word.charAt(0))

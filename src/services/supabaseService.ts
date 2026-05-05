@@ -1,5 +1,4 @@
-import { supabase } from '../lib/supabase';
-import { isSupabaseReady } from '../lib/supabase';
+import { supabase, isSupabaseReady } from '../lib/supabase';
 import { User, Exhibitor, Partner, Product, Appointment, Event, ChatMessage, ChatConversation, MiniSiteSection, MessageAttachment, ExhibitorCategory, ContactInfo, TimeSlot, UserProfile } from '../types';
 
 // Production: All data from Supabase only
@@ -2547,7 +2546,7 @@ export class SupabaseService {
 
 	    const safeSupabase = supabase!;
 	    try {
-	      // @ts-ignore - Supabase type inference issue with user status update
+	      // @ts-expect-error - Supabase type inference issue with user status update
 	      const { error } = await safeSupabase
 	        .from('users')
 	        .update({ status })

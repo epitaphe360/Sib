@@ -290,7 +290,7 @@ export function extractTagsFromQuery(query: string): string[] {
 
   // 2. Tokens individuels
   const tokens = normalized
-    .split(/[\s,;.!?\/\-]+/)
+    .split(/[\s,;.!?/-]+/)
     .filter(t => t.length > 2 && !FR_STOPWORDS.has(t));
 
   for (const token of tokens) {

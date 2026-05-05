@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Activity, X, QrCode, Download, Star, LogOut } from 'lucide-react';
+import { Users, Activity, X, QrCode, Download, Star, LogOut, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { DashboardSkeleton } from '../ui/Skeleton';
@@ -19,7 +19,6 @@ import {
   VisitorAvailabilityModal,
 } from './components';
 import { getVisitorQuota } from '../../config/quotas';
-import { Calendar } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import useAuthStore from '../../store/authStore';
 

@@ -72,7 +72,7 @@ export function useExhibitorDashboard() {
 
         if (flagSaysCreated || hasMiniSiteInDB) {
           if (hasMiniSiteInDB && !flagSaysCreated) {
-            // @ts-ignore – table not in generated Supabase types
+            // @ts-expect-error – table not in generated Supabase types
             await supabase!.from('users').update({ minisite_created: true }).eq('id', user.id);
           }
           return;
@@ -263,7 +263,7 @@ export function useExhibitorDashboard() {
       const newStatus = !isPublished;
       const { error: err } = await supabase!
         .from('exhibitors')
-        // @ts-ignore – column not in generated Supabase types
+        // @ts-expect-error – column not in generated Supabase types
         .update({ is_published: newStatus })
         .eq('user_id', user.id);
       if (err) {throw err;}

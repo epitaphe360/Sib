@@ -9,8 +9,7 @@ import { Play, Clock, Users, Calendar, Award } from 'lucide-react';
 import { Badge } from '../ui/Badge';
 import { Card } from '../ui/Card';
 import { ROUTES } from '../../lib/routes';
-import type { MediaContent } from '../../types/media';
-import { MEDIA_TYPE_LABELS, MEDIA_TYPE_ICONS } from '../../types/media';
+import { MEDIA_TYPE_LABELS, MEDIA_TYPE_ICONS, type MediaContent } from '../../types/media';
 
 interface MediaCardProps {
   media: MediaContent;

@@ -1,13 +1,11 @@
-import { Activity } from 'lucide-react';
+import { Activity, Calendar, Building2, Network } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '../../ui/Badge';
 import { LineChartCard, BarChartCard, PieChartCard } from '../../dashboard/charts';
 import { PeriodComparisonGrid } from '../../common/PeriodComparison';
 import { VisitorEngagementFunnel } from '../../common/ConversionFunnel';
-import { AIPredictions } from '../../common/AIPredictions';
-import type { Prediction } from '../../common/AIPredictions';
+import { AIPredictions, type Prediction } from '../../common/AIPredictions';
 import { useTranslation } from '../../../hooks/useTranslation';
-import { Calendar, Building2, Network } from 'lucide-react';
 
 interface AnalyticsData { name: string; value: number; color?: string; }
 interface ActivityData { name: string; visites: number; interactions: number; }

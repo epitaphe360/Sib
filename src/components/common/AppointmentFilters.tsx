@@ -48,14 +48,16 @@ export const AppointmentFilters: React.FC<AppointmentFiltersProps> = ({
         switch (dateRange) {
           case 'today':
             return appDate.toDateString() === now.toDateString();
-          case 'week':
+          case 'week': {
             const weekAgo = new Date(now);
             weekAgo.setDate(now.getDate() - 7);
             return appDate >= weekAgo;
-          case 'month':
+          }
+          case 'month': {
             const monthAgo = new Date(now);
             monthAgo.setMonth(now.getMonth() - 1);
             return appDate >= monthAgo;
+          }
           default:
             return true;
         }

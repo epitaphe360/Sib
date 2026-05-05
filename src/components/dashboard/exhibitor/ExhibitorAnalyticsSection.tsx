@@ -4,8 +4,7 @@ import { Badge } from '../../ui/Badge';
 import { Button } from '../../ui/Button';
 import { LineChartCard, BarChartCard, PieChartCard } from '../charts';
 import { ExhibitorConversionFunnel } from '../../common/ConversionFunnel';
-import { AIPredictions } from '../../common/AIPredictions';
-import type { Prediction } from '../../common/AIPredictions';
+import { AIPredictions, type Prediction } from '../../common/AIPredictions';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { ROUTES } from '../../../lib/routes';
 

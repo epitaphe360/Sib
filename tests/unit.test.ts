@@ -642,6 +642,7 @@ describe('🔒 Sécurité', () => {
       '../../../etc/passwd',
       'null',
       'undefined',
+      // eslint-disable-next-line no-template-curly-in-string
       '${process.env.SECRET}'
     ];
 

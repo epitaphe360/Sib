@@ -8,8 +8,7 @@ import { ArrowLeft, Calendar, Clock, User, Eye, Share2, Bookmark, MessageCircle,
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
-import { useNewsStore } from '../store/newsStore';
-import type { NewsArticle } from '../store/newsStore';
+import { useNewsStore, type NewsArticle } from '../store/newsStore';
 import { motion } from 'framer-motion';
 import ArticleAudioPlayer from '../components/news/ArticleAudioPlayer';
 import { ROUTES } from '../lib/routes';

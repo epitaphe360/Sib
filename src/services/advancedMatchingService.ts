@@ -54,7 +54,7 @@ interface ExhibitorRow {
 function extractQueryTokens(query: string): string[] {
   const normalized = normalizeText(query);
   return normalized
-    .split(/[\s,;.!?\/\-]+/)
+    .split(/[\s,;.!?/-]+/)
     .filter(t => t.length > 2 && !FR_STOPWORDS.has(t));
 }
 

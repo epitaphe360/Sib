@@ -115,7 +115,7 @@ export default function PartnerBankTransferPage() {
     }
     if (expectedAmount && Math.abs(parsedDeclaredAmount - expectedAmount) > 0.01) {
       toast.error(
-        `Montant incorrect. Attendu : $${expectedAmount.toLocaleString('fr-FR')} USD — Saisi : $${parsedDeclaredAmount.toLocaleString('fr-FR')} USD. Vérifiez votre virement.`
+        `Montant incorrect. Attendu : $${expectedAmount.toLocaleString('fr-FR')} USD — Saisi : $${parsedDeclaredAmount.toLocaleString('fr-FR')} USD. Vérifiez votre virement.`
       );
       return;
     }
@@ -496,7 +496,7 @@ export default function PartnerBankTransferPage() {
                 </div>
                 {paymentRequest?.amount && (
                   <p className="text-xs text-blue-600 mt-1">
-                    Montant attendu : <strong>${paymentRequest.amount.toLocaleString('fr-FR')} USD</strong>
+                    Montant attendu : <strong>${paymentRequest.amount.toLocaleString('fr-FR')} USD</strong>
                   </p>
                 )}
               </div>

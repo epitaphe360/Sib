@@ -42,8 +42,7 @@ import { motion } from 'framer-motion';
 import { EventsService, Event } from '../../services/eventsService';
 import { useOptimizedList } from '../../hooks/useOptimizedList';
 import { exportService } from '../../services/exportService';
-import { RATE_LIMITS } from '../../middleware/rateLimiter';
-import { useRateLimit } from '../../middleware/rateLimiter';
+import { RATE_LIMITS, useRateLimit } from '../../middleware/rateLimiter';
 import { logger } from '../../lib/logger';
 import { toast } from 'sonner';
 

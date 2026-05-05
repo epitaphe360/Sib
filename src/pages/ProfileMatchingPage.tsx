@@ -152,34 +152,6 @@ export default function ProfileMatchingPage() {
     bio: user?.profile?.bio || ''
   });
 
-  if (isFreeVisitor) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-8 text-center">
-        <div className="bg-purple-100 p-6 rounded-full mb-6">
-          <Sparkles className="h-16 w-16 text-purple-600 outline-none" />
-        </div>
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('matching.title')}</h2>
-        <p className="text-gray-600 text-lg max-w-md mb-8">
-          {t('auth.premium_required')}
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Button
-            onClick={() => navigate(ROUTES.VISITOR_UPGRADE)}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg"
-          >
-            {t('common.upgrade')}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => navigate(-1)}
-            className="px-8 py-3 rounded-xl border-2"
-          >
-            {t('common.back')}
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   // ✅ Resynchroniser le formulaire quand le user change (après sauvegarde ou rechargement)
   useEffect(() => {
@@ -222,6 +194,37 @@ export default function ProfileMatchingPage() {
 
     setCompletionPercentage(score);
   }, [formData]);
+
+  if (isFreeVisitor) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-8 text-center">
+        <div className="bg-purple-100 p-6 rounded-full mb-6">
+          <Sparkles className="h-16 w-16 text-purple-600 outline-none" />
+        </div>
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('matching.title')}</h2>
+        <p className="text-gray-600 text-lg max-w-md mb-8">
+          {t('auth.premium_required')}
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Button
+            onClick={() => navigate(ROUTES.VISITOR_UPGRADE)}
+            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg"
+          >
+            {t('common.upgrade')}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => navigate(-1)}
+            className="px-8 py-3 rounded-xl border-2"
+          >
+            {t('common.back')}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+
 
   const toggleArrayItem = (field: 'sectors' | 'interests' | 'objectives' | 'collaborationTypes', item: string) => {
     const currentArray = formData[field];

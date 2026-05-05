@@ -60,7 +60,7 @@ export function usePartnerDashboard() {
     setIsTogglingPublish(true);
     try {
       const newStatus = !isPublished;
-      // @ts-ignore – column not in generated Supabase types
+      // @ts-expect-error – column not in generated Supabase types
       const { error } = await supabase!.from('partners').update({ is_published: newStatus }).eq('user_id', user.id);
       if (error) {throw error;}
       setIsPublished(newStatus);

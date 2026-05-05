@@ -106,7 +106,7 @@ export default function PublicationControlPage() {
       }
       const { error } = await supabase
         .from('partners')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: !currentStatus } as any)
         .eq('id', partnerId);
 
@@ -135,7 +135,7 @@ export default function PublicationControlPage() {
       }
       const { error } = await supabase
         .from('exhibitors')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: !currentStatus } as any)
         .eq('id', exhibitorId);
 
@@ -184,7 +184,7 @@ export default function PublicationControlPage() {
       // Update using a valid condition that matches all records
       const { error } = await supabase
         .from('partners')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: publish } as any)
         .in('id', allPartners.map((p: any) => p.id));
 
@@ -232,7 +232,7 @@ export default function PublicationControlPage() {
       // Update using a valid condition that matches all records
       const { error } = await supabase
         .from('exhibitors')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: publish } as any)
         .in('id', allExhibitors.map((e: any) => e.id));
 
