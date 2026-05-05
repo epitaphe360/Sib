@@ -88,12 +88,8 @@ class ExportService {
         })
       );
 
-      const result = await writeXlsxFile([headerRow, ...dataRows] as Parameters<typeof writeXlsxFile>[0]);
-      const blob = result instanceof Blob
-        ? result
-        : new Blob([result as ArrayBuffer], {
-            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          });
+      const file = writeXlsxFile([headerRow, ...dataRows] as Parameters<typeof writeXlsxFile>[0]);
+      const blob = await file.toBlob();
 
       logger.info('Excel export successful', { rows: data.length });
       return blob;
