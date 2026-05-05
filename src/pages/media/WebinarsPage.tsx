@@ -31,13 +31,13 @@ export const WebinarsPage: React.FC = () => {
     setLoading(true);
     try {
       const orderBy = filter === 'popular' ? 'views_count' : 'published_at';
-      
+
       const data = await MediaService.getMediaByType('webinar', {
         status: 'published',
         orderBy,
         order: 'desc'
       });
-      
+
       setWebinars(data);
     } catch (error) {
       console.error('❌ Erreur chargement webinaires:', error);
@@ -47,12 +47,12 @@ export const WebinarsPage: React.FC = () => {
   };
 
   const filteredWebinars = webinars.filter(webinar => {
-    const matchesSearch = searchQuery === '' || 
+    const matchesSearch = searchQuery === '' ||
       webinar.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       webinar.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesCategory = !selectedCategory || webinar.category === selectedCategory;
-    
+
     return matchesSearch && matchesCategory;
   });
 
@@ -87,11 +87,11 @@ export const WebinarsPage: React.FC = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-6 shadow-lg">
             <Play className="h-10 w-10 text-white ml-1" />
           </div>
-          
+
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
             {t('pages.webinars.title')}
           </h1>
-          
+
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {t('pages.webinars.description')}
           </p>
@@ -248,11 +248,11 @@ export const WebinarsPage: React.FC = () => {
                   <Badge className="mb-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
                     ⭐ {t('common.featured')}
                   </Badge>
-                  
+
                   <h2 className="text-3xl font-bold text-gray-900 mb-4">
                     {filteredWebinars[0].title}
                   </h2>
-                  
+
                   <p className="text-gray-600 mb-6 text-lg">
                     {filteredWebinars[0].description}
                   </p>
@@ -307,7 +307,7 @@ export const WebinarsPage: React.FC = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
               {searchQuery || selectedCategory ? t('common.results') : t('common.all_items')}
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredWebinars.slice(1).map((webinar) => (
                 <MediaCard

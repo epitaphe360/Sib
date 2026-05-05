@@ -10,7 +10,7 @@ export const dashboardTranslations = {
     'dashboard.overview': 'Vue d\'ensemble',
     'dashboard.statistics': 'Statistiques',
     'dashboard.recent_activity': 'Activité récente',
-    
+
     // Statistiques communes
     'dashboard.stats.total': 'Total',
     'dashboard.stats.active': 'Actifs',
@@ -19,7 +19,7 @@ export const dashboardTranslations = {
     'dashboard.stats.growth': 'Croissance',
     'dashboard.stats.vs_last_month': 'vs mois dernier',
     'dashboard.stats.vs_last_week': 'vs semaine dernière',
-    
+
     // Dashboard Visiteur
     'dashboard.visitor.title': 'Tableau de bord Visiteur',
     'dashboard.visitor.welcome': 'Bienvenue sur votre espace visiteur',
@@ -34,7 +34,7 @@ export const dashboardTranslations = {
     'dashboard.visitor.browse_exhibitors': 'Parcourir les exposants',
     'dashboard.visitor.my_badge': 'Mon badge',
     'dashboard.visitor.upgrade_vip': 'Passer VIP',
-    
+
     // Dashboard Exposant
     'dashboard.exhibitor.title': 'Tableau de bord Exposant',
     'dashboard.exhibitor.welcome': 'Bienvenue sur votre espace exposant',
@@ -50,7 +50,7 @@ export const dashboardTranslations = {
     'dashboard.exhibitor.edit_profile': 'Modifier le profil',
     'dashboard.exhibitor.manage_schedule': 'Gérer l\'agenda',
     'dashboard.exhibitor.view_analytics': 'Voir les analyses',
-    
+
     // Dashboard Partenaire
     'dashboard.partner.title': 'Tableau de bord Partenaire',
     'dashboard.partner.welcome': 'Bienvenue sur votre espace partenaire',
@@ -64,7 +64,7 @@ export const dashboardTranslations = {
     'dashboard.partner.benefits': 'Avantages',
     'dashboard.partner.upload_media': 'Téléverser un média',
     'dashboard.partner.view_report': 'Voir le rapport',
-    
+
     // Dashboard Admin
     'dashboard.admin.title': 'Tableau de bord Administrateur',
     'dashboard.admin.welcome': 'Bienvenue Admin',
@@ -82,7 +82,7 @@ export const dashboardTranslations = {
     'dashboard.admin.manage_content': 'Gérer le contenu',
     'dashboard.admin.view_analytics': 'Voir les analyses',
     'dashboard.admin.settings': 'Paramètres',
-    
+
     // Admin - Gestion Articles/News
     'admin.news_management': 'Gestion des articles',
     'admin.manage_news_desc': 'Gérer et publier les actualités',
@@ -99,7 +99,7 @@ export const dashboardTranslations = {
     'admin.view_article': 'Voir l\'article',
     'admin.edit_article': 'Modifier l\'article',
     'admin.delete_article': 'Supprimer l\'article',
-    
+
     // Cartes de statistiques
     'dashboard.card.appointments': 'Rendez-vous',
     'dashboard.card.views': 'Vues',
@@ -115,7 +115,7 @@ export const dashboardTranslations = {
     'dashboard.overview': 'Overview',
     'dashboard.statistics': 'Statistics',
     'dashboard.recent_activity': 'Recent activity',
-    
+
     // Common statistics
     'dashboard.stats.total': 'Total',
     'dashboard.stats.active': 'Active',
@@ -124,7 +124,7 @@ export const dashboardTranslations = {
     'dashboard.stats.growth': 'Growth',
     'dashboard.stats.vs_last_month': 'vs last month',
     'dashboard.stats.vs_last_week': 'vs last week',
-    
+
     // Visitor Dashboard
     'dashboard.visitor.title': 'Visitor Dashboard',
     'dashboard.visitor.welcome': 'Welcome to your visitor space',
@@ -139,7 +139,7 @@ export const dashboardTranslations = {
     'dashboard.visitor.browse_exhibitors': 'Browse exhibitors',
     'dashboard.visitor.my_badge': 'My badge',
     'dashboard.visitor.upgrade_vip': 'Upgrade to VIP',
-    
+
     // Exhibitor Dashboard
     'dashboard.exhibitor.title': 'Exhibitor Dashboard',
     'dashboard.exhibitor.welcome': 'Welcome to your exhibitor space',
@@ -155,7 +155,7 @@ export const dashboardTranslations = {
     'dashboard.exhibitor.edit_profile': 'Edit profile',
     'dashboard.exhibitor.manage_schedule': 'Manage schedule',
     'dashboard.exhibitor.view_analytics': 'View analytics',
-    
+
     // Partner Dashboard
     'dashboard.partner.title': 'Partner Dashboard',
     'dashboard.partner.welcome': 'Welcome to your partner space',
@@ -169,7 +169,7 @@ export const dashboardTranslations = {
     'dashboard.partner.benefits': 'Benefits',
     'dashboard.partner.upload_media': 'Upload media',
     'dashboard.partner.view_report': 'View report',
-    
+
     // Admin Dashboard
     'dashboard.admin.title': 'Administrator Dashboard',
     'dashboard.admin.welcome': 'Welcome Admin',
@@ -187,7 +187,7 @@ export const dashboardTranslations = {
     'dashboard.admin.manage_content': 'Manage content',
     'dashboard.admin.view_analytics': 'View analytics',
     'dashboard.admin.settings': 'Settings',
-    
+
     // Admin - News Management
     'admin.news_management': 'News Management',
     'admin.manage_news_desc': 'Manage and publish news articles',
@@ -204,7 +204,7 @@ export const dashboardTranslations = {
     'admin.view_article': 'View article',
     'admin.edit_article': 'Edit article',
     'admin.delete_article': 'Delete article',
-    
+
     // Statistics cards
     'dashboard.card.appointments': 'Appointments',
     'dashboard.card.views': 'Views',
@@ -212,5 +212,95 @@ export const dashboardTranslations = {
     'dashboard.card.conversion': 'Conversion rate',
     'dashboard.card.revenue': 'Revenue',
     'dashboard.card.growth_rate': 'Growth rate',
+  },
+  ar: {
+    'dashboard.title': 'لوحة التحكم',
+    'dashboard.welcome': 'مرحباً',
+    'dashboard.overview': 'نظرة عامة',
+    'dashboard.statistics': 'إحصائيات',
+    'dashboard.recent_activity': 'النشاط الأخير',
+    'dashboard.stats.total': 'المجموع',
+    'dashboard.stats.active': 'نشط',
+    'dashboard.stats.pending': 'قيد الانتظار',
+    'dashboard.stats.completed': 'مكتمل',
+    'dashboard.stats.growth': 'النمو',
+    'dashboard.stats.vs_last_month': 'مقارنة بالشهر الماضي',
+    'dashboard.stats.vs_last_week': 'مقارنة بالأسبوع الماضي',
+    'dashboard.visitor.title': 'لوحة تحكم الزائر',
+    'dashboard.visitor.welcome': 'مرحباً بك في مساحة الزائر',
+    'dashboard.visitor.my_appointments': 'مواعيدي',
+    'dashboard.visitor.upcoming': 'القادمة',
+    'dashboard.visitor.past': 'المنتهية',
+    'dashboard.visitor.favorites': 'المفضلة',
+    'dashboard.visitor.exhibitors_saved': 'العارضون المحفوظون',
+    'dashboard.visitor.events_registered': 'الفعاليات المسجلة',
+    'dashboard.visitor.quick_actions': 'إجراءات سريعة',
+    'dashboard.visitor.book_appointment': 'حجز موعد',
+    'dashboard.visitor.browse_exhibitors': 'تصفح العارضين',
+    'dashboard.visitor.my_badge': 'شارتي',
+    'dashboard.visitor.upgrade_vip': 'الترقية إلى VIP',
+    'dashboard.exhibitor.title': 'لوحة تحكم العارض',
+    'dashboard.exhibitor.welcome': 'مرحباً بك في مساحة العارض',
+    'dashboard.exhibitor.appointments': 'المواعيد',
+    'dashboard.exhibitor.pending_requests': 'الطلبات المعلقة',
+    'dashboard.exhibitor.confirmed': 'المؤكدة',
+    'dashboard.exhibitor.profile_views': 'مشاهدات الملف',
+    'dashboard.exhibitor.visitors': 'الزوار',
+    'dashboard.exhibitor.leads': 'العملاء المحتملون',
+    'dashboard.exhibitor.minisite_visits': 'زيارات الموقع الصغير',
+    'dashboard.exhibitor.booth_number': 'رقم الجناح',
+    'dashboard.exhibitor.booth_size': 'حجم الجناح',
+    'dashboard.exhibitor.edit_profile': 'تعديل الملف',
+    'dashboard.exhibitor.manage_schedule': 'إدارة الجدول',
+    'dashboard.exhibitor.view_analytics': 'عرض التحليلات',
+    'dashboard.partner.title': 'لوحة تحكم الشريك',
+    'dashboard.partner.welcome': 'مرحباً بك في مساحة الشريك',
+    'dashboard.partner.visibility': 'الرؤية',
+    'dashboard.partner.impressions': 'الانطباعات',
+    'dashboard.partner.clicks': 'النقرات',
+    'dashboard.partner.engagement': 'التفاعل',
+    'dashboard.partner.leads_generated': 'العملاء المحتملون',
+    'dashboard.partner.media_views': 'مشاهدات الوسائط',
+    'dashboard.partner.sponsorship_level': 'مستوى الرعاية',
+    'dashboard.partner.benefits': 'المزايا',
+    'dashboard.partner.upload_media': 'رفع وسائط',
+    'dashboard.partner.view_report': 'عرض التقرير',
+    'dashboard.admin.title': 'لوحة تحكم المدير',
+    'dashboard.admin.welcome': 'مرحباً أيها المدير',
+    'dashboard.admin.total_users': 'إجمالي المستخدمين',
+    'dashboard.admin.exhibitors': 'العارضون',
+    'dashboard.admin.visitors': 'الزوار',
+    'dashboard.admin.partners': 'الشركاء',
+    'dashboard.admin.registrations': 'التسجيلات',
+    'dashboard.admin.today': 'اليوم',
+    'dashboard.admin.this_week': 'هذا الأسبوع',
+    'dashboard.admin.this_month': 'هذا الشهر',
+    'dashboard.admin.pending_validations': 'التحقق المعلق',
+    'dashboard.admin.system_health': 'صحة النظام',
+    'dashboard.admin.manage_users': 'إدارة المستخدمين',
+    'dashboard.admin.manage_content': 'إدارة المحتوى',
+    'dashboard.admin.view_analytics': 'عرض التحليلات',
+    'dashboard.admin.settings': 'الإعدادات',
+    'admin.news_management': 'إدارة المقالات',
+    'admin.manage_news_desc': 'إدارة ونشر الأخبار',
+    'admin.new_article': 'مقال جديد',
+    'admin.total_articles': 'إجمالي المقالات',
+    'admin.this_month': 'هذا الشهر',
+    'admin.search_article': 'البحث عن مقال...',
+    'admin.all_categories': 'جميع الفئات',
+    'admin.no_articles_found': 'لم يُعثر على مقالات',
+    'admin.no_articles_criteria': 'لا توجد مقالات تطابق معايير البحث.',
+    'admin.create_first_article': 'ابدأ بإنشاء أول مقال.',
+    'admin.create_article': 'إنشاء مقال',
+    'admin.featured': 'مميز',
+    'admin.view_article': 'عرض المقال',
+    'admin.edit_article': 'تعديل المقال',
+    'admin.delete_article': 'حذف المقال',
+    'dashboard.card.appointments': 'المواعيد',
+    'dashboard.card.views': 'المشاهدات',
+    'dashboard.card.leads': 'العملاء المحتملون',
+    'dashboard.card.conversion': 'معدل التحويل',
+    'dashboard.card.revenue': 'الإيرادات',
+    'dashboard.card.growth_rate': 'معدل النمو',
   },
 };

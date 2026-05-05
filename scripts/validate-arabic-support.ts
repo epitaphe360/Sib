@@ -113,7 +113,7 @@ async function validate() {
     },
     {
       name: 'Contient traductions auth arabes',
-      check: checkFile(translationsPath, /'auth\.login'/) && 
+      check: checkFile(translationsPath, /'auth\.login'/) &&
              checkFile(translationsPath, /'تسجيل الدخول'/)
     },
     {
@@ -266,7 +266,7 @@ async function validate() {
     },
     {
       name: 'i18next-browser-languagedetector installé',
-      check: packageJson?.dependencies?.['i18next-browser-languagedetector'] || 
+      check: packageJson?.dependencies?.['i18next-browser-languagedetector'] ||
              packageJson?.devDependencies?.['i18next-browser-languagedetector']
     }
   ];

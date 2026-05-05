@@ -729,7 +729,7 @@ function isValidConfig(url: string, key: string): boolean {
  * Env vars are resolved lazily so window.__ENV__ (Railway runtime injection) is always available.
  */
 function getSupabaseClient(): ReturnType<typeof createClient<Database>> | null {
-  if (supabaseClientInstance) return supabaseClientInstance;
+  if (supabaseClientInstance) {return supabaseClientInstance;}
 
   // Resolve env vars NOW (not at module load time)
   const url = getRuntimeEnv('VITE_SUPABASE_URL');
@@ -770,7 +770,7 @@ function getSupabaseClient(): ReturnType<typeof createClient<Database>> | null {
 
 // Export du client Supabase — résolu de manière lazy.
 // On utilise `let` car sur Railway, window.__ENV__ peut ne pas être disponible
-// au moment exact du chargement du module ; un retry asynchrone met 
+// au moment exact du chargement du module ; un retry asynchrone met
 // à jour la variable (ES module live binding).
 export let supabase: ReturnType<typeof createClient<Database>> | null = getSupabaseClient();
 

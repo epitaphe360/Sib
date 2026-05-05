@@ -13,30 +13,30 @@ export function initializeSentry() {
           blockAllMedia: true
         })
       ],
-      
+
       // Performance Monitoring
       tracesSampleRate: 0.1, // 10% des transactions
-      
+
       // Session Replay
       replaysSessionSampleRate: 0.1, // 10% des sessions
       replaysOnErrorSampleRate: 1.0, // 100% des sessions avec erreur
-      
+
       environment: import.meta.env.MODE,
       release: import.meta.env.VITE_APP_VERSION || '1.0.0',
-      
+
       beforeSend(event, hint) {
         // Filter out PII
         if (event.user?.email) {
           event.user.email = event.user.email.replace(/(.{2}).*(@.*)/, '$1***$2');
         }
-        
+
         // Add custom context
         event.tags = {
           ...event.tags,
           deployment: 'vercel',
           score: '98/100'
         };
-        
+
         return event;
       },
 

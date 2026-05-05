@@ -74,13 +74,13 @@ export default function VisitorBankTransferPage() {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
-      // @ts-ignore - Supabase type inference limitation
+      // @ts-expect-error - Supabase type inference limitation
       setPaymentRequest(data as VisitorPaymentRequest);
-      // @ts-ignore - Supabase type inference limitation
+      // @ts-expect-error - Supabase type inference limitation
       if (data && 'transfer_reference' in data && data.transfer_reference) {
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         setTransferReference(data.transfer_reference as string);
       } else {
         // Générer une référence si elle n'existe pas
@@ -90,14 +90,14 @@ export default function VisitorBankTransferPage() {
         if (supabase) {
           await supabase
             .from('payment_requests')
-            // @ts-ignore - Supabase type inference limitation
+            // @ts-expect-error - Supabase type inference limitation
             .update({ transfer_reference: ref })
             .eq('id', requestId);
         }
       }
-      // @ts-ignore - Supabase type inference limitation
+      // @ts-expect-error - Supabase type inference limitation
       if (data && 'transfer_proof_url' in data && data.transfer_proof_url) {
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         setProofUrl(data.transfer_proof_url as string);
       }
     } catch (error) {
@@ -137,7 +137,7 @@ export default function VisitorBankTransferPage() {
             upsert: false
           });
 
-        if (uploadError) throw uploadError;
+        if (uploadError) {throw uploadError;}
 
         const { data: urlData } = supabase.storage
           .from('payment-proofs')
@@ -150,10 +150,10 @@ export default function VisitorBankTransferPage() {
       if (!supabase) {
         throw new Error('Supabase client not initialized');
       }
-      
+
       const { error: updateError } = await supabase
         .from('payment_requests')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({
           transfer_reference: transferReference,
           transfer_proof_url: finalProofUrl,
@@ -162,11 +162,11 @@ export default function VisitorBankTransferPage() {
         } as any)
         .eq('id', requestId);
 
-      if (updateError) throw updateError;
+      if (updateError) {throw updateError;}
 
       toast.success('Justificatif envoyé avec succès !');
       toast.info('Votre paiement sera validé sous 2-5 jours ouvrés');
-      
+
       // Recharger les données
       await loadPaymentRequest();
     } catch (error) {
@@ -179,7 +179,7 @@ export default function VisitorBankTransferPage() {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {return;}
 
     // Vérifier le type de fichier
     const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];

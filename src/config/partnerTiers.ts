@@ -280,7 +280,7 @@ export function getPartnerQuota(tier: PartnerTier | string, quotaType: keyof Par
   const config = getPartnerTierConfig(tier);
   const quota = config.quotas[quotaType];
 
-  if (typeof quota === 'boolean') return quota ? 999999 : 0;
+  if (typeof quota === 'boolean') {return quota ? 999999 : 0;}
   return quota === -1 ? 999999 : quota;
 }
 
@@ -291,7 +291,7 @@ export function hasPartnerAccess(tier: PartnerTier | string, quotaType: keyof Pa
   const config = getPartnerTierConfig(tier);
   const quota = config.quotas[quotaType];
 
-  if (typeof quota === 'boolean') return quota;
+  if (typeof quota === 'boolean') {return quota;}
   return quota !== 0;
 }
 
@@ -304,7 +304,7 @@ export function calculatePartnerRemainingQuota(
   currentUsage: number
 ): number {
   const quota = getPartnerQuota(tier, quotaType);
-  if (quota === 999999) return 999999;
+  if (quota === 999999) {return 999999;}
   return Math.max(0, quota - currentUsage);
 }
 
@@ -371,7 +371,7 @@ export function getPartnerTierIndex(tier: PartnerTier | string): number {
 export function canUpgradeTo(currentTier: PartnerTier | string, targetTier: PartnerTier): boolean {
   const current = PARTNER_TIERS[currentTier as PartnerTier];
   const target = PARTNER_TIERS[targetTier];
-  if (!current || !target) return false;
+  if (!current || !target) {return false;}
   return target.price > current.price;
 }
 
@@ -381,6 +381,6 @@ export function canUpgradeTo(currentTier: PartnerTier | string, targetTier: Part
 export function calculateUpgradePrice(currentTier: PartnerTier | string, targetTier: PartnerTier): number {
   const current = PARTNER_TIERS[currentTier as PartnerTier];
   const target = PARTNER_TIERS[targetTier];
-  if (!current || !target) return 0;
+  if (!current || !target) {return 0;}
   return Math.max(0, target.price - current.price);
 }

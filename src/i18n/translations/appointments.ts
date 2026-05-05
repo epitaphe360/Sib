@@ -15,7 +15,7 @@ export const appointmentsTranslations = {
     'appointments.confirmed': 'Confirmés',
     'appointments.cancelled': 'Annulés',
     'appointments.no_appointments': 'Aucun rendez-vous',
-    
+
     // Calendrier
     'appointments.calendar.title': 'Calendrier',
     'appointments.calendar.day': 'Jour',
@@ -27,7 +27,7 @@ export const appointmentsTranslations = {
     'appointments.calendar.available': 'Disponible',
     'appointments.calendar.unavailable': 'Indisponible',
     'appointments.calendar.blocked': 'Bloqué',
-    
+
     // Créneaux (Slots)
     'appointments.slots.available': 'Créneaux disponibles',
     'appointments.slots.no_slots': 'Aucun créneau disponible',
@@ -38,7 +38,7 @@ export const appointmentsTranslations = {
     'appointments.slots.morning': 'Matin',
     'appointments.slots.afternoon': 'Après-midi',
     'appointments.slots.evening': 'Soir',
-    
+
     // Réservation
     'appointments.book.title': 'Réserver un rendez-vous',
     'appointments.book.with': 'Rendez-vous avec',
@@ -51,7 +51,7 @@ export const appointmentsTranslations = {
     'appointments.book.confirm': 'Confirmer la réservation',
     'appointments.book.success': 'Rendez-vous réservé avec succès',
     'appointments.book.error': 'Erreur lors de la réservation',
-    
+
     // Détails rendez-vous
     'appointments.detail.title': 'Détails du rendez-vous',
     'appointments.detail.with': 'Avec',
@@ -65,7 +65,7 @@ export const appointmentsTranslations = {
     'appointments.detail.subject': 'Sujet',
     'appointments.detail.notes': 'Notes',
     'appointments.detail.status': 'Statut',
-    
+
     // Actions
     'appointments.action.confirm': 'Confirmer',
     'appointments.action.cancel': 'Annuler',
@@ -75,14 +75,14 @@ export const appointmentsTranslations = {
     'appointments.action.add_notes': 'Ajouter des notes',
     'appointments.action.export': 'Exporter',
     'appointments.action.print': 'Imprimer',
-    
+
     // Statuts
     'appointments.status.pending': 'En attente',
     'appointments.status.confirmed': 'Confirmé',
     'appointments.status.completed': 'Terminé',
     'appointments.status.cancelled': 'Annulé',
     'appointments.status.no_show': 'Absent',
-    
+
     // Disponibilités
     'appointments.availability.title': 'Disponibilités',
     'appointments.availability.set': 'Définir mes disponibilités',
@@ -92,14 +92,14 @@ export const appointmentsTranslations = {
     'appointments.availability.breaks': 'Pauses',
     'appointments.availability.days_off': 'Jours de congé',
     'appointments.availability.recurring': 'Récurrent',
-    
+
     // Notifications
     'appointments.notification.new': 'Nouvelle demande de rendez-vous',
     'appointments.notification.confirmed': 'Rendez-vous confirmé',
     'appointments.notification.cancelled': 'Rendez-vous annulé',
     'appointments.notification.reminder': 'Rappel : Rendez-vous dans {{time}}',
     'appointments.notification.starting_soon': 'Votre rendez-vous commence dans 15 minutes',
-    
+
     // Quotas
     'appointments.quota.title': 'Quotas',
     'appointments.quota.remaining': 'Restants',
@@ -107,7 +107,7 @@ export const appointmentsTranslations = {
     'appointments.quota.limit': 'Limite',
     'appointments.quota.unlimited': 'Illimité',
     'appointments.quota.exceeded': 'Quota dépassé',
-    
+
     // Filtres
     'appointments.filter.all': 'Tous',
     'appointments.filter.today': 'Aujourd\'hui',
@@ -128,7 +128,7 @@ export const appointmentsTranslations = {
     'appointments.confirmed': 'Confirmed',
     'appointments.cancelled': 'Cancelled',
     'appointments.no_appointments': 'No appointments',
-    
+
     // Calendar
     'appointments.calendar.title': 'Calendar',
     'appointments.calendar.day': 'Day',
@@ -140,7 +140,7 @@ export const appointmentsTranslations = {
     'appointments.calendar.available': 'Available',
     'appointments.calendar.unavailable': 'Unavailable',
     'appointments.calendar.blocked': 'Blocked',
-    
+
     // Slots
     'appointments.slots.available': 'Available slots',
     'appointments.slots.no_slots': 'No slots available',
@@ -151,7 +151,7 @@ export const appointmentsTranslations = {
     'appointments.slots.morning': 'Morning',
     'appointments.slots.afternoon': 'Afternoon',
     'appointments.slots.evening': 'Evening',
-    
+
     // Booking
     'appointments.book.title': 'Book appointment',
     'appointments.book.with': 'Appointment with',
@@ -164,7 +164,7 @@ export const appointmentsTranslations = {
     'appointments.book.confirm': 'Confirm booking',
     'appointments.book.success': 'Appointment booked successfully',
     'appointments.book.error': 'Booking error',
-    
+
     // Appointment details
     'appointments.detail.title': 'Appointment details',
     'appointments.detail.with': 'With',
@@ -178,7 +178,7 @@ export const appointmentsTranslations = {
     'appointments.detail.subject': 'Subject',
     'appointments.detail.notes': 'Notes',
     'appointments.detail.status': 'Status',
-    
+
     // Actions
     'appointments.action.confirm': 'Confirm',
     'appointments.action.cancel': 'Cancel',
@@ -188,14 +188,14 @@ export const appointmentsTranslations = {
     'appointments.action.add_notes': 'Add notes',
     'appointments.action.export': 'Export',
     'appointments.action.print': 'Print',
-    
+
     // Statuses
     'appointments.status.pending': 'Pending',
     'appointments.status.confirmed': 'Confirmed',
     'appointments.status.completed': 'Completed',
     'appointments.status.cancelled': 'Cancelled',
     'appointments.status.no_show': 'No show',
-    
+
     // Availability
     'appointments.availability.title': 'Availability',
     'appointments.availability.set': 'Set my availability',
@@ -205,14 +205,14 @@ export const appointmentsTranslations = {
     'appointments.availability.breaks': 'Breaks',
     'appointments.availability.days_off': 'Days off',
     'appointments.availability.recurring': 'Recurring',
-    
+
     // Notifications
     'appointments.notification.new': 'New appointment request',
     'appointments.notification.confirmed': 'Appointment confirmed',
     'appointments.notification.cancelled': 'Appointment cancelled',
     'appointments.notification.reminder': 'Reminder: Appointment in {{time}}',
     'appointments.notification.starting_soon': 'Your appointment starts in 15 minutes',
-    
+
     // Quotas
     'appointments.quota.title': 'Quotas',
     'appointments.quota.remaining': 'Remaining',
@@ -220,7 +220,7 @@ export const appointmentsTranslations = {
     'appointments.quota.limit': 'Limit',
     'appointments.quota.unlimited': 'Unlimited',
     'appointments.quota.exceeded': 'Quota exceeded',
-    
+
     // Filters
     'appointments.filter.all': 'All',
     'appointments.filter.today': 'Today',
@@ -228,5 +228,97 @@ export const appointmentsTranslations = {
     'appointments.filter.month': 'This month',
     'appointments.filter.status': 'Status',
     'appointments.filter.type': 'Type',
+  },
+  ar: {
+    'appointments.title': 'المواعيد',
+    'appointments.subtitle': 'إدارة لقاءاتك المهنية',
+    'appointments.book': 'حجز موعد',
+    'appointments.my_appointments': 'مواعيدي',
+    'appointments.upcoming': 'القادمة',
+    'appointments.past': 'المنتهية',
+    'appointments.pending': 'قيد الانتظار',
+    'appointments.confirmed': 'مؤكدة',
+    'appointments.cancelled': 'ملغاة',
+    'appointments.no_appointments': 'لا توجد مواعيد',
+    'appointments.calendar.title': 'التقويم',
+    'appointments.calendar.day': 'يوم',
+    'appointments.calendar.week': 'أسبوع',
+    'appointments.calendar.month': 'شهر',
+    'appointments.calendar.today': 'اليوم',
+    'appointments.calendar.select_date': 'اختر تاريخاً',
+    'appointments.calendar.select_time': 'اختر وقتاً',
+    'appointments.calendar.available': 'متاح',
+    'appointments.calendar.unavailable': 'غير متاح',
+    'appointments.calendar.blocked': 'محجوب',
+    'appointments.slots.available': 'المواعيد المتاحة',
+    'appointments.slots.no_slots': 'لا توجد مواعيد متاحة',
+    'appointments.slots.duration': 'المدة: {{duration}} دقيقة',
+    'appointments.slots.select': 'اختر هذا الموعد',
+    'appointments.slots.generate': 'توليد المواعيد',
+    'appointments.slots.bulk_create': 'إنشاء جماعي',
+    'appointments.slots.morning': 'الصباح',
+    'appointments.slots.afternoon': 'بعد الظهر',
+    'appointments.slots.evening': 'المساء',
+    'appointments.book.title': 'حجز موعد',
+    'appointments.book.with': 'موعد مع',
+    'appointments.book.date': 'التاريخ',
+    'appointments.book.time': 'الوقت',
+    'appointments.book.duration': 'المدة',
+    'appointments.book.subject': 'الموضوع',
+    'appointments.book.message': 'رسالة (اختياري)',
+    'appointments.book.notes': 'ملاحظات',
+    'appointments.book.confirm': 'تأكيد الحجز',
+    'appointments.book.success': 'تم حجز الموعد بنجاح',
+    'appointments.book.error': 'خطأ في الحجز',
+    'appointments.detail.title': 'تفاصيل الموعد',
+    'appointments.detail.with': 'مع',
+    'appointments.detail.date': 'التاريخ',
+    'appointments.detail.time': 'الوقت',
+    'appointments.detail.duration': 'المدة',
+    'appointments.detail.location': 'الموقع',
+    'appointments.detail.booth': 'الجناح',
+    'appointments.detail.room': 'القاعة',
+    'appointments.detail.online': 'عبر الإنترنت',
+    'appointments.detail.subject': 'الموضوع',
+    'appointments.detail.notes': 'ملاحظات',
+    'appointments.detail.status': 'الحالة',
+    'appointments.action.confirm': 'تأكيد',
+    'appointments.action.cancel': 'إلغاء',
+    'appointments.action.reschedule': 'إعادة الجدولة',
+    'appointments.action.edit': 'تعديل',
+    'appointments.action.delete': 'حذف',
+    'appointments.action.add_notes': 'إضافة ملاحظات',
+    'appointments.action.export': 'تصدير',
+    'appointments.action.print': 'طباعة',
+    'appointments.status.pending': 'قيد الانتظار',
+    'appointments.status.confirmed': 'مؤكد',
+    'appointments.status.completed': 'مكتمل',
+    'appointments.status.cancelled': 'ملغى',
+    'appointments.status.no_show': 'لم يحضر',
+    'appointments.availability.title': 'الإتاحة',
+    'appointments.availability.set': 'تحديد إتاحتي',
+    'appointments.availability.edit': 'تعديل الإتاحة',
+    'appointments.availability.timezone': 'المنطقة الزمنية',
+    'appointments.availability.working_hours': 'ساعات العمل',
+    'appointments.availability.breaks': 'فترات الاستراحة',
+    'appointments.availability.days_off': 'أيام الإجازة',
+    'appointments.availability.recurring': 'متكرر',
+    'appointments.notification.new': 'طلب موعد جديد',
+    'appointments.notification.confirmed': 'تم تأكيد الموعد',
+    'appointments.notification.cancelled': 'تم إلغاء الموعد',
+    'appointments.notification.reminder': 'تذكير: موعد في {{time}}',
+    'appointments.notification.starting_soon': 'موعدك يبدأ خلال 15 دقيقة',
+    'appointments.quota.title': 'الحصص',
+    'appointments.quota.remaining': 'المتبقية',
+    'appointments.quota.used': 'المستخدمة',
+    'appointments.quota.limit': 'الحد',
+    'appointments.quota.unlimited': 'غير محدود',
+    'appointments.quota.exceeded': 'تم تجاوز الحصة',
+    'appointments.filter.all': 'الكل',
+    'appointments.filter.today': 'اليوم',
+    'appointments.filter.week': 'هذا الأسبوع',
+    'appointments.filter.month': 'هذا الشهر',
+    'appointments.filter.status': 'الحالة',
+    'appointments.filter.type': 'النوع',
   },
 };

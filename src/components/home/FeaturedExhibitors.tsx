@@ -34,7 +34,7 @@ export const FeaturedExhibitors: React.FC = () => {
   }, [exhibitors.length, fetchExhibitors]);
 
   useEffect(() => {
-    if (featuredExhibitors.length === 0) return;
+    if (featuredExhibitors.length === 0) {return;}
     import('../../services/supabaseService').then(({ SupabaseService }) => {
       Promise.all(
         featuredExhibitors.map(e =>

@@ -10,7 +10,7 @@ export const badgeTranslations = {
     'badge.download': 'Télécharger',
     'badge.print': 'Imprimer',
     'badge.qr_code': 'Code QR',
-    
+
     // Scanner
     'badge.scanner.title': 'Scanner de Badges',
     'badge.scanner.subtitle': 'Scannez les badges des visiteurs',
@@ -29,7 +29,7 @@ export const badgeTranslations = {
     'badge.scanner.error_stats': 'Erreur chargement stats',
     'badge.scanner.expired': 'Badge expiré',
     'badge.scanner.inactive': 'Badge inactif',
-    
+
     // Impression
     'badge.print.title': 'Station d\'Impression',
     'badge.print.subtitle': 'Imprimez votre badge sur place',
@@ -43,7 +43,7 @@ export const badgeTranslations = {
     'badge.print.error_printing': 'Erreur impression',
     'badge.print.error_camera': 'Erreur caméra',
     'badge.print.camera_activated': 'Caméra activée — Présentez un QR code',
-    
+
     // Informations
     'badge.info.name': 'Nom',
     'badge.info.company': 'Entreprise',
@@ -51,7 +51,7 @@ export const badgeTranslations = {
     'badge.info.type': 'Type de badge',
     'badge.info.valid': 'Valide',
     'badge.info.expires': 'Expire le',
-    
+
     // Types
     'badge.type.visitor': 'Visiteur',
     'badge.type.visitor_vip': 'Visiteur VIP',
@@ -68,7 +68,7 @@ export const badgeTranslations = {
     'badge.download': 'Download',
     'badge.print': 'Print',
     'badge.qr_code': 'QR Code',
-    
+
     // Scanner
     'badge.scanner.title': 'Badge Scanner',
     'badge.scanner.subtitle': 'Scan visitor badges',
@@ -87,7 +87,7 @@ export const badgeTranslations = {
     'badge.scanner.error_stats': 'Error loading stats',
     'badge.scanner.expired': 'Badge expired',
     'badge.scanner.inactive': 'Badge inactive',
-    
+
     // Printing
     'badge.print.title': 'Print Station',
     'badge.print.subtitle': 'Print your badge on-site',
@@ -101,7 +101,7 @@ export const badgeTranslations = {
     'badge.print.error_printing': 'Print error',
     'badge.print.error_camera': 'Camera error',
     'badge.print.camera_activated': 'Camera activated — Present a QR code',
-    
+
     // Information
     'badge.info.name': 'Name',
     'badge.info.company': 'Company',
@@ -109,7 +109,7 @@ export const badgeTranslations = {
     'badge.info.type': 'Badge type',
     'badge.info.valid': 'Valid',
     'badge.info.expires': 'Expires on',
-    
+
     // Types
     'badge.type.visitor': 'Visitor',
     'badge.type.visitor_vip': 'VIP Visitor',
@@ -118,5 +118,54 @@ export const badgeTranslations = {
     'badge.type.staff': 'Staff',
     'badge.type.press': 'Press',
     'badge.type.speaker': 'Speaker',
+  },
+  ar: {
+    'badge.title': 'شارتي',
+    'badge.subtitle': 'شارة الوصول SIB 2026',
+    'badge.download': 'تنزيل',
+    'badge.print': 'طباعة',
+    'badge.qr_code': 'رمز QR',
+    'badge.scanner.title': 'ماسح الشارات',
+    'badge.scanner.subtitle': 'امسح شارات الزوار',
+    'badge.scanner.scan': 'مسح',
+    'badge.scanner.success': 'تم مسح الشارة بنجاح',
+    'badge.scanner.error': 'خطأ في المسح',
+    'badge.scanner.invalid': 'شارة غير صالحة',
+    'badge.scanner.activated': 'تم تفعيل الماسح',
+    'badge.scanner.camera_activated': 'تم تفعيل الكاميرا — قدّم رمز QR',
+    'badge.scanner.error_camera': 'خطأ في الكاميرا',
+    'badge.scanner.error_start': 'خطأ في تشغيل الماسح',
+    'badge.scanner.error_stop': 'خطأ في إيقاف الماسح',
+    'badge.scanner.error_processing': 'خطأ في معالجة المسح',
+    'badge.scanner.error_validation': 'خطأ في التحقق من الشارة',
+    'badge.scanner.error_lead': 'خطأ في تسجيل العميل المحتمل',
+    'badge.scanner.error_stats': 'خطأ في تحميل الإحصائيات',
+    'badge.scanner.expired': 'الشارة منتهية الصلاحية',
+    'badge.scanner.inactive': 'الشارة غير نشطة',
+    'badge.print.title': 'محطة الطباعة',
+    'badge.print.subtitle': 'اطبع شارتك في الموقع',
+    'badge.print.select_printer': 'اختر الطابعة',
+    'badge.print.quality': 'الجودة',
+    'badge.print.print_button': 'طباعة',
+    'badge.print.success': 'تمت طباعة الشارة',
+    'badge.print.error': 'خطأ في الطباعة',
+    'badge.print.generated': 'تم إنشاء الشارة بنجاح!',
+    'badge.print.sent': 'تم إرسال الشارة إلى الطابعة!',
+    'badge.print.error_printing': 'خطأ في الطباعة',
+    'badge.print.error_camera': 'خطأ في الكاميرا',
+    'badge.print.camera_activated': 'تم تفعيل الكاميرا — قدّم رمز QR',
+    'badge.info.name': 'الاسم',
+    'badge.info.company': 'الشركة',
+    'badge.info.role': 'الوظيفة',
+    'badge.info.type': 'نوع الشارة',
+    'badge.info.valid': 'صالحة',
+    'badge.info.expires': 'تنتهي في',
+    'badge.type.visitor': 'زائر',
+    'badge.type.visitor_vip': 'زائر VIP',
+    'badge.type.exhibitor': 'عارض',
+    'badge.type.partner': 'شريك',
+    'badge.type.staff': 'موظف',
+    'badge.type.press': 'صحافة',
+    'badge.type.speaker': 'متحدث',
   },
 };

@@ -56,8 +56,8 @@ export default function AdminPressAccreditationsPage() {
   const handleUpdateStatus = async (id: string, newStatus: 'approved' | 'rejected') => {
     try {
       const { error } = await supabase.from('press_accreditations').update({ status: newStatus }).eq('id', id);
-      if (error && error.code !== '42P01') throw error;
-      
+      if (error && error.code !== '42P01') {throw error;}
+
       setAccreditations(prev => prev.map(a => a.id === id ? { ...a, status: newStatus } : a));
       toast.success(newStatus === 'approved' ? 'Accréditation validée' : 'Accréditation refusée');
     } catch (err: any) {
@@ -83,9 +83,9 @@ export default function AdminPressAccreditationsPage() {
                 <p className="text-gray-600 mt-1">Gérez les demandes de badges pour les journalistes</p>
               </div>
             </div>
-            
+
             {/* Filter */}
-            <select 
+            <select
               className="px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
@@ -110,7 +110,7 @@ export default function AdminPressAccreditationsPage() {
             {filtered.map(acc => (
               <motion.div key={acc.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                 <Card className={`p-6 border-t-4 h-full flex flex-col ${acc.status === 'approved' ? 'border-t-green-500' : acc.status === 'rejected' ? 'border-t-red-500' : 'border-t-blue-500'}`}>
-                  
+
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h3 className="text-lg font-bold text-gray-900 flex items-center">
@@ -141,15 +141,15 @@ export default function AdminPressAccreditationsPage() {
                   <div className="mt-auto pt-4 flex gap-2 border-t text-sm">
                     {acc.status === 'pending' ? (
                       <>
-                        <Button 
-                          className="flex-1 bg-green-600 hover:bg-green-700" 
+                        <Button
+                          className="flex-1 bg-green-600 hover:bg-green-700"
                           onClick={() => handleUpdateStatus(acc.id, 'approved')}
                         >
                           <CheckCircle className="h-4 w-4 mr-1" /> Accepter
                         </Button>
-                        <Button 
-                          variant="destructive" 
-                          className="flex-1" 
+                        <Button
+                          variant="destructive"
+                          className="flex-1"
                           onClick={() => handleUpdateStatus(acc.id, 'rejected')}
                         >
                           <XCircle className="h-4 w-4 mr-1" /> Refuser

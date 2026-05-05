@@ -1,7 +1,7 @@
 /**
  * PUSH NOTIFICATION SERVICE
  * Handles Firebase Cloud Messaging for web and mobile push notifications
- * 
+ *
  * Features:
  * - Register device tokens with Supabase
  * - Send targeted push notifications
@@ -110,7 +110,7 @@ class PushNotificationService {
   private async registerToken(token: string) {
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      
+
       if (!session?.user) {
         console.warn('⚠️ User not authenticated, skipping token registration');
         return;
@@ -183,8 +183,8 @@ class PushNotificationService {
   private async storeNotification(notification: NotificationData) {
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session?.user) return;
+
+      if (!session?.user) {return;}
 
       const { error } = await supabase
         .from('notifications')
@@ -208,7 +208,7 @@ class PushNotificationService {
 
   /**
    * Send notification to specific user
-   * 
+   *
    * This would be called from backend via Supabase Function
    * The function sends to Firebase Cloud Messaging
    */
@@ -319,8 +319,8 @@ class PushNotificationService {
    */
   private getPlatform(): string {
     const ua = navigator.userAgent.toLowerCase();
-    if (ua.includes('android')) return 'android';
-    if (ua.includes('iphone') || ua.includes('ipad')) return 'ios';
+    if (ua.includes('android')) {return 'android';}
+    if (ua.includes('iphone') || ua.includes('ipad')) {return 'ios';}
     return 'web';
   }
 
@@ -329,10 +329,10 @@ class PushNotificationService {
    */
   private getBrowserName(): string {
     const ua = navigator.userAgent;
-    if (ua.includes('Chrome')) return 'Chrome';
-    if (ua.includes('Safari')) return 'Safari';
-    if (ua.includes('Firefox')) return 'Firefox';
-    if (ua.includes('Edge')) return 'Edge';
+    if (ua.includes('Chrome')) {return 'Chrome';}
+    if (ua.includes('Safari')) {return 'Safari';}
+    if (ua.includes('Firefox')) {return 'Firefox';}
+    if (ua.includes('Edge')) {return 'Edge';}
     return 'Unknown';
   }
 
@@ -347,7 +347,7 @@ class PushNotificationService {
    * Check if user has granted permission
    */
   async hasPermission(): Promise<boolean> {
-    if (!this.isSupported) return false;
+    if (!this.isSupported) {return false;}
     return Notification.permission === 'granted';
   }
 

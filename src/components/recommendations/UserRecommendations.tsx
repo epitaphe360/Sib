@@ -49,7 +49,7 @@ const UserRecommendations: React.FC = () => {
             let foundProduct: Product | undefined;
             for (const exhibitor of exhibitors) {
               foundProduct = exhibitor.products.find(p => p.id === rec.itemId);
-              if (foundProduct) break;
+              if (foundProduct) {break;}
             }
             return { ...rec, product: foundProduct };
           }
@@ -132,16 +132,16 @@ const UserRecommendations: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {recommendations.map((rec) => {
           const item = rec.exhibitor || rec.product;
-          if (!item) return null;
+          if (!item) {return null;}
 
           const isExhibitor = !!rec.exhibitor;
           const title = isExhibitor ? (rec.exhibitor as Exhibitor).companyName : (rec.product as Product).name;
-          const description = isExhibitor 
-            ? (rec.exhibitor as Exhibitor).description 
+          const description = isExhibitor
+            ? (rec.exhibitor as Exhibitor).description
             : (rec.product as Product).description;
           const logo = isExhibitor ? (rec.exhibitor as Exhibitor).logo : undefined;
-          const category = isExhibitor 
-            ? (rec.exhibitor as Exhibitor).category 
+          const category = isExhibitor
+            ? (rec.exhibitor as Exhibitor).category
             : (rec.product as Product).category;
 
           return (

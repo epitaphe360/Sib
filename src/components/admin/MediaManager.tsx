@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { 
+import {
   Trash2,
   RefreshCw,
   Database,
@@ -67,7 +67,7 @@ export default function MediaManager() {
     setIsLoading(true);
     try {
       const { data, error } = await supabase!.storage.listBuckets();
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Enrichir avec des informations supplémentaires
       const enrichedBuckets = await Promise.all(
@@ -79,7 +79,7 @@ export default function MediaManager() {
 
             // Pour simplifier, nous ne calculons pas la taille réelle de tous les fichiers
             // car cela nécessiterait de nombreuses requêtes pour les gros buckets
-            
+
             return {
               ...bucket,
               file_count: fileCount,
@@ -92,7 +92,7 @@ export default function MediaManager() {
       );
 
       setBuckets(enrichedBuckets);
-      
+
       // Si aucun bucket n'est sélectionné et qu'il y a des buckets, sélectionner le premier
       if (!selectedBucket && enrichedBuckets.length > 0) {
         setSelectedBucket(enrichedBuckets[0].name);
@@ -109,7 +109,7 @@ export default function MediaManager() {
     setIsLoading(true);
     try {
       const { data, error } = await supabase!.storage.from(bucketName).list();
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Enrichir les fichiers avec des métadonnées (si disponibles)
       const enrichedFiles = await Promise.all(
@@ -177,10 +177,10 @@ export default function MediaManager() {
 
     try {
       const { error } = await supabase!.storage.emptyBucket(bucketName);
-      if (error) throw error;
+      if (error) {throw error;}
 
       const { error: deleteBucketError } = await supabase!.storage.deleteBucket(bucketName);
-      if (deleteBucketError) throw deleteBucketError;
+      if (deleteBucketError) {throw deleteBucketError;}
 
       toast.success(`Bucket "${bucketName}" supprimé avec succès`);
       if (selectedBucket === bucketName) {
@@ -194,14 +194,14 @@ export default function MediaManager() {
   };
 
   const handleDeleteFile = async (fileName: string) => {
-    if (!selectedBucket) return;
+    if (!selectedBucket) {return;}
     if (!window.confirm(`Êtes-vous sûr de vouloir supprimer le fichier "${fileName}" ? Cette action est irréversible.`)) {
       return;
     }
 
     try {
       const { error } = await supabase!.storage.from(selectedBucket).remove([fileName]);
-      if (error) throw error;
+      if (error) {throw error;}
 
       toast.success(`Fichier "${fileName}" supprimé avec succès`);
       fetchFiles(selectedBucket);
@@ -218,7 +218,7 @@ export default function MediaManager() {
     }
 
     const files = e.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {return;}
 
     setIsUploading(true);
     setUploadProgress(0);
@@ -279,10 +279,10 @@ export default function MediaManager() {
   };
 
   const getBucketIcon = (name: string) => {
-    if (name.includes('avatar')) return <User className="h-5 w-5" />;
-    if (name.includes('product')) return <Database className="h-5 w-5" />;
-    if (name.includes('exhibitor') || name.includes('company')) return <Building className="h-5 w-5" />;
-    if (name.includes('image') || name.includes('gallery')) return <ImageIcon className="h-5 w-5" />;
+    if (name.includes('avatar')) {return <User className="h-5 w-5" />;}
+    if (name.includes('product')) {return <Database className="h-5 w-5" />;}
+    if (name.includes('exhibitor') || name.includes('company')) {return <Building className="h-5 w-5" />;}
+    if (name.includes('image') || name.includes('gallery')) {return <ImageIcon className="h-5 w-5" />;}
     return <HardDrive className="h-5 w-5" />;
   };
 
@@ -291,7 +291,7 @@ export default function MediaManager() {
       <h1 className="text-2xl font-bold text-gray-900 mb-6">
         Gestionnaire de médias
       </h1>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Sidebar - Liste des buckets */}
         <div className="lg:col-span-1">
@@ -300,8 +300,8 @@ export default function MediaManager() {
               <h2 className="font-semibold text-gray-900">
                 Buckets de stockage
               </h2>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="sm"
                 onClick={fetchBuckets}
                 disabled={isLoading}
@@ -310,10 +310,10 @@ export default function MediaManager() {
                 <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               </Button>
             </div>
-            
+
             <div className="space-y-1 mb-4">
               {buckets.map(bucket => (
-                <div 
+                <div
                   key={bucket.id}
                   className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors
                     ${selectedBucket === bucket.name ? 'bg-blue-100' : 'hover:bg-gray-100'}`}
@@ -330,20 +330,20 @@ export default function MediaManager() {
                   </div>
                 </div>
               ))}
-              
+
               {buckets.length === 0 && !isLoading && (
                 <div className="text-sm text-gray-500 p-2">
                   Aucun bucket trouvé
                 </div>
               )}
-              
+
               {isLoading && (
                 <div className="flex items-center justify-center p-4">
                   <RefreshCw className="h-5 w-5 animate-spin text-blue-500" />
                 </div>
               )}
             </div>
-            
+
             {/* Création de bucket */}
             <div className="border-t pt-4">
               <h3 className="text-sm font-medium text-gray-700 mb-2">
@@ -357,7 +357,7 @@ export default function MediaManager() {
                   placeholder="Nom du bucket"
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                
+
                 <div className="flex items-center">
                   <input
                     type="checkbox"
@@ -370,7 +370,7 @@ export default function MediaManager() {
                     Bucket public
                   </label>
                 </div>
-                
+
                 <Button
                   onClick={handleCreateBucket}
                   disabled={isCreatingBucket || !newBucketName.trim()}
@@ -387,7 +387,7 @@ export default function MediaManager() {
             </div>
           </Card>
         </div>
-        
+
         {/* Contenu principal - Fichiers */}
         <div className="lg:col-span-3">
           <Card className="p-4">
@@ -395,12 +395,12 @@ export default function MediaManager() {
               <h2 className="font-semibold text-gray-900">
                 {selectedBucket ? `Fichiers dans "${selectedBucket}"` : 'Sélectionnez un bucket'}
               </h2>
-              
+
               <div className="flex items-center space-x-2">
                 {selectedBucket && (
                   <>
-                    <Button 
-                      variant="ghost" 
+                    <Button
+                      variant="ghost"
                       size="sm"
                       onClick={() => fetchFiles(selectedBucket)}
                       disabled={isLoading}
@@ -408,9 +408,9 @@ export default function MediaManager() {
                     >
                       <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                     </Button>
-                    
-                    <Button 
-                      variant="outline" 
+
+                    <Button
+                      variant="outline"
                       size="sm"
                       onClick={() => document.getElementById('file-upload')?.click()}
                       disabled={isUploading}
@@ -430,9 +430,9 @@ export default function MediaManager() {
                       className="hidden"
                       onChange={handleFileUpload}
                     />
-                    
-                    <Button 
-                      variant="ghost" 
+
+                    <Button
+                      variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteBucket(selectedBucket)}
                       className="text-red-500 hover:text-red-700 hover:bg-red-50"
@@ -444,13 +444,13 @@ export default function MediaManager() {
                 )}
               </div>
             </div>
-            
+
             {/* Barre de progression */}
             {isUploading && (
               <div className="w-full mb-4">
                 <div className="h-2 bg-gray-200 rounded-full">
-                  <div 
-                    className="h-2 bg-blue-600 rounded-full" 
+                  <div
+                    className="h-2 bg-blue-600 rounded-full"
                     style={{ width: `${uploadProgress}%` }}
                   ></div>
                 </div>
@@ -459,7 +459,7 @@ export default function MediaManager() {
                 </p>
               </div>
             )}
-            
+
             {/* Tableau des fichiers */}
             {selectedBucket ? (
               <>

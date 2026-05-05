@@ -54,7 +54,7 @@ export default function RegistrationRequests() {
   };
 
   const handleApprove = async (request: RegistrationRequest) => {
-    if (!user) return;
+    if (!user) {return;}
 
     try {
       // 1. Mettre à jour le statut de la demande

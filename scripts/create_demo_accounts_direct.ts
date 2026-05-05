@@ -10,10 +10,10 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 async function executeSQL(sql: string): Promise<any> {
   // Split by semicolon and execute each statement
   const statements = sql.split(';').filter(s => s.trim().length > 0);
-  
+
   for (const statement of statements) {
     console.log(`\n执行 SQL: ${statement.substring(0, 80)}...`);
-    
+
     try {
       const { data, error } = await supabase.rpc('exec_sql', {
         sql_string: statement
@@ -25,7 +25,7 @@ async function executeSQL(sql: string): Promise<any> {
       if (error) {
         // Si rpc n'existe pas, essayer via l'API directe
         console.log(`⚠️  RPC exec_sql non disponible, tentative directe...`);
-        
+
         // Essayer avec postgres directement via fetch
         const res = await fetch(`${SUPABASE_URL}/rest/v1/`, {
           method: 'POST',
@@ -65,7 +65,7 @@ async function setupDemoAccounts() {
 
     // Vérifier les comptes créés
     const { data: users } = await supabase.auth.admin.listUsers();
-    const demoUsers = users?.filter(u => 
+    const demoUsers = users?.filter(u =>
       u.email?.includes('@test.sib2026.ma') || u.email?.includes('@sib.com')
     );
 

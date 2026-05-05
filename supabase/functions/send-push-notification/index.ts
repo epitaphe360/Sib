@@ -58,7 +58,7 @@ Deno.serve(async (req: Request) => {
       .eq('user_id', userId)
       .eq('is_active', true);
 
-    if (subError) throw subError;
+    if (subError) {throw subError;}
 
     if (!subscriptions || subscriptions.length === 0) {
       return new Response(

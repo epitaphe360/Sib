@@ -10,7 +10,7 @@ const BASE_URL = 'http://localhost:9323';
 const PAGES = [
   '/',
   '/login',
-  '/register', 
+  '/register',
   '/forgot-password',
   '/exposants',
   '/events',
@@ -52,7 +52,7 @@ interface Result {
 async function checkPage(pagePath: string): Promise<Result> {
   const url = `${BASE_URL}${pagePath}`;
   const start = Date.now();
-  
+
   return new Promise((resolve) => {
     const req = http.get(url, { timeout: 10000 }, (res: any) => {
       const time = Date.now() - start;
@@ -62,7 +62,7 @@ async function checkPage(pagePath: string): Promise<Result> {
         time,
       });
     });
-    
+
     req.on('error', (err: any) => {
       resolve({
         page: pagePath,
@@ -71,7 +71,7 @@ async function checkPage(pagePath: string): Promise<Result> {
         error: err.message,
       });
     });
-    
+
     req.on('timeout', () => {
       req.destroy();
       resolve({
@@ -90,31 +90,31 @@ async function main() {
   console.log(`URL de base: ${BASE_URL}`);
   console.log(`Nombre de pages: ${PAGES.length}`);
   console.log('');
-  
+
   const results: Result[] = [];
-  
+
   for (const page of PAGES) {
     const result = await checkPage(page);
     results.push(result);
-    
+
     const statusIcon = result.status === 200 ? '[OK]' : '[!!]';
     console.log(`${statusIcon} ${page.padEnd(35)} - Status: ${result.status} (${result.time}ms)`);
     if (result.error) {
       console.log(`    Error: ${result.error}`);
     }
   }
-  
+
   console.log('');
   console.log('='.repeat(60));
   console.log('RESUME');
   console.log('='.repeat(60));
-  
+
   const ok = results.filter(r => r.status === 200).length;
   const errors = results.filter(r => r.status !== 200).length;
-  
+
   console.log(`Pages OK (200): ${ok}`);
   console.log(`Pages avec erreurs: ${errors}`);
-  
+
   if (errors > 0) {
     console.log('');
     console.log('Pages problematiques:');
@@ -122,7 +122,7 @@ async function main() {
       console.log(`  - ${r.page}: ${r.status} ${r.error || ''}`);
     });
   }
-  
+
   // Sauvegarder
   const fs = require('fs');
   const report = {
@@ -133,7 +133,7 @@ async function main() {
     errorPages: errors,
     results,
   };
-  
+
   fs.writeFileSync('test-results/quick-test-report.json', JSON.stringify(report, null, 2));
   console.log('');
   console.log('Rapport sauvegarde: test-results/quick-test-report.json');

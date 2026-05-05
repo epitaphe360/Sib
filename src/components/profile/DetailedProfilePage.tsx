@@ -131,7 +131,7 @@ export default function DetailedProfilePage() {
                 <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">
                   Contact Information
                 </h2>
-                
+
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <Mail className="w-5 h-5 text-gray-400" />
@@ -205,7 +205,7 @@ export default function DetailedProfilePage() {
                 <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">
                   Professional Information
                 </h2>
-                
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Company</label>

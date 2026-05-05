@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
-import { 
+import {
   Share2,
   MessageCircle,
   ArrowLeft,
@@ -89,18 +89,18 @@ interface ExhibitorData {
 // Image avec fallback
 const SafeImage = ({ src, alt, className, fallback }: { src?: string; alt: string; className?: string; fallback?: React.ReactNode }) => {
   const [error, setError] = useState(false);
-  
+
   if (!src || error) {
     return fallback || <div className={className}><Building2 className="w-full h-full p-4 text-gray-300" /></div>;
   }
-  
+
   return <img src={src} alt={alt} className={className} onError={() => setError(true)} />;
 };
 
 export default function MiniSitePreviewSimple() {
   const { exhibitorId } = useParams<{ exhibitorId: string }>();
   const navigate = useNavigate();
-  
+
   const [miniSiteData, setMiniSiteData] = useState<MiniSiteData | null>(null);
   const [exhibitorData, setExhibitorData] = useState<ExhibitorData | null>(null);
   const [products, setProducts] = useState<any[]>([]);
@@ -123,7 +123,7 @@ export default function MiniSitePreviewSimple() {
   }, [exhibitorId]);
 
   const loadData = async () => {
-    if (!exhibitorId) return;
+    if (!exhibitorId) {return;}
     setIsLoading(true);
     try {
       const [miniSite, exhibitor, prods] = await Promise.all([
@@ -156,7 +156,7 @@ export default function MiniSitePreviewSimple() {
 
       setMiniSiteData(miniSite);
       setProducts(prods || []);
-      
+
       await SupabaseService.incrementMiniSiteViews(exhibitorId);
     } catch (err) {
       console.error('Erreur:', err);
@@ -192,7 +192,7 @@ export default function MiniSitePreviewSimple() {
               ? "Cet exposant n'a pas encore créé son mini-site vitrine. Revenez bientôt pour découvrir leur présentation complète !"
               : error || "Ce mini-site n'existe pas ou n'est plus disponible."}
           </p>
-          
+
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button onClick={() => navigate(ROUTES.EXHIBITORS)} variant="outline" className="group">
@@ -204,7 +204,7 @@ export default function MiniSitePreviewSimple() {
               Découvrir SIB 2026
             </Button>
           </div>
-          
+
           {/* Message informatif pour exposants */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
@@ -229,10 +229,10 @@ export default function MiniSitePreviewSimple() {
   // Extraire les sections
   const heroSection = miniSiteData.sections?.find(s => s.type === 'hero');
   const aboutSection = miniSiteData.sections?.find(s => s.type === 'about');
-  
+
   // Priorité au logo du mini-site, puis fallback sur le logo de l'exposant
   const effectiveLogoUrl = miniSiteData.logo_url || exhibitorData.logo_url;
-  
+
   // Features/Values - S'assurer que c'est un array de strings
   let features = aboutSection?.content?.features || aboutSection?.content?.values || [];
   if (features.length > 0 && typeof features[0] === 'object') {
@@ -240,7 +240,7 @@ export default function MiniSitePreviewSimple() {
     features = features.map((f: any) => f.name || f.title || f.label || '');
   }
   features = features.filter((f: any) => typeof f === 'string' && f.trim() !== '');
-  
+
   // Contact info
   const contactInfo = exhibitorData.contact_info || {};
   const socialLinks = contactInfo.social || {};
@@ -274,7 +274,7 @@ export default function MiniSitePreviewSimple() {
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
-                <SafeImage 
+                <SafeImage
                   src={miniSiteData?.logo_url || exhibitorData?.logo_url}
                   alt={exhibitorData?.company_name}
                   className="h-10 w-10 rounded object-contain"
@@ -345,14 +345,14 @@ export default function MiniSitePreviewSimple() {
         <motion.div style={{ y: heroY }} className="absolute inset-0">
           {heroSection?.content?.backgroundImage ? (
             <>
-              <div 
+              <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: `url(${heroSection.content.backgroundImage})` }}
               />
               <div className="absolute inset-0 bg-black/50" />
             </>
           ) : (
-            <div 
+            <div
               className="absolute inset-0"
               style={{ background: `linear-gradient(135deg, ${theme.primaryColor}, ${theme.secondaryColor})` }}
             />
@@ -362,12 +362,12 @@ export default function MiniSitePreviewSimple() {
         {/* Content */}
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center text-white pt-20">
           {/* Logo */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             className="mb-8"
           >
-            <SafeImage 
+            <SafeImage
               src={effectiveLogoUrl}
               alt={exhibitorData.company_name}
               className="h-36 w-36 mx-auto rounded-2xl bg-white p-4 shadow-2xl object-contain"
@@ -388,9 +388,9 @@ export default function MiniSitePreviewSimple() {
           </motion.div>
 
           {/* Titre */}
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }} 
-            animate={{ opacity: 1, y: 0 }} 
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             className="text-4xl md:text-6xl font-bold mb-6"
           >
@@ -398,9 +398,9 @@ export default function MiniSitePreviewSimple() {
           </motion.h1>
 
           {/* Sous-titre */}
-          <motion.p 
-            initial={{ opacity: 0, y: 30 }} 
-            animate={{ opacity: 1, y: 0 }} 
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl mb-10 text-white/90 max-w-3xl mx-auto"
           >
@@ -408,13 +408,13 @@ export default function MiniSitePreviewSimple() {
           </motion.p>
 
           {/* Boutons */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} 
-            animate={{ opacity: 1, y: 0 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Button 
+            <Button
               size="lg"
               className="text-lg px-8 py-6 rounded-xl"
               style={{ backgroundColor: theme.accentColor }}
@@ -435,7 +435,7 @@ export default function MiniSitePreviewSimple() {
         </div>
 
         {/* Scroll indicator */}
-        <motion.div 
+        <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 cursor-pointer"
@@ -451,12 +451,12 @@ export default function MiniSitePreviewSimple() {
       <section id="about" className="py-24 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 relative overflow-hidden">
         {/* Decorative grid pattern */}
         <div className="absolute inset-0 opacity-[0.03]">
-          <div className="w-full h-full" style={{ 
+          <div className="w-full h-full" style={{
             backgroundImage: `radial-gradient(circle, ${theme.accentColor} 1px, transparent 1px)`,
             backgroundSize: '30px 30px'
           }} />
         </div>
-        
+
         <div className="max-w-6xl mx-auto px-6 relative">
           {/* Header */}
           <div className="text-center mb-16">
@@ -470,7 +470,7 @@ export default function MiniSitePreviewSimple() {
             <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium leading-relaxed mb-8">
               {aboutSection?.content?.description || aboutSection?.content?.text || exhibitorData.description || 'Nous sommes fiers de présenter nos solutions innovantes à SIB 2026.'}
             </p>
-            
+
             {/* Certification Badges */}
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Badge className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow">
@@ -494,12 +494,12 @@ export default function MiniSitePreviewSimple() {
               features.map((feature: any, index: number) => {
                 // Ensure feature is a string
                 const featureName = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-                if (!featureName) return null;
-                
+                if (!featureName) {return null;}
+
                 const featureIcons = [Sparkles, Star, Award, CheckCircle2];
                 const FeatureIcon = featureIcons[index % featureIcons.length];
                 const isExpanded = expandedFeatures[index] || false;
-                
+
                 // Descriptions génériques basées sur les domaines courants
                 const getFeatureDescription = (title: string) => {
                   const lowerTitle = title.toLowerCase();
@@ -523,19 +523,19 @@ export default function MiniSitePreviewSimple() {
                   }
                   return "Solution complète et personnalisée adaptée à vos besoins spécifiques et enjeux métiers.";
                 };
-                
+
                 return (
-                  <Card 
-                    key={featureName} 
+                  <Card
+                    key={featureName}
                     className="p-8 text-center hover:shadow-2xl transition-all duration-300 group bg-white/80 backdrop-blur-sm border-2 border-transparent hover:border-blue-200 hover:-translate-y-2 relative overflow-hidden cursor-pointer"
                     onClick={() => setExpandedFeatures(prev => ({ ...prev, [index]: !prev[index] }))}
                   >
-                    <div 
+                    <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                       style={{ background: `linear-gradient(135deg, ${theme.primaryColor}05, ${theme.accentColor}05)` }}
                     />
                     <div className="relative z-10">
-                      <div 
+                      <div
                         className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg"
                         style={{ background: `linear-gradient(135deg, ${theme.primaryColor}, ${theme.accentColor})` }}
                       >
@@ -559,15 +559,15 @@ export default function MiniSitePreviewSimple() {
                 { title: 'Déploiement international', icon: Globe }
               ].map((feature, index) => {
                 const FeatureIcon = feature.icon;
-                
+
                 return (
                   <Card key={feature.title} className="p-8 text-center hover:shadow-2xl transition-all duration-300 group bg-white/80 backdrop-blur-sm border-2 border-transparent hover:border-blue-200 hover:-translate-y-2 relative overflow-hidden">
-                    <div 
+                    <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                       style={{ background: `linear-gradient(135deg, ${theme.primaryColor}05, ${theme.accentColor}05)` }}
                     />
                     <div className="relative z-10">
-                      <div 
+                      <div
                         className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg"
                         style={{ background: `linear-gradient(135deg, ${theme.primaryColor}, ${theme.accentColor})` }}
                       >
@@ -587,8 +587,8 @@ export default function MiniSitePreviewSimple() {
             <div className={`grid grid-cols-1 gap-6 ${(aboutSection?.content?.images?.length > 0 || (aboutSection?.content?.image && aboutSection?.content?.images?.length > 0)) ? 'md:grid-cols-2' : 'md:grid-cols-1 max-w-2xl mx-auto'}`}>
               {aboutSection?.content?.image && (
                 <div className="rounded-2xl overflow-hidden shadow-lg">
-                  <img 
-                    src={aboutSection.content.image} 
+                  <img
+                    src={aboutSection.content.image}
                     alt="À propos"
                     className="w-full h-64 object-cover"
                     onError={(e) => (e.currentTarget.style.display = 'none')}
@@ -597,8 +597,8 @@ export default function MiniSitePreviewSimple() {
               )}
               {aboutSection?.content?.images?.map((img: string) => (
                 <div key={`img-${img.slice(-20)}`} className="rounded-2xl overflow-hidden shadow-lg">
-                  <img 
-                    src={img} 
+                  <img
+                    src={img}
                     alt="Image galerie"
                     className="w-full h-64 object-cover"
                     onError={(e) => (e.currentTarget.style.display = 'none')}
@@ -653,16 +653,16 @@ export default function MiniSitePreviewSimple() {
           {products.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product) => (
-                <Card 
-                  key={product.id} 
+                <Card
+                  key={product.id}
                   className="overflow-hidden hover:shadow-2xl transition-all duration-300 border-4 border-gray-100 hover:border-blue-200 group relative"
                 >
                   {/* Animated border effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-blue-500/20 group-hover:via-purple-500/20 group-hover:to-pink-500/20 transition-all duration-500 pointer-events-none rounded-lg" />
-                  
+
                   {/* Image with enhanced overlay */}
                   <div className="h-56 bg-gray-100 relative overflow-hidden">
-                    <SafeImage 
+                    <SafeImage
                       src={product.image || product.images?.[0]}
                       alt={product.name}
                       className="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700"
@@ -674,10 +674,10 @@ export default function MiniSitePreviewSimple() {
                         </div>
                       }
                     />
-                    
+
                     {/* Dark overlay on hover */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    
+
                     {/* Stock & Category Badges */}
                     <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
                       {/* Stock Badge */}
@@ -687,7 +687,7 @@ export default function MiniSitePreviewSimple() {
                           En stock
                         </Badge>
                       )}
-                      
+
                       {/* Category Badge */}
                       {product.category && (
                         <Badge className="px-3 py-1 text-xs font-bold shadow-lg bg-gradient-to-r from-blue-500 to-cyan-600 text-white border-0">
@@ -696,7 +696,7 @@ export default function MiniSitePreviewSimple() {
                       )}
                     </div>
                   </div>
-                  
+
                   {/* Content - Enhanced */}
                   <div className="p-6 relative z-10">
                     <h3 className="text-xl font-black mb-3 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all">
@@ -705,7 +705,7 @@ export default function MiniSitePreviewSimple() {
                     <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
                       {product.description}
                     </p>
-                    
+
                     {/* Features with modern styling */}
                     {product.features?.length > 0 && (
                       <div className="space-y-2 mb-4">
@@ -719,7 +719,7 @@ export default function MiniSitePreviewSimple() {
                         ))}
                       </div>
                     )}
-                    
+
                     {/* Price & CTA - Enhanced */}
                     <div className="flex items-center justify-between pt-4 border-t-2 border-gray-100 group-hover:border-blue-200 transition-colors">
                       <div className="flex-1">
@@ -737,8 +737,8 @@ export default function MiniSitePreviewSimple() {
                           </div>
                         )}
                       </div>
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         className="rounded-xl px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105"
                         onClick={() => setSelectedProduct(product)}
                       >
@@ -909,7 +909,7 @@ export default function MiniSitePreviewSimple() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
             {/* Logo & Name */}
             <div className="flex items-center gap-4">
-              <SafeImage 
+              <SafeImage
                 src={effectiveLogoUrl}
                 alt={exhibitorData.company_name}
                 className="h-12 w-12 rounded-xl bg-white p-2 object-contain"

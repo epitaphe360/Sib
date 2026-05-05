@@ -30,10 +30,10 @@ export function QuotaWidget({
   const remaining = isUnlimited ? Infinity : Math.max(0, limit - current);
 
   const status = useMemo(() => {
-    if (isUnlimited) return 'unlimited';
-    if (percentage >= 100) return 'exceeded';
-    if (percentage >= 80) return 'warning';
-    if (percentage >= 50) return 'moderate';
+    if (isUnlimited) {return 'unlimited';}
+    if (percentage >= 100) {return 'exceeded';}
+    if (percentage >= 80) {return 'warning';}
+    if (percentage >= 50) {return 'moderate';}
     return 'good';
   }, [percentage, isUnlimited]);
 
@@ -58,9 +58,9 @@ export function QuotaWidget({
   };
 
   const getStatusIcon = () => {
-    if (isUnlimited) return <Crown className="h-4 w-4 text-purple-600" />;
-    if (status === 'exceeded') return <AlertCircle className="h-4 w-4 text-red-600" />;
-    if (status === 'warning') return <AlertCircle className="h-4 w-4 text-orange-600" />;
+    if (isUnlimited) {return <Crown className="h-4 w-4 text-purple-600" />;}
+    if (status === 'exceeded') {return <AlertCircle className="h-4 w-4 text-red-600" />;}
+    if (status === 'warning') {return <AlertCircle className="h-4 w-4 text-orange-600" />;}
     return <CheckCircle className="h-4 w-4 text-green-600" />;
   };
 
@@ -82,9 +82,9 @@ export function QuotaWidget({
               {current} / {limit}
             </span>
             <span className="text-gray-500">
-              {remaining === Infinity 
-                ? t('quota.remaining_unlimited') 
-                : remaining > 1 
+              {remaining === Infinity
+                ? t('quota.remaining_unlimited')
+                : remaining > 1
                   ? t('quota.remaining_plural', { count: remaining })
                   : t('quota.remaining', { count: remaining })
               }
@@ -162,7 +162,7 @@ export function LevelBadge({ level, type, showIcon = true, size = 'md' }: LevelB
   };
 
   return (
-    <div 
+    <div
       className={`inline-flex items-center space-x-1 rounded-full font-semibold ${config.color} ${sizeClasses[size]}`}
       data-testid="level-badge"
       data-level={level}

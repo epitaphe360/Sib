@@ -116,7 +116,7 @@ function generateReport() {
   // Sauvegarder le rapport
   const reportDir = path.join(process.cwd(), 'test-reports');
   fs.mkdirSync(reportDir, { recursive: true });
-  
+
   const report = {
     date: new Date().toISOString(),
     issuesCount: issues.length,

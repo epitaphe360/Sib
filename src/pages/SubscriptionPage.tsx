@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
-import { 
-  Check, X, Crown, Zap, Star, Award, 
+import {
+  Check, X, Crown, Zap, Star, Award,
   Anchor, Globe, Users, GraduationCap, Landmark,
   Ship, Cog, BookOpen, Palette, ArrowRight,
   MapPin, CalendarDays, Clock, CreditCard,

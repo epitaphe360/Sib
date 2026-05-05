@@ -19,7 +19,7 @@ export const eventsTranslations = {
     'events.cancelled': 'Annulé',
     'events.no_results': 'Aucun événement trouvé',
     'events.count': '{{count}} événements',
-    
+
     // Types d'événements
     'events.type.all': 'Tous les types',
     'events.type.conference': 'Conférence',
@@ -31,7 +31,7 @@ export const eventsTranslations = {
     'events.type.demo': 'Démonstration',
     'events.type.meeting': 'Réunion',
     'events.type.keynote': 'Keynote',
-    
+
     // Détails événement
     'events.detail.date': 'Date',
     'events.detail.time': 'Horaire',
@@ -47,7 +47,7 @@ export const eventsTranslations = {
     'events.detail.materials': 'Supports',
     'events.detail.language': 'Langue',
     'events.detail.target_audience': 'Public cible',
-    
+
     // Inscription
     'events.register.title': 'S\'inscrire à l\'événement',
     'events.register.confirm': 'Confirmer l\'inscription',
@@ -57,14 +57,14 @@ export const eventsTranslations = {
     'events.register.full_message': 'Cet événement est complet',
     'events.register.deadline_passed': 'Date limite dépassée',
     'events.register.already_registered': 'Vous êtes déjà inscrit',
-    
+
     // Filtres
     'events.filter.date': 'Date',
     'events.filter.type': 'Type',
     'events.filter.location': 'Lieu',
     'events.filter.language': 'Langue',
     'events.filter.free_seats': 'Places disponibles',
-    
+
     // Mes événements
     'events.my_events': 'Mes événements',
     'events.my_registrations': 'Mes inscriptions',
@@ -72,13 +72,13 @@ export const eventsTranslations = {
     'events.share': 'Partager',
     'events.reminder': 'Rappel',
     'events.set_reminder': 'Définir un rappel',
-    
+
     // Programme scientifique
     'events.program.scientific': 'Programme Scientifique',
     'events.program.business': 'Programme Business',
     'events.program.social': 'Programme Social',
     'events.program.download': 'Télécharger le programme',
-    
+
     // Statuts
     'events.status.scheduled': 'Programmé',
     'events.status.in_progress': 'En cours',
@@ -88,13 +88,13 @@ export const eventsTranslations = {
     'events.status.confirmed': 'Confirmé',
     'events.status.pending': 'En attente',
     'events.status.draft': 'Brouillon',
-    
+
     // Admin
     'events.admin.manage': 'Gérer les événements',
     'events.admin.create': 'Créer un événement',
     'events.admin.edit': 'Modifier l\'événement',
     'events.admin.loading_error': 'Échec du chargement des événements. Veuillez réessayer plus tard.',
-    
+
     // Notifications
     'events.notification.starts_soon': 'L\'événement commence dans {{time}}',
     'events.notification.reminder': 'Rappel : {{event}} demain à {{time}}',
@@ -117,7 +117,7 @@ export const eventsTranslations = {
     'events.cancelled': 'Cancelled',
     'events.no_results': 'No events found',
     'events.count': '{{count}} events',
-    
+
     // Event types
     'events.type.all': 'All types',
     'events.type.conference': 'Conference',
@@ -129,7 +129,7 @@ export const eventsTranslations = {
     'events.type.demo': 'Demonstration',
     'events.type.meeting': 'Meeting',
     'events.type.keynote': 'Keynote',
-    
+
     // Event details
     'events.detail.date': 'Date',
     'events.detail.time': 'Time',
@@ -145,7 +145,7 @@ export const eventsTranslations = {
     'events.detail.materials': 'Materials',
     'events.detail.language': 'Language',
     'events.detail.target_audience': 'Target audience',
-    
+
     // Registration
     'events.register.title': 'Register for event',
     'events.register.confirm': 'Confirm registration',
@@ -155,14 +155,14 @@ export const eventsTranslations = {
     'events.register.full_message': 'This event is full',
     'events.register.deadline_passed': 'Deadline passed',
     'events.register.already_registered': 'Already registered',
-    
+
     // Filters
     'events.filter.date': 'Date',
     'events.filter.type': 'Type',
     'events.filter.location': 'Location',
     'events.filter.language': 'Language',
     'events.filter.free_seats': 'Available seats',
-    
+
     // My events
     'events.my_events': 'My events',
     'events.my_registrations': 'My registrations',
@@ -170,13 +170,13 @@ export const eventsTranslations = {
     'events.share': 'Share',
     'events.reminder': 'Reminder',
     'events.set_reminder': 'Set reminder',
-    
+
     // Programs
     'events.program.scientific': 'Scientific Program',
     'events.program.business': 'Business Program',
     'events.program.social': 'Social Program',
     'events.program.download': 'Download program',
-    
+
     // Statuses
     'events.status.scheduled': 'Scheduled',
     'events.status.in_progress': 'In progress',
@@ -184,7 +184,7 @@ export const eventsTranslations = {
     'events.status.confirmed': 'Confirmed',
     'events.status.pending': 'Pending',
     'events.status.draft': 'Draft',
-    
+
     // Admin
     'events.admin.manage': 'Manage events',
     'events.admin.create': 'Create event',
@@ -192,11 +192,90 @@ export const eventsTranslations = {
     'events.admin.loading_error': 'Failed to load events. Please try again later.',
     'events.status.cancelled': 'Cancelled',
     'events.status.postponed': 'Postponed',
-    
+
     // Notifications
     'events.notification.starts_soon': 'Event starts in {{time}}',
     'events.notification.reminder': 'Reminder: {{event}} tomorrow at {{time}}',
     'events.notification.cancelled': '{{event}} has been cancelled',
     'events.notification.updated': '{{event}} has been updated',
+  },
+  ar: {
+    'events.title': 'الفعاليات',
+    'events.subtitle': 'مؤتمرات وورش عمل وأنشطة المعرض',
+    'events.search': 'البحث عن فعالية',
+    'events.all': 'جميع الفعاليات',
+    'events.upcoming': 'القادمة',
+    'events.today': 'اليوم',
+    'events.tomorrow': 'غداً',
+    'events.this_week': 'هذا الأسبوع',
+    'events.register': 'التسجيل',
+    'events.registered': 'مسجّل',
+    'events.full': 'ممتلئ',
+    'events.cancelled': 'ملغى',
+    'events.no_results': 'لم يُعثر على فعاليات',
+    'events.count': '{{count}} فعالية',
+    'events.type.all': 'جميع الأنواع',
+    'events.type.conference': 'مؤتمر',
+    'events.type.workshop': 'ورشة عمل',
+    'events.type.panel': 'نقاش',
+    'events.type.roundtable': 'طاولة مستديرة',
+    'events.type.networking': 'تواصل مهني',
+    'events.type.ceremony': 'حفل',
+    'events.type.demo': 'عرض توضيحي',
+    'events.type.meeting': 'اجتماع',
+    'events.type.keynote': 'كلمة رئيسية',
+    'events.detail.date': 'التاريخ',
+    'events.detail.time': 'الوقت',
+    'events.detail.duration': 'المدة',
+    'events.detail.location': 'الموقع',
+    'events.detail.capacity': 'السعة',
+    'events.detail.available_seats': 'الأماكن المتاحة',
+    'events.detail.speaker': 'المتحدث',
+    'events.detail.speakers': 'المتحدثون',
+    'events.detail.moderator': 'المحاور',
+    'events.detail.description': 'الوصف',
+    'events.detail.agenda': 'البرنامج',
+    'events.detail.materials': 'المواد',
+    'events.detail.language': 'اللغة',
+    'events.detail.target_audience': 'الجمهور المستهدف',
+    'events.register.title': 'التسجيل في الفعالية',
+    'events.register.confirm': 'تأكيد التسجيل',
+    'events.register.cancel': 'إلغاء التسجيل',
+    'events.register.success': 'تم تأكيد التسجيل!',
+    'events.register.error': 'خطأ في التسجيل',
+    'events.register.full_message': 'هذه الفعالية ممتلئة',
+    'events.register.deadline_passed': 'انتهت مهلة التسجيل',
+    'events.register.already_registered': 'أنت مسجّل بالفعل',
+    'events.filter.date': 'التاريخ',
+    'events.filter.type': 'النوع',
+    'events.filter.location': 'الموقع',
+    'events.filter.language': 'اللغة',
+    'events.filter.free_seats': 'الأماكن المتاحة',
+    'events.my_events': 'فعالياتي',
+    'events.my_registrations': 'تسجيلاتي',
+    'events.add_to_calendar': 'إضافة إلى التقويم',
+    'events.share': 'مشاركة',
+    'events.reminder': 'تذكير',
+    'events.set_reminder': 'تعيين تذكير',
+    'events.program.scientific': 'البرنامج العلمي',
+    'events.program.business': 'برنامج الأعمال',
+    'events.program.social': 'البرنامج الاجتماعي',
+    'events.program.download': 'تنزيل البرنامج',
+    'events.status.scheduled': 'مجدول',
+    'events.status.in_progress': 'جارٍ',
+    'events.status.completed': 'مكتمل',
+    'events.status.cancelled': 'ملغى',
+    'events.status.postponed': 'مؤجل',
+    'events.status.confirmed': 'مؤكد',
+    'events.status.pending': 'قيد الانتظار',
+    'events.status.draft': 'مسودة',
+    'events.admin.manage': 'إدارة الفعاليات',
+    'events.admin.create': 'إنشاء فعالية',
+    'events.admin.edit': 'تعديل الفعالية',
+    'events.admin.loading_error': 'فشل تحميل الفعاليات. يرجى المحاولة لاحقاً.',
+    'events.notification.starts_soon': 'تبدأ الفعالية خلال {{time}}',
+    'events.notification.reminder': 'تذكير: {{event}} غداً في {{time}}',
+    'events.notification.cancelled': 'تم إلغاء {{event}}',
+    'events.notification.updated': 'تم تحديث {{event}}',
   },
 };

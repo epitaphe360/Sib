@@ -1,6 +1,6 @@
 /**
  * Page Station d'Impression de Badges - Service Clientèle
- * 
+ *
  * Cette page est utilisée par le personnel du stand "Service Clientèle"
  * pour scanner les QR codes des participants et imprimer leurs badges papier.
  *
@@ -55,8 +55,7 @@ import {
   BadgeLookupResult,
   PrintRecord,
 } from '../services/badgePrintService';
-import { generateBadgeFromUser } from '../services/badgeService';
-import { getBadgeColor, getAccessLevelLabel } from '../services/badgeService';
+import { generateBadgeFromUser, getBadgeColor, getAccessLevelLabel } from '../services/badgeService';
 import PrintableBadge from '../components/badge/PrintableBadge';
 
 type Tab = 'scanner' | 'search' | 'history' | 'stats';
@@ -153,7 +152,7 @@ export default function BadgePrintStationPage() {
 
   // --- Recherche manuelle ---
   const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim()) {return;}
 
     setIsSearching(true);
     setSearchResults([]);
@@ -202,7 +201,7 @@ export default function BadgePrintStationPage() {
 
   // --- Impression ---
   const handlePrint = async () => {
-    if (!lookupResult?.badge) return;
+    if (!lookupResult?.badge) {return;}
 
     setIsPrinting(true);
 
@@ -548,7 +547,7 @@ export default function BadgePrintStationPage() {
               key={tab.id}
               onClick={() => {
                 setActiveTab(tab.id);
-                if (tab.id !== 'scanner') stopScanning();
+                if (tab.id !== 'scanner') {stopScanning();}
               }}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id
@@ -987,7 +986,7 @@ export default function BadgePrintStationPage() {
                         onClick={() => {
                           // Re-scan
                           handleReset();
-                          if (activeTab === 'scanner') startScanning();
+                          if (activeTab === 'scanner') {startScanning();}
                         }}
                       >
                         <RefreshCw className="w-4 h-4 mr-1" />

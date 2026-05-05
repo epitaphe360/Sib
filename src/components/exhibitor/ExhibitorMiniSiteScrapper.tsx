@@ -60,7 +60,7 @@ export default function ExhibitorMiniSiteScrapper({ exhibitorId, userId, onSucce
   };
 
   const handleSave = async () => {
-    if (!scrapResult) return;
+    if (!scrapResult) {return;}
 
     setIsLoading(true);
     const savingToast = toast.loading('💾 Publication du mini-site...');

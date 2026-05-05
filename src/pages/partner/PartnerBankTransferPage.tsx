@@ -78,7 +78,7 @@ export default function PartnerBankTransferPage() {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setPaymentRequest(data);
       if (data?.transfer_reference) {
@@ -115,7 +115,7 @@ export default function PartnerBankTransferPage() {
     }
     if (expectedAmount && Math.abs(parsedDeclaredAmount - expectedAmount) > 0.01) {
       toast.error(
-        `Montant incorrect. Attendu : $${expectedAmount.toLocaleString('fr-FR')} USD — Saisi : $${parsedDeclaredAmount.toLocaleString('fr-FR')} USD. Vérifiez votre virement.`
+        `Montant incorrect. Attendu : $${expectedAmount.toLocaleString('fr-FR')} USD — Saisi : $${parsedDeclaredAmount.toLocaleString('fr-FR')} USD. Vérifiez votre virement.`
       );
       return;
     }
@@ -162,7 +162,7 @@ export default function PartnerBankTransferPage() {
         .eq('id', requestId)
         .eq('user_id', user?.id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Créer une notification pour les admins
       try {
@@ -204,7 +204,7 @@ export default function PartnerBankTransferPage() {
 
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {return;}
 
     // Validate file type
     const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
@@ -496,7 +496,7 @@ export default function PartnerBankTransferPage() {
                 </div>
                 {paymentRequest?.amount && (
                   <p className="text-xs text-blue-600 mt-1">
-                    Montant attendu : <strong>${paymentRequest.amount.toLocaleString('fr-FR')} USD</strong>
+                    Montant attendu : <strong>${paymentRequest.amount.toLocaleString('fr-FR')} USD</strong>
                   </p>
                 )}
               </div>
@@ -505,7 +505,7 @@ export default function PartnerBankTransferPage() {
                 <label htmlFor="proof-upload" className="block text-sm font-medium text-gray-700 mb-2">
                   Justificatif de virement <span className="text-red-500">*</span>
                 </label>
-                
+
                 {/* File Upload */}
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
                   <input
@@ -538,7 +538,7 @@ export default function PartnerBankTransferPage() {
                       </>
                     )}
                   </label>
-                  
+
                   {uploadProgress > 0 && uploadProgress < 100 && (
                     <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
                       <div

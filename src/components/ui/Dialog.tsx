@@ -43,7 +43,7 @@ const DialogContext = React.createContext<{
 
 export function Dialog({ open = false, onOpenChange, children }: DialogProps) {
   const [internalOpen, setInternalOpen] = React.useState(open);
-  
+
   React.useEffect(() => {
     setInternalOpen(open);
   }, [open]);
@@ -62,7 +62,7 @@ export function Dialog({ open = false, onOpenChange, children }: DialogProps) {
 
 export function DialogTrigger({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) {
   const { onOpenChange } = React.useContext(DialogContext);
-  
+
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(children as React.ReactElement<any>, {
       onClick: () => onOpenChange(true),
@@ -79,16 +79,16 @@ export function DialogTrigger({ children, asChild }: { children: React.ReactNode
 export function DialogContent({ className, children }: DialogContentProps) {
   const { open, onOpenChange } = React.useContext(DialogContext);
 
-  if (!open) return null;
+  if (!open) {return null;}
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-black/50 backdrop-blur-sm"
         onClick={() => onOpenChange(false)}
       />
-      
+
       {/* Content */}
       <div
         className={cn(
@@ -144,7 +144,7 @@ export function DialogFooter({ className, children }: DialogFooterProps) {
 
 export function DialogClose({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) {
   const { onOpenChange } = React.useContext(DialogContext);
-  
+
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(children as React.ReactElement<any>, {
       onClick: () => onOpenChange(false),

@@ -8,8 +8,7 @@ import { ArrowLeft, Calendar, Clock, User, Eye, Share2, Bookmark, MessageCircle,
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
-import { useNewsStore } from '../store/newsStore';
-import type { NewsArticle } from '../store/newsStore';
+import { useNewsStore, type NewsArticle } from '../store/newsStore';
 import { motion } from 'framer-motion';
 import ArticleAudioPlayer from '../components/news/ArticleAudioPlayer';
 import { ROUTES } from '../lib/routes';
@@ -18,7 +17,7 @@ import { ROUTES } from '../lib/routes';
 const getFullArticleText = (article: NewsArticle): string => {
   // Strip HTML tags pour obtenir du texte pur
   const stripHtml = (html: string) => html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-  
+
   const fullText = `
     ${stripHtml(article.title)}
     
@@ -26,7 +25,7 @@ const getFullArticleText = (article: NewsArticle): string => {
     
     ${stripHtml(article.content)}
   `;
-  
+
   return fullText.trim();
 };
 
@@ -40,7 +39,7 @@ export default function ArticleDetailPage() {
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [readingProgress, setReadingProgress] = useState(0);
-  
+
   // Utiliser le hook de traduction d'article
   const translatedArticle = useArticleTranslation(article);
 
@@ -54,7 +53,7 @@ export default function ArticleDetailPage() {
       if (foundArticle) {
         setArticle(foundArticle);
         setLikes(Math.floor(Math.random() * 100) + 20);
-        
+
         // Articles similaires
         const related = articles
           .filter(a => a.id !== id && (a.category === foundArticle.category ||
@@ -168,7 +167,7 @@ export default function ArticleDetailPage() {
     <div className="min-h-screen bg-white">
       {/* Barre de progression de lecture */}
       <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-[101]">
-        <div 
+        <div
           className="h-full bg-blue-600 transition-all duration-300"
           style={{ width: `${readingProgress}%` }}
         />
@@ -184,9 +183,9 @@ export default function ArticleDetailPage() {
                 {t('navigation.news')}
               </Button>
             </Link>
-            
+
             <div className="flex items-center space-x-2">
-              <Button 
+              <Button
                 variant="default"
                 size="sm"
                 onClick={handleBookmark}
@@ -194,15 +193,15 @@ export default function ArticleDetailPage() {
               >
                 <Bookmark className={`h-4 w-4 ${isBookmarked ? 'fill-current' : ''}`} />
               </Button>
-              
+
               <Button variant="default" size="sm" onClick={handlePrint}>
                 <Print className="h-4 w-4" />
               </Button>
-              
+
               <Button variant="default" size="sm" onClick={handleDownloadPDF}>
                 <Download className="h-4 w-4" />
               </Button>
-              
+
               <Button variant="default" size="sm" onClick={() => handleShare('native')}>
                 <Share2 className="h-4 w-4" />
               </Button>
@@ -214,22 +213,22 @@ export default function ArticleDetailPage() {
             <Badge className={getCategoryColor(article.category)} size="sm">
               {article.category}
             </Badge>
-            
+
             <div className="flex items-center space-x-1">
               <Calendar className="h-4 w-4" />
               <span>{formatDate(article.publishedAt)}</span>
             </div>
-            
+
             <div className="flex items-center space-x-1">
               <Clock className="h-4 w-4" />
               <span>{formatReadTime(article.readTime)}</span>
             </div>
-            
+
             <div className="flex items-center space-x-1">
               <Eye className="h-4 w-4" />
               <span>{article.views.toLocaleString()} {t('common.views')}</span>
             </div>
-            
+
             <div className="flex items-center space-x-1">
               <User className="h-4 w-4" />
               <span>{article.author}</span>
@@ -249,7 +248,7 @@ export default function ArticleDetailPage() {
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
             {translatedArticle.title}
           </h1>
-          
+
           <p className="text-xl text-gray-600 mb-8 leading-relaxed">
             {translatedArticle.excerpt}
           </p>
@@ -265,7 +264,7 @@ export default function ArticleDetailPage() {
               />
             </div>
           )}
-          
+
           {article.image && (
             <div className="relative mb-8">
               <img
@@ -285,8 +284,8 @@ export default function ArticleDetailPage() {
           transition={{ delay: 0.2 }}
           className="prose prose-lg max-w-none mb-12"
         >
-          <div 
-            className="text-gray-800 leading-relaxed space-y-6 
+          <div
+            className="text-gray-800 leading-relaxed space-y-6
               prose-headings:text-gray-900 prose-headings:font-bold
               prose-a:text-blue-600 prose-a:hover:text-blue-700
               prose-strong:text-gray-900
@@ -302,7 +301,7 @@ export default function ArticleDetailPage() {
                   <Globe className="h-4 w-4 inline mr-1" />
                   {t('common.source')} :
                 </p>
-                <a 
+                <a
                   href={article.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -354,7 +353,7 @@ export default function ArticleDetailPage() {
               <Heart className={`h-4 w-4 mr-2 ${isLiked ? 'fill-current text-red-500' : ''}`} />
               {likes} {t('common.like')}
             </Button>
-            
+
             <Button variant="default" size="sm" onClick={() => {
               // Ouvrir un modal de commentaires ou rediriger vers la section commentaires
               const commentsSection = document.getElementById('comments-section');
@@ -364,7 +363,7 @@ export default function ArticleDetailPage() {
                 // Si pas de section commentaires, ouvrir un modal simple
                 toast.info(t('common.comments'));
               }
-            }}> 
+            }}>
               <MessageCircle className="h-4 w-4 mr-2" />
               {t('common.comment')}
             </Button>
@@ -372,27 +371,27 @@ export default function ArticleDetailPage() {
 
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600 mr-3">{t('common.share')} :</span>
-            
-            <Button 
-              variant="default" 
+
+            <Button
+              variant="default"
               size="sm"
               onClick={() => handleShare('facebook')}
               className="text-blue-600 border-blue-300 hover:bg-blue-50"
             >
               <Facebook className="h-4 w-4" />
             </Button>
-            
-            <Button 
-              variant="default" 
+
+            <Button
+              variant="default"
               size="sm"
               onClick={() => handleShare('twitter')}
               className="text-sky-600 border-sky-300 hover:bg-sky-50"
             >
               <Twitter className="h-4 w-4" />
             </Button>
-            
-            <Button 
-              variant="default" 
+
+            <Button
+              variant="default"
               size="sm"
               onClick={() => handleShare('linkedin')}
               className="text-blue-700 border-blue-300 hover:bg-blue-50"
@@ -442,7 +441,7 @@ export default function ArticleDetailPage() {
             <h3 className="text-2xl font-bold text-gray-900 mb-6">
               {t('common.related_articles')}
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedArticles.map((relatedArticle, index) => (
                 <motion.div
@@ -461,20 +460,20 @@ export default function ArticleDetailPage() {
                       <Badge className={getCategoryColor(relatedArticle.category) + ' mb-3'} size="sm">
                         {relatedArticle.category}
                       </Badge>
-                      
+
                       <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2">
                         {relatedArticle.title}
                       </h4>
-                      
+
                       <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                         {relatedArticle.excerpt}
                       </p>
-                      
+
                       <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
                         <span>{formatDate(relatedArticle.publishedAt)}</span>
                         <span>{formatReadTime(relatedArticle.readTime)}</span>
                       </div>
-                      
+
                       <Link to={`/news/${relatedArticle.id}`}>
                         <Button variant="default" size="sm" className="w-full">
                           <BookOpen className="h-4 w-4 mr-2" />
@@ -503,15 +502,15 @@ export default function ArticleDetailPage() {
               <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
                 {t('common.newsletter_subtitle')}
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                 <input type="email"
                   placeholder={t('common.newsletter_placeholder')}
                   className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
                  aria-label={t('common.newsletter_placeholder')} />
-                <Button 
+                <Button
                   variant="default"
-                  size="lg" 
+                  size="lg"
                   className="bg-white text-blue-600 hover:bg-blue-50"
                   onClick={() => {
                     toast.success('? ' + t('common.newsletter_subscribe'));
@@ -528,7 +527,7 @@ export default function ArticleDetailPage() {
       {/* Floating Action Button */}
       <div className="fixed bottom-6 right-6 z-40">
         <div className="flex flex-col space-y-3">
-          <Button 
+          <Button
             variant="default"
             className="rounded-full w-12 h-12 shadow-lg"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -536,9 +535,9 @@ export default function ArticleDetailPage() {
           >
             <ArrowLeft className="h-5 w-5 rotate-90" />
           </Button>
-          
-          <Button 
-            variant="default" 
+
+          <Button
+            variant="default"
             className="rounded-full w-12 h-12 shadow-lg bg-white"
             onClick={() => handleShare('native')}
             title={t('ui.share_article')}

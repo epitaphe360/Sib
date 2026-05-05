@@ -9,7 +9,7 @@ export const visitorTranslations = {
     'visitor.registration.free.badge_access': 'Accès salon',
     'visitor.registration.free.badge_qr': 'Badge QR',
     'visitor.registration.free.badge_free': 'Gratuit',
-    
+
     // Formulaire
     'visitor.form.firstname': 'Prénom',
     'visitor.form.lastname': 'Nom',
@@ -23,7 +23,7 @@ export const visitorTranslations = {
     'visitor.form.confirm_password': 'Confirmer le mot de passe',
     'visitor.form.submit': 'Créer mon badge gratuit',
     'visitor.form.submitting': 'Création en cours...',
-    
+
     // Secteurs
     'visitor.sector.authority': 'Autorité urbaine',
     'visitor.sector.transport': 'Transport & mobilité',
@@ -53,7 +53,7 @@ export const visitorTranslations = {
     'visitor.validation.password_length': 'Le mot de passe doit contenir au moins 12 caractères',
     'visitor.validation.password_requirements': 'Doit contenir majuscule, minuscule, chiffre et caractère spécial',
     'visitor.validation.password_match': 'Les mots de passe ne correspondent pas',
-    
+
     // Messages
     'visitor.message.email_check': 'Vérification de l\'email...',
     'visitor.message.account_exists': 'COMPTE EXISTANT',
@@ -69,7 +69,7 @@ export const visitorTranslations = {
     'visitor.registration.free.badge_access': 'Access to fair',
     'visitor.registration.free.badge_qr': 'QR Badge',
     'visitor.registration.free.badge_free': 'Free',
-    
+
     // Form
     'visitor.form.firstname': 'First Name',
     'visitor.form.lastname': 'Last Name',
@@ -83,7 +83,7 @@ export const visitorTranslations = {
     'visitor.form.confirm_password': 'Confirm Password',
     'visitor.form.submit': 'Create my free badge',
     'visitor.form.submitting': 'Creating...',
-    
+
     // Sectors
     'visitor.sector.authority': 'Bâtiment Authority',
     'visitor.sector.transport': 'Bâtiment Transport',
@@ -113,7 +113,7 @@ export const visitorTranslations = {
     'visitor.validation.password_length': 'Password must be at least 12 characters',
     'visitor.validation.password_requirements': 'Must contain uppercase, lowercase, number and special char',
     'visitor.validation.password_match': 'Passwords do not match',
-    
+
     // Messages
     'visitor.message.email_check': 'Checking email...',
     'visitor.message.account_exists': 'ACCOUNT EXISTS',
@@ -122,5 +122,55 @@ export const visitorTranslations = {
     'visitor.message.success_desc': 'Your free visitor account has been created successfully.',
     'visitor.message.redirect': 'You will be redirected to your dashboard...',
     'visitor.message.email_sent': 'Welcome email sent!',
-  }
+  },
+  ar: {
+    'visitor.registration.free.title': 'تسجيل الزائر المجاني',
+    'visitor.registration.free.subtitle': 'أنشئ حسابك للوصول إلى معرض SIB 2026',
+    'visitor.registration.free.badge_access': 'الوصول إلى المعرض',
+    'visitor.registration.free.badge_qr': 'شارة QR',
+    'visitor.registration.free.badge_free': 'مجاني',
+    'visitor.form.firstname': 'الاسم الأول',
+    'visitor.form.lastname': 'اسم العائلة',
+    'visitor.form.email': 'البريد الإلكتروني المهني',
+    'visitor.form.phone': 'الهاتف',
+    'visitor.form.country': 'الدولة',
+    'visitor.form.sector': 'قطاع النشاط',
+    'visitor.form.position': 'المسمى الوظيفي',
+    'visitor.form.company': 'الشركة / المنظمة',
+    'visitor.form.password': 'كلمة المرور',
+    'visitor.form.confirm_password': 'تأكيد كلمة المرور',
+    'visitor.form.submit': 'إنشاء شارتي المجانية',
+    'visitor.form.submitting': 'جارٍ الإنشاء...',
+    'visitor.sector.authority': 'هيئة حضرية',
+    'visitor.sector.transport': 'النقل والتنقل',
+    'visitor.sector.logistics': 'اللوجستيات',
+    'visitor.sector.consulting': 'الاستشارات',
+    'visitor.sector.technology': 'التكنولوجيا',
+    'visitor.sector.student': 'طالب',
+    'visitor.sector.media': 'إعلام/صحافة',
+    'visitor.sector.institutional': 'مؤسسي',
+    'visitor.sector.other': 'أخرى',
+    'visitor.free.features.title': '✅ مدرج في تذكرتك المجانية',
+    'visitor.free.features.list.1': '• الوصول إلى معرض SIB 2026',
+    'visitor.free.features.list.2': '• شارة QR آمنة',
+    'visitor.free.features.list.3': '• الوصول إلى المؤتمرات العامة',
+    'visitor.free.features.list.4': '• الوصول إلى لوحة التحكم الشخصية',
+    'visitor.upsell.vip.title': 'هل تحتاج إلى وصول VIP كامل؟',
+    'visitor.upsell.vip.button': 'الترقية إلى تذكرة VIP Premium',
+    'visitor.validation.firstname_required': 'الاسم الأول مطلوب',
+    'visitor.validation.lastname_required': 'اسم العائلة مطلوب',
+    'visitor.validation.email_invalid': 'بريد إلكتروني غير صالح',
+    'visitor.validation.country_required': 'الدولة مطلوبة',
+    'visitor.validation.sector_required': 'القطاع مطلوب',
+    'visitor.validation.password_length': 'يجب أن تحتوي كلمة المرور على 12 حرفاً على الأقل',
+    'visitor.validation.password_requirements': 'يجب أن تحتوي على حرف كبير وصغير ورقم ورمز خاص',
+    'visitor.validation.password_match': 'كلمتا المرور غير متطابقتين',
+    'visitor.message.email_check': 'جارٍ التحقق من البريد الإلكتروني...',
+    'visitor.message.account_exists': 'الحساب موجود',
+    'visitor.message.account_exists_desc': 'هذا البريد الإلكتروني مسجّل بالفعل. يرجى تسجيل الدخول.',
+    'visitor.message.success_title': 'تم التسجيل بنجاح!',
+    'visitor.message.success_desc': 'تم إنشاء حسابك كزائر مجاني بنجاح.',
+    'visitor.message.redirect': 'ستتم إعادة توجيهك إلى لوحة التحكم...',
+    'visitor.message.email_sent': 'تم إرسال بريد الترحيب!',
+  },
 };

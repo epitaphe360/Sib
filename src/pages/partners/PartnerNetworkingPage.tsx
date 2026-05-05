@@ -36,7 +36,7 @@ export const PartnerNetworkingPage: React.FC = () => {
 
   useEffect(() => {
     const loadMessageStats = async () => {
-      if (!user?.id || !isSupabaseReady() || !supabase) return;
+      if (!user?.id || !isSupabaseReady() || !supabase) {return;}
       try {
         const [sentRes, receivedRes] = await Promise.all([
           supabase.from('messages').select('id', { count: 'exact', head: true }).eq('sender_id', user.id),
@@ -63,7 +63,7 @@ export const PartnerNetworkingPage: React.FC = () => {
           .eq('status', 'active')
           .neq('id', user?.id ?? '')
           .limit(50);
-        if (error) throw error;
+        if (error) {throw error;}
         const mapped = (data || []).map((u: any) => ({
           id: u.id,
           name: u.name || u.profile?.companyName || 'Participant',

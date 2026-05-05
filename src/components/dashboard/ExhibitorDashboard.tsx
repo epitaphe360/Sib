@@ -1,8 +1,6 @@
 import React, { memo } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Calendar } from 'lucide-react';
-import { Users, FileText, Award, Scan } from 'lucide-react';
-import { Sparkles } from 'lucide-react';
+import { Calendar, Users, FileText, Award, Scan, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { QRCodeCanvas as QRCode } from 'qrcode.react';
 

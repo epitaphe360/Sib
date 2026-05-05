@@ -1,9 +1,9 @@
 /**
  * usePushNotifications Hook
- * 
+ *
  * Initializes Firebase Cloud Messaging and registers service worker for push notifications
  * Called on app startup to set up push notification support
- * 
+ *
  * Features:
  * - Registers service worker
  * - Requests notification permission
@@ -53,14 +53,14 @@ export function usePushNotifications() {
 
         // Initialize Firebase Cloud Messaging
         const initialized = await PushNotificationService.initialize();
-        
+
         if (initialized) {
           console.log('✅ Push notifications initialized successfully');
 
           // Set up listener for foreground notifications
           PushNotificationService.onNotificationReceived((notification) => {
             console.log('🔔 Received push notification:', notification);
-            
+
             // You can add custom handling here, such as:
             // - Showing in-app notification toast
             // - Updating app state

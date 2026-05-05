@@ -32,7 +32,7 @@ export async function initializeAuth() {
         localStorage.removeItem('sib-auth-storage');
       }
     }
-    
+
     if (!supabase) {
       console.warn('[AUTH] Supabase non configure');
       authInitialized = true;
@@ -65,7 +65,7 @@ export async function initializeAuth() {
       const createdAt = createdAtDate && !isNaN(createdAtDate.getTime()) ? createdAtDate.getTime() : 0;
       const now = Date.now();
       const wasJustCreated = (now - createdAt) < 5000; // Within 5 seconds
-      
+
       if (useAuthStore.getState().isAuthenticated && !wasJustCreated) {
         console.warn('[AUTH] Session invalide ou expiree detectee au demarrage, nettoyage du store...');
         useAuthStore.getState().logout();
@@ -85,7 +85,7 @@ export async function initializeAuth() {
       useAuthStore.setState({ isLoading: false });
       return;
     }
-    
+
     const userProfile = await SupabaseService.getUserByEmail(session.user.email);
 
     if (userProfile) {
@@ -97,7 +97,7 @@ export async function initializeAuth() {
           .select('type, email')
           .eq('id', userProfile.id)
           .single();
-          
+
         if (dbError || !dbUser || (dbUser as any).type !== 'admin') {
           console.error('[AUTH] Tentative de connexion admin non autorisee!');
           useAuthStore.getState().logout();
@@ -106,7 +106,7 @@ export async function initializeAuth() {
           return;
         }
       }
-      
+
       // Restore auth state in store
       console.log('✅ [AUTH] Utilisateur restauré:', userProfile.name);
       useAuthStore.setState({
@@ -119,7 +119,7 @@ export async function initializeAuth() {
       console.warn('[AUTH] Profil utilisateur introuvable, deconnexion...');
       useAuthStore.getState().logout();
     }
-    
+
     authInitialized = true;
   } catch (error) {
     console.error('[AUTH] Erreur initialisation auth:', error);

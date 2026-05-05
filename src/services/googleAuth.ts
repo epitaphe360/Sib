@@ -1,8 +1,8 @@
 import { initializeApp } from 'firebase/app';
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   User as FirebaseUser
@@ -20,8 +20,8 @@ const firebaseConfig = {
 };
 
 // Vérifier si Firebase est configuré
-const isFirebaseConfigured = firebaseConfig.apiKey && 
-                             firebaseConfig.authDomain && 
+const isFirebaseConfigured = firebaseConfig.apiKey &&
+                             firebaseConfig.authDomain &&
                              firebaseConfig.projectId;
 
 // Initialiser Firebase seulement si configuré
@@ -33,7 +33,7 @@ if (isFirebaseConfigured) {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   googleProvider = new GoogleAuthProvider();
-  
+
   // Configuration du provider Google
   googleProvider.addScope('email');
   googleProvider.addScope('profile');
@@ -44,7 +44,7 @@ if (isFirebaseConfigured) {
 
 
 export class GoogleAuthService {
-  
+
   /**
    * Connexion avec Google
    */
@@ -52,17 +52,17 @@ export class GoogleAuthService {
     if (!isFirebaseConfigured || !auth || !googleProvider) {
       throw new Error('Firebase n\'est pas configuré. Veuillez configurer vos clés Firebase dans le fichier .env');
     }
-    
+
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const firebaseUser = result.user;
-      
+
       // Récupérer les informations utilisateur depuis Google
       const googleUser = await this.mapFirebaseUserToSIBsUser(firebaseUser);
-      
+
       // Vérifier si l'utilisateur existe déjà dans notre base
       const existingUser = await this.checkExistingUser(googleUser.email);
-      
+
       if (existingUser) {
         // Utilisateur existant - mise à jour des infos Google
         return await this.updateUserWithGoogleInfo(existingUser, firebaseUser);
@@ -70,10 +70,10 @@ export class GoogleAuthService {
         // Nouvel utilisateur - création automatique
         return await this.createUserFromGoogle(firebaseUser);
       }
-      
+
     } catch (error) {
       console.error('Erreur connexion Google:', error);
-      
+
       // Gestion des erreurs spécifiques
       const firebaseError = error as { code?: string };
       if (firebaseError.code === 'auth/popup-closed-by-user') {
@@ -95,7 +95,7 @@ export class GoogleAuthService {
     if (!auth) {
       throw new Error('Firebase n\'est pas configuré');
     }
-    
+
     try {
       await firebaseSignOut(auth);
     } catch (error) {
@@ -112,7 +112,7 @@ export class GoogleAuthService {
       callback(null);
       return () => {};
     }
-    
+
     return onAuthStateChanged(auth, callback);
   }
 
@@ -168,12 +168,12 @@ export class GoogleAuthService {
       // Simulation d'appel API pour vérifier l'utilisateur existant
       // En production, remplacez par un vrai appel API
       const response = await fetch(`/api/users/check?email=${encodeURIComponent(email)}`);
-      
+
       if (response.ok) {
         const userData = await response.json();
         return userData.user || null;
       }
-      
+
       return null;
     } catch (error) {
       console.error('Erreur vérification utilisateur:', error);
@@ -242,7 +242,7 @@ export class GoogleAuthService {
    * Obtenir l'utilisateur actuellement connecté
    */
   static getCurrentUser(): FirebaseUser | null {
-    if (!auth) return null;
+    if (!auth) {return null;}
     return auth.currentUser;
   }
 
@@ -250,7 +250,7 @@ export class GoogleAuthService {
    * Vérifier si l'utilisateur est connecté
    */
   static isAuthenticated(): boolean {
-    if (!auth) return false;
+    if (!auth) {return false;}
     return !!auth.currentUser;
   }
 
@@ -258,7 +258,7 @@ export class GoogleAuthService {
    * Obtenir le token d'authentification
    */
   static async getAuthToken(): Promise<string | null> {
-    if (!auth) return null;
+    if (!auth) {return null;}
     const user = auth.currentUser;
     if (user) {
       return await user.getIdToken();
@@ -270,7 +270,7 @@ export class GoogleAuthService {
    * Rafraîchir le token d'authentification
    */
   static async refreshToken(): Promise<string | null> {
-    if (!auth) return null;
+    if (!auth) {return null;}
     const user = auth.currentUser;
     if (user) {
       return await user.getIdToken(true);

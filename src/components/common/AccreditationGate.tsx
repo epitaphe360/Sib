@@ -37,7 +37,7 @@ interface AccreditationGateProps {
  */
 function useAccreditationLevel(): AccreditationLevel | null {
   const { user, isAuthenticated } = useAuthStore();
-  if (!isAuthenticated || !user) return null;
+  if (!isAuthenticated || !user) {return null;}
 
   switch (user.type) {
     case 'partner':

@@ -70,7 +70,7 @@ class AuditService {
         p_severity: params.severity || 'info',
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('❌ Erreur log audit:', error);
@@ -134,7 +134,7 @@ class AuditService {
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getLogs:', error);
@@ -153,7 +153,7 @@ class AuditService {
         .eq('id', logId)
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('❌ Erreur getLogById:', error);

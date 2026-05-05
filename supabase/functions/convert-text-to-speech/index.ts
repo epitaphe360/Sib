@@ -50,8 +50,8 @@ Deno.serve(async (req: Request) => {
     if (existingAudio && existingAudio.status === 'ready') {
       console.log('✅ Audio déjà existant et prêt');
       return new Response(
-        JSON.stringify({ 
-          success: true, 
+        JSON.stringify({
+          success: true,
           audio: existingAudio,
           message: 'Audio déjà disponible'
         }),
@@ -74,7 +74,7 @@ Deno.serve(async (req: Request) => {
         .eq('id', existingAudio.id)
         .select()
         .single();
-      
+
       if (error) {
         console.error('❌ Erreur update:', error);
         throw error;
@@ -91,7 +91,7 @@ Deno.serve(async (req: Request) => {
         })
         .select()
         .single();
-      
+
       if (error) {
         console.error('❌ Erreur insert:', error);
         throw error;
@@ -108,13 +108,13 @@ Deno.serve(async (req: Request) => {
 
     if (googleApiKey) {
       console.log('🌟 Utilisation de Google Cloud Text-to-Speech...');
-      
+
       try {
         // Nettoyer le texte HTML
         // Google Cloud TTS limite à 5000 caractères par requête
         // Pour les articles plus longs, on prend les premiers 5000 caractères
         let cleanText = text.replace(/<[^>]*>/g, '').trim();
-        
+
         // Si le texte dépasse 5000 caractères, on le tronque intelligemment
         // en cherchant la fin de la dernière phrase complète avant 5000 caractères
         if (cleanText.length > 5000) {
@@ -123,16 +123,16 @@ Deno.serve(async (req: Request) => {
           const lastExclamation = truncated.lastIndexOf('!');
           const lastQuestion = truncated.lastIndexOf('?');
           const lastSentenceEnd = Math.max(lastPeriod, lastExclamation, lastQuestion);
-          
+
           if (lastSentenceEnd > 0) {
             cleanText = truncated.substring(0, lastSentenceEnd + 1);
           } else {
             cleanText = truncated;
           }
-          
+
           console.log(`⚠️ Texte tronqué de ${text.length} à ${cleanText.length} caractères`);
         }
-        
+
         // Mapper les langues aux codes Google Cloud
         const languageCodeMap: { [key: string]: string } = {
           'fr': 'fr-FR',
@@ -191,7 +191,7 @@ Deno.serve(async (req: Request) => {
         }
 
         const responseData = await response.json();
-        
+
         if (!responseData.audioContent) {
           throw new Error('Pas de contenu audio dans la réponse');
         }
@@ -207,7 +207,7 @@ Deno.serve(async (req: Request) => {
         // Upload vers Supabase Storage
         const fileName = `${articleId}_${language}_${Date.now()}.mp3`;
         console.log(`📤 Upload vers Storage: ${fileName}`);
-        
+
         const { data: uploadData, error: uploadError } = await supabaseClient
           .storage
           .from('article-audio')
@@ -258,8 +258,8 @@ Deno.serve(async (req: Request) => {
         console.log('✅ Audio créé avec succès via Google Cloud TTS');
 
         return new Response(
-          JSON.stringify({ 
-            success: true, 
+          JSON.stringify({
+            success: true,
             audio: updatedAudio,
             message: 'Audio généré avec succès (Google Cloud TTS)',
             provider: 'google'
@@ -274,7 +274,7 @@ Deno.serve(async (req: Request) => {
         );
       } catch (googleError: any) {
         console.error('❌ Erreur Google TTS:', googleError);
-        
+
         // Mettre à jour le statut en erreur
         await supabaseClient
           .from('articles_audio')
@@ -290,15 +290,15 @@ Deno.serve(async (req: Request) => {
 
     // Fallback - Retourner un statut 'pending' pour génération côté client
     console.log('⚠️ Pas de clé Google - Audio sera généré côté client');
-    
+
     await supabaseClient
       .from('articles_audio')
       .update({ status: 'pending' })
       .eq('id', audioRecord.id);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         audio: { ...audioRecord, status: 'pending' },
         message: 'Audio sera généré dans le navigateur',
         useClientSide: true

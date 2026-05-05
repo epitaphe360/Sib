@@ -54,7 +54,7 @@ async function setupDemoAccounts() {
           // Essayer une autre approche: get user by email
           const { data: users } = await supabase.auth.admin.listUsers();
           const existingUser = users?.users?.find(u => u.email === account.email);
-          
+
           if (existingUser) {
             const { error: updateErr } = await supabase.auth.admin.updateUserById(
               existingUser.id,
@@ -86,7 +86,7 @@ async function setupDemoAccounts() {
               name: account.name,
               type: account.type,
               status: 'active',
-              profile: JSON.stringify({ 
+              profile: JSON.stringify({
                 role: account.type,
                 standArea: (account as any).standArea
               }),
@@ -117,11 +117,11 @@ async function setupDemoAccounts() {
   // Vérifier les comptes créés
   console.log('🔍 Vérification des comptes créés...\n');
   const { data: { users }, error: listError } = await supabase.auth.admin.listUsers();
-  
+
   if (listError) {
     console.log(`Erreur lors de la listage: ${listError.message}`);
   } else {
-    const demoUsers = users?.filter(u => 
+    const demoUsers = users?.filter(u =>
       u.email?.includes('@test.sib2026.ma') || u.email?.includes('@sib.com')
     );
     console.log(`✅ Comptes de démo trouvés: ${demoUsers?.length || 0}`);

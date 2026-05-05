@@ -1,7 +1,7 @@
 /**
  * API Endpoint pour lister tous les médias publiés
  * Compatible avec WordPress et Elementor Pro
- * 
+ *
  * Usage: GET /api/media?limit=10&type=podcast&category=Innovation
  * Returns: JSON avec liste des médias
  */
@@ -25,12 +25,12 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { 
-    limit = '10', 
-    offset = '0', 
+  const {
+    limit = '10',
+    offset = '0',
     type,
     category,
-    search 
+    search
   } = req.query;
 
   try {
@@ -84,9 +84,9 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json(response);
   } catch (error: any) {
     console.error('API Error:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Internal server error',
-      message: error.message 
+      message: error.message
     });
   }
 }

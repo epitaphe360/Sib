@@ -46,7 +46,7 @@ export default function VisitorProfileSettings() {
   // Charger l'utilisation du quota depuis daily_quotas
   useEffect(() => {
     const loadQuota = async () => {
-      if (!isSupabaseReady() || !supabase || !user?.id) return;
+      if (!isSupabaseReady() || !supabase || !user?.id) {return;}
       try {
         const today = new Date().toISOString().split('T')[0];
         const { data } = await supabase
@@ -55,7 +55,7 @@ export default function VisitorProfileSettings() {
           .eq('user_id', user.id)
           .eq('quota_date', today)
           .maybeSingle();
-        if (data) setMeetingsUsed(data.meetings_used ?? 0);
+        if (data) {setMeetingsUsed(data.meetings_used ?? 0);}
       } catch {
         // Quiet fail — quota stays at 0
       }

@@ -49,14 +49,14 @@ export const SiteBuilder: React.FC<SiteBuilderProps> = ({ siteId, templateId, on
   // Load exhibitor ID for current user
   useEffect(() => {
     const fetchExhibitorId = async () => {
-      if (!user?.id) return;
-      
+      if (!user?.id) {return;}
+
       const { data } = await supabase
         .from('exhibitors')
         .select('id')
         .eq('user_id', user.id)
         .maybeSingle();
-      
+
       if (data) {
         setResolvedExhibitorId(data.id);
       } else {
@@ -64,7 +64,7 @@ export const SiteBuilder: React.FC<SiteBuilderProps> = ({ siteId, templateId, on
         setResolvedExhibitorId(user.id);
       }
     };
-    
+
     fetchExhibitorId();
   }, [user?.id]);
 
@@ -85,7 +85,7 @@ export const SiteBuilder: React.FC<SiteBuilderProps> = ({ siteId, templateId, on
         .eq('id', id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
       if (data) {
         setSiteConfig(data);
         setSections(data.sections || []);
@@ -104,7 +104,7 @@ export const SiteBuilder: React.FC<SiteBuilderProps> = ({ siteId, templateId, on
         .eq('id', id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
       if (data) {
         setSections(data.sections || []);
         setSiteConfig(prev => ({
@@ -121,7 +121,7 @@ export const SiteBuilder: React.FC<SiteBuilderProps> = ({ siteId, templateId, on
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
-    
+
     if (over && active.id !== over.id) {
       setSections(items => {
         const oldIndex = items.findIndex(item => item.id === active.id);
@@ -189,7 +189,7 @@ export const SiteBuilder: React.FC<SiteBuilderProps> = ({ siteId, templateId, on
   };
 
   const updateSection = (sectionId: string, content: any) => {
-    setSections(sections.map(s => 
+    setSections(sections.map(s =>
       s.id === sectionId ? { ...s, content } : s
     ));
   };
@@ -212,7 +212,7 @@ export const SiteBuilder: React.FC<SiteBuilderProps> = ({ siteId, templateId, on
       toast.error('Impossible d\'identifier l\'exposant. Veuillez vous reconnecter.');
       return;
     }
-    
+
     setSaving(true);
     try {
       const siteData = {
@@ -239,14 +239,14 @@ export const SiteBuilder: React.FC<SiteBuilderProps> = ({ siteId, templateId, on
           .from('mini_sites')
           .update(dbData)
           .eq('id', siteId);
-        if (error) throw error;
+        if (error) {throw error;}
       } else {
         const { data, error } = await supabase
           .from('mini_sites')
           .insert([{ ...dbData, created_at: new Date().toISOString() }])
           .select()
           .single();
-        if (error) throw error;
+        if (error) {throw error;}
         if (data) {
           setSiteConfig({
             ...siteData,

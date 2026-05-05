@@ -1,7 +1,7 @@
 /**
  * Fixtures de données pour les tests E2E
  * Contient les utilisateurs de test pour chaque type de compte
- * 
+ *
  * ⚠️ IMPORTANT: Les mots de passe sont chargés depuis les variables d'environnement
  * pour des raisons de sécurité. Ne jamais hardcoder les mots de passe en production.
  */

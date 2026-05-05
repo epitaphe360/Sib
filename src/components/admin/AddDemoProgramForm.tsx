@@ -98,7 +98,7 @@ export default function AddDemoProgramPage() {
           order_index: 0,
         });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       toast.success('Programme ajouté avec succès');
 

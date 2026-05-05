@@ -18,20 +18,20 @@ export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>
   const percentage = (strength / 5) * 100;
 
   const getStrengthColor = () => {
-    if (percentage <= 40) return 'bg-red-500';
-    if (percentage <= 60) return 'bg-orange-500';
-    if (percentage <= 80) return 'bg-yellow-500';
+    if (percentage <= 40) {return 'bg-red-500';}
+    if (percentage <= 60) {return 'bg-orange-500';}
+    if (percentage <= 80) {return 'bg-yellow-500';}
     return 'bg-green-500';
   };
 
   const getStrengthText = () => {
-    if (percentage <= 40) return 'Faible';
-    if (percentage <= 60) return 'Moyen';
-    if (percentage <= 80) return 'Bon';
+    if (percentage <= 40) {return 'Faible';}
+    if (percentage <= 60) {return 'Moyen';}
+    if (percentage <= 80) {return 'Bon';}
     return 'Excellent';
   };
 
-  if (!password) return null;
+  if (!password) {return null;}
 
   return (
     <div className="mt-2 space-y-2">

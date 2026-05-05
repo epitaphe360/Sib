@@ -264,11 +264,11 @@ export default function CatalogPage() {
 
   const filtered = useMemo(() => {
     return products.filter(p => {
-      if (activeCategory !== 'all' && p.category !== activeCategory) return false;
-      if (selectedLot && p.lot !== selectedLot) return false;
-      if (selectedCert && !p.certifications.includes(selectedCert)) return false;
-      if (selectedRegion && !p.region.includes(selectedRegion) && !p.region.includes('National')) return false;
-      if (selectedPhase && !p.phase.includes(selectedPhase)) return false;
+      if (activeCategory !== 'all' && p.category !== activeCategory) {return false;}
+      if (selectedLot && p.lot !== selectedLot) {return false;}
+      if (selectedCert && !p.certifications.includes(selectedCert)) {return false;}
+      if (selectedRegion && !p.region.includes(selectedRegion) && !p.region.includes('National')) {return false;}
+      if (selectedPhase && !p.phase.includes(selectedPhase)) {return false;}
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         return (

@@ -23,8 +23,8 @@ serve(async (req) => {
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response(null, { 
-      status: 204, 
+    return new Response(null, {
+      status: 204,
       headers: {
         ...corsHeaders,
         'Access-Control-Allow-Origin': origin,
@@ -40,10 +40,10 @@ serve(async (req) => {
         JSON.stringify({ success: false, error: 'Token manquant' }),
         {
           status: 400,
-          headers: { 
-            ...corsHeaders, 
+          headers: {
+            ...corsHeaders,
             'Access-Control-Allow-Origin': origin,
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
           },
         }
       );
@@ -77,10 +77,10 @@ serve(async (req) => {
         }),
         {
           status: 400,
-          headers: { 
-            ...corsHeaders, 
+          headers: {
+            ...corsHeaders,
             'Access-Control-Allow-Origin': origin,
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
           },
         }
       );
@@ -98,10 +98,10 @@ serve(async (req) => {
         }),
         {
           status: 400,
-          headers: { 
-            ...corsHeaders, 
+          headers: {
+            ...corsHeaders,
             'Access-Control-Allow-Origin': origin,
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
           },
         }
       );
@@ -119,10 +119,10 @@ serve(async (req) => {
         }),
         {
           status: 400,
-          headers: { 
-            ...corsHeaders, 
+          headers: {
+            ...corsHeaders,
             'Access-Control-Allow-Origin': origin,
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
           },
         }
       );
@@ -139,10 +139,10 @@ serve(async (req) => {
       }),
       {
         status: 200,
-        headers: { 
-          ...corsHeaders, 
+        headers: {
+          ...corsHeaders,
           'Access-Control-Allow-Origin': origin,
-          'Content-Type': 'application/json' 
+          'Content-Type': 'application/json'
         },
       }
     );
@@ -155,10 +155,10 @@ serve(async (req) => {
       }),
       {
         status: 500,
-        headers: { 
-          ...corsHeaders, 
+        headers: {
+          ...corsHeaders,
           'Access-Control-Allow-Origin': origin,
-          'Content-Type': 'application/json' 
+          'Content-Type': 'application/json'
         },
       }
     );

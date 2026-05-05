@@ -45,7 +45,7 @@ export async function createPayPalOrder(userId: string) {
       },
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     return data.orderId;
   } catch (error) {
@@ -66,7 +66,7 @@ export async function capturePayPalOrder(orderId: string, userId: string) {
       },
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     return data;
   } catch (error) {
@@ -92,7 +92,7 @@ export async function createCMIPaymentRequest(userId: string, userEmail: string)
       },
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     return data;
   } catch (error) {
@@ -119,7 +119,7 @@ export async function checkPaymentStatus(userId: string): Promise<{
       .limit(1)
       .single();
 
-    if (error && error.code !== 'PGRST116') throw error;
+    if (error && error.code !== 'PGRST116') {throw error;}
 
     if (data) {
       return {
@@ -238,7 +238,7 @@ export async function upgradeUserToVIP(userId: string, paymentRequestId: string)
       .update({ visitor_level: 'premium' })
       .eq('id', userId);
 
-    if (userError) throw userError;
+    if (userError) {throw userError;}
 
     // Mark payment as approved
     const { error: paymentError } = await supabase
@@ -249,7 +249,7 @@ export async function upgradeUserToVIP(userId: string, paymentRequestId: string)
       })
       .eq('id', paymentRequestId);
 
-    if (paymentError) throw paymentError;
+    if (paymentError) {throw paymentError;}
 
     return true;
   } catch (error) {
@@ -269,7 +269,7 @@ export async function getPaymentHistory(userId: string) {
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
-    if (error) throw error;
+    if (error) {throw error;}
 
     return data || [];
   } catch (error) {

@@ -79,7 +79,7 @@ export function useOptimizedList<T extends Record<string, any>>({
       result = result.filter((item) =>
         searchFields.some((field) => {
           const value = item[field];
-          if (value === null || value === undefined) return false;
+          if (value === null || value === undefined) {return false;}
           return String(value).toLowerCase().includes(query);
         })
       );
@@ -96,8 +96,8 @@ export function useOptimizedList<T extends Record<string, any>>({
         const aVal = a[sortField];
         const bVal = b[sortField];
 
-        if (aVal === null || aVal === undefined) return 1;
-        if (bVal === null || bVal === undefined) return -1;
+        if (aVal === null || aVal === undefined) {return 1;}
+        if (bVal === null || bVal === undefined) {return -1;}
 
         let comparison = 0;
 

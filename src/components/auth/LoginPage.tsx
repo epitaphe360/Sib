@@ -70,11 +70,11 @@ export default function LoginPage() {
     setEmail(demoEmail);
     setPassword(demoPassword);
     setDemoLoading(key);
-    
+
     try {
       await login(demoEmail, demoPassword, { rememberMe: true });
       const { user } = useAuthStore.getState();
-      
+
       if (user) {
         // 🔴 CRITICAL: Block VIP visitors who haven't paid
         if (user.type === 'visitor' && (user.visitor_level === 'vip' || user.visitor_level === 'premium') && user.status === 'pending_payment') {
@@ -137,7 +137,7 @@ export default function LoginPage() {
     } catch (err: unknown) {
       console.error('❌ Erreur login:', err);
       let errorMessage = err instanceof Error ? err.message : t('login.wrongCredentials');
-      
+
       // Message plus clair selon le type d'erreur
       if (err instanceof Error) {
         if (err.message.includes('Invalid login credentials') || err.message.includes('Identifiants incorrects')) {
@@ -148,7 +148,7 @@ export default function LoginPage() {
           errorMessage = err.message;
         }
       }
-      
+
       setError(errorMessage);
     }
   };
@@ -168,7 +168,7 @@ export default function LoginPage() {
         }
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : t('login.googleError');
       setError(errorMessage);
@@ -186,13 +186,13 @@ export default function LoginPage() {
         }
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : t('login.linkedinError');
       setError(errorMessage);
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-primary-900 flex items-center justify-center py-12 px-6 relative overflow-hidden">
       {/* Ambient glows */}

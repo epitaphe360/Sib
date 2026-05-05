@@ -4,7 +4,7 @@
  * Génération professionnelle de rapports
  */
 
-import * as XLSX from 'xlsx';
+import writeXlsxFile from 'write-excel-file/browser';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { logger } from '../lib/logger';
@@ -78,25 +78,18 @@ class ExportService {
       const headers = options.headers || Object.keys(data[0] || {});
       const fields = options.fields || Object.keys(data[0] || {});
 
-      // Build worksheet rows
-      const wsData: (string | number | null)[][] = [headers];
-      data.forEach((item) => {
-        const row = fields.map((field) => {
+      const headerRow = headers.map(h => ({ value: String(h) }));
+      const dataRows = data.map((item) =>
+        fields.map((field) => {
           const value = this.getNestedValue(item, field);
-          if (value === null || value === undefined) return null;
-          if (typeof value === 'number') return value;
-          return String(value);
-        });
-        wsData.push(row);
-      });
+          if (value === null || value === undefined) {return { value: '' };}
+          if (typeof value === 'number') {return { value, type: Number };}
+          return { value: String(value) };
+        })
+      );
 
-      const ws = XLSX.utils.aoa_to_sheet(wsData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, options.title || 'Export');
-      const buf = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
-      const blob = new Blob([buf], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
+      const file = writeXlsxFile([headerRow, ...dataRows] as Parameters<typeof writeXlsxFile>[0]);
+      const blob = await file.toBlob();
 
       logger.info('Excel export successful', { rows: data.length });
       return blob;

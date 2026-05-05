@@ -5,9 +5,9 @@
  */
 
 import { supabase } from '../lib/supabase';
-import type { 
-  MediaContent, 
-  MediaInteraction, 
+import type {
+  MediaContent,
+  MediaInteraction,
   LiveEvent,
   MediaPlaylist,
   MediaFilters,
@@ -73,8 +73,8 @@ export class MediaService {
 
       const { data: mediaData, error } = await query;
 
-      if (error) throw error;
-      if (!mediaData || mediaData.length === 0) return [];
+      if (error) {throw error;}
+      if (!mediaData || mediaData.length === 0) {return [];}
 
       // Step 2: Fetch partners separately
       const partnerIds = mediaData
@@ -87,14 +87,14 @@ export class MediaService {
           .from('partners')
           .select('id, company_name, logo_url, partnership_level')
           .in('id', partnerIds);
-        
+
         partners = partnersData || [];
       }
 
       // Step 3: Merge data locally
       const result = mediaData.map(media => ({
         ...media,
-        sponsor_partner: media.sponsor_partner_id 
+        sponsor_partner: media.sponsor_partner_id
           ? partners.find(p => p.id === media.sponsor_partner_id) || null
           : null
       }));
@@ -128,8 +128,8 @@ export class MediaService {
         .eq('id', id)
         .single();
 
-      if (error) throw error;
-      if (!mediaData) return null;
+      if (error) {throw error;}
+      if (!mediaData) {return null;}
 
       // Step 2: Fetch partner if exists
       let partner = null;
@@ -139,7 +139,7 @@ export class MediaService {
           .select('id, company_name, logo_url, partnership_level, website')
           .eq('id', mediaData.sponsor_partner_id)
           .single();
-        
+
         partner = partnerData;
       }
 
@@ -170,8 +170,8 @@ export class MediaService {
         .select(this.MEDIA_COLUMNS)
         .single();
 
-      if (error) throw error;
-      if (!newMedia) return null;
+      if (error) {throw error;}
+      if (!newMedia) {return null;}
 
       // Step 2: Fetch partner if exists
       let partner = null;
@@ -181,7 +181,7 @@ export class MediaService {
           .select('id, company_name, logo_url')
           .eq('id', newMedia.sponsor_partner_id)
           .single();
-        
+
         partner = partnerData;
       }
 
@@ -202,7 +202,7 @@ export class MediaService {
   static async updateMedia(updateData: UpdateMediaRequest): Promise<MediaContent | null> {
     try {
       const { id, ...updates } = updateData;
-      
+
       // Step 1: Update media content
       const { data: updatedMedia, error } = await supabase
         .from('media_contents')
@@ -211,8 +211,8 @@ export class MediaService {
         .select(this.MEDIA_COLUMNS)
         .single();
 
-      if (error) throw error;
-      if (!updatedMedia) return null;
+      if (error) {throw error;}
+      if (!updatedMedia) {return null;}
 
       // Step 2: Fetch partner if exists
       let partner = null;
@@ -222,7 +222,7 @@ export class MediaService {
           .select('id, company_name, logo_url')
           .eq('id', updatedMedia.sponsor_partner_id)
           .single();
-        
+
         partner = partnerData;
       }
 
@@ -247,7 +247,7 @@ export class MediaService {
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur deleteMedia:', error);
@@ -266,7 +266,7 @@ export class MediaService {
         .from('media_interactions')
         .insert([interaction]);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Incrémenter les compteurs appropriés
       if (interaction.action === 'view') {
@@ -332,7 +332,7 @@ export class MediaService {
         .from('media_contents')
         .select('id, status, views_count');
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const stats = {
         total: mediaList?.length || 0,
@@ -371,10 +371,10 @@ export class MediaService {
         .select('action, watch_time, completed')
         .eq('media_content_id', mediaId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const media = await this.getMediaById(mediaId);
-      if (!media) return null;
+      if (!media) {return null;}
 
       const totalViews = interactions?.filter(i => i.action === 'view').length || 0;
       const totalLikes = media.likes_count || 0;
@@ -383,7 +383,7 @@ export class MediaService {
       const watchTimes = interactions
         ?.filter(i => i.watch_time)
         .map(i => i.watch_time || 0) || [];
-      
+
       const avgWatchTime = watchTimes.length > 0
         ? watchTimes.reduce((a, b) => a + b, 0) / watchTimes.length
         : 0;
@@ -427,7 +427,7 @@ export class MediaService {
         .in('status', ['scheduled', 'live'])
         .order('event_date', { ascending: true });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getUpcomingLiveEvents:', error);
@@ -458,7 +458,7 @@ export class MediaService {
         `)
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('❌ Erreur createLiveEvent:', error);
@@ -481,7 +481,7 @@ export class MediaService {
         .eq('status', 'published')
         .order('published_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getPartnerMedia:', error);
@@ -514,7 +514,7 @@ export class MediaService {
         .order('views_count', { ascending: false })
         .limit(limit);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getTrendingMedia:', error);
@@ -537,7 +537,7 @@ export class MediaService {
         .order('published_at', { ascending: false })
         .limit(limit);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getLatestMedia:', error);
@@ -556,7 +556,7 @@ export class MediaService {
         .eq('id', id)
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Charger les médias de la playlist
       if (data && data.media_content_ids && data.media_content_ids.length > 0) {
@@ -591,7 +591,7 @@ export class MediaService {
         .eq('action', 'like')
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== 'PGRST116') {throw error;}
       return !!data;
     } catch (error) {
       console.error('❌ Erreur hasUserLiked:', error);
@@ -618,7 +618,7 @@ export class MediaService {
 
       const { data, error } = await query.order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getUserInteractions:', error);

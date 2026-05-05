@@ -39,7 +39,7 @@ export default function PartnerPaymentSelectionPage() {
       navigate('/partner/dashboard');
       return;
     }
-    
+
     // Redirection automatique vers le virement bancaire
     if (user && tier) {
       handleBankTransfer();

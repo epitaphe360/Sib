@@ -85,7 +85,7 @@ export function getAriaDescribedBy(
   hasError: boolean
 ): string | undefined {
   const ids: string[] = [];
-  if (hasDescription) ids.push(`${inputId}-desc`);
-  if (hasError) ids.push(`${inputId}-error`);
+  if (hasDescription) {ids.push(`${inputId}-desc`);}
+  if (hasError) {ids.push(`${inputId}-error`);}
   return ids.length > 0 ? ids.join(' ') : undefined;
 }

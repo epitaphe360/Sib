@@ -10,7 +10,7 @@ export const matchingTranslations = {
     'matching.my_profile': 'Mon Profil',
     'matching.matches': 'Correspondances',
     'matching.score': 'Score de compatibilité',
-    
+
     // Secteurs d'activité
     'matching.sector.port_operations': 'Exploitation Bâtiment',
     'matching.sector.construction_tech': 'Technologies BTP',
@@ -27,7 +27,7 @@ export const matchingTranslations = {
     'matching.sector.it': 'IT et Systèmes',
     'matching.sector.construction_services': 'Services BTP',
     'matching.sector.cargo_handling': 'Manutention de Marchandises',
-    
+
     // Centres d'intérêt
     'matching.interest.innovation': 'Innovation et R&D',
     'matching.interest.sustainability': 'Développement Durable',
@@ -39,7 +39,7 @@ export const matchingTranslations = {
     'matching.interest.cybersecurity': 'Cybersécurité',
     'matching.interest.smart_ports': 'Bâtiments Intelligents',
     'matching.interest.green_tech': 'Technologies Vertes',
-    
+
     // Objectifs networking
     'matching.goal.find_clients': 'Trouver de nouveaux clients',
     'matching.goal.find_suppliers': 'Trouver des fournisseurs',
@@ -51,7 +51,7 @@ export const matchingTranslations = {
     'matching.goal.invest': 'Trouver des opportunités d\'investissement',
     'matching.goal.export': 'Développer à l\'international',
     'matching.goal.technology_transfer': 'Transfert de technologie',
-    
+
     // Types de collaboration
     'matching.collab.commercial_partnership': 'Partenariat commercial',
     'matching.collab.joint_venture': 'Joint-venture',
@@ -63,7 +63,7 @@ export const matchingTranslations = {
     'matching.collab.consortium': 'Consortium',
     'matching.collab.subcontracting': 'Sous-traitance',
     'matching.collab.investment': 'Investissement',
-    
+
     // Formulaire
     'matching.form.sectors': 'Secteurs d\'activité',
     'matching.form.interests': 'Centres d\'intérêt',
@@ -71,7 +71,7 @@ export const matchingTranslations = {
     'matching.form.collaboration_types': 'Types de collaboration recherchés',
     'matching.form.save': 'Enregistrer mon profil',
     'matching.form.update': 'Mettre à jour',
-    
+
     // Résultats
     'matching.results.title': 'Vos meilleures correspondances',
     'matching.results.no_matches': 'Aucune correspondance pour le moment',
@@ -87,7 +87,7 @@ export const matchingTranslations = {
     'matching.my_profile': 'My Profile',
     'matching.matches': 'Matches',
     'matching.score': 'Compatibility score',
-    
+
     // Sectors
     'matching.sector.port_operations': 'Bâtiment Operations',
     'matching.sector.construction_tech': 'Bâtiment Technologies',
@@ -104,7 +104,7 @@ export const matchingTranslations = {
     'matching.sector.it': 'IT and Systems',
     'matching.sector.construction_services': 'Bâtiment Services',
     'matching.sector.cargo_handling': 'Cargo Handling',
-    
+
     // Interests
     'matching.interest.innovation': 'Innovation and R&D',
     'matching.interest.sustainability': 'Sustainability',
@@ -116,7 +116,7 @@ export const matchingTranslations = {
     'matching.interest.cybersecurity': 'Cybersecurity',
     'matching.interest.smart_ports': 'Smart Bâtiments',
     'matching.interest.green_tech': 'Green Technologies',
-    
+
     // Networking goals
     'matching.goal.find_clients': 'Find new clients',
     'matching.goal.find_suppliers': 'Find suppliers',
@@ -128,7 +128,7 @@ export const matchingTranslations = {
     'matching.goal.invest': 'Find investment opportunities',
     'matching.goal.export': 'Expand internationally',
     'matching.goal.technology_transfer': 'Technology transfer',
-    
+
     // Collaboration types
     'matching.collab.commercial_partnership': 'Commercial partnership',
     'matching.collab.joint_venture': 'Joint venture',
@@ -140,7 +140,7 @@ export const matchingTranslations = {
     'matching.collab.consortium': 'Consortium',
     'matching.collab.subcontracting': 'Subcontracting',
     'matching.collab.investment': 'Investment',
-    
+
     // Form
     'matching.form.sectors': 'Business sectors',
     'matching.form.interests': 'Interests',
@@ -148,7 +148,7 @@ export const matchingTranslations = {
     'matching.form.collaboration_types': 'Desired collaboration types',
     'matching.form.save': 'Save my profile',
     'matching.form.update': 'Update',
-    
+
     // Results
     'matching.results.title': 'Your best matches',
     'matching.results.no_matches': 'No matches yet',
@@ -156,5 +156,69 @@ export const matchingTranslations = {
     'matching.results.view_profile': 'View profile',
     'matching.results.contact': 'Contact',
     'matching.results.book_meeting': 'Book a meeting',
+  },
+  ar: {
+    'matching.title': 'مطابقة الملفات',
+    'matching.subtitle': 'ابحث عن جهات الاتصال التي تتوافق مع أهدافك',
+    'matching.my_profile': 'ملفي الشخصي',
+    'matching.matches': 'التطابقات',
+    'matching.score': 'درجة التوافق',
+    'matching.sector.port_operations': 'عمليات البناء',
+    'matching.sector.construction_tech': 'تقنيات البناء',
+    'matching.sector.digital_transformation': 'التحول الرقمي',
+    'matching.sector.logistics': 'اللوجستيات وسلسلة الإمداد',
+    'matching.sector.equipment': 'معدات البناء',
+    'matching.sector.security': 'سلامة المواقع',
+    'matching.sector.environment': 'البيئة والاستدامة',
+    'matching.sector.training': 'التدريب والتعليم',
+    'matching.sector.consulting': 'الاستشارات والخدمات',
+    'matching.sector.finance': 'المال والتأمين',
+    'matching.sector.construction': 'البناء والبنية التحتية',
+    'matching.sector.energy': 'الطاقة والمرافق',
+    'matching.sector.it': 'تقنية المعلومات والأنظمة',
+    'matching.sector.construction_services': 'خدمات البناء',
+    'matching.sector.cargo_handling': 'مناولة البضائع',
+    'matching.interest.innovation': 'الابتكار والبحث والتطوير',
+    'matching.interest.sustainability': 'الاستدامة',
+    'matching.interest.automation': 'الأتمتة',
+    'matching.interest.digitalization': 'الرقمنة',
+    'matching.interest.ai': 'الذكاء الاصطناعي',
+    'matching.interest.blockchain': 'بلوكتشين',
+    'matching.interest.iot': 'إنترنت الأشياء (IoT)',
+    'matching.interest.cybersecurity': 'الأمن السيبراني',
+    'matching.interest.smart_ports': 'المباني الذكية',
+    'matching.interest.green_tech': 'التقنيات الخضراء',
+    'matching.goal.find_clients': 'إيجاد عملاء جدد',
+    'matching.goal.find_suppliers': 'إيجاد موردين',
+    'matching.goal.find_partners': 'إيجاد شركاء جدد',
+    'matching.goal.develop_network': 'توسيع شبكة علاقاتي',
+    'matching.goal.present_innovations': 'عرض ابتكاراتي',
+    'matching.goal.learn': 'التعلم والتدريب',
+    'matching.goal.recruit': 'توظيف كفاءات',
+    'matching.goal.invest': 'إيجاد فرص استثمارية',
+    'matching.goal.export': 'التوسع دولياً',
+    'matching.goal.technology_transfer': 'نقل التكنولوجيا',
+    'matching.collab.commercial_partnership': 'شراكة تجارية',
+    'matching.collab.joint_venture': 'مشروع مشترك',
+    'matching.collab.distribution': 'توزيع',
+    'matching.collab.licensing': 'ترخيص',
+    'matching.collab.rd_partnership': 'شراكة بحث وتطوير',
+    'matching.collab.supplier': 'علاقة مورد',
+    'matching.collab.strategic_alliance': 'تحالف استراتيجي',
+    'matching.collab.consortium': 'كونسورتيوم',
+    'matching.collab.subcontracting': 'مقاولة من الباطن',
+    'matching.collab.investment': 'استثمار',
+    'matching.form.sectors': 'قطاعات النشاط',
+    'matching.form.interests': 'الاهتمامات',
+    'matching.form.goals': 'أهداف التواصل',
+    'matching.form.collaboration_types': 'أنواع التعاون المطلوبة',
+    'matching.form.save': 'حفظ ملفي',
+    'matching.form.update': 'تحديث',
+    'matching.results.title': 'أفضل تطابقاتك',
+    'matching.results.no_matches': 'لا توجد تطابقات حالياً',
+    'matching.results.loading': 'جارٍ البحث عن تطابقات...',
+    'matching.results.view_profile': 'عرض الملف',
+    'matching.results.contact': 'تواصل',
+    'matching.results.book_meeting': 'حجز موعد',
   },
 };

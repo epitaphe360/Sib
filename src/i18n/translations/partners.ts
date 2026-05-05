@@ -14,7 +14,7 @@ export const partnersTranslations = {
     'partners.visit_website': 'Visiter le site',
     'partners.no_results': 'Aucun partenaire trouvé',
     'partners.count': '{{count}} partenaires',
-    
+
     // Niveaux de partenariat
     'partners.tier.platinum': 'Platinum',
     'partners.tier.gold': 'Gold',
@@ -24,7 +24,7 @@ export const partnersTranslations = {
     'partners.tier.institutional': 'Institutionnel',
     'partners.tier.media': 'Média',
     'partners.tier.technical': 'Technique',
-    
+
     // Catégories
     'partners.category.all': 'Toutes les catégories',
     'partners.category.education': 'Éducation & Formation',
@@ -33,14 +33,14 @@ export const partnersTranslations = {
     'partners.category.finance': 'Finance',
     'partners.category.media': 'Média',
     'partners.category.institutional': 'Institutionnel',
-    
+
     // Page profil partenaire
     'partners.profile.about': 'À propos',
     'partners.profile.benefits': 'Avantages',
     'partners.profile.media': 'Contenus médias',
     'partners.profile.contact': 'Contact',
     'partners.profile.opportunities': 'Opportunités',
-    
+
     // Dashboard partenaire
     'partners.dashboard.visibility': 'Visibilité',
     'partners.dashboard.impressions': 'Impressions',
@@ -50,7 +50,7 @@ export const partnersTranslations = {
     'partners.dashboard.roi': 'Retour sur investissement',
     'partners.dashboard.media_views': 'Vues médias',
     'partners.dashboard.download_report': 'Télécharger le rapport',
-    
+
     // Médias partenaires
     'partners.media.upload': 'Téléverser un média',
     'partners.media.manage': 'Gérer les médias',
@@ -63,7 +63,7 @@ export const partnersTranslations = {
     'partners.media.pending_approval': 'En attente d\'approbation',
     'partners.media.approved': 'Approuvé',
     'partners.media.rejected': 'Rejeté',
-    
+
     // Inscription partenaire
     'partners.signup.title': 'Devenir Partenaire',
     'partners.signup.subtitle': 'Rejoignez notre écosystème',
@@ -75,7 +75,7 @@ export const partnersTranslations = {
     'partners.signup.submit': 'Soumettre la demande',
     'partners.signup.success': 'Demande envoyée avec succès',
     'partners.signup.error': 'Erreur lors de l\'envoi',
-    
+
     // Avantages
     'partners.benefits.visibility': 'Visibilité maximale',
     'partners.benefits.networking': 'Opportunités de networking',
@@ -84,7 +84,7 @@ export const partnersTranslations = {
     'partners.benefits.booth': 'Stand au salon',
     'partners.benefits.speaking': 'Opportunités de prise de parole',
     'partners.benefits.branding': 'Placement de marque',
-    
+
     // Analyse
     'partners.analytics.overview': 'Vue d\'ensemble',
     'partners.analytics.traffic': 'Trafic',
@@ -104,7 +104,7 @@ export const partnersTranslations = {
     'partners.visit_website': 'Visit website',
     'partners.no_results': 'No partners found',
     'partners.count': '{{count}} partners',
-    
+
     // Partnership tiers
     'partners.tier.platinum': 'Platinum',
     'partners.tier.gold': 'Gold',
@@ -114,7 +114,7 @@ export const partnersTranslations = {
     'partners.tier.institutional': 'Institutional',
     'partners.tier.media': 'Media',
     'partners.tier.technical': 'Technical',
-    
+
     // Categories
     'partners.category.all': 'All categories',
     'partners.category.education': 'Education & Training',
@@ -123,14 +123,14 @@ export const partnersTranslations = {
     'partners.category.finance': 'Finance',
     'partners.category.media': 'Media',
     'partners.category.institutional': 'Institutional',
-    
+
     // Partner profile page
     'partners.profile.about': 'About',
     'partners.profile.benefits': 'Benefits',
     'partners.profile.media': 'Media content',
     'partners.profile.contact': 'Contact',
     'partners.profile.opportunities': 'Opportunities',
-    
+
     // Partner dashboard
     'partners.dashboard.visibility': 'Visibility',
     'partners.dashboard.impressions': 'Impressions',
@@ -140,7 +140,7 @@ export const partnersTranslations = {
     'partners.dashboard.roi': 'Return on investment',
     'partners.dashboard.media_views': 'Media views',
     'partners.dashboard.download_report': 'Download report',
-    
+
     // Partner media
     'partners.media.upload': 'Upload media',
     'partners.media.manage': 'Manage media',
@@ -153,7 +153,7 @@ export const partnersTranslations = {
     'partners.media.pending_approval': 'Pending approval',
     'partners.media.approved': 'Approved',
     'partners.media.rejected': 'Rejected',
-    
+
     // Partner signup
     'partners.signup.title': 'Become a Partner',
     'partners.signup.subtitle': 'Join our ecosystem',
@@ -165,7 +165,7 @@ export const partnersTranslations = {
     'partners.signup.submit': 'Submit application',
     'partners.signup.success': 'Application sent successfully',
     'partners.signup.error': 'Submission error',
-    
+
     // Benefits
     'partners.benefits.visibility': 'Maximum visibility',
     'partners.benefits.networking': 'Networking opportunities',
@@ -174,7 +174,7 @@ export const partnersTranslations = {
     'partners.benefits.booth': 'Exhibition booth',
     'partners.benefits.speaking': 'Speaking opportunities',
     'partners.benefits.branding': 'Brand placement',
-    
+
     // Analytics
     'partners.analytics.overview': 'Overview',
     'partners.analytics.traffic': 'Traffic',
@@ -182,5 +182,78 @@ export const partnersTranslations = {
     'partners.analytics.conversions': 'Conversions',
     'partners.analytics.export': 'Export data',
     'partners.analytics.date_range': 'Date range',
+  },
+  ar: {
+    'partners.title': 'الشركاء',
+    'partners.subtitle': 'المنظمات الداعمة لـ SIB 2026',
+    'partners.search': 'البحث عن شريك',
+    'partners.all': 'جميع الشركاء',
+    'partners.view_details': 'عرض التفاصيل',
+    'partners.contact': 'تواصل',
+    'partners.visit_website': 'زيارة الموقع',
+    'partners.no_results': 'لم يُعثر على شركاء',
+    'partners.count': '{{count}} شريك',
+    'partners.tier.platinum': 'بلاتيني',
+    'partners.tier.gold': 'ذهبي',
+    'partners.tier.silver': 'فضي',
+    'partners.tier.bronze': 'برونزي',
+    'partners.tier.museum': 'متحف',
+    'partners.tier.institutional': 'مؤسسي',
+    'partners.tier.media': 'إعلام',
+    'partners.tier.technical': 'تقني',
+    'partners.category.all': 'جميع الفئات',
+    'partners.category.education': 'التعليم والتدريب',
+    'partners.category.technology': 'التكنولوجيا',
+    'partners.category.logistics': 'اللوجستيات',
+    'partners.category.finance': 'المال',
+    'partners.category.media': 'الإعلام',
+    'partners.category.institutional': 'المؤسسي',
+    'partners.profile.about': 'عن الشريك',
+    'partners.profile.benefits': 'المزايا',
+    'partners.profile.media': 'محتوى الوسائط',
+    'partners.profile.contact': 'التواصل',
+    'partners.profile.opportunities': 'الفرص',
+    'partners.dashboard.visibility': 'الرؤية',
+    'partners.dashboard.impressions': 'الانطباعات',
+    'partners.dashboard.clicks': 'النقرات',
+    'partners.dashboard.engagement': 'معدل التفاعل',
+    'partners.dashboard.leads': 'العملاء المحتملون',
+    'partners.dashboard.roi': 'العائد على الاستثمار',
+    'partners.dashboard.media_views': 'مشاهدات الوسائط',
+    'partners.dashboard.download_report': 'تنزيل التقرير',
+    'partners.media.upload': 'رفع وسائط',
+    'partners.media.manage': 'إدارة الوسائط',
+    'partners.media.type': 'نوع الوسائط',
+    'partners.media.webinar': 'ويبينار',
+    'partners.media.podcast': 'بودكاست',
+    'partners.media.video': 'فيديو',
+    'partners.media.brochure': 'كتيّب',
+    'partners.media.case_study': 'دراسة حالة',
+    'partners.media.pending_approval': 'في انتظار الموافقة',
+    'partners.media.approved': 'تمت الموافقة',
+    'partners.media.rejected': 'مرفوض',
+    'partners.signup.title': 'الانضمام كشريك',
+    'partners.signup.subtitle': 'انضم إلى منظومتنا',
+    'partners.signup.organization': 'معلومات المنظمة',
+    'partners.signup.contact': 'جهة الاتصال الرئيسية',
+    'partners.signup.partnership_type': 'نوع الشراكة المطلوب',
+    'partners.signup.description': 'وصف المنظمة',
+    'partners.signup.motivation': 'لماذا تنضم كشريك؟',
+    'partners.signup.submit': 'تقديم الطلب',
+    'partners.signup.success': 'تم إرسال الطلب بنجاح',
+    'partners.signup.error': 'خطأ في الإرسال',
+    'partners.benefits.visibility': 'أقصى قدر من الرؤية',
+    'partners.benefits.networking': 'فرص التواصل',
+    'partners.benefits.media': 'مساحة إعلامية مخصصة',
+    'partners.benefits.leads': 'توليد العملاء المحتملين',
+    'partners.benefits.booth': 'جناح في المعرض',
+    'partners.benefits.speaking': 'فرص التحدث',
+    'partners.benefits.branding': 'وضع العلامة التجارية',
+    'partners.analytics.overview': 'نظرة عامة',
+    'partners.analytics.traffic': 'حركة المرور',
+    'partners.analytics.engagement': 'التفاعل',
+    'partners.analytics.conversions': 'التحويلات',
+    'partners.analytics.export': 'تصدير البيانات',
+    'partners.analytics.date_range': 'الفترة الزمنية',
   },
 };

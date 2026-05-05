@@ -109,7 +109,7 @@ const useAuthStore = create<AuthState>()(
   isLoading: true, // ✅ CRITICAL: Commence à true pour initialiser l'auth
   isGoogleLoading: false,
   isLinkedInLoading: false,
-  
+
   login: async (email: string, password: string, options?: { rememberMe?: boolean }) => {
     set({ isLoading: true });
 
@@ -184,8 +184,8 @@ const useAuthStore = create<AuthState>()(
             : profileData.name || '',
           type: profileData.role || 'visitor',
           // ✅ Status selon le type: partner/exhibitor → pending_payment, visitor → active
-          status: (profileData.role === 'partner' || profileData.role === 'exhibitor') 
-            ? 'pending_payment' 
+          status: (profileData.role === 'partner' || profileData.role === 'exhibitor')
+            ? 'pending_payment'
             : profileData.status || 'active',
           profile: {
             firstName: profileData.firstName || '',
@@ -290,10 +290,10 @@ const useAuthStore = create<AuthState>()(
 
       // ✅ Mettre à jour l'utilisateur dans le store pour les visiteurs (auto-login)
       if (userType === 'visitor') {
-        set({ 
-          user: newUser, 
+        set({
+          user: newUser,
           isAuthenticated: true,
-          isLoading: false 
+          isLoading: false
         });
       }
 
@@ -428,7 +428,7 @@ const useAuthStore = create<AuthState>()(
     // CRITIQUE: Nettoyer TOUS les stores avant de déconnecter
     // Empêche les fuites de données sur ordinateurs partagés
     resetAllStores();
-    
+
     // CRITICAL: Nettoyage complet du localStorage et sessionStorage
     try {
       localStorage.removeItem('sib-auth-storage');
@@ -449,8 +449,8 @@ const useAuthStore = create<AuthState>()(
       isLinkedInLoading: false
     });
   },
-  
-  setUser: (user) => set({ 
+
+  setUser: (user) => set({
     user,
     isAuthenticated: !!user, // ✅ CRITICAL: Also update isAuthenticated when setting user
     token: user ? 'local-session' : null // ✅ Set a token to mark authenticated state
@@ -458,14 +458,14 @@ const useAuthStore = create<AuthState>()(
 
   updateProfile: async (profileData: Partial<UserProfile>) => {
     const { user } = get();
-    if (!user) throw new Error('Utilisateur non connecté');
+    if (!user) {throw new Error('Utilisateur non connecté');}
 
     set({ isLoading: true });
 
     try {
       console.log('🔄 Début mise à jour profil pour:', user.id);
       console.log('📊 Données à fusionner:', Object.keys(profileData));
-      
+
       // ✅ Fusionner les données de manière robuste
       const mergedProfile = {
         ...user.profile,
@@ -499,7 +499,7 @@ const useAuthStore = create<AuthState>()(
       set({ isLoading: false });
       const errorMsg = error instanceof Error ? error.message : String(error);
       console.error('❌ Erreur mise à jour profil pour', user.id, ':', errorMsg);
-      
+
       // ✅ Ajouter des détails sur l'erreur
       if (errorMsg.includes('RLS') || errorMsg.includes('PGRST116')) {
         console.error('🔒 PROBLÈME RLS DÉTECTÉ - Vérifiez les politiques de sécurité en base de données');

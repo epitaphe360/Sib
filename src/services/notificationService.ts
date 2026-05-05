@@ -68,7 +68,7 @@ class NotificationService {
         .select('id, user_id, title, message, type, category, is_read, action_url, metadata, created_at, expires_at')
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Envoyer push notification si activé
       if (notification.user_id) {
@@ -119,7 +119,7 @@ class NotificationService {
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getUserNotifications:', error);
@@ -137,7 +137,7 @@ class NotificationService {
         .update({ is_read: true })
         .eq('id', notificationId);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur markAsRead:', error);
@@ -156,7 +156,7 @@ class NotificationService {
         .eq('user_id', userId)
         .eq('is_read', false);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur markAllAsRead:', error);
@@ -174,7 +174,7 @@ class NotificationService {
         .delete()
         .eq('id', notificationId);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur deleteNotification:', error);
@@ -193,7 +193,7 @@ class NotificationService {
         .eq('user_id', userId)
         .eq('is_read', false);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return count || 0;
     } catch (error) {
       console.error('❌ Erreur getUnreadCount:', error);
@@ -250,7 +250,7 @@ class NotificationService {
         .eq('user_id', userId)
         .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== 'PGRST116') {throw error;}
 
       // Si pas de préférences, créer avec valeurs par défaut
       if (!data) {
@@ -289,7 +289,7 @@ class NotificationService {
         .select('id, user_id, email_notifications_enabled, email_digest_frequency, push_notifications_enabled, sms_notifications_enabled, notify_appointments, notify_messages, notify_events, notify_networking, notify_promotions, notify_system, quiet_hours_enabled, quiet_hours_start, quiet_hours_end, quiet_hours_timezone')
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('❌ Erreur createDefaultPreferences:', error);
@@ -312,7 +312,7 @@ class NotificationService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('❌ Erreur updatePreferences:', error);
@@ -336,7 +336,7 @@ class NotificationService {
           is_active: true,
         }]);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur registerPushSubscription:', error);
@@ -358,7 +358,7 @@ class NotificationService {
         .eq('user_id', userId)
         .eq('endpoint', endpoint);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur unregisterPushSubscription:', error);
@@ -395,7 +395,7 @@ class NotificationService {
         },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur sendPushNotification:', error);
@@ -430,7 +430,7 @@ class NotificationService {
         },
       });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return true;
     } catch (error) {
       console.error('❌ Erreur sendEmailNotification:', error);

@@ -166,7 +166,7 @@ export default function ContentManagement() {
   };
 
   const handleSave = async () => {
-    if (!selectedSectionId) return;
+    if (!selectedSectionId) {return;}
 
     setIsLoading(true);
     setError(null);

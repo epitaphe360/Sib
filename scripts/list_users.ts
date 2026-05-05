@@ -10,7 +10,7 @@ async function listAllUsers() {
 
   try {
     const { data: { users }, error } = await supabase.auth.admin.listUsers();
-    
+
     if (error) {
       console.log(`Erreur: ${error.message}`);
       return;
@@ -23,7 +23,7 @@ async function listAllUsers() {
     const byDomain = {} as Record<string, typeof users>;
     users?.forEach(user => {
       const domain = user.email?.split('@')[1] || 'unknown';
-      if (!byDomain[domain]) byDomain[domain] = [];
+      if (!byDomain[domain]) {byDomain[domain] = [];}
       byDomain[domain].push(user);
     });
 

@@ -3,7 +3,7 @@ import { apiClient } from './client';
 
 /**
  * Service API pour la gestion des formulaires
- * 
+ *
  * Centralise tous les appels API liés aux formulaires
  */
 

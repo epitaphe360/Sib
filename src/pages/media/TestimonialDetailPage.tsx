@@ -49,7 +49,7 @@ export const TestimonialDetailPage: React.FC = () => {
         .eq('type', 'testimonial')
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {throw error;}
       setTestimonial(data);
     } catch (error) {
       console.error('Error loading testimonial:', error);
@@ -91,7 +91,7 @@ export const TestimonialDetailPage: React.FC = () => {
   };
 
   const renderStars = (rating?: number) => {
-    if (!rating) return null;
+    if (!rating) {return null;}
     return (
       <div className="flex items-center space-x-1">
         {[1, 2, 3, 4, 5].map((star) => (
@@ -149,8 +149,8 @@ export const TestimonialDetailPage: React.FC = () => {
             {/* Video Player or Quote Card */}
             {testimonial.is_video && testimonial.content_url ? (
               <div className="relative">
-                <Badge 
-                  variant="default" 
+                <Badge
+                  variant="default"
                   className="absolute top-4 left-4 z-10 bg-green-600"
                 >
                   💬 Témoignage Vidéo
@@ -212,7 +212,7 @@ export const TestimonialDetailPage: React.FC = () => {
                 <Quote className="h-5 w-5 text-green-600" />
                 <span className="text-sm font-medium text-gray-600 uppercase">Témoignage</span>
               </div>
-              
+
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
                 {testimonial.title}
               </h1>

@@ -171,7 +171,7 @@ const AccommodationPage: React.FC = () => {
                   {t('accommodation.featured_partner')}
                 </div>
               )}
-              
+
               {/* Image */}
               <div className="relative h-48 overflow-hidden">
                 <img
@@ -189,7 +189,7 @@ const AccommodationPage: React.FC = () => {
               {/* Content */}
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{hotel.name}</h3>
-                
+
                 <div className="flex items-center gap-2 text-gray-600 mb-3">
                   <MapPin className="text-blue-600" size={18} />
                   <span className="text-sm">{hotel.distance}</span>
@@ -322,13 +322,13 @@ const AccommodationPage: React.FC = () => {
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
                {(() => {
                  const hotel = hotels.find(h => h.id === selectedHotel);
-                 if (!hotel) return null;
+                 if (!hotel) {return null;}
                  return (
                    <div className="p-6">
                       <div className="flex justify-between items-start mb-6">
                         <h2 className="text-3xl font-bold text-gray-900">{hotel.name}</h2>
                         <button onClick={() => setSelectedHotel(null)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                          <X size={24} className="text-gray-500" /> 
+                          <X size={24} className="text-gray-500" />
                         </button>
                       </div>
 
@@ -361,7 +361,7 @@ const AccommodationPage: React.FC = () => {
                               <p className="text-sm text-gray-500">Prix exclusifs pour les participants</p>
                             </div>
                           </div>
-                          
+
                           <div className="overflow-x-auto">
                             <table className="w-full text-left border-collapse bg-white rounded-lg overflow-hidden shadow-sm">
                               <thead>
@@ -387,7 +387,7 @@ const AccommodationPage: React.FC = () => {
                           </p>
                         </div>
                       )}
-                      
+
                       <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-100">
                          <a href={`tel:${hotel.phone}`} className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
                             <Phone size={18} />

@@ -36,10 +36,10 @@ export function ShortcodeRenderer({ content }: ShortcodeProps) {
 
   const parseAndRenderShortcodes = async () => {
     setLoading(true);
-    
+
     // Regex pour détecter les shortcodes [article id="..."]
     const shortcodeRegex = /\[article\s+id=["']([^"']+)["']\]/g;
-    
+
     const parts: React.ReactNode[] = [];
     let lastIndex = 0;
     let match;
@@ -47,7 +47,7 @@ export function ShortcodeRenderer({ content }: ShortcodeProps) {
 
     // Trouver tous les shortcodes
     const matches = Array.from(content.matchAll(shortcodeRegex));
-    
+
     if (matches.length === 0) {
       // Pas de shortcode, retourner le contenu tel quel
       setRenderedContent([content]);
@@ -73,7 +73,7 @@ export function ShortcodeRenderer({ content }: ShortcodeProps) {
       // Ajouter l'article rendu
       const articleId = match[1];
       const article = articles.find(a => a.id === articleId);
-      
+
       if (article) {
         parts.push(
           <ArticleDisplay key={`article-${keyIndex++}`} article={article} />
@@ -111,7 +111,7 @@ export function ShortcodeRenderer({ content }: ShortcodeProps) {
         .eq('published', true) // Seulement les articles publiés
         .range(0, 49);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('Erreur chargement articles:', error);

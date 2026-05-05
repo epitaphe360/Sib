@@ -132,7 +132,7 @@ interface NewsState {
   isLoading: boolean;
   selectedCategory: string;
   searchTerm: string;
-  
+
   // Actions
   fetchNews: (reset?: boolean) => Promise<void>;
   loadMoreNews: () => Promise<void>;
@@ -209,8 +209,8 @@ export const useNewsStore = create<NewsState>((set, get) => ({
           featured: reset ? index < 3 : false,
           image: (() => {
             const img = article.featured_image;
-            if (!img) return fallbackImages[article.category || 'Actualité'] || fallbackImages['Actualité'];
-            if (img.startsWith('http')) return img;
+            if (!img) {return fallbackImages[article.category || 'Actualité'] || fallbackImages['Actualité'];}
+            if (img.startsWith('http')) {return img;}
             // Chemin relatif Supabase storage → construire l'URL complète
             const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
             return `${supabaseUrl}/storage/v1/object/public/${img}`;
@@ -247,28 +247,28 @@ export const useNewsStore = create<NewsState>((set, get) => ({
       console.error('Erreur chargement articles, utilisation du fallback:', _error);
       // En cas d'erreur, utiliser les articles de fallback
       const categories = [...new Set(fallbackArticles.map(article => article.category))];
-      set({ 
+      set({
         articles: fallbackArticles,
         featuredArticles: fallbackArticles.filter(a => a.featured).slice(0, 3),
         categories,
         totalArticles: fallbackArticles.length,
         currentPage: 1,
         hasMore: false,
-        isLoading: false 
+        isLoading: false
       });
     }
   },
 
   loadMoreNews: async () => {
     const { isLoading, hasMore } = get();
-    if (isLoading || !hasMore) return;
+    if (isLoading || !hasMore) {return;}
     await get().fetchNews(false);
   },
 
   fetchFromOfficialSite: async () => {
     set({ isLoading: true });
     try {
-      
+
       // Appeler l'Edge Function de synchronisation
       const { data, error } = await supabase.functions.invoke('sync-news-articles', {
         body: {}
@@ -301,7 +301,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
 
   getFilteredArticles: () => {
     const { articles, selectedCategory, searchTerm } = get();
-    
+
     return articles.filter(article => {
       const title = article.title || '';
       const excerpt = article.excerpt || '';
@@ -309,11 +309,11 @@ export const useNewsStore = create<NewsState>((set, get) => ({
       const search = searchTerm.toLowerCase();
 
       const matchesCategory = !selectedCategory || article.category === selectedCategory;
-      const matchesSearch = !searchTerm || 
+      const matchesSearch = !searchTerm ||
         title.toLowerCase().includes(search) ||
         excerpt.toLowerCase().includes(search) ||
         tags.some(tag => tag.toLowerCase().includes(search));
-      
+
       return matchesCategory && matchesSearch;
     });
   },

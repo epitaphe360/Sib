@@ -1,8 +1,8 @@
 ﻿import { describe, it, expect } from 'vitest';
-import { 
-  VISITOR_QUOTAS, 
-  getVisitorQuota, 
-  calculateRemainingQuota 
+import {
+  VISITOR_QUOTAS,
+  getVisitorQuota,
+  calculateRemainingQuota
 } from '../../src/config/quotas';
 
 describe('Quotas System', () => {

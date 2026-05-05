@@ -83,7 +83,7 @@ async function scrapeArticles(): Promise<ScrapedArticle[]> {
         // Extraire l'image
         const imgElement = element.querySelector('img');
         let image = imgElement?.getAttribute('src') || imgElement?.getAttribute('data-src') || '';
-        
+
         // Si pas d'image, utiliser le fallback selon la catégorie
         const categoryElement = element.querySelector('.elementor-post__badge, .category');
         const category = categoryElement?.textContent?.trim() || 'Actualités Portuaires';

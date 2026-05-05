@@ -43,7 +43,7 @@ interface EnhancedProductModalProps {
 // Composant Image Sécurisée
 const SafeImage: React.FC<{ src?: string; alt: string; className?: string; fallback: React.ReactNode }> = ({ src, alt, className, fallback }) => {
   const [error, setError] = useState(false);
-  if (!src || error) return <>{fallback}</>;
+  if (!src || error) {return <>{fallback}</>;}
   return <img src={src} alt={alt} className={className} onError={() => setError(true)} />;
 };
 
@@ -68,10 +68,10 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
   };
 
   // Préparer la galerie d'images
-  const images = product.images?.length > 0 
-    ? product.images 
-    : product.image 
-    ? [product.image] 
+  const images = product.images?.length > 0
+    ? product.images
+    : product.image
+    ? [product.image]
     : [];
 
   // Navigation galerie
@@ -87,7 +87,7 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
   const shareProduct = (platform: string) => {
     const url = window.location.href;
     const text = `Découvrez ${product.name}`;
-    
+
     switch (platform) {
       case 'email':
         window.location.href = `mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}`;
@@ -111,11 +111,11 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
   // Badges produit
   const renderBadges = () => {
     const badges = [];
-    if (product.isNew) badges.push({ label: 'Nouveau', icon: TrendingUp, color: 'bg-blue-500' });
-    if (product.inStock !== false) badges.push({ label: 'En stock', icon: CheckCircle2, color: 'bg-green-500' });
-    if (product.certified) badges.push({ label: 'Certifié', icon: Award, color: 'bg-purple-500' });
-    if (product.deliveryTime) badges.push({ label: `Livraison: ${product.deliveryTime}`, icon: Truck, color: 'bg-orange-500' });
-    
+    if (product.isNew) {badges.push({ label: 'Nouveau', icon: TrendingUp, color: 'bg-blue-500' });}
+    if (product.inStock !== false) {badges.push({ label: 'En stock', icon: CheckCircle2, color: 'bg-green-500' });}
+    if (product.certified) {badges.push({ label: 'Certifié', icon: Award, color: 'bg-purple-500' });}
+    if (product.deliveryTime) {badges.push({ label: `Livraison: ${product.deliveryTime}`, icon: Truck, color: 'bg-orange-500' });}
+
     return badges.map((badge, idx) => (
       <div key={idx} className={`${badge.color} text-white px-3 py-1 rounded-full text-xs flex items-center gap-1`}>
         <badge.icon className="h-3 w-3" />
@@ -125,8 +125,8 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
   };
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" 
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
       onClick={onClose}
     >
       <motion.div
@@ -141,7 +141,7 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
         <div className="relative h-80 bg-gradient-to-br from-gray-100 to-gray-200">
           {/* Image principale */}
           {images.length > 0 ? (
-            <SafeImage 
+            <SafeImage
               src={images[currentImageIndex]}
               alt={product.name}
               className="w-full h-full object-cover"
@@ -172,7 +172,7 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
               >
                 <ChevronRight className="h-5 w-5 text-gray-700" />
               </button>
-              
+
               {/* Indicateurs */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                 {images.map((_, idx) => (
@@ -204,7 +204,7 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
             >
               <Share2 className="h-5 w-5 text-gray-700" />
             </button>
-            
+
             {/* Menu de partage */}
             <AnimatePresence>
               {showShareMenu && (
@@ -253,7 +253,7 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
               <h2 className="text-3xl font-bold mb-3" style={{ color: theme.primaryColor }}>
                 {product.name}
               </h2>
-              
+
               {/* Badges informatifs */}
               <div className="flex flex-wrap gap-2 mb-4">
                 {renderBadges()}
@@ -262,7 +262,7 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
               {/* Prix */}
               <div className="flex items-baseline gap-3 mb-2">
                 <span className="text-3xl font-bold" style={{ color: theme.accentColor }}>
-                  {typeof product.price === 'number' 
+                  {typeof product.price === 'number'
                     ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(product.price)
                     : product.price || 'Sur devis'}
                 </span>
@@ -435,7 +435,7 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
           {/* Footer avec actions */}
           <div className="border-t bg-gray-50 p-6">
             <div className="flex gap-3">
-              <Button 
+              <Button
                 className="flex-1 text-white font-semibold py-3"
                 style={{ backgroundColor: theme.primaryColor }}
                 onClick={() => {
@@ -446,8 +446,8 @@ export default function EnhancedProductModal({ product: rawProduct, theme, onClo
                 <MessageCircle className="h-5 w-5 mr-2" />
                 Demander un devis
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="py-3"
                 onClick={onClose}
               >

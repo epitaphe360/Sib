@@ -68,23 +68,23 @@ export default function CreateUserPage() {
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
-    
+
     if (!userData.email.trim()) {
       newErrors.email = 'L\'email est requis.';
     } else if (!validateEmail(userData.email)) {
       newErrors.email = 'Format d\'email invalide.';
     }
-    
+
     if (!userData.name.trim()) {
       newErrors.name = 'Le nom est requis.';
     }
-    
+
     if (!userData.password.trim()) {
       newErrors.password = 'Le mot de passe est requis.';
     } else if (userData.password.length < 8) {
       newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères.';
     }
-    
+
     if (!userData.type) {
       newErrors.type = 'Le type d\'utilisateur est requis.';
     }
@@ -95,7 +95,7 @@ export default function CreateUserPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm()) {return;}
 
     setIsLoading(true);
     setErrors({});
@@ -123,8 +123,8 @@ export default function CreateUserPage() {
       navigate(ROUTES.ADMIN_USERS);
     } catch (error: unknown) {
       console.error('Erreur lors de la création de l\'utilisateur:', error);
-      setErrors({ 
-        general: error instanceof Error ? error.message : String(error) || 'Une erreur est survenue. Veuillez réessayer.' 
+      setErrors({
+        general: error instanceof Error ? error.message : String(error) || 'Une erreur est survenue. Veuillez réessayer.'
       });
     } finally {
       setIsLoading(false);

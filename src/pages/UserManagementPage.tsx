@@ -3,7 +3,7 @@ import { SupabaseService } from '../services/supabaseService';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
-import { 
+import {
   ArrowLeft,
   Users,
   Building2,
@@ -167,7 +167,7 @@ export default function UserManagementPage() {
                            user.company.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesType = !selectedType || user.type === selectedType;
       const matchesStatus = !selectedStatus || user.status === selectedStatus;
-      
+
       return matchesSearch && matchesType && matchesStatus;
     });
 
@@ -251,7 +251,7 @@ export default function UserManagementPage() {
     }
 
     const confirmMessage = `Êtes-vous sûr de vouloir ${
-      action === CONFIG.userActions.activate ? 'activer' : 
+      action === CONFIG.userActions.activate ? 'activer' :
       action === CONFIG.userActions.suspend ? 'suspendre' : 'supprimer'
     } ${selectedUsers.length} utilisateur(s) ?`;
 
@@ -278,7 +278,7 @@ export default function UserManagementPage() {
 
   const formatDate = (date: Date) => {
     const d = date instanceof Date ? date : new Date(date as unknown as string);
-    if (isNaN(d.getTime())) return '—';
+    if (isNaN(d.getTime())) {return '—';}
     return new Intl.DateTimeFormat('fr-FR', {
       day: 'numeric',
       month: 'short',
@@ -288,15 +288,15 @@ export default function UserManagementPage() {
 
   const getLastActivityText = (date: Date) => {
     const d = date instanceof Date ? date : new Date(date as unknown as string);
-    if (isNaN(d.getTime())) return '—';
+    if (isNaN(d.getTime())) {return '—';}
     const now = new Date();
     const diffMs = now.getTime() - d.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffHours < 1) return 'À l\'instant';
-    if (diffHours < 24) return `Il y a ${diffHours}h`;
-    if (diffDays < 7) return `Il y a ${diffDays}j`;
+    if (diffHours < 1) {return 'À l\'instant';}
+    if (diffHours < 24) {return `Il y a ${diffHours}h`;}
+    if (diffDays < 7) {return `Il y a ${diffDays}j`;}
     return formatDate(d);
   };
 
@@ -342,7 +342,7 @@ export default function UserManagementPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div className="flex items-center space-x-2">
                 <Users className="h-5 w-5 text-blue-600" />
@@ -454,22 +454,22 @@ export default function UserManagementPage() {
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              
+
               {/* Actions */}
               <div className="flex items-center space-x-3">
-                <Button 
+                <Button
                   variant="outline"
                   onClick={() => setShowFilters(!showFilters)}
                 >
                   <Filter className="h-4 w-4 mr-2" />
                   Filtres
                 </Button>
-                
+
                 <Button variant="outline" onClick={handleExport}>
                   <Download className="h-4 w-4 mr-2" />
                   Exporter
                 </Button>
-                
+
                 <Button variant="default" onClick={handleCreateUser}>
                   <Plus className="h-4 w-4 mr-2" />
                   Nouvel Utilisateur
@@ -501,7 +501,7 @@ export default function UserManagementPage() {
                       <option value="admin">Administrateurs</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Statut
@@ -518,10 +518,10 @@ export default function UserManagementPage() {
                       <option value="rejected">Rejetés</option>
                     </select>
                   </div>
-                  
+
                   <div className="flex items-end">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="w-full"
                       onClick={() => {
                         setSearchTerm('');
@@ -547,10 +547,10 @@ export default function UserManagementPage() {
                   <span className="text-sm text-gray-600">
                     {selectedUsers.length} utilisateur(s) sélectionné(s)
                   </span>
-                  
+
                   <div className="flex space-x-2">
                     <Button
-                      size="sm" 
+                      size="sm"
                       variant="default"
                       disabled={isLoading}
                       onClick={() => handleBulkAction(CONFIG.userActions.activate)}
@@ -559,7 +559,7 @@ export default function UserManagementPage() {
                       Activer
                     </Button>
                     <Button
-                      variant="outline" 
+                      variant="outline"
                       size="sm"
                       disabled={isLoading}
                       onClick={() => handleBulkAction(CONFIG.userActions.suspend)}
@@ -568,7 +568,7 @@ export default function UserManagementPage() {
                       Suspendre
                     </Button>
                     <Button
-                      variant="destructive" 
+                      variant="destructive"
                       size="sm"
                       disabled={isLoading}
                       onClick={() => handleBulkAction(CONFIG.userActions.delete)}
@@ -626,7 +626,7 @@ export default function UserManagementPage() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredUsers.map((user, index) => {
                   const UserIcon = getUserTypeIcon(user.type);
-                  
+
                   return (
                     <motion.tr
                       key={user.id}
@@ -649,7 +649,7 @@ export default function UserManagementPage() {
                           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
                       </td>
-                      
+
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-3">
                           <div className="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
@@ -667,23 +667,23 @@ export default function UserManagementPage() {
                           </div>
                         </div>
                       </td>
-                      
+
                       <td className="px-6 py-4">
                         <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getUserTypeColor(user.type)}`}>
                           <UserIcon className="h-3 w-3 mr-1" />
                           {getUserTypeLabel(user.type)}
                         </div>
                       </td>
-                      
+
                       <td className="px-6 py-4">
-                        <Badge 
+                        <Badge
                           variant={getStatusColor(user.status)}
                           size="sm"
                         >
                           {getStatusLabel(user.status)}
                         </Badge>
                       </td>
-                      
+
                       <td className="px-6 py-4 text-sm text-gray-600">
                         <div className="flex items-center space-x-1">
                           <Calendar className="h-4 w-4" />
@@ -694,18 +694,18 @@ export default function UserManagementPage() {
                           <span>{user.country}</span>
                         </div>
                       </td>
-                      
+
                       <td className="px-6 py-4 text-sm text-gray-600">
                         {getLastActivityText(user.lastActivity)}
                       </td>
-                      
+
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-2">
                           <Button variant="outline" size="sm" onClick={() => handleViewUser(user)}>
                             <Eye className="h-3 w-3 mr-1" />
                             Voir
                           </Button>
-                          
+
                           {user.status === 'pending' && (
                             <Button
                               size="sm"
@@ -718,10 +718,10 @@ export default function UserManagementPage() {
                               Activer
                             </Button>
                           )}
-                          
+
                           {user.status === 'active' && (
                             <Button
-                              variant="outline" 
+                              variant="outline"
                               size="sm"
                               onClick={() => handleUserAction(user.id, CONFIG.userActions.suspend)}
                               disabled={isLoading}
@@ -730,7 +730,7 @@ export default function UserManagementPage() {
                               Suspendre
                             </Button>
                           )}
-                          
+
                           {user.status === 'suspended' && (
                             <Button
                               size="sm"
@@ -742,9 +742,9 @@ export default function UserManagementPage() {
                               Réactiver
                             </Button>
                           )}
-                          
+
                           <Button
-                            variant="destructive" 
+                            variant="destructive"
                             size="sm"
                             disabled={isLoading}
                             onClick={() => handleUserAction(user.id, CONFIG.userActions.delete)}
@@ -759,7 +759,7 @@ export default function UserManagementPage() {
               </tbody>
             </table>
           </div>
-          
+
           {filteredUsers.length === 0 && !isLoading && (
             <div className="text-center py-12">
               <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />

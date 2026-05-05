@@ -84,7 +84,7 @@ class ChatFileUploadService {
           upsert: false,
         });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {throw uploadError;}
 
       // Obtenir l'URL publique
       const { data: urlData } = supabase.storage
@@ -133,7 +133,7 @@ class ChatFileUploadService {
         .select('id, message_id, file_url, file_name, file_size, file_type, thumbnail_url, created_at')
         .single();
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     } catch (error) {
       console.error('❌ Erreur createMessageAttachment:', error);
@@ -151,7 +151,7 @@ class ChatFileUploadService {
         .select('id, message_id, file_url, file_name, file_size, file_type, thumbnail_url, created_at')
         .eq('message_id', messageId);
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getMessageAttachments:', error);
@@ -173,7 +173,7 @@ class ChatFileUploadService {
         .eq('message.conversation_id', conversationId)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {throw error;}
       return data || [];
     } catch (error) {
       console.error('❌ Erreur getConversationFiles:', error);
@@ -193,7 +193,7 @@ class ChatFileUploadService {
         .eq('id', attachmentId)
         .single();
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {throw fetchError;}
 
       // Extraire le path du fichier depuis l'URL
       const url = new URL(attachment.file_url);
@@ -206,7 +206,7 @@ class ChatFileUploadService {
         .from(bucket)
         .remove([filePath]);
 
-      if (storageError) throw storageError;
+      if (storageError) {throw storageError;}
 
       // Supprimer l'enregistrement
       const { error: deleteError } = await supabase
@@ -214,7 +214,7 @@ class ChatFileUploadService {
         .delete()
         .eq('id', attachmentId);
 
-      if (deleteError) throw deleteError;
+      if (deleteError) {throw deleteError;}
 
       return true;
     } catch (error) {
@@ -314,7 +314,7 @@ class ChatFileUploadService {
           upsert: false,
         });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       const { data: urlData } = supabase.storage
         .from(bucket)
@@ -338,7 +338,7 @@ class ChatFileUploadService {
    * Formater la taille d'un fichier
    */
   private formatSize(bytes: number): string {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) {return '0 Bytes';}
 
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];

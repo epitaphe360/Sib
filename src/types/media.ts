@@ -3,7 +3,7 @@
  * Webinaires, Podcasts, Capsules vidéo, Live Studio, etc.
  */
 
-export type MediaType = 
+export type MediaType =
   | 'webinar'           // Webinaires sponsorisés
   | 'capsule_inside'    // Capsules "Inside SIB"
   | 'podcast'           // Podcast "SIB Talks"
@@ -34,12 +34,12 @@ export interface MediaContent {
   duration?: number; // en secondes
   published_at?: string;
   status: MediaStatus;
-  
+
   // Métadonnées
   views_count: number;
   likes_count: number;
   shares_count: number;
-  
+
   // Sponsors/Participants
   sponsor_partner_id?: string;
   sponsor_partner?: {
@@ -50,17 +50,17 @@ export interface MediaContent {
   };
   featured_exhibitors?: string[];
   speakers: Speaker[];
-  
+
   // Contenu
   transcript?: string;
   tags: string[];
   category?: string;
-  
+
   // SEO
   seo_title?: string;
   seo_description?: string;
   seo_keywords?: string[];
-  
+
   created_at: string;
   updated_at: string;
 }

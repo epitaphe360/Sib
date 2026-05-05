@@ -57,7 +57,7 @@ export function StatCard({
             <Icon className={`h-6 w-6 ${iconColor}`} />
           </motion.div>
         </div>
-        
+
         <motion.div
           className="text-3xl font-bold text-gray-900 mb-2"
           initial={{ scale: 0 }}
@@ -66,7 +66,7 @@ export function StatCard({
         >
           {value}
         </motion.div>
-        
+
         {change && (
           <div className="flex items-center space-x-1">
             <motion.div

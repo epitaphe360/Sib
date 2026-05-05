@@ -16,13 +16,13 @@ export const errorsTranslations = {
     'error.502': 'Passerelle incorrecte',
     'error.503': 'Service temporairement indisponible',
     'error.504': 'Délai d\'attente de la passerelle',
-    
+
     // Erreurs réseau
     'error.network.offline': 'Vous êtes hors ligne',
     'error.network.timeout': 'La connexion a expiré',
     'error.network.connection': 'Erreur de connexion',
     'error.network.dns': 'Impossible de résoudre le nom de domaine',
-    
+
     // Erreurs d'authentification
     'error.auth.invalid_credentials': 'Identifiants incorrects',
     'error.auth.session_expired': 'Session expirée - Reconnectez-vous',
@@ -32,38 +32,38 @@ export const errorsTranslations = {
     'error.auth.account_locked': 'Compte verrouillé',
     'error.auth.account_disabled': 'Compte désactivé',
     'error.auth.too_many_attempts': 'Trop de tentatives - Réessayez plus tard',
-    
+
     // Erreurs de validation
     'error.validation.required': 'Champs requis manquants',
     'error.validation.invalid_email': 'Email invalide',
     'error.validation.invalid_phone': 'Numéro de téléphone invalide',
     'error.validation.invalid_format': 'Format de données invalide',
     'error.validation.duplicate': 'Cette valeur existe déjà',
-    
+
     // Erreurs de fichier
     'error.file.too_large': 'Fichier trop volumineux',
     'error.file.invalid_type': 'Type de fichier non supporté',
     'error.file.upload_failed': 'Échec du téléversement',
     'error.file.corrupted': 'Fichier corrompu',
     'error.file.not_found': 'Fichier non trouvé',
-    
+
     // Erreurs de base de données
     'error.database.connection': 'Erreur de connexion à la base de données',
     'error.database.query': 'Erreur lors de la requête',
     'error.database.constraint': 'Violation de contrainte',
     'error.database.duplicate': 'Enregistrement en double',
-    
+
     // Erreurs de données
     'error.data.not_found': 'Données non trouvées',
     'error.data.invalid': 'Données invalides',
     'error.data.corrupted': 'Données corrompues',
     'error.data.missing': 'Données manquantes',
-    
+
     // Erreurs de permission
     'error.permission.denied': 'Permission refusée',
     'error.permission.insufficient': 'Permissions insuffisantes',
     'error.permission.role_required': 'Rôle requis : {{role}}',
-    
+
     // Erreurs métier
     'error.appointment.quota_exceeded': 'Quota de rendez-vous dépassé',
     'error.appointment.slot_taken': 'Créneau déjà réservé',
@@ -72,13 +72,13 @@ export const errorsTranslations = {
     'error.event.registration_closed': 'Inscriptions fermées',
     'error.payment.failed': 'Paiement échoué',
     'error.payment.cancelled': 'Paiement annulé',
-    
+
     // Messages génériques
     'error.generic': 'Une erreur est survenue',
     'error.unknown': 'Erreur inconnue',
     'error.try_again': 'Veuillez réessayer',
     'error.contact_support': 'Contactez le support si le problème persiste',
-    
+
     // Erreurs de chargement spécifiques
     'error.loading.exhibitor': 'Erreur lors du chargement de l\'exposant',
     'error.loading.partner': 'Erreur lors du chargement du partenaire',
@@ -103,25 +103,25 @@ export const errorsTranslations = {
     'error.loading.stats': 'Erreur chargement stats',
     'error.loading.payment_request': 'Erreur recuperation payment_request',
     'error.loading.templates': 'Erreur chargement templates',
-    
+
     // Erreurs de création
     'error.create.auth': 'Erreur création auth',
     'error.create.user': 'Erreur lors de la création de l\'utilisateur',
     'error.create.notification': 'Erreur création notification admin',
     'error.create.request': 'Erreur lors de la création de la demande',
-    
+
     // Erreurs d\'envoi/upload
     'error.upload.file': 'Erreur upload',
     'error.upload.proof': 'Erreur lors de l\'envoi du justificatif',
     'error.upload.media': 'Erreur upload',
-    
+
     // Erreurs de suppression
     'error.delete.item': 'Erreur suppression',
-    
+
     // Erreurs de sauvegarde
     'error.save.template': 'Erreur sauvegarde',
     'error.save.item': 'Erreur lors de l\'enregistrement',
-    
+
     // Erreurs diverses
     'error.search': 'Erreur lors de la recherche',
     'error.generation': 'Erreur lors de la génération',
@@ -133,7 +133,7 @@ export const errorsTranslations = {
     'error.cancellation': 'Erreur lors de l\'annulation',
     'error.update_data': 'Erreur upgrade données',
     'error.recommendation': 'Erreur generateRecommendations',
-    
+
     // Erreurs caméra/scanner
     'error.camera': 'Erreur caméra',
     'error.scanner.start': 'Erreur démarrage scanner',
@@ -141,10 +141,10 @@ export const errorsTranslations = {
     'error.scanner.processing': 'Erreur traitement scan',
     'error.scanner.validation': 'Erreur validation badge',
     'error.scanner.lead': 'Erreur enregistrement lead',
-    
+
     // Erreurs impression
     'error.print': 'Erreur impression',
-    
+
     // Actions d'erreur
     'error.action.retry': 'Réessayer',
     'error.action.reload': 'Recharger',
@@ -165,13 +165,13 @@ export const errorsTranslations = {
     'error.502': 'Bad gateway',
     'error.503': 'Service temporarily unavailable',
     'error.504': 'Gateway timeout',
-    
+
     // Network errors
     'error.network.offline': 'You are offline',
     'error.network.timeout': 'Connection timed out',
     'error.network.connection': 'Connection error',
     'error.network.dns': 'Unable to resolve domain name',
-    
+
     // Authentication errors
     'error.auth.invalid_credentials': 'Invalid credentials',
     'error.auth.session_expired': 'Session expired - Please log in again',
@@ -181,38 +181,38 @@ export const errorsTranslations = {
     'error.auth.account_locked': 'Account locked',
     'error.auth.account_disabled': 'Account disabled',
     'error.auth.too_many_attempts': 'Too many attempts - Try again later',
-    
+
     // Validation errors
     'error.validation.required': 'Missing required fields',
     'error.validation.invalid_email': 'Invalid email',
     'error.validation.invalid_phone': 'Invalid phone number',
     'error.validation.invalid_format': 'Invalid data format',
     'error.validation.duplicate': 'This value already exists',
-    
+
     // File errors
     'error.file.too_large': 'File too large',
     'error.file.invalid_type': 'Unsupported file type',
     'error.file.upload_failed': 'Upload failed',
     'error.file.corrupted': 'Corrupted file',
     'error.file.not_found': 'File not found',
-    
+
     // Database errors
     'error.database.connection': 'Database connection error',
     'error.database.query': 'Query error',
     'error.database.constraint': 'Constraint violation',
     'error.database.duplicate': 'Duplicate record',
-    
+
     // Data errors
     'error.data.not_found': 'Data not found',
     'error.data.invalid': 'Invalid data',
     'error.data.corrupted': 'Corrupted data',
     'error.data.missing': 'Missing data',
-    
+
     // Permission errors
     'error.permission.denied': 'Permission denied',
     'error.permission.insufficient': 'Insufficient permissions',
     'error.permission.role_required': 'Role required: {{role}}',
-    
+
     // Business errors
     'error.appointment.quota_exceeded': 'Appointment quota exceeded',
     'error.appointment.slot_taken': 'Slot already booked',
@@ -221,13 +221,13 @@ export const errorsTranslations = {
     'error.event.registration_closed': 'Registration closed',
     'error.payment.failed': 'Payment failed',
     'error.payment.cancelled': 'Payment cancelled',
-    
+
     // Generic messages
     'error.generic': 'An error occurred',
     'error.unknown': 'Unknown error',
     'error.try_again': 'Please try again',
     'error.contact_support': 'Contact support if the problem persists',
-    
+
     // Specific loading errors
     'error.loading.exhibitor': 'Error loading exhibitor',
     'error.loading.partner': 'Error loading partner',
@@ -252,25 +252,25 @@ export const errorsTranslations = {
     'error.loading.stats': 'Error loading stats',
     'error.loading.payment_request': 'Error retrieving payment_request',
     'error.loading.templates': 'Error loading templates',
-    
+
     // Creation errors
     'error.create.auth': 'Auth creation error',
     'error.create.user': 'Error creating user',
     'error.create.notification': 'Error creating admin notification',
     'error.create.request': 'Error creating request',
-    
+
     // Send/upload errors
     'error.upload.file': 'Upload error',
     'error.upload.proof': 'Error sending proof',
     'error.upload.media': 'Upload error',
-    
+
     // Deletion errors
     'error.delete.item': 'Deletion error',
-    
+
     // Save errors
     'error.save.template': 'Save error',
     'error.save.item': 'Error saving',
-    
+
     // Miscellaneous errors
     'error.search': 'Error during search',
     'error.generation': 'Error during generation',
@@ -282,7 +282,7 @@ export const errorsTranslations = {
     'error.cancellation': 'Error during cancellation',
     'error.update_data': 'Data upgrade error',
     'error.recommendation': 'generateRecommendations error',
-    
+
     // Camera/scanner errors
     'error.camera': 'Camera error',
     'error.scanner.start': 'Scanner start error',
@@ -290,15 +290,127 @@ export const errorsTranslations = {
     'error.scanner.processing': 'Scan processing error',
     'error.scanner.validation': 'Badge validation error',
     'error.scanner.lead': 'Lead recording error',
-    
+
     // Print errors
     'error.print': 'Print error',
-    
+
     // Error actions
     'error.action.retry': 'Retry',
     'error.action.reload': 'Reload',
     'error.action.go_back': 'Go back',
     'error.action.go_home': 'Home',
     'error.action.contact': 'Contact support',
+  },
+  ar: {
+    'error.400': 'طلب غير صالح',
+    'error.401': 'غير مصرح - يرجى تسجيل الدخول',
+    'error.403': 'الوصول مرفوض',
+    'error.404': 'الصفحة غير موجودة',
+    'error.408': 'انتهت مهلة الطلب',
+    'error.409': 'تعارض في البيانات',
+    'error.429': 'طلبات كثيرة جداً - يرجى الانتظار',
+    'error.500': 'خطأ داخلي في الخادم',
+    'error.502': 'بوابة خاطئة',
+    'error.503': 'الخدمة غير متاحة مؤقتاً',
+    'error.504': 'انتهت مهلة البوابة',
+    'error.network.offline': 'أنت غير متصل بالإنترنت',
+    'error.network.timeout': 'انتهت مهلة الاتصال',
+    'error.network.connection': 'خطأ في الاتصال',
+    'error.network.dns': 'تعذّر تحليل اسم النطاق',
+    'error.auth.invalid_credentials': 'بيانات اعتماد غير صحيحة',
+    'error.auth.session_expired': 'انتهت الجلسة - يرجى تسجيل الدخول مجدداً',
+    'error.auth.unauthorized': 'وصول غير مصرح',
+    'error.auth.token_invalid': 'رمز مصادقة غير صالح',
+    'error.auth.token_expired': 'انتهت صلاحية رمز المصادقة',
+    'error.auth.account_locked': 'الحساب مقفل',
+    'error.auth.account_disabled': 'الحساب معطّل',
+    'error.auth.too_many_attempts': 'محاولات كثيرة جداً - أعد المحاولة لاحقاً',
+    'error.validation.required': 'حقول مطلوبة مفقودة',
+    'error.validation.invalid_email': 'بريد إلكتروني غير صالح',
+    'error.validation.invalid_phone': 'رقم هاتف غير صالح',
+    'error.validation.invalid_format': 'تنسيق بيانات غير صالح',
+    'error.validation.duplicate': 'هذه القيمة موجودة بالفعل',
+    'error.file.too_large': 'الملف كبير جداً',
+    'error.file.invalid_type': 'نوع ملف غير مدعوم',
+    'error.file.upload_failed': 'فشل الرفع',
+    'error.file.corrupted': 'الملف تالف',
+    'error.file.not_found': 'الملف غير موجود',
+    'error.database.connection': 'خطأ في الاتصال بقاعدة البيانات',
+    'error.database.query': 'خطأ في الاستعلام',
+    'error.database.constraint': 'انتهاك القيد',
+    'error.database.duplicate': 'سجل مكرر',
+    'error.data.not_found': 'البيانات غير موجودة',
+    'error.data.invalid': 'بيانات غير صالحة',
+    'error.data.corrupted': 'بيانات تالفة',
+    'error.data.missing': 'بيانات مفقودة',
+    'error.permission.denied': 'الإذن مرفوض',
+    'error.permission.insufficient': 'صلاحيات غير كافية',
+    'error.permission.role_required': 'الدور المطلوب: {{role}}',
+    'error.appointment.quota_exceeded': 'تم تجاوز حصة المواعيد',
+    'error.appointment.slot_taken': 'الموعد محجوز بالفعل',
+    'error.appointment.past_date': 'لا يمكن الحجز في الماضي',
+    'error.event.full': 'الفعالية ممتلئة',
+    'error.event.registration_closed': 'التسجيل مغلق',
+    'error.payment.failed': 'فشل الدفع',
+    'error.payment.cancelled': 'تم إلغاء الدفع',
+    'error.generic': 'حدث خطأ',
+    'error.unknown': 'خطأ غير معروف',
+    'error.try_again': 'يرجى المحاولة مجدداً',
+    'error.contact_support': 'تواصل مع الدعم إذا استمرت المشكلة',
+    'error.loading.exhibitor': 'خطأ في تحميل العارض',
+    'error.loading.partner': 'خطأ في تحميل الشريك',
+    'error.loading.partners': 'خطأ في تحميل الشركاء',
+    'error.loading.event': 'خطأ في تحميل الفعالية',
+    'error.loading.events': 'خطأ في تحميل الفعاليات',
+    'error.loading.exhibitors': 'خطأ في تحميل العارضين',
+    'error.loading.user': 'خطأ في تحميل المستخدم',
+    'error.loading.users': 'خطأ في تحميل المستخدمين',
+    'error.loading.media': 'خطأ في تحميل الوسائط',
+    'error.loading.medias': 'خطأ في تحميل الوسائط',
+    'error.loading.podcasts': 'خطأ في تحميل البودكاست',
+    'error.loading.testimonials': 'خطأ في تحميل الشهادات',
+    'error.loading.interviews': 'خطأ في تحميل المقابلات',
+    'error.loading.capsule': 'خطأ في تحميل الكبسولة',
+    'error.loading.episode': 'خطأ في تحميل الحلقة',
+    'error.loading.webinar': 'خطأ في تحميل الويبينار',
+    'error.loading.live_studio': 'خطأ في تحميل الاستوديو المباشر',
+    'error.loading.testimonial': 'خطأ في تحميل الشهادة',
+    'error.loading.request': 'خطأ في تحميل الطلب',
+    'error.loading.connections': 'خطأ في تحميل الاتصالات',
+    'error.loading.stats': 'خطأ في تحميل الإحصائيات',
+    'error.loading.payment_request': 'خطأ في استرداد طلب الدفع',
+    'error.loading.templates': 'خطأ في تحميل القوالب',
+    'error.create.auth': 'خطأ في إنشاء المصادقة',
+    'error.create.user': 'خطأ في إنشاء المستخدم',
+    'error.create.notification': 'خطأ في إنشاء الإشعار',
+    'error.create.request': 'خطأ في إنشاء الطلب',
+    'error.upload.file': 'خطأ في الرفع',
+    'error.upload.proof': 'خطأ في إرسال المستند',
+    'error.upload.media': 'خطأ في الرفع',
+    'error.delete.item': 'خطأ في الحذف',
+    'error.save.template': 'خطأ في الحفظ',
+    'error.save.item': 'خطأ في الحفظ',
+    'error.search': 'خطأ أثناء البحث',
+    'error.generation': 'خطأ أثناء الإنشاء',
+    'error.auto_generation': 'خطأ في الإنشاء التلقائي',
+    'error.action': 'خطأ أثناء الإجراء',
+    'error.group_action': 'خطأ أثناء الإجراء الجماعي',
+    'error.acceptance': 'خطأ أثناء القبول',
+    'error.refusal': 'خطأ أثناء الرفض',
+    'error.cancellation': 'خطأ أثناء الإلغاء',
+    'error.update_data': 'خطأ في تحديث البيانات',
+    'error.recommendation': 'خطأ في التوصيات',
+    'error.camera': 'خطأ في الكاميرا',
+    'error.scanner.start': 'خطأ في تشغيل الماسح',
+    'error.scanner.stop': 'خطأ في إيقاف الماسح',
+    'error.scanner.processing': 'خطأ في معالجة المسح',
+    'error.scanner.validation': 'خطأ في التحقق من الشارة',
+    'error.scanner.lead': 'خطأ في تسجيل العميل المحتمل',
+    'error.print': 'خطأ في الطباعة',
+    'error.action.retry': 'إعادة المحاولة',
+    'error.action.reload': 'إعادة التحميل',
+    'error.action.go_back': 'رجوع',
+    'error.action.go_home': 'الرئيسية',
+    'error.action.contact': 'التواصل مع الدعم',
   },
 };

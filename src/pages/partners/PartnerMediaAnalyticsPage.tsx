@@ -25,8 +25,8 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
   }, []);
 
   const loadPartnerMedia = async () => {
-    if (!user) return;
-    
+    if (!user) {return;}
+
     try {
       setLoading(true);
       const data = await mediaService.getMedia({
@@ -46,8 +46,8 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
     const totalViews = mediaList.reduce((sum, m) => sum + (m.view_count || 0), 0);
     const totalLikes = mediaList.reduce((sum, m) => sum + (m.like_count || 0), 0);
     const totalDuration = mediaList.reduce((sum, m) => sum + (m.duration || 0), 0);
-    const topMedia = mediaList.reduce((top, m) => 
-      !top || (m.view_count || 0) > (top.view_count || 0) ? m : top, 
+    const topMedia = mediaList.reduce((top, m) =>
+      !top || (m.view_count || 0) > (top.view_count || 0) ? m : top,
       null as MediaContent | null
     );
 
@@ -126,8 +126,8 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
             </h2>
             <div className="flex items-center gap-4">
               {stats.topMedia.thumbnail_url && (
-                <img 
-                  src={stats.topMedia.thumbnail_url} 
+                <img
+                  src={stats.topMedia.thumbnail_url}
                   alt={stats.topMedia.title}
                   className="w-32 h-20 object-cover rounded-lg"
                 />
@@ -155,7 +155,7 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-xl font-bold text-gray-900">Performance par média</h2>
           </div>
-          
+
           {loading ? (
             <div className="p-12 text-center">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -165,7 +165,7 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
             <div className="p-12 text-center">
               <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-600">Aucun média publié</p>
-              <Link 
+              <Link
                 to="/partner/media/upload"
                 className="mt-4 inline-block text-blue-600 hover:text-blue-700"
               >
@@ -199,17 +199,17 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {media.map((item) => {
-                    const engagementRate = item.view_count 
+                    const engagementRate = item.view_count
                       ? ((item.like_count || 0) / item.view_count * 100).toFixed(1)
                       : '0.0';
-                    
+
                     return (
                       <tr key={item.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             {item.thumbnail_url && (
-                              <img 
-                                src={item.thumbnail_url} 
+                              <img
+                                src={item.thumbnail_url}
                                 alt={item.title}
                                 className="w-16 h-10 object-cover rounded mr-3"
                               />

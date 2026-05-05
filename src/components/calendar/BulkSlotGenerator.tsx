@@ -36,14 +36,14 @@ export const BulkSlotGenerator: React.FC<BulkSlotGeneratorProps> = ({ userId, on
   };
 
   const calculateSlots = () => {
-    if (!startTime || !endTime || duration <= 0) return 0;
-    
-    let totalSlots = 0;
+    if (!startTime || !endTime || duration <= 0) {return 0;}
+
+    const totalSlots = 0;
     const startMin = parseInt(startTime.split(':')[0]) * 60 + parseInt(startTime.split(':')[1]);
     const endMin = parseInt(endTime.split(':')[0]) * 60 + parseInt(endTime.split(':')[1]);
-    
-    if (endMin <= startMin) return 0;
-    
+
+    if (endMin <= startMin) {return 0;}
+
     const slotsPerDay = Math.floor((endMin - startMin) / duration);
     return slotsPerDay * selectedDates.length;
   };
@@ -69,12 +69,12 @@ export const BulkSlotGenerator: React.FC<BulkSlotGeneratorProps> = ({ userId, on
 
       for (const date of selectedDates) {
         let currentMin = startMinutes;
-        
+
         while (currentMin + duration <= endMinutes) {
           // Format times
           const hStart = Math.floor(currentMin / 60).toString().padStart(2, '0');
           const mStart = (currentMin % 60).toString().padStart(2, '0');
-          
+
           const endSlotMin = currentMin + duration;
           const hEnd = Math.floor(endSlotMin / 60).toString().padStart(2, '0');
           const mEnd = (endSlotMin % 60).toString().padStart(2, '0');
@@ -96,9 +96,9 @@ export const BulkSlotGenerator: React.FC<BulkSlotGeneratorProps> = ({ userId, on
       }
 
       console.log(`Génération de ${slotsToCreate.length} créneaux...`);
-      
+
       await SupabaseService.createTimeSlotsBulk(slotsToCreate);
-      
+
       toast.success(`${slotsToCreate.length} créneaux générés avec succès !`);
       onGenerate();
       onClose();
@@ -221,8 +221,8 @@ export const BulkSlotGenerator: React.FC<BulkSlotGeneratorProps> = ({ userId, on
         <Button variant="outline" onClick={onClose}>
           Annuler
         </Button>
-        <Button 
-            onClick={handleGenerate} 
+        <Button
+            onClick={handleGenerate}
             disabled={isGenerating || selectedDates.length === 0 || calculateSlots() === 0}
             className="bg-blue-600 hover:bg-blue-700"
         >

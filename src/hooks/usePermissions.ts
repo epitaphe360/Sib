@@ -8,12 +8,12 @@ export const usePermissions = () => {
   const isPartner = user?.type === 'partner';
   const isVisitor = user?.type === 'visitor';
 
-  return { 
-    user, 
-    isAdmin, 
+  return {
+    user,
+    isAdmin,
     isExhibitor,
     isPartner,
     isVisitor,
-    isAuthenticated: !!user 
+    isAuthenticated: !!user
   };
 };

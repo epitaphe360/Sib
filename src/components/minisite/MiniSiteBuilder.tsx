@@ -163,7 +163,7 @@ export default function MiniSiteBuilder() {
   // Charger le vrai logo de l'entreprise depuis la base de données
   useEffect(() => {
     const loadExhibitorLogo = async () => {
-      if (!user?.id) return;
+      if (!user?.id) {return;}
       try {
         // Récupérer les données de l'exposant
         const exhibitor = await SupabaseService.getExhibitorByUserId(user.id);
@@ -525,7 +525,7 @@ export default function MiniSiteBuilder() {
                                   <div className="grid grid-cols-2 gap-4">
                                     {(section.content as AboutContent).features.map((feature: any, idx: number) => {
                                       const featureName = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-                                      if (!featureName) return null;
+                                      if (!featureName) {return null;}
                                       return (
                                         <div key={`feature-${idx}`} className="flex items-center space-x-2">
                                           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: siteSettings.primaryColor }}></div>
@@ -550,7 +550,7 @@ export default function MiniSiteBuilder() {
                                       <div className="flex flex-wrap gap-1">
                                         {product.features.map((feature: any, idx: number) => {
                                           const featureName = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-                                          if (!featureName) return null;
+                                          if (!featureName) {return null;}
                                           return <Badge key={`pf-${idx}`} variant="info" size="sm">{featureName}</Badge>;
                                         })}
                                       </div>

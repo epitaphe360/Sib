@@ -49,8 +49,8 @@ export default function ExhibitorDetailPage() {
 
   useEffect(() => {
     const loadExhibitor = async () => {
-      if (!id) return;
-      
+      if (!id) {return;}
+
       setIsLoading(true);
       try {
         const data = await SupabaseService.getExhibitorById(id);

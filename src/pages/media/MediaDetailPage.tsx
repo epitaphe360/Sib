@@ -1,8 +1,8 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, Calendar, Users, Play, Share2, Heart, 
+import {
+  ArrowLeft, Calendar, Users, Play, Share2, Heart,
   MessageCircle, Clock, Building2, User as UserIcon,
   Download, Info, Sparkles
 } from 'lucide-react';
@@ -25,7 +25,7 @@ export default function MediaDetailPage() {
 
   useEffect(() => {
     const fetchMedia = async () => {
-      if (!id) return;
+      if (!id) {return;}
       try {
         const data = await MediaService.getMediaById(id);
         if (!data) {
@@ -50,16 +50,16 @@ export default function MediaDetailPage() {
       e.preventDefault();
       e.stopPropagation();
     }
-    
+
     // Support video_url OU media_url
     const mediaUrl = media?.video_url || media?.audio_url || media?.media_url;
-    console.log('?? Play button clicked', { 
+    console.log('?? Play button clicked', {
       video_url: media?.video_url,
       audio_url: media?.audio_url,
       media_url: media?.media_url,
-      using: mediaUrl 
+      using: mediaUrl
     });
-    
+
     if (mediaUrl) {
       setIsPlaying(true);
       window.open(mediaUrl, '_blank');
@@ -75,7 +75,7 @@ export default function MediaDetailPage() {
       e.stopPropagation();
     }
     console.log('?? Download button clicked', { resources_url: media?.resources_url });
-    
+
     if (media?.resources_url) {
       window.open(media.resources_url, '_blank');
       toast.success('Téléchargement des ressources en cours...');
@@ -90,7 +90,7 @@ export default function MediaDetailPage() {
       e.stopPropagation();
     }
     console.log('?? Share button clicked');
-    
+
     const url = window.location.href;
     if (navigator.share) {
       try {
@@ -129,13 +129,13 @@ export default function MediaDetailPage() {
     );
   }
 
-  if (!media) return null;
+  if (!media) {return null;}
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         {/* Back Button */}
-        <Link 
+        <Link
           to={ROUTES.MEDIA_LIBRARY}
           className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-8 transition-colors"
         >
@@ -146,14 +146,14 @@ export default function MediaDetailPage() {
         {/* Video Player Section */}
         <Card className="overflow-hidden mb-8 shadow-2xl border-0 bg-black aspect-video relative group">
           <div className="absolute inset-0 flex items-center justify-center">
-            <img 
-              src={media.thumbnail_url || 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200'} 
+            <img
+              src={media.thumbnail_url || 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200'}
               alt={media.title}
               className="w-full h-full object-cover opacity-60"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               type="button"
               className="relative z-10 w-20 h-20 rounded-full bg-blue-600 hover:bg-blue-700 hover:scale-110 transition-all shadow-xl cursor-pointer"
               onClick={(e) => handlePlayMedia(e)}
@@ -161,7 +161,7 @@ export default function MediaDetailPage() {
               <Play className="h-10 w-10 text-white ml-1" />
             </Button>
           </div>
-          
+
           {/* Video Overlay Info */}
           <div className="absolute bottom-6 left-6 right-6 text-white">
             <div className="flex items-center space-x-3 mb-2">
@@ -222,8 +222,8 @@ export default function MediaDetailPage() {
               <p className="text-blue-800/80 italic">
                 "La transformation digitale des bâtiments marocains s'accélère avec l'adoption massive de l'IA et de la 5G. Ce webinaire explore comment ces technologies optimisent la chaîne logistique et renforcent la compétitivité du secteur de la construction national..."
               </p>
-              <Button 
-                variant="link" 
+              <Button
+                variant="link"
                 type="button"
                 className="mt-4 p-0 text-blue-600 font-bold cursor-pointer"
                 onClick={(e) => {
@@ -246,7 +246,7 @@ export default function MediaDetailPage() {
           <div className="space-y-6">
             <Card className="p-6">
               <div className="space-y-4">
-                <Button 
+                <Button
                   type="button"
                   className="w-full bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200 cursor-pointer"
                   onClick={(e) => handleDownloadResources(e)}
@@ -255,19 +255,19 @@ export default function MediaDetailPage() {
                   Télécharger les ressources
                 </Button>
                 <div className="flex gap-2">
-                  <Button 
+                  <Button
                     type="button"
-                    variant="outline" 
-                    className="flex-1 cursor-pointer" 
+                    variant="outline"
+                    className="flex-1 cursor-pointer"
                     onClick={(e) => handleShare(e)}
                   >
                     <Share2 className="h-4 w-4 mr-2" />
                     Partager
                   </Button>
-                  <Button 
+                  <Button
                     type="button"
-                    variant="outline" 
-                    className="flex-1 cursor-pointer" 
+                    variant="outline"
+                    className="flex-1 cursor-pointer"
                     onClick={(e) => handleToggleFavorite(e)}
                   >
                     <Heart className="h-4 w-4 mr-2" />
@@ -302,7 +302,7 @@ export default function MediaDetailPage() {
               <p className="text-sm text-slate-300 mb-6">
                 Vous avez des questions sur ce contenu ou souhaitez contacter les intervenants ?
               </p>
-              <Button 
+              <Button
                 type="button"
                 className="w-full bg-white text-slate-900 hover:bg-blue-50 cursor-pointer"
                 onClick={(e) => {

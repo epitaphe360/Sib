@@ -30,7 +30,7 @@ type LanguageTranslations = Record<string, TranslationObject>;
  */
 function mergeTranslations(...translationObjects: LanguageTranslations[]): LanguageTranslations {
   const result: LanguageTranslations = {};
-  
+
   translationObjects.forEach(translations => {
     Object.keys(translations).forEach(lang => {
       if (!result[lang]) {
@@ -39,7 +39,7 @@ function mergeTranslations(...translationObjects: LanguageTranslations[]): Langu
       Object.assign(result[lang], translations[lang]);
     });
   });
-  
+
   return result;
 }
 
@@ -71,7 +71,7 @@ export const allTranslations = mergeTranslations(
 /**
  * Langues supportées
  */
-export const supportedLanguages = ['fr', 'en'] as const;
+export const supportedLanguages = ['fr', 'en', 'ar'] as const;
 export type SupportedLanguage = typeof supportedLanguages[number];
 
 /**

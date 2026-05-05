@@ -38,10 +38,10 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
 
   // Filtrer les rendez-vous selon le type d'utilisateur
   const getFilteredAppointments = () => {
-    if (!user) return [];
+    if (!user) {return [];}
 
     let filteredByUser: Appointment[] = [];
-    
+
     if (userType === 'visitor') {
       // Pour les visiteurs : rendez-vous qu'ils ont demandés
       filteredByUser = appointments.filter(apt => apt.visitorId === user.id);
@@ -51,7 +51,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
     }
 
     // Appliquer le filtre de statut
-    if (filter === 'all') return filteredByUser;
+    if (filter === 'all') {return filteredByUser;}
     return filteredByUser.filter(apt => apt.status === filter);
   };
 
@@ -76,8 +76,8 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
   };
 
   const handleCancel = async (appointmentId: string) => {
-    if (!confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')) return;
-    
+    if (!confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')) {return;}
+
     try {
       await cancelAppointment(appointmentId);
       toast.success('Rendez-vous annulé');
@@ -139,7 +139,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
     <div className={`${standalone ? 'min-h-screen bg-[#f8fafc] p-4 md:p-8' : 'p-0 bg-transparent'}`} data-testid="personal-appointments-calendar">
       {/* Hero Header Premium - Masqué si non standalone */}
       {standalone && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] p-8 md:p-12 mb-10 shadow-2xl border border-white/10"
@@ -148,7 +148,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
           <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px]"></div>
           <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/10 rounded-full blur-[80px]"></div>
-          
+
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
             <div className="flex items-center space-x-8">
               <div className="p-5 bg-white/10 backdrop-blur-xl rounded-[1.5rem] border border-white/20 shadow-2xl transform hover:rotate-3 transition-transform duration-500">
@@ -167,7 +167,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                   Mes Rendez-vous B2B
                 </h1>
                 <p className="text-blue-100/60 text-lg font-medium max-w-xl italic">
-                  {userType === 'visitor' 
+                  {userType === 'visitor'
                     ? '🎯 Gérez vos rencontres stratégiques avec les leaders de l\'industrie du bâtiment'
                     : '📩 Optimisez votre réseau et validez vos opportunités d\'affaires'}
                 </p>
@@ -209,8 +209,8 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                     key={s.id}
                     onClick={() => setFilter(s.id as any)}
                     className={`px-4 py-2 text-xs font-black rounded-xl transition-all duration-300 flex items-center gap-2 ${
-                      filter === s.id 
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' 
+                      filter === s.id
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
                         : 'text-gray-500 hover:bg-gray-100'
                     }`}
                   >
@@ -238,7 +238,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
           {weekDays.map((day, index) => {
             const dayAppointments = weekAppointments.filter(appointment => {
               const slot = timeSlots.find(s => s.id === appointment.timeSlotId);
-              if (!slot) return false;
+              if (!slot) {return false;}
               const slotDate = new Date(slot.date);
               return slotDate.toDateString() === day.toDateString();
             });
@@ -246,14 +246,14 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
             const hasAppointments = dayAppointments.length > 0;
 
             return (
-              <motion.div 
-                key={day.toISOString()} 
+              <motion.div
+                key={day.toISOString()}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className={`flex flex-col h-full min-h-[500px] rounded-[2.5rem] bg-white border-2 transition-all duration-500 overflow-hidden group ${
-                  isToday 
-                    ? 'border-blue-500 shadow-2xl shadow-blue-900/10' 
+                  isToday
+                    ? 'border-blue-500 shadow-2xl shadow-blue-900/10'
                     : 'border-gray-50 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/5'
                 }`}
               >
@@ -263,7 +263,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                 }`}>
                   {/* Pattern marocain en background du header */}
                   <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
-                  
+
                   <div className="relative z-10 flex items-center justify-between text-center md:text-left">
                     <div>
                       <div className={`text-[10px] font-black uppercase tracking-[0.3em] mb-2 ${
@@ -328,7 +328,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                               {appointment.status}
                             </div>
                           </div>
-                          
+
                           <div className="space-y-3 py-4 border-y border-gray-50">
                             <div className="flex items-center gap-3 text-sm font-bold text-gray-700">
                               <div className="p-1.5 bg-gray-100 rounded-lg">
@@ -362,7 +362,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                                 </button>
                               </>
                             )}
-                            
+
                             {appointment.status === 'confirmed' && (
                               <button
                                 onClick={() => handleCancel(appointment.id)}
@@ -392,29 +392,29 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
 
         {/* Empty State Premium */}
         {getFilteredAppointments().length === 0 && !isLoading && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="relative overflow-hidden p-20 bg-white rounded-[3rem] border-2 border-dashed border-gray-200 text-center shadow-2xl shadow-blue-900/5 group"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent"></div>
-            
-            <motion.div 
+
+            <motion.div
               animate={{ y: [0, -15, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               className="relative z-10 w-32 h-32 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-blue-600/20"
             >
               <CalendarDays className="w-16 h-16 text-white" />
             </motion.div>
-            
+
             <h4 className="relative z-10 text-4xl font-black text-slate-900 mb-4 tracking-tight">
-              {filter === 'all' 
+              {filter === 'all'
                 ? 'Planning Vierge'
                 : `Aucun RDV ${filter}`}
             </h4>
-            
+
             <p className="relative z-10 text-slate-500 text-lg font-medium max-w-xl mx-auto italic">
-              {userType === 'visitor' 
+              {userType === 'visitor'
                 ? '🔍 Votre agenda B2B est prêt. Explorez le catalogue des exposants pour initier des connexions transformatrices pour SIB 2026.'
                 : '⏰ Patience. Votre visibilité est maximale. Les demandes de rendez-vous apparaîtront ici dès validation par les visiteurs.'}
             </p>

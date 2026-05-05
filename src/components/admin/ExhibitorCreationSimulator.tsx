@@ -1,6 +1,6 @@
 ﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
+import {
   ArrowLeft,
   Plus,
   Building2,
@@ -40,7 +40,7 @@ interface NewExhibitorForm {
   establishedYear: string;
   employeeCount: string;
   revenue: string;
-  
+
   // Contact principal
   contactName: string;
   email: string;
@@ -49,7 +49,7 @@ interface NewExhibitorForm {
   address: string;
   city: string;
   zipCode: string;
-  
+
   // Informations commerciales
   packageType: 'base' | 'standard' | 'premium' | 'elite';
   standSize: string;
@@ -57,18 +57,18 @@ interface NewExhibitorForm {
   standArea: number;
   contractValue: string;
   paymentStatus: 'pending' | 'partial' | 'completed';
-  
+
   // Produits
   products: Array<{
     name: string;
     category: string;
     description: string;
   }>;
-  
+
   // Informations supplémentaires
   certifications: string;
   markets: string;
-  
+
   // Contrôles admin
   verified: boolean;
   featured: boolean;
@@ -187,7 +187,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    
+
     try {
       if (!user) {
         throw new Error('Utilisateur non connecté');
@@ -224,7 +224,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
             zipCode: formData.zipCode
           }
         });
-        
+
         toast.success(`Exposant modifié : ${formData.companyName}`);
         setIsSubmitting(false);
         window.location.href = ROUTES.ADMIN_EXHIBITORS;
@@ -326,9 +326,9 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
 
       // 4. Rafraîchir la liste des exposants
       await fetchExhibitors();
-      
+
   toast.success(`?? Exposant créé: ${newExhibitor.companyName} (ID: ${newExhibitor.id}) — utilisateur: ${newUser.email}`);
-      
+
       // Reset form
       setFormData({
         companyName: '',
@@ -346,10 +346,10 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
         paymentStatus: 'pending',
         products: []
       });
-      
+
       setCurrentStep(1);
       setIsSubmitting(false);
-      
+
     } catch (error) {
   setIsSubmitting(false);
   toast.error(error instanceof Error ? `Erreur: ${error.message}` : "Erreur inconnue");
@@ -371,7 +371,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
   };
 
   const updateProduct = (index: number, field: string, value: string) => {
-    const updatedProducts = formData.products.map((product, i) => 
+    const updatedProducts = formData.products.map((product, i) =>
       i === index ? { ...product, [field]: value } : product
     );
     setFormData({ ...formData, products: updatedProducts });
@@ -415,8 +415,8 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                  currentStep >= step.id 
-                    ? 'bg-blue-600 text-white border-blue-600' 
+                  currentStep >= step.id
+                    ? 'bg-blue-600 text-white border-blue-600'
                     : 'bg-white text-gray-400 border-gray-300'
                 }`}>
                   {currentStep > step.id ? (
@@ -900,7 +900,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                       <p className="text-2xl font-bold text-blue-600 mt-2">{pkg.price}</p>
                       <p className="text-sm text-gray-600">{pkg.standSize}</p>
                     </div>
-                    
+
                     <ul className="space-y-2">
                       {pkg.features.map((feature) => (
                         <li key={feature} className="flex items-center text-sm text-gray-700">
@@ -1011,7 +1011,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1025,7 +1025,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                           placeholder="Nom du produit/service"
                         />
                       </div>
-                      
+
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Catégorie
@@ -1043,7 +1043,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                         </select>
                       </div>
                     </div>
-                    
+
                     <div className="mt-4">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Description
@@ -1058,7 +1058,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                     </div>
                   </div>
                 ))}
-                
+
                 <Button
                   variant="outline"
                   onClick={addProduct}
@@ -1216,8 +1216,8 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                 <Card className="p-4">
                   <h4 className="font-semibold text-gray-900 mb-3">Logo de l'entreprise</h4>
                   <div className="flex justify-center">
-                    <img 
-                      src={formData.logo} 
+                    <img
+                      src={formData.logo}
                       alt={formData.companyName}
                       className="w-32 h-32 object-contain rounded-lg border border-gray-300 bg-white p-2"
                       onError={(e) => {
@@ -1318,7 +1318,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
               <div className="bg-blue-50 p-4 rounded-lg">
                 <h4 className="font-medium text-blue-900 mb-2">Processus de validation</h4>
                 <p className="text-sm text-blue-700">
-                  Après soumission, le dossier sera examiné par l'équipe commerciale puis validé par l'administration. 
+                  Après soumission, le dossier sera examiné par l'équipe commerciale puis validé par l'administration.
                   L'exposant recevra un email de confirmation une fois son compte activé.
                 </p>
               </div>

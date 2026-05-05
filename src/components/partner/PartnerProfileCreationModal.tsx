@@ -81,7 +81,7 @@ export default function PartnerProfileCreationModal({
           onConflict: 'user_id'
         });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       toast.success('Profil partenaire créé avec succès !');
       onComplete();

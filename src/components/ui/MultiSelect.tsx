@@ -50,7 +50,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   return (
     <div className="space-y-2">
       <Label>{label}</Label>
-      
+
       {/* Tags sélectionnés */}
       {selectedValues.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-2">

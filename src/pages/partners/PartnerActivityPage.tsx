@@ -114,7 +114,7 @@ export const PartnerActivityPage: React.FC = () => {
   ];
 
   const filteredActivities = activities.filter(activity => {
-    if (selectedFilter === 'all') return true;
+    if (selectedFilter === 'all') {return true;}
     return activity.category === selectedFilter;
   });
 
@@ -122,11 +122,11 @@ export const PartnerActivityPage: React.FC = () => {
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
 
-    if (diffInHours < 1) return t('partner.activity.just_now', "À l'instant");
-    if (diffInHours < 24) return t('partner.activity.hours_ago', `Il y a ${diffInHours}h`);
+    if (diffInHours < 1) {return t('partner.activity.just_now', "À l'instant");}
+    if (diffInHours < 24) {return t('partner.activity.hours_ago', `Il y a ${diffInHours}h`);}
 
     const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) return t('partner.activity.days_ago', `Il y a ${diffInDays}j`);
+    if (diffInDays < 7) {return t('partner.activity.days_ago', `Il y a ${diffInDays}j`);}
 
     return new Intl.DateTimeFormat('fr-FR', {
       day: 'numeric',

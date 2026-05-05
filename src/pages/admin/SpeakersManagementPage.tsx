@@ -49,7 +49,7 @@ export default function SpeakersManagementPage() {
     }
   };
 
-  const filtered = speakers.filter(s => 
+  const filtered = speakers.filter(s =>
     `${s.first_name} ${s.last_name} ${s.company} ${s.title}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -68,7 +68,7 @@ export default function SpeakersManagementPage() {
                 <p className="text-gray-600 mt-1">Ajoutez, modifiez ou supprimez les speakers des conférences</p>
               </div>
             </div>
-            
+
             <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700">
               <Plus className="h-5 w-5 mr-2" /> Nouveau Speaker
             </Button>
@@ -77,7 +77,7 @@ export default function SpeakersManagementPage() {
 
         <div className="mb-6 relative w-full md:w-96">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <input 
+          <input
             type="text"
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
             placeholder="Rechercher par nom, entreprise..."

@@ -43,17 +43,17 @@ export default function ProductDetailPage() {
 
   const bookRdv = () => {
     const exhibitorId = exhibitorFromQuery || product?.exhibitorId;
-    if (!exhibitorId) return;
+    if (!exhibitorId) {return;}
     const target = `${ROUTES.APPOINTMENTS}?exhibitor=${exhibitorId}`;
-    if (!isAuthenticated) navigate(`${ROUTES.LOGIN}?redirect=${encodeURIComponent(target)}`);
-    else navigate(target);
+    if (!isAuthenticated) {navigate(`${ROUTES.LOGIN}?redirect=${encodeURIComponent(target)}`);}
+    else {navigate(target);}
   };
 
   const contactExhibitor = () => {
     // Optionally this page could receive exhibitor email via location state; fallback toast
     toast.info("Contactez l'exposant depuis sa page détaillée");
     const exhibitorId = exhibitorFromQuery || product?.exhibitorId;
-    if (exhibitorId) navigate(`/exhibitors/${exhibitorId}`);
+    if (exhibitorId) {navigate(`/exhibitors/${exhibitorId}`);}
   };
 
   if (loading) {
@@ -119,7 +119,7 @@ export default function ProductDetailPage() {
               </div>
 
               <h1 className="text-2xl font-bold text-gray-900 mb-2">{product.name}</h1>
-              
+
               {/* Prix et disponibilité */}
               <div className="flex items-center gap-4 mb-4">
                 {(product as any).price && (

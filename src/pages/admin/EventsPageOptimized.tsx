@@ -42,8 +42,7 @@ import { motion } from 'framer-motion';
 import { EventsService, Event } from '../../services/eventsService';
 import { useOptimizedList } from '../../hooks/useOptimizedList';
 import { exportService } from '../../services/exportService';
-import { RATE_LIMITS } from '../../middleware/rateLimiter';
-import { useRateLimit } from '../../middleware/rateLimiter';
+import { RATE_LIMITS, useRateLimit } from '../../middleware/rateLimiter';
 import { logger } from '../../lib/logger';
 import { toast } from 'sonner';
 
@@ -131,10 +130,10 @@ export default function EventsPageOptimized() {
     initialSortField: 'date',
     initialSortDirection: 'desc',
     filterFn: (event, filters) => {
-      if (filters.event_type && event.event_type !== filters.event_type) return false;
-      if (filters.status && event.status !== filters.status) return false;
-      if (filters.virtual === 'true' && !event.virtual) return false;
-      if (filters.virtual === 'false' && event.virtual) return false;
+      if (filters.event_type && event.event_type !== filters.event_type) {return false;}
+      if (filters.status && event.status !== filters.status) {return false;}
+      if (filters.virtual === 'true' && !event.virtual) {return false;}
+      if (filters.virtual === 'false' && event.virtual) {return false;}
       return true;
     },
   });
@@ -214,7 +213,7 @@ export default function EventsPageOptimized() {
   };
 
   const renderSortIcon = (field: keyof ExtendedEvent) => {
-    if (sortField !== field) return null;
+    if (sortField !== field) {return null;}
     return sortDirection === 'asc' ? (
       <ChevronUp className="h-4 w-4 inline ml-1" />
     ) : (

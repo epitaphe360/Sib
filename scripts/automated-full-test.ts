@@ -55,18 +55,18 @@ const ALL_PAGES = [
   { name: 'Mentions legales', path: '/legal' },
   { name: 'Plan du site', path: '/sitemap' },
   { name: 'API Documentation', path: '/api' },
-  
+
   // Inscription specifique
   { name: 'Inscription Exposant', path: '/exhibitor-signup' },
   { name: 'Inscription Partenaire', path: '/partner-signup' },
   { name: 'Inscription Visiteur Free', path: '/visitor/register/free' },
   { name: 'Inscription Visiteur VIP', path: '/visitor/register/vip' },
-  
+
   // Pages medias
   { name: 'Galerie Medias', path: '/media' },
   { name: 'Meilleurs Moments', path: '/best-moments' },
   { name: 'Temoignages', path: '/testimonials' },
-  
+
   // Dashboard (necessite auth)
   { name: 'Dashboard', path: '/dashboard', requiresAuth: true },
   { name: 'Profil', path: '/profile', requiresAuth: true },
@@ -75,16 +75,16 @@ const ALL_PAGES = [
   { name: 'Networking', path: '/networking', requiresAuth: true },
   { name: 'Rendez-vous', path: '/appointments', requiresAuth: true },
   { name: 'Calendrier', path: '/calendar', requiresAuth: true },
-  
+
   // Pages Admin
   { name: 'Admin Dashboard', path: '/admin', requiresAuth: true, requiresAdmin: true },
   { name: 'Admin Utilisateurs', path: '/admin/users', requiresAuth: true, requiresAdmin: true },
   { name: 'Admin Metrics', path: '/admin/metrics', requiresAuth: true, requiresAdmin: true },
-  
+
   // Pages Exposant
   { name: 'Mini-Site Editor', path: '/exhibitor/minisite', requiresAuth: true },
   { name: 'Exhibitor Products', path: '/exhibitor/products', requiresAuth: true },
-  
+
   // Pages Partenaire
   { name: 'Partner Analytics', path: '/partner/analytics', requiresAuth: true },
   { name: 'Partner Leads', path: '/partner/leads', requiresAuth: true },
@@ -100,9 +100,9 @@ class FullPageTester {
   private networkErrors: string[] = [];
 
   async init() {
-    this.browser = await chromium.launch({ 
+    this.browser = await chromium.launch({
       headless: false, // Visible pour debug
-      slowMo: 100 
+      slowMo: 100
     });
     this.context = await this.browser.newContext({
       viewport: { width: 1920, height: 1080 },
@@ -114,7 +114,7 @@ class FullPageTester {
     this.page.on('console', (msg) => {
       const type = msg.type();
       const text = msg.text();
-      
+
       if (type === 'error') {
         this.consoleErrors.push(`[CONSOLE ERROR] ${text}`);
       } else if (type === 'warning') {
@@ -137,7 +137,7 @@ class FullPageTester {
   }
 
   async testPage(pageInfo: { name: string; path: string; requiresAuth?: boolean; requiresAdmin?: boolean }): Promise<TestResult> {
-    if (!this.page) throw new Error('Browser not initialized');
+    if (!this.page) {throw new Error('Browser not initialized');}
 
     // Reset errors pour cette page
     this.consoleErrors = [];
@@ -146,14 +146,14 @@ class FullPageTester {
 
     const url = `${BASE_URL}${pageInfo.path}`;
     const startTime = Date.now();
-    
+
     console.log(`\n[TEST] ${pageInfo.name} - ${url}`);
 
     try {
       // Navigation avec timeout de 30s
-      await this.page.goto(url, { 
+      await this.page.goto(url, {
         waitUntil: 'networkidle',
-        timeout: 30000 
+        timeout: 30000
       });
 
       const loadTime = Date.now() - startTime;
@@ -163,16 +163,16 @@ class FullPageTester {
 
       // Compter les elements cliquables
       const clickableElements = await this.page.$$('button, a, [role="button"], input[type="submit"]');
-      
+
       // Tester les boutons visibles
       const brokenButtons: string[] = [];
       const buttons = await this.page.$$('button:visible');
-      
+
       for (let i = 0; i < Math.min(buttons.length, 5); i++) { // Max 5 boutons par page
         try {
           const buttonText = await buttons[i].textContent();
           const isDisabled = await buttons[i].isDisabled();
-          
+
           if (!isDisabled && buttonText && !buttonText.includes('Supprimer') && !buttonText.includes('Delete')) {
             // Ne pas cliquer sur les boutons de suppression
           }
@@ -227,7 +227,7 @@ class FullPageTester {
 
     } catch (error) {
       console.log(`  [ERREUR CRITIQUE] ${error}`);
-      
+
       return {
         page: pageInfo.name,
         url,
@@ -252,7 +252,7 @@ class FullPageTester {
     // Tester toutes les pages publiques d'abord
     const publicPages = ALL_PAGES.filter(p => !p.requiresAuth);
     console.log(`\n[PHASE 1] Test de ${publicPages.length} pages publiques`);
-    
+
     for (const pageInfo of publicPages) {
       const result = await this.testPage(pageInfo);
       this.results.push(result);
@@ -260,11 +260,11 @@ class FullPageTester {
 
     // Generer le rapport
     const report = this.generateReport();
-    
+
     // Sauvegarder le rapport
     const reportPath = path.join(process.cwd(), 'test-results', 'full-test-report.json');
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-    
+
     // Sauvegarder aussi en markdown
     const mdReport = this.generateMarkdownReport(report);
     const mdPath = path.join(process.cwd(), 'test-results', 'full-test-report.md');
@@ -289,7 +289,7 @@ class FullPageTester {
     const successPages = this.results.filter(r => r.status === 'success').length;
     const errorPages = this.results.filter(r => r.status === 'error').length;
     const warningPages = this.results.filter(r => r.status === 'warning').length;
-    
+
     return {
       timestamp: new Date().toISOString(),
       totalPages: this.results.length,
@@ -323,14 +323,14 @@ class FullPageTester {
         md += `### ${result.page}\n`;
         md += `- **URL:** ${result.url}\n`;
         md += `- **Temps de chargement:** ${result.loadTime}ms\n`;
-        
+
         if (result.consoleErrors.length > 0) {
           md += `- **Erreurs console:**\n`;
           result.consoleErrors.forEach(e => {
             md += `  - \`${e.substring(0, 200)}\`\n`;
           });
         }
-        
+
         if (result.networkErrors.length > 0) {
           md += `- **Erreurs reseau:**\n`;
           result.networkErrors.forEach(e => {

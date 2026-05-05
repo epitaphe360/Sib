@@ -24,7 +24,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
   const [isEventStarted, setIsEventStarted] = useState(false);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {return;}
 
     // Date du salon SIB 2026 (25-29 Novembre 2026)
     const salonDate = new Date('2026-11-25T09:00:00');
@@ -76,7 +76,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
     return num.toString().padStart(2, '0');
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <AnimatePresence>
@@ -143,8 +143,8 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                   {t('countdown.opening_in')}
                 </h3>
                 <p className="text-gray-600 mb-8">
-                  {t('countdown.opening_description', { 
-                    period: timeLeft.days > 30 ? t('countdown.months') : timeLeft.days > 7 ? t('countdown.weeks') : t('countdown.days_plural') 
+                  {t('countdown.opening_description', {
+                    period: timeLeft.days > 30 ? t('countdown.months') : timeLeft.days > 7 ? t('countdown.weeks') : t('countdown.days_plural')
                   })}
                 </p>
 
@@ -277,7 +277,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                   <Calendar className="h-5 w-5 mr-2 text-blue-600" />
                   {t('countdown.program_3days')}
                 </h4>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="text-center p-4 bg-blue-50 rounded-lg">
                     <div className="font-bold text-blue-600 mb-2">{t('countdown.day1_title')}</div>
@@ -287,7 +287,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                       <div>• {t('countdown.day1_networking')}</div>
                     </div>
                   </div>
-                  
+
                   <div className="text-center p-4 bg-green-50 rounded-lg">
                     <div className="font-bold text-green-600 mb-2">{t('countdown.day2_title')}</div>
                     <div className="text-sm text-gray-600 space-y-1">
@@ -296,7 +296,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                       <div>• {t('countdown.day2_demos')}</div>
                     </div>
                   </div>
-                  
+
                   <div className="text-center p-4 bg-purple-50 rounded-lg">
                     <div className="font-bold text-purple-600 mb-2">{t('countdown.day3_title')}</div>
                     <div className="text-sm text-gray-600 space-y-1">
@@ -311,7 +311,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
+              <Button
                 size="lg"
                 variant="default"
                 onClick={() => {
@@ -321,8 +321,8 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                 <Clock className="h-4 w-4 mr-2" />
                 {t('countdown.set_reminder')}
               </Button>
-              
-              <Button 
+
+              <Button
                 variant="outline"
                 onClick={() => {
                   const shareText = t('countdown.share_text', {
@@ -331,7 +331,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                     days: timeLeft.days,
                     hours: timeLeft.hours
                   });
-                  
+
                   if (navigator.share) {
                     navigator.share({
                       title: t('countdown.share_title'),
@@ -348,8 +348,8 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                 <Globe className="h-4 w-4 mr-2" />
                 {t('countdown.share_countdown')}
               </Button>
-              
-              <Button 
+
+              <Button
                 variant="outline"
                 onClick={() => {
                   const calendarEvent = {
@@ -359,9 +359,9 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                     location: 'Mohammed VI Exhibition Center, El Jadida, Maroc',
                     description: t('countdown.calendar_description')
                   };
-                  
+
                   const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(calendarEvent.title)}&dates=${calendarEvent.start.replace(/[-:]/g, '').replace('.000', '')}Z/${calendarEvent.end.replace(/[-:]/g, '').replace('.000', '')}Z&location=${encodeURIComponent(calendarEvent.location)}&details=${encodeURIComponent(calendarEvent.description)}`;
-                  
+
                   window.open(googleCalendarUrl, '_blank');
                   toast.success(t('countdown.calendar_added'));
                 }}
@@ -384,7 +384,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
                     <div>• {t('countdown.info_wifi')}</div>
                   </div>
                 </div>
-                
+
                 <div>
                   <h5 className="font-semibold text-gray-900 mb-3">{t('countdown.contact_org')}</h5>
                   <div className="space-y-2 text-gray-600">

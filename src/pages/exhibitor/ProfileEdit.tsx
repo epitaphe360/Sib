@@ -53,7 +53,7 @@ const ProfileEdit: React.FC = () => {
     // prefill values from user.exhibitor if present
     (async () => {
       try {
-        if (!user) return;
+        if (!user) {return;}
         const exhibitor = await SupabaseService.getExhibitorByUserId(user.id).catch(() => null);
         if (exhibitor) {
           reset({
@@ -70,18 +70,18 @@ const ProfileEdit: React.FC = () => {
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files && e.target.files[0];
-    if (f) setFile(f);
+    if (f) {setFile(f);}
   };
 
   const onSubmit = async (data: ProfileFormData) => {
-    if (!user) return setError('Vous devez être connecté.');
+    if (!user) {return setError('Vous devez être connecté.');}
     setError(null);
     setLoading(true);
     try {
       let logoUrl: string | undefined = undefined;
       if (file) {
         const res = await SupabaseService.uploadExhibitorLogo(user.id, file);
-        if (res?.publicUrl) logoUrl = res.publicUrl;
+        if (res?.publicUrl) {logoUrl = res.publicUrl;}
       }
 
       const updates: any = {
@@ -89,7 +89,7 @@ const ProfileEdit: React.FC = () => {
         description: data.description || '',
         website: data.website || ''
       };
-      if (logoUrl) updates.logo = logoUrl;
+      if (logoUrl) {updates.logo = logoUrl;}
 
       // Find exhibitor id by user id
       const exhibitor = await SupabaseService.getExhibitorByUserId(user.id as string);

@@ -54,7 +54,7 @@ interface ExhibitorRow {
 function extractQueryTokens(query: string): string[] {
   const normalized = normalizeText(query);
   return normalized
-    .split(/[\s,;.!?\/\-]+/)
+    .split(/[\s,;.!?/-]+/)
     .filter(t => t.length > 2 && !FR_STOPWORDS.has(t));
 }
 
@@ -85,7 +85,7 @@ function buildMatchReasons(
   // Raisons sectorielles
   for (const tag of tags) {
     const label = SECTOR_LABELS[tag];
-    if (!label) continue;
+    if (!label) {continue;}
     const normalizedLabel = normalizeText(label);
     if (
       normalizedText.includes(normalizedLabel) ||
@@ -140,10 +140,10 @@ function scoreExhibitor(
   let score = scoreExhibitorForTags(exhibitorText, tags, queryTokens);
 
   // Bonus si exposant publié / vérifié
-  if (exhibitor.is_published) score += 5;
+  if (exhibitor.is_published) {score += 5;}
 
   // Bonus si stand attribué (exposant confirmé)
-  if (exhibitor.stand_number) score += 5;
+  if (exhibitor.stand_number) {score += 5;}
 
   return Math.min(100, score);
 }

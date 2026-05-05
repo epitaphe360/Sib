@@ -33,7 +33,7 @@ export class StorageService {
 
     // DÉSACTIVATION TEMPORAIRE DE LA VALIDATION pour debug
     // La validation pourrait corrompre le fichier
-    /* 
+    /*
     try {
       await validateImage(file, 10); // Max 10MB
       console.log('✅ [UPLOAD DEBUG] Validation réussie');
@@ -110,21 +110,21 @@ export class StorageService {
       // Télécharger l'image depuis l'URL
       const response = await fetch(imageUrl);
       const blob = await response.blob();
-      
+
       // Déterminer l'extension à partir du type MIME
       let fileExt = 'jpg'; // par défaut
       const contentType = response.headers.get('content-type');
       if (contentType) {
-        if (contentType.includes('png')) fileExt = 'png';
-        else if (contentType.includes('jpeg') || contentType.includes('jpg')) fileExt = 'jpg';
-        else if (contentType.includes('gif')) fileExt = 'gif';
-        else if (contentType.includes('webp')) fileExt = 'webp';
-        else if (contentType.includes('svg')) fileExt = 'svg';
+        if (contentType.includes('png')) {fileExt = 'png';}
+        else if (contentType.includes('jpeg') || contentType.includes('jpg')) {fileExt = 'jpg';}
+        else if (contentType.includes('gif')) {fileExt = 'gif';}
+        else if (contentType.includes('webp')) {fileExt = 'webp';}
+        else if (contentType.includes('svg')) {fileExt = 'svg';}
       }
-      
+
       // Créer un fichier à partir du blob
       const file = new File([blob], `image.${fileExt}`, { type: contentType || 'image/jpeg' });
-      
+
       // Utiliser la méthode d'upload existante
       return await this.uploadImage(file, bucket, folder);
     } catch (error) {

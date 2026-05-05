@@ -10,9 +10,9 @@ interface RequestBody {
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { 
+    return new Response('ok', {
       headers: corsHeaders,
-      status: 200 
+      status: 200
     });
   }
 
@@ -23,7 +23,7 @@ serve(async (req) => {
     if (!userId || !websiteUrl) {
       return new Response(
         JSON.stringify({ error: 'Missing userId or websiteUrl' }),
-        { 
+        {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         }
@@ -54,7 +54,7 @@ serve(async (req) => {
     const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
     const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i);
     const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/i);
-    
+
     // Extract basic info
     const companyName = titleMatch ? titleMatch[1].trim() : 'Mon Entreprise';
     const description = descMatch ? descMatch[1].trim() : h1Match ? h1Match[1].trim() : 'Description de l\'entreprise';
@@ -71,7 +71,7 @@ serve(async (req) => {
     }
 
     const exhibitor = Array.isArray(user.exhibitors) ? user.exhibitors[0] : user.exhibitors;
-    
+
     if (!exhibitor) {
       throw new Error('Exhibitor profile not found');
     }
@@ -98,7 +98,7 @@ serve(async (req) => {
       .single();
 
     let miniSiteResult;
-    
+
     if (existingMinisite) {
       // Update existing minisite
       miniSiteResult = await supabase
@@ -123,12 +123,12 @@ serve(async (req) => {
     console.log('✅ Mini-site created/updated successfully');
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         miniSite: miniSiteResult.data,
         message: 'Mini-site créé avec succès'
       }),
-      { 
+      {
         status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
@@ -136,13 +136,13 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('❌ Error creating mini-site:', error);
-    
+
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         error: error instanceof Error ? error.message : 'Unknown error',
         details: 'Failed to create mini-site from website'
       }),
-      { 
+      {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }

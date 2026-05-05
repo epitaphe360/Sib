@@ -162,10 +162,10 @@ export default function RegisterPage() {
 
   // Déterminer le type de compte par défaut basé sur l'URL
   const getDefaultAccountType = () => {
-    if (requestedLevel) return 'visitor';
-    if (location.pathname.includes('/visitor')) return 'visitor';
-    if (location.pathname.includes('/exhibitor')) return 'exhibitor';
-    if (location.pathname.includes('/partner')) return 'partner';
+    if (requestedLevel) {return 'visitor';}
+    if (location.pathname.includes('/visitor')) {return 'visitor';}
+    if (location.pathname.includes('/exhibitor')) {return 'exhibitor';}
+    if (location.pathname.includes('/partner')) {return 'partner';}
     return undefined;
   };
 
@@ -203,18 +203,18 @@ export default function RegisterPage() {
     const newObjectives = checked
       ? [...selectedObjectives, objective]
       : selectedObjectives.filter(o => o !== objective);
-    
+
     setSelectedObjectives(newObjectives);
     setValue('objectives', newObjectives.length > 0 ? newObjectives : undefined);
   };
-  
+
   // Log des erreurs de validation
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
       console.log('⚠️ [INSCRIPTION] Erreurs de validation détectées:', errors);
     }
   }, [errors]);
-  
+
   // Log au changement d'étape (désactivé en production)
   useEffect(() => {
     if (currentStep === 5 && Object.keys(errors).length > 0) {
@@ -225,11 +225,11 @@ export default function RegisterPage() {
   // Fonction pour calculer la force du mot de passe
   const getPasswordStrength = (pwd: string) => {
     let strength = 0;
-    if (pwd.length >= 12) strength++;
-    if (/[A-Z]/.test(pwd)) strength++;
-    if (/[a-z]/.test(pwd)) strength++;
-    if (/[0-9]/.test(pwd)) strength++;
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) strength++;
+    if (pwd.length >= 12) {strength++;}
+    if (/[A-Z]/.test(pwd)) {strength++;}
+    if (/[a-z]/.test(pwd)) {strength++;}
+    if (/[0-9]/.test(pwd)) {strength++;}
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) {strength++;}
     return strength;
   };
 
@@ -317,7 +317,7 @@ export default function RegisterPage() {
 
     const fieldsToValidate = getFieldsForStep(currentStep);
     console.log('🔍 [INSCRIPTION] Champs à valider:', fieldsToValidate);
-    
+
     // Debug: log les valeurs actuelles des champs
     const currentValues = fieldsToValidate.reduce((acc, field) => ({
       ...acc,
@@ -326,11 +326,11 @@ export default function RegisterPage() {
     console.log('📝 [INSCRIPTION] Valeurs actuelles:', currentValues);
 
     const isValid = await trigger(fieldsToValidate);
-    console.log('🔍 [INSCRIPTION] Résultat validation trigger:', { 
-      isValid, 
-      errors: Object.keys(errors).length > 0 ? errors : 'None' 
+    console.log('🔍 [INSCRIPTION] Résultat validation trigger:', {
+      isValid,
+      errors: Object.keys(errors).length > 0 ? errors : 'None'
     });
-    
+
     if (isValid) {
       // Validations manuelles pour les champs conditionnels non couverts par le trigger
       if (currentStep === 2 && watchedSector === 'Autre') {
@@ -362,41 +362,41 @@ export default function RegisterPage() {
             return;
           }
         }
-        
+
         // 🆕 Vérifier si l'email existe déjà dans la base de données
         const emailValue = watch('email');
         if (emailValue) {
           console.log('🔍 [INSCRIPTION - Étape 3] Vérification de l\'email:', emailValue);
-          
+
           setIsCheckingEmail(true);
-          
+
           const emailToCheck = emailValue.toLowerCase().trim();
           const { data: existingUser, error: checkError } = await supabase
             .from('users')
             .select('email, role')
             .eq('email', emailToCheck)
             .maybeSingle();
-          
+
           setIsCheckingEmail(false);
-          
+
           if (checkError && checkError.code !== 'PGRST116') {
             console.error('❌ [INSCRIPTION - Étape 3] Erreur lors de la vérification:', checkError);
             toast.error('Erreur lors de la vérification de l\'email. Veuillez réessayer.');
             return;
           }
-          
+
           if (existingUser) {
             console.warn('⚠️ [INSCRIPTION - Étape 3] Email déjà existant:', existingUser);
-            const roleLabel = existingUser.role === 'exhibitor' ? 'exposant' : 
+            const roleLabel = existingUser.role === 'exhibitor' ? 'exposant' :
                              existingUser.role === 'partner' ? 'partenaire' : 'visiteur';
-            
+
             setError('email', {
               type: 'manual',
               message: `Déjà enregistré comme ${roleLabel}`
             });
-            
+
             toast.error(`⚠️ Cet email est déjà enregistré en tant que ${roleLabel}. Connectez-vous pour accéder à votre compte.`);
-            
+
             // Scroller vers le champ email
             setTimeout(() => {
               const emailElement = document.querySelector('[name="email"]') as HTMLElement;
@@ -405,17 +405,17 @@ export default function RegisterPage() {
                 emailElement.focus();
               }
             }, 200);
-            
+
             // Proposer la redirection vers login après 2s
             setTimeout(() => {
               if (window.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
                 navigate(ROUTES.LOGIN);
               }
             }, 2000);
-            
+
             return;
           }
-          
+
           console.log('✅ [INSCRIPTION - Étape 3] Email disponible');
         }
       }
@@ -428,7 +428,7 @@ export default function RegisterPage() {
       const errorFields = Object.keys(errors);
       console.warn('❌ [INSCRIPTION] Validation échouée - erreurs sur:', errorFields);
       console.warn('❌ [INSCRIPTION] Détails erreurs:', errors);
-      
+
       // Afficher toast pour feedback immédiat
       if (errorFields.length > 0) {
         const firstError = errors[errorFields[0] as keyof RegistrationForm];
@@ -463,22 +463,22 @@ export default function RegisterPage() {
       password: '***',
       confirmPassword: '***'
     });
-    
+
     setIsSubmitting(true);
     try {
       console.log('📝 [INSCRIPTION] Démarrage appel registerUser dans le store...');
-      
+
       // 🆕 Vérification finale : L'email existe-t-il déjà ? (filet de sécurité)
       console.log('🔍 [INSCRIPTION - Vérification finale] Contrôle de l\'email avant création...');
       const emailToCheck = data.email.toLowerCase().trim();
-      
+
       // Vérifier dans la table users
       const { data: existingUser, error: checkError } = await supabase
         .from('users')
         .select('email, role')
         .eq('email', emailToCheck)
         .maybeSingle();
-      
+
       if (checkError && checkError.code !== 'PGRST116') {
         // Erreur autre que "pas de résultat"
         console.error('❌ [INSCRIPTION] Erreur lors de la vérification de l\'email:', checkError);
@@ -486,22 +486,22 @@ export default function RegisterPage() {
         setIsSubmitting(false);
         return;
       }
-      
+
       if (existingUser) {
         console.warn('⚠️ [INSCRIPTION] Email déjà existant dans la table users');
-        const roleLabel = existingUser.role === 'exhibitor' ? 'exposant' : 
+        const roleLabel = existingUser.role === 'exhibitor' ? 'exposant' :
                          existingUser.role === 'partner' ? 'partenaire' : 'visiteur';
         toast.error(`⚠️ Cet email est déjà enregistré en tant que ${roleLabel}. Connectez-vous pour accéder à votre compte.`);
-        
+
         // Mettre une erreur sur le champ email
         setError('email', {
           type: 'manual',
           message: `Déjà enregistré comme ${roleLabel}`
         });
-        
+
         // Revenir à l'étape 3 (où se trouve le champ email)
         setCurrentStep(3);
-        
+
         // Scroller vers le champ email pour la visibilité
         setTimeout(() => {
           const emailElement = document.querySelector('[name="email"]') as HTMLElement;
@@ -510,24 +510,24 @@ export default function RegisterPage() {
             emailElement.focus();
           }
         }, 300);
-        
+
         setTimeout(() => {
           if (window.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
             navigate(ROUTES.LOGIN);
           }
         }, 2000);
-        
+
         setIsSubmitting(false);
         return;
       }
-      
+
       console.log('✅ [INSCRIPTION] Email disponible, création du compte...');
-      
+
       const timestamp = new Date().getTime();
-      
+
       // Appel à Supabase authStore.register
       await registerUser(data);
-      
+
       const duration = new Date().getTime() - timestamp;
       console.log(`✅ [INSCRIPTION] registerUser terminé succès en ${duration}ms`);
 
@@ -536,9 +536,9 @@ export default function RegisterPage() {
         console.log('📧 [INSCRIPTION] Envoi email de bienvenue...');
         const { EmailService } = await import('../../services/emailService');
         const firstName = data.firstName || data.accountType;
-        const accountTypeLabel = data.accountType === 'visitor' ? 'visiteur' : 
+        const accountTypeLabel = data.accountType === 'visitor' ? 'visiteur' :
                                 data.accountType === 'exhibitor' ? 'exposant' : 'partenaire';
-        
+
         await EmailService.sendWelcomeEmail(data.email, firstName, accountTypeLabel);
         console.log('✅ [INSCRIPTION] Email de bienvenue envoyé');
       } catch (emailError) {
@@ -584,23 +584,23 @@ export default function RegisterPage() {
         stack: error instanceof Error ? error.stack : undefined,
         error
       });
-      
+
       // Messages d'erreur améliorés
       let errorMessage = 'Erreur lors de l\'inscription';
-      
+
       if (error instanceof Error) {
         if (error.message.includes('already registered') || error.message.includes('already been registered')) {
           errorMessage = '⚠️ Cet email est déjà associé à un compte. Utilisez "Mot de passe oublié" si vous ne vous souvenez plus de vos identifiants.';
-          
+
           // Mettre une erreur sur le champ email
           setError('email', {
             type: 'manual',
             message: 'Email déjà utilisé'
           });
-          
+
           // Revenir à l'étape 3 (où se trouve le champ email)
           setCurrentStep(3);
-          
+
           // Scroller vers le champ email après un court délai
           setTimeout(() => {
             const emailElement = document.querySelector('[name="email"]') as HTMLElement;
@@ -609,7 +609,7 @@ export default function RegisterPage() {
               emailElement.focus();
             }
           }, 300);
-          
+
           // Proposer la redirection vers login après 3s
           setTimeout(() => {
             const shouldRedirect = window.confirm(
@@ -626,10 +626,10 @@ export default function RegisterPage() {
             type: 'manual',
             message: 'Adresse email invalide'
           });
-          
+
           // Revenir à l'étape 3 (où se trouve le champ email)
           setCurrentStep(3);
-          
+
           // Scroller vers le champ email après un court délai
           setTimeout(() => {
             const emailElement = document.querySelector('[name="email"]') as HTMLElement;
@@ -648,7 +648,7 @@ export default function RegisterPage() {
           errorMessage = error.message;
         }
       }
-      
+
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -658,23 +658,23 @@ export default function RegisterPage() {
   // Gestionnaire d'erreurs de validation
   const onError = (errors: any) => {
     console.error('❌ [INSCRIPTION] Erreurs de validation:', errors);
-    
+
     // Afficher un toast pour informer l'utilisateur
     const errorMessages = Object.values(errors)
       .map((err: any) => err?.message)
       .filter(Boolean);
-    
+
     if (errorMessages.length > 0) {
       toast.error(`Erreur de validation : ${errorMessages[0]}`);
       console.log('⚠️ [INSCRIPTION] Premier message d\'erreur:', errorMessages[0]);
     } else {
       toast.error('Veuillez vérifier les champs du formulaire');
     }
-    
+
     // Trouver le premier champ avec erreur et scroller vers lui
     const firstErrorField = Object.keys(errors)[0];
     console.log('🔍 [INSCRIPTION] Premier champ en erreur:', firstErrorField);
-    
+
     // Scroller vers le champ en erreur après un court délai
     setTimeout(() => {
       const errorElement = document.querySelector(`[name="${firstErrorField}"]`) as HTMLElement;
@@ -689,7 +689,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-gradient-to-br from-sib-primary via-sib-secondary to-sib-accent py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background Pattern */}
       <MoroccanPattern className="opacity-10" color="white" scale={1.5} />
-      
+
       {/* Decorative Arch at bottom */}
       <MoroccanArch className="text-white/10" />
 
@@ -728,8 +728,8 @@ export default function RegisterPage() {
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors duration-300 ${
-                  currentStep >= step.id 
-                    ? 'bg-sib-gold text-white border-sib-gold shadow-lg shadow-sib-gold/30' 
+                  currentStep >= step.id
+                    ? 'bg-sib-gold text-white border-sib-gold shadow-lg shadow-sib-gold/30'
                     : 'bg-transparent text-white border-white/30'
                 }`}>
                   {currentStep > step.id ? (
@@ -1051,8 +1051,8 @@ export default function RegisterPage() {
                           data-testid="email"
                           {...register('email')}
                           className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
-                            errors.email 
-                              ? 'border-red-500 focus:ring-red-500' 
+                            errors.email
+                              ? 'border-red-500 focus:ring-red-500'
                               : 'border-gray-300 focus:ring-blue-500'
                           }`}
                           placeholder="votre@email.com"
@@ -1319,7 +1319,7 @@ export default function RegisterPage() {
                     <div className="bg-blue-50 p-4 rounded-lg">
                       <h4 className="font-medium text-blue-900 mb-2">Validation de votre compte</h4>
                       <p className="text-sm text-blue-700">
-                        Après votre inscription, votre compte sera examiné par notre équipe. 
+                        Après votre inscription, votre compte sera examiné par notre équipe.
                         Vous recevrez un email de confirmation une fois votre compte validé.
                       </p>
                     </div>
@@ -1365,14 +1365,14 @@ export default function RegisterPage() {
                       disabled={isSubmitting}
                       data-testid="btn-submit"
                       onClick={() => {
-                        console.log('👆 [INSCRIPTION] Click sur "Créer mon compte"', { 
+                        console.log('👆 [INSCRIPTION] Click sur "Créer mon compte"', {
                           isSubmitting,
                           currentStep,
                           errorsCount: Object.keys(errors).length,
                           errors,
                           formData: watch()
                         });
-                        
+
                         // Appeler handleSubmit manuellement
                         handleSubmit(
                           (data) => {
@@ -1440,7 +1440,7 @@ export default function RegisterPage() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-3">
                   {watchedAccountType === 'visitor' ? 'Compte créé avec succès !' : 'Inscription réussie !'}
                 </h2>
-                
+
                 {watchedAccountType === 'visitor' ? (
                   <>
                     <p className="text-gray-600 mb-2">

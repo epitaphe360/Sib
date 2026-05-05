@@ -30,7 +30,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>((set, get) => 
 
   refreshMetric: async (metric) => {
     const { metrics } = get();
-    if (!metrics) return;
+    if (!metrics) {return;}
 
     try {
       let newValue: number;

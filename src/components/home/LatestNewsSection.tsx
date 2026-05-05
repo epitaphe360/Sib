@@ -89,7 +89,7 @@ export const LatestNewsSection: React.FC = () => {
     );
   }
 
-  if (!articles || articles.length === 0) return null;
+  if (!articles || articles.length === 0) {return null;}
 
   return (
     <section className="relative py-20 lg:py-24 bg-white dark:bg-neutral-950 overflow-hidden">

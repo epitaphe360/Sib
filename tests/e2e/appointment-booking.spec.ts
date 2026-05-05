@@ -13,17 +13,17 @@ test.describe('Appointment Booking Flow', () => {
              startTime.setHours(14, 0, 0, 0); // Default to 14:00 today
              const endTime = new Date(startTime);
              endTime.setMinutes(30);
-             
+
              const mockSlots = [{
                  id: 'mock-slot-1',
-                 exhibitor_id: 'mock-exhibitor-id', 
+                 exhibitor_id: 'mock-exhibitor-id',
                  start_time: startTime.toISOString(),
                  end_time: endTime.toISOString(),
                  max_bookings: 5,
                  current_bookings: 0,
                  type: 'video'
              }];
-             
+
              await route.fulfill({
                  status: 200,
                  contentType: 'application/json',
@@ -49,20 +49,20 @@ test.describe('Appointment Booking Flow', () => {
     await page.goto('/login');
     await page.fill('input[type="email"]', user.email);
     await page.fill('input[type="password"]', user.password);
-    await page.click('button[type="submit"]'); 
-    await page.waitForTimeout(2000); 
+    await page.click('button[type="submit"]');
+    await page.waitForTimeout(2000);
     await expect(page).toHaveURL(/dashboard|exhibitors/);
   }
 
   test('should book appointment successfully', async ({ page }) => {
     test.slow();
     await login(page, 'visitor');
-    
+
     await page.goto('/exhibitors');
-    
+
     const firstExhibitor = page.locator('.exhibitor-card, [data-testid="exhibitor-card"]').first();
     await expect(firstExhibitor).toBeVisible();
-    
+
     // Click View Details relative to the card
     const detailsBtn = firstExhibitor.locator('button[title="Fiche complète"], button[title="Full Profile"]');
     if (await detailsBtn.count() > 0) {
@@ -71,20 +71,20 @@ test.describe('Appointment Booking Flow', () => {
         // Fallback: try finding button with external-link icon
         await firstExhibitor.locator('button').filter({ has: page.locator('.lucide-external-link, svg.lucide-external-link') }).click();
     }
-    
+
     // "Planifier un RDV B2B" button on detail page
     const bookBtn = page.locator('button', { hasText: 'Planifier un RDV B2B' });
     await expect(bookBtn).toBeVisible({ timeout: 15000 });
     await bookBtn.click();
-    
+
     // Verify timeslots appear
     // Since we mocked them, they should appear
     const timeSlots = page.locator('[data-testid="timeslot"]');
     await expect(timeSlots.first()).toBeVisible({ timeout: 15000 });
-    
+
     // Click slot
     await timeSlots.first().click();
-    
+
     // Verify booking modal
     const messageInput = page.locator('textarea[name="message"], textarea');
     await expect(messageInput).toBeVisible();
@@ -94,7 +94,7 @@ test.describe('Appointment Booking Flow', () => {
     test.slow();
     await login(page, 'visitor');
     await page.goto('/exhibitors');
-    
+
     const firstExhibitor = page.locator('.exhibitor-card, [data-testid="exhibitor-card"]').first();
     const detailsBtn = firstExhibitor.locator('button[title="Fiche complète"], button[title="Full Profile"]');
     if (await detailsBtn.count() > 0) {
@@ -124,7 +124,7 @@ test.describe('Appointment Booking Flow', () => {
 
     await login(page, 'visitor');
     await page.goto('/exhibitors');
-    
+
     const firstExhibitor = page.locator('.exhibitor-card, [data-testid="exhibitor-card"]').first();
     const detailsBtn = firstExhibitor.locator('button[title="Fiche complète"], button[title="Full Profile"]');
     if (await detailsBtn.count() > 0) {
@@ -132,7 +132,7 @@ test.describe('Appointment Booking Flow', () => {
     } else {
         await firstExhibitor.locator('button').filter({ has: page.locator('.lucide-external-link, svg.lucide-external-link') }).click();
     }
-    
+
     const bookBtn = page.locator('button', { hasText: 'Planifier un RDV B2B' });
     await expect(bookBtn).toBeVisible({ timeout: 15000 });
     await bookBtn.click();
@@ -140,12 +140,12 @@ test.describe('Appointment Booking Flow', () => {
     const slot = page.locator('[data-testid="timeslot"]').first();
     await expect(slot).toBeVisible({ timeout: 10000 });
     await slot.click();
-        
+
     const textArea = page.locator('textarea');
     if (await textArea.isVisible()) {
             await textArea.fill('Test quota message');
     }
-    
+
     const reserveBtn = page.locator('button:has-text("Réserver"), button:has-text("Confirm"), button:has-text("Book")');
     if (await reserveBtn.isVisible()) {
         await reserveBtn.click();

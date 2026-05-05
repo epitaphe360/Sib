@@ -11,7 +11,7 @@ interface LogoWithFallbackProps {
 function generatePlaceholder(name: string): string {
   try {
     // Extraire uniquement les caractères ASCII pour éviter btoa/SVG Unicode errors
-    const asciiName = name.replace(/[^\x00-\x7F]/g, '');
+    const asciiName = name.replace(/[\u0080-\uFFFF]/g, '');
     const rawInitials = (asciiName.length > 0 ? asciiName : 'P')
       .split(' ')
       .map(word => word.charAt(0))
@@ -58,7 +58,7 @@ export default function LogoWithFallback({
 
     // Preload image using JavaScript Image object (NOT lazy loaded)
     const img = new Image();
-    
+
     // Timeout: if image hasn't loaded in 8 seconds, show fallback
     timeoutRef.current = setTimeout(() => {
       setStatus('error');

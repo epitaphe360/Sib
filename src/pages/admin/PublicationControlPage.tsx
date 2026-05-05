@@ -60,10 +60,10 @@ export default function PublicationControlPage() {
         .select('id, company_name, partnership_level, is_published, contact_info')
         .order('company_name');
 
-      console.log('📊 [PublicationControl] Partenaires reçus:', { 
-        count: partnersData?.length || 0, 
+      console.log('📊 [PublicationControl] Partenaires reçus:', {
+        count: partnersData?.length || 0,
         error: partnersError?.message,
-        data: partnersData 
+        data: partnersData
       });
 
       if (partnersError) {
@@ -79,10 +79,10 @@ export default function PublicationControlPage() {
         .select('id, company_name, category, sector, is_published, contact_info')
         .order('company_name');
 
-      console.log('📊 [PublicationControl] Exposants reçus:', { 
-        count: exhibitorsData?.length || 0, 
+      console.log('📊 [PublicationControl] Exposants reçus:', {
+        count: exhibitorsData?.length || 0,
         error: exhibitorsError?.message,
-        data: exhibitorsData 
+        data: exhibitorsData
       });
 
       if (exhibitorsError) {
@@ -106,11 +106,11 @@ export default function PublicationControlPage() {
       }
       const { error } = await supabase
         .from('partners')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: !currentStatus } as any)
         .eq('id', partnerId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setPartners(prev =>
         prev.map(p => (p.id === partnerId ? { ...p, is_published: !currentStatus } : p))
@@ -135,11 +135,11 @@ export default function PublicationControlPage() {
       }
       const { error } = await supabase
         .from('exhibitors')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: !currentStatus } as any)
         .eq('id', exhibitorId);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       setExhibitors(prev =>
         prev.map(e => (e.id === exhibitorId ? { ...e, is_published: !currentStatus } : e))
@@ -171,7 +171,7 @@ export default function PublicationControlPage() {
         .from('partners')
         .select('id');
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {throw fetchError;}
 
       if (!allPartners || allPartners.length === 0) {
         toast.info('Aucun partenaire à modifier');
@@ -184,11 +184,11 @@ export default function PublicationControlPage() {
       // Update using a valid condition that matches all records
       const { error } = await supabase
         .from('partners')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: publish } as any)
         .in('id', allPartners.map((p: any) => p.id));
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       await loadData();
       toast.success(
@@ -219,7 +219,7 @@ export default function PublicationControlPage() {
         .from('exhibitors')
         .select('id');
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {throw fetchError;}
 
       if (!allExhibitors || allExhibitors.length === 0) {
         toast.info('Aucun exposant à modifier');
@@ -232,11 +232,11 @@ export default function PublicationControlPage() {
       // Update using a valid condition that matches all records
       const { error } = await supabase
         .from('exhibitors')
-        // @ts-ignore - Supabase type inference limitation
+        // @ts-expect-error - Supabase type inference limitation
         .update({ is_published: publish } as any)
         .in('id', allExhibitors.map((e: any) => e.id));
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       await loadData();
       toast.success(

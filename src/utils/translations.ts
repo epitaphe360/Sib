@@ -3,7 +3,7 @@ export const translations = {
     // En-tête
     title: "Devenir Partenaire SIB 2026",
     subtitle: "Rejoignez notre écosystème et contribuez au succès de l'événement.",
-    
+
     // Progression
     progressTitle: "Progression du formulaire",
     stepOrganization: "Organisation",
@@ -11,13 +11,13 @@ export const translations = {
     stepSecurity: "Sécurité",
     stepDetails: "Détails",
     stepTerms: "CGU",
-    
+
     // Sections
     organizationInfo: "Informations sur l'Organisation",
     contactInfo: "Informations de Contact",
     description: "Description de votre organisation et de vos motivations",
     termsAndConditions: "Conditions Générales",
-    
+
     // Champs
     companyName: "Nom de l'organisation",
     sector: "Secteur d'activité",
@@ -42,7 +42,7 @@ export const translations = {
     confirmPassword: "Confirmer le mot de passe",
     confirmPasswordPlaceholder: "Confirmez votre mot de passe",
     descriptionPlaceholder: "Décrivez votre organisation, vos activités et pourquoi vous souhaitez devenir partenaire de SIB 2026.",
-    
+
     // Types de partenariat
     institutional: "Institutionnel",
     media: "Média",
@@ -50,7 +50,7 @@ export const translations = {
     financial: "Financier",
     logistics: "Logistique",
     other: "Autre",
-    
+
     // Validation mot de passe
     passwordWeak: "Faible",
     passwordMedium: "Moyen",
@@ -61,7 +61,7 @@ export const translations = {
     passwordLowercase: "Une lettre minuscule",
     passwordNumber: "Un chiffre",
     passwordSpecial: "Un caractère spécial (!@#$%^&*...)",
-    
+
     // CGU
     acceptTerms: "J'accepte les",
     termsLink: "Conditions Générales d'Utilisation",
@@ -70,20 +70,20 @@ export const translations = {
     privacyText: "et consent au traitement de mes données personnelles conformément au RGPD",
     dataProtection: "Protection de vos données :",
     dataProtectionText: "Vos informations personnelles sont sécurisées et ne seront jamais partagées avec des tiers sans votre consentement. Vous pouvez exercer vos droits d'accès, de rectification et de suppression à tout moment.",
-    
+
     // Boutons
     submit: "Demander à devenir partenaire",
     submitting: "Envoi en cours...",
     requiredFields: "Champs obligatoires",
     hasAccount: "Vous avez déjà un compte ?",
     login: "Se connecter",
-    
+
     // Messages
     characterCount: "caractères minimum",
     draftSaved: "Brouillon sauvegardé",
     draftLoaded: "Brouillon chargé",
     emailSuggestion: "Vouliez-vous dire",
-    
+
     // Modal de prévisualisation
     previewTitle: "Vérifiez vos informations",
     previewSubtitle: "Assurez-vous que toutes les informations sont correctes",
@@ -142,7 +142,7 @@ export const translations = {
     // Header
     title: "Become a SIB 2026 Partner",
     subtitle: "Join our ecosystem and contribute to the event's success.",
-    
+
     // Progress
     progressTitle: "Form progress",
     stepOrganization: "Organization",
@@ -150,13 +150,13 @@ export const translations = {
     stepSecurity: "Security",
     stepDetails: "Details",
     stepTerms: "Terms",
-    
+
     // Sections
     organizationInfo: "Organization Information",
     contactInfo: "Contact Information",
     description: "Description of your organization and motivations",
     termsAndConditions: "Terms and Conditions",
-    
+
     // Fields
     companyName: "Organization name",
     sector: "Business sector",
@@ -181,7 +181,7 @@ export const translations = {
     confirmPassword: "Confirm password",
     confirmPasswordPlaceholder: "Confirm your password",
     descriptionPlaceholder: "Describe your organization, your activities and why you want to become a SIB 2026 partner.",
-    
+
     // Partnership types
     institutional: "Institutional",
     media: "Media",
@@ -189,7 +189,7 @@ export const translations = {
     financial: "Financial",
     logistics: "Logistics",
     other: "Other",
-    
+
     // Password validation
     passwordWeak: "Weak",
     passwordMedium: "Medium",
@@ -200,7 +200,7 @@ export const translations = {
     passwordLowercase: "One lowercase letter",
     passwordNumber: "One number",
     passwordSpecial: "One special character (!@#$%^&*...)",
-    
+
     // Terms
     acceptTerms: "I accept the",
     termsLink: "Terms and Conditions",
@@ -209,20 +209,20 @@ export const translations = {
     privacyText: "and consent to the processing of my personal data in accordance with GDPR",
     dataProtection: "Data protection:",
     dataProtectionText: "Your personal information is secure and will never be shared with third parties without your consent. You can exercise your rights of access, rectification and deletion at any time.",
-    
+
     // Buttons
     submit: "Apply to become a partner",
     submitting: "Sending...",
     requiredFields: "Required fields",
     hasAccount: "Already have an account?",
     login: "Log in",
-    
+
     // Messages
     characterCount: "minimum characters",
     draftSaved: "Draft saved",
     draftLoaded: "Draft loaded",
     emailSuggestion: "Did you mean",
-    
+
     // Preview modal
     previewTitle: "Review your information",
     previewSubtitle: "Make sure all information is correct",

@@ -53,7 +53,7 @@ describe('ExportService', () => {
       const blob = await exportService.exportToExcel(sampleData);
 
       expect(blob).toBeInstanceOf(Blob);
-      expect(blob.type).toBe('application/vnd.ms-excel');
+      expect(blob.type).toBe('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     });
   });
 
@@ -78,11 +78,7 @@ describe('ExportService', () => {
       });
 
       expect(blob).toBeInstanceOf(Blob);
-
-      const html = await blob.text();
-      expect(html).toContain('<table>');
-      expect(html).toContain('<th>id</th>');
-      expect(html).toContain('Test Report');
+      expect(blob.type).toBe('application/pdf');
     });
   });
 

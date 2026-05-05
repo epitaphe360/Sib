@@ -290,7 +290,7 @@ export function extractTagsFromQuery(query: string): string[] {
 
   // 2. Tokens individuels
   const tokens = normalized
-    .split(/[\s,;.!?\/\-]+/)
+    .split(/[\s,;.!?/-]+/)
     .filter(t => t.length > 2 && !FR_STOPWORDS.has(t));
 
   for (const token of tokens) {
@@ -311,7 +311,7 @@ export function scoreExhibitorForTags(
   tags: string[],
   queryTokens: string[]
 ): number {
-  if (tags.length === 0 && queryTokens.length === 0) return 0;
+  if (tags.length === 0 && queryTokens.length === 0) {return 0;}
 
   const normalizedText = normalizeText(exhibitorText);
   let score = 0;

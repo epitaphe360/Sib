@@ -30,14 +30,14 @@ export const AppointmentCalendarWidget: React.FC = () => {
     setSelectedDate(prev => {
       const newDate = new Date(prev);
       newDate.setDate(newDate.getDate() + days);
-      
+
       // Limiter entre le 1er et le 3 avril 2026
       const minDate = new Date(`${getMinSlotDate()}T00:00:00`);
       const maxDate = new Date(`${getMaxSlotDate()}T00:00:00`);
-      
-      if (newDate < minDate) return minDate;
-      if (newDate > maxDate) return maxDate;
-      
+
+      if (newDate < minDate) {return minDate;}
+      if (newDate > maxDate) {return maxDate;}
+
       return newDate;
     });
   };
@@ -46,11 +46,11 @@ export const AppointmentCalendarWidget: React.FC = () => {
     return appointments
       .map(appointment => {
         const slot = timeSlots.find(s => s.id === appointment.timeSlotId);
-        if (!slot) return null;
+        if (!slot) {return null;}
         return { ...appointment, slot };
       })
       .filter((appointment): appointment is NonNullable<typeof appointment> => {
-        if (!appointment) return false;
+        if (!appointment) {return false;}
         const appointmentDate = new Date(appointment.slot.date);
         return appointmentDate.toDateString() === selectedDate.toDateString();
       })

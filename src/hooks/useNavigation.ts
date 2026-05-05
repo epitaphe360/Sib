@@ -3,7 +3,7 @@ import { useNavigationStore } from '../store/navigationStore';
 
 /**
  * Hook useNavigation - Gestion centralisée de la navigation
- * 
+ *
  * Fournit des utilitaires pour contrôler le menu et la navigation
  */
 export const useNavigation = () => {

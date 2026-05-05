@@ -15,7 +15,7 @@ const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 
 
 export function VisitorCommunicationCards({ userLevel }: VisitorCommunicationCardsProps) {
   const { t } = useTranslation();
-  if (userLevel === 'free') return null;
+  if (userLevel === 'free') {return null;}
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible"
       className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">

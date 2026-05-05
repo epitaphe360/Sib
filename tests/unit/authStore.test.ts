@@ -3,10 +3,10 @@ import { useAuthStore } from '../../src/store/authStore';
 
 describe('authStore', () => {
   beforeEach(() => {
-    useAuthStore.setState({ 
-      user: null, 
+    useAuthStore.setState({
+      user: null,
       isAuthenticated: false,
-      isLoading: false 
+      isLoading: false
     });
   });
 

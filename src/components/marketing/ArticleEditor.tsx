@@ -64,7 +64,7 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {return;}
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
@@ -95,7 +95,7 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
           upsert: false
         });
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
@@ -167,7 +167,7 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
           .update(articleData)
           .eq('id', article.id);
 
-        if (error) throw error;
+        if (error) {throw error;}
       } else {
         // Create new article
         const { error } = await supabase
@@ -177,7 +177,7 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
             created_at: new Date().toISOString()
           }]);
 
-        if (error) throw error;
+        if (error) {throw error;}
       }
 
       toast.dismiss(savingToast);
@@ -217,7 +217,7 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
           .update(articleData)
           .eq('id', article.id);
 
-        if (error) throw error;
+        if (error) {throw error;}
       } else {
         const { error } = await supabase
           .from('news_articles')
@@ -226,7 +226,7 @@ export default function ArticleEditor({ article, onSave, onClose }: ArticleEdito
             created_at: new Date().toISOString()
           }]);
 
-        if (error) throw error;
+        if (error) {throw error;}
       }
 
       toast.dismiss(savingToast);

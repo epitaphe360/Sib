@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
-import { 
+import {
   Download,
   Share2,
   MessageCircle,
@@ -120,7 +120,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
   const exhibitorId = propExhibitorId || exhibitor?.id || urlExhibitorId;
   const navigate = useNavigate();
   const { articles, fetchNews } = useNewsStore();
-  
+
   const [miniSiteData, setMiniSiteData] = useState<MiniSiteData | null>(null);
   const [exhibitorData, setExhibitorData] = useState<ExhibitorData | null>(null);
   const [products, setProducts] = useState<any[]>([]);
@@ -156,7 +156,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
       // Charger le mini-site
       const miniSite = await SupabaseService.getMiniSite(exhibitorId);
       console.log('[MiniSite] Received site data:', miniSite);
-      
+
       // IMPORTANT: On ne bloque plus si miniSite est null - on génère un fallback
       if (!miniSite) {
         console.warn(`[MiniSite] Site not found for ID: ${exhibitorId}, generating default structure`);
@@ -182,7 +182,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
       // Charger les informations de l'exposant
       const exhibitor = await SupabaseService.getExhibitorForMiniSite(exhibitorId);
       console.log('[MiniSite] Received exhibitor data:', exhibitor);
-      
+
       if (exhibitor) {
         setExhibitorData(exhibitor);
       } else {
@@ -230,7 +230,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
 
   // Helper function to get section data
   const getSection = (sectionName: string) => {
-    if (!miniSiteData?.sections) return null;
+    if (!miniSiteData?.sections) {return null;}
     return miniSiteData.sections.find((s: any) => s.type === sectionName);
   };
 
@@ -396,7 +396,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {aboutSection.data.features.map((feature: any, i: number) => {
             const name = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-            if (!name) return null;
+            if (!name) {return null;}
             return (
               <div key={i} className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                 <Award className="h-5 w-5 shrink-0" style={{ color: theme.accentColor }} />
@@ -593,7 +593,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                   {aboutSection.data.features.map((feature: any, index: number) => {
                     const featureName = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-                    if (!featureName) return null;
+                    if (!featureName) {return null;}
                     return (
                       <Card key={index} className="p-6 text-center hover:shadow-lg transition-shadow">
                         <Award className="h-8 w-8 mx-auto mb-3" style={{ color: theme.accentColor }} />
@@ -670,7 +670,7 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
                           <ul className="space-y-2 mb-4">
                             {product.features.slice(0, 3).map((feature: any, idx: number) => {
                               const featureName = typeof feature === 'string' ? feature : (feature?.name || feature?.title || '');
-                              if (!featureName) return null;
+                              if (!featureName) {return null;}
                               return (
                                 <li key={idx} className="flex items-center text-sm text-gray-600">
                                   <Award className="h-4 w-4 mr-2" style={{ color: theme.accentColor }} />

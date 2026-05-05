@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
-import { 
-  Check, X, Crown, Zap, Star, Award, 
+import {
+  Check, X, Crown, Zap, Star, Award,
   Globe, Users, GraduationCap, Landmark,
   Ship, Cog, ArrowRight,
   MapPin, CalendarDays, Clock, CreditCard,
@@ -260,10 +260,10 @@ export default function ExhibitorSubscriptionPage() {
               </h1>
 
               <p className="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed">
-                En exposant au Salon International du Bâtiment et de leur Écosystème, vous vous positionnez 
-                au cœur de l'innovation, de la coopération stratégique et du développement des 
-                infrastructures BTP mondiales. Que vous soyez institution, entreprise, bâtiment, 
-                équipementier, startup ou organisme de formation, prenez votre place parmi les acteurs 
+                En exposant au Salon International du Bâtiment et de leur Écosystème, vous vous positionnez
+                au cœur de l'innovation, de la coopération stratégique et du développement des
+                infrastructures BTP mondiales. Que vous soyez institution, entreprise, bâtiment,
+                équipementier, startup ou organisme de formation, prenez votre place parmi les acteurs
                 qui façonnent l'avenir construction à l'échelle internationale.
               </p>
 
@@ -526,7 +526,7 @@ export default function ExhibitorSubscriptionPage() {
               Comment réserver votre stand ou activer votre participation ?
             </h2>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-              Les demandes de réservation sont traitées individuellement par notre équipe commerciale. 
+              Les demandes de réservation sont traitées individuellement par notre équipe commerciale.
               Les tarifs sont établis en fonction des surfaces, aménagements et options souhaitées.
             </p>
             <Link to={ROUTES.CONTACT}>

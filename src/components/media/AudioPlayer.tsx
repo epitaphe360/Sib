@@ -28,7 +28,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio) {return;}
 
     const updateTime = () => setCurrentTime(audio.currentTime);
     const updateDuration = () => setDuration(audio.duration);
@@ -91,7 +91,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   };
 
   const formatTime = (time: number) => {
-    if (isNaN(time)) return '0:00';
+    if (isNaN(time)) {return '0:00';}
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -100,13 +100,13 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
       <audio ref={audioRef} src={src} autoPlay={autoPlay} />
-      
+
       {/* Cover & Info */}
       <div className="flex items-center space-x-4 mb-6">
         {coverImage && (
-          <img 
-            src={coverImage} 
-            alt={title || 'Audio cover'} 
+          <img
+            src={coverImage}
+            alt={title || 'Audio cover'}
             className="w-20 h-20 rounded-lg object-cover"
           />
         )}
@@ -146,7 +146,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           >
             <SkipBack className="h-4 w-4" />
           </Button>
-          
+
           <Button
             variant="default"
             size="lg"
@@ -155,7 +155,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           >
             {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 ml-0.5" />}
           </Button>
-          
+
           <Button
             variant="ghost"
             size="sm"

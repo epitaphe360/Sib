@@ -14,7 +14,7 @@ interface ConversionFunnelProps {
   title?: string;
 }
 
-export const ConversionFunnel: React.FC<ConversionFunnelProps> = ({ 
+export const ConversionFunnel: React.FC<ConversionFunnelProps> = ({
   stages,
   title = 'Funnel de Conversion'
 }) => {
@@ -29,12 +29,12 @@ export const ConversionFunnel: React.FC<ConversionFunnelProps> = ({
       } else if (stages[0].count > 0) {
         rate = Math.round((stage.count / stages[0].count) * 100);
       }
-      
+
       const dropoff = index > 0 ? stages[index - 1].count - stage.count : 0;
       const dropoffRate = index > 0 && stages[index - 1].count > 0
         ? Math.round((dropoff / stages[index - 1].count) * 100)
         : 0;
-      
+
       return {
         ...stage,
         rate,
@@ -71,7 +71,7 @@ export const ConversionFunnel: React.FC<ConversionFunnelProps> = ({
             <div className="relative">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <div 
+                  <div
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: stage.color }}
                   />
@@ -86,12 +86,12 @@ export const ConversionFunnel: React.FC<ConversionFunnelProps> = ({
                   </span>
                 </div>
               </div>
-              
+
               {/* Barre de progression */}
               <div className="relative h-8 bg-gray-100 rounded-lg overflow-hidden">
-                <div 
+                <div
                   className="h-full flex items-center justify-start px-3 transition-all duration-500 text-white font-semibold text-sm"
-                  style={{ 
+                  style={{
                     width: `${stage.width}%`,
                     backgroundColor: stage.color,
                     minWidth: stage.width > 0 ? '50px' : '0'

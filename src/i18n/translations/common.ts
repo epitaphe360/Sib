@@ -32,7 +32,7 @@ export const commonTranslations = {
     'common.city': 'Ville',
     'common.country': 'Pays',
     'common.website': 'Site web',
-    
+
     // Article/Contenu
     'common.loading_article': 'Chargement de l\'article...',
     'common.reading_time': '{{minutes}} min de lecture',
@@ -62,12 +62,12 @@ export const commonTranslations = {
     'common.tags': 'Mots-clés',
     'common.category': 'Catégorie',
     'common.published_on': 'Publié le',
-    
+
     // Dashboard
     'common.dashboard': 'Tableau de bord',
     'common.complete_dashboard': 'Tableau de bord complet',
     'common.back_to_dashboard': 'Retour au tableau de bord',
-    
+
     // Management/Admin
     'common.management': 'Gestion',
     'common.create': 'Créer',
@@ -95,7 +95,7 @@ export const commonTranslations = {
     'common.update_error': 'Erreur lors de la mise à jour',
     'common.create_success': 'Créé avec succès',
     'common.create_error': 'Erreur lors de la création',
-    
+
     // Features/Zones
     'common.public_conferences': 'Conférences publiques',
     'common.b2b_meetings': 'Rendez-vous B2B',
@@ -112,7 +112,7 @@ export const commonTranslations = {
     'common.categories': 'Catégories',
     'common.saving': 'Enregistrement...',
     'common.saved': 'Enregistré',
-    
+
     // Toast messages - Success
     'toast.success.saved': 'Enregistré avec succès',
     'toast.success.updated': 'Mis à jour avec succès',
@@ -127,7 +127,7 @@ export const commonTranslations = {
     'toast.success.approved': 'Approuvé avec succès',
     'toast.success.rejected': 'Rejeté avec succès',
     'toast.success.completed': 'Terminé avec succès',
-    
+
     // Toast messages - Error
     'toast.error.loading': 'Erreur lors du chargement',
     'toast.error.saving': 'Erreur lors de l\'enregistrement',
@@ -143,7 +143,7 @@ export const commonTranslations = {
     'toast.error.permission': 'Permission refusée',
     'toast.error.network': 'Erreur réseau',
     'toast.error.timeout': 'Délai d\'attente dépassé',
-    
+
     // Toast messages - Info
     'toast.info.processing': 'Traitement en cours...',
     'toast.info.please_wait': 'Veuillez patienter...',
@@ -179,7 +179,7 @@ export const commonTranslations = {
     'common.city': 'City',
     'common.country': 'Country',
     'common.website': 'Website',
-    
+
     // Article/Content
     'common.loading_article': 'Loading article...',
     'common.reading_time': '{{minutes}} min read',
@@ -209,18 +209,18 @@ export const commonTranslations = {
     'common.tags': 'Tags',
     'common.category': 'Category',
     'common.published_on': 'Published on',
-    
+
     // Dashboard
     'common.dashboard': 'Dashboard',
     'common.complete_dashboard': 'Complete Dashboard',
     'common.back_to_dashboard': 'Back to dashboard',
-    
+
     // Management/Admin
     'common.management': 'Management',
     'common.create': 'Create',
     'common.saving': 'Saving...',
     'common.saved': 'Saved',
-    
+
     // Toast messages - Success
     'toast.success.saved': 'Successfully saved',
     'toast.success.updated': 'Successfully updated',
@@ -235,10 +235,10 @@ export const commonTranslations = {
     'toast.success.approved': 'Successfully approved',
     'toast.success.rejected': 'Successfully rejected',
     'toast.success.completed': 'Successfully completed',
-    
+
     // Toast messages - Error
     'toast.error.loading': 'Error loading',
-    'toast. error.saving': 'Error saving',
+    'toast.error.saving': 'Error saving',
     'toast.error.deleting': 'Error deleting',
     'toast.error.uploading': 'Error uploading',
     'toast.error.sending': 'Error sending',
@@ -251,7 +251,7 @@ export const commonTranslations = {
     'toast.error.permission': 'Permission denied',
     'toast.error.network': 'Network error',
     'toast.error.timeout': 'Timeout exceeded',
-    
+
     // Toast messages - Info
     'toast.info.processing': 'Processing...',
     'toast.info.please_wait': 'Please wait...',
@@ -281,7 +281,7 @@ export const commonTranslations = {
     'common.update_error': 'Error during update',
     'common.create_success': 'Successfully created',
     'common.create_error': 'Error during creation',
-    
+
     // Features/Zones
     'common.public_conferences': 'Public Conferences',
     'common.b2b_meetings': 'B2B Meetings',
@@ -296,5 +296,138 @@ export const commonTranslations = {
     'common.error_unknown': 'Unknown error',
     'common.sync_error': 'Synchronization error',
     'common.categories': 'Categories',
+  },
+  ar: {
+    'common.back': 'رجوع',
+    'common.save': 'حفظ',
+    'common.cancel': 'إلغاء',
+    'common.confirm': 'تأكيد',
+    'common.delete': 'حذف',
+    'common.edit': 'تعديل',
+    'common.view': 'عرض',
+    'common.search': 'بحث',
+    'common.filter': 'تصفية',
+    'common.loading': 'جارٍ التحميل...',
+    'common.error': 'خطأ',
+    'common.success': 'نجاح',
+    'common.yes': 'نعم',
+    'common.no': 'لا',
+    'common.close': 'إغلاق',
+    'common.open': 'فتح',
+    'common.download': 'تنزيل',
+    'common.upload': 'رفع',
+    'common.submit': 'إرسال',
+    'common.next': 'التالي',
+    'common.previous': 'السابق',
+    'common.finish': 'إنهاء',
+    'common.email': 'البريد الإلكتروني',
+    'common.phone': 'الهاتف',
+    'common.address': 'العنوان',
+    'common.city': 'المدينة',
+    'common.country': 'الدولة',
+    'common.website': 'الموقع الإلكتروني',
+    'common.loading_article': 'جارٍ تحميل المقال...',
+    'common.reading_time': 'قراءة {{minutes}} دقيقة',
+    'common.views': 'مشاهدات',
+    'common.share': 'مشاركة',
+    'common.bookmark': 'المفضلة',
+    'common.like': 'إعجاب',
+    'common.comment': 'تعليق',
+    'common.comments': 'التعليقات',
+    'common.print': 'طباعة',
+    'common.share_link_copied': 'تم نسخ الرابط!',
+    'common.share_link_error': 'تعذّر نسخ الرابط',
+    'common.bookmarked_add': 'تمت إضافة المقال إلى المفضلة!',
+    'common.bookmarked_remove': 'تمت إزالة المقال من المفضلة!',
+    'common.generating_pdf': 'جارٍ إنشاء PDF...',
+    'common.related_articles': 'مقالات ذات صلة',
+    'common.read_more': 'اقرأ المزيد',
+    'common.newsletter_title': 'ابقَ على اطلاع',
+    'common.newsletter_subtitle': 'احصل على آخر الأخبار مباشرةً في بريدك',
+    'common.newsletter_placeholder': 'بريدك@الإلكتروني.com',
+    'common.newsletter_subscribe': 'اشتراك',
+    'common.published_articles': '{{count}} مقالات منشورة',
+    'common.about_author': 'عن المؤلف',
+    'common.author_articles': '{{count}} مقالات منشورة',
+    'common.source': 'المصدر',
+    'common.read_original': 'اقرأ المقال الأصلي',
+    'common.tags': 'الوسوم',
+    'common.category': 'الفئة',
+    'common.published_on': 'نُشر في',
+    'common.dashboard': 'لوحة التحكم',
+    'common.complete_dashboard': 'لوحة التحكم الكاملة',
+    'common.back_to_dashboard': 'العودة إلى لوحة التحكم',
+    'common.management': 'الإدارة',
+    'common.create': 'إنشاء',
+    'common.update': 'تحديث',
+    'common.publish': 'نشر',
+    'common.unpublish': 'إلغاء النشر',
+    'common.draft': 'مسودة',
+    'common.published': 'منشور',
+    'common.archived': 'مؤرشف',
+    'common.total': 'المجموع',
+    'common.status': 'الحالة',
+    'common.actions': 'الإجراءات',
+    'common.details': 'التفاصيل',
+    'common.description': 'الوصف',
+    'common.content': 'المحتوى',
+    'common.title': 'العنوان',
+    'common.excerpt': 'مقتطف',
+    'common.image': 'صورة',
+    'common.date': 'التاريخ',
+    'common.author': 'المؤلف',
+    'common.delete_confirm': 'هل أنت متأكد من حذف "{{name}}"؟',
+    'common.delete_success': 'تم الحذف بنجاح',
+    'common.delete_error': 'خطأ أثناء الحذف',
+    'common.update_success': 'تم التحديث بنجاح',
+    'common.update_error': 'خطأ أثناء التحديث',
+    'common.create_success': 'تم الإنشاء بنجاح',
+    'common.create_error': 'خطأ أثناء الإنشاء',
+    'common.public_conferences': 'المؤتمرات العامة',
+    'common.b2b_meetings': 'اجتماعات B2B',
+    'common.vip_zones': 'مناطق VIP',
+    'common.unlimited': 'غير محدود',
+    'common.limited': 'محدود',
+    'common.unlimited_access': 'وصول غير محدود',
+    'common.networking': 'التواصل المهني',
+    'common.appointments': 'المواعيد',
+    'common.new': 'جديد',
+    'common.updated': 'محدّث',
+    'common.error_unknown': 'خطأ غير معروف',
+    'common.sync_error': 'خطأ في المزامنة',
+    'common.categories': 'الفئات',
+    'common.saving': 'جارٍ الحفظ...',
+    'common.saved': 'تم الحفظ',
+    'toast.success.saved': 'تم الحفظ بنجاح',
+    'toast.success.updated': 'تم التحديث بنجاح',
+    'toast.success.deleted': 'تم الحذف بنجاح',
+    'toast.success.created': 'تم الإنشاء بنجاح',
+    'toast.success.uploaded': 'تم الرفع بنجاح',
+    'toast.success.sent': 'تم الإرسال بنجاح',
+    'toast.success.copied': 'تم النسخ إلى الحافظة',
+    'toast.success.link_copied': 'تم نسخ الرابط!',
+    'toast.success.registered': 'تم تأكيد التسجيل!',
+    'toast.success.cancelled': 'تم الإلغاء بنجاح',
+    'toast.success.approved': 'تمت الموافقة بنجاح',
+    'toast.success.rejected': 'تم الرفض بنجاح',
+    'toast.success.completed': 'تم الاكتمال بنجاح',
+    'toast.error.loading': 'خطأ في التحميل',
+    'toast.error.saving': 'خطأ في الحفظ',
+    'toast.error.deleting': 'خطأ في الحذف',
+    'toast.error.uploading': 'خطأ في الرفع',
+    'toast.error.sending': 'خطأ في الإرسال',
+    'toast.error.copying': 'تعذّر النسخ',
+    'toast.error.generic': 'حدث خطأ',
+    'toast.error.try_again': 'يرجى المحاولة مجدداً',
+    'toast.error.not_found': 'غير موجود',
+    'toast.error.invalid': 'غير صالح',
+    'toast.error.required': 'حقول مطلوبة مفقودة',
+    'toast.error.permission': 'تم رفض الإذن',
+    'toast.error.network': 'خطأ في الشبكة',
+    'toast.error.timeout': 'انتهت مهلة الانتظار',
+    'toast.info.processing': 'جارٍ المعالجة...',
+    'toast.info.please_wait': 'يرجى الانتظار...',
+    'toast.info.no_changes': 'لا توجد تغييرات',
+    'toast.info.coming_soon': 'قريباً',
   },
 };

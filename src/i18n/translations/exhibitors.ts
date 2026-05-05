@@ -19,7 +19,7 @@ export const exhibitorsTranslations = {
     'exhibitors.unsave': 'Retirer des favoris',
     'exhibitors.no_results': 'Aucun exposant trouvé',
     'exhibitors.count': '{{count}} exposants',
-    
+
     // Catégories
     'exhibitors.category.all': 'Toutes les catégories',
     'exhibitors.category.institutional': 'Institutionnel',
@@ -29,13 +29,13 @@ export const exhibitorsTranslations = {
     'exhibitors.category.technology': 'Technologie',
     'exhibitors.category.automation': 'Automatisation',
     'exhibitors.category.equipment': 'Équipement',
-    
+
     // Niveaux de stand
     'exhibitors.level.basic_9': '9m² Basique',
     'exhibitors.level.standard_18': '18m² Standard',
     'exhibitors.level.premium_36': '36m² Premium',
     'exhibitors.level.elite_54': '54m²+ Élite',
-    
+
     // Page de détail
     'exhibitors.detail.about': 'À propos',
     'exhibitors.detail.products': 'Produits & Services',
@@ -53,14 +53,14 @@ export const exhibitorsTranslations = {
     'exhibitors.detail.minisite': 'Mini-site',
     'exhibitors.detail.brochures': 'Brochures',
     'exhibitors.detail.videos': 'Vidéos',
-    
+
     // Produits
     'exhibitors.products.title': 'Produits & Services',
     'exhibitors.products.view_all': 'Voir tous les produits',
     'exhibitors.products.request_info': 'Demander des informations',
     'exhibitors.products.download_catalog': 'Télécharger le catalogue',
     'exhibitors.products.no_products': 'Aucun produit disponible',
-    
+
     // Rendez-vous
     'exhibitors.appointment.title': 'Réserver un rendez-vous',
     'exhibitors.appointment.select_date': 'Sélectionner une date',
@@ -72,7 +72,7 @@ export const exhibitorsTranslations = {
     'exhibitors.appointment.confirm': 'Confirmer le rendez-vous',
     'exhibitors.appointment.success': 'Rendez-vous confirmé !',
     'exhibitors.appointment.error': 'Erreur lors de la réservation',
-    
+
     // Profil exposant (pour l'exposant lui-même)
     'exhibitors.profile.edit': 'Modifier le profil',
     'exhibitors.profile.preview': 'Prévisualiser',
@@ -88,7 +88,7 @@ export const exhibitorsTranslations = {
     'exhibitors.profile.add_member': 'Ajouter un membre',
     'exhibitors.profile.save_changes': 'Enregistrer les modifications',
     'exhibitors.profile.changes_saved': 'Modifications enregistrées',
-    
+
     // Mini-site
     'exhibitors.minisite.create': 'Créer un mini-site',
     'exhibitors.minisite.edit': 'Modifier le mini-site',
@@ -115,7 +115,7 @@ export const exhibitorsTranslations = {
     'exhibitors.unsave': 'Remove from favorites',
     'exhibitors.no_results': 'No exhibitors found',
     'exhibitors.count': '{{count}} exhibitors',
-    
+
     // Categories
     'exhibitors.category.all': 'All categories',
     'exhibitors.category.institutional': 'Institutional',
@@ -125,13 +125,13 @@ export const exhibitorsTranslations = {
     'exhibitors.category.technology': 'Technology',
     'exhibitors.category.automation': 'Automation',
     'exhibitors.category.equipment': 'Equipment',
-    
+
     // Booth levels
     'exhibitors.level.basic_9': '9m² Basic',
     'exhibitors.level.standard_18': '18m² Standard',
     'exhibitors.level.premium_36': '36m² Premium',
     'exhibitors.level.elite_54': '54m²+ Elite',
-    
+
     // Detail page
     'exhibitors.detail.about': 'About',
     'exhibitors.detail.products': 'Products & Services',
@@ -149,14 +149,14 @@ export const exhibitorsTranslations = {
     'exhibitors.detail.minisite': 'Mini-site',
     'exhibitors.detail.brochures': 'Brochures',
     'exhibitors.detail.videos': 'Videos',
-    
+
     // Products
     'exhibitors.products.title': 'Products & Services',
     'exhibitors.products.view_all': 'View all products',
     'exhibitors.products.request_info': 'Request information',
     'exhibitors.products.download_catalog': 'Download catalog',
     'exhibitors.products.no_products': 'No products available',
-    
+
     // Appointments
     'exhibitors.appointment.title': 'Book an appointment',
     'exhibitors.appointment.select_date': 'Select a date',
@@ -168,7 +168,7 @@ export const exhibitorsTranslations = {
     'exhibitors.appointment.confirm': 'Confirm appointment',
     'exhibitors.appointment.success': 'Appointment confirmed!',
     'exhibitors.appointment.error': 'Booking error',
-    
+
     // Exhibitor profile (for the exhibitor themselves)
     'exhibitors.profile.edit': 'Edit profile',
     'exhibitors.profile.preview': 'Preview',
@@ -184,7 +184,7 @@ export const exhibitorsTranslations = {
     'exhibitors.profile.add_member': 'Add member',
     'exhibitors.profile.save_changes': 'Save changes',
     'exhibitors.profile.changes_saved': 'Changes saved',
-    
+
     // Mini-site
     'exhibitors.minisite.create': 'Create mini-site',
     'exhibitors.minisite.edit': 'Edit mini-site',
@@ -194,5 +194,86 @@ export const exhibitorsTranslations = {
     'exhibitors.minisite.url': 'Mini-site URL',
     'exhibitors.minisite.visits': 'Visits',
     'exhibitors.minisite.analytics': 'Analytics',
+  },
+  ar: {
+    'exhibitors.title': 'العارضون',
+    'exhibitors.subtitle': 'اكتشف الشركات والمنظمات',
+    'exhibitors.search': 'البحث عن عارض',
+    'exhibitors.filter': 'تصفية',
+    'exhibitors.all': 'جميع العارضين',
+    'exhibitors.featured': 'مميز',
+    'exhibitors.verified': 'موثق',
+    'exhibitors.view_profile': 'عرض الملف',
+    'exhibitors.contact': 'تواصل',
+    'exhibitors.book_appointment': 'حجز موعد',
+    'exhibitors.save': 'حفظ',
+    'exhibitors.unsave': 'إزالة من المفضلة',
+    'exhibitors.no_results': 'لم يُعثر على عارضين',
+    'exhibitors.count': '{{count}} عارض',
+    'exhibitors.category.all': 'جميع الفئات',
+    'exhibitors.category.institutional': 'مؤسسي',
+    'exhibitors.category.port_industry': 'صناعة البناء',
+    'exhibitors.category.operations': 'التشغيل والإدارة',
+    'exhibitors.category.academic': 'أكاديمي وتدريب',
+    'exhibitors.category.technology': 'التكنولوجيا',
+    'exhibitors.category.automation': 'الأتمتة',
+    'exhibitors.category.equipment': 'المعدات',
+    'exhibitors.level.basic_9': '9م² أساسي',
+    'exhibitors.level.standard_18': '18م² قياسي',
+    'exhibitors.level.premium_36': '36م² بريميوم',
+    'exhibitors.level.elite_54': '54م²+ نخبة',
+    'exhibitors.detail.about': 'عن الشركة',
+    'exhibitors.detail.products': 'المنتجات والخدمات',
+    'exhibitors.detail.team': 'الفريق',
+    'exhibitors.detail.contact': 'التواصل',
+    'exhibitors.detail.booth': 'الجناح',
+    'exhibitors.detail.booth_number': 'رقم الجناح',
+    'exhibitors.detail.booth_size': 'الحجم',
+    'exhibitors.detail.pavilion': 'القاعة',
+    'exhibitors.detail.website': 'الموقع الإلكتروني',
+    'exhibitors.detail.email': 'البريد الإلكتروني',
+    'exhibitors.detail.phone': 'الهاتف',
+    'exhibitors.detail.address': 'العنوان',
+    'exhibitors.detail.social': 'وسائل التواصل الاجتماعي',
+    'exhibitors.detail.minisite': 'الموقع الصغير',
+    'exhibitors.detail.brochures': 'الكتيبات',
+    'exhibitors.detail.videos': 'الفيديوهات',
+    'exhibitors.products.title': 'المنتجات والخدمات',
+    'exhibitors.products.view_all': 'عرض جميع المنتجات',
+    'exhibitors.products.request_info': 'طلب معلومات',
+    'exhibitors.products.download_catalog': 'تنزيل الكتالوج',
+    'exhibitors.products.no_products': 'لا توجد منتجات متاحة',
+    'exhibitors.appointment.title': 'حجز موعد',
+    'exhibitors.appointment.select_date': 'اختر تاريخاً',
+    'exhibitors.appointment.select_time': 'اختر وقتاً',
+    'exhibitors.appointment.available_slots': 'المواعيد المتاحة',
+    'exhibitors.appointment.no_slots': 'لا توجد مواعيد متاحة',
+    'exhibitors.appointment.duration': 'المدة',
+    'exhibitors.appointment.minutes': '{{count}} دقيقة',
+    'exhibitors.appointment.confirm': 'تأكيد الموعد',
+    'exhibitors.appointment.success': 'تم تأكيد الموعد!',
+    'exhibitors.appointment.error': 'خطأ في الحجز',
+    'exhibitors.profile.edit': 'تعديل الملف',
+    'exhibitors.profile.preview': 'معاينة',
+    'exhibitors.profile.basic_info': 'المعلومات الأساسية',
+    'exhibitors.profile.company_name': 'اسم الشركة',
+    'exhibitors.profile.description': 'الوصف',
+    'exhibitors.profile.logo': 'الشعار',
+    'exhibitors.profile.banner': 'البانر',
+    'exhibitors.profile.category': 'الفئة',
+    'exhibitors.profile.products': 'المنتجات',
+    'exhibitors.profile.add_product': 'إضافة منتج',
+    'exhibitors.profile.team_members': 'أعضاء الفريق',
+    'exhibitors.profile.add_member': 'إضافة عضو',
+    'exhibitors.profile.save_changes': 'حفظ التغييرات',
+    'exhibitors.profile.changes_saved': 'تم حفظ التغييرات',
+    'exhibitors.minisite.create': 'إنشاء موقع صغير',
+    'exhibitors.minisite.edit': 'تعديل الموقع الصغير',
+    'exhibitors.minisite.publish': 'نشر',
+    'exhibitors.minisite.unpublish': 'إلغاء النشر',
+    'exhibitors.minisite.preview': 'معاينة',
+    'exhibitors.minisite.url': 'رابط الموقع الصغير',
+    'exhibitors.minisite.visits': 'الزيارات',
+    'exhibitors.minisite.analytics': 'التحليلات',
   },
 };

@@ -35,11 +35,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   isLoading = false,
 }) => {
   const { t } = useTranslation();
-  
-  if (!isOpen) return null;
+
+  if (!isOpen) {return null;}
 
   const InfoRow = ({ icon: Icon, label, value }: { icon: any; label: string; value?: string }) => {
-    if (!value) return null;
+    if (!value) {return null;}
     return (
       <div className="flex items-start gap-3 py-2">
         <Icon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />

@@ -44,7 +44,7 @@ export default function DevSubscriptionSwitcher() {
         })
         .eq('id', user.id);
 
-      if (error) throw error;
+      if (error) {throw error;}
 
       await fetchUser();
       toast.success(`✅ Basculé vers ${role.toUpperCase()} - ${level.toUpperCase()}`);
