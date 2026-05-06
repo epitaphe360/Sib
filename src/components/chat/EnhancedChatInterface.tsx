@@ -28,6 +28,7 @@ import { Card } from '../ui/Card';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import useAuthStore from '../../store/authStore';
+import { useTranslation } from '../../hooks/useTranslation';
 import { useNetworkingStore } from '../../store/networkingStore';
 import { useChatStore } from '../../store/chatStore';
 import { ChatMessage, ChatConversation } from '../../types';
@@ -52,6 +53,7 @@ interface EnhancedChatConversation extends ChatConversation {
 }
 
 export const EnhancedChatInterface: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const { permissions } = useNetworkingStore();
   const {
@@ -98,7 +100,7 @@ export const EnhancedChatInterface: React.FC = () => {
           Votre forfait actuel ne permet pas d'utiliser le chat direct.
         </p>
         <Button variant="default">
-          Mettre à Niveau Mon Forfait
+          {t('chat.upgrade_plan')}
         </Button>
       </Card>
     );
@@ -147,7 +149,7 @@ export const EnhancedChatInterface: React.FC = () => {
 
     // This would normally be handled by the backend
     // For now, we'll just show a toast
-    toast.success(`Réaction ${emoji} ajoutée !`);
+    toast.success(t('chat.reaction_added', { emoji }));
   };
 
   const togglePin = (conversationId: string) => {
@@ -283,8 +285,8 @@ export const EnhancedChatInterface: React.FC = () => {
               >
                 {filter === 'all' && 'Tous'}
                 {filter === 'unread' && 'Non lus'}
-                {filter === 'pinned' && 'Épinglés'}
-                {filter === 'archived' && 'Archivés'}
+                {filter === 'pinned' && t('chat.filter_pinned')}
+                {filter === 'archived' && t('chat.filter_archived')}
               </button>
             ))}
           </div>
@@ -295,7 +297,7 @@ export const EnhancedChatInterface: React.FC = () => {
           {filteredConversations.length === 0 ? (
             <div className="p-4 text-center text-gray-500">
               <Search className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-              <p>Aucune conversation trouvée</p>
+              <p>{t('chat.no_conversations')}</p>
             </div>
           ) : (
             filteredConversations.map((conversation) => {
@@ -406,7 +408,7 @@ export const EnhancedChatInterface: React.FC = () => {
                           </h3>
                           <p className="text-sm text-gray-500">
                             {otherParticipant.online ? 'En ligne' : 'Hors ligne'}
-                            {activeChatConversation && isTyping[activeChatConversation] && ' • En train d\'écrire...'}
+                            {activeChatConversation && isTyping[activeChatConversation] && ` • ${t('chat.typing')}`}
                           </p>
                         </div>
                       </>
@@ -595,10 +597,10 @@ export const EnhancedChatInterface: React.FC = () => {
                 <Send className="h-12 w-12 text-gray-400" />
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Sélectionnez une conversation
+                {t('chat.select_conversation')}
               </h3>
-              <p className="text-gray-600">
-                Choisissez une conversation dans la liste pour commencer à discuter
+              <p className="text-gray-500 text-sm">
+                {t('chat.select_conversation_hint')}
               </p>
             </div>
           </div>

@@ -4173,6 +4173,16 @@ export const allTranslations = {
     'products.badge_video': 'Vidéo',
     'products.badge_brochure': 'Brochure',
     'products.err_no_profile': 'Impossible de charger les produits — profil exposant introuvable.',
+
+    // EnhancedChatInterface
+    'chat.reaction_added': 'Réaction {{emoji}} ajoutée !',
+    'chat.filter_pinned': 'Épinglés',
+    'chat.filter_archived': 'Archivés',
+    'chat.no_conversations': 'Aucune conversation trouvée',
+    'chat.typing': 'En train d\''écrire...',
+    'chat.select_conversation': 'Sélectionnez une conversation',
+    'chat.select_conversation_hint': 'Choisissez une conversation dans la liste pour commencer à discuter',
+    'chat.upgrade_plan': 'Mettre à Niveau Mon Forfait',
   },
 
   en: {
@@ -8339,6 +8349,16 @@ export const allTranslations = {
     'products.badge_video': 'Video',
     'products.badge_brochure': 'Brochure',
     'products.err_no_profile': 'Unable to load products — exhibitor profile not found.',
+
+    // EnhancedChatInterface
+    'chat.reaction_added': 'Reaction {{emoji}} added!',
+    'chat.filter_pinned': 'Pinned',
+    'chat.filter_archived': 'Archived',
+    'chat.no_conversations': 'No conversations found',
+    'chat.typing': 'Typing...',
+    'chat.select_conversation': 'Select a conversation',
+    'chat.select_conversation_hint': 'Choose a conversation from the list to start chatting',
+    'chat.upgrade_plan': 'Upgrade My Plan',
   },
 
   ar: {
@@ -10293,6 +10313,16 @@ export const allTranslations = {
     'products.badge_video': 'فيديو',
     'products.badge_brochure': 'كتيب',
     'products.err_no_profile': 'تعذّر تحميل المنتجات — ملف العارض غير موجود.',
+
+    // EnhancedChatInterface
+    'chat.reaction_added': 'تمت إضافة التفاعل {{emoji}}!',
+    'chat.filter_pinned': 'مثبتة',
+    'chat.filter_archived': 'مؤرشفة',
+    'chat.no_conversations': 'لا توجد محادثات',
+    'chat.typing': 'يكتب الآن...',
+    'chat.select_conversation': 'اختر محادثة',
+    'chat.select_conversation_hint': 'اختر محادثة من القائمة لبدء الدردشة',
+    'chat.upgrade_plan': 'ترقية اشتراكي',
   },
 
 };
