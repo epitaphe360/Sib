@@ -20,16 +20,16 @@ interface VisaFormData {
 
 export default function VisaLetterPage() {
   const { user } = useAuthStore();
-  const profile = user?.profile || {};
+  const profile = user?.profile;
 
   const [form, setForm] = useState<VisaFormData>({
-    firstName: (profile.firstName as string) || '',
-    lastName: (profile.lastName as string) || '',
+    firstName: profile?.firstName || '',
+    lastName: profile?.lastName || '',
     passportNumber: '',
-    nationality: (profile.country as string) || '',
+    nationality: profile?.country || '',
     dateOfBirth: '',
-    organization: (profile.companyName as string) || '',
-    jobTitle: (profile.position as string) || '',
+    organization: profile?.company || '',
+    jobTitle: profile?.position || '',
     address: '',
   });
   const [generating, setGenerating] = useState(false);
@@ -276,8 +276,9 @@ export default function VisaLetterPage() {
 
             {/* Organisation */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Organisation / Entreprise</label>
+              <label htmlFor="visa-organization" className="block text-sm font-medium text-gray-700 mb-1">Organisation / Entreprise</label>
               <input
+                id="visa-organization"
                 name="organization"
                 value={form.organization}
                 onChange={handleChange}
@@ -288,8 +289,9 @@ export default function VisaLetterPage() {
 
             {/* Fonction */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Fonction / Titre</label>
+              <label htmlFor="visa-jobTitle" className="block text-sm font-medium text-gray-700 mb-1">Fonction / Titre</label>
               <input
+                id="visa-jobTitle"
                 name="jobTitle"
                 value={form.jobTitle}
                 onChange={handleChange}
@@ -300,8 +302,9 @@ export default function VisaLetterPage() {
 
             {/* Adresse */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Adresse professionnelle</label>
+              <label htmlFor="visa-address" className="block text-sm font-medium text-gray-700 mb-1">Adresse professionnelle</label>
               <input
+                id="visa-address"
                 name="address"
                 value={form.address}
                 onChange={handleChange}

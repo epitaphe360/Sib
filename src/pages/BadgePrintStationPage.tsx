@@ -701,22 +701,16 @@ export default function BadgePrintStationPage() {
                       {searchResults.length > 0 && (
                         <div className="space-y-2 max-h-96 overflow-y-auto">
                           {searchResults.map((result, idx) => (
-                            <div
+                            <button
                               key={result.badge?.badgeCode ?? String(idx)}
-                              role="button"
-                              tabIndex={0}
-                              className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                              type="button"
+                              className={`w-full text-left p-3 rounded-lg border cursor-pointer transition-colors ${
                                 lookupResult === result
                                   ? 'border-blue-500 bg-blue-50'
                                   : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                               }`}
                               onClick={() => {
                                 if (result.found && result.badge) {
-                                  setLookupResult(result);
-                                }
-                              }}
-                              onKeyDown={(e) => {
-                                if ((e.key === 'Enter' || e.key === ' ') && result.found && result.badge) {
                                   setLookupResult(result);
                                 }
                               }}
@@ -764,7 +758,7 @@ export default function BadgePrintStationPage() {
                                   )}
                                 </div>
                               )}
-                            </div>
+                            </button>
                           ))}
                         </div>
                       )}

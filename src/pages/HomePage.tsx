@@ -7,11 +7,8 @@ import { FeaturedExhibitors } from '../components/home/FeaturedExhibitors';
 import { LogoShowcaseSection } from '../components/home/LogoShowcaseSection';
 import { NetworkingSection } from '../components/home/NetworkingSection';
 import { ServicesSection } from '../components/home/ServicesSection';
-import { RentalBanner } from '../components/common/RentalBanner';
-import { useTranslation } from '../hooks/useTranslation';
 
 export default function HomePage() {
-  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen">
@@ -24,7 +21,7 @@ export default function HomePage() {
       {/* À propos de SIB */}
       <AboutSalonSection />
 
-      {/* Sponsors à la Une - Titre + Bande défilante + 3 Fiches */}
+      {/* Partenaires à la Une - Titre + Bande défilante + 3 Fiches */}
       <FeaturedPartners />
 
       {/* Bannière UrbaEvent App */}
@@ -35,9 +32,6 @@ export default function HomePage() {
 
       {/* Logo Showcase Exposants */}
       <LogoShowcaseSection type="exhibitors" />
-
-      {/* Bannière Location Matériel */}
-      <RentalBanner variant="hero" />
 
       {/* Section Networking */}
       <NetworkingSection />

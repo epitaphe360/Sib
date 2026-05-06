@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, useCallback } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useTranslation } from '../hooks/useTranslation';
@@ -32,10 +32,9 @@ import {
   Briefcase,
   Shield,
   Linkedin,
-  Twitter,
-  Facebook,
-  Instagram,
-  Youtube,
+  ExternalLink as TwitterIcon,
+  ExternalLink as FacebookIcon,
+  ExternalLink as YoutubeIcon,
   Sparkles,
   Zap,
   Heart,
@@ -43,25 +42,20 @@ import {
   ChevronRight,
   Quote,
   BarChart3,
-  PieChart,
   Activity,
   Clock,
   BookOpen,
   Layers,
   Network,
   Lightbulb,
-  GraduationCap,
-  Camera,
-  Newspaper
+  GraduationCap
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import LogoWithFallback from '../components/ui/LogoWithFallback';
 import { motion } from 'framer-motion';
-import { CONFIG } from '../lib/config';
 import { SupabaseService } from '../services/supabaseService';
-import { useAuthStore } from '../store/authStore';
 
 interface Project {
   id: string;
@@ -135,12 +129,11 @@ interface Partner {
   gallery?: string[];
 }
 
-// Les données du sponsor sont maintenant chargées depuis Supabase
+// Les données du partenaire sont maintenant chargées depuis Supabase
 
 export default function PartnerDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const { user } = useAuthStore();
   const [partner, setPartner] = useState<Partner | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedNews, setSelectedNews] = useState<{ title: string; date: Date; excerpt: string; image?: string } | null>(null);
@@ -168,14 +161,14 @@ export default function PartnerDetailPage() {
           setPartner(data);
           // Incrémenter les vues
           SupabaseService.incrementPartnerViews(id).catch(err =>
-            console.error("Erreur incrémentation vues sponsor:", err)
+            console.error("Erreur incrémentation vues partenaire:", err)
           );
         } else {
-          setError("Sponsor non trouvé");
+          setError("Partenaire non trouvé");
         }
       } catch (err) {
-        console.error("Erreur chargement sponsor:", err);
-        setError("Erreur lors du chargement du sponsor");
+        console.error("Erreur chargement partenaire:", err);
+        setError("Erreur lors du chargement du partenaire");
       } finally {
         setIsLoading(false);
       }
@@ -190,7 +183,7 @@ export default function PartnerDetailPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Chargement du sponsor...
+            Chargement du partenaire...
           </h3>
         </div>
       </div>
@@ -205,12 +198,12 @@ export default function PartnerDetailPage() {
             <Handshake className="h-10 w-10 text-white" />
           </div>
           <h2 className="text-2xl font-bold mb-3 text-gray-800">
-            {t('partner.notFound', 'Sponsor non disponible')}
+            {t('partner.notFound', 'Partenaire non disponible')}
           </h2>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            {error === "Sponsor non trouvé"
-              ? t('partner.notFoundDesc', "Ce sponsor n'a pas encore complété son profil ou n'est pas encore visible publiquement. Revenez bientôt pour découvrir notre réseau de sponsors !")
-              : error || t('partner.notFoundGeneric', "Le sponsor que vous recherchez n'existe pas ou a été supprimé.")}
+            {error === "Partenaire non trouvé"
+              ? t('partner.notFoundDesc', "Ce partenaire n'a pas encore complété son profil ou n'est pas encore visible publiquement. Revenez bientôt pour découvrir notre réseau de partenaires !")
+              : error || t('partner.notFoundGeneric', "Le partenaire que vous recherchez n'existe pas ou a été supprimé.")}
           </p>
 
           {/* Actions */}
@@ -218,7 +211,7 @@ export default function PartnerDetailPage() {
             <Link to={ROUTES.PARTNERS}>
               <Button variant="outline" className="group w-full sm:w-auto">
                 <ArrowLeft className="h-4 w-4 mr-2 transition-transform group-hover:-translate-x-1" />
-                {t('partner.backToList', 'Voir tous les sponsors')}
+                {t('partner.backToList', 'Voir tous les partenaires')}
               </Button>
             </Link>
             <Link to={ROUTES.HOME}>
@@ -232,9 +225,9 @@ export default function PartnerDetailPage() {
           {/* Message informatif */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
-              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous êtes sponsor ?')}</span>
+              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous êtes partenaire ?')}</span>
               <br />
-              {t('partner.completeProfile', 'Complétez votre profil depuis votre tableau de bord pour apparaître dans notre annuaire des sponsors.')}
+              {t('partner.completeProfile', 'Complétez votre profil depuis votre tableau de bord pour apparaître dans notre annuaire des partenaires.')}
             </p>
           </div>
         </Card>
@@ -290,9 +283,9 @@ export default function PartnerDetailPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed': return t('partner.detail.status.completed');
-      case 'active': return t('partner.detail.status.active');
-      case 'planned': return t('partner.detail.status.planned');
+      case 'completed': return 'Terminé';
+      case 'active': return 'En cours';
+      case 'planned': return 'Planifié';
       default: return status;
     }
   };
@@ -306,7 +299,7 @@ export default function PartnerDetailPage() {
     const shareData = {
       title: partner.name,
       text: `Découvrez ${partner.name} - ${partner.description}`,
-      url: window.location.href
+      url: globalThis.location.href
     };
 
     if (navigator.share) {
@@ -314,20 +307,20 @@ export default function PartnerDetailPage() {
     } else {
       // Fallback: copier le lien dans le presse-papiers
       navigator.clipboard.writeText(shareData.url)
-        .then(() => toast.success(t('partner.detail.link_copied')))
-        .catch(() => toast.error(t('partner.detail.copy_error')));
+        .then(() => toast.success('Lien copié dans le presse-papiers !'))
+        .catch(() => toast.error('Impossible de copier le lien'));
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Banner de validation — visible UNIQUEMENT par le propriétaire ou un admin */}
-      {partner.is_published === false && user && (user.id === (partner as any).userId || user.id === (partner as any).user_id || user.type === 'admin') && (
+      {/* Banner de validation pour les profils non publiés */}
+      {(partner as unknown as Record<string, unknown>).is_published === false && (
         <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 px-4 shadow-lg">
           <div className="max-w-7xl mx-auto flex items-center justify-center space-x-3">
             <AlertCircle className="h-6 w-6 flex-shrink-0" />
             <p className="text-base font-semibold text-center">
-              {t('partner.detail.validation_warning')}
+              ?? Fiche en cours de validation - Ce profil n'est pas encore visible publiquement
             </p>
           </div>
         </div>
@@ -340,7 +333,7 @@ export default function PartnerDetailPage() {
             <Link to={ROUTES.PARTNERS}>
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                {t('partner.detail.back_to_partners')}
+                Retour aux partenaires
               </Button>
             </Link>
           </div>
@@ -393,14 +386,14 @@ export default function PartnerDetailPage() {
                     className="flex items-center space-x-2 text-blue-600 hover:text-blue-700"
                   >
                     <Globe className="h-4 w-4" />
-                    <span>{t('partner.detail.official_site')}</span>
+                    <span>Site officiel</span>
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 )}
 
                 <Button variant="default" size="sm" onClick={handleContact}>
                   <MessageCircle className="h-4 w-4 mr-2" />
-                  {t('partner.detail.contact_btn')}
+                  Contacter
                 </Button>
 
                 <Button variant="default" size="sm" onClick={handleShare}>
@@ -421,19 +414,19 @@ export default function PartnerDetailPage() {
                   {partner.socialMedia.twitter && (
                     <a href={partner.socialMedia.twitter} target="_blank" rel="noopener noreferrer"
                        className="p-2 bg-sky-100 text-sky-600 rounded-lg hover:bg-sky-200 transition-colors">
-                      <Twitter className="h-4 w-4" />
+                      <TwitterIcon className="h-4 w-4" />
                     </a>
                   )}
                   {partner.socialMedia.facebook && (
                     <a href={partner.socialMedia.facebook} target="_blank" rel="noopener noreferrer"
                        className="p-2 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors">
-                      <Facebook className="h-4 w-4" />
+                      <FacebookIcon className="h-4 w-4" />
                     </a>
                   )}
                   {partner.socialMedia.youtube && (
                     <a href={partner.socialMedia.youtube} target="_blank" rel="noopener noreferrer"
                        className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors">
-                      <Youtube className="h-4 w-4" />
+                      <YoutubeIcon className="h-4 w-4" />
                     </a>
                   )}
                 </div>
@@ -449,13 +442,13 @@ export default function PartnerDetailPage() {
         <div className="mb-8 overflow-x-auto">
           <nav className="flex space-x-2 md:space-x-4 min-w-max pb-2">
             {[
-              { id: 'overview', label: t('partner.detail.tab_overview'), icon: Eye },
-              { id: 'about', label: t('partner.detail.tab_about'), icon: Building2 },
-              { id: 'expertise', label: t('partner.detail.tab_expertise'), icon: Lightbulb },
-              { id: 'projects', label: t('partner.detail.tab_projects'), icon: Target },
-              { id: 'gallery', label: t('partner.detail.tab_gallery'), icon: ImageIcon },
-              { id: 'news', label: t('partner.detail.tab_news'), icon: BookOpen },
-              { id: 'contact', label: t('partner.detail.tab_contact'), icon: MessageCircle }
+              { id: 'overview', label: 'Vue d\'ensemble', icon: Eye },
+              { id: 'about', label: 'À propos', icon: Building2 },
+              { id: 'expertise', label: 'Expertise', icon: Lightbulb },
+              { id: 'projects', label: 'Projets', icon: Target },
+              { id: 'gallery', label: 'Galerie', icon: ImageIcon },
+              { id: 'news', label: 'Actualités', icon: BookOpen },
+              { id: 'contact', label: 'Contact', icon: MessageCircle }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -519,7 +512,7 @@ export default function PartnerDetailPage() {
               <Card className="lg:col-span-2 p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                   <Building2 className="h-5 w-5 mr-2 text-blue-600" />
-                  {t('partner.detail.who_we_are')}
+                  Qui sommes-nous ?
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg mb-6">
                   {partner.longDescription || partner.description}
@@ -531,7 +524,7 @@ export default function PartnerDetailPage() {
                     <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
                       <div className="flex items-center mb-2">
                         <Target className="h-5 w-5 text-blue-600 mr-2" />
-                        <h4 className="font-semibold text-blue-900">{t('partner.detail.our_mission')}</h4>
+                        <h4 className="font-semibold text-blue-900">Notre Mission</h4>
                       </div>
                       <p className="text-sm text-blue-800">{partner.mission}</p>
                     </div>
@@ -540,7 +533,7 @@ export default function PartnerDetailPage() {
                     <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border border-purple-100">
                       <div className="flex items-center mb-2">
                         <Eye className="h-5 w-5 text-purple-600 mr-2" />
-                        <h4 className="font-semibold text-purple-900">{t('partner.detail.our_vision')}</h4>
+                        <h4 className="font-semibold text-purple-900">Notre Vision</h4>
                       </div>
                       <p className="text-sm text-purple-800">{partner.vision}</p>
                     </div>
@@ -565,8 +558,8 @@ export default function PartnerDetailPage() {
                         <Play className="h-8 w-8 text-blue-600 ml-1" />
                       </div>
                       <div className="absolute bottom-4 left-4 right-4 text-white">
-                        <p className="font-medium">{t('partner.detail.presentation_discover').replace('{{name}}', partner.name)}</p>
-                        <p className="text-sm text-white/80">{t('partner.detail.presentation_video')}</p>
+                        <p className="font-medium">Découvrez {partner.name}</p>
+                        <p className="text-sm text-white/80">Vidéo de présentation</p>
                       </div>
                     </button>
                   </div>
@@ -579,14 +572,14 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Heart className="h-5 w-5 mr-2 text-red-500" />
-                  {t('partner.detail.our_values')}
+                  Nos Valeurs
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   {partner.values.map((value, index) => {
                     const valText = typeof value === 'object' ? ((value as any).name || JSON.stringify(value)) : String(value);
                     return (
                     <motion.div
-                      key={index}
+                    key={`value-${index}-${valText}`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -610,13 +603,13 @@ export default function PartnerDetailPage() {
                 <Card className="p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
                     <Shield className="h-5 w-5 mr-2 text-green-600" />
-                    {t('partner.detail.certifications')}
+                    Certifications
                   </h3>
                   <div className="space-y-3">
                     {partner.certifications.map((cert, idx) => {
                       const certText = typeof cert === 'object' ? ((cert as any).name || JSON.stringify(cert)) : String(cert);
                       return (
-                      <div key={idx} className="flex items-center p-3 bg-green-50 rounded-lg border border-green-100">
+                      <div key={`cert-${certText}`} className="flex items-center p-3 bg-green-50 rounded-lg border border-green-100">
                         <CheckCircle className="h-5 w-5 text-green-600 mr-3 flex-shrink-0" />
                         <span className="text-sm font-medium text-green-900">{certText}</span>
                       </div>
@@ -631,7 +624,7 @@ export default function PartnerDetailPage() {
                 <Card className="p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
                     <Award className="h-5 w-5 mr-2 text-yellow-600" />
-                    {t('partner.detail.awards')}
+                    Récompenses
                   </h3>
                   <div className="space-y-3">
                     {partner.awards.map((award, idx) => {
@@ -639,7 +632,7 @@ export default function PartnerDetailPage() {
                       const awardIssuer = typeof award === 'string' ? '' : (award?.issuer || '');
                       const awardYear = typeof award === 'string' ? '' : (award?.year || '');
                       return (
-                      <div key={idx} className="flex items-start p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+                      <div key={`award-${awardName}-${awardYear}`} className="flex items-start p-3 bg-yellow-50 rounded-lg border border-yellow-100">
                         <Star className="h-5 w-5 text-yellow-600 mr-3 flex-shrink-0 mt-0.5" />
                         <div>
                           <p className="font-medium text-yellow-900">{awardName}</p>
@@ -658,7 +651,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Quote className="h-5 w-5 mr-2 text-blue-600" />
-                  {t('partner.detail.testimonials_title')}
+                  Ce que disent nos partenaires
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {partner.testimonials.map((testimonial, index) => (
@@ -694,7 +687,7 @@ export default function PartnerDetailPage() {
             <Card className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                 <Handshake className="h-5 w-5 mr-2 text-indigo-600" />
-                {t('partner.detail.contributions_title')}
+                Contributions au Salon SIB 2026
               </h3>
               {partner.contributions && partner.contributions.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -704,7 +697,7 @@ export default function PartnerDetailPage() {
                     : String(contribution);
                   return (
                   <motion.div
-                    key={idx}
+                    key={`contrib-${text}`}
                     whileHover={{ scale: 1.02 }}
                     className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100 cursor-pointer"
                   >
@@ -729,20 +722,20 @@ export default function PartnerDetailPage() {
             className="space-y-8"
           >
             <Card className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('partner.detail.about_title').replace('{{name}}', partner.name)}</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">À propos de {partner.name}</h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-6">{partner.longDescription || partner.description}</p>
 
                 {partner.mission && (
                   <div className="my-8 p-6 bg-blue-50 rounded-2xl border-l-4 border-blue-500">
-                    <h3 className="text-lg font-bold text-blue-900 mb-2">{t('partner.detail.our_mission')}</h3>
+                    <h3 className="text-lg font-bold text-blue-900 mb-2">Notre Mission</h3>
                     <p className="text-blue-800">{partner.mission}</p>
                   </div>
                 )}
 
                 {partner.vision && (
                   <div className="my-8 p-6 bg-purple-50 rounded-2xl border-l-4 border-purple-500">
-                    <h3 className="text-lg font-bold text-purple-900 mb-2">{t('partner.detail.our_vision')}</h3>
+                    <h3 className="text-lg font-bold text-purple-900 mb-2">Notre Vision</h3>
                     <p className="text-purple-800">{partner.vision}</p>
                   </div>
                 )}
@@ -753,10 +746,10 @@ export default function PartnerDetailPage() {
             <Card className="p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Clock className="h-5 w-5 mr-2 text-blue-600" />
-                {t('partner.detail.our_history')}
+                Notre Histoire
               </h3>
               {partner.establishedYear ? (
-                <p className="text-gray-600">{t('partner.detail.founded_in').replace('{{year}}', String(partner.establishedYear))}</p>
+                <p className="text-gray-600">Fondé en {partner.establishedYear}</p>
               ) : null}
             </Card>
 
@@ -765,13 +758,13 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Briefcase className="h-5 w-5 mr-2 text-green-600" />
-                  {t('partner.detail.clients_title')}
+                  Ils nous font confiance
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {partner.clients.map((client, idx) => {
                     const clientText = typeof client === 'object' ? ((client as any).name || JSON.stringify(client)) : String(client);
                     return (
-                    <Badge key={idx} variant="info" size="md" className="px-4 py-2">
+                    <Badge key={`client-${clientText}`} variant="info" size="md" className="px-4 py-2">
                       {clientText}
                     </Badge>
                     );
@@ -794,7 +787,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Layers className="h-5 w-5 mr-2 text-blue-600" />
-                  {t('partner.detail.expertise_title')}
+                  Nos Domaines d'Expertise
                 </h3>
                 <div className="space-y-4">
                   {(partner.expertise || []).length > 0 ? (partner.expertise || []).map((exp, index) => {
@@ -945,7 +938,7 @@ export default function PartnerDetailPage() {
                       if (lowerTitle.includes('compétitivité') || lowerTitle.includes('export') || lowerTitle.includes('marché')) {
                         return "Accompagnement des entreprises dans leur développement commercial, à l'export et sur les marchés internationaux.";
                       }
-                      // Fallback intelligent basé sur le contexte du sponsor
+                      // Fallback intelligent basé sur le contexte du partenaire
                       return `Expertise reconnue en ${title.toLowerCase()} au service de l'excellence et de l'innovation dans le secteur.`;
                     };
 
@@ -989,7 +982,7 @@ export default function PartnerDetailPage() {
                   </h3>
                   <div className="grid gap-3">
                     {partner.expertise.map((exp, index) => (
-                      <div key={index} className="flex items-start">
+                      <div key={`exp-${exp}`} className="flex items-start">
                         <div className="flex-shrink-0 h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
                           <span className="text-blue-600 text-xs font-bold">{index + 1}</span>
                         </div>
@@ -1006,13 +999,13 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <GraduationCap className="h-5 w-5 mr-2 text-green-600" />
-                  {t('partner.detail.certif_accred')}
+                  Certifications & Accréditations
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {partner.certifications.map((cert, idx) => {
                     const certText = typeof cert === 'object' ? ((cert as any).name || JSON.stringify(cert)) : String(cert);
                     return (
-                    <div key={idx} className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 text-center">
+                    <div key={`cert2-${certText}`} className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 text-center">
                       <Shield className="h-8 w-8 text-green-600 mx-auto mb-2" />
                       <p className="text-sm font-medium text-green-900">{certText}</p>
                     </div>
@@ -1032,8 +1025,8 @@ export default function PartnerDetailPage() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">{t('partner.detail.gallery_title')}</h2>
-              {partner.gallery?.length > 0 && <Badge variant="info">{partner.gallery.length} photos</Badge>}
+              <h2 className="text-2xl font-bold text-gray-900">Galerie Photos</h2>
+              {(partner.gallery?.length ?? 0) > 0 && <Badge variant="info">{partner.gallery!.length} photos</Badge>}
             </div>
 
             {partner.gallery && partner.gallery.length > 0 ? (
@@ -1072,7 +1065,7 @@ export default function PartnerDetailPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('partner.detail.news_title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Dernières Actualités</h2>
 
             {partner.news && partner.news.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1106,7 +1099,7 @@ export default function PartnerDetailPage() {
                           setShowNewsModal(true);
                         }}
                       >
-                        {t('partner.detail.read_more')} <ChevronRight className="h-4 w-4 ml-1" />
+                        Lire plus <ChevronRight className="h-4 w-4 ml-1" />
                       </Button>
                     </div>
                   </Card>
@@ -1124,7 +1117,7 @@ export default function PartnerDetailPage() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">{t('partner.detail.projects_title')}</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Nos Projets</h2>
               {partner.projects?.length > 0 && <Badge variant="success">{partner.projects.length} projets</Badge>}
             </div>
             {partner.projects && partner.projects.length > 0 ? (
@@ -1188,7 +1181,7 @@ export default function PartnerDetailPage() {
                         onClick={() => handleViewProjectDetails(project)}
                       >
                         <Eye className="h-4 w-4 mr-2" />
-                        {t('partner.detail.view_details')}
+                        Voir les détails
                       </Button>
                     </div>
                   </Card>
@@ -1207,12 +1200,12 @@ export default function PartnerDetailPage() {
           >
             <Card className="p-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-8">
-                {t('partner.detail.contact_info_title')}
+                Informations de Contact
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                  <h4 className="font-semibold text-gray-900 text-lg">{t('partner.detail.contact_coordinates')}</h4>
+                  <h4 className="font-semibold text-gray-900 text-lg">Coordonnées</h4>
 
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
@@ -1272,7 +1265,7 @@ export default function PartnerDetailPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 text-lg mb-4">{t('partner.detail.contact_sib')}</h4>
+                  <h4 className="font-semibold text-gray-900 text-lg mb-4">Contact SIB</h4>
                   <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
                     <div className="flex items-center space-x-4 mb-4">
                       <div className="h-14 w-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
@@ -1300,7 +1293,7 @@ export default function PartnerDetailPage() {
                       onClick={handleContact}
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />
-                      {t('partner.detail.send_message')}
+                      Envoyer un message
                     </Button>
                   </div>
                 </div>
@@ -1312,7 +1305,13 @@ export default function PartnerDetailPage() {
 
       {/* Modal Vidéo */}
       {showVideoModal && partner.videoUrl && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setShowVideoModal(false)}>
+        <dialog
+          open
+          aria-label="Vidéo"
+          className="fixed inset-0 m-0 w-full h-full bg-black/80 flex items-center justify-center z-50 p-4 border-0"
+          onClick={() => setShowVideoModal(false)}
+          onKeyDown={(e) => e.key === 'Escape' && setShowVideoModal(false)}
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -1327,6 +1326,7 @@ export default function PartnerDetailPage() {
             </button>
             {getEmbedUrl(partner.videoUrl) && (
               <iframe
+                title={`Vidéo de présentation — ${partner.name}`}
                 src={getEmbedUrl(partner.videoUrl)!}
                 className="w-full h-full rounded-xl"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -1334,14 +1334,17 @@ export default function PartnerDetailPage() {
               />
             )}
           </motion.div>
-        </div>
+        </dialog>
       )}
 
       {/* Modal Article / News */}
       {showNewsModal && selectedNews && (
-        <div
-          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+        <dialog
+          open
+          aria-label="Article"
+          className="fixed inset-0 m-0 w-full h-full bg-black/70 flex items-center justify-center z-50 p-4 border-0"
           onClick={() => setShowNewsModal(false)}
+          onKeyDown={(e) => e.key === 'Escape' && setShowNewsModal(false)}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -1379,7 +1382,7 @@ export default function PartnerDetailPage() {
               )}
 
               <div className="flex items-center gap-2 mb-4">
-                <Badge variant="primary" className="bg-blue-100 text-blue-700">
+                <Badge variant="info" className="bg-blue-100 text-blue-700">
                   <BookOpen className="h-3 w-3 mr-1" />
                   Article
                 </Badge>
@@ -1448,12 +1451,18 @@ export default function PartnerDetailPage() {
               </div>
             </div>
           </motion.div>
-        </div>
+        </dialog>
       )}
 
       {/* Modal Galerie */}
       {showGalleryModal && selectedImage && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4" onClick={() => setShowGalleryModal(false)}>
+        <dialog
+          open
+          aria-label="Galerie photos"
+          className="fixed inset-0 m-0 w-full h-full bg-black/90 flex items-center justify-center z-50 p-4 border-0"
+          onClick={() => setShowGalleryModal(false)}
+          onKeyDown={(e) => e.key === 'Escape' && setShowGalleryModal(false)}
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -1472,7 +1481,7 @@ export default function PartnerDetailPage() {
               className="w-full h-auto max-h-[80vh] object-contain rounded-xl"
             />
           </motion.div>
-        </div>
+        </dialog>
       )}
 
       {/* Modal Détails Projet */}
@@ -1565,8 +1574,9 @@ export default function PartnerDetailPage() {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Équipe:</span>
                       <span className="font-medium">
-                        {selectedProject.status === 'completed' ? '45 experts' :
-                         selectedProject.status === 'active' ? '32 experts' : '15 experts'}
+                        {selectedProject.status === 'completed' && '45 experts'}
+                        {selectedProject.status === 'active' && '32 experts'}
+                        {selectedProject.status === 'planned' && '15 experts'}
                       </span>
                     </div>
                   </div>
@@ -1633,12 +1643,13 @@ export default function PartnerDetailPage() {
               <div className="mb-8">
                 <h4 className="font-semibold text-gray-900 mb-4">Chronologie du Projet</h4>
                 <div className="space-y-4">
-                  {selectedProject.timeline.map((phase: Project['timeline'][0]) => (
+                  {selectedProject.timeline.map((phase: Project['timeline'][0]) => {
+                    let dotColor = 'bg-gray-300';
+                    if (phase.status === 'completed') dotColor = 'bg-green-500';
+                    else if (phase.status === 'current') dotColor = 'bg-blue-500';
+                    return (
                     <div key={phase.phase} className="flex items-start space-x-4">
-                      <div className={`w-4 h-4 rounded-full mt-1 ${
-                        phase.status === 'completed' ? 'bg-green-500' :
-                        phase.status === 'current' ? 'bg-blue-500' : 'bg-gray-300'
-                      }`} />
+                      <div className={`w-4 h-4 rounded-full mt-1 ${dotColor}`} />
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
                           <h5 className="font-medium text-gray-900">{phase.phase}</h5>
@@ -1647,13 +1658,14 @@ export default function PartnerDetailPage() {
                         <p className="text-sm text-gray-600">{phase.description}</p>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Sponsors du Projet */}
+              {/* Partenaires du Projet */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Sponsors du Projet</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Partenaires du Projet</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.partners.map((partnerName: string) => (
                     <Badge key={partnerName} variant="success" size="sm">
@@ -1713,6 +1725,11 @@ export default function PartnerDetailPage() {
                   variant="default"
                   onClick={() => {
                     if (selectedProject) {
+                      // Accès aux champs étendus (non typés dans l'interface de base)
+                      const ext = selectedProject as unknown as Record<string, unknown>;
+                      const teamLines = selectedProject.team.map(m => `- ${m}`).join('\n');
+                      const endDateStr = selectedProject.endDate ? formatDate(new Date(selectedProject.endDate)) : 'En cours';
+
                       // Créer un rapport complet
                       const report = `
 ==============================================
@@ -1720,9 +1737,9 @@ RAPPORT DE PROJET COMPLET
 ==============================================
 
 Projet: ${selectedProject.name}
-Client: ${selectedProject.client}
+Client: ${typeof ext.client === 'string' ? ext.client : 'N/A'}
 Statut: ${getStatusLabel(selectedProject.status)}
-Période: ${formatDate(new Date(selectedProject.startDate))} - ${formatDate(new Date(selectedProject.endDate))}
+Période: ${formatDate(new Date(selectedProject.startDate))} - ${endDateStr}
 
 DESCRIPTION
 ${selectedProject.description}
@@ -1739,20 +1756,7 @@ TECHNOLOGIES
 ${selectedProject.technologies.join(', ')}
 
 ÉQUIPE
-${selectedProject.team.map(m => `- ${m.name} (${m.role})`).join('\n')}
-
-JALONS PRINCIPAUX
-${selectedProject.milestones.map(m => `- ${m.title} (${m.date}) ${m.completed ? '? Complété' : '? En cours'}`).join('\n')}
-
-DÉFIS ET SOLUTIONS
-${selectedProject.challenges.map(c => `
-Défi: ${c.challenge}
-Solution: ${c.solution}
-`).join('\n')}
-
-TÉMOIGNAGE CLIENT
-"${selectedProject.testimonial.text}"
-- ${selectedProject.testimonial.author}, ${selectedProject.testimonial.role}
+${teamLines}
 
 ==============================================
 Rapport généré le ${new Date().toLocaleDateString('fr-FR')}
@@ -1767,7 +1771,7 @@ Rapport généré le ${new Date().toLocaleDateString('fr-FR')}
                       link.download = `Rapport_${selectedProject.name.replace(/\s+/g, '_')}_${Date.now()}.txt`;
                       document.body.appendChild(link);
                       link.click();
-                      document.body.removeChild(link);
+                      link.remove();
                       URL.revokeObjectURL(url);
 
                       toast.success('Rapport téléchargé avec succès');
@@ -1806,40 +1810,41 @@ Rapport généré le ${new Date().toLocaleDateString('fr-FR')}
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 mb-2">
                     Votre nom
                   </label>
-                  <input type="text"
+                  <input id="contact-name" type="text"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Votre nom complet"
-                   aria-label="Votre nom complet" />
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 mb-2">
                     Email
                   </label>
-                  <input type="email"
+                  <input id="contact-email" type="email"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="votre@email.com"
-                   aria-label="votre@email.com" />
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="contact-subject" className="block text-sm font-medium text-gray-700 mb-2">
                     Sujet
                   </label>
-                  <input type="text"
+                  <input id="contact-subject" type="text"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Objet de votre message"
-                   aria-label="Objet de votre message" />
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="contact-message" className="block text-sm font-medium text-gray-700 mb-2">
                     Message
                   </label>
                   <textarea
+                    id="contact-message"
                     rows={4}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Votre message..."

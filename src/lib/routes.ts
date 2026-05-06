@@ -237,11 +237,9 @@
 
   // Exposant — pages dédiées
   EXHIBITOR_SCANS: '/exhibitor/scans',
-  EXHIBITOR_TEAM: '/exhibitor/team',
 
   // Sponsor — pages dédiées
   PARTNER_SCANS: '/partner/scans',
-  PARTNER_TEAM: '/partner/team',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

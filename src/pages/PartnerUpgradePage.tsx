@@ -1,4 +1,5 @@
-﻿import { useNavigate } from 'react-router-dom';
+﻿import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Crown,
@@ -70,6 +71,25 @@ export default function PartnerUpgradePage() {
             const canUpgrade = tier.price > currentConfig.price;
             const upgradePrice = calculateUpgradePrice(currentTier, tierId);
 
+            let cardClassName = 'relative h-full ';
+            if (isCurrentTier) cardClassName += 'ring-2 ring-blue-500 shadow-lg';
+            else if (canUpgrade) cardClassName += 'hover:shadow-xl transition-shadow';
+            else cardClassName += 'opacity-75';
+
+            let ctaButton: React.ReactNode;
+            if (isCurrentTier) {
+              ctaButton = <Button variant="outline" className="w-full" disabled>Niveau actuel</Button>;
+            } else if (canUpgrade) {
+              ctaButton = (
+                <Button variant="default" className="w-full" onClick={() => handleUpgrade(tierId)}>
+                  <span>Upgrader</span>
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              );
+            } else {
+              ctaButton = <Button variant="outline" className="w-full" disabled>Non disponible</Button>;
+            }
+
             return (
               <motion.div
                 key={tierId}
@@ -77,15 +97,7 @@ export default function PartnerUpgradePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card
-                  className={`relative h-full ${
-                    isCurrentTier
-                      ? 'ring-2 ring-blue-500 shadow-lg'
-                      : canUpgrade
-                      ? 'hover:shadow-xl transition-shadow'
-                      : 'opacity-75'
-                  }`}
-                >
+                <Card className={cardClassName}>
                   {isCurrentTier && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                       <div className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
@@ -162,24 +174,7 @@ export default function PartnerUpgradePage() {
 
                     {/* CTA Button */}
                     <div className="mt-auto">
-                      {isCurrentTier ? (
-                        <Button variant="outline" className="w-full" disabled>
-                          Niveau actuel
-                        </Button>
-                      ) : canUpgrade ? (
-                        <Button
-                          variant="default"
-                          className="w-full"
-                          onClick={() => handleUpgrade(tierId)}
-                        >
-                          <span>Upgrader</span>
-                          <ArrowRight className="h-4 w-4 ml-2" />
-                        </Button>
-                      ) : (
-                        <Button variant="outline" className="w-full" disabled>
-                          Non disponible
-                        </Button>
-                      )}
+                      {ctaButton}
                     </div>
                   </div>
                 </Card>
