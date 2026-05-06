@@ -9,9 +9,11 @@ import { supabase } from '../../lib/supabase';
 import { Salon } from '../../contexts/SalonContext';
 import { ROUTES } from '../../lib/routes';
 import { Button } from '../../components/ui/Button';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function SalonPublicPage() {
   const { slug } = useParams<{ slug: string }>();
+  const { t } = useTranslation();
   const [salon, setSalon] = useState<Salon | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -47,10 +49,10 @@ export default function SalonPublicPage() {
       <div className="min-h-screen bg-[#0F2034] flex items-center justify-center text-white">
         <div className="text-center">
           <Building2 className="h-16 w-16 mx-auto mb-4 text-[#C9A84C]" />
-          <h1 className="text-2xl font-bold mb-2">Salon introuvable</h1>
-          <p className="text-white/60 mb-6">Le salon « {slug} » n'existe pas ou n'est plus disponible.</p>
+          <h1 className="text-2xl font-bold mb-2">{t('salon.not_found')}</h1>
+          <p className="text-white/60 mb-6">{t('salon.not_found_msg', { slug: slug || '' })}</p>
           <Link to={ROUTES.HOME}>
-            <Button variant="primary">Retour à l'accueil</Button>
+            <Button variant="primary">{t('salon.back_home')}</Button>
           </Link>
         </div>
       </div>
@@ -62,7 +64,7 @@ export default function SalonPublicPage() {
 
   const dateDebut = formatDate(salon.date_debut);
   const dateFin = formatDate(salon.date_fin);
-  const dateLabel = dateDebut && dateFin ? `${dateDebut} — ${dateFin}` : dateDebut || dateFin || 'Dates à confirmer';
+  const dateLabel = dateDebut && dateFin ? `${dateDebut} — ${dateFin}` : dateDebut || dateFin || t('salon.dates_tbc');
 
   return (
     <div className="min-h-screen bg-[#0F2034]">
@@ -94,7 +96,7 @@ export default function SalonPublicPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-4"
             style={{ background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.35)', color: '#C9A84C' }}>
             <CheckCircle className="h-3.5 w-3.5" />
-            {salon.is_active ? 'Salon actif' : 'Édition passée'}
+            {salon.is_active ? t('salon.active') : t('salon.past_edition')}
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">{salon.name}</h1>
@@ -117,12 +119,12 @@ export default function SalonPublicPage() {
           <div className="flex flex-wrap gap-3 justify-center">
             <Link to={ROUTES.REGISTER_VISITOR}>
               <Button variant="primary" className="flex items-center gap-2">
-                S'inscrire gratuitement <ArrowRight className="h-4 w-4" />
+                {t('salon.register_free')} <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <Link to={ROUTES.EXHIBITORS}>
               <Button variant="outline" className="text-white border-white/30 hover:border-[#C9A84C]">
-                Voir les exposants
+                {t('salon.view_exhibitors')}
               </Button>
             </Link>
           </div>
@@ -134,17 +136,17 @@ export default function SalonPublicPage() {
         {[
           {
             Icon: Clock,
-            label: 'Dates',
+            label: t('salon.dates_label'),
             value: dateLabel,
           },
           {
             Icon: MapPin,
-            label: 'Lieu',
-            value: salon.location || 'À confirmer',
+            label: t('salon.venue_label'),
+            value: salon.location || t('salon.tbc'),
           },
           {
             Icon: Globe,
-            label: 'Site officiel',
+            label: t('salon.website_label'),
             value: (salon.config as any)?.website || 'sibca.fr',
           },
         ].map(({ Icon, label, value }) => (
@@ -169,12 +171,12 @@ export default function SalonPublicPage() {
 
       {/* ── RUBRIQUES ────────────────────────────────────────────────────── */}
       <section className="max-w-5xl mx-auto px-4 pb-20">
-        <h2 className="text-2xl font-bold text-white mb-8">Explorer le salon</h2>
+        <h2 className="text-2xl font-bold text-white mb-8">{t('salon.explore')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {[
-            { label: 'Exposants', desc: 'Découvrez les entreprises participantes', href: ROUTES.EXHIBITORS, Icon: Building2 },
-            { label: 'Sponsors', desc: 'Nos sponsors institutionnels et privés', href: ROUTES.PARTNERS, Icon: Users },
-            { label: 'Programme', desc: 'Conférences, ateliers et événements', href: ROUTES.EVENTS, Icon: Calendar },
+            { label: t('salon.exhibitors_tab'), desc: t('salon.discover_companies'), href: ROUTES.EXHIBITORS, Icon: Building2 },
+            { label: t('salon.sponsors_tab'), desc: t('salon.institutional_sponsors'), href: ROUTES.PARTNERS, Icon: Users },
+            { label: t('salon.programme_tab'), desc: t('salon.programme_desc'), href: ROUTES.EVENTS, Icon: Calendar },
           ].map(({ label, desc, href, Icon }) => (
             <Link key={label} to={href}>
               <motion.div

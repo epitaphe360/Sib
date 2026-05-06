@@ -18,7 +18,7 @@ export default function AdminDashboard() {
   const { user, t, isLoading, error, fetchMetrics, adminMetrics } = ctx;
 
   // ── Early returns ─────────────────────────────────────────────────────────
-  if (user?.type !== 'admin') {
+  if (!user || user.type !== 'admin') {
     return (
       <div className="min-h-screen bg-sib-bg flex items-center justify-center">
         <div className="text-center">
@@ -109,8 +109,8 @@ export default function AdminDashboard() {
           >
             <div className="flex items-center justify-between mb-5">
               <div>
-                <h3 className="text-base font-bold text-white tracking-wide uppercase" style={{ letterSpacing: '0.08em' }}>Accès CMS</h3>
-                <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>Gestion complète du contenu et des templates</p>
+                <h3 className="text-base font-bold text-white tracking-wide uppercase" style={{ letterSpacing: '0.08em' }}>{t('admin.cms_access')}</h3>
+                <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>{t('admin.cms_desc')}</p>
               </div>
               <div className="w-8 h-0.5 rounded-full" style={{ background: '#C9A84C' }} />
             </div>
@@ -123,13 +123,13 @@ export default function AdminDashboard() {
               viewport={{ once: true }}
             >
               {([
-                { to: ROUTES.ADMIN_CONTENT,         Icon: FileText,   label: 'Contenu pages',   sub: 'Modifier les contenus des pages' },
-                { to: ROUTES.ADMIN_EMAIL_TEMPLATES, Icon: Mail,       label: 'Templates email', sub: 'Editer les emails envoyes' },
-                { to: ROUTES.ADMIN_NEWS,            Icon: Newspaper,  label: 'Actualites',      sub: 'Gerer les articles et news' },
-                { to: ROUTES.ADMIN_MEDIA,           Icon: Image,      label: 'Medias',          sub: 'Bibliotheque images/videos' },
-                { to: ROUTES.ADMIN_EVENTS,          Icon: Calendar,   label: 'Programme',       sub: 'Gerer le programme scientifique' },
-                { to: ROUTES.ADMIN_SPEAKERS,        Icon: Mic2,       label: 'Intervenants',    sub: 'Gerer les speakers du salon' },
-                { to: ROUTES.ADMIN_SALONS,          Icon: Building2,  label: 'Salons',          sub: 'Gerer les editions du salon' },
+                { to: ROUTES.ADMIN_CONTENT,         Icon: FileText,   label: t('admin.cms_pages'),      sub: t('admin.cms_pages_desc') },
+                { to: ROUTES.ADMIN_EMAIL_TEMPLATES, Icon: Mail,       label: t('admin.cms_email'),      sub: t('admin.cms_email_desc') },
+                { to: ROUTES.ADMIN_NEWS,            Icon: Newspaper,  label: t('admin.cms_news'),       sub: t('admin.cms_news_desc') },
+                { to: ROUTES.ADMIN_MEDIA,           Icon: Image,      label: t('admin.cms_media'),      sub: t('admin.cms_media_desc') },
+                { to: ROUTES.ADMIN_EVENTS,          Icon: Calendar,   label: t('admin.cms_programme'),  sub: t('admin.cms_programme_desc') },
+                { to: ROUTES.ADMIN_SPEAKERS,        Icon: Mic2,       label: t('admin.cms_speakers'),   sub: t('admin.cms_speakers_desc') },
+                { to: ROUTES.ADMIN_SALONS,          Icon: Building2,  label: t('admin.cms_salons'),     sub: t('admin.cms_salons_desc') },
               ] as const).map(({ to, Icon, label, sub }) => (
                 <motion.div
                   key={label}

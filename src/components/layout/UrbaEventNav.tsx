@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import useAuthStore from '../../store/authStore';
+import { useTranslation } from '../../hooks/useTranslation';
 
 /** Couleur associée à chaque salon */
 const SALON_COLORS: Record<string, string> = {
@@ -36,6 +37,7 @@ export const UrbaEventNav: React.FC = memo(() => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuthStore();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { color, salonName, isOnSalonList } = useSalonContext();
@@ -71,10 +73,10 @@ export const UrbaEventNav: React.FC = memo(() => {
   };
 
   const navLinks = [
-    { label: 'Salons', href: ROUTES.SALON_SELECTION, icon: Grid3X3 },
+    { label: t('nav.salons'), href: ROUTES.SALON_SELECTION, icon: Grid3X3 },
     { label: 'SIB 2026', href: ROUTES.HOME, icon: Home },
-    { label: 'Exposants', href: ROUTES.EXHIBITORS, icon: Building2 },
-    { label: 'Événements', href: ROUTES.EVENTS, icon: Bell },
+    { label: t('nav.exhibitors'), href: ROUTES.EXHIBITORS, icon: Building2 },
+    { label: t('nav.events'), href: ROUTES.EVENTS, icon: Bell },
   ];
 
   return (
@@ -146,7 +148,7 @@ export const UrbaEventNav: React.FC = memo(() => {
                     className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-[#647483] hover:text-[#333333] hover:bg-gray-100 transition-all"
                   >
                     <LayoutDashboard className="w-4 h-4" />
-                    <span className="hidden lg:inline">Dashboard</span>
+                    <span className="hidden lg:inline">{t('nav.dashboard_short')}</span>
                   </Link>
 
                   {/* QR Badge shortcut */}
@@ -154,7 +156,7 @@ export const UrbaEventNav: React.FC = memo(() => {
                     to={ROUTES.BADGE}
                     className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all"
                     style={{ backgroundColor: `${color}10`, color }}
-                    title="Mon E-Badge"
+                    title={t('nav.my_ebadge')}
                   >
                     <QrCode className="w-4 h-4" />
                     <span className="hidden lg:inline">Mon Badge</span>
@@ -199,7 +201,7 @@ export const UrbaEventNav: React.FC = memo(() => {
                               style={{ backgroundColor: `${color}15`, color }}
                             >
                               {user.type === 'visitor'
-                                ? `Visiteur ${user.visitor_level ?? 'Standard'}`
+                                ? `${t('nav.visitor_prefix')} ${user.visitor_level ?? t('nav.standard')}`
                                 : user.type}
                             </span>
                           </div>
@@ -210,21 +212,21 @@ export const UrbaEventNav: React.FC = memo(() => {
                               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-[#333333] hover:bg-gray-50 font-medium transition-colors"
                             >
                               <LayoutDashboard className="w-4 h-4 text-[#647483]" />
-                              Mon tableau de bord
+                              {t('nav.dashboard')}
                             </Link>
                             <Link
                               to={ROUTES.BADGE}
                               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-[#333333] hover:bg-gray-50 font-medium transition-colors"
                             >
                               <QrCode className="w-4 h-4 text-[#647483]" />
-                              Mon E-Badge
+                              {t('nav.my_ebadge')}
                             </Link>
                             <Link
                               to={ROUTES.PROFILE}
                               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-[#333333] hover:bg-gray-50 font-medium transition-colors"
                             >
                               <User className="w-4 h-4 text-[#647483]" />
-                              Mon profil
+                              {t('nav.my_profile')}
                             </Link>
                           </div>
 
@@ -234,7 +236,7 @@ export const UrbaEventNav: React.FC = memo(() => {
                               className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-sm text-[#F44336] hover:bg-red-50 font-medium transition-colors"
                             >
                               <LogOut className="w-4 h-4" />
-                              Se déconnecter
+                              {t('nav.logout')}
                             </button>
                           </div>
                         </div>
@@ -249,14 +251,14 @@ export const UrbaEventNav: React.FC = memo(() => {
                     className="hidden sm:inline-flex px-4 py-2 rounded-full text-sm font-semibold border-2 transition-all duration-200"
                     style={{ borderColor: color, color }}
                   >
-                    Se connecter
+                    {t('nav.login')}
                   </Link>
                   <Link
                     to={ROUTES.REGISTER}
                     className="inline-flex px-4 py-2 rounded-full text-sm font-bold text-white transition-all duration-200 hover:opacity-90 shadow-sm"
                     style={{ backgroundColor: color }}
                   >
-                    S'inscrire
+                    {t('nav.register')}
                   </Link>
                 </>
               )}
@@ -347,14 +349,14 @@ export const UrbaEventNav: React.FC = memo(() => {
               {isAuthenticated && (
                 <>
                   <div className="pt-3 pb-1">
-                    <p className="text-[10px] font-black text-[#647483] uppercase tracking-widest px-4">Mon espace</p>
+                    <p className="text-[10px] font-black text-[#647483] uppercase tracking-widest px-4">{t('nav.my_space')}</p>
                   </div>
                   <Link
                     to={getDashboardRoute()}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-[#333333] hover:bg-gray-50 transition-colors"
                   >
                     <LayoutDashboard className="w-4.5 h-4.5 text-[#647483]" />
-                    Tableau de bord
+                    {t('nav.dashboard_short')}
                   </Link>
                   <Link
                     to={ROUTES.BADGE}
@@ -362,14 +364,14 @@ export const UrbaEventNav: React.FC = memo(() => {
                     style={{ backgroundColor: `${color}10`, color }}
                   >
                     <QrCode className="w-4.5 h-4.5" />
-                    Mon E-Badge QR
+                    {t('nav.my_ebadge_qr')}
                   </Link>
                   <Link
                     to={ROUTES.PROFILE}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-[#333333] hover:bg-gray-50 transition-colors"
                   >
                     <User className="w-4.5 h-4.5 text-[#647483]" />
-                    Mon profil
+                    {t('nav.my_profile')}
                   </Link>
                 </>
               )}
@@ -383,7 +385,7 @@ export const UrbaEventNav: React.FC = memo(() => {
                   className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-[#F44336] border-2 border-red-100 hover:bg-red-50 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
-                  Se déconnecter
+                  {t('nav.logout')}
                 </button>
               ) : (
                 <>
@@ -392,14 +394,14 @@ export const UrbaEventNav: React.FC = memo(() => {
                     className="flex items-center justify-center w-full py-3 rounded-full text-sm font-bold text-white shadow-sm"
                     style={{ backgroundColor: color }}
                   >
-                    Créer mon compte
+                    {t('nav.create_account')}
                   </Link>
                   <Link
                     to={ROUTES.LOGIN}
                     className="flex items-center justify-center w-full py-3 rounded-full text-sm font-bold border-2 transition-colors"
                     style={{ borderColor: color, color }}
                   >
-                    Se connecter
+                    {t('nav.login')}
                   </Link>
                 </>
               )}

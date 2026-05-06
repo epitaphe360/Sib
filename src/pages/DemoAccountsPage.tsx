@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import { LogIn, Eye, EyeOff } from 'lucide-react';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface QuickAccount {
   email: string;
@@ -14,6 +15,7 @@ interface QuickAccount {
 
 export const DemoAccountsPage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [showPasswords, setShowPasswords] = useState(false);
   const [loggingIn, setLoggingIn] = useState<string | null>(null);
 
@@ -30,11 +32,11 @@ export const DemoAccountsPage: React.FC = () => {
     { email: 'f.amrani@ocpgroup.ma', password: 'TestPassword123!', label: '🏗️ Exposant - OCP Group', type: 'exhibitor', color: '#06B6D4' },
     { email: 'k.bennani@tangermed.ma', password: 'TestPassword123!', label: '🏗️ Exposant - Groupe Atlas', type: 'exhibitor', color: '#6366F1' },
 
-    // Sponsors
-    { email: 'contact@bollore-maroc.ma', password: 'TestPassword123!', label: '🤝 Sponsor - MatBuild Group', type: 'partner', color: '#F59E0B' },
-    { email: 'contact@msc-maroc.ma', password: 'TestPassword123!', label: '🤝 Sponsor - UrbanTech Maroc', type: 'partner', color: '#D97706' },
-    { email: 'contact@cma-cgm.ma', password: 'TestPassword123!', label: '🤝 Sponsor - EcoBeton', type: 'partner', color: '#EAB308' },
-    { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🥈 Sponsor', type: 'partner', color: '#9CA3AF' },
+    // Partenaires
+    { email: 'contact@bollore-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - MatBuild Group', type: 'partner', color: '#F59E0B' },
+    { email: 'contact@msc-maroc.ma', password: 'TestPassword123!', label: '🤝 Partenaire - UrbanTech Maroc', type: 'partner', color: '#D97706' },
+    { email: 'contact@cma-cgm.ma', password: 'TestPassword123!', label: '🤝 Partenaire - EcoBeton', type: 'partner', color: '#EAB308' },
+    { email: 'partner-museum@test.sib.com', password: 'TestPassword123!', label: '🥈 Partenaire', type: 'partner', color: '#9CA3AF' },
 
     // Admin
     { email: 'admin.sib@sib.com', password: 'Admin123!', label: '⚙️ Administrateur SIB', type: 'admin', color: '#EF4444' },
@@ -50,7 +52,7 @@ export const DemoAccountsPage: React.FC = () => {
 
       if (error) {throw error;}
 
-      toast.success(`✅ Connecté: ${account.label}`);
+      toast.success(`${t('demo.login_success')}${account.label}`);
 
       // Redirection selon le type
       const routes: Record<string, string> = {
@@ -62,7 +64,7 @@ export const DemoAccountsPage: React.FC = () => {
       };
       navigate(routes[account.type] || '/');
     } catch (error: any) {
-      toast.error(error.message || 'Erreur de connexion');
+      toast.error(error.message || t('demo.login_error'));
     } finally {
       setLoggingIn(null);
     }
@@ -78,10 +80,10 @@ export const DemoAccountsPage: React.FC = () => {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <h1 style={{ fontSize: '2.5rem', color: 'white', marginBottom: '10px' }}>
-            ⚡ COMPTES RAPIDES
+            {t('demo.title')}
           </h1>
           <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>
-            Cliquez sur un compte pour vous connecter instantanément
+            {t('demo.subtitle')}
           </p>
           <button
             onClick={() => setShowPasswords(!showPasswords)}
@@ -99,7 +101,7 @@ export const DemoAccountsPage: React.FC = () => {
             }}
           >
             {showPasswords ? <EyeOff size={18} /> : <Eye size={18} />}
-            {showPasswords ? 'Masquer mots de passe' : 'Afficher mots de passe'}
+            {showPasswords ? t('demo.hide_passwords') : t('demo.show_passwords')}
           </button>
         </div>
 
@@ -157,7 +159,7 @@ export const DemoAccountsPage: React.FC = () => {
                 fontSize: '0.85rem',
                 color: '#94a3b8'
               }}>
-                Compte de démonstration prêt à l'emploi
+                {t('demo.demo_account')}
               </div>
               {showPasswords && (
                 <div style={{
@@ -182,7 +184,7 @@ export const DemoAccountsPage: React.FC = () => {
           borderRadius: '12px'
         }}>
           <p style={{ color: '#64748b', fontSize: '0.9rem' }}>
-            💡 Mot de passe par défaut: <code style={{ color: '#60a5fa' }}>Demo2026!</code> |
+            {t('demo.default_password')} <code style={{ color: '#60a5fa' }}>Demo2026!</code> |
             Admin: <code style={{ color: '#f87171' }}>Demo2026!</code>
           </p>
         </div>

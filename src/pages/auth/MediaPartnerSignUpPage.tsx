@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { ROUTES } from '../../lib/routes';
 import useAuthStore from '../../store/authStore';
 import { supabase } from '../../lib/supabase';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const schema = z.object({
   mediaName: z.string().min(2, 'Nom du média requis'),
@@ -42,6 +43,7 @@ const MEDIA_TYPES = [
 export default function MediaPartnerSignUpPage() {
   const navigate = useNavigate();
   const { signUp } = useAuthStore();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, watch } = useForm<FormValues>({
@@ -83,10 +85,10 @@ export default function MediaPartnerSignUpPage() {
 
       if (error) {throw error;}
 
-      toast.success('Demande d\'accréditation soumise ! Vous recevrez une réponse sous 48h.');
+      toast.success(t('media_signup.submitted_toast'));
       navigate(ROUTES.MEDIA_PARTNER_DASHBOARD);
     } catch (err: any) {
-      toast.error(err?.message || 'Erreur lors de l\'inscription');
+      toast.error(err?.message || t('media_signup.error_toast'));
     } finally {
       setIsLoading(false);
     }
@@ -104,26 +106,26 @@ export default function MediaPartnerSignUpPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-red-700 rounded-2xl mb-4 shadow-2xl">
             <Mic2 className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Accréditation Média</h1>
-          <p className="text-red-300">Salon International du Bâtiment — SIB 2026</p>
-          <p className="text-red-400 text-sm mt-1">El Jadida • 25-29 Novembre 2026</p>
+          <h1 className="text-3xl font-bold text-white mb-2">{t('media_signup.title')}</h1>
+          <p className="text-red-300">{t('media_signup.subtitle')}</p>
+          <p className="text-red-400 text-sm mt-1">{t('media_signup.location')}</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-xl p-3 mb-6 text-sm text-red-800">
             <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
-            Votre accréditation sera examinée par l'équipe organisatrice. Badge rouge accordé après validation.
+            {t('media_signup.review_notice')}
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
             {/* Informations média */}
             <div>
-              <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Informations Média</h2>
+              <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">{t('media_signup.media_info')}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <Building className="inline h-3.5 w-3.5 mr-1" />Nom du média *
+                    <Building className="inline h-3.5 w-3.5 mr-1" />{t('media_signup.media_name')}
                   </label>
                   <input {...register('mediaName')}
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-500"
@@ -131,11 +133,11 @@ export default function MediaPartnerSignUpPage() {
                   {errors.mediaName && <p className="text-red-500 text-xs mt-1">{errors.mediaName.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type de média *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('media_signup.media_type')}</label>
                   <select {...register('mediaType')}
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-500">
                     <option value="">Choisir...</option>
-                    {MEDIA_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                    {MEDIA_TYPES.map(mt => <option key={mt} value={mt}>{mt}</option>)}
                   </select>
                   {errors.mediaType && <p className="text-red-500 text-xs mt-1">{errors.mediaType.message}</p>}
                 </div>
@@ -170,7 +172,7 @@ export default function MediaPartnerSignUpPage() {
 
             {/* Informations contact */}
             <div>
-              <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Journaliste / Responsable</h2>
+              <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">{t('media_signup.journalist')}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -215,7 +217,7 @@ export default function MediaPartnerSignUpPage() {
 
             {/* Mot de passe */}
             <div>
-              <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Accès Plateforme</h2>
+              <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">{t('media_signup.platform_access')}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -256,13 +258,13 @@ export default function MediaPartnerSignUpPage() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                 </svg>
               ) : <Mic2 className="h-4 w-4" />}
-              {isLoading ? 'Envoi en cours...' : 'Soumettre ma demande d\'accréditation'}
+              {isLoading ? 'Envoi en cours...' : t('media_signup.submit')}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-500 mt-6">
-            Vous avez déjà un compte ?{' '}
-            <Link to={ROUTES.LOGIN} className="text-red-600 hover:underline font-medium">Se connecter</Link>
+            {t('media_signup.already_account')}{' '}
+            <Link to={ROUTES.LOGIN} className="text-red-600 hover:underline font-medium">{t('nav.login')}</Link>
           </p>
         </div>
       </motion.div>
