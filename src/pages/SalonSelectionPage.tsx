@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { ROUTES } from '../lib/routes';
+import { useTranslation } from '../hooks/useTranslation';
 
 /* ─────────────────────────────────────────────────────────────
    DONNÉES SALONS
@@ -177,6 +178,7 @@ export default function SalonSelectionPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const handleSalonClick = (salon: Salon) => {
     if (!isAuthenticated) {
@@ -267,9 +269,9 @@ export default function SalonSelectionPage() {
                 <Lock className="w-5 h-5 text-[#4598D1]" />
               </div>
               <div className="min-w-0">
-                <p className="font-bold text-[#333333] text-sm sm:text-base">Accès restreint</p>
+                <p className="font-bold text-[#333333] text-sm sm:text-base">{t('selection.restricted_access')}</p>
                 <p className="text-[#647483] text-xs sm:text-sm truncate">
-                  Créez votre compte gratuit pour accéder aux salons et obtenir votre E-Badge.
+                  {t('selection.restricted_desc')}
                 </p>
               </div>
             </div>
@@ -278,13 +280,13 @@ export default function SalonSelectionPage() {
                 to={ROUTES.LOGIN}
                 className="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-full border-2 border-[#4598D1] text-[#4598D1] text-sm font-bold hover:bg-[#4598D1] hover:text-white transition-all duration-200"
               >
-                Connexion
+                {t('nav.login')}
               </Link>
               <Link
                 to={ROUTES.REGISTER}
                 className="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-full bg-[#EB9A44] text-white text-sm font-bold hover:bg-[#D4883A] transition-all duration-200 shadow-md"
               >
-                S'inscrire
+                {t('nav.register')}
               </Link>
             </div>
           </div>
@@ -297,12 +299,12 @@ export default function SalonSelectionPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="mb-8 sm:mb-10">
           <h2 className="text-2xl sm:text-3xl font-black text-[#333333]">
-            Choisissez votre Salon
+            {t('selection.choose_salon')}
           </h2>
           <p className="text-[#647483] mt-1.5 text-sm sm:text-base">
             {isAuthenticated
-              ? 'Sélectionnez un salon pour accéder à son espace dédié.'
-              : 'Connectez-vous pour débloquer l\'accès complet à chaque salon.'}
+              ? t('selection.choose_salon_auth')
+              : t('selection.choose_salon_guest')}
           </p>
         </div>
 
@@ -344,8 +346,8 @@ export default function SalonSelectionPage() {
                     <div className="w-12 h-12 rounded-full bg-[#333333] flex items-center justify-center mb-2 shadow-lg">
                       <Lock className="w-5 h-5 text-white" />
                     </div>
-                    <p className="font-bold text-[#333333] text-sm">Connexion requise</p>
-                    <p className="text-[#647483] text-xs mt-0.5">Cliquer pour accéder</p>
+                    <p className="font-bold text-[#333333] text-sm">{t('auth.login_required')}</p>
+                    <p className="text-[#647483] text-xs mt-0.5">{t('selection.click_to_access')}</p>
                   </div>
                 )}
 
@@ -418,11 +420,11 @@ export default function SalonSelectionPage() {
                     {locked ? (
                       <>
                         <Lock className="w-4 h-4" />
-                        Se connecter pour accéder
+                        {t('selection.login_to_access')}
                       </>
                     ) : (
                       <>
-                        Accéder au salon
+                        {t('selection.access_salon')}
                         <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                       </>
                     )}
@@ -441,13 +443,13 @@ export default function SalonSelectionPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="text-center mb-10">
             <span className="inline-block text-xs font-black uppercase tracking-[0.2em] text-[#4598D1] mb-3">
-              Système d'accréditation
+              {t('selection.accreditation_system')}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-[#333333]">
-              Votre niveau d'accès UrbaEvent
+              {t('selection.your_level')}
             </h2>
             <p className="text-[#647483] mt-2 max-w-xl mx-auto text-sm sm:text-base">
-              4 niveaux progressifs pour une expérience personnalisée à chaque salon.
+              {t('selection.levels_desc')}
             </p>
           </div>
 
@@ -469,7 +471,7 @@ export default function SalonSelectionPage() {
                     className="text-xs font-black px-2 py-0.5 rounded-full"
                     style={{ backgroundColor: `${lvl.color}20`, color: lvl.color }}
                   >
-                    Niv. {lvl.level}
+                    {t('selection.level_prefix')} {lvl.level}
                   </span>
                 </div>
                 <h3 className="font-black text-[#333333] text-sm mb-3">{lvl.title}</h3>
@@ -578,28 +580,26 @@ export default function SalonSelectionPage() {
         <div className="max-w-3xl mx-auto px-4 text-center text-white">
           <div className="inline-flex items-center gap-2 bg-white/15 border border-white/20 rounded-full px-4 py-1.5 mb-5">
             <div className="w-2 h-2 rounded-full bg-[#FFD700] animate-pulse" />
-            <span className="text-xs font-bold uppercase tracking-wider">Inscription gratuite</span>
+            <span className="text-xs font-bold uppercase tracking-wider">{t('selection.free_registration')}</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-black mb-4">
-            Rejoignez l'écosystème UrbaEvent
+            {t('selection.join_ecosystem')}
           </h2>
           <p className="text-blue-200 mb-8 text-sm sm:text-base max-w-xl mx-auto">
-            Créez votre compte gratuit et recevez instantanément votre{' '}
-            <span className="text-white font-bold">QR Code universel #UVE</span> — votre badge
-            d'entrée et carte de visite pour tous les salons Urbacom.
+            {t('selection.join_ecosystem_desc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to={ROUTES.REGISTER}
               className="px-7 py-4 rounded-full bg-[#EB9A44] text-white font-black text-sm sm:text-base hover:bg-[#D4883A] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
-              Créer mon compte gratuit →
+              {t('selection.create_account')} →
             </Link>
             <Link
               to={ROUTES.LOGIN}
               className="px-7 py-4 rounded-full border-2 border-white/60 text-white font-bold text-sm sm:text-base hover:bg-white/10 hover:border-white transition-all"
             >
-              Déjà inscrit ? Se connecter
+              {t('selection.already_registered')}
             </Link>
           </div>
         </div>

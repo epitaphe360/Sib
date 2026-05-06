@@ -161,7 +161,7 @@ const exhibitorTiers: SubscriptionTier[] = [
 export default function ExhibitorSubscriptionPage() {
   const navigate = useNavigate();
   // t used for future translations
-  const { t: _t } = useTranslation();
+  const { t } = useTranslation();
 
   const handleSubscribe = (tierId: string) => {
     const tier = exhibitorTiers.find(t => t.id === tierId);
@@ -298,7 +298,7 @@ export default function ExhibitorSubscriptionPage() {
                     className="bg-gradient-to-r from-sib-gold to-amber-400 text-blue-950 hover:from-yellow-400 hover:to-amber-300 font-bold text-lg px-10 py-4 shadow-2xl shadow-sib-gold/25 transition-all hover:scale-105"
                   >
                     <Mail className="mr-2 h-5 w-5" />
-                    Réserver votre stand
+                    {t('exhibitor.cta_book_stand')}
                   </Button>
                 </Link>
                 <Button
@@ -310,7 +310,7 @@ export default function ExhibitorSubscriptionPage() {
                   className="border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 font-semibold backdrop-blur-sm px-8 py-4 transition-all"
                 >
                   <CreditCard className="mr-2 h-5 w-5" />
-                  Voir les offres
+                  {t('exhibitor.cta_view_offers')}
                 </Button>
               </div>
 
@@ -318,11 +318,11 @@ export default function ExhibitorSubscriptionPage() {
               <div className="flex items-center gap-6 mt-10 text-blue-200/70 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  <span>Réservation ouverte</span>
+                  <span>{t('exhibitor.reservation_open')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4" />
-                  <span>Tarifs sur devis</span>
+                  <span>{t('exhibitor.pricing_on_request')}</span>
                 </div>
               </div>
             </motion.div>
@@ -380,13 +380,13 @@ export default function ExhibitorSubscriptionPage() {
               <div className="bg-sib-primary p-2 rounded-lg">
                 <Target className="h-6 w-6 text-white" />
               </div>
-              <span className="text-sib-primary font-semibold">Pourquoi participer ?</span>
+              <span className="text-sib-primary font-semibold">{t('exhibitor.why_participate_label')}</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Pourquoi participer au <span className="text-sib-primary">SIB 2026</span> ?
+              {t('exhibitor.why_participate_title')} <span className="text-sib-primary">SIB 2026</span> ?
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Un rendez-vous stratégique pour tisser des partenariats et explorer les opportunités économiques du secteur du bâtiment mondial et de son écosystème.
+              {t('exhibitor.why_participate_subtitle')}
             </p>
           </motion.div>
 
@@ -523,10 +523,10 @@ export default function ExhibitorSubscriptionPage() {
               <div className="bg-sib-primary p-2 rounded-lg">
                 <Building2 className="h-6 w-6 text-white" />
               </div>
-              <span className="text-sib-primary font-semibold">Un positionnement pensé pour tous les acteurs</span>
+              <span className="text-sib-primary font-semibold">{t('exhibitor.positioning_label')}</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Rejoignez nos espaces thématiques d'<span className="text-sib-primary">exposition</span>
+              {t('exhibitor.positioning_title')} <span className="text-sib-primary">{t('exhibitor.positioning_title_suffix')}</span>
             </h2>
           </motion.div>
 
@@ -570,16 +570,15 @@ export default function ExhibitorSubscriptionPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              Comment réserver votre stand ou activer votre participation ?
+              {t('exhibitor.how_to_book_title')}
             </h2>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-              Les demandes de réservation sont traitées individuellement par notre équipe commerciale.
-              Les tarifs sont établis en fonction des surfaces, aménagements et options souhaitées.
+              {t('exhibitor.how_to_book_description')}
             </p>
             <Link to={ROUTES.CONTACT}>
               <Button size="lg" className="bg-white text-sib-primary hover:bg-blue-50 font-bold">
                 <Mail className="mr-2 h-5 w-5" />
-                Réserver votre espace
+                {t('exhibitor.cta_book_space')}
               </Button>
             </Link>
           </motion.div>
@@ -603,13 +602,13 @@ export default function ExhibitorSubscriptionPage() {
               <div className="bg-blue-600 p-2 rounded-lg">
                 <CreditCard className="h-6 w-6 text-white" />
               </div>
-              <span className="text-blue-600 font-semibold">Forfaits Exposants</span>
+              <span className="text-blue-600 font-semibold">{t('exhibitor.tiers_label')}</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Choisissez le forfait qui correspond le mieux à vos besoins
+              {t('exhibitor.tiers_title')}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Maximisez votre expérience au SIB
+              {t('exhibitor.tiers_subtitle')}
             </p>
           </motion.div>
 
@@ -634,7 +633,7 @@ export default function ExhibitorSubscriptionPage() {
 
                 {/* Features */}
                 <div className="p-6 flex-grow">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wider">Fonctionnalités</h4>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wider">{t('common.features')}</h4>
                   <ul className="space-y-3">
                     {tier.features.map((feature) => (
                       <li key={feature.name} className="flex items-start gap-3">
@@ -651,7 +650,7 @@ export default function ExhibitorSubscriptionPage() {
                   </ul>
 
                   {/* Benefits */}
-                  <h4 className="text-sm font-semibold text-gray-900 mt-6 mb-4 uppercase tracking-wider">Avantages</h4>
+                  <h4 className="text-sm font-semibold text-gray-900 mt-6 mb-4 uppercase tracking-wider">{t('common.benefits')}</h4>
                   <ul className="space-y-2 mb-6">
                     {tier.benefits.map((benefit) => (
                       <li key={benefit} className="text-sm text-gray-700 flex items-start gap-2">
@@ -684,12 +683,12 @@ export default function ExhibitorSubscriptionPage() {
             className="mt-12 text-center bg-gradient-to-r from-sib-primary to-indigo-600 rounded-2xl p-8 text-white"
           >
             <h3 className="text-2xl font-bold mb-4">
-              Besoin d'un forfait sur mesure pour votre équipe ?
+              {t('exhibitor.custom_package_title')}
             </h3>
             <Link to={ROUTES.CONTACT}>
               <Button size="lg" className="bg-white text-sib-primary hover:bg-blue-50 font-bold">
                 <Users className="mr-2 h-5 w-5" />
-                Contactez-nous
+                  {t('common.cta_contact')}
               </Button>
             </Link>
           </motion.div>
@@ -715,10 +714,10 @@ export default function ExhibitorSubscriptionPage() {
                 <div className="bg-sib-primary p-2 rounded-lg">
                   <MapPin className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-sib-primary font-semibold">Organisez votre participation !</span>
+                <span className="text-sib-primary font-semibold">{t('exhibitor.organize_participation_label')}</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
-                Infos <span className="text-sib-primary">pratiques</span>
+                {t('exhibitor.practical_info_title')}
               </h2>
 
               <div className="space-y-6">
@@ -727,8 +726,8 @@ export default function ExhibitorSubscriptionPage() {
                     <MapPin className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1">Lieu</h3>
-                    <p className="text-gray-600">Parc d'Exposition Mohammed VI – El Jadida, Maroc</p>
+                    <h3 className="font-bold text-gray-900 mb-1">{t('common.location')}</h3>
+                    <p className="text-gray-600">{t('exhibitor.venue_address')}</p>
                   </div>
                 </div>
 
@@ -737,8 +736,8 @@ export default function ExhibitorSubscriptionPage() {
                     <CalendarDays className="h-6 w-6 text-amber-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1">Dates</h3>
-                    <p className="text-gray-600">25-29 Novembre 2026</p>
+                    <h3 className="font-bold text-gray-900 mb-1">{t('common.dates')}</h3>
+                    <p className="text-gray-600">{t('exhibitor.event_dates')}</p>
                   </div>
                 </div>
 
@@ -747,8 +746,8 @@ export default function ExhibitorSubscriptionPage() {
                     <Clock className="h-6 w-6 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1">Horaires</h3>
-                    <p className="text-gray-600">9h00 à 19h00</p>
+                    <h3 className="font-bold text-gray-900 mb-1">{t('common.hours')}</h3>
+                    <p className="text-gray-600">{t('exhibitor.event_hours')}</p>
                   </div>
                 </div>
 
@@ -757,8 +756,8 @@ export default function ExhibitorSubscriptionPage() {
                     <Ticket className="h-6 w-6 text-purple-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1">Entrée</h3>
-                    <p className="text-gray-600">Gratuite — sur badge électronique</p>
+                    <h3 className="font-bold text-gray-900 mb-1">{t('common.entry')}</h3>
+                    <p className="text-gray-600">{t('exhibitor.entry_free_badge')}</p>
                   </div>
                 </div>
               </div>
@@ -777,7 +776,7 @@ export default function ExhibitorSubscriptionPage() {
                     <Phone className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    Contact Organisation
+                    {t('exhibitor.contact_organization_title')}
                   </h3>
                   <p className="text-gray-600 mb-6">
                     URBACOM
@@ -807,7 +806,7 @@ export default function ExhibitorSubscriptionPage() {
                   <Link to={ROUTES.CONTACT}>
                     <Button className="w-full bg-sib-primary text-white hover:bg-blue-700">
                       <MessageCircle className="mr-2 h-5 w-5" />
-                      Nous contacter
+                      {t('exhibitor.cta_contact_us')}
                     </Button>
                   </Link>
                 </div>
@@ -833,7 +832,7 @@ export default function ExhibitorSubscriptionPage() {
               <div className="bg-blue-600 p-2 rounded-lg">
                 <Zap className="h-6 w-6 text-white" />
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Comment ça marche ?</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t('exhibitor.how_it_works_title')}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <motion.div
@@ -846,9 +845,9 @@ export default function ExhibitorSubscriptionPage() {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-3xl font-bold text-blue-600">1</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2 text-lg">Choix de l'offre</h3>
+                <h3 className="font-bold text-gray-900 mb-2 text-lg">{t('exhibitor.step_1_title')}</h3>
                 <p className="text-gray-600">
-                  Sélectionnez l'offre qui correspond à vos besoins parmi nos différents niveaux.
+                  {t('exhibitor.step_1_description')}
                 </p>
               </motion.div>
               <motion.div
@@ -861,9 +860,9 @@ export default function ExhibitorSubscriptionPage() {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-3xl font-bold text-blue-600">2</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2 text-lg">Paiement sécurisé</h3>
+                <h3 className="font-bold text-gray-900 mb-2 text-lg">{t('exhibitor.step_2_title')}</h3>
                 <p className="text-gray-600">
-                  Paiement en ligne ou via un commercial. Validation par administrateur automatique.
+                  {t('exhibitor.step_2_description')}
                 </p>
               </motion.div>
               <motion.div
@@ -876,9 +875,9 @@ export default function ExhibitorSubscriptionPage() {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-3xl font-bold text-blue-600">3</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2 text-lg">Accès immédiat</h3>
+                <h3 className="font-bold text-gray-900 mb-2 text-lg">{t('exhibitor.step_3_title')}</h3>
                 <p className="text-gray-600">
-                  Accès instantané à votre tableau de bord et à tous les avantages de votre offre.
+                  {t('exhibitor.step_3_description')}
                 </p>
               </motion.div>
             </div>
@@ -898,31 +897,31 @@ export default function ExhibitorSubscriptionPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-10"
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Questions fréquentes</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t('exhibitor.faq_title')}</h2>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="p-6 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold text-gray-900 mb-3">Puis-je changer d'offre ?</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">{t('exhibitor.faq_q1_title')}</h3>
               <p className="text-gray-600">
-                Oui, vous pouvez faire évoluer votre offre à tout moment. Un administrateur validera les changements.
+                {t('exhibitor.faq_q1_answer')}
               </p>
             </Card>
             <Card className="p-6 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold text-gray-900 mb-3">Quel est le délai d'activation ?</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">{t('exhibitor.faq_q2_title')}</h3>
               <p className="text-gray-600">
-                Une fois le paiement validé, votre accès est activé dans les 24 heures.
+                {t('exhibitor.faq_q2_answer')}
               </p>
             </Card>
             <Card className="p-6 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold text-gray-900 mb-3">Y a-t-il une facturation récurrente ?</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">{t('exhibitor.faq_q3_title')}</h3>
               <p className="text-gray-600">
-                Non, sauf mention contraire. Les offres sont forfaitaires pour le salon 2026.
+                {t('exhibitor.faq_q3_answer')}
               </p>
             </Card>
             <Card className="p-6 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold text-gray-900 mb-3">Comment contacter le support ?</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">{t('exhibitor.faq_q4_title')}</h3>
               <p className="text-gray-600">
-                Contactez notre équipe via le formulaire du site ou par e-mail : Sib2026@urbacom.net
+                {t('exhibitor.faq_q4_answer')}
               </p>
             </Card>
           </div>

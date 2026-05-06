@@ -163,7 +163,7 @@ export default function ExhibitorsPage() {
 
   return (
     <>
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Hero indigo */}
       <div className="relative bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 pt-8 pb-24 px-4 overflow-hidden">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />

@@ -2,6 +2,7 @@ import React from 'react';
 import { Download, FileText, Calendar } from 'lucide-react';
 import { usePageContent } from '../../hooks/usePageContent';
 import { ScrollReveal, HeroReveal, fadeUp, fadeLeft } from '../../components/ui/motion';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface DocGroup {
   year: string;
@@ -52,6 +53,7 @@ const defaultDocuments: DocGroup[] = [
 
 export default function TelechargementPage() {
   const cms = usePageContent('telechargements');
+  const { t } = useTranslation();
 
   const documents: DocGroup[] = (() => {
     const raw = cms.documents_json;
@@ -81,9 +83,9 @@ export default function TelechargementPage() {
       <HeroReveal>
       <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Téléchargements'}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || t('page.downloads.title')}</h1>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            {cms.hero_subtitle || 'Retrouvez les brochures, bilans et dossiers de presse des différentes éditions du SIB.'}
+            {cms.hero_subtitle || t('page.downloads.subtitle')}
           </p>
         </div>
       </div>

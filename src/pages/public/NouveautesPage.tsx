@@ -1,7 +1,8 @@
+import React from 'react';
 import { MapPin, Zap, Smartphone, Battery, Eye, Cpu, Presentation, Tv, Users } from 'lucide-react';
 import { usePageContent } from '../../hooks/usePageContent';
 import {
-  StaggerReveal, StaggerItem, HoverCard, HeroReveal,
+  ScrollReveal, StaggerReveal, StaggerItem, HoverCard, HeroReveal,
 } from '../../components/ui/motion';
 
 const defaultNouveautes = [
@@ -114,8 +115,8 @@ export default function NouveautesPage() {
       {/* Grid */}
       <div className="container mx-auto px-4 py-16">
         <StaggerReveal slow className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {nouveautes.map((item) => (
-            <StaggerItem key={item.title}>
+          {nouveautes.map((item, i) => (
+            <StaggerItem key={i}>
               <HoverCard className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
                 <div className={`w-14 h-14 rounded-xl ${item.color} flex items-center justify-center mb-5`}>
                   <item.icon className="w-7 h-7" />

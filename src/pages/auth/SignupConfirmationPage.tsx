@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { EmailService } from '@/services/emailService';
 import { ROUTES } from '@/lib/routes';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function SignupConfirmationPage() {
   const navigate = useNavigate();
@@ -15,108 +16,57 @@ export default function SignupConfirmationPage() {
   const userLevel = searchParams.get('level') || '';
   const needsPassword = searchParams.get('needsPassword') === 'true';
   const [countdown, setCountdown] = useState(60);
+  const { t } = useTranslation();
 
   // Messages personnalisés selon le type
   const getTitle = () => {
-    if (userType === 'exhibitor') {return 'Inscription Exposant Réussie !';}
-    if (userType === 'partner') {return 'Inscription Sponsor Réussie !';}
-    if (userLevel === 'free' && needsPassword) {return '📧 Badge Gratuit + Définition Mot de Passe';}
-    if (userLevel === 'free') {return 'Badge Gratuit Envoyé !';}
-    if (userLevel === 'premium') {return 'Inscription VIP Réussie !';}
-    return 'Inscription réussie !';
+    if (userType === 'exhibitor') {return t('signup.title_exhibitor');}
+    if (userType === 'partner') {return t('signup.title_partner');}
+    if (userLevel === 'free' && needsPassword) {return t('signup.title_badge_password');}
+    if (userLevel === 'free') {return t('signup.title_free_badge');}
+    if (userLevel === 'premium') {return t('signup.title_vip');}
+    return t('signup.title_default');
   };
 
   const getDescription = () => {
-    if (userType === 'exhibitor') {return 'Votre demande de compte exposant a été enregistrée';}
-    if (userType === 'partner') {return 'Votre demande de compte sponsor a été enregistrée';}
-    if (userLevel === 'free' && needsPassword) {return 'Votre badge gratuit vous a été envoyé + un email pour définir votre mot de passe';}
-    if (userLevel === 'free') {return 'Votre badge d\'accès gratuit vous a été envoyé par email';}
-    if (userLevel === 'premium') {return 'Votre compte VIP a été créé avec succès';}
-    return 'Votre compte a été créé avec succès';
+    if (userType === 'exhibitor') {return t('signup.desc_exhibitor');}
+    if (userType === 'partner') {return t('signup.desc_partner');}
+    if (userLevel === 'free' && needsPassword) {return t('signup.desc_badge_password');}
+    if (userLevel === 'free') {return t('signup.desc_free_badge');}
+    if (userLevel === 'premium') {return t('signup.desc_vip');}
+    return t('signup.desc_default');
   };
 
   const getInstructions = () => {
     if (userLevel === 'free' && needsPassword) {
       return [
-        {
-          step: 1,
-          title: '🔐 Définissez votre mot de passe',
-          description: 'Cliquez sur le lien dans l\'email "Définir votre mot de passe" pour créer votre mot de passe sécurisé'
-        },
-        {
-          step: 2,
-          title: '🎫 Téléchargez votre badge gratuit',
-          description: 'Un autre email contient votre badge QR à imprimer ou sauvegarder sur mobile'
-        },
-        {
-          step: 3,
-          title: '🚪 Accédez au salon',
-          description: 'Présentez votre badge QR à l\'entrée pour accéder gratuitement'
-        },
-        {
-          step: 4,
-          title: '💻 Connectez-vous au dashboard',
-          description: 'Utilisez votre email et mot de passe pour accéder à vos fonctionnalités limitées'
-        }
+        { step: 1, title: t('signup.step_set_password_title'), description: t('signup.step_set_password_desc') },
+        { step: 2, title: t('signup.step_download_badge_title'), description: t('signup.step_download_badge_desc') },
+        { step: 3, title: t('signup.step_access_salon_title'), description: t('signup.step_access_salon_desc') },
+        { step: 4, title: t('signup.step_dashboard_title'), description: t('signup.step_dashboard_desc') },
       ];
     }
 
     if (userLevel === 'free') {
       return [
-        {
-          step: 1,
-          title: 'Ouvrez votre boîte email',
-          description: 'Recherchez l\'email contenant votre badge QR gratuit'
-        },
-        {
-          step: 2,
-          title: 'Téléchargez votre badge',
-          description: 'Cliquez sur le badge pour le sauvegarder ou l\'imprimer'
-        },
-        {
-          step: 3,
-          title: 'Présentez-vous au salon',
-          description: 'Montrez votre badge QR à l\'entrée pour accéder gratuitement'
-        }
+        { step: 1, title: t('signup.step_open_email_title'), description: t('signup.step_open_email_desc') },
+        { step: 2, title: t('signup.step_download_badge_title2'), description: t('signup.step_download_badge_desc2') },
+        { step: 3, title: t('signup.step_show_badge_title'), description: t('signup.step_show_badge_desc') },
       ];
     }
 
     if (userType === 'exhibitor' || userType === 'partner') {
       return [
-        {
-          step: 1,
-          title: 'Vérifiez votre email',
-          description: 'Cliquez sur le lien de confirmation dans l\'email'
-        },
-        {
-          step: 2,
-          title: 'Validation administrative',
-          description: 'Votre compte sera examiné par notre équipe (24-48h)'
-        },
-        {
-          step: 3,
-          title: 'Accès complet',
-          description: 'Vous recevrez un email une fois votre compte validé'
-        }
+        { step: 1, title: t('signup.step_verify_email_title'), description: t('signup.step_verify_email_desc') },
+        { step: 2, title: t('signup.step_admin_review_title'), description: t('signup.step_admin_review_desc') },
+        { step: 3, title: t('signup.step_full_access_title'), description: t('signup.step_full_access_desc') },
       ];
     }
 
     return [
-      {
-        step: 1,
-        title: 'Ouvrez votre boîte email',
-        description: 'Recherchez notre message de confirmation'
-      },
-      {
-        step: 2,
-        title: 'Cliquez sur le lien de confirmation',
-        description: 'Validez votre adresse email'
-      },
-      {
-        step: 3,
-        title: 'Connectez-vous',
-        description: 'Utilisez vos identifiants pour accéder à votre compte'
-      }
+      { step: 1, title: t('signup.step_open_email_title'), description: t('signup.step_open_email_desc2') },
+      { step: 2, title: t('signup.step_confirm_link_title'), description: t('signup.step_confirm_link_desc') },
+      { step: 3, title: t('signup.step_login_action_title'), description: t('signup.step_login_action_desc') },
     ];
   };
 
@@ -188,10 +138,10 @@ export default function SignupConfirmationPage() {
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 mb-2">
-                  Vérifiez votre boîte email
+                  {t('signup.check_email')}
                 </h3>
                 <p className="text-sm text-gray-600 mb-3">
-                  Nous avons envoyé un email de confirmation à :
+                  {t('signup.email_sent_to')}
                 </p>
                 <p className="text-sm font-mono bg-white px-3 py-2 rounded border border-blue-200 text-blue-700 break-all">
                   {email}
@@ -235,11 +185,10 @@ export default function SignupConfirmationPage() {
                 <Clock className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="font-medium text-amber-900 mb-1">
-                    Validation en cours
+                    {t('signup.validation_in_progress')}
                   </h4>
                   <p className="text-sm text-amber-700">
-                    Votre demande de compte {userType === 'exhibitor' ? 'exposant' : 'sponsor'} sera examinée par notre équipe dans les 24-48 heures.
-                    Vous recevrez un email de confirmation une fois votre compte validé.
+                    {t('signup.validation_desc', { type: userType === 'exhibitor' ? t('signup.type_exhibitor') : t('signup.type_sponsor') })}
                   </p>
                 </div>
               </div>
@@ -258,11 +207,10 @@ export default function SignupConfirmationPage() {
                 <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="font-medium text-green-900 mb-1">
-                    Badge envoyé par email
+                    {t('signup.badge_sent')}
                   </h4>
                   <p className="text-sm text-green-700">
-                    Votre badge d'accès gratuit avec QR code a été envoyé à votre adresse email.
-                    Imprimez-le ou affichez-le sur votre smartphone à l'entrée du salon.
+                    {t('signup.badge_sent_desc')}
                   </p>
                 </div>
               </div>
@@ -284,7 +232,7 @@ export default function SignupConfirmationPage() {
                 disabled={countdown > 0}
               >
                 <RefreshCw className={`h-4 w-4 ${countdown > 0 ? 'opacity-50' : ''}`} />
-                {countdown > 0 ? `Renvoyer (${countdown}s)` : 'Renvoyer l\'email'}
+                {countdown > 0 ? t('signup.resend_countdown', { count: countdown }) : t('signup.resend_email')}
               </Button>
             )}
 
@@ -292,7 +240,7 @@ export default function SignupConfirmationPage() {
               onClick={() => userLevel === 'free' ? navigate(ROUTES.HOME) : navigate(ROUTES.LOGIN)}
               className="flex-1 flex items-center justify-center gap-2"
             >
-              {userLevel === 'free' ? 'Retour à l\'accueil' : 'Aller à la connexion'}
+              {userLevel === 'free' ? t('signup.back_home') : t('signup.go_login')}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </motion.div>
@@ -305,7 +253,7 @@ export default function SignupConfirmationPage() {
             className="mt-6 text-center"
           >
             <p className="text-xs text-gray-500">
-              Vous ne trouvez pas l'email ? Vérifiez votre dossier spam ou courrier indésirable.
+              {t('signup.check_spam')}
             </p>
           </motion.div>
         </Card>
@@ -318,12 +266,12 @@ export default function SignupConfirmationPage() {
           className="mt-6 text-center"
         >
           <p className="text-sm text-gray-600">
-            Besoin d'aide ?{' '}
+            {t('signup.need_help')}{' '}
             <button
               onClick={() => navigate(ROUTES.CONTACT)}
               className="text-blue-600 hover:text-blue-700 font-medium underline"
             >
-              Contactez-nous
+              {t('nav.contact')}
             </button>
           </p>
         </motion.div>

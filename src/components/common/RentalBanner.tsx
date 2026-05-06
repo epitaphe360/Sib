@@ -1,8 +1,10 @@
 ﻿import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { Package, ArrowRight, Zap, Clock, ChevronLeft, ChevronRight } from "lucide-react";
 import { ROUTES } from "../../lib/routes";
+import useAuthStore from "../../store/authStore";
+import { toast } from "sonner";
 
 interface RentalBannerProps {
   variant?: "hero" | "compact" | "sidebar";
@@ -43,7 +45,7 @@ function useCategoryRotate(items: typeof CATEGORIES, interval = 3200) {
 }
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
-function HeroBanner({ to }: { to: string }) {
+function HeroBanner({ onCatalogClick }: { onCatalogClick: () => void }) {
   const stock = useStockRotate(STOCK_ITEMS);
   const { item: cat } = useCategoryRotate(CATEGORIES);
   const [hover, setHover] = useState(false);
@@ -163,33 +165,32 @@ function HeroBanner({ to }: { to: string }) {
 
             {/* CTA */}
             <div className="flex-shrink-0">
-              <Link to={to}>
-                <motion.button
-                  whileHover={{ scale: 1.06 }}
-                  whileTap={{ scale: 0.95 }}
-                  onHoverStart={() => setHover(true)}
-                  onHoverEnd={() => setHover(false)}
-                  className="relative flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-base overflow-hidden"
-                  style={{ background: "linear-gradient(135deg, #C9A84C, #E7D192)", color: "#0b1929" }}
+              <motion.button
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.95 }}
+                onHoverStart={() => setHover(true)}
+                onHoverEnd={() => setHover(false)}
+                onClick={onCatalogClick}
+                className="relative flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-base overflow-hidden"
+                style={{ background: "linear-gradient(135deg, #C9A84C, #E7D192)", color: "#0b1929" }}
+              >
+                <motion.span
+                  animate={{ x: hover ? 4 : 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex items-center gap-2"
                 >
-                  <motion.span
-                    animate={{ x: hover ? 4 : 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center gap-2"
-                  >
-                    <Zap className="h-5 w-5" />
-                    Voir le catalogue
-                    <ArrowRight className="h-5 w-5" />
-                  </motion.span>
-                  {/* Shimmer bouton */}
-                  <motion.div
-                    animate={{ x: ["-100%", "200%"] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1.5, ease: "linear" }}
-                    className="absolute inset-0 pointer-events-none"
-                    style={{ background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.25) 50%, transparent 65%)" }}
-                  />
-                </motion.button>
-              </Link>
+                  <Zap className="h-5 w-5" />
+                  Voir le catalogue
+                  <ArrowRight className="h-5 w-5" />
+                </motion.span>
+                {/* Shimmer bouton */}
+                <motion.div
+                  animate={{ x: ["-100%", "200%"] }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1.5, ease: "linear" }}
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.25) 50%, transparent 65%)" }}
+                />
+              </motion.button>
             </div>
           </div>
         </motion.div>
@@ -199,7 +200,7 @@ function HeroBanner({ to }: { to: string }) {
 }
 
 // ─── Compact (dashboard) ────────────────────────────────────────────────────
-function CompactBanner({ to }: { to: string }) {
+function CompactBanner({ onCatalogClick }: { onCatalogClick: () => void }) {
   const stock = useStockRotate(STOCK_ITEMS, 3000);
   const [hover, setHover] = useState(false);
 
@@ -258,32 +259,31 @@ function CompactBanner({ to }: { to: string }) {
             </div>
           </div>
         </div>
-        <Link to={to} className="flex-shrink-0">
-          <motion.button
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.95 }}
-            onHoverStart={() => setHover(true)}
-            onHoverEnd={() => setHover(false)}
-            className="relative flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #C9A84C, #E7D192)", color: "#0b1929" }}
-          >
-            <Zap className="h-4 w-4" />
-            Réserver maintenant
-            <motion.div
-              animate={{ x: ["-100%", "200%"] }}
-              transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 1.2, ease: "linear" }}
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.3) 50%, transparent 65%)" }}
-            />
-          </motion.button>
-        </Link>
+        <motion.button
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.95 }}
+          onHoverStart={() => setHover(true)}
+          onHoverEnd={() => setHover(false)}
+          onClick={onCatalogClick}
+          className="relative flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap overflow-hidden"
+          style={{ background: "linear-gradient(135deg, #C9A84C, #E7D192)", color: "#0b1929" }}
+        >
+          <Zap className="h-4 w-4" />
+          Réserver maintenant
+          <motion.div
+            animate={{ x: ["-100%", "200%"] }}
+            transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 1.2, ease: "linear" }}
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.3) 50%, transparent 65%)" }}
+          />
+        </motion.button>
       </div>
     </motion.div>
   );
 }
 
 // ─── Sidebar ─────────────────────────────────────────────────────────────────
-function SidebarBanner({ to }: { to: string }) {
+function SidebarBanner({ onCatalogClick }: { onCatalogClick: () => void }) {
   const stock = useStockRotate(STOCK_ITEMS, 3500);
   const { item: cat } = useCategoryRotate(CATEGORIES, 3000);
 
@@ -361,22 +361,21 @@ function SidebarBanner({ to }: { to: string }) {
           </AnimatePresence>
         </div>
 
-        <Link to={to} className="block">
-          <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-xs overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #C9A84C, #E7D192)", color: "#0b1929" }}
-          >
-            Voir le catalogue <ArrowRight className="h-3.5 w-3.5" />
-            <motion.div
-              animate={{ x: ["-100%", "200%"] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "linear" }}
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.3) 50%, transparent 65%)" }}
-            />
-          </motion.button>
-        </Link>
+        <motion.button
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onCatalogClick}
+          className="relative w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-xs overflow-hidden"
+          style={{ background: "linear-gradient(135deg, #C9A84C, #E7D192)", color: "#0b1929" }}
+        >
+          Voir le catalogue <ArrowRight className="h-3.5 w-3.5" />
+          <motion.div
+            animate={{ x: ["-100%", "200%"] }}
+            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "linear" }}
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.3) 50%, transparent 65%)" }}
+          />
+        </motion.button>
       </div>
     </motion.div>
   );
@@ -384,7 +383,23 @@ function SidebarBanner({ to }: { to: string }) {
 
 // ─── Export principal ────────────────────────────────────────────────────────
 export function RentalBanner({ variant = "compact", to = ROUTES.RENTAL_CATALOG }: RentalBannerProps) {
-  if (variant === "hero") { return <HeroBanner to={to} />; }
-  if (variant === "sidebar") { return <SidebarBanner to={to} />; }
-  return <CompactBanner to={to} />;
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuthStore();
+
+  const handleCatalogClick = () => {
+    if (!isAuthenticated || !user) {
+      toast.error("Veuillez vous connecter pour accéder au catalogue.");
+      navigate(`${ROUTES.LOGIN}?redirect=${encodeURIComponent(to)}`);
+      return;
+    }
+    if (user.type !== 'exhibitor' && user.type !== 'partner') {
+      toast.error("L'accès au catalogue est réservé aux exposants et partenaires.");
+      return;
+    }
+    navigate(to);
+  };
+
+  if (variant === "hero") { return <HeroBanner onCatalogClick={handleCatalogClick} />; }
+  if (variant === "sidebar") { return <SidebarBanner onCatalogClick={handleCatalogClick} />; }
+  return <CompactBanner onCatalogClick={handleCatalogClick} />;
 }

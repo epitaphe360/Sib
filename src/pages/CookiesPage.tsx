@@ -3,6 +3,7 @@ import { Button } from '../components/ui/Button';
 import { useTranslation } from '../hooks/useTranslation';
 import { Cookie, Settings, Shield } from 'lucide-react';
 import { toast } from 'sonner';
+import { PageHero } from '../components/ui/PageHero';
 
 export default function CookiesPage() {
   const { t } = useTranslation();
@@ -11,21 +12,18 @@ export default function CookiesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {t('legal.cookies_title')}
-          </h1>
-          <p className="text-xl text-gray-600">
-            {t('legal.last_update')}: {new Date().toLocaleDateString('fr-FR')}
-          </p>
-        </div>
+    <div className="min-h-screen bg-slate-50 pb-12">
+      <PageHero
+        badge={<><Cookie className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Cookies</span></>}
+        title={<>{t('legal.cookies_title')}</>}
+        subtitle={`${t('legal.last_update')} : ${new Date().toLocaleDateString('fr-FR')}`}
+        py="py-14 md:py-18"
+      />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         <Card className="p-8 mb-8">
           <div className="flex items-center mb-6">
-            <Cookie className="h-8 w-8 text-blue-600 mr-4" />
+            <Cookie className="h-8 w-8 text-indigo-600 mr-4" />
             <h2 className="text-2xl font-bold text-gray-900">Qu'est-ce qu'un cookie ?</h2>
           </div>
           <p className="text-gray-700 mb-6">

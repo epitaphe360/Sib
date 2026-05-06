@@ -6,6 +6,9 @@ import { useTranslation } from '../hooks/useTranslation';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { SupabaseService } from '../services/supabaseService';
+import { PageHero } from '../components/ui/PageHero';
+import { SectionHeader } from '../components/ui/SectionHeader';
+import { motion } from 'framer-motion';
 
 export default function ContactPage() {
   const navigate = useNavigate();
@@ -95,24 +98,27 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {t('contact.title')}
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('contact.description')}
-          </p>
-        </div>
+    <div className="min-h-screen bg-slate-50 pb-12">
+      <PageHero
+        badge={<><Mail className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{t('contact.title')}</span></>}
+        title={<>{t('contact.title')}</>}
+        subtitle={t('contact.description')}
+        py="py-16 md:py-20"
+      />
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <Card className="p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-              {t('contact.form_title')}
-            </h2>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+          <Card className="p-8 border border-gray-100 shadow-sm">
+            <SectionHeader
+              label={t('contact.form_title')}
+              title={<>{t('contact.form_title')}</>}
+            />
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -222,7 +228,7 @@ export default function ContactPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-[#1A1A1A] hover:bg-[#C9A84C] text-white"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -242,17 +248,24 @@ export default function ContactPage() {
               </Button>
             </form>
           </Card>
+          </motion.div>
 
           {/* Contact Information */}
-          <div className="space-y-8">
-            <Card className="p-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-                {t('contact.contact_info')}
-              </h2>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="space-y-6"
+          >
+            <Card className="p-8 border border-gray-100 shadow-sm">
+              <SectionHeader
+                label={t('contact.contact_info')}
+                title={<>{t('contact.contact_info')}</>}
+              />
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="bg-[rgba(231,209,146,0.1)] border border-[rgba(231,209,146,0.25)] p-3 rounded-sm">
-                    <MapPin className="h-6 w-6 text-[#C9A84C]" />
+                  <div className="bg-indigo-50 border border-indigo-100 p-3 rounded-xl">
+                    <MapPin className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{t('contact.address')}</h3>
@@ -265,32 +278,26 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="bg-[rgba(231,209,146,0.1)] border border-[rgba(231,209,146,0.25)] p-3 rounded-sm">
-                    <Mail className="h-6 w-6 text-[#C9A84C]" />
+                  <div className="bg-indigo-50 border border-indigo-100 p-3 rounded-xl">
+                    <Mail className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Email</h3>
-                    <a
-                      href="mailto:Sib2026@urbacom.net"
-                      className="text-[#C9A84C] hover:text-[#1A1A1A] transition-colors"
-                    >
-                      Sib2026@urbacom.net
-                    </a>
+                    <a href="mailto:Sib2026@urbacom.net" className="text-indigo-600 hover:text-indigo-800 transition-colors">
+                    Sib2026@urbacom.net
+                  </a>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="bg-[rgba(231,209,146,0.1)] border border-[rgba(231,209,146,0.25)] p-3 rounded-sm">
-                    <Phone className="h-6 w-6 text-[#C9A84C]" />
+                  <div className="bg-indigo-50 border border-indigo-100 p-3 rounded-xl">
+                    <Phone className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{t('contact.phone')}</h3>
-                    <a
-                      href="tel:+212688500500"
-                      className="text-[#C9A84C] hover:text-[#1A1A1A] transition-colors"
-                    >
-                      +212 6 88 50 05 00
-                    </a>
+                    <a href="tel:+212688500500" className="text-indigo-600 hover:text-indigo-800 transition-colors">
+                    +212 6 88 50 05 00
+                  </a>
                   </div>
                 </div>
               </div>
@@ -325,32 +332,32 @@ export default function ContactPage() {
               </p>
               <div className="flex space-x-4">
                 <a
-                  href="https://facebook.com/sibs2026"
+                  href="https://www.facebook.com/sibevent"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#1A1A1A] text-white p-3 rounded-sm hover:bg-[#C9A84C] transition-colors"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium"
                 >
                   Facebook
                 </a>
                 <a
-                  href="https://linkedin.com/company/sibs2026"
+                  href="https://www.linkedin.com/company/sib-event"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#1A1A1A] text-white p-3 rounded-sm hover:bg-[#C9A84C] transition-colors"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium"
                 >
                   LinkedIn
                 </a>
                 <a
-                  href="https://twitter.com/sibs2026"
+                  href="https://x.com/sibevent"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#1A1A1A] text-white p-3 rounded-sm hover:bg-[#C9A84C] transition-colors"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium"
                 >
-                  Twitter
+                  X (Twitter)
                 </a>
               </div>
             </Card>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
