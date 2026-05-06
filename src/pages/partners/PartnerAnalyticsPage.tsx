@@ -17,6 +17,7 @@ import { Badge } from '../../components/ui/Badge';
 import { supabase } from '../../lib/supabase';
 import useAuthStore from '../../store/authStore';
 import { useDashboardStore } from '../../store/dashboardStore';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // --- Types --------------------------------------------------------------------
 
@@ -59,6 +60,7 @@ const SUBSCRIPTION_COSTS: Record<string, number> = {
 // --- Component ----------------------------------------------------------------
 
 export const PartnerAnalyticsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [selectedPeriod, setSelectedPeriod] = useState('30d');
   const [loading, setLoading] = useState(true);
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
@@ -222,7 +224,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    toast.success('Rapport ROI exporté avec succès !');
+    toast.success(t('analytics.export_success'));
   };
 
   const fmt = (n: number) => n.toLocaleString('fr-FR');
@@ -235,7 +237,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
         {/* Header */}
         <div className="mb-8">
           <Link to={ROUTES.PARTNER_DASHBOARD} className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
-            <ArrowLeft className="h-4 w-4 mr-2" /> Retour au tableau de bord
+            <ArrowLeft className="h-4 w-4 mr-2" /> {t('common.back_dashboard')}
           </Link>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center space-x-3">
@@ -243,8 +245,8 @@ export const PartnerAnalyticsPage: React.FC = () => {
                 <BarChart3 className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Dashboard ROI Exposant</h1>
-                <p className="text-gray-600">Performances et retour sur investissement — SIB 2026</p>
+                <h1 className="text-3xl font-bold text-gray-900">{t('analytics.title')}</h1>
+                <p className="text-gray-600">{t('analytics.subtitle')}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -253,58 +255,58 @@ export const PartnerAnalyticsPage: React.FC = () => {
                 onChange={e => setSelectedPeriod(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                <option value="7d">7 jours</option>
-                <option value="30d">30 jours</option>
-                <option value="90d">90 jours</option>
-                <option value="1y">1 an</option>
+                <option value="7d">{t('analytics.period_7d')}</option>
+                <option value="30d">{t('analytics.period_30d')}</option>
+                <option value="90d">{t('analytics.period_90d')}</option>
+                <option value="1y">{t('analytics.period_1y')}</option>
               </select>
               <Button onClick={exportAnalytics} variant="default">
-                <Download className="h-4 w-4 mr-2" /> Exporter ROI
+                <Download className="h-4 w-4 mr-2" /> {t('analytics.export_roi')}
               </Button>
             </div>
           </div>
           <div className="mt-4 bg-purple-50 border border-purple-200 rounded-lg p-4 flex items-center space-x-2">
             <Crown className="h-5 w-5 text-purple-600" />
-            <span className="text-purple-800 font-medium">Données temps réel · SIB 2026 Casablanca</span>
+            <span className="text-purple-800 font-medium">{t('analytics.live_data')}</span>
             <Badge className="bg-purple-100 text-purple-800" size="sm">Live</Badge>
           </div>
         </div>
 
         {/* -- ROI Summary Cards ------------------------------------------------- */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <ROICard icon={<Users className="h-6 w-6 text-indigo-600" />} label="Leads générés" value={loading ? null : fmt(roi.totalLeads)} bg="bg-indigo-50" />
-          <ROICard icon={<Zap className="h-6 w-6 text-green-600" />} label="Leads qualifiés" value={loading ? null : fmt(roi.qualifiedLeads)} sub={`${qualificationRate}% taux qualification`} bg="bg-green-50" />
-          <ROICard icon={<FileText className="h-6 w-6 text-orange-600" />} label="Demandes devis" value={loading ? null : fmt(roi.devisRequests)} bg="bg-orange-50" />
-          <ROICard icon={<Award className="h-6 w-6 text-purple-600" />} label="Deals convertis" value={loading ? null : fmt(roi.convertedDeals)} sub={`${conversionRate}% conversion`} bg="bg-purple-50" />
+          <ROICard icon={<Users className="h-6 w-6 text-indigo-600" />} label={t('analytics.leads_generated')} value={loading ? null : fmt(roi.totalLeads)} bg="bg-indigo-50" />
+          <ROICard icon={<Zap className="h-6 w-6 text-green-600" />} label={t('analytics.leads_qualified')} value={loading ? null : fmt(roi.qualifiedLeads)} sub={`${qualificationRate}% ${t('analytics.qualification_pct')}`} bg="bg-green-50" />
+          <ROICard icon={<FileText className="h-6 w-6 text-orange-600" />} label={t('analytics.devis_requests')} value={loading ? null : fmt(roi.devisRequests)} bg="bg-orange-50" />
+          <ROICard icon={<Award className="h-6 w-6 text-purple-600" />} label={t('analytics.deals_converted')} value={loading ? null : fmt(roi.convertedDeals)} sub={`${conversionRate}% ${t('analytics.conversion_pct')}`} bg="bg-purple-50" />
         </div>
 
         {/* -- KPI ROI Row ------------------------------------------------------- */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <ROICard
             icon={<DollarSign className="h-6 w-6 text-red-600" />}
-            label="Coût par lead"
+            label={t('analytics.cost_per_lead')}
             value={loading ? null : fmtMAD(costPerLead)}
             bg="bg-red-50"
           />
           <ROICard
             icon={<Target className="h-6 w-6 text-indigo-600" />}
-            label="Investissement"
+            label={t('analytics.investment')}
             value={loading ? null : fmtMAD(roi.subscriptionCost)}
-            sub="Abonnement SIB 2026"
+            sub={t('analytics.subscription_label')}
             bg="bg-indigo-50"
           />
           <ROICard
             icon={<TrendingUp className="h-6 w-6 text-emerald-600" />}
-            label="Revenus estimés"
+            label={t('analytics.estimated_revenue')}
             value={loading ? null : fmtMAD(roi.estimatedRevenue)}
-            sub="Deals BTP générés"
+            sub={t('analytics.deals_generated')}
             bg="bg-emerald-50"
           />
           <ROICard
             icon={roi_ratio >= 1 ? <TrendingUp className="h-6 w-6 text-green-600" /> : <TrendingDown className="h-6 w-6 text-red-500" />}
-            label="Ratio ROI"
+            label={t('analytics.roi_ratio')}
             value={loading ? null : `×${roi_ratio}`}
-            sub={roi_ratio >= 1 ? 'ROI positif ?' : 'En cours'}
+            sub={roi_ratio >= 1 ? t('analytics.roi_positive') : t('common.in_progress')}
             bg={roi_ratio >= 1 ? 'bg-green-50' : 'bg-yellow-50'}
           />
         </div>
@@ -316,7 +318,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
             <div className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <BarChart2 className="h-5 w-5 text-indigo-600" />
-                Évolution — 6 derniers mois
+                {t('analytics.monthly_evolution')}
               </h3>
               {loading ? (
                 <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-gray-400" /></div>
@@ -328,9 +330,9 @@ export const PartnerAnalyticsPage: React.FC = () => {
                     <YAxis tick={{ fontSize: 12 }} />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="leads" name="Leads" fill="#1D4ED8" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="appointments" name="RDV" fill="#D97706" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="devis" name="Devis" fill="#059669" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="leads" name={t('analytics.chart_leads')} fill="#1D4ED8" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="appointments" name={t('analytics.chart_rdv')} fill="#D97706" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="devis" name={t('analytics.chart_devis')} fill="#059669" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               )}
@@ -342,7 +344,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
             <div className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <PieChart className="h-5 w-5 text-purple-600" />
-                Leads par secteur BTP
+                {t('analytics.leads_by_sector')}
               </h3>
               {loading ? (
                 <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-gray-400" /></div>
@@ -371,7 +373,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
                   </div>
                 </>
               ) : (
-                <p className="text-center text-gray-400 py-8 text-sm">Aucune donnée sectorielle disponible.</p>
+                <p className="text-center text-gray-400 py-8 text-sm">{t('analytics.no_sector_data')}</p>
               )}
             </div>
           </Card>
@@ -382,19 +384,19 @@ export const PartnerAnalyticsPage: React.FC = () => {
           <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-5 flex items-center gap-2">
               <Activity className="h-5 w-5 text-indigo-600" />
-              Entonnoir de conversion BTP
+              {t('analytics.conversion_funnel')}
             </h3>
             {loading ? (
               <div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin text-gray-400" /></div>
             ) : (
               <div className="space-y-3">
                 {[
-                  { label: 'Vues du profil', value: roi.profileViews, max: roi.profileViews, color: 'bg-indigo-500' },
-                  { label: 'Scans badge QR / connexions', value: roi.totalLeads, max: roi.profileViews, color: 'bg-indigo-500' },
-                  { label: 'Leads qualifiés', value: roi.qualifiedLeads, max: roi.profileViews, color: 'bg-violet-500' },
-                  { label: 'Demandes de devis', value: roi.devisRequests, max: roi.profileViews, color: 'bg-orange-500' },
-                  { label: 'Rendez-vous tenus', value: roi.appointments, max: roi.profileViews, color: 'bg-amber-500' },
-                  { label: 'Deals conclus (estimé)', value: roi.convertedDeals, max: roi.profileViews, color: 'bg-green-600' },
+                  { label: t('analytics.funnel_profile_views'), value: roi.profileViews, max: roi.profileViews, color: 'bg-indigo-500' },
+                  { label: t('analytics.funnel_badge_scans'), value: roi.totalLeads, max: roi.profileViews, color: 'bg-indigo-500' },
+                  { label: t('analytics.leads_qualified'), value: roi.qualifiedLeads, max: roi.profileViews, color: 'bg-violet-500' },
+                  { label: t('analytics.devis_requests'), value: roi.devisRequests, max: roi.profileViews, color: 'bg-orange-500' },
+                  { label: t('analytics.funnel_appointments'), value: roi.appointments, max: roi.profileViews, color: 'bg-amber-500' },
+                  { label: t('analytics.funnel_deals'), value: roi.convertedDeals, max: roi.profileViews, color: 'bg-green-600' },
                 ].map(step => {
                   const pct = roi.profileViews > 0 ? Math.max(4, Math.round((step.value / roi.profileViews) * 100)) : 0;
                   return (
@@ -417,12 +419,12 @@ export const PartnerAnalyticsPage: React.FC = () => {
         {/* -- Engagement Metrics ------------------------------------------------ */}
         <Card>
           <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Métriques d'engagement détaillées</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('analytics.engagement_title')}</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <MetricBlock icon={<Eye className="h-7 w-7 text-indigo-600" />} label="Vues profil" value={loading ? null : fmt(roi.profileViews)} color="bg-indigo-50 text-indigo-600" />
-              <MetricBlock icon={<Handshake className="h-7 w-7 text-green-600" />} label="Connexions" value={loading ? null : fmt(roi.connections)} color="bg-green-50 text-green-600" />
-              <MetricBlock icon={<Calendar className="h-7 w-7 text-purple-600" />} label="Rendez-vous" value={loading ? null : fmt(roi.appointments)} color="bg-purple-50 text-purple-600" />
-              <MetricBlock icon={<MessageCircle className="h-7 w-7 text-orange-600" />} label="Messages" value={loading ? null : fmt(roi.messages)} color="bg-orange-50 text-orange-600" />
+              <MetricBlock icon={<Eye className="h-7 w-7 text-indigo-600" />} label={t('analytics.metric_profile_views')} value={loading ? null : fmt(roi.profileViews)} color="bg-indigo-50 text-indigo-600" />
+              <MetricBlock icon={<Handshake className="h-7 w-7 text-green-600" />} label={t('analytics.metric_connections')} value={loading ? null : fmt(roi.connections)} color="bg-green-50 text-green-600" />
+              <MetricBlock icon={<Calendar className="h-7 w-7 text-purple-600" />} label={t('analytics.metric_appointments')} value={loading ? null : fmt(roi.appointments)} color="bg-purple-50 text-purple-600" />
+              <MetricBlock icon={<MessageCircle className="h-7 w-7 text-orange-600" />} label={t('analytics.metric_messages')} value={loading ? null : fmt(roi.messages)} color="bg-orange-50 text-orange-600" />
             </div>
           </div>
         </Card>

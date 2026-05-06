@@ -16,8 +16,10 @@ import {
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { supabase } from '../../lib/supabase';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export const PartnerSatisfactionPage: React.FC = () => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [realStats, setRealStats] = useState({
     verifiedPartners: 0,
@@ -150,10 +152,19 @@ export const PartnerSatisfactionPage: React.FC = () => {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed': return 'Terminé';
-      case 'in_progress': return 'En cours';
-      case 'planned': return 'Planifié';
+      case 'completed': return t('satisfaction.status_completed');
+      case 'in_progress': return t('satisfaction.status_in_progress');
+      case 'planned': return t('satisfaction.status_planned');
       default: return status;
+    }
+  };
+
+  const getPriorityLabel = (priority: string) => {
+    switch (priority) {
+      case 'high': return t('satisfaction.priority_high');
+      case 'medium': return t('satisfaction.priority_medium');
+      case 'low': return t('satisfaction.priority_low');
+      default: return priority;
     }
   };
 
@@ -164,7 +175,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
         <div className="mb-8">
           <Link to={ROUTES.PARTNER_DASHBOARD} className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Retour au tableau de bord
+            {t('common.back_dashboard')}
           </Link>
 
           <div className="flex items-center space-x-3 mb-4">
@@ -173,10 +184,10 @@ export const PartnerSatisfactionPage: React.FC = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Satisfaction Partenariat
+                {t('satisfaction.title')}
               </h1>
               <p className="text-gray-600">
-                Découvrez ce que pensent nos sponsors de leur expérience SIB
+                {t('satisfaction.subtitle')}
               </p>
             </div>
           </div>
@@ -184,9 +195,9 @@ export const PartnerSatisfactionPage: React.FC = () => {
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <div className="flex items-center space-x-2">
               <Crown className="h-5 w-5 text-green-600" />
-              <span className="text-green-800 font-medium">Programme de Satisfaction Sponsors</span>
+              <span className="text-green-800 font-medium">{t('satisfaction.program')}</span>
               <Badge className="bg-green-100 text-green-800" size="sm">
-                Données en Temps Réel
+                {t('satisfaction.live')}
               </Badge>
             </div>
           </div>
@@ -200,7 +211,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
               <div className="text-3xl font-bold text-gray-900 mb-1">
                 {loading ? <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto" /> : realStats.verifiedPartners}
               </div>
-              <div className="text-gray-600 text-sm">Sponsors vérifiés</div>
+              <div className="text-gray-600 text-sm">{t('satisfaction.verified_sponsors')}</div>
             </div>
           </Card>
 
@@ -210,7 +221,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
               <div className="text-3xl font-bold text-gray-900 mb-1">
                 {loading ? <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto" /> : realStats.totalEvents}
               </div>
-              <div className="text-gray-600 text-sm">Événements organisés</div>
+              <div className="text-gray-600 text-sm">{t('satisfaction.events_organized')}</div>
             </div>
           </Card>
 
@@ -220,7 +231,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
               <div className="text-3xl font-bold text-gray-900 mb-1">
                 {loading ? <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto" /> : realStats.totalConnections}
               </div>
-              <div className="text-gray-600 text-sm">Connexions établies</div>
+              <div className="text-gray-600 text-sm">{t('satisfaction.connections')}</div>
             </div>
           </Card>
 
@@ -230,7 +241,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
               <div className="text-3xl font-bold text-gray-900 mb-1">
                 {loading ? <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto" /> : realStats.totalAppointments}
               </div>
-              <div className="text-gray-600 text-sm">Rendez-vous B2B</div>
+              <div className="text-gray-600 text-sm">{t('satisfaction.b2b_meetings')}</div>
             </div>
           </Card>
         </div>
@@ -239,8 +250,8 @@ export const PartnerSatisfactionPage: React.FC = () => {
         <Card className="mb-8">
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Axes de Satisfaction</h3>
-              <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Enquête post-événement à venir</span>
+              <h3 className="text-lg font-semibold text-gray-900">{t('satisfaction.axes')}</h3>
+              <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{t('satisfaction.survey_coming')}</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {satisfactionData.categories.map((category) => {
@@ -260,7 +271,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
         {/* Testimonials */}
         <Card className="mb-8">
           <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Témoignages Clients</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-6">{t('satisfaction.testimonials')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {satisfactionData.testimonials.map((testimonial) => (
                 <div key={testimonial.id} className="p-4 bg-slate-50 rounded-lg">
@@ -286,7 +297,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
         {/* Improvements */}
         <Card>
           <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Améliorations en Cours</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-6">{t('satisfaction.improvements_title')}</h3>
             <div className="space-y-4">
               {satisfactionData.improvements.map((improvement) => (
                 <div key={improvement.category} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
@@ -294,7 +305,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
                     <div className="flex items-center space-x-3 mb-2">
                       <h4 className="font-semibold text-gray-900">{improvement.category}</h4>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(improvement.priority)}`}>
-                        {improvement.priority === 'high' ? 'Haute' : improvement.priority === 'medium' ? 'Moyenne' : 'Basse'}
+                        {getPriorityLabel(improvement.priority)}
                       </span>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(improvement.status)}`}>
                         {getStatusLabel(improvement.status)}
