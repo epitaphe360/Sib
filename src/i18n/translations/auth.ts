@@ -132,68 +132,53 @@ export const authTranslations = {
     'auth.status.suspended': 'Suspended',
   },
   ar: {
-    // صفحات تسجيل الدخول
     'auth.login': 'تسجيل الدخول',
     'auth.login.title': 'تسجيل الدخول',
-    'auth.login.subtitle': 'الوصول إلى حساب SIB الخاص بك',
+    'auth.login.subtitle': 'الوصول إلى حسابك في SIB',
     'auth.login.button': 'تسجيل الدخول',
-    'auth.login.forgot_password': 'هل نسيت كلمة المرور؟',
-    'auth.login.no_account': 'لا تملك حسابًا؟',
-    'auth.login.register': 'سجل',
-
-    // صفحات التسجيل
+    'auth.login.forgot_password': 'نسيت كلمة المرور؟',
+    'auth.login.no_account': 'ليس لديك حساب؟',
+    'auth.login.register': 'التسجيل',
     'auth.register': 'التسجيل',
     'auth.register.title': 'إنشاء حساب',
     'auth.register.subtitle': 'انضم إلى SIB 2026',
-    'auth.register.button': 'سجل',
-    'auth.register.have_account': 'هل لديك حساب؟',
+    'auth.register.button': 'التسجيل',
+    'auth.register.have_account': 'لديك حساب بالفعل؟',
     'auth.register.login': 'تسجيل الدخول',
-
-    // حقول النماذج
-    'auth.field.email': 'البريد الإلكتروني',
+    'auth.field.email': 'عنوان البريد الإلكتروني',
     'auth.field.password': 'كلمة المرور',
     'auth.field.confirm_password': 'تأكيد كلمة المرور',
     'auth.field.first_name': 'الاسم الأول',
     'auth.field.last_name': 'اسم العائلة',
     'auth.field.company': 'الشركة',
     'auth.field.phone': 'الهاتف',
-
-    // كلمة المرور
     'auth.password.forgot': 'نسيت كلمة المرور',
     'auth.password.reset': 'إعادة تعيين كلمة المرور',
-    'auth.password.new': 'كلمة مرور جديدة',
+    'auth.password.new': 'كلمة المرور الجديدة',
     'auth.password.confirm': 'تأكيد كلمة المرور',
     'auth.password.strength.weak': 'ضعيفة',
     'auth.password.strength.medium': 'متوسطة',
     'auth.password.strength.strong': 'قوية',
-    'auth.password.strength.very_strong': 'قوية جدًا',
-
-    // رسائل الخطأ
+    'auth.password.strength.very_strong': 'قوية جداً',
     'auth.error.invalid_credentials': 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
     'auth.error.email_exists': 'هذا البريد الإلكتروني مستخدم بالفعل',
-    'auth.error.weak_password': 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل',
+    'auth.error.weak_password': 'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل',
     'auth.error.passwords_mismatch': 'كلمتا المرور غير متطابقتين',
     'auth.error.required_field': 'هذا الحقل مطلوب',
     'auth.error.invalid_email': 'بريد إلكتروني غير صالح',
-    'auth.error.account_disabled': 'الحساب معطل',
-    'auth.error.too_many_attempts': 'عدد محاولات كبير. حاول لاحقًا',
-
-    // رسائل النجاح
-    'auth.success.registered': 'تم التسجيل بنجاح !',
+    'auth.error.account_disabled': 'الحساب معطّل',
+    'auth.error.too_many_attempts': 'محاولات كثيرة جداً. أعد المحاولة لاحقاً',
+    'auth.success.registered': 'تم التسجيل بنجاح!',
     'auth.success.logged_in': 'تم تسجيل الدخول بنجاح',
-    'auth.success.password_reset': 'تمت إعادة تعيين كلمة المرور',
+    'auth.success.password_reset': 'تم إعادة تعيين كلمة المرور',
     'auth.success.email_sent': 'تم إرسال البريد الإلكتروني بنجاح',
-
-    // OAuth
-    'auth.oauth.google': 'المتابعة عبر Google',
-    'auth.oauth.linkedin': 'المتابعة عبر LinkedIn',
+    'auth.oauth.google': 'المتابعة باستخدام Google',
+    'auth.oauth.linkedin': 'المتابعة باستخدام LinkedIn',
     'auth.oauth.or': 'أو',
-
-    // حالات الحساب
-    'auth.status.pending': 'قيد الانتظار',
+    'auth.status.pending': 'في انتظار التحقق',
     'auth.status.active': 'نشط',
     'auth.status.inactive': 'غير نشط',
-    'auth.status.suspended': 'معلق',
+    'auth.status.suspended': 'موقوف',
   },
 };
 

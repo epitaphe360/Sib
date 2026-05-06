@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Traductions pour la navigation
  */
 
@@ -6,7 +6,7 @@ export const navigationTranslations = {
   fr: {
     'nav.home': 'Accueil',
     'nav.exhibitors': 'Exposants',
-    'nav.partners': 'Sponsors',
+    'nav.partners': 'Partenaires',
     'nav.networking': 'Réseautage',
     'nav.event': 'Événement',
     'nav.participate': 'Participer',
@@ -48,23 +48,23 @@ export const navigationTranslations = {
     'nav.logout': 'Logout',
   },
   ar: {
-    'nav.home': 'الصفحة الرئيسية',
+    'nav.home': 'الرئيسية',
     'nav.exhibitors': 'العارضون',
     'nav.partners': 'الشركاء',
-    'nav.networking': 'التواصل',
+    'nav.networking': 'التواصل المهني',
     'nav.event': 'الحدث',
     'nav.participate': 'المشاركة',
-    'nav.contact': 'اتصال',
+    'nav.contact': 'اتصل بنا',
     'nav.pavilions': 'الأجنحة',
-    'nav.events': 'الأحداث',
+    'nav.events': 'الفعاليات',
     'nav.news': 'الأخبار',
-    'nav.information': 'معلومات',
+    'nav.information': 'المعلومات',
     'nav.accommodation': 'الإقامة',
     'nav.subscriptions': 'الاشتراكات',
-    'nav.dashboard': 'لوحة القيادة',
+    'nav.dashboard': 'لوحة التحكم',
     'nav.appointments': 'المواعيد',
     'nav.chat': 'الرسائل',
-    'nav.profile': 'ملفي',
+    'nav.profile': 'ملفي الشخصي',
     'nav.login': 'تسجيل الدخول',
     'nav.register': 'التسجيل',
     'nav.logout': 'تسجيل الخروج',
