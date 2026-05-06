@@ -224,7 +224,7 @@ function useCountdown(targetDate: Date) {
 export default function PartnerSubscriptionPage() {
   const navigate = useNavigate();
   // t used for future translations
-  const { t: _t } = useTranslation();
+  const { t } = useTranslation();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [expandedTier, setExpandedTier] = useState<string | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
@@ -338,14 +338,14 @@ export default function PartnerSubscriptionPage() {
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
                 <Handshake className="w-4 h-4 text-yellow-300" />
                 <span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">
-                  Devenez sponsor SIB 2026
+                  {t('partner.hero_badge')}
                 </span>
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Devenez{' '}
-                <span className="text-yellow-300">Sponsor</span>{' '}
-                du SIB 2026
+                {t('partner.hero_title_1')}{' '}
+                <span className="text-yellow-300">{t('partner.hero_title_2')}</span>{' '}
+                {t('partner.hero_title_3')}
               </h1>
 
               <p className="text-lg md:text-xl text-indigo-100 mb-6 leading-relaxed">
@@ -356,13 +356,13 @@ export default function PartnerSubscriptionPage() {
 
               {/* Countdown */}
               <div className="mb-8">
-                <p className="text-xs font-bold text-indigo-300 uppercase tracking-widest mb-3">Ouverture du salon dans</p>
+                <p className="text-xs font-bold text-indigo-300 uppercase tracking-widest mb-3">{t('partner.hero_countdown_label')}</p>
                 <div className="flex gap-3">
                   {[
-                    { val: countdown.days,    label: 'Jours' },
-                    { val: countdown.hours,   label: 'Heures' },
-                    { val: countdown.minutes, label: 'Min' },
-                    { val: countdown.seconds, label: 'Sec' },
+                    { val: countdown.days,    label: t('partner.countdown_days') },
+                    { val: countdown.hours,   label: t('partner.countdown_hours') },
+                    { val: countdown.minutes, label: t('partner.countdown_minutes') },
+                    { val: countdown.seconds, label: t('partner.countdown_seconds') },
                   ].map(({ val, label }) => (
                     <div key={label} className="flex flex-col items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-3 py-2 min-w-[56px]">
                       <span className="text-2xl font-black text-yellow-300 tabular-nums leading-none">
@@ -383,18 +383,8 @@ export default function PartnerSubscriptionPage() {
                   className="bg-indigo-300 text-indigo-900 hover:bg-indigo-400 font-bold text-lg px-8"
                 >
                   <CreditCard className="mr-2 h-5 w-5" />
-                  Voir les offres
+                  {t('partner.hero_btn_offers')}
                 </Button>
-                <Link to={ROUTES.CONTACT}>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-white text-white hover:bg-white/10 font-semibold"
-                  >
-                    <Mail className="mr-2 h-5 w-5" />
-                    Nous contacter
-                  </Button>
-                </Link>
               </div>
             </motion.div>
 
@@ -431,7 +421,7 @@ export default function PartnerSubscriptionPage() {
           onClick={() => window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' })}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/40 hover:text-white/70 transition-colors z-10"
         >
-          <span className="text-[10px] uppercase tracking-[0.25em]">Découvrir</span>
+          <span className="text-[10px] uppercase tracking-[0.25em]">{t('partner.hero_discover')}</span>
           <ArrowDown className="w-4 h-4" />
         </motion.button>
 
@@ -450,7 +440,7 @@ export default function PartnerSubscriptionPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
             <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap flex-shrink-0">
-              Partenaires SIB précédents
+              {t('partner.social_proof_label')}
             </p>
             <div className="w-px h-6 bg-gray-200 hidden sm:block flex-shrink-0" />
             <div className="flex flex-wrap justify-center sm:justify-start gap-3">
@@ -488,13 +478,13 @@ export default function PartnerSubscriptionPage() {
           >
             <div className="flex items-center gap-3 mb-3">
               <div className="w-1 h-10 bg-gradient-to-b from-indigo-600 to-indigo-400 rounded-full" />
-              <span className="text-xs font-bold text-indigo-600 uppercase tracking-[0.2em]">Partenariat stratégique</span>
+              <span className="text-xs font-bold text-indigo-600 uppercase tracking-[0.2em]">{t('partner.why_partner_badge')}</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-              Pourquoi devenir sponsor de <span className="text-indigo-600">SIB</span> ?
+              {t('partner.why_partner_title')} <span className="text-indigo-600">SIB</span> ?
             </h2>
             <p className="text-lg text-gray-500 max-w-2xl">
-              Associez votre marque à un événement de référence
+              {t('partner.why_partner_subtitle')}
             </p>
           </motion.div>
 
@@ -543,13 +533,13 @@ export default function PartnerSubscriptionPage() {
           >
             <span className="inline-flex items-center gap-2 bg-[#00AEEF]/10 text-[#0089CC] border border-[#00AEEF]/30 text-xs font-bold px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest">
               <Video className="h-3.5 w-3.5" />
-              Visibilité maximale
+              {t('partner.media_badge')}
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Une couverture <span style={{ color: '#00AEEF' }}>médiatique</span> complète
+              {t('partner.media_title')} <span style={{ color: '#00AEEF' }}>{t('partner.media_title_accent')}</span> {t('partner.media_title_end')}
             </h2>
             <p className="text-lg text-gray-500 max-w-3xl mx-auto">
-              Présence sur tous les canaux — avant, pendant et après le salon
+              {t('partner.media_subtitle')}
             </p>
           </motion.div>
 
@@ -620,15 +610,15 @@ export default function PartnerSubscriptionPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              Besoin d'informations complémentaires ?
+              {t('partner.cta_info_title')}
             </h2>
             <p className="text-indigo-100 mb-6">
-              Notre équipe est à votre disposition pour vous accompagner dans votre projet de partenariat.
+              {t('partner.cta_info_subtitle')}
             </p>
             <Link to={ROUTES.CONTACT}>
               <Button size="lg" className="bg-white text-amber-700 hover:bg-amber-50 font-bold">
                 <Mail className="mr-2 h-5 w-5" />
-                Contactez-nous
+                {t('partner.cta_info_btn')}
               </Button>
             </Link>
           </motion.div>
@@ -652,13 +642,13 @@ export default function PartnerSubscriptionPage() {
           >
             <span className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest">
               <CreditCard className="h-3.5 w-3.5" />
-              Forfaits Sponsors
+              {t('partner.pricing_badge')}
             </span>
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-              Choisissez votre formule
+              {t('partner.pricing_title')}
             </h2>
             <p className="text-lg text-indigo-300 max-w-2xl mx-auto">
-              3 niveaux de visibilité — du Silver au Partenaire Officiel
+              {t('partner.pricing_subtitle')}
             </p>
           </motion.div>
 
@@ -701,7 +691,7 @@ export default function PartnerSubscriptionPage() {
                         transition={{ delay: 0.6, type: 'spring', stiffness: 300 }}
                         className="text-[10px] bg-white/25 text-white font-bold px-2.5 py-1 rounded-full border border-white/40 tracking-wide"
                       >
-                        ⭐ Populaire
+                        ⭐ {t('partner.pricing_popular')}
                       </motion.span>
                     )}
                   </div>
@@ -724,7 +714,7 @@ export default function PartnerSubscriptionPage() {
 
                 {/* Features */}
                 <div className="px-5 pt-4 flex-grow">
-                  <p className="text-[10px] font-bold text-gray-400 mb-2.5 uppercase tracking-widest">Inclus</p>
+                  <p className="text-[10px] font-bold text-gray-400 mb-2.5 uppercase tracking-widest">{t('partner.pricing_included')}</p>
                   <ul className="space-y-1.5">
                     {tier.features.slice(0, 4).map((feature) => (
                       <li key={feature.name} className="flex items-start gap-2">
@@ -778,14 +768,14 @@ export default function PartnerSubscriptionPage() {
                         >
                           <ChevronDown className="h-3.5 w-3.5" />
                         </motion.span>
-                        {expandedTier === tier.id ? 'Voir moins' : `+ ${tier.features.length - 4} de plus`}
+                        {expandedTier === tier.id ? t('partner.pricing_collapse') : `+ ${tier.features.length - 4} de plus`}
                       </button>
                     </>
                   )}
 
                   {/* Benefits */}
                   <div className="mt-4 pt-4 border-t border-gray-100">
-                    <p className="text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-widest">Avantages clés</p>
+                    <p className="text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-widest">{t('partner.pricing_key_benefits')}</p>
                     <ul className="space-y-1.5">
                       {tier.benefits.slice(0, 3).map((benefit) => (
                         <li key={benefit} className="flex items-start gap-2">
@@ -827,15 +817,15 @@ export default function PartnerSubscriptionPage() {
                 <Handshake className="h-8 w-8 text-yellow-300" />
               </div>
               <h3 className="text-2xl md:text-3xl font-bold mb-3">
-                Besoin d'un forfait sur mesure ?
+                {t('partner.custom_offer_title')}
               </h3>
               <p className="text-indigo-200 mb-7 max-w-lg mx-auto">
-                Notre équipe vous accompagne pour construire une offre personnalisée adaptée à vos objectifs et votre budget.
+                {t('partner.custom_offer_subtitle')}
               </p>
               <Link to={ROUTES.CONTACT}>
                 <Button size="lg" className="bg-white text-indigo-700 hover:bg-yellow-50 font-bold shadow-lg">
                   <Users className="mr-2 h-5 w-5" />
-                  Parler à un conseiller
+                  {t('partner.custom_offer_btn')}
                 </Button>
               </Link>
             </div>
@@ -858,10 +848,10 @@ export default function PartnerSubscriptionPage() {
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-1 h-10 bg-gradient-to-b from-amber-500 to-amber-300 rounded-full" />
-                <span className="text-xs font-bold text-amber-600 uppercase tracking-[0.2em]">Organisez votre participation !</span>
+                <span className="text-xs font-bold text-amber-600 uppercase tracking-[0.2em]">{t('exhibitor.organize_participation_label')}</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
-                Infos <span className="text-indigo-600">pratiques</span>
+                {t('exhibitor.practical_info_title')}
               </h2>
 
               <div className="space-y-6">
@@ -870,8 +860,8 @@ export default function PartnerSubscriptionPage() {
                     <MapPin className="h-6 w-6 text-indigo-500" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1">Lieu</h3>
-                    <p className="text-gray-600">Parc d'Exposition Mohammed VI – El Jadida, Maroc</p>
+                    <h3 className="font-bold text-gray-900 mb-1">{t('common.location')}</h3>
+                    <p className="text-gray-600">{t('exhibitor.venue_address')}</p>
                   </div>
                 </div>
 
@@ -880,8 +870,8 @@ export default function PartnerSubscriptionPage() {
                     <CalendarDays className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1">Dates</h3>
-                    <p className="text-gray-600">25-29 Novembre 2026</p>
+                    <h3 className="font-bold text-gray-900 mb-1">{t('common.dates')}</h3>
+                    <p className="text-gray-600">{t('exhibitor.event_dates')}</p>
                   </div>
                 </div>
 
@@ -890,8 +880,8 @@ export default function PartnerSubscriptionPage() {
                     <Clock className="h-6 w-6 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1">Horaires</h3>
-                    <p className="text-gray-600">9h00 à 19h00</p>
+                    <h3 className="font-bold text-gray-900 mb-1">{t('common.hours')}</h3>
+                    <p className="text-gray-600">{t('exhibitor.event_hours')}</p>
                   </div>
                 </div>
 
@@ -900,8 +890,8 @@ export default function PartnerSubscriptionPage() {
                     <Ticket className="h-6 w-6 text-purple-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1">Entrée</h3>
-                    <p className="text-gray-600">Gratuite — sur badge électronique</p>
+                    <h3 className="font-bold text-gray-900 mb-1">{t('common.entry')}</h3>
+                    <p className="text-gray-600">{t('exhibitor.entry_free_badge')}</p>
                   </div>
                 </div>
               </div>
@@ -920,7 +910,7 @@ export default function PartnerSubscriptionPage() {
                     <Phone className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    Contact Organisation
+                    {t('exhibitor.contact_organization_title')}
                   </h3>
                   <p className="text-gray-600 mb-6">
                     URBACOM
@@ -950,7 +940,7 @@ export default function PartnerSubscriptionPage() {
                   <Link to={ROUTES.CONTACT}>
                     <Button className="w-full bg-indigo-600 text-white hover:bg-indigo-700">
                       <MessageCircle className="mr-2 h-5 w-5" />
-                      Nous contacter
+                      {t('exhibitor.cta_contact_us')}
                     </Button>
                   </Link>
                 </div>
@@ -974,7 +964,7 @@ export default function PartnerSubscriptionPage() {
               <div className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-300" />
               <div className="flex items-center gap-2">
                 <Zap className="h-5 w-5 text-amber-500" />
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Comment ça marche ?</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t('exhibitor.how_it_works_title')}</h2>
               </div>
               <div className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-300" />
             </div>
@@ -1005,10 +995,10 @@ export default function PartnerSubscriptionPage() {
                 >
                   <Star className="w-9 h-9 text-white" />
                 </motion.div>
-                <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-0.5 rounded-full mb-2">Étape 1</span>
-                <h3 className="font-bold text-gray-900 mb-2 text-lg">Choix de l'offre</h3>
+                <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-0.5 rounded-full mb-2">{t('partner.step1_badge')}</span>
+                <h3 className="font-bold text-gray-900 mb-2 text-lg">{t('exhibitor.step_1_title')}</h3>
                 <p className="text-gray-600">
-                  Sélectionnez l'offre qui correspond à vos besoins parmi nos différents niveaux.
+                  {t('exhibitor.step_1_description')}
                 </p>
               </motion.div>
               <motion.div
@@ -1026,10 +1016,10 @@ export default function PartnerSubscriptionPage() {
                 >
                   <CreditCard className="w-9 h-9 text-white" />
                 </motion.div>
-                <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-0.5 rounded-full mb-2">Étape 2</span>
-                <h3 className="font-bold text-gray-900 mb-2 text-lg">Paiement sécurisé</h3>
+                <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-0.5 rounded-full mb-2">{t('partner.step2_badge')}</span>
+                <h3 className="font-bold text-gray-900 mb-2 text-lg">{t('exhibitor.step_2_title')}</h3>
                 <p className="text-gray-600">
-                  Paiement en ligne ou via un commercial. Validation par administrateur automatique.
+                  {t('exhibitor.step_2_description')}
                 </p>
               </motion.div>
               <motion.div
@@ -1047,10 +1037,10 @@ export default function PartnerSubscriptionPage() {
                 >
                   <Zap className="w-9 h-9 text-white" />
                 </motion.div>
-                <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-0.5 rounded-full mb-2">Étape 3</span>
-                <h3 className="font-bold text-gray-900 mb-2 text-lg">Accès immédiat</h3>
+                <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-0.5 rounded-full mb-2">{t('partner.step3_badge')}</span>
+                <h3 className="font-bold text-gray-900 mb-2 text-lg">{t('exhibitor.step_3_title')}</h3>
                 <p className="text-gray-600">
-                  Accès instantané à votre tableau de bord et à tous les avantages de votre offre.
+                  {t('exhibitor.step_3_description')}
                 </p>
               </motion.div>
             </div>
@@ -1069,15 +1059,15 @@ export default function PartnerSubscriptionPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-10"
           >
-            <span className="inline-flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-[0.2em] mb-3">Questions fréquentes</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Vous avez des questions ?</h2>
+            <span className="inline-flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-[0.2em] mb-3">{t('partner.faq_badge')}</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t('partner.faq_title')}</h2>
           </motion.div>
           <div className="space-y-4 max-w-3xl mx-auto">
             {[
-              { q: "Puis-je changer d'offre ?", a: "Oui, vous pouvez faire évoluer votre offre à tout moment. Un administrateur validera les changements." },
-              { q: "Quel est le délai d'activation ?", a: "Une fois le paiement validé, votre accès est activé dans les 24 heures." },
-              { q: "Y a-t-il une facturation récurrente ?", a: "Non, sauf mention contraire. Les offres sont forfaitaires pour le salon 2026." },
-              { q: "Comment contacter le support ?", a: "Contactez notre équipe via le formulaire du site ou par e-mail : Sib2026@urbacom.net" },
+              { q: t('partner.faq_q1'), a: t('partner.faq_a1') },
+              { q: t('partner.faq_q2'), a: t('partner.faq_a2') },
+              { q: t('partner.faq_q3'), a: t('partner.faq_a3') },
+              { q: t('partner.faq_q4'), a: t('partner.faq_a4') },
             ].map((faq, i) => (
               <motion.div
                 key={faq.q}
@@ -1135,8 +1125,8 @@ export default function PartnerSubscriptionPage() {
           >
             <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
               <div className="hidden sm:block">
-                <p className="font-bold text-gray-900 text-sm">Devenez Sponsor SIB 2026</p>
-                <p className="text-xs text-gray-500">Dès 200 000 MAD — 3 formules disponibles</p>
+                <p className="font-bold text-gray-900 text-sm">{t('partner.sticky_title')}</p>
+                <p className="text-xs text-gray-500">{t('partner.sticky_subtitle')}</p>
               </div>
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <Button
@@ -1144,7 +1134,7 @@ export default function PartnerSubscriptionPage() {
                   className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold px-6 flex-1 sm:flex-none"
                 >
                   <CreditCard className="h-4 w-4 mr-2" />
-                  Voir les offres
+                  {t('partner.sticky_btn')}
                 </Button>
                 <button
                   onClick={() => setShowStickyBar(false)}
