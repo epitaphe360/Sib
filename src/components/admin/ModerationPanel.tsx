@@ -2,6 +2,7 @@
 import { supabase, isSupabaseReady } from '../../lib/supabase';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   ArrowLeft,
   CheckCircle,
@@ -44,6 +45,7 @@ const mockPendingContent: PendingContent[] = [];
 
 export default function ModerationPanel() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [pendingContent, setPendingContent] = useState<PendingContent[]>([]);
   const [selectedContent, setSelectedContent] = useState<PendingContent | null>(null);
   const [showModerationModal, setShowModerationModal] = useState(false);
@@ -72,7 +74,7 @@ export default function ModerationPanel() {
           exhibitorId: row.created_by_id || '',
           exhibitorName: row.partner_company || row.creator_name || 'Sponsor inconnu',
           sectionType: row.type || 'media',
-          sectionTitle: row.title || 'Contenu média',
+          sectionTitle: row.title || t('moderation.default_content'),
           content: {
             title: row.title,
             description: row.description || undefined,
@@ -80,7 +82,7 @@ export default function ModerationPanel() {
           submittedAt: new Date(row.created_at),
           status: (row.status || 'pending') as 'pending' | 'approved' | 'rejected',
           moderatorComment: row.rejection_reason || undefined,
-          changes: row.category ? [`Catégorie: ${row.category}`] : [],
+          changes: row.category ? [t('moderation.category_change', { cat: row.category })] : [],
           priority: (new Date().getTime() - new Date(row.created_at).getTime() > 86400000 * 2
             ? 'high'
             : new Date().getTime() - new Date(row.created_at).getTime() > 86400000
@@ -129,11 +131,11 @@ export default function ModerationPanel() {
 
       if (error) {throw error;}
 
-      toast.success(`✅ Contenu approuvé - ${content.exhibitorName} — ${content.sectionTitle}`);
+      toast.success(`✅ ${t('moderation.toast_approved', { name: content.exhibitorName, title: content.sectionTitle })}`);
       setPendingContent(prev => prev.filter(c => c.id !== content.id));
       setApprovedToday(n => n + 1);
     } catch {
-      toast.error('Erreur lors de l\'approbation');
+      toast.error(t('moderation.err_approval'));
     } finally {
       setModeratingContent(prev => prev.filter(id => id !== content.id));
     }
@@ -156,7 +158,7 @@ export default function ModerationPanel() {
 
       if (error) {throw error;}
 
-      toast.error(`❌ Contenu refusé - ${content.exhibitorName} — ${content.sectionTitle}: ${comment}`);
+      toast.error(`❌ ${t('moderation.toast_rejected', { name: content.exhibitorName, title: content.sectionTitle, comment })}`);
       setPendingContent(prev => prev.map(c =>
         c.id === content.id
           ? { ...c, status: 'rejected', moderatorComment: comment }
@@ -166,7 +168,7 @@ export default function ModerationPanel() {
       setSelectedContent(null);
       setModerationComment('');
     } catch {
-      toast.error('Erreur lors du refus');
+      toast.error(t('moderation.err_rejection'));
     } finally {
       setModeratingContent(prev => prev.filter(id => id !== content.id));
     }
@@ -183,9 +185,9 @@ export default function ModerationPanel() {
 
   const getPriorityLabel = (priority: string) => {
     switch (priority) {
-      case 'high': return 'Priorité Haute';
-      case 'medium': return 'Priorité Moyenne';
-      case 'low': return 'Priorité Basse';
+      case 'high': return t('moderation.priority_high');
+      case 'medium': return t('moderation.priority_medium');
+      case 'low': return t('moderation.priority_low');
       default: return priority;
     }
   };
@@ -208,7 +210,7 @@ export default function ModerationPanel() {
             <Link to={ROUTES.DASHBOARD}>
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour au Tableau de Bord Admin
+                {t('admin.back_to_dashboard')}
               </Button>
             </Link>
           </div>
@@ -223,10 +225,10 @@ export default function ModerationPanel() {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  Panneau de Modération de Contenu
+                  {t('moderation.title')}
                 </h1>
                 <p className="text-gray-600">
-                  Validez les modifications des mini-sites exposants
+                  {t('moderation.subtitle')}
                 </p>
               </div>
             </div>
@@ -234,8 +236,8 @@ export default function ModerationPanel() {
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
               <div className="flex items-center space-x-2">
                 <Flag className="h-5 w-5 text-orange-600" />
-                <span className="text-orange-800 font-medium">Modération Active</span>
-                <Badge variant="warning" size="sm">{pendingContent.length} contenus en attente</Badge>
+                <span className="text-orange-800 font-medium">{t('moderation.active')}</span>
+                <Badge variant="warning" size="sm">{t('moderation.n_pending', { count: pendingContent.length })}</Badge>
               </div>
             </div>
           </motion.div>
@@ -250,7 +252,7 @@ export default function ModerationPanel() {
             <div className="text-2xl font-bold text-gray-900 mb-1">
               {pendingContent.filter(c => c.status === 'pending').length}
             </div>
-            <div className="text-sm text-gray-600">En Attente</div>
+            <div className="text-sm text-gray-600">{t('moderation.pending')}</div>
           </Card>
 
           <Card className="text-center p-6">
@@ -260,7 +262,7 @@ export default function ModerationPanel() {
             <div className="text-2xl font-bold text-gray-900 mb-1">
               {pendingContent.filter(c => c.priority === 'high').length}
             </div>
-            <div className="text-sm text-gray-600">Priorité Haute</div>
+            <div className="text-sm text-gray-600">{t('moderation.priority_high')}</div>
           </Card>
 
           <Card className="text-center p-6">
@@ -268,7 +270,7 @@ export default function ModerationPanel() {
               <CheckCircle className="h-6 w-6 text-green-600" />
             </div>
             <div className="text-2xl font-bold text-gray-900 mb-1">{approvedToday}</div>
-            <div className="text-sm text-gray-600">Approuvés Aujourd'hui</div>
+            <div className="text-sm text-gray-600">{t('moderation.approved_today')}</div>
           </Card>
 
           <Card className="text-center p-6">
@@ -276,7 +278,7 @@ export default function ModerationPanel() {
               <Eye className="h-6 w-6 text-blue-600" />
             </div>
             <div className="text-2xl font-bold text-gray-900 mb-1">—</div>
-            <div className="text-sm text-gray-600">Temps Moyen (min)</div>
+            <div className="text-sm text-gray-600">{t('moderation.avg_time')}</div>
           </Card>
         </div>
 
@@ -302,7 +304,7 @@ export default function ModerationPanel() {
                         </h3>
                         <p className="text-gray-600">{content.sectionTitle}</p>
                         <p className="text-sm text-gray-500">
-                          Soumis le {formatDate(content.submittedAt)}
+                          {t('moderation.submitted_on', { date: formatDate(content.submittedAt) })}
                         </p>
                       </div>
                     </div>
@@ -315,14 +317,14 @@ export default function ModerationPanel() {
                         {getPriorityLabel(content.priority)}
                       </Badge>
                       <Badge variant="warning" size="sm">
-                        {content.status === 'pending' ? 'En attente' : content.status}
+                        {content.status === 'pending' ? t('moderation.status_pending') : content.status}
                       </Badge>
                     </div>
                   </div>
 
                   {/* Changements */}
                   <div className="mb-4">
-                    <h4 className="font-medium text-gray-900 mb-2">Modifications apportées :</h4>
+                    <h4 className="font-medium text-gray-900 mb-2">{t('moderation.changes_header')}</h4>
                     <div className="flex flex-wrap gap-2">
                       {content.changes.map((change) => (
                         <Badge key={change} variant="info" size="sm">
@@ -334,7 +336,7 @@ export default function ModerationPanel() {
 
                   {/* Aperçu du Contenu */}
                   <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                    <h4 className="font-medium text-gray-900 mb-2">Aperçu du contenu :</h4>
+                    <h4 className="font-medium text-gray-900 mb-2">{t('moderation.preview_header')}</h4>
                     {content.sectionType === 'about' && (
                       <div>
                         <h5 className="font-semibold text-gray-800 mb-1">{content.content.title}</h5>
@@ -344,7 +346,7 @@ export default function ModerationPanel() {
                     {content.sectionType === 'products' && (
                       <div>
                         <h5 className="font-semibold text-gray-800 mb-1">{content.content.title}</h5>
-                        <p className="text-sm text-gray-600">{content.content.products?.length || 0} produits</p>
+                        <p className="text-sm text-gray-600">{t('moderation.n_products', { count: content.content.products?.length || 0 })}</p>
                       </div>
                     )}
                   </div>
@@ -359,12 +361,12 @@ export default function ModerationPanel() {
                       {moderatingContent.includes(content.id) ? (
                         <>
                           <Loader className="h-4 w-4 mr-2 animate-spin" />
-                          Approbation...
+                          {t('moderation.approving')}
                         </>
                       ) : (
                         <>
                           <CheckCircle className="h-4 w-4 mr-2" />
-                          Approuver
+                          {t('moderation.approve')}
                         </>
                       )}
                     </Button>
@@ -377,25 +379,25 @@ export default function ModerationPanel() {
                       }}
                     >
                       <X className="h-4 w-4 mr-2" />
-                      Refuser avec Commentaire
+                      {t('moderation.reject_with_comment')}
                     </Button>
 
                     <Button
                       variant="outline"
                       onClick={() => navigate(ROUTES.MINISITE_PREVIEW.replace(':exhibitorId', content.exhibitorId))}
-                      aria-label={`Prévisualiser ${content.exhibitorName}`}
+                      aria-label={t('moderation.preview_aria', { name: content.exhibitorName })}
                     >
                       <Eye className="h-4 w-4 mr-2" />
-                      Prévisualiser
+                      {t('moderation.preview_btn')}
                     </Button>
 
                     <Button
                       variant="outline"
                       onClick={() => navigate(ROUTES.EXHIBITOR_DETAIL.replace(':id', content.exhibitorId))}
-                      aria-label={`Contacter ${content.exhibitorName}`}
+                      aria-label={t('moderation.contact_aria', { name: content.exhibitorName })}
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />
-                      Contacter Exposant
+                      {t('moderation.contact_exhibitor')}
                     </Button>
                   </div>
                 </div>
@@ -411,15 +413,15 @@ export default function ModerationPanel() {
               <CheckCircle className="h-12 w-12 text-green-600" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">
-              Toute la modération est à jour !
+              {t('moderation.all_up_to_date')}
             </h3>
             <p className="text-gray-600 mb-6">
-              Aucun contenu en attente de validation
+              {t('moderation.no_pending')}
             </p>
             <Link to={ROUTES.DASHBOARD}>
               <Button>
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour au Tableau de Bord Admin
+                {t('admin.back_to_dashboard')}
               </Button>
             </Link>
           </Card>
@@ -435,7 +437,7 @@ export default function ModerationPanel() {
             className="bg-white rounded-lg p-6 w-full max-w-md mx-4"
           >
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Refuser le Contenu
+              {t('moderation.reject_modal_title')}
             </h3>
 
             <div className="mb-4">
@@ -444,12 +446,12 @@ export default function ModerationPanel() {
               </p>
 
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Motif du refus et corrections demandées :
+                {t('moderation.reject_reason_label')}
               </label>
               <textarea
                 value={moderationComment}
                 onChange={(e) => setModerationComment(e.target.value)}
-                placeholder="Expliquez les raisons du refus et les corrections à apporter..."
+                placeholder={t('moderation.reject_reason_ph')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 rows={4}
               />
@@ -464,7 +466,7 @@ export default function ModerationPanel() {
                   setModerationComment('');
                 }}
               >
-                Annuler
+                {t('moderation.cancel')}
               </Button>
               <Button
                 onClick={() => handleRejectContent(selectedContent, moderationComment)}
@@ -472,7 +474,7 @@ export default function ModerationPanel() {
                 className="bg-red-600 hover:bg-red-700"
               >
                 <X className="h-4 w-4 mr-2" />
-                Refuser le Contenu
+                {t('moderation.confirm_reject')}
               </Button>
             </div>
           </motion.div>

@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   ArrowLeft,
   Plus,
@@ -33,6 +34,7 @@ export default function NewsArticleCreationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const { user } = useAuthStore();
+  const { t } = useTranslation();
   const { createNewsArticle, updateNewsArticle, getArticleById, fetchNews, articles } = useNewsStore(); // Added updateNewsArticle, getArticleById, fetchNews, articles
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -99,11 +101,11 @@ export default function NewsArticleCreationForm() {
 
     try {
       if (!user) {
-        throw new Error('Utilisateur non connecté');
+        throw new Error(t('news_form.err_not_logged_in'));
       }
 
       if (!formData.title || !formData.excerpt || !formData.content || !formData.category) {
-        throw new Error('Veuillez remplir tous les champs obligatoires');
+        throw new Error(t('news_form.err_fill_all'));
       }
 
       const articleData = {
@@ -125,10 +127,10 @@ export default function NewsArticleCreationForm() {
 
       if (isEditMode && editId) {
         await updateNewsArticle(editId, articleData);
-        toast.success(`✏️ Article mis à jour : ${formData.title}`);
+        toast.success(`✏️ ${t('news_form.toast_updated', { title: formData.title })}`);
       } else {
         await createNewsArticle(articleData as any);
-        toast.success(`✅ Article publié : ${formData.title}`);
+        toast.success(`✅ ${t('news_form.toast_published', { title: formData.title })}`);
       }
 
       // Rediriger vers la page des actualités
@@ -136,8 +138,11 @@ export default function NewsArticleCreationForm() {
 
     } catch (error) {
       setIsSubmitting(false);
-      const action = isEditMode ? 'modification' : 'création';
-      toast.error(error instanceof Error ? `Erreur ${action} article: ${error.message}` : `Erreur inconnue lors de la ${action} de l'article`);
+      if (isEditMode) {
+        toast.error(error instanceof Error ? t('news_form.err_update', { message: error.message }) : t('news_form.err_unknown_update'));
+      } else {
+        toast.error(error instanceof Error ? t('news_form.err_create', { message: error.message }) : t('news_form.err_unknown_create'));
+      }
     }
   };
 
@@ -182,7 +187,7 @@ export default function NewsArticleCreationForm() {
             <Link to={ROUTES.DASHBOARD}>
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour au Tableau de Bord Admin
+                {t('admin.back_to_dashboard')}
               </Button>
             </Link>
           </div>
@@ -192,10 +197,10 @@ export default function NewsArticleCreationForm() {
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {isEditMode ? 'Modifier l\'Article' : 'Créer un Nouvel Article'}
+              {isEditMode ? t('news_form.edit_title') : t('news_form.create_title')}
             </h1>
             <p className="text-gray-600">
-              {isEditMode ? 'Mettre à jour les informations de l\'article' : 'Publier une nouvelle actualité bâtiment'}
+              {isEditMode ? t('news_form.edit_subtitle') : t('news_form.create_subtitle')}
             </p>
           </motion.div>
         </div>
@@ -208,52 +213,52 @@ export default function NewsArticleCreationForm() {
                 {/* Titre */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Titre de l'article *
+                    {t('news_form.label_article_title')} *
                   </label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Titre accrocheur de votre article"
+                    placeholder={t('news_form.ph_article_title')}
                   />
                 </div>
 
                 {/* Extrait */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Extrait/Résumé *
+                    {t('news_form.label_excerpt')} *
                   </label>
                   <textarea
                     value={formData.excerpt}
                     onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                     rows={3}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Résumé de l'article qui apparaîtra dans la liste..."
+                    placeholder={t('news_form.ph_excerpt')}
                   />
                 </div>
 
                 {/* Contenu */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Contenu de l'article *
+                    {t('news_form.label_content')} *
                   </label>
                   <textarea
                     value={formData.content}
                     onChange={(e) => handleContentChange(e.target.value)}
                     rows={12}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Rédigez le contenu complet de votre article..."
+                    placeholder={t('news_form.ph_content')}
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Temps de lecture estimé: {formData.readTime} minute{formData.readTime > 1 ? 's' : ''}
+                    {t('news_form.read_time', { count: formData.readTime })}
                   </p>
                 </div>
 
                 {/* Image */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Image de couverture
+                    {t('news_form.label_cover_image')}
                   </label>
                   <input
                     type="url"
@@ -266,7 +271,7 @@ export default function NewsArticleCreationForm() {
                     <div className="mt-2">
                       <img
                         src={formData.image}
-                        alt="Aperçu"
+                        alt={t('news_form.image_preview_alt')}
                         className="w-32 h-20 object-cover rounded-lg"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
@@ -279,7 +284,7 @@ export default function NewsArticleCreationForm() {
                 {/* URL Source */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    URL source (optionnel)
+                    {t('news_form.label_source_url')}
                   </label>
                   <input
                     type="url"
@@ -297,12 +302,12 @@ export default function NewsArticleCreationForm() {
           <div className="lg:col-span-1 space-y-6">
             {/* Métadonnées */}
             <Card className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Métadonnées</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{t('news_form.label_metadata')}</h3>
 
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Auteur
+                    {t('news_form.label_author')}
                   </label>
                   <input
                     type="text"
@@ -314,14 +319,14 @@ export default function NewsArticleCreationForm() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Catégorie *
+                    {t('news_form.label_category')} *
                   </label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Sélectionnez une catégorie</option>
+                    <option value="">{t('news_form.ph_select_category')}</option>
                     {categories.map((category) => (
                       <option key={category} value={category}>{category}</option>
                     ))}
@@ -336,7 +341,7 @@ export default function NewsArticleCreationForm() {
                       onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     />
-                    <span className="text-sm text-gray-700">Article à la une</span>
+                    <span className="text-sm text-gray-700">{t('news_form.featured_checkbox')}</span>
                   </label>
                 </div>
               </div>
@@ -344,7 +349,7 @@ export default function NewsArticleCreationForm() {
 
             {/* Tags */}
             <Card className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Mots-clés</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{t('news_form.label_keywords')}</h3>
 
               <div className="space-y-3">
                 <div className="flex space-x-2">
@@ -354,7 +359,7 @@ export default function NewsArticleCreationForm() {
                     onChange={(e) => setNewTag(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Ajouter un tag"
+                    placeholder={t('news_form.ph_add_tag')}
                   />
                   <Button size="sm" onClick={addTag}>
                     <Plus className="h-4 w-4" />
@@ -377,7 +382,7 @@ export default function NewsArticleCreationForm() {
 
             {/* Actions */}
             <Card className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Actions</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{t('news_form.label_actions')}</h3>
 
               <div className="space-y-3">
                 <Button
@@ -386,7 +391,7 @@ export default function NewsArticleCreationForm() {
                   onClick={() => setShowPreview(!showPreview)}
                 >
                   <Eye className="h-4 w-4 mr-2" />
-                  {showPreview ? 'Masquer' : 'Prévisualiser'}
+                  {showPreview ? t('news_form.hide_preview') : t('news_form.preview')}
                 </Button>
 
                 <Button
@@ -397,12 +402,12 @@ export default function NewsArticleCreationForm() {
                   {isSubmitting ? (
                     <>
                       <Loader className="animate-spin h-4 w-4 mr-2" />
-                      Publication...
+                      {t('news_form.publishing')}
                     </>
                   ) : (
                     <>
                       <Save className="h-4 w-4 mr-2" />
-                      Publier l'Article
+                      {t('news_form.publish_article')}
                     </>
                   )}
                 </Button>
@@ -422,10 +427,10 @@ export default function NewsArticleCreationForm() {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-bold text-gray-900">
-                    Aperçu de l'Article
+                    {t('news_form.article_preview_title')}
                   </h3>
                   <Button variant="outline" size="sm" onClick={() => setShowPreview(false)}>
-                    Fermer
+                    {t('news_form.close')}
                   </Button>
                 </div>
 
@@ -462,7 +467,7 @@ export default function NewsArticleCreationForm() {
 
                   {formData.tags.length > 0 && (
                     <div className="mt-6 pt-4 border-t border-gray-200">
-                      <h4 className="font-medium text-gray-900 mb-2">Mots-clés :</h4>
+                      <h4 className="font-medium text-gray-900 mb-2">{t('news_form.keywords_header')}</h4>
                       <div className="flex flex-wrap gap-2">
                         {formData.tags.map((tag) => (
                           <Badge key={tag} variant="info" size="sm">
