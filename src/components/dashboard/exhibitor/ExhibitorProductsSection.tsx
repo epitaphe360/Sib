@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { supabase } from '../../../lib/supabase';
 import { Button } from '../../ui/Button';
 import ProductDetailModal from '../../products/ProductDetailModal';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface TechSpec { name: string; value: string; unit?: string; }
@@ -74,6 +75,7 @@ function ProductForm({
   onCancel: () => void;
   isSaving: boolean;
 }) {
+  const { t } = useTranslation();
   const [form, setForm] = useState<ProductFormState>(initial);
   const [tab, setTab] = useState<FormTab>('general');
 
@@ -89,15 +91,15 @@ function ProductForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim()) { toast.error('Le nom du produit est requis'); setTab('general'); return; }
-    if (!form.category) { toast.error('La catégorie est requise'); setTab('general'); return; }
+    if (!form.name.trim()) { toast.error(t('products.err_name_required')); setTab('general'); return; }
+    if (!form.category) { toast.error(t('products.err_category_required')); setTab('general'); return; }
     onSave(form);
   };
 
   const TABS: { id: FormTab; label: string; icon: React.ReactNode }[] = [
-    { id: 'general', label: 'Général', icon: <Info className="h-3.5 w-3.5" /> },
-    { id: 'details', label: 'Fiche détaillée', icon: <Tag className="h-3.5 w-3.5" /> },
-    { id: 'medias', label: 'Médias', icon: <Video className="h-3.5 w-3.5" /> },
+    { id: 'general', label: t('products.tab_general'), icon: <Info className="h-3.5 w-3.5" /> },
+    { id: 'details', label: t('products.tab_details'), icon: <Tag className="h-3.5 w-3.5" /> },
+    { id: 'medias', label: t('products.tab_medias'), icon: <Video className="h-3.5 w-3.5" /> },
   ];
 
   return (
@@ -118,23 +120,23 @@ function ProductForm({
       {tab === 'general' && (
         <div className="space-y-4">
           <div>
-            <label className={LABEL_CLS}>Nom du produit *</label>
+            <label className={LABEL_CLS}>{t('products.label_name')}</label>
             <input type="text" value={form.name} onChange={(e) => set('name', e.target.value)}
               className={INPUT_CLS} placeholder="ex: Carrelage Grande Format 60x60" maxLength={200} />
           </div>
           <div>
-            <label className={LABEL_CLS}>Catégorie *</label>
+            <label className={LABEL_CLS}>{t('products.label_category')}</label>
             <select value={form.category} onChange={(e) => set('category', e.target.value)}
               className={INPUT_CLS + ' bg-white'}>
-              <option value="">-- Choisir une catégorie --</option>
+              <option value="">{t('products.ph_select_category')}</option>
               {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
           <div>
-            <label className={LABEL_CLS}>Description courte</label>
+            <label className={LABEL_CLS}>{t('products.label_description')}</label>
             <textarea value={form.description} onChange={(e) => set('description', e.target.value)}
               rows={3} className={INPUT_CLS + ' resize-none'}
-              placeholder="Description affichée sur la carte produit..." maxLength={1000} />
+              placeholder={t('products.ph_description')} maxLength={1000} />
             <p className="text-xs text-gray-400 text-right mt-0.5">{form.description.length}/1000</p>
           </div>
           <div className="grid grid-cols-3 gap-3">
@@ -144,12 +146,12 @@ function ProductForm({
                 className={INPUT_CLS} placeholder="350" min={0} />
             </div>
             <div>
-              <label className={LABEL_CLS}>Prix barré (MAD)</label>
+              <label className={LABEL_CLS}>{t('products.label_original_price')}</label>
               <input type="number" value={form.original_price} onChange={(e) => set('original_price', e.target.value)}
                 className={INPUT_CLS} placeholder="450" min={0} />
             </div>
             <div>
-              <label className={LABEL_CLS}>Délai livraison</label>
+              <label className={LABEL_CLS}>{t('products.label_delivery_time')}</label>
               <input type="text" value={form.delivery_time} onChange={(e) => set('delivery_time', e.target.value)}
                 className={INPUT_CLS} placeholder="3-5 jours" maxLength={50} />
             </div>
@@ -159,7 +161,7 @@ function ProductForm({
               { field: 'featured' as keyof ProductFormState, label: '⭐ Vedette' },
               { field: 'is_new' as keyof ProductFormState, label: '🆕 Nouveau' },
               { field: 'in_stock' as keyof ProductFormState, label: '✅ En stock' },
-              { field: 'certified' as keyof ProductFormState, label: '🏅 Certifié' },
+              { field: 'certified' as keyof ProductFormState, label: `🏅 ${t('products.badge_certified')}` },
             ]).map(({ field, label }) => (
               <label key={field} className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer text-sm font-medium transition-colors ${
                 form[field] ? 'bg-[#1e3a5f]/10 border-[#1e3a5f]/30 text-[#1e3a5f]' : 'bg-gray-50 border-gray-200 text-gray-500 hover:bg-gray-100'
@@ -176,30 +178,30 @@ function ProductForm({
       {tab === 'details' && (
         <div className="space-y-5">
           <div>
-            <label className={LABEL_CLS}>Description complète / Spécifications textuelles</label>
-            <p className="text-xs text-gray-400 mb-1.5">Contenu affiché dans la fiche produit (détails techniques, avantages, usages...).</p>
+            <label className={LABEL_CLS}>{t('products.label_full_description')}</label>
+            <p className="text-xs text-gray-400 mb-1.5">{t('products.hint_full_description')}</p>
             <textarea value={form.specifications} onChange={(e) => set('specifications', e.target.value)}
               rows={6} className={INPUT_CLS + ' resize-none'}
               placeholder={'Ex:\nDimensions: 60×60 cm\nÉpaisseur: 10 mm\nRésistance au glissement: R10\nHydrofuge: Oui\nDomaine: Sol et mur intérieur'} />
           </div>
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className={LABEL_CLS + ' mb-0'}>Fiche technique (tableau structuré)</label>
+              <label className={LABEL_CLS + ' mb-0'}>{t('products.label_tech_specs')}</label>
               <button type="button" onClick={addSpec}
                 className="text-xs text-[#1e3a5f] font-semibold flex items-center gap-1 hover:underline">
-                <Plus className="h-3.5 w-3.5" /> Ajouter une ligne
+                <Plus className="h-3.5 w-3.5" /> {t('products.add_spec_row')}
               </button>
             </div>
             {form.technical_specs.length === 0 && (
               <p className="text-xs text-gray-400 italic py-4 text-center border border-dashed border-gray-200 rounded-lg">
-                Aucune spécification. Cliquez sur "Ajouter une ligne".
+                {t('products.no_specs')}
               </p>
             )}
             <div className="space-y-2">
               {form.technical_specs.map((spec, i) => (
                 <div key={i} className="flex gap-2 items-center">
                   <input type="text" value={spec.name} onChange={(e) => updateSpec(i, 'name', e.target.value)}
-                    className={INPUT_CLS} placeholder="Propriété (ex: Poids)" />
+                    className={INPUT_CLS} placeholder={t('products.ph_spec_name')} />
                   <input type="text" value={spec.value} onChange={(e) => updateSpec(i, 'value', e.target.value)}
                     className={INPUT_CLS} placeholder="Valeur (ex: 2.5)" />
                   <input type="text" value={spec.unit || ''} onChange={(e) => updateSpec(i, 'unit', e.target.value)}
@@ -219,22 +221,22 @@ function ProductForm({
       {tab === 'medias' && (
         <div className="space-y-4">
           <div>
-            <label className={LABEL_CLS}>URL de la vidéo produit</label>
-            <p className="text-xs text-gray-400 mb-1.5">YouTube, Vimeo ou lien vidéo direct.</p>
+            <label className={LABEL_CLS}>{t('products.label_video_url')}</label>
+            <p className="text-xs text-gray-400 mb-1.5">{t('products.hint_video_url')}</p>
             <input type="url" value={form.video_url} onChange={(e) => set('video_url', e.target.value)}
               className={INPUT_CLS} placeholder="https://youtube.com/watch?v=..." />
           </div>
           <div>
-            <label className={LABEL_CLS}>URL de la brochure (PDF)</label>
-            <p className="text-xs text-gray-400 mb-1.5">Lien direct vers un fichier PDF ou document en ligne.</p>
+            <label className={LABEL_CLS}>{t('products.label_brochure_url')}</label>
+            <p className="text-xs text-gray-400 mb-1.5">{t('products.hint_brochure_url')}</p>
             <input type="url" value={form.brochure} onChange={(e) => set('brochure', e.target.value)}
               className={INPUT_CLS} placeholder="https://..." />
           </div>
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-700">
             <p className="font-semibold mb-1 flex items-center gap-1.5">
-              <FileText className="h-3.5 w-3.5" /> Note sur les images produit
+              <FileText className="h-3.5 w-3.5" /> {t('products.images_note_title')}
             </p>
-            Pour ajouter des images, utilisez une URL image (Unsplash, CDN, etc.) — l'upload direct sera disponible prochainement.
+            {t('products.images_note_text')}
           </div>
         </div>
       )}
@@ -245,23 +247,23 @@ function ProductForm({
           {tab !== 'general' && (
             <button type="button" onClick={() => setTab(tab === 'medias' ? 'details' : 'general')}
               className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 transition-colors">
-              ← Précédent
+              ← {t('products.previous')}
             </button>
           )}
         </div>
         <div className="flex gap-3">
-          <Button type="button" variant="outline" onClick={onCancel} className="text-sm">Annuler</Button>
+          <Button type="button" variant="outline" onClick={onCancel} className="text-sm">{t('products.cancel')}</Button>
           {tab !== 'medias' && (
             <Button type="button" onClick={() => setTab(tab === 'general' ? 'details' : 'medias')}
               className="bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm flex items-center gap-1.5">
-              Suivant <ChevronRight className="h-4 w-4" />
+              {t('products.next')} <ChevronRight className="h-4 w-4" />
             </Button>
           )}
           <Button type="submit" disabled={isSaving}
             className="bg-[#1e3a5f] text-white hover:bg-[#1e4976] text-sm">
             {isSaving
-              ? <span className="flex items-center gap-2"><span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" /> Enregistrement...</span>
-              : <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4" /> Enregistrer</span>}
+              ? <span className="flex items-center gap-2"><span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" /> {t('products.saving')}</span>
+              : <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4" /> {t('products.save')}</span>}
           </Button>
         </div>
       </div>
@@ -271,6 +273,7 @@ function ProductForm({
 
 // ─── Section principale ───────────────────────────────────────────────────────
 export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName }: Props) {
+  const { t } = useTranslation();
   const [products, setProducts] = useState<ProductRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -287,7 +290,7 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
       .select('id, name, description, category, price, original_price, images, featured, is_new, in_stock, certified, delivery_time, specifications, technical_specs, video_url, brochure, documents')
       .eq('exhibitor_id', exhibitorDbId)
       .order('created_at', { ascending: false });
-    if (error) { toast.error('Impossible de charger les produits'); }
+    if (error) { toast.error(t('products.err_load')); }
     else { setProducts(data || []); }
     setIsLoading(false);
   }, [exhibitorDbId]);
@@ -316,12 +319,12 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
 
     if (editingProduct) {
       const { error } = await supabase!.from('products').update(payload).eq('id', editingProduct.id);
-      if (error) { toast.error('Erreur lors de la mise à jour'); }
-      else { toast.success('Produit mis à jour !'); }
+      if (error) { toast.error(t('products.err_update')); }
+      else { toast.success(t('products.toast_updated')); }
     } else {
       const { error } = await supabase!.from('products').insert(payload);
-      if (error) { toast.error('Erreur lors de la création'); }
-      else { toast.success('Produit ajouté !'); }
+      if (error) { toast.error(t('products.err_create')); }
+      else { toast.success(t('products.toast_added')); }
     }
     setIsSaving(false);
     setShowForm(false);
@@ -332,8 +335,8 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
   const handleDelete = async (id: string) => {
     setDeletingId(id);
     const { error } = await supabase!.from('products').delete().eq('id', id);
-    if (error) { toast.error('Erreur lors de la suppression'); }
-    else { toast.success('Produit supprimé'); setProducts((p) => p.filter((x) => x.id !== id)); }
+    if (error) { toast.error(t('products.err_delete')); }
+    else { toast.success(t('products.toast_deleted')); setProducts((p) => p.filter((x) => x.id !== id)); }
     setDeletingId(null);
   };
 
@@ -373,15 +376,15 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
             <Package className="h-5 w-5 text-[#1e3a5f]" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Mes Produits</h2>
+            <h2 className="text-lg font-bold text-gray-900">{t('products.title')}</h2>
             <p className="text-sm text-gray-500">
-              {products.length} produit{products.length !== 1 ? 's' : ''} dans votre catalogue
+              {t('products.n_in_catalog', { count: products.length })}
             </p>
           </div>
         </div>
         {!showForm && (
           <Button onClick={openAdd} className="bg-[#1e3a5f] text-white hover:bg-[#1e4976] flex items-center gap-2 text-sm">
-            <Plus className="h-4 w-4" /> Ajouter un produit
+            <Plus className="h-4 w-4" /> {t('products.add_product')}
           </Button>
         )}
       </div>
@@ -394,7 +397,7 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
             className="bg-white rounded-2xl border border-[#1e3a5f]/20 shadow-sm p-6 mb-6">
             <div className="flex items-center justify-between mb-5">
               <h3 className="font-bold text-gray-900 text-base">
-                {editingProduct ? `Modifier — ${editingProduct.name}` : 'Nouveau produit'}
+                {editingProduct ? t('products.edit_product_title', { name: editingProduct.name }) : t('products.new_product')}
               </h3>
               <button onClick={() => { setShowForm(false); setEditingProduct(null); }}
                 className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -418,10 +421,10 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
       {!isLoading && products.length === 0 && !showForm && (
         <div className="bg-white rounded-2xl border border-dashed border-gray-300 p-12 text-center">
           <Package className="h-12 w-12 text-gray-200 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">Aucun produit dans votre catalogue</p>
-          <p className="text-sm text-gray-400 mt-1 mb-5">Ajoutez vos produits et services pour les afficher sur votre profil public</p>
+          <p className="text-gray-500 font-medium">{t('products.no_products')}</p>
+          <p className="text-sm text-gray-400 mt-1 mb-5">{t('products.no_products_hint')}</p>
           <Button onClick={openAdd} className="bg-[#1e3a5f] text-white hover:bg-[#1e4976]">
-            <Plus className="h-4 w-4 mr-2" /> Ajouter mon premier produit
+            <Plus className="h-4 w-4 mr-2" /> {t('products.add_first_product')}
           </Button>
         </div>
       )}
@@ -445,10 +448,10 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
                 )}
                 <div className="absolute top-2 left-2 flex flex-wrap gap-1">
                   {product.featured && <span className="text-xs bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-semibold">⭐</span>}
-                  {product.is_new && <span className="text-xs bg-emerald-500 text-white px-1.5 py-0.5 rounded-full font-semibold">Nouveau</span>}
-                  {product.in_stock === false && <span className="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-semibold">Rupture</span>}
+                  {product.is_new && <span className="text-xs bg-emerald-500 text-white px-1.5 py-0.5 rounded-full font-semibold">{t('products.badge_new')}</span>}
+                  {product.in_stock === false && <span className="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-semibold">{t('products.badge_out_of_stock')}</span>}
                   {(product.specifications || (product.technical_specs && product.technical_specs.length > 0)) && (
-                    <span className="text-xs bg-[#1e3a5f] text-white px-1.5 py-0.5 rounded-full font-semibold">Fiche</span>
+                    <span className="text-xs bg-[#1e3a5f] text-white px-1.5 py-0.5 rounded-full font-semibold">{t('products.badge_spec_sheet')}</span>
                   )}
                 </div>
                 <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -485,7 +488,7 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
                   </div>
                   {product.certified && (
                     <span className="inline-flex items-center gap-1 text-xs text-emerald-700 font-medium">
-                      <CheckCircle className="h-3 w-3" /> Certifié
+                      <CheckCircle className="h-3 w-3" /> {t('products.badge_certified')}
                     </span>
                   )}
                 </div>
@@ -495,8 +498,8 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
                       <Truck className="h-3 w-3" /> {product.delivery_time}
                     </span>
                   )}
-                  {product.video_url && <span className="text-xs text-blue-400 font-medium">● Vidéo</span>}
-                  {product.brochure && <span className="text-xs text-purple-400 font-medium">● Brochure</span>}
+                  {product.video_url && <span className="text-xs text-blue-400 font-medium">● {t('products.badge_video')}</span>}
+                  {product.brochure && <span className="text-xs text-purple-400 font-medium">● {t('products.badge_brochure')}</span>}
                 </div>
               </div>
             </motion.div>
@@ -507,7 +510,7 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
             <motion.button layout onClick={openAdd}
               className="min-h-[220px] rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-2 text-gray-400 hover:border-[#1e3a5f]/40 hover:text-[#1e3a5f] hover:bg-[#1e3a5f]/5 transition-all">
               <Plus className="h-8 w-8" />
-              <span className="text-sm font-medium">Ajouter un produit</span>
+              <span className="text-sm font-medium">{t('products.add_product')}</span>
             </motion.button>
           )}
         </div>
@@ -517,7 +520,7 @@ export default function ExhibitorProductsSection({ exhibitorDbId, exhibitorName 
       {!exhibitorDbId && !isLoading && (
         <div className="flex items-center gap-2 text-amber-700 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm">
           <AlertCircle className="h-4 w-4 shrink-0" />
-          Impossible de charger les produits — profil exposant introuvable.
+          {t('products.err_no_profile')}
         </div>
       )}
 
