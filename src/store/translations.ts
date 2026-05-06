@@ -3990,6 +3990,10 @@ export const allTranslations = {
     'event_form.creating': 'Création en cours...',
     'event_form.btn_update': 'Mettre à jour l\'Événement',
     'event_form.btn_create': 'Créer et Publier l\'Événement',
+
+    // App – 404
+    'app.page_not_found': 'Page non trouvée',
+    'app.back_home': 'Retour à l\accueil',
   },
 
   en: {
@@ -7973,6 +7977,10 @@ export const allTranslations = {
     'event_form.creating': 'Creating...',
     'event_form.btn_update': 'Update Event',
     'event_form.btn_create': 'Create and Publish Event',
+
+    // App – 404
+    'app.page_not_found': 'Page not found',
+    'app.back_home': 'Back to home',
   },
 
   ar: {
@@ -9744,6 +9752,10 @@ export const allTranslations = {
     'event_form.creating': 'جارٍ الإنشاء...',
     'event_form.btn_update': 'تحديث الفعالية',
     'event_form.btn_create': 'إنشاء ونشر الفعالية',
+
+    // App – 404
+    'app.page_not_found': 'الصفحة غير موجودة',
+    'app.back_home': 'العودة إلى الصفحة الرئيسية',
   },
 
 };
