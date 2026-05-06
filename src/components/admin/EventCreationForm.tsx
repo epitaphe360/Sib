@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, Clock, MapPin, Users, Video, Plus, Trash2, Loader2 } from 'lucide-react';
+import { Calendar, Plus, Trash2, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -14,6 +14,7 @@ import { SupabaseService } from '../../services/supabaseService';
 import { Event, Speaker } from '../../types/index';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // Type pour le formulaire (simplifié)
 interface EventFormState {
@@ -102,6 +103,7 @@ interface EventCreationFormProps {
 
 export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: EventCreationFormProps) {
   const { user } = useAuthStore();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   // React Hook Form with Zod validation
@@ -159,10 +161,10 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Accès Restreint
+            {t('event_form.restricted_title')}
           </h3>
           <p className="text-gray-600 mb-4">
-            Seuls les administrateurs peuvent créer des événements.
+            {t('event_form.restricted_desc')}
           </p>
         </div>
       </div>
@@ -232,29 +234,29 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
       if (eventToEdit) {
         // Modification
         await SupabaseService.updateEvent(eventToEdit.id, eventData);
-        toast.success(`L'événement "${data.title}" a été mis à jour.`);
+        toast.success(t('event_form.toast_updated', { title: data.title }));
         onSuccess && onSuccess();
       } else {
         // Création
         await SupabaseService.createEvent(eventData);
-        toast.success(`L'événement "${data.title}" a été créé et publié.`);
+        toast.success(t('event_form.toast_created', { title: data.title }));
         navigate(ROUTES.ADMIN_DASHBOARD);
       }
 
     } catch (error) {
       console.error('Erreur lors de la gestion de l\'événement:', error);
-      toast.error(error instanceof Error ? error.message : 'Une erreur inattendue est survenue lors de la gestion de l\'événement.');
+      toast.error(error instanceof Error ? error.message : t('event_form.toast_error'));
     } finally {
       setIsLoading(false);
     }
   };
 
   const eventTypes = [
-    { value: 'conference', label: 'Conférence' },
-    { value: 'webinar', label: 'Webinaire' },
-    { value: 'roundtable', label: 'Table Ronde' },
-    { value: 'networking', label: 'Réseautage' },
-    { value: 'workshop', label: 'Atelier' }
+    { value: 'conference', label: t('event_form.type_conference') },
+    { value: 'webinar', label: t('event_form.type_webinar') },
+    { value: 'roundtable', label: t('event_form.type_roundtable') },
+    { value: 'networking', label: t('event_form.type_networking') },
+    { value: 'workshop', label: t('event_form.type_workshop') },
   ];
 
   const categories = [
@@ -269,7 +271,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">
-          {eventToEdit ? 'Modifier l\'Événement' : 'Créer un Nouvel Événement'}
+          {eventToEdit ? t('event_form.edit_title') : t('event_form.create_title')}
         </h1>
 
         <Card className="p-6 shadow-lg">
@@ -278,13 +280,13 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
               {/* Titre et Description */}
               <div>
                 <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-                  Titre de l'événement <span className="text-red-500">*</span>
+                  {t('event_form.label_title')} <span className="text-red-500">*</span>
                 </label>
                 <Input
                   id="title"
                   type="text"
                   {...register('title')}
-                  placeholder="Ex: Conférence sur la Logistique 4.0"
+                  placeholder={t('event_form.ph_title')}
                   className={errors.title ? 'border-red-500' : ''}
                 />
                 {errors.title && (
@@ -294,13 +296,13 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
 
               <div>
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                  Description <span className="text-red-500">*</span>
+                  {t('event_form.label_description')} <span className="text-red-500">*</span>
                 </label>
                 <Textarea
                   id="description"
                   {...register('description')}
                   rows={4}
-                  placeholder="Décrivez l'objectif, le public cible et le contenu de l'événement."
+                  placeholder={t('event_form.ph_description')}
                   className={errors.description ? 'border-red-500' : ''}
                 />
                 {errors.description && (
@@ -312,7 +314,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
-                    Type d'événement <span className="text-red-500">*</span>
+                    {t('event_form.label_type')} <span className="text-red-500">*</span>
                   </label>
                   <Select
                     name="type"
@@ -320,7 +322,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                     onValueChange={(value) => setValue('type', value as any, { shouldValidate: true })}
                   >
                     <SelectTrigger className={errors.type ? 'border-red-500' : ''}>
-                      <SelectValue placeholder="Sélectionner un type" />
+                      <SelectValue placeholder={t('event_form.ph_type')} />
                     </SelectTrigger>
                     <SelectContent>
                       {eventTypes.map(type => (
@@ -337,7 +339,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
 
                 <div>
                   <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
-                    Catégorie <span className="text-red-500">*</span>
+                    {t('event_form.label_category')} <span className="text-red-500">*</span>
                   </label>
                   <Select
                     name="category"
@@ -345,7 +347,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                     onValueChange={(value) => setValue('category', value, { shouldValidate: true })}
                   >
                     <SelectTrigger className={errors.category ? 'border-red-500' : ''}>
-                      <SelectValue placeholder="Sélectionner une catégorie" />
+                      <SelectValue placeholder={t('event_form.ph_category')} />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map(category => (
@@ -365,7 +367,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
-                    Date <span className="text-red-500">*</span>
+                    {t('event_form.label_date')} <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="date"
@@ -379,7 +381,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                 </div>
                 <div>
                   <label htmlFor="startTime" className="block text-sm font-medium text-gray-700 mb-1">
-                    Heure de début <span className="text-red-500">*</span>
+                    {t('event_form.label_start_time')} <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="startTime"
@@ -393,7 +395,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                 </div>
                 <div>
                   <label htmlFor="endTime" className="block text-sm font-medium text-gray-700 mb-1">
-                    Heure de fin <span className="text-red-500">*</span>
+                    {t('event_form.label_end_time')} <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="endTime"
@@ -411,13 +413,13 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
-                    Lieu (Salle, Stand, etc.)
+                    {t('event_form.label_location')}
                   </label>
                   <Input
                     id="location"
                     type="text"
                     {...register('location')}
-                    placeholder="Ex: Salle de Conférence A"
+                    placeholder={t('event_form.ph_location')}
                     className={errors.location ? 'border-red-500' : ''}
                   />
                   {errors.location && (
@@ -426,7 +428,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                 </div>
                 <div>
                   <label htmlFor="capacity" className="block text-sm font-medium text-gray-700 mb-1">
-                    Capacité Maximale
+                    {t('event_form.label_capacity')}
                   </label>
                   <Input
                     id="capacity"
@@ -451,7 +453,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                     className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                   />
                   <label htmlFor="virtual" className="ml-2 block text-sm text-gray-900">
-                    Événement Virtuel
+                    {t('event_form.virtual_event')}
                   </label>
                 </div>
                 <div className="flex items-center">
@@ -462,7 +464,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                     className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                   />
                   <label htmlFor="featured" className="ml-2 block text-sm text-gray-900">
-                    Mettre à la Une
+                    {t('event_form.featured')}
                   </label>
                 </div>
               </div>
@@ -470,7 +472,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
               {isVirtual && (
                 <div>
                   <label htmlFor="meetingLink" className="block text-sm font-medium text-gray-700 mb-1">
-                    Lien de la Réunion (Zoom, Teams, etc.)
+                    {t('event_form.label_meeting_link')}
                   </label>
                   <Input
                     id="meetingLink"
@@ -488,16 +490,16 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
               {/* Tags */}
               <div>
                 <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">
-                  Mots-clés (Tags)
+                  {t('event_form.label_tags')}
                 </label>
                 <Input
                   id="tags"
                   type="text"
                   {...register('tags')}
-                  placeholder="Ex: logistique, innovation, IA, bâtiment"
+                  placeholder={t('event_form.ph_tags')}
                   className={errors.tags ? 'border-red-500' : ''}
                 />
-                <p className="mt-1 text-xs text-gray-500">Séparer les mots-clés par des virgules.</p>
+                <p className="mt-1 text-xs text-gray-500">{t('event_form.tags_hint')}</p>
                 {errors.tags && (
                   <p className="text-red-500 text-sm mt-1">{errors.tags.message}</p>
                 )}
@@ -506,9 +508,9 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
               {/* Intervenants (Speakers) */}
               <div className="pt-4 border-t border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-between">
-                  Intervenants (Speakers)
+                  {t('event_form.speakers_section')}
                   <Button type="button" variant="outline" onClick={addSpeaker} size="sm">
-                    <Plus className="h-4 w-4 mr-2" /> Ajouter un intervenant
+                    <Plus className="h-4 w-4 mr-2" /> {t('event_form.add_speaker')}
                   </Button>
                 </h3>
 
@@ -516,66 +518,66 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                   {speakers.map((speaker, index) => (
                     <Card key={speaker.id || index} className="p-4 border border-gray-100 bg-white">
                       <div className="flex justify-between items-start mb-3">
-                        <h4 className="font-medium text-gray-800">Intervenant #{index + 1}</h4>
+                        <h4 className="font-medium text-gray-800">{t('event_form.speaker_n', { n: index + 1 })}</h4>
                         <Button type="button" variant="ghost" size="sm" onClick={() => removeSpeaker(index)}>
                           <Trash2 className="h-4 w-4 text-red-500" />
                         </Button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor={`speaker-name-${index}`} className="block text-xs font-medium text-gray-700 mb-1">Nom</label>
+                          <label htmlFor={`speaker-name-${index}`} className="block text-xs font-medium text-gray-700 mb-1">{t('event_form.sp_name')}</label>
                           <Input
                             id={`speaker-name-${index}`}
                             name="name"
                             type="text"
                             value={speaker.name}
                             onChange={(e) => handleSpeakerChange(index, e)}
-                            placeholder="Nom de l'intervenant"
+                            placeholder={t('event_form.sp_name_ph')}
                           />
                         </div>
                         <div>
-                          <label htmlFor={`speaker-title-${index}`} className="block text-xs font-medium text-gray-700 mb-1">Titre/Poste</label>
+                          <label htmlFor={`speaker-title-${index}`} className="block text-xs font-medium text-gray-700 mb-1">{t('event_form.sp_title')}</label>
                           <Input
                             id={`speaker-title-${index}`}
                             name="title"
                             type="text"
                             value={speaker.title}
                             onChange={(e) => handleSpeakerChange(index, e)}
-                            placeholder="Ex: CEO, Directeur R&D"
+                            placeholder={t('event_form.sp_title_ph')}
                           />
                         </div>
                         <div>
-                          <label htmlFor={`speaker-company-${index}`} className="block text-xs font-medium text-gray-700 mb-1">Entreprise</label>
+                          <label htmlFor={`speaker-company-${index}`} className="block text-xs font-medium text-gray-700 mb-1">{t('event_form.sp_company')}</label>
                           <Input
                             id={`speaker-company-${index}`}
                             name="company"
                             type="text"
                             value={speaker.company}
                             onChange={(e) => handleSpeakerChange(index, e)}
-                            placeholder="Nom de l'entreprise"
+                            placeholder={t('event_form.sp_company_ph')}
                           />
                         </div>
                         <div>
-                          <label htmlFor={`speaker-expertise-${index}`} className="block text-xs font-medium text-gray-700 mb-1">Expertise (Tags)</label>
+                          <label htmlFor={`speaker-expertise-${index}`} className="block text-xs font-medium text-gray-700 mb-1">{t('event_form.sp_expertise')}</label>
                           <Input
                             id={`speaker-expertise-${index}`}
                             name="expertise"
                             type="text"
                             value={speaker.expertise.join(', ')}
                             onChange={(e) => handleSpeakerChange(index, e)}
-                            placeholder="Ex: IA, Blockchain, Logistique"
+                            placeholder={t('event_form.sp_expertise_ph')}
                           />
                         </div>
                       </div>
                       <div className="mt-4">
-                        <label htmlFor={`speaker-bio-${index}`} className="block text-xs font-medium text-gray-700 mb-1">Biographie (Optionnel)</label>
+                        <label htmlFor={`speaker-bio-${index}`} className="block text-xs font-medium text-gray-700 mb-1">{t('event_form.sp_bio')}</label>
                         <Textarea
                           id={`speaker-bio-${index}`}
                           name="bio"
                           value={speaker.bio}
                           onChange={(e) => handleSpeakerChange(index, e)}
                           rows={2}
-                          placeholder="Courte biographie de l'intervenant"
+                          placeholder={t('event_form.sp_bio_ph')}
                         />
                       </div>
                     </Card>
@@ -587,7 +589,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
               <div className="pt-6 border-t border-gray-200 flex justify-end space-x-4">
                 {eventToEdit && onCancel && (
                   <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-                    Annuler
+                    {t('event_form.cancel')}
                   </Button>
                 )}
                 <Button type="submit" disabled={isLoading} className="w-full md:w-auto">
@@ -596,7 +598,7 @@ export default function EventCreationForm({ eventToEdit, onSuccess, onCancel }: 
                   ) : (
                     <Calendar className="h-5 w-5 mr-2" />
                   )}
-                  {isLoading ? (eventToEdit ? 'Mise à jour en cours...' : 'Création en cours...') : (eventToEdit ? 'Mettre à jour l\'Événement' : 'Créer et Publier l\'Événement')}
+                  {isLoading ? (eventToEdit ? t('event_form.updating') : t('event_form.creating')) : (eventToEdit ? t('event_form.btn_update') : t('event_form.btn_create'))}
                 </Button>
               </div>
             </div>
