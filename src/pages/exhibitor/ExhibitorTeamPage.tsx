@@ -9,6 +9,7 @@ import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
+import { useTranslation } from '../../hooks/useTranslation';
 import type { StandCollaborator } from '../../types';
 
 const COMPANY_NAME_FIELD = 'company';
@@ -28,6 +29,7 @@ interface ExhibitorTeamPageProps {
 
 export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorTeamPageProps) {
   const { user } = useAuthStore();
+  const { t } = useTranslation();
   const [collaborators, setCollaborators] = useState<StandCollaborator[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -85,7 +87,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
       if (error) {throw error;}
       setCollaborators(data || []);
     } catch {
-      toast.error('Erreur lors du chargement des collaborateurs');
+      toast.error(t('team.load_error'));
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +114,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
         .eq('email', emailLower)
         .maybeSingle();
       if (existing) {
-        toast.error('Cet email est déjà utilisé pour un collaborateur');
+        toast.error(t('team.email_exists'));
         return;
       }
 
@@ -158,19 +160,19 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
 
       if (insertError) {throw insertError;}
 
-      toast.success(`Collaborateur ajouté ! Mot de passe: ${tempPassword}`);
+      toast.success(`${t('team.collab_added')} ${tempPassword}`);
       setForm({ first_name: '', last_name: '', email: '', phone: '', position: 'Exposant' });
       setShowForm(false);
       fetchCollaborators();
     } catch (err: any) {
-      toast.error(err?.message || 'Erreur lors de la création du collaborateur');
+      toast.error(err?.message || t('team.create_error'));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Supprimer ce collaborateur ? Son accès sera révoqué.')) {return;}
+    if (!confirm(t('team.confirm_delete'))) {return;}
     setDeletingId(id);
     try {
       const { error } = await (supabase as any)
@@ -178,10 +180,10 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
         .update({ status: 'inactive' })
         .eq('id', id);
       if (error) {throw error;}
-      toast.success('Collaborateur désactivé');
+      toast.success(t('team.collab_deactivated'));
       fetchCollaborators();
     } catch {
-      toast.error('Erreur lors de la suppression');
+      toast.error(t('team.delete_error'));
     } finally {
       setDeletingId(null);
     }
@@ -189,7 +191,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success('Copié !');
+    toast.success(t('common.copied'));
   };
 
   const toggleShowPassword = (id: string) => {
@@ -198,11 +200,11 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
 
   const handlePrintAllBadges = useCallback(() => {    const active = collaborators.filter(c => c.status === 'active');
     if (active.length === 0) {
-      toast.error('Aucun collaborateur actif à imprimer');
+      toast.error(t('team.no_active_print'));
       return;
     }
     if (!user?.id) {
-      toast.error('Utilisateur non authentifié');
+      toast.error(t('common.not_logged_in'));
       return;
     }
     const url = `/print/badges-equipe?owner_id=${encodeURIComponent(user.id)}`;
@@ -219,7 +221,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
             to={userType === 'partner' ? ROUTES.PARTNER_DASHBOARD : ROUTES.EXHIBITOR_DASHBOARD}
             className="inline-flex items-center text-gray-500 hover:text-gray-900 mb-4 text-sm"
           >
-            <ArrowLeft className="h-4 w-4 mr-1" /> Retour au tableau de bord
+            <ArrowLeft className="h-4 w-4 mr-1" /> {t('common.back_dashboard')}
           </Link>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
@@ -228,11 +230,11 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {userType === 'partner' ? 'Mon Équipe Sponsor' : 'Mon Équipe Stand'}
+                  {userType === 'partner' ? t('team.title_partner') : t('team.title_exhibitor')}
                 </h1>
                 <p className="text-sm text-gray-500">
                   {companyName && <span className="font-medium text-indigo-600">{companyName}</span>}
-                  {standNumber && <span className="ml-2 text-gray-400">• Stand {standNumber}</span>}
+                  {standNumber && <span className="ml-2 text-gray-400">• {t('team.stand')} {standNumber}</span>}
                 </p>
               </div>
             </div>
@@ -241,7 +243,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
               className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition"
             >
               <Plus className="h-4 w-4" />
-              Ajouter un collaborateur
+              {t('team.add_collab')}
             </button>
             {collaborators.some(c => c.status === 'active') && (
               <button
@@ -249,7 +251,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                 className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl font-semibold text-sm transition"
               >
                 <Printer className="h-4 w-4" />
-                Imprimer les badges
+                {t('team.print_badges')}
               </button>
             )}
           </div>
@@ -266,11 +268,11 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
             >
               <h2 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2">
                 <Plus className="h-5 w-5 text-indigo-600" />
-                Nouveau collaborateur
+                {t('team.new_collab')}
               </h2>
               <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('common.first_name')} *</label>
                   <input
                     type="text"
                     required
@@ -281,7 +283,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('common.last_name')} *</label>
                   <input
                     type="text"
                     required
@@ -292,7 +294,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('common.email')} *</label>
                   <input
                     type="email"
                     required
@@ -303,7 +305,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('common.phone')}</label>
                   <input
                     type="tel"
                     value={form.phone}
@@ -313,7 +315,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Poste / Fonction</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('team.position')}</label>
                   <input
                     type="text"
                     value={form.position}
@@ -323,7 +325,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                   />
                 </div>
                 <div className="sm:col-span-2 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
-                  <strong>ℹ️ Information :</strong> Un email avec les identifiants de connexion sera envoyé automatiquement au collaborateur. Il recevra également son badge numérique.
+                  <strong>ℹ️ {t('team.info_title')}</strong> {t('team.email_info')}
                 </div>
                 <div className="sm:col-span-2 flex gap-3 justify-end">
                   <button
@@ -331,7 +333,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                     onClick={() => setShowForm(false)}
                     className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
                   >
-                    Annuler
+                    {t('common.cancel')}
                   </button>
                   <button
                     type="submit"
@@ -339,7 +341,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                     className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 text-white px-5 py-2 rounded-lg text-sm font-semibold transition"
                   >
                     {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
-                    {isSubmitting ? 'Création...' : 'Créer le compte'}
+                    {isSubmitting ? t('team.creating') : t('team.create_account')}
                   </button>
                 </div>
               </form>
@@ -355,26 +357,26 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
         ) : collaborators.length === 0 ? (
           <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-12 text-center">
             <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Aucun collaborateur</h3>
-            <p className="text-sm text-gray-500 mb-6">Ajoutez des membres de votre équipe pour qu'ils puissent accéder à la plateforme et obtenir leur badge.</p>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">{t('team.no_collabs')}</h3>
+            <p className="text-sm text-gray-500 mb-6">{t('team.no_collabs_desc')}</p>
             <button
               onClick={() => setShowForm(true)}
               className="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition"
             >
-              <Plus className="h-4 w-4" /> Ajouter le premier collaborateur
+              <Plus className="h-4 w-4" /> {t('team.add_first_collab')}
             </button>
           </div>
         ) : (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-gray-500">{collaborators.length} collaborateur{collaborators.length > 1 ? 's' : ''}</p>
+              <p className="text-sm text-gray-500">{collaborators.length} {collaborators.length > 1 ? t('team.collabs_plural') : t('team.collab_singular')}</p>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handlePrintAllBadges()}
                   className="flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-3 py-1.5 rounded-lg transition"
                   title="Imprimer tous les badges"
                 >
-                  <Printer className="h-3.5 w-3.5" /> Imprimer les badges
+                  <Printer className="h-3.5 w-3.5" /> {t('team.print_badges')}
                 </button>
                 <button onClick={fetchCollaborators} className="text-gray-400 hover:text-gray-600 transition">
                   <RefreshCw className="h-4 w-4" />
@@ -418,11 +420,11 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                   {/* Badge statut */}
                   {c.status === 'active' ? (
                     <span className="flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
-                      <CheckCircle className="h-3 w-3" /> Actif
+                      <CheckCircle className="h-3 w-3" /> {t('team.status_active')}
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 text-xs font-medium text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
-                      <AlertCircle className="h-3 w-3" /> Inactif
+                      <AlertCircle className="h-3 w-3" /> {t('team.status_inactive')}
                     </span>
                   )}
 

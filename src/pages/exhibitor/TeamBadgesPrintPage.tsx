@@ -13,6 +13,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Loader2, Printer } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import PrintableBadgeA4 from '../../components/badge/PrintableBadgeA4';
+import { useTranslation } from '../../hooks/useTranslation';
 import type { UserBadge, StandCollaborator } from '../../types';
 
 // ─── Types internes ───────────────────────────────────────────────────────────
@@ -52,6 +53,7 @@ function buildUserBadge(c: CollaboratorWithMeta): UserBadge {
 export default function TeamBadgesPrintPage() {
   const [searchParams] = useSearchParams();
   const ownerId = searchParams.get('owner_id');
+  const { t } = useTranslation();
 
   const [badges, setBadges] = useState<UserBadge[]>([]);
   const [companyLabel, setCompanyLabel] = useState('');
@@ -81,7 +83,7 @@ export default function TeamBadgesPrintPage() {
   // Chargement des données
   useEffect(() => {
     if (!ownerId || !supabase) {
-      setError('Paramètre owner_id manquant ou client Supabase non initialisé.');
+      setError(t('team.print_missing_param'));
       setIsLoading(false);
       return;
     }
@@ -98,7 +100,7 @@ export default function TeamBadgesPrintPage() {
 
         if (collabErr) { throw collabErr; }
         if (!collabs || collabs.length === 0) {
-          setError('Aucun collaborateur actif trouvé pour cet exposant.');
+          setError(t('team.print_no_collab'));
           setIsLoading(false);
           return;
         }
@@ -136,7 +138,7 @@ export default function TeamBadgesPrintPage() {
         setBadges(enriched.map(buildUserBadge));
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Erreur inconnue';
-        setError(`Erreur lors du chargement : ${msg}`);
+        setError(`${t('team.print_load_error')} ${msg}`);
       } finally {
         setIsLoading(false);
       }
@@ -149,7 +151,7 @@ export default function TeamBadgesPrintPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4 bg-white">
         <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
-        <p className="text-gray-600 text-sm">Chargement des badges…</p>
+        <p className="text-gray-600 text-sm">{t('team.print_loading')}</p>
       </div>
     );
   }
@@ -158,7 +160,7 @@ export default function TeamBadgesPrintPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4 bg-white p-8 text-center">
         <p className="text-red-600 font-semibold">{error}</p>
-        <button onClick={() => window.close()} className="text-sm text-gray-500 underline">Fermer</button>
+        <button onClick={() => window.close()} className="text-sm text-gray-500 underline">{t('common.close')}</button>
       </div>
     );
   }
@@ -170,23 +172,23 @@ export default function TeamBadgesPrintPage() {
         className="no-print fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between shadow-sm"
       >
         <div>
-          <span className="font-bold text-gray-900">{companyLabel || 'Badges collaborateurs'}</span>
+          <span className="font-bold text-gray-900">{companyLabel || t('team.print_collab_badges')}</span>
           <span className="ml-2 text-sm text-gray-500">
             {badges.length} badge{badges.length > 1 ? 's' : ''} — SIB 2026
           </span>
         </div>
         <div className="flex gap-3">
-          <button
+            <button
             onClick={() => globalThis.print()}
             className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
           >
-            <Printer className="h-4 w-4" /> Imprimer
+            <Printer className="h-4 w-4" /> {t('team.print_action')}
           </button>
           <button
             onClick={() => window.close()}
             className="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 text-sm font-medium transition"
           >
-            Fermer
+            {t('common.close')}
           </button>
         </div>
       </div>
