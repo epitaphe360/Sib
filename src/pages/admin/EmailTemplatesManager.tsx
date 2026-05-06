@@ -11,6 +11,7 @@ import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { Save, Eye, Code, Type, Mail, ArrowLeft } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface EmailTemplate {
   id: string;
@@ -26,6 +27,7 @@ interface EmailTemplate {
 }
 
 export default function EmailTemplatesManager() {
+  const { t } = useTranslation();
   const [templates, setTemplates] = useState<EmailTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null);
   const [loading, setLoading] = useState(true);
@@ -62,7 +64,7 @@ export default function EmailTemplatesManager() {
       setTemplates(data || []);
     } catch (error) {
       console.error('Erreur chargement templates:', error);
-      toast.error('Impossible de charger les templates');
+      toast.error(t('admin.email_templates_load_error'));
     } finally {
       setLoading(false);
     }
@@ -101,7 +103,7 @@ export default function EmailTemplatesManager() {
 
       if (error) {throw error;}
 
-      toast.success('✅ Template enregistré avec succès');
+      toast.success(t('admin.email_templates_saved'));
       loadTemplates();
 
       // Mettre à jour le template sélectionné
@@ -111,7 +113,7 @@ export default function EmailTemplatesManager() {
       });
     } catch (error) {
       console.error('Erreur sauvegarde:', error);
-      toast.error('❌ Erreur lors de la sauvegarde');
+      toast.error(t('admin.email_templates_save_error'));
     } finally {
       setSaving(false);
     }
@@ -130,7 +132,7 @@ export default function EmailTemplatesManager() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p>Chargement des templates...</p>
+          <p>{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -141,14 +143,14 @@ export default function EmailTemplatesManager() {
       <div className="mb-6">
         <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Retour au Tableau de Bord
+          {t('common.back_to_dashboard')}
         </Link>
       </div>
 
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">📧 Gestion des Templates d'Emails</h1>
+        <h1 className="text-3xl font-bold mb-2">📧 {t('admin.email_templates_title')}</h1>
         <p className="text-gray-600">
-          Personnalisez le contenu des emails envoyés automatiquement aux visiteurs
+          {t('admin.email_templates_subtitle')}
         </p>
       </div>
 
@@ -157,8 +159,8 @@ export default function EmailTemplatesManager() {
         <div className="col-span-12 lg:col-span-4">
           <Card>
             <CardHeader>
-              <CardTitle>Templates disponibles</CardTitle>
-              <CardDescription>Sélectionnez un template à modifier</CardDescription>
+              <CardTitle>{t('admin.email_templates_list_title')}</CardTitle>
+              <CardDescription>{t('admin.email_templates_list_desc')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               {templates.map((template) => (
@@ -174,9 +176,9 @@ export default function EmailTemplatesManager() {
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="font-semibold text-sm">{template.name}</h3>
                     {template.is_active ? (
-                      <Badge variant="default" className="bg-green-500">Actif</Badge>
+                      <Badge variant="default" className="bg-green-500">{t('common.active')}</Badge>
                     ) : (
-                      <Badge variant="secondary">Inactif</Badge>
+                      <Badge variant="secondary">{t('common.inactive')}</Badge>
                     )}
                   </div>
                   <p className="text-xs text-gray-600 mb-2">{template.description}</p>
@@ -188,7 +190,7 @@ export default function EmailTemplatesManager() {
                     ))}
                   </div>
                   <p className="text-xs text-gray-400 mt-2">
-                    Modifié: {new Date(template.updated_at).toLocaleDateString('fr-FR')}
+                    Modifé: {new Date(template.updated_at).toLocaleDateString('fr-FR')}
                   </p>
                 </div>
               ))}
@@ -216,11 +218,11 @@ export default function EmailTemplatesManager() {
                       onClick={() => setPreviewMode(previewMode === 'html' ? 'text' : 'html')}
                     >
                       <Eye className="mr-2 h-4 w-4" />
-                      {previewMode === 'html' ? 'Voir texte' : 'Voir HTML'}
+                      {previewMode === 'html' ? t('admin.email_templates_see_text') : t('admin.email_templates_see_html')}
                     </Button>
                     <Button onClick={handleSave} disabled={saving}>
                       <Save className="mr-2 h-4 w-4" />
-                      {saving ? 'Enregistrement...' : 'Enregistrer'}
+                      {saving ? t('common.saving') : t('common.save')}
                     </Button>
                   </div>
                 </div>
@@ -230,11 +232,11 @@ export default function EmailTemplatesManager() {
                   <TabsList className="grid w-full grid-cols-2 mb-4">
                     <TabsTrigger value="edit">
                       <Code className="mr-2 h-4 w-4" />
-                      Éditer
+                      {t('admin.email_templates_edit')}
                     </TabsTrigger>
                     <TabsTrigger value="preview">
                       <Eye className="mr-2 h-4 w-4" />
-                      Aperçu
+                      {t('admin.email_templates_preview')}
                     </TabsTrigger>
                   </TabsList>
 
@@ -258,12 +260,12 @@ export default function EmailTemplatesManager() {
                   <TabsContent value="edit" className="space-y-4">
                     {/* Sujet */}
                     <div>
-                      <Label htmlFor="subject">Sujet de l'email</Label>
+                      <Label htmlFor="subject">{t('admin.email_templates_subject')}</Label>
                       <Input
                         id="subject"
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        placeholder="Entrez le sujet de l'email"
+                        placeholder={t('admin.email_templates_subject_ph')}
                         className="mt-1"
                       />
                     </div>
@@ -272,7 +274,7 @@ export default function EmailTemplatesManager() {
                     <div>
                       <Label htmlFor="html_content" className="flex items-center gap-2">
                         <Code className="h-4 w-4" />
-                        Contenu HTML
+                        {t('admin.email_templates_html_content')}
                       </Label>
                       <Textarea
                         id="html_content"
@@ -280,7 +282,7 @@ export default function EmailTemplatesManager() {
                         onChange={(e) => setFormData({ ...formData, html_content: e.target.value })}
                         rows={15}
                         className="mt-1 font-mono text-sm"
-                        placeholder="Contenu HTML de l'email..."
+                        placeholder={t('admin.email_templates_html_ph')}
                       />
                     </div>
 
@@ -288,7 +290,7 @@ export default function EmailTemplatesManager() {
                     <div>
                       <Label htmlFor="text_content" className="flex items-center gap-2">
                         <Type className="h-4 w-4" />
-                        Contenu texte (fallback)
+                        {t('admin.email_templates_text_content')}
                       </Label>
                       <Textarea
                         id="text_content"
@@ -296,7 +298,7 @@ export default function EmailTemplatesManager() {
                         onChange={(e) => setFormData({ ...formData, text_content: e.target.value })}
                         rows={8}
                         className="mt-1"
-                        placeholder="Version texte simple de l'email..."
+                        placeholder={t('admin.email_templates_text_ph')}
                       />
                     </div>
 
@@ -310,7 +312,7 @@ export default function EmailTemplatesManager() {
                         className="rounded"
                       />
                       <Label htmlFor="is_active" className="cursor-pointer">
-                        Template actif (utilisé pour l'envoi d'emails)
+                        {t('admin.email_templates_active_label')}
                       </Label>
                     </div>
                   </TabsContent>
@@ -319,7 +321,7 @@ export default function EmailTemplatesManager() {
                     <div className="border rounded-lg overflow-hidden">
                       {/* Sujet */}
                       <div className="bg-gray-100 p-3 border-b">
-                        <p className="text-xs text-gray-600 mb-1">Sujet:</p>
+                      <p className="text-xs text-gray-600 mb-1">{t('admin.email_templates_subject_label')}:</p>
                         <p className="font-semibold">{getPreviewContent(formData.subject)}</p>
                       </div>
 
@@ -341,7 +343,7 @@ export default function EmailTemplatesManager() {
 
                     <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                       <p className="text-sm text-yellow-900">
-                        ℹ️ Ceci est un aperçu avec des données d'exemple. Les vraies données seront insérées lors de l'envoi.
+                        ℹ️ {t('admin.email_templates_preview_notice')}
                       </p>
                     </div>
                   </TabsContent>
@@ -353,7 +355,7 @@ export default function EmailTemplatesManager() {
               <CardContent className="flex items-center justify-center h-96">
                 <div className="text-center text-gray-400">
                   <Mail className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                  <p>Sélectionnez un template pour commencer l'édition</p>
+                  <p>{t('admin.email_templates_select_to_edit')}</p>
                 </div>
               </CardContent>
             </Card>

@@ -8,6 +8,7 @@ import {
 import { ROUTES } from '../../../lib/routes';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'sonner';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -73,6 +74,7 @@ function formatDate(iso: string): string {
 // ─── Composant principal ──────────────────────────────────────────────────────
 
 export default function MediaLibraryPage() {
+  const { t } = useTranslation();
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -121,7 +123,7 @@ export default function MediaLibraryPage() {
         });
         setAssets(mapped);
       } catch {
-        toast.error('Impossible de charger la bibliothèque');
+        toast.error(t('admin.media_lib_load_error'));
       }
     } finally {
       setLoading(false);
@@ -135,7 +137,7 @@ export default function MediaLibraryPage() {
     if (!files || files.length === 0) return;
     setUploading(true);
     setUploadProgress(0);
-    const tags = uploadTags.split(',').map(t => t.trim()).filter(Boolean);
+    const tags = uploadTags.split(',').map(tag => tag.trim()).filter(Boolean);
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -167,9 +169,9 @@ export default function MediaLibraryPage() {
         }
 
         setUploadProgress(Math.round(((i + 1) / files.length) * 100));
-        toast.success(`${file.name} uploadé`);
+        toast.success(`${file.name} ${t('admin.media_lib_uploaded')}`);
       } catch (err: any) {
-        toast.error(`Erreur upload ${file.name}: ${err.message}`);
+        toast.error(`${t('admin.media_lib_upload_error')} ${file.name}: ${err.message}`);
       }
     }
 
@@ -188,7 +190,7 @@ export default function MediaLibraryPage() {
   const copyUrl = async (asset: MediaAsset) => {
     await navigator.clipboard.writeText(asset.url);
     setCopiedId(asset.id);
-    toast.success('URL copiée');
+    toast.success(t('admin.media_lib_url_copied'));
     setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -200,9 +202,9 @@ export default function MediaLibraryPage() {
       setAssets(prev => prev.filter(a => a.id !== asset.id));
       if (selectedAsset?.id === asset.id) setSelectedAsset(null);
       setDeleteConfirm(null);
-      toast.success('Fichier supprimé');
+      toast.success(t('admin.media_lib_deleted'));
     } catch (err: any) {
-      toast.error(`Erreur suppression: ${err.message}`);
+      toast.error(`${t('admin.media_lib_delete_error')}: ${err.message}`);
     }
   };
 
@@ -210,7 +212,7 @@ export default function MediaLibraryPage() {
   const filtered = assets.filter(a => {
     if (typeFilter !== 'all' && a.type !== typeFilter) return false;
     if (categoryFilter !== 'all' && a.category !== categoryFilter) return false;
-    if (search && !a.name.toLowerCase().includes(search.toLowerCase()) && !a.tags.some(t => t.toLowerCase().includes(search.toLowerCase()))) return false;
+    if (search && !a.name.toLowerCase().includes(search.toLowerCase()) && !a.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()))) return false;
     return true;
   });
 
@@ -228,19 +230,19 @@ export default function MediaLibraryPage() {
         {/* Header */}
         <div className="mb-8">
           <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Retour au Tableau de Bord
+            <ArrowLeft className="w-4 h-4 mr-2" /> {t('common.back_to_dashboard')}
           </Link>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Bibliothèque Média</h1>
-              <p className="text-gray-500 mt-1">Images et vidéos du salon — {assets.length} fichier{assets.length === 1 ? '' : 's'}</p>
+              <h1 className="text-3xl font-bold text-gray-900">{t('admin.media_lib_title')}</h1>
+              <p className="text-gray-500 mt-1">{t('admin.media_lib_subtitle')} — {assets.length} {t('admin.media_lib_file_count', { count: assets.length })}</p>
             </div>
             <button
               onClick={() => fileInputRef.current?.click()}
               className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-5 py-2.5 rounded-xl font-semibold shadow transition-all"
             >
               <Upload className="w-4 h-4" />
-              Uploader des fichiers
+              {t('admin.media_lib_upload_btn')}
             </button>
             <input
               ref={fileInputRef}
@@ -257,7 +259,7 @@ export default function MediaLibraryPage() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 mb-6 flex flex-wrap gap-4 items-center">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Tag className="w-4 h-4 text-indigo-400" />
-            <span className="font-medium">Catégorie upload :</span>
+            <span className="font-medium">{t('admin.media_lib_upload_cat')} :</span>
           </div>
           <select
             value={uploadCategory}
@@ -272,7 +274,7 @@ export default function MediaLibraryPage() {
             type="text"
             value={uploadTags}
             onChange={e => setUploadTags(e.target.value)}
-            placeholder="Tags séparés par virgule (ex: SIB2026, inauguration)"
+            placeholder={t('admin.media_lib_tags_ph')}
             className="flex-1 min-w-[200px] text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
         </div>
@@ -295,7 +297,7 @@ export default function MediaLibraryPage() {
           {uploading ? (
             <div className="space-y-3">
               <RefreshCw className="w-8 h-8 text-indigo-500 animate-spin mx-auto" />
-              <p className="text-sm font-medium text-indigo-700">Upload en cours... {uploadProgress}%</p>
+              <p className="text-sm font-medium text-indigo-700">{t('admin.media_lib_uploading')} {uploadProgress}%</p>
               <div className="w-64 mx-auto bg-gray-200 rounded-full h-2">
                 <div
                   className="bg-indigo-600 h-2 rounded-full transition-all"
@@ -307,9 +309,9 @@ export default function MediaLibraryPage() {
             <div className="space-y-2">
               <Upload className="w-10 h-10 text-gray-300 mx-auto" />
               <p className="text-gray-500 font-medium">
-                {dragOver ? 'Déposez vos fichiers ici' : 'Glissez-déposez vos images ou vidéos, ou cliquez pour parcourir'}
+                {dragOver ? t('admin.media_lib_drop') : t('admin.media_lib_drag')}
               </p>
-              <p className="text-xs text-gray-400">JPG, PNG, GIF, WebP, MP4, MOV, WebM — max 50 MB par fichier</p>
+              <p className="text-xs text-gray-400">{t('admin.media_lib_formats')}</p>
             </div>
           )}
         </div>
@@ -318,20 +320,20 @@ export default function MediaLibraryPage() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 mb-6 flex flex-wrap gap-4 items-center justify-between">
           <div className="flex items-center gap-2">
             {/* Type filter */}
-            {(['all', 'image', 'video'] as AssetType[]).map(t => (
+            {(['all', 'image', 'video'] as AssetType[]).map(atype => (
               <button
-                key={t}
-                onClick={() => setTypeFilter(t)}
+                key={atype}
+                onClick={() => setTypeFilter(atype)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  typeFilter === t
+                  typeFilter === atype
                     ? 'bg-indigo-600 text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                {t === 'image' && <ImageIcon className="w-3.5 h-3.5" />}
-                {t === 'video' && <Video className="w-3.5 h-3.5" />}
-                {t === 'all' ? 'Tout' : t === 'image' ? 'Images' : 'Vidéos'}
-                <span className="ml-1 text-xs opacity-70">({counts[t]})</span>
+                {atype === 'image' && <ImageIcon className="w-3.5 h-3.5" />}
+                {atype === 'video' && <Video className="w-3.5 h-3.5" />}
+                {atype === 'all' ? t('common.all') : atype === 'image' ? t('admin.media_lib_images') : t('admin.media_lib_videos')}
+                <span className="ml-1 text-xs opacity-70">({counts[atype]})</span>
               </button>
             ))}
           </div>
@@ -358,7 +360,7 @@ export default function MediaLibraryPage() {
                 type="text"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="Rechercher..."
+                placeholder={t('common.search_ellipsis')}
                 className="pl-9 pr-4 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 w-48"
               />
               {search && (
@@ -401,8 +403,8 @@ export default function MediaLibraryPage() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
             <FolderOpen className="w-14 h-14 text-gray-200 mx-auto mb-4" />
-            <p className="text-gray-400 font-medium">Aucun fichier trouvé</p>
-            <p className="text-gray-300 text-sm mt-1">Uploader vos premières images ou vidéos ci-dessus</p>
+            <p className="text-gray-400 font-medium">{t('admin.media_lib_no_files')}</p>
+            <p className="text-gray-300 text-sm mt-1">{t('admin.media_lib_no_files_hint')}</p>
           </div>
         ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -482,12 +484,12 @@ export default function MediaLibraryPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  <th className="text-left px-4 py-3 text-gray-500 font-medium">Fichier</th>
-                  <th className="text-left px-4 py-3 text-gray-500 font-medium hidden sm:table-cell">Type</th>
-                  <th className="text-left px-4 py-3 text-gray-500 font-medium hidden md:table-cell">Catégorie</th>
-                  <th className="text-left px-4 py-3 text-gray-500 font-medium hidden lg:table-cell">Taille</th>
-                  <th className="text-left px-4 py-3 text-gray-500 font-medium hidden lg:table-cell">Date</th>
-                  <th className="text-right px-4 py-3 text-gray-500 font-medium">Actions</th>
+                  <th className="text-left px-4 py-3 text-gray-500 font-medium">{t('common.file')}</th>
+                  <th className="text-left px-4 py-3 text-gray-500 font-medium hidden sm:table-cell">{t('common.type')}</th>
+                  <th className="text-left px-4 py-3 text-gray-500 font-medium hidden md:table-cell">{t('common.category')}</th>
+                  <th className="text-left px-4 py-3 text-gray-500 font-medium hidden lg:table-cell">{t('common.size')}</th>
+                  <th className="text-left px-4 py-3 text-gray-500 font-medium hidden lg:table-cell">{t('common.date')}</th>
+                  <th className="text-right px-4 py-3 text-gray-500 font-medium">{t('common.actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -509,7 +511,7 @@ export default function MediaLibraryPage() {
                         asset.type === 'image' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'
                       }`}>
                         {asset.type === 'image' ? <ImageIcon className="w-3 h-3" /> : <Video className="w-3 h-3" />}
-                        {asset.type === 'image' ? 'Image' : 'Vidéo'}
+                        {asset.type === 'image' ? t('admin.media_lib_image_type') : t('admin.media_lib_video_type')}
                       </span>
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell">
@@ -576,10 +578,10 @@ export default function MediaLibraryPage() {
               )}
             </div>
             <div className="px-6 py-4 flex items-center justify-between flex-wrap gap-3">
-              <div className="text-sm text-gray-500 space-y-1">
-                <p><span className="font-medium text-gray-700">Taille :</span> {formatBytes(selectedAsset.size)}</p>
-                <p><span className="font-medium text-gray-700">Catégorie :</span> {CATEGORY_LABELS[selectedAsset.category]}</p>
-                <p><span className="font-medium text-gray-700">Date :</span> {formatDate(selectedAsset.created_at)}</p>
+              <div>
+                <p><span className="font-medium text-gray-700">{t('common.size')} :</span> {formatBytes(selectedAsset.size)}</p>
+                <p><span className="font-medium text-gray-700">{t('common.category')} :</span> {CATEGORY_LABELS[selectedAsset.category]}</p>
+                <p><span className="font-medium text-gray-700">{t('common.date')} :</span> {formatDate(selectedAsset.created_at)}</p>
                 {selectedAsset.tags.length > 0 && (
                   <p><span className="font-medium text-gray-700">Tags :</span> {selectedAsset.tags.join(', ')}</p>
                 )}
@@ -590,14 +592,14 @@ export default function MediaLibraryPage() {
                   className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
                 >
                   {copiedId === selectedAsset.id ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  {copiedId === selectedAsset.id ? 'Copié !' : 'Copier URL'}
+                  {copiedId === selectedAsset.id ? t('admin.media_lib_copied') : t('admin.media_lib_copy_url')}
                 </button>
                 <a
                   href={selectedAsset.url}
                   download
                   className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
                 >
-                  <Download className="w-4 h-4" /> Télécharger
+                  <Download className="w-4 h-4" /> {t('common.download')}
                 </a>
               </div>
             </div>
@@ -614,13 +616,13 @@ export default function MediaLibraryPage() {
                 <Trash2 className="w-5 h-5 text-red-600" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900">Supprimer le fichier ?</h3>
-                <p className="text-sm text-gray-500">Cette action est irréversible.</p>
+                <h3 className="font-bold text-gray-900">{t('admin.media_lib_delete_title')}</h3>
+                <p className="text-sm text-gray-500">{t('admin.media_lib_delete_irreversible')}</p>
               </div>
             </div>
             <div className="flex items-center gap-3 justify-end">
               <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                Annuler
+                {t('common.cancel')}
               </button>
               <button
                 onClick={() => {
@@ -629,7 +631,7 @@ export default function MediaLibraryPage() {
                 }}
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
               >
-                Supprimer
+                {t('common.delete')}
               </button>
             </div>
           </div>

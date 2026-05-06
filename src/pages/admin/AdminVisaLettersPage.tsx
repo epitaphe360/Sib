@@ -10,6 +10,7 @@ import { ROUTES } from '../../lib/routes';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { jsPDF } from 'jspdf';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -157,6 +158,7 @@ const STATUS_CONFIG = {
 };
 
 export default function AdminVisaLettersPage() {
+  const { t } = useTranslation();
   const [requests, setRequests] = useState<VisaRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Status | 'all'>('all');
@@ -171,7 +173,7 @@ export default function AdminVisaLettersPage() {
       .from('visa_letter_requests')
       .select('*')
       .order('created_at', { ascending: false });
-    if (error) { toast.error('Erreur de chargement'); }
+    if (error) { toast.error(t('common.load_error')); }
     else { setRequests((data as VisaRequest[]) || []); }
     setLoading(false);
   };
@@ -186,7 +188,7 @@ export default function AdminVisaLettersPage() {
       .eq('id', req.id);
 
     if (error) {
-      toast.error('Erreur lors de l\'approbation');
+      toast.error(t('admin.visa_approve_error'));
     } else {
       // Envoyer email via Edge Function
       await supabase.functions.invoke('send-template-email', {
@@ -222,7 +224,7 @@ export default function AdminVisaLettersPage() {
         },
       });
 
-      toast.success(`Demande approuvée — email envoyé à ${req.user_email}`);
+      toast.success(`${t('admin.visa_approved_msg')} ${req.user_email}`);
       setRequests(prev => prev.map(r => r.id === req.id ? { ...r, status: 'approved', reviewed_at: new Date().toISOString() } : r));
       setExpandedId(null);
     }
@@ -231,7 +233,7 @@ export default function AdminVisaLettersPage() {
 
   const handleReject = async (req: VisaRequest) => {
     if (!rejectionReason.trim()) {
-      toast.error('Veuillez indiquer un motif de refus');
+      toast.error(t('admin.visa_reject_reason_required'));
       return;
     }
     setProcessingId(req.id);
@@ -241,7 +243,7 @@ export default function AdminVisaLettersPage() {
       .eq('id', req.id);
 
     if (error) {
-      toast.error('Erreur lors du refus');
+      toast.error(t('admin.visa_reject_error'));
     } else {
       await supabase.functions.invoke('send-template-email', {
         body: {
@@ -266,7 +268,7 @@ export default function AdminVisaLettersPage() {
         },
       });
 
-      toast.success(`Demande refusée — email envoyé à ${req.user_email}`);
+      toast.success(`${t('admin.visa_rejected_msg')} ${req.user_email}`);
       setRequests(prev => prev.map(r => r.id === req.id ? { ...r, status: 'rejected', rejection_reason: rejectionReason.trim() } : r));
       setExpandedId(null);
       setRejectionReason('');
@@ -299,18 +301,18 @@ export default function AdminVisaLettersPage() {
             className="inline-flex items-center gap-2 text-sm text-sib-gray-500 hover:text-[#1B365D] transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Retour au tableau de bord
+            {t('common.back_dashboard')}
           </Link>
         </div>
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-[#0F2034]">Lettres d'invitation visa</h1>
-            <p className="text-sm text-gray-500 mt-1">Validez les demandes — l'email est envoyé automatiquement</p>
+            <h1 className="text-2xl font-bold text-[#0F2034]">{t('admin.visa_title')}</h1>
+            <p className="text-sm text-gray-500 mt-1">{t('admin.visa_subtitle')}</p>
           </div>
           {counts.pending > 0 && (
             <span className="bg-amber-100 text-amber-800 text-sm font-bold px-3 py-1.5 rounded-full">
-              {counts.pending} en attente
+              {counts.pending} {t('common.pending')}
             </span>
           )}
         </div>
@@ -327,7 +329,7 @@ export default function AdminVisaLettersPage() {
                   : 'bg-white border text-gray-600 hover:border-[#1B365D]'
               }`}
             >
-              {s === 'all' ? 'Toutes' : STATUS_CONFIG[s].label} ({counts[s]})
+              {s === 'all' ? t('common.all_f') : s === 'pending' ? t('common.pending_status') : s === 'approved' ? t('common.approved_f') : t('common.rejected_f')} ({counts[s]})
             </button>
           ))}
           <div className="flex-1 min-w-[200px] relative">
@@ -336,7 +338,7 @@ export default function AdminVisaLettersPage() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               className="w-full pl-9 pr-3 py-2 border rounded-full text-sm focus:ring-2 focus:ring-[#1B365D] focus:outline-none"
-              placeholder="Chercher par nom, email, passeport..."
+              placeholder={t('admin.visa_search_ph')}
             />
           </div>
         </div>
@@ -349,7 +351,7 @@ export default function AdminVisaLettersPage() {
         ) : filtered.length === 0 ? (
           <Card className="p-12 text-center">
             <FileText className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">Aucune demande trouvée</p>
+            <p className="text-gray-500">{t('common.no_results')}</p>
           </Card>
         ) : (
           <div className="space-y-3">
@@ -378,7 +380,7 @@ export default function AdminVisaLettersPage() {
                     </div>
                     <div className="hidden sm:flex flex-col items-end text-right">
                       <span className={`text-xs font-medium px-2 py-1 rounded-full ${cfg.bg} ${cfg.text}`}>
-                        {cfg.label}
+                        {req.status === 'pending' ? t('common.pending_status') : req.status === 'approved' ? t('common.approved_f') : t('common.rejected_f')}
                       </span>
                       <span className="text-xs text-gray-400 mt-1">
                         {new Date(req.created_at).toLocaleDateString('fr-FR')}
@@ -392,12 +394,12 @@ export default function AdminVisaLettersPage() {
                     <div className="border-t px-4 py-5 bg-gray-50">
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-3 text-sm mb-5">
                         {[
-                          ['Passeport', req.passport_number],
-                          ['Nationalité', req.nationality],
-                          ['Date de naissance', req.date_of_birth || '—'],
-                          ['Organisation', req.organization || '—'],
-                          ['Fonction', req.job_title || '—'],
-                          ['Adresse', req.address || '—'],
+                          [t('admin.visa_passport'), req.passport_number],
+                          [t('admin.visa_nationality'), req.nationality],
+                          [t('admin.visa_dob'), req.date_of_birth || '—'],
+                          [t('admin.visa_organization'), req.organization || '—'],
+                          [t('admin.visa_job_title'), req.job_title || '—'],
+                          [t('admin.visa_address'), req.address || '—'],
                         ].map(([label, value]) => (
                           <div key={label}>
                             <p className="text-gray-400 text-xs uppercase tracking-wide">{label}</p>
@@ -408,7 +410,7 @@ export default function AdminVisaLettersPage() {
 
                       {req.status === 'rejected' && req.rejection_reason && (
                         <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-sm text-red-800">
-                          <strong>Motif de refus :</strong> {req.rejection_reason}
+                          <strong>{t('admin.visa_reject_reason')}:</strong> {req.rejection_reason}
                         </div>
                       )}
 
@@ -418,7 +420,7 @@ export default function AdminVisaLettersPage() {
                             onClick={() => { const doc = buildVisaPDF(req); doc.save(`visa_SIB2026_${req.last_name}.pdf`); }}
                             className="bg-green-600 hover:bg-green-700 text-white text-sm"
                           >
-                            <Download className="h-4 w-4 mr-1" /> Télécharger PDF
+                            <Download className="h-4 w-4 mr-1" /> {t('admin.visa_download_pdf')}
                           </Button>
                         </div>
                       )}
@@ -432,14 +434,14 @@ export default function AdminVisaLettersPage() {
                               className="bg-green-600 hover:bg-green-700 text-white text-sm"
                             >
                               <CheckCircle className="h-4 w-4 mr-1" />
-                              {processingId === req.id ? 'Traitement...' : 'Approuver'}
+                              {processingId === req.id ? t('common.processing') : t('common.approve')}
                             </Button>
                           </div>
                           <div className="flex gap-2">
                             <input
                               value={rejectionReason}
                               onChange={e => setRejectionReason(e.target.value)}
-                              placeholder="Motif du refus (obligatoire pour refuser)"
+                              placeholder={t('admin.visa_reject_reason_ph')}
                               className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-400 focus:outline-none"
                             />
                             <Button
@@ -447,7 +449,7 @@ export default function AdminVisaLettersPage() {
                               disabled={processingId === req.id || !rejectionReason.trim()}
                               className="bg-red-600 hover:bg-red-700 text-white text-sm flex-shrink-0"
                             >
-                              <XCircle className="h-4 w-4 mr-1" /> Refuser
+                              <XCircle className="h-4 w-4 mr-1" /> {t('common.reject')}
                             </Button>
                           </div>
                         </div>

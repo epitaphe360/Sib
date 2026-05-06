@@ -13,6 +13,7 @@ import {
   getZones, addZone, updateZone, deleteZone, resetZones,
   ControlZone
 } from '../../services/zonesService';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const EMOJI_OPTIONS = [
   '🌐','🏛️','⭐','🤝','🎭','💼','🏢','🔧','🚪','🔑','🛡️','📍','🎯','🏗️','🔬',
@@ -28,6 +29,7 @@ interface ZoneForm {
 const emptyForm: ZoneForm = { name: '', icon: '📍', description: '' };
 
 export default function SecurityZonesPage() {
+  const { t } = useTranslation();
   const [zones, setZones] = useState<ControlZone[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editZone, setEditZone] = useState<ControlZone | null>(null);
@@ -65,15 +67,15 @@ export default function SecurityZonesPage() {
 
   const handleSubmit = () => {
     if (!form.name.trim()) {
-      toast.error('Le nom de la zone est obligatoire');
+      toast.error(t('admin.zones_name_required'));
       return;
     }
     if (editZone) {
       updateZone(editZone.id, { name: form.name.trim(), icon: form.icon, description: form.description.trim() });
-      toast.success(`Zone "${form.name}" modifiée`);
+      toast.success(`${t('admin.zones_zone')} "${form.name}" ${t('admin.zones_modified')}`);
     } else {
       addZone({ name: form.name.trim(), icon: form.icon, description: form.description.trim() });
-      toast.success(`Zone "${form.name}" créée`);
+      toast.success(`${t('admin.zones_zone')} "${form.name}" ${t('admin.zones_created')}`);
     }
     refresh();
     closeModal();
@@ -81,14 +83,14 @@ export default function SecurityZonesPage() {
 
   const handleDelete = (id: string) => {
     deleteZone(id);
-    toast.success('Zone supprimée');
+    toast.success(t('admin.zones_deleted'));
     setConfirmDelete(null);
     refresh();
   };
 
   const handleReset = () => {
     resetZones();
-    toast.success('Zones réinitialisées aux valeurs par défaut');
+    toast.success(t('admin.zones_reset_success'));
     setConfirmReset(false);
     refresh();
   };
@@ -96,7 +98,7 @@ export default function SecurityZonesPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-6">
-        <ArrowLeft className="w-4 h-4 mr-2" /> Retour au Tableau de Bord
+        <ArrowLeft className="w-4 h-4 mr-2" /> {t('common.back_to_dashboard')}
       </Link>
       {/* ── Modal Ajout / Édition ──────────────────────────────── */}
       <AnimatePresence>
@@ -122,7 +124,7 @@ export default function SecurityZonesPage() {
                     <MapPin className="h-5 w-5 text-white" />
                   </div>
                   <h2 className="text-lg font-bold text-gray-900">
-                    {editZone ? 'Modifier la zone' : 'Nouvelle zone'}
+                    {editZone ? t('admin.zones_edit') : t('admin.zones_new')}
                   </h2>
                 </div>
                 <button
@@ -138,7 +140,7 @@ export default function SecurityZonesPage() {
                 {/* Icône */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                    Icône
+                    {t('admin.zones_form_icon')}
                   </label>
                   <div className="flex items-center gap-3">
                     <button
@@ -147,7 +149,7 @@ export default function SecurityZonesPage() {
                     >
                       {form.icon}
                     </button>
-                    <span className="text-sm text-gray-500">Cliquez pour choisir une icône</span>
+                    <span className="text-sm text-gray-500">{t('admin.zones_icon_click')}</span>
                   </div>
                   {showEmojiPicker && (
                     <div className="mt-2 p-3 border border-gray-200 rounded-lg bg-gray-50 grid grid-cols-10 gap-1">
@@ -167,13 +169,13 @@ export default function SecurityZonesPage() {
                 {/* Nom */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                    Nom de la zone <span className="text-red-500">*</span>
+                    {t('admin.zones_form_name')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     value={form.name}
                     onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                    placeholder="ex: Zone VIP, Salle Conférence..."
+                    placeholder={t('admin.zones_name_ph')}
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     maxLength={50}
                   />
@@ -182,13 +184,13 @@ export default function SecurityZonesPage() {
                 {/* Description */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                    Description
+                    {t('common.description')}
                   </label>
                   <input
                     type="text"
                     value={form.description}
                     onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                    placeholder="Description courte (optionnel)"
+                    placeholder={t('admin.zones_desc_ph')}
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     maxLength={100}
                   />
@@ -201,11 +203,11 @@ export default function SecurityZonesPage() {
                   onClick={closeModal}
                   className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
                 >
-                  Annuler
+                  {t('common.cancel')}
                 </button>
                 <Button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-white">
                   <Check className="h-4 w-4 mr-1.5" />
-                  {editZone ? 'Enregistrer' : 'Créer'}
+                  {editZone ? t('common.save') : t('common.create')}
                 </Button>
               </div>
             </motion.div>
@@ -233,22 +235,22 @@ export default function SecurityZonesPage() {
               <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
                 <AlertTriangle className="h-7 w-7 text-amber-600" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Réinitialiser les zones ?</h3>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">{t('admin.zones_reset_title')}</h3>
               <p className="text-sm text-gray-500 mb-6">
-                Toutes vos zones personnalisées seront supprimées et remplacées par les zones par défaut.
+                {t('admin.zones_reset_desc')}
               </p>
               <div className="flex gap-3 justify-center">
                 <button
                   onClick={() => setConfirmReset(false)}
                   className="px-5 py-2 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  Annuler
+                  {t('common.cancel')}
                 </button>
                 <button
                   onClick={handleReset}
                   className="px-5 py-2 text-sm font-medium bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
                 >
-                  Réinitialiser
+                  {t('admin.zones_reset_btn')}
                 </button>
               </div>
             </motion.div>
@@ -265,7 +267,7 @@ export default function SecurityZonesPage() {
               <Shield className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Zones de Contrôle</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t('admin.zones_title')}</h1>
               <p className="text-sm text-gray-500 mt-0.5">
                 {zones.length} zone{zones.length !== 1 ? 's' : ''} configurée{zones.length !== 1 ? 's' : ''}
               </p>
@@ -277,11 +279,11 @@ export default function SecurityZonesPage() {
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <RotateCcw className="h-4 w-4" />
-              Réinitialiser
+              {t('admin.zones_reset_btn')}
             </button>
             <Button onClick={openAdd} className="bg-blue-600 hover:bg-blue-700 text-white">
               <Plus className="h-4 w-4 mr-1.5" />
-              Nouvelle zone
+              {t('admin.zones_new')}
             </Button>
           </div>
         </div>
@@ -291,8 +293,8 @@ export default function SecurityZonesPage() {
           {zones.length === 0 ? (
             <div className="py-16 text-center">
               <MapPin className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 font-medium">Aucune zone configurée</p>
-              <p className="text-sm text-gray-400 mt-1">Cliquez sur "Nouvelle zone" pour commencer</p>
+              <p className="text-gray-500 font-medium">{t('admin.zones_empty')}</p>
+              <p className="text-sm text-gray-400 mt-1">{t('admin.zones_empty_hint')}</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-100">

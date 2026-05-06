@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface PressAccreditation {
   id: string;
@@ -43,6 +44,7 @@ function badgeNum(id: string) {
 
 // ─── Badge visuel ────────────────────────────────────────────────────────────
 function PressBadge({ acc, onClose }: { acc: PressAccreditation; onClose: () => void }) {
+  const { t } = useTranslation();
   const badgeRef = useRef<HTMLDivElement>(null);
   const num = badgeNum(acc.id);
   const initials = (acc.first_name[0] || '') + (acc.last_name[0] || '');
@@ -99,7 +101,7 @@ function PressBadge({ acc, onClose }: { acc: PressAccreditation; onClose: () => 
         onClick={e => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-[#0F2034] text-lg">Badge Presse</h3>
+          <h3 className="font-bold text-[#0F2034] text-lg">{t('admin.press_badge_title')}</h3>
           <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100 text-gray-500"><X className="w-5 h-5" /></button>
         </div>
 
@@ -142,7 +144,7 @@ function PressBadge({ acc, onClose }: { acc: PressAccreditation; onClose: () => 
           onClick={handlePrint}
           className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 bg-[#0F2034] hover:bg-[#1B365D] text-white rounded-lg text-sm font-semibold transition-colors"
         >
-          <Printer className="w-4 h-4" /> Imprimer le badge
+          <Printer className="w-4 h-4" /> {t('admin.press_print_badge')}
         </button>
       </motion.div>
     </div>
@@ -151,6 +153,7 @@ function PressBadge({ acc, onClose }: { acc: PressAccreditation; onClose: () => 
 
 // ─── Formulaire d'ajout ──────────────────────────────────────────────────────
 function AddPressModal({ onClose, onSaved }: { onClose: () => void; onSaved: () => void }) {
+  const { t } = useTranslation();
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
 
@@ -159,7 +162,7 @@ function AddPressModal({ onClose, onSaved }: { onClose: () => void; onSaved: () 
 
   const handleSubmit = async () => {
     if (!form.first_name || !form.last_name || !form.email || !form.media_name) {
-      toast.error('Prénom, nom, email et média sont obligatoires');
+      toast.error(t('admin.press_form_required'));
       return;
     }
     setSaving(true);
@@ -170,11 +173,11 @@ function AddPressModal({ onClose, onSaved }: { onClose: () => void; onSaved: () 
         reviewed_at: new Date().toISOString(),
       });
       if (error) throw error;
-      toast.success(`✅ Compte presse créé pour ${form.first_name} ${form.last_name}`);
+      toast.success(`${t('admin.press_created')} ${form.first_name} ${form.last_name}`);
       onSaved();
       onClose();
     } catch (err: any) {
-      toast.error(err.message || 'Erreur lors de la création');
+      toast.error(err.message || t('admin.press_create_error'));
     } finally {
       setSaving(false);
     }
@@ -192,8 +195,8 @@ function AddPressModal({ onClose, onSaved }: { onClose: () => void; onSaved: () 
           <div className="flex items-center gap-3">
             <div className="p-2 bg-[#C9A84C]/20 rounded-lg"><Newspaper className="w-5 h-5 text-[#C9A84C]" /></div>
             <div>
-              <h2 className="text-white font-bold text-base">Ajouter un journaliste</h2>
-              <p className="text-white/50 text-xs">Badge généré automatiquement</p>
+              <h2 className="text-white font-bold text-base">{t('admin.press_add_journalist')}</h2>
+              <p className="text-white/50 text-xs">{t('admin.press_badge_auto')}</p>
             </div>
           </div>
           <button onClick={onClose} className="text-white/60 hover:text-white transition-colors"><X className="w-5 h-5" /></button>
@@ -239,7 +242,7 @@ function AddPressModal({ onClose, onSaved }: { onClose: () => void; onSaved: () 
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Type de média</label>
               <select value={form.media_type} onChange={set('media_type')} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 bg-white">
-                {MEDIA_TYPES.map(t => <option key={t}>{t}</option>)}
+          {MEDIA_TYPES.map(mt => <option key={mt}>{mt}</option>)}
               </select>
             </div>
           </div>
@@ -273,14 +276,14 @@ function AddPressModal({ onClose, onSaved }: { onClose: () => void; onSaved: () 
         {/* Footer */}
         <div className="px-6 pb-6 flex gap-3 border-t border-gray-100 pt-4">
           <button onClick={onClose} className="flex-1 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-            Annuler
+            {t('common.cancel')}
           </button>
           <button
             onClick={handleSubmit}
             disabled={saving}
             className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0F2034] hover:bg-[#1B365D] text-white rounded-lg text-sm font-semibold transition-colors disabled:opacity-50"
           >
-            {saving ? <><span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> Création...</> : <><BadgeCheck className="w-4 h-4" /> Créer & Générer badge</>}
+            {saving ? <><span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> {t('common.creating')}</> : <><BadgeCheck className="w-4 h-4" /> {t('admin.press_create_badge_btn')}</>}
           </button>
         </div>
       </motion.div>
@@ -290,6 +293,7 @@ function AddPressModal({ onClose, onSaved }: { onClose: () => void; onSaved: () 
 
 // ─── Page principale ─────────────────────────────────────────────────────────
 export default function AdminPressAccreditationsPage() {
+  const { t } = useTranslation();
   const [accreditations, setAccreditations] = useState<PressAccreditation[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -312,7 +316,7 @@ export default function AdminPressAccreditationsPage() {
         setAccreditations(data as PressAccreditation[]);
       }
     } catch {
-      toast.error('Erreur lors de la récupération des accréditations');
+      toast.error(t('admin.press_fetch_error'));
     } finally {
       setLoading(false);
     }
@@ -326,9 +330,9 @@ export default function AdminPressAccreditationsPage() {
         .eq('id', id);
       if (error && error.code !== '42P01') throw error;
       setAccreditations(prev => prev.map(a => a.id === id ? { ...a, status: newStatus } : a));
-      toast.success(newStatus === 'approved' ? '✅ Accréditation validée' : '❌ Accréditation refusée');
+      toast.success(newStatus === 'approved' ? t('admin.press_validated') : t('admin.press_rejected'));
     } catch {
-      toast.error('Erreur lors de la mise à jour');
+      toast.error(t('admin.press_update_error'));
     } finally {
       setProcessing(null);
     }
@@ -340,10 +344,10 @@ export default function AdminPressAccreditationsPage() {
       const { error } = await supabase.from('press_accreditations').delete().eq('id', id);
       if (error && error.code !== '42P01') throw error;
       setAccreditations(prev => prev.filter(a => a.id !== id));
-      toast.success('🗑️ Accréditation supprimée');
+      toast.success(t('admin.press_deleted'));
       setConfirmDelete(null);
     } catch {
-      toast.error('Erreur lors de la suppression');
+      toast.error(t('admin.press_delete_error'));
     } finally {
       setProcessing(null);
     }
@@ -372,7 +376,7 @@ export default function AdminPressAccreditationsPage() {
         {/* Header */}
         <div className="mb-8">
           <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-[#1B365D] hover:text-[#C9A84C] mb-4 text-sm font-medium transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-1.5" /> Tableau de bord
+            <ArrowLeft className="w-4 h-4 mr-1.5" /> {t('common.back_dashboard')}
           </Link>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -380,15 +384,15 @@ export default function AdminPressAccreditationsPage() {
                 <Camera className="w-7 h-7 text-[#C9A84C]" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-[#0F2034]">Accréditations Presse</h1>
-                <p className="text-gray-500 text-sm mt-0.5">Journalistes, reporters et professionnels des médias</p>
+                <h1 className="text-2xl font-bold text-[#0F2034]">{t('admin.press_title')}</h1>
+                <p className="text-gray-500 text-sm mt-0.5">{t('admin.press_subtitle')}</p>
               </div>
             </div>
             <button
               onClick={() => setShowAddModal(true)}
               className="flex items-center gap-2 px-5 py-2.5 bg-[#0F2034] hover:bg-[#1B365D] text-white rounded-xl text-sm font-semibold transition-colors shadow-sm"
             >
-              <UserPlus className="w-4 h-4" /> Ajouter un journaliste
+              <UserPlus className="w-4 h-4" /> {t('admin.press_add_journalist')}
             </button>
           </div>
         </div>
@@ -396,10 +400,10 @@ export default function AdminPressAccreditationsPage() {
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
           {([
-            { key: 'all',      label: 'Total',       color: 'bg-[#0F2034] text-white' },
-            { key: 'pending',  label: 'En attente',  color: 'bg-amber-50 text-amber-800 border border-amber-200' },
-            { key: 'approved', label: 'Validées',    color: 'bg-green-50 text-green-800 border border-green-200' },
-            { key: 'rejected', label: 'Refusées',    color: 'bg-red-50 text-red-800 border border-red-200' },
+            { key: 'all',      label: t('common.total'),          color: 'bg-[#0F2034] text-white' },
+            { key: 'pending',  label: t('common.pending_plural'), color: 'bg-amber-50 text-amber-800 border border-amber-200' },
+            { key: 'approved', label: t('admin.press_validated_plural'), color: 'bg-green-50 text-green-800 border border-green-200' },
+            { key: 'rejected', label: t('admin.press_rejected_plural'), color: 'bg-red-50 text-red-800 border border-red-200' },
           ] as const).map(s => (
             <button
               key={s.key}
@@ -418,7 +422,7 @@ export default function AdminPressAccreditationsPage() {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Rechercher un journaliste, média, email…"
+            placeholder={t('admin.press_search_ph')}
             className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
           />
         </div>
@@ -429,9 +433,9 @@ export default function AdminPressAccreditationsPage() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
             <Camera className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 font-medium">Aucune accréditation trouvée</p>
+            <p className="text-gray-500 font-medium">{t('admin.press_empty')}</p>
             <button onClick={() => setShowAddModal(true)} className="mt-4 text-sm text-[#1B365D] hover:text-[#C9A84C] font-medium transition-colors">
-              + Ajouter le premier journaliste
+              + {t('admin.press_add_first')}
             </button>
           </div>
         ) : (
@@ -464,9 +468,9 @@ export default function AdminPressAccreditationsPage() {
                           <div className="text-xs text-gray-500 mt-0.5 truncate">{acc.media_name}</div>
                         </div>
                         <div className="flex-shrink-0">
-                          {acc.status === 'pending' && <span className="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-medium">En attente</span>}
-                          {acc.status === 'approved' && <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1"><CheckCircle className="w-3 h-3" />Validée</span>}
-                          {acc.status === 'rejected' && <span className="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1"><XCircle className="w-3 h-3" />Refusée</span>}
+                          {acc.status === 'pending' && <span className="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-medium">{t('common.pending_status')}</span>}
+                          {acc.status === 'approved' && <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1"><CheckCircle className="w-3 h-3" />{t('admin.press_validated_sing')}</span>}
+                          {acc.status === 'rejected' && <span className="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1"><XCircle className="w-3 h-3" />{t('admin.press_rejected_sing')}</span>}
                         </div>
                       </div>
 
@@ -501,14 +505,14 @@ export default function AdminPressAccreditationsPage() {
                             disabled={isProc}
                             className="flex-1 flex items-center justify-center gap-1 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold transition-colors disabled:opacity-50"
                           >
-                            <CheckCircle className="w-3.5 h-3.5" /> Accepter
+                            <CheckCircle className="w-3.5 h-3.5" /> {t('common.accept')}
                           </button>
                           <button
                             onClick={() => handleUpdateStatus(acc.id, 'rejected')}
                             disabled={isProc}
                             className="flex-1 flex items-center justify-center gap-1 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-semibold transition-colors disabled:opacity-50"
                           >
-                            <XCircle className="w-3.5 h-3.5" /> Refuser
+                            <XCircle className="w-3.5 h-3.5" /> {t('common.reject')}
                           </button>
                         </>
                       )}
@@ -518,7 +522,7 @@ export default function AdminPressAccreditationsPage() {
                             onClick={() => setBadgeFor(acc)}
                             className="flex-1 flex items-center justify-center gap-1 py-2 bg-[#0F2034] hover:bg-[#1B365D] text-[#C9A84C] rounded-lg text-xs font-semibold transition-colors"
                           >
-                            <Eye className="w-3.5 h-3.5" /> Voir badge
+                            <Eye className="w-3.5 h-3.5" /> {t('admin.press_view_badge')}
                           </button>
                           <button
                             onClick={() => handleUpdateStatus(acc.id, 'rejected')}
@@ -535,14 +539,14 @@ export default function AdminPressAccreditationsPage() {
                           disabled={isProc}
                           className="flex-1 flex items-center justify-center gap-1 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold transition-colors disabled:opacity-50"
                         >
-                          <CheckCircle className="w-3.5 h-3.5" /> Approuver
+                          <CheckCircle className="w-3.5 h-3.5" /> {t('common.approve')}
                         </button>
                       )}
                       {/* Delete */}
                       {confirmDelete === acc.id ? (
                         <div className="flex gap-1">
-                          <button onClick={() => handleDelete(acc.id)} disabled={isProc} className="py-2 px-3 bg-red-600 text-white rounded-lg text-xs font-bold">Oui</button>
-                          <button onClick={() => setConfirmDelete(null)} className="py-2 px-3 border border-gray-200 text-gray-600 rounded-lg text-xs">Non</button>
+                          <button onClick={() => handleDelete(acc.id)} disabled={isProc} className="py-2 px-3 bg-red-600 text-white rounded-lg text-xs font-bold">{t('common.yes')}</button>
+                          <button onClick={() => setConfirmDelete(null)} className="py-2 px-3 border border-gray-200 text-gray-600 rounded-lg text-xs">{t('common.no')}</button>
                         </div>
                       ) : (
                         <button onClick={() => setConfirmDelete(acc.id)} className="py-2 px-3 border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 rounded-lg text-xs transition-colors">

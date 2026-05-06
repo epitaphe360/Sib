@@ -9,6 +9,7 @@ import { ROUTES } from '../../../lib/routes';
 import { mediaService } from '../../../services/mediaService';
 import { toast } from 'sonner';
 import type { MediaType } from '../../../types/media';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Speaker {
@@ -62,6 +63,7 @@ function Section({ title, icon, children }: { title: string; icon: React.ReactNo
 // ─── Page principale ──────────────────────────────────────────────────────────
 export const CreateMediaPage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
 
   // Form fields
@@ -106,7 +108,7 @@ export const CreateMediaPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) { toast.error('Le titre est obligatoire'); return; }
+    if (!title.trim()) { toast.error(t('admin.media_create_title_required')); return; }
     setLoading(true);
     try {
       const validSpeakers = speakers.filter(s => s.name.trim());
@@ -124,11 +126,11 @@ export const CreateMediaPage: React.FC = () => {
         status,
         ...(publishedAt ? { published_at: new Date(publishedAt).toISOString() } : {}),
       } as any);
-      toast.success('✅ Média créé avec succès !');
+      toast.success(t('admin.media_create_success'));
       navigate(ROUTES.ADMIN_MEDIA_MANAGE);
     } catch (err) {
       console.error(err);
-      toast.error('Erreur lors de la création du média');
+      toast.error(t('admin.media_create_error'));
     } finally {
       setLoading(false);
     }
@@ -141,15 +143,15 @@ export const CreateMediaPage: React.FC = () => {
         {/* Header */}
         <div className="mb-8">
           <Link to={ROUTES.ADMIN_MEDIA_MANAGE} className="inline-flex items-center text-[#1B365D] hover:text-[#C9A84C] mb-4 text-sm font-medium transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-1.5" /> Retour à la médiathèque
+            <ArrowLeft className="w-4 h-4 mr-1.5" /> {t('admin.media_create_back')}
           </Link>
           <div className="flex items-center gap-4">
             <div className="p-3 bg-[#0F2034] rounded-xl">
               <Video className="w-7 h-7 text-[#C9A84C]" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-[#0F2034]">Créer un nouveau média</h1>
-              <p className="text-gray-500 text-sm mt-0.5">Webinaire, podcast, capsule vidéo, témoignage…</p>
+              <h1 className="text-2xl font-bold text-[#0F2034]">{t('admin.media_create_title')}</h1>
+              <p className="text-gray-500 text-sm mt-0.5">{t('admin.media_create_subtitle')}</p>
             </div>
           </div>
         </div>
@@ -157,7 +159,7 @@ export const CreateMediaPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
 
           {/* ── Type ── */}
-          <Section title="Type de média" icon={<Film className="w-4 h-4" />}>
+          <Section title={t('admin.media_create_section_type')} icon={<Film className="w-4 h-4" />}>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {MEDIA_TYPES.map(mt => {
                 const Icon = mt.icon;
@@ -178,10 +180,10 @@ export const CreateMediaPage: React.FC = () => {
           </Section>
 
           {/* ── Infos générales ── */}
-          <Section title="Informations générales" icon={<FileText className="w-4 h-4" />}>
+          <Section title={t('admin.media_create_section_info')} icon={<FileText className="w-4 h-4" />}>
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Titre <span className="text-red-500">*</span></label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">{t('common.title')} <span className="text-red-500">*</span></label>
                 <input
                   type="text"
                   value={title}
@@ -192,7 +194,7 @@ export const CreateMediaPage: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Description</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">{t('common.description')}</label>
                 <textarea
                   value={description}
                   onChange={e => setDescription(e.target.value)}
@@ -204,24 +206,24 @@ export const CreateMediaPage: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                    {type === 'testimonial' ? 'Profil du témoin' : 'Catégorie'}
+                    {type === 'testimonial' ? t('admin.media_witness_profile') : t('common.category')}
                   </label>
                   <select
                     value={category}
                     onChange={e => setCategory(e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-sm bg-white"
                   >
-                    <option value="">Sélectionner…</option>
+                    <option value="">{t('common.select_ellipsis')}</option>
                     {categories.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Statut de publication</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">{t('admin.media_create_publish_status')}</label>
                   <div className="grid grid-cols-3 gap-2">
                     {([
-                      { value: 'draft',     label: 'Brouillon', cls: 'border-gray-400 bg-gray-50 text-gray-700' },
-                      { value: 'published', label: 'Publié',    cls: 'border-green-500 bg-green-50 text-green-700' },
-                      { value: 'archived',  label: 'Archivé',   cls: 'border-slate-400 bg-slate-50 text-slate-600' },
+                      { value: 'draft',     label: t('common.draft'),    cls: 'border-gray-400 bg-gray-50 text-gray-700' },
+                      { value: 'published', label: t('common.published'), cls: 'border-green-500 bg-green-50 text-green-700' },
+                      { value: 'archived',  label: t('common.archived'),  cls: 'border-slate-400 bg-slate-50 text-slate-600' },
                     ] as const).map(s => (
                       <button
                         key={s.value}
@@ -237,7 +239,7 @@ export const CreateMediaPage: React.FC = () => {
               </div>
               {status === 'published' && (
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Date de publication</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">{t('admin.media_create_publish_date')}</label>
                   <input
                     type="datetime-local"
                     value={publishedAt}
@@ -250,7 +252,7 @@ export const CreateMediaPage: React.FC = () => {
           </Section>
 
           {/* ── Médias & URLs ── */}
-          <Section title="Médias & URLs" icon={<Link2 className="w-4 h-4" />}>
+          <Section title={t('admin.media_create_section_urls')} icon={<Link2 className="w-4 h-4" />}>
             <div className="space-y-4">
               {/* Thumbnail */}
               <div>
@@ -351,7 +353,7 @@ export const CreateMediaPage: React.FC = () => {
           </Section>
 
           {/* ── Tags ── */}
-          <Section title="Tags" icon={<Tag className="w-4 h-4" />}>
+          <Section title={t('admin.media_create_section_tags')} icon={<Tag className="w-4 h-4" />}>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
@@ -366,7 +368,7 @@ export const CreateMediaPage: React.FC = () => {
                 onClick={addTag}
                 className="px-4 py-2 bg-[#0F2034] hover:bg-[#1B365D] text-[#C9A84C] rounded-lg text-sm font-semibold transition-colors flex items-center gap-1"
               >
-                <Plus className="w-4 h-4" /> Ajouter
+                <Plus className="w-4 h-4" /> {t('common.add')}
               </button>
             </div>
             {tags.length > 0 ? (
@@ -381,12 +383,12 @@ export const CreateMediaPage: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-gray-400">Aucun tag ajouté. Appuyez sur Entrée ou cliquez "Ajouter".</p>
+              <p className="text-xs text-gray-400">{t('admin.media_create_no_tags')}</p>
             )}
           </Section>
 
           {/* ── Intervenants ── */}
-          <Section title="Intervenants / Speakers" icon={<User className="w-4 h-4" />}>
+          <Section title={t('admin.media_create_section_speakers')} icon={<User className="w-4 h-4" />}>
             <div className="space-y-4">
               {speakers.map((sp, i) => (
                 <div key={i} className="bg-gray-50 rounded-xl p-4 border border-gray-200 relative">
@@ -397,7 +399,7 @@ export const CreateMediaPage: React.FC = () => {
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
-                  <div className="font-semibold text-xs text-[#0F2034] mb-3">Intervenant {i + 1}</div>
+                  <div className="font-semibold text-xs text-[#0F2034] mb-3">{t('admin.media_create_speaker')} {i + 1}</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
@@ -450,7 +452,7 @@ export const CreateMediaPage: React.FC = () => {
                 onClick={addSpeaker}
                 className="w-full py-3 border-2 border-dashed border-gray-300 hover:border-[#C9A84C] hover:bg-yellow-50/50 rounded-xl text-sm font-medium text-gray-500 hover:text-[#0F2034] transition-all flex items-center justify-center gap-2"
               >
-                <Plus className="w-4 h-4" /> Ajouter un intervenant
+                <Plus className="w-4 h-4" /> {t('admin.media_create_add_speaker')}
               </button>
             </div>
           </Section>
@@ -463,9 +465,9 @@ export const CreateMediaPage: React.FC = () => {
               className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#0F2034] hover:bg-[#1B365D] text-white rounded-xl font-semibold transition-colors shadow-sm disabled:opacity-50"
             >
               {loading ? (
-                <><span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> Création…</>
+                <><span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> {t('admin.media_create_creating')}</>
               ) : (
-                <><Save className="w-4 h-4" /> Créer le média</>
+                <><Save className="w-4 h-4" /> {t('admin.media_create_btn')}</>
               )}
             </button>
             <Link to={ROUTES.ADMIN_MEDIA_MANAGE} className="flex-1">
@@ -473,7 +475,7 @@ export const CreateMediaPage: React.FC = () => {
                 type="button"
                 className="w-full flex items-center justify-center gap-2 py-3 border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl font-semibold transition-colors"
               >
-                <X className="w-4 h-4" /> Annuler
+                <X className="w-4 h-4" /> {t('common.cancel')}
               </button>
             </Link>
           </div>

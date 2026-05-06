@@ -5,6 +5,7 @@ import { Badge } from '../../../components/ui/Badge';
 import { VideoStreamPlayer } from '../../../components/media/VideoStreamPlayer';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'sonner';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface LiveEvent {
   id: string;
@@ -23,6 +24,7 @@ interface LiveEvent {
 }
 
 export const LiveEventManager: React.FC = () => {
+  const { t } = useTranslation();
   const [liveEvents, setLiveEvents] = useState<LiveEvent[]>([]);
   const [currentLive, setCurrentLive] = useState<LiveEvent | null>(null);
   const [loading, setLoading] = useState(true);
@@ -71,7 +73,7 @@ export const LiveEventManager: React.FC = () => {
       }
     } catch (error) {
       console.error('Error loading live events:', error);
-      toast.error('Erreur lors du chargement des événements');
+      toast.error(t('admin.live_load_error'));
     } finally {
       setLoading(false);
     }
@@ -93,10 +95,10 @@ export const LiveEventManager: React.FC = () => {
 
       setCurrentLive(data);
       setIsStreaming(true);
-      toast.success('Live démarré !');
+      toast.success(t('admin.live_started'));
     } catch (error) {
       console.error('Error starting live:', error);
-      toast.error('Erreur lors du démarrage du live');
+      toast.error(t('admin.live_start_error'));
     }
   };
 
@@ -117,11 +119,11 @@ export const LiveEventManager: React.FC = () => {
       setCurrentLive(null);
       setIsStreaming(false);
       setViewersCount(0);
-      toast.success('Live terminé et enregistré');
+      toast.success(t('admin.live_stopped'));
       loadLiveEvents();
     } catch (error) {
       console.error('Error stopping live:', error);
-      toast.error('Erreur lors de l\'arrêt du live');
+      toast.error(t('admin.live_stop_error'));
     }
   };
 
@@ -150,10 +152,10 @@ export const LiveEventManager: React.FC = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center">
             <Radio className="h-8 w-8 mr-3 text-red-600" />
-            Gestion des Lives Studio
+            {t('admin.live_title')}
           </h1>
           <p className="text-gray-600 mt-2">
-            Gérez vos événements live et surveillez les statistiques en temps réel
+          {t('admin.live_subtitle')}
           </p>
         </div>
 
@@ -163,7 +165,7 @@ export const LiveEventManager: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
                 <Badge variant="destructive" className="animate-pulse">
-                  🔴 EN DIRECT
+                  🔴 {t('admin.live_on_air')}
                 </Badge>
                 <h2 className="text-2xl font-bold text-gray-900">
                   {currentLive.title}
@@ -174,7 +176,7 @@ export const LiveEventManager: React.FC = () => {
                 onClick={handleStopLive}
               >
                 <Square className="h-4 w-4 mr-2" />
-                Arrêter le live
+                {t('admin.live_stop')}
               </Button>
             </div>
 
@@ -193,7 +195,7 @@ export const LiveEventManager: React.FC = () => {
               <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-red-600 font-medium">Spectateurs</p>
+                    <p className="text-sm text-red-600 font-medium">{t('admin.live_viewers')}</p>
                     <p className="text-3xl font-bold text-red-900">{viewersCount}</p>
                   </div>
                   <Users className="h-10 w-10 text-red-600 opacity-20" />
@@ -203,7 +205,7 @@ export const LiveEventManager: React.FC = () => {
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-blue-600 font-medium">Vues totales</p>
+                    <p className="text-sm text-blue-600 font-medium">{t('admin.live_total_views')}</p>
                     <p className="text-3xl font-bold text-blue-900">
                       {currentLive.viewers_count || 0}
                     </p>
@@ -215,7 +217,7 @@ export const LiveEventManager: React.FC = () => {
               <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-green-600 font-medium">Messages</p>
+                    <p className="text-sm text-green-600 font-medium">{t('admin.live_messages')}</p>
                     <p className="text-3xl font-bold text-green-900">0</p>
                   </div>
                   <MessageCircle className="h-10 w-10 text-green-600 opacity-20" />
@@ -225,7 +227,7 @@ export const LiveEventManager: React.FC = () => {
               <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-purple-600 font-medium">Durée</p>
+                    <p className="text-sm text-purple-600 font-medium">{t('admin.live_duration')}</p>
                     <p className="text-3xl font-bold text-purple-900">
                       {Math.floor((Date.now() - new Date(currentLive.created_at).getTime()) / 60000)} min
                     </p>
@@ -240,13 +242,13 @@ export const LiveEventManager: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {currentLive.host_name && (
                   <div>
-                    <p className="text-sm font-medium text-gray-700">Animateur</p>
+                  <p className="text-sm font-medium text-gray-700">{t('admin.live_host')}</p>
                     <p className="text-gray-900">{currentLive.host_name}</p>
                   </div>
                 )}
                 {currentLive.guest_name && (
                   <div>
-                    <p className="text-sm font-medium text-gray-700">Invité</p>
+                  <p className="text-sm font-medium text-gray-700">{t('admin.live_guest')}</p>
                     <p className="text-gray-900">{currentLive.guest_name}</p>
                   </div>
                 )}
@@ -257,7 +259,7 @@ export const LiveEventManager: React.FC = () => {
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-3 flex items-center">
                 <Settings className="h-5 w-5 mr-2" />
-                Paramètres de diffusion
+                {t('admin.live_stream_settings')}
               </h3>
               <div className="space-y-2 text-sm">
                 {currentLive.rtmp_url && (
@@ -284,10 +286,10 @@ export const LiveEventManager: React.FC = () => {
           <div className="bg-white rounded-lg shadow-sm p-12 text-center mb-8">
             <Radio className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Aucun live en cours
+              {t('admin.live_none_active')}
             </h3>
             <p className="text-gray-600">
-              Sélectionnez un événement planifié pour démarrer un live
+              {t('admin.live_none_active_hint')}
             </p>
           </div>
         )}
@@ -295,12 +297,12 @@ export const LiveEventManager: React.FC = () => {
         {/* Scheduled Events */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Événements planifiés
+            {t('admin.live_scheduled')}
           </h2>
 
           {liveEvents.filter(e => !e.is_live).length === 0 ? (
             <p className="text-center text-gray-600 py-8">
-              Aucun événement planifié
+              {t('admin.live_no_scheduled')}
             </p>
           ) : (
             <div className="space-y-4">
@@ -319,9 +321,9 @@ export const LiveEventManager: React.FC = () => {
                           <div className="flex items-center space-x-3 mb-2">
                             <h3 className="font-semibold text-gray-900">{event.title}</h3>
                             {isUpcoming ? (
-                              <Badge variant="default">À venir</Badge>
+                              <Badge variant="default">{t('common.upcoming')}</Badge>
                             ) : (
-                              <Badge variant="secondary">Passé</Badge>
+                              <Badge variant="secondary">{t('common.past')}</Badge>
                             )}
                           </div>
 
@@ -355,7 +357,7 @@ export const LiveEventManager: React.FC = () => {
                               className="bg-red-600 hover:bg-red-700"
                             >
                               <Play className="h-4 w-4 mr-2" />
-                              Démarrer
+                              {t('admin.live_start_btn')}
                             </Button>
                           )}
                           <Button
@@ -364,7 +366,7 @@ export const LiveEventManager: React.FC = () => {
                             onClick={() => window.open(`/media/live-studio/${event.id}`, '_blank')}
                           >
                             <Eye className="h-4 w-4 mr-2" />
-                            Voir
+                            {t('common.view')}
                           </Button>
                         </div>
                       </div>

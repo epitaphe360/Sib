@@ -14,6 +14,7 @@ import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { Salon } from '../../contexts/SalonContext';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // ─── Formulaire vide ──────────────────────────────────────────────────────────
 
@@ -53,6 +54,7 @@ function formatDate(iso: string | null): string {
 // ─── Composant principal ──────────────────────────────────────────────────────
 
 export default function SalonsManagementPage() {
+  const { t } = useTranslation();
   const [salons, setSalons] = useState<Salon[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -81,7 +83,7 @@ export default function SalonsManagementPage() {
       if (error) {throw error;}
       setSalons((data || []) as Salon[]);
     } catch (err: any) {
-      toast.error('Impossible de charger les salons : ' + (err.message ?? err));
+      toast.error(t('admin.salons_load_error') + (err.message ?? err));
     } finally {
       setIsLoading(false);
     }
@@ -91,7 +93,7 @@ export default function SalonsManagementPage() {
 
   const uploadImage = async (file: File, bucket: string, path: string): Promise<string | null> => {
     const { error } = await supabase!.storage.from(bucket).upload(path, file, { upsert: true });
-    if (error) { toast.error('Erreur upload : ' + error.message); return null; }
+    if (error) { toast.error(t('admin.salons_upload_error') + error.message); return null; }
     const { data } = supabase!.storage.from(bucket).getPublicUrl(path);
     return data.publicUrl;
   };
@@ -145,7 +147,7 @@ export default function SalonsManagementPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.slug.trim()) {
-      toast.error('Le nom et le slug sont obligatoires.');
+      toast.error(t('admin.salons_name_slug_required'));
       return;
     }
     setIsSubmitting(true);
@@ -156,20 +158,18 @@ export default function SalonsManagementPage() {
           .update({ ...form, updated_at: new Date().toISOString() })
           .eq('id', editingSalon.id);
         if (error) {throw error;}
-        toast.success('Salon mis à jour.');
+        toast.success(t('admin.salons_updated'));
       } else {
         const { error } = await supabase!
           .from('salons')
           .insert([{ ...form }]);
         if (error) {throw error;}
-        toast.success('Salon créé.');
+        toast.success(t('admin.salons_created'));
       }
       closeModal();
       await fetchSalons();
     } catch (err: any) {
-      toast.error('Erreur : ' + (err.message ?? err));
-    } finally {
-      setIsSubmitting(false);
+      toast.error(t('common.save_error') + (err.message ?? err));
     }
   };
 
@@ -185,10 +185,10 @@ export default function SalonsManagementPage() {
       }
       const { error } = await supabase!.from('salons').update(update).eq('id', salon.id);
       if (error) {throw error;}
-      toast.success(`Salon ${field === 'is_active' ? (newValue ? 'activé' : 'désactivé') : (newValue ? 'défini par défaut' : 'retiré par défaut')}.`);
+      toast.success(`${t('admin.salons_toggled')} ${field === 'is_active' ? (newValue ? t('admin.salons_activated') : t('admin.salons_deactivated')) : (newValue ? t('admin.salons_set_default') : t('admin.salons_unset_default'))}.`);
       await fetchSalons();
     } catch (err: any) {
-      toast.error('Erreur : ' + (err.message ?? err));
+      toast.error(t('common.save_error') + (err.message ?? err));
     }
   };
 
@@ -206,21 +206,21 @@ export default function SalonsManagementPage() {
       ]);
       await fetchSalons();
     } catch (err: any) {
-      toast.error('Erreur : ' + (err.message ?? err));
+      toast.error(t('common.save_error') + (err.message ?? err));
     }
   };
 
   // ── Suppression ───────────────────────────────────────────────────────────────
 
   const handleDelete = async (salon: Salon) => {
-    if (!window.confirm(`Supprimer le salon "${salon.name}" ? Cette action est irréversible.`)) {return;}
+    if (!window.confirm(t('admin.salons_delete_confirm').replace('{name}', salon.name))) {return;}
     try {
       const { error } = await supabase!.from('salons').delete().eq('id', salon.id);
       if (error) {throw error;}
-      toast.success('Salon supprimé.');
+      toast.success(t('admin.salons_deleted'));
       await fetchSalons();
     } catch (err: any) {
-      toast.error('Erreur : ' + (err.message ?? err));
+      toast.error(t('common.save_error') + (err.message ?? err));
     }
   };
 
@@ -245,20 +245,20 @@ export default function SalonsManagementPage() {
         <div className="mb-8">
           <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour au tableau de bord
+            {t('common.back_to_dashboard')}
           </Link>
 
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Gestion des salons</h1>
-              <p className="mt-2 text-gray-600">Gérez les éditions multi-tenant : création, activation, ordre d&apos;affichage.</p>
+              <h1 className="text-3xl font-bold text-gray-900">{t('admin.salons_title')}</h1>
+              <p className="mt-2 text-gray-600">{t('admin.salons_subtitle')}</p>
             </div>
             <Button
               onClick={openCreate}
               className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
             >
               <Plus className="h-5 w-5 mr-2" />
-              Nouveau salon
+              {t('admin.salons_new')}
             </Button>
           </div>
         </div>
@@ -266,15 +266,15 @@ export default function SalonsManagementPage() {
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="p-6">
-            <p className="text-sm text-gray-600">Total</p>
+            <p className="text-sm text-gray-600">{t('common.total')}</p>
             <p className="text-3xl font-bold text-gray-900">{salons.length}</p>
           </Card>
           <Card className="p-6">
-            <p className="text-sm text-gray-600">Actifs</p>
+            <p className="text-sm text-gray-600">{t('admin.salons_active')}</p>
             <p className="text-3xl font-bold text-green-600">{activeCount}</p>
           </Card>
           <Card className="p-6">
-            <p className="text-sm text-gray-600">Salon par défaut</p>
+            <p className="text-sm text-gray-600">{t('admin.salons_default')}</p>
             <p className="text-lg font-semibold text-blue-700 truncate">{defaultSalon?.name ?? '—'}</p>
           </Card>
         </div>
@@ -285,7 +285,7 @@ export default function SalonsManagementPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Rechercher…"
+              placeholder={t('common.search_ellipsis')}
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm"
@@ -295,9 +295,9 @@ export default function SalonsManagementPage() {
 
         {/* Liste */}
         {isLoading ? (
-          <div className="text-center py-20 text-gray-500">Chargement…</div>
+          <div className="text-center py-20 text-gray-500">{t('common.loading')}</div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">Aucun salon trouvé.</div>
+          <div className="text-center py-20 text-gray-400">{t('admin.salons_empty')}</div>
         ) : (
           <div className="space-y-4">
             <AnimatePresence>
@@ -328,7 +328,7 @@ export default function SalonsManagementPage() {
                           <Badge variant="info" className="text-xs">Défaut</Badge>
                         )}
                         <Badge variant={salon.is_active ? 'success' : 'secondary'} className="text-xs">
-                          {salon.is_active ? 'Actif' : 'Inactif'}
+                          {salon.is_active ? t('common.active') : t('common.inactive')}
                         </Badge>
                       </div>
                       <div className="mt-1 flex items-center gap-4 text-xs text-gray-500 flex-wrap">
@@ -397,7 +397,7 @@ export default function SalonsManagementPage() {
                         className="gap-1"
                       >
                         <Edit className="h-4 w-4" />
-                        Éditer
+                        {t('common.edit')}
                       </Button>
 
                       {/* Supprimer */}
@@ -438,7 +438,7 @@ export default function SalonsManagementPage() {
                 {/* Header modal */}
                 <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
                   <h2 className="text-xl font-bold text-gray-900">
-                    {editingSalon ? 'Modifier le salon' : 'Créer un salon'}
+                    {editingSalon ? t('admin.salons_modal_edit') : t('admin.salons_modal_create')}
                   </h2>
                   <button type="button" onClick={closeModal} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
                     <X className="h-5 w-5" />
@@ -453,7 +453,7 @@ export default function SalonsManagementPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Nom <span className="text-red-500">*</span>
+                        {t('common.name')} <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -485,7 +485,7 @@ export default function SalonsManagementPage() {
 
                   {/* Description */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('common.description')}</label>
                     <textarea
                       rows={3}
                       value={form.description ?? ''}
@@ -498,7 +498,7 @@ export default function SalonsManagementPage() {
                   {/* Lieu + Ordre */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.salons_location')}</label>
                       <input
                         type="text"
                         value={form.location ?? ''}
@@ -508,7 +508,7 @@ export default function SalonsManagementPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Ordre d&apos;affichage</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.salons_sort_order')}</label>
                       <input
                         type="number"
                         min={0}
@@ -522,7 +522,7 @@ export default function SalonsManagementPage() {
                   {/* Dates */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.salons_date_start')}</label>
                       <input
                         type="date"
                         value={form.date_debut ? form.date_debut.slice(0, 10) : ''}
@@ -531,7 +531,7 @@ export default function SalonsManagementPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.salons_date_end')}</label>
                       <input
                         type="date"
                         value={form.date_fin ? form.date_fin.slice(0, 10) : ''}
@@ -543,7 +543,7 @@ export default function SalonsManagementPage() {
 
                   {/* Logo */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Logo</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.salons_logo')}</label>
                     <div className="flex items-center gap-3">
                       {form.logo_url && (
                         <img src={form.logo_url} alt="logo" className="h-14 w-14 rounded-lg object-contain border border-gray-200 bg-gray-50" />
@@ -556,7 +556,7 @@ export default function SalonsManagementPage() {
                         className="gap-1"
                       >
                         <Upload className="h-4 w-4" />
-                        {form.logo_url ? 'Changer' : 'Uploader'}
+                        {form.logo_url ? t('common.change') : t('common.upload')}
                       </Button>
                       {form.logo_url && (
                         <button
@@ -564,7 +564,7 @@ export default function SalonsManagementPage() {
                           onClick={() => setForm(prev => ({ ...prev, logo_url: null }))}
                           className="text-red-500 hover:text-red-700 text-xs"
                         >
-                          Supprimer
+                          {t('common.delete')}
                         </button>
                       )}
                       <input
@@ -579,7 +579,7 @@ export default function SalonsManagementPage() {
 
                   {/* Cover */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Image de couverture</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.salons_cover')}</label>
                     <div className="flex items-center gap-3">
                       {form.cover_url && (
                         <img src={form.cover_url} alt="cover" className="h-14 w-28 rounded-lg object-cover border border-gray-200 bg-gray-50" />
@@ -592,7 +592,7 @@ export default function SalonsManagementPage() {
                         className="gap-1"
                       >
                         <Upload className="h-4 w-4" />
-                        {form.cover_url ? 'Changer' : 'Uploader'}
+                        {form.cover_url ? t('common.change') : t('common.upload')}
                       </Button>
                       {form.cover_url && (
                         <button
@@ -600,7 +600,7 @@ export default function SalonsManagementPage() {
                           onClick={() => setForm(prev => ({ ...prev, cover_url: null }))}
                           className="text-red-500 hover:text-red-700 text-xs"
                         >
-                          Supprimer
+                          {t('common.delete')}
                         </button>
                       )}
                       <input
@@ -622,7 +622,7 @@ export default function SalonsManagementPage() {
                         onChange={e => setForm(prev => ({ ...prev, is_active: e.target.checked }))}
                         className="w-4 h-4 rounded text-blue-600 cursor-pointer"
                       />
-                      <span className="text-sm text-gray-700">Actif</span>
+                      <span className="text-sm text-gray-700">{t('common.active')}</span>
                     </label>
                     <label className="flex items-center gap-2 cursor-pointer select-none">
                       <input
@@ -631,7 +631,7 @@ export default function SalonsManagementPage() {
                         onChange={e => setForm(prev => ({ ...prev, is_default: e.target.checked }))}
                         className="w-4 h-4 rounded text-yellow-500 cursor-pointer"
                       />
-                      <span className="text-sm text-gray-700">Salon par défaut</span>
+                      <span className="text-sm text-gray-700">{t('admin.salons_default_label')}</span>
                     </label>
                   </div>
 
@@ -653,7 +653,7 @@ export default function SalonsManagementPage() {
                 {/* Footer modal */}
                 <div className="flex justify-end gap-3 px-6 pb-6 pt-2 border-t border-gray-100">
                   <Button type="button" variant="outline" onClick={closeModal}>
-                    Annuler
+                    {t('common.cancel')}
                   </Button>
                   <Button
                     type="submit"
@@ -661,7 +661,7 @@ export default function SalonsManagementPage() {
                     className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 gap-2"
                   >
                     <Save className="h-4 w-4" />
-                    {isSubmitting ? 'Enregistrement…' : editingSalon ? 'Mettre à jour' : 'Créer'}
+                    {isSubmitting ? t('common.saving') : editingSalon ? t('common.update') : t('common.create')}
                   </Button>
                 </div>
               </form>

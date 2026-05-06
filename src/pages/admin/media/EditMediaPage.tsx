@@ -6,6 +6,7 @@ import { mediaService } from '../../../services/mediaService';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'sonner';
 import type { MediaType } from '../../../types/media';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface Media {
   id: string;
@@ -25,6 +26,7 @@ interface Media {
 export const EditMediaPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [media, setMedia] = useState<Media | null>(null);
@@ -105,7 +107,7 @@ export const EditMediaPage: React.FC = () => {
       });
     } catch (error) {
       console.error('Erreur chargement média:', error);
-      toast.error('Impossible de charger le média');
+      toast.error(t('admin.media_edit_load_error'));
       navigate(ROUTES.ADMIN_MEDIA_MANAGE);
     } finally {
       setLoading(false);
@@ -117,7 +119,7 @@ export const EditMediaPage: React.FC = () => {
 
     if (!id) {return;}
     if (!formData.title || !formData.type) {
-      toast.error('Veuillez remplir tous les champs obligatoires');
+      toast.error(t('admin.media_edit_required'));
       return;
     }
 
@@ -129,7 +131,7 @@ export const EditMediaPage: React.FC = () => {
         try {
           speakersArray = JSON.parse(formData.speakers);
         } catch {
-          toast.error('Format JSON des speakers invalide');
+          toast.error(t('admin.media_edit_speakers_json'));
           setSubmitting(false);
           return;
         }
@@ -158,11 +160,11 @@ export const EditMediaPage: React.FC = () => {
 
       if (error) {throw error;}
 
-      toast.success('Média mis à jour avec succès !');
+      toast.success(t('admin.media_edit_success'));
       navigate(ROUTES.ADMIN_MEDIA_MANAGE);
     } catch (error) {
       console.error('Erreur modification média:', error);
-      toast.error('Erreur lors de la modification du média');
+      toast.error(t('admin.media_edit_error'));
     } finally {
       setSubmitting(false);
     }
@@ -179,7 +181,7 @@ export const EditMediaPage: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 py-8 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader className="w-8 h-8 animate-spin text-blue-600" />
-          <p className="text-gray-600">Chargement du média...</p>
+          <p className="text-gray-600">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -192,10 +194,10 @@ export const EditMediaPage: React.FC = () => {
         <div className="mb-8">
           <Link to={ROUTES.ADMIN_MEDIA_MANAGE} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour à la gestion des médias
+            {t('admin.media_edit_back')}
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Modifier le Média</h1>
-          <p className="mt-2 text-gray-600">Mettez à jour les informations du média</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('admin.media_edit_title')}</h1>
+          <p className="mt-2 text-gray-600">{t('admin.media_edit_subtitle')}</p>
         </div>
 
         {/* Form */}
@@ -203,7 +205,7 @@ export const EditMediaPage: React.FC = () => {
           {/* Type Selection */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Type de Média <span className="text-red-500">*</span>
+              {t('admin.media_type')} <span className="text-red-500">*</span>
             </label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {mediaTypes.map((type) => {
@@ -233,14 +235,14 @@ export const EditMediaPage: React.FC = () => {
           {/* Title */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Titre <span className="text-red-500">*</span>
+              {t('common.title')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Titre du média"
+              placeholder={t('admin.media_edit_title_ph')}
               required
             />
           </div>
@@ -248,14 +250,14 @@ export const EditMediaPage: React.FC = () => {
           {/* Description */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Description
+              {t('common.description')}
             </label>
             <textarea
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               rows={4}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Description du média"
+              placeholder={t('admin.media_edit_desc_ph')}
             />
           </div>
 
@@ -324,14 +326,14 @@ export const EditMediaPage: React.FC = () => {
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                {formData.type === 'testimonial' ? 'Profil du témoin' : 'Catégorie'}
+                {formData.type === 'testimonial' ? t('admin.media_witness_profile') : t('common.category')}
               </label>
               <select
                 value={formData.category}
                 onChange={(e) => handleChange('category', e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">-- Sélectionner --</option>
+                <option value="">{t('common.select')}</option>
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
@@ -342,7 +344,7 @@ export const EditMediaPage: React.FC = () => {
           {/* Tags */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Tags (séparés par des virgules)
+              {t('admin.media_edit_tags')}
             </label>
             <input
               type="text"
@@ -371,24 +373,23 @@ export const EditMediaPage: React.FC = () => {
           {/* Status */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Statut
+              {t('admin.media_edit_status')}
             </label>
             <select
               value={formData.status}
               onChange={(e) => handleChange('status', e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="draft">Brouillon</option>
-              <option value="published">Publié</option>
-              <option value="archived">Archivé</option>
+              <option value="draft">{t('common.draft')}</option>
+              <option value="published">{t('common.published')}</option>
+              <option value="archived">{t('common.archived')}</option>
             </select>
           </div>
 
           {/* Buttons */}
           <div className="flex items-center justify-between pt-6 border-t border-gray-200">
             <Link to={ROUTES.ADMIN_MEDIA_MANAGE} className="text-gray-600 hover:text-gray-900">
-              Annuler
-            </Link>
+              {t('common.cancel')}
             <button
               type="submit"
               disabled={submitting}
@@ -397,12 +398,12 @@ export const EditMediaPage: React.FC = () => {
               {submitting ? (
                 <>
                   <Loader className="w-4 h-4 animate-spin" />
-                  Mise à jour en cours...
+                  {t('admin.media_edit_updating')}
                 </>
               ) : (
                 <>
                   <Save className="w-4 h-4" />
-                  Mettre à jour
+                  {t('admin.media_edit_update_btn')}
                 </>
               )}
             </button>

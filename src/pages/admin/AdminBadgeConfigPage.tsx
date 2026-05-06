@@ -16,6 +16,7 @@ import { Button } from '../../components/ui/Button';
 import PrintableBadgeA4 from '../../components/badge/PrintableBadgeA4';
 import type { UserBadge } from '../../types';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -1070,6 +1071,7 @@ function Face4Preview({ config }: Readonly<{ config: BadgeConfig }>) {
 async function loadBadgeConfig(
   setConfig: React.Dispatch<React.SetStateAction<BadgeConfig>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  errorMsg: string,
 ): Promise<void> {
   setLoading(true);
   try {
@@ -1082,7 +1084,7 @@ async function loadBadgeConfig(
       }));
     }
   } catch {
-    toast.error('Impossible de charger la configuration badge');
+    toast.error(errorMsg);
   } finally {
     setLoading(false);
   }
@@ -1091,14 +1093,16 @@ async function loadBadgeConfig(
 async function saveBadgeConfig(
   config: BadgeConfig,
   setSaving: React.Dispatch<React.SetStateAction<boolean>>,
+  successMsg: string,
+  errorMsg: string,
 ): Promise<void> {
   setSaving(true);
   try {
     const toSave = { ...config, program_days: config.program_days.map(d => ({ ...d, open: undefined })) };
     await supabase.from('app_settings').upsert({ key: DB_KEY, value: JSON.stringify(toSave) }, { onConflict: 'key' });
-    toast.success('Configuration badge sauvegardée ✓');
+    toast.success(successMsg);
   } catch {
-    toast.error('Erreur lors de la sauvegarde');
+    toast.error(errorMsg);
   } finally {
     setSaving(false);
   }
@@ -1247,6 +1251,7 @@ function FaceDetailSection({ faceLabel, faceContent, config, set, setConfig, onN
 }
 
 export default function AdminBadgeConfigPage() {
+  const { t } = useTranslation();
   const [config, setConfig] = useState<BadgeConfig>(DEFAULT_CONFIG);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -1257,12 +1262,12 @@ export default function AdminBadgeConfigPage() {
   const [selectedFace, setSelectedFace] = useState<1 | 2 | 3 | 4 | null>(null);
 
   // ── Chargement depuis app_settings ──
-  const loadConfig = useCallback(() => loadBadgeConfig(setConfig, setLoading), []);
+  const loadConfig = useCallback(() => loadBadgeConfig(setConfig, setLoading, t('admin.badge_load_error')), [t]);
 
   useEffect(() => { loadConfig(); }, [loadConfig]);
 
   // ── Sauvegarde ──
-  const handleSave = () => saveBadgeConfig(config, setSaving);
+  const handleSave = () => saveBadgeConfig(config, setSaving, t('admin.badge_saved'), t('admin.badge_save_error'));
 
   // ── Helpers ──
   const set = (field: keyof BadgeConfig) => (v: string) =>
@@ -1361,7 +1366,7 @@ export default function AdminBadgeConfigPage() {
       <header className="shrink-0 flex items-center justify-between px-5 border-b bg-white" style={{ height: 52, borderColor: '#e5e7eb' }}>
         <div className="flex items-center gap-3">
           <Link to={ROUTES.ADMIN_DASHBOARD} className="flex items-center gap-1.5 text-gray-400 hover:text-gray-700 transition-colors text-xs">
-            <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
+            <ArrowLeft className="w-3.5 h-3.5" /> {t('common.back_to_dashboard')}
           </Link>
           <div className="h-3.5 w-px bg-gray-200" />
           <div className="flex items-center gap-2">
@@ -1377,14 +1382,14 @@ export default function AdminBadgeConfigPage() {
         <div className="flex items-center gap-2">
           <button type="button" onClick={() => setPreviewVisible(v => !v)} className="flex items-center gap-1.5 px-3 h-7 rounded-lg text-xs border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 transition-colors">
             {previewVisible ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-            {previewVisible ? 'Masquer' : 'Aperçu'}
+            {previewVisible ? t('admin.badge_hide_preview') : t('admin.badge_show_preview')}
           </button>
           <button type="button" onClick={loadConfig} title="Réinitialiser" className="flex items-center justify-center w-7 h-7 rounded-lg border border-gray-200 bg-white text-gray-400 hover:bg-gray-50 transition-colors">
             <RefreshCw className="h-3 w-3" />
           </button>
           <Button onClick={handleSave} disabled={saving} className="gap-1.5 text-xs font-bold h-7 px-4 bg-indigo-600 hover:bg-indigo-700 text-white border-0" style={{ boxShadow: '0 2px 8px rgba(99,102,241,0.3)' }}>
             {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
-            Sauvegarder
+            {t('common.save')}
           </Button>
         </div>
       </header>
@@ -1716,7 +1721,7 @@ export default function AdminBadgeConfigPage() {
             <div className="px-4 py-3 border-b shrink-0 space-y-2" style={{ borderColor: '#e5e7eb' }}>
               <div className="flex items-center gap-2">
                 <Eye className="h-3.5 w-3.5 text-indigo-500" />
-                <span className="text-xs font-bold text-gray-700">Aperçu temps réel</span>
+                <span className="text-xs font-bold text-gray-700">{t('admin.badge_preview_realtime')}</span>
                 <div className="ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200">
                   <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse inline-block" />
                   LIVE

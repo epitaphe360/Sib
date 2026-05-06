@@ -10,6 +10,7 @@ import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
 import type { StandCollaborator } from '../../types';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface CollaboratorRow extends StandCollaborator {
   company_name?: string;
@@ -39,6 +40,7 @@ const EMPTY_FORM = {
 };
 
 export default function AdminStandCollaboratorsPage() {
+  const { t } = useTranslation();
   const [collaborators, setCollaborators]     = useState<CollaboratorRow[]>([]);
   const [exhibitors, setExhibitors]           = useState<ExhibitorOption[]>([]);
   const [partners, setPartners]               = useState<PartnerOption[]>([]);
@@ -94,7 +96,7 @@ export default function AdminStandCollaboratorsPage() {
         stand_number: exhibitorMap[row.exhibitor_id]?.stand_number,
       })));
     } catch (err: any) {
-      toast.error(err?.message || 'Erreur lors du chargement');
+      toast.error(err?.message || t('common.load_error'));
     } finally {
       setIsLoading(false);
     }
@@ -153,18 +155,18 @@ export default function AdminStandCollaboratorsPage() {
           .update({ ...payload, owner_id: ownerId || editTarget.owner_id })
           .eq('id', editTarget.id);
         if (error) throw error;
-        toast.success('Collaborateur mis a jour');
+        toast.success(t('admin.collab_updated'));
       } else {
         const { error } = await (supabase as any)
           .from('stand_collaborators')
           .insert({ ...payload, badge_generated: false });
         if (error) throw error;
-        toast.success('Collaborateur ajoute');
+        toast.success(t('admin.collab_added'));
       }
       setShowModal(false);
       fetchCollaborators();
     } catch (err: any) {
-      toast.error(err?.message || 'Erreur lors de la sauvegarde');
+      toast.error(err?.message || t('common.save_error'));
     } finally {
       setIsSaving(false);
     }
@@ -173,7 +175,7 @@ export default function AdminStandCollaboratorsPage() {
   const handleToggleStatus = async (id: string, current: string) => {
     const next = current === 'active' ? 'inactive' : 'active';
     const { error } = await (supabase as any).from('stand_collaborators').update({ status: next }).eq('id', id);
-    if (error) { toast.error('Erreur mise a jour statut'); return; }
+    if (error) { toast.error(t('admin.collab_status_error')); return; }
     toast.success(`Collaborateur ${next === 'active' ? 'active' : 'desactive'}`);
     fetchCollaborators();
   };
@@ -184,9 +186,9 @@ export default function AdminStandCollaboratorsPage() {
     try {
       const { error } = await (supabase as any).from('stand_collaborators').delete().eq('id', id);
       if (error) throw error;
-      toast.success('Collaborateur supprime');
+      toast.success(t('admin.collab_deleted'));
       setCollaborators(prev => prev.filter(c => c.id !== id));
-    } catch { toast.error('Erreur lors de la suppression'); }
+    catch { toast.error(t('admin.collab_delete_error')); }
     finally { setDeletingId(null); }
   };
 
@@ -213,8 +215,8 @@ export default function AdminStandCollaboratorsPage() {
           </Link>
           <UserPlus className="h-6 w-6 text-blue-400" />
           <div>
-            <h1 className="text-xl font-bold">Collaborateurs de Stand</h1>
-            <p className="text-white/60 text-sm">Gestion complete des equipes exposants et sponsors</p>
+            <h1 className="text-xl font-bold">{t('admin.collab_title')}</h1>
+            <p className="text-white/60 text-sm">{t('admin.collab_subtitle')}</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <button onClick={fetchCollaborators} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
@@ -222,7 +224,7 @@ export default function AdminStandCollaboratorsPage() {
             </button>
             <button onClick={openAdd}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white font-medium text-sm transition-colors">
-              <Plus className="h-4 w-4" /> Ajouter
+              <Plus className="h-4 w-4" /> {t('common.add')}
             </button>
           </div>
         </div>
@@ -231,10 +233,10 @@ export default function AdminStandCollaboratorsPage() {
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
         <div className="grid grid-cols-4 gap-4">
           {[
-            { label: 'Total',      value: total,    color: 'text-[#1a1f3c]', bg: 'bg-white' },
-            { label: 'Actifs',     value: active,   color: 'text-green-700', bg: 'bg-green-50' },
-            { label: 'Inactifs',   value: inactive, color: 'text-red-700',   bg: 'bg-red-50' },
-            { label: 'En attente', value: pending,  color: 'text-amber-700', bg: 'bg-amber-50' },
+            { label: t('common.total'),    value: total,    color: 'text-[#1a1f3c]', bg: 'bg-white' },
+            { label: t('common.active_plural'), value: active,   color: 'text-green-700', bg: 'bg-green-50' },
+            { label: t('common.inactive_plural'), value: inactive, color: 'text-red-700',   bg: 'bg-red-50' },
+            { label: t('common.pending_plural'), value: pending,  color: 'text-amber-700', bg: 'bg-amber-50' },
           ].map(s => (
             <div key={s.label} className={`${s.bg} rounded-xl p-4 text-center shadow-sm border border-gray-100`}>
               <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
@@ -247,21 +249,21 @@ export default function AdminStandCollaboratorsPage() {
           <div className="relative flex-1 min-w-48">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Rechercher nom, email, societe..."
+              placeholder={t('admin.collab_search_ph')}
               className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
           <select value={filterType} onChange={e => setFilterType(e.target.value as any)}
             className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="all">Tous types</option>
-            <option value="exhibitor">Exposants</option>
-            <option value="partner">Sponsors</option>
+            <option value="all">{t('admin.collab_all_types')}</option>
+            <option value="exhibitor">{t('admin.collab_exhibitors')}</option>
+            <option value="partner">{t('admin.collab_partners')}</option>
           </select>
           <select value={filterStatus} onChange={e => setFilterStatus(e.target.value as any)}
             className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="all">Tous statuts</option>
-            <option value="active">Actifs</option>
-            <option value="inactive">Inactifs</option>
-            <option value="pending">En attente</option>
+            <option value="all">{t('admin.collab_all_statuses')}</option>
+            <option value="active">{t('common.active_plural')}</option>
+            <option value="inactive">{t('common.inactive_plural')}</option>
+            <option value="pending">{t('common.pending_plural')}</option>
           </select>
         </div>
 
@@ -269,15 +271,15 @@ export default function AdminStandCollaboratorsPage() {
           {(() => {
             if (isLoading) return (
               <div className="flex items-center justify-center py-20 text-gray-400">
-                <Loader2 className="h-6 w-6 animate-spin mr-2" /> Chargement...
+                <Loader2 className="h-6 w-6 animate-spin mr-2" /> {t('common.loading')}
               </div>
             );
             if (filtered.length === 0) return (
               <div className="text-center py-20 text-gray-400">
                 <Users className="h-10 w-10 mx-auto mb-3 opacity-30" />
-                <p>Aucun collaborateur trouve</p>
+                <p>{t('admin.collab_empty')}</p>
                 <button onClick={openAdd} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-400 transition-colors">
-                  Ajouter le premier collaborateur
+                  {t('admin.collab_add_first')}
                 </button>
               </div>
             );
@@ -286,12 +288,12 @@ export default function AdminStandCollaboratorsPage() {
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 border-b border-gray-100">
                   <tr>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Collaborateur</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Contact</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Societe / Stand</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Type</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Statut</th>
-                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">{t('admin.collab_col_name')}</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">{t('admin.collab_col_contact')}</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">{t('admin.collab_col_company')}</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">{t('admin.collab_col_type')}</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">{t('admin.collab_col_status')}</th>
+                    <th className="text-right px-4 py-3 font-semibold text-gray-600">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -319,11 +321,11 @@ export default function AdminStandCollaboratorsPage() {
                           <div className="flex items-center gap-1 text-xs font-medium text-gray-700">
                             <Building2 className="h-3 w-3 text-gray-400" />{c.company_name || 'e'}
                           </div>
-                          {c.stand_number && <div className="text-xs text-gray-400 mt-0.5">Stand {c.stand_number}</div>}
+                          {c.stand_number && <div className="text-xs text-gray-400 mt-0.5">{t('admin.collab_stand')} {c.stand_number}</div>}
                         </td>
                         <td className="px-4 py-3">
                           <span className={`text-xs px-2 py-1 rounded-full font-medium ${c.owner_type === 'partner' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
-                            {c.owner_type === 'partner' ? 'Sponsor' : 'Exposant'}
+                            {c.owner_type === 'partner' ? t('admin.collab_partners_sing') : t('admin.collab_exhibitors_sing')}
                           </span>
                         </td>
                         <td className="px-4 py-3">
@@ -360,7 +362,7 @@ export default function AdminStandCollaboratorsPage() {
           })()}
         </div>
 
-        <p className="text-xs text-gray-400 text-center">{filtered.length} collaborateur(s) affiche(s)</p>
+        <p className="text-xs text-gray-400 text-center">{filtered.length} {t('admin.collab_count')}</p>
       </div>
 
       <AnimatePresence>
@@ -376,7 +378,7 @@ export default function AdminStandCollaboratorsPage() {
                     <UserPlus className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <h2 className="font-bold text-gray-900">{editTarget ? 'Modifier le collaborateur' : 'Ajouter un collaborateur'}</h2>
+                    <h2 className="font-bold text-gray-900">{editTarget ? t('admin.collab_modal_edit') : t('admin.collab_modal_add')}</h2>
                     <p className="text-xs text-gray-500">Controle admin total</p>
                   </div>
                 </div>
@@ -387,13 +389,13 @@ export default function AdminStandCollaboratorsPage() {
 
               <form onSubmit={handleSave} className="p-6 space-y-4">
                 <div>
-                  <p className="block text-sm font-medium text-gray-700 mb-2">Appartient a</p>
+                  <p className="block text-sm font-medium text-gray-700 mb-2">{t('admin.collab_belongs_to')}</p>
                   <div className="flex gap-2">
-                    {(['exhibitor', 'partner'] as const).map(t => (
-                      <button key={t} type="button"
-                        onClick={() => setForm(f => ({ ...f, owner_type: t, exhibitor_id: '', partner_id: '' }))}
-                        className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${form.owner_type === t ? 'bg-[#1a1f3c] text-white border-[#1a1f3c]' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'}`}>
-                        {t === 'exhibitor' ? 'Exposant' : 'Sponsor'}
+                    {(['exhibitor', 'partner'] as const).map(otype => (
+                      <button key={otype} type="button"
+                        onClick={() => setForm(f => ({ ...f, owner_type: otype, exhibitor_id: '', partner_id: '' }))}
+                        className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${form.owner_type === otype ? 'bg-[#1a1f3c] text-white border-[#1a1f3c]' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'}`}>
+                        {otype === 'exhibitor' ? t('admin.collab_exhibitors_sing') : t('admin.collab_partners_sing')}
                       </button>
                     ))}
                   </div>
@@ -476,15 +478,15 @@ export default function AdminStandCollaboratorsPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-3 pt-2">
+                  <div className="flex items-center gap-3 pt-2">
                   <button type="button" onClick={() => setShowModal(false)}
                     className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
-                    Annuler
+                    {t('common.cancel')}
                   </button>
                   <button type="submit" disabled={isSaving}
                     className="flex-1 py-2.5 bg-[#1a1f3c] text-white rounded-xl text-sm font-medium hover:bg-[#2d3561] transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                     {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                    {editTarget ? 'Mettre a jour' : 'Ajouter'}
+                    {editTarget ? t('admin.collab_update_btn') : t('common.add')}
                   </button>
                 </div>
               </form>

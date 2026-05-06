@@ -16,6 +16,7 @@ import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { Button } from '../../components/ui/Button';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -230,6 +231,7 @@ const CONFIG_SECTIONS: ConfigSection[] = [
 // ─── Composant guide étapes ───────────────────────────────────────────────────
 
 function HowToGuide({ steps, color }: { steps: ConfigStep[]; color: string }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   return (
     <div className="mt-4 rounded-xl overflow-hidden" style={{ border: `1px solid ${color}25` }}>
@@ -240,7 +242,7 @@ function HowToGuide({ steps, color }: { steps: ConfigStep[]; color: string }) {
       >
         <span className="flex items-center gap-2 text-sm font-semibold" style={{ color }}>
           <Info className="h-4 w-4" />
-          Comment trouver ces informations ?
+          {t('admin.config_how_to')}
         </span>
         {open ? <ChevronUp className="h-4 w-4" style={{ color }} /> : <ChevronDown className="h-4 w-4" style={{ color }} />}
       </button>
@@ -265,7 +267,7 @@ function HowToGuide({ steps, color }: { steps: ConfigStep[]; color: string }) {
                       className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full transition-colors"
                       style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}
                     >
-                      <ExternalLink className="h-3 w-3" /> Ouvrir le lien
+                      <ExternalLink className="h-3 w-3" /> {t('admin.config_open_link')}
                     </a>
                   )}
                 </div>
@@ -294,6 +296,7 @@ function ConfigInput({
 }) {
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation();
 
   const isPassword = field.type === 'password';
   const inputType = isPassword && !visible ? 'password' : (field.type === 'number' ? 'number' : 'text');
@@ -321,12 +324,12 @@ function ConfigInput({
         </label>
         {value && (
           <span className="flex items-center gap-1 text-xs text-green-400">
-            <CheckCircle className="h-3 w-3" /> Configuré
+            <CheckCircle className="h-3 w-3" /> {t('admin.config_field_configured')}
           </span>
         )}
         {!value && field.required && (
           <span className="flex items-center gap-1 text-xs text-red-400">
-            <XCircle className="h-3 w-3" /> Requis
+            <XCircle className="h-3 w-3" /> {t('admin.config_field_required')}
           </span>
         )}
       </div>
@@ -379,6 +382,7 @@ function ConfigSectionCard({
   saving: string | null;
 }) {
   const [expanded, setExpanded] = useState(true);
+  const { t } = useTranslation();
   const Icon = section.icon;
 
   const totalFields = section.fields.length;
@@ -414,8 +418,8 @@ function ConfigSectionCard({
           <div className="flex items-center gap-2">
             <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${isComplete ? 'bg-green-500/15 text-green-400' : missingRequired > 0 ? 'bg-red-500/15 text-red-400' : 'bg-yellow-500/15 text-yellow-400'}`}>
               {isComplete
-                ? <><CheckCircle className="h-3 w-3" /> Complet</>
-                : <><XCircle className="h-3 w-3" /> {missingRequired} requis manquant{missingRequired > 1 ? 's' : ''}</>
+                ? <><CheckCircle className="h-3 w-3" /> {t('admin.config_complete')}</>
+                : <><XCircle className="h-3 w-3" /> {missingRequired} {t('admin.config_missing_required')}{missingRequired > 1 ? 's' : ''}</>
               }
             </div>
             <span className="text-xs text-white/30">{configuredFields}/{totalFields}</span>
@@ -448,8 +452,8 @@ function ConfigSectionCard({
               style={{ background: '#C9A84C' }}
             >
               {saving === section.id
-                ? <><Loader2 className="h-4 w-4 animate-spin" /> Enregistrement...</>
-                : <><Save className="h-4 w-4" /> Sauvegarder {section.label}</>
+                ? <><Loader2 className="h-4 w-4 animate-spin" /> {t('common.saving')}</>
+                : <><Save className="h-4 w-4" /> {t('common.save')} {section.label}</>
               }
             </Button>
           </div>
@@ -469,6 +473,7 @@ interface RegControl {
 }
 
 export default function AdminConfigPage() {
+  const { t } = useTranslation();
   const [config, setConfig] = useState<AppConfig>({});
   const [saving, setSaving] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -488,7 +493,7 @@ export default function AdminConfigPage() {
       if (error) {
         // Table peut ne pas exister encore
         if (error.code === '42P01') {
-          toast.info('La table app_settings n\'existe pas encore. Elle sera créée lors du premier enregistrement.');
+          toast.info(t('admin.config_no_table'));
         }
         setConfig({});
         return;
@@ -504,7 +509,7 @@ export default function AdminConfigPage() {
         partner: configMap['partner_registration_open'] === 'true',
       });
     } catch {
-      toast.error('Erreur lors du chargement de la configuration');
+      toast.error(t('common.load_error'));
     } finally {
       setLoading(false);
     }
@@ -529,7 +534,7 @@ export default function AdminConfigPage() {
         .map(f => ({ key: f.key, value: config[f.key] || '', updated_at: new Date().toISOString() }));
 
       if (upserts.length === 0) {
-        toast.info('Aucune valeur à enregistrer');
+        toast.info(t('admin.config_nothing_to_save'));
         return;
       }
 
@@ -540,14 +545,14 @@ export default function AdminConfigPage() {
 
       if (error) {
         if (error.code === '42P01') {
-          toast.error('La table app_settings n\'existe pas. Exécutez la migration SQL d\'abord.', { duration: 6000 });
+          toast.error(t('admin.config_no_table_sql'), { duration: 6000 });
         } else {
           throw error;
         }
         return;
       }
 
-      toast.success(`✅ Section "${section.label}" sauvegardée avec succès`);
+      toast.success(`✅ ${t('admin.config_section_saved').replace('{label}', section.label)}`);
     } catch (err: unknown) {
       toast.error(`Erreur: ${err instanceof Error ? err.message : 'Inconnue'}`);
     } finally {
@@ -561,12 +566,12 @@ export default function AdminConfigPage() {
       const res = await fetch('/api/health');
       const data = await res.json();
       if (data.email === 'configured') {
-        toast.success('✅ SMTP configuré et opérationnel');
+        toast.success(t('admin.config_smtp_ok'));
       } else {
-        toast.warning('⚠️ SMTP non configuré (SMTP_PASS manquant sur le serveur)');
+        toast.warning(t('admin.config_smtp_missing'));
       }
     } catch {
-      toast.error('❌ Impossible de contacter le serveur API');
+      toast.error(t('admin.config_api_error'));
     } finally {
       setTestingEmail(false);
     }
@@ -577,7 +582,7 @@ export default function AdminConfigPage() {
     try {
       const { error } = await supabase.from('users').select('id').limit(1);
       if (error) {throw error;}
-      toast.success('✅ Connexion Supabase opérationnelle');
+      toast.success(t('admin.config_db_ok'));
     } catch (err: unknown) {
       toast.error(`❌ Erreur Supabase: ${err instanceof Error ? err.message : 'Connexion échouée'}`);
     } finally {
@@ -598,8 +603,8 @@ export default function AdminConfigPage() {
         );
       if (error) { throw error; }
       setRegControl(prev => ({ ...prev, [type]: newValue }));
-      const label = type === 'exhibitor' ? 'Inscriptions Exposants' : 'Inscriptions Sponsors';
-      toast.success(newValue ? `✅ ${label} ouvertes` : `🔒 ${label} clôturées`);
+      const label = type === 'exhibitor' ? t('admin.config_reg_exhibitors') : t('admin.config_reg_partners');
+      toast.success(newValue ? `✅ ${label} ${t('admin.config_reg_opened')}` : `🔒 ${label} ${t('admin.config_reg_closed')}`);
     } catch (err: unknown) {
       toast.error(`Erreur: ${err instanceof Error ? err.message : 'Inconnue'}`);
     } finally {
@@ -621,7 +626,7 @@ export default function AdminConfigPage() {
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-white/60 hover:text-white mb-8">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Retour au Tableau de Bord
+          <ArrowLeft className="w-4 h-4 mr-2" /> {t('common.back_to_dashboard')}
         </Link>
 
         {/* Header */}
@@ -637,11 +642,11 @@ export default function AdminConfigPage() {
                   <Key className="h-6 w-6" style={{ color: '#C9A84C' }} />
                 </div>
                 <h1 className="text-3xl font-bold text-white" style={{ fontFamily: 'var(--font-heading, serif)' }}>
-                  Configuration Centralisée
+                  {t('admin.config_title')}
                 </h1>
               </div>
               <p className="text-white/40 text-sm ml-14">
-                Gérez toutes les clés API et paramètres de l'application depuis un seul endroit
+                {t('admin.config_subtitle')}
               </p>
             </div>
 
@@ -654,7 +659,7 @@ export default function AdminConfigPage() {
                 style={{ background: 'rgba(62,207,142,0.1)', border: '1px solid rgba(62,207,142,0.2)' }}
               >
                 {testingDb ? <Loader2 className="h-4 w-4 animate-spin" /> : <Database className="h-4 w-4 text-[#3ECF8E]" />}
-                Tester Supabase
+                {t('admin.config_test_db')}
               </button>
               <button
                 onClick={handleTestEmail}
@@ -663,7 +668,7 @@ export default function AdminConfigPage() {
                 style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)' }}
               >
                 {testingEmail ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4 text-blue-400" />}
-                Tester Email
+                {t('admin.config_test_email')}
               </button>
               <button
                 onClick={loadConfig}
@@ -672,7 +677,7 @@ export default function AdminConfigPage() {
                 style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
                 <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                Actualiser
+                {t('common.refresh')}
               </button>
             </div>
           </div>
@@ -680,7 +685,7 @@ export default function AdminConfigPage() {
           {/* Barre de progression globale */}
           <div className="mt-6 p-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-white/70">Complétion globale</span>
+              <span className="text-sm font-medium text-white/70">{t('admin.config_global_completion')}</span>
               <span className="text-sm font-bold" style={{ color: completionPct === 100 ? '#3ECF8E' : completionPct >= 60 ? '#C9A84C' : '#EF4444' }}>
                 {completionPct}%
               </span>
@@ -701,7 +706,7 @@ export default function AdminConfigPage() {
               />
             </div>
             <p className="text-xs text-white/30 mt-2">
-              {configuredRequired.length} / {allRequired.length} champs obligatoires configurés
+              {configuredRequired.length} / {allRequired.length} {t('admin.config_required_fields')}
             </p>
           </div>
 
@@ -730,8 +735,8 @@ export default function AdminConfigPage() {
               <Shield className="h-5 w-5" style={{ color: '#C9A84C' }} />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Contrôle des Inscriptions</h3>
-              <p className="text-xs text-white/40">Ouvrez ou fermez les inscriptions exposants et sponsors en temps réel</p>
+              <h3 className="text-base font-bold text-white">{t('admin.config_reg_control_title')}</h3>
+              <p className="text-xs text-white/40">{t('admin.config_reg_control_subtitle')}</p>
             </div>
           </div>
 
@@ -740,7 +745,7 @@ export default function AdminConfigPage() {
             {(['exhibitor', 'partner'] as const).map((type) => {
               const isOpen = regControl[type];
               const isSaving = savingReg === type;
-              const label = type === 'exhibitor' ? 'Inscriptions Exposants' : 'Inscriptions Sponsors';
+              const label = type === 'exhibitor' ? t('admin.config_reg_exhibitors') : t('admin.config_reg_partners');
               const Icon = type === 'exhibitor' ? Users : UserCheck;
               const closedMsg = type === 'exhibitor'
                 ? 'Tous les stands ont été vendus'
@@ -762,7 +767,7 @@ export default function AdminConfigPage() {
                       <Icon className="h-4 w-4" style={{ color: isOpen ? '#3ECF8E' : '#EF4444' }} />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold text-white">{label}</p>
+                  <p className="text-sm font-semibold text-white">{label}</p>
                       <p className="text-xs truncate" style={{ color: isOpen ? '#3ECF8E' : '#EF4444' }}>
                         {isOpen ? '✅ Ouvertes' : `🔒 ${closedMsg}`}
                       </p>
@@ -788,7 +793,7 @@ export default function AdminConfigPage() {
 
           <p className="mt-3 text-xs text-white/30 flex items-center gap-1.5">
             <Info className="h-3.5 w-3.5" />
-            Le changement est instantané — les pages d'inscription exposent le message correspondant en temps réel.
+            {t('admin.config_reg_realtime')}
           </p>
         </motion.div>
 
@@ -796,7 +801,7 @@ export default function AdminConfigPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="h-10 w-10 animate-spin text-[#C9A84C] mb-4" />
-            <p className="text-white/40">Chargement de la configuration...</p>
+            <p className="text-white/40">{t('common.loading')}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -830,9 +835,9 @@ export default function AdminConfigPage() {
           <div className="flex items-start gap-3">
             <Globe className="h-5 w-5 mt-0.5 flex-shrink-0 text-cyan-400" />
             <div>
-              <h4 className="text-sm font-semibold text-white mb-1">Première utilisation ? Créer la table app_settings</h4>
+              <h4 className="text-sm font-semibold text-white mb-1">{t('admin.config_first_use_title')}</h4>
               <p className="text-xs text-white/40 mb-3">
-                Exécutez ce SQL dans votre Supabase Dashboard → SQL Editor :
+                {t('admin.config_first_use_hint')}
               </p>
               <pre className="text-xs bg-black/40 p-3 rounded-lg text-cyan-300 overflow-x-auto whitespace-pre-wrap">
 {`CREATE TABLE IF NOT EXISTS app_settings (

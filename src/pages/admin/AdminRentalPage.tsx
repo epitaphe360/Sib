@@ -10,6 +10,7 @@ import {
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface RentalItem {
   id: string;
@@ -94,6 +95,7 @@ const Pill: React.FC<Readonly<{ cfg: { label: string; color: string } }>> = ({ c
 );
 
 export default function AdminRentalPage() {
+  const { t } = useTranslation();
   const [items, setItems]     = useState<RentalItem[]>([]);
   const [orders, setOrders]   = useState<RentalOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -128,8 +130,8 @@ export default function AdminRentalPage() {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) { return; }
-    if (!file.type.startsWith('image/')) { toast.error('Fichier non supporté — choisissez une image'); return; }
-    if (file.size > 5 * 1024 * 1024) { toast.error('Image trop lourde (max 5 Mo)'); return; }
+    if (!file.type.startsWith('image/')) { toast.error(t('admin.rental_invalid_file')); return; }
+    if (file.size > 5 * 1024 * 1024) { toast.error(t('admin.rental_file_too_large')); return; }
     setUploadingImage(true);
     try {
       const ext = file.name.split('.').pop();
@@ -143,9 +145,9 @@ export default function AdminRentalPage() {
       }
       const { data: { publicUrl } } = supabase.storage.from('media').getPublicUrl(path);
       setForm(f => ({ ...f, image_url: publicUrl }));
-      toast.success('Image téléchargée');
+      toast.success(t('admin.rental_image_uploaded'));
     } catch (err: any) {
-      toast.error(err?.message ?? 'Erreur upload image');
+      toast.error(err?.message ?? t('admin.rental_upload_error'));
     } finally {
       setUploadingImage(false);
       if (fileInputRef.current) { fileInputRef.current.value = ''; }
@@ -169,7 +171,7 @@ export default function AdminRentalPage() {
       setItems(itemsData ?? []);
       setOrders(ordersData ?? []);
     } catch {
-      toast.error('Erreur chargement données');
+      toast.error(t('common.load_error'));
     } finally {
       setIsLoading(false);
     }
@@ -179,19 +181,19 @@ export default function AdminRentalPage() {
 
   /* ── save item ── */
   const handleSave = async () => {
-    if (!form.name.trim()) { toast.error('Le nom est requis'); return; }
-    if (form.price_per_day < 0) { toast.error('Le prix ne peut pas être négatif'); return; }
-    if (form.stock_total < 0) { toast.error('Le stock ne peut pas être négatif'); return; }
+    if (!form.name.trim()) { toast.error(t('admin.rental_name_required')); return; }
+    if (form.price_per_day < 0) { toast.error(t('admin.rental_price_negative')); return; }
+    if (form.stock_total < 0) { toast.error(t('admin.rental_stock_negative')); return; }
     setIsSaving(true);
     try {
       if (editingItem) {
         const { error } = await (supabase as any).from('rental_items').update({ ...form }).eq('id', editingItem.id);
         if (error) { throw error; }
-        toast.success('Article mis à jour');
+        toast.success(t('admin.rental_item_updated'));
       } else {
         const { error } = await (supabase as any).from('rental_items').insert({ ...form });
         if (error) { throw error; }
-        toast.success('Article ajouté');
+        toast.success(t('admin.rental_item_added'));
       }
       setShowForm(false);
       setEditingItem(null);
@@ -211,7 +213,7 @@ export default function AdminRentalPage() {
     try {
       const { error } = await (supabase as any).from('rental_items').delete().eq('id', item.id);
       if (error) { throw error; }
-      toast.success('Article supprimé');
+      toast.success(t('admin.rental_item_deleted'));
       fetchData();
     } catch (err: any) {
       toast.error(err?.message ?? 'Impossible de supprimer (commandes existantes ?)');
@@ -231,7 +233,7 @@ export default function AdminRentalPage() {
     try {
       const { error } = await (supabase as any).from('rental_orders').update({ status }).eq('id', orderId);
       if (error) { throw error; }
-      toast.success('Statut commande mis à jour');
+      toast.success(t('admin.rental_order_status_updated'));
       fetchData();
     } catch (err: any) { toast.error(err?.message ?? 'Erreur'); }
   };
@@ -246,7 +248,7 @@ export default function AdminRentalPage() {
       }
       const { error } = await (supabase as any).from('rental_orders').update(patch).eq('id', orderId);
       if (error) { throw error; }
-      toast.success('Paiement mis à jour');
+      toast.success(t('admin.rental_payment_updated'));
       fetchData();
     } catch (err: any) { toast.error(err?.message ?? 'Erreur'); }
   };
@@ -254,10 +256,10 @@ export default function AdminRentalPage() {
   /* ── create / update order ── */
   const handleSaveOrder = async () => {
     const { item_id, customer_email, quantity, rental_start, rental_end } = orderForm;
-    if (!item_id) { toast.error('Sélectionnez un article'); return; }
-    if (!customer_email.trim()) { toast.error('Email client requis'); return; }
-    if (!rental_start || !rental_end) { toast.error('Dates de location requises'); return; }
-    if (rental_end < rental_start) { toast.error('La date de fin doit être après le début'); return; }
+    if (!item_id) { toast.error(t('admin.rental_select_item')); return; }
+    if (!customer_email.trim()) { toast.error(t('admin.rental_email_required')); return; }
+    if (!rental_start || !rental_end) { toast.error(t('admin.rental_dates_required')); return; }
+    if (rental_end < rental_start) { toast.error(t('admin.rental_date_end_invalid')); return; }
     setIsSavingOrder(true);
     try {
       const { data: userData } = await (supabase as any)
@@ -288,11 +290,11 @@ export default function AdminRentalPage() {
       if (editingOrder) {
         const { error } = await (supabase as any).from('rental_orders').update(payload).eq('id', editingOrder.id);
         if (error) { throw error; }
-        toast.success('Commande mise à jour');
+        toast.success(t('admin.rental_order_updated'));
       } else {
         const { error } = await (supabase as any).from('rental_orders').insert(payload);
         if (error) { throw error; }
-        toast.success('Commande créée');
+        toast.success(t('admin.rental_order_created'));
         if (item) {
           await (supabase as any).from('rental_items')
             .update({ stock_available: Math.max(0, item.stock_available - quantity) })
@@ -317,7 +319,7 @@ export default function AdminRentalPage() {
     try {
       const { error } = await (supabase as any).from('rental_orders').delete().eq('id', orderId);
       if (error) { throw error; }
-      toast.success('Commande supprimée');
+      toast.success(t('admin.rental_order_deleted'));
       fetchData();
     } catch (err: any) {
       toast.error(err?.message ?? 'Erreur suppression');
@@ -418,7 +420,7 @@ export default function AdminRentalPage() {
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-6">
-        <ArrowLeft className="w-4 h-4 mr-2" /> Retour au Tableau de Bord
+        <ArrowLeft className="w-4 h-4 mr-2" /> {t('common.back_to_dashboard')}
       </Link>
 
       {/* Header */}
@@ -428,13 +430,13 @@ export default function AdminRentalPage() {
             <Package className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Location de matériel</h1>
-            <p className="text-sm text-gray-500">Catalogue, stock, commandes et paiements</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t('admin.rental_title')}</h1>
+            <p className="text-sm text-gray-500">{t('admin.rental_subtitle')}</p>
           </div>
         </div>
         <button onClick={fetchData}
           className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50">
-          <RefreshCw className="h-4 w-4" /> Actualiser
+          <RefreshCw className="h-4 w-4" /> {t('common.refresh')}
         </button>
       </div>
 
@@ -457,12 +459,12 @@ export default function AdminRentalPage() {
 
       {/* Tabs */}
       <div className="flex gap-2 mb-6 flex-wrap">
-        {(['items', 'orders'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)}
+        {(['items', 'orders'] as const).map(tabKey => (
+          <button key={tabKey} onClick={() => setTab(tabKey)}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
-              tab === t ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:border-emerald-300'
+              tab === tabKey ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:border-emerald-300'
             }`}>
-            {t === 'items' ? '📦 Articles / Stock' : '🛍️ Commandes'}
+            {tabKey === 'items' ? `📦 ${t('admin.rental_tab_items')}` : `🛍️ ${t('admin.rental_tab_orders')}`}
           </button>
         ))}
         {tab === 'items' && (
@@ -470,7 +472,7 @@ export default function AdminRentalPage() {
             onClick={() => { setEditingItem(null); setForm(EMPTY_FORM); setShowForm(v => !v); }}
             className="ml-auto flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm"
           >
-            <Plus className="h-4 w-4" /> Nouvel article
+            <Plus className="h-4 w-4" /> {t('admin.rental_new_item')}
           </button>
         )}
         {tab === 'orders' && (
@@ -478,7 +480,7 @@ export default function AdminRentalPage() {
             onClick={() => { setEditingOrder(null); setOrderForm(EMPTY_ORDER_FORM); setShowOrderForm(v => !v); }}
             className="ml-auto flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm"
           >
-            <Plus className="h-4 w-4" /> Nouvelle commande
+            <Plus className="h-4 w-4" /> {t('admin.rental_new_order')}
           </button>
         )}
       </div>
@@ -497,7 +499,7 @@ export default function AdminRentalPage() {
               >
                 <div className="bg-white rounded-xl border border-emerald-100 p-5 mb-6 shadow-sm">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bold text-gray-900">{editingItem ? 'Modifier l\'article' : 'Nouvel article'}</h3>
+                    <h3 className="font-bold text-gray-900">{editingItem ? t('admin.rental_edit_item') : t('admin.rental_new_item')}</h3>
                     <button onClick={() => { setShowForm(false); setEditingItem(null); setForm(EMPTY_FORM); }}
                       className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-400">
                       <X className="h-4 w-4" />
@@ -505,21 +507,21 @@ export default function AdminRentalPage() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div className="sm:col-span-2 lg:col-span-3">
-                      <label htmlFor="item-name" className="text-xs font-medium text-gray-600 mb-1 block">Nom *</label>
+                      <label htmlFor="item-name" className="text-xs font-medium text-gray-600 mb-1 block">{t('common.name')} *</label>
                       <input id="item-name" type="text" value={form.name}
                         onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                         placeholder="Ex: Télévision 55 pouces, Table pliante..."
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
                     </div>
                     <div className="sm:col-span-2 lg:col-span-3">
-                      <label htmlFor="item-desc" className="text-xs font-medium text-gray-600 mb-1 block">Description</label>
+                      <label htmlFor="item-desc" className="text-xs font-medium text-gray-600 mb-1 block">{t('common.description')}</label>
                       <textarea id="item-desc" value={form.description ?? ''}
                         onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                         rows={2} placeholder="Caractéristiques, dimensions, marque..."
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none resize-none" />
                     </div>
                     <div>
-                      <label htmlFor="item-cat" className="text-xs font-medium text-gray-600 mb-1 block">Catégorie</label>
+                      <label htmlFor="item-cat" className="text-xs font-medium text-gray-600 mb-1 block">{t('common.category')}</label>
                       <select id="item-cat" value={form.category}
                         onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-500 outline-none">
@@ -529,20 +531,20 @@ export default function AdminRentalPage() {
                       </select>
                     </div>
                     <div>
-                      <label htmlFor="item-unit" className="text-xs font-medium text-gray-600 mb-1 block">Unité</label>
+                      <label htmlFor="item-unit" className="text-xs font-medium text-gray-600 mb-1 block">{t('admin.rental_unit')}</label>
                       <input id="item-unit" type="text" value={form.unit}
                         onChange={e => setForm(f => ({ ...f, unit: e.target.value }))}
                         placeholder="unité, m², kit, jour..."
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
                     </div>
                     <div>
-                      <label htmlFor="item-price" className="text-xs font-medium text-gray-600 mb-1 block">Prix / jour (MAD)</label>
+                      <label htmlFor="item-price" className="text-xs font-medium text-gray-600 mb-1 block">{t('admin.rental_price_day')} (MAD)</label>
                       <input id="item-price" type="number" min={0} step={0.01} value={form.price_per_day}
                         onChange={e => setForm(f => ({ ...f, price_per_day: Number.parseFloat(e.target.value) || 0 }))}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
                     </div>
                     <div>
-                      <label htmlFor="item-stock-total" className="text-xs font-medium text-gray-600 mb-1 block">Stock total</label>
+                      <label htmlFor="item-stock-total" className="text-xs font-medium text-gray-600 mb-1 block">{t('admin.rental_stock_total')}</label>
                       <input id="item-stock-total" type="number" min={0} value={form.stock_total}
                         onChange={e => {
                           const n = Number.parseInt(e.target.value, 10) || 0;
@@ -551,7 +553,7 @@ export default function AdminRentalPage() {
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
                     </div>
                     <div>
-                      <label htmlFor="item-stock-avail" className="text-xs font-medium text-gray-600 mb-1 block">Stock disponible</label>
+                      <label htmlFor="item-stock-avail" className="text-xs font-medium text-gray-600 mb-1 block">{t('admin.rental_stock_available')}</label>
                       <input id="item-stock-avail" type="number" min={0} max={form.stock_total} value={form.stock_available}
                         onChange={e => setForm(f => ({ ...f, stock_available: Math.min(Number.parseInt(e.target.value, 10) || 0, f.stock_total) }))}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
@@ -608,18 +610,18 @@ export default function AdminRentalPage() {
                       <input type="checkbox" id="is_active" checked={form.is_active}
                         onChange={e => setForm(f => ({ ...f, is_active: e.target.checked }))}
                         className="rounded border-gray-300 text-emerald-600" />
-                      <label htmlFor="is_active" className="text-sm text-gray-700">Actif (visible catalogue)</label>
+                      <label htmlFor="is_active" className="text-sm text-gray-700">{t('admin.rental_active_visible')}</label>
                     </div>
                   </div>
                   <div className="flex gap-3 mt-5 pt-4 border-t border-gray-100">
                     <button onClick={() => { setShowForm(false); setEditingItem(null); setForm(EMPTY_FORM); }}
                       className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
-                      Annuler
+                      {t('common.cancel')}
                     </button>
                     <button onClick={handleSave} disabled={isSaving}
                       className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white px-5 py-2 rounded-lg text-sm font-semibold transition">
                       {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                      {editingItem ? 'Mettre à jour' : 'Ajouter'}
+                      {editingItem ? t('common.update') : t('common.add')}
                     </button>
                   </div>
                 </div>
@@ -631,15 +633,14 @@ export default function AdminRentalPage() {
           <div className="flex flex-wrap gap-2 mb-4">
             <div className="relative flex-1 min-w-48">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input type="text" placeholder="Rechercher un article..." value={itemSearch}
-                onChange={e => setItemSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+              <input type="text" placeholder={t('admin.rental_search_item_ph')} value={itemSearch}
+              placeholder={t('admin.rental_search_item_ph')}
             </div>
             <div className="flex items-center gap-1.5">
               <Filter className="h-4 w-4 text-gray-400" />
               <select value={itemCatFilter} onChange={e => setItemCatFilter(e.target.value)}
                 className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-500 outline-none">
-                <option value="all">Toutes catégories</option>
+                <option value="all">{t('admin.rental_all_categories')}</option>
                 {CATEGORIES.map(c => (
                   <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
                 ))}
@@ -654,7 +655,7 @@ export default function AdminRentalPage() {
           {!isLoading && filteredItems.length === 0 && (
             <div className="text-center py-16 text-gray-400">
               <Package className="h-10 w-10 mx-auto mb-3 opacity-30" />
-              <p className="text-sm">Aucun article trouvé</p>
+              <p className="text-sm">{t('admin.rental_no_items')}</p>
             </div>
           )}
           {!isLoading && filteredItems.length > 0 && (
@@ -705,7 +706,7 @@ export default function AdminRentalPage() {
                             ? 'bg-green-50 text-green-700 border-green-200 hover:bg-red-50 hover:text-red-700 hover:border-red-200'
                             : 'bg-gray-100 text-gray-500 border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200'
                         }`}>
-                        {item.is_active ? 'Actif' : 'Inactif'}
+                        {item.is_active ? t('common.active') : t('common.inactive')}
                       </button>
                       <button
                         onClick={() => handleDelete(item)}
@@ -740,7 +741,7 @@ export default function AdminRentalPage() {
               >
                 <div className="bg-white rounded-xl border border-emerald-100 p-5 shadow-sm">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bold text-gray-900">{editingOrder ? 'Modifier la commande' : 'Nouvelle commande'}</h3>
+                    <h3 className="font-bold text-gray-900">{editingOrder ? t('admin.rental_edit_order') : t('admin.rental_new_order')}</h3>
                     <button onClick={() => { setShowOrderForm(false); setEditingOrder(null); setOrderForm(EMPTY_ORDER_FORM); }}
                       className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-400"><X className="h-4 w-4" /></button>
                   </div>
@@ -843,11 +844,11 @@ export default function AdminRentalPage() {
                   </div>
                   <div className="flex gap-3 mt-4 pt-4 border-t border-gray-100">
                     <button onClick={() => { setShowOrderForm(false); setEditingOrder(null); setOrderForm(EMPTY_ORDER_FORM); }}
-                      className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">Annuler</button>
+                      className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">{t('common.cancel')}</button>
                     <button onClick={handleSaveOrder} disabled={isSavingOrder}
                       className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white px-5 py-2 rounded-lg text-sm font-semibold transition">
                       {isSavingOrder ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                      {editingOrder ? 'Mettre à jour' : 'Créer la commande'}
+                      {editingOrder ? t('common.update') : t('admin.rental_create_order')}
                     </button>
                   </div>
                 </div>
@@ -859,23 +860,22 @@ export default function AdminRentalPage() {
           <div className="flex flex-wrap gap-2 mb-4">
             <div className="relative flex-1 min-w-48">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input type="text" placeholder="Article, email client..." value={orderSearch}
-                onChange={e => setOrderSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+              <input type="text" placeholder={t('admin.rental_search_order_ph')} value={orderSearch}
+              placeholder={t('admin.rental_search_order_ph')}
             </div>
             <select value={orderStatusFilter} onChange={e => setOrderStatusFilter(e.target.value)}
               className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-500 outline-none">
-              <option value="all">Tous statuts</option>
+              <option value="all">{t('admin.rental_all_statuses')}</option>
               {Object.entries(ORDER_STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
             </select>
             <select value={orderPayFilter} onChange={e => setOrderPayFilter(e.target.value)}
               className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-500 outline-none">
-              <option value="all">Tous paiements</option>
+              <option value="all">{t('admin.rental_all_payments')}</option>
               {Object.entries(PAYMENT_STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
             </select>
             <button onClick={exportCSV} title="Exporter en CSV"
               className="flex items-center gap-1.5 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 hover:border-emerald-300">
-              <Download className="h-4 w-4" /> Export CSV
+              <Download className="h-4 w-4" /> {t('admin.rental_export_csv')}
             </button>
           </div>
 
@@ -885,7 +885,7 @@ export default function AdminRentalPage() {
           {!isLoading && filteredOrders.length === 0 && (
             <div className="text-center py-16 text-gray-400">
               <ShoppingBag className="h-10 w-10 mx-auto mb-3 opacity-30" />
-              <p className="text-sm">Aucune commande trouvée</p>
+              <p className="text-sm">{t('admin.rental_no_orders')}</p>
             </div>
           )}
           {!isLoading && filteredOrders.length > 0 && (
