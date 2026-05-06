@@ -1,8 +1,6 @@
-ï»¿import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Filter, Grid2x2 as Grid, List, Handshake } from 'lucide-react';
-import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
 import { motion } from 'framer-motion';
 import { CONFIG } from '../lib/config';
 import { SupabaseService } from '../services/supabaseService';
@@ -12,6 +10,7 @@ import { usePartnerTranslation } from '../hooks/usePartnerTranslation';
 import { COUNTRIES } from '../data/countries';
 import PartnerCard from '../components/partner/PartnerCard';
 import { LogoShowcaseSection } from '../components/home/LogoShowcaseSection';
+import { PageHero } from '../components/ui/PageHero';
 
 interface Partner {
   id: string;
@@ -34,8 +33,8 @@ interface Partner {
   employees: string;
 }
 
-// Les partenaires sont maintenant chargÃ©s depuis Supabase
-// Composant wrapper pour gÃ©rer la traduction de chaque partenaire
+// Les partenaires sont maintenant chargés depuis Supabase
+// Composant wrapper pour gérer la traduction de chaque partenaire
 interface PartnerCardWrapperProps {
   partner: Partner;
   viewMode: 'grid' | 'list';
@@ -135,7 +134,7 @@ export default function PartnersPage() {
         setTotalPartners(0);
         setCurrentPage(0);
         setHasMore(false);
-        // Statistiques par dÃ©faut
+        // Statistiques par défaut
         setPartnerStats({
           organizer: 0,
           co_organizer: 0,
@@ -185,25 +184,25 @@ export default function PartnersPage() {
     setFilteredPartners(filtered);
   }, [partners, searchTerm, selectedTier, selectedCountry]);
 
-  // ? OPTIMISÃ‰: MÃ©moriser les tiers pour Ã©viter recrÃ©ation
+  // ? OPTIMISÉ: Mémoriser les tiers pour éviter recréation
   const partnerTiers = useMemo(() => [
     { value: '', label: t('pages.partners.filter_tier') },
     { value: 'organizer', label: 'Organisateurs' },
     { value: 'co_organizer', label: 'Co-organisateurs' },
     { value: 'official_sponsor', label: 'Sponsor Officiel' },
-    { value: 'delegated_organizer', label: 'Organisateur DÃ©lÃ©guÃ©' },
+    { value: 'delegated_organizer', label: 'Organisateur Délégué' },
     { value: 'partner', label: 'Nos Partenaires' },
     { value: 'press_partner', label: 'Nos Partenaires Presse' },
   ], [t]);
 
-  // ? OPTIMISÃ‰: MÃ©moriser les pays
+  // ? OPTIMISÉ: Mémoriser les pays
   const countries = useMemo(() => {
     const partnerCountries = [...new Set(partners.map(p => p.country).filter(Boolean))];
     const allCountryNames = COUNTRIES.map(c => c.name);
     return [...new Set([...allCountryNames, ...partnerCountries])].sort();
   }, [partners]);
 
-  // ? OPTIMISÃ‰: useCallback pour les handlers
+  // ? OPTIMISÉ: useCallback pour les handlers
   const handleViewDetails = useCallback((partnerId: string, partnerName?: string) => {
     const readableSegment = (partnerName || '').trim()
       .replace(/\s+/g, '-')
@@ -233,31 +232,15 @@ export default function PartnersPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0A0F1E] text-white">
-      {/* Hero dark luxury */}
-      <div className="relative bg-[#0A0F1E] overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80')" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/85 via-[#0A0F1E]/75 to-[#0A0F1E]" />
-        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(201,168,76,0.06) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#C9A84C]/40 bg-[#C9A84C]/10 text-[#E7D192] text-xs font-bold tracking-widest uppercase mb-6">
-              Partenaires & Sponsors
-            </div>
-            <h1 className="font-display text-4xl md:text-5xl font-light text-white mb-4">
-              {t('pages.partners.title')}
-            </h1>
-            <p className="text-lg text-white/55 max-w-2xl mx-auto">
-              {t('pages.partners.description')}
-            </p>
-          </motion.div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50">
+      <PageHero
+        badge={<><Handshake className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Partenaires &amp; Sponsors</span></>}
+        title={<>Nos <span className="text-yellow-300">Partenaires</span></>}
+        subtitle={t('pages.partners.description')}
+        py="py-16 md:py-20"
+      />
 
-      {/* Logo Showcase Section - Bande dÃ©filante des logos partenaires */}
+      {/* Logo Showcase Section - Bande défilante des logos partenaires */}
       <LogoShowcaseSection type="partners" />
 
       {/* Main Content */}
@@ -265,35 +248,35 @@ export default function PartnersPage() {
         {/* Search and Controls */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/30" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
               placeholder={t('pages.partners.search')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C]/50"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 border border-white/15 rounded-lg text-white/70 hover:border-[#C9A84C]/40 hover:text-[#E7D192] transition-colors text-sm"
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-indigo-200 rounded-xl text-indigo-700 hover:bg-indigo-50 transition-colors text-sm font-medium"
             >
               <Filter className="h-4 w-4" />
               Filtres
             </button>
 
-            <div className="flex border border-white/15 rounded-lg overflow-hidden">
+            <div className="flex border border-gray-200 rounded-xl overflow-hidden">
               <button
                 onClick={() => setViewMode(CONFIG.viewModes.grid)}
-                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.grid ? 'bg-[#C9A84C]/20 text-[#E7D192]' : 'text-white/40 hover:text-white/70'}`}
+                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.grid ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-gray-600 bg-white'}`}
               >
                 <Grid className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode(CONFIG.viewModes.list)}
-                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.list ? 'bg-[#C9A84C]/20 text-[#E7D192]' : 'text-white/40 hover:text-white/70'}`}
+                className={`p-2.5 transition-colors ${viewMode === CONFIG.viewModes.list ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-gray-600 bg-white'}`}
               >
                 <List className="h-4 w-4" />
               </button>
@@ -306,20 +289,20 @@ export default function PartnersPage() {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6 p-4 bg-white/5 border border-white/10 rounded-xl mb-6"
+            className="mt-6 p-4 bg-white border border-gray-200 rounded-2xl mb-6 shadow-sm"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+                <label className="block text-xs font-medium text-gray-500 uppercase tracking-widest mb-2">
                   Niveau partenaire
                 </label>
                 <select
                   value={selectedTier}
                   onChange={(e) => setSelectedTier(e.target.value)}
-                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50"
+                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   {partnerTiers.map((tier) => (
-                    <option key={tier.value} value={tier.value} className="bg-[#0A0F1E]">
+                    <option key={tier.value} value={tier.value}>
                       {tier.label}
                     </option>
                   ))}
@@ -327,17 +310,17 @@ export default function PartnersPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+                <label className="block text-xs font-medium text-gray-500 uppercase tracking-widest mb-2">
                   Pays
                 </label>
                 <select
                   value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/50"
+                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  <option value="" className="bg-[#0A0F1E]">Tous les pays</option>
+                  <option value="">Tous les pays</option>
                   {countries.map((country) => (
-                    <option key={country} value={country} className="bg-[#0A0F1E]">
+                    <option key={country} value={country}>
                       {country}
                     </option>
                   ))}
@@ -350,18 +333,18 @@ export default function PartnersPage() {
         {/* Stats - Types Partenaires SIB */}
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
           {[
-            { count: partnerStats.organizer,           label: 'Organisateurs',     icon: 'ðŸ›ï¸' },
-            { count: partnerStats.co_organizer,        label: 'Co-organisateurs',  icon: 'ðŸ¤' },
-            { count: partnerStats.official_sponsor,    label: 'Sponsor Officiel',  icon: 'â­' },
-            { count: partnerStats.delegated_organizer, label: 'Org. DÃ©lÃ©guÃ©',      icon: 'ðŸ“‹' },
-            { count: partnerStats.partner,             label: 'Partenaires',       icon: 'ðŸŒ' },
-            { count: partnerStats.press_partner,       label: 'Presse',            icon: 'ðŸ“°' },
-            { count: partnerStats.total,               label: 'Total',             icon: 'ðŸ¤' },
+            { count: partnerStats.organizer,           label: 'Organisateurs',     icon: '???' },
+            { count: partnerStats.co_organizer,        label: 'Co-organisateurs',  icon: '??' },
+            { count: partnerStats.official_sponsor,    label: 'Sponsor Officiel',  icon: '?' },
+            { count: partnerStats.delegated_organizer, label: 'Org. Délégué',      icon: '??' },
+            { count: partnerStats.partner,             label: 'Partenaires',       icon: '??' },
+            { count: partnerStats.press_partner,       label: 'Presse',            icon: '??' },
+            { count: partnerStats.total,               label: 'Total',             icon: '??' },
           ].map((stat, i) => (
-            <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+            <div key={i} className="bg-white border border-gray-200 rounded-2xl p-4 text-center shadow-sm hover:shadow-md transition-shadow">
               <div className="text-2xl mb-1.5">{stat.icon}</div>
-              <div className="text-xl font-bold text-[#E7D192]">{stat.count}</div>
-              <div className="text-[10px] font-medium text-white/45 uppercase tracking-wider mt-0.5">{stat.label}</div>
+              <div className="text-xl font-bold text-indigo-600">{stat.count}</div>
+              <div className="text-[10px] font-medium text-gray-500 uppercase tracking-wider mt-0.5">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -371,29 +354,29 @@ export default function PartnersPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={`skeleton-${i}`} className="animate-pulse">
-                <div className="bg-white/5 border border-white/8 rounded-2xl p-6 h-80">
-                  <div className="h-4 bg-white/10 rounded mb-4"></div>
-                  <div className="h-20 bg-white/10 rounded mb-4"></div>
-                  <div className="h-4 bg-white/10 rounded mb-2"></div>
-                  <div className="h-4 bg-white/10 rounded w-2/3"></div>
+                <div className="bg-white border border-gray-100 rounded-2xl p-6 h-80">
+                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                  <div className="h-20 bg-gray-100 rounded mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
                 </div>
               </div>
             ))}
           </div>
         ) : filteredPartners.length === 0 ? (
           <div className="text-center py-16">
-            <div className="bg-white/5 border border-white/10 rounded-full p-6 w-24 h-24 mx-auto mb-4 flex items-center justify-center">
-              <Search className="h-10 w-10 text-white/30" />
+            <div className="bg-indigo-50 border border-indigo-100 rounded-full p-6 w-24 h-24 mx-auto mb-4 flex items-center justify-center">
+              <Search className="h-10 w-10 text-indigo-400" />
             </div>
-            <h3 className="text-lg font-display font-light text-white mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
               {t('pages.partners.no_results')}
             </h3>
-            <p className="text-white/40 mb-6">
+            <p className="text-gray-500 mb-6">
               {t('pages.partners.try_modify')}
             </p>
             <button
               onClick={() => { setSearchTerm(''); setSelectedTier(''); setSelectedCountry(''); }}
-              className="inline-flex items-center gap-2 bg-[#C9A84C] text-[#0A0F1E] font-bold px-5 py-2.5 rounded-sm hover:bg-[#E7D192] transition-colors text-sm"
+              className="inline-flex items-center gap-2 bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors text-sm"
             >
               {t('pages.partners.reset_filters')}
             </button>
@@ -401,12 +384,12 @@ export default function PartnersPage() {
         ) : (
           <div className="space-y-10">
             {[
-              { key: 'organizer',           label: 'Organisateurs',         emoji: 'ðŸ›ï¸', gradient: 'from-yellow-600 to-amber-700',   border: 'border-yellow-200', bg: 'bg-yellow-50' },
-              { key: 'co_organizer',        label: 'Co-organisateurs',      emoji: 'ðŸ¤', gradient: 'from-amber-500 to-yellow-600',  border: 'border-amber-200',  bg: 'bg-amber-50' },
-              { key: 'official_sponsor',    label: 'Sponsor Officiel',      emoji: 'â­', gradient: 'from-blue-600 to-blue-800',     border: 'border-blue-200',   bg: 'bg-blue-50' },
-              { key: 'delegated_organizer', label: 'Organisateur DÃ©lÃ©guÃ©',  emoji: 'ðŸ“‹', gradient: 'from-green-600 to-emerald-700', border: 'border-green-200',  bg: 'bg-green-50' },
-              { key: 'partner',             label: 'Nos Partenaires',       emoji: 'ðŸŒ', gradient: 'from-purple-500 to-indigo-600', border: 'border-purple-200', bg: 'bg-purple-50' },
-              { key: 'press_partner',       label: 'Nos Partenaires Presse',emoji: 'ðŸ“°', gradient: 'from-red-600 to-rose-700',      border: 'border-red-200',    bg: 'bg-red-50' },
+              { key: 'organizer',           label: 'Organisateurs',         emoji: '???', gradient: 'from-yellow-600 to-amber-700',   border: 'border-yellow-200', bg: 'bg-yellow-50' },
+              { key: 'co_organizer',        label: 'Co-organisateurs',      emoji: '??', gradient: 'from-amber-500 to-yellow-600',  border: 'border-amber-200',  bg: 'bg-amber-50' },
+              { key: 'official_sponsor',    label: 'Sponsor Officiel',      emoji: '?', gradient: 'from-indigo-600 to-indigo-800',     border: 'border-indigo-200',   bg: 'bg-indigo-50' },
+              { key: 'delegated_organizer', label: 'Organisateur Délégué',  emoji: '??', gradient: 'from-green-600 to-emerald-700', border: 'border-green-200',  bg: 'bg-green-50' },
+              { key: 'partner',             label: 'Nos Partenaires',       emoji: '??', gradient: 'from-purple-500 to-indigo-600', border: 'border-purple-200', bg: 'bg-purple-50' },
+              { key: 'press_partner',       label: 'Nos Partenaires Presse',emoji: '??', gradient: 'from-red-600 to-rose-700',      border: 'border-red-200',    bg: 'bg-red-50' },
             ]
               .map(tier => ({
                 ...tier,
@@ -453,7 +436,7 @@ export default function PartnersPage() {
 
             <div className="pt-4 flex flex-col items-center gap-3">
               <p className="text-sm text-white/35">
-                {partners.length} affichÃ©s sur {totalPartners} partenaires
+                {partners.length} affichés sur {totalPartners} partenaires
               </p>
               {hasMore && (
                 <button
@@ -471,4 +454,5 @@ export default function PartnersPage() {
     </div>
   );
 }
+
 

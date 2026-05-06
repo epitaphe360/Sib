@@ -62,7 +62,7 @@ export default function PartnerMediaLibraryPage() {
       if (error) {throw error;}
       setMedia(data || []);
     } catch (error) {
-      console.error('Erreur chargement m√©dias:', error);
+      console.error('Erreur chargement mÈdias:', error);
     } finally {
       setIsLoading(false);
     }
@@ -81,21 +81,21 @@ export default function PartnerMediaLibraryPage() {
         return (
           <Badge variant="success" className="flex items-center">
             <CheckCircle className="w-3 h-3 mr-1" />
-            Approuv√©
+            ApprouvÈ
           </Badge>
         );
       case 'published':
         return (
           <Badge variant="success" className="flex items-center">
             <CheckCircle className="w-3 h-3 mr-1" />
-            Publi√©
+            PubliÈ
           </Badge>
         );
       case 'rejected':
         return (
           <Badge variant="error" className="flex items-center">
             <XCircle className="w-3 h-3 mr-1" />
-            Rejet√©
+            RejetÈ
           </Badge>
         );
       default:
@@ -125,24 +125,24 @@ export default function PartnerMediaLibraryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <Link to={ROUTES.PARTNER_DASHBOARD} className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
-            ‚Üê Retour au dashboard
+            ? Retour au dashboard
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Ma Biblioth√®que M√©dias</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Ma BibliothËque MÈdias</h1>
               <p className="mt-2 text-gray-600">
-                G√©rez vos contenus m√©dias soumis
+                GÈrez vos contenus mÈdias soumis
               </p>
             </div>
             <Link to={ROUTES.PARTNER_MEDIA_UPLOAD}>
               <Button className="bg-orange-600 hover:bg-orange-700">
                 <Upload className="w-4 h-4 mr-2" />
-                Soumettre un m√©dia
+                Soumettre un mÈdia
               </Button>
             </Link>
           </div>
@@ -178,7 +178,7 @@ export default function PartnerMediaLibraryPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Approuv√©s</p>
+                  <p className="text-sm font-medium text-gray-600">ApprouvÈs</p>
                   <p className="text-3xl font-bold text-green-600">{stats.approved}</p>
                 </div>
                 <CheckCircle className="h-8 w-8 text-green-600" />
@@ -190,7 +190,7 @@ export default function PartnerMediaLibraryPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Rejet√©s</p>
+                  <p className="text-sm font-medium text-gray-600">RejetÈs</p>
                   <p className="text-3xl font-bold text-red-600">{stats.rejected}</p>
                 </div>
                 <XCircle className="h-8 w-8 text-red-600" />
@@ -217,38 +217,38 @@ export default function PartnerMediaLibraryPage() {
             variant={filter === 'approved' ? 'default' : 'outline'}
             onClick={() => setFilter('approved')}
           >
-            Approuv√©s ({stats.approved})
+            ApprouvÈs ({stats.approved})
           </Button>
           <Button
             variant={filter === 'rejected' ? 'default' : 'outline'}
             onClick={() => setFilter('rejected')}
           >
-            Rejet√©s ({stats.rejected})
+            RejetÈs ({stats.rejected})
           </Button>
         </div>
 
         {/* Loading */}
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
           </div>
         ) : filteredMedia.length === 0 ? (
           <Card>
             <div className="p-12 text-center">
               <Video className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {filter === 'all' ? 'Aucun m√©dia' : `Aucun m√©dia ${filter === 'pending_approval' ? 'en attente' : filter === 'approved' ? 'approuv√©' : 'rejet√©'}`}
+                {filter === 'all' ? 'Aucun mÈdia' : `Aucun mÈdia ${filter === 'pending_approval' ? 'en attente' : filter === 'approved' ? 'approuvÈ' : 'rejetÈ'}`}
               </h3>
               <p className="text-gray-600 mb-4">
                 {filter === 'all'
-                  ? 'Commencez par soumettre votre premier contenu m√©dia'
-                  : 'Aucun contenu dans cette cat√©gorie pour le moment'}
+                  ? 'Commencez par soumettre votre premier contenu mÈdia'
+                  : 'Aucun contenu dans cette catÈgorie pour le moment'}
               </p>
               {filter === 'all' && (
                 <Link to={ROUTES.PARTNER_MEDIA_UPLOAD}>
                   <Button className="bg-orange-600 hover:bg-orange-700">
                     <Upload className="w-4 h-4 mr-2" />
-                    Soumettre un m√©dia
+                    Soumettre un mÈdia
                   </Button>
                 </Link>
               )}
@@ -303,7 +303,7 @@ export default function PartnerMediaLibraryPage() {
                       </div>
                       {item.approved_at && (
                         <div className="flex items-center text-sm text-gray-600">
-                          <span className="font-medium mr-2">Approuv√© le:</span>
+                          <span className="font-medium mr-2">ApprouvÈ le:</span>
                           {new Date(item.approved_at).toLocaleDateString('fr-FR')}
                         </div>
                       )}
@@ -331,7 +331,7 @@ export default function PartnerMediaLibraryPage() {
                         onClick={() => window.open(item.video_url, '_blank')}
                       >
                         <Eye className="w-4 h-4 mr-2" />
-                        Voir le m√©dia
+                        Voir le mÈdia
                       </Button>
                     )}
                   </div>
@@ -344,3 +344,4 @@ export default function PartnerMediaLibraryPage() {
     </div>
   );
 }
+

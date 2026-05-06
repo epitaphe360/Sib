@@ -1,4 +1,4 @@
-ï»¿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -37,8 +37,8 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
       setMedia(data);
       calculateStats(data);
     } catch (error) {
-      console.error('Erreur chargement mÃ©dias:', error);
-      toast.error('Erreur lors du chargement des analytiques mÃ©dias');
+      console.error('Erreur chargement médias:', error);
+      toast.error('Erreur lors du chargement des analytiques médias');
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-slate-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -72,17 +72,17 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Retour au Tableau de Bord
           </Link>
-          <Link to="/partner/media" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4 ml-4">
+          <Link to="/partner/media" className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-4 ml-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour Ã  ma bibliothÃ¨que
+            Retour à ma bibliothèque
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Analytics MÃ©dias</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Analytics Médias</h1>
           <p className="mt-2 text-gray-600">Suivez les performances de vos contenus</p>
         </div>
 
         {/* Stats globales */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white">
+          <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
             <div className="flex items-center justify-between mb-2">
               <Eye className="w-8 h-8 opacity-80" />
               <TrendingUp className="w-5 h-5 opacity-60" />
@@ -114,7 +114,7 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
               <Clock className="w-8 h-8 opacity-80" />
               <BarChart3 className="w-5 h-5 opacity-60" />
             </div>
-            <p className="text-sm opacity-90">DurÃ©e moyenne</p>
+            <p className="text-sm opacity-90">Durée moyenne</p>
             <p className="text-3xl font-bold mt-1">{Math.round(stats.avgViewDuration)} min</p>
           </div>
         </div>
@@ -152,35 +152,35 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
           </div>
         )}
 
-        {/* Liste des mÃ©dias avec stats */}
+        {/* Liste des médias avec stats */}
         <div className="bg-white rounded-lg shadow">
           <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900">Performance par mÃ©dia</h2>
+            <h2 className="text-xl font-bold text-gray-900">Performance par média</h2>
           </div>
 
           {loading ? (
             <div className="p-12 text-center">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
               <p className="mt-4 text-gray-600">Chargement...</p>
             </div>
           ) : media.length === 0 ? (
             <div className="p-12 text-center">
               <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">Aucun mÃ©dia publiÃ©</p>
+              <p className="text-gray-600">Aucun média publié</p>
               <Link
                 to="/partner/media/upload"
-                className="mt-4 inline-block text-blue-600 hover:text-blue-700"
+                className="mt-4 inline-block text-indigo-600 hover:text-indigo-700"
               >
-                Uploader votre premier mÃ©dia
+                Uploader votre premier média
               </Link>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-slate-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      MÃ©dia
+                      Média
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Type
@@ -206,7 +206,7 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
                       : '0.0';
 
                     return (
-                      <tr key={item.id} className="hover:bg-gray-50">
+                      <tr key={item.id} className="hover:bg-slate-50">
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             {item.thumbnail_url && (
@@ -223,7 +223,7 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800">
                             {item.type}
                           </span>
                         </td>
@@ -265,6 +265,7 @@ export const PartnerMediaAnalyticsPage: React.FC = () => {
 };
 
 export default PartnerMediaAnalyticsPage;
+
 
 
 

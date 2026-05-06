@@ -94,7 +94,7 @@ export const WebinarDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
@@ -114,7 +114,7 @@ export const WebinarDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -244,8 +244,8 @@ export const WebinarDetailPage: React.FC = () => {
                       className="w-16 h-16 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                      <span className="text-2xl font-semibold text-blue-600">
+                    <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center">
+                      <span className="text-2xl font-semibold text-indigo-600">
                         {webinar.instructor_name.charAt(0)}
                       </span>
                     </div>
@@ -296,11 +296,11 @@ export const WebinarDetailPage: React.FC = () => {
             </div>
 
             {/* CTA Card */}
-            <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg shadow-lg p-6 text-white">
               <h3 className="text-lg font-semibold mb-2">
                 Inscrivez-vous à SIB 2026
               </h3>
-              <p className="text-sm text-blue-100 mb-4">
+              <p className="text-sm text-indigo-100 mb-4">
                 Participez à nos webinaires en direct et accédez à tous les replays
               </p>
               <Button variant="secondary" className="w-full" asChild>

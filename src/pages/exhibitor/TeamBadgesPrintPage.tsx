@@ -148,7 +148,7 @@ export default function TeamBadgesPrintPage() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4 bg-white">
-        <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
+        <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
         <p className="text-gray-600 text-sm">Chargement des badges…</p>
       </div>
     );
@@ -178,7 +178,7 @@ export default function TeamBadgesPrintPage() {
         <div className="flex gap-3">
           <button
             onClick={() => globalThis.print()}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
           >
             <Printer className="h-4 w-4" /> Imprimer
           </button>
@@ -258,3 +258,4 @@ function BadgePageWrapper({ badge, onReady }: Readonly<BadgePageWrapperProps>) {
     </div>
   );
 }
+

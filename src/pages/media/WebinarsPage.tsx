@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Page des Webinaires SIB
  * Affiche tous les webinaires sponsorisés disponibles en replay
  */
@@ -14,6 +14,7 @@ import MediaCard from '../../components/media/MediaCard';
 import { MediaService } from '../../services/mediaService';
 import { ROUTES } from '../../lib/routes';
 import type { MediaContent } from '../../types/media';
+import { PageHero } from '../../components/ui/PageHero';
 
 export const WebinarsPage: React.FC = () => {
   const [webinars, setWebinars] = useState<MediaContent[]>([]);
@@ -63,7 +64,7 @@ export const WebinarsPage: React.FC = () => {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-gray-600">{t('pages.webinars.loading')}</p>
         </div>
       </div>
@@ -71,7 +72,14 @@ export const WebinarsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-slate-50">
+      <PageHero
+        badge={<><Play className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Webinaires</span></>}
+        title={<>{t('pages.webinars.title')}</>}
+        subtitle={t('pages.webinars.description')}
+        py="py-16 md:py-20"
+      />
+
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Back Button */}
         <Link
@@ -82,13 +90,7 @@ export const WebinarsPage: React.FC = () => {
           {t('media.back_to_home')}
         </Link>
 
-        {/* Header */}
-        <div className="mb-12 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-6 shadow-lg">
-            <Play className="h-10 w-10 text-white ml-1" />
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-700">
             {t('pages.webinars.title')}
           </h1>
 
@@ -99,13 +101,13 @@ export const WebinarsPage: React.FC = () => {
 
         {/* Stats Bar */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <Card className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <Card className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-blue-600 font-medium mb-1">{t('pages.webinars.total_webinars')}</p>
-                <p className="text-3xl font-bold text-blue-900">{webinars.length}</p>
+                <p className="text-sm text-indigo-600 font-medium mb-1">{t('pages.webinars.total_webinars')}</p>
+                <p className="text-3xl font-bold text-indigo-900">{webinars.length}</p>
               </div>
-              <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center">
                 <Play className="h-6 w-6 text-white" />
               </div>
             </div>
@@ -151,7 +153,7 @@ export const WebinarsPage: React.FC = () => {
                 placeholder={t('pages.webinars.search_webinars')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
               />
             </div>
 
@@ -189,7 +191,7 @@ export const WebinarsPage: React.FC = () => {
                 onClick={() => setSelectedCategory(null)}
                 className={`px-3 py-1 text-sm rounded-full transition-colors ${
                   selectedCategory === null
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-indigo-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -201,7 +203,7 @@ export const WebinarsPage: React.FC = () => {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-3 py-1 text-sm rounded-full transition-colors ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-indigo-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -215,7 +217,7 @@ export const WebinarsPage: React.FC = () => {
         {/* Featured Webinar */}
         {filteredWebinars[0] && (
           <Link to={ROUTES.WEBINAR_DETAIL.replace(':id', filteredWebinars[0].id)}>
-            <Card className="mb-12 overflow-hidden hover:shadow-2xl transition-shadow bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
+            <Card className="mb-12 overflow-hidden hover:shadow-2xl transition-shadow bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200">
               <div className="p-8 md:flex items-center space-y-6 md:space-y-0 md:space-x-8">
                 {/* Thumbnail */}
                 <div className="md:w-1/2 relative group">
@@ -232,7 +234,7 @@ export const WebinarsPage: React.FC = () => {
                     />
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center">
-                        <Play className="h-10 w-10 text-blue-600 ml-1" />
+                        <Play className="h-10 w-10 text-indigo-600 ml-1" />
                       </div>
                     </div>
                     {filteredWebinars[0].duration && (
@@ -245,7 +247,7 @@ export const WebinarsPage: React.FC = () => {
 
                 {/* Content */}
                 <div className="md:w-1/2">
-                  <Badge className="mb-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                  <Badge className="mb-4 bg-gradient-to-r from-indigo-500 to-indigo-700 text-white">
                     ⭐ {t('common.featured')}
                   </Badge>
 
@@ -264,7 +266,7 @@ export const WebinarsPage: React.FC = () => {
                       <div className="flex flex-wrap gap-3">
                         {filteredWebinars[0].speakers.map((speaker, idx) => (
                           <div key={`speaker-${idx}-${speaker?.name || 'unknown'}`} className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow">
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                            <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-full flex items-center justify-center text-white font-bold">
                               {speaker?.name?.charAt(0) || 'S'}
                             </div>
                             <div>
@@ -291,7 +293,7 @@ export const WebinarsPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                  <Button size="lg" className="bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-700 hover:to-purple-700">
                     <Play className="h-5 w-5 mr-2" />
                     {t('common.watch_replay')}
                   </Button>

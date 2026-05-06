@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { Video, ArrowLeft, Search, Calendar, Users, Play } from 'lucide-react';
@@ -6,6 +6,7 @@ import { mediaService } from '../../services/mediaService';
 import { MediaContent } from '../../types/media';
 import { MediaCard } from '../../components/media/MediaCard';
 import { ROUTES } from '../../lib/routes';
+import { PageHero } from '../../components/ui/PageHero';
 
 export const LiveStudioPage: React.FC = () => {
   const [interviews, setInterviews] = useState<MediaContent[]>([]);
@@ -36,56 +37,13 @@ export const LiveStudioPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-pink-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-red-600 to-pink-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link to={ROUTES.HOME} className="inline-flex items-center text-white/80 hover:text-white mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('media.back_to_home')}
-          </Link>
-
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
-              <Video className="w-8 h-8" />
-            </div>
-            <div>
-              <h1 className="text-4xl font-bold mb-2">{t('pages.live.title')}</h1>
-              <p className="text-xl text-white/90">{t('pages.live.description')}</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/70 text-sm">{t('pages.live.scheduled_broadcasts')}</p>
-                  <p className="text-3xl font-bold">{interviews.length}</p>
-                </div>
-                <Video className="w-8 h-8 text-white/50" />
-              </div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/70 text-sm">{t('pages.live.total_viewers')}</p>
-                  <p className="text-3xl font-bold">{interviews.length}</p>
-                </div>
-                <Users className="w-8 h-8 text-white/50" />
-              </div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/70 text-sm">{t('pages.live.average_duration')}</p>
-                  <p className="text-xl font-bold">7 jours</p>
-                </div>
-                <Calendar className="w-8 h-8 text-white/50" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50">
+      <PageHero
+        badge={<><Radio className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Live Studio</span></>}
+        title={<>{t('pages.live.title')}</>}
+        subtitle={t('pages.live.description')}
+        py="py-16 md:py-20"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Search */}

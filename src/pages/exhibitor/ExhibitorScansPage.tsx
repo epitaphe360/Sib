@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   QrCode, Download, RefreshCw, Search, User,
@@ -10,7 +10,7 @@ import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+// --- Types -------------------------------------------------------------------
 
 interface ScannedVisitor {
   id: string;
@@ -34,12 +34,12 @@ interface CollaboratorGroup {
   scans: ScannedVisitor[];
 }
 
-// ─── Utilitaires ─────────────────────────────────────────────────────────────
+// --- Utilitaires -------------------------------------------------------------
 
 function badgeColor(type: string): string {
   if (type === 'vip') return 'bg-yellow-100 text-yellow-800';
   if (type === 'press') return 'bg-purple-100 text-purple-800';
-  if (type === 'exhibitor') return 'bg-blue-100 text-blue-800';
+  if (type === 'exhibitor') return 'bg-indigo-100 text-indigo-800';
   return 'bg-gray-100 text-gray-700';
 }
 
@@ -53,7 +53,7 @@ function avatarInitials(name: string): string {
 }
 
 const AVATAR_COLORS = [
-  'bg-blue-500', 'bg-emerald-500', 'bg-violet-500',
+  'bg-indigo-500', 'bg-emerald-500', 'bg-violet-500',
   'bg-rose-500', 'bg-amber-500', 'bg-cyan-500',
   'bg-indigo-500', 'bg-pink-500',
 ];
@@ -67,7 +67,7 @@ function avatarColor(id: string): string {
 }
 
 function exportCsv(rows: ScannedVisitor[], exhibitorName: string, scannerName?: string) {
-  const headers = ['Nom visiteur', 'Email', 'Société', 'Téléphone', 'Type badge', 'Scanné par', 'Date/Heure', 'Lieu'];
+  const headers = ['Nom visiteur', 'Email', 'Soci�t�', 'T�l�phone', 'Type badge', 'Scann� par', 'Date/Heure', 'Lieu'];
   const sep = ';';
   const BOM = '\uFEFF';
   const csvContent =
@@ -98,7 +98,7 @@ function exportCsv(rows: ScannedVisitor[], exhibitorName: string, scannerName?: 
   URL.revokeObjectURL(url);
 }
 
-// ─── Ligne de tableau ─────────────────────────────────────────────────────────
+// --- Ligne de tableau ---------------------------------------------------------
 
 function ScanRowItem({ scan }: Readonly<{ scan: ScannedVisitor }>) {
   const dateStr = scan.scanned_at
@@ -106,14 +106,14 @@ function ScanRowItem({ scan }: Readonly<{ scan: ScannedVisitor }>) {
         day: '2-digit', month: '2-digit', year: '2-digit',
         hour: '2-digit', minute: '2-digit',
       })
-    : '—';
+    : '�';
 
   return (
     <tr className="hover:bg-gray-50 transition-colors">
       <td className="py-3 px-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-            <User className="h-4 w-4 text-blue-500" />
+          <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+            <User className="h-4 w-4 text-indigo-500" />
           </div>
           <div>
             <p className="font-semibold text-sm text-gray-900">{scan.visitor_name ?? 'Inconnu'}</p>
@@ -127,7 +127,7 @@ function ScanRowItem({ scan }: Readonly<{ scan: ScannedVisitor }>) {
         </div>
       </td>
       <td className="py-3 px-4 hidden sm:table-cell text-sm text-gray-700">
-        {scan.visitor_company ?? '—'}
+        {scan.visitor_company ?? '�'}
       </td>
       <td className="py-3 px-4 hidden md:table-cell">
         <div className="flex items-center gap-1.5 text-sm text-gray-600">
@@ -142,7 +142,7 @@ function ScanRowItem({ scan }: Readonly<{ scan: ScannedVisitor }>) {
             <span>{scan.location}</span>
           </div>
         ) : (
-          <span className="text-gray-400 text-sm">—</span>
+          <span className="text-gray-400 text-sm">�</span>
         )}
       </td>
       <td className="py-3 px-4">
@@ -154,7 +154,7 @@ function ScanRowItem({ scan }: Readonly<{ scan: ScannedVisitor }>) {
   );
 }
 
-// ─── Section par collaborateur ────────────────────────────────────────────────
+// --- Section par collaborateur ------------------------------------------------
 
 interface CollaboratorSectionProps {
   group: CollaboratorGroup;
@@ -184,14 +184,14 @@ function CollaboratorSection({ group, search, exhibitorName, defaultOpen }: Read
 
   function handleExport(e: React.MouseEvent) {
     e.stopPropagation();
-    if (group.scans.length === 0) { toast.error('Aucune donnée'); return; }
+    if (group.scans.length === 0) { toast.error('Aucune donn�e'); return; }
     exportCsv(group.scans, exhibitorName, group.scanned_by_name);
     toast.success(`Export de ${group.scans.length} scan(s)`);
   }
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-      {/* En-tête collaborateur */}
+      {/* En-t�te collaborateur */}
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
@@ -205,10 +205,10 @@ function CollaboratorSection({ group, search, exhibitorName, defaultOpen }: Read
             <div className="flex items-center gap-2">
               <p className="font-bold text-gray-900 text-sm">{group.scanned_by_name}</p>
               {group.isOwner && (
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Vous</span>
+                <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">Vous</span>
               )}
             </div>
-            <p className="text-xs text-gray-500">{totalLabel} · {uniqueLabel}</p>
+            <p className="text-xs text-gray-500">{totalLabel} � {uniqueLabel}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -230,7 +230,7 @@ function CollaboratorSection({ group, search, exhibitorName, defaultOpen }: Read
           {filtered.length === 0 ? (
             <div className="text-center py-10 text-gray-400">
               <QrCode className="h-8 w-8 mx-auto mb-2 opacity-20" />
-              <p className="text-sm">{search ? 'Aucun résultat pour cette recherche' : 'Aucun scan'}</p>
+              <p className="text-sm">{search ? 'Aucun r�sultat pour cette recherche' : 'Aucun scan'}</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -238,7 +238,7 @@ function CollaboratorSection({ group, search, exhibitorName, defaultOpen }: Read
                 <thead>
                   <tr className="text-left text-xs text-gray-400 bg-gray-50 border-b border-gray-100">
                     <th className="py-2.5 px-4 font-medium">Visiteur</th>
-                    <th className="py-2.5 px-4 font-medium hidden sm:table-cell">Société</th>
+                    <th className="py-2.5 px-4 font-medium hidden sm:table-cell">Soci�t�</th>
                     <th className="py-2.5 px-4 font-medium hidden md:table-cell">Date</th>
                     <th className="py-2.5 px-4 font-medium hidden lg:table-cell">Lieu</th>
                     <th className="py-2.5 px-4 font-medium">Badge</th>
@@ -249,7 +249,7 @@ function CollaboratorSection({ group, search, exhibitorName, defaultOpen }: Read
                 </tbody>
               </table>
               <p className="text-xs text-gray-400 px-4 py-2.5 text-right">
-                {filtered.length} résultat{filtered.length === 1 ? '' : 's'}
+                {filtered.length} r�sultat{filtered.length === 1 ? '' : 's'}
                 {search ? ` sur ${group.scans.length}` : ''}
               </p>
             </div>
@@ -260,7 +260,7 @@ function CollaboratorSection({ group, search, exhibitorName, defaultOpen }: Read
   );
 }
 
-// ─── Page principale ──────────────────────────────────────────────────────────
+// --- Page principale ----------------------------------------------------------
 
 export default function ExhibitorScansPage() {
   const { user } = useAuthStore();
@@ -273,7 +273,7 @@ export default function ExhibitorScansPage() {
     if (!supabase || !user?.id) return;
     setIsLoading(true);
     try {
-      // Récupérer les collaborateurs actifs de l'exposant (stand_collaborators)
+      // R�cup�rer les collaborateurs actifs de l'exposant (stand_collaborators)
       const { data: collabData } = await supabase
         .from('stand_collaborators')
         .select('auth_user_id')
@@ -355,7 +355,7 @@ export default function ExhibitorScansPage() {
         }
       }
 
-      // Propriétaire en premier, puis tri décroissant par nombre de scans
+      // Propri�taire en premier, puis tri d�croissant par nombre de scans
       const sorted = [...groupMap.values()].sort((a, b) => {
         if (a.isOwner) return -1;
         if (b.isOwner) return 1;
@@ -364,7 +364,7 @@ export default function ExhibitorScansPage() {
 
       setGroups(sorted);
     } catch {
-      toast.error('Impossible de charger les visiteurs scannés');
+      toast.error('Impossible de charger les visiteurs scann�s');
     } finally {
       setIsLoading(false);
     }
@@ -380,21 +380,21 @@ export default function ExhibitorScansPage() {
   const totalVip = allScans.filter(s => s.badge_type === 'vip').length;
 
   const stats = [
-    { label: 'Total scans', value: allScans.length, color: 'text-blue-600' },
+    { label: 'Total scans', value: allScans.length, color: 'text-indigo-600' },
     { label: 'Visiteurs uniques', value: totalUnique, color: 'text-emerald-600' },
     { label: "Aujourd'hui", value: totalToday, color: 'text-amber-600' },
     { label: 'VIP', value: totalVip, color: 'text-purple-600' },
   ];
 
   function handleExportAll() {
-    if (allScans.length === 0) { toast.error('Aucune donnée à exporter'); return; }
+    if (allScans.length === 0) { toast.error('Aucune donn�e � exporter'); return; }
     exportCsv(allScans, exhibitorName);
-    toast.success(`${allScans.length} ligne(s) exportée(s)`);
+    toast.success(`${allScans.length} ligne(s) export�e(s)`);
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* En-tête page */}
+      {/* En-t�te page */}
       <div className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -407,8 +407,8 @@ export default function ExhibitorScansPage() {
             </Link>
             <span className="text-gray-300">/</span>
             <div className="flex items-center gap-2">
-              <ScanLine className="h-5 w-5 text-blue-600" />
-              <h1 className="text-lg font-bold text-gray-900">Visiteurs Scannés</h1>
+              <ScanLine className="h-5 w-5 text-indigo-600" />
+              <h1 className="text-lg font-bold text-gray-900">Visiteurs Scann�s</h1>
             </div>
           </div>
           <button
@@ -429,7 +429,7 @@ export default function ExhibitorScansPage() {
           {stats.map(stat => (
             <div key={stat.label} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
               <p className={`text-2xl font-bold ${stat.color}`}>
-                {isLoading ? '—' : stat.value}
+                {isLoading ? '�' : stat.value}
               </p>
               <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
             </div>
@@ -442,10 +442,10 @@ export default function ExhibitorScansPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Rechercher un visiteur dans toutes les sections…"
+              placeholder="Rechercher un visiteur dans toutes les sections�"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+              className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
             />
           </div>
           <button
@@ -470,7 +470,7 @@ export default function ExhibitorScansPage() {
         {!isLoading && groups.length === 0 && (
           <div className="bg-white rounded-2xl border border-dashed border-gray-200 text-center py-20 text-gray-400">
             <Users className="h-14 w-14 mx-auto mb-4 opacity-20" />
-            <p className="font-medium text-gray-500 text-base">Aucun scan enregistré</p>
+            <p className="font-medium text-gray-500 text-base">Aucun scan enregistr�</p>
             <p className="text-sm mt-2 max-w-xs mx-auto text-gray-400">
               Utilisez l&apos;application scanner pour collecter les badges QR de vos visiteurs
             </p>

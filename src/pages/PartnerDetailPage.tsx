@@ -1,4 +1,4 @@
-Ôªøimport { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useTranslation } from '../hooks/useTranslation';
@@ -129,7 +129,7 @@ interface Partner {
   gallery?: string[];
 }
 
-// Les donn√©es du partenaire sont maintenant charg√©es depuis Supabase
+// Les donnÈes du partenaire sont maintenant chargÈes depuis Supabase
 
 export default function PartnerDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -159,12 +159,12 @@ export default function PartnerDetailPage() {
         const data = await SupabaseService.getPartnerById(id);
         if (data) {
           setPartner(data);
-          // Incr√©menter les vues
+          // IncrÈmenter les vues
           SupabaseService.incrementPartnerViews(id).catch(err =>
-            console.error("Erreur incr√©mentation vues partenaire:", err)
+            console.error("Erreur incrÈmentation vues partenaire:", err)
           );
         } else {
-          setError("Partenaire non trouv√©");
+          setError("Partenaire non trouvÈ");
         }
       } catch (err) {
         console.error("Erreur chargement partenaire:", err);
@@ -179,9 +179,9 @@ export default function PartnerDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             Chargement du partenaire...
           </h3>
@@ -201,9 +201,9 @@ export default function PartnerDetailPage() {
             {t('partner.notFound', 'Partenaire non disponible')}
           </h2>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            {error === "Partenaire non trouv√©"
-              ? t('partner.notFoundDesc', "Ce partenaire n'a pas encore compl√©t√© son profil ou n'est pas encore visible publiquement. Revenez bient√¥t pour d√©couvrir notre r√©seau de partenaires !")
-              : error || t('partner.notFoundGeneric', "Le partenaire que vous recherchez n'existe pas ou a √©t√© supprim√©.")}
+            {error === "Partenaire non trouvÈ"
+              ? t('partner.notFoundDesc', "Ce partenaire n'a pas encore complÈtÈ son profil ou n'est pas encore visible publiquement. Revenez bientÙt pour dÈcouvrir notre rÈseau de partenaires !")
+              : error || t('partner.notFoundGeneric', "Le partenaire que vous recherchez n'existe pas ou a ÈtÈ supprimÈ.")}
           </p>
 
           {/* Actions */}
@@ -217,7 +217,7 @@ export default function PartnerDetailPage() {
             <Link to={ROUTES.HOME}>
               <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 w-full sm:w-auto">
                 <Crown className="h-4 w-4 mr-2" />
-                {t('partner.discoverSIB', 'D√©couvrir SIB 2026')}
+                {t('partner.discoverSIB', 'DÈcouvrir SIB 2026')}
               </Button>
             </Link>
           </div>
@@ -225,9 +225,9 @@ export default function PartnerDetailPage() {
           {/* Message informatif */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
-              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous √™tes partenaire ?')}</span>
+              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous Ítes partenaire ?')}</span>
               <br />
-              {t('partner.completeProfile', 'Compl√©tez votre profil depuis votre tableau de bord pour appara√Ætre dans notre annuaire des partenaires.')}
+              {t('partner.completeProfile', 'ComplÈtez votre profil depuis votre tableau de bord pour apparaÓtre dans notre annuaire des partenaires.')}
             </p>
           </div>
         </Card>
@@ -255,7 +255,7 @@ export default function PartnerDetailPage() {
       case 'co_organizer': return 'bg-indigo-100 text-indigo-600';
       case 'partner': return 'bg-gray-100 text-gray-600';
       case 'press_partner': return 'bg-orange-100 text-orange-600';
-      default: return 'bg-blue-100 text-blue-600';
+      default: return 'bg-indigo-100 text-indigo-600';
     }
   };
 
@@ -275,7 +275,7 @@ export default function PartnerDetailPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed': return 'bg-green-100 text-green-800';
-      case 'active': return 'bg-blue-100 text-blue-800';
+      case 'active': return 'bg-indigo-100 text-indigo-800';
       case 'planned': return 'bg-yellow-100 text-yellow-800';
       default: return 'bg-gray-100 text-gray-800';
     }
@@ -283,9 +283,9 @@ export default function PartnerDetailPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed': return 'Termin√©';
+      case 'completed': return 'TerminÈ';
       case 'active': return 'En cours';
-      case 'planned': return 'Planifi√©';
+      case 'planned': return 'PlanifiÈ';
       default: return status;
     }
   };
@@ -298,7 +298,7 @@ export default function PartnerDetailPage() {
   const handleShare = () => {
     const shareData = {
       title: partner.name,
-      text: `D√©couvrez ${partner.name} - ${partner.description}`,
+      text: `DÈcouvrez ${partner.name} - ${partner.description}`,
       url: globalThis.location.href
     };
 
@@ -307,14 +307,14 @@ export default function PartnerDetailPage() {
     } else {
       // Fallback: copier le lien dans le presse-papiers
       navigator.clipboard.writeText(shareData.url)
-        .then(() => toast.success('Lien copi√© dans le presse-papiers !'))
+        .then(() => toast.success('Lien copiÈ dans le presse-papiers !'))
         .catch(() => toast.error('Impossible de copier le lien'));
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Banner de validation pour les profils non publi√©s */}
+    <div className="min-h-screen bg-slate-50">
+      {/* Banner de validation pour les profils non publiÈs */}
       {(partner as unknown as Record<string, unknown>).is_published === false && (
         <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 px-4 shadow-lg">
           <div className="max-w-7xl mx-auto flex items-center justify-center space-x-3">
@@ -355,7 +355,7 @@ export default function PartnerDetailPage() {
                   {partner.name}
                 </h1>
                 {partner.verified && (
-                  <CheckCircle className="h-6 w-6 text-blue-500" />
+                  <CheckCircle className="h-6 w-6 text-indigo-500" />
                 )}
               </div>
 
@@ -383,7 +383,7 @@ export default function PartnerDetailPage() {
                     href={partner.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center space-x-2 text-blue-600 hover:text-blue-700"
+                    className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-700"
                   >
                     <Globe className="h-4 w-4" />
                     <span>Site officiel</span>
@@ -402,12 +402,12 @@ export default function PartnerDetailPage() {
                 </Button>
               </div>
 
-              {/* R√©seaux sociaux */}
+              {/* RÈseaux sociaux */}
               {partner.socialMedia && (
                 <div className="flex items-center space-x-3 mt-4">
                   {partner.socialMedia.linkedin && (
                     <a href={partner.socialMedia.linkedin} target="_blank" rel="noopener noreferrer"
-                       className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors">
+                       className="p-2 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors">
                       <Linkedin className="h-4 w-4" />
                     </a>
                   )}
@@ -443,11 +443,11 @@ export default function PartnerDetailPage() {
           <nav className="flex space-x-2 md:space-x-4 min-w-max pb-2">
             {[
               { id: 'overview', label: 'Vue d\'ensemble', icon: Eye },
-              { id: 'about', label: '√Ä propos', icon: Building2 },
+              { id: 'about', label: '¿ propos', icon: Building2 },
               { id: 'expertise', label: 'Expertise', icon: Lightbulb },
               { id: 'projects', label: 'Projets', icon: Target },
               { id: 'gallery', label: 'Galerie', icon: ImageIcon },
-              { id: 'news', label: 'Actualit√©s', icon: BookOpen },
+              { id: 'news', label: 'ActualitÈs', icon: BookOpen },
               { id: 'contact', label: 'Contact', icon: MessageCircle }
             ].map((tab) => (
               <button
@@ -455,7 +455,7 @@ export default function PartnerDetailPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium transition-all ${
                   activeTab === tab.id
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
+                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-600 text-white shadow-lg shadow-indigo-500/25'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
@@ -473,7 +473,7 @@ export default function PartnerDetailPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-8"
           >
-            {/* Hero Stats avec chiffres cl√©s */}
+            {/* Hero Stats avec chiffres clÈs */}
             {Array.isArray(partner.keyFigures) && partner.keyFigures.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {partner.keyFigures.map((stat, index) => (
@@ -484,9 +484,9 @@ export default function PartnerDetailPage() {
                   transition={{ delay: index * 0.1 }}
                 >
                   <Card className="relative overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 group-hover:from-indigo-500/10 group-hover:to-purple-500/10 transition-all" />
                     <div className="relative p-6 text-center">
-                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white mb-3 shadow-lg">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white mb-3 shadow-lg">
                         {stat.icon === 'Calendar' && <Calendar className="h-6 w-6" />}
                         {stat.icon === 'Users' && <Users className="h-6 w-6" />}
                         {stat.icon === 'Target' && <Target className="h-6 w-6" />}
@@ -496,7 +496,7 @@ export default function PartnerDetailPage() {
                         {stat.icon === 'BarChart3' && <BarChart3 className="h-6 w-6" />}
                         {!['Calendar','Users','Target','ThumbsUp','TrendingUp','Globe','BarChart3'].includes(stat.icon) && <Activity className="h-6 w-6" />}
                       </div>
-                      <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-1">
+                      <div className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-600 bg-clip-text text-transparent mb-1">
                         {stat.value}
                       </div>
                       <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
@@ -507,11 +507,11 @@ export default function PartnerDetailPage() {
             </div>
             ) : null}
 
-            {/* Description longue avec vid√©o */}
+            {/* Description longue avec vidÈo */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <Card className="lg:col-span-2 p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                  <Building2 className="h-5 w-5 mr-2 text-blue-600" />
+                  <Building2 className="h-5 w-5 mr-2 text-indigo-600" />
                   Qui sommes-nous ?
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg mb-6">
@@ -521,12 +521,12 @@ export default function PartnerDetailPage() {
                 {/* Mission & Vision */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                   {partner.mission && (
-                    <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+                    <div className="p-4 bg-gradient-to-br from-indigo-50 to-indigo-50 rounded-xl border border-indigo-100">
                       <div className="flex items-center mb-2">
-                        <Target className="h-5 w-5 text-blue-600 mr-2" />
-                        <h4 className="font-semibold text-blue-900">Notre Mission</h4>
+                        <Target className="h-5 w-5 text-indigo-600 mr-2" />
+                        <h4 className="font-semibold text-indigo-900">Notre Mission</h4>
                       </div>
-                      <p className="text-sm text-blue-800">{partner.mission}</p>
+                      <p className="text-sm text-indigo-800">{partner.mission}</p>
                     </div>
                   )}
                   {partner.vision && (
@@ -541,7 +541,7 @@ export default function PartnerDetailPage() {
                 </div>
               </Card>
 
-              {/* Vid√©o de pr√©sentation */}
+              {/* VidÈo de prÈsentation */}
               <Card className="p-0 overflow-hidden">
                 {partner.videoUrl ? (
                   <div className="relative aspect-video bg-gray-900 rounded-xl overflow-hidden">
@@ -555,11 +555,11 @@ export default function PartnerDetailPage() {
                         className="absolute inset-0 w-full h-full object-cover opacity-70"
                       />
                       <div className="relative z-10 w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-                        <Play className="h-8 w-8 text-blue-600 ml-1" />
+                        <Play className="h-8 w-8 text-indigo-600 ml-1" />
                       </div>
                       <div className="absolute bottom-4 left-4 right-4 text-white">
-                        <p className="font-medium">D√©couvrez {partner.name}</p>
-                        <p className="text-sm text-white/80">Vid√©o de pr√©sentation</p>
+                        <p className="font-medium">DÈcouvrez {partner.name}</p>
+                        <p className="text-sm text-white/80">VidÈo de prÈsentation</p>
                       </div>
                     </button>
                   </div>
@@ -585,7 +585,7 @@ export default function PartnerDetailPage() {
                       transition={{ delay: index * 0.1 }}
                       className="text-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl hover:shadow-md transition-shadow"
                     >
-                      <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold">
+                      <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold">
                         {index + 1}
                       </div>
                       <span className="text-sm font-medium text-gray-800">{valText}</span>
@@ -596,7 +596,7 @@ export default function PartnerDetailPage() {
               </Card>
             ) : null}
 
-            {/* Certifications & R√©compenses */}
+            {/* Certifications & RÈcompenses */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Certifications */}
               {partner.certifications && partner.certifications.length > 0 ? (
@@ -619,12 +619,12 @@ export default function PartnerDetailPage() {
                 </Card>
               ) : null}
 
-              {/* R√©compenses */}
+              {/* RÈcompenses */}
               {partner.awards && partner.awards.length > 0 ? (
                 <Card className="p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
                     <Award className="h-5 w-5 mr-2 text-yellow-600" />
-                    R√©compenses
+                    RÈcompenses
                   </h3>
                   <div className="space-y-3">
                     {partner.awards.map((award, idx) => {
@@ -636,7 +636,7 @@ export default function PartnerDetailPage() {
                         <Star className="h-5 w-5 text-yellow-600 mr-3 flex-shrink-0 mt-0.5" />
                         <div>
                           <p className="font-medium text-yellow-900">{awardName}</p>
-                          {(awardIssuer || awardYear) && <p className="text-xs text-yellow-700">{awardIssuer}{awardIssuer && awardYear ? ' ‚Ä¢ ' : ''}{awardYear}</p>}
+                          {(awardIssuer || awardYear) && <p className="text-xs text-yellow-700">{awardIssuer}{awardIssuer && awardYear ? ' ï ' : ''}{awardYear}</p>}
                         </div>
                       </div>
                       );
@@ -646,11 +646,11 @@ export default function PartnerDetailPage() {
               ) : null}
             </div>
 
-            {/* T√©moignages */}
+            {/* TÈmoignages */}
             {partner.testimonials && partner.testimonials.length > 0 ? (
-              <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
+              <Card className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-50">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                  <Quote className="h-5 w-5 mr-2 text-blue-600" />
+                  <Quote className="h-5 w-5 mr-2 text-indigo-600" />
                   Ce que disent nos partenaires
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -662,7 +662,7 @@ export default function PartnerDetailPage() {
                       transition={{ delay: index * 0.2 }}
                       className="bg-white p-6 rounded-xl shadow-sm"
                     >
-                      <Quote className="h-8 w-8 text-blue-200 mb-4" />
+                      <Quote className="h-8 w-8 text-indigo-200 mb-4" />
                       <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
                       <div className="flex items-center">
                         {testimonial.avatar && (
@@ -714,7 +714,7 @@ export default function PartnerDetailPage() {
           </motion.div>
         )}
 
-        {/* Onglet √Ä propos */}
+        {/* Onglet ¿ propos */}
         {activeTab === 'about' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -722,14 +722,14 @@ export default function PartnerDetailPage() {
             className="space-y-8"
           >
             <Card className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">√Ä propos de {partner.name}</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">¿ propos de {partner.name}</h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-6">{partner.longDescription || partner.description}</p>
 
                 {partner.mission && (
-                  <div className="my-8 p-6 bg-blue-50 rounded-2xl border-l-4 border-blue-500">
-                    <h3 className="text-lg font-bold text-blue-900 mb-2">Notre Mission</h3>
-                    <p className="text-blue-800">{partner.mission}</p>
+                  <div className="my-8 p-6 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                    <h3 className="text-lg font-bold text-indigo-900 mb-2">Notre Mission</h3>
+                    <p className="text-indigo-800">{partner.mission}</p>
                   </div>
                 )}
 
@@ -745,15 +745,15 @@ export default function PartnerDetailPage() {
             {/* Timeline historique */}
             <Card className="p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                <Clock className="h-5 w-5 mr-2 text-blue-600" />
+                <Clock className="h-5 w-5 mr-2 text-indigo-600" />
                 Notre Histoire
               </h3>
               {partner.establishedYear ? (
-                <p className="text-gray-600">Fond√© en {partner.establishedYear}</p>
+                <p className="text-gray-600">FondÈ en {partner.establishedYear}</p>
               ) : null}
             </Card>
 
-            {/* Clients r√©f√©rents */}
+            {/* Clients rÈfÈrents */}
             {partner.clients && partner.clients.length > 0 ? (
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
@@ -786,159 +786,159 @@ export default function PartnerDetailPage() {
               {/* Domaines d'expertise */}
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                  <Layers className="h-5 w-5 mr-2 text-blue-600" />
+                  <Layers className="h-5 w-5 mr-2 text-indigo-600" />
                   Nos Domaines d'Expertise
                 </h3>
                 <div className="space-y-4">
                   {(partner.expertise || []).length > 0 ? (partner.expertise || []).map((exp, index) => {
                     const isExpanded = expandedExpertise[index] || false;
 
-                    // Descriptions g√©n√©riques bas√©es sur les domaines courants
+                    // Descriptions gÈnÈriques basÈes sur les domaines courants
                     const getExpertiseDescription = (title: string) => {
                       const lowerTitle = title.toLowerCase();
-                      // Infrastructure & √âquipement
-                      if (lowerTitle.includes('routi√®re') || lowerTitle.includes('routes') || lowerTitle.includes('route')) {
-                        return "Planification, construction et entretien du r√©seau routier national incluant routes nationales, r√©gionales et provinciales pour une connectivit√© territoriale optimale.";
+                      // Infrastructure & …quipement
+                      if (lowerTitle.includes('routiËre') || lowerTitle.includes('routes') || lowerTitle.includes('route')) {
+                        return "Planification, construction et entretien du rÈseau routier national incluant routes nationales, rÈgionales et provinciales pour une connectivitÈ territoriale optimale.";
                       }
-                      if (lowerTitle.includes('b√¢timent') && (lowerTitle.includes('construction') || lowerTitle.includes('infrastructure'))) {
-                        return "D√©veloppement, modernisation et gestion des infrastructures BTP strat√©giques pour renforcer la comp√©titivit√© construction et le commerce international du Maroc.";
+                      if (lowerTitle.includes('b‚timent') && (lowerTitle.includes('construction') || lowerTitle.includes('infrastructure'))) {
+                        return "DÈveloppement, modernisation et gestion des infrastructures BTP stratÈgiques pour renforcer la compÈtitivitÈ construction et le commerce international du Maroc.";
                       }
                       if (lowerTitle.includes('eau') || lowerTitle.includes('ressources en eau') || lowerTitle.includes('hydraulique')) {
-                        return "Gestion int√©gr√©e des ressources hydriques du pays : mobilisation, distribution, assainissement et pr√©servation des ressources en eau face aux d√©fis du changement climatique.";
+                        return "Gestion intÈgrÈe des ressources hydriques du pays : mobilisation, distribution, assainissement et prÈservation des ressources en eau face aux dÈfis du changement climatique.";
                       }
-                      if (lowerTitle.includes('a√©roport') || lowerTitle.includes('a√©rien') || lowerTitle.includes('aviation')) {
-                        return "Conception, construction et supervision des infrastructures a√©roBTP assurant la connectivit√© a√©rienne nationale et internationale du Maroc.";
+                      if (lowerTitle.includes('aÈroport') || lowerTitle.includes('aÈrien') || lowerTitle.includes('aviation')) {
+                        return "Conception, construction et supervision des infrastructures aÈroBTP assurant la connectivitÈ aÈrienne nationale et internationale du Maroc.";
                       }
                       if (lowerTitle.includes('autoroute') || lowerTitle.includes('voies express')) {
-                        return "Planification et d√©ploiement du r√©seau autoroutier et des voies express pour d√©senclaver les r√©gions et fluidifier les √©changes √©conomiques √† l'√©chelle nationale.";
+                        return "Planification et dÈploiement du rÈseau autoroutier et des voies express pour dÈsenclaver les rÈgions et fluidifier les Èchanges Èconomiques ‡ l'Èchelle nationale.";
                       }
                       if (lowerTitle.includes('barrage') || lowerTitle.includes('ouvrage')) {
-                        return "Construction et exploitation de grands barrages et ouvrages hydrauliques pour la r√©gulation des eaux, l'irrigation agricole et la production d'√©nergie hydro√©lectrique.";
+                        return "Construction et exploitation de grands barrages et ouvrages hydrauliques pour la rÈgulation des eaux, l'irrigation agricole et la production d'Ènergie hydroÈlectrique.";
                       }
-                      if (lowerTitle.includes('m√©t√©o') || lowerTitle.includes('climatol')) {
-                        return "Service de pr√©vision m√©t√©orologique, surveillance climatique et alerte pr√©coce pour la protection des personnes, des biens et le soutien aux secteurs √©conomiques sensibles.";
+                      if (lowerTitle.includes('mÈtÈo') || lowerTitle.includes('climatol')) {
+                        return "Service de prÈvision mÈtÈorologique, surveillance climatique et alerte prÈcoce pour la protection des personnes, des biens et le soutien aux secteurs Èconomiques sensibles.";
                       }
-                      if (lowerTitle.includes('am√©nagement') || lowerTitle.includes('territoire')) {
-                        return "√âlaboration des sch√©mas d'am√©nagement du territoire et coordination des politiques de d√©veloppement spatial pour un √©quilibre r√©gional durable.";
+                      if (lowerTitle.includes('amÈnagement') || lowerTitle.includes('territoire')) {
+                        return "…laboration des schÈmas d'amÈnagement du territoire et coordination des politiques de dÈveloppement spatial pour un Èquilibre rÈgional durable.";
                       }
                       // Transport & Logistique
                       if (lowerTitle.includes('transport routier')) {
-                        return "R√©gulation et d√©veloppement du transport routier de personnes et de marchandises, incluant la s√©curit√© routi√®re et la modernisation du parc v√©hicules.";
+                        return "RÈgulation et dÈveloppement du transport routier de personnes et de marchandises, incluant la sÈcuritÈ routiËre et la modernisation du parc vÈhicules.";
                       }
                       if (lowerTitle.includes('transport construction') || lowerTitle.includes('marine marchande')) {
-                        return "Encadrement et d√©veloppement du transport construction et de la marine marchande, incluant la r√©glementation, la s√©curit√© et la comp√©titivit√© de la flotte nationale.";
+                        return "Encadrement et dÈveloppement du transport construction et de la marine marchande, incluant la rÈglementation, la sÈcuritÈ et la compÈtitivitÈ de la flotte nationale.";
                       }
-                      if (lowerTitle.includes('transport a√©rien')) {
-                        return "Supervision du transport a√©rien civil, promotion de la connectivit√© a√©rienne et d√©veloppement des accords de ciel ouvert pour renforcer l'attractivit√© du Maroc.";
+                      if (lowerTitle.includes('transport aÈrien')) {
+                        return "Supervision du transport aÈrien civil, promotion de la connectivitÈ aÈrienne et dÈveloppement des accords de ciel ouvert pour renforcer l'attractivitÈ du Maroc.";
                       }
                       if (lowerTitle.includes('ferroviaire') || lowerTitle.includes('train') || lowerTitle.includes('lgv')) {
-                        return "Planification et d√©veloppement du r√©seau ferroviaire incluant les lignes √† grande vitesse et les services de transport de passagers et de fret.";
+                        return "Planification et dÈveloppement du rÈseau ferroviaire incluant les lignes ‡ grande vitesse et les services de transport de passagers et de fret.";
                       }
-                      if (lowerTitle.includes('logistique') || lowerTitle.includes('supply') || lowerTitle.includes('cha√Æne')) {
-                        return "Mise en ≈ìuvre de la strat√©gie nationale logistique visant √† r√©duire les co√ªts, d√©velopper les zones logistiques et optimiser les flux de marchandises.";
+                      if (lowerTitle.includes('logistique') || lowerTitle.includes('supply') || lowerTitle.includes('chaÓne')) {
+                        return "Mise en úuvre de la stratÈgie nationale logistique visant ‡ rÈduire les co˚ts, dÈvelopper les zones logistiques et optimiser les flux de marchandises.";
                       }
-                      if (lowerTitle.includes('s√©curit√© routi√®re')) {
-                        return "Politique nationale de s√©curit√© routi√®re : pr√©vention des accidents, sensibilisation, contr√¥le technique et am√©lioration des infrastructures de s√©curit√©.";
+                      if (lowerTitle.includes('sÈcuritÈ routiËre')) {
+                        return "Politique nationale de sÈcuritÈ routiËre : prÈvention des accidents, sensibilisation, contrÙle technique et amÈlioration des infrastructures de sÈcuritÈ.";
                       }
-                      if (lowerTitle.includes('r√©glementation')) {
-                        return "√âlaboration du cadre juridique et r√©glementaire r√©gissant les activit√©s de transport, de logistique et de mobilit√© au niveau national.";
+                      if (lowerTitle.includes('rÈglementation')) {
+                        return "…laboration du cadre juridique et rÈglementaire rÈgissant les activitÈs de transport, de logistique et de mobilitÈ au niveau national.";
                       }
                       // BTP & BTP
                       if (lowerTitle.includes('navigation') || lowerTitle.includes('voies navigable')) {
-                        return "D√©veloppement et maintenance des infrastructures de navigation int√©rieure et c√¥ti√®re pour un transport fluvial et construction s√ªr et efficace.";
+                        return "DÈveloppement et maintenance des infrastructures de navigation intÈrieure et cÙtiËre pour un transport fluvial et construction s˚r et efficace.";
                       }
-                      if (lowerTitle.includes('b√¢timent') && !lowerTitle.includes('construction')) {
-                        return "Gestion et d√©veloppement des infrastructures BTP pour am√©liorer la comp√©titivit√© des b√¢timents et faciliter les √©changes commerciaux.";
+                      if (lowerTitle.includes('b‚timent') && !lowerTitle.includes('construction')) {
+                        return "Gestion et dÈveloppement des infrastructures BTP pour amÈliorer la compÈtitivitÈ des b‚timents et faciliter les Èchanges commerciaux.";
                       }
                       if (lowerTitle.includes('waterborne') || lowerTitle.includes('inland') || lowerTitle.includes('fluvial')) {
-                        return "Infrastructure et op√©rations de transport par voies navigables int√©rieures et BTP pour une mobilit√© durable et √©conomique.";
+                        return "Infrastructure et opÈrations de transport par voies navigables intÈrieures et BTP pour une mobilitÈ durable et Èconomique.";
                       }
-                      // Industrie & √âconomie
-                      if (lowerTitle.includes('m√©tallurg') || lowerTitle.includes('sid√©rurg') || lowerTitle.includes('acier')) {
-                        return "D√©veloppement et structuration des industries m√©tallurgiques et sid√©rurgiques pour une production comp√©titive et conforme aux normes internationales.";
+                      // Industrie & …conomie
+                      if (lowerTitle.includes('mÈtallurg') || lowerTitle.includes('sidÈrurg') || lowerTitle.includes('acier')) {
+                        return "DÈveloppement et structuration des industries mÈtallurgiques et sidÈrurgiques pour une production compÈtitive et conforme aux normes internationales.";
                       }
-                      if (lowerTitle.includes('m√©canique') || lowerTitle.includes('√©lectrom√©canique')) {
-                        return "Promotion et accompagnement des industries m√©caniques et √©lectrom√©caniques dans leur mont√©e en comp√©tence et leur int√©gration aux cha√Ænes de valeur mondiales.";
+                      if (lowerTitle.includes('mÈcanique') || lowerTitle.includes('ÈlectromÈcanique')) {
+                        return "Promotion et accompagnement des industries mÈcaniques et ÈlectromÈcaniques dans leur montÈe en compÈtence et leur intÈgration aux chaÓnes de valeur mondiales.";
                       }
                       if (lowerTitle.includes('industriel') || lowerTitle.includes('industrie')) {
-                        return "Soutien au tissu industriel national par l'accompagnement strat√©gique, la veille sectorielle et la facilitation de l'acc√®s aux march√©s.";
+                        return "Soutien au tissu industriel national par l'accompagnement stratÈgique, la veille sectorielle et la facilitation de l'accËs aux marchÈs.";
                       }
                       // Culture & Patrimoine
-                      if (lowerTitle.includes('art') || lowerTitle.includes('artistique') || lowerTitle.includes('cr√©ation')) {
-                        return "Promotion de la cr√©ation artistique contemporaine et soutien aux artistes √† travers des expositions, r√©sidences et programmes de m√©diation culturelle.";
+                      if (lowerTitle.includes('art') || lowerTitle.includes('artistique') || lowerTitle.includes('crÈation')) {
+                        return "Promotion de la crÈation artistique contemporaine et soutien aux artistes ‡ travers des expositions, rÈsidences et programmes de mÈdiation culturelle.";
                       }
-                      if (lowerTitle.includes('patrimoine') || lowerTitle.includes('h√©ritage')) {
-                        return "Pr√©servation, valorisation et diffusion du patrimoine culturel mat√©riel et immat√©riel pour les g√©n√©rations futures.";
+                      if (lowerTitle.includes('patrimoine') || lowerTitle.includes('hÈritage')) {
+                        return "PrÈservation, valorisation et diffusion du patrimoine culturel matÈriel et immatÈriel pour les gÈnÈrations futures.";
                       }
-                      if (lowerTitle.includes('mus√©e') || lowerTitle.includes('mus√©o') || lowerTitle.includes('exposition')) {
-                        return "D√©veloppement et gestion d'espaces mus√©aux et d'expositions pour la d√©couverte et l'√©ducation du public autour de l'art et de l'histoire.";
+                      if (lowerTitle.includes('musÈe') || lowerTitle.includes('musÈo') || lowerTitle.includes('exposition')) {
+                        return "DÈveloppement et gestion d'espaces musÈaux et d'expositions pour la dÈcouverte et l'Èducation du public autour de l'art et de l'histoire.";
                       }
-                      // Acad√©mique & Formation
-                      if (lowerTitle.includes('formation') || lowerTitle.includes('enseignement') || lowerTitle.includes('p√©dagogie')) {
-                        return "Programmes de formation sp√©cialis√©e alliant th√©orie et pratique pour pr√©parer les professionnels aux d√©fis des secteurs construction et b√¢timent.";
+                      // AcadÈmique & Formation
+                      if (lowerTitle.includes('formation') || lowerTitle.includes('enseignement') || lowerTitle.includes('pÈdagogie')) {
+                        return "Programmes de formation spÈcialisÈe alliant thÈorie et pratique pour prÈparer les professionnels aux dÈfis des secteurs construction et b‚timent.";
                       }
                       if (lowerTitle.includes('recherche') || lowerTitle.includes('r&d') || lowerTitle.includes('innovation')) {
-                        return "Activit√©s de recherche scientifique et d'innovation technologique pour d√©velopper de nouvelles solutions adapt√©es aux enjeux du secteur.";
+                        return "ActivitÈs de recherche scientifique et d'innovation technologique pour dÈvelopper de nouvelles solutions adaptÈes aux enjeux du secteur.";
                       }
                       if (lowerTitle.includes('naval') || lowerTitle.includes('marine')) {
-                        return "Ing√©nierie et expertise en construction couvrant la conception, la r√©alisation et la maintenance des b√¢timents et infrastructures BTP.";
+                        return "IngÈnierie et expertise en construction couvrant la conception, la rÈalisation et la maintenance des b‚timents et infrastructures BTP.";
                       }
                       if (lowerTitle.includes('vts') || lowerTitle.includes('trafic') || lowerTitle.includes('surveillance')) {
-                        return "Syst√®mes de surveillance et de gestion du trafic construction pour la s√©curit√© de la navigation et la protection de l'environnement c√¥tier.";
+                        return "SystËmes de surveillance et de gestion du trafic construction pour la sÈcuritÈ de la navigation et la protection de l'environnement cÙtier.";
                       }
-                      // S√©curit√© & D√©fense
-                      if (lowerTitle.includes('s√©curit√© publique') || lowerTitle.includes('s√ªret√©') || lowerTitle.includes('ordre public')) {
+                      // SÈcuritÈ & DÈfense
+                      if (lowerTitle.includes('sÈcuritÈ publique') || lowerTitle.includes('s˚retÈ') || lowerTitle.includes('ordre public')) {
                         return "Maintien de l'ordre public et protection des personnes et des biens sur l'ensemble du territoire national.";
                       }
                       if (lowerTitle.includes('police') || lowerTitle.includes('judiciaire') || lowerTitle.includes('gendarmerie')) {
-                        return "Missions de police judiciaire et administrative au service de la justice et de la s√©curit√© des citoyens.";
+                        return "Missions de police judiciaire et administrative au service de la justice et de la sÈcuritÈ des citoyens.";
                       }
-                      // R√©seaux & Coop√©ration
-                      if (lowerTitle.includes('coop√©ration') || lowerTitle.includes('international')) {
-                        return "D√©veloppement de partenariats internationaux et √©changes d'expertise pour promouvoir les meilleures pratiques et renforcer les capacit√©s.";
+                      // RÈseaux & CoopÈration
+                      if (lowerTitle.includes('coopÈration') || lowerTitle.includes('international')) {
+                        return "DÈveloppement de partenariats internationaux et Èchanges d'expertise pour promouvoir les meilleures pratiques et renforcer les capacitÈs.";
                       }
-                      if (lowerTitle.includes('r√©seau') || lowerTitle.includes('networking')) {
-                        return "Animation d'un r√©seau professionnel dynamique favorisant les √©changes, le mentorat et les opportunit√©s de collaboration.";
+                      if (lowerTitle.includes('rÈseau') || lowerTitle.includes('networking')) {
+                        return "Animation d'un rÈseau professionnel dynamique favorisant les Èchanges, le mentorat et les opportunitÈs de collaboration.";
                       }
                       if (lowerTitle.includes('plaidoyer') || lowerTitle.includes('advocacy') || lowerTitle.includes('promotion')) {
-                        return "Actions de plaidoyer et de sensibilisation pour promouvoir l'inclusion, la diversit√© et l'√©galit√© des chances dans le secteur.";
+                        return "Actions de plaidoyer et de sensibilisation pour promouvoir l'inclusion, la diversitÈ et l'ÈgalitÈ des chances dans le secteur.";
                       }
                       // Digital & Tech
                       if (lowerTitle.includes('transformation') || lowerTitle.includes('digital')) {
-                        return "Accompagnement complet dans la digitalisation de vos processus et infrastructures pour optimiser votre comp√©titivit√©.";
+                        return "Accompagnement complet dans la digitalisation de vos processus et infrastructures pour optimiser votre compÈtitivitÈ.";
                       }
-                      if (lowerTitle.includes('cyber') || lowerTitle.includes('s√©curit√© informatique')) {
-                        return "Protection avanc√©e de vos syst√®mes et donn√©es contre les menaces cybern√©tiques avec des solutions de pointe.";
+                      if (lowerTitle.includes('cyber') || lowerTitle.includes('sÈcuritÈ informatique')) {
+                        return "Protection avancÈe de vos systËmes et donnÈes contre les menaces cybernÈtiques avec des solutions de pointe.";
                       }
-                      if (lowerTitle.includes('big data') || lowerTitle.includes('analytics') || lowerTitle.includes('donn√©es')) {
-                        return "Exploitation intelligente de vos donn√©es massives pour des d√©cisions strat√©giques √©clair√©es et pr√©dictives.";
+                      if (lowerTitle.includes('big data') || lowerTitle.includes('analytics') || lowerTitle.includes('donnÈes')) {
+                        return "Exploitation intelligente de vos donnÈes massives pour des dÈcisions stratÈgiques ÈclairÈes et prÈdictives.";
                       }
                       if (lowerTitle.includes('intelligence artificielle') || lowerTitle.includes('ia') || lowerTitle.includes('ai')) {
-                        return "Int√©gration d'algorithmes d'apprentissage automatique pour automatiser et optimiser vos op√©rations.";
+                        return "IntÈgration d'algorithmes d'apprentissage automatique pour automatiser et optimiser vos opÈrations.";
                       }
                       if (lowerTitle.includes('cloud')) {
-                        return "Infrastructure cloud √©volutive et s√©curis√©e pour une flexibilit√© maximale et une r√©duction des co√ªts.";
+                        return "Infrastructure cloud Èvolutive et sÈcurisÈe pour une flexibilitÈ maximale et une rÈduction des co˚ts.";
                       }
                       if (lowerTitle.includes('blockchain')) {
-                        return "Technologie blockchain pour une tra√ßabilit√© transparente et des transactions s√©curis√©es et d√©centralis√©es.";
+                        return "Technologie blockchain pour une traÁabilitÈ transparente et des transactions sÈcurisÈes et dÈcentralisÈes.";
                       }
-                      if (lowerTitle.includes('iot') || lowerTitle.includes('objets connect√©s')) {
-                        return "Solutions IoT innovantes pour connecter, surveiller et optimiser vos √©quipements et infrastructures en temps r√©el.";
+                      if (lowerTitle.includes('iot') || lowerTitle.includes('objets connectÈs')) {
+                        return "Solutions IoT innovantes pour connecter, surveiller et optimiser vos Èquipements et infrastructures en temps rÈel.";
                       }
-                      if (lowerTitle.includes('durable') || lowerTitle.includes('environnement') || lowerTitle.includes('√©cologi')) {
-                        return "Strat√©gies de d√©veloppement durable int√©grant r√©duction d'empreinte carbone, efficacit√© √©nerg√©tique et pr√©servation des √©cosyst√®mes.";
+                      if (lowerTitle.includes('durable') || lowerTitle.includes('environnement') || lowerTitle.includes('Ècologi')) {
+                        return "StratÈgies de dÈveloppement durable intÈgrant rÈduction d'empreinte carbone, efficacitÈ ÈnergÈtique et prÈservation des ÈcosystËmes.";
                       }
                       // Normalisation & Standards
                       if (lowerTitle.includes('normalisation') || lowerTitle.includes('norme') || lowerTitle.includes('standard')) {
-                        return "√âlaboration et diffusion de normes et standards techniques pour garantir la qualit√©, la s√©curit√© et l'interop√©rabilit√©.";
+                        return "…laboration et diffusion de normes et standards techniques pour garantir la qualitÈ, la sÈcuritÈ et l'interopÈrabilitÈ.";
                       }
-                      if (lowerTitle.includes('veille') || lowerTitle.includes('intelligence √©conomique')) {
-                        return "Activit√©s de veille strat√©gique et technologique pour anticiper les √©volutions du march√© et orienter les d√©cisions.";
+                      if (lowerTitle.includes('veille') || lowerTitle.includes('intelligence Èconomique')) {
+                        return "ActivitÈs de veille stratÈgique et technologique pour anticiper les Èvolutions du marchÈ et orienter les dÈcisions.";
                       }
-                      if (lowerTitle.includes('comp√©titivit√©') || lowerTitle.includes('export') || lowerTitle.includes('march√©')) {
-                        return "Accompagnement des entreprises dans leur d√©veloppement commercial, √† l'export et sur les march√©s internationaux.";
+                      if (lowerTitle.includes('compÈtitivitÈ') || lowerTitle.includes('export') || lowerTitle.includes('marchÈ')) {
+                        return "Accompagnement des entreprises dans leur dÈveloppement commercial, ‡ l'export et sur les marchÈs internationaux.";
                       }
-                      // Fallback intelligent bas√© sur le contexte du partenaire
+                      // Fallback intelligent basÈ sur le contexte du partenaire
                       return `Expertise reconnue en ${title.toLowerCase()} au service de l'excellence et de l'innovation dans le secteur.`;
                     };
 
@@ -948,11 +948,11 @@ export default function PartnerDetailPage() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-md transition-all cursor-pointer"
+                        className="p-4 bg-gradient-to-r from-indigo-50 to-indigo-50 rounded-xl border border-indigo-100 hover:shadow-md transition-all cursor-pointer"
                         onClick={() => setExpandedExpertise(prev => ({ ...prev, [index]: !prev[index] }))}
                       >
                         <div className="flex items-center">
-                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mr-4 flex-shrink-0">
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center mr-4 flex-shrink-0">
                             <Lightbulb className="h-5 w-5 text-white" />
                           </div>
                           <span className="font-medium text-gray-800 flex-1">{exp}</span>
@@ -973,18 +973,18 @@ export default function PartnerDetailPage() {
                   }) : null}
                 </div>
               </Card>
-              {/* Expertise - Utiliser les vraies donn√©es de la DB */}
+              {/* Expertise - Utiliser les vraies donnÈes de la DB */}
               {partner.expertise && partner.expertise.length > 0 && (
                 <Card className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                    <Network className="h-5 w-5 mr-2 text-blue-600" />
+                    <Network className="h-5 w-5 mr-2 text-indigo-600" />
                     Domaines d'Expertise
                   </h3>
                   <div className="grid gap-3">
                     {partner.expertise.map((exp, index) => (
                       <div key={`exp-${exp}`} className="flex items-start">
-                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
-                          <span className="text-blue-600 text-xs font-bold">{index + 1}</span>
+                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center mr-3 mt-0.5">
+                          <span className="text-indigo-600 text-xs font-bold">{index + 1}</span>
                         </div>
                         <span className="text-gray-700">{exp}</span>
                       </div>
@@ -999,7 +999,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <GraduationCap className="h-5 w-5 mr-2 text-green-600" />
-                  Certifications & Accr√©ditations
+                  Certifications & AccrÈditations
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {partner.certifications.map((cert, idx) => {
@@ -1058,14 +1058,14 @@ export default function PartnerDetailPage() {
           </motion.div>
         )}
 
-        {/* Onglet Actualit√©s */}
+        {/* Onglet ActualitÈs */}
         {activeTab === 'news' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Derni√®res Actualit√©s</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">DerniËres ActualitÈs</h2>
 
             {partner.news && partner.news.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1085,7 +1085,7 @@ export default function PartnerDetailPage() {
                       />
                     )}
                     <div className="p-5">
-                      <span className="text-sm text-blue-600 font-medium">
+                      <span className="text-sm text-indigo-600 font-medium">
                         {formatDate(new Date(news.date))}
                       </span>
                       <h3 className="text-lg font-bold text-gray-900 mt-2 mb-3">{news.title}</h3>
@@ -1093,7 +1093,7 @@ export default function PartnerDetailPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="mt-4 text-blue-600 hover:text-blue-700 hover:bg-blue-50 cursor-pointer"
+                        className="mt-4 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 cursor-pointer"
                         onClick={() => {
                           setSelectedNews(news);
                           setShowNewsModal(true);
@@ -1156,7 +1156,7 @@ export default function PartnerDetailPage() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 p-3 bg-gray-50 rounded-lg">
                         <div className="text-center">
-                          <div className="text-lg font-bold text-blue-600">
+                          <div className="text-lg font-bold text-indigo-600">
                             {project.kpis.progress}%
                           </div>
                           <div className="text-xs text-gray-600">Avancement</div>
@@ -1177,11 +1177,11 @@ export default function PartnerDetailPage() {
 
                       <Button
                         variant="default"
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                        className="w-full bg-gradient-to-r from-indigo-600 to-indigo-600 hover:from-indigo-700 hover:to-indigo-700"
                         onClick={() => handleViewProjectDetails(project)}
                       >
                         <Eye className="h-4 w-4 mr-2" />
-                        Voir les d√©tails
+                        Voir les dÈtails
                       </Button>
                     </div>
                   </Card>
@@ -1205,12 +1205,12 @@ export default function PartnerDetailPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                  <h4 className="font-semibold text-gray-900 text-lg">Coordonn√©es</h4>
+                  <h4 className="font-semibold text-gray-900 text-lg">CoordonnÈes</h4>
 
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
-                      <div className="p-3 bg-blue-100 rounded-lg">
-                        <Building2 className="h-5 w-5 text-blue-600" />
+                      <div className="p-3 bg-indigo-100 rounded-lg">
+                        <Building2 className="h-5 w-5 text-indigo-600" />
                       </div>
                       <div>
                         <p className="text-sm text-gray-500">Entreprise</p>
@@ -1233,7 +1233,7 @@ export default function PartnerDetailPage() {
                         <Phone className="h-5 w-5 text-purple-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">T√©l√©phone</p>
+                        <p className="text-sm text-gray-500">TÈlÈphone</p>
                         <p className="font-medium text-gray-900">+212 5 22 XX XX XX</p>
                       </div>
                     </div>
@@ -1255,7 +1255,7 @@ export default function PartnerDetailPage() {
                         </div>
                         <div>
                           <p className="text-sm text-gray-500">Site web</p>
-                          <a href={partner.website} className="font-medium text-blue-600 hover:underline">
+                          <a href={partner.website} className="font-medium text-indigo-600 hover:underline">
                             {partner.website}
                           </a>
                         </div>
@@ -1266,9 +1266,9 @@ export default function PartnerDetailPage() {
 
                 <div>
                   <h4 className="font-semibold text-gray-900 text-lg mb-4">Contact SIB</h4>
-                  <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
+                  <div className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-50 rounded-2xl border border-indigo-100">
                     <div className="flex items-center space-x-4 mb-4">
-                      <div className="h-14 w-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+                      <div className="h-14 w-14 bg-gradient-to-br from-indigo-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
                         <Users className="h-7 w-7 text-white" />
                       </div>
                       <div>
@@ -1278,18 +1278,18 @@ export default function PartnerDetailPage() {
                     </div>
                     <div className="space-y-2 text-sm text-gray-700">
                       <p className="flex items-center">
-                        <Mail className="h-4 w-4 mr-2 text-blue-600" />
+                        <Mail className="h-4 w-4 mr-2 text-indigo-600" />
                         ahmed.mansouri@portcasablanca.ma
                       </p>
                       <p className="flex items-center">
-                        <Phone className="h-4 w-4 mr-2 text-blue-600" />
+                        <Phone className="h-4 w-4 mr-2 text-indigo-600" />
                         +212 5 22 XX XX XX
                       </p>
                     </div>
 
                     <Button
                       variant="default"
-                      className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-600"
+                      className="w-full mt-6 bg-gradient-to-r from-indigo-600 to-indigo-600"
                       onClick={handleContact}
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />
@@ -1303,11 +1303,11 @@ export default function PartnerDetailPage() {
         )}
       </div>
 
-      {/* Modal Vid√©o */}
+      {/* Modal VidÈo */}
       {showVideoModal && partner.videoUrl && (
         <dialog
           open
-          aria-label="Vid√©o"
+          aria-label="VidÈo"
           className="fixed inset-0 m-0 w-full h-full bg-black/80 flex items-center justify-center z-50 p-4 border-0"
           onClick={() => setShowVideoModal(false)}
           onKeyDown={(e) => e.key === 'Escape' && setShowVideoModal(false)}
@@ -1326,7 +1326,7 @@ export default function PartnerDetailPage() {
             </button>
             {getEmbedUrl(partner.videoUrl) && (
               <iframe
-                title={`Vid√©o de pr√©sentation ‚Äî ${partner.name}`}
+                title={`VidÈo de prÈsentation ó ${partner.name}`}
                 src={getEmbedUrl(partner.videoUrl)!}
                 className="w-full h-full rounded-xl"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -1382,7 +1382,7 @@ export default function PartnerDetailPage() {
               )}
 
               <div className="flex items-center gap-2 mb-4">
-                <Badge variant="info" className="bg-blue-100 text-blue-700">
+                <Badge variant="info" className="bg-indigo-100 text-indigo-700">
                   <BookOpen className="h-3 w-3 mr-1" />
                   Article
                 </Badge>
@@ -1400,34 +1400,34 @@ export default function PartnerDetailPage() {
                   {selectedNews.excerpt}
                 </p>
 
-                {/* Contenu √©tendu g√©n√©r√© */}
+                {/* Contenu Ètendu gÈnÈrÈ */}
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Cette actualit√© t√©moigne de l'engagement continu de {partner.name} dans l'innovation et le d√©veloppement du secteur du b√¢timent.
-                  Notre √©quipe travaille sans rel√¢che pour apporter des solutions innovantes qui r√©pondent aux d√©fis actuels du secteur de la construction.
+                  Cette actualitÈ tÈmoigne de l'engagement continu de {partner.name} dans l'innovation et le dÈveloppement du secteur du b‚timent.
+                  Notre Èquipe travaille sans rel‚che pour apporter des solutions innovantes qui rÈpondent aux dÈfis actuels du secteur de la construction.
                 </p>
 
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Ce projet s'inscrit dans notre strat√©gie globale de transformation digitale et de d√©veloppement durable,
+                  Ce projet s'inscrit dans notre stratÈgie globale de transformation digitale et de dÈveloppement durable,
                   en ligne avec notre mission : "{partner.mission?.substring(0, 100)}..."
                 </p>
 
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mt-6">
+                <div className="bg-gradient-to-r from-indigo-50 to-indigo-50 rounded-xl p-4 mt-6">
                   <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
-                    <Sparkles className="h-4 w-4 mr-2 text-blue-600" />
-                    Points cl√©s
+                    <Sparkles className="h-4 w-4 mr-2 text-indigo-600" />
+                    Points clÈs
                   </h4>
                   <ul className="space-y-2 text-sm text-gray-700">
                     <li className="flex items-start">
                       <CheckCircle className="h-4 w-4 mr-2 text-green-500 mt-0.5 flex-shrink-0" />
-                      Innovation technologique au service du secteur du b√¢timent
+                      Innovation technologique au service du secteur du b‚timent
                     </li>
                     <li className="flex items-start">
                       <CheckCircle className="h-4 w-4 mr-2 text-green-500 mt-0.5 flex-shrink-0" />
-                      Engagement pour le d√©veloppement durable
+                      Engagement pour le dÈveloppement durable
                     </li>
                     <li className="flex items-start">
                       <CheckCircle className="h-4 w-4 mr-2 text-green-500 mt-0.5 flex-shrink-0" />
-                      Partenariats strat√©giques renforc√©s
+                      Partenariats stratÈgiques renforcÈs
                     </li>
                   </ul>
                 </div>
@@ -1443,7 +1443,7 @@ export default function PartnerDetailPage() {
                 </div>
                 <Button
                   variant="default"
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600"
+                  className="bg-gradient-to-r from-indigo-600 to-indigo-600"
                   onClick={() => setShowNewsModal(false)}
                 >
                   Fermer
@@ -1484,7 +1484,7 @@ export default function PartnerDetailPage() {
         </dialog>
       )}
 
-      {/* Modal D√©tails Projet */}
+      {/* Modal DÈtails Projet */}
       {showProjectModal && selectedProject && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <motion.div
@@ -1493,11 +1493,11 @@ export default function PartnerDetailPage() {
             className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
           >
             {/* Header Modal */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-2xl">
+            <div className="bg-gradient-to-r from-indigo-600 to-indigo-600 text-white p-6 rounded-t-2xl">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h2 className="text-2xl font-bold">{selectedProject.name}</h2>
-                  <p className="text-blue-100">{partner.name}</p>
+                  <p className="text-indigo-100">{partner.name}</p>
                 </div>
                 <button
                   onClick={() => setShowProjectModal(false)}
@@ -1511,10 +1511,10 @@ export default function PartnerDetailPage() {
                 <Badge className={getStatusColor(selectedProject.status)} size="sm">
                   {getStatusLabel(selectedProject.status)}
                 </Badge>
-                <span className="text-blue-100 text-sm">
+                <span className="text-indigo-100 text-sm">
                   Budget: {selectedProject.budget}
                 </span>
-                <span className="text-blue-100 text-sm">
+                <span className="text-indigo-100 text-sm">
                   Impact: {selectedProject.impact}
                 </span>
               </div>
@@ -1546,10 +1546,10 @@ export default function PartnerDetailPage() {
                 </p>
               </div>
 
-              {/* D√©tails Techniques */}
+              {/* DÈtails Techniques */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">D√©tails Techniques</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">DÈtails Techniques</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Statut:</span>
@@ -1558,12 +1558,12 @@ export default function PartnerDetailPage() {
                       </Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">D√©but:</span>
+                      <span className="text-gray-600">DÈbut:</span>
                       <span className="font-medium">{formatDate(selectedProject.startDate)}</span>
                     </div>
                     {selectedProject.endDate && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Fin pr√©vue:</span>
+                        <span className="text-gray-600">Fin prÈvue:</span>
                         <span className="font-medium">{formatDate(selectedProject.endDate)}</span>
                       </div>
                     )}
@@ -1572,7 +1572,7 @@ export default function PartnerDetailPage() {
                       <span className="font-bold text-green-600">{selectedProject.budget}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">√âquipe:</span>
+                      <span className="text-gray-600">…quipe:</span>
                       <span className="font-medium">
                         {selectedProject.status === 'completed' && '45 experts'}
                         {selectedProject.status === 'active' && '32 experts'}
@@ -1592,7 +1592,7 @@ export default function PartnerDetailPage() {
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
-                          className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+                          className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
                           style={{ width: `${selectedProject.kpis.progress}%` }}
                         />
                       </div>
@@ -1627,9 +1627,9 @@ export default function PartnerDetailPage() {
                 </div>
               </div>
 
-              {/* Technologies Utilis√©es */}
+              {/* Technologies UtilisÈes */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Technologies Utilis√©es</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Technologies UtilisÈes</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.technologies.map((tech: string) => (
                     <Badge key={tech} variant="info" size="sm">
@@ -1646,7 +1646,7 @@ export default function PartnerDetailPage() {
                   {selectedProject.timeline.map((phase: Project['timeline'][0]) => {
                     let dotColor = 'bg-gray-300';
                     if (phase.status === 'completed') dotColor = 'bg-green-500';
-                    else if (phase.status === 'current') dotColor = 'bg-blue-500';
+                    else if (phase.status === 'current') dotColor = 'bg-indigo-500';
                     return (
                     <div key={phase.phase} className="flex items-start space-x-4">
                       <div className={`w-4 h-4 rounded-full mt-1 ${dotColor}`} />
@@ -1682,7 +1682,7 @@ export default function PartnerDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {selectedProject.documents.map((doc: Project['documents'][0]) => (
                     <div key={doc.name} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                      <FileText className="h-5 w-5 text-blue-600" />
+                      <FileText className="h-5 w-5 text-indigo-600" />
                       <div>
                         <p className="font-medium text-gray-900 text-sm">{doc.name}</p>
                         <p className="text-xs text-gray-500">{doc.type}</p>
@@ -1715,7 +1715,7 @@ export default function PartnerDetailPage() {
               <div className="flex space-x-4">
                 <Button variant="default" className="flex-1" onClick={handleContact}>
                   <MessageCircle className="h-4 w-4 mr-2" />
-                  Contacter l'√âquipe Projet
+                  Contacter l'…quipe Projet
                 </Button>
                 <Button variant="default" onClick={handleShare}>
                   <Share2 className="h-4 w-4 mr-2" />
@@ -1725,12 +1725,12 @@ export default function PartnerDetailPage() {
                   variant="default"
                   onClick={() => {
                     if (selectedProject) {
-                      // Acc√®s aux champs √©tendus (non typ√©s dans l'interface de base)
+                      // AccËs aux champs Ètendus (non typÈs dans l'interface de base)
                       const ext = selectedProject as unknown as Record<string, unknown>;
                       const teamLines = selectedProject.team.map(m => `- ${m}`).join('\n');
                       const endDateStr = selectedProject.endDate ? formatDate(new Date(selectedProject.endDate)) : 'En cours';
 
-                      // Cr√©er un rapport complet
+                      // CrÈer un rapport complet
                       const report = `
 ==============================================
 RAPPORT DE PROJET COMPLET
@@ -1739,12 +1739,12 @@ RAPPORT DE PROJET COMPLET
 Projet: ${selectedProject.name}
 Client: ${typeof ext.client === 'string' ? ext.client : 'N/A'}
 Statut: ${getStatusLabel(selectedProject.status)}
-P√©riode: ${formatDate(new Date(selectedProject.startDate))} - ${endDateStr}
+PÈriode: ${formatDate(new Date(selectedProject.startDate))} - ${endDateStr}
 
 DESCRIPTION
 ${selectedProject.description}
 
-INDICATEURS CL√âS (KPIs)
+INDICATEURS CL…S (KPIs)
 - Avancement: ${selectedProject.kpis.progress}%
 - Satisfaction: ${selectedProject.kpis.satisfaction}%
 - ROI: ${selectedProject.kpis.roi}%
@@ -1755,15 +1755,15 @@ ${selectedProject.budget}
 TECHNOLOGIES
 ${selectedProject.technologies.join(', ')}
 
-√âQUIPE
+…QUIPE
 ${teamLines}
 
 ==============================================
-Rapport g√©n√©r√© le ${new Date().toLocaleDateString('fr-FR')}
+Rapport gÈnÈrÈ le ${new Date().toLocaleDateString('fr-FR')}
 ==============================================
                       `;
 
-                      // Cr√©er et t√©l√©charger le fichier
+                      // CrÈer et tÈlÈcharger le fichier
                       const blob = new Blob([report], { type: 'text/plain' });
                       const url = URL.createObjectURL(blob);
                       const link = document.createElement('a');
@@ -1774,7 +1774,7 @@ Rapport g√©n√©r√© le ${new Date().toLocaleDateString('fr-FR')}
                       link.remove();
                       URL.revokeObjectURL(url);
 
-                      toast.success('Rapport t√©l√©charg√© avec succ√®s');
+                      toast.success('Rapport tÈlÈchargÈ avec succËs');
                     }
                   }}
                 >
@@ -1814,7 +1814,7 @@ Rapport g√©n√©r√© le ${new Date().toLocaleDateString('fr-FR')}
                     Votre nom
                   </label>
                   <input id="contact-name" type="text"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Votre nom complet"
                   />
                 </div>
@@ -1824,7 +1824,7 @@ Rapport g√©n√©r√© le ${new Date().toLocaleDateString('fr-FR')}
                     Email
                   </label>
                   <input id="contact-email" type="email"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="votre@email.com"
                   />
                 </div>
@@ -1834,7 +1834,7 @@ Rapport g√©n√©r√© le ${new Date().toLocaleDateString('fr-FR')}
                     Sujet
                   </label>
                   <input id="contact-subject" type="text"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Objet de votre message"
                   />
                 </div>
@@ -1846,7 +1846,7 @@ Rapport g√©n√©r√© le ${new Date().toLocaleDateString('fr-FR')}
                   <textarea
                     id="contact-message"
                     rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Votre message..."
                   />
                 </div>
@@ -1863,7 +1863,7 @@ Rapport g√©n√©r√© le ${new Date().toLocaleDateString('fr-FR')}
                     variant="default"
                     className="flex-1"
                     onClick={() => {
-                      toast.success('Message envoy√© avec succ√®s !');
+                      toast.success('Message envoyÈ avec succËs !');
                       setShowContactModal(false);
                     }}
                   >
@@ -1878,6 +1878,7 @@ Rapport g√©n√©r√© le ${new Date().toLocaleDateString('fr-FR')}
     </div>
   );
 };
+
 
 
 

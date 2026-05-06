@@ -4,8 +4,8 @@ import { Lightbulb, Network, GraduationCap, Gift, TrendingUp, Globe, MapPin, Cal
 import { ROUTES } from '../../lib/routes';
 import { usePageContent } from '../../hooks/usePageContent';
 import { motion } from 'framer-motion';
-import { MoroccanPattern } from '../../components/ui/MoroccanDecor';
 import { useTranslation } from '../../hooks/useTranslation';
+import { PageHero } from '../../components/ui/PageHero';
 
 const arguments_visiter = [
   { icon: Lightbulb, title: 'Découvrir les innovations', desc: 'Le salon offre une réponse complète aux besoins des particuliers et des professionnels dans un espace et un temps maîtrisé.' },
@@ -114,37 +114,23 @@ export default function PourquoiVisiterPage() {
   const infoTextColors = ['text-[#00AEEF]', 'text-[#52B847]', 'text-[#E63329]', 'text-[#52B847]'];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-50">
 
-      {/* ── HERO ── */}
-      <section className="relative bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 text-white py-20 overflow-hidden">
-        {/* Orbes animés */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-16 w-80 h-80 bg-[#00AEEF]/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#52B847]/10 rounded-full blur-3xl pointer-events-none" />
-        <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 text-xs font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest">
-              🎫 {t('visiter.hero_badge')}
-            </span>
-            <h1 className="text-4xl md:text-5xl font-black mb-5 leading-tight">
-              {cms.hero_title || t('visiter.hero_title')}
-            </h1>
-            <p className="text-lg text-white/80 max-w-3xl mx-auto mb-8">
-              {cms.hero_subtitle || t('visiter.hero_subtitle')}
-            </p>
-            <Link
-              to={ROUTES.BADGE}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#52B847] text-white rounded-xl font-bold text-base hover:bg-[#3D9B35] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-            >
-              {getCms('hero_cta', t('visiter.hero_cta'))}
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        badge={<><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">🎫 {t('visiter.hero_badge')}</span></>}
+        title={<>{cms.hero_title || t('visiter.hero_title')}</>}
+        subtitle={cms.hero_subtitle || t('visiter.hero_subtitle')}
+        py="py-16 md:py-20"
+        actions={
+          <Link
+            to={ROUTES.BADGE}
+            className="inline-flex items-center gap-2 px-8 py-4 bg-yellow-400 text-indigo-900 rounded-xl font-bold text-base hover:bg-yellow-300 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+          >
+            {getCms('hero_cta', t('visiter.hero_cta'))}
+            <ArrowRight className="h-5 w-5" />
+          </Link>
+        }
+      />
 
       {/* ── 6 RAISONS ── */}
       <section className="py-16 md:py-20 bg-white relative overflow-hidden">

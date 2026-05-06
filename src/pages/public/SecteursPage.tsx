@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Search, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, ChevronDown } from 'lucide-react';
 import { usePageContent } from '../../hooks/usePageContent';
 import {
-  ScrollReveal, StaggerReveal, StaggerItem, HoverCard, HeroReveal,
-  fadeUp, motion, AnimatePresence,
+  StaggerReveal, StaggerItem, HoverCard,
+  motion, AnimatePresence,
 } from '../../components/ui/motion';
+import { PageHero } from '../../components/ui/PageHero';
 
 interface Secteur {
   id: number;
@@ -63,25 +64,13 @@ export default function SecteursPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16 overflow-hidden">
-        <div className="container mx-auto px-4 text-center">
-          <HeroReveal>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
-              {getCms('hero_badge', "10 secteurs d'activité")}
-            </span>
-          </HeroReveal>
-          <HeroReveal delay={0.15}>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Secteurs d\'Activités'}</h1>
-          </HeroReveal>
-          <HeroReveal delay={0.3}>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              {cms.hero_subtitle || 'Tous les métiers du bâtiment, réunis sous un même toit. Plongez au cœur des univers du SIB, où se rencontrent innovation, savoir-faire et solutions concrètes pour construire l\'avenir.'}
-            </p>
-          </HeroReveal>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50">
+      <PageHero
+        badge={<><Search className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{getCms('hero_badge', "10 secteurs d'activité")}</span></>}
+        title={<>Secteurs <span className="text-yellow-300">d'Activités</span></>}
+        subtitle={cms.hero_subtitle || "Tous les métiers du bâtiment, réunis sous un même toit. Plongez au cœur des univers du SIB, où se rencontrent innovation, savoir-faire et solutions concrètes pour construire l'avenir."}
+        py="py-16 md:py-20"
+      />
 
       {/* Search */}
       <div className="container mx-auto px-4 -mt-6">
@@ -92,7 +81,7 @@ export default function SecteursPage() {
             placeholder={getCms('search_placeholder', 'Rechercher un secteur ou une sous-catégorie...')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 rounded-xl shadow-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sib-gold/50 text-gray-800"
+            className="w-full pl-12 pr-4 py-4 rounded-xl shadow-lg bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
           />
         </div>
       </div>

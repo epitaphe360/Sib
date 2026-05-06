@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -9,6 +9,7 @@ import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/authStore';
 import { ROUTES } from '../lib/routes';
 import { toast } from 'sonner';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface RentalItem {
   id: string;
@@ -45,6 +46,7 @@ interface RentalCatalogPageProps {
 export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) {
   const { user } = useAuthStore();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [items, setItems] = useState<RentalItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [cart, setCart] = useState<Record<string, CartItem>>({});
@@ -74,7 +76,7 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
       if (error) {throw error;}
       setItems(data || []);
     } catch {
-      toast.error('Erreur lors du chargement du catalogue');
+      toast.error(t('rental.error_loading'));
     } finally {
       setIsLoading(false);
     }
@@ -117,7 +119,7 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
   const handleCheckout = () => {
     if (!user?.id || cartItems.length === 0) { return; }
     if (!entityId) {
-      toast.error('Impossible de récupérer vos informations. Veuillez recharger la page.');
+      toast.error(t('rental.error_entity'));
       return;
     }
     navigate(ROUTES.RENTAL_CHECKOUT, {
@@ -135,13 +137,13 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
   const categories = ['all', ...Array.from(new Set(items.map(i => i.category)))];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Header */}
         <div className="mb-8">
           <Link to={dashboardRoute} className="inline-flex items-center text-gray-500 hover:text-gray-900 mb-4 text-sm">
-            <ArrowLeft className="h-4 w-4 mr-1" /> Retour au tableau de bord
+            <ArrowLeft className="h-4 w-4 mr-1" /> {t('rental.back_dashboard')}
           </Link>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
@@ -149,8 +151,8 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
                 <Package className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Location de Matériel</h1>
-                <p className="text-sm text-gray-500">Mobilier, audiovisuel, structure — livré à votre stand</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('rental.title')}</h1>
+                <p className="text-sm text-gray-500">{t('rental.subtitle')}</p>
               </div>
             </div>
             <button
@@ -158,7 +160,7 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
               className="relative flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition"
             >
               <ShoppingCart className="h-4 w-4" />
-              Mon panier
+              {t('rental.cart_btn')}
               {cartItems.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                   {cartItems.length}
@@ -171,10 +173,10 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
         {/* Période de location fixe */}
         <div className="bg-white rounded-xl border border-gray-100 p-4 mb-6 flex flex-wrap items-center gap-3">
           <Calendar className="h-4 w-4 text-emerald-600 shrink-0" />
-          <span className="text-sm font-medium text-gray-700">Période de location :</span>
+          <span className="text-sm font-medium text-gray-700">{t('rental.period_label')}</span>
           <span className="text-sm text-gray-900 font-semibold">Mercredi 25 Nov. → Dimanche 29 Nov. 2026</span>
           <span className="text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full font-medium ml-auto">
-            5 jours
+            {t('rental.duration')}
           </span>
         </div>
 
@@ -190,7 +192,7 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
                   : 'bg-white border border-gray-200 text-gray-600 hover:border-emerald-300'
               }`}
             >
-              {cat === 'all' ? '🏪 Tout' : CATEGORY_LABELS[cat] || cat}
+              {cat === 'all' ? t('rental.filter_all') : CATEGORY_LABELS[cat] || cat}
             </button>
           ))}
         </div>
@@ -202,7 +204,7 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
             animate={{ opacity: 1, y: 0 }}
             className="bg-white rounded-2xl border border-emerald-100 shadow-lg p-6 mb-6"
           >
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Mon Panier</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">{t('rental.cart_title')}</h3>
             <div className="space-y-3 mb-4">
               {cartItems.map(ci => (
                 <div key={ci.id} className="flex items-center justify-between text-sm">
@@ -215,7 +217,7 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
             </div>
             <div className="border-t pt-4 flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-500">{totalDays} jour{totalDays > 1 ? 's' : ''}</div>
+                <div className="text-sm text-gray-500">{totalDays} {t('rental.days_label')}</div>
                 <div className="text-xl font-bold text-emerald-700">{totalAmount.toLocaleString()} MAD</div>
               </div>
               <button
@@ -223,10 +225,10 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
                 className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold text-sm transition"
               >
                 <CreditCard className="h-4 w-4" />
-                Procéder au paiement
+                {t('rental.checkout_btn')}
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-2">* TVA 20% incluse · Paiement sécurisé par PayPal ou CMI</p>
+            <p className="text-xs text-gray-400 mt-2">{t('rental.vat_note')}</p>
           </motion.div>
         )}
 
@@ -251,7 +253,7 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
                     <div className="flex items-start justify-between mb-1">
                       <h3 className="font-semibold text-gray-900 text-sm">{item.name}</h3>
                       <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full shrink-0 ml-2">
-                        {item.stock_available} dispo
+                        {item.stock_available} {t('rental.available_label')}
                       </span>
                     </div>
                     <p className="text-xs text-gray-500 mb-3 line-clamp-2">{item.description}</p>
@@ -287,7 +289,7 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
         {/* Mes commandes */}
         {myOrders.length > 0 && (
           <div>
-            <h2 className="text-base font-bold text-gray-900 mb-4">Mes Commandes</h2>
+            <h2 className="text-base font-bold text-gray-900 mb-4">{t('rental.my_orders')}</h2>
             <div className="space-y-3">
               {myOrders.map((order: any) => (
                 <div key={order.id} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center justify-between flex-wrap gap-3">
@@ -300,7 +302,7 @@ export default function RentalCatalogPage({ userType }: RentalCatalogPageProps) 
                     order.status === 'cancelled' ? 'bg-red-50 text-red-700' :
                     'bg-amber-50 text-amber-700'
                   }`}>
-                    {order.status === 'confirmed' ? 'Confirmée' : order.status === 'cancelled' ? 'Annulée' : 'En attente'}
+                    {order.status === 'confirmed' ? t('rental.status_confirmed') : order.status === 'cancelled' ? t('rental.status_cancelled') : t('rental.status_pending')}
                   </span>
                 </div>
               ))}

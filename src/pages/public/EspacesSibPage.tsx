@@ -1,10 +1,13 @@
 ﻿import React from 'react';
 import { Wrench, GraduationCap, Briefcase, Tv, Handshake, ArrowRight } from 'lucide-react';
 import { usePageContent } from '../../hooks/usePageContent';
-import { ScrollReveal, HeroReveal, StaggerReveal, StaggerItem } from '../../components/ui/motion';
+import { ScrollReveal, StaggerReveal, StaggerItem } from '../../components/ui/motion';
+import { PageHero } from '../../components/ui/PageHero';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function EspacesSibPage() {
   const cms = usePageContent('espaces-sib');
+  const { t } = useTranslation();
 
   const getCms = (key: string, fallback: string) => {
     const value = cms[key];
@@ -57,35 +60,13 @@ export default function EspacesSibPage() {
   })();
 
   return (
-    <div className="min-h-screen bg-[#0A0F1E] text-white overflow-x-hidden">
-      <div className="relative h-[58vh] min-h-[380px] flex items-center">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1605152276897-4f618f831968?auto=format&fit=crop&w=1920&q=80"
-            alt="Espaces SIB"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/75 via-[#0A0F1E]/60 to-[#0A0F1E]" />
-        </div>
-
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <HeroReveal>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/35 text-[#C9A84C] text-sm font-semibold mb-6">
-              {getCms('hero_badge', '5 espaces dédiés')}
-            </span>
-          </HeroReveal>
-          <HeroReveal delay={0.15}>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 font-display">
-              {cms.hero_title || 'Espaces SIB'}
-            </h1>
-          </HeroReveal>
-          <HeroReveal delay={0.3}>
-            <p className="text-white/70 text-lg max-w-3xl mx-auto">
-              {cms.hero_subtitle || "Parce que le SIB ne se résume pas qu'aux stands d'exposition, plusieurs espaces sont également mis en avant."}
-            </p>
-          </HeroReveal>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50 overflow-x-hidden">
+      <PageHero
+        badge={<><Wrench className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{t('espaces.hero_badge')}</span></>}
+        title={<>Espaces <span className="text-yellow-300">SIB</span></>}
+        subtitle={cms.hero_subtitle || "Parce que le SIB ne se résume pas qu'à des stands d'exposition, plusieurs espaces sont également mis en avant."}
+        py="py-16 md:py-20"
+      />
 
       <div className="container mx-auto px-4 py-16">
         <StaggerReveal className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
@@ -93,12 +74,12 @@ export default function EspacesSibPage() {
             const Icon = espace.icon;
             return (
               <StaggerItem key={i}>
-                <article className="h-full rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-7 hover:border-[#C9A84C]/45 transition-colors">
-                  <div className="w-14 h-14 rounded-xl border border-[#C9A84C]/35 bg-[#C9A84C]/12 flex items-center justify-center mb-5">
-                    <Icon className="w-7 h-7 text-[#C9A84C]" />
+                <article className="h-full rounded-2xl border border-gray-200 bg-white shadow-sm p-7 hover:border-indigo-300 hover:shadow-md transition-all">
+                  <div className="w-14 h-14 rounded-xl border border-indigo-200 bg-indigo-50 flex items-center justify-center mb-5">
+                    <Icon className="w-7 h-7 text-indigo-600" />
                   </div>
-                  <h2 className="text-2xl font-semibold text-white mb-3 font-display leading-snug">{espace.title}</h2>
-                  <p className="text-white/65 leading-relaxed text-sm">{espace.description}</p>
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-3 font-display leading-snug">{espace.title}</h2>
+                  <p className="text-gray-600 leading-relaxed text-sm">{espace.description}</p>
                 </article>
               </StaggerItem>
             );
@@ -106,18 +87,18 @@ export default function EspacesSibPage() {
         </StaggerReveal>
       </div>
 
-      <section className="relative py-20 border-t border-white/10">
+      <section className="relative py-20 border-t border-gray-200 bg-white">
         <div className="container mx-auto px-4 text-center max-w-3xl">
           <ScrollReveal>
-            <h2 className="text-3xl md:text-5xl font-bold text-white font-display mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-800 font-display mb-4">
               {getCms('cta_title', 'Intéressé par un espace ?')}
             </h2>
-            <p className="text-white/65 mb-8 text-lg">
+            <p className="text-gray-600 mb-8 text-lg">
               {getCms('cta_text', 'Contactez-nous pour en savoir plus sur les modalités de participation et de réservation.')}
             </p>
             <a
               href={getCms('cta_url', '/contact')}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-[#C9A84C] text-[#0A0F1E] font-semibold hover:bg-[#E7D192] transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors"
             >
               {getCms('cta_button', 'Contactez-nous')}
               <ArrowRight className="w-5 h-5" />

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
@@ -98,7 +98,7 @@ export default function PaymentInstructionsPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
@@ -124,7 +124,7 @@ export default function PaymentInstructionsPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">{t('payment.instructions.title')}</h1>
         <p className="text-xl text-gray-600">
-          {t('payment.instructions.subtitle')}<span className="font-bold text-blue-600">{amount.toFixed(2)}€</span>
+          {t('payment.instructions.subtitle')}<span className="font-bold text-indigo-600">{amount.toFixed(2)}�</span>
         </p>
       </div>
 
@@ -166,7 +166,7 @@ export default function PaymentInstructionsPage() {
         {/* Bank Info */}
         <Card className="p-6">
           <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-blue-600" />
+            <Building2 className="w-5 h-5 text-indigo-600" />
             {t('payment.bank.title')}
           </h2>
 
@@ -193,15 +193,15 @@ export default function PaymentInstructionsPage() {
               <Copy className="w-4 h-4 text-gray-400 absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
 
-            <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg">
-              <div className="text-xs text-blue-600 mb-1 font-bold uppercase tracking-wider">{t('payment.bank.mandatoryReference')}</div>
+            <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-lg">
+              <div className="text-xs text-indigo-600 mb-1 font-bold uppercase tracking-wider">{t('payment.bank.mandatoryReference')}</div>
               <div className="flex items-center justify-between">
-                <code className="text-lg font-bold text-blue-900">{referenceCode}</code>
+                <code className="text-lg font-bold text-indigo-900">{referenceCode}</code>
                 <Button variant="ghost" size="sm" onClick={() => copyToClipboard(referenceCode)} className="h-8 w-8 p-0">
                   <Copy className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-xs text-blue-600 mt-2">
+              <p className="text-xs text-indigo-600 mt-2">
                 {t('payment.bank.referenceNote')}
               </p>
             </div>
@@ -210,35 +210,35 @@ export default function PaymentInstructionsPage() {
 
         {/* Instructions */}
         <div className="space-y-6">
-          <Card className="p-6 bg-blue-50 border-blue-100">
-            <h3 className="text-lg font-bold text-blue-900 mb-4 flex items-center gap-2">
+          <Card className="p-6 bg-indigo-50 border-indigo-100">
+            <h3 className="text-lg font-bold text-indigo-900 mb-4 flex items-center gap-2">
               <FileText className="w-5 h-5" />
               {t('payment.instructions.stepsTitle')}
             </h3>
-            <ol className="space-y-3 text-blue-800 text-sm">
+            <ol className="space-y-3 text-indigo-800 text-sm">
               <li className="flex gap-2">
-                <span className="font-bold bg-blue-200 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs">1</span>
+                <span className="font-bold bg-indigo-200 text-indigo-800 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs">1</span>
                 <span dangerouslySetInnerHTML={{ __html: t('payment.instructions.step1', { amount: amount.toFixed(2) }) }} />
               </li>
               <li className="flex gap-2">
-                <span className="font-bold bg-blue-200 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs">2</span>
+                <span className="font-bold bg-indigo-200 text-indigo-800 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs">2</span>
                 <span dangerouslySetInnerHTML={{ __html: t('payment.instructions.step2', { reference: referenceCode }) }} />
               </li>
               <li className="flex gap-2">
-                <span className="font-bold bg-blue-200 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs">3</span>
+                <span className="font-bold bg-indigo-200 text-indigo-800 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs">3</span>
                 <span>{t('payment.instructions.step3')}</span>
               </li>
               <li className="flex gap-2">
-                <span className="font-bold bg-blue-200 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs">4</span>
+                <span className="font-bold bg-indigo-200 text-indigo-800 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs">4</span>
                 <span>{t('payment.instructions.step4')}</span>
               </li>
             </ol>
           </Card>
 
           {paymentRequest?.status === 'pending' && !paymentRequest.transfer_reference && (
-            <Card className="p-6 border-2 border-blue-100 shadow-lg">
+            <Card className="p-6 border-2 border-indigo-100 shadow-lg">
               <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                <Upload className="w-5 h-5 text-blue-600" />
+                <Upload className="w-5 h-5 text-indigo-600" />
                 {t('payment.proof.title')}
               </h3>
 
@@ -278,7 +278,7 @@ export default function PaymentInstructionsPage() {
                 <Button
                   onClick={handleSubmitProof}
                   disabled={uploading || !reference}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
                 >
                   {uploading ? t('payment.proof.submitting') : t('payment.proof.submit')}
                 </Button>
@@ -311,13 +311,14 @@ export default function PaymentInstructionsPage() {
       <div className="mt-8 p-4 bg-gray-50 rounded-lg flex items-center justify-center gap-2 text-sm text-gray-600">
         <HelpCircle className="w-4 h-4" />
         <span>{t('payment.support.needHelp')}</span>
-        <a href={`mailto:${bankInfo.supportEmail}`} className="text-blue-600 hover:underline font-medium">
+        <a href={`mailto:${bankInfo.supportEmail}`} className="text-indigo-600 hover:underline font-medium">
           {bankInfo.supportEmail}
         </a>
       </div>
     </div>
   );
 }
+
 
 
 

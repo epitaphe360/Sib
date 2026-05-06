@@ -33,15 +33,15 @@ export const CreateMiniSitePage: React.FC = () => {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto p-6">
           {/* Back Button */}
-          <Link to={ROUTES.EXHIBITOR_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6">
+          <Link to={ROUTES.EXHIBITOR_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Retour au Tableau de Bord
           </Link>
 
           {/* Header */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-4">
-              <Layout className="w-10 h-10 text-blue-600" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-indigo-100 rounded-full mb-4">
+              <Layout className="w-10 h-10 text-indigo-600" />
             </div>
             <h1 className="text-4xl font-bold mb-4">{t('minisite.page.create_title')}</h1>
             <p className="text-xl text-gray-600">
@@ -53,7 +53,7 @@ export const CreateMiniSitePage: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
             <button
               onClick={() => setShowTemplateSelector(true)}
-              className="group bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-all border-2 border-transparent hover:border-blue-500"
+              className="group bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-all border-2 border-transparent hover:border-indigo-500"
             >
               <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Eye className="w-8 h-8 text-purple-600" />
@@ -95,3 +95,4 @@ export const CreateMiniSitePage: React.FC = () => {
     />
   );
 };
+

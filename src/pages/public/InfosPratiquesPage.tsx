@@ -7,6 +7,8 @@ import {
   ScrollReveal, StaggerReveal, StaggerItem, HoverCard, HeroReveal,
   fadeUp, fadeLeft, fadeRight, scaleUp,
 } from '../../components/ui/motion';
+import { PageHero } from '../../components/ui/PageHero';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const defaultHoraires = [
   { jour: 'Mardi 25 Novembre', heures: '9h00 – 19h00' },
@@ -18,6 +20,7 @@ const defaultHoraires = [
 
 export default function InfosPratiquesPage() {
   const cms = usePageContent('infos-pratiques');
+  const { t } = useTranslation();
 
   const getCms = (key: string, fallback: string) => {
     const value = cms[key];
@@ -70,20 +73,13 @@ export default function InfosPratiquesPage() {
   })();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16 overflow-hidden">
-        <div className="container mx-auto px-4 text-center">
-          <HeroReveal>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Infos Pratiques'}</h1>
-          </HeroReveal>
-          <HeroReveal delay={0.15}>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              {cms.hero_subtitle || "Tout ce qu'il faut savoir pour préparer votre visite au SIB 2026."}
-            </p>
-          </HeroReveal>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50">
+      <PageHero
+        badge={<><MapPin className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">SIB 2026</span></>}
+        title={<>Infos <span className="text-yellow-300">Pratiques</span></>}
+        subtitle={cms.hero_subtitle || "Tout ce qu'il faut savoir pour préparer votre visite au SIB 2026."}
+        py="py-16 md:py-20"
+      />
 
       {/* Lieu */}
       <div className="container mx-auto px-4 py-16">
@@ -91,7 +87,6 @@ export default function InfosPratiquesPage() {
             <div className="flex items-start gap-4 mb-6">
               <MapPin className="w-8 h-8 text-sib-gold flex-shrink-0 mt-1" />
               <div>
-                <h2 className="text-2xl font-bold text-sib-navy font-display">Parc d'Exposition Mohammed VI</h2>
                 <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('lieu_title', "Parc d'Exposition Mohammed VI")}</h2>
                 <p className="text-gray-600 mt-2">
                   {cms.lieu_adresse || 'Adresse : Route Nationale 1 vers Azemmour, Région Casablanca - Settat, 24000 — EL JADIDA'}
@@ -184,7 +179,7 @@ export default function InfosPratiquesPage() {
                 <p className="text-gray-500 text-sm italic">
                   {venirSections?.[1]?.note ?? "« Afin d'accompagner la transition écologique, nous invitons nos visiteurs à privilégier le covoiturage. »"}
                 </p>
-                <p className="text-gray-600 mt-2 text-sm">Parking : <strong>2 500 places</strong> + parking VIP 52 places + parking autocars 50 places.</p>
+                <p className="text-gray-600 mt-2 text-sm">{t('infos.parking_text')}</p>
               </div>
 
               {/* Train */}

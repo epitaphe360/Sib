@@ -1,4 +1,4 @@
-ï»¿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SupabaseService } from '../services/supabaseService';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
@@ -68,7 +68,7 @@ export default function UserManagementPage() {
       try {
         const data = await SupabaseService.getUsers();
         if (!data || data.length === 0) {
-          console.warn('Aucun utilisateur retournÃ© par Supabase. VÃ©rifiez les politiques RLS.');
+          console.warn('Aucun utilisateur retourné par Supabase. Vérifiez les politiques RLS.');
         }
         const transformedUsers: User[] = data.map(u => ({
           id: u.id,
@@ -111,7 +111,7 @@ export default function UserManagementPage() {
     URL.revokeObjectURL(url);
   };
 
-  // Handler pour ouvrir le modal de crÃ©ation
+  // Handler pour ouvrir le modal de création
   const handleCreateUser = () => {
     setNewUserForm({ name: '', email: '', password: '', type: 'visitor', company: '', country: '' });
     setShowCreateModal(true);
@@ -146,17 +146,17 @@ export default function UserManagementPage() {
         lastActivity: new Date(),
         verified: false,
       }]);
-      toast.success(`Utilisateur "${newUserForm.name}" crÃ©Ã© avec succÃ¨s`);
+      toast.success(`Utilisateur "${newUserForm.name}" créé avec succès`);
       setShowCreateModal(false);
     } catch (err) {
-      console.error('Erreur crÃ©ation utilisateur:', err);
-      toast.error('Erreur lors de la crÃ©ation de l\'utilisateur');
+      console.error('Erreur création utilisateur:', err);
+      toast.error('Erreur lors de la création de l\'utilisateur');
     } finally {
       setIsCreating(false);
     }
   };
 
-  // Handler pour voir le dÃ©tail utilisateur
+  // Handler pour voir le détail utilisateur
   const handleViewUser = (user: User) => {
     setViewUser(user);
   };
@@ -196,7 +196,7 @@ export default function UserManagementPage() {
 
   const getUserTypeColor = (type: string) => {
     switch (type) {
-      case 'exhibitor': return 'bg-blue-100 text-blue-800';
+      case 'exhibitor': return 'bg-indigo-100 text-indigo-800';
       case 'partner': return 'bg-purple-100 text-purple-800';
       case 'visitor': return 'bg-green-100 text-green-800';
       case 'admin': return 'bg-red-100 text-red-800';
@@ -219,7 +219,7 @@ export default function UserManagementPage() {
       case 'active': return 'Actif';
       case 'pending': return 'En attente';
       case 'suspended': return 'Suspendu';
-      case 'rejected': return 'RejetÃ©';
+      case 'rejected': return 'Rejeté';
       default: return status;
     }
   };
@@ -246,11 +246,11 @@ export default function UserManagementPage() {
 
   const handleBulkAction = async (action: keyof typeof CONFIG.userActions) => {
     if (selectedUsers.length === 0) {
-      toast.error('Veuillez sÃ©lectionner au moins un utilisateur');
+      toast.error('Veuillez sélectionner au moins un utilisateur');
       return;
     }
 
-    const confirmMessage = `ÃŠtes-vous sÃ»r de vouloir ${
+    const confirmMessage = `Êtes-vous sûr de vouloir ${
       action === CONFIG.userActions.activate ? 'activer' :
       action === CONFIG.userActions.suspend ? 'suspendre' : 'supprimer'
     } ${selectedUsers.length} utilisateur(s) ?`;
@@ -271,14 +271,14 @@ export default function UserManagementPage() {
         toast.success(getUserActionMessage(`${action === CONFIG.userActions.activate ? 'bulkActivated' : action === CONFIG.userActions.suspend ? 'bulkSuspended' : 'bulkDeleted'}` as keyof typeof CONFIG.messages.user));
       } catch {
         setIsLoading(false);
-        toast.error('Erreur lors de l\'action groupÃ©e');
+        toast.error('Erreur lors de l\'action groupée');
       }
     }
   };
 
   const formatDate = (date: Date) => {
     const d = date instanceof Date ? date : new Date(date as unknown as string);
-    if (isNaN(d.getTime())) {return 'â€”';}
+    if (isNaN(d.getTime())) {return '—';}
     return new Intl.DateTimeFormat('fr-FR', {
       day: 'numeric',
       month: 'short',
@@ -288,13 +288,13 @@ export default function UserManagementPage() {
 
   const getLastActivityText = (date: Date) => {
     const d = date instanceof Date ? date : new Date(date as unknown as string);
-    if (isNaN(d.getTime())) {return 'â€”';}
+    if (isNaN(d.getTime())) {return '—';}
     const now = new Date();
     const diffMs = now.getTime() - d.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffHours < 1) {return 'Ã€ l\'instant';}
+    if (diffHours < 1) {return 'À l\'instant';}
     if (diffHours < 24) {return `Il y a ${diffHours}h`;}
     if (diffDays < 7) {return `Il y a ${diffDays}j`;}
     return formatDate(d);
@@ -330,7 +330,7 @@ export default function UserManagementPage() {
             animate={{ opacity: 1, y: 0 }}
           >
             <div className="flex items-center space-x-3 mb-4">
-              <div className="bg-blue-600 p-3 rounded-lg">
+              <div className="bg-indigo-600 p-3 rounded-lg">
                 <Users className="h-8 w-8 text-white" />
               </div>
               <div>
@@ -343,10 +343,10 @@ export default function UserManagementPage() {
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
               <div className="flex items-center space-x-2">
-                <Users className="h-5 w-5 text-blue-600" />
-                <span className="text-blue-800 font-medium">Gestion Utilisateurs</span>
+                <Users className="h-5 w-5 text-indigo-600" />
+                <span className="text-indigo-800 font-medium">Gestion Utilisateurs</span>
                 <Badge variant="info" size="sm">{userStats.total} utilisateurs</Badge>
               </div>
             </div>
@@ -356,8 +356,8 @@ export default function UserManagementPage() {
         {/* Statistiques Utilisateurs */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="text-center p-6">
-            <div className="bg-blue-100 p-3 rounded-lg w-12 h-12 mx-auto mb-3">
-              <Users className="h-6 w-6 text-blue-600" />
+            <div className="bg-indigo-100 p-3 rounded-lg w-12 h-12 mx-auto mb-3">
+              <Users className="h-6 w-6 text-indigo-600" />
             </div>
             <div className="text-2xl font-bold text-gray-900 mb-1">
               {userStats.total}
@@ -396,11 +396,11 @@ export default function UserManagementPage() {
           </Card>
         </div>
 
-        {/* RÃ©partition par Type */}
+        {/* Répartition par Type */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="text-center p-6">
-            <div className="bg-blue-100 p-3 rounded-lg w-12 h-12 mx-auto mb-3">
-              <Building2 className="h-6 w-6 text-blue-600" />
+            <div className="bg-indigo-100 p-3 rounded-lg w-12 h-12 mx-auto mb-3">
+              <Building2 className="h-6 w-6 text-indigo-600" />
             </div>
             <div className="text-2xl font-bold text-gray-900 mb-1">
               {userStats.exhibitors}
@@ -451,7 +451,7 @@ export default function UserManagementPage() {
                   placeholder="Rechercher par nom, email ou entreprise..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
@@ -477,7 +477,7 @@ export default function UserManagementPage() {
               </div>
             </div>
 
-            {/* Filtres AvancÃ©s */}
+            {/* Filtres Avancés */}
             {showFilters && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
@@ -492,7 +492,7 @@ export default function UserManagementPage() {
                     <select
                       value={selectedType}
                       onChange={(e) => setSelectedType(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
                       <option value="">Tous les types</option>
                       <option value="exhibitor">Exposants</option>
@@ -509,13 +509,13 @@ export default function UserManagementPage() {
                     <select
                       value={selectedStatus}
                       onChange={(e) => setSelectedStatus(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
                       <option value="">Tous les statuts</option>
                       <option value="active">Actifs</option>
                       <option value="pending">En attente</option>
                       <option value="suspended">Suspendus</option>
-                      <option value="rejected">RejetÃ©s</option>
+                      <option value="rejected">Rejetés</option>
                     </select>
                   </div>
 
@@ -529,14 +529,14 @@ export default function UserManagementPage() {
                         setSelectedStatus('');
                       }}
                     >
-                      RÃ©initialiser
+                      Réinitialiser
                     </Button>
                   </div>
                 </div>
               </motion.div>
             )}
 
-            {/* Actions GroupÃ©es */}
+            {/* Actions Groupées */}
             {selectedUsers.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -545,7 +545,7 @@ export default function UserManagementPage() {
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">
-                    {selectedUsers.length} utilisateur(s) sÃ©lectionnÃ©(s)
+                    {selectedUsers.length} utilisateur(s) sélectionné(s)
                   </span>
 
                   <div className="flex space-x-2">
@@ -600,7 +600,7 @@ export default function UserManagementPage() {
                           setSelectedUsers([]);
                         }
                       }}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     />
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -616,7 +616,7 @@ export default function UserManagementPage() {
                     Inscription
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    DerniÃ¨re ActivitÃ©
+                    Dernière Activité
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -646,7 +646,7 @@ export default function UserManagementPage() {
                               setSelectedUsers(selectedUsers.filter(id => id !== user.id));
                             }
                           }}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                         />
                       </td>
 
@@ -739,7 +739,7 @@ export default function UserManagementPage() {
                               disabled={isLoading}
                             >
                               <UserCheck className="h-3 w-3 mr-1" />
-                              RÃ©activer
+                              Réactiver
                             </Button>
                           )}
 
@@ -764,57 +764,57 @@ export default function UserManagementPage() {
             <div className="text-center py-12">
               <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Aucun utilisateur trouvÃ©
+                Aucun utilisateur trouvé
               </h3>
               <p className="text-gray-600 max-w-md mx-auto">
-                Si vous Ãªtes administrateur et que vous ne voyez aucun utilisateur, il est possible que les politiques de sÃ©curitÃ© (RLS) de la base de donnÃ©es restreignent l'accÃ¨s.
+                Si vous êtes administrateur et que vous ne voyez aucun utilisateur, il est possible que les politiques de sécurité (RLS) de la base de données restreignent l'accès.
               </p>
             </div>
           )}
         </Card>
       </div>
-      {/* Modal CrÃ©ation Utilisateur */}
+      {/* Modal Création Utilisateur */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
-            <h2 className="text-xl font-bold mb-6">CrÃ©er un nouvel utilisateur</h2>
+            <h2 className="text-xl font-bold mb-6">Créer un nouvel utilisateur</h2>
             <form onSubmit={handleCreateUserSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet *</label>
                   <input type="text" required value={newUserForm.name}
                     onChange={e => setNewUserForm(p => ({ ...p, name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Jean Dupont" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Entreprise</label>
                   <input type="text" value={newUserForm.company}
                     onChange={e => setNewUserForm(p => ({ ...p, company: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Ma SociÃ©tÃ©" />
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Ma Société" />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
                 <input type="email" required value={newUserForm.email}
                   onChange={e => setNewUserForm(p => ({ ...p, email: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="jean@exemple.com" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe temporaire *</label>
                 <input type="password" required minLength={8} value={newUserForm.password}
                   onChange={e => setNewUserForm(p => ({ ...p, password: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Minimum 8 caractÃ¨res" />
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Minimum 8 caractères" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Type *</label>
                   <select value={newUserForm.type}
                     onChange={e => setNewUserForm(p => ({ ...p, type: e.target.value as typeof newUserForm.type }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option value="visitor">Visiteur</option>
                     <option value="exhibitor">Exposant</option>
                     <option value="partner">Sponsor</option>
@@ -825,7 +825,7 @@ export default function UserManagementPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Pays</label>
                   <input type="text" value={newUserForm.country}
                     onChange={e => setNewUserForm(p => ({ ...p, country: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="France" />
                 </div>
               </div>
@@ -834,7 +834,7 @@ export default function UserManagementPage() {
                   Annuler
                 </Button>
                 <Button type="submit" variant="default" disabled={isCreating}>
-                  {isCreating ? 'CrÃ©ation...' : 'CrÃ©er l\'utilisateur'}
+                  {isCreating ? 'Création...' : 'Créer l\'utilisateur'}
                 </Button>
               </div>
             </form>
@@ -846,7 +846,7 @@ export default function UserManagementPage() {
       {viewUser && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">DÃ©tail utilisateur</h2>
+            <h2 className="text-xl font-bold mb-4">Détail utilisateur</h2>
             <div className="mb-2"><b>Nom :</b> {viewUser.name}</div>
             <div className="mb-2"><b>Email :</b> {viewUser.email}</div>
             <div className="mb-2"><b>Type :</b> {getUserTypeLabel(viewUser.type)}</div>
@@ -860,4 +860,5 @@ export default function UserManagementPage() {
     </div>
   );
 };
+
 

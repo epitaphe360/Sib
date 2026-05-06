@@ -1,4 +1,4 @@
-ï»¿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Building2, Eye, ExternalLink, Sparkles, Search } from 'lucide-react';
 import { Card } from '../components/ui/Card';
@@ -64,7 +64,7 @@ export default function MiniSiteListPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-gray-600">{t('common.loading')}</p>
         </div>
       </div>
@@ -72,9 +72,9 @@ export default function MiniSiteListPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20">
+      <section className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -88,7 +88,7 @@ export default function MiniSiteListPage() {
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               {t('minisite.list.title')}
             </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+            <p className="text-xl text-indigo-100 max-w-3xl mx-auto mb-8">
               {t('minisite.list.subtitle')}
             </p>
             <Badge className="px-6 py-2 bg-white/20 text-white border-white/30 text-lg">
@@ -110,7 +110,7 @@ export default function MiniSiteListPage() {
                 placeholder={t('minisite.search.placeholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function MiniSiteListPage() {
               >
                 <Card className="h-full hover:shadow-xl transition-all duration-300 group overflow-hidden">
                   {/* Logo */}
-                  <div className="h-48 bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-8 group-hover:from-blue-100 group-hover:to-indigo-100 transition-colors">
+                  <div className="h-48 bg-gradient-to-br from-indigo-50 to-indigo-50 flex items-center justify-center p-8 group-hover:from-indigo-100 group-hover:to-indigo-100 transition-colors">
                     {site.logo_url ? (
                       <img
                         src={site.logo_url}
@@ -155,7 +155,7 @@ export default function MiniSiteListPage() {
                   {/* Content */}
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
                         {site.company_name}
                       </h3>
                       <Badge className="ml-2 flex-shrink-0 bg-gray-100 text-gray-700 border-gray-300">
@@ -171,11 +171,11 @@ export default function MiniSiteListPage() {
                     )}
 
                     <div className="text-xs text-gray-500 mb-4">
-                      Mis Ã  jour le {new Date(site.last_updated).toLocaleDateString('fr-FR')}
+                      Mis à jour le {new Date(site.last_updated).toLocaleDateString('fr-FR')}
                     </div>
 
                     <Link to={`/minisite/${site.exhibitor_id}`} className="block">
-                      <Button className="w-full group-hover:bg-blue-700 transition-colors">
+                      <Button className="w-full group-hover:bg-indigo-700 transition-colors">
                         Voir le Mini-Site
                         <ExternalLink className="h-4 w-4 ml-2" />
                       </Button>
@@ -189,18 +189,18 @@ export default function MiniSiteListPage() {
       </div>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-indigo-600 to-blue-700 text-white py-16 mt-16">
+      <section className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-16 mt-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
-            Vous Ãªtes exposant ?
+            Vous êtes exposant ?
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            CrÃ©ez votre mini-site vitrine pour prÃ©senter vos produits et services aux visiteurs de SIB 2026.
+          <p className="text-xl text-indigo-100 mb-8">
+            Créez votre mini-site vitrine pour présenter vos produits et services aux visiteurs de SIB 2026.
           </p>
           <Link to="/exhibitor/dashboard">
-            <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+            <Button size="lg" className="bg-white text-indigo-700 hover:bg-indigo-50">
               <Sparkles className="h-5 w-5 mr-2" />
-              CrÃ©er mon Mini-Site
+              Créer mon Mini-Site
             </Button>
           </Link>
         </div>
@@ -208,4 +208,5 @@ export default function MiniSiteListPage() {
     </div>
   );
 }
+
 

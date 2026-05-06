@@ -1,4 +1,4 @@
-Ôªøimport React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -35,7 +35,7 @@ export default function PartnerPaymentSelectionPage() {
   // Redirect if already active
   React.useEffect(() => {
     if (user?.status === 'active') {
-      toast.info('Votre compte est d√©j√† actif');
+      toast.info('Votre compte est dÈj‡ actif');
       navigate('/partner/dashboard');
       return;
     }
@@ -59,11 +59,11 @@ export default function PartnerPaymentSelectionPage() {
 
   if (processing) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
           <Crown className="h-16 w-16 mx-auto mb-4 text-purple-600" />
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Pr√©paration de votre demande de virement bancaire...</p>
+          <p className="text-gray-600">PrÈparation de votre demande de virement bancaire...</p>
         </div>
       </div>
     );
@@ -76,27 +76,27 @@ export default function PartnerPaymentSelectionPage() {
 
   const handleBankTransfer = async () => {
     if (!user) {
-      toast.error('Utilisateur non connect√©');
+      toast.error('Utilisateur non connectÈ');
       return;
     }
 
     setProcessing(true);
 
     try {
-      // Cr√©er une demande de virement bancaire
+      // CrÈer une demande de virement bancaire
       const { requestId } = await createPartnerBankTransferRequest(
         user.id,
         tier,
         currentTier
       );
 
-      toast.success('Demande de virement cr√©√©e avec succ√®s !');
+      toast.success('Demande de virement crÈÈe avec succËs !');
 
       // Rediriger vers la page d'instructions de virement
       navigate(`/partner/bank-transfer?request_id=${requestId}&tier=${tier}`);
     } catch (error: any) {
       console.error('Error creating bank transfer request:', error);
-      toast.error('Erreur lors de la cr√©ation de la demande');
+      toast.error('Erreur lors de la crÈation de la demande');
     } finally {
       setProcessing(false);
     }
@@ -111,10 +111,10 @@ export default function PartnerPaymentSelectionPage() {
       color: 'green',
       recommended: true,
       features: [
-        'Virement bancaire s√©curis√©',
-        'D√©lai de traitement: 2-5 jours',
-        'Id√©al pour montants √©lev√©s',
-        'SEPA ou SWIFT accept√©s',
+        'Virement bancaire sÈcurisÈ',
+        'DÈlai de traitement: 2-5 jours',
+        'IdÈal pour montants ÈlevÈs',
+        'SEPA ou SWIFT acceptÈs',
         'Justificatif requis',
         'Validation manuelle par l\'administrateur'
       ],
@@ -123,7 +123,7 @@ export default function PartnerPaymentSelectionPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
+    <div className="min-h-screen bg-slate-50 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -136,15 +136,15 @@ export default function PartnerPaymentSelectionPage() {
             {isUpgrade ? 'Upgrade vers' : 'Abonnement'} {tierInfo.displayName}
           </h1>
           <p className="text-xl text-gray-600">
-            Choisissez votre m√©thode de paiement
+            Choisissez votre mÈthode de paiement
           </p>
         </motion.div>
 
         {/* Order Summary */}
-        <Card className="p-6 mb-8 bg-gradient-to-r from-purple-50 to-blue-50">
+        <Card className="p-6 mb-8 bg-gradient-to-r from-purple-50 to-indigo-50">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">
-              {isUpgrade ? '√¢¬¨‚Ä†√Ø¬∏¬è Montant de l\'upgrade' : ' Montant total'}
+              {isUpgrade ? '‚¨ÜÔ∏è Montant de l\'upgrade' : ' Montant total'}
             </h3>
             <div className="text-right">
               <div className="text-3xl font-bold text-purple-600">
@@ -157,7 +157,7 @@ export default function PartnerPaymentSelectionPage() {
           </div>
 
           <div className="border-t border-gray-300 pt-4 mt-4">
-            <h4 className="font-semibold text-gray-900 mb-3">‚ú® Inclus dans votre abonnement:</h4>
+            <h4 className="font-semibold text-gray-900 mb-3">? Inclus dans votre abonnement:</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {tierInfo.features.map((feature) => (
                 <div key={feature} className="flex items-center text-sm text-gray-700">
@@ -172,7 +172,7 @@ export default function PartnerPaymentSelectionPage() {
         {/* Payment Methods */}
         <div className="space-y-6 mb-8">
           <h3 className="text-xl font-semibold text-gray-900 text-center">
-            S√©lectionnez votre mode de paiement
+            SÈlectionnez votre mode de paiement
           </h3>
 
           {paymentMethods.map((method, index) => (
@@ -200,7 +200,7 @@ export default function PartnerPaymentSelectionPage() {
                         <h4 className="font-bold text-gray-900 text-lg">{method.name}</h4>
                         {method.recommended && (
                           <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded">
-                            Recommand√©
+                            RecommandÈ
                           </span>
                         )}
                       </div>
@@ -217,7 +217,7 @@ export default function PartnerPaymentSelectionPage() {
                   </div>
                   <div className="flex-shrink-0 ml-4">
                     {selectedMethod === method.id ? (
-                      <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center">
                         <Check className="h-4 w-4 text-white" />
                       </div>
                     ) : (
@@ -249,7 +249,7 @@ export default function PartnerPaymentSelectionPage() {
                           {method.id === 'online' ? (
                             <>
                               <Zap className="mr-2 h-5 w-5" />
-                              Payer maintenant - Activation imm√©diate
+                              Payer maintenant - Activation immÈdiate
                             </>
                           ) : (
                             <>
@@ -271,7 +271,7 @@ export default function PartnerPaymentSelectionPage() {
         {/* Security Badge */}
         <div className="mt-8 flex items-center justify-center text-sm text-gray-600">
           <Shield className="h-5 w-5 mr-2 text-green-600" />
-          <span>Paiement 100% s√©curis√© - Vos donn√©es sont crypt√©es</span>
+          <span>Paiement 100% sÈcurisÈ - Vos donnÈes sont cryptÈes</span>
         </div>
 
         {/* Cancel Button */}
@@ -287,6 +287,7 @@ export default function PartnerPaymentSelectionPage() {
     </div>
   );
 }
+
 
 
 

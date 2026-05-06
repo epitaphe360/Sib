@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
@@ -53,21 +53,21 @@ export default function VisitorUpgradePage() {
   const testimonials = [
     {
       name: 'Ahmed Benali',
-      role: 'Directeur Logistique, Bâtiment de Casablanca',
+      role: 'Directeur Logistique, B�timent de Casablanca',
       content: t('upgrade.testimonial1.content'),
-      avatar: '👤'
+      avatar: '??'
     },
     {
       name: 'Fatima El Amrani',
       role: 'CEO, Building Solutions',
       content: t('upgrade.testimonial2.content'),
-      avatar: '👤'
+      avatar: '??'
     },
     {
       name: 'Jean-Pierre Dubois',
       role: 'Consultant BTP',
       content: t('upgrade.testimonial3.content'),
-      avatar: '👤'
+      avatar: '??'
     }
   ];
 
@@ -76,9 +76,9 @@ export default function VisitorUpgradePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+      <div className="relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-20">
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
@@ -94,7 +94,7 @@ export default function VisitorUpgradePage() {
               {t('upgrade.hero.subtitle')}
             </p>
             {isFree && (
-              <div className="inline-block bg-yellow-400 text-blue-900 px-6 py-3 rounded-full font-bold text-lg">
+              <div className="inline-block bg-yellow-400 text-indigo-900 px-6 py-3 rounded-full font-bold text-lg">
                 <Gift className="inline-block mr-2 h-5 w-5" />
                 {t('upgrade.hero.launchOffer')}
               </div>
@@ -115,7 +115,7 @@ export default function VisitorUpgradePage() {
             <Card className="p-8 h-full border-2 border-gray-200 relative">
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('upgrade.freeCard.title')}</h3>
-                <div className="text-4xl font-extrabold text-gray-500">0€</div>
+                <div className="text-4xl font-extrabold text-gray-500">0�</div>
                 <p className="text-gray-600 mt-2">{t('upgrade.freeCard.subtitle')}</p>
               </div>
               <ul className="space-y-4 mb-8">
@@ -160,8 +160,8 @@ export default function VisitorUpgradePage() {
                   {t('upgrade.vipCard.title')}
                 </h3>
                 <div className="flex items-center justify-center gap-3">
-                  <div className="text-2xl font-bold text-gray-400 line-through">950€</div>
-                  <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-600">300€</div>
+                  <div className="text-2xl font-bold text-gray-400 line-through">950�</div>
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-600">300�</div>
                 </div>
                 <p className="text-gray-700 mt-2 font-semibold">{t('upgrade.vipCard.subtitle')}</p>
               </div>
@@ -202,8 +202,8 @@ export default function VisitorUpgradePage() {
               transition={{ delay: 0.4 }}
               className="text-center"
             >
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Calendar className="h-8 w-8 text-blue-600" />
+              <div className="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Calendar className="h-8 w-8 text-indigo-600" />
               </div>
               <h3 className="text-xl font-bold mb-2">{t('upgrade.benefits.b2bTitle')}</h3>
               <p className="text-gray-600">
@@ -272,7 +272,7 @@ export default function VisitorUpgradePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-3xl p-12 text-center"
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-3xl p-12 text-center"
         >
           <Zap className="h-16 w-16 mx-auto mb-6 text-yellow-300" />
           <h2 className="text-4xl font-bold mb-4">{t('upgrade.roi.title')}</h2>
@@ -280,7 +280,7 @@ export default function VisitorUpgradePage() {
           <Button
             onClick={handleUpgrade}
             size="lg"
-            className="bg-white text-blue-600 hover:bg-gray-100 font-bold text-lg px-8 py-6"
+            className="bg-white text-indigo-600 hover:bg-gray-100 font-bold text-lg px-8 py-6"
           >
             <Crown className="mr-2 h-5 w-5" />
             {t('upgrade.roi.cta')}
@@ -310,6 +310,7 @@ export default function VisitorUpgradePage() {
     </div>
   );
 }
+
 
 
 

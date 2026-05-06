@@ -24,6 +24,7 @@ import {
   calculateUpgradePrice,
   PARTNER_TIER_ORDER
 } from '../config/partnerTiers';
+import { useTranslation } from '../hooks/useTranslation';
 
 export default function PartnerUpgradePage() {
   const navigate = useNavigate();
@@ -31,6 +32,20 @@ export default function PartnerUpgradePage() {
 
   const currentTier = (user?.partner_tier || user?.profile?.partner_tier || 'partner') as PartnerTier;
   const currentConfig = getPartnerTierConfig(currentTier);
+  const { t } = useTranslation();
+
+  const testimonials = [
+    { tier: t('upgrade.tier_official'), company: 'TechCorp International', quote: t('upgrade.testimonial1_quote'), author: 'Jean Dupont, CEO' },
+    { tier: t('upgrade.tier_gold'), company: 'Innovation Solutions', quote: t('upgrade.testimonial2_quote'), author: 'Marie Martin, Directrice' },
+    { tier: t('upgrade.tier_silver'), company: 'StartUp Tech', quote: t('upgrade.testimonial3_quote'), author: 'Ahmed Benali, Fondateur' },
+  ];
+
+  const faqs = [
+    { q: t('upgrade.faq1_q'), a: t('upgrade.faq1_a') },
+    { q: t('upgrade.faq2_q'), a: t('upgrade.faq2_a') },
+    { q: t('upgrade.faq3_q'), a: t('upgrade.faq3_a') },
+    { q: t('upgrade.faq4_q'), a: t('upgrade.faq4_a') },
+  ];
 
   const handleUpgrade = (targetTier: PartnerTier) => {
     navigate(`/partner/payment-selection?tier=${targetTier}`);
@@ -39,7 +54,7 @@ export default function PartnerUpgradePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -48,15 +63,14 @@ export default function PartnerUpgradePage() {
           >
             <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
               <Crown className="h-5 w-5" />
-              <span className="font-medium">Niveau actuel: {currentConfig.displayName}</span>
+              <span className="font-medium">{t('upgrade.current_level_prefix')} {currentConfig.displayName}</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Développez votre visibilité
+              {t('upgrade.hero_title')}
             </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Choisissez le niveau partenaire qui correspond à vos ambitions et
-              maximisez votre présence au SIB 2026
+            <p className="text-xl text-indigo-100 max-w-3xl mx-auto">
+              {t('upgrade.hero_subtitle')}
             </p>
           </motion.div>
         </div>
@@ -78,16 +92,16 @@ export default function PartnerUpgradePage() {
 
             let ctaButton: React.ReactNode;
             if (isCurrentTier) {
-              ctaButton = <Button variant="outline" className="w-full" disabled>Niveau actuel</Button>;
+              ctaButton = <Button variant="outline" className="w-full" disabled>{t('upgrade.current_level_badge')}</Button>;
             } else if (canUpgrade) {
               ctaButton = (
                 <Button variant="default" className="w-full" onClick={() => handleUpgrade(tierId)}>
-                  <span>Upgrader</span>
+                  <span>{t('upgrade.upgrade_btn')}</span>
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               );
             } else {
-              ctaButton = <Button variant="outline" className="w-full" disabled>Non disponible</Button>;
+              ctaButton = <Button variant="outline" className="w-full" disabled>{t('upgrade.not_available')}</Button>;
             }
 
             return (
@@ -100,8 +114,8 @@ export default function PartnerUpgradePage() {
                 <Card className={cardClassName}>
                   {isCurrentTier && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <div className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                        Niveau actuel
+                      <div className="bg-indigo-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                        {t('upgrade.current_level_badge')}
                       </div>
                     </div>
                   )}
@@ -126,7 +140,7 @@ export default function PartnerUpgradePage() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center text-gray-600">
                           <Calendar className="h-4 w-4 mr-2" />
-                          Rendez-vous B2B
+                          {t('upgrade.quota_appointments')}
                         </span>
                         <span className="font-semibold">
                           {tier.quotas.appointments === -1 ? '∞' : tier.quotas.appointments}
@@ -136,7 +150,7 @@ export default function PartnerUpgradePage() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center text-gray-600">
                           <Users className="h-4 w-4 mr-2" />
-                          Membres équipe
+                          {t('upgrade.quota_team')}
                         </span>
                         <span className="font-semibold">{tier.quotas.teamMembers}</span>
                       </div>
@@ -144,7 +158,7 @@ export default function PartnerUpgradePage() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center text-gray-600">
                           <FileText className="h-4 w-4 mr-2" />
-                          Fichiers média
+                          {t('upgrade.quota_media')}
                         </span>
                         <span className="font-semibold">{tier.quotas.mediaUploads}</span>
                       </div>
@@ -152,7 +166,7 @@ export default function PartnerUpgradePage() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center text-gray-600">
                           <Award className="h-4 w-4 mr-2" />
-                          Stands
+                          {t('upgrade.quota_stands')}
                         </span>
                         <span className="font-semibold">{tier.quotas.standsAllowed}</span>
                       </div>
@@ -160,7 +174,7 @@ export default function PartnerUpgradePage() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center text-gray-600">
                           <BarChart className="h-4 w-4 mr-2" />
-                          Analytics
+                          {t('upgrade.quota_analytics')}
                         </span>
                         <span className="font-semibold">
                           {tier.quotas.analyticsAccess ? (
@@ -186,7 +200,7 @@ export default function PartnerUpgradePage() {
         {/* Detailed Features */}
         <div className="mt-16">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Fonctionnalités détaillées par niveau
+            {t('upgrade.detailed_features')}
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -204,7 +218,7 @@ export default function PartnerUpgradePage() {
                     <div>
                       <h4 className="font-semibold text-sm text-gray-900 mb-2 flex items-center">
                         <Check className="h-4 w-4 text-green-600 mr-2" />
-                        Fonctionnalités incluses
+                        {t('upgrade.features_included')}
                       </h4>
                       <ul className="space-y-2">
                         {tier.features.map((feature) => (
@@ -219,7 +233,7 @@ export default function PartnerUpgradePage() {
                     <div>
                       <h4 className="font-semibold text-sm text-gray-900 mb-2 flex items-center">
                         <Zap className="h-4 w-4 text-yellow-600 mr-2" />
-                        Avantages exclusifs
+                        {t('upgrade.exclusive_perks')}
                       </h4>
                       <ul className="space-y-2">
                         {tier.exclusivePerks.map((perk) => (
@@ -242,29 +256,28 @@ export default function PartnerUpgradePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white"
+          className="mt-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white"
         >
           <div className="text-center max-w-3xl mx-auto">
             <TrendingUp className="h-12 w-12 mx-auto mb-4" />
             <h2 className="text-3xl font-bold mb-4">
-              Maximisez votre retour sur investissement
+              {t('upgrade.roi_title')}
             </h2>
-            <p className="text-lg text-blue-100 mb-6">
-              En moyenne, nos sponsors Gold et Officiel génèrent 5x leur investissement
-              en nouveaux contrats et opportunités business grâce au SIB 2026.
+            <p className="text-lg text-indigo-100 mb-6">
+              {t('upgrade.roi_subtitle')}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
               <div>
                 <div className="text-4xl font-bold">200 000+</div>
-                <div className="text-blue-200 text-sm">Visiteurs qualifiés</div>
+                <div className="text-indigo-200 text-sm">{t('upgrade.roi_stat1')}</div>
               </div>
               <div>
                 <div className="text-4xl font-bold">300+</div>
-                <div className="text-blue-200 text-sm">Rendez-vous B2B</div>
+                <div className="text-indigo-200 text-sm">{t('upgrade.roi_stat2')}</div>
               </div>
               <div>
                 <div className="text-4xl font-bold">5x</div>
-                <div className="text-blue-200 text-sm">ROI moyen</div>
+                <div className="text-indigo-200 text-sm">{t('upgrade.roi_stat3')}</div>
               </div>
             </div>
           </div>
@@ -273,36 +286,17 @@ export default function PartnerUpgradePage() {
         {/* Testimonials */}
         <div className="mt-16">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Ce que disent nos partenaires
+            {t('upgrade.testimonials_title')}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                tier: 'Sponsor Officiel',
-                company: 'TechCorp International',
-                quote: "Le sponsoring officiel nous a permis d'obtenir une visibilité exceptionnelle. 87 rendez-vous qualifiés en 5 jours!",
-                author: 'Jean Dupont, CEO'
-              },
-              {
-                tier: 'Sponsor Gold',
-                company: 'Innovation Solutions',
-                quote: "Le ROI a été immédiat. Nous avons signé 3 contrats majeurs dès la première semaine après le salon.",
-                author: 'Marie Martin, Directrice'
-              },
-              {
-                tier: 'Sponsor Silver',
-                company: 'StartUp Tech',
-                quote: "Le sponsoring Silver est parfait pour une première participation. Les analytics nous ont beaucoup aidés.",
-                author: 'Ahmed Benali, Fondateur'
-              }
-            ].map((testimonial) => (
+            {testimonials.map((testimonial) => (
               <Card key={testimonial.company} className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-sm font-semibold text-gray-900">
                     {testimonial.company}
                   </span>
-                  <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                  <span className="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full">
                     {testimonial.tier}
                   </span>
                 </div>
@@ -316,28 +310,11 @@ export default function PartnerUpgradePage() {
         {/* FAQ Section */}
         <div className="mt-16">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Questions fréquentes
+            {t('upgrade.faq_title')}
           </h2>
 
           <div className="max-w-3xl mx-auto space-y-4">
-            {[
-              {
-                q: "Puis-je changer de niveau pendant l'événement?",
-                a: "Oui, vous pouvez upgrader votre niveau à tout moment. Le prix sera ajusté au prorata."
-              },
-              {
-                q: "Les quotas sont-ils partagés entre les membres de l'équipe?",
-                a: "Oui, les quotas sont globaux pour votre organisation et partagés entre tous les membres."
-              },
-              {
-                q: "Que se passe-t-il si j'atteins mes quotas?",
-                a: "Vous recevrez une notification et pourrez soit upgrader votre niveau, soit attendre le renouvellement."
-              },
-              {
-                q: "Les analytics sont-elles en temps réel?",
-                a: "Pour Silver et Gold, les analytics sont mises à jour toutes les heures. Le Sponsor Officiel bénéficie d'analytics en temps réel avec IA."
-              }
-            ].map((faq) => (
+            {faqs.map((faq) => (
               <Card key={faq.q} className="p-6">
                 <h3 className="font-semibold text-gray-900 mb-2">{faq.q}</h3>
                 <p className="text-gray-600">{faq.a}</p>
@@ -354,10 +331,10 @@ export default function PartnerUpgradePage() {
           className="mt-16 text-center"
         >
           <h2 className="text-3xl font-bold mb-4">
-            Prêt à passer au niveau supérieur?
+            {t('upgrade.cta_title')}
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Rejoignez les leaders de l'industrie et maximisez votre présence au SIB 2026
+            {t('upgrade.cta_subtitle')}
           </p>
           <Button
             variant="default"
@@ -365,7 +342,7 @@ export default function PartnerUpgradePage() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <Crown className="h-5 w-5 mr-2" />
-            Choisir mon niveau
+            {t('upgrade.cta_btn')}
           </Button>
         </motion.div>
       </div>

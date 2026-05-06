@@ -1,4 +1,4 @@
-Ôªøimport { toast } from 'sonner';
+import { toast } from 'sonner';
 import { sanitizeArticleContent } from '../utils/sanitizeHtml';
 import { useTranslation } from '../hooks/useTranslation';
 import { useArticleTranslation } from '../hooks/useArticleTranslation';
@@ -62,7 +62,7 @@ export default function ArticleDetailPage() {
           .slice(0, 3);
         setRelatedArticles(related);
 
-        // Scroll vers le haut pour voir le d√©but de l'article
+        // Scroll vers le haut pour voir le dÈbut de l'article
         setTimeout(() => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }, 100);
@@ -70,7 +70,7 @@ export default function ArticleDetailPage() {
     }
   }, [id, articles]);
 
-  // Suivi du progr√®s de lecture
+  // Suivi du progrËs de lecture
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -85,9 +85,9 @@ export default function ArticleDetailPage() {
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             {t('common.loading_article')}
           </h3>
@@ -111,10 +111,10 @@ export default function ArticleDetailPage() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      '√âv√©nement': 'bg-blue-100 text-blue-800',
+      '…vÈnement': 'bg-indigo-100 text-indigo-800',
       'Innovation': 'bg-purple-100 text-purple-800',
       'Partenariat': 'bg-green-100 text-green-800',
-      'Durabilit√©': 'bg-emerald-100 text-emerald-800',
+      'DurabilitÈ': 'bg-emerald-100 text-emerald-800',
       'Formation': 'bg-orange-100 text-orange-800',
       'Commerce': 'bg-indigo-100 text-indigo-800'
     };
@@ -169,7 +169,7 @@ export default function ArticleDetailPage() {
       {/* Barre de progression de lecture */}
       <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-[101]">
         <div
-          className="h-full bg-blue-600 transition-all duration-300"
+          className="h-full bg-indigo-600 transition-all duration-300"
           style={{ width: `${readingProgress}%` }}
         />
       </div>
@@ -209,7 +209,7 @@ export default function ArticleDetailPage() {
             </div>
           </div>
 
-          {/* M√©tadonn√©es Article */}
+          {/* MÈtadonnÈes Article */}
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
             <Badge className={getCategoryColor(article.category)} size="sm">
               {article.category}
@@ -288,17 +288,17 @@ export default function ArticleDetailPage() {
           <div
             className="text-gray-800 leading-relaxed space-y-6
               prose-headings:text-gray-900 prose-headings:font-bold
-              prose-a:text-blue-600 prose-a:hover:text-blue-700
+              prose-a:text-indigo-600 prose-a:hover:text-indigo-700
               prose-strong:text-gray-900
               prose-ul:space-y-2 prose-li:text-gray-700
-              prose-blockquote:border-l-4 prose-blockquote:border-blue-600 prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:bg-blue-50 prose-blockquote:rounded-r-lg
+              prose-blockquote:border-l-4 prose-blockquote:border-indigo-600 prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:bg-indigo-50 prose-blockquote:rounded-r-lg
               prose-img:rounded-xl prose-img:shadow-lg prose-img:mx-auto"
             dangerouslySetInnerHTML={{ __html: sanitizeArticleContent(translatedArticle.content) }}
           />
 
             {article.sourceUrl && (
-              <div className="bg-blue-50 p-4 rounded-lg mt-8">
-                <p className="text-sm text-blue-800 mb-2">
+              <div className="bg-indigo-50 p-4 rounded-lg mt-8">
+                <p className="text-sm text-indigo-800 mb-2">
                   <Globe className="h-4 w-4 inline mr-1" />
                   {t('common.source')} :
                 </p>
@@ -306,7 +306,7 @@ export default function ArticleDetailPage() {
                   href={article.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-indigo-600 hover:text-indigo-700 font-medium"
                 >
                   {article.sourceUrl}
                   <ExternalLink className="h-4 w-4 inline ml-1" />
@@ -329,7 +329,7 @@ export default function ArticleDetailPage() {
           </h4>
           <div className="flex flex-wrap gap-2">
             {article.tags.map((tag: string) => (
-              <Badge key={tag} variant="info" size="sm" className="cursor-pointer hover:bg-blue-200">
+              <Badge key={tag} variant="info" size="sm" className="cursor-pointer hover:bg-indigo-200">
                 #{tag}
               </Badge>
             ))}
@@ -377,7 +377,7 @@ export default function ArticleDetailPage() {
               variant="default"
               size="sm"
               onClick={() => handleShare('facebook')}
-              className="text-blue-600 border-blue-300 hover:bg-blue-50"
+              className="text-indigo-600 border-indigo-300 hover:bg-indigo-50"
             >
               <Facebook className="h-4 w-4" />
             </Button>
@@ -395,7 +395,7 @@ export default function ArticleDetailPage() {
               variant="default"
               size="sm"
               onClick={() => handleShare('linkedin')}
-              className="text-blue-700 border-blue-300 hover:bg-blue-50"
+              className="text-indigo-700 border-indigo-300 hover:bg-indigo-50"
             >
               <Linkedin className="h-4 w-4" />
             </Button>
@@ -419,7 +419,7 @@ export default function ArticleDetailPage() {
                   {article.author}
                 </h4>
                 <p className="text-gray-600 mb-3">
-                  Expert en d√©veloppement b√¢timent et innovation construction. Contributeur r√©gulier aux publications sp√©cialis√©es du secteur.
+                  Expert en dÈveloppement b‚timent et innovation construction. Contributeur rÈgulier aux publications spÈcialisÈes du secteur.
                 </p>
                 <div className="flex items-center space-x-4 text-sm text-gray-500">
                   <span>{article.author.toLowerCase().replace(' ', '.')}@sib2026.ma</span>
@@ -495,12 +495,12 @@ export default function ArticleDetailPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2 }}
         >
-          <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+          <Card className="bg-gradient-to-r from-indigo-600 to-indigo-600 text-white">
             <div className="p-8 text-center">
               <h3 className="text-2xl font-bold mb-4">
                 {t('common.newsletter_title')}
               </h3>
-              <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+              <p className="text-indigo-100 mb-6 max-w-2xl mx-auto">
                 {t('common.newsletter_subtitle')}
               </p>
 
@@ -512,7 +512,7 @@ export default function ArticleDetailPage() {
                 <Button
                   variant="default"
                   size="lg"
-                  className="bg-white text-blue-600 hover:bg-blue-50"
+                  className="bg-white text-indigo-600 hover:bg-indigo-50"
                   onClick={() => {
                     toast.success('? ' + t('common.newsletter_subscribe'));
                   }}
@@ -550,6 +550,7 @@ export default function ArticleDetailPage() {
     </div>
   );
 };
+
 
 
 

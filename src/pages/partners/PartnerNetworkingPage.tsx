@@ -1,4 +1,4 @@
-ï»¿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -51,7 +51,7 @@ export const PartnerNetworkingPage: React.FC = () => {
     loadMessageStats();
   }, [user?.id]);
 
-  // Charger les opportunitÃ©s rÃ©elles depuis Supabase
+  // Charger les opportunités réelles depuis Supabase
   useEffect(() => {
     const loadNetworkingOpportunities = async () => {
       if (!isSupabaseReady() || !supabase) { setIsLoadingNetworking(false); return; }
@@ -97,11 +97,11 @@ export const PartnerNetworkingPage: React.FC = () => {
     return matchesSearch && matchesSector;
   });
 
-  // Secteurs dÃ©duits dynamiquement des donnÃ©es rÃ©elles
+  // Secteurs déduits dynamiquement des données réelles
   const sectors = Array.from(new Set(networkingOpportunities.map(o => o.sector).filter(Boolean)));
 
   const handleNetworkingAction = (opportunityId: string, action: string) => {
-    // Ici vous pouvez implÃ©menter les actions rÃ©elles
+    // Ici vous pouvez implémenter les actions réelles
   };
 
   const getTypeIcon = (type: string) => {
@@ -115,7 +115,7 @@ export const PartnerNetworkingPage: React.FC = () => {
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'partner': return 'text-purple-600';
-      case 'exhibitor': return 'text-blue-600';
+      case 'exhibitor': return 'text-indigo-600';
       default: return 'text-gray-600';
     }
   };
@@ -123,15 +123,15 @@ export const PartnerNetworkingPage: React.FC = () => {
   const getAvailabilityColor = (availability: string) => {
     if (availability.includes('Libre') || availability.includes('Disponible')) {
       return 'text-green-600 bg-green-50';
-    } else if (availability.includes('Planning chargÃ©')) {
+    } else if (availability.includes('Planning chargé')) {
       return 'text-yellow-600 bg-yellow-50';
     } else {
-      return 'text-gray-600 bg-gray-50';
+      return 'text-gray-600 bg-slate-50';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -139,9 +139,9 @@ export const PartnerNetworkingPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour au tableau de bord
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Networking PrivilÃ©giÃ©</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Networking Privilégié</h1>
           <p className="text-gray-600 mt-2">
-            DÃ©couvrez et connectez-vous avec les dÃ©cideurs de l'industrie du bÃ¢timent
+            Découvrez et connectez-vous avec les décideurs de l'industrie du bâtiment
           </p>
         </div>
 
@@ -152,9 +152,9 @@ export const PartnerNetworkingPage: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Connexions Disponibles</p>
-                  <p className="text-3xl font-bold text-blue-600">{networkingOpportunities.length}</p>
+                  <p className="text-3xl font-bold text-indigo-600">{networkingOpportunities.length}</p>
                 </div>
-                <Users className="h-8 w-8 text-blue-600" />
+                <Users className="h-8 w-8 text-indigo-600" />
               </div>
             </div>
           </Card>
@@ -177,7 +177,7 @@ export const PartnerNetworkingPage: React.FC = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Messages EnvoyÃ©s</p>
+                  <p className="text-sm font-medium text-gray-600">Messages Envoyés</p>
                   <p className="text-3xl font-bold text-purple-600">{sentMessages}</p>
                 </div>
                 <MessageCircle className="h-8 w-8 text-purple-600" />
@@ -189,7 +189,7 @@ export const PartnerNetworkingPage: React.FC = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">RÃ©ponses ReÃ§ues</p>
+                  <p className="text-sm font-medium text-gray-600">Réponses Reçues</p>
                   <p className="text-3xl font-bold text-orange-600">{receivedMessages}</p>
                 </div>
                 <Target className="h-8 w-8 text-orange-600" />
@@ -209,14 +209,14 @@ export const PartnerNetworkingPage: React.FC = () => {
                   placeholder="Rechercher par nom, entreprise ou secteur..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
               <select
                 value={selectedSector}
                 onChange={(e) => setSelectedSector(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">Tous les secteurs</option>
                 {sectors.map(sector => (
@@ -275,7 +275,7 @@ export const PartnerNetworkingPage: React.FC = () => {
                     </div>
                     <div className="flex items-center text-sm text-gray-600">
                       <Star className="h-4 w-4 mr-2 text-yellow-500" />
-                      <span>{opportunity.rating}/5 â€¢ {opportunity.profileStrength}% profil complet</span>
+                      <span>{opportunity.rating}/5 • {opportunity.profileStrength}% profil complet</span>
                     </div>
                   </div>
 
@@ -285,7 +285,7 @@ export const PartnerNetworkingPage: React.FC = () => {
 
                   {opportunity.interests.length > 0 && (
                     <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Centres d'intÃ©rÃªt :</h4>
+                      <h4 className="text-sm font-medium text-gray-900 mb-2">Centres d'intérêt :</h4>
                       <div className="flex flex-wrap gap-2">
                         {opportunity.interests.slice(0, 3).map((interest) => (
                           <Badge key={interest} variant="info" size="sm">{interest}</Badge>
@@ -324,10 +324,10 @@ export const PartnerNetworkingPage: React.FC = () => {
           <div className="text-center py-12">
             <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Aucune opportunitÃ© trouvÃ©e
+              Aucune opportunité trouvée
             </h3>
             <p className="text-gray-600">
-              Essayez de modifier vos critÃ¨res de recherche
+              Essayez de modifier vos critères de recherche
             </p>
           </div>
         )}
@@ -351,16 +351,16 @@ export const PartnerNetworkingPage: React.FC = () => {
                      Profils Prioritaires
                   </h4>
                   <p className="text-sm text-purple-700">
-                    3 contacts identifiÃ©s comme stratÃ©giques pour vos objectifs business
+                    3 contacts identifiés comme stratégiques pour vos objectifs business
                   </p>
                 </div>
 
                 <div className="p-4 bg-white rounded-lg border border-purple-200">
                   <h4 className="font-medium text-purple-900 mb-2">
-                     OpportunitÃ©s Sectorielles
+                     Opportunités Sectorielles
                   </h4>
                   <p className="text-sm text-purple-700">
-                    Focus recommandÃ© sur les secteurs Data & Technologie cette semaine
+                    Focus recommandé sur les secteurs Data & Technologie cette semaine
                   </p>
                 </div>
               </div>
@@ -373,5 +373,6 @@ export const PartnerNetworkingPage: React.FC = () => {
 };
 
 export default PartnerNetworkingPage;
+
 
 

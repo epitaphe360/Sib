@@ -124,7 +124,7 @@ export const LiveStudioDetailPage: React.FC = () => {
   const isUpcoming = liveStudio.scheduled_date && new Date(liveStudio.scheduled_date) > new Date();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -316,8 +316,8 @@ export const LiveStudioDetailPage: React.FC = () => {
                   Animateur
                 </h3>
                 <div className="flex items-start space-x-4">
-                  <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                    <span className="text-2xl font-semibold text-blue-600">
+                  <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center">
+                    <span className="text-2xl font-semibold text-indigo-600">
                       {liveStudio.host_name.charAt(0)}
                     </span>
                   </div>
@@ -363,11 +363,11 @@ export const LiveStudioDetailPage: React.FC = () => {
             </div>
 
             {/* More Lives CTA */}
-            <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg shadow-lg p-6 text-white">
               <h3 className="text-lg font-semibold mb-2">
                 Tous les Lives
               </h3>
-              <p className="text-sm text-blue-100 mb-4">
+              <p className="text-sm text-indigo-100 mb-4">
                 Découvrez tous nos Lives Studios et replays
               </p>
               <Button variant="secondary" className="w-full" asChild>

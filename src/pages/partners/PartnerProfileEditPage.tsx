@@ -1,4 +1,4 @@
-ï»¿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -17,10 +17,10 @@ import { SupabaseService } from '../../services/supabaseService';
 // Zod validation schema for basic partner profile fields
 const partnerProfileSchema = z.object({
   companyName: z.string()
-    .min(2, 'Le nom de l\'entreprise est requis (min 2 caractÃ¨res)')
-    .max(200, 'Maximum 200 caractÃ¨res'),
+    .min(2, 'Le nom de l\'entreprise est requis (min 2 caractères)')
+    .max(200, 'Maximum 200 caractères'),
   description: z.string()
-    .max(2000, 'Maximum 2000 caractÃ¨res')
+    .max(2000, 'Maximum 2000 caractères')
     .optional()
     .or(z.literal('')),
   website: z.string()
@@ -32,7 +32,7 @@ const partnerProfileSchema = z.object({
     .optional()
     .or(z.literal('')),
   phone: z.string()
-    .regex(/^\+?[1-9]\d{1,14}$/, 'Format de tÃ©lÃ©phone invalide')
+    .regex(/^\+?[1-9]\d{1,14}$/, 'Format de téléphone invalide')
     .optional()
     .or(z.literal('')),
   country: z.string()
@@ -75,14 +75,14 @@ export const PartnerProfileEditPage: React.FC = () => {
     email: '',
     country: '',
 
-    // DÃ©tails (optionnel)
+    // Détails (optionnel)
     type: 'corporate',
     sponsorLevel: '',
     employees: '',
     founded: '',
     ceo: '',
 
-    // CatÃ©gories (optionnel)
+    // Catégories (optionnel)
     sectors: [] as string[],
     services: [] as string[],
     certifications: [] as string[],
@@ -104,7 +104,7 @@ export const PartnerProfileEditPage: React.FC = () => {
     // Timeline (optionnel)
     timeline: [] as Array<{ year: string; event: string; description?: string }>,
 
-    // Ã‰quipe (optionnel)
+    // Équipe (optionnel)
     team: [] as Array<{ name: string; role: string; photo?: string; bio?: string }>,
 
     logo: null as string | null
@@ -210,13 +210,13 @@ export const PartnerProfileEditPage: React.FC = () => {
             logo: completeFormData.logo,
           },
         });
-        toast.success('Profil mis Ã  jour avec succÃ¨s !');
+        toast.success('Profil mis à jour avec succès !');
       } else {
-        toast.error('Utilisateur non connectÃ©');
+        toast.error('Utilisateur non connecté');
       }
     } catch (err) {
       console.error('Erreur sauvegarde profil sponsor:', err);
-      toast.error('Erreur lors de la sauvegarde. Veuillez rÃ©essayer.');
+      toast.error('Erreur lors de la sauvegarde. Veuillez réessayer.');
     } finally {
       setIsSaving(false);
     }
@@ -227,7 +227,7 @@ export const PartnerProfileEditPage: React.FC = () => {
     if (file) {
       const url = URL.createObjectURL(file);
       setFormData(prev => ({ ...prev, logo: url }));
-      toast.success('Logo tÃ©lÃ©chargÃ©');
+      toast.success('Logo téléchargé');
     }
   };
 
@@ -236,7 +236,7 @@ export const PartnerProfileEditPage: React.FC = () => {
     if (files) {
       const newImages = Array.from(files).map(f => URL.createObjectURL(f));
       setFormData(prev => ({ ...prev, gallery: [...prev.gallery, ...newImages] }));
-      toast.success(`${files.length} image(s) ajoutÃ©e(s)`);
+      toast.success(`${files.length} image(s) ajoutée(s)`);
     }
   };
 
@@ -245,10 +245,10 @@ export const PartnerProfileEditPage: React.FC = () => {
   }) => (
     <button
       onClick={() => toggleSection(section)}
-      className="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-t-lg transition-colors"
+      className="w-full flex items-center justify-between p-4 hover:bg-slate-50 rounded-t-lg transition-colors"
     >
       <div className="flex items-center space-x-3">
-        <Icon className="h-5 w-5 text-blue-600" />
+        <Icon className="h-5 w-5 text-indigo-600" />
         <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
         {optional && <span className="text-sm text-gray-500 italic">(Optionnel)</span>}
       </div>
@@ -261,7 +261,7 @@ export const PartnerProfileEditPage: React.FC = () => {
   const completeness = calculateCompleteness();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -272,15 +272,15 @@ export const PartnerProfileEditPage: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Profil Sponsor</h1>
-              <p className="text-gray-600 mt-2">ComplÃ©tez votre profil progressivement - seul le nom est obligatoire</p>
+              <p className="text-gray-600 mt-2">Complétez votre profil progressivement - seul le nom est obligatoire</p>
             </div>
             <div className="text-right">
-              <div className="text-sm text-gray-600 mb-1">ComplÃ©tude</div>
+              <div className="text-sm text-gray-600 mb-1">Complétude</div>
               <div className="flex items-center space-x-2">
                 <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-600 transition-all" style={{ width: `${completeness}%` }} />
+                  <div className="h-full bg-indigo-600 transition-all" style={{ width: `${completeness}%` }} />
                 </div>
-                <span className="text-lg font-semibold text-blue-600">{completeness}%</span>
+                <span className="text-lg font-semibold text-indigo-600">{completeness}%</span>
               </div>
             </div>
           </div>
@@ -298,13 +298,13 @@ export const PartnerProfileEditPage: React.FC = () => {
                       Nom de l'entreprise <span className="text-red-500">*</span>
                     </label>
                     <input type="text" value={formData.companyName} onChange={(e) => handleInputChange('companyName', e.target.value)}
-                      placeholder="Royal BÃ¢timent Group" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="Royal Bâtiment Group" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Type d'organisation</label>
                     <select value={formData.type} onChange={(e) => handleInputChange('type', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                       <option value="corporate">Entreprise</option>
                       <option value="sponsor">Sponsor</option>
                       <option value="organizer">Organisateur</option>
@@ -316,14 +316,14 @@ export const PartnerProfileEditPage: React.FC = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Niveau de sponsoring
-                      <span className="ml-2 text-xs text-gray-500">(DÃ©fini par l'administrateur)</span>
+                      <span className="ml-2 text-xs text-gray-500">(Défini par l'administrateur)</span>
                     </label>
                     <input
                       type="text"
-                      value={formData.sponsorLevel || "Aucun niveau dÃ©fini"}
+                      value={formData.sponsorLevel || "Aucun niveau défini"}
                       disabled
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
-                      title="DÃ©fini par l'administrateur"
+                      title="Défini par l'administrateur"
                     />
                   </div>
 
@@ -331,7 +331,7 @@ export const PartnerProfileEditPage: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                     <textarea value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} rows={4}
                       placeholder="Groupe construction d'excellence, leader dans le transport construction..."
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                 </div>
 
@@ -344,8 +344,8 @@ export const PartnerProfileEditPage: React.FC = () => {
                     </div>
                     <div>
                       <input type="file" accept="image/*" onChange={handleLogoUpload}
-                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                      <p className="mt-1 text-sm text-gray-500">PNG, JPG jusqu'Ã  2MB</p>
+                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                      <p className="mt-1 text-sm text-gray-500">PNG, JPG jusqu'à 2MB</p>
                     </div>
                   </div>
                 </div>
@@ -364,79 +364,79 @@ export const PartnerProfileEditPage: React.FC = () => {
                       <Globe className="inline h-4 w-4 mr-1" />Site web
                     </label>
                     <input type="url" value={formData.website} onChange={(e) => handleInputChange('website', e.target.value)}
-                      placeholder="https://www.exemple.com" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="https://www.exemple.com" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Mail className="inline h-4 w-4 mr-1" />Email
                     </label>
                     <input type="email" value={formData.email} onChange={(e) => handleInputChange('email', e.target.value)}
-                      placeholder="contact@exemple.com" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="contact@exemple.com" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Phone className="inline h-4 w-4 mr-1" />TÃ©lÃ©phone
+                      <Phone className="inline h-4 w-4 mr-1" />Téléphone
                     </label>
                     <input type="tel" value={formData.phone} onChange={(e) => handleInputChange('phone', e.target.value)}
-                      placeholder="+33 1 23 45 67 89" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="+33 1 23 45 67 89" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <MapPin className="inline h-4 w-4 mr-1" />Pays
                     </label>
                     <input type="text" value={formData.country} onChange={(e) => handleInputChange('country', e.target.value)}
-                      placeholder="Maroc, France..." className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="Maroc, France..." className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Adresse complÃ¨te</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Adresse complète</label>
                     <input type="text" value={formData.address} onChange={(e) => handleInputChange('address', e.target.value)}
-                      placeholder="123 Avenue Example, Ville, Pays" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="123 Avenue Example, Ville, Pays" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                 </div>
               </div>
             )}
           </Card>
 
-          {/* 3. DÃ©tails entreprise */}
+          {/* 3. Détails entreprise */}
           <Card>
-            <SectionHeader title="DÃ©tails de l'entreprise" section="details" icon={Building2} />
+            <SectionHeader title="Détails de l'entreprise" section="details" icon={Building2} />
             {expandedSections.details && (
               <div className="p-6 border-t">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">EmployÃ©s</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Employés</label>
                     <input type="number" value={formData.employees} onChange={(e) => handleInputChange('employees', e.target.value)}
-                      placeholder="50" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="50" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">AnnÃ©e de crÃ©ation</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Année de création</label>
                     <input type="number" value={formData.founded} onChange={(e) => handleInputChange('founded', e.target.value)}
-                      placeholder="2010" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="2010" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Directeur GÃ©nÃ©ral</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Directeur Général</label>
                     <input type="text" value={formData.ceo} onChange={(e) => handleInputChange('ceo', e.target.value)}
-                      placeholder="Jean Dupont" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="Jean Dupont" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                 </div>
               </div>
             )}
           </Card>
 
-          {/* 4. CatÃ©gories */}
+          {/* 4. Catégories */}
           <Card>
             <SectionHeader title="Secteurs et services" section="categories" icon={Award} />
             {expandedSections.categories && (
               <div className="p-6 border-t">
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Secteurs d'activitÃ©</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">Secteurs d'activité</label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {['Transport & mobilitÃ©', 'Technologie', 'Logistique', 'Environnement', 'SÃ©curitÃ©', 'Formation'].map(s => (
+                      {['Transport & mobilité', 'Technologie', 'Logistique', 'Environnement', 'Sécurité', 'Formation'].map(s => (
                         <label key={s} className="flex items-center">
                           <input type="checkbox" checked={formData.sectors.includes(s)}
                             onChange={(e) => handleInputChange('sectors', e.target.checked ? [...formData.sectors, s] : formData.sectors.filter(x => x !== s))}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2" />
+                            className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-2" />
                           <span className="text-sm">{s}</span>
                         </label>
                       ))}
@@ -446,11 +446,11 @@ export const PartnerProfileEditPage: React.FC = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Certifications</label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {['ISO 9001', 'ISO 14001', 'ISO 27001', 'OHSAS 18001', 'BÃ¢timent Security'].map(c => (
+                      {['ISO 9001', 'ISO 14001', 'ISO 27001', 'OHSAS 18001', 'Bâtiment Security'].map(c => (
                         <label key={c} className="flex items-center">
                           <input type="checkbox" checked={formData.certifications.includes(c)}
                             onChange={(e) => handleInputChange('certifications', e.target.checked ? [...formData.certifications, c] : formData.certifications.filter(x => x !== c))}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2" />
+                            className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-2" />
                           <span className="text-sm">{c}</span>
                         </label>
                       ))}
@@ -467,8 +467,8 @@ export const PartnerProfileEditPage: React.FC = () => {
             {expandedSections.expertise && (
               <div className="p-6 border-t">
                 <textarea value={formData.expertise} onChange={(e) => handleInputChange('expertise', e.target.value)} rows={6}
-                  placeholder="DÃ©crivez votre expertise, vos domaines de compÃ©tence, votre savoir-faire..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  placeholder="Décrivez votre expertise, vos domaines de compétence, votre savoir-faire..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
             )}
           </Card>
@@ -479,7 +479,7 @@ export const PartnerProfileEditPage: React.FC = () => {
             {expandedSections.projects && (
               <div className="p-6 border-t space-y-4">
                 {formData.projects.map((proj, i) => (
-                  <div key={i} className="p-4 border rounded-lg bg-gray-50 space-y-3">
+                  <div key={i} className="p-4 border rounded-lg bg-slate-50 space-y-3">
                     <div className="flex justify-between">
                       <h4 className="font-medium">Projet {i + 1}</h4>
                       <button onClick={() => handleArrayRemove('projects', i)} className="text-red-600 hover:text-red-800">
@@ -487,14 +487,14 @@ export const PartnerProfileEditPage: React.FC = () => {
                       </button>
                     </div>
                     <input type="text" value={proj.title} onChange={(e) => handleArrayItemChange('projects', i, 'title', e.target.value)}
-                      placeholder="Titre du projet" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="Titre du projet" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                     <textarea value={proj.description} onChange={(e) => handleArrayItemChange('projects', i, 'description', e.target.value)}
-                      placeholder="Description" rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      placeholder="Description" rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                     <div className="grid grid-cols-2 gap-3">
                       <input type="text" value={proj.year || ''} onChange={(e) => handleArrayItemChange('projects', i, 'year', e.target.value)}
-                        placeholder="AnnÃ©e (ex: 2023)" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        placeholder="Année (ex: 2023)" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                       <input type="url" value={proj.image || ''} onChange={(e) => handleArrayItemChange('projects', i, 'image', e.target.value)}
-                        placeholder="URL image" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        placeholder="URL image" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                     </div>
                   </div>
                 ))}
@@ -522,27 +522,27 @@ export const PartnerProfileEditPage: React.FC = () => {
                   ))}
                 </div>
                 <input type="file" multiple accept="image/*" onChange={handleGalleryUpload}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
                 <p className="mt-2 text-sm text-gray-500">Ajoutez plusieurs images de votre entreprise, installations, projets...</p>
               </div>
             )}
           </Card>
 
-          {/* 8. ActualitÃ©s */}
+          {/* 8. Actualités */}
           <Card>
-            <SectionHeader title="ActualitÃ©s" section="news" icon={Calendar} />
+            <SectionHeader title="Actualités" section="news" icon={Calendar} />
             {expandedSections.news && (
               <div className="p-6 border-t space-y-4">
                 {formData.news.map((item, i) => (
-                  <div key={i} className="p-4 border rounded-lg bg-gray-50 space-y-3">
+                  <div key={i} className="p-4 border rounded-lg bg-slate-50 space-y-3">
                     <div className="flex justify-between">
-                      <h4 className="font-medium">ActualitÃ© {i + 1}</h4>
+                      <h4 className="font-medium">Actualité {i + 1}</h4>
                       <button onClick={() => handleArrayRemove('news', i)} className="text-red-600 hover:text-red-800">
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                     <input type="text" value={item.title} onChange={(e) => handleArrayItemChange('news', i, 'title', e.target.value)}
-                      placeholder="Titre de l'actualitÃ©" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                      placeholder="Titre de l'actualité" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                     <textarea value={item.description} onChange={(e) => handleArrayItemChange('news', i, 'description', e.target.value)}
                       placeholder="Description" rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                     <div className="grid grid-cols-2 gap-3">
@@ -554,30 +554,30 @@ export const PartnerProfileEditPage: React.FC = () => {
                   </div>
                 ))}
                 <Button onClick={() => handleArrayAdd('news')} variant="outline" className="w-full">
-                  <Plus className="h-4 w-4 mr-2" /> Ajouter une actualitÃ©
+                  <Plus className="h-4 w-4 mr-2" /> Ajouter une actualité
                 </Button>
               </div>
             )}
           </Card>
 
-          {/* 9. MÃ©triques */}
+          {/* 9. Métriques */}
           <Card>
-            <SectionHeader title="MÃ©triques" section="metrics" icon={TrendingUp} />
+            <SectionHeader title="Métriques" section="metrics" icon={TrendingUp} />
             {expandedSections.metrics && (
               <div className="p-6 border-t">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Projets rÃ©alisÃ©s</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Projets réalisés</label>
                     <input type="number" value={formData.metrics.projectsCompleted} onChange={(e) => handleNestedChange('metrics', 'projectsCompleted', e.target.value)}
                       placeholder="150" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">AnnÃ©es d'expÃ©rience</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Années d'expérience</label>
                     <input type="number" value={formData.metrics.yearsExperience} onChange={(e) => handleNestedChange('metrics', 'yearsExperience', e.target.value)}
                       placeholder="25" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Taille de l'Ã©quipe</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Taille de l'équipe</label>
                     <input type="number" value={formData.metrics.teamSize} onChange={(e) => handleNestedChange('metrics', 'teamSize', e.target.value)}
                       placeholder="200" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                   </div>
@@ -597,9 +597,9 @@ export const PartnerProfileEditPage: React.FC = () => {
             {expandedSections.timeline && (
               <div className="p-6 border-t space-y-4">
                 {formData.timeline.map((item, i) => (
-                  <div key={i} className="p-4 border rounded-lg bg-gray-50 space-y-3">
+                  <div key={i} className="p-4 border rounded-lg bg-slate-50 space-y-3">
                     <div className="flex justify-between">
-                      <h4 className="font-medium">Ã‰vÃ©nement {i + 1}</h4>
+                      <h4 className="font-medium">Événement {i + 1}</h4>
                       <button onClick={() => handleArrayRemove('timeline', i)} className="text-red-600 hover:text-red-800">
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -608,26 +608,26 @@ export const PartnerProfileEditPage: React.FC = () => {
                       <input type="text" value={item.year} onChange={(e) => handleArrayItemChange('timeline', i, 'year', e.target.value)}
                         placeholder="2020" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                       <input type="text" value={item.event} onChange={(e) => handleArrayItemChange('timeline', i, 'event', e.target.value)}
-                        placeholder="Ã‰vÃ©nement" className="col-span-2 w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                        placeholder="Événement" className="col-span-2 w-full px-3 py-2 border border-gray-300 rounded-lg" />
                     </div>
                     <input type="text" value={item.description || ''} onChange={(e) => handleArrayItemChange('timeline', i, 'description', e.target.value)}
                       placeholder="Description (optionnel)" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                   </div>
                 ))}
                 <Button onClick={() => handleArrayAdd('timeline')} variant="outline" className="w-full">
-                  <Plus className="h-4 w-4 mr-2" /> Ajouter un Ã©vÃ©nement
+                  <Plus className="h-4 w-4 mr-2" /> Ajouter un événement
                 </Button>
               </div>
             )}
           </Card>
 
-          {/* 11. Ã‰quipe */}
+          {/* 11. Équipe */}
           <Card>
-            <SectionHeader title="Ã‰quipe" section="team" icon={Users} />
+            <SectionHeader title="Équipe" section="team" icon={Users} />
             {expandedSections.team && (
               <div className="p-6 border-t space-y-4">
                 {formData.team.map((member, i) => (
-                  <div key={i} className="p-4 border rounded-lg bg-gray-50 space-y-3">
+                  <div key={i} className="p-4 border rounded-lg bg-slate-50 space-y-3">
                     <div className="flex justify-between">
                       <h4 className="font-medium">Membre {i + 1}</h4>
                       <button onClick={() => handleArrayRemove('team', i)} className="text-red-600 hover:text-red-800">

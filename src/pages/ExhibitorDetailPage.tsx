@@ -1,4 +1,4 @@
-Ôªøimport { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RentalBanner } from '../components/common/RentalBanner';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
@@ -77,7 +77,7 @@ export default function ExhibitorDetailPage() {
     loadExhibitor();
   }, [id]);
 
-  // Fonction pour g√©rer le clic sur le bouton RDV ‚Äî modal inline comme le R√©seautage
+  // Fonction pour gÈrer le clic sur le bouton RDV ó modal inline comme le RÈseautage
   const handleAppointmentClick = () => {
     if (!isAuthenticated) {
       navigate(`/login?redirect=/exhibitors/${exhibitor?.id}`);
@@ -100,16 +100,16 @@ export default function ExhibitorDetailPage() {
       setShowRdvModal(false);
       setSelectedTimeSlot('');
       setAppointmentMessage('');
-      toast.success('Demande de RDV envoy√©e avec succ√®s !');
+      toast.success('Demande de RDV envoyÈe avec succËs !');
       await fetchAppointments();
     } catch (err: any) {
-      toast.error(err.message || 'Erreur lors de la r√©servation');
+      toast.error(err.message || 'Erreur lors de la rÈservation');
     } finally {
       setIsBookingInProgress(false);
     }
   };
 
-  // Fonction pour g√©rer le clic sur le bouton Message
+  // Fonction pour gÈrer le clic sur le bouton Message
   const handleMessageClick = () => {
     if (!isAuthenticated) {
       navigate(`/login?redirect=/messages?userId=${exhibitor?.id}`);
@@ -128,7 +128,7 @@ export default function ExhibitorDetailPage() {
 
   const handleShare = () => {
     const shareData = {
-      title: `D√©couvrez ${exhibitor?.companyName}`,
+      title: `DÈcouvrez ${exhibitor?.companyName}`,
       text: exhibitor?.description,
       url: window.location.href
     };
@@ -137,7 +137,7 @@ export default function ExhibitorDetailPage() {
       navigator.share(shareData).catch(() => {});
     } else {
       navigator.clipboard.writeText(shareData.url)
-        .then(() => toast.success('Lien copi√© dans le presse-papiers !'))
+        .then(() => toast.success('Lien copiÈ dans le presse-papiers !'))
         .catch(() => toast.error('Impossible de copier le lien'));
     }
   };
@@ -158,14 +158,14 @@ export default function ExhibitorDetailPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toast.success('T√©l√©chargement de la brochure d√©marr√©');
+    toast.success('TÈlÈchargement de la brochure dÈmarrÈ');
   };
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             Chargement de l'exposant...
           </h3>
@@ -178,7 +178,7 @@ export default function ExhibitorDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             Chargement de l'exposant...
           </h3>
@@ -190,9 +190,9 @@ export default function ExhibitorDetailPage() {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'institutional': return Crown;
-      case 'b√¢timent-industry':
+      case 'b‚timent-industry':
       case 'port-industry': return Building2;
-      case 'b√¢timent-operations':
+      case 'b‚timent-operations':
       case 'port-operations': return Target;
       case 'academic': return Award;
       default: return Building2;
@@ -202,9 +202,9 @@ export default function ExhibitorDetailPage() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'institutional': return 'bg-purple-100 text-purple-600';
-      case 'b√¢timent-industry':
-      case 'port-industry': return 'bg-blue-100 text-blue-600';
-      case 'b√¢timent-operations':
+      case 'b‚timent-industry':
+      case 'port-industry': return 'bg-indigo-100 text-indigo-600';
+      case 'b‚timent-operations':
       case 'port-operations': return 'bg-green-100 text-green-600';
       case 'academic': return 'bg-orange-100 text-orange-600';
       default: return 'bg-gray-100 text-gray-600';
@@ -214,12 +214,12 @@ export default function ExhibitorDetailPage() {
   const getCategoryLabel = (category: string) => {
     switch (category) {
       case 'institutional': return 'Institutionnel';
-      case 'b√¢timent-industry':
-      case 'port-industry': return 'Industrie du B√¢timent';
-      case 'b√¢timent-operations':
+      case 'b‚timent-industry':
+      case 'port-industry': return 'Industrie du B‚timent';
+      case 'b‚timent-operations':
       case 'port-operations': return 'Exploitation & Gestion';
-      case 'academic': return 'Acad√©mique & Formation';
-      default: return 'Industrie du B√¢timent';
+      case 'academic': return 'AcadÈmique & Formation';
+      default: return 'Industrie du B‚timent';
     }
   };
 
@@ -229,17 +229,17 @@ export default function ExhibitorDetailPage() {
     <>
     <div className="min-h-screen bg-gray-50">
 
-      {/* Banner validation profil non publi√© ‚Äî visible UNIQUEMENT par le propri√©taire */}
+      {/* Banner validation profil non publiÈ ó visible UNIQUEMENT par le propriÈtaire */}
       {exhibitor.isPublished === false && user && (user.id === exhibitor.userId || user.type === 'admin') && (
         <div className="bg-amber-50 border-b border-amber-200 py-3 px-4">
           <div className="max-w-7xl mx-auto flex items-center justify-center gap-3 text-amber-800">
             <AlertCircle className="h-5 w-5 flex-shrink-0" />
-            <p className="text-sm font-medium">Fiche en cours de validation ‚Äî ce profil n'est pas encore visible publiquement.</p>
+            <p className="text-sm font-medium">Fiche en cours de validation ó ce profil n'est pas encore visible publiquement.</p>
           </div>
         </div>
       )}
 
-      {/* Hero Banner ‚Äî design blanc & bleu SIB */}
+      {/* Hero Banner ó design blanc & bleu SIB */}
       <div className="bg-gradient-to-br from-[#1e3a5f] via-[#1e4976] to-[#1a6496] relative overflow-hidden">
         {/* Motif subtil */}
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '28px 28px' }} />
@@ -248,7 +248,7 @@ export default function ExhibitorDetailPage() {
           {/* Breadcrumb */}
           <Link
             to={ROUTES.EXHIBITORS}
-            className="inline-flex items-center gap-2 text-blue-200 hover:text-white transition-colors text-sm font-medium mb-8 group"
+            className="inline-flex items-center gap-2 text-indigo-200 hover:text-white transition-colors text-sm font-medium mb-8 group"
           >
             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
             Retour au catalogue exposants
@@ -285,9 +285,9 @@ export default function ExhibitorDetailPage() {
             >
               {/* Badges */}
               <div className="flex flex-wrap gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-100 text-xs font-semibold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 animate-pulse" />
-                  SIB 2026 ‚Äî Officiel
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-100 text-xs font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-300 animate-pulse" />
+                  SIB 2026 ó Officiel
                 </span>
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(exhibitor.category)} bg-white/10 border border-white/20 text-white`}>
                   <CategoryIcon className="h-3 w-3" />
@@ -296,7 +296,7 @@ export default function ExhibitorDetailPage() {
                 {exhibitor.verified && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-200 text-xs font-semibold">
                     <CheckCircle className="h-3 w-3" />
-                    V√©rifi√©
+                    VÈrifiÈ
                   </span>
                 )}
               </div>
@@ -307,20 +307,20 @@ export default function ExhibitorDetailPage() {
               </h1>
 
               {/* Localisation & secteur */}
-              <div className="flex flex-wrap items-center gap-5 text-blue-200 text-sm font-medium">
+              <div className="flex flex-wrap items-center gap-5 text-indigo-200 text-sm font-medium">
                 {exhibitor.contactInfo?.city && (
                   <span className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-blue-300" />
+                    <MapPin className="h-4 w-4 text-indigo-300" />
                     {exhibitor.contactInfo.city}{exhibitor.contactInfo.country ? `, ${exhibitor.contactInfo.country}` : ''}
                   </span>
                 )}
                 <span className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-blue-300" />
+                  <TrendingUp className="h-4 w-4 text-indigo-300" />
                   {exhibitor.sector}
                 </span>
                 {exhibitor.boothNumber && (
                   <span className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-blue-300" />
+                    <Building2 className="h-4 w-4 text-indigo-300" />
                     Stand {exhibitor.boothNumber}
                   </span>
                 )}
@@ -337,7 +337,7 @@ export default function ExhibitorDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-          {/* Colonne gauche ‚Äî actions & contact */}
+          {/* Colonne gauche ó actions & contact */}
           <div className="lg:col-span-4 space-y-6">
             <RentalBanner variant="sidebar" />
             <motion.div
@@ -346,7 +346,7 @@ export default function ExhibitorDetailPage() {
               transition={{ delay: 0.15 }}
               className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden sticky top-6"
             >
-              {/* En-t√™te carte */}
+              {/* En-tÍte carte */}
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-base font-semibold text-gray-900">Actions rapides</h3>
                 <p className="text-sm text-gray-500 mt-0.5">Prenez contact ou planifiez un rendez-vous</p>
@@ -365,7 +365,7 @@ export default function ExhibitorDetailPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={handleContact}
-                    className="flex items-center justify-center gap-2 px-3 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl font-medium text-sm transition-colors border border-blue-200"
+                    className="flex items-center justify-center gap-2 px-3 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl font-medium text-sm transition-colors border border-indigo-200"
                   >
                     <Mail className="h-4 w-4" />
                     Contact
@@ -384,56 +384,56 @@ export default function ExhibitorDetailPage() {
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl font-medium text-sm transition-colors border border-gray-200"
                 >
                   <Download className="h-4 w-4" />
-                  T√©l√©charger la brochure
+                  TÈlÈcharger la brochure
                 </button>
               </div>
 
-              {/* S√©parateur */}
+              {/* SÈparateur */}
               <div className="border-t border-gray-100" />
 
               {/* Informations stand */}
               <div className="p-6 space-y-4">
                 <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Salon SIB 2026</h4>
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-xl border border-blue-100">
+                <div className="flex items-center gap-3 p-3 bg-indigo-50 rounded-xl border border-indigo-100">
                   <div className="h-10 w-10 rounded-lg bg-[#1e3a5f] flex items-center justify-center flex-shrink-0">
                     <Shield className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">Stand {exhibitor.boothNumber || '√Ä confirmer'}</p>
-                    <p className="text-xs text-gray-500">Pavillon principal ‚Äî El Jadida</p>
+                    <p className="text-sm font-semibold text-gray-900">Stand {exhibitor.boothNumber || '¿ confirmer'}</p>
+                    <p className="text-xs text-gray-500">Pavillon principal ó El Jadida</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <Calendar className="h-3.5 w-3.5" />
-                  <span>25 ‚Äì 29 novembre 2026</span>
+                  <span>25 ñ 29 novembre 2026</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <MapPin className="h-3.5 w-3.5" />
-                  <span>Complexe Mohammed VI ‚Äî El Jadida, Maroc</span>
+                  <span>Complexe Mohammed VI ó El Jadida, Maroc</span>
                 </div>
               </div>
 
-              {/* S√©parateur */}
+              {/* SÈparateur */}
               <div className="border-t border-gray-100" />
 
-              {/* Coordonn√©es */}
+              {/* CoordonnÈes */}
               <div className="p-6 space-y-3">
-                <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Coordonn√©es</h4>
+                <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">CoordonnÈes</h4>
                 {exhibitor.contactInfo?.email && (
-                  <a href={`mailto:${exhibitor.contactInfo.email}`} className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors group">
-                    <Mail className="h-4 w-4 text-gray-400 group-hover:text-blue-500 flex-shrink-0" />
+                  <a href={`mailto:${exhibitor.contactInfo.email}`} className="flex items-center gap-3 text-sm text-gray-700 hover:text-indigo-600 transition-colors group">
+                    <Mail className="h-4 w-4 text-gray-400 group-hover:text-indigo-500 flex-shrink-0" />
                     <span className="truncate">{exhibitor.contactInfo.email}</span>
                   </a>
                 )}
                 {exhibitor.contactInfo?.phone && (
-                  <a href={`tel:${exhibitor.contactInfo.phone}`} className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors group">
-                    <Phone className="h-4 w-4 text-gray-400 group-hover:text-blue-500 flex-shrink-0" />
+                  <a href={`tel:${exhibitor.contactInfo.phone}`} className="flex items-center gap-3 text-sm text-gray-700 hover:text-indigo-600 transition-colors group">
+                    <Phone className="h-4 w-4 text-gray-400 group-hover:text-indigo-500 flex-shrink-0" />
                     <span>{exhibitor.contactInfo.phone}</span>
                   </a>
                 )}
                 {exhibitor.website && (
-                  <a href={exhibitor.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-blue-600 hover:text-blue-800 transition-colors group">
+                  <a href={exhibitor.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-indigo-600 hover:text-indigo-800 transition-colors group">
                     <Globe className="h-4 w-4 flex-shrink-0" />
                     <span className="truncate">Visiter le site web</span>
                     <ExternalLink className="h-3 w-3 ml-auto flex-shrink-0" />
@@ -443,7 +443,7 @@ export default function ExhibitorDetailPage() {
             </motion.div>
           </div>
 
-          {/* Colonne droite ‚Äî onglets avec donn√©es r√©elles */}
+          {/* Colonne droite ó onglets avec donnÈes rÈelles */}
           <div className="lg:col-span-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -451,13 +451,13 @@ export default function ExhibitorDetailPage() {
               transition={{ delay: 0.2 }}
               className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
             >
-              {/* Barre d'onglets pill anim√©e */}
+              {/* Barre d'onglets pill animÈe */}
               <div className="px-4 pt-4 pb-0 border-b border-gray-100 bg-gray-50/60">
                 <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
                   {[
                     { id: 'overview', label: "Vue d'ensemble", icon: Eye },
                     { id: 'projects', label: 'Produits', icon: Package },
-                    { id: 'impact', label: '√Ä propos', icon: Users },
+                    { id: 'impact', label: '¿ propos', icon: Users },
                     { id: 'contact', label: 'Contact', icon: Mail },
                   ].map((tab) => (
                     <button
@@ -479,58 +479,58 @@ export default function ExhibitorDetailPage() {
                 </div>
               </div>
 
-              {/* Contenu des onglets ‚Äî donn√©es r√©elles */}
+              {/* Contenu des onglets ó donnÈes rÈelles */}
               <div className="min-h-[600px] p-6">
 
-                {/* ‚îÄ‚îÄ‚îÄ VUE D'ENSEMBLE ‚îÄ‚îÄ‚îÄ */}
+                {/* --- VUE D'ENSEMBLE --- */}
                 {activeTab === 'overview' && (
                   <motion.div key="overview" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                     {/* Description */}
                     {exhibitor.description && (
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">√Ä propos</h3>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">¿ propos</h3>
                         <p className="text-gray-700 leading-relaxed">{exhibitor.description}</p>
                       </div>
                     )}
 
-                    {/* Stats rapides ‚Äî champs toujours disponibles */}
+                    {/* Stats rapides ó champs toujours disponibles */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       <div className="bg-[#1e3a5f]/5 rounded-xl p-4 text-center border border-[#1e3a5f]/10">
                         <p className="text-2xl font-bold text-[#1e3a5f]">{exhibitor.products?.length || 0}</p>
                         <p className="text-xs text-gray-500 mt-1">Produits</p>
                       </div>
                       <div className="bg-[#1e3a5f]/5 rounded-xl p-4 text-center border border-[#1e3a5f]/10">
-                        <p className="text-2xl font-bold text-[#1e3a5f]">{exhibitor.verified ? '‚úì' : '‚Äî'}</p>
-                        <p className="text-xs text-gray-500 mt-1">V√©rifi√©</p>
+                        <p className="text-2xl font-bold text-[#1e3a5f]">{exhibitor.verified ? '?' : 'ó'}</p>
+                        <p className="text-xs text-gray-500 mt-1">VÈrifiÈ</p>
                       </div>
                       <div className="bg-[#1e3a5f]/5 rounded-xl p-4 text-center border border-[#1e3a5f]/10">
                         <p className="text-2xl font-bold text-[#1e3a5f]">SIB</p>
                         <p className="text-xs text-gray-500 mt-1">2026</p>
                       </div>
                       {exhibitor.establishedYear && (
-                        <div className="bg-blue-50 rounded-xl p-4 text-center border border-blue-100">
+                        <div className="bg-indigo-50 rounded-xl p-4 text-center border border-indigo-100">
                           <p className="text-2xl font-bold text-[#1e3a5f]">{exhibitor.establishedYear}</p>
-                          <p className="text-xs text-gray-500 mt-1">Fond√©e</p>
+                          <p className="text-xs text-gray-500 mt-1">FondÈe</p>
                         </div>
                       )}
                       {exhibitor.employeeCount && (
-                        <div className="bg-blue-50 rounded-xl p-4 text-center border border-blue-100">
+                        <div className="bg-indigo-50 rounded-xl p-4 text-center border border-indigo-100">
                           <p className="text-2xl font-bold text-[#1e3a5f]">{exhibitor.employeeCount}</p>
-                          <p className="text-xs text-gray-500 mt-1">Employ√©s</p>
+                          <p className="text-xs text-gray-500 mt-1">EmployÈs</p>
                         </div>
                       )}
                       {exhibitor.markets?.length > 0 && (
-                        <div className="bg-blue-50 rounded-xl p-4 text-center border border-blue-100">
+                        <div className="bg-indigo-50 rounded-xl p-4 text-center border border-indigo-100">
                           <p className="text-2xl font-bold text-[#1e3a5f]">{exhibitor.markets.length}</p>
-                          <p className="text-xs text-gray-500 mt-1">March√©s</p>
+                          <p className="text-xs text-gray-500 mt-1">MarchÈs</p>
                         </div>
                       )}
                     </div>
 
-                    {/* March√©s cibl√©s */}
+                    {/* MarchÈs ciblÈs */}
                     {exhibitor.markets?.length > 0 && (
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">March√©s cibl√©s</h3>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">MarchÈs ciblÈs</h3>
                         <div className="flex flex-wrap gap-2">
                           {exhibitor.markets.map((m: string) => (
                             <span key={m} className="px-3 py-1.5 bg-[#1e3a5f]/5 text-[#1e3a5f] text-sm rounded-lg border border-[#1e3a5f]/10 font-medium">{m}</span>
@@ -555,33 +555,33 @@ export default function ExhibitorDetailPage() {
 
                     {/* Secteur */}
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Secteur d'activit√©</h3>
+                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Secteur d'activitÈ</h3>
                       <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-700 rounded-xl border border-gray-200 font-medium">
-                        <TrendingUp className="h-4 w-4 text-blue-500" />{exhibitor.sector}
+                        <TrendingUp className="h-4 w-4 text-indigo-500" />{exhibitor.sector}
                       </span>
                     </div>
                   </motion.div>
                 )}
 
-                {/* ‚îÄ‚îÄ‚îÄ PRODUITS ‚îÄ‚îÄ‚îÄ */}
+                {/* --- PRODUITS --- */}
                 {activeTab === 'projects' && (
                   <motion.div key="projects" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                     {exhibitor.products?.length > 0 ? (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {exhibitor.products.map((product: any) => (
-                          <div key={product.id} onClick={() => setSelectedProduct(product)} className="group rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-blue-200 transition-all duration-200 cursor-pointer">
+                          <div key={product.id} onClick={() => setSelectedProduct(product)} className="group rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-indigo-200 transition-all duration-200 cursor-pointer">
                             {/* Image */}
                             <div className="relative h-48 overflow-hidden bg-gray-50">
                               {product.images?.[0] ? (
                                 <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                               ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-[#1e3a5f]/5 to-blue-50 flex items-center justify-center">
+                                <div className="w-full h-full bg-gradient-to-br from-[#1e3a5f]/5 to-indigo-50 flex items-center justify-center">
                                   <Package className="h-10 w-10 text-[#1e3a5f]/20" />
                                 </div>
                               )}
-                              {/* Badges superpos√©s */}
+                              {/* Badges superposÈs */}
                               <div className="absolute top-2 left-2 flex flex-wrap gap-1.5">
-                                {product.featured && <span className="text-xs bg-amber-500 text-white px-2 py-0.5 rounded-full font-semibold shadow-sm">‚≠ê Vedette</span>}
+                                {product.featured && <span className="text-xs bg-amber-500 text-white px-2 py-0.5 rounded-full font-semibold shadow-sm">? Vedette</span>}
                                 {product.isNew && <span className="text-xs bg-emerald-500 text-white px-2 py-0.5 rounded-full font-semibold shadow-sm">Nouveau</span>}
                               </div>
                               {product.inStock === false && (
@@ -592,7 +592,7 @@ export default function ExhibitorDetailPage() {
                             </div>
                             <div className="p-4 space-y-2.5">
                               <div>
-                                {product.category && <p className="text-xs text-blue-600 font-semibold uppercase tracking-wide mb-1">{product.category}</p>}
+                                {product.category && <p className="text-xs text-indigo-600 font-semibold uppercase tracking-wide mb-1">{product.category}</p>}
                                 <h4 className="font-bold text-gray-900">{product.name}</h4>
                               </div>
                               {product.description && <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">{product.description}</p>}
@@ -603,7 +603,7 @@ export default function ExhibitorDetailPage() {
                                 </div>
                                 {product.certified && (
                                   <span className="inline-flex items-center gap-1 text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-lg font-medium">
-                                    <CheckCircle className="h-3 w-3" /> Certifi√©
+                                    <CheckCircle className="h-3 w-3" /> CertifiÈ
                                   </span>
                                 )}
                               </div>
@@ -615,13 +615,13 @@ export default function ExhibitorDetailPage() {
                       <div className="flex flex-col items-center justify-center py-20 text-center">
                         <Package className="h-14 w-14 text-gray-200 mb-4" />
                         <p className="text-gray-500 font-medium">Aucun produit disponible</p>
-                        <p className="text-sm text-gray-400 mt-1">Cet exposant n'a pas encore publi√© de produits</p>
+                        <p className="text-sm text-gray-400 mt-1">Cet exposant n'a pas encore publiÈ de produits</p>
                       </div>
                     )}
                   </motion.div>
                 )}
 
-                {/* ‚îÄ‚îÄ‚îÄ √Ä PROPOS ‚îÄ‚îÄ‚îÄ */}
+                {/* --- ¿ PROPOS --- */}
                 {activeTab === 'impact' && (
                   <motion.div key="impact" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                     <div className="flex items-center gap-4">
@@ -645,34 +645,34 @@ export default function ExhibitorDetailPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {exhibitor.establishedYear && (
                         <div className="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-white">
-                          <Calendar className="h-5 w-5 text-blue-500 shrink-0" />
+                          <Calendar className="h-5 w-5 text-indigo-500 shrink-0" />
                           <div>
-                            <p className="text-xs text-gray-400">Fond√©e en</p>
+                            <p className="text-xs text-gray-400">FondÈe en</p>
                             <p className="font-semibold text-gray-900">{exhibitor.establishedYear}</p>
                           </div>
                         </div>
                       )}
                       {exhibitor.employeeCount && (
                         <div className="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-white">
-                          <Users className="h-5 w-5 text-blue-500 shrink-0" />
+                          <Users className="h-5 w-5 text-indigo-500 shrink-0" />
                           <div>
                             <p className="text-xs text-gray-400">Effectif</p>
-                            <p className="font-semibold text-gray-900">{exhibitor.employeeCount} employ√©s</p>
+                            <p className="font-semibold text-gray-900">{exhibitor.employeeCount} employÈs</p>
                           </div>
                         </div>
                       )}
                       {exhibitor.contactInfo?.city && (
                         <div className="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-white">
-                          <MapPin className="h-5 w-5 text-blue-500 shrink-0" />
+                          <MapPin className="h-5 w-5 text-indigo-500 shrink-0" />
                           <div>
-                            <p className="text-xs text-gray-400">Si√®ge social</p>
+                            <p className="text-xs text-gray-400">SiËge social</p>
                             <p className="font-semibold text-gray-900">{exhibitor.contactInfo.city}, {exhibitor.contactInfo.country}</p>
                           </div>
                         </div>
                       )}
                       {exhibitor.revenue && (
                         <div className="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-white">
-                          <TrendingUp className="h-5 w-5 text-blue-500 shrink-0" />
+                          <TrendingUp className="h-5 w-5 text-indigo-500 shrink-0" />
                           <div>
                             <p className="text-xs text-gray-400">Chiffre d'affaires</p>
                             <p className="font-semibold text-gray-900">{exhibitor.revenue}</p>
@@ -696,16 +696,16 @@ export default function ExhibitorDetailPage() {
                   </motion.div>
                 )}
 
-                {/* ‚îÄ‚îÄ‚îÄ CONTACT ‚îÄ‚îÄ‚îÄ */}
+                {/* --- CONTACT --- */}
                 {activeTab === 'contact' && (
                   <motion.div key="contact" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                     <h3 className="text-base font-semibold text-gray-900">Contactez {exhibitor.companyName}</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {exhibitor.contactInfo?.email && (
                         <a href={`mailto:${exhibitor.contactInfo.email}`}
-                          className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all group">
-                          <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 group-hover:bg-blue-500 transition-colors">
-                            <Mail className="h-5 w-5 text-blue-600 group-hover:text-white" />
+                          className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all group">
+                          <div className="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0 group-hover:bg-indigo-500 transition-colors">
+                            <Mail className="h-5 w-5 text-indigo-600 group-hover:text-white" />
                           </div>
                           <div className="min-w-0">
                             <p className="text-xs text-gray-400 mb-0.5">Email</p>
@@ -715,25 +715,25 @@ export default function ExhibitorDetailPage() {
                       )}
                       {exhibitor.contactInfo?.phone && (
                         <a href={`tel:${exhibitor.contactInfo.phone}`}
-                          className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all group">
-                          <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 group-hover:bg-blue-500 transition-colors">
-                            <Phone className="h-5 w-5 text-blue-600 group-hover:text-white" />
+                          className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all group">
+                          <div className="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0 group-hover:bg-indigo-500 transition-colors">
+                            <Phone className="h-5 w-5 text-indigo-600 group-hover:text-white" />
                           </div>
                           <div>
-                            <p className="text-xs text-gray-400 mb-0.5">T√©l√©phone</p>
+                            <p className="text-xs text-gray-400 mb-0.5">TÈlÈphone</p>
                             <p className="text-sm font-medium text-gray-900">{exhibitor.contactInfo.phone}</p>
                           </div>
                         </a>
                       )}
                       {exhibitor.website && (
                         <a href={exhibitor.website} target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all group">
-                          <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 group-hover:bg-blue-500 transition-colors">
-                            <Globe className="h-5 w-5 text-blue-600 group-hover:text-white" />
+                          className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all group">
+                          <div className="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0 group-hover:bg-indigo-500 transition-colors">
+                            <Globe className="h-5 w-5 text-indigo-600 group-hover:text-white" />
                           </div>
                           <div className="min-w-0">
                             <p className="text-xs text-gray-400 mb-0.5">Site web</p>
-                            <p className="text-sm font-medium text-blue-600 truncate">{exhibitor.website}</p>
+                            <p className="text-sm font-medium text-indigo-600 truncate">{exhibitor.website}</p>
                           </div>
                         </a>
                       )}
@@ -754,9 +754,9 @@ export default function ExhibitorDetailPage() {
                     {/* CTA planifier RDV */}
                     <div className="mt-6 p-5 bg-[#1e3a5f] rounded-xl text-white">
                       <h4 className="font-semibold mb-1">Planifier une rencontre B2B</h4>
-                      <p className="text-blue-200 text-sm mb-4">R√©servez un cr√©neau directement avec {exhibitor.companyName} lors du salon SIB 2026.</p>
+                      <p className="text-indigo-200 text-sm mb-4">RÈservez un crÈneau directement avec {exhibitor.companyName} lors du salon SIB 2026.</p>
                       <button onClick={handleAppointmentClick}
-                        className="w-full bg-white text-[#1e3a5f] rounded-lg py-2.5 font-semibold text-sm hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                        className="w-full bg-white text-[#1e3a5f] rounded-lg py-2.5 font-semibold text-sm hover:bg-indigo-50 transition-colors flex items-center justify-center gap-2">
                         <Calendar className="h-4 w-4" />
                         Planifier un RDV B2B
                       </button>
@@ -782,16 +782,16 @@ export default function ExhibitorDetailPage() {
       />
     )}
 
-    {/* Modal RDV ‚Äî m√™me comportement que la page R√©seautage */}
+    {/* Modal RDV ó mÍme comportement que la page RÈseautage */}
     {showRdvModal && exhibitor && (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
           {/* Header */}
-          <div className="bg-gradient-to-br from-[#1e3a5f] to-blue-700 text-white p-6 rounded-t-2xl sticky top-0 z-10">
+          <div className="bg-gradient-to-br from-[#1e3a5f] to-indigo-700 text-white p-6 rounded-t-2xl sticky top-0 z-10">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-bold">Prendre RDV avec {exhibitor.companyName}</h3>
-                <p className="text-blue-200 text-sm mt-0.5">S√©lectionnez un cr√©neau disponible</p>
+                <p className="text-indigo-200 text-sm mt-0.5">SÈlectionnez un crÈneau disponible</p>
               </div>
               <button
                 onClick={() => setShowRdvModal(false)}
@@ -803,7 +803,7 @@ export default function ExhibitorDetailPage() {
           </div>
 
           <div className="p-6 space-y-5">
-            {/* Cr√©neaux horaires */}
+            {/* CrÈneaux horaires */}
             {(() => {
               const filteredSlots = timeSlots.filter(slot => {
                 if (slot.available === false) {return false;}
@@ -814,16 +814,16 @@ export default function ExhibitorDetailPage() {
               if (filteredSlots.length === 0) {return (
                 <div className="text-center py-10 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
                   <Calendar className="h-10 w-10 text-gray-300 mx-auto mb-2" />
-                  <p className="text-gray-500 font-medium">Aucun cr√©neau disponible</p>
-                  <p className="text-sm text-gray-400 mt-1">Veuillez r√©essayer plus tard ou contacter l'exposant</p>
+                  <p className="text-gray-500 font-medium">Aucun crÈneau disponible</p>
+                  <p className="text-sm text-gray-400 mt-1">Veuillez rÈessayer plus tard ou contacter l'exposant</p>
                 </div>
               );}
 
               return (
                 <div>
                   <label className="block text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-blue-600" />
-                    Choisir un cr√©neau horaire
+                    <Calendar className="h-4 w-4 text-indigo-600" />
+                    Choisir un crÈneau horaire
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-72 overflow-y-auto p-1">
                     {filteredSlots.map(slot => {
@@ -841,14 +841,14 @@ export default function ExhibitorDetailPage() {
                             booked
                               ? 'border-green-200 bg-green-50 opacity-70 cursor-not-allowed'
                               : isSelected
-                              ? 'border-[#1e3a5f] bg-blue-50 shadow-md'
-                              : 'border-gray-200 hover:border-blue-300 hover:shadow'
+                              ? 'border-[#1e3a5f] bg-indigo-50 shadow-md'
+                              : 'border-gray-200 hover:border-indigo-300 hover:shadow'
                           }`}
                         >
                           <div className="font-semibold text-gray-800 capitalize text-xs mb-1">{dateLabel}</div>
-                          <div className="flex items-center gap-1 text-blue-600 font-bold text-sm">
+                          <div className="flex items-center gap-1 text-indigo-600 font-bold text-sm">
                             <Clock className="h-3.5 w-3.5" />
-                            {slot.startTime} ‚Äì {slot.endTime}
+                            {slot.startTime} ñ {slot.endTime}
                           </div>
                           {slot.location && (
                             <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
@@ -856,13 +856,13 @@ export default function ExhibitorDetailPage() {
                             </div>
                           )}
                           <div className="text-xs text-gray-400 mt-1">
-                            {slot.currentBookings || 0}/{slot.maxBookings} r√©serv√©(s)
+                            {slot.currentBookings || 0}/{slot.maxBookings} rÈservÈ(s)
                           </div>
                           {booked && (
                             <span className={`absolute top-2 right-2 text-xs text-white px-2 py-0.5 rounded-full font-bold ${
                               booked.status === 'confirmed' ? 'bg-green-500' : 'bg-yellow-500'
                             }`}>
-                              {booked.status === 'confirmed' ? 'Confirm√©' : 'En attente'}
+                              {booked.status === 'confirmed' ? 'ConfirmÈ' : 'En attente'}
                             </span>
                           )}
                           {isSelected && !booked && (
@@ -879,13 +879,13 @@ export default function ExhibitorDetailPage() {
             {/* Message optionnel */}
             <div>
               <label className="block text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
-                <MessageCircle className="h-4 w-4 text-blue-600" />
+                <MessageCircle className="h-4 w-4 text-indigo-600" />
                 Message (optionnel)
               </label>
               <textarea
                 value={appointmentMessage}
                 onChange={e => setAppointmentMessage(e.target.value)}
-                placeholder="D√©crivez bri√®vement l'objet de votre rendez-vous..."
+                placeholder="DÈcrivez briËvement l'objet de votre rendez-vous..."
                 rows={3}
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] focus:border-[#1e3a5f] resize-none text-sm"
               />
@@ -907,7 +907,7 @@ export default function ExhibitorDetailPage() {
                     <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
                     Envoi en cours...
                   </span>
-                ) : selectedTimeSlot ? 'Envoyer la demande' : 'S√©lectionnez un cr√©neau'}
+                ) : selectedTimeSlot ? 'Envoyer la demande' : 'SÈlectionnez un crÈneau'}
               </button>
               <button
                 onClick={() => setShowRdvModal(false)}
@@ -923,3 +923,4 @@ export default function ExhibitorDetailPage() {
     </>
   );
 }
+

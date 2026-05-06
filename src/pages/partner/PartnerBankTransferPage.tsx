@@ -1,4 +1,4 @@
-Ôªøimport React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -97,7 +97,7 @@ export default function PartnerBankTransferPage() {
 
   async function handleSubmitProof() {
     if (!requestId || !transferReference.trim()) {
-      toast.error('Veuillez renseigner la r√©f√©rence de votre virement');
+      toast.error('Veuillez renseigner la rÈfÈrence de votre virement');
       return;
     }
 
@@ -106,16 +106,16 @@ export default function PartnerBankTransferPage() {
       return;
     }
 
-    // Fix P0-5 : Validation du montant d√©clar√©
+    // Fix P0-5 : Validation du montant dÈclarÈ
     const expectedAmount = paymentRequest?.amount;
     const parsedDeclaredAmount = parseFloat(declaredAmount.replace(/[^0-9.]/g, ''));
     if (!declaredAmount.trim() || isNaN(parsedDeclaredAmount)) {
-      toast.error('Veuillez saisir le montant exact que vous avez vir√©');
+      toast.error('Veuillez saisir le montant exact que vous avez virÈ');
       return;
     }
     if (expectedAmount && Math.abs(parsedDeclaredAmount - expectedAmount) > 0.01) {
       toast.error(
-        `Montant incorrect. Attendu : $${expectedAmount.toLocaleString('fr-FR')} USD ‚Äî Saisi : $${parsedDeclaredAmount.toLocaleString('fr-FR')} USD. V√©rifiez votre virement.`
+        `Montant incorrect. Attendu : $${expectedAmount.toLocaleString('fr-FR')} USD ó Saisi : $${parsedDeclaredAmount.toLocaleString('fr-FR')} USD. VÈrifiez votre virement.`
       );
       return;
     }
@@ -164,15 +164,15 @@ export default function PartnerBankTransferPage() {
 
       if (error) {throw error;}
 
-      // Cr√©er une notification pour les admins
+      // CrÈer une notification pour les admins
       try {
-        // R√©cup√©rer tous les admins
+        // RÈcupÈrer tous les admins
         const { data: admins } = await supabase
           .from('users')
           .select('id')
           .eq('type', 'admin');
 
-        // Cr√©er une notification pour chaque admin
+        // CrÈer une notification pour chaque admin
         if (admins && admins.length > 0) {
           const notifications = admins.map(admin => ({
             user_id: admin.id,
@@ -185,12 +185,12 @@ export default function PartnerBankTransferPage() {
           await supabase.from('notifications').insert(notifications);
         }
       } catch (notifError) {
-        console.error('Erreur cr√©ation notification admin:', notifError);
-        // Ne pas bloquer si la notification √©choue
+        console.error('Erreur crÈation notification admin:', notifError);
+        // Ne pas bloquer si la notification Èchoue
       }
 
-      toast.success('Justificatif enregistr√© avec succ√®s !');
-      toast.info('Votre paiement sera valid√© sous 2-5 jours ouvr√©s');
+      toast.success('Justificatif enregistrÈ avec succËs !');
+      toast.info('Votre paiement sera validÈ sous 2-5 jours ouvrÈs');
       setSelectedFile(null);
       setUploadProgress(0);
       loadPaymentRequest();
@@ -209,7 +209,7 @@ export default function PartnerBankTransferPage() {
     // Validate file type
     const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
     if (!validTypes.includes(file.type)) {
-      toast.error('Format non support√©. Utilisez PDF, JPG ou PNG');
+      toast.error('Format non supportÈ. Utilisez PDF, JPG ou PNG');
       return;
     }
 
@@ -220,14 +220,14 @@ export default function PartnerBankTransferPage() {
     }
 
     setSelectedFile(file);
-    toast.success(`Fichier s√©lectionn√©: ${file.name}`);
+    toast.success(`Fichier sÈlectionnÈ: ${file.name}`);
   }
 
   function copyToClipboard(text: string, label: string) {
     navigator.clipboard.writeText(text)
       .then(() => {
         setCopied(true);
-        toast.success(`${label} copi√© dans le presse-papier`);
+        toast.success(`${label} copiÈ dans le presse-papier`);
         setTimeout(() => setCopied(false), 2000);
       })
       .catch(() => toast.error('Impossible de copier'));
@@ -237,7 +237,7 @@ export default function PartnerBankTransferPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
@@ -249,9 +249,9 @@ export default function PartnerBankTransferPage() {
       <div className="min-h-screen flex items-center justify-center">
         <Card className="p-8 max-w-md">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-center mb-2">Acc√®s non autoris√©</h2>
+          <h2 className="text-xl font-bold text-center mb-2">AccËs non autorisÈ</h2>
           <p className="text-gray-600 text-center mb-4">
-            Vous devez d'abord soumettre une demande de partenariat avant d'acc√©der √† cette page.
+            Vous devez d'abord soumettre une demande de partenariat avant d'accÈder ‡ cette page.
           </p>
           <Button onClick={() => navigate('/partner/upgrade')} className="w-full">
             Faire une demande de partenariat
@@ -267,7 +267,7 @@ export default function PartnerBankTransferPage() {
   const instructions = bankInfo.instructions.fr;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
+    <div className="min-h-screen bg-slate-50 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -285,7 +285,7 @@ export default function PartnerBankTransferPage() {
           </Button>
 
           <div className="text-center">
-            <Building2 className="h-16 w-16 mx-auto mb-4 text-blue-600" />
+            <Building2 className="h-16 w-16 mx-auto mb-4 text-indigo-600" />
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
               Instructions de Virement Bancaire
             </h1>
@@ -308,7 +308,7 @@ export default function PartnerBankTransferPage() {
                 <div>
                   <p className="font-semibold text-yellow-800">Demande en attente de validation</p>
                   <p className="text-yellow-700 text-sm mt-1">
-                    Votre demande sera trait√©e sous 2-5 jours ouvr√©s apr√®s r√©ception du virement
+                    Votre demande sera traitÈe sous 2-5 jours ouvrÈs aprËs rÈception du virement
                   </p>
                 </div>
               </div>
@@ -318,9 +318,9 @@ export default function PartnerBankTransferPage() {
               <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start">
                 <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-green-800">Paiement approuv√© !</p>
+                  <p className="font-semibold text-green-800">Paiement approuvÈ !</p>
                   <p className="text-green-700 text-sm mt-1">
-                    Votre compte a √©t√© activ√© avec le niveau {tierInfo.displayName}
+                    Votre compte a ÈtÈ activÈ avec le niveau {tierInfo.displayName}
                   </p>
                 </div>
               </div>
@@ -330,7 +330,7 @@ export default function PartnerBankTransferPage() {
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start">
                 <XCircle className="h-5 w-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-red-800">Paiement refus√©</p>
+                  <p className="font-semibold text-red-800">Paiement refusÈ</p>
                   {paymentRequest.validation_notes && (
                     <p className="text-red-700 text-sm mt-1">
                       Raison: {paymentRequest.validation_notes}
@@ -343,9 +343,9 @@ export default function PartnerBankTransferPage() {
         )}
 
         {/* Bank Information Card */}
-        <Card className="p-6 mb-6 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <Card className="p-6 mb-6 bg-gradient-to-r from-indigo-50 to-indigo-50">
           <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-            <Building2 className="h-6 w-6 mr-2 text-blue-600" />
+            <Building2 className="h-6 w-6 mr-2 text-indigo-600" />
             Informations Bancaires
           </h2>
 
@@ -394,20 +394,20 @@ export default function PartnerBankTransferPage() {
 
             <div className="border-t border-gray-300 pt-4 mt-4">
               <div className="flex justify-between items-center">
-                <span className="text-gray-700 font-medium text-lg">Montant √† virer:</span>
+                <span className="text-gray-700 font-medium text-lg">Montant ‡ virer:</span>
                 <span className="text-3xl font-bold text-green-600">
                   {formatPartnerAmount(tierInfo.amount)}
                 </span>
               </div>
               <div className="mt-2 text-sm text-gray-600">
-                √âgalement: {formatPartnerAmount(tierInfo.amount, 'EUR')} |{' '}
+                …galement: {formatPartnerAmount(tierInfo.amount, 'EUR')} |{' '}
                 {formatPartnerAmount(tierInfo.amount, 'MAD')}
               </div>
             </div>
 
             <div className="border-t border-gray-300 pt-4 mt-4">
               <div className="mb-2">
-                <span className="text-gray-700 font-medium">R√©f√©rence obligatoire:</span>
+                <span className="text-gray-700 font-medium">RÈfÈrence obligatoire:</span>
               </div>
               <div className="flex items-center space-x-2">
                 <code className="bg-yellow-100 px-3 py-2 rounded border-2 border-yellow-400 font-mono text-sm font-bold flex-1">
@@ -416,13 +416,13 @@ export default function PartnerBankTransferPage() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => copyToClipboard(paymentReference, 'R√©f√©rence')}
+                  onClick={() => copyToClipboard(paymentReference, 'RÈfÈrence')}
                 >
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 </Button>
               </div>
               <p className="text-xs text-red-600 mt-2 font-semibold">
-                ‚ö†Ô∏è Cette r√©f√©rence DOIT figurer dans le libell√© de votre virement
+                ?? Cette rÈfÈrence DOIT figurer dans le libellÈ de votre virement
               </p>
             </div>
           </div>
@@ -436,7 +436,7 @@ export default function PartnerBankTransferPage() {
 
           <div className="space-y-4">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">√âtapes √† suivre:</h4>
+              <h4 className="font-semibold text-gray-900 mb-2">…tapes ‡ suivre:</h4>
               <ol className="list-decimal list-inside space-y-2 text-gray-700">
                 {instructions.steps.map((step) => (
                   <li key={step}>{step}</li>
@@ -456,14 +456,14 @@ export default function PartnerBankTransferPage() {
               </ul>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+              <h4 className="font-semibold text-indigo-900 mb-2 flex items-center">
                 <Info className="h-5 w-5 mr-2" />
-                Informations compl√©mentaires:
+                Informations complÈmentaires:
               </h4>
-              <ul className="space-y-1 text-sm text-blue-800">
+              <ul className="space-y-1 text-sm text-indigo-800">
                 {instructions.additionalInfo.map((item) => (
-                  <li key={item}>‚Ä¢ {item}</li>
+                  <li key={item}>ï {item}</li>
                 ))}
               </ul>
             </div>
@@ -474,15 +474,15 @@ export default function PartnerBankTransferPage() {
         {paymentRequest?.status === 'pending' && !paymentRequest.transfer_reference && (
           <Card className="p-6 mb-6">
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-              <Upload className="h-6 w-6 mr-2 text-blue-600" />
+              <Upload className="h-6 w-6 mr-2 text-indigo-600" />
               Soumettre votre preuve de paiement
             </h3>
 
             <div className="space-y-4">
-              {/* Montant d√©clar√© - Fix P0-5 */}
+              {/* Montant dÈclarÈ - Fix P0-5 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Montant vir√© (USD) <span className="text-red-500">*</span>
+                  Montant virÈ (USD) <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 font-medium">$</span>
@@ -491,11 +491,11 @@ export default function PartnerBankTransferPage() {
                     value={declaredAmount}
                     onChange={(e) => setDeclaredAmount(e.target.value)}
                     placeholder={paymentRequest?.amount ? `${paymentRequest.amount.toLocaleString('fr-FR')}` : '0'}
-                    className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
                 {paymentRequest?.amount && (
-                  <p className="text-xs text-blue-600 mt-1">
+                  <p className="text-xs text-indigo-600 mt-1">
                     Montant attendu : <strong>${paymentRequest.amount.toLocaleString('fr-FR')} USD</strong>
                   </p>
                 )}
@@ -507,7 +507,7 @@ export default function PartnerBankTransferPage() {
                 </label>
 
                 {/* File Upload */}
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 transition-colors">
                   <input
                     type="file"
                     id="proof-upload"
@@ -522,7 +522,7 @@ export default function PartnerBankTransferPage() {
                     <Upload className="h-12 w-12 text-gray-400 mb-2" />
                     {selectedFile ? (
                       <div className="text-sm">
-                        <p className="font-semibold text-green-600 mb-1">‚úì {selectedFile.name}</p>
+                        <p className="font-semibold text-green-600 mb-1">? {selectedFile.name}</p>
                         <p className="text-gray-500">
                           {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                         </p>
@@ -542,7 +542,7 @@ export default function PartnerBankTransferPage() {
                   {uploadProgress > 0 && uploadProgress < 100 && (
                     <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                        className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${uploadProgress}%` }}
                       ></div>
                     </div>
@@ -559,11 +559,11 @@ export default function PartnerBankTransferPage() {
                   value={proofUrl}
                   onChange={(e) => setProofUrl(e.target.value)}
                   placeholder="https://... (lien vers Google Drive, Dropbox, etc.)"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   disabled={!!selectedFile}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Si vous pr√©f√©rez, h√©bergez votre document sur un service cloud
+                  Si vous prÈfÈrez, hÈbergez votre document sur un service cloud
                 </p>
               </div>
 
@@ -591,12 +591,12 @@ export default function PartnerBankTransferPage() {
 
         {/* Submitted Proof Info */}
         {paymentRequest?.transfer_reference && (
-          <Card className="p-6 mb-6 bg-blue-50 border-blue-200">
+          <Card className="p-6 mb-6 bg-indigo-50 border-indigo-200">
             <div className="flex items-start">
-              <CheckCircle className="h-6 w-6 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+              <CheckCircle className="h-6 w-6 text-indigo-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-blue-900">Justificatif soumis avec succ√®s</p>
-                <p className="text-blue-800 text-sm mt-1">
+                <p className="font-semibold text-indigo-900">Justificatif soumis avec succËs</p>
+                <p className="text-indigo-800 text-sm mt-1">
                   Date de soumission:{' '}
                   {new Date(paymentRequest.transfer_date || '').toLocaleDateString('fr-FR', {
                     day: 'numeric',
@@ -606,24 +606,24 @@ export default function PartnerBankTransferPage() {
                     minute: '2-digit'
                   })}
                 </p>
-                <p className="text-blue-800 text-sm mt-1">
-                  <strong>R√©f√©rence:</strong> {paymentRequest.transfer_reference}
+                <p className="text-indigo-800 text-sm mt-1">
+                  <strong>RÈfÈrence:</strong> {paymentRequest.transfer_reference}
                 </p>
                 {paymentRequest.transfer_proof_url && (
-                  <p className="text-blue-800 text-sm mt-1">
+                  <p className="text-indigo-800 text-sm mt-1">
                     <strong>Justificatif:</strong>{' '}
                     <a
                       href={paymentRequest.transfer_proof_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline hover:text-blue-600"
+                      className="underline hover:text-indigo-600"
                     >
                       Voir le document
                     </a>
                   </p>
                 )}
-                <p className="text-blue-700 text-sm mt-3">
-                  √¢¬è¬≥ Votre demande est en cours de traitement. Vous serez notifi√© par email d√®s validation.
+                <p className="text-indigo-700 text-sm mt-3">
+                  ‚è≥ Votre demande est en cours de traitement. Vous serez notifiÈ par email dËs validation.
                 </p>
               </div>
             </div>
@@ -633,7 +633,7 @@ export default function PartnerBankTransferPage() {
         {/* Features Included */}
         <Card className="p-6 mb-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4">
-            ‚ú® Inclus dans votre abonnement {tierInfo.displayName}
+            ? Inclus dans votre abonnement {tierInfo.displayName}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {tierInfo.features.map((feature) => (
@@ -653,19 +653,19 @@ export default function PartnerBankTransferPage() {
           <div className="space-y-2 text-sm text-gray-700">
             <p>
               <strong>Email:</strong>{' '}
-              <a href={`mailto:${bankInfo.support.email}`} className="text-blue-600 hover:underline">
+              <a href={`mailto:${bankInfo.support.email}`} className="text-indigo-600 hover:underline">
                 {bankInfo.support.email}
               </a>
             </p>
             <p>
-              <strong>T√©l√©phone:</strong>{' '}
-              <a href={`tel:${bankInfo.support.phone}`} className="text-blue-600 hover:underline">
+              <strong>TÈlÈphone:</strong>{' '}
+              <a href={`tel:${bankInfo.support.phone}`} className="text-indigo-600 hover:underline">
                 {bankInfo.support.phone}
               </a>
             </p>
             <p>
               <strong>WhatsApp:</strong>{' '}
-              <a href={`https://wa.me/${bankInfo.support.whatsapp.replace(/\s/g, '')}`} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+              <a href={`https://wa.me/${bankInfo.support.whatsapp.replace(/\s/g, '')}`} className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
                 {bankInfo.support.whatsapp}
               </a>
             </p>
@@ -676,6 +676,7 @@ export default function PartnerBankTransferPage() {
     </div>
   );
 }
+
 
 
 

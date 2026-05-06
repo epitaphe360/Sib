@@ -95,7 +95,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
@@ -115,7 +115,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -141,7 +141,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
             {/* Title & Episode Info */}
             <div>
               <div className="flex items-center space-x-2 mb-2">
-                <Headphones className="h-5 w-5 text-blue-600" />
+                <Headphones className="h-5 w-5 text-indigo-600" />
                 {episode.season_number && episode.episode_number && (
                   <span className="text-sm text-gray-600">
                     Saison {episode.season_number} • Épisode {episode.episode_number}
@@ -220,7 +220,7 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                   Invité de cet épisode
                 </h2>
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                     <span className="text-2xl font-semibold text-white">
                       {episode.guest_name.charAt(0)}
                     </span>
@@ -260,8 +260,8 @@ export const PodcastEpisodeDetailPage: React.FC = () => {
                       className="w-16 h-16 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                      <span className="text-2xl font-semibold text-blue-600">
+                    <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center">
+                      <span className="text-2xl font-semibold text-indigo-600">
                         {episode.host_name.charAt(0)}
                       </span>
                     </div>

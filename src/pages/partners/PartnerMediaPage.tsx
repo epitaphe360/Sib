@@ -1,4 +1,4 @@
-Ôªøimport React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -54,7 +54,7 @@ export const PartnerMediaPage: React.FC = () => {
     const fetchMentions = async () => {
       if (!user) {return;}
       try {
-        // R√©cup√®re le partner_id de l'utilisateur connect√©
+        // RÈcupËre le partner_id de l'utilisateur connectÈ
         const { data: partnerData } = await supabase
           .from('partners')
           .select('id')
@@ -71,7 +71,7 @@ export const PartnerMediaPage: React.FC = () => {
 
         if (!error && data) {setMentions(data as MediaMention[]);}
       } catch {
-        // table peut ne pas exister encore ‚Äî afficher √©tat vide
+        // table peut ne pas exister encore ó afficher Ètat vide
       } finally {
         setLoading(false);
       }
@@ -94,35 +94,35 @@ export const PartnerMediaPage: React.FC = () => {
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
       case 'very_positive': return 'text-green-600 bg-green-50';
-      case 'positive': return 'text-blue-600 bg-blue-50';
+      case 'positive': return 'text-indigo-600 bg-indigo-50';
       case 'neutral': return 'text-yellow-600 bg-yellow-50';
       case 'negative': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-600 bg-gray-50';
+      default: return 'text-gray-600 bg-slate-50';
     }
   };
 
   const getSentimentLabel = (sentiment: string) => {
     switch (sentiment) {
-      case 'very_positive': return 'Tr√®s positif';
+      case 'very_positive': return 'TrËs positif';
       case 'positive': return 'Positif';
       case 'neutral': return 'Neutre';
-      case 'negative': return 'N√©gatif';
+      case 'negative': return 'NÈgatif';
       default: return sentiment;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Diffus√©': return 'text-green-600 bg-green-50';
-      case 'Programm√©': return 'text-blue-600 bg-blue-50';
-      case 'Confirm√©': return 'text-purple-600 bg-purple-50';
-      case 'En pr√©paration': return 'text-yellow-600 bg-yellow-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'DiffusÈ': return 'text-green-600 bg-green-50';
+      case 'ProgrammÈ': return 'text-indigo-600 bg-indigo-50';
+      case 'ConfirmÈ': return 'text-purple-600 bg-purple-50';
+      case 'En prÈparation': return 'text-yellow-600 bg-yellow-50';
+      default: return 'text-gray-600 bg-slate-50';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -132,35 +132,35 @@ export const PartnerMediaPage: React.FC = () => {
           </Link>
 
           <div className="flex items-center space-x-3 mb-4">
-            <div className="bg-blue-600 p-3 rounded-lg">
+            <div className="bg-indigo-600 p-3 rounded-lg">
               <Tv className="h-8 w-8 text-white" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                M√©dias & Communication
+                MÈdias & Communication
               </h1>
               <p className="text-gray-600">
-                Suivez votre couverture m√©diatique et votre pr√©sence dans les m√©dias
+                Suivez votre couverture mÈdiatique et votre prÈsence dans les mÈdias
               </p>
             </div>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Crown className="h-5 w-5 text-blue-600" />
-                <span className="text-blue-800 font-medium">Couverture M√©diatique Premium</span>
-                <Badge className="bg-blue-100 text-blue-800" size="sm">
-                  Temps R√©el
+                <Crown className="h-5 w-5 text-indigo-600" />
+                <span className="text-indigo-800 font-medium">Couverture MÈdiatique Premium</span>
+                <Badge className="bg-indigo-100 text-indigo-800" size="sm">
+                  Temps RÈel
                 </Badge>
               </div>
               <div className="flex gap-3">
                 <Link
                   to={ROUTES.PARTNER_MEDIA_UPLOAD}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
                 >
                   <Upload className="w-4 h-4" />
-                  Uploader un m√©dia
+                  Uploader un mÈdia
                 </Link>
                 <Link
                   to={ROUTES.PARTNER_MEDIA_ANALYTICS}
@@ -174,7 +174,7 @@ export const PartnerMediaPage: React.FC = () => {
                   className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
                 >
                   <Library className="w-4 h-4" />
-                  Biblioth√®que
+                  BibliothËque
                 </Link>
               </div>
             </div>
@@ -187,11 +187,11 @@ export const PartnerMediaPage: React.FC = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <Newspaper className="h-8 w-8 text-blue-600" />
+                  <Newspaper className="h-8 w-8 text-indigo-600" />
                 </div>
                 <div className="text-right">
                   <p className="text-2xl font-bold text-gray-900">{overview.totalMentions}</p>
-                  <p className="text-sm text-gray-600">Mentions m√©dias</p>
+                  <p className="text-sm text-gray-600">Mentions mÈdias</p>
                 </div>
               </div>
             </div>
@@ -232,8 +232,8 @@ export const PartnerMediaPage: React.FC = () => {
                   <Award className="h-8 w-8 text-orange-600" />
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-gray-900">{overview.mediaValue.toLocaleString()}‚Ç¨</p>
-                  <p className="text-sm text-gray-600">Valeur m√©dia</p>
+                  <p className="text-2xl font-bold text-gray-900">{overview.mediaValue.toLocaleString()}Ä</p>
+                  <p className="text-sm text-gray-600">Valeur mÈdia</p>
                 </div>
               </div>
             </div>
@@ -244,18 +244,18 @@ export const PartnerMediaPage: React.FC = () => {
         <Card className="mb-8">
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-6">
-              <Tv className="h-6 w-6 text-blue-600" />
-              <h3 className="text-lg font-semibold text-gray-900">T√©l√©vision</h3>
+              <Tv className="h-6 w-6 text-indigo-600" />
+              <h3 className="text-lg font-semibold text-gray-900">TÈlÈvision</h3>
             </div>
 
             {loading ? (
-              <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-blue-600" /></div>
+              <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-indigo-600" /></div>
             ) : tvMentions.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">Aucune mention TV enregistr√©e</div>
+              <div className="text-center py-8 text-gray-500">Aucune mention TV enregistrÈe</div>
             ) : (
               <div className="space-y-4">
                 {tvMentions.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={item.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h4 className="font-semibold text-gray-900">{item.title}</h4>
@@ -263,9 +263,9 @@ export const PartnerMediaPage: React.FC = () => {
                       </div>
                       {item.description && <p className="text-gray-600 text-sm mb-2">{item.description}</p>}
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        {item.mention_date && <span>üìÖ {item.mention_date}</span>}
-                        {item.reach && <span>üë• {item.reach} t√©l√©spectateurs</span>}
-                        {item.duration && <span>‚è±Ô∏è {item.duration}</span>}
+                        {item.mention_date && <span>?? {item.mention_date}</span>}
+                        {item.reach && <span>?? {item.reach} tÈlÈspectateurs</span>}
+                        {item.duration && <span>?? {item.duration}</span>}
                       </div>
                     </div>
                     {item.url && <a href={item.url} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-5 w-5 text-gray-400 hover:text-gray-600" /></a>}
@@ -281,17 +281,17 @@ export const PartnerMediaPage: React.FC = () => {
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-6">
               <Newspaper className="h-6 w-6 text-green-600" />
-              <h3 className="text-lg font-semibold text-gray-900">Presse √âcrite</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Presse …crite</h3>
             </div>
 
             {loading ? (
               <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-green-600" /></div>
             ) : pressMentions.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">Aucune mention presse enregistr√©e</div>
+              <div className="text-center py-8 text-gray-500">Aucune mention presse enregistrÈe</div>
             ) : (
               <div className="space-y-4">
                 {pressMentions.map((item) => (
-                  <div key={item.id} className="p-4 bg-gray-50 rounded-lg">
+                  <div key={item.id} className="p-4 bg-slate-50 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-3">
                         <h4 className="font-semibold text-gray-900">{item.title}</h4>
@@ -303,7 +303,7 @@ export const PartnerMediaPage: React.FC = () => {
                     {item.headline && <h5 className="font-medium text-gray-900 mb-2">{item.headline}</h5>}
                     {item.excerpt && <p className="text-gray-600 text-sm mb-3">{item.excerpt}</p>}
                     <div className="flex items-center justify-between">
-                      {item.reach && <span className="text-sm text-gray-500">B√¢timent√©e estim√©e: {item.reach}</span>}
+                      {item.reach && <span className="text-sm text-gray-500">B‚timentÈe estimÈe: {item.reach}</span>}
                       {item.url && <a href={item.url} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-4 w-4 text-gray-400 hover:text-gray-600" /></a>}
                     </div>
                   </div>
@@ -318,17 +318,17 @@ export const PartnerMediaPage: React.FC = () => {
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-6">
               <Share2 className="h-6 w-6 text-purple-600" />
-              <h3 className="text-lg font-semibold text-gray-900">R√©seaux Sociaux</h3>
+              <h3 className="text-lg font-semibold text-gray-900">RÈseaux Sociaux</h3>
             </div>
 
             {loading ? (
               <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-purple-600" /></div>
             ) : socialMentions.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">Aucune mention sur les r√©seaux sociaux</div>
+              <div className="text-center py-8 text-gray-500">Aucune mention sur les rÈseaux sociaux</div>
             ) : (
               <div className="space-y-4">
                 {socialMentions.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={item.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         {item.platform && <span className="font-medium text-gray-900">{item.platform}</span>}
@@ -336,9 +336,9 @@ export const PartnerMediaPage: React.FC = () => {
                       </div>
                       {item.content && <p className="text-gray-900 text-sm mb-1">{item.content}</p>}
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        {item.mention_date && <span>üìÖ {item.mention_date}</span>}
-                        {item.engagement && <span>‚ù§Ô∏è {item.engagement}</span>}
-                        {item.reach && <span>üëÅÔ∏è {item.reach} impressions</span>}
+                        {item.mention_date && <span>?? {item.mention_date}</span>}
+                        {item.engagement && <span>?? {item.engagement}</span>}
+                        {item.reach && <span>??? {item.reach} impressions</span>}
                       </div>
                     </div>
                     {item.url && <a href={item.url} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-5 w-5 text-gray-400 hover:text-gray-600" /></a>}
@@ -354,17 +354,17 @@ export const PartnerMediaPage: React.FC = () => {
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-6">
               <Calendar className="h-6 w-6 text-orange-600" />
-              <h3 className="text-lg font-semibold text-gray-900">√âv√©nements M√©diatiques √† Venir</h3>
+              <h3 className="text-lg font-semibold text-gray-900">…vÈnements MÈdiatiques ‡ Venir</h3>
             </div>
 
             {loading ? (
               <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-orange-600" /></div>
             ) : upcomingMentions.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">Aucun √©v√©nement m√©diatique planifi√©</div>
+              <div className="text-center py-8 text-gray-500">Aucun ÈvÈnement mÈdiatique planifiÈ</div>
             ) : (
               <div className="space-y-4">
                 {upcomingMentions.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={item.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <span className="font-medium text-gray-900">{item.title}</span>
@@ -372,7 +372,7 @@ export const PartnerMediaPage: React.FC = () => {
                         {item.status && <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(item.status)}`}>{item.status}</span>}
                       </div>
                       {item.topic && <p className="text-gray-600 text-sm mb-2">{item.topic}</p>}
-                      {item.mention_date && <span className="text-sm text-gray-500">üìÖ {item.mention_date}</span>}
+                      {item.mention_date && <span className="text-sm text-gray-500">?? {item.mention_date}</span>}
                     </div>
                     <Calendar className="h-5 w-5 text-gray-400" />
                   </div>
@@ -387,3 +387,4 @@ export const PartnerMediaPage: React.FC = () => {
 };
 
 export default PartnerMediaPage;
+

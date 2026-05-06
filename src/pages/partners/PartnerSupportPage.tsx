@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -128,11 +128,11 @@ export const PartnerSupportPage: React.FC = () => {
     const resolved = t('partSupport.statusResolved');
     const pending = t('partSupport.statusPending');
     const closed = t('partSupport.statusClosed');
-    if (status === inProgress) {return 'text-blue-600 bg-blue-50';}
+    if (status === inProgress) {return 'text-indigo-600 bg-indigo-50';}
     if (status === resolved) {return 'text-green-600 bg-green-50';}
     if (status === pending) {return 'text-yellow-600 bg-yellow-50';}
-    if (status === closed) {return 'text-gray-600 bg-gray-50';}
-    return 'text-gray-600 bg-gray-50';
+    if (status === closed) {return 'text-gray-600 bg-slate-50';}
+    return 'text-gray-600 bg-slate-50';
   };
 
   const getPriorityColor = (priority: string) => {
@@ -140,7 +140,7 @@ export const PartnerSupportPage: React.FC = () => {
       case 'high': return 'text-red-600 bg-red-50';
       case 'medium': return 'text-yellow-600 bg-yellow-50';
       case 'low': return 'text-green-600 bg-green-50';
-      default: return 'text-gray-600 bg-gray-50';
+      default: return 'text-gray-600 bg-slate-50';
     }
   };
 
@@ -154,7 +154,7 @@ export const PartnerSupportPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -164,7 +164,7 @@ export const PartnerSupportPage: React.FC = () => {
           </Link>
 
           <div className="flex items-center space-x-3 mb-4">
-            <div className="bg-blue-600 p-3 rounded-lg">
+            <div className="bg-indigo-600 p-3 rounded-lg">
               <HeadphonesIcon className="h-8 w-8 text-white" />
             </div>
             <div>
@@ -177,11 +177,11 @@ export const PartnerSupportPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="h-5 w-5 text-blue-600" />
-              <span className="text-blue-800 font-medium">{t('partSupport.premiumSupport')}</span>
-              <Badge className="bg-blue-100 text-blue-800" size="sm">
+              <CheckCircle className="h-5 w-5 text-indigo-600" />
+              <span className="text-indigo-800 font-medium">{t('partSupport.premiumSupport')}</span>
+              <Badge className="bg-indigo-100 text-indigo-800" size="sm">
                 {t('partSupport.responseTime')}
               </Badge>
             </div>
@@ -222,7 +222,7 @@ export const PartnerSupportPage: React.FC = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <Clock className="h-8 w-8 text-blue-600" />
+                  <Clock className="h-8 w-8 text-indigo-600" />
                 </div>
                 <div className="text-right">
                   <p className="text-2xl font-bold text-gray-900">{supportData.overview.averageResponseTime}</p>
@@ -255,10 +255,10 @@ export const PartnerSupportPage: React.FC = () => {
               {supportData.quickActions.map((action) => (
                 <button
                   key={action.title}
-                  className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors text-left"
+                  className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-left"
                 >
                   <div className="flex items-center space-x-3 mb-2">
-                    <div className="text-blue-600">{action.icon}</div>
+                    <div className="text-indigo-600">{action.icon}</div>
                     <h4 className="font-medium text-gray-900">{action.title}</h4>
                   </div>
                   <p className="text-sm text-gray-600">{action.description}</p>
@@ -312,7 +312,7 @@ export const PartnerSupportPage: React.FC = () => {
                   </div>
 
                   <div className="flex space-x-2">
-                    <button className="flex items-center space-x-1 px-3 py-1 bg-blue-50 text-blue-600 rounded text-sm hover:bg-blue-100">
+                    <button className="flex items-center space-x-1 px-3 py-1 bg-indigo-50 text-indigo-600 rounded text-sm hover:bg-indigo-100">
                       <MessageSquare className="h-3 w-3" />
                       <span>{t('partSupport.reply')}</span>
                     </button>
@@ -337,7 +337,7 @@ export const PartnerSupportPage: React.FC = () => {
                   <div className="flex items-center space-x-3 mb-3">
                     <div className={`p-2 rounded-lg ${
                       index === 0 ? 'bg-yellow-100 text-yellow-600' :
-                      index === 1 ? 'bg-blue-100 text-blue-600' :
+                      index === 1 ? 'bg-indigo-100 text-indigo-600' :
                       index === 2 ? 'bg-green-100 text-green-600' :
                       'bg-purple-100 text-purple-600'
                     }`}>
@@ -366,11 +366,11 @@ export const PartnerSupportPage: React.FC = () => {
         </Card>
 
         {/* Contact Information */}
-        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <Card className="bg-gradient-to-r from-indigo-50 to-indigo-50 border-indigo-200">
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-blue-100 p-2 rounded-lg">
-                <Phone className="h-5 w-5 text-blue-600" />
+              <div className="bg-indigo-100 p-2 rounded-lg">
+                <Phone className="h-5 w-5 text-indigo-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900">
                 {t('partSupport.contactSupportTitle')}
@@ -379,29 +379,29 @@ export const PartnerSupportPage: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="bg-white p-4 rounded-lg border border-blue-200">
-                  <Phone className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                  <h4 className="font-medium text-blue-900 mb-1">{t('partSupport.phoneSupport')}</h4>
-                  <p className="text-sm text-blue-700 mb-2">{t('partSupport.phoneAvailability')}</p>
-                  <p className="text-blue-600 font-medium">01 23 45 67 89</p>
+                <div className="bg-white p-4 rounded-lg border border-indigo-200">
+                  <Phone className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
+                  <h4 className="font-medium text-indigo-900 mb-1">{t('partSupport.phoneSupport')}</h4>
+                  <p className="text-sm text-indigo-700 mb-2">{t('partSupport.phoneAvailability')}</p>
+                  <p className="text-indigo-600 font-medium">01 23 45 67 89</p>
                 </div>
               </div>
 
               <div className="text-center">
-                <div className="bg-white p-4 rounded-lg border border-blue-200">
-                  <Mail className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                  <h4 className="font-medium text-blue-900 mb-1">{t('partSupport.emailSupport')}</h4>
-                  <p className="text-sm text-blue-700 mb-2">{t('partSupport.emailResponseTime')}</p>
-                  <p className="text-blue-600 font-medium">support@sipors.fr</p>
+                <div className="bg-white p-4 rounded-lg border border-indigo-200">
+                  <Mail className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
+                  <h4 className="font-medium text-indigo-900 mb-1">{t('partSupport.emailSupport')}</h4>
+                  <p className="text-sm text-indigo-700 mb-2">{t('partSupport.emailResponseTime')}</p>
+                  <p className="text-indigo-600 font-medium">support@sipors.fr</p>
                 </div>
               </div>
 
               <div className="text-center">
-                <div className="bg-white p-4 rounded-lg border border-blue-200">
-                  <HelpCircle className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                  <h4 className="font-medium text-blue-900 mb-1">{t('partSupport.liveChat')}</h4>
-                  <p className="text-sm text-blue-700 mb-2">{t('partSupport.liveChatAvailability')}</p>
-                  <p className="text-blue-600 font-medium">{t('partSupport.liveChatLocation')}</p>
+                <div className="bg-white p-4 rounded-lg border border-indigo-200">
+                  <HelpCircle className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
+                  <h4 className="font-medium text-indigo-900 mb-1">{t('partSupport.liveChat')}</h4>
+                  <p className="text-sm text-indigo-700 mb-2">{t('partSupport.liveChatAvailability')}</p>
+                  <p className="text-indigo-600 font-medium">{t('partSupport.liveChatLocation')}</p>
                 </div>
               </div>
             </div>
@@ -413,3 +413,4 @@ export const PartnerSupportPage: React.FC = () => {
 };
 
 export default PartnerSupportPage;
+

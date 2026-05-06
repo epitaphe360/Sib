@@ -223,7 +223,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
           </Link>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
-              <div className="bg-blue-600 p-3 rounded-xl">
+              <div className="bg-indigo-600 p-3 rounded-xl">
                 <Users className="h-7 w-7 text-white" />
               </div>
               <div>
@@ -231,14 +231,14 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                   {userType === 'partner' ? 'Mon Équipe Sponsor' : 'Mon Équipe Stand'}
                 </h1>
                 <p className="text-sm text-gray-500">
-                  {companyName && <span className="font-medium text-blue-600">{companyName}</span>}
+                  {companyName && <span className="font-medium text-indigo-600">{companyName}</span>}
                   {standNumber && <span className="ml-2 text-gray-400">• Stand {standNumber}</span>}
                 </p>
               </div>
             </div>
             <button
               onClick={() => setShowForm(v => !v)}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition"
+              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition"
             >
               <Plus className="h-4 w-4" />
               Ajouter un collaborateur
@@ -262,10 +262,10 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
-              className="bg-white rounded-2xl border border-blue-100 shadow-lg p-6 mb-8"
+              className="bg-white rounded-2xl border border-indigo-100 shadow-lg p-6 mb-8"
             >
               <h2 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2">
-                <Plus className="h-5 w-5 text-blue-600" />
+                <Plus className="h-5 w-5 text-indigo-600" />
                 Nouveau collaborateur
               </h2>
               <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -276,7 +276,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                     required
                     value={form.first_name}
                     onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))}
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                     placeholder="Prénom"
                   />
                 </div>
@@ -287,7 +287,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                     required
                     value={form.last_name}
                     onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))}
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                     placeholder="Nom de famille"
                   />
                 </div>
@@ -298,7 +298,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                     required
                     value={form.email}
                     onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                     placeholder="email@exemple.com"
                   />
                 </div>
@@ -308,7 +308,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                     type="tel"
                     value={form.phone}
                     onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                     placeholder="+212 6 xx xx xx xx"
                   />
                 </div>
@@ -318,7 +318,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                     type="text"
                     value={form.position}
                     onChange={e => setForm(f => ({ ...f, position: e.target.value }))}
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                     placeholder="Exposant, Commercial, Technicien..."
                   />
                 </div>
@@ -336,7 +336,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white px-5 py-2 rounded-lg text-sm font-semibold transition"
+                    className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 text-white px-5 py-2 rounded-lg text-sm font-semibold transition"
                   >
                     {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
                     {isSubmitting ? 'Création...' : 'Créer le compte'}
@@ -350,7 +350,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
         {/* Liste des collaborateurs */}
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
           </div>
         ) : collaborators.length === 0 ? (
           <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-12 text-center">
@@ -359,7 +359,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
             <p className="text-sm text-gray-500 mb-6">Ajoutez des membres de votre équipe pour qu'ils puissent accéder à la plateforme et obtenir leur badge.</p>
             <button
               onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-700 transition"
+              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition"
             >
               <Plus className="h-4 w-4" /> Ajouter le premier collaborateur
             </button>
@@ -371,7 +371,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handlePrintAllBadges()}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition"
+                  className="flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-3 py-1.5 rounded-lg transition"
                   title="Imprimer tous les badges"
                 >
                   <Printer className="h-3.5 w-3.5" /> Imprimer les badges
@@ -389,8 +389,8 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                 className={`bg-white rounded-xl border p-5 flex flex-col sm:flex-row sm:items-center gap-4 shadow-sm ${c.status === 'inactive' ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-center gap-3 flex-1">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                    <User className="h-5 w-5 text-blue-600" />
+                  <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+                    <User className="h-5 w-5 text-indigo-600" />
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900">{c.first_name} {c.last_name}</div>
@@ -402,7 +402,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
                   <div className="flex items-center gap-1.5">
                     <Mail className="h-3.5 w-3.5 text-gray-400" />
                     <span>{c.email}</span>
-                    <button onClick={() => copyToClipboard(c.email)} className="text-gray-300 hover:text-blue-500">
+                    <button onClick={() => copyToClipboard(c.email)} className="text-gray-300 hover:text-indigo-500">
                       <Copy className="h-3.5 w-3.5" />
                     </button>
                   </div>
@@ -445,3 +445,4 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
     </div>
   );
 }
+

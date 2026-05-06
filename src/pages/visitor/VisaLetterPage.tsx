@@ -1,4 +1,4 @@
-ï»¿import { useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, FileText, Download, User, Globe, Calendar, Hash } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jsPDF } from 'jspdf';
@@ -52,11 +52,11 @@ export default function VisaLetterPage() {
     const pageWidth = marginRight - marginLeft;
     let y = 25;
 
-    // --- En-tÃªte ---
+    // --- En-tête ---
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
     doc.setTextColor(30, 58, 138); // bleu
-    doc.text('SALON INTERNATIONAL DU BÃ‚TIMENT', 105, y, { align: 'center' });
+    doc.text('SALON INTERNATIONAL DU BÂTIMENT', 105, y, { align: 'center' });
     y += 8;
     doc.setFontSize(13);
     doc.text('SIB 2026', 105, y, { align: 'center' });
@@ -78,14 +78,14 @@ export default function VisaLetterPage() {
     doc.text("LETTRE D'INVITATION - FACILITATION VISA", 105, y, { align: 'center' });
     y += 10;
 
-    // --- Date + rÃ©fÃ©rence ---
+    // --- Date + référence ---
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
     doc.setTextColor(80, 80, 80);
     const userSlug = user?.id ? user.id.slice(0, 6).toUpperCase() : 'GUEST';
     const refNum = `SIB2026-VISA-${userSlug}-${Date.now().toString(36).toUpperCase()}`;
     doc.text(`El Jadida, le ${dateStr}`, marginLeft, y);
-    doc.text(`RÃ©f. : ${refNum}`, marginRight, y, { align: 'right' });
+    doc.text(`Réf. : ${refNum}`, marginRight, y, { align: 'right' });
     y += 12;
 
     // --- Corps principal ---
@@ -98,12 +98,12 @@ export default function VisaLetterPage() {
     doc.text(salutation, marginLeft, y);
     y += 8;
 
-    const intro = `Nous avons l'honneur de vous informer que ${fullName} est officiellement invitÃ©(e) Ã  participer au Salon International du BÃ¢timent SIB 2026, qui se tiendra du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI, El Jadida, Royaume du Maroc.`;
+    const intro = `Nous avons l'honneur de vous informer que ${fullName} est officiellement invité(e) à participer au Salon International du Bâtiment SIB 2026, qui se tiendra du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI, El Jadida, Royaume du Maroc.`;
     const introLines = doc.splitTextToSize(intro, pageWidth);
     doc.text(introLines, marginLeft, y);
     y += introLines.length * 6 + 4;
 
-    // --- DonnÃ©es participant ---
+    // --- Données participant ---
     doc.setFillColor(240, 245, 255);
     doc.roundedRect(marginLeft, y, pageWidth, 52, 3, 3, 'F');
     y += 6;
@@ -116,8 +116,8 @@ export default function VisaLetterPage() {
 
     const fields = [
       ['Nom complet', fullName],
-      ['NumÃ©ro de passeport', form.passportNumber || '-'],
-      ['NationalitÃ©', form.nationality || '-'],
+      ['Numéro de passeport', form.passportNumber || '-'],
+      ['Nationalité', form.nationality || '-'],
       ['Date de naissance', form.dateOfBirth || '-'],
       ['Organisation', form.organization || '-'],
       ['Fonction', form.jobTitle || '-'],
@@ -135,10 +135,10 @@ export default function VisaLetterPage() {
 
     // --- Paragraphes invitation ---
     const paras = [
-      `Ã€ cet Ã©gard, nous sollicitons auprÃ¨s des autoritÃ©s consulaires compÃ©tentes la dÃ©livrance d'un visa d'entrÃ©e au Royaume du Maroc pour le/la titulaire de ce document.`,
-      `Le Salon International du BÃ¢timent SIB 2026 est le rendez-vous annuel incontournable du secteur de la construction et du bÃ¢timent au Maroc et en Afrique. Il rÃ©unit dÃ©cideurs, professionnels et experts internationaux pour trois jours de confÃ©rences, expositions et networking.`,
-      `Tous les frais de dÃ©placement, d'hÃ©bergement et de sÃ©jour sont Ã  la charge du participant ou de son organisation.`,
-      `Nous vous prions d'agrÃ©er, Messieurs/Mesdames, l'expression de nos salutations distinguÃ©es.`,
+      `À cet égard, nous sollicitons auprès des autorités consulaires compétentes la délivrance d'un visa d'entrée au Royaume du Maroc pour le/la titulaire de ce document.`,
+      `Le Salon International du Bâtiment SIB 2026 est le rendez-vous annuel incontournable du secteur de la construction et du bâtiment au Maroc et en Afrique. Il réunit décideurs, professionnels et experts internationaux pour trois jours de conférences, expositions et networking.`,
+      `Tous les frais de déplacement, d'hébergement et de séjour sont à la charge du participant ou de son organisation.`,
+      `Nous vous prions d'agréer, Messieurs/Mesdames, l'expression de nos salutations distinguées.`,
     ];
 
     paras.forEach((para) => {
@@ -150,11 +150,11 @@ export default function VisaLetterPage() {
     // --- Signature ---
     y += 6;
     doc.setFont('helvetica', 'bold');
-    doc.text('ComitÃ© d\'Organisation - SIB 2026', marginLeft, y);
+    doc.text('Comité d\'Organisation - SIB 2026', marginLeft, y);
     y += 6;
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(80, 80, 80);
-    doc.text('URBACOM â€” 63, Imm B, RÃ©s LE YACHT, Bd de la Corniche 7Ã¨me Ã©tage NÂ°185, Casablanca 20510', marginLeft, y);
+    doc.text('URBACOM — 63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185, Casablanca 20510', marginLeft, y);
     y += 5;
     doc.text('Sib2026@urbacom.net  |  www.sibevent.com', marginLeft, y);
 
@@ -164,8 +164,8 @@ export default function VisaLetterPage() {
     doc.line(marginLeft, 280, marginRight, 280);
     doc.setFontSize(8);
     doc.setTextColor(120, 120, 120);
-    doc.text('Ce document est gÃ©nÃ©rÃ© automatiquement par la plateforme SIB 2026. Il ne constitue pas une garantie d\'obtention de visa.', 105, 285, { align: 'center' });
-    doc.text(`RÃ©fÃ©rence : ${refNum} - GÃ©nÃ©rÃ© le ${dateStr}`, 105, 290, { align: 'center' });
+    doc.text('Ce document est généré automatiquement par la plateforme SIB 2026. Il ne constitue pas une garantie d\'obtention de visa.', 105, 285, { align: 'center' });
+    doc.text(`Référence : ${refNum} - Généré le ${dateStr}`, 105, 290, { align: 'center' });
 
     doc.save(`lettre_invitation_visa_SIB2026_${form.lastName.toLowerCase()}.pdf`);
     setGenerating(false);
@@ -177,7 +177,7 @@ export default function VisaLetterPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-3xl mx-auto px-4">
-        <Link to={ROUTES.VISITOR_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6">
+        <Link to={ROUTES.VISITOR_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Retour au tableau de bord
         </Link>
@@ -185,17 +185,17 @@ export default function VisaLetterPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Lettre d'invitation visa</h1>
           <p className="mt-2 text-gray-600">
-            GÃ©nÃ©rez votre lettre d'invitation officielle pour faciliter l'obtention de votre visa d'entrÃ©e au Maroc dans le cadre du SIB 2026.
+            Générez votre lettre d'invitation officielle pour faciliter l'obtention de votre visa d'entrée au Maroc dans le cadre du SIB 2026.
           </p>
         </div>
 
         {/* Info box */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
           <div className="flex gap-3">
-            <FileText className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-blue-800">
-              <p className="font-medium mb-1">Ã€ propos de ce document</p>
-              <p>Cette lettre d'invitation est fournie Ã  titre de facilitation pour vos dÃ©marches consulaires. Elle ne garantit pas l'obtention d'un visa. PrÃ©sentez ce document Ã  l'ambassade ou au consulat du Maroc compÃ©tent avec votre dossier de demande de visa.</p>
+            <FileText className="h-5 w-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-indigo-800">
+              <p className="font-medium mb-1">À propos de ce document</p>
+              <p>Cette lettre d'invitation est fournie à titre de facilitation pour vos démarches consulaires. Elle ne garantit pas l'obtention d'un visa. Présentez ce document à l'ambassade ou au consulat du Maroc compétent avec votre dossier de demande de visa.</p>
             </div>
           </div>
         </div>
@@ -204,17 +204,17 @@ export default function VisaLetterPage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Informations du participant</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* PrÃ©nom */}
+            {/* Prénom */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                <User className="inline h-4 w-4 mr-1" />PrÃ©nom <span className="text-red-500">*</span>
+                <User className="inline h-4 w-4 mr-1" />Prénom <span className="text-red-500">*</span>
               </label>
               <input
                 name="firstName"
                 value={form.firstName}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                placeholder="PrÃ©nom (tel que sur le passeport)"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                placeholder="Prénom (tel que sur le passeport)"
               />
             </div>
 
@@ -227,36 +227,36 @@ export default function VisaLetterPage() {
                 name="lastName"
                 value={form.lastName}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 placeholder="Nom (tel que sur le passeport)"
               />
             </div>
 
-            {/* NÂ° passeport */}
+            {/* N° passeport */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                <Hash className="inline h-4 w-4 mr-1" />NÂ° de passeport <span className="text-red-500">*</span>
+                <Hash className="inline h-4 w-4 mr-1" />N° de passeport <span className="text-red-500">*</span>
               </label>
               <input
                 name="passportNumber"
                 value={form.passportNumber}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 placeholder="Ex: AB1234567"
               />
             </div>
 
-            {/* NationalitÃ© */}
+            {/* Nationalité */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                <Globe className="inline h-4 w-4 mr-1" />NationalitÃ© <span className="text-red-500">*</span>
+                <Globe className="inline h-4 w-4 mr-1" />Nationalité <span className="text-red-500">*</span>
               </label>
               <input
                 name="nationality"
                 value={form.nationality}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                placeholder="Ex: FranÃ§aise, SÃ©nÃ©galaise..."
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                placeholder="Ex: Française, Sénégalaise..."
               />
             </div>
 
@@ -270,7 +270,7 @@ export default function VisaLetterPage() {
                 name="dateOfBirth"
                 value={form.dateOfBirth}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
             </div>
 
@@ -282,7 +282,7 @@ export default function VisaLetterPage() {
                 name="organization"
                 value={form.organization}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 placeholder="Nom de votre entreprise"
               />
             </div>
@@ -295,8 +295,8 @@ export default function VisaLetterPage() {
                 name="jobTitle"
                 value={form.jobTitle}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                placeholder="Ex: Directeur GÃ©nÃ©ral, IngÃ©nieur..."
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                placeholder="Ex: Directeur Général, Ingénieur..."
               />
             </div>
 
@@ -308,7 +308,7 @@ export default function VisaLetterPage() {
                 name="address"
                 value={form.address}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 placeholder="Ville, Pays"
               />
             </div>
@@ -318,16 +318,16 @@ export default function VisaLetterPage() {
             <Button
               onClick={generatePDF}
               disabled={!isValid || generating}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6"
             >
               <Download className="h-5 w-5 mr-2" />
-              {generating ? 'GÃ©nÃ©ration en cours...' : 'TÃ©lÃ©charger la lettre PDF'}
+              {generating ? 'Génération en cours...' : 'Télécharger la lettre PDF'}
             </Button>
           </div>
 
           {generated && (
             <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-800">
-              Votre lettre d'invitation a Ã©tÃ© tÃ©lÃ©chargÃ©e avec succÃ¨s. Joignez-la Ã  votre dossier de demande de visa.
+              Votre lettre d'invitation a été téléchargée avec succès. Joignez-la à votre dossier de demande de visa.
             </div>
           )}
         </Card>
@@ -351,4 +351,5 @@ export default function VisaLetterPage() {
     </div>
   );
 }
+
 

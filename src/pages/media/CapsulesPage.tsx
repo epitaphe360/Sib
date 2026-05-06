@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { Play, ArrowLeft, Search, Filter, Eye, Clock } from 'lucide-react';
@@ -6,6 +6,7 @@ import { mediaService } from '../../services/mediaService';
 import { MediaContent } from '../../types/media';
 import { MediaCard } from '../../components/media/MediaCard';
 import { ROUTES } from '../../lib/routes';
+import { PageHero } from '../../components/ui/PageHero';
 
 export const CapsulesPage: React.FC = () => {
   const [capsules, setCapsules] = useState<MediaContent[]>([]);
@@ -36,60 +37,13 @@ export const CapsulesPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-yellow-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-orange-600 to-yellow-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link to={ROUTES.HOME} className="inline-flex items-center text-white/80 hover:text-white mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('media.back_to_home')}
-          </Link>
-
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
-              <Play className="w-8 h-8" />
-            </div>
-            <div>
-              <h1 className="text-4xl font-bold mb-2">{t('pages.capsules.title')}</h1>
-              <p className="text-xl text-white/90">{t('pages.capsules.description')}</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/70 text-sm">{t('pages.capsules.total_capsules')}</p>
-                  <p className="text-3xl font-bold">{capsules.length}</p>
-                </div>
-                <Play className="w-8 h-8 text-white/50" />
-              </div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/70 text-sm">{t('pages.capsules.total_views')}</p>
-                  <p className="text-3xl font-bold">
-                    {capsules.reduce((sum, c) => sum + c.views_count, 0).toLocaleString()}
-                  </p>
-                </div>
-                <Eye className="w-8 h-8 text-white/50" />
-              </div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/70 text-sm">{t('pages.capsules.filter_recent')}</p>
-                  <p className="text-3xl font-bold">
-                    {Math.floor(capsules.reduce((sum, c) => sum + (c.duration || 0), 0) / capsules.length / 60)} min
-                  </p>
-                </div>
-                <Clock className="w-8 h-8 text-white/50" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50">
+      <PageHero
+        badge={<><Video className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Capsules Vidéo</span></>}
+        title={<>{t('pages.capsules.title')}</>}
+        subtitle={t('pages.capsules.description')}
+        py="py-16 md:py-20"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Search */}

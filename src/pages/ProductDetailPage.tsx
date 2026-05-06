@@ -1,4 +1,4 @@
-ï»¿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link, useSearchParams } from 'react-router-dom';
 import { Product } from '../types';
 import { useTranslation } from '../hooks/useTranslation';
@@ -51,23 +51,23 @@ export default function ProductDetailPage() {
 
   const contactExhibitor = () => {
     // Optionally this page could receive exhibitor email via location state; fallback toast
-    toast.info("Contactez l'exposant depuis sa page dÃ©taillÃ©e");
+    toast.info("Contactez l'exposant depuis sa page détaillée");
     const exhibitorId = exhibitorFromQuery || product?.exhibitorId;
     if (exhibitorId) {navigate(`/exhibitors/${exhibitorId}`);}
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">Chargement du produitÃ¢â€¦</div>
+      <div className="min-h-screen flex items-center justify-center">Chargement du produitâ…</div>
     );
   }
 
   if (error || !product) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-6">
-        <p className="text-red-600 mb-4">{error || 'Produit non trouvÃ©'}</p>
+        <p className="text-red-600 mb-4">{error || 'Produit non trouvé'}</p>
         {(exhibitorFromQuery || product?.exhibitorId) && (
-          <Link to={`/exhibitors/${exhibitorFromQuery || product?.exhibitorId}`} className="text-blue-600 underline">Retour Ã  l'exposant</Link>
+          <Link to={`/exhibitors/${exhibitorFromQuery || product?.exhibitorId}`} className="text-indigo-600 underline">Retour à l'exposant</Link>
         )}
       </div>
     );
@@ -102,7 +102,7 @@ export default function ProductDetailPage() {
             </Card>
 
             <div>
-              {/* En-tÃªte avec badges */}
+              {/* En-tête avec badges */}
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 {(product as any).is_new && (
                   <Badge variant="success" size="sm" className="bg-green-500 text-white">
@@ -110,8 +110,8 @@ export default function ProductDetailPage() {
                   </Badge>
                 )}
                 {(product as any).certified && (
-                  <Badge variant="default" size="sm" className="bg-blue-500 text-white">
-                    <Shield className="h-3 w-3 mr-1" /> CertifiÃ©
+                  <Badge variant="default" size="sm" className="bg-indigo-500 text-white">
+                    <Shield className="h-3 w-3 mr-1" /> Certifié
                   </Badge>
                 )}
                 <Badge variant="default" size="sm">{product.category}</Badge>
@@ -120,7 +120,7 @@ export default function ProductDetailPage() {
 
               <h1 className="text-2xl font-bold text-gray-900 mb-2">{product.name}</h1>
 
-              {/* Prix et disponibilitÃ© */}
+              {/* Prix et disponibilité */}
               <div className="flex items-center gap-4 mb-4">
                 {(product as any).price && (
                   <div className="text-2xl font-bold text-primary">
@@ -152,11 +152,11 @@ export default function ProductDetailPage() {
 
               <p className="text-gray-700 mb-6">{product.description}</p>
 
-              {/* VidÃ©o de prÃ©sentation */}
+              {/* Vidéo de présentation */}
               {(product as any).video_url && getEmbedUrl((product as any).video_url) && (
                 <Card className="p-4 mb-6">
                   <h3 className="font-semibold mb-3 flex items-center gap-2">
-                    <Play className="h-4 w-4 text-red-500" /> VidÃ©o de prÃ©sentation
+                    <Play className="h-4 w-4 text-red-500" /> Vidéo de présentation
                   </h3>
                   <div className="aspect-video rounded-lg overflow-hidden">
                     <iframe
@@ -164,7 +164,7 @@ export default function ProductDetailPage() {
                       className="w-full h-full"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
-                      title={`VidÃ©o ${product.name}`}
+                      title={`Vidéo ${product.name}`}
                     />
                   </div>
                 </Card>
@@ -172,14 +172,14 @@ export default function ProductDetailPage() {
 
               {product.specifications && (
                 <Card className="p-4 mb-6">
-                  <h3 className="font-semibold mb-2">SpÃ©cifications</h3>
+                  <h3 className="font-semibold mb-2">Spécifications</h3>
                   <p className="text-sm text-gray-700 whitespace-pre-line">{product.specifications}</p>
                 </Card>
               )}
 
               {product.technicalSpecs && product.technicalSpecs.length > 0 && (
                 <Card className="p-4 mb-6">
-                  <h3 className="font-semibold mb-2">CaractÃ©ristiques techniques</h3>
+                  <h3 className="font-semibold mb-2">Caractéristiques techniques</h3>
                   <ul className="list-disc pl-6 text-sm text-gray-700">
                     {product.technicalSpecs.map((s) => (
                       <li key={`spec-${s.name}`}>{s.name}: {s.value}{s.unit ? ` ${s.unit}` : ''}</li>
@@ -188,11 +188,11 @@ export default function ProductDetailPage() {
                 </Card>
               )}
 
-              {/* Documents tÃ©lÃ©chargeables */}
+              {/* Documents téléchargeables */}
               {(product as any).documents && (product as any).documents.length > 0 && (
                 <Card className="p-4 mb-6">
                   <h3 className="font-semibold mb-3 flex items-center gap-2">
-                    <FileText className="h-4 w-4" /> Documents Ã  tÃ©lÃ©charger
+                    <FileText className="h-4 w-4" /> Documents à télécharger
                   </h3>
                   <div className="space-y-2">
                     {(product as any).documents.map((doc: any, idx: number) => (
@@ -239,5 +239,6 @@ export default function ProductDetailPage() {
     </div>
   );
 }
+
 
 

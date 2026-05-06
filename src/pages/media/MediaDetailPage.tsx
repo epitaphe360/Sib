@@ -123,8 +123,8 @@ export default function MediaDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
@@ -137,7 +137,7 @@ export default function MediaDetailPage() {
         {/* Back Button */}
         <Link
           to={ROUTES.MEDIA_LIBRARY}
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-8 transition-colors"
+          className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-8 transition-colors"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
           Retour à la médiathèque
@@ -155,7 +155,7 @@ export default function MediaDetailPage() {
             <Button
               size="lg"
               type="button"
-              className="relative z-10 w-20 h-20 rounded-full bg-blue-600 hover:bg-blue-700 hover:scale-110 transition-all shadow-xl cursor-pointer"
+              className="relative z-10 w-20 h-20 rounded-full bg-indigo-600 hover:bg-indigo-700 hover:scale-110 transition-all shadow-xl cursor-pointer"
               onClick={(e) => handlePlayMedia(e)}
             >
               <Play className="h-10 w-10 text-white ml-1" />
@@ -165,7 +165,7 @@ export default function MediaDetailPage() {
           {/* Video Overlay Info */}
           <div className="absolute bottom-6 left-6 right-6 text-white">
             <div className="flex items-center space-x-3 mb-2">
-              <Badge className="bg-blue-600 text-white border-0">
+              <Badge className="bg-indigo-600 text-white border-0">
                 {media.type?.toUpperCase() || 'MÉDIA'}
               </Badge>
               <span className="text-sm font-medium opacity-80 flex items-center">
@@ -190,13 +190,13 @@ export default function MediaDetailPage() {
               {media.speakers && media.speakers.length > 0 && (
                 <div className="border-t pt-8">
                   <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
-                    <Users className="h-5 w-5 mr-2 text-blue-600" />
+                    <Users className="h-5 w-5 mr-2 text-indigo-600" />
                     Intervenants
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {media.speakers.map((speaker: any, idx: number) => (
                       <div key={`speaker-${idx}-${speaker?.name || 'unknown'}`} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
+                        <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
                           {speaker?.name?.charAt(0) || 'S'}
                         </div>
                         <div>
@@ -211,21 +211,21 @@ export default function MediaDetailPage() {
             </Card>
 
             {/* Transcript Placeholder */}
-            <Card className="p-8 bg-blue-50 border-blue-100">
+            <Card className="p-8 bg-indigo-50 border-indigo-100">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-blue-900 flex items-center">
-                  <Sparkles className="h-5 w-5 mr-2 text-blue-600" />
+                <h3 className="text-lg font-bold text-indigo-900 flex items-center">
+                  <Sparkles className="h-5 w-5 mr-2 text-indigo-600" />
                   Résumé IA & Transcription
                 </h3>
-                <Badge variant="outline" className="border-blue-200 text-blue-700">Bêta</Badge>
+                <Badge variant="outline" className="border-indigo-200 text-indigo-700">Bêta</Badge>
               </div>
-              <p className="text-blue-800/80 italic">
+              <p className="text-indigo-800/80 italic">
                 "La transformation digitale des bâtiments marocains s'accélère avec l'adoption massive de l'IA et de la 5G. Ce webinaire explore comment ces technologies optimisent la chaîne logistique et renforcent la compétitivité du secteur de la construction national..."
               </p>
               <Button
                 variant="link"
                 type="button"
-                className="mt-4 p-0 text-blue-600 font-bold cursor-pointer"
+                className="mt-4 p-0 text-indigo-600 font-bold cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -235,7 +235,7 @@ export default function MediaDetailPage() {
                 {showTranscript ? 'Masquer' : 'Lire'} la transcription complète
               </Button>
               {showTranscript && media?.transcript && (
-                <div className="mt-4 p-4 bg-blue-50 rounded-lg text-sm text-gray-700">
+                <div className="mt-4 p-4 bg-indigo-50 rounded-lg text-sm text-gray-700">
                   {media.transcript}
                 </div>
               )}
@@ -248,7 +248,7 @@ export default function MediaDetailPage() {
               <div className="space-y-4">
                 <Button
                   type="button"
-                  className="w-full bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200 cursor-pointer"
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200 cursor-pointer"
                   onClick={(e) => handleDownloadResources(e)}
                 >
                   <Download className="h-4 w-4 mr-2" />
@@ -296,7 +296,7 @@ export default function MediaDetailPage() {
 
             <Card className="p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white border-0">
               <h3 className="font-bold mb-4 flex items-center">
-                <Info className="h-4 w-4 mr-2 text-blue-400" />
+                <Info className="h-4 w-4 mr-2 text-indigo-400" />
                 Besoin d'aide ?
               </h3>
               <p className="text-sm text-slate-300 mb-6">
@@ -304,7 +304,7 @@ export default function MediaDetailPage() {
               </p>
               <Button
                 type="button"
-                className="w-full bg-white text-slate-900 hover:bg-blue-50 cursor-pointer"
+                className="w-full bg-white text-slate-900 hover:bg-indigo-50 cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
                   toast.info('Support : support@SIB.ma');

@@ -1,4 +1,4 @@
-ï»¿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sparkles, Settings } from 'lucide-react';
 import MiniSiteEditor from '../components/minisite/MiniSiteEditor';
 import ExhibitorMiniSiteScrapper from '../components/exhibitor/ExhibitorMiniSiteScrapper';
@@ -19,7 +19,7 @@ function AiTabContent({
   if (!exhibitorId) {
     return (
       <div className="flex items-center justify-center p-12 text-gray-500">
-        Chargementâ€¦
+        Chargement…
       </div>
     );
   }
@@ -67,24 +67,24 @@ export default function MiniSiteCreationPage() {
             }`}
           >
             <Sparkles className="h-4 w-4" />
-            CrÃ©er avec l&apos;IA
+            Créer avec l&apos;IA
           </button>
           <button
             onClick={() => setActiveTab('manual')}
             className={`flex items-center gap-2 px-6 py-2 rounded-lg font-semibold transition-all ${
               activeTab === 'manual'
-                ? 'bg-blue-800 text-white shadow'
+                ? 'bg-indigo-800 text-white shadow'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             <Settings className="h-4 w-4" />
-            Ã‰diteur complet
+            Éditeur complet
           </button>
         </div>
         <p className="max-w-7xl mx-auto mt-2 text-xs text-gray-400">
           {activeTab === 'ai'
-            ? "L'IA analyse votre site web et gÃ©nÃ¨re automatiquement hero, Ã -propos, produits, galerie, Ã©quipe et contact."
-            : 'Ã‰ditez toutes les sections : hero, Ã -propos, produits, galerie, actualitÃ©s et contact. Personnalisez les couleurs et le logo.'}
+            ? "L'IA analyse votre site web et génère automatiquement hero, à-propos, produits, galerie, équipe et contact."
+            : 'Éditez toutes les sections : hero, à-propos, produits, galerie, actualités et contact. Personnalisez les couleurs et le logo.'}
         </p>
       </div>
 
@@ -101,5 +101,6 @@ export default function MiniSiteCreationPage() {
     </div>
   );
 }
+
 
 

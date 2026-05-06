@@ -1,4 +1,4 @@
-Ôªøimport React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -33,57 +33,57 @@ import { ROUTES } from '../lib/routes';
 const AVAILABLE_SECTORS = [
   'Gros Oeuvre',
   'Second Oeuvre',
-  'MEP / CVC / √âlectricit√©',
-  'Mat√©riaux de Construction',
-  'Finitions & Rev√™tements',
-  'Architecture & Bureau d\'√âtudes',
-  'Promotion Immobili√®re',
-  'Ing√©nierie Structure',
+  'MEP / CVC / …lectricitÈ',
+  'MatÈriaux de Construction',
+  'Finitions & RevÍtements',
+  'Architecture & Bureau d\'…tudes',
+  'Promotion ImmobiliËre',
+  'IngÈnierie Structure',
   'VRD & Terrassement',
-  '√ânergie & Renouvelables',
+  '…nergie & Renouvelables',
   'BIM & Digital Construction',
-  'S√©curit√© Incendie',
-  '√âquipements de Chantier',
+  'SÈcuritÈ Incendie',
+  '…quipements de Chantier',
   'Maintenance Technique',
   'Formation & Certification BTP'
 ];
 
-// Centres d'int√©r√™t disponibles
+// Centres d'intÈrÍt disponibles
 const AVAILABLE_INTERESTS = [
-  'D√©carbonation des chantiers',
+  'DÈcarbonation des chantiers',
   'Industrialisation de la construction',
-  'Pr√©fabrication',
-  'IoT B√¢timent',
+  'PrÈfabrication',
+  'IoT B‚timent',
   'Intelligence Artificielle',
   'BIM 4D/5D',
-  '√âconomie circulaire',
-  'S√©curit√© chantier',
+  '…conomie circulaire',
+  'SÈcuritÈ chantier',
   'Gestion de projet',
-  'Mat√©riaux bas carbone',
-  'Efficacit√© √©nerg√©tique',
+  'MatÈriaux bas carbone',
+  'EfficacitÈ ÈnergÈtique',
   'Smart Building',
-  'Conformit√© r√©glementaire',
+  'ConformitÈ rÈglementaire',
   'BTP Safety',
   'Innovation',
   'Startups',
-  'Opportunit√©s d\'investissement'
+  'OpportunitÈs d\'investissement'
 ];
 
 // Objectifs de participation
 const AVAILABLE_OBJECTIVES = [
   'Trouver de nouveaux sponsors',
-  'D√©velopper mon r√©seau',
-  'Pr√©senter mes innovations',
+  'DÈvelopper mon rÈseau',
+  'PrÈsenter mes innovations',
   'Identifier des fournisseurs',
-  'Explorer de nouveaux march√©s',
+  'Explorer de nouveaux marchÈs',
   'Rencontrer des investisseurs',
-  'D√©couvrir les innovations BTP',
+  'DÈcouvrir les innovations BTP',
   'Benchmarking & veille',
-  'Opportunit√©s d\'emploi',
+  'OpportunitÈs d\'emploi',
   'Formation continue'
 ];
 
-// Types de collaboration recherch√©s
+// Types de collaboration recherchÈs
 const AVAILABLE_COLLABORATION_TYPES = [
   'Partenariat commercial',
   'Joint-venture',
@@ -93,7 +93,7 @@ const AVAILABLE_COLLABORATION_TYPES = [
   'Transfert de technologie',
   'Conseil & Expertise',
   'Sous-traitance',
-  'Coop√©ration institutionnelle',
+  'CoopÈration institutionnelle',
   'Formation & Accompagnement'
 ];
 
@@ -109,26 +109,26 @@ const AVAILABLE_COUNTRIES = [
   'Belgique',
   'Allemagne',
   'Royaume-Uni',
-  '√âtats-Unis',
+  '…tats-Unis',
   'Chine',
-  '√âmirats Arabes Unis',
+  '…mirats Arabes Unis',
   'Arabie Saoudite',
   'Singapour',
   'Japon',
-  'Cor√©e du Sud',
-  'S√©n√©gal',
-  'C√¥te d\'Ivoire',
+  'CorÈe du Sud',
+  'SÈnÈgal',
+  'CÙte d\'Ivoire',
   'Autre'
 ];
 
 // Tailles d'entreprise
 const COMPANY_SIZES = [
-  '1-10 employ√©s',
-  '11-50 employ√©s',
-  '51-200 employ√©s',
-  '201-500 employ√©s',
-  '501-1000 employ√©s',
-  '1000+ employ√©s'
+  '1-10 employÈs',
+  '11-50 employÈs',
+  '51-200 employÈs',
+  '201-500 employÈs',
+  '501-1000 employÈs',
+  '1000+ employÈs'
 ];
 
 export default function ProfileMatchingPage() {
@@ -138,7 +138,7 @@ export default function ProfileMatchingPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [completionPercentage, setCompletionPercentage] = useState(0);
 
-  // V√©rification du niveau d'acc√®s (Premium requis pour le matching IA)
+  // VÈrification du niveau d'accËs (Premium requis pour le matching IA)
   const isFreeVisitor = user?.type === 'visitor' && (user?.visitor_level === 'free' || !user?.visitor_level);
 
   const [formData, setFormData] = useState({
@@ -152,7 +152,7 @@ export default function ProfileMatchingPage() {
     bio: user?.profile?.bio || ''
   });
 
-  // ‚úÖ Resynchroniser le formulaire quand le user change (apr√®s sauvegarde ou rechargement)
+  // ? Resynchroniser le formulaire quand le user change (aprËs sauvegarde ou rechargement)
   useEffect(() => {
     if (user?.profile) {
       setFormData({
@@ -168,7 +168,7 @@ export default function ProfileMatchingPage() {
     }
   }, [user?.profile]);
 
-  // Calculer le pourcentage de compl√©tion du profil
+  // Calculer le pourcentage de complÈtion du profil
   useEffect(() => {
     let score = 0;
     const weights = {
@@ -196,7 +196,7 @@ export default function ProfileMatchingPage() {
 
   if (isFreeVisitor) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-8 text-center">
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8 text-center">
         <div className="bg-purple-100 p-6 rounded-full mb-6">
           <Sparkles className="h-16 w-16 text-purple-600 outline-none" />
         </div>
@@ -207,7 +207,7 @@ export default function ProfileMatchingPage() {
         <div className="flex flex-col sm:flex-row gap-4">
           <Button
             onClick={() => navigate(ROUTES.VISITOR_UPGRADE)}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg"
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg"
           >
             {t('common.upgrade')}
           </Button>
@@ -241,7 +241,7 @@ export default function ProfileMatchingPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // ‚úÖ Sauvegarder les donn√©es
+      // ? Sauvegarder les donnÈes
       await updateProfile({
         sectors: formData.sectors,
         interests: formData.interests,
@@ -253,14 +253,14 @@ export default function ProfileMatchingPage() {
         bio: formData.bio
       });
 
-      // ‚úÖ IMPORTANT: Attendre un court d√©lai pour que Zustand finisse la mise √† jour
-      // Puis v√©rifier que les donn√©es sont bien √† jour dans le store
+      // ? IMPORTANT: Attendre un court dÈlai pour que Zustand finisse la mise ‡ jour
+      // Puis vÈrifier que les donnÈes sont bien ‡ jour dans le store
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      // ‚úÖ Resynchroniser les donn√©es du formulaire avec le user mis √† jour du store
+      // ? Resynchroniser les donnÈes du formulaire avec le user mis ‡ jour du store
       const currentUser = useAuthStore.getState().user;
       if (currentUser?.profile) {
-        console.log('‚úÖ Donn√©es mises √† jour en base:', {
+        console.log('? DonnÈes mises ‡ jour en base:', {
           sectors: currentUser.profile.sectors?.length,
           bio: currentUser.profile.bio?.substring(0, 50)
         });
@@ -279,12 +279,12 @@ export default function ProfileMatchingPage() {
 
       toast.success(t('form.success.updated'));
 
-      // Redirection vers la page r√©seau avec d√©clenchement automatique de la g√©n√©ration
+      // Redirection vers la page rÈseau avec dÈclenchement automatique de la gÈnÈration
       setTimeout(() => {
         navigate(ROUTES.NETWORKING + '?generate=true');
       }, 1500);
     } catch (error) {
-      console.error('‚ùå Erreur lors de la mise √† jour:', error);
+      console.error('? Erreur lors de la mise ‡ jour:', error);
       toast.error(t('form.error.generic'));
     } finally {
       setIsSaving(false);
@@ -293,7 +293,7 @@ export default function ProfileMatchingPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <Card className="p-6 text-center">
           <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">{t('auth.login_required')}</h3>
@@ -305,7 +305,7 @@ export default function ProfileMatchingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
+    <div className="min-h-screen bg-slate-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -340,7 +340,7 @@ export default function ProfileMatchingPage() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="p-6 mb-8 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+          <Card className="p-6 mb-8 bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white/20 rounded-lg">
@@ -354,7 +354,7 @@ export default function ProfileMatchingPage() {
               <div className="text-right">
                 <div className="text-4xl font-bold">{completionPercentage}%</div>
                 <div className="text-white/80 text-sm">
-                  {completionPercentage >= 80 ? 'Excellent !' : completionPercentage >= 50 ? 'Bon d√©but' : '√Ä compl√©ter'}
+                  {completionPercentage >= 80 ? 'Excellent !' : completionPercentage >= 50 ? 'Bon dÈbut' : '¿ complÈter'}
                 </div>
               </div>
             </div>
@@ -413,8 +413,8 @@ export default function ProfileMatchingPage() {
           >
             <Card className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <Building2 className="h-5 w-5 text-blue-600" />
+                <div className="p-2 bg-indigo-100 rounded-lg">
+                  <Building2 className="h-5 w-5 text-indigo-600" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">{t('matching.form.sectors')}</h3>
@@ -439,7 +439,7 @@ export default function ProfileMatchingPage() {
                     }}
                     className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                       formData.sectors.includes(sector)
-                        ? 'bg-blue-600 text-white shadow-sm'
+                        ? 'bg-indigo-600 text-white shadow-sm'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -608,7 +608,7 @@ export default function ProfileMatchingPage() {
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                       placeholder={t('auth.company_placeholder')}
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
@@ -623,7 +623,7 @@ export default function ProfileMatchingPage() {
                     <select
                       value={formData.companySize}
                       onChange={(e) => setFormData({ ...formData, companySize: e.target.value })}
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white"
+                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none bg-white"
                     >
                       <option value="">{t('form.select.placeholder')}</option>
                       {COMPANY_SIZES.map((size) => (
@@ -643,7 +643,7 @@ export default function ProfileMatchingPage() {
                     <select
                       value={formData.country}
                       onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white"
+                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none bg-white"
                     >
                       <option value="">{t('auth.select_country')}</option>
                       {AVAILABLE_COUNTRIES.map((country) => (
@@ -663,7 +663,7 @@ export default function ProfileMatchingPage() {
                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                     placeholder={t('auth.bio_placeholder')}
                     rows={3}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     {t('dashboard.bio_help')}
@@ -689,11 +689,11 @@ export default function ProfileMatchingPage() {
             <Button
               onClick={handleSave}
               disabled={isSaving || isLoading}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8"
+              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8"
             >
               {isSaving ? (
                 <>
-                  <span className="animate-spin mr-2">‚è≥</span>
+                  <span className="animate-spin mr-2">?</span>
                   {t('form.status.saving')}
                 </>
               ) : (
@@ -711,29 +711,29 @@ export default function ProfileMatchingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <Card className="p-6 bg-gradient-to-br from-gray-50 to-blue-50">
+            <Card className="p-6 bg-gradient-to-br from-gray-50 to-indigo-50">
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <Star className="h-6 w-6 text-blue-600" />
+                <div className="p-3 bg-indigo-100 rounded-full">
+                  <Star className="h-6 w-6 text-indigo-600" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">{t('dashboard.profile_tips')}</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span>S√©lectionnez des secteurs et int√©r√™ts sp√©cifiques plut√¥t que g√©n√©raux</span>
+                      <span>SÈlectionnez des secteurs et intÈrÍts spÈcifiques plutÙt que gÈnÈraux</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span>D√©finissez clairement vos objectifs pour des correspondances plus pertinentes</span>
+                      <span>DÈfinissez clairement vos objectifs pour des correspondances plus pertinentes</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span>Une bio d√©taill√©e am√©liore la qualit√© des recommandations</span>
+                      <span>Une bio dÈtaillÈe amÈliore la qualitÈ des recommandations</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span>Mettez √† jour votre profil r√©guli√®rement pour des r√©sultats optimaux</span>
+                      <span>Mettez ‡ jour votre profil rÈguliËrement pour des rÈsultats optimaux</span>
                     </li>
                   </ul>
                 </div>
@@ -745,5 +745,6 @@ export default function ProfileMatchingPage() {
     </div>
   );
 }
+
 
 

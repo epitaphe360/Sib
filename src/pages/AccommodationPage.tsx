@@ -1,4 +1,4 @@
-ï»¿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 import { Hotel, Star, MapPin, Phone, Wifi, ParkingCircle, Waves, BellRing, UtensilsCrossed, CheckCircle, X } from 'lucide-react';
 
@@ -61,7 +61,7 @@ const AccommodationPage: React.FC = () => {
       standardPrice: 1810,
       vipPrice: 1539,
       description: t('accommodation.hotel.mazagan.desc'),
-      address: 'Route CÃ´tiÃ¨re, Casablanca',
+      address: 'Route Côtière, Casablanca',
       phone: '+212 523 388 100',
       website: 'https://www.mazaganbeachresort.com',
       featured: true,
@@ -76,27 +76,27 @@ const AccommodationPage: React.FC = () => {
 
   const getAmenityIcon = (amenity: string) => {
     switch (amenity) {
-      case 'wifi': return <Wifi className="text-blue-600" size={20} />;
-      case 'parking': return <ParkingCircle className="text-blue-600" size={20} />;
-      case 'pool': return <Waves className="text-blue-600" size={20} />;
-      case 'spa': return <BellRing className="text-blue-600" size={20} />;
-      case 'restaurant': return <UtensilsCrossed className="text-blue-600" size={20} />;
-      case 'gym': return <BellRing className="text-blue-600" size={20} />;
-      case 'casino': return <BellRing className="text-blue-600" size={20} />;
-      case 'beach': return <Waves className="text-blue-600" size={20} />;
-      case 'golf': return <BellRing className="text-blue-600" size={20} />;
-      case 'bar': return <UtensilsCrossed className="text-blue-600" size={20} />;
-      case 'terrace': return <BellRing className="text-blue-600" size={20} />;
-      default: return <CheckCircle className="text-blue-600" size={20} />;
+      case 'wifi': return <Wifi className="text-indigo-600" size={20} />;
+      case 'parking': return <ParkingCircle className="text-indigo-600" size={20} />;
+      case 'pool': return <Waves className="text-indigo-600" size={20} />;
+      case 'spa': return <BellRing className="text-indigo-600" size={20} />;
+      case 'restaurant': return <UtensilsCrossed className="text-indigo-600" size={20} />;
+      case 'gym': return <BellRing className="text-indigo-600" size={20} />;
+      case 'casino': return <BellRing className="text-indigo-600" size={20} />;
+      case 'beach': return <Waves className="text-indigo-600" size={20} />;
+      case 'golf': return <BellRing className="text-indigo-600" size={20} />;
+      case 'bar': return <UtensilsCrossed className="text-indigo-600" size={20} />;
+      case 'terrace': return <BellRing className="text-indigo-600" size={20} />;
+      default: return <CheckCircle className="text-indigo-600" size={20} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 py-12">
+    <div className="min-h-screen bg-slate-50 py-12">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-3 bg-blue-100 text-blue-700 px-6 py-2 rounded-full mb-4">
+          <div className="inline-flex items-center gap-3 bg-indigo-100 text-indigo-700 px-6 py-2 rounded-full mb-4">
             <Hotel className="text-2xl" size={24} />
             <span className="font-semibold">{t('accommodation.badge')}</span>
           </div>
@@ -109,19 +109,19 @@ const AccommodationPage: React.FC = () => {
         </div>
 
         {/* Info Banner */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl p-8 mb-12 shadow-xl">
+        <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-2xl p-8 mb-12 shadow-xl">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="text-4xl font-bold mb-2">{hotels.length}</div>
-              <div className="text-blue-100">{t('accommodation.hotels_partners')}</div>
+              <div className="text-indigo-100">{t('accommodation.hotels_partners')}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold mb-2">-15%</div>
-              <div className="text-blue-100">{t('accommodation.vip_discount')}</div>
+              <div className="text-indigo-100">{t('accommodation.vip_discount')}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold mb-2">1-3</div>
-              <div className="text-blue-100">{t('accommodation.april_dates')}</div>
+              <div className="text-indigo-100">{t('accommodation.april_dates')}</div>
             </div>
           </div>
         </div>
@@ -163,11 +163,11 @@ const AccommodationPage: React.FC = () => {
             <div
               key={hotel.id}
               className={`bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                hotel.featured ? 'ring-2 ring-blue-500' : ''
+                hotel.featured ? 'ring-2 ring-indigo-500' : ''
               }`}
             >
               {hotel.featured && (
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-2 font-semibold">
+                <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white text-center py-2 font-semibold">
                   {t('accommodation.featured_partner')}
                 </div>
               )}
@@ -191,7 +191,7 @@ const AccommodationPage: React.FC = () => {
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{hotel.name}</h3>
 
                 <div className="flex items-center gap-2 text-gray-600 mb-3">
-                  <MapPin className="text-blue-600" size={18} />
+                  <MapPin className="text-indigo-600" size={18} />
                   <span className="text-sm">{hotel.distance}</span>
                 </div>
 
@@ -204,7 +204,7 @@ const AccommodationPage: React.FC = () => {
                   {hotel.amenities.slice(0, 5).map((amenity) => (
                     <div
                       key={amenity}
-                      className="flex items-center gap-1 bg-blue-50 px-2 py-1 rounded-lg"
+                      className="flex items-center gap-1 bg-indigo-50 px-2 py-1 rounded-lg"
                       title={t(`accommodation.amenity_${amenity}`)}
                     >
                       {getAmenityIcon(amenity)}
@@ -248,7 +248,7 @@ const AccommodationPage: React.FC = () => {
 
                   <button
                     onClick={() => setSelectedHotel(hotel.id)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200"
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200"
                   >
                     {t('accommodation.view_details')}
                   </button>
@@ -265,29 +265,29 @@ const AccommodationPage: React.FC = () => {
           </h2>
           <div className="grid md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl font-bold text-blue-600">1</span>
+              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl font-bold text-indigo-600">1</span>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">{t('accommodation.step1_title')}</h3>
               <p className="text-sm text-gray-600">{t('accommodation.step1_desc')}</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl font-bold text-blue-600">2</span>
+              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl font-bold text-indigo-600">2</span>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">{t('accommodation.step2_title')}</h3>
               <p className="text-sm text-gray-600">{t('accommodation.step2_desc')}</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl font-bold text-blue-600">3</span>
+              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl font-bold text-indigo-600">3</span>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">{t('accommodation.step3_title')}</h3>
               <p className="text-sm text-gray-600">{t('accommodation.step3_desc')}</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl font-bold text-blue-600">4</span>
+              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl font-bold text-indigo-600">4</span>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">{t('accommodation.step4_title')}</h3>
               <p className="text-sm text-gray-600">{t('accommodation.step4_desc')}</p>
@@ -309,14 +309,14 @@ const AccommodationPage: React.FC = () => {
             </a>
             <a
               href="mailto:hebergement@SIBevent.com"
-              className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
             >
               hebergement@SIBevent.com
             </a>
           </div>
         </div>
 
-        {/* Modal DÃ©tails & Tarifs */}
+        {/* Modal Détails & Tarifs */}
         {selectedHotel && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setSelectedHotel(null)}>
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
@@ -336,13 +336,13 @@ const AccommodationPage: React.FC = () => {
                         <img src={hotel.image} alt={hotel.name} className="w-full md:w-1/3 h-48 object-cover rounded-xl" />
                         <div className="flex-1">
                           <div className="flex items-center gap-2 text-gray-600 mb-2">
-                            <MapPin className="text-blue-600" size={18} />
+                            <MapPin className="text-indigo-600" size={18} />
                             <span>{hotel.address}</span>
                           </div>
                           <p className="text-gray-700 mb-4">{hotel.description}</p>
                           <div className="flex flex-wrap gap-2">
                              {hotel.amenities.map(a => (
-                               <span key={a} className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                               <span key={a} className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">
                                  {t(`accommodation.amenity_${a}`)}
                                </span>
                              ))}
@@ -351,13 +351,13 @@ const AccommodationPage: React.FC = () => {
                       </div>
 
                       {hotel.rates && (
-                        <div className="mb-8 bg-blue-50/50 rounded-xl p-6 border border-blue-100">
+                        <div className="mb-8 bg-indigo-50/50 rounded-xl p-6 border border-indigo-100">
                           <div className="flex items-center gap-3 mb-6">
-                            <div className="bg-blue-100 p-2 rounded-lg text-blue-600">
+                            <div className="bg-indigo-100 p-2 rounded-lg text-indigo-600">
                               <Star className="w-6 h-6" />
                             </div>
                             <div>
-                              <h3 className="text-xl font-bold text-gray-900">Tarifs NÃ©gociÃ©s SIB 2026</h3>
+                              <h3 className="text-xl font-bold text-gray-900">Tarifs Négociés SIB 2026</h3>
                               <p className="text-sm text-gray-500">Prix exclusifs pour les participants</p>
                             </div>
                           </div>
@@ -367,15 +367,15 @@ const AccommodationPage: React.FC = () => {
                               <thead>
                                 <tr className="bg-gray-50 border-b border-gray-100">
                                   <th className="p-4 font-semibold text-gray-600 text-sm uppercase tracking-wider">Type de Chambre</th>
-                                  <th className="p-4 font-semibold text-blue-600 text-sm uppercase tracking-wider">BB (Petit-dÃ©jeuner)</th>
+                                  <th className="p-4 font-semibold text-indigo-600 text-sm uppercase tracking-wider">BB (Petit-déjeuner)</th>
                                   <th className="p-4 font-semibold text-gray-600 text-sm uppercase tracking-wider">DP (Demi-pension)</th>
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-gray-100">
                                 {hotel.rates.map((rate, idx) => (
-                                  <tr key={idx} className="hover:bg-blue-50/30 transition-colors">
+                                  <tr key={idx} className="hover:bg-indigo-50/30 transition-colors">
                                     <td className="p-4 font-medium text-gray-900">{rate.roomType}</td>
-                                    <td className="p-4 font-bold text-blue-600 font-mono text-lg">{rate.bbPrice}</td>
+                                    <td className="p-4 font-bold text-indigo-600 font-mono text-lg">{rate.bbPrice}</td>
                                     <td className="p-4 text-gray-600 font-mono">{rate.dpPrice}</td>
                                   </tr>
                                 ))}
@@ -383,7 +383,7 @@ const AccommodationPage: React.FC = () => {
                             </table>
                           </div>
                           <p className="text-xs text-gray-500 mt-4 italic">
-                            * Les tarifs incluent la taxe de sÃ©jour (sauf mention contraire).
+                            * Les tarifs incluent la taxe de séjour (sauf mention contraire).
                           </p>
                         </div>
                       )}
@@ -391,11 +391,11 @@ const AccommodationPage: React.FC = () => {
                       <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-100">
                          <a href={`tel:${hotel.phone}`} className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
                             <Phone size={18} />
-                            Appeler l'hÃ´tel
+                            Appeler l'hôtel
                          </a>
                          {hotel.website && (
-                            <a href={hotel.website} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">
-                               RÃ©server en ligne
+                            <a href={hotel.website} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+                               Réserver en ligne
                             </a>
                          )}
                       </div>
@@ -411,4 +411,6 @@ const AccommodationPage: React.FC = () => {
 };
 
 export default AccommodationPage;
+
+
 

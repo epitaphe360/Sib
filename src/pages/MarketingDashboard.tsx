@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 import { useMarketingData } from '../hooks/useMarketingData';
 import { motion, AnimatePresence } from 'framer-motion';

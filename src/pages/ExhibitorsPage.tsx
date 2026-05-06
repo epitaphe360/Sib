@@ -1,4 +1,4 @@
-ï»¿import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -44,7 +44,7 @@ export default function ExhibitorsPage() {
   const [viewMode, setViewMode] = useState<keyof typeof CONFIG.viewModes>(CONFIG.viewModes.grid);
   const [showFilters, setShowFilters] = useState(false);
 
-  // â”€â”€â”€ Modal RDV â”€â”€â”€
+  // --- Modal RDV ---
   const [rdvExhibitorId, setRdvExhibitorId] = useState<string | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
   const [appointmentMessage, setAppointmentMessage] = useState('');
@@ -59,60 +59,60 @@ export default function ExhibitorsPage() {
     fetchExhibitors(true);
   }, [fetchExhibitors]);
 
-  // âš¡ OPTIMISÃ‰: MÃ©moriser les catÃ©gories pour Ã©viter la recrÃ©ation Ã  chaque render
+  // ? OPTIMISÉ: Mémoriser les catégories pour éviter la recréation à chaque render
   const categories = useMemo(() => [
     { value: '', label: t('pages.exhibitors.all_categories') },
     { value: 'institutional', label: t('pages.exhibitors.category_institutional') },
-    { value: 'bÃ¢timent-industry', label: t('pages.exhibitors.category_port_industry') },
-    { value: 'bÃ¢timent-operations', label: t('pages.exhibitors.category_operations') },
+    { value: 'bâtiment-industry', label: t('pages.exhibitors.category_port_industry') },
+    { value: 'bâtiment-operations', label: t('pages.exhibitors.category_operations') },
     { value: 'academic', label: t('pages.exhibitors.category_academic') }
   ], [t]);
 
-  // âš¡ OPTIMISÃ‰: MÃ©moriser les secteurs pour le filtre (correspondant aux donnÃ©es rÃ©elles)
+  // ? OPTIMISÉ: Mémoriser les secteurs pour le filtre (correspondant aux données réelles)
   const sectors = useMemo(() => [
     { value: '', label: t('exhibitors.all_sectors') },
-    { value: 'Exploitation BÃ¢timent', label: 'Exploitation BÃ¢timent' },
-    { value: 'RÃ©gulation BÃ¢timent', label: 'RÃ©gulation BÃ¢timent' },
+    { value: 'Exploitation Bâtiment', label: 'Exploitation Bâtiment' },
+    { value: 'Régulation Bâtiment', label: 'Régulation Bâtiment' },
     { value: 'Hub Logistique', label: 'Hub Logistique' },
     { value: 'Industrie & Export', label: 'Industrie & Export' },
-    { value: 'Technologies du BÃ¢timent', label: 'Technologies du BÃ¢timent' },
-    { value: 'Technologie BÃ¢timent', label: 'Technologie BÃ¢timent' },
-    { value: 'Culture & Heritage BÃ¢timent', label: 'Culture & Heritage BÃ¢timent' },
-    { value: 'Logistique BÃ¢timent', label: 'Logistique BÃ¢timent' },
-    { value: 'Services du BÃ¢timent Premium', label: 'Services du BÃ¢timent Premium' },
-    { value: 'Conseil BÃ¢timent', label: 'Conseil BÃ¢timent' },
-    { value: 'Patrimoine BÃ¢timent', label: 'Patrimoine BÃ¢timent' },
-    { value: 'Armement BÃ¢timent', label: 'Armement BÃ¢timent' },
-    { value: 'Gestion BÃ¢timent', label: 'Gestion BÃ¢timent' },
+    { value: 'Technologies du Bâtiment', label: 'Technologies du Bâtiment' },
+    { value: 'Technologie Bâtiment', label: 'Technologie Bâtiment' },
+    { value: 'Culture & Heritage Bâtiment', label: 'Culture & Heritage Bâtiment' },
+    { value: 'Logistique Bâtiment', label: 'Logistique Bâtiment' },
+    { value: 'Services du Bâtiment Premium', label: 'Services du Bâtiment Premium' },
+    { value: 'Conseil Bâtiment', label: 'Conseil Bâtiment' },
+    { value: 'Patrimoine Bâtiment', label: 'Patrimoine Bâtiment' },
+    { value: 'Armement Bâtiment', label: 'Armement Bâtiment' },
+    { value: 'Gestion Bâtiment', label: 'Gestion Bâtiment' },
     { value: 'Logistique Mondiale', label: 'Logistique Mondiale' }
   ], []);
 
-  // âš¡ OPTIMISÃ‰: useCallback pour Ã©viter de recrÃ©er ces fonctions Ã  chaque render
+  // ? OPTIMISÉ: useCallback pour éviter de recréer ces fonctions à chaque render
   const getCategoryLabel = useCallback((category: string) => {
     const labels = {
       'institutional': t('pages.exhibitors.category_institutional'),
-      'bÃ¢timent-industry': t('pages.exhibitors.category_port_industry'),
+      'bâtiment-industry': t('pages.exhibitors.category_port_industry'),
       'port-industry': t('pages.exhibitors.category_port_industry'),
-      'bÃ¢timent-operations': t('pages.exhibitors.category_operations'),
+      'bâtiment-operations': t('pages.exhibitors.category_operations'),
       'port-operations': t('pages.exhibitors.category_operations'),
       'academic': t('pages.exhibitors.category_academic')
     };
-    return labels[category as keyof typeof labels] || 'Industrie du BÃ¢timent';
+    return labels[category as keyof typeof labels] || 'Industrie du Bâtiment';
   }, [t]);
 
   const getCategoryColor = useCallback((category: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {
     const colors: Record<string, 'default' | 'success' | 'warning' | 'error' | 'info'> = {
       'institutional': 'success',
-      'bÃ¢timent-industry': 'error',
+      'bâtiment-industry': 'error',
       'port-industry': 'error',
-      'bÃ¢timent-operations': 'info',
+      'bâtiment-operations': 'info',
       'port-operations': 'info',
       'academic': 'warning'
     };
     return colors[category] || 'default';
   }, []);
 
-  // âš¡ OPTIMISÃ‰: useCallback pour les handlers
+  // ? OPTIMISÉ: useCallback pour les handlers
   const handleViewDetails = useCallback((exhibitorId: string) => {
     navigate(`${ROUTES.EXHIBITORS}/${exhibitorId}`);
   }, [navigate]);
@@ -139,7 +139,7 @@ export default function ExhibitorsPage() {
 
   const handleExhibitorMessage = useCallback((exhibitorId: string) => {
     if (!canChat) {
-      toast.error('La messagerie est rÃ©servÃ©e aux exposants, sponsors et visiteurs VIP');
+      toast.error('La messagerie est réservée aux exposants, sponsors et visiteurs VIP');
       return;
     }
     navigate(`/messages?exhibitorId=${exhibitorId}`);
@@ -151,11 +151,11 @@ export default function ExhibitorsPage() {
     try {
       const appointmentStore = useAppointmentStore.getState();
       await appointmentStore.bookAppointment(selectedTimeSlot, appointmentMessage);
-      toast.success('Demande de rendez-vous envoyÃ©e !');
+      toast.success('Demande de rendez-vous envoyée !');
       await fetchAppointments();
       setRdvExhibitorId(null);
     } catch (err: any) {
-      toast.error(err?.message || 'Erreur lors de la rÃ©servation');
+      toast.error(err?.message || 'Erreur lors de la réservation');
     } finally {
       setIsBookingInProgress(false);
     }
@@ -194,7 +194,7 @@ export default function ExhibitorsPage() {
             transition={{ delay: 0.1 }}
             className="text-white/80 text-lg max-w-2xl mx-auto mb-12"
           >
-            {t('pages.exhibitors.description')} â€¢ <span className="text-[#E7D192] font-light">{filteredExhibitors.length} {t('exhibitors.leaders_count')}</span>
+            {t('pages.exhibitors.description')} • <span className="text-[#E7D192] font-light">{filteredExhibitors.length} {t('exhibitors.leaders_count')}</span>
           </motion.p>
 
           {/* Barre de Recherche */}
@@ -300,7 +300,7 @@ export default function ExhibitorsPage() {
         </div>
       </div>
 
-      {/* Logo Showcase Section - Bande dÃ©filante des logos exposants */}
+      {/* Logo Showcase Section - Bande défilante des logos exposants */}
       <div className="relative z-30">
         <LogoShowcaseSection type="exhibitors" />
       </div>
@@ -325,7 +325,7 @@ export default function ExhibitorsPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl sm:rounded-[3rem] p-8 sm:p-16 md:p-24 text-center border-2 border-dashed border-gray-100 shadow-2xl shadow-blue-900/5 overflow-hidden relative"
+            className="bg-white rounded-2xl sm:rounded-[3rem] p-8 sm:p-16 md:p-24 text-center border-2 border-dashed border-gray-100 shadow-2xl shadow-indigo-900/5 overflow-hidden relative"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div className="relative z-10">
@@ -388,7 +388,7 @@ export default function ExhibitorsPage() {
       </div>
     </div>
 
-    {/* â”€â”€â”€ MODAL RDV â”€â”€â”€ */}
+    {/* --- MODAL RDV --- */}
     {rdvExhibitorId && rdvExhibitor && (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -397,7 +397,7 @@ export default function ExhibitorsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-bold">Prendre RDV avec {rdvExhibitor.companyName}</h3>
-                <p className="text-blue-200 text-sm mt-0.5">SÃ©lectionnez un crÃ©neau disponible</p>
+                <p className="text-indigo-200 text-sm mt-0.5">Sélectionnez un créneau disponible</p>
               </div>
               <button onClick={() => setRdvExhibitorId(null)} className="p-2 hover:bg-white/20 rounded-lg transition-colors">
                 <X className="h-5 w-5" />
@@ -406,7 +406,7 @@ export default function ExhibitorsPage() {
           </div>
 
           <div className="p-6 space-y-5">
-            {/* CrÃ©neaux horaires */}
+            {/* Créneaux horaires */}
             {(() => {
               const filteredSlots = timeSlots.filter(slot => {
                 if (slot.available === false) {return false;}
@@ -417,16 +417,16 @@ export default function ExhibitorsPage() {
               if (filteredSlots.length === 0) {return (
                 <div className="text-center py-10 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
                   <Calendar className="h-10 w-10 text-gray-300 mx-auto mb-2" />
-                  <p className="text-gray-500 font-medium">Aucun crÃ©neau disponible</p>
-                  <p className="text-sm text-gray-400 mt-1">Veuillez rÃ©essayer plus tard ou contacter l'exposant</p>
+                  <p className="text-gray-500 font-medium">Aucun créneau disponible</p>
+                  <p className="text-sm text-gray-400 mt-1">Veuillez réessayer plus tard ou contacter l'exposant</p>
                 </div>
               );}
 
               return (
                 <div>
                   <label className="block text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-blue-600" />
-                    Choisir un crÃ©neau horaire
+                    <Calendar className="h-4 w-4 text-indigo-600" />
+                    Choisir un créneau horaire
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-72 overflow-y-auto p-1">
                     {filteredSlots.map(slot => {
@@ -444,14 +444,14 @@ export default function ExhibitorsPage() {
                             booked
                               ? 'border-green-200 bg-green-50 opacity-70 cursor-not-allowed'
                               : isSelected
-                              ? 'border-[#1e3a5f] bg-blue-50 shadow-md'
-                              : 'border-gray-200 hover:border-blue-300 hover:shadow'
+                              ? 'border-[#1e3a5f] bg-indigo-50 shadow-md'
+                              : 'border-gray-200 hover:border-indigo-300 hover:shadow'
                           }`}
                         >
                           <div className="font-semibold text-gray-800 capitalize text-xs mb-1">{dateLabel}</div>
-                          <div className="flex items-center gap-1 text-blue-600 font-bold text-sm">
+                          <div className="flex items-center gap-1 text-indigo-600 font-bold text-sm">
                             <Clock className="h-3.5 w-3.5" />
-                            {slot.startTime} â€“ {slot.endTime}
+                            {slot.startTime} – {slot.endTime}
                           </div>
                           {slot.location && (
                             <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
@@ -459,13 +459,13 @@ export default function ExhibitorsPage() {
                             </div>
                           )}
                           <div className="text-xs text-gray-400 mt-1">
-                            {slot.currentBookings || 0}/{slot.maxBookings} rÃ©servÃ©(s)
+                            {slot.currentBookings || 0}/{slot.maxBookings} réservé(s)
                           </div>
                           {booked && (
                             <span className={`absolute top-2 right-2 text-xs text-white px-2 py-0.5 rounded-full font-bold ${
                               booked.status === 'confirmed' ? 'bg-green-500' : 'bg-yellow-500'
                             }`}>
-                              {booked.status === 'confirmed' ? 'ConfirmÃ©' : 'En attente'}
+                              {booked.status === 'confirmed' ? 'Confirmé' : 'En attente'}
                             </span>
                           )}
                           {isSelected && !booked && (
@@ -482,13 +482,13 @@ export default function ExhibitorsPage() {
             {/* Message optionnel */}
             <div>
               <label className="block text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
-                <MessageCircle className="h-4 w-4 text-blue-600" />
+                <MessageCircle className="h-4 w-4 text-indigo-600" />
                 Message (optionnel)
               </label>
               <textarea
                 value={appointmentMessage}
                 onChange={e => setAppointmentMessage(e.target.value)}
-                placeholder="DÃ©crivez briÃ¨vement l'objet de votre rendez-vous..."
+                placeholder="Décrivez brièvement l'objet de votre rendez-vous..."
                 rows={3}
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] focus:border-[#1e3a5f] resize-none text-sm"
               />
@@ -510,7 +510,7 @@ export default function ExhibitorsPage() {
                     <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
                     Envoi en cours...
                   </span>
-                ) : selectedTimeSlot ? 'Envoyer la demande' : 'SÃ©lectionnez un crÃ©neau'}
+                ) : selectedTimeSlot ? 'Envoyer la demande' : 'Sélectionnez un créneau'}
               </button>
               <button
                 onClick={() => setRdvExhibitorId(null)}
@@ -526,3 +526,4 @@ export default function ExhibitorsPage() {
     </>
   );
 };
+

@@ -39,7 +39,7 @@ interface CollaboratorGroup {
 function badgeColor(type: string): string {
   if (type === 'vip') return 'bg-yellow-100 text-yellow-800';
   if (type === 'press') return 'bg-purple-100 text-purple-800';
-  if (type === 'exhibitor') return 'bg-blue-100 text-blue-800';
+  if (type === 'exhibitor') return 'bg-indigo-100 text-indigo-800';
   return 'bg-gray-100 text-gray-700';
 }
 
@@ -55,7 +55,7 @@ function avatarInitials(name: string): string {
 const AVATAR_COLORS = [
   'bg-indigo-500', 'bg-emerald-500', 'bg-violet-500',
   'bg-rose-500', 'bg-amber-500', 'bg-cyan-500',
-  'bg-blue-500', 'bg-pink-500',
+  'bg-indigo-500', 'bg-pink-500',
 ];
 
 function avatarColor(id: string): string {
@@ -489,3 +489,4 @@ export default function PartnerScansPage() {
     </div>
   );
 }
+

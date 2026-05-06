@@ -1,4 +1,4 @@
-﻿import { Card } from '../components/ui/Card';
+import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useTranslation } from '../hooks/useTranslation';
 import { HelpCircle, MessageCircle, FileText, Phone } from 'lucide-react';
@@ -123,7 +123,7 @@ export default function SupportPage() {
 
         {/* Contact Information */}
         <Card className="p-8 text-center">
-          <Phone className="h-16 w-16 text-blue-600 mx-auto mb-6" />
+          <Phone className="h-16 w-16 text-indigo-600 mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             {t('support.immediateHelp')}
           </h2>
@@ -164,5 +164,6 @@ export default function SupportPage() {
     </div>
   );
 }
+
 
 

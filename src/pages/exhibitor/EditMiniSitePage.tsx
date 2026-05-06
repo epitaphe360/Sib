@@ -10,7 +10,7 @@ export const EditMiniSitePage: React.FC = () => {
   return (
     <div className="h-screen flex flex-col">
       <div className="px-4 py-2 bg-white border-b">
-        <Link to={ROUTES.EXHIBITOR_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700">
+        <Link to={ROUTES.EXHIBITOR_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Retour au Tableau de Bord
         </Link>
@@ -21,3 +21,4 @@ export const EditMiniSitePage: React.FC = () => {
     </div>
   );
 };
+

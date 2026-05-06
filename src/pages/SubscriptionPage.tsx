@@ -113,13 +113,13 @@ export default function SubscriptionPage() {
     }
   };
 
-  // Données des 5 pavillons WordPress
+  // Donn�es des 5 pavillons WordPress
   const pavilions = [
     {
       icon: Landmark,
       title: t('sub.pav1.title'),
       description: t('sub.pav1.desc'),
-      color: 'from-blue-500 to-blue-700'
+      color: 'from-indigo-500 to-indigo-700'
     },
     {
       icon: Cog,
@@ -165,27 +165,27 @@ export default function SubscriptionPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-50">
 
-      {/* ═══════════════════════════════════════════════════════════════
+      {/* ---------------------------------------------------------------
           SECTION 1 : HERO IMMERSIF
-          ═══════════════════════════════════════════════════════════════ */}
+          --------------------------------------------------------------- */}
       <section className="relative min-h-[90vh] flex items-center text-white overflow-hidden">
         {/* Background image salon */}
         <div className="absolute inset-0">
           <img
             src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920"
-            alt="Salon du bâtiment"
+            alt="Salon du b�timent"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-blue-800/85 to-indigo-900/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-blue-950/60 via-transparent to-blue-900/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/95 via-indigo-800/85 to-indigo-900/75" />
+          <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/60 via-transparent to-indigo-900/30" />
         </div>
 
         {/* Pattern Zellige subtil */}
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 11px)' }} />
 
-        {/* Éléments décoratifs géométriques */}
+        {/* �l�ments d�coratifs g�om�triques */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-20 -right-20 w-96 h-96 border border-sib-gold/20 rounded-full" />
           <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] border border-white/10 rounded-full" />
@@ -209,7 +209,7 @@ export default function SubscriptionPage() {
               >
                 <Sparkles className="w-4 h-4 text-sib-gold" />
                 <span className="text-sm font-bold text-sib-gold uppercase tracking-widest">
-                  20ème Édition — {t('sub.hero.badge')}
+                  20�me �dition � {t('sub.hero.badge')}
                 </span>
               </motion.div>
 
@@ -218,14 +218,14 @@ export default function SubscriptionPage() {
                 <span className="block">Salon</span>
                 <span className="block">International</span>
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-sib-gold via-yellow-300 to-amber-400">
-                  du Bâtiment
+                  du B�timent
                 </span>
               </h1>
 
-              <p className="text-lg md:text-xl text-blue-100/90 mb-4 leading-relaxed max-w-lg">
-                Du 25 au 29 Novembre 2026 à El Jadida – Maroc
+              <p className="text-lg md:text-xl text-indigo-100/90 mb-4 leading-relaxed max-w-lg">
+                Du 25 au 29 Novembre 2026 � El Jadida � Maroc
               </p>
-              <p className="text-base text-blue-200/70 mb-10 leading-relaxed max-w-lg">
+              <p className="text-base text-indigo-200/70 mb-10 leading-relaxed max-w-lg">
                 {t('sub.hero.desc')}
               </p>
 
@@ -234,7 +234,7 @@ export default function SubscriptionPage() {
                 <Button
                   size="lg"
                   onClick={() => handleSubscribe('visitor-free')}
-                  className="bg-gradient-to-r from-sib-gold to-amber-400 text-blue-950 hover:from-yellow-400 hover:to-amber-300 font-bold text-lg px-10 py-4 shadow-2xl shadow-sib-gold/25 transition-all hover:scale-105"
+                  className="bg-gradient-to-r from-sib-gold to-amber-400 text-indigo-950 hover:from-yellow-400 hover:to-amber-300 font-bold text-lg px-10 py-4 shadow-2xl shadow-sib-gold/25 transition-all hover:scale-105"
                 >
                   <Ticket className="mr-2 h-5 w-5" />
                   {t('sub.hero.badgeBtn')}
@@ -251,7 +251,7 @@ export default function SubscriptionPage() {
               </div>
 
               {/* Trust indicators */}
-              <div className="flex items-center gap-6 mt-10 text-blue-200/70 text-sm">
+              <div className="flex items-center gap-6 mt-10 text-indigo-200/70 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                   <span>Inscription ouverte</span>
@@ -281,7 +281,7 @@ export default function SubscriptionPage() {
                   <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-sib-gold to-amber-300 mb-2">
                     {stat.number}
                   </div>
-                  <div className="text-sm text-blue-100/80 font-medium">{stat.label}</div>
+                  <div className="text-sm text-indigo-100/80 font-medium">{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -298,9 +298,9 @@ export default function SubscriptionPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════
+      {/* ---------------------------------------------------------------
           SECTION 2 : POURQUOI VISITER SIB ? (WordPress)
-          ═══════════════════════════════════════════════════════════════ */}
+          --------------------------------------------------------------- */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
         <MoroccanPattern className="opacity-[0.03] text-sib-primary" scale={1.5} />
 
@@ -322,7 +322,7 @@ export default function SubscriptionPage() {
               {t('sub.whySection.title1')} <span className="text-sib-primary">SIB</span> {t('sub.whySection.title2')}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Une expérience immersive au cœur de l'écosystème bâtiment international
+              Une exp�rience immersive au c�ur de l'�cosyst�me b�timent international
             </p>
           </motion.div>
 
@@ -360,7 +360,7 @@ export default function SubscriptionPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 p-8">
+              <Card className="bg-gradient-to-br from-indigo-50 to-indigo-50 border-indigo-200 p-8">
                 <div className="text-center mb-6">
                   <div className="bg-sib-primary p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                     <Globe className="h-8 w-8 text-white" />
@@ -411,10 +411,10 @@ export default function SubscriptionPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════
+      {/* ---------------------------------------------------------------
           SECTION 3 : LES 5 UNIVERS / PAVILLONS (WordPress)
-          ═══════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50 via-white to-sky-50 relative overflow-hidden">
+          --------------------------------------------------------------- */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-indigo-50 via-white to-sky-50 relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.05]">
           <div className="absolute top-10 left-10 w-32 h-32 border-4 border-sib-gold rounded-full" />
           <div className="absolute bottom-20 right-20 w-24 h-24 border-4 border-green-600 rotate-45 transform" />
@@ -466,9 +466,9 @@ export default function SubscriptionPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════
+      {/* ---------------------------------------------------------------
           SECTION 4 : BESOIN D'INFORMATIONS ? (WordPress)
-          ═══════════════════════════════════════════════════════════════ */}
+          --------------------------------------------------------------- */}
       <section className="py-12 bg-gradient-to-r from-sib-primary to-indigo-600">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <motion.div
@@ -481,7 +481,7 @@ export default function SubscriptionPage() {
               {t('sub.needInfo')}
             </h2>
             <Link to={ROUTES.CONTACT}>
-              <Button size="lg" className="bg-white text-sib-primary hover:bg-blue-50 font-bold">
+              <Button size="lg" className="bg-white text-sib-primary hover:bg-indigo-50 font-bold">
                 <Mail className="mr-2 h-5 w-5" />
                 {t('sub.contactUs')}
               </Button>
@@ -490,9 +490,9 @@ export default function SubscriptionPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════
+      {/* ---------------------------------------------------------------
           SECTION 5 : FORFAITS VISITEURS (App existante + WordPress)
-          ═══════════════════════════════════════════════════════════════ */}
+          --------------------------------------------------------------- */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -581,7 +581,7 @@ export default function SubscriptionPage() {
               <div className="p-6 border-t-2 border-gray-200">
                 <Button
                   onClick={() => handleSubscribe(tier.id)}
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold hover:shadow-lg transition-all"
+                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg transition-all"
                 >
                   {tier.cta}
                 </Button>
@@ -603,7 +603,7 @@ export default function SubscriptionPage() {
             {t('sub.plans.customPlan')}
           </h3>
           <Link to={ROUTES.CONTACT}>
-            <Button size="lg" className="bg-white text-sib-primary hover:bg-blue-50 font-bold">
+            <Button size="lg" className="bg-white text-sib-primary hover:bg-indigo-50 font-bold">
               <Users className="mr-2 h-5 w-5" />
               {t('sub.plans.customPlanDesc')}
             </Button>
@@ -612,10 +612,10 @@ export default function SubscriptionPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════
+      {/* ---------------------------------------------------------------
           SECTION 6 : ORGANISEZ VOTRE VISITE - INFOS PRATIQUES (WordPress)
-          ═══════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50 via-white to-sky-50 relative overflow-hidden">
+          --------------------------------------------------------------- */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-indigo-50 via-white to-sky-50 relative overflow-hidden">
         <MoroccanPattern className="opacity-[0.03] text-sib-primary" scale={1.5} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -639,8 +639,8 @@ export default function SubscriptionPage() {
 
               <div className="space-y-6">
                 <div className="flex items-start gap-4 bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
-                  <div className="bg-blue-100 p-3 rounded-lg">
-                    <MapPin className="h-6 w-6 text-blue-600" />
+                  <div className="bg-indigo-100 p-3 rounded-lg">
+                    <MapPin className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">{t('sub.info.venue')}</h3>
@@ -687,7 +687,7 @@ export default function SubscriptionPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 p-8">
+              <Card className="bg-gradient-to-br from-indigo-50 to-indigo-50 border-indigo-200 p-8">
                 <div className="text-center mb-6">
                   <div className="bg-sib-primary p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                     <Phone className="h-8 w-8 text-white" />
@@ -721,7 +721,7 @@ export default function SubscriptionPage() {
 
                 <div className="mt-6">
                   <Link to={ROUTES.CONTACT}>
-                    <Button className="w-full bg-sib-primary text-white hover:bg-blue-700">
+                    <Button className="w-full bg-sib-primary text-white hover:bg-indigo-700">
                       <MessageCircle className="mr-2 h-5 w-5" />
                       {t('sub.info.contactBtn')}
                     </Button>
@@ -733,9 +733,9 @@ export default function SubscriptionPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════
-          SECTION 7 : COMMENT ÇA MARCHE (App existante)
-          ═══════════════════════════════════════════════════════════════ */}
+      {/* ---------------------------------------------------------------
+          SECTION 7 : COMMENT �A MARCHE (App existante)
+          --------------------------------------------------------------- */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -802,9 +802,9 @@ export default function SubscriptionPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════
+      {/* ---------------------------------------------------------------
           SECTION 8 : FAQ (App existante)
-          ═══════════════════════════════════════════════════════════════ */}
+          --------------------------------------------------------------- */}
       <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -847,6 +847,7 @@ export default function SubscriptionPage() {
     </div>
   );
 }
+
 
 
 

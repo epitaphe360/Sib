@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toast } from 'sonner';
 import { Download, Printer, RefreshCw, AlertTriangle, CheckCircle, XCircle, Scan, Calendar, User, Briefcase, Building, FileText } from 'lucide-react';
@@ -110,7 +110,7 @@ export default function BadgePage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
@@ -157,7 +157,7 @@ export default function BadgePage() {
       </style>
 
       <div className="no-print mb-8 text-center">
-        <h1 className="text-3xl font-bold mb-2">🎫 {t('badge.my_access_badge')}</h1>
+        <h1 className="text-3xl font-bold mb-2">?? {t('badge.my_access_badge')}</h1>
         <p className="text-gray-600">
           {badge
             ? t('badge.download_print_info')
@@ -178,7 +178,7 @@ export default function BadgePage() {
             onClick={handleGenerateBadge}
             disabled={generating}
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all"
           >
             {generating ? (
               <>
@@ -188,7 +188,7 @@ export default function BadgePage() {
             ) : (
               <>
                 <Scan className="w-5 h-5 mr-2" />
-                ✨ {t('badge.generate_my_badge')}
+                ? {t('badge.generate_my_badge')}
               </>
             )}
           </Button>
@@ -250,7 +250,7 @@ export default function BadgePage() {
                   SIB 2026
                 </div>
                 <div className="text-xs text-gray-500 mt-1 uppercase tracking-wider">
-                  Salon International du Bâtiment et de leurs Écosystème
+                  Salon International du B�timent et de leurs �cosyst�me
                 </div>
               </div>
 
@@ -335,7 +335,7 @@ export default function BadgePage() {
           {showA4 && (
             <div className="mt-8" ref={a4Ref}>
               <div className="no-print flex items-center justify-between mb-3">
-                <h2 className="text-xl font-bold text-gray-900">📄 Badge A4 bifold — 4 faces</h2>
+                <h2 className="text-xl font-bold text-gray-900">?? Badge A4 bifold � 4 faces</h2>
                 <Button
                   onClick={() => setShowA4(false)}
                   variant="ghost"
@@ -353,12 +353,12 @@ export default function BadgePage() {
           {/* Instructions & Stats Grid */}
           <div className="no-print grid md:grid-cols-2 gap-6">
             {/* Instructions */}
-            <Card className="p-6 bg-blue-50 border-blue-100">
-              <h3 className="text-lg font-bold text-blue-900 mb-4 flex items-center gap-2">
+            <Card className="p-6 bg-indigo-50 border-indigo-100">
+              <h3 className="text-lg font-bold text-indigo-900 mb-4 flex items-center gap-2">
                 <Scan className="w-5 h-5" />
                 {t('badge.usage_instructions')}
               </h3>
-              <ol className="list-decimal list-inside space-y-2 text-blue-800 text-sm">
+              <ol className="list-decimal list-inside space-y-2 text-indigo-800 text-sm">
                 <li><span className="font-semibold">{t('badge.instruction_1')}</span> {t('badge.instruction_1_desc')}</li>
                 <li><span className="font-semibold">{t('badge.instruction_2')}</span> {t('badge.instruction_2_desc')}</li>
                 <li><span className="font-semibold">{t('badge.instruction_3')}</span> {t('badge.instruction_3_desc')}</li>
@@ -368,7 +368,7 @@ export default function BadgePage() {
               {(badge.accessLevel === 'vip' || badge.accessLevel === 'premium') && (
                 <div className="mt-4 bg-yellow-50 p-3 rounded-lg border border-yellow-200 text-yellow-800 text-sm">
                   <strong className="block mb-1 flex items-center gap-1">
-                    <span className="text-lg">👑</span> {t('badge.vip_advantages')}
+                    <span className="text-lg">??</span> {t('badge.vip_advantages')}
                   </strong>
                   <ul className="list-disc list-inside pl-1 space-y-1 text-xs">
                     <li>{t('badge.vip_advantage_1')}</li>
@@ -381,7 +381,7 @@ export default function BadgePage() {
 
             {/* Stats */}
             <Card className="p-6">
-              <h4 className="text-lg font-bold text-gray-900 mb-4">📊 {t('badge.statistics')}</h4>
+              <h4 className="text-lg font-bold text-gray-900 mb-4">?? {t('badge.statistics')}</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <div className="text-xs text-gray-500 mb-1">{t('badge.scans_done')}</div>
@@ -415,5 +415,6 @@ export default function BadgePage() {
     </div>
   );
 }
+
 
 

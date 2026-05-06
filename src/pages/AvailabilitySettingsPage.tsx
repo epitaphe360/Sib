@@ -1,4 +1,4 @@
-ï»¿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Card } from '@/components/ui/Card';
 import { useTranslation } from '../hooks/useTranslation';
 import useAuthStore from '@/store/authStore';
@@ -37,12 +37,12 @@ export default function AvailabilitySettingsPage() {
   const cancelledApps = appointments.filter(a => a.status === 'cancelled').length;
   const totalApps = appointments.length;
 
-  // Calculer les pourcentages rÃ©els
+  // Calculer les pourcentages réels
   const confirmedPercent = totalApps > 0 ? ((confirmedApps / totalApps) * 100).toFixed(1) : '0.0';
   const pendingPercent = totalApps > 0 ? ((pendingApps / totalApps) * 100).toFixed(1) : '0.0';
   const completedPercent = totalApps > 0 ? ((completedApps / totalApps) * 100).toFixed(1) : '0.0';
 
-  // DonnÃ©es d'engagement hebdomadaire â€” calculÃ©es depuis les vrais rendez-vous
+  // Données d'engagement hebdomadaire — calculées depuis les vrais rendez-vous
   const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
   const weekDayCounts = [0, 0, 0, 0, 0, 0, 0];
   const weekDayInteractions = [0, 0, 0, 0, 0, 0, 0];
@@ -64,18 +64,18 @@ export default function AvailabilitySettingsPage() {
     interactions: weekDayInteractions[i],
   }));
 
-  // Utiliser les vraies donnÃ©es dynamiques
+  // Utiliser les vraies données dynamiques
   const statusData = [
-    { name: 'ConfirmÃ©s', value: confirmedPercent, color: '#10B981' },
+    { name: 'Confirmés', value: confirmedPercent, color: '#10B981' },
     { name: 'En attente', value: pendingPercent, color: '#F59E0B' },
-    { name: 'TerminÃ©s', value: completedPercent, color: '#3B82F6' },
+    { name: 'Terminés', value: completedPercent, color: '#3B82F6' },
   ];
 
   const activityData = [
-    { name: 'RDV ConfirmÃ©s', value: totalApps > 0 ? confirmedApps / totalApps : 0 },
-    { name: 'RDV TerminÃ©s', value: totalApps > 0 ? completedApps / totalApps : 0 },
+    { name: 'RDV Confirmés', value: totalApps > 0 ? confirmedApps / totalApps : 0 },
+    { name: 'RDV Terminés', value: totalApps > 0 ? completedApps / totalApps : 0 },
     { name: 'En attente', value: totalApps > 0 ? pendingApps / totalApps : 0 },
-    { name: 'AnnulÃ©s', value: totalApps > 0 ? cancelledApps / totalApps : 0 },
+    { name: 'Annulés', value: totalApps > 0 ? cancelledApps / totalApps : 0 },
   ];
 
   return (
@@ -84,28 +84,28 @@ export default function AvailabilitySettingsPage() {
 
         {/* Header Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Gestion Calendaire AvancÃ©e</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Gestion Calendaire Avancée</h1>
           <p className="mt-2 text-gray-600">
-            Votre systÃ¨me complet de gestion des rendez-vous : dÃ©finissez vos disponibilitÃ©s publiques et suivez tous vos rendez-vous personnels
+            Votre système complet de gestion des rendez-vous : définissez vos disponibilités publiques et suivez tous vos rendez-vous personnels
           </p>
         </div>
 
         {/* Content Sections - Vertical Layout */}
         <div className="space-y-12">
 
-          {/* SECTION 1: Gestion des DisponibilitÃ©s */}
+          {/* SECTION 1: Gestion des Disponibilités */}
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <AvailabilityManager
               userId={user.id}
               userType={user.type as any}
               onAvailabilityUpdate={() => {
                 fetchTimeSlots(user.id);
-                toast.success("DisponibilitÃ©s mises Ã  jour");
+                toast.success("Disponibilités mises à jour");
               }}
             />
           </motion.div>
 
-          {/* SÃ©parateur visuel */}
+          {/* Séparateur visuel */}
           <div className="border-t border-gray-200" />
 
           {/* SECTION 2: Mes Rendez-vous B2B */}
@@ -113,14 +113,14 @@ export default function AvailabilitySettingsPage() {
             <PersonalAppointmentsCalendar userType={user.type as any} />
           </motion.div>
 
-          {/* SÃ©parateur visuel */}
+          {/* Séparateur visuel */}
           <div className="border-t border-gray-200" />
 
           {/* SECTION 3: Analytics */}
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <BarChart3 className="w-6 h-6 text-blue-600" />
+                <BarChart3 className="w-6 h-6 text-indigo-600" />
                 Performance & Analytics
               </h2>
               <p className="mt-1 text-gray-600">Suivez vos statistiques de rendez-vous et d'engagement</p>
@@ -142,7 +142,7 @@ export default function AvailabilitySettingsPage() {
               <Card className="p-4 bg-white shadow-sm border border-gray-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">ConfirmÃ©s</p>
+                    <p className="text-sm text-gray-500">Confirmés</p>
                     <p className="text-2xl font-bold text-green-600">{confirmedApps}</p>
                   </div>
                   <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
@@ -164,7 +164,7 @@ export default function AvailabilitySettingsPage() {
               <Card className="p-4 bg-white shadow-sm border border-gray-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">AnnulÃ©s</p>
+                    <p className="text-sm text-gray-500">Annulés</p>
                     <p className="text-2xl font-bold text-red-600">{cancelledApps}</p>
                   </div>
                   <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center">
@@ -177,7 +177,7 @@ export default function AvailabilitySettingsPage() {
             {/* Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
               <Card className="p-6 bg-white shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">DonnÃ©es en temps rÃ©el</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-6">Données en temps réel</h3>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={engagementData}>
@@ -235,7 +235,7 @@ export default function AvailabilitySettingsPage() {
             </div>
 
             <Card className="p-6 bg-white shadow-sm border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">RÃ©partition des ActivitÃ©s</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">Répartition des Activités</h3>
               <div className="space-y-6">
                 {activityData.map((item) => (
                   <div key={item.name}>
@@ -245,7 +245,7 @@ export default function AvailabilitySettingsPage() {
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-2.5">
                       <div
-                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-500"
+                        className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500"
                         style={{ width: `${item.value * 100}%` }}
                       />
                     </div>
@@ -259,4 +259,5 @@ export default function AvailabilitySettingsPage() {
     </div>
   );
 }
+
 

@@ -4,6 +4,7 @@ import { usePageContent } from '../../hooks/usePageContent';
 import {
   ScrollReveal, StaggerReveal, StaggerItem, HoverCard, HeroReveal,
 } from '../../components/ui/motion';
+import { PageHero } from '../../components/ui/PageHero';
 
 const defaultNouveautes = [
   {
@@ -16,7 +17,7 @@ const defaultNouveautes = [
     icon: MapPin,
     title: '35 000 m² d\'exposition',
     desc: 'Un espace agrandi et optimisé au Parc d\'Exposition Mohammed VI d\'El Jadida (3ᵉ édition consécutive sur ce site). Parcours de visite fluide, structuré et immersif.',
-    color: 'bg-blue-50 text-blue-600',
+    color: 'bg-indigo-50 text-indigo-600',
   },
   {
     icon: Users,
@@ -92,25 +93,13 @@ export default function NouveautesPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16 overflow-hidden">
-        <div className="container mx-auto px-4 text-center">
-          <HeroReveal>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
-              {getCms('hero_badge', 'SIB 2026')}
-            </span>
-          </HeroReveal>
-          <HeroReveal delay={0.15}>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Nouveautés'}</h1>
-          </HeroReveal>
-          <HeroReveal delay={0.3}>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              {cms.hero_subtitle || 'Découvrez les innovations et les changements majeurs de cette 20ème édition du SIB.'}
-            </p>
-          </HeroReveal>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50">
+      <PageHero
+        badge={<><Zap className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{getCms('hero_badge', 'SIB 2026')}</span></>}
+        title={<>{cms.hero_title ? <>{cms.hero_title.split(' ')[0]} <span className="text-yellow-300">{cms.hero_title.split(' ').slice(1).join(' ')}</span></> : <>Nouveautés <span className="text-yellow-300">SIB 2026</span></>}</>}
+        subtitle={cms.hero_subtitle || 'Découvrez les innovations et les changements majeurs de cette 20ème édition du SIB.'}
+        py="py-16 md:py-20"
+      />
 
       {/* Grid */}
       <div className="container mx-auto px-4 py-16">
@@ -131,3 +120,4 @@ export default function NouveautesPage() {
     </div>
   );
 }
+

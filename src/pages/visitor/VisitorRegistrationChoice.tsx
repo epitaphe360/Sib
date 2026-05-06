@@ -1,4 +1,4 @@
-Ôªø/**
+/**
  * Page de choix d'inscription visiteur
  * Permet de choisir entre Pass Gratuit et Pass Premium VIP
  */
@@ -15,29 +15,29 @@ export default function VisitorRegistrationChoice() {
   const navigate = useNavigate();
 
   const freeFeatures = [
-    'Acc√®s au salon SIB 2026',
-    'Badge QR s√©curis√©',
-    'Acc√®s aux zones publiques',
-    'Conf√©rences publiques',
+    'AccËs au salon SIB 2026',
+    'Badge QR sÈcurisÈ',
+    'AccËs aux zones publiques',
+    'ConfÈrences publiques',
     'Inscription rapide sans mot de passe',
     'Gratuit - 0 EUR'
   ];
 
   const vipFeatures = [
     'Tous les avantages du Pass Gratuit',
-    'Rendez-vous B2B ILLIMIT√âS',
-    'Acc√®s zones VIP premium',
-    'Badge ultra-s√©curis√© avec photo',
+    'Rendez-vous B2B ILLIMIT…S',
+    'AccËs zones VIP premium',
+    'Badge ultra-sÈcurisÈ avec photo',
     'Networking area exclusif',
-    'Ateliers et conf√©rences VIP',
-    'Gala de cl√¥ture exclusif',
+    'Ateliers et confÈrences VIP',
+    'Gala de clÙture exclusif',
     'Tableau de bord complet',
     'Support prioritaire',
     '700,00 EUR'
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-green-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -46,11 +46,11 @@ export default function VisitorRegistrationChoice() {
           className="text-center mb-12"
         >
           <div className="flex items-center justify-center space-x-2 mb-6">
-            <div className="bg-gradient-to-r from-blue-600 to-green-600 p-4 rounded-lg shadow-lg">
+            <div className="bg-indigo-600 p-4 rounded-lg shadow-lg">
               <Anchor className="h-10 w-10 text-white" />
             </div>
             <div>
-              <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+              <span className="text-3xl font-bold bg-indigo-600 bg-clip-text text-transparent">
                 SIB
               </span>
               <span className="text-lg text-gray-600 block leading-none">2026</span>
@@ -60,7 +60,7 @@ export default function VisitorRegistrationChoice() {
             Inscription Visiteur
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Choisissez le pass qui correspond √† vos besoins pour SIB 2026
+            Choisissez le pass qui correspond ‡ vos besoins pour SIB 2026
           </p>
         </motion.div>
 
@@ -86,7 +86,7 @@ export default function VisitorRegistrationChoice() {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900">Pass Gratuit</h2>
-                    <p className="text-gray-600">Acc√®s salon de base</p>
+                    <p className="text-gray-600">AccËs salon de base</p>
                   </div>
                 </div>
 
@@ -121,7 +121,7 @@ export default function VisitorRegistrationChoice() {
                 {/* Info */}
                 <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
                   <p className="text-xs text-green-800">
-                    ‚úÖ Aucun mot de passe requis ‚Ä¢ Badge envoy√© par email
+                    ? Aucun mot de passe requis ï Badge envoyÈ par email
                   </p>
                 </div>
               </div>
@@ -150,7 +150,7 @@ export default function VisitorRegistrationChoice() {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900">Pass Premium VIP</h2>
-                    <p className="text-gray-600">Acc√®s complet et exclusif</p>
+                    <p className="text-gray-600">AccËs complet et exclusif</p>
                   </div>
                 </div>
 
@@ -162,7 +162,7 @@ export default function VisitorRegistrationChoice() {
                     </span>
                     <span className="text-2xl text-gray-600 ml-2">EUR</span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">Paiement s√©curis√© unique</p>
+                  <p className="text-sm text-gray-500 mt-1">Paiement sÈcurisÈ unique</p>
                 </div>
 
                 {/* Features */}
@@ -190,10 +190,10 @@ export default function VisitorRegistrationChoice() {
                 {/* Highlight */}
                 <div className="mt-4 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border border-yellow-300">
                   <p className="text-sm font-semibold text-gray-900 mb-2">
-                     Rendez-vous B2B ILLIMIT√âS
+                     Rendez-vous B2B ILLIMIT…S
                   </p>
                   <p className="text-xs text-gray-700">
-                    Planifiez autant de meetings strat√©giques que vous le souhaitez avec les exposants et sponsors du salon.
+                    Planifiez autant de meetings stratÈgiques que vous le souhaitez avec les exposants et sponsors du salon.
                   </p>
                 </div>
               </div>
@@ -211,61 +211,61 @@ export default function VisitorRegistrationChoice() {
           <Card className="overflow-hidden">
             <div className="p-6 bg-gradient-to-r from-gray-50 to-gray-100">
               <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
-                Comparaison d√©taill√©e
+                Comparaison dÈtaillÈe
               </h3>
               <p className="text-gray-600 text-center text-sm">
-                Choisissez le pass adapt√© √† vos objectifs
+                Choisissez le pass adaptÈ ‡ vos objectifs
               </p>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Fonctionnalit√©</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">FonctionnalitÈ</th>
                     <th className="px-6 py-3 text-center text-sm font-semibold text-green-700">Pass Gratuit</th>
                     <th className="px-6 py-3 text-center text-sm font-semibold text-yellow-700">Pass VIP Premium</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   <tr className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-900">Acc√®s au salon</td>
-                    <td className="px-6 py-4 text-center">‚úÖ</td>
-                    <td className="px-6 py-4 text-center">‚úÖ</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">AccËs au salon</td>
+                    <td className="px-6 py-4 text-center">?</td>
+                    <td className="px-6 py-4 text-center">?</td>
                   </tr>
                   <tr className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-900">Badge QR s√©curis√©</td>
-                    <td className="px-6 py-4 text-center">‚úÖ Simple</td>
-                    <td className="px-6 py-4 text-center">‚úÖ Avec photo</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Badge QR sÈcurisÈ</td>
+                    <td className="px-6 py-4 text-center">? Simple</td>
+                    <td className="px-6 py-4 text-center">? Avec photo</td>
                   </tr>
                   <tr className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm text-gray-900">{t('common.public_conferences')}</td>
-                    <td className="px-6 py-4 text-center">‚úÖ</td>
-                    <td className="px-6 py-4 text-center">‚úÖ</td>
+                    <td className="px-6 py-4 text-center">?</td>
+                    <td className="px-6 py-4 text-center">?</td>
                   </tr>
                   <tr className="hover:bg-gray-50 bg-yellow-50">
                     <td className="px-6 py-4 text-sm font-semibold text-gray-900">{t('common.b2b_meetings')}</td>
-                    <td className="px-6 py-4 text-center text-gray-400">‚ùå 0</td>
-                    <td className="px-6 py-4 text-center text-yellow-700 font-bold">‚úÖ {t('common.unlimited')}</td>
+                    <td className="px-6 py-4 text-center text-gray-400">? 0</td>
+                    <td className="px-6 py-4 text-center text-yellow-700 font-bold">? {t('common.unlimited')}</td>
                   </tr>
                   <tr className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm text-gray-900">{t('common.dashboard')}</td>
-                    <td className="px-6 py-4 text-center text-gray-400">√¢¬ù≈í</td>
-                    <td className="px-6 py-4 text-center">‚úÖ</td>
+                    <td className="px-6 py-4 text-center text-gray-400">‚ùå</td>
+                    <td className="px-6 py-4 text-center">?</td>
                   </tr>
                   <tr className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm text-gray-900">{t('common.vip_zones')}</td>
-                    <td className="px-6 py-4 text-center text-gray-400">√¢¬ù≈í</td>
-                    <td className="px-6 py-4 text-center">‚úÖ</td>
+                    <td className="px-6 py-4 text-center text-gray-400">‚ùå</td>
+                    <td className="px-6 py-4 text-center">?</td>
                   </tr>
                   <tr className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm text-gray-900">{t('common.networking')} area</td>
-                    <td className="px-6 py-4 text-center text-gray-400">√¢¬ù≈í</td>
-                    <td className="px-6 py-4 text-center">‚úÖ</td>
+                    <td className="px-6 py-4 text-center text-gray-400">‚ùå</td>
+                    <td className="px-6 py-4 text-center">?</td>
                   </tr>
                   <tr className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-900">Gala de cl√¥ture</td>
-                    <td className="px-6 py-4 text-center text-gray-400">√¢¬ù≈í</td>
-                    <td className="px-6 py-4 text-center">‚úÖ</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Gala de clÙture</td>
+                    <td className="px-6 py-4 text-center text-gray-400">‚ùå</td>
+                    <td className="px-6 py-4 text-center">?</td>
                   </tr>
                   <tr className="bg-gray-50 font-semibold">
                     <td className="px-6 py-4 text-sm text-gray-900">Prix</td>
@@ -285,20 +285,20 @@ export default function VisitorRegistrationChoice() {
           transition={{ delay: 0.5 }}
           className="mt-12 max-w-3xl mx-auto text-center"
         >
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-3">Questions fr√©quentes</h3>
+          <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-3">Questions frÈquentes</h3>
             <div className="space-y-2 text-sm text-gray-700 text-left">
               <p>
                 <strong>Q: Puis-je passer du Pass Gratuit au Pass VIP plus tard ?</strong><br />
-                R: Oui, vous pourrez upgrader votre compte √† tout moment depuis votre badge.
+                R: Oui, vous pourrez upgrader votre compte ‡ tout moment depuis votre badge.
               </p>
               <p>
-                <strong>Q: Le paiement est-il s√©curis√© ?</strong><br />
-                R: Oui, nous utilisons PayPal, CMI et le virement bancaire pour des paiements 100% s√©curis√©s.
+                <strong>Q: Le paiement est-il sÈcurisÈ ?</strong><br />
+                R: Oui, nous utilisons PayPal, CMI et le virement bancaire pour des paiements 100% sÈcurisÈs.
               </p>
               <p>
                 <strong>Q: Comment recevoir mon badge ?</strong><br />
-                R: Pass Gratuit : badge envoy√© par email imm√©diatement. Pass VIP : badge avec photo envoy√© apr√®s validation du paiement.
+                R: Pass Gratuit : badge envoyÈ par email immÈdiatement. Pass VIP : badge avec photo envoyÈ aprËs validation du paiement.
               </p>
             </div>
           </div>
@@ -311,13 +311,14 @@ export default function VisitorRegistrationChoice() {
             onClick={() => navigate(ROUTES.HOME)}
             className="text-gray-600 hover:text-gray-900"
           >
-            √¢‚Ä†¬ê Retour √† l'accueil
+            ‚Üê Retour ‡ l'accueil
           </Button>
         </div>
       </div>
     </div>
   );
 }
+
 
 
 

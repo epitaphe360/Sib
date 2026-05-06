@@ -159,7 +159,7 @@ function PayPalPayButton({
   if (isPending) {
     return (
       <div className="flex justify-center py-4">
-        <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
+        <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />
       </div>
     );
   }
@@ -411,8 +411,8 @@ export default function RentalCheckoutPage() {
               onClick={() => setPaymentMethod('paypal')}
               className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition ${
                 paymentMethod === 'paypal'
-                  ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
-                  : 'border-gray-200 hover:border-blue-300 bg-gray-50/50'
+                  ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200'
+                  : 'border-gray-200 hover:border-indigo-300 bg-gray-50/50'
               }`}
             >
               <span className="text-3xl">🅿️</span>
@@ -445,7 +445,7 @@ export default function RentalCheckoutPage() {
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.2 }}
               >
-                <div className="flex items-start gap-2 bg-blue-50 rounded-xl p-3 mb-4 text-xs text-blue-700">
+                <div className="flex items-start gap-2 bg-indigo-50 rounded-xl p-3 mb-4 text-xs text-indigo-700">
                   <Info className="h-4 w-4 mt-0.5 shrink-0" />
                   <span>
                     Le montant sera traité en EUR via PayPal.{' '}
@@ -534,3 +534,4 @@ export default function RentalCheckoutPage() {
     </div>
   );
 }
+

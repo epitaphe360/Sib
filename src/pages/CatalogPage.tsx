@@ -298,7 +298,7 @@ export default function CatalogPage() {
           <div className="flex items-center justify-between mb-3">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <BookOpen className="h-6 w-6 text-blue-600" />
+                <BookOpen className="h-6 w-6 text-indigo-600" />
                 Catalogue Technique BTP — SIB 2026
               </h1>
               <p className="text-gray-500 text-sm">
@@ -307,7 +307,7 @@ export default function CatalogPage() {
             </div>
             <Button variant="outline" size="sm" onClick={() => setShowFilters(f => !f)}>
               <Filter className="h-4 w-4 mr-2" />
-              Filtres {hasFilters && <span className="ml-1 w-2 h-2 rounded-full bg-blue-600 inline-block" />}
+              Filtres {hasFilters && <span className="ml-1 w-2 h-2 rounded-full bg-indigo-600 inline-block" />}
             </Button>
           </div>
 
@@ -319,7 +319,7 @@ export default function CatalogPage() {
               placeholder="Rechercher un produit, une marque, une technologie..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -359,7 +359,7 @@ export default function CatalogPage() {
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-gray-900 text-sm">Filtres avancés</h3>
                   {hasFilters && (
-                    <button onClick={clearFilters} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+                    <button onClick={clearFilters} className="text-xs text-indigo-600 hover:underline flex items-center gap-1">
                       <X className="h-3 w-3" /> Effacer
                     </button>
                   )}
@@ -413,19 +413,19 @@ export default function CatalogPage() {
 
                       {/* Title */}
                       <h3 className="font-bold text-gray-900 mb-1 leading-tight">{product.name}</h3>
-                      <p className="text-xs text-blue-600 font-medium mb-2">{product.exhibitorName}</p>
+                      <p className="text-xs text-indigo-600 font-medium mb-2">{product.exhibitorName}</p>
                       <p className="text-sm text-gray-600 mb-3 flex-1 line-clamp-3">{product.description}</p>
 
                       {/* Tags */}
                       <div className="flex flex-wrap gap-1 mb-3">
                         <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">{product.lot}</span>
                         {product.certifications.slice(0, 2).map(c => (
-                          <span key={c} className="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full border border-blue-100 flex items-center gap-1">
+                          <span key={c} className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-100 flex items-center gap-1">
                             <Award className="h-2.5 w-2.5" /> {c}
                           </span>
                         ))}
                         {product.certifications.length > 2 && (
-                          <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-xs rounded-full">+{product.certifications.length - 2}</span>
+                          <span className="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-xs rounded-full">+{product.certifications.length - 2}</span>
                         )}
                       </div>
 
@@ -445,7 +445,7 @@ export default function CatalogPage() {
                               <Download className="h-3.5 w-3.5" /> Fiche
                             </button>
                           )}
-                          <button className="text-xs text-blue-600 font-medium hover:underline flex items-center gap-1">
+                          <button className="text-xs text-indigo-600 font-medium hover:underline flex items-center gap-1">
                             Détails <ChevronDown className="h-3 w-3" />
                           </button>
                         </div>
@@ -481,7 +481,7 @@ export default function CatalogPage() {
                     )}
                   </div>
                   <h2 className="text-xl font-bold text-gray-900">{selectedProduct.name}</h2>
-                  <p className="text-blue-600 font-medium text-sm mt-0.5">{selectedProduct.exhibitorName}</p>
+                  <p className="text-indigo-600 font-medium text-sm mt-0.5">{selectedProduct.exhibitorName}</p>
                 </div>
                 <button onClick={() => setSelectedProduct(null)} className="text-gray-400 hover:text-gray-600">
                   <X className="h-5 w-5" />
@@ -511,7 +511,7 @@ export default function CatalogPage() {
                   <p className="font-semibold text-gray-900 mb-1.5">Certifications</p>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedProduct.certifications.map(c => (
-                      <span key={c} className="flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded border border-blue-100">
+                      <span key={c} className="flex items-center gap-1 px-2 py-0.5 bg-indigo-50 text-indigo-700 text-xs rounded border border-indigo-100">
                         <Check className="h-3 w-3" /> {c}
                       </span>
                     ))}
@@ -539,7 +539,7 @@ export default function CatalogPage() {
               <div className="flex gap-3 pt-4 border-t">
                 <Link
                   to={`${ROUTES.EXHIBITORS}/${selectedProduct.exhibitorId}`}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium transition-colors"
                 >
                   <ExternalLink className="h-4 w-4" /> Voir l'exposant
                 </Link>
@@ -571,7 +571,7 @@ function FilterSelect({ label, value, onChange, options }: { label: string; valu
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
-        className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
       >
         <option value="">Tous</option>
         {options.map(o => <option key={o} value={o}>{o}</option>)}
@@ -579,3 +579,4 @@ function FilterSelect({ label, value, onChange, options }: { label: string; valu
     </div>
   );
 }
+

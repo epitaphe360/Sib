@@ -3,6 +3,7 @@ import { Download, FileText, Calendar } from 'lucide-react';
 import { usePageContent } from '../../hooks/usePageContent';
 import { ScrollReveal, HeroReveal, fadeUp, fadeLeft } from '../../components/ui/motion';
 import { useTranslation } from '../../hooks/useTranslation';
+import { PageHero } from '../../components/ui/PageHero';
 
 interface DocGroup {
   year: string;
@@ -78,18 +79,13 @@ export default function TelechargementPage() {
   })();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <HeroReveal>
-      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || t('page.downloads.title')}</h1>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            {cms.hero_subtitle || t('page.downloads.subtitle')}
-          </p>
-        </div>
-      </div>
-      </HeroReveal>
+    <div className="min-h-screen bg-slate-50">
+      <PageHero
+        badge={<><Download className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Documents SIB</span></>}
+        title={<>{(cms.hero_title || t('page.downloads.title')).split(' ').slice(0,1).join(' ')} <span className="text-yellow-300">{(cms.hero_title || t('page.downloads.title')).split(' ').slice(1).join(' ')}</span></>}
+        subtitle={cms.hero_subtitle || t('page.downloads.subtitle')}
+        py="py-16 md:py-20"
+      />
 
       {/* Documents */}
       <div className="container mx-auto px-4 py-16">
