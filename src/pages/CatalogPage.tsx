@@ -10,6 +10,7 @@ import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { ROUTES } from '../lib/routes';
 import { supabase } from '../lib/supabase';
+import { useTranslation } from '../hooks/useTranslation';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -189,6 +190,17 @@ export default function CatalogPage() {
   const [selectedPhase, setSelectedPhase] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
+  const { t } = useTranslation();
+
+  const catLabels: Record<string, string> = {
+    all: t('catalog.cat_all'),
+    gros_oeuvre: t('catalog.cat_gros_oeuvre'),
+    second_oeuvre: t('catalog.cat_second_oeuvre'),
+    mep_cvc: t('catalog.cat_mep_cvc'),
+    finitions: t('catalog.cat_finitions'),
+    materiaux: t('catalog.cat_materiaux'),
+    innovation: t('catalog.cat_innovation'),
+  };
 
   useEffect(() => {
     const loadCatalogFromDb = async () => {
@@ -299,15 +311,15 @@ export default function CatalogPage() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                 <BookOpen className="h-6 w-6 text-indigo-600" />
-                Catalogue Technique BTP — SIB 2026
+                {t('catalog.title')}
               </h1>
               <p className="text-gray-500 text-sm">
-                {isLoadingData ? 'Chargement du catalogue...' : `${filtered.length} produit${filtered.length !== 1 ? 's' : ''} trouvé${filtered.length !== 1 ? 's' : ''}`}
+                {isLoadingData ? t('catalog.loading') : `${filtered.length} ${t('catalog.products_found')}`}
               </p>
             </div>
             <Button variant="outline" size="sm" onClick={() => setShowFilters(f => !f)}>
               <Filter className="h-4 w-4 mr-2" />
-              Filtres {hasFilters && <span className="ml-1 w-2 h-2 rounded-full bg-indigo-600 inline-block" />}
+              {t('catalog.filters_btn')} {hasFilters && <span className="ml-1 w-2 h-2 rounded-full bg-indigo-600 inline-block" />}
             </Button>
           </div>
 
@@ -316,7 +328,7 @@ export default function CatalogPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Rechercher un produit, une marque, une technologie..."
+              placeholder={t('catalog.search_placeholder')}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -337,7 +349,7 @@ export default function CatalogPage() {
                   style={activeCategory === cat.id ? { backgroundColor: cat.color } : {}}
                 >
                   <Icon className="h-3 w-3" />
-                  {cat.label}
+                  {catLabels[cat.id] || cat.label}
                 </button>
               );
             })}
@@ -357,19 +369,19 @@ export default function CatalogPage() {
             <Card>
               <div className="p-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900 text-sm">Filtres avancés</h3>
+                  <h3 className="font-semibold text-gray-900 text-sm">{t('catalog.advanced_filters')}</h3>
                   {hasFilters && (
                     <button onClick={clearFilters} className="text-xs text-indigo-600 hover:underline flex items-center gap-1">
-                      <X className="h-3 w-3" /> Effacer
+                      <X className="h-3 w-3" /> {t('catalog.clear')}
                     </button>
                   )}
                 </div>
 
                 <div className="space-y-4">
-                  <FilterSelect label="Lot BTP" value={selectedLot} onChange={setSelectedLot} options={LOTS_BTP} />
-                  <FilterSelect label="Certification" value={selectedCert} onChange={setSelectedCert} options={CERTIFICATIONS} />
-                  <FilterSelect label="Région" value={selectedRegion} onChange={setSelectedRegion} options={REGIONS} />
-                  <FilterSelect label="Phase chantier" value={selectedPhase} onChange={setSelectedPhase} options={PHASES} />
+                  <FilterSelect label={t('catalog.lot_label')} value={selectedLot} onChange={setSelectedLot} options={LOTS_BTP} allLabel={t('catalog.all_option')} />
+                  <FilterSelect label={t('catalog.cert_label')} value={selectedCert} onChange={setSelectedCert} options={CERTIFICATIONS} allLabel={t('catalog.all_option')} />
+                  <FilterSelect label={t('catalog.region_label')} value={selectedRegion} onChange={setSelectedRegion} options={REGIONS} allLabel={t('catalog.all_option')} />
+                  <FilterSelect label={t('catalog.phase_label')} value={selectedPhase} onChange={setSelectedPhase} options={PHASES} allLabel={t('catalog.all_option')} />
                 </div>
               </div>
             </Card>
@@ -381,9 +393,9 @@ export default function CatalogPage() {
           {filtered.length === 0 ? (
             <div className="text-center py-16">
               <Package className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 font-medium">Aucun produit ne correspond à vos critères.</p>
+              <p className="text-gray-500 font-medium">{t('catalog.no_results')}</p>
               <Button variant="outline" className="mt-4" onClick={() => { setSearchQuery(''); clearFilters(); setActiveCategory('all'); }}>
-                Réinitialiser les filtres
+                {t('catalog.reset_filters')}
               </Button>
             </div>
           ) : (
@@ -405,7 +417,7 @@ export default function CatalogPage() {
                             <CategoryIcon category={product.category} className="h-4 w-4" style={{ color: catColor }} />
                           </div>
                           {product.featured && (
-                            <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 text-xs font-medium rounded">⭐ Vedette</span>
+                            <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 text-xs font-medium rounded">⭐ {t('catalog.featured')}</span>
                           )}
                         </div>
                         <span className="text-xs text-gray-400">{product.id}</span>
@@ -442,11 +454,11 @@ export default function CatalogPage() {
                               onClick={e => { e.stopPropagation(); }}
                               className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1"
                             >
-                              <Download className="h-3.5 w-3.5" /> Fiche
+                              <Download className="h-3.5 w-3.5" /> {t('catalog.sheet')}
                             </button>
                           )}
                           <button className="text-xs text-indigo-600 font-medium hover:underline flex items-center gap-1">
-                            Détails <ChevronDown className="h-3 w-3" />
+                            {t('catalog.details')} <ChevronDown className="h-3 w-3" />
                           </button>
                         </div>
                       </div>
@@ -477,7 +489,7 @@ export default function CatalogPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs text-gray-400 font-mono">{selectedProduct.id}</span>
                     {selectedProduct.featured && (
-                      <span className="px-2 py-0.5 bg-amber-100 text-amber-800 text-xs font-medium rounded">⭐ Vedette</span>
+                      <span className="px-2 py-0.5 bg-amber-100 text-amber-800 text-xs font-medium rounded">⭐ {t('catalog.featured')}</span>
                     )}
                   </div>
                   <h2 className="text-xl font-bold text-gray-900">{selectedProduct.name}</h2>
@@ -493,7 +505,7 @@ export default function CatalogPage() {
               {/* Specs */}
               {Object.keys(selectedProduct.specs).length > 0 && (
                 <div className="bg-gray-50 rounded-xl p-4 mb-5">
-                  <h4 className="font-semibold text-gray-900 text-sm mb-3">Caractéristiques techniques</h4>
+                  <h4 className="font-semibold text-gray-900 text-sm mb-3">{t('catalog.technical_specs')}</h4>
                   <div className="space-y-2">
                     {Object.entries(selectedProduct.specs).map(([key, val]) => (
                       <div key={key} className="flex justify-between text-sm">
@@ -508,7 +520,7 @@ export default function CatalogPage() {
               {/* Details Grid */}
               <div className="grid grid-cols-2 gap-4 mb-5 text-sm">
                 <div>
-                  <p className="font-semibold text-gray-900 mb-1.5">Certifications</p>
+                  <p className="font-semibold text-gray-900 mb-1.5">{t('catalog.certifications_label')}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedProduct.certifications.map(c => (
                       <span key={c} className="flex items-center gap-1 px-2 py-0.5 bg-indigo-50 text-indigo-700 text-xs rounded border border-indigo-100">
@@ -518,7 +530,7 @@ export default function CatalogPage() {
                   </div>
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 mb-1.5">Phases chantier</p>
+                  <p className="font-semibold text-gray-900 mb-1.5">{t('catalog.construction_phases')}</p>
                   <div className="flex flex-wrap gap-1">
                     {selectedProduct.phase.map(p => (
                       <span key={p} className="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded">{p}</span>
@@ -526,11 +538,11 @@ export default function CatalogPage() {
                   </div>
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 mb-1">Lot BTP</p>
+                  <p className="font-semibold text-gray-900 mb-1">{t('catalog.lot_label')}</p>
                   <p className="text-gray-600 text-xs">{selectedProduct.lot}</p>
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 mb-1">Régions couvertes</p>
+                  <p className="font-semibold text-gray-900 mb-1">{t('catalog.regions_covered')}</p>
                   <p className="text-gray-600 text-xs">{selectedProduct.region.join(', ')}</p>
                 </div>
               </div>
@@ -541,18 +553,18 @@ export default function CatalogPage() {
                   to={`${ROUTES.EXHIBITORS}/${selectedProduct.exhibitorId}`}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium transition-colors"
                 >
-                  <ExternalLink className="h-4 w-4" /> Voir l'exposant
+                  <ExternalLink className="h-4 w-4" /> {t('catalog.view_exhibitor')}
                 </Link>
                 {selectedProduct.pdfUrl && (
                   <button className="flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium transition-colors">
-                    <Download className="h-4 w-4" /> Fiche PDF
+                    <Download className="h-4 w-4" /> {t('catalog.pdf_sheet')}
                   </button>
                 )}
                 <Link
                   to={`${ROUTES.CONTACT}?subject=Demande+devis+${selectedProduct.id}`}
                   className="flex items-center gap-2 px-4 py-2.5 border border-green-300 text-green-700 rounded-lg hover:bg-green-50 text-sm font-medium transition-colors"
                 >
-                  Demander devis
+                  {t('catalog.request_quote')}
                 </Link>
               </div>
             </div>
@@ -564,7 +576,7 @@ export default function CatalogPage() {
 }
 
 // FilterSelect helper
-function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[]; }) {
+function FilterSelect({ label, value, onChange, options, allLabel }: { label: string; value: string; onChange: (v: string) => void; options: string[]; allLabel?: string; }) {
   return (
     <div>
       <label className="block text-xs font-semibold text-gray-700 mb-1">{label}</label>
@@ -573,7 +585,7 @@ function FilterSelect({ label, value, onChange, options }: { label: string; valu
         onChange={e => onChange(e.target.value)}
         className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
       >
-        <option value="">Tous</option>
+        <option value="">{allLabel ?? 'Tous'}</option>
         {options.map(o => <option key={o} value={o}>{o}</option>)}
       </select>
     </div>

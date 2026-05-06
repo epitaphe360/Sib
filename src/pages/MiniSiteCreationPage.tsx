@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { Sparkles, Settings } from 'lucide-react';
 import MiniSiteEditor from '../components/minisite/MiniSiteEditor';
 import ExhibitorMiniSiteScrapper from '../components/exhibitor/ExhibitorMiniSiteScrapper';
 import useAuthStore from '../store/authStore';
 import { supabase } from '../lib/supabase';
+import { useTranslation } from '../hooks/useTranslation';
 
 type CreationTab = 'ai' | 'manual';
 
@@ -16,10 +17,11 @@ function AiTabContent({
   userId: string;
   onSuccess: () => void;
 }>) {
+  const { t } = useTranslation();
   if (!exhibitorId) {
     return (
       <div className="flex items-center justify-center p-12 text-gray-500">
-        Chargement…
+        {t('common.loading')}
       </div>
     );
   }
@@ -34,6 +36,7 @@ function AiTabContent({
 
 export default function MiniSiteCreationPage() {
   const { user } = useAuthStore();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<CreationTab>('ai');
   const [exhibitorId, setExhibitorId] = useState<string | null>(null);
 
@@ -67,7 +70,7 @@ export default function MiniSiteCreationPage() {
             }`}
           >
             <Sparkles className="h-4 w-4" />
-            Créer avec l&apos;IA
+            {t('minisite.create_ai')}
           </button>
           <button
             onClick={() => setActiveTab('manual')}
@@ -78,13 +81,11 @@ export default function MiniSiteCreationPage() {
             }`}
           >
             <Settings className="h-4 w-4" />
-            Éditeur complet
+            {t('minisite.full_editor')}
           </button>
         </div>
         <p className="max-w-7xl mx-auto mt-2 text-xs text-gray-400">
-          {activeTab === 'ai'
-            ? "L'IA analyse votre site web et génère automatiquement hero, à-propos, produits, galerie, équipe et contact."
-            : 'Éditez toutes les sections : hero, à-propos, produits, galerie, actualités et contact. Personnalisez les couleurs et le logo.'}
+          {activeTab === 'ai' ? t('minisite.ai_desc') : t('minisite.manual_desc')}
         </p>
       </div>
 

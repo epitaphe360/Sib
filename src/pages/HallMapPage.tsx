@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -10,6 +10,7 @@ import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { ROUTES } from '../lib/routes';
 import { supabase } from '../lib/supabase';
+import { useTranslation } from '../hooks/useTranslation';
 
 // --- Types -------------------------------------------------------------------
 
@@ -41,62 +42,78 @@ const SECTORS = [
   { id: 'mep_cvc', label: 'MEP / CVC', color: '#D97706' },
   { id: 'finitions', label: 'Finitions', color: '#7C3AED' },
   { id: 'innovation', label: 'Innovation', color: '#DC2626' },
-  { id: 'materiaux', label: 'Matériaux', color: '#0891B2' },
+  { id: 'materiaux', label: 'MatÃ©riaux', color: '#0891B2' },
 ];
 
 const HALLS: Hall[] = [
   { id: 'A', name: 'Hall A', theme: 'Gros Oeuvre & Structure', x: 20, y: 20, width: 380, height: 280, color: '#1D4ED8', bgColor: '#EFF6FF' },
   { id: 'B', name: 'Hall B', theme: 'Second Oeuvre & Finitions', x: 420, y: 20, width: 360, height: 280, color: '#059669', bgColor: '#F0FDF4' },
-  { id: 'C', name: 'Hall C', theme: 'MEP / CVC / Électricité', x: 20, y: 320, width: 380, height: 280, color: '#D97706', bgColor: '#FFFBEB' },
-  { id: 'D', name: 'Hall D', theme: 'Innovation & Numérique', x: 420, y: 320, width: 360, height: 280, color: '#7C3AED', bgColor: '#FAF5FF' },
+  { id: 'C', name: 'Hall C', theme: 'MEP / CVC / Ã‰lectricitÃ©', x: 20, y: 320, width: 380, height: 280, color: '#D97706', bgColor: '#FFFBEB' },
+  { id: 'D', name: 'Hall D', theme: 'Innovation & NumÃ©rique', x: 420, y: 320, width: 360, height: 280, color: '#7C3AED', bgColor: '#FAF5FF' },
 ];
 
 const STATIC_BOOTHS: Booth[] = [
-  // Hall A — Gros Oeuvre
-  { id: 'A01', exhibitorId: '1', exhibitorName: 'Ciment du Maroc', sector: 'gros_oeuvre', surface: '36m²', x: 40, y: 60, width: 62, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['QUALIBAT', 'ISO 9001'] },
-  { id: 'A02', exhibitorId: '2', exhibitorName: 'Lafarge Holcim MA', sector: 'gros_oeuvre', surface: '54m²+', x: 112, y: 60, width: 80, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['ISO 9001', 'ISO 14001'] },
-  { id: 'A03', exhibitorId: '3', exhibitorName: 'Société des Bétons', sector: 'gros_oeuvre', surface: '18m²', x: 202, y: 60, width: 52, height: 42, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['CE'] },
-  { id: 'A04', exhibitorId: '4', exhibitorName: 'Acier Maroc', sector: 'gros_oeuvre', surface: '36m²', x: 264, y: 60, width: 62, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['ISO 9001'] },
-  { id: 'A05', exhibitorId: '5', exhibitorName: 'FER-BTP', sector: 'gros_oeuvre', surface: '9m²', x: 336, y: 60, width: 42, height: 42, hall: 'A', color: '#3B82F6', occupied: true, certifications: [] },
-  { id: 'A06', exhibitorId: '6', exhibitorName: 'Coffrages Pro', sector: 'gros_oeuvre', surface: '18m²', x: 40, y: 132, width: 52, height: 42, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['QUALIBAT'] },
-  { id: 'A07', exhibitorId: '7', exhibitorName: 'Fondations SA', sector: 'gros_oeuvre', surface: '36m²', x: 102, y: 132, width: 62, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['QUALIBAT'] },
-  { id: 'A08', exhibitorId: '8', exhibitorName: 'Granulats Atlas', sector: 'materiaux', surface: '18m²', x: 174, y: 132, width: 52, height: 42, hall: 'A', color: '#0891B2', occupied: true, certifications: ['CE'] },
-  { id: 'A09', exhibitorId: '9', exhibitorName: 'Mortiers BTP', sector: 'gros_oeuvre', surface: '9m²', x: 236, y: 132, width: 42, height: 42, hall: 'A', color: '#3B82F6', occupied: true, certifications: [] },
-  { id: 'A10', exhibitorId: '10', exhibitorName: 'Carrefour Étanchéité', sector: 'second_oeuvre', surface: '9m²', x: 288, y: 132, width: 42, height: 42, hall: 'A', color: '#059669', occupied: false, certifications: [] },
-  { id: 'A11', exhibitorId: '11', exhibitorName: 'Techniques Charpente', sector: 'gros_oeuvre', surface: '18m²', x: 40, y: 204, width: 58, height: 48, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['QUALIBAT'] },
-  { id: 'A12', exhibitorId: '12', exhibitorName: 'Préfabriqués MA', sector: 'gros_oeuvre', surface: '36m²', x: 108, y: 204, width: 62, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['ISO 9001'] },
-  { id: 'A13', exhibitorId: '33', exhibitorName: 'Béton Armé Pro', sector: 'gros_oeuvre', surface: '18m²', x: 180, y: 204, width: 52, height: 42, hall: 'A', color: '#1D4ED8', occupied: false, certifications: [] },
-  // Hall B — Second Oeuvre & Finitions
-  { id: 'B01', exhibitorId: '13', exhibitorName: 'Menuiserie Atlas', sector: 'second_oeuvre', surface: '18m²', x: 440, y: 60, width: 58, height: 48, hall: 'B', color: '#059669', occupied: true, certifications: ['OPQCB'] },
-  { id: 'B02', exhibitorId: '14', exhibitorName: 'Plâtrerie du Nord', sector: 'second_oeuvre', surface: '36m²', x: 508, y: 60, width: 62, height: 52, hall: 'B', color: '#059669', occupied: true, certifications: ['QUALIBAT'] },
-  { id: 'B03', exhibitorId: '15', exhibitorName: 'Carrelage Prestige', sector: 'finitions', surface: '54m²+', x: 580, y: 60, width: 80, height: 56, hall: 'B', color: '#7C3AED', occupied: true, certifications: ['CE', 'ISO 9001'] },
-  { id: 'B04', exhibitorId: '16', exhibitorName: 'Peintures Couleurs', sector: 'finitions', surface: '9m²', x: 670, y: 60, width: 42, height: 42, hall: 'B', color: '#7C3AED', occupied: true, certifications: [] },
-  { id: 'B05', exhibitorId: '17', exhibitorName: 'Isolation Pro', sector: 'second_oeuvre', surface: '18m²', x: 440, y: 132, width: 58, height: 48, hall: 'B', color: '#059669', occupied: true, certifications: ['QUALIBAT'] },
-  { id: 'B06', exhibitorId: '18', exhibitorName: 'Cloisons & Plafonds', sector: 'second_oeuvre', surface: '36m²', x: 508, y: 132, width: 62, height: 52, hall: 'B', color: '#059669', occupied: true, certifications: ['ISO 9001'] },
-  { id: 'B07', exhibitorId: '19', exhibitorName: 'Étanchéité Total', sector: 'second_oeuvre', surface: '18m²', x: 580, y: 132, width: 58, height: 48, hall: 'B', color: '#059669', occupied: false, certifications: [] },
-  { id: 'B08', exhibitorId: '20', exhibitorName: 'Façades & Bardage', sector: 'second_oeuvre', surface: '36m²', x: 440, y: 204, width: 68, height: 52, hall: 'B', color: '#059669', occupied: true, certifications: ['QUALIBAT', 'CE'] },
-  { id: 'B09', exhibitorId: '34', exhibitorName: 'Parquet & Sols', sector: 'finitions', surface: '18m²', x: 518, y: 204, width: 55, height: 48, hall: 'B', color: '#7C3AED', occupied: true, certifications: ['CE'] },
-  // Hall C — MEP / CVC / Électricité
-  { id: 'C01', exhibitorId: '21', exhibitorName: 'Plomberie Expert', sector: 'mep_cvc', surface: '18m²', x: 40, y: 360, width: 58, height: 48, hall: 'C', color: '#D97706', occupied: true, certifications: ['QUALIBAT'] },
-  { id: 'C02', exhibitorId: '22', exhibitorName: 'Climatisation Atlas', sector: 'mep_cvc', surface: '54m²+', x: 108, y: 360, width: 78, height: 58, hall: 'C', color: '#D97706', occupied: true, certifications: ['ISO 9001', 'ONEE'] },
-  { id: 'C03', exhibitorId: '23', exhibitorName: 'Électricité BTP', sector: 'mep_cvc', surface: '36m²', x: 196, y: 360, width: 62, height: 52, hall: 'C', color: '#D97706', occupied: true, certifications: ['ONEE'] },
-  { id: 'C04', exhibitorId: '24', exhibitorName: 'Chauffage & CVC', sector: 'mep_cvc', surface: '18m²', x: 268, y: 360, width: 58, height: 48, hall: 'C', color: '#D97706', occupied: true, certifications: ['QUALIBAT'] },
-  { id: 'C05', exhibitorId: '25', exhibitorName: 'Ventilation Pro', sector: 'mep_cvc', surface: '9m²', x: 336, y: 360, width: 42, height: 42, hall: 'C', color: '#F59E0B', occupied: true, certifications: [] },
-  { id: 'C06', exhibitorId: '26', exhibitorName: 'Énergie Solaire MA', sector: 'mep_cvc', surface: '36m²', x: 40, y: 432, width: 68, height: 52, hall: 'C', color: '#D97706', occupied: false, certifications: ['ISO 9001'] },
-  { id: 'C07', exhibitorId: '27', exhibitorName: 'Smart Building Tech', sector: 'innovation', surface: '18m²', x: 118, y: 432, width: 58, height: 48, hall: 'C', color: '#DC2626', occupied: true, certifications: ['CE'] },
-  { id: 'C08', exhibitorId: '35', exhibitorName: 'Sécurité Incendie', sector: 'mep_cvc', surface: '18m²', x: 186, y: 432, width: 58, height: 48, hall: 'C', color: '#D97706', occupied: true, certifications: ['QUALIBAT'] },
-  // Hall D — Innovation & Numérique
-  { id: 'D01', exhibitorId: '28', exhibitorName: 'BIM Solutions MA', sector: 'innovation', surface: '36m²', x: 440, y: 360, width: 68, height: 52, hall: 'D', color: '#DC2626', occupied: true, certifications: ['ISO 9001'] },
-  { id: 'D02', exhibitorId: '29', exhibitorName: 'Drone BTP', sector: 'innovation', surface: '18m²', x: 518, y: 360, width: 58, height: 48, hall: 'D', color: '#DC2626', occupied: true, certifications: [] },
-  { id: 'D03', exhibitorId: '30', exhibitorName: 'IA Construction', sector: 'innovation', surface: '54m²+', x: 586, y: 360, width: 78, height: 62, hall: 'D', color: '#DC2626', occupied: true, certifications: ['ISO 9001'] },
-  { id: 'D04', exhibitorId: '31', exhibitorName: 'Réalité Augmentée BTP', sector: 'innovation', surface: '18m²', x: 440, y: 432, width: 58, height: 48, hall: 'D', color: '#DC2626', occupied: true, certifications: [] },
-  { id: 'D05', exhibitorId: '32', exhibitorName: 'Logiciels Archi', sector: 'innovation', surface: '36m²', x: 508, y: 432, width: 62, height: 52, hall: 'D', color: '#DC2626', occupied: false, certifications: [] },
-  { id: 'D06', exhibitorId: '36', exhibitorName: 'IoT Bâtiment', sector: 'innovation', surface: '9m²', x: 580, y: 432, width: 42, height: 42, hall: 'D', color: '#EF4444', occupied: true, certifications: ['CE'] },
+  // Hall A â€” Gros Oeuvre
+  { id: 'A01', exhibitorId: '1', exhibitorName: 'Ciment du Maroc', sector: 'gros_oeuvre', surface: '36mÂ²', x: 40, y: 60, width: 62, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['QUALIBAT', 'ISO 9001'] },
+  { id: 'A02', exhibitorId: '2', exhibitorName: 'Lafarge Holcim MA', sector: 'gros_oeuvre', surface: '54mÂ²+', x: 112, y: 60, width: 80, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['ISO 9001', 'ISO 14001'] },
+  { id: 'A03', exhibitorId: '3', exhibitorName: 'SociÃ©tÃ© des BÃ©tons', sector: 'gros_oeuvre', surface: '18mÂ²', x: 202, y: 60, width: 52, height: 42, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['CE'] },
+  { id: 'A04', exhibitorId: '4', exhibitorName: 'Acier Maroc', sector: 'gros_oeuvre', surface: '36mÂ²', x: 264, y: 60, width: 62, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['ISO 9001'] },
+  { id: 'A05', exhibitorId: '5', exhibitorName: 'FER-BTP', sector: 'gros_oeuvre', surface: '9mÂ²', x: 336, y: 60, width: 42, height: 42, hall: 'A', color: '#3B82F6', occupied: true, certifications: [] },
+  { id: 'A06', exhibitorId: '6', exhibitorName: 'Coffrages Pro', sector: 'gros_oeuvre', surface: '18mÂ²', x: 40, y: 132, width: 52, height: 42, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['QUALIBAT'] },
+  { id: 'A07', exhibitorId: '7', exhibitorName: 'Fondations SA', sector: 'gros_oeuvre', surface: '36mÂ²', x: 102, y: 132, width: 62, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['QUALIBAT'] },
+  { id: 'A08', exhibitorId: '8', exhibitorName: 'Granulats Atlas', sector: 'materiaux', surface: '18mÂ²', x: 174, y: 132, width: 52, height: 42, hall: 'A', color: '#0891B2', occupied: true, certifications: ['CE'] },
+  { id: 'A09', exhibitorId: '9', exhibitorName: 'Mortiers BTP', sector: 'gros_oeuvre', surface: '9mÂ²', x: 236, y: 132, width: 42, height: 42, hall: 'A', color: '#3B82F6', occupied: true, certifications: [] },
+  { id: 'A10', exhibitorId: '10', exhibitorName: 'Carrefour Ã‰tanchÃ©itÃ©', sector: 'second_oeuvre', surface: '9mÂ²', x: 288, y: 132, width: 42, height: 42, hall: 'A', color: '#059669', occupied: false, certifications: [] },
+  { id: 'A11', exhibitorId: '11', exhibitorName: 'Techniques Charpente', sector: 'gros_oeuvre', surface: '18mÂ²', x: 40, y: 204, width: 58, height: 48, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['QUALIBAT'] },
+  { id: 'A12', exhibitorId: '12', exhibitorName: 'PrÃ©fabriquÃ©s MA', sector: 'gros_oeuvre', surface: '36mÂ²', x: 108, y: 204, width: 62, height: 52, hall: 'A', color: '#1D4ED8', occupied: true, certifications: ['ISO 9001'] },
+  { id: 'A13', exhibitorId: '33', exhibitorName: 'BÃ©ton ArmÃ© Pro', sector: 'gros_oeuvre', surface: '18mÂ²', x: 180, y: 204, width: 52, height: 42, hall: 'A', color: '#1D4ED8', occupied: false, certifications: [] },
+  // Hall B â€” Second Oeuvre & Finitions
+  { id: 'B01', exhibitorId: '13', exhibitorName: 'Menuiserie Atlas', sector: 'second_oeuvre', surface: '18mÂ²', x: 440, y: 60, width: 58, height: 48, hall: 'B', color: '#059669', occupied: true, certifications: ['OPQCB'] },
+  { id: 'B02', exhibitorId: '14', exhibitorName: 'PlÃ¢trerie du Nord', sector: 'second_oeuvre', surface: '36mÂ²', x: 508, y: 60, width: 62, height: 52, hall: 'B', color: '#059669', occupied: true, certifications: ['QUALIBAT'] },
+  { id: 'B03', exhibitorId: '15', exhibitorName: 'Carrelage Prestige', sector: 'finitions', surface: '54mÂ²+', x: 580, y: 60, width: 80, height: 56, hall: 'B', color: '#7C3AED', occupied: true, certifications: ['CE', 'ISO 9001'] },
+  { id: 'B04', exhibitorId: '16', exhibitorName: 'Peintures Couleurs', sector: 'finitions', surface: '9mÂ²', x: 670, y: 60, width: 42, height: 42, hall: 'B', color: '#7C3AED', occupied: true, certifications: [] },
+  { id: 'B05', exhibitorId: '17', exhibitorName: 'Isolation Pro', sector: 'second_oeuvre', surface: '18mÂ²', x: 440, y: 132, width: 58, height: 48, hall: 'B', color: '#059669', occupied: true, certifications: ['QUALIBAT'] },
+  { id: 'B06', exhibitorId: '18', exhibitorName: 'Cloisons & Plafonds', sector: 'second_oeuvre', surface: '36mÂ²', x: 508, y: 132, width: 62, height: 52, hall: 'B', color: '#059669', occupied: true, certifications: ['ISO 9001'] },
+  { id: 'B07', exhibitorId: '19', exhibitorName: 'Ã‰tanchÃ©itÃ© Total', sector: 'second_oeuvre', surface: '18mÂ²', x: 580, y: 132, width: 58, height: 48, hall: 'B', color: '#059669', occupied: false, certifications: [] },
+  { id: 'B08', exhibitorId: '20', exhibitorName: 'FaÃ§ades & Bardage', sector: 'second_oeuvre', surface: '36mÂ²', x: 440, y: 204, width: 68, height: 52, hall: 'B', color: '#059669', occupied: true, certifications: ['QUALIBAT', 'CE'] },
+  { id: 'B09', exhibitorId: '34', exhibitorName: 'Parquet & Sols', sector: 'finitions', surface: '18mÂ²', x: 518, y: 204, width: 55, height: 48, hall: 'B', color: '#7C3AED', occupied: true, certifications: ['CE'] },
+  // Hall C â€” MEP / CVC / Ã‰lectricitÃ©
+  { id: 'C01', exhibitorId: '21', exhibitorName: 'Plomberie Expert', sector: 'mep_cvc', surface: '18mÂ²', x: 40, y: 360, width: 58, height: 48, hall: 'C', color: '#D97706', occupied: true, certifications: ['QUALIBAT'] },
+  { id: 'C02', exhibitorId: '22', exhibitorName: 'Climatisation Atlas', sector: 'mep_cvc', surface: '54mÂ²+', x: 108, y: 360, width: 78, height: 58, hall: 'C', color: '#D97706', occupied: true, certifications: ['ISO 9001', 'ONEE'] },
+  { id: 'C03', exhibitorId: '23', exhibitorName: 'Ã‰lectricitÃ© BTP', sector: 'mep_cvc', surface: '36mÂ²', x: 196, y: 360, width: 62, height: 52, hall: 'C', color: '#D97706', occupied: true, certifications: ['ONEE'] },
+  { id: 'C04', exhibitorId: '24', exhibitorName: 'Chauffage & CVC', sector: 'mep_cvc', surface: '18mÂ²', x: 268, y: 360, width: 58, height: 48, hall: 'C', color: '#D97706', occupied: true, certifications: ['QUALIBAT'] },
+  { id: 'C05', exhibitorId: '25', exhibitorName: 'Ventilation Pro', sector: 'mep_cvc', surface: '9mÂ²', x: 336, y: 360, width: 42, height: 42, hall: 'C', color: '#F59E0B', occupied: true, certifications: [] },
+  { id: 'C06', exhibitorId: '26', exhibitorName: 'Ã‰nergie Solaire MA', sector: 'mep_cvc', surface: '36mÂ²', x: 40, y: 432, width: 68, height: 52, hall: 'C', color: '#D97706', occupied: false, certifications: ['ISO 9001'] },
+  { id: 'C07', exhibitorId: '27', exhibitorName: 'Smart Building Tech', sector: 'innovation', surface: '18mÂ²', x: 118, y: 432, width: 58, height: 48, hall: 'C', color: '#DC2626', occupied: true, certifications: ['CE'] },
+  { id: 'C08', exhibitorId: '35', exhibitorName: 'SÃ©curitÃ© Incendie', sector: 'mep_cvc', surface: '18mÂ²', x: 186, y: 432, width: 58, height: 48, hall: 'C', color: '#D97706', occupied: true, certifications: ['QUALIBAT'] },
+  // Hall D â€” Innovation & NumÃ©rique
+  { id: 'D01', exhibitorId: '28', exhibitorName: 'BIM Solutions MA', sector: 'innovation', surface: '36mÂ²', x: 440, y: 360, width: 68, height: 52, hall: 'D', color: '#DC2626', occupied: true, certifications: ['ISO 9001'] },
+  { id: 'D02', exhibitorId: '29', exhibitorName: 'Drone BTP', sector: 'innovation', surface: '18mÂ²', x: 518, y: 360, width: 58, height: 48, hall: 'D', color: '#DC2626', occupied: true, certifications: [] },
+  { id: 'D03', exhibitorId: '30', exhibitorName: 'IA Construction', sector: 'innovation', surface: '54mÂ²+', x: 586, y: 360, width: 78, height: 62, hall: 'D', color: '#DC2626', occupied: true, certifications: ['ISO 9001'] },
+  { id: 'D04', exhibitorId: '31', exhibitorName: 'RÃ©alitÃ© AugmentÃ©e BTP', sector: 'innovation', surface: '18mÂ²', x: 440, y: 432, width: 58, height: 48, hall: 'D', color: '#DC2626', occupied: true, certifications: [] },
+  { id: 'D05', exhibitorId: '32', exhibitorName: 'Logiciels Archi', sector: 'innovation', surface: '36mÂ²', x: 508, y: 432, width: 62, height: 52, hall: 'D', color: '#DC2626', occupied: false, certifications: [] },
+  { id: 'D06', exhibitorId: '36', exhibitorName: 'IoT BÃ¢timent', sector: 'innovation', surface: '9mÂ²', x: 580, y: 432, width: 42, height: 42, hall: 'D', color: '#EF4444', occupied: true, certifications: ['CE'] },
 ];
 
 // --- Component ----------------------------------------------------------------
 
 export default function HallMapPage() {
+  const { t } = useTranslation();
+  const sectorLabels: Record<string, string> = {
+    all: t('catalog.cat_all'),
+    gros_oeuvre: t('catalog.cat_gros_oeuvre'),
+    second_oeuvre: t('catalog.cat_second_oeuvre'),
+    mep_cvc: t('catalog.cat_mep_cvc'),
+    finitions: t('catalog.cat_finitions'),
+    innovation: t('catalog.cat_innovation'),
+    materiaux: t('catalog.cat_materiaux'),
+  };
+  const hallThemes: Record<string, string> = {
+    A: t('hallmap.hall_a_theme'),
+    B: t('hallmap.hall_b_theme'),
+    C: t('hallmap.hall_c_theme'),
+    D: t('hallmap.hall_d_theme'),
+  };
   const [booths, setBooths] = useState<Booth[]>(STATIC_BOOTHS);
   const [isLoadingBooths, setIsLoadingBooths] = useState(true);
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
@@ -186,10 +203,10 @@ export default function HallMapPage() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                 <LayoutGrid className="h-6 w-6 text-indigo-600" />
-                Plan Interactif des Halls — SIB 2026
+                {t('hallmap.title')}
               </h1>
               <p className="text-gray-500 text-sm mt-0.5">
-                Parc d'Exposition Mohammed VI, El Jadida · 25–29 Novembre 2026 · {isLoadingBooths ? 'Chargement...' : `${occupiedCount}/${booths.length} stands occupés`}
+                {t('hallmap.venue')} Â· {isLoadingBooths ? t('common.loading') : `${occupiedCount}/${booths.length} ${t('hallmap.stands_occupied')}`}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -212,7 +229,7 @@ export default function HallMapPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher un exposant..."
+                placeholder={t('hallmap.search_placeholder')}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -228,7 +245,7 @@ export default function HallMapPage() {
                   }`}
                   style={activeSector === s.id ? { backgroundColor: s.color } : {}}
                 >
-                  {s.label}
+                  {s.label ? sectorLabels[s.id] ?? s.label : ''}
                 </button>
               ))}
             </div>
@@ -266,15 +283,15 @@ export default function HallMapPage() {
                 {/* Main corridors */}
                 <rect x="398" y="0" width="24" height="640" fill="#CBD5E1" rx="2" />
                 <rect x="0" y="298" width="800" height="24" fill="#CBD5E1" rx="2" />
-                <text x="410" y="294" fontSize="9" fill="#94A3B8">Allée principale N-S</text>
-                <text x="10" y="310" fontSize="9" fill="#94A3B8">Allée principale E-O</text>
+                <text x="410" y="294" fontSize="9" fill="#94A3B8">{t('hallmap.corridor_ns')}</text>
+                <text x="10" y="310" fontSize="9" fill="#94A3B8">{t('hallmap.corridor_eo')}</text>
 
                 {/* Halls backgrounds */}
                 {HALLS.map(hall => (
                   <g key={hall.id}>
                     <rect x={hall.x} y={hall.y} width={hall.width} height={hall.height} rx="10" fill={hall.bgColor} stroke={hall.color} strokeWidth="2.5" />
                     <text x={hall.x + 12} y={hall.y + 20} fontSize="13" fontWeight="bold" fill={hall.color}>{hall.name}</text>
-                    <text x={hall.x + 12} y={hall.y + 34} fontSize="9" fill="#6B7280">{hall.theme}</text>
+                    <text x={hall.x + 12} y={hall.y + 34} fontSize="9" fill="#6B7280">{hallThemes[hall.id] ?? hall.theme}</text>
                   </g>
                 ))}
 
@@ -317,7 +334,7 @@ export default function HallMapPage() {
 
                 {/* Entrance */}
                 <rect x="320" y="622" width="160" height="18" rx="4" fill="#1E40AF" />
-                <text x="400" y="633" textAnchor="middle" fontSize="10" fill="white" fontWeight="bold">? ENTRÉE PRINCIPALE</text>
+                <text x="400" y="633" textAnchor="middle" fontSize="10" fill="white" fontWeight="bold">{t('hallmap.entrance')}</text>
               </svg>
             </div>
           </div>
@@ -325,7 +342,7 @@ export default function HallMapPage() {
           {/* Legend */}
           <div className="mt-4 bg-white rounded-xl shadow-sm border p-4">
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2 text-sm">
-              <Info className="h-4 w-4 text-gray-400" /> Légende
+              <Info className="h-4 w-4 text-gray-400" /> {t('hallmap.legend')}
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {SECTORS.filter(s => s.id !== 'all').map(s => (
@@ -336,7 +353,7 @@ export default function HallMapPage() {
               ))}
               <div className="flex items-center gap-2 text-xs">
                 <div className="w-4 h-4 rounded-sm bg-gray-200 border border-gray-300 flex-shrink-0" />
-                <span className="text-gray-400">Disponible</span>
+                <span className="text-gray-400">{t('hallmap.available')}</span>
               </div>
             </div>
           </div>
@@ -372,11 +389,11 @@ export default function HallMapPage() {
                     <div className="space-y-2.5 text-sm mb-4">
                       <div className="flex items-center gap-2 text-gray-600">
                         <Building2 className="h-4 w-4 flex-shrink-0" />
-                        <span>{HALLS.find(h => h.id === selectedBooth.hall)?.name} — {HALLS.find(h => h.id === selectedBooth.hall)?.theme}</span>
+                        <span>{HALLS.find(h => h.id === selectedBooth.hall)?.name} â€” {HALLS.find(h => h.id === selectedBooth.hall)?.theme}</span>
                       </div>
                       <div className="flex items-center gap-2 text-gray-600">
                         <MapPin className="h-4 w-4 flex-shrink-0" />
-                        <span>Surface : {selectedBooth.surface}</span>
+                        <span className="text-gray-600">{t('hallmap.surface')} {selectedBooth.surface}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: selectedBooth.color }} />
@@ -386,7 +403,7 @@ export default function HallMapPage() {
                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
                           selectedBooth.occupied ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                         }`}>
-                          {selectedBooth.occupied ? '? Stand occupé' : '? Disponible'}
+                          {selectedBooth.occupied ? t('hallmap.stand_occupied') : t('hallmap.available')}
                         </span>
                       </div>
                       {selectedBooth.certifications && selectedBooth.certifications.length > 0 && (
@@ -403,7 +420,7 @@ export default function HallMapPage() {
                         to={`${ROUTES.EXHIBITORS}/${selectedBooth.exhibitorId}`}
                         className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium transition-colors"
                       >
-                        Voir le profil exposant <ArrowRight className="h-4 w-4" />
+                        {t('hallmap.view_profile')} <ArrowRight className="h-4 w-4" />
                       </Link>
                     )}
                     {!selectedBooth.occupied && (
@@ -411,7 +428,7 @@ export default function HallMapPage() {
                         to={ROUTES.CONTACT}
                         className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 text-sm font-medium transition-colors"
                       >
-                        Réserver ce stand <ArrowRight className="h-4 w-4" />
+                        {t('hallmap.book_stand')} <ArrowRight className="h-4 w-4" />
                       </Link>
                     )}
                   </div>
@@ -425,10 +442,10 @@ export default function HallMapPage() {
               >
                 <Card>
                   <div className="p-5">
-                    <h3 className="font-bold text-gray-900 mb-4 text-sm">Occupation des halls</h3>
+                    <h3 className="font-bold text-gray-900 mb-4 text-sm">{t('hallmap.hall_occupancy')}</h3>
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm text-gray-600 mb-1">
-                        <span>Total stands occupés</span>
+                      <span>{t('hallmap.total_occupied')}</span>
                         <span className="font-semibold text-gray-900">{occupiedCount} / {BOOTHS.length}</span>
                       </div>
                       <div className="w-full bg-gray-100 rounded-full h-2">
@@ -462,7 +479,7 @@ export default function HallMapPage() {
           <Card>
             <div className="p-5">
               <h3 className="font-bold text-gray-900 mb-3 text-sm flex items-center gap-2">
-                <Users className="h-4 w-4 text-gray-400" /> Répartition sectorielle
+                <Users className="h-4 w-4 text-gray-400" /> {t('hallmap.sector_breakdown')}
               </h3>
               <div className="space-y-2">
                 {SECTORS.filter(s => s.id !== 'all').map(s => {
@@ -478,7 +495,7 @@ export default function HallMapPage() {
                     >
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: s.color }} />
-                        <span className="text-gray-600">{s.label}</span>
+                        <span className="text-gray-600">{sectorLabels[s.id] ?? s.label}</span>
                       </div>
                       <span className="font-semibold text-gray-900">{count}</span>
                     </button>
@@ -490,8 +507,8 @@ export default function HallMapPage() {
 
           {/* Info */}
           <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-xs text-indigo-700 space-y-1">
-            <p className="font-semibold">?? Navigation</p>
-            <p>Cliquez sur un stand pour voir les détails. Faites glisser la carte pour la déplacer, utilisez les boutons +/- pour zoomer.</p>
+            <p className="font-semibold">{t('hallmap.nav_title')}</p>
+            <p>{t('hallmap.nav_hint')}</p>
           </div>
         </div>
       </div>

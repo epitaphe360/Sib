@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+ï»¿import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
@@ -222,7 +222,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    toast.success('Rapport ROI exporté avec succès !');
+    toast.success('Rapport ROI exportÃ© avec succÃ¨s !');
   };
 
   const fmt = (n: number) => n.toLocaleString('fr-FR');
@@ -244,7 +244,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Dashboard ROI Exposant</h1>
-                <p className="text-gray-600">Performances et retour sur investissement — SIB 2026</p>
+                <p className="text-gray-600">Performances et retour sur investissement â€” SIB 2026</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -265,15 +265,15 @@ export const PartnerAnalyticsPage: React.FC = () => {
           </div>
           <div className="mt-4 bg-purple-50 border border-purple-200 rounded-lg p-4 flex items-center space-x-2">
             <Crown className="h-5 w-5 text-purple-600" />
-            <span className="text-purple-800 font-medium">Données temps réel · SIB 2026 Casablanca</span>
+            <span className="text-purple-800 font-medium">DonnÃ©es temps rÃ©el Â· SIB 2026 Casablanca</span>
             <Badge className="bg-purple-100 text-purple-800" size="sm">Live</Badge>
           </div>
         </div>
 
         {/* -- ROI Summary Cards ------------------------------------------------- */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <ROICard icon={<Users className="h-6 w-6 text-indigo-600" />} label="Leads générés" value={loading ? null : fmt(roi.totalLeads)} bg="bg-indigo-50" />
-          <ROICard icon={<Zap className="h-6 w-6 text-green-600" />} label="Leads qualifiés" value={loading ? null : fmt(roi.qualifiedLeads)} sub={`${qualificationRate}% taux qualification`} bg="bg-green-50" />
+          <ROICard icon={<Users className="h-6 w-6 text-indigo-600" />} label="Leads gÃ©nÃ©rÃ©s" value={loading ? null : fmt(roi.totalLeads)} bg="bg-indigo-50" />
+          <ROICard icon={<Zap className="h-6 w-6 text-green-600" />} label="Leads qualifiÃ©s" value={loading ? null : fmt(roi.qualifiedLeads)} sub={`${qualificationRate}% taux qualification`} bg="bg-green-50" />
           <ROICard icon={<FileText className="h-6 w-6 text-orange-600" />} label="Demandes devis" value={loading ? null : fmt(roi.devisRequests)} bg="bg-orange-50" />
           <ROICard icon={<Award className="h-6 w-6 text-purple-600" />} label="Deals convertis" value={loading ? null : fmt(roi.convertedDeals)} sub={`${conversionRate}% conversion`} bg="bg-purple-50" />
         </div>
@@ -282,7 +282,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <ROICard
             icon={<DollarSign className="h-6 w-6 text-red-600" />}
-            label="Coût par lead"
+            label="CoÃ»t par lead"
             value={loading ? null : fmtMAD(costPerLead)}
             bg="bg-red-50"
           />
@@ -295,15 +295,15 @@ export const PartnerAnalyticsPage: React.FC = () => {
           />
           <ROICard
             icon={<TrendingUp className="h-6 w-6 text-emerald-600" />}
-            label="Revenus estimés"
+            label="Revenus estimÃ©s"
             value={loading ? null : fmtMAD(roi.estimatedRevenue)}
-            sub="Deals BTP générés"
+            sub="Deals BTP gÃ©nÃ©rÃ©s"
             bg="bg-emerald-50"
           />
           <ROICard
             icon={roi_ratio >= 1 ? <TrendingUp className="h-6 w-6 text-green-600" /> : <TrendingDown className="h-6 w-6 text-red-500" />}
             label="Ratio ROI"
-            value={loading ? null : `×${roi_ratio}`}
+            value={loading ? null : `Ã—${roi_ratio}`}
             sub={roi_ratio >= 1 ? 'ROI positif ?' : 'En cours'}
             bg={roi_ratio >= 1 ? 'bg-green-50' : 'bg-yellow-50'}
           />
@@ -316,7 +316,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
             <div className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <BarChart2 className="h-5 w-5 text-indigo-600" />
-                Évolution — 6 derniers mois
+                Ã‰volution â€” 6 derniers mois
               </h3>
               {loading ? (
                 <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-gray-400" /></div>
@@ -371,7 +371,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
                   </div>
                 </>
               ) : (
-                <p className="text-center text-gray-400 py-8 text-sm">Aucune donnée sectorielle disponible.</p>
+                <p className="text-center text-gray-400 py-8 text-sm">Aucune donnÃ©e sectorielle disponible.</p>
               )}
             </div>
           </Card>
@@ -391,10 +391,10 @@ export const PartnerAnalyticsPage: React.FC = () => {
                 {[
                   { label: 'Vues du profil', value: roi.profileViews, max: roi.profileViews, color: 'bg-indigo-500' },
                   { label: 'Scans badge QR / connexions', value: roi.totalLeads, max: roi.profileViews, color: 'bg-indigo-500' },
-                  { label: 'Leads qualifiés', value: roi.qualifiedLeads, max: roi.profileViews, color: 'bg-violet-500' },
+                  { label: 'Leads qualifiÃ©s', value: roi.qualifiedLeads, max: roi.profileViews, color: 'bg-violet-500' },
                   { label: 'Demandes de devis', value: roi.devisRequests, max: roi.profileViews, color: 'bg-orange-500' },
                   { label: 'Rendez-vous tenus', value: roi.appointments, max: roi.profileViews, color: 'bg-amber-500' },
-                  { label: 'Deals conclus (estimé)', value: roi.convertedDeals, max: roi.profileViews, color: 'bg-green-600' },
+                  { label: 'Deals conclus (estimÃ©)', value: roi.convertedDeals, max: roi.profileViews, color: 'bg-green-600' },
                 ].map(step => {
                   const pct = roi.profileViews > 0 ? Math.max(4, Math.round((step.value / roi.profileViews) * 100)) : 0;
                   return (
@@ -417,7 +417,7 @@ export const PartnerAnalyticsPage: React.FC = () => {
         {/* -- Engagement Metrics ------------------------------------------------ */}
         <Card>
           <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Métriques d'engagement détaillées</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">MÃ©triques d'engagement dÃ©taillÃ©es</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <MetricBlock icon={<Eye className="h-7 w-7 text-indigo-600" />} label="Vues profil" value={loading ? null : fmt(roi.profileViews)} color="bg-indigo-50 text-indigo-600" />
               <MetricBlock icon={<Handshake className="h-7 w-7 text-green-600" />} label="Connexions" value={loading ? null : fmt(roi.connections)} color="bg-green-50 text-green-600" />

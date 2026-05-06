@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+ï»¿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import {
@@ -62,7 +62,7 @@ export default function PartnerMediaLibraryPage() {
       if (error) {throw error;}
       setMedia(data || []);
     } catch (error) {
-      console.error('Erreur chargement médias:', error);
+      console.error('Erreur chargement mÃ©dias:', error);
     } finally {
       setIsLoading(false);
     }
@@ -81,21 +81,21 @@ export default function PartnerMediaLibraryPage() {
         return (
           <Badge variant="success" className="flex items-center">
             <CheckCircle className="w-3 h-3 mr-1" />
-            Approuvé
+            ApprouvÃ©
           </Badge>
         );
       case 'published':
         return (
           <Badge variant="success" className="flex items-center">
             <CheckCircle className="w-3 h-3 mr-1" />
-            Publié
+            PubliÃ©
           </Badge>
         );
       case 'rejected':
         return (
           <Badge variant="error" className="flex items-center">
             <XCircle className="w-3 h-3 mr-1" />
-            Rejeté
+            RejetÃ©
           </Badge>
         );
       default:
@@ -134,15 +134,15 @@ export default function PartnerMediaLibraryPage() {
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Ma Bibliothèque Médias</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Ma BibliothÃ¨que MÃ©dias</h1>
               <p className="mt-2 text-gray-600">
-                Gérez vos contenus médias soumis
+                GÃ©rez vos contenus mÃ©dias soumis
               </p>
             </div>
             <Link to={ROUTES.PARTNER_MEDIA_UPLOAD}>
               <Button className="bg-orange-600 hover:bg-orange-700">
                 <Upload className="w-4 h-4 mr-2" />
-                Soumettre un média
+                Soumettre un mÃ©dia
               </Button>
             </Link>
           </div>
@@ -178,7 +178,7 @@ export default function PartnerMediaLibraryPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Approuvés</p>
+                  <p className="text-sm font-medium text-gray-600">ApprouvÃ©s</p>
                   <p className="text-3xl font-bold text-green-600">{stats.approved}</p>
                 </div>
                 <CheckCircle className="h-8 w-8 text-green-600" />
@@ -190,7 +190,7 @@ export default function PartnerMediaLibraryPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Rejetés</p>
+                  <p className="text-sm font-medium text-gray-600">RejetÃ©s</p>
                   <p className="text-3xl font-bold text-red-600">{stats.rejected}</p>
                 </div>
                 <XCircle className="h-8 w-8 text-red-600" />
@@ -217,13 +217,13 @@ export default function PartnerMediaLibraryPage() {
             variant={filter === 'approved' ? 'default' : 'outline'}
             onClick={() => setFilter('approved')}
           >
-            Approuvés ({stats.approved})
+            ApprouvÃ©s ({stats.approved})
           </Button>
           <Button
             variant={filter === 'rejected' ? 'default' : 'outline'}
             onClick={() => setFilter('rejected')}
           >
-            Rejetés ({stats.rejected})
+            RejetÃ©s ({stats.rejected})
           </Button>
         </div>
 
@@ -237,18 +237,18 @@ export default function PartnerMediaLibraryPage() {
             <div className="p-12 text-center">
               <Video className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {filter === 'all' ? 'Aucun média' : `Aucun média ${filter === 'pending_approval' ? 'en attente' : filter === 'approved' ? 'approuvé' : 'rejeté'}`}
+                {filter === 'all' ? 'Aucun mÃ©dia' : `Aucun mÃ©dia ${filter === 'pending_approval' ? 'en attente' : filter === 'approved' ? 'approuvÃ©' : 'rejetÃ©'}`}
               </h3>
               <p className="text-gray-600 mb-4">
                 {filter === 'all'
-                  ? 'Commencez par soumettre votre premier contenu média'
-                  : 'Aucun contenu dans cette catégorie pour le moment'}
+                  ? 'Commencez par soumettre votre premier contenu mÃ©dia'
+                  : 'Aucun contenu dans cette catÃ©gorie pour le moment'}
               </p>
               {filter === 'all' && (
                 <Link to={ROUTES.PARTNER_MEDIA_UPLOAD}>
                   <Button className="bg-orange-600 hover:bg-orange-700">
                     <Upload className="w-4 h-4 mr-2" />
-                    Soumettre un média
+                    Soumettre un mÃ©dia
                   </Button>
                 </Link>
               )}
@@ -303,7 +303,7 @@ export default function PartnerMediaLibraryPage() {
                       </div>
                       {item.approved_at && (
                         <div className="flex items-center text-sm text-gray-600">
-                          <span className="font-medium mr-2">Approuvé le:</span>
+                          <span className="font-medium mr-2">ApprouvÃ© le:</span>
                           {new Date(item.approved_at).toLocaleDateString('fr-FR')}
                         </div>
                       )}
@@ -331,7 +331,7 @@ export default function PartnerMediaLibraryPage() {
                         onClick={() => window.open(item.video_url, '_blank')}
                       >
                         <Eye className="w-4 h-4 mr-2" />
-                        Voir le média
+                        Voir le mÃ©dia
                       </Button>
                     )}
                   </div>

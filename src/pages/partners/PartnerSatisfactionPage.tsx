@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import {
@@ -52,18 +52,18 @@ export const PartnerSatisfactionPage: React.FC = () => {
 
   const satisfactionData = {
     categories: [
-      { name: 'Qualité des événements', icon: Award },
-      { name: 'Support & réactivité', icon: MessageSquare },
-      { name: 'ROI & visibilité', icon: TrendingUp },
+      { name: 'QualitÃ© des Ã©vÃ©nements', icon: Award },
+      { name: 'Support & rÃ©activitÃ©', icon: MessageSquare },
+      { name: 'ROI & visibilitÃ©', icon: TrendingUp },
       { name: 'Recommandation NPS', icon: Heart }
     ],
     testimonials: [
       {
         id: '1',
         name: 'Marie Dubois',
-        company: 'Bâtiment Solutions Inc.',
+        company: 'BÃ¢timent Solutions Inc.',
         rating: 5,
-        comment: 'Sponsor exceptionnel, toujours à l\'écoute et très réactif. La qualité des événements est remarquable.',
+        comment: 'Sponsor exceptionnel, toujours Ã  l\'Ã©coute et trÃ¨s rÃ©actif. La qualitÃ© des Ã©vÃ©nements est remarquable.',
         date: '2024-01-15'
       },
       {
@@ -71,7 +71,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
         name: 'Pierre Martin',
         company: 'TechMarine Solutions',
         rating: 5,
-        comment: 'Excellente visibilité et retours sur investissement. L\'équipe est professionnelle et les résultats dépassent nos attentes.',
+        comment: 'Excellente visibilitÃ© et retours sur investissement. L\'Ã©quipe est professionnelle et les rÃ©sultats dÃ©passent nos attentes.',
         date: '2024-01-12'
       },
       {
@@ -79,42 +79,42 @@ export const PartnerSatisfactionPage: React.FC = () => {
         name: 'Sophie Bernard',
         company: 'LogiFlow Systems',
         rating: 5,
-        comment: 'Partenariat très bénéfique pour notre développement. La plateforme SIB offre une visibilité incomparable.',
+        comment: 'Partenariat trÃ¨s bÃ©nÃ©fique pour notre dÃ©veloppement. La plateforme SIB offre une visibilitÃ© incomparable.',
         date: '2024-01-10'
       },
       {
         id: '4',
-        name: 'Jean-François Moreau',
+        name: 'Jean-FranÃ§ois Moreau',
         company: 'Building Tech Hub',
         rating: 5,
-        comment: 'Les événements sont d\'une qualité exceptionnelle et le networking est très efficace. Hautement recommandé.',
+        comment: 'Les Ã©vÃ©nements sont d\'une qualitÃ© exceptionnelle et le networking est trÃ¨s efficace. Hautement recommandÃ©.',
         date: '2024-01-08'
       },
       {
         id: '5',
         name: 'Claire Leroy',
-        company: 'Bâtiment Innovation',
+        company: 'BÃ¢timent Innovation',
         rating: 4,
-        comment: 'Très satisfait du partenariat. Quelques améliorations possibles sur la communication mais globalement excellent.',
+        comment: 'TrÃ¨s satisfait du partenariat. Quelques amÃ©liorations possibles sur la communication mais globalement excellent.',
         date: '2024-01-05'
       }
     ],
     improvements: [
       {
         category: 'Communication',
-        suggestion: 'Augmenter la fréquence des newsletters sponsors',
+        suggestion: 'Augmenter la frÃ©quence des newsletters sponsors',
         priority: 'high',
         status: 'planned'
       },
       {
         category: 'Analytics',
-        suggestion: 'Ajouter plus de métriques détaillées dans les rapports',
+        suggestion: 'Ajouter plus de mÃ©triques dÃ©taillÃ©es dans les rapports',
         priority: 'medium',
         status: 'in_progress'
       },
       {
         category: 'Networking',
-        suggestion: 'Développer les fonctionnalités de mise en relation automatique',
+        suggestion: 'DÃ©velopper les fonctionnalitÃ©s de mise en relation automatique',
         priority: 'high',
         status: 'completed'
       }
@@ -150,9 +150,9 @@ export const PartnerSatisfactionPage: React.FC = () => {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed': return 'Terminé';
+      case 'completed': return 'TerminÃ©';
       case 'in_progress': return 'En cours';
-      case 'planned': return 'Planifié';
+      case 'planned': return 'PlanifiÃ©';
       default: return status;
     }
   };
@@ -176,7 +176,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
                 Satisfaction Partenariat
               </h1>
               <p className="text-gray-600">
-                Découvrez ce que pensent nos sponsors de leur expérience SIB
+                DÃ©couvrez ce que pensent nos sponsors de leur expÃ©rience SIB
               </p>
             </div>
           </div>
@@ -186,13 +186,13 @@ export const PartnerSatisfactionPage: React.FC = () => {
               <Crown className="h-5 w-5 text-green-600" />
               <span className="text-green-800 font-medium">Programme de Satisfaction Sponsors</span>
               <Badge className="bg-green-100 text-green-800" size="sm">
-                Données en Temps Réel
+                DonnÃ©es en Temps RÃ©el
               </Badge>
             </div>
           </div>
         </div>
 
-        {/* Overall Satisfaction - vraies données */}
+        {/* Overall Satisfaction - vraies donnÃ©es */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <div className="p-6 text-center">
@@ -200,7 +200,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
               <div className="text-3xl font-bold text-gray-900 mb-1">
                 {loading ? <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto" /> : realStats.verifiedPartners}
               </div>
-              <div className="text-gray-600 text-sm">Sponsors vérifiés</div>
+              <div className="text-gray-600 text-sm">Sponsors vÃ©rifiÃ©s</div>
             </div>
           </Card>
 
@@ -210,7 +210,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
               <div className="text-3xl font-bold text-gray-900 mb-1">
                 {loading ? <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto" /> : realStats.totalEvents}
               </div>
-              <div className="text-gray-600 text-sm">Événements organisés</div>
+              <div className="text-gray-600 text-sm">Ã‰vÃ©nements organisÃ©s</div>
             </div>
           </Card>
 
@@ -220,7 +220,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
               <div className="text-3xl font-bold text-gray-900 mb-1">
                 {loading ? <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto" /> : realStats.totalConnections}
               </div>
-              <div className="text-gray-600 text-sm">Connexions établies</div>
+              <div className="text-gray-600 text-sm">Connexions Ã©tablies</div>
             </div>
           </Card>
 
@@ -235,12 +235,12 @@ export const PartnerSatisfactionPage: React.FC = () => {
           </Card>
         </div>
 
-        {/* Categories - enquête à venir */}
+        {/* Categories - enquÃªte Ã  venir */}
         <Card className="mb-8">
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-gray-900">Axes de Satisfaction</h3>
-              <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Enquête post-événement à venir</span>
+              <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">EnquÃªte post-Ã©vÃ©nement Ã  venir</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {satisfactionData.categories.map((category) => {
@@ -248,7 +248,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
                 return (
                   <div key={category.name} className="text-center p-4 bg-slate-50 rounded-lg">
                     <CategoryIcon className="h-8 w-8 text-indigo-600 mx-auto mb-3" />
-                    <div className="text-lg font-semibold text-gray-400 mb-1">—</div>
+                    <div className="text-lg font-semibold text-gray-400 mb-1">â€”</div>
                     <div className="text-sm text-gray-600">{category.name}</div>
                   </div>
                 );
@@ -260,7 +260,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
         {/* Testimonials */}
         <Card className="mb-8">
           <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Témoignages Clients</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-6">TÃ©moignages Clients</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {satisfactionData.testimonials.map((testimonial) => (
                 <div key={testimonial.id} className="p-4 bg-slate-50 rounded-lg">
@@ -286,7 +286,7 @@ export const PartnerSatisfactionPage: React.FC = () => {
         {/* Improvements */}
         <Card>
           <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Améliorations en Cours</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-6">AmÃ©liorations en Cours</h3>
             <div className="space-y-4">
               {satisfactionData.improvements.map((improvement) => (
                 <div key={improvement.category} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">

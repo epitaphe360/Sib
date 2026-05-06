@@ -6,6 +6,7 @@ import {
   Calendar, CreditCard, Hash, Mail, Home,
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface SuccessState {
   invoiceNumber: string;
@@ -166,6 +167,7 @@ export default function RentalPaymentSuccessPage() {
   const printRef = useRef<HTMLDivElement>(null);
 
   const state = location.state as SuccessState | null;
+  const { t } = useTranslation();
 
   if (!state?.invoiceNumber) {
     navigate(ROUTES.HOME, { replace: true });
@@ -218,12 +220,12 @@ export default function RentalPaymentSuccessPage() {
           {/* Titre */}
           <div className="text-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              {isPaid ? 'Paiement confirmé !' : 'Commande enregistrée !'}
+              {isPaid ? t('rentalSuccess.payment_confirmed') : t('rentalSuccess.order_registered')}
             </h1>
             <p className="text-gray-500 text-sm">
               {isPaid
-                ? `Merci ${userName} — votre facture a été envoyée par email.`
-                : `Merci ${userName} — vous recevrez un lien de paiement CMI par email sous 24h.`}
+                ? `${t('rentalSuccess.thanks_paypal_pre')} ${userName} ${t('rentalSuccess.thanks_paypal_post')}`
+                : `${t('rentalSuccess.thanks_cmi_pre')} ${userName} ${t('rentalSuccess.thanks_cmi_post')}`}
             </p>
           </div>
 
@@ -235,13 +237,13 @@ export default function RentalPaymentSuccessPage() {
                 <Hash className={`h-5 w-5 ${isPaid ? 'text-emerald-600' : 'text-amber-600'}`} />
               </div>
               <div>
-                <div className="text-xs text-gray-400">Numéro de facture</div>
+                <div className="text-xs text-gray-400">{t('rentalSuccess.invoice_number')}</div>
                 <div className="font-bold text-gray-900 font-mono text-sm">{invoiceNumber}</div>
               </div>
               <span className={`ml-auto text-xs font-semibold px-2.5 py-1 rounded-full ${
                 isPaid ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
               }`}>
-                {isPaid ? 'Payé' : 'En attente'}
+                {isPaid ? t('rentalSuccess.paid') : t('rentalSuccess.pending')}
               </span>
             </div>
 
@@ -269,15 +271,15 @@ export default function RentalPaymentSuccessPage() {
             {/* Totaux */}
             <div className="border-t border-gray-100 pt-3 space-y-1.5">
               <div className="flex justify-between text-xs text-gray-500">
-                <span>Sous-total HT</span>
+                <span>{t('checkout.subtotal_ht')}</span>
                 <span>{subtotalHT.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD</span>
               </div>
               <div className="flex justify-between text-xs text-gray-500">
-                <span>TVA (20%)</span>
+                <span>{t('checkout.tva')}</span>
                 <span>{tvaAmount.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD</span>
               </div>
               <div className="flex justify-between text-sm font-bold text-gray-900 pt-1 border-t border-gray-100">
-                <span>Total TTC</span>
+                <span>{t('checkout.total_ttc')}</span>
                 <span className="text-emerald-700">
                   {totalTTC.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD
                 </span>
@@ -296,7 +298,7 @@ export default function RentalPaymentSuccessPage() {
           {/* Email note */}
           <div className="flex items-center gap-2 text-xs text-gray-400 bg-white rounded-xl border border-gray-100 px-4 py-3 mb-4">
             <Mail className="h-4 w-4 text-gray-400 shrink-0" />
-            <span>Un email de confirmation avec votre facture a été envoyé à votre adresse.</span>
+            <span>{t('rentalSuccess.email_sent')}</span>
           </div>
 
           {/* Actions */}
@@ -306,7 +308,7 @@ export default function RentalPaymentSuccessPage() {
               className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-xl font-semibold text-sm transition"
             >
               <Download className="h-4 w-4" />
-              Télécharger / Imprimer la facture
+              {t('rentalSuccess.download_invoice')}
             </button>
 
             <Link
@@ -314,7 +316,7 @@ export default function RentalPaymentSuccessPage() {
               className="flex items-center justify-center gap-2 w-full bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 px-5 py-3 rounded-xl font-semibold text-sm transition"
             >
               <Home className="h-4 w-4" />
-              Retour au tableau de bord
+              {t('common.back_dashboard')}
               <ArrowRight className="h-4 w-4 ml-auto" />
             </Link>
           </div>

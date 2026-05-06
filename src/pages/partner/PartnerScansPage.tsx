@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -101,6 +102,7 @@ function exportCsv(rows: ScannedVisitor[], sponsorName: string, scannerName?: st
 // ─── Ligne de tableau ──────────────────────────────────────────────────────────
 
 function ScanRowItem({ scan }: Readonly<{ scan: ScannedVisitor }>) {
+  const { t } = useTranslation();
   const dateStr = scan.scanned_at
     ? new Date(scan.scanned_at).toLocaleString('fr-FR', {
         day: '2-digit', month: '2-digit', year: '2-digit',
@@ -116,7 +118,7 @@ function ScanRowItem({ scan }: Readonly<{ scan: ScannedVisitor }>) {
             <User className="h-4 w-4 text-indigo-500" />
           </div>
           <div>
-            <p className="font-semibold text-sm text-gray-900">{scan.visitor_name ?? 'Inconnu'}</p>
+            <p className="font-semibold text-sm text-gray-900">{scan.visitor_name ?? t('scans.unknown')}</p>
             {scan.visitor_email && (
               <p className="text-xs text-gray-400">{scan.visitor_email}</p>
             )}
@@ -162,6 +164,7 @@ interface CollaboratorSectionProps {
 
 function CollaboratorSection({ group, search, sponsorName, defaultOpen }: Readonly<CollaboratorSectionProps>) {
   const [open, setOpen] = useState(defaultOpen);
+  const { t } = useTranslation();
 
   const filtered = group.scans.filter(s => {
     if (!search) return true;
@@ -176,14 +179,14 @@ function CollaboratorSection({ group, search, sponsorName, defaultOpen }: Readon
   const uniqueVisitors = new Set(group.scans.map(s => s.visitor_id).filter(Boolean)).size;
   const initials = avatarInitials(group.scanned_by_name);
   const color = avatarColor(group.scanned_by_id);
-  const totalLabel = group.scans.length === 1 ? '1 scan' : `${group.scans.length} scans`;
-  const uniqueLabel = uniqueVisitors === 1 ? '1 visiteur unique' : `${uniqueVisitors} visiteurs uniques`;
+  const totalLabel = `${group.scans.length} ${group.scans.length === 1 ? t('scans.scan_singular') : t('scans.scan_plural')}`;
+  const uniqueLabel = `${uniqueVisitors} ${uniqueVisitors === 1 ? t('scans.unique_visitor_singular') : t('scans.unique_visitor_plural')}`;
 
   function handleExport(e: React.MouseEvent) {
     e.stopPropagation();
-    if (group.scans.length === 0) { toast.error('Aucune donnée'); return; }
+    if (group.scans.length === 0) { toast.error(t('scans.no_data')); return; }
     exportCsv(group.scans, sponsorName, group.scanned_by_name);
-    toast.success(`Export de ${group.scans.length} scan(s)`);
+    toast.success(`${group.scans.length} ${t('scans.exported')}`);
   }
 
   return (
@@ -201,7 +204,7 @@ function CollaboratorSection({ group, search, sponsorName, defaultOpen }: Readon
             <div className="flex items-center gap-2">
               <p className="font-bold text-gray-900 text-sm">{group.scanned_by_name}</p>
               {group.isOwner && (
-                <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">Vous</span>
+                <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">{t('scans.you')}</span>
               )}
             </div>
             <p className="text-xs text-gray-500">{totalLabel} · {uniqueLabel}</p>
@@ -214,7 +217,7 @@ function CollaboratorSection({ group, search, sponsorName, defaultOpen }: Readon
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
           >
             <Download className="h-3.5 w-3.5" />
-            Exporter
+            {t('scans.export')}
           </button>
           {open ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
         </div>
@@ -225,18 +228,18 @@ function CollaboratorSection({ group, search, sponsorName, defaultOpen }: Readon
           {filtered.length === 0 ? (
             <div className="text-center py-10 text-gray-400">
               <QrCode className="h-8 w-8 mx-auto mb-2 opacity-20" />
-              <p className="text-sm">{search ? 'Aucun résultat pour cette recherche' : 'Aucun scan'}</p>
+              <p className="text-sm">{search ? t('scans.no_search_results') : t('scans.no_scans')}</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left text-xs text-gray-400 bg-gray-50 border-b border-gray-100">
-                    <th className="py-2.5 px-4 font-medium">Visiteur</th>
-                    <th className="py-2.5 px-4 font-medium hidden sm:table-cell">Société</th>
-                    <th className="py-2.5 px-4 font-medium hidden md:table-cell">Date</th>
-                    <th className="py-2.5 px-4 font-medium hidden lg:table-cell">Lieu</th>
-                    <th className="py-2.5 px-4 font-medium">Badge</th>
+                    <th className="py-2.5 px-4 font-medium">{t('scans.col_visitor')}</th>
+                    <th className="py-2.5 px-4 font-medium hidden sm:table-cell">{t('scans.col_company')}</th>
+                    <th className="py-2.5 px-4 font-medium hidden md:table-cell">{t('scans.col_date')}</th>
+                    <th className="py-2.5 px-4 font-medium hidden lg:table-cell">{t('scans.col_location')}</th>
+                    <th className="py-2.5 px-4 font-medium">{t('scans.col_badge')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -244,8 +247,8 @@ function CollaboratorSection({ group, search, sponsorName, defaultOpen }: Readon
                 </tbody>
               </table>
               <p className="text-xs text-gray-400 px-4 py-2.5 text-right">
-                {filtered.length} résultat{filtered.length === 1 ? '' : 's'}
-                {search ? ` sur ${group.scans.length}` : ''}
+                {filtered.length} {filtered.length === 1 ? t('scans.result_singular') : t('scans.result_plural')}
+                {search ? ` ${t('scans.on')} ${group.scans.length}` : ''}
               </p>
             </div>
           )}
@@ -259,6 +262,7 @@ function CollaboratorSection({ group, search, sponsorName, defaultOpen }: Readon
 
 export default function PartnerScansPage() {
   const { user } = useAuthStore();
+  const { t } = useTranslation();
   const [groups, setGroups] = useState<CollaboratorGroup[]>([]);
   const [allScans, setAllScans] = useState<ScannedVisitor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -358,7 +362,7 @@ export default function PartnerScansPage() {
 
       setGroups(sorted);
     } catch {
-      toast.error('Impossible de charger les visiteurs scannés');
+      toast.error(t('scans.load_error'));
     } finally {
       setIsLoading(false);
     }
@@ -376,16 +380,16 @@ export default function PartnerScansPage() {
   const totalVip = allScans.filter(s => s.badge_type === 'vip').length;
 
   const stats = [
-    { label: 'Total scans', value: allScans.length, color: 'text-indigo-600' },
-    { label: 'Visiteurs uniques', value: totalUnique, color: 'text-emerald-600' },
-    { label: "Aujourd'hui", value: totalToday, color: 'text-amber-600' },
-    { label: 'VIP', value: totalVip, color: 'text-purple-600' },
+    { label: t('scans.total_scans'), value: allScans.length, color: 'text-indigo-600' },
+    { label: t('scans.unique_visitors'), value: totalUnique, color: 'text-emerald-600' },
+    { label: t('scans.today'), value: totalToday, color: 'text-amber-600' },
+    { label: t('scans.vip'), value: totalVip, color: 'text-purple-600' },
   ];
 
   function handleExportAll() {
-    if (allScans.length === 0) { toast.error('Aucune donnée à exporter'); return; }
+    if (allScans.length === 0) { toast.error(t('scans.no_data_export')); return; }
     exportCsv(allScans, sponsorName);
-    toast.success(`${allScans.length} ligne(s) exportée(s)`);
+    toast.success(`${allScans.length} ${t('scans.lines_exported')}`);
   }
 
   return (
@@ -404,7 +408,7 @@ export default function PartnerScansPage() {
             <span className="text-gray-300">/</span>
             <div className="flex items-center gap-2">
               <ScanLine className="h-5 w-5 text-indigo-600" />
-              <h1 className="text-lg font-bold text-gray-900">Visiteurs Scannés</h1>
+              <h1 className="text-lg font-bold text-gray-900">{t('scans.title')}</h1>
             </div>
           </div>
           <button
@@ -414,7 +418,7 @@ export default function PartnerScansPage() {
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-xl hover:bg-green-700 disabled:opacity-50 transition-colors"
           >
             <Download className="h-4 w-4" />
-            <span className="hidden sm:inline">Exporter tout</span>
+            <span className="hidden sm:inline">{t('scans.export_all')}</span>
           </button>
         </div>
       </div>
@@ -438,7 +442,7 @@ export default function PartnerScansPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Rechercher un visiteur dans toutes les sections…"
+              placeholder={t('scans.search_placeholder')}
               value={search}
               onChange={e => setSearch(e.target.value)}
               className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
@@ -451,7 +455,7 @@ export default function PartnerScansPage() {
             className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-50 transition-colors shadow-sm"
           >
             <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-            <span className="hidden sm:inline">Actualiser</span>
+            <span className="hidden sm:inline">{t('common.refresh')}</span>
           </button>
         </div>
 
@@ -466,9 +470,9 @@ export default function PartnerScansPage() {
         {!isLoading && groups.length === 0 && (
           <div className="bg-white rounded-2xl border border-dashed border-gray-200 text-center py-20 text-gray-400">
             <Users className="h-14 w-14 mx-auto mb-4 opacity-20" />
-            <p className="font-medium text-gray-500 text-base">Aucun scan enregistré</p>
+            <p className="font-medium text-gray-500 text-base">{t('scans.no_scans_title')}</p>
             <p className="text-sm mt-2 max-w-xs mx-auto text-gray-400">
-              Utilisez l&apos;application scanner pour collecter les badges QR de vos visiteurs
+              {t('scans.no_scans_desc')}
             </p>
           </div>
         )}

@@ -11,6 +11,7 @@ import { useAuthStore } from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
 import { PAYPAL_CLIENT_ID } from '../../services/paymentService';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const TVA_RATE = 0.20;
 const MAD_TO_EUR = 11; // taux approximatif
@@ -155,6 +156,7 @@ function PayPalPayButton({
   onSuccess: (paypalOrderId: string) => void;
 }) {
   const [{ isPending }] = usePayPalScriptReducer();
+  const { t } = useTranslation();
 
   if (isPending) {
     return (
@@ -183,7 +185,7 @@ function PayPalPayButton({
       }}
       onError={(err) => {
         console.error('[PayPal] Error:', err);
-        toast.error('Erreur PayPal. Veuillez réessayer.');
+        toast.error(t('checkout.paypal_error'));
       }}
     />
   );
@@ -199,6 +201,7 @@ export default function RentalCheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'cmi' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [invoiceNumber] = useState(() => generateInvoiceNumber());
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!state?.cartItems?.length) {
@@ -309,7 +312,7 @@ export default function RentalCheckoutPage() {
         replace: true,
       });
     } catch (err: any) {
-      toast.error(err?.message || 'Erreur lors du traitement. Réessayez.');
+      toast.error(err?.message || t('checkout.error'));
       setIsProcessing(false);
     }
   }, [user, cartItems, rentalStart, rentalEnd, totalDays, userType, entityId,
@@ -327,15 +330,15 @@ export default function RentalCheckoutPage() {
             onClick={() => navigate(-1)}
             className="inline-flex items-center text-gray-500 hover:text-gray-900 mb-4 text-sm transition"
           >
-            <ArrowLeft className="h-4 w-4 mr-1" /> Retour au catalogue
+            <ArrowLeft className="h-4 w-4 mr-1" /> {t('checkout.back')}
           </button>
           <div className="flex items-center gap-3">
             <div className="bg-emerald-600 p-3 rounded-xl">
               <Receipt className="h-7 w-7 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Récapitulatif & Paiement</h1>
-              <p className="text-sm text-gray-500">Vérifiez votre commande avant de payer</p>
+              <h1 className="text-2xl font-bold text-gray-900">{t('checkout.title')}</h1>
+              <p className="text-sm text-gray-500">{t('checkout.subtitle')}</p>
             </div>
           </div>
         </div>
@@ -344,7 +347,7 @@ export default function RentalCheckoutPage() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-5">
           <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-4 flex items-center gap-2">
             <ShoppingCart className="h-4 w-4 text-emerald-600" />
-            Articles commandés
+            {t('checkout.ordered_items')}
           </h2>
 
           {/* Période */}
@@ -382,15 +385,15 @@ export default function RentalCheckoutPage() {
           {/* Total HT / TVA / TTC */}
           <div className="border-t border-gray-100 mt-3 pt-4 space-y-2">
             <div className="flex justify-between text-sm text-gray-500">
-              <span>Sous-total HT</span>
+              <span>{t('checkout.subtotal_ht')}</span>
               <span>{subtotalHT.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD</span>
             </div>
             <div className="flex justify-between text-sm text-gray-500">
-              <span>TVA (20%)</span>
+              <span>{t('checkout.tva')}</span>
               <span>{tvaAmount.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD</span>
             </div>
             <div className="flex justify-between text-base font-bold text-gray-900 pt-2 border-t border-gray-100">
-              <span>Total TTC</span>
+              <span>{t('checkout.total_ttc')}</span>
               <span className="text-emerald-700 text-lg">
                 {totalTTC.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD
               </span>
@@ -402,7 +405,7 @@ export default function RentalCheckoutPage() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-5">
           <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-4 flex items-center gap-2">
             <CreditCard className="h-4 w-4 text-emerald-600" />
-            Mode de paiement
+            {t('checkout.payment_method_title')}
           </h2>
 
           <div className="grid grid-cols-2 gap-3 mb-5">
@@ -417,7 +420,7 @@ export default function RentalCheckoutPage() {
             >
               <span className="text-3xl">🅿️</span>
               <span className="font-semibold text-sm text-gray-800">PayPal</span>
-              <span className="text-xs text-gray-500 text-center">Paiement en ligne sécurisé</span>
+              <span className="text-xs text-gray-500 text-center">{t('checkout.paypal_desc')}</span>
             </button>
 
             {/* CMI */}
@@ -431,7 +434,7 @@ export default function RentalCheckoutPage() {
             >
               <Building2 className="h-8 w-8 text-emerald-600" />
               <span className="font-semibold text-sm text-gray-800">CMI</span>
-              <span className="text-xs text-gray-500 text-center">Carte bancaire marocaine</span>
+              <span className="text-xs text-gray-500 text-center">{t('checkout.cmi_desc')}</span>
             </button>
           </div>
 
@@ -448,15 +451,15 @@ export default function RentalCheckoutPage() {
                 <div className="flex items-start gap-2 bg-indigo-50 rounded-xl p-3 mb-4 text-xs text-indigo-700">
                   <Info className="h-4 w-4 mt-0.5 shrink-0" />
                   <span>
-                    Le montant sera traité en EUR via PayPal.{' '}
+                    {t('checkout.paypal_eur_note')}{' '}
                     <strong>{amountEUR} EUR</strong> ≈ {totalTTC.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD
-                    <br />Taux indicatif : 1 EUR = {MAD_TO_EUR} MAD
+                    <br />{t('checkout.exchange_rate')} {MAD_TO_EUR} MAD
                   </span>
                 </div>
                 {isProcessing ? (
                   <div className="flex items-center justify-center gap-2 py-4 text-gray-500 text-sm">
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    Traitement du paiement en cours…
+                    {t('checkout.processing')}
                   </div>
                 ) : PAYPAL_CLIENT_ID ? (
                   <PayPalScriptProvider
@@ -475,7 +478,7 @@ export default function RentalCheckoutPage() {
                 ) : (
                   <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-700">
                     <Info className="h-4 w-4 shrink-0" />
-                    <span>PayPal non configuré. Contactez l'administrateur ou choisissez CMI.</span>
+                    <span>{t('checkout.paypal_not_configured')}</span>
                   </div>
                 )}
               </motion.div>
@@ -493,8 +496,7 @@ export default function RentalCheckoutPage() {
                 <div className="flex items-start gap-2 bg-emerald-50 rounded-xl p-3 mb-4 text-xs text-emerald-700">
                   <Info className="h-4 w-4 mt-0.5 shrink-0" />
                   <span>
-                    Votre commande sera enregistrée. Notre équipe vous enverra un lien de paiement
-                    CMI sécurisé par email dans les <strong>24 heures</strong>.
+                    {t('checkout.cmi_info')}
                   </span>
                 </div>
                 <button
@@ -503,9 +505,9 @@ export default function RentalCheckoutPage() {
                   className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white px-6 py-3 rounded-xl font-semibold text-sm transition"
                 >
                   {isProcessing ? (
-                    <><Loader2 className="h-4 w-4 animate-spin" /> Traitement…</>
+                    <><Loader2 className="h-4 w-4 animate-spin" /> {t('checkout.processing_short')}</>
                   ) : (
-                    <><Building2 className="h-4 w-4" /> Confirmer & payer par CMI</>
+                    <><Building2 className="h-4 w-4" /> {t('checkout.confirm_cmi')}</>
                   )}
                 </button>
               </motion.div>
@@ -519,7 +521,7 @@ export default function RentalCheckoutPage() {
                 animate={{ opacity: 1 }}
                 className="text-center text-sm text-gray-400 py-3"
               >
-                Sélectionnez un mode de paiement ci-dessus
+                {t('checkout.select_payment')}
               </motion.div>
             )}
           </AnimatePresence>
@@ -528,7 +530,7 @@ export default function RentalCheckoutPage() {
         {/* Note sécurité */}
         <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
           <Shield className="h-3.5 w-3.5 text-green-400" />
-          Paiement sécurisé · Facture envoyée par email · TVA 20% incluse
+          <span>{t('checkout.secure_note')}</span>
         </div>
       </div>
     </div>
