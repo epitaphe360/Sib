@@ -63,8 +63,8 @@ export default function EspacesSibPage() {
     <div className="min-h-screen bg-slate-50 overflow-x-hidden">
       <PageHero
         badge={<><Wrench className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{t('espaces.hero_badge')}</span></>}
-        title={<>Espaces <span className="text-yellow-300">SIB</span></>}
-        subtitle={cms.hero_subtitle || "Parce que le SIB ne se résume pas qu'à des stands d'exposition, plusieurs espaces sont également mis en avant."}
+        title={<>{t('espaces.title_1')} <span className="text-yellow-300">SIB</span></>}
+        subtitle={cms.hero_subtitle || t('espaces.hero_subtitle')}
         py="py-16 md:py-20"
       />
 

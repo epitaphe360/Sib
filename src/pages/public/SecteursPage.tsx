@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { usePageContent } from '../../hooks/usePageContent';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   StaggerReveal, StaggerItem, HoverCard,
   motion, AnimatePresence,
@@ -28,6 +29,7 @@ const defaultSecteurs: Secteur[] = [
 
 export default function SecteursPage() {
   const cms = usePageContent('secteurs-activites');
+  const { t } = useTranslation();
 
   const getCms = (key: string, fallback: string) => {
     const value = cms[key];
@@ -67,7 +69,7 @@ export default function SecteursPage() {
     <div className="min-h-screen bg-slate-50">
       <PageHero
         badge={<><Search className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{getCms('hero_badge', "10 secteurs d'activité")}</span></>}
-        title={<>Secteurs <span className="text-yellow-300">d'Activités</span></>}
+        title={<>{t('secteurs.title_1')} <span className="text-yellow-300">{t('secteurs.title_2')}</span></>}
         subtitle={cms.hero_subtitle || "Tous les métiers du bâtiment, réunis sous un même toit. Plongez au cœur des univers du SIB, où se rencontrent innovation, savoir-faire et solutions concrètes pour construire l'avenir."}
         py="py-16 md:py-20"
       />
@@ -101,7 +103,7 @@ export default function SecteursPage() {
                     className="w-full flex items-center justify-between p-6 text-left"
                   >
                     <div className="flex items-center gap-4">
-                      <span className="w-10 h-10 rounded-lg bg-sib-navy/10 flex items-center justify-center text-sib-navy font-bold text-sm">
+                      <span className="w-10 h-10 rounded-lg bg-indigo-800/10 flex items-center justify-center text-indigo-800 font-bold text-sm">
                         {String(secteur.id).padStart(2, '0')}
                       </span>
                       <h3 className="font-bold text-gray-900">{secteur.name}</h3>
@@ -130,7 +132,7 @@ export default function SecteursPage() {
                                   transition={{ delay: i * 0.05 }}
                                   className="flex items-center gap-2 text-sm text-gray-600"
                                 >
-                                  <span className="w-1.5 h-1.5 rounded-full bg-sib-gold" />
+                                  <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
                                   {sub}
                                 </motion.li>
                               ))}
@@ -155,3 +157,4 @@ export default function SecteursPage() {
     </div>
   );
 }
+

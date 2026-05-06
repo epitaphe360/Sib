@@ -76,8 +76,8 @@ export default function InfosPratiquesPage() {
     <div className="min-h-screen bg-slate-50">
       <PageHero
         badge={<><MapPin className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">SIB 2026</span></>}
-        title={<>Infos <span className="text-yellow-300">Pratiques</span></>}
-        subtitle={cms.hero_subtitle || "Tout ce qu'il faut savoir pour préparer votre visite au SIB 2026."}
+        title={<>{t('infos.title_1')} <span className="text-yellow-300">{t('infos.title_2')}</span></>}
+        subtitle={cms.hero_subtitle || t('infos.hero_subtitle')}
         py="py-16 md:py-20"
       />
 
@@ -220,8 +220,7 @@ export default function InfosPratiquesPage() {
               <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('hebergement_title', 'Hébergement')}</h2>
             </div>
             <p className="text-gray-600 mb-4">
-              Les exposants et visiteurs disposent d'une multitude de choix pour séjourner à proximité du parc.
-              La ville d'El Jadida propose un choix varié d'hôtels dont les prix peuvent s'adapter à toutes les bourses.
+              {t('infos.hebergement_text')}
             </p>
             <Link
               to={ROUTES.ACCOMMODATION}

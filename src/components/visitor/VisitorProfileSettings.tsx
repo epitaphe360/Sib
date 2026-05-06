@@ -27,6 +27,7 @@ import { motion } from 'framer-motion';
 import { LevelBadge, QuotaWidget } from '../common/QuotaWidget';
 import { getVisitorQuota } from '../../config/quotas';
 import useAuthStore from '../../store/authStore';
+import { useTranslation } from '../../hooks/useTranslation';
 import { supabase, isSupabaseReady } from '../../lib/supabase';
 
 export default function VisitorProfileSettings() {
@@ -35,6 +36,7 @@ export default function VisitorProfileSettings() {
   const [isEditing, setIsEditing] = useState(false);
   const [activeSection, setActiveSection] = useState<'profile' | 'interests' | 'notifications' | 'privacy' | 'quotas'>('profile');
   const [meetingsUsed, setMeetingsUsed] = useState(0);
+  const { t } = useTranslation();
 
   // Charger les données du visiteur au montage du composant
   useEffect(() => {
@@ -159,10 +161,10 @@ export default function VisitorProfileSettings() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Chargement du profil
+            {t('visitor_settings.loading')}
           </h3>
           <p className="text-gray-600">
-            Veuillez patienter...
+            {t('visitor_settings.loading_wait')}
           </p>
         </div>
       </div>
@@ -174,13 +176,13 @@ export default function VisitorProfileSettings() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center max-w-md mx-auto px-4">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Profil en cours de création
+            {t('visitor_settings.profile_creating')}
           </h3>
           <p className="text-gray-600 mb-4">
-            Votre profil est en cours d'initialisation. Veuillez rafraîchir la page dans quelques instants.
+            {t('visitor_settings.profile_creating_desc')}
           </p>
           <Button onClick={() => window.location.reload()}>
-            Rafraîchir la page
+            {t('visitor_settings.refresh')}
           </Button>
         </div>
       </div>
@@ -197,7 +199,7 @@ export default function VisitorProfileSettings() {
             <Link to={ROUTES.VISITOR_DASHBOARD}>
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour au Tableau de Bord Visiteur
+                {t('visitor_settings.back')}
               </Button>
             </Link>
           </div>
@@ -207,10 +209,10 @@ export default function VisitorProfileSettings() {
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Paramètres du Profil Visiteur
+              {t('visitor_settings.title')}
             </h1>
             <p className="text-gray-600">
-              Personnalisez votre profil et vos préférences pour optimiser votre expérience SIB
+              {t('visitor_settings.subtitle')}
             </p>
           </motion.div>
         </div>
@@ -222,11 +224,11 @@ export default function VisitorProfileSettings() {
               <div className="p-4">
                 <nav className="space-y-2">
                   {[
-                    { id: 'profile', label: 'Profil Personnel', icon: User },
-                    { id: 'quotas', label: 'Mes Quotas', icon: Award },
-                    { id: 'interests', label: 'Intérêts & Objectifs', icon: Target },
-                    { id: 'notifications', label: 'Notifications', icon: Bell },
-                    { id: 'privacy', label: 'Confidentialité', icon: Shield }
+                    { id: 'profile', label: t('visitor_settings.nav_profile'), icon: User },
+                    { id: 'quotas', label: t('visitor_settings.nav_quotas'), icon: Award },
+                    { id: 'interests', label: t('visitor_settings.nav_interests'), icon: Target },
+                    { id: 'notifications', label: t('visitor_settings.nav_notifications'), icon: Bell },
+                    { id: 'privacy', label: t('visitor_settings.nav_privacy'), icon: Shield }
                   ].map((section) => (
                     <button
                       key={section.id}
@@ -258,7 +260,7 @@ export default function VisitorProfileSettings() {
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-6">
                       <h3 className="text-lg font-semibold text-gray-900">
-                        Informations Personnelles
+                        {t('visitor_settings.personal_info')}
                       </h3>
                       {!isEditing ? (
                         <Button
@@ -267,7 +269,7 @@ export default function VisitorProfileSettings() {
                           onClick={() => setIsEditing(true)}
                         >
                           <Edit className="h-4 w-4 mr-2" />
-                          Modifier
+                          {t('visitor_settings.edit')}
                         </Button>
                       ) : (
                         <div className="flex space-x-2">
@@ -277,7 +279,7 @@ export default function VisitorProfileSettings() {
                             onClick={handleCancel}
                           >
                             <X className="h-4 w-4 mr-2" />
-                            Annuler
+                            {t('visitor_settings.cancel')}
                           </Button>
                           <Button
                             size="sm"
@@ -285,7 +287,7 @@ export default function VisitorProfileSettings() {
                             disabled={isLoading}
                           >
                             <Save className="h-4 w-4 mr-2" />
-                            Sauvegarder
+                            {t('visitor_settings.save')}
                           </Button>
                         </div>
                       )}
@@ -294,7 +296,7 @@ export default function VisitorProfileSettings() {
                     {/* Type de Visiteur */}
                     <div className="mb-6">
                       <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Type de visiteur
+                        {t('visitor_settings.visitor_type')}
                       </label>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <label className="flex items-center space-x-2">
@@ -307,7 +309,7 @@ export default function VisitorProfileSettings() {
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                             aria-label="Particulier"
                           />
-                          <span className="text-sm text-gray-700">Particulier</span>
+                          <span className="text-sm text-gray-700">{t('visitor_settings.individual')}</span>
                         </label>
                         <label className="flex items-center space-x-2">
                           <input
@@ -319,7 +321,7 @@ export default function VisitorProfileSettings() {
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                             aria-label="Travailleur autonome"
                           />
-                          <span className="text-sm text-gray-700">Travailleur autonome</span>
+                          <span className="text-sm text-gray-700">{t('visitor_settings.freelancer_type')}</span>
                         </label>
                         <label className="flex items-center space-x-2">
                           <input
@@ -331,7 +333,7 @@ export default function VisitorProfileSettings() {
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                             aria-label="Entreprise"
                           />
-                          <span className="text-sm text-gray-700">Entreprise</span>
+                          <span className="text-sm text-gray-700">{t('visitor_settings.company_type')}</span>
                         </label>
                       </div>
                     </div>
@@ -356,9 +358,9 @@ export default function VisitorProfileSettings() {
                       </div>
 
                       <div>
-                        <h4 className="font-medium text-gray-900">Photo de profil</h4>
+                        <h4 className="font-medium text-gray-900">{t('visitor_settings.photo_title')}</h4>
                         <p className="text-sm text-gray-600">
-                          Ajoutez une photo pour personnaliser votre profil
+                          {t('visitor_settings.photo_hint')}
                         </p>
                       </div>
                     </div>
@@ -367,7 +369,7 @@ export default function VisitorProfileSettings() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Prénom
+                          {t('visitor_settings.first_name')}
                         </label>
                         {isEditing ? (
                           <input
@@ -383,7 +385,7 @@ export default function VisitorProfileSettings() {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Nom
+                          {t('visitor_settings.last_name')}
                         </label>
                         {isEditing ? (
                           <input
@@ -402,7 +404,7 @@ export default function VisitorProfileSettings() {
                         <>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Entreprise
+                              {t('visitor_settings.company_label')}
                             </label>
                             {isEditing ? (
                               <input
@@ -421,7 +423,7 @@ export default function VisitorProfileSettings() {
 
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Poste
+                              {t('visitor_settings.position')}
                             </label>
                             {isEditing ? (
                               <input
@@ -441,35 +443,35 @@ export default function VisitorProfileSettings() {
                         <>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Statut professionnel
+                              {t('visitor_settings.professional_status')}
                             </label>
                             {isEditing ? (
                               <input
                                 type="text"
                                 value={formData.professionalStatus}
                                 onChange={(e) => setFormData({ ...formData, professionalStatus: e.target.value })}
-                                placeholder="Ex: Consultant indépendant"
+                                placeholder={t('visitor_settings.status_placeholder')}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                               />
                             ) : (
-                              <p className="text-gray-900">{visitorProfile.professionalStatus || 'Non spécifié'}</p>
+                              <p className="text-gray-900">{visitorProfile.professionalStatus || t('visitor_settings.not_specified')}</p>
                             )}
                           </div>
 
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Secteur d'activité
+                              {t('visitor_settings.business_sector')}
                             </label>
                             {isEditing ? (
                               <input
                                 type="text"
                                 value={formData.businessSector}
                                 onChange={(e) => setFormData({ ...formData, businessSector: e.target.value })}
-                                placeholder="Ex: Consulting construction"
+                                placeholder={t('visitor_settings.sector_placeholder')}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                               />
                             ) : (
-                              <p className="text-gray-900">{visitorProfile.businessSector || 'Non spécifié'}</p>
+                              <p className="text-gray-900">{visitorProfile.businessSector || t('visitor_settings.not_specified')}</p>
                             )}
                           </div>
                         </>
@@ -477,7 +479,7 @@ export default function VisitorProfileSettings() {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Email
+                          {t('visitor_settings.email')}
                         </label>
                         <div className="flex items-center space-x-2">
                           <Mail className="h-4 w-4 text-gray-400" />
@@ -487,7 +489,7 @@ export default function VisitorProfileSettings() {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Téléphone
+                          {t('visitor_settings.phone')}
                         </label>
                         {isEditing ? (
                           <input
@@ -506,7 +508,7 @@ export default function VisitorProfileSettings() {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Pays
+                          {t('visitor_settings.country')}
                         </label>
                         <div className="flex items-center space-x-2">
                           <MapPin className="h-4 w-4 text-gray-400" />
@@ -516,7 +518,7 @@ export default function VisitorProfileSettings() {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Niveau Visiteur
+                          {t('visitor_settings.visitor_level')}
                         </label>
                         <LevelBadge
                           level={user?.visitor_level || 'free'}
@@ -526,7 +528,7 @@ export default function VisitorProfileSettings() {
                         {user?.visitor_level === 'free' && (
                           <Link to={ROUTES.VISITOR_UPGRADE} className="block mt-2">
                             <Button variant="outline" size="sm">
-                              Passer au Pass VIP
+                              {t('visitor_settings.vip_upgrade_btn')}
                             </Button>
                           </Link>
                         )}
@@ -548,10 +550,10 @@ export default function VisitorProfileSettings() {
                     <div className="flex items-center justify-between mb-6">
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                          Mes Quotas Visiteur
+                          {t('visitor_settings.my_quotas_title')}
                         </h3>
                         <p className="text-sm text-gray-600">
-                          Consultez vos limites et votre utilisation actuelle
+                          {t('visitor_settings.my_quotas_desc')}
                         </p>
                       </div>
                       <LevelBadge
@@ -564,7 +566,7 @@ export default function VisitorProfileSettings() {
                     <div className="space-y-4">
                       {/* Quota Rendez-vous B2B */}
                       <QuotaWidget
-                        label="Rendez-vous B2B"
+                        label={t('visitor_settings.quota_b2b')}
                         current={meetingsUsed}
                         limit={getVisitorQuota(user?.visitor_level || 'free')}
                         icon={<Calendar className="h-4 w-4 text-gray-400" />}
@@ -578,14 +580,14 @@ export default function VisitorProfileSettings() {
                             <Award className="h-5 w-5 text-yellow-600 mt-0.5" />
                             <div>
                               <h4 className="font-medium text-gray-900 mb-1">
-                                Passez au Pass VIP
+                                {t('visitor_settings.upgrade_title')}
                               </h4>
                               <p className="text-sm text-gray-600 mb-3">
-                                Débloquez 10 rendez-vous B2B et profitez de tous les avantages du salon
+                                {t('visitor_settings.upgrade_desc')}
                               </p>
                               <Link to={ROUTES.VISITOR_UPGRADE}>
                                 <Button size="sm" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600">
-                                  Upgrader maintenant
+                                  {t('visitor_settings.upgrade_btn')}
                                 </Button>
                               </Link>
                             </div>
@@ -598,9 +600,9 @@ export default function VisitorProfileSettings() {
                           <div className="flex items-center space-x-3">
                             <CheckCircle className="h-5 w-5 text-green-600" />
                             <div>
-                              <h4 className="font-medium text-gray-900">Pass VIP Actif</h4>
+                              <h4 className="font-medium text-gray-900">{t('visitor_settings.vip_active')}</h4>
                               <p className="text-sm text-gray-600">
-                                Vous bénéficiez de 10 rendez-vous B2B et de tous les avantages premium
+                                {t('visitor_settings.vip_active_desc')}
                               </p>
                             </div>
                           </div>
@@ -624,7 +626,7 @@ export default function VisitorProfileSettings() {
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
                       <Target className="h-5 w-5 inline mr-2" />
-                      Secteurs d'Intérêt
+                      {t('visitor_settings.sectors_title')}
                     </h3>
 
                     {isEditing ? (
@@ -671,7 +673,7 @@ export default function VisitorProfileSettings() {
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
                       <Award className="h-5 w-5 inline mr-2" />
-                      Objectifs de Visite
+                      {t('visitor_settings.objectives_title')}
                     </h3>
 
                     {isEditing ? (
@@ -718,7 +720,7 @@ export default function VisitorProfileSettings() {
                 <Card>
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Compétences & Expertises
+                      {t('visitor_settings.competencies_title')}
                     </h3>
 
                     {isEditing ? (
@@ -764,7 +766,7 @@ export default function VisitorProfileSettings() {
                 <Card>
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Thématiques d'Intérêt
+                      {t('visitor_settings.thematics_title')}
                     </h3>
 
                     {isEditing ? (
@@ -818,14 +820,14 @@ export default function VisitorProfileSettings() {
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-6">
                       <Bell className="h-5 w-5 inline mr-2" />
-                      Préférences de Notification
+                      {t('visitor_settings.notifications_title')}
                     </h3>
 
                     <div className="space-y-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-gray-900">Notifications Email</h4>
-                          <p className="text-sm text-gray-600">Recevez les notifications par email</p>
+                          <h4 className="font-medium text-gray-900">{t('visitor_settings.notif_email')}</h4>
+                          <p className="text-sm text-gray-600">{t('visitor_settings.notif_email_desc')}</p>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input
@@ -841,8 +843,8 @@ export default function VisitorProfileSettings() {
 
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-gray-900">Notifications Push</h4>
-                          <p className="text-sm text-gray-600">Notifications sur votre appareil</p>
+                          <h4 className="font-medium text-gray-900">{t('visitor_settings.notif_push')}</h4>
+                          <p className="text-sm text-gray-600">{t('visitor_settings.notif_push_desc')}</p>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input
@@ -858,8 +860,8 @@ export default function VisitorProfileSettings() {
 
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-gray-900">Notifications In-App</h4>
-                          <p className="text-sm text-gray-600">Notifications dans l'application</p>
+                          <h4 className="font-medium text-gray-900">{t('visitor_settings.notif_inapp')}</h4>
+                          <p className="text-sm text-gray-600">{t('visitor_settings.notif_inapp_desc')}</p>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input
@@ -888,13 +890,13 @@ export default function VisitorProfileSettings() {
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-6">
                       <Shield className="h-5 w-5 inline mr-2" />
-                      Paramètres de Confidentialité
+                      {t('visitor_settings.privacy_title')}
                     </h3>
 
                     <div className="space-y-6">
                       <div>
                         <h4 className="font-medium text-gray-900 mb-3">
-                          Visibilité du Profil
+                          {t('visitor_settings.visibility_title')}
                         </h4>
                         <div className="space-y-3">
                           <label className="flex items-center space-x-2">
@@ -905,7 +907,7 @@ export default function VisitorProfileSettings() {
                               className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                               aria-label="Public - Visible par tous les participants"
                             />
-                            <span className="text-sm text-gray-700">Public - Visible par tous les participants</span>
+                            <span className="text-sm text-gray-700">{t('visitor_settings.visibility_public')}</span>
                           </label>
                           <label className="flex items-center space-x-2">
                             <input
@@ -916,7 +918,7 @@ export default function VisitorProfileSettings() {
                               className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                               aria-label="Connexions uniquement - Visible par mes connexions"
                             />
-                            <span className="text-sm text-gray-700">Connexions uniquement - Visible par mes connexions</span>
+                            <span className="text-sm text-gray-700">{t('visitor_settings.visibility_connections')}</span>
                           </label>
                           <label className="flex items-center space-x-2">
                             <input
@@ -926,18 +928,18 @@ export default function VisitorProfileSettings() {
                               className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                               aria-label="Privé - Non visible dans les recherches"
                             />
-                            <span className="text-sm text-gray-700">Privé - Non visible dans les recherches</span>
+                            <span className="text-sm text-gray-700">{t('visitor_settings.visibility_private')}</span>
                           </label>
                         </div>
                       </div>
 
                       <div>
                         <h4 className="font-medium text-gray-900 mb-3">
-                          Partage des Données
+                          {t('visitor_settings.data_sharing_title')}
                         </h4>
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-700">Permettre aux exposants de me contacter</span>
+                            <span className="text-sm text-gray-700">{t('visitor_settings.allow_exhibitors')}</span>
                             <label className="relative inline-flex items-center cursor-pointer">
                               <input type="checkbox" defaultChecked className="sr-only peer" aria-label="Permettre aux exposants de me contacter" />
                               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -945,7 +947,7 @@ export default function VisitorProfileSettings() {
                           </div>
 
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-700">Inclure dans les recommandations IA</span>
+                            <span className="text-sm text-gray-700">{t('visitor_settings.include_recommendations')}</span>
                             <label className="relative inline-flex items-center cursor-pointer">
                               <input type="checkbox" defaultChecked className="sr-only peer" aria-label="Inclure dans les recommandations IA" />
                               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -956,17 +958,17 @@ export default function VisitorProfileSettings() {
 
                       <div className="pt-4 border-t border-gray-200">
                         <h4 className="font-medium text-gray-900 mb-3">
-                          Conformité RGPD
+                          {t('visitor_settings.rgpd_title')}
                         </h4>
                         <p className="text-sm text-gray-600 mb-4">
-                          Vos données sont protégées selon le Règlement Général sur la Protection des Données (RGPD).
+                          {t('visitor_settings.rgpd_desc')}
                         </p>
                         <div className="flex space-x-3">
                           <Button variant="outline" size="sm">
-                            Télécharger mes données
+                            {t('visitor_settings.download_data')}
                           </Button>
                           <Button variant="outline" size="sm">
-                            Supprimer mon compte
+                            {t('visitor_settings.delete_account')}
                           </Button>
                         </div>
                       </div>
