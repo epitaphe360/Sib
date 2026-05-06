@@ -5,10 +5,12 @@ import ExhibitorCreationSimulator from '../../components/admin/ExhibitorCreation
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function ExhibitorCreationPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [exhibitorData, setExhibitorData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const editId = searchParams.get('edit');
@@ -30,13 +32,13 @@ export default function ExhibitorCreationPage() {
 
       if (error) {
         console.error('Erreur chargement exposant:', error);
-        toast.error('Impossible de charger l\'exposant');
+        toast.error(t('admin.exhibitor_load_error'));
         navigate(ROUTES.ADMIN_EXHIBITORS);
         return;
       }
 
       if (!data) {
-        toast.error('Exposant non trouvé');
+        toast.error(t('admin.exhibitor_not_found'));
         navigate(ROUTES.ADMIN_EXHIBITORS);
         return;
       }
@@ -59,7 +61,7 @@ export default function ExhibitorCreationPage() {
       });
     } catch (error) {
       console.error('Erreur chargement exposant:', error);
-      toast.error('Impossible de charger l\'exposant');
+      toast.error(t('admin.exhibitor_load_error'));
       navigate(ROUTES.ADMIN_EXHIBITORS);
     } finally {
       setIsLoading(false);
@@ -71,7 +73,7 @@ export default function ExhibitorCreationPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement...</p>
+          <p className="text-gray-600">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -82,7 +84,7 @@ export default function ExhibitorCreationPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Retour au Tableau de Bord
+          {t('common.back_to_dashboard')}
         </Link>
       </div>
       <ExhibitorCreationSimulator

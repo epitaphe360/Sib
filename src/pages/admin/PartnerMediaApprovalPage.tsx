@@ -22,6 +22,7 @@ import { getEmbedUrl } from '../../utils/videoUtils';
 import { supabase } from '../../lib/supabase';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface PendingMedia {
   id: string;
@@ -40,6 +41,7 @@ interface PendingMedia {
 }
 
 export default function PartnerMediaApprovalPage() {
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const [pendingMedia, setPendingMedia] = useState<PendingMedia[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,7 +67,7 @@ export default function PartnerMediaApprovalPage() {
       setPendingMedia(data || []);
     } catch (error) {
       console.error('Erreur chargement médias:', error);
-      toast.error('Erreur lors du chargement des médias en attente');
+      toast.error(t('admin.media_load_error'));
     } finally {
       setIsLoading(false);
     }
@@ -84,16 +86,16 @@ export default function PartnerMediaApprovalPage() {
       if (error) {throw error;}
 
       if (data?.success) {
-        toast.success('Média approuvé avec succès !');
+        toast.success(t('admin.media_approved'));
         setPendingMedia(prev => prev.filter(m => m.id !== mediaId));
         setShowPreview(false);
         setSelectedMedia(null);
       } else {
-        toast.error(data?.error || 'Erreur lors de l\'approbation');
+        toast.error(data?.error || t('admin.media_approve_error'));
       }
     } catch (error) {
       console.error('Erreur approbation:', error);
-      toast.error('Erreur lors de l\'approbation du média');
+      toast.error(t('admin.media_approve_error'));
     } finally {
       setProcessingId(null);
     }
@@ -101,7 +103,7 @@ export default function PartnerMediaApprovalPage() {
 
   const handleReject = async (mediaId: string) => {
     if (!user || !rejectionReason.trim()) {
-      toast.error('Veuillez indiquer une raison de rejet');
+      toast.error(t('admin.media_reject_reason_required'));
       return;
     }
 
@@ -117,17 +119,17 @@ export default function PartnerMediaApprovalPage() {
       if (error) {throw error;}
 
       if (data?.success) {
-        toast.success('Média rejeté');
+        toast.success(t('admin.media_rejected'));
         setPendingMedia(prev => prev.filter(m => m.id !== mediaId));
         setShowPreview(false);
         setSelectedMedia(null);
         setRejectionReason('');
       } else {
-        toast.error(data?.error || 'Erreur lors du rejet');
+        toast.error(data?.error || t('admin.media_reject_error'));
       }
     } catch (error) {
       console.error('Erreur rejet:', error);
-      toast.error('Erreur lors du rejet du média');
+      toast.error(t('admin.media_reject_error'));
     } finally {
       setProcessingId(null);
     }
@@ -153,19 +155,19 @@ export default function PartnerMediaApprovalPage() {
         {/* Header */}
         <div className="mb-8">
           <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
-            ← Retour au dashboard
+            ← {t('common.back_dashboard')}
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Validation Médias Sponsors</h1>
+              <h1 className="text-3xl font-bold text-gray-900">{t('admin.media_approval_title')}</h1>
               <p className="mt-2 text-gray-600">
-                Approuvez ou rejetez les médias soumis par les sponsors
+                {t('admin.media_approval_subtitle')}
               </p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
                 <div className="text-2xl font-bold text-orange-600">{pendingMedia.length}</div>
-                <div className="text-sm text-gray-600">En attente</div>
+                  <div className="text-sm text-gray-600">{t('common.pending')}</div>
               </div>
             </div>
           </div>
@@ -177,7 +179,7 @@ export default function PartnerMediaApprovalPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">En attente</p>
+                  <p className="text-sm font-medium text-gray-600">{t('common.pending')}</p>
                   <p className="text-3xl font-bold text-orange-600">{pendingMedia.length}</p>
                 </div>
                 <Clock className="h-8 w-8 text-orange-600" />
@@ -195,8 +197,8 @@ export default function PartnerMediaApprovalPage() {
           <Card>
             <div className="p-12 text-center">
               <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Aucun média en attente</h3>
-              <p className="text-gray-600">Tous les médias sponsors ont été traités</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('admin.media_none_pending')}</h3>
+              <p className="text-gray-600">{t('admin.media_all_processed')}</p>
             </div>
           </Card>
         ) : (
@@ -224,7 +226,7 @@ export default function PartnerMediaApprovalPage() {
                       </div>
                     )}
                     <div className="absolute top-2 right-2">
-                      <Badge variant="warning">En attente</Badge>
+                      <Badge variant="warning">{t('common.pending')}</Badge>
                     </div>
                   </div>
 
@@ -263,7 +265,7 @@ export default function PartnerMediaApprovalPage() {
                         }}
                       >
                         <Eye className="w-4 h-4 mr-2" />
-                        Prévisualiser
+                        {t('admin.media_preview')}
                       </Button>
                     </div>
                   </div>
@@ -319,16 +321,16 @@ export default function PartnerMediaApprovalPage() {
                 {/* Details */}
                 <div className="space-y-4 mb-6">
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Description</h3>
+                    <h3 className="font-semibold text-gray-900 mb-2">{t('common.description')}</h3>
                     <p className="text-gray-700">{selectedMedia.description}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <span className="text-sm text-gray-600">Type:</span>
+                      <span className="text-sm text-gray-600">{t('common.type')}:</span>
                       <span className="ml-2 font-medium">{selectedMedia.type}</span>
                     </div>
                     <div>
-                      <span className="text-sm text-gray-600">Catégorie:</span>
+                      <span className="text-sm text-gray-600">{t('common.category')}:</span>
                       <span className="ml-2 font-medium">{selectedMedia.category}</span>
                     </div>
                   </div>
@@ -337,14 +339,14 @@ export default function PartnerMediaApprovalPage() {
                 {/* Rejection Reason */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Raison du rejet (si applicable)
+                    {t('admin.media_reject_reason_label')}
                   </label>
                   <textarea
                     value={rejectionReason}
                     onChange={(e) => setRejectionReason(e.target.value)}
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Expliquez pourquoi ce média est rejeté..."
+                    placeholder={t('admin.media_reject_reason_ph')}
                   />
                 </div>
 
@@ -359,7 +361,7 @@ export default function PartnerMediaApprovalPage() {
                     }}
                     disabled={processingId === selectedMedia.id}
                   >
-                    Annuler
+                    {t('common.cancel')}
                   </Button>
                   <Button
                     variant="outline"
@@ -368,7 +370,7 @@ export default function PartnerMediaApprovalPage() {
                     disabled={processingId === selectedMedia.id || !rejectionReason.trim()}
                   >
                     <XCircle className="w-4 h-4 mr-2" />
-                    Rejeter
+                    {t('common.reject')}
                   </Button>
                   <Button
                     className="bg-green-600 hover:bg-green-700"
@@ -380,7 +382,7 @@ export default function PartnerMediaApprovalPage() {
                     ) : (
                       <CheckCircle className="w-4 h-4 mr-2" />
                     )}
-                    Approuver
+                    {t('common.approve')}
                   </Button>
                 </div>
               </div>

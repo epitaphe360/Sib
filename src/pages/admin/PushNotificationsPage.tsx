@@ -6,6 +6,7 @@ import { Button } from '../../components/ui/Button';
 import { ROUTES } from '../../lib/routes';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -42,6 +43,7 @@ const QUICK_TEMPLATES = [
 // ─── Composant principal ──────────────────────────────────────────────────────
 
 export default function PushNotificationsPage() {
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [audience, setAudience] = useState<Audience>('all');
@@ -96,10 +98,10 @@ export default function PushNotificationsPage() {
 
   const handleSend = async () => {
     if (!title.trim() || !message.trim()) {
-      toast.error('Titre et message obligatoires');
+      toast.error(t('admin.push_title_message_required'));
       return;
     }
-    if (!supabase) { toast.error('Supabase non configuré'); return; }
+    if (!supabase) { toast.error(t('admin.push_supabase_not_configured')); return; }
 
     setIsSending(true);
     try {
@@ -122,12 +124,12 @@ export default function PushNotificationsPage() {
         sent_at: new Date().toISOString(),
       });
 
-      toast.success(`Notification envoyée à ${recipientCount ?? '?'} appareil(s)`);
+      toast.success(t('admin.push_sent_success', { count: recipientCount ?? '?' }));
       setTitle('');
       setMessage('');
       fetchHistory();
     } catch (err: any) {
-      toast.error(`Erreur d'envoi : ${err?.message ?? err}`);
+      toast.error(`${t('admin.push_send_error')} : ${err?.message ?? err}`);
     }
     setIsSending(false);
   };
@@ -142,7 +144,7 @@ export default function PushNotificationsPage() {
         <div className="flex items-center gap-4 mb-8">
           <Link to={ROUTES.ADMIN_DASHBOARD}>
             <Button variant="ghost" size="sm" className="text-white/60 hover:text-white">
-              <ArrowLeft className="h-4 w-4 mr-1" /> Tableau de bord
+              <ArrowLeft className="h-4 w-4 mr-1" /> {t('common.dashboard')}
             </Button>
           </Link>
         </div>
@@ -153,9 +155,9 @@ export default function PushNotificationsPage() {
               <Bell className="h-5 w-5" style={{ color: '#C9A84C' }} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">Notifications Push</h1>
+              <h1 className="text-2xl font-bold text-white">{t('admin.push_title')}</h1>
               <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                Envoyez des alertes en temps réel aux utilisateurs de l'app mobile SIB 2026
+                {t('admin.push_subtitle')}
               </p>
             </div>
           </div>
@@ -171,12 +173,12 @@ export default function PushNotificationsPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h2 className="text-lg font-semibold text-white mb-5">Composer la notification</h2>
+            <h2 className="text-lg font-semibold text-white mb-5">{t('admin.push_compose')}</h2>
 
             {/* Titre */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                Titre <span className="text-red-400">*</span>
+                {t('common.title')} <span className="text-red-400">*</span>
                 <span className="ml-2 text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>{title.length}/60</span>
               </label>
               <input
@@ -191,7 +193,7 @@ export default function PushNotificationsPage() {
             {/* Message */}
             <div className="mb-5">
               <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                Message <span className="text-red-400">*</span>
+                {t('common.message')} <span className="text-red-400">*</span>
                 <span className="ml-2 text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>{message.length}/200</span>
               </label>
               <textarea
@@ -207,7 +209,7 @@ export default function PushNotificationsPage() {
             {/* Audience */}
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                Destinataires
+                {t('admin.push_recipients')}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {AUDIENCE_OPTIONS.map(({ value, label, color, description, IconComp }) => (
@@ -237,8 +239,8 @@ export default function PushNotificationsPage() {
             <div className="flex items-center justify-between">
               <div className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
                 {recipientCount !== null
-                  ? <span>~<strong className="text-white">{recipientCount}</strong> appareil(s) ciblé(s)</span>
-                  : <span>Calcul en cours...</span>
+                  ? <span>~<strong className="text-white">{recipientCount}</strong> {t('admin.push_devices_targeted')}</span>
+                  : <span>{t('admin.push_calculating')}</span>
                 }
               </div>
               <Button
@@ -248,9 +250,9 @@ export default function PushNotificationsPage() {
                 style={{ background: '#C9A84C', color: '#000' }}
               >
                 {isSending ? (
-                  <><span className="animate-spin border-2 border-black/30 border-t-black rounded-full w-4 h-4" /> Envoi...</>
+                  <><span className="animate-spin border-2 border-black/30 border-t-black rounded-full w-4 h-4" /> {t('admin.push_sending')}</>
                 ) : (
-                  <><Send className="h-4 w-4" /> Envoyer</>
+                  <><Send className="h-4 w-4" /> {t('common.send')}</>
                 )}
               </Button>
             </div>
@@ -265,7 +267,7 @@ export default function PushNotificationsPage() {
           >
             {/* Aperçu mobile */}
             <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-              <h3 className="text-sm font-semibold mb-3 uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>Aperçu</h3>
+              <h3 className="text-sm font-semibold mb-3 uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>{t('admin.push_preview')}</h3>
               <div className="rounded-2xl p-4" style={{ background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <div className="flex items-start gap-2">
                   <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#C9A84C' }}>
@@ -274,21 +276,21 @@ export default function PushNotificationsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.8)' }}>SIB 2026</span>
-                      <span className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>maintenant</span>
+                      <span className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>{t('admin.push_now')}</span>
                     </div>
-                    <p className="text-xs font-medium text-white mt-0.5 truncate">{title || 'Titre de la notification'}</p>
+                    <p className="text-xs font-medium text-white mt-0.5 truncate">{title || t('admin.push_preview_title_ph')}</p>
                     <p className="text-xs mt-0.5 leading-relaxed line-clamp-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                      {message || 'Contenu du message...'}
+                      {message || t('admin.push_preview_message_ph')}
                     </p>
                   </div>
                 </div>
               </div>
-              <p className="text-xs mt-2 text-center" style={{ color: 'rgba(255,255,255,0.2)' }}>Apparence sur iPhone</p>
+              <p className="text-xs mt-2 text-center" style={{ color: 'rgba(255,255,255,0.2)' }}>{t('admin.push_iphone_preview')}</p>
             </div>
 
             {/* Templates rapides */}
             <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-              <h3 className="text-sm font-semibold mb-3 uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>Templates rapides</h3>
+              <h3 className="text-sm font-semibold mb-3 uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>{t('admin.push_templates')}</h3>
               <div className="space-y-1.5">
                 {QUICK_TEMPLATES.map((tpl, i) => (
                   <button
@@ -315,7 +317,7 @@ export default function PushNotificationsPage() {
         >
           <h2 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
             <Clock className="h-4 w-4" style={{ color: '#C9A84C' }} />
-            Historique des envois
+            {t('admin.push_history')}
           </h2>
 
           {isLoadingHistory ? (
@@ -325,7 +327,7 @@ export default function PushNotificationsPage() {
           ) : history.length === 0 ? (
             <div className="text-center py-8" style={{ color: 'rgba(255,255,255,0.3)' }}>
               <Bell className="h-8 w-8 mx-auto mb-2 opacity-30" />
-              <p className="text-sm">Aucune notification envoyée pour le moment</p>
+              <p className="text-sm">{t('admin.push_no_history')}</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -356,7 +358,7 @@ export default function PushNotificationsPage() {
                             {new Date(notif.sent_at).toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
                           </span>
                           <span className="text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>
-                            {notif.recipient_count} destinataire(s)
+                            {notif.recipient_count} {t('admin.push_recipients_count')}
                           </span>
                         </div>
                       </div>

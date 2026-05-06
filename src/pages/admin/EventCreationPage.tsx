@@ -5,10 +5,12 @@ import { SupabaseService } from '../../services/supabaseService';
 import { Event } from '../../types';
 import { toast } from 'sonner';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function EventCreationPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [eventToEdit, setEventToEdit] = useState<Event | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const editId = searchParams.get('edit');
@@ -30,12 +32,12 @@ export default function EventCreationPage() {
           date: event.date ? new Date(event.date) : new Date(),
         });
       } else {
-        toast.error('Événement non trouvé');
+        toast.error(t('admin.event_not_found'));
         navigate(ROUTES.ADMIN_EVENTS);
       }
     } catch (error) {
       console.error('Erreur chargement événement:', error);
-      toast.error('Impossible de charger l\'événement');
+      toast.error(t('admin.event_load_error'));
       navigate(ROUTES.ADMIN_EVENTS);
     } finally {
       setIsLoading(false);
@@ -55,7 +57,7 @@ export default function EventCreationPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement...</p>
+          <p className="text-gray-600">{t('common.loading')}</p>
         </div>
       </div>
     );

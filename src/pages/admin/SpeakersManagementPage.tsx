@@ -8,6 +8,7 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { toast } from 'sonner';
 import { useSalon } from '../../contexts/SalonContext';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface Speaker {
   id: string;
@@ -21,6 +22,7 @@ interface Speaker {
 }
 
 export default function SpeakersManagementPage() {
+  const { t } = useTranslation();
   const { currentSalon } = useSalon();
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,7 +52,7 @@ export default function SpeakersManagementPage() {
         if (error.code === '42P01') { setSpeakers([]); }
         else { throw error; }
       } else { setSpeakers(data as Speaker[]); }
-    } catch { toast.error('Erreur lors de la récupération des intervenants'); }
+    } catch { toast.error(t('admin.speakers_fetch_error')); }
     finally { setLoading(false); }
   };
 
@@ -69,7 +71,7 @@ export default function SpeakersManagementPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.first_name.trim() || !form.last_name.trim()) {
-      toast.error('Prénom et nom sont obligatoires');
+      toast.error(t('admin.speakers_firstname_lastname_required'));
       return;
     }
     setSaving(true);
@@ -87,27 +89,27 @@ export default function SpeakersManagementPage() {
       if (editingId) {
         const { error } = await supabase.from('speakers').update(payload).eq('id', editingId);
         if (error) {throw error;}
-        toast.success('Intervenant mis à jour');
+        toast.success(t('admin.speakers_updated'));
       } else {
         const { error } = await supabase.from('speakers').insert(payload);
         if (error) {throw error;}
-        toast.success('Intervenant ajouté');
+        toast.success(t('admin.speakers_added'));
       }
       setModalOpen(false);
       await fetchSpeakers();
     } catch (err: any) {
-      toast.error(err.message || 'Erreur lors de la sauvegarde');
+      toast.error(err.message || t('admin.speakers_save_error'));
     } finally { setSaving(false); }
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!window.confirm(`Supprimer "${name}" ?`)) {return;}
+    if (!window.confirm(`${t('common.delete')} "${name}" ?`)) {return;}
     try {
       const { error } = await supabase.from('speakers').delete().eq('id', id);
       if (error) {throw error;}
-      toast.success('Intervenant supprimé');
+      toast.success(t('admin.speakers_deleted'));
       setSpeakers(prev => prev.filter(s => s.id !== id));
-    } catch { toast.error('Erreur lors de la suppression'); }
+    } catch { toast.error(t('admin.speakers_delete_error')); }
   };
 
   const filtered = speakers.filter(s =>
@@ -119,18 +121,18 @@ export default function SpeakersManagementPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Retour au tableau de bord
+            <ArrowLeft className="w-4 h-4 mr-2" /> {t('common.back_dashboard')}
           </Link>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <User className="w-8 h-8 text-blue-800 mr-3" />
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Gestion des Intervenants</h1>
-                <p className="text-gray-600 mt-1">Ajoutez, modifiez ou supprimez les speakers des conférences</p>
+                <h1 className="text-3xl font-bold text-gray-900">{t('admin.speakers_title')}</h1>
+                <p className="text-gray-600 mt-1">{t('admin.speakers_subtitle')}</p>
               </div>
             </div>
             <Button onClick={openCreate} className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700">
-              <Plus className="h-5 w-5 mr-2" /> Nouveau Speaker
+              <Plus className="h-5 w-5 mr-2" /> {t('admin.speakers_new')}
             </Button>
           </div>
         </div>
@@ -140,7 +142,7 @@ export default function SpeakersManagementPage() {
           <input
             type="text"
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            placeholder="Rechercher par nom, entreprise..."
+            placeholder={t('admin.speakers_search_ph')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -150,17 +152,17 @@ export default function SpeakersManagementPage() {
           <div className="flex justify-center p-12"><div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full"/></div>
         ) : filtered.length === 0 ? (
           <div className="text-center p-12 bg-white rounded-lg shadow text-gray-500">
-            {searchTerm ? 'Aucun résultat.' : 'Aucun intervenant. Cliquez sur "Nouveau Speaker" pour en ajouter un.'}
+            {searchTerm ? t('common.no_results') : t('admin.speakers_empty')}
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Intervenant</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Titre & Entreprise</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ordre</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.speakers_col_speaker')}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.speakers_col_title_company')}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.speakers_col_order')}</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{t('common.actions')}</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -209,7 +211,7 @@ export default function SpeakersManagementPage() {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-bold text-gray-900">
-                    {editingId ? 'Modifier l\'intervenant' : 'Nouvel intervenant'}
+                    {editingId ? t('admin.speakers_edit') : t('admin.speakers_new_intervenant')}
                   </h3>
                   <button onClick={() => setModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-lg">
                     <X className="w-5 h-5" />
@@ -219,46 +221,46 @@ export default function SpeakersManagementPage() {
                 <form onSubmit={handleSave} className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('common.first_name')} *</label>
                       <input value={form.first_name} onChange={e => setForm({...form, first_name: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Mohammed" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('common.last_name')} *</label>
                       <input value={form.last_name} onChange={e => setForm({...form, last_name: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="BENCHAÂBANE" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Titre / Fonction</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.speakers_form_title')}</label>
                     <input value={form.title} onChange={e => setForm({...form, title: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Directeur Général" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Entreprise / Organisation</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.speakers_form_company')}</label>
                     <input value={form.company} onChange={e => setForm({...form, company: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Ministère du Bâtiment" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Biographie</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.speakers_form_bio')}</label>
                     <textarea value={form.bio} onChange={e => setForm({...form, bio: e.target.value})} rows={3}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Courte biographie…" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">URL photo</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.speakers_form_photo_url')}</label>
                     <input value={form.photo_url} onChange={e => setForm({...form, photo_url: e.target.value})} type="url"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://…" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Ordre d'affichage</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin.speakers_form_order')}</label>
                     <input value={form.sort_order} onChange={e => setForm({...form, sort_order: parseInt(e.target.value) || 0})} type="number" min={0}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
                   </div>
                   <div className="flex gap-3 pt-2">
-                    <Button type="button" variant="outline" className="flex-1" onClick={() => setModalOpen(false)}>Annuler</Button>
+                    <Button type="button" variant="outline" className="flex-1" onClick={() => setModalOpen(false)}>{t('common.cancel')}</Button>
                     <Button type="submit" disabled={saving} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
                       {saving ? <Loader className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                      {saving ? 'Enregistrement…' : editingId ? 'Mettre à jour' : 'Créer'}
+                      {saving ? t('common.saving') : editingId ? t('common.update') : t('common.create')}
                     </Button>
                   </div>
                 </form>

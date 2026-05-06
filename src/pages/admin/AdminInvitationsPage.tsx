@@ -5,6 +5,7 @@ import { FileText, CheckCircle, XCircle, Clock, Loader2, Search, Eye, EyeOff, Ar
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { ROUTES } from '../../lib/routes';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface InvitationLetter {
   id: string;
@@ -34,6 +35,7 @@ const SALON_DATES: Record<string, string> = {
 };
 
 export default function AdminInvitationsPage() {
+  const { t } = useTranslation();
   const [letters, setLetters] = useState<InvitationLetter[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -52,7 +54,7 @@ export default function AdminInvitationsPage() {
       if (error) {throw error;}
       setLetters(data || []);
     } catch {
-      toast.error('Erreur lors du chargement des demandes');
+      toast.error(t('admin.invitations_load_error'));
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +70,7 @@ export default function AdminInvitationsPage() {
         .update({ status: 'approved', processed_at: new Date().toISOString() })
         .eq('id', id);
       if (error) {throw error;}
-      toast.success('Demande approuvée ! Un email sera envoyé au demandeur.');
+      toast.success(t('admin.invitations_approved'));
       fetchLetters();
     } catch (err: any) {
       toast.error(err?.message || 'Erreur');
@@ -79,7 +81,7 @@ export default function AdminInvitationsPage() {
 
   const handleReject = async (id: string) => {
     if (!rejectNote.trim()) {
-      toast.error('Veuillez indiquer le motif du refus');
+      toast.error(t('admin.invitations_reject_reason_required'));
       return;
     }
     setProcessingId(id);
@@ -89,7 +91,7 @@ export default function AdminInvitationsPage() {
         .update({ status: 'rejected', admin_note: rejectNote, processed_at: new Date().toISOString() })
         .eq('id', id);
       if (error) {throw error;}
-      toast.success('Demande refusée. Le demandeur sera notifié.');
+      toast.success(t('admin.invitations_rejected'));
       setShowRejectForm(null);
       setRejectNote('');
       fetchLetters();
@@ -118,7 +120,7 @@ export default function AdminInvitationsPage() {
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-6">
-        <ArrowLeft className="w-4 h-4 mr-2" /> Retour au Tableau de Bord
+        <ArrowLeft className="w-4 h-4 mr-2" /> {t('common.back_to_dashboard')}
       </Link>
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
@@ -126,8 +128,8 @@ export default function AdminInvitationsPage() {
           <FileText className="h-6 w-6 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Gestion des Lettres d'Invitation</h1>
-          <p className="text-sm text-gray-500">Approuvez ou refusez les demandes de lettres d'invitation</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t('admin.invitations_title')}</h1>
+          <p className="text-sm text-gray-500">{t('admin.invitations_subtitle')}</p>
         </div>
       </div>
 
@@ -144,7 +146,7 @@ export default function AdminInvitationsPage() {
             {s === 'pending' && <Clock className="h-3.5 w-3.5" />}
             {s === 'approved' && <CheckCircle className="h-3.5 w-3.5" />}
             {s === 'rejected' && <XCircle className="h-3.5 w-3.5" />}
-            {s === 'all' ? 'Tout' : s === 'pending' ? 'En attente' : s === 'approved' ? 'Approuvées' : 'Refusées'}
+            {s === 'all' ? t('common.all') : s === 'pending' ? t('common.pending') : s === 'approved' ? t('common.approved_plural') : t('common.rejected_plural')}
             <span className="bg-gray-100 text-gray-600 text-xs px-1.5 py-0.5 rounded-full ml-1">{counts[s]}</span>
           </button>
         ))}
@@ -152,7 +154,7 @@ export default function AdminInvitationsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Rechercher..."
+            placeholder={t('common.search_placeholder')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 w-64"
@@ -166,7 +168,7 @@ export default function AdminInvitationsPage() {
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-200">
           <FileText className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">Aucune demande trouvée</p>
+          <p className="text-gray-500">{t('common.no_results')}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -209,14 +211,14 @@ export default function AdminInvitationsPage() {
                       {letter.status === 'approved' && <CheckCircle className="h-3.5 w-3.5" />}
                       {letter.status === 'rejected' && <XCircle className="h-3.5 w-3.5" />}
                       {letter.status === 'pending' && <Clock className="h-3.5 w-3.5" />}
-                      {letter.status === 'approved' ? 'Approuvée' : letter.status === 'rejected' ? 'Refusée' : 'En attente'}
+                      {letter.status === 'approved' ? t('common.approved_f') : letter.status === 'rejected' ? t('common.rejected_f') : t('common.pending')}
                     </span>
                     <button
                       onClick={() => setExpandedId(expandedId === letter.id ? null : letter.id)}
                       className="text-xs text-gray-400 hover:text-gray-700 flex items-center gap-1"
                     >
                       {expandedId === letter.id ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-                      Détails
+                      {t('common.details')}
                     </button>
                   </div>
                 </div>
@@ -226,15 +228,15 @@ export default function AdminInvitationsPage() {
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm mb-4">
                       <div>
-                        <span className="text-gray-400 block text-xs">Passeport</span>
+                        <span className="text-gray-400 block text-xs">{t('admin.invitations_passport')}</span>
                         <span className="font-medium">{letter.recipient_passport_no}</span>
                       </div>
                       <div>
-                        <span className="text-gray-400 block text-xs">Email</span>
+                        <span className="text-gray-400 block text-xs">{t('common.email')}</span>
                         <span className="font-medium">{letter.recipient_email}</span>
                       </div>
                       <div>
-                        <span className="text-gray-400 block text-xs">Objet</span>
+                        <span className="text-gray-400 block text-xs">{t('admin.invitations_purpose')}</span>
                         <span className="font-medium">{letter.visit_purpose}</span>
                       </div>
                     </div>
@@ -250,14 +252,14 @@ export default function AdminInvitationsPage() {
                       className="flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-200 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
                     >
                       {processingId === letter.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
-                      Approuver
+                      {t('common.approve')}
                     </button>
                     <button
                       onClick={() => setShowRejectForm(showRejectForm === letter.id ? null : letter.id)}
                       className="flex items-center gap-2 border border-red-200 text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-semibold transition"
                     >
                       <XCircle className="h-4 w-4" />
-                      Refuser
+                      {t('common.reject')}
                     </button>
                   </div>
                 )}
@@ -267,7 +269,7 @@ export default function AdminInvitationsPage() {
                   <div className="mt-3 flex gap-2">
                     <input
                       type="text"
-                      placeholder="Motif du refus (obligatoire)..."
+                      placeholder={t('admin.invitations_reject_ph')}
                       value={rejectNote}
                       onChange={e => setRejectNote(e.target.value)}
                       className="flex-1 px-3 py-2 border border-red-200 rounded-lg text-sm focus:ring-2 focus:ring-red-300"
@@ -277,7 +279,7 @@ export default function AdminInvitationsPage() {
                       disabled={!!processingId}
                       className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold"
                     >
-                      {processingId === letter.id ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Confirmer'}
+                      {processingId === letter.id ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.confirm')}
                     </button>
                   </div>
                 )}
@@ -285,7 +287,7 @@ export default function AdminInvitationsPage() {
                 {/* Note admin si refusé */}
                 {letter.status === 'rejected' && letter.admin_note && (
                   <div className="mt-3 bg-red-50 border border-red-100 rounded-lg p-3 text-sm text-red-700">
-                    <strong>Motif :</strong> {letter.admin_note}
+                    <strong>{t('admin.invitations_reason')} :</strong> {letter.admin_note}
                   </div>
                 )}
               </div>
