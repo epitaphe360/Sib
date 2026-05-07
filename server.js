@@ -79,7 +79,9 @@ const allowedOrigins = [
   // Vercel frontend URLs
   'https://sib.vercel.app',
   'https://sib-2026.vercel.app',
+  'https://sib2026.vercel.app',
   // Railway deployment URL (auto-assigned)
+  ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim()) : []),
 ];
 
 app.use((req, res, next) => {
@@ -116,17 +118,17 @@ app.use((req, res, next) => {
 // ============================================
 // EMAIL CONFIGURATION (SMTP)
 // ============================================
+const smtpPort = parseInt(process.env.SMTP_PORT || '465');
 const smtpConfig = {
   host: process.env.SMTP_HOST || 'mail.sib2026.ma',
-  port: parseInt(process.env.SMTP_PORT || '465'),
-  secure: process.env.SMTP_SECURE === 'true', // true for 465, false for 587
+  port: smtpPort,
+  secure: smtpPort === 465, // true pour port 465 (SSL), false pour 587 (STARTTLS)
   auth: {
     user: process.env.SMTP_USER || 'contact@sib2026.ma',
     pass: process.env.SMTP_PASS,
   },
   tls: {
-    // In production, reject untrusted certificates. In dev, allow self-signed.
-    rejectUnauthorized: process.env.NODE_ENV === 'production',
+    rejectUnauthorized: false, // Accepter les certs auto-signés
   }
 };
 

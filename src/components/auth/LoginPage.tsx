@@ -126,8 +126,8 @@ export default function LoginPage() {
       }
 
       // Envoyer le magic link via le serveur (bypass rate limits Supabase)
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://sib-production.up.railway.app';
-      await fetch(`${apiUrl}/api/auth/magic-link`, {
+      // URL relative → proxy Vercel → Railway (pas de CORS)
+      await fetch(`/api/auth/magic-link`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: normalizedEmail }),
