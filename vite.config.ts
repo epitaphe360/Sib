@@ -97,8 +97,6 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     rollupOptions: {
-      // Externalize optional dependencies that may not be installed
-      external: ['@sentry/react'],
       output: {
         // Use content-based hashing for better cache busting
         entryFileNames: 'assets/[name]-[hash].js',
@@ -107,6 +105,7 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react/jsx-runtime'],
           'router-vendor': ['react-router-dom'],
+          'sentry-vendor': ['@sentry/react'],
           'supabase-vendor': ['@supabase/supabase-js'],
           'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
           'ui-vendor': ['@headlessui/react', '@heroicons/react', 'framer-motion'],
