@@ -696,7 +696,7 @@ app.get('{*path}', (req, res) => {
 /**
  * API: Send Magic Link (bypass Supabase rate limits)
  * POST /api/auth/magic-link
- * Uses admin.generateLink + SMTP to send the email directly
+ * Uses service_role key → aucun rate limit Supabase
  */
 app.post('/api/auth/magic-link', async (req, res) => {
   if (!supabaseAdmin) {
@@ -711,82 +711,24 @@ app.post('/api/auth/magic-link', async (req, res) => {
 
     const normalizedEmail = email.toLowerCase().trim();
     const appUrl = process.env.VITE_APP_URL || process.env.FRONTEND_URL || 'https://sib2026.vercel.app';
-    const redirectTo = `${appUrl}/auth/callback`;
 
-    let magicLink = null;
+    const { error } = await supabaseAdmin.auth.signInWithOtp({
+      email: normalizedEmail,
+      options: {
+        emailRedirectTo: `${appUrl}/auth/callback`,
+        shouldCreateUser: true,
+      },
+    });
 
-    // Essai 1 : generateLink (user doit déjà exister dans auth.users)
-    try {
-      const { data, error: genError } = await supabaseAdmin.auth.admin.generateLink({
-        type: 'magiclink',
-        email: normalizedEmail,
-        options: { redirectTo },
-      });
-      if (!genError && data?.properties?.action_link) {
-        magicLink = data.properties.action_link;
-        console.log('✅ generateLink OK pour:', normalizedEmail);
-      } else {
-        console.warn('⚠️ generateLink failed:', genError?.message, '— tentative signInWithOtp');
-      }
-    } catch (e) {
-      console.warn('⚠️ generateLink exception:', e.message);
+    if (error) {
+      console.error('❌ signInWithOtp error:', error.message);
+      return res.status(500).json({ success: false, error: error.message });
     }
 
-    // Essai 2 : signInWithOtp avec shouldCreateUser (crée auth.users si besoin + envoie via Supabase)
-    if (!magicLink) {
-      const { error: otpError } = await supabaseAdmin.auth.signInWithOtp({
-        email: normalizedEmail,
-        options: { emailRedirectTo: redirectTo, shouldCreateUser: true },
-      });
-      if (otpError) {
-        console.error('❌ signInWithOtp error:', otpError.message);
-        return res.status(500).json({ success: false, error: otpError.message });
-      }
-      // Supabase a envoyé l'email directement
-      console.log('✅ Magic link envoyé via Supabase OTP à:', normalizedEmail);
-      return res.json({ success: true });
-    }
-
-    // Envoyer le magicLink généré via SMTP
-    if (transporter) {
-      try {
-        await transporter.sendMail({
-          from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@sib2026.ma'}>`,
-          to: normalizedEmail,
-          subject: 'Votre lien de connexion - SIB 2026',
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-              <h2 style="color: #1a1a2e;">Connexion à SIB 2026</h2>
-              <p>Cliquez sur le bouton ci-dessous pour vous connecter :</p>
-              <a href="${magicLink}" style="display: inline-block; background: #c9a84c; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; margin: 16px 0;">
-                Se connecter
-              </a>
-              <p style="color: #666; font-size: 13px;">Ce lien est valable 1 heure et ne peut être utilisé qu'une seule fois.<br>Si vous n'avez pas demandé ce lien, ignorez cet email.</p>
-            </div>
-          `,
-          text: `Votre lien de connexion SIB 2026 :\n\n${magicLink}\n\nValable 1 heure.`,
-        });
-        console.log('✅ Magic link envoyé via SMTP à:', normalizedEmail);
-      } catch (smtpErr) {
-        // SMTP inaccessible (DNS/réseau) → fallback Supabase OTP
-        console.warn('⚠️ SMTP failed:', smtpErr.message, '— fallback Supabase OTP');
-        const { error: otpError } = await supabaseAdmin.auth.signInWithOtp({
-          email: normalizedEmail,
-          options: { emailRedirectTo: redirectTo, shouldCreateUser: true },
-        });
-        if (otpError) {
-          console.error('❌ signInWithOtp fallback error:', otpError.message);
-          return res.status(500).json({ success: false, error: otpError.message });
-        }
-        console.log('✅ Magic link envoyé via Supabase OTP (fallback) à:', normalizedEmail);
-      }
-    } else {
-      console.warn('⚠️ SMTP non configuré');
-    }
-
+    console.log('✅ Magic link envoyé à:', normalizedEmail);
     res.json({ success: true });
   } catch (error) {
-    console.error('❌ Erreur magic-link:', error.message, error.stack);
+    console.error('❌ Erreur magic-link:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
