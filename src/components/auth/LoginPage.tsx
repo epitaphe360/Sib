@@ -125,12 +125,14 @@ export default function LoginPage() {
         return;
       }
 
-      // Envoyer le magic link via le serveur (bypass rate limits Supabase)
-      // URL relative → proxy Vercel → Railway (pas de CORS)
-      await fetch(`/api/auth/magic-link`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: normalizedEmail }),
+      // Envoyer le magic link via Supabase (SMTP custom configuré, aucun rate limit)
+      const appUrl = import.meta.env.VITE_APP_URL || globalThis.location.origin;
+      await supabase.auth.signInWithOtp({
+        email: normalizedEmail,
+        options: {
+          emailRedirectTo: `${appUrl}/auth/callback`,
+          shouldCreateUser: true,
+        },
       });
 
       setMagicSent(true);
