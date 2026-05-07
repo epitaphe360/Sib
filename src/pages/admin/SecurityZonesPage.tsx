@@ -269,7 +269,7 @@ export default function SecurityZonesPage() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{t('admin.zones_title')}</h1>
               <p className="text-sm text-gray-500 mt-0.5">
-                {zones.length} zone{zones.length !== 1 ? 's' : ''} configurée{zones.length !== 1 ? 's' : ''}
+                {zones.length} zone{zones.length === 1 ? '' : 's'} configurée{zones.length === 1 ? '' : 's'}
               </p>
             </div>
           </div>

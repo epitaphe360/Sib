@@ -94,8 +94,8 @@ export default function TelechargementPage() {
             <ScrollReveal key={group.year} variant={fadeLeft} delay={gi * 0.1}>
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <Calendar className="w-6 h-6 text-sib-gold" />
-                <h2 className="text-2xl font-bold text-sib-navy font-display">{group.label}</h2>
+                <Calendar className="w-6 h-6 text-yellow-500" />
+                <h2 className="text-2xl font-bold text-indigo-800 font-display">{group.label}</h2>
               </div>
               <div className="grid gap-3">
                 {group.docs.map((doc, i) => (
@@ -104,14 +104,14 @@ export default function TelechargementPage() {
                     href={doc.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between bg-white rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-sib-gold/30 transition-all group"
+                    className="flex items-center justify-between bg-white rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-yellow-400/30 transition-all group"
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-lg bg-red-50 flex items-center justify-center">
                         <FileText className="w-6 h-6 text-red-500" />
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900 group-hover:text-sib-navy transition-colors">
+                        <div className="font-semibold text-gray-900 group-hover:text-indigo-800 transition-colors">
                           {doc.name}
                         </div>
                         {doc.size && (
@@ -119,7 +119,7 @@ export default function TelechargementPage() {
                         )}
                       </div>
                     </div>
-                    <Download className="w-5 h-5 text-gray-300 group-hover:text-sib-gold transition-colors" />
+                    <Download className="w-5 h-5 text-gray-300 group-hover:text-yellow-500 transition-colors" />
                   </a>
                   </ScrollReveal>
                 ))}
@@ -132,3 +132,4 @@ export default function TelechargementPage() {
     </div>
   );
 }
+

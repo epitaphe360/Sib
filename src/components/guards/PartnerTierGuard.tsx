@@ -16,11 +16,11 @@ interface PartnerTierGuardProps {
 }
 
 /**
- * Guard pour prot�ger les routes selon le niveau sponsor
+ * Guard pour protéger les routes selon le niveau sponsor
  *
  * Utilisation:
  * - requiredTier: Niveau exact requis
- * - minimumTier: Niveau minimum requis (ex: silver ou sup�rieur)
+ * - minimumTier: Niveau minimum requis (ex: silver ou supérieur)
  *
  * @example
  * // Require exact tier
@@ -47,38 +47,38 @@ export function PartnerTierGuard({
   const { user } = useAuthStore();
 
   useEffect(() => {
-    // V�rifier que l'utilisateur est connect�
+    // Vérifier que l'utilisateur est connecté
     if (!user) {
       if (showToast) {
-        toast.error('Acc�s refus�', {
-          description: 'Vous devez �tre connect� pour acc�der � cette page.'
+        toast.error('Accès refusé', {
+          description: 'Vous devez être connecté pour accéder à cette page.'
         });
       }
       navigate(ROUTES.LOGIN, { replace: true });
       return;
     }
 
-    // V�rifier que l'utilisateur est un sponsor
+    // Vérifier que l'utilisateur est un sponsor
     if (user.type !== 'partner') {
       if (showToast) {
-        toast.error('Acc�s refus�', {
-          description: 'Cette page est r�serv�e aux sponsors.'
+        toast.error('Accès refusé', {
+          description: 'Cette page est réservée aux sponsors.'
         });
       }
       navigate(ROUTES.UNAUTHORIZED, { replace: true });
       return;
     }
 
-    // R�cup�rer le niveau sponsor (depuis le profil ou la base de donn�es)
+    // Récupérer le niveau sponsor (depuis le profil ou la base de données)
     const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'partner') as PartnerTier;
 
-    // V�rification du niveau requis exact
+    // Vérification du niveau requis exact
     if (requiredTier && partnerTier !== requiredTier) {
       const requiredConfig = getPartnerTierConfig(requiredTier);
 
       if (showToast) {
-        toast.error('Acc�s r�serv�', {
-          description: customMessage || `Cette fonctionnalit� est r�serv�e aux sponsors ${requiredConfig.displayName}.`,
+        toast.error('Accès réservé', {
+          description: customMessage || `Cette fonctionnalité est réservée aux sponsors ${requiredConfig.displayName}.`,
           action: {
             label: 'Voir les offres',
             onClick: () => navigate(ROUTES.PARTNER_PROFILE)
@@ -89,17 +89,17 @@ export function PartnerTierGuard({
       return;
     }
 
-    // V�rification du niveau minimum
+    // Vérification du niveau minimum
     if (minimumTier) {
       const comparison = comparePartnerTiers(partnerTier, minimumTier);
 
-      // Si le niveau actuel est inf�rieur au minimum requis
+      // Si le niveau actuel est inférieur au minimum requis
       if (comparison < 0) {
         const minimumConfig = getPartnerTierConfig(minimumTier);
 
         if (showToast) {
-          toast.error('Acc�s r�serv�', {
-            description: customMessage || `Cette fonctionnalit� n�cessite au minimum le niveau ${minimumConfig.displayName}.`,
+          toast.error('Accès réservé', {
+            description: customMessage || `Cette fonctionnalité nécessite au minimum le niveau ${minimumConfig.displayName}.`,
             action: {
               label: 'Upgrader',
               onClick: () => navigate(ROUTES.PARTNER_PROFILE)
@@ -111,17 +111,17 @@ export function PartnerTierGuard({
       }
     }
 
-    // V�rification de quota sp�cifique (si fourni)
+    // Vérification de quota spécifique (si fourni)
     if (quotaType && user.type === 'partner') {
       const partnerTier = (user.partner_tier || user.profile?.partner_tier || 'partner') as PartnerTier;
 
-      // V�rifier si le tier a acc�s � ce quota
+      // Vérifier si le tier a accès à ce quota
       const hasAccess = hasPartnerAccess(partnerTier, quotaType as keyof PartnerTierConfig['quotas']);
 
       if (!hasAccess) {
         toast({
-          title: 'Acc�s restreint',
-          description: customMessage || `Votre niveau ${partnerTier} n'a pas acc�s � cette fonctionnalit�. Veuillez upgrader votre compte.`,
+          title: 'Accès restreint',
+          description: customMessage || `Votre niveau ${partnerTier} n'a pas accès à cette fonctionnalité. Veuillez upgrader votre compte.`,
           variant: 'destructive',
           action: {
             label: 'Upgrader',
@@ -132,13 +132,13 @@ export function PartnerTierGuard({
         return;
       }
 
-      // Note: La v�rification de l'utilisation actuelle vs quota max
-      // n�cessite une requ�te DB et sera impl�ment�e au niveau du composant
-      // qui utilise PartnerTierGuard, pas ici pour �viter les requ�tes multiples
+      // Note: La vérification de l'utilisation actuelle vs quota max
+      // nécessite une requête DB et sera implémentée au niveau du composant
+      // qui utilise PartnerTierGuard, pas ici pour éviter les requêtes multiples
     }
   }, [user, requiredTier, minimumTier, quotaType, fallbackRoute, showToast, customMessage, navigate]);
 
-  // Si toutes les v�rifications passent, afficher le contenu
+  // Si toutes les vérifications passent, afficher le contenu
   if (!user || user.type !== 'partner') {
     return null;
   }
@@ -162,7 +162,7 @@ export function PartnerTierGuard({
 }
 
 /**
- * Hook pour v�rifier le niveau sponsor
+ * Hook pour vérifier le niveau sponsor
  */
 export function usePartnerTier() {
   const { user } = useAuthStore();
@@ -175,7 +175,7 @@ export function usePartnerTier() {
 }
 
 /**
- * Hook pour v�rifier l'acc�s � une fonctionnalit�
+ * Hook pour vérifier l'accès à une fonctionnalité
  */
 export function usePartnerAccess(minimumTier?: PartnerTier, requiredTier?: PartnerTier): boolean {
   const currentTier = usePartnerTier();

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Globe, ChevronDown, Check, Loader } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguageStore, supportedLanguages } from '../../store/languageStore';
@@ -62,7 +62,7 @@ export const LanguageSelector: React.FC = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         disabled={isLoading}
-        className="flex items-center space-x-2 p-2 text-sib-gray-600 hover:text-sib-primary transition-colors rounded-lg hover:bg-sib-gray-100 disabled:opacity-50"
+        className="flex items-center space-x-2 p-2 text-sib-gray-600 hover:text-indigo-600 transition-colors rounded-lg hover:bg-sib-gray-100 disabled:opacity-50"
         title={`Langue actuelle: ${currentLang.nativeName}`}
       >
         {isLoading ? (
@@ -109,13 +109,13 @@ export const LanguageSelector: React.FC = () => {
                     onClick={() => handleLanguageChange(language.code)}
                     disabled={isLoading}
                     className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-sib-gray-50 transition-colors disabled:opacity-50 ${
-                      isSelected ? 'bg-sib-primary/5 text-sib-primary' : 'text-sib-gray-700'
+                      isSelected ? 'bg-indigo-600/5 text-indigo-600' : 'text-sib-gray-700'
                     }`}
                   >
                     <div className="flex items-center space-x-3">
                       <span className="text-xl">{language.flag}</span>
                       <div>
-                        <div className={`font-medium ${isSelected ? 'text-sib-primary' : 'text-sib-gray-900'}`}>
+                        <div className={`font-medium ${isSelected ? 'text-indigo-600' : 'text-sib-gray-900'}`}>
                           {language.nativeName}
                         </div>
                         <div className="text-xs text-sib-gray-500">
@@ -125,7 +125,7 @@ export const LanguageSelector: React.FC = () => {
                     </div>
 
                     {isSelected && (
-                      <Check className="h-4 w-4 text-sib-primary" />
+                      <Check className="h-4 w-4 text-indigo-600" />
                     )}
                   </button>
                 );

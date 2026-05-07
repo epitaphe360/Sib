@@ -485,31 +485,31 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
   // Mode page complète (non embarqué) ──────────────────────────────
   return (
     <div className="bg-gray-50" style={{ fontFamily: theme.fontFamily }}>
-      {/* Header with back button - hidden when embedded */}
+      {/* Barre de retour — sticky juste sous la navbar principale */}
       {!embedded && (
-        <div className="bg-white shadow-sm sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div
+          className="sticky top-16 sm:top-20 xl:top-[112px] bg-white border-b border-gray-200 shadow-md"
+          style={{ zIndex: 199 }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
             <div className="flex items-center justify-between">
-              <Button
-                variant="ghost"
-                onClick={() => navigate(ROUTES.EXHIBITORS)}
-                className="flex items-center gap-2"
+              <Link
+                to={ROUTES.EXHIBITORS}
+                className="inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-900 transition-colors group"
               >
-                <ArrowLeft className="h-4 w-4" />
-                Retour aux exposants
-              </Button>
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    toast.success('Lien copié dans le presse-papiers');
-                  }}
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Partager
-                </Button>
-              </div>
+                <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                ← Retour à la liste des exposants
+              </Link>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  toast.success('Lien copié dans le presse-papiers');
+                }}
+                className="inline-flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors"
+              >
+                <Share2 className="h-3.5 w-3.5" />
+                Partager
+              </button>
             </div>
           </div>
         </div>

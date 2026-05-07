@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Section Galerie Média sur la HomePage
  * Affiche photos/vidéos depuis Supabase (ou WordPress en fallback)
  */
@@ -36,7 +36,7 @@ const Lightbox: React.FC<LightboxProps> = ({ image, title, onClose }) => {
     >
       <button
         onClick={onClose}
-        className="absolute top-6 right-6 text-white hover:text-sib-gold transition-colors"
+        className="absolute top-6 right-6 text-white hover:text-yellow-400 transition-colors"
       >
         <X className="w-8 h-8" />
       </button>
@@ -128,7 +128,7 @@ export const MediaShowcaseSection: React.FC = () => {
 
   return (
     <>
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-sib-primary to-blue-900 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-indigo-600 to-blue-900 relative overflow-hidden">
         {/* Pattern lumineux */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
@@ -146,7 +146,7 @@ export const MediaShowcaseSection: React.FC = () => {
             className="text-center mb-16"
           >
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg mb-6">
-              <ImageIcon className="w-6 h-6 text-sib-gold" />
+              <ImageIcon className="w-6 h-6 text-yellow-400" />
               <span className="text-sm font-bold text-white uppercase tracking-wider">
                 {t('media.gallery_badge')}
               </span>
@@ -191,7 +191,7 @@ export const MediaShowcaseSection: React.FC = () => {
                   />
 
                   {/* Overlay au survol */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-sib-primary via-sib-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                  <div className="absolute inset-0 bg-gradient-to-t from-indigo-600 via-indigo-600/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                     <p className="text-white text-sm font-semibold truncate">
                       {item.title}
                     </p>
@@ -215,7 +215,7 @@ export const MediaShowcaseSection: React.FC = () => {
           >
             <Link
               to="/media"
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-sib-gold to-amber-600 text-white px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-amber-600 text-white px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
             >
               <span>{t('media.view_gallery')}</span>
               <ArrowRight className="w-5 h-5" />

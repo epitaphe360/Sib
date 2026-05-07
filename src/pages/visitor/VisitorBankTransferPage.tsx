@@ -85,10 +85,10 @@ export default function VisitorBankTransferPage() {
         // @ts-expect-error - Supabase type inference limitation
         setTransferReference(data.transfer_reference as string);
       } else {
-        // G�n�rer une r�f�rence si elle n'existe pas
+        // Générer une référence si elle n'existe pas
         const ref = generateVisitorPaymentReference(user.id);
         setTransferReference(ref);
-        // Sauvegarder la r�f�rence
+        // Sauvegarder la référence
         if (supabase) {
           await supabase
             .from('payment_requests')
@@ -112,7 +112,7 @@ export default function VisitorBankTransferPage() {
 
   async function handleSubmitProof() {
     if (!requestId || !transferReference.trim()) {
-      toast.error('Veuillez renseigner la r�f�rence de votre virement');
+      toast.error('Veuillez renseigner la référence de votre virement');
       return;
     }
 
@@ -126,7 +126,7 @@ export default function VisitorBankTransferPage() {
     try {
       let finalProofUrl = proofUrl;
 
-      // Upload du fichier si nouveau fichier s�lectionn�
+      // Upload du fichier si nouveau fichier sélectionné
       if (selectedFile && supabase) {
         const fileExt = selectedFile.name.split('.').pop();
         const fileName = `${user!.id}-${Date.now()}.${fileExt}`;
@@ -148,7 +148,7 @@ export default function VisitorBankTransferPage() {
         finalProofUrl = urlData.publicUrl;
       }
 
-      // Mettre � jour la demande de paiement
+      // Mettre à jour la demande de paiement
       if (!supabase) {
         throw new Error('Supabase client not initialized');
       }
@@ -166,10 +166,10 @@ export default function VisitorBankTransferPage() {
 
       if (updateError) {throw updateError;}
 
-      toast.success('Justificatif envoy� avec succ�s !');
-      toast.info('Votre paiement sera valid� sous 2-5 jours ouvr�s');
+      toast.success('Justificatif envoyé avec succès !');
+      toast.info('Votre paiement sera validé sous 2-5 jours ouvrés');
 
-      // Recharger les donn�es
+      // Recharger les données
       await loadPaymentRequest();
     } catch (error) {
       console.error('Error submitting proof:', error);
@@ -183,27 +183,27 @@ export default function VisitorBankTransferPage() {
     const file = e.target.files?.[0];
     if (!file) {return;}
 
-    // V�rifier le type de fichier
+    // Vérifier le type de fichier
     const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
     if (!validTypes.includes(file.type)) {
       toast.error('Format invalide. Utilisez JPG, PNG ou PDF');
       return;
     }
 
-    // V�rifier la taille (max 5MB)
+    // Vérifier la taille (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('Le fichier ne doit pas d�passer 5MB');
+      toast.error('Le fichier ne doit pas dépasser 5MB');
       return;
     }
 
     setSelectedFile(file);
-    toast.success(`Fichier s�lectionn�: ${file.name}`);
+    toast.success(`Fichier sélectionné: ${file.name}`);
   }
 
   function copyToClipboard(text: string) {
     navigator.clipboard.writeText(text);
     setCopied(true);
-    toast.success('Copi� dans le presse-papier');
+    toast.success('Copié dans le presse-papier');
     setTimeout(() => setCopied(false), 2000);
   }
 
@@ -386,7 +386,7 @@ export default function VisitorBankTransferPage() {
           </h2>
 
           <div className="space-y-6">
-            {/* �tapes */}
+            {/* Étapes */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">{t('transfer.steps_title')}</h3>
               <ol className="space-y-2">
@@ -419,7 +419,7 @@ export default function VisitorBankTransferPage() {
               <ul className="space-y-1">
                 {instructions.additionalInfo.map((info, index) => (
                   <li key={index} className="text-sm text-indigo-800">
-                    � {info}
+                    • {info}
                   </li>
                 ))}
               </ul>
@@ -501,7 +501,7 @@ export default function VisitorBankTransferPage() {
           </Card>
         )}
 
-        {/* Message de confirmation si approuv� */}
+        {/* Message de confirmation si approuvé */}
         {paymentRequest?.status === 'approved' && (
           <Card className="p-6 bg-green-50 border-2 border-green-200">
             <div className="text-center">

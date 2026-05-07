@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+﻿import React, { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -83,7 +83,7 @@ export const AppointmentCalendarWidget: React.FC = () => {
             {t('appointments.calendar')}
           </h3>
           <Link to={ROUTES.APPOINTMENTS}>
-            <Button variant="ghost" size="sm" className="text-SIB-primary">
+            <Button variant="ghost" size="sm" className="text-indigo-600">
               {t('common.view_all')}
             </Button>
           </Link>
@@ -106,7 +106,7 @@ export const AppointmentCalendarWidget: React.FC = () => {
         <div className="space-y-4 h-64 overflow-y-auto pr-2">
           {isLoading ? (
             <div className="text-center py-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-SIB-primary mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
               <p className="text-gray-500 mt-2">{t('common.loading')}</p>
             </div>
           ) : todayAppointments.length > 0 ? (

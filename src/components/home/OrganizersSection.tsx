@@ -62,18 +62,18 @@ const organizers: OrganizerItem[] = [
 const categoryMeta: Record<OrganizerItem['category'], { label: string; accentClass: string; borderClass: string }> = {
   tutelle: {
     label: 'Tutelle',
-    accentClass: 'text-sib-gold',
-    borderClass: 'border-sib-gold/25',
+    accentClass: 'text-yellow-400',
+    borderClass: 'border-yellow-400/25',
   },
   sponsor: {
     label: 'Sponsor',
-    accentClass: 'text-sib-primary',
-    borderClass: 'border-sib-primary/15',
+    accentClass: 'text-indigo-600',
+    borderClass: 'border-indigo-600/15',
   },
   organisateur: {
     label: 'Organisateur Délégué',
-    accentClass: 'text-sib-secondary',
-    borderClass: 'border-sib-secondary/20',
+    accentClass: 'text-indigo-500',
+    borderClass: 'border-indigo-500/20',
   },
 };
 
@@ -91,16 +91,16 @@ export const OrganizersSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 text-sib-gold">
+          <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 text-yellow-400">
             Sponsors & Organisateurs
           </p>
           <h2 className="font-heading font-bold text-3xl sm:text-4xl text-gray-900 uppercase tracking-wide">
             Sous l'égide des Institutions
           </h2>
           <div className="flex items-center justify-center gap-3 mt-4">
-            <div className="h-0.5 w-16 rounded-full bg-sib-gold/70" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-sib-gold" />
-            <div className="h-0.5 w-16 rounded-full bg-sib-gold/70" />
+            <div className="h-0.5 w-16 rounded-full bg-yellow-400/70" />
+            <div className="w-1.5 h-1.5 rotate-45 bg-yellow-400" />
+            <div className="h-0.5 w-16 rounded-full bg-yellow-400/70" />
           </div>
         </motion.div>
 
@@ -110,7 +110,7 @@ export const OrganizersSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.65 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 p-6 sm:p-8 rounded-2xl mb-10 bg-gradient-to-br from-sib-gold/10 via-white to-sib-light/60 border border-sib-gold/20 shadow-sib"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 p-6 sm:p-8 rounded-2xl mb-10 bg-gradient-to-br from-yellow-400/10 via-white to-sib-light/60 border border-yellow-400/20 shadow-sib"
         >
           <img
             src="/logo-ministere.png"
@@ -119,7 +119,7 @@ export const OrganizersSection: React.FC = () => {
             onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/logo-ministere.svg'; }}
           />
           <div className="text-center sm:text-left">
-            <p className="text-xs font-bold tracking-[0.18em] uppercase mb-1 text-sib-gold">
+            <p className="text-xs font-bold tracking-[0.18em] uppercase mb-1 text-yellow-400">
               Sous le Haut Patronage de Sa Majesté le Roi Mohammed VI
             </p>
             <h3 className="font-heading font-bold text-lg sm:text-xl text-gray-900 uppercase">

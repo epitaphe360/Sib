@@ -18,6 +18,7 @@ import {
   ExhibitorGenericModal,
   ExhibitorProductsSection,
   ExhibitorScannedVisitors,
+  ExhibitorProgrammeSection,
 } from './exhibitor';
 
 import { Button } from '../ui/Button';
@@ -185,6 +186,8 @@ export default memo(function ExhibitorDashboard() {
           isExpanded={scansOpen}
           onToggle={() => setScansOpen(v => !v)}
         />
+
+        <ExhibitorProgrammeSection accent="emerald" />
 
         <ExhibitorInfoSection />
 

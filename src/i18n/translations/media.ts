@@ -260,7 +260,7 @@ export const mediaTranslations = {
     'media.testimonial.company': 'Company',
     'media.testimonial.role': 'Role',
     'media.testimonial.satisfaction': 'Satisfied partners',
-    'media.testimonial.search_placeholder': 'Search testomonial...',
+    'media.testimonial.search_placeholder': 'Search testimonial...',
     'media.testimonial.no_results': 'No testimonials found',
     'media.testimonial.no_results_desc': 'New testimonials will be added soon',
 

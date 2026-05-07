@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { Check, Building2, TrendingUp, Crown, Sparkles } from 'lucide-react';
 import { Card } from '../ui/Card';
@@ -106,7 +106,7 @@ export const SubscriptionSelector: React.FC<SubscriptionSelectorProps> = ({
 
                     <div className="space-y-1">
                       <div className="flex items-baseline justify-center gap-1">
-                        <span className="text-3xl font-bold text-sib-primary" data-testid={`subscription-price-${level.id}`}>
+                        <span className="text-3xl font-bold text-indigo-600" data-testid={`subscription-price-${level.id}`}>
                           Sur devis
                         </span>
                       </div>

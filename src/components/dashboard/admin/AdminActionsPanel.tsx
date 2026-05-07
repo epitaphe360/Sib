@@ -14,6 +14,8 @@ import {
   Globe,
   BadgeCheck,
   QrCode,
+  Bell,
+  Mail,
 } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
 
@@ -248,6 +250,12 @@ export function AdminActionsPanel({
                 </Link>
                 <Link to={ROUTES.ADMIN_BADGE_CONFIG}>
                   <Tile Icon={BadgeCheck} label={t('admin.badge_a4')} sub={t('admin.bifold_customization')} color="#0ea5e9" />
+                </Link>
+                <Link to={ROUTES.ADMIN_INVITATIONS}>
+                  <Tile Icon={Mail} label={t('admin.invitations')} sub={t('admin.invitation_letters')} color="#0ea5e9" />
+                </Link>
+                <Link to={ROUTES.ADMIN_PUSH_NOTIFICATIONS}>
+                  <Tile Icon={Bell} label={t('admin.push_notifications')} sub={t('admin.send_alerts')} color="#0ea5e9" />
                 </Link>
               </motion.div>
             </div>

@@ -245,7 +245,7 @@ export const FeaturedExhibitors: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center"
+          className="flex justify-center"
         >
           <Link to={ROUTES.EXHIBITORS}>
             <button className="luxury-btn group flex items-center gap-2">

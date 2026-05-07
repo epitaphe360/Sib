@@ -1,6 +1,7 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Linkedin, Twitter, Globe, Search, Calendar } from 'lucide-react';
+import { Linkedin, Twitter, Globe, Search, Calendar, Users } from 'lucide-react';
+import { PageHero } from '../../components/ui/PageHero';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
@@ -61,16 +62,13 @@ export default function SpeakersPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20 pb-12">
-      {/* Hero Section */}
-      <div className="bg-indigo-900 text-white py-16 px-4 mb-12">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('speakers.title')}</h1>
-          <p className="text-indigo-100 text-lg max-w-2xl mx-auto">
-            {t('speakers.subtitle')}
-          </p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50 pb-12">
+      <PageHero
+        badge={<><Users className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{t('speakers.badge', 'Intervenants')}</span></>}
+        title={<>{t('speakers.title', 'Conférenciers')}</>}
+        subtitle={t('speakers.subtitle', 'Découvrez les experts et professionnels qui animent les conférences, ateliers et forums du Salon International du Bâtiment.')}
+        py="py-16 md:py-20"
+      />
 
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-10">
@@ -147,4 +145,5 @@ export default function SpeakersPage() {
     </div>
   );
 }
+
 

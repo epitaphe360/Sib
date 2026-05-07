@@ -89,12 +89,12 @@ export const matchingTranslations = {
     'matching.score': 'Compatibility score',
 
     // Sectors
-    'matching.sector.port_operations': 'Bâtiment Operations',
-    'matching.sector.construction_tech': 'Bâtiment Technologies',
+    'matching.sector.port_operations': 'Building Operations',
+    'matching.sector.construction_tech': 'Building Technologies',
     'matching.sector.digital_transformation': 'Digital Transformation',
     'matching.sector.logistics': 'Logistics and Supply Chain',
-    'matching.sector.equipment': 'Bâtiment Equipment',
-    'matching.sector.security': 'Bâtiment Security',
+    'matching.sector.equipment': 'Building Equipment',
+    'matching.sector.security': 'Construction Site Security',
     'matching.sector.environment': 'Environment and Sustainability',
     'matching.sector.training': 'Training and Education',
     'matching.sector.consulting': 'Consulting and Services',
@@ -102,7 +102,7 @@ export const matchingTranslations = {
     'matching.sector.construction': 'Construction and Infrastructure',
     'matching.sector.energy': 'Energy and Utilities',
     'matching.sector.it': 'IT and Systems',
-    'matching.sector.construction_services': 'Bâtiment Services',
+    'matching.sector.construction_services': 'Building Services',
     'matching.sector.cargo_handling': 'Cargo Handling',
 
     // Interests
@@ -114,7 +114,7 @@ export const matchingTranslations = {
     'matching.interest.blockchain': 'Blockchain',
     'matching.interest.iot': 'Internet of Things (IoT)',
     'matching.interest.cybersecurity': 'Cybersecurity',
-    'matching.interest.smart_ports': 'Smart Bâtiments',
+    'matching.interest.smart_ports': 'Smart Buildings',
     'matching.interest.green_tech': 'Green Technologies',
 
     // Networking goals

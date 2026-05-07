@@ -63,7 +63,7 @@ export default function PushNotificationsPage() {
 
   // ── Compter les appareils cibles ──────────────────────────────────────────
 
-  const fetchRecipientCount = async (aud: Audience) => {
+  const fetchRecipientCount = async (_audience: Audience) => {
     if (!supabase) {return;}
     setRecipientCount(null);
     try {
@@ -116,7 +116,7 @@ export default function PushNotificationsPage() {
       if (error) {throw error;}
 
       // Log dans la table historique (best-effort)
-      await supabase.from('push_notification_logs').insert({
+      await (supabase as any).from('push_notification_logs').insert({
         title: title.trim(),
         message: message.trim(),
         audience,
@@ -238,9 +238,9 @@ export default function PushNotificationsPage() {
             {/* Bouton envoi */}
             <div className="flex items-center justify-between">
               <div className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                {recipientCount !== null
-                  ? <span>~<strong className="text-white">{recipientCount}</strong> {t('admin.push_devices_targeted')}</span>
-                  : <span>{t('admin.push_calculating')}</span>
+                {recipientCount === null
+                  ? <span>{t('admin.push_calculating')}</span>
+                  : <span>~<strong className="text-white">{recipientCount}</strong> {t('admin.push_devices_targeted')}</span>
                 }
               </div>
               <Button
@@ -292,9 +292,9 @@ export default function PushNotificationsPage() {
             <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
               <h3 className="text-sm font-semibold mb-3 uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>{t('admin.push_templates')}</h3>
               <div className="space-y-1.5">
-                {QUICK_TEMPLATES.map((tpl, i) => (
+                {QUICK_TEMPLATES.map((tpl) => (
                   <button
-                    key={i}
+                    key={tpl.title}
                     onClick={() => { setTitle(tpl.title); setMessage(tpl.message); }}
                     className="w-full text-left px-3 py-2 rounded-lg text-xs transition-colors hover:bg-white/5"
                     style={{ color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.05)' }}
@@ -320,16 +320,23 @@ export default function PushNotificationsPage() {
             {t('admin.push_history')}
           </h2>
 
-          {isLoadingHistory ? (
-            <div className="flex items-center justify-center py-8">
-              <span className="animate-spin border-2 border-white/20 border-t-white/60 rounded-full w-6 h-6" />
-            </div>
-          ) : history.length === 0 ? (
-            <div className="text-center py-8" style={{ color: 'rgba(255,255,255,0.3)' }}>
-              <Bell className="h-8 w-8 mx-auto mb-2 opacity-30" />
-              <p className="text-sm">{t('admin.push_no_history')}</p>
-            </div>
-          ) : (
+          {(() => {
+            if (isLoadingHistory) {
+              return (
+                <div className="flex items-center justify-center py-8">
+                  <span className="animate-spin border-2 border-white/20 border-t-white/60 rounded-full w-6 h-6" />
+                </div>
+              );
+            }
+            if (history.length === 0) {
+              return (
+                <div className="text-center py-8" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                  <Bell className="h-8 w-8 mx-auto mb-2 opacity-30" />
+                  <p className="text-sm">{t('admin.push_no_history')}</p>
+                </div>
+              );
+            }
+            return (
             <div className="space-y-2">
               <AnimatePresence>
                 {history.map((notif, i) => {
@@ -367,7 +374,8 @@ export default function PushNotificationsPage() {
                 })}
               </AnimatePresence>
             </div>
-          )}
+            );
+          })()}
         </motion.div>
 
       </div>

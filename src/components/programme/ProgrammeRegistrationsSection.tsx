@@ -23,6 +23,7 @@ import {
   getSessionGoogleCalendarLink,
   getSessionOutlookCalendarLink,
 } from '../../utils/calendarExport';
+import { SessionQRCode } from './SessionQRCode';
 
 /* ─── Types ────────────────────────────────────────────────── */
 type AccentColor = 'emerald' | 'amber' | 'indigo';
@@ -114,6 +115,7 @@ function SessionRow({
   sessionId, title, time, type, dayLabel, dayDate, description, accent, onRemove,
 }: SessionRowProps) {
   const { isLoading, unregister } = useProgrammeRegistration(sessionId);
+  const { user } = useAuthStore();
   const st = accentStyles[accent];
   const [showExport, setShowExport] = useState(false);
 
@@ -185,6 +187,18 @@ function SessionRow({
             </a>
           )}
           {showExport && <span className="sr-only">calendrier ouvert</span>}
+
+          {/* QR code d'accès à la session */}
+          {user && (
+            <SessionQRCode
+              userId={user.id}
+              sessionId={sessionId}
+              sessionTitle={title}
+              sessionTime={time}
+              sessionDate={dayDate}
+              accent={accent}
+            />
+          )}
         </div>
       </div>
 

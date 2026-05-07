@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users, Building2, ArrowRight } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -62,7 +62,7 @@ export const HeroSection: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <div className="mb-6">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-sib-gold/20 text-sib-gold border border-sib-gold/40 mb-4">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-400/20 text-yellow-400 border border-yellow-400/40 mb-4">
                 <Calendar className="h-4 w-4 mr-2" />
                 25-29 Nov. 2026
               </span>
@@ -91,9 +91,9 @@ export const HeroSection: React.FC = () => {
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-SIB-gold to-amber-600 rounded-2xl transform rotate-2 group-hover:rotate-3 transition-transform"></div>
-                    <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-4 shadow-2xl text-center border-2 border-SIB-gold">
-                      <div className="text-3xl font-bold text-SIB-gold mb-1">
+                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-2xl transform rotate-2 group-hover:rotate-3 transition-transform"></div>
+                    <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-4 shadow-2xl text-center border-2 border-yellow-400">
+                      <div className="text-3xl font-bold text-yellow-400 mb-1">
                         {formatNumber(timeLeft.days)}
                       </div>
                       <div className="text-amber-200 text-xs font-medium uppercase tracking-wide">
@@ -103,20 +103,20 @@ export const HeroSection: React.FC = () => {
                   </div>
 
                   <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-sib-navy to-sib-navy-light rounded-2xl transform rotate-2 group-hover:rotate-3 transition-transform"></div>
-                    <div className="relative bg-white rounded-2xl p-4 shadow-2xl text-center border-2 border-sib-navy">
-                      <div className="text-3xl font-bold text-sib-navy mb-1">
+                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-800 to-indigo-800-light rounded-2xl transform rotate-2 group-hover:rotate-3 transition-transform"></div>
+                    <div className="relative bg-white rounded-2xl p-4 shadow-2xl text-center border-2 border-indigo-800">
+                      <div className="text-3xl font-bold text-indigo-800 mb-1">
                         {formatNumber(timeLeft.hours)}
                       </div>
-                      <div className="text-sib-navy-light text-xs font-medium uppercase tracking-wide">
+                      <div className="text-indigo-800-light text-xs font-medium uppercase tracking-wide">
                         {getTimeUnit(timeLeft.hours, 'time.hour', 'time.hours')}
                       </div>
                     </div>
                   </div>
 
                   <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-SIB-gold to-amber-600 rounded-2xl transform -rotate-2 group-hover:-rotate-3 transition-transform"></div>
-                    <div className="relative bg-white rounded-2xl p-4 shadow-2xl text-center border-2 border-SIB-gold">
+                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-2xl transform -rotate-2 group-hover:-rotate-3 transition-transform"></div>
+                    <div className="relative bg-white rounded-2xl p-4 shadow-2xl text-center border-2 border-yellow-400">
                       <div className="text-3xl font-bold text-amber-700 mb-1">
                         {formatNumber(timeLeft.minutes)}
                       </div>
@@ -127,12 +127,12 @@ export const HeroSection: React.FC = () => {
                   </div>
 
                   <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-sib-gold-dark to-sib-gold rounded-2xl transform -rotate-2 group-hover:-rotate-3 transition-transform"></div>
-                    <div className="relative bg-gradient-to-br from-sib-gold-dark to-sib-gold rounded-2xl p-4 shadow-2xl text-center">
-                      <div className="text-3xl font-bold text-sib-navy-dark mb-1">
+                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-400-dark to-yellow-400 rounded-2xl transform -rotate-2 group-hover:-rotate-3 transition-transform"></div>
+                    <div className="relative bg-gradient-to-br from-yellow-400-dark to-yellow-400 rounded-2xl p-4 shadow-2xl text-center">
+                      <div className="text-3xl font-bold text-indigo-800-dark mb-1">
                         {formatNumber(timeLeft.seconds)}
                       </div>
-                      <div className="text-sib-navy text-xs font-medium uppercase tracking-wide">
+                      <div className="text-indigo-800 text-xs font-medium uppercase tracking-wide">
                         {getTimeUnit(timeLeft.seconds, 'time.second', 'time.seconds')}
                       </div>
                     </div>
@@ -153,8 +153,8 @@ export const HeroSection: React.FC = () => {
             {/* Event Info */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
               <div className="flex items-center space-x-3 bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="bg-SIB-gold/20 p-2 rounded-lg">
-                  <MapPin className="h-5 w-5 text-SIB-gold" />
+                <div className="bg-yellow-400/20 p-2 rounded-lg">
+                  <MapPin className="h-5 w-5 text-yellow-400" />
                 </div>
                 <div>
                   <p className="font-semibold text-white">{t('hero.stats.location')}</p>
@@ -162,8 +162,8 @@ export const HeroSection: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3 bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="bg-SIB-gold/20 p-2 rounded-lg">
-                  <Users className="h-5 w-5 text-SIB-gold" />
+                <div className="bg-yellow-400/20 p-2 rounded-lg">
+                  <Users className="h-5 w-5 text-yellow-400" />
                 </div>
                 <div>
                   <p className="font-semibold text-white">Networking</p>
@@ -171,8 +171,8 @@ export const HeroSection: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3 bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="bg-SIB-gold/20 p-2 rounded-lg">
-                  <Building2 className="h-5 w-5 text-SIB-gold" />
+                <div className="bg-yellow-400/20 p-2 rounded-lg">
+                  <Building2 className="h-5 w-5 text-yellow-400" />
                 </div>
                 <div>
                   <p className="font-semibold text-white">Format</p>
@@ -184,13 +184,13 @@ export const HeroSection: React.FC = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to={ROUTES.REGISTER_EXHIBITOR}>
-                <Button size="lg" className="bg-SIB-gold text-white hover:bg-SIB-gold/90 border-none w-full sm:w-auto shadow-lg shadow-SIB-gold/20">
+                <Button size="lg" className="bg-yellow-400 text-white hover:bg-yellow-400/90 border-none w-full sm:w-auto shadow-lg shadow-yellow-400/20">
                   {t('hero.cta.exhibitor')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link to={ROUTES.EXHIBITORS}>
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-SIB-primary w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-indigo-600 w-full sm:w-auto">
                   {t('hero.cta.discover')}
                 </Button>
               </Link>
@@ -205,18 +205,18 @@ export const HeroSection: React.FC = () => {
             className="relative block"
           >
             <div className="relative z-10">
-              <div className="absolute -inset-4 bg-SIB-gold/20 rounded-t-[10rem] rounded-b-2xl blur-xl" />
+              <div className="absolute -inset-4 bg-yellow-400/20 rounded-t-[10rem] rounded-b-2xl blur-xl" />
               <div className="relative rounded-t-[10rem] rounded-b-2xl overflow-hidden border-4 border-white/20 shadow-2xl aspect-[4/3]">
                 <img
                   src="https://sib.ma/backend/uploads/home_banner1_copie_77cbe633a7.jpg"
                   alt="Salon International du Bâtiment SIB 2026"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-SIB-primary/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-indigo-600/60 to-transparent" />
               </div>
 
               {/* Decorative Elements */}
-              <div className="hidden lg:block absolute -top-12 -right-12 text-SIB-gold/20 animate-spin-slow">
+              <div className="hidden lg:block absolute -top-12 -right-12 text-yellow-400/20 animate-spin-slow">
                 <MoroccanPattern className="w-48 h-48" />
               </div>
 
@@ -225,14 +225,14 @@ export const HeroSection: React.FC = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="hidden lg:block absolute bottom-8 -left-12 bg-white p-4 rounded-xl shadow-xl border-l-4 border-SIB-gold"
+                className="hidden lg:block absolute bottom-8 -left-12 bg-white p-4 rounded-xl shadow-xl border-l-4 border-yellow-400"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="bg-SIB-primary/5 p-3 rounded-lg">
-                    <Users className="h-6 w-6 text-SIB-primary" />
+                  <div className="bg-indigo-600/5 p-3 rounded-lg">
+                    <Users className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
-                    <p className="text-lg font-bold text-SIB-primary">Innovation</p>
+                    <p className="text-lg font-bold text-indigo-600">Innovation</p>
                     <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Smart Building</p>
                   </div>
                 </div>
@@ -242,14 +242,14 @@ export const HeroSection: React.FC = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="hidden lg:block absolute top-24 -right-8 bg-white p-4 rounded-xl shadow-xl border-l-4 border-SIB-gold"
+                className="hidden lg:block absolute top-24 -right-8 bg-white p-4 rounded-xl shadow-xl border-l-4 border-yellow-400"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="bg-SIB-primary/5 p-3 rounded-lg">
-                    <Calendar className="h-6 w-6 text-SIB-primary" />
+                  <div className="bg-indigo-600/5 p-3 rounded-lg">
+                    <Calendar className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
-                    <p className="text-lg font-bold text-SIB-primary">Conférences</p>
+                    <p className="text-lg font-bold text-indigo-600">Conférences</p>
                     <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">High Level</p>
                   </div>
                 </div>

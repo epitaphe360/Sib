@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
-import { Play, ArrowLeft, Search, Filter, Eye, Clock } from 'lucide-react';
+import { Play, ArrowLeft, Search, Filter, Eye, Clock, Video } from 'lucide-react';
 import { mediaService } from '../../services/mediaService';
 import { MediaContent } from '../../types/media';
 import { MediaCard } from '../../components/media/MediaCard';

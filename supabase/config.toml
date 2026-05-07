@@ -32,7 +32,14 @@ file_size_limit = "50MiB"
 [auth]
 enabled = true
 site_url = "https://sib2026.vercel.app"
-additional_redirect_urls = ["https://sib2026.vercel.app/**", "http://localhost:9323/**", "http://localhost:5173/**"]
+additional_redirect_urls = [
+  "https://sib2026.vercel.app/**",
+  "https://sib2026.vercel.app/auth/callback",
+  "http://localhost:9323/**",
+  "http://localhost:9323/auth/callback",
+  "http://localhost:5173/**",
+  "http://localhost:5173/auth/callback"
+]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10

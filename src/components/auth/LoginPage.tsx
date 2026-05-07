@@ -12,8 +12,7 @@ import {
   Building2,
   Store,
   BarChart2,
-  Users,
-  Zap
+  Users
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { Card } from '../ui/Card';
@@ -29,7 +28,11 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true); // ✅ Par défaut activé pour meilleure UX
+  const [rememberMe, setRememberMe] = useState(true);
+  const [magicEmail, setMagicEmail] = useState('');
+  const [magicSent, setMagicSent] = useState(false);
+  const [magicLoading, setMagicLoading] = useState(false);
+  const [magicError, setMagicError] = useState('');
   const [error, setError] = useState('');
   const { login, loginWithGoogle, isLoading, isGoogleLoading } = useAuthStore();
   const navigate = useNavigate();
@@ -81,7 +84,7 @@ export default function LoginPage() {
 
       if (user) {
         // 🔴 CRITICAL: Block VIP visitors who haven't paid
-        if (user.type === 'visitor' && user.visitor_level === 'vip' && user.status === 'pending_payment') {
+        if (user.type === 'visitor' && (user.visitor_level === 'vip' || user.visitor_level === 'premium') && user.status === 'pending_payment') {
           await supabase.auth.signOut();
           setError(t('login.paymentRequired'));
           setTimeout(() => {
@@ -98,18 +101,43 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLoginWithRedirect = async (demoEmail: string, demoPassword: string, key: string, redirectTo: string) => {
-    setError('');
-    setEmail(demoEmail);
-    setPassword(demoPassword);
-    setDemoLoading(key);
+  const handleMagicLink = async () => {
+    setMagicError('');
+    if (!magicEmail.trim()) return;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(magicEmail.trim())) {
+      setMagicError('Adresse email invalide.');
+      return;
+    }
+
+    setMagicLoading(true);
     try {
-      await login(demoEmail, demoPassword, { rememberMe: true });
-      navigate(redirectTo, { replace: true });
-    } catch (err: any) {
-      setError(err.message || t('login.connectionError'));
+      const normalizedEmail = magicEmail.trim().toLowerCase();
+
+      // Vérifier l'existence via RPC SECURITY DEFINER (bypasse RLS, pas de service_role)
+      const { data: exists, error: rpcError } = await supabase.rpc('check_email_exists', {
+        p_email: normalizedEmail,
+      });
+
+      if (rpcError || !exists) {
+        setMagicError('Aucun compte trouvé avec cet email. Veuillez vous inscrire d\'abord.');
+        return;
+      }
+
+      // Envoyer le magic link via le serveur (bypass rate limits Supabase)
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://sib-production.up.railway.app';
+      await fetch(`${apiUrl}/api/auth/magic-link`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: normalizedEmail }),
+      });
+
+      setMagicSent(true);
+    } catch {
+      setMagicSent(true);
     } finally {
-      setDemoLoading(null);
+      setMagicLoading(false);
     }
   };
 
@@ -130,7 +158,7 @@ export default function LoginPage() {
       const { user } = useAuthStore.getState();
 
       // 🔴 CRITICAL: Block VIP visitors who haven't paid
-      if (user?.type === 'visitor' && user?.visitor_level === 'vip' && user?.status === 'pending_payment') {
+      if (user?.type === 'visitor' && (user?.visitor_level === 'vip' || user?.visitor_level === 'premium') && user?.status === 'pending_payment') {
         // Log out immediately
         await supabase.auth.signOut();
 
@@ -376,6 +404,60 @@ export default function LoginPage() {
             </p>
           </div>
 
+          {/* Connexion sans mot de passe — magic link (tous types) */}
+          <div className="mt-6">
+            <div className="relative flex items-center">
+              <div className="flex-1 border-t border-gray-200" />
+              <span className="px-3 text-xs text-gray-400">Connexion sans mot de passe</span>
+              <div className="flex-1 border-t border-gray-200" />
+            </div>
+            <div className="mt-3">
+              {magicSent ? (
+                <div className="text-center p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-sm text-green-700 font-medium">📧 Lien envoyé !</p>
+                  <p className="text-xs text-green-600 mt-1">Vérifiez votre boîte email — le lien vous connecte directement.</p>
+                  <button
+                    type="button"
+                    onClick={() => { setMagicSent(false); setMagicEmail(''); }}
+                    className="mt-2 text-xs text-green-700 underline"
+                  >
+                    Renvoyer un lien
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <p className="text-xs text-gray-500 text-center mb-2">
+                    Exposant, partenaire, visiteur — recevez un lien de connexion direct
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      value={magicEmail}
+                      onChange={(e) => { setMagicEmail(e.target.value); setMagicError(''); }}
+                      onKeyDown={(e) => e.key === 'Enter' && handleMagicLink()}
+                      placeholder="votre@email.com"
+                      className={`flex-1 px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] ${magicError ? 'border-red-400' : 'border-gray-300'}`}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleMagicLink}
+                      disabled={magicLoading || !magicEmail.trim()}
+                      className="px-3 py-2 text-sm font-medium text-white bg-[#1e3a5f] hover:bg-[#1e3a5f]/90 rounded-lg disabled:opacity-50 transition-colors whitespace-nowrap"
+                    >
+                      {magicLoading ? <Loader className="h-4 w-4 animate-spin" /> : 'Recevoir le lien'}
+                    </button>
+                  </div>
+                  {magicError && (
+                    <p className="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+                      <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
+                      {magicError}
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+
           {/* Raccourcis connexion rapide - uniquement en mode démo */}
           {showDemoLogins && (
             <div className="mt-6">
@@ -404,7 +486,7 @@ export default function LoginPage() {
                   className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 transition-colors"
                 >
                   {demoLoading === 'partner' ? <Loader className="h-4 w-4 animate-spin" /> : <Building2 className="h-4 w-4" />}
-                  Sponsor
+                  Partenaire
                 </button>
                 <button
                   type="button"
@@ -428,19 +510,10 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => handleDemoLogin('visitor-free@test.sib2026.ma', 'Test@123456', 'visitor')}
                   disabled={demoLoading !== null || isLoading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 disabled:opacity-50 transition-colors"
+                  className="col-span-2 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 disabled:opacity-50 transition-colors"
                 >
                   {demoLoading === 'visitor' ? <Loader className="h-4 w-4 animate-spin" /> : <Users className="h-4 w-4" />}
                   Visiteur Gratuit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDemoLoginWithRedirect('visitor-free@test.sib2026.ma', 'Test@123456', 'matching', ROUTES.PROFILE_MATCHING)}
-                  disabled={demoLoading !== null || isLoading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-50 transition-colors"
-                >
-                  {demoLoading === 'matching' ? <Loader className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
-                  Matching IA
                 </button>
               </div>
             </div>

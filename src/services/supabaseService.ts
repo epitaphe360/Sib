@@ -1,5 +1,10 @@
 ﻿import { supabase, isSupabaseReady } from '../lib/supabase';
-import { User, Exhibitor, Partner, Product, Appointment, Event, ChatMessage, ChatConversation, MiniSiteSection, ExhibitorCategory, ContactInfo, TimeSlot, UserProfile } from '../types';
+import { User, Exhibitor, Partner, Product, Appointment, Event, ChatMessage, ChatConversation, MiniSiteSection, MessageAttachment, ExhibitorCategory, ContactInfo, TimeSlot, UserProfile } from '../types';
+
+// Production: All data from Supabase only
+function getDemoExhibitors(): Exhibitor[] {
+  return [];
+}
 
 // Interfaces pour les données de base de données
 interface UserDB {
@@ -74,12 +79,6 @@ interface MiniSiteData {
   custom_colors?: Record<string, string>;
   sections?: MiniSiteSection[];
   published?: boolean;
-  company?: string;
-  logo?: string;
-  description?: string;
-  products?: unknown[];
-  contact?: { email?: string; phone?: string; address?: string; website?: string };
-  socials?: unknown[];
 }
 
 interface RegistrationRequest {
@@ -113,7 +112,6 @@ interface ExhibitorDB {
   website?: string;
   verified: boolean;
   featured: boolean;
-  is_published?: boolean;
   stand_number?: string;
   stand_area?: number;
   contact_info: ContactInfo;
@@ -144,9 +142,17 @@ interface EventsPageResult {
   total: number;
 }
 
+interface AnalyticsData {
+  miniSiteViews: number;
+  appointments: number;
+  products: number;
+  profileViews: number;
+  connections: number;
+  messages: number;
+}
+
 interface Recommendation {
   id: string;
-  item_id: string;
   item_type: string;
   similarity_score: number;
 }
@@ -172,22 +178,9 @@ interface EventDB {
   description?: string;
   start_time: string;
   end_time: string;
-  event_date?: string;
-  start_date?: string;
-  end_date?: string;
-  event_type?: string;
   location?: string;
   type?: string;
   capacity?: number;
-  registered?: number;
-  pavilion_id?: string;
-  organizer_id?: string;
-  featured?: boolean;
-  is_featured?: boolean;
-  image_url?: string;
-  registration_url?: string;
-  tags?: string[];
-  speakers?: unknown[];
   created_at: string;
 }
 
@@ -197,8 +190,6 @@ interface ChatConversationDB {
   participant2_id: string;
   last_message_at?: string;
   created_at: string;
-  updated_at?: string;
-  participants?: string[];
   messages?: ChatMessageDB[];
 }
 
@@ -224,6 +215,56 @@ interface UserSignupData {
   [key: string]: unknown;
 }
 
+interface EventRegistration {
+  id: string;
+  eventId: string;
+  userId: string;
+  registrationType: string;
+  status: string;
+  registrationDate: Date;
+  attendedAt?: Date;
+  notes?: string;
+  specialRequirements?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface NetworkingRecommendationDB {
+  id: string;
+  userId: string;
+  recommendedUserId: string;
+  recommendationType: string;
+  score: number;
+  reasons: string[];
+  category: string;
+  viewed: boolean;
+  contacted: boolean;
+  mutualConnections: number;
+  expiresAt: Date;
+  createdAt: Date;
+  recommendedUser?: User;
+}
+
+interface ActivityDB {
+  id: string;
+  userId: string;
+  activityType: string;
+  description: string;
+  relatedUserId?: string;
+  relatedEntityType?: string;
+  relatedEntityId?: string;
+  metadata: Record<string, unknown>;
+  isPublic: boolean;
+  createdAt: Date;
+  user?: User;
+  relatedUser?: User;
+}
+
+interface SearchFilters {
+  category?: string;
+  sector?: string;
+}
+
 export class SupabaseService {
   // ==================== CONNECTION CHECK ====================
   static checkSupabaseConnection(): boolean {
@@ -237,7 +278,7 @@ export class SupabaseService {
       return null;
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // On récupère d'abord l'utilisateur - utiliser maybeSingle() au lieu de single()
       // pour éviter l'erreur "Cannot coerce" quand 0 ou plusieurs résultats
@@ -253,7 +294,7 @@ export class SupabaseService {
         throw new Error(`Utilisateur non trouvé: ${userError.message}`);
       }
 
-      const userData: UserDB | null = usersData && usersData.length > 0 ? (usersData[0] as UserDB) : null;
+      const userData = usersData && usersData.length > 0 ? usersData[0] : null;
 
       if (!userData) {
         throw new Error('Aucun profil utilisateur trouvé pour cet email');
@@ -279,7 +320,7 @@ export class SupabaseService {
         }
       }
 
-      // Si c'est un sponsor, on tente de récupérer ses projets séparément
+      // Si c'est un partenaire, on tente de récupérer ses projets séparément
       // pour éviter les erreurs de jointure si la relation n'est pas détectée par PostgREST
       let projects: PartnerProject[] = [];
       if (userData.type === 'partner') {
@@ -314,13 +355,13 @@ export class SupabaseService {
             }
           }
         } catch (e) {
-          console.warn('⚠️ Erreur lors de la récupération des projets sponsor:', e);
+          console.warn('⚠️ Erreur lors de la récupération des projets partenaire:', e);
         }
       }
 
       const combinedData = {
         ...userData,
-        exhibitor: exhibitorData ?? undefined,
+        exhibitor: exhibitorData,
         partner_projects: projects
       };
 
@@ -333,24 +374,44 @@ export class SupabaseService {
 
   static async deleteUser(userId: string): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
+
+    // Récupérer le token de session
+    const { data: { session } } = await safeSupabase.auth.getSession();
+    if (!session?.access_token) {
+      throw new Error('Session expirée - reconnectez-vous');
+    }
+
     try {
-      // Soft-delete: marquer l'utilisateur comme supprimé
+      // Appel à la route serveur qui supprime dans users + auth.users
+      const baseUrl = window.location.origin;
+      const response = await fetch(`${baseUrl}/api/admin/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Échec de la suppression');
+      }
+    } catch (fetchError: any) {
+      // Fallback: suppression directe via Supabase (si RLS le permet)
+      console.warn('API admin non disponible, tentative directe:', fetchError.message);
       const { error } = await safeSupabase
         .from('users')
-        .update({ status: 'deleted', updated_at: new Date().toISOString() } as any)
+        .delete()
         .eq('id', userId);
-      if (error) {throw new Error(`Erreur suppression utilisateur ${userId}: ${error.message}`);}
-    } catch (error) {
-      console.error(`Erreur deleteUser ${userId}:`, error);
-      throw error;
+      if (error) {throw new Error(`Erreur suppression: ${error.message}`);}
     }
   }
 
   static async updateUser(userId: string, userData: Partial<User>): Promise<User | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // ✅ Étape 1: Vérifier que l'utilisateur existe et que nous avons les droits d'accès
       console.log('🔍 Vérification de l\'utilisateur avant mise à jour:', userId);
@@ -383,7 +444,7 @@ export class SupabaseService {
       console.log('📝 Mise à jour utilisateur:', userId, Object.keys(updateData));
       const { data, error } = await safeSupabase
         .from('users')
-        .update(updateData as any)
+        .update(updateData)
         .eq('id', userId)
         .select('*');
 
@@ -410,7 +471,7 @@ export class SupabaseService {
   static async createSimpleRegistrationRequest(userId: string, requestType: 'exhibitor' | 'partner'): Promise<RegistrationRequest | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('registration_requests')
@@ -418,7 +479,7 @@ export class SupabaseService {
           user_id: userId,
           request_type: requestType,
           status: 'pending'
-        }] as any)
+        }])
         .select()
         .single();
 
@@ -441,7 +502,7 @@ export class SupabaseService {
       return { items: [], total: 0 };
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     const limit = options?.limit ?? 24;
     const offset = options?.offset ?? 0;
 
@@ -461,7 +522,6 @@ export class SupabaseService {
           verified,
           featured,
           stand_number,
-          is_published,
           contact_info,
           mini_site:mini_sites!mini_sites_exhibitor_id_fkey(published)
         `,
@@ -495,7 +555,7 @@ export class SupabaseService {
       return [];
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data: exhibitorsData, error: exhibitorsError } = await safeSupabase
         .from('exhibitors')
@@ -546,7 +606,7 @@ export class SupabaseService {
       return null;
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Tenter de récupérer depuis la table exhibitors
       const { data: exhibitorData, error: exhibitorError } = await safeSupabase
@@ -596,25 +656,24 @@ export class SupabaseService {
         .single();
 
       if (!profileError && profileData) {
-        const pd = profileData as any;
         return {
-          id: pd.id,
-          userId: pd.user_id,
-          companyName: pd.company_name || 'Exposant',
-          category: (pd.category || 'bâtiment-industry') as ExhibitorCategory,
-          sector: pd.sector || '',
-          description: pd.description || '',
-          logo: pd.logo_url,
-          website: pd.website,
+          id: profileData.id,
+          userId: profileData.user_id,
+          companyName: profileData.company_name || 'Exposant',
+          category: (profileData.category || 'bâtiment-industry') as ExhibitorCategory,
+          sector: profileData.sector || '',
+          description: profileData.description || '',
+          logo: profileData.logo_url,
+          website: profileData.website,
           verified: false,
           featured: false,
-          isPublished: pd.is_published ?? false,
+          isPublished: profileData.is_published ?? false,
           contactInfo: {
-            email: pd.email || '',
-            phone: pd.phone || '',
+            email: profileData.email || '',
+            phone: profileData.phone || '',
             address: '',
             city: '',
-            country: pd.country || ''
+            country: profileData.country || ''
           },
           products: [],
           miniSite: null,
@@ -672,11 +731,11 @@ export class SupabaseService {
     offset?: number;
   }): Promise<PartnersPageResult> {
     if (!this.checkSupabaseConnection()) {
-      console.warn('⚠️ Supabase non configuré - aucun sponsor disponible');
+      console.warn('⚠️ Supabase non configuré - aucun partenaire disponible');
       return { items: [], total: 0 };
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     const limit = options?.limit ?? 24;
     const offset = options?.offset ?? 0;
 
@@ -688,7 +747,7 @@ export class SupabaseService {
           `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`,
           { count: 'exact' }
         )
-        // Afficher les sponsors publiés (true) OU dont is_published n'est pas renseigné (null)
+        // Afficher les partenaires publiés (true) OU dont is_published n'est pas renseigné (null)
         .or('is_published.eq.true,is_published.is.null')
         .order('featured', { ascending: false })
         .order('partner_type')
@@ -698,12 +757,12 @@ export class SupabaseService {
 
       const items = (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
-        name: typeof partner.company_name === 'string' ? partner.company_name : 'Sponsor',
+        name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
         partner_tier: SupabaseService.normalizePartnerTier(
           typeof partner.partner_type === 'string' ? partner.partner_type : null,
           partner.partnership_level
         ),
-        category: (typeof partner.partner_type === 'object') ? 'Sponsor' : (partner.partner_type || 'partner'),
+        category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
         description: typeof partner.description === 'string' ? partner.description : '',
         logo: partner.logo_url,
@@ -723,13 +782,13 @@ export class SupabaseService {
     } catch (error) {
       try {
         const errorInfo = error as ErrorInfo & { hint?: string };
-        console.error('Erreur lors de la récupération paginée des sponsors:', {
+        console.error('Erreur lors de la récupération paginée des partenaires:', {
           message: errorInfo?.message || String(error),
           details: errorInfo?.details || errorInfo?.hint || null,
           raw: JSON.stringify(error)
         });
       } catch (e) {
-        console.error('Erreur lors de la récupération paginée des sponsors (raw):', error);
+        console.error('Erreur lors de la récupération paginée des partenaires (raw):', error);
       }
       return { items: [], total: 0 };
     }
@@ -737,11 +796,11 @@ export class SupabaseService {
 
   static async getPartners(): Promise<PartnerUI[]> {
     if (!this.checkSupabaseConnection()) {
-      console.warn('⚠️ Supabase non configuré - aucun sponsor disponible');
+      console.warn('⚠️ Supabase non configuré - aucun partenaire disponible');
       return [];
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // FIX: Sélectionner uniquement les colonnes garanties dans la table partners
       const { data, error } = await safeSupabase
@@ -757,12 +816,12 @@ export class SupabaseService {
 
       return (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
-        name: typeof partner.company_name === 'string' ? partner.company_name : 'Sponsor',
+        name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
         partner_tier: SupabaseService.normalizePartnerTier(
           typeof partner.partner_type === 'string' ? partner.partner_type : null,
           partner.partnership_level
         ),
-        category: (typeof partner.partner_type === 'object') ? 'Sponsor' : (partner.partner_type || 'partner'),
+        category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
         description: typeof partner.description === 'string' ? partner.description : '',
         logo: partner.logo_url,
@@ -781,13 +840,13 @@ export class SupabaseService {
       // Log détaillé pour faciliter le debug (message, details, hint si disponibles)
       try {
         const errorInfo = error as ErrorInfo & { hint?: string };
-        console.error('Erreur lors de la récupération des sponsors:', {
+        console.error('Erreur lors de la récupération des partenaires:', {
           message: errorInfo?.message || String(error),
           details: errorInfo?.details || errorInfo?.hint || null,
           raw: JSON.stringify(error)
         });
       } catch (e) {
-        console.error('Erreur lors de la récupération des sponsors (raw):', error);
+        console.error('Erreur lors de la récupération des partenaires (raw):', error);
       }
       return [];
     }
@@ -796,7 +855,7 @@ export class SupabaseService {
   static async getPartnerById(id: string): Promise<any | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
       const rawIdentifier = decodeURIComponent(id).trim();
@@ -834,7 +893,7 @@ export class SupabaseService {
         return fuzzyByName;
       };
 
-      // Récupérer les données du sponsor (colonnes core garanties + enrichies si disponibles)
+      // Récupérer les données du partenaire (colonnes core garanties + enrichies si disponibles)
       const coreSelect = `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, contributions, projects:partner_projects(*)`;
       const enrichedSelect = `${coreSelect}, mission, vision, values, certifications, awards, social_media, key_figures, testimonials, news, expertise, clients, video_url, gallery`;
 
@@ -884,14 +943,17 @@ export class SupabaseService {
       // Utiliser les données de la base de données, avec fallback sur les données générées
       const fallbackData = this.getEnrichedPartnerData(data.id, data.company_name, data.sector);
 
+      // Vérifier si les données enrichies existent dans la base
+      const hasDbEnrichedData = data.mission || data.vision || (data.values_list && data.values_list.length > 0);
+
       return {
         id: data.id,
-        name: typeof data.company_name === 'string' ? data.company_name : 'Sponsor',
+        name: typeof data.company_name === 'string' ? data.company_name : 'Partenaire',
         type: typeof data.partner_type === 'string' ? data.partner_type : 'gold',
         sponsorshipLevel: (typeof data.partnership_level === 'object' && data.partnership_level !== null)
           ? ((data.partnership_level as any).level || (data.partnership_level as any).name || 'silver')
           : (typeof data.partnership_level === 'string' ? data.partnership_level : (typeof data.partner_type === 'string' ? data.partner_type : 'silver')),
-        category: (typeof data.partner_type === 'object') ? 'Sponsor' : data.partner_type,
+        category: (typeof data.partner_type === 'object') ? 'Partenaire' : data.partner_type,
         sector: typeof data.sector === 'string' ? data.sector : 'Bâtiment',
         description: typeof data.description === 'string' ? data.description : '',
         longDescription: typeof data.description === 'string' ? data.description : fallbackData.longDescription,
@@ -947,7 +1009,7 @@ export class SupabaseService {
         gallery: data.gallery || fallbackData.gallery,
       };
     } catch (error) {
-      console.error('Erreur lors de la récupération du sponsor:', error);
+      console.error('Erreur lors de la récupération du partenaire:', error);
       return null;
     }
   }
@@ -989,14 +1051,14 @@ export class SupabaseService {
       return [];
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
-      const { data, error } = await (safeSupabase as any)
+      const { data, error } = await safeSupabase
         .rpc("get_recommendations_for_user", { p_user_id: userId, p_limit: limit });
 
       if (error) {throw error;}
 
-      return ((data as Recommendation[]) || []).map((rec: Recommendation) => ({
+      return (data || []).map((rec: Recommendation) => ({
         itemId: rec.item_id,
         itemType: rec.item_type,
         similarityScore: rec.similarity_score,
@@ -1017,7 +1079,7 @@ export class SupabaseService {
     const effectiveLevel = userDB.visitor_level || profileLevel;
 
     // Enrichir le profil avec les données d'exhibitor si disponibles
-    const enrichedProfile = { ...userDB.profile } as any;
+    const enrichedProfile = { ...userDB.profile } as any || {};
 
     // Si c'est un exhibitor et qu'on a les données d'exhibitor, enrichir le profil
     if (userDB.type === 'exhibitor' && userDB.exhibitor) {
@@ -1037,7 +1099,7 @@ export class SupabaseService {
       visitor_level: effectiveLevel,
       profile: enrichedProfile,
       status: userDB.status || 'active',
-      projects: (userDB.partner_projects || []) as any[],
+      projects: userDB.partner_projects || [],
       createdAt: new Date(userDB.created_at),
       updatedAt: new Date(userDB.updated_at)
     };
@@ -1081,7 +1143,7 @@ export class SupabaseService {
     };
   }
 
-  private static transformExhibitorDBToExhibitor(exhibitorDB: ExhibitorDB & { is_published?: boolean }): Exhibitor {
+  private static transformExhibitorDBToExhibitor(exhibitorDB: ExhibitorDB): Exhibitor {
     const products = (exhibitorDB.products || []).map((p: ProductDB) => ({
       id: p.id,
       exhibitorId: p.exhibitor_id,
@@ -1091,24 +1153,18 @@ export class SupabaseService {
       images: p.images || [],
       specifications: p.specifications,
       price: p.price,
-      featured: p.featured || false,
-      technicalSpecs: []
+      featured: p.featured || false
     }));
 
     // mini_site est retourné comme un array par Supabase, prenons le premier élément
     const miniSiteArray = exhibitorDB.mini_site as unknown;
     const miniSiteData = Array.isArray(miniSiteArray) && miniSiteArray.length > 0 ? (miniSiteArray[0] as MiniSiteFieldData) : (miniSiteArray as MiniSiteFieldData);
 
-    const rawColors = miniSiteData?.custom_colors || {};
     const miniSite = miniSiteData ? {
       id: miniSiteData.id || '',
       exhibitorId: exhibitorDB.id,
       theme: miniSiteData.theme || 'default',
-      customColors: {
-        primary: rawColors['primary'] || '#1e40af',
-        secondary: rawColors['secondary'] || '#3b82f6',
-        accent: rawColors['accent'] || '#60a5fa'
-      },
+      customColors: miniSiteData.custom_colors || { primary: '#1e40af', secondary: '#3b82f6', accent: '#60a5fa' },
       sections: miniSiteData.sections || [],
       published: miniSiteData.published || false,
       views: miniSiteData.views || 0,
@@ -1151,7 +1207,7 @@ export class SupabaseService {
         id: eventDB.id,
         title: eventDB.title || 'Sans titre',
         description: eventDB.description || '',
-        type: (eventDB.type || eventDB.event_type || 'conference') as 'conference' | 'workshop' | 'networking' | 'exhibition',
+        type: eventDB.type || eventDB.event_type || 'conference',
         startDate: defaultDate,
         endDate: defaultDate,
         capacity: eventDB.capacity,
@@ -1189,7 +1245,7 @@ export class SupabaseService {
         id: eventDB.id,
         title: eventDB.title || 'Sans titre',
         description: eventDB.description || '',
-        type: (eventDB.type || eventDB.event_type || 'conference') as 'conference' | 'workshop' | 'networking' | 'exhibition',
+        type: eventDB.type || eventDB.event_type || 'conference',
         startDate: defaultDate,
         endDate: defaultDate,
         capacity: eventDB.capacity,
@@ -1201,7 +1257,7 @@ export class SupabaseService {
         imageUrl: eventDB.image_url,
         registrationUrl: eventDB.registration_url,
         tags: eventDB.tags || [],
-        speakers: (eventDB.speakers || []) as any[],
+        speakers: eventDB.speakers || [],
         date: defaultDate,
         startTime: '00:00',
         endTime: '00:00'
@@ -1211,8 +1267,8 @@ export class SupabaseService {
     return {
       id: eventDB.id,
       title: eventDB.title,
-      description: eventDB.description || '',
-      type: (eventDB.type || eventDB.event_type || 'conference') as 'conference' | 'workshop' | 'networking' | 'exhibition',
+      description: eventDB.description,
+      type: eventDB.type || eventDB.event_type,
       startDate,
       endDate,
       capacity: eventDB.capacity,
@@ -1224,7 +1280,7 @@ export class SupabaseService {
       imageUrl: eventDB.image_url,
       registrationUrl: eventDB.registration_url,
       tags: eventDB.tags || [],
-      speakers: (eventDB.speakers || []) as any[],
+      speakers: eventDB.speakers || [],
       // Legacy/computed fields for backward compatibility
       date: startDate,
       startTime: startDate.toISOString().substring(11, 16),
@@ -1236,7 +1292,7 @@ export class SupabaseService {
   static async signUp(email: string, password: string, userData: UserSignupData): Promise<User | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // 1. Créer l'utilisateur dans Supabase Auth
       console.log('📝 Tentative de création utilisateur:', { email, type: userData.type });
@@ -1294,15 +1350,13 @@ export class SupabaseService {
             } else {
               // Profil manquant → le créer maintenant et continuer
               console.log('✅ Profil manquant détecté — création du profil...');
-              const recoveryPayload = {
+              const recoveryPayload: UserDB = {
                 id: signInData.user.id,
                 email,
-                name: userData.name || '',
+                name: userData.name,
                 type: userData.type,
                 status: (userData.type === 'visitor' ? 'active' : (userData.status || 'pending')) as any,
-                profile: (userData.profile || {}) as UserProfile,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
+                profile: userData.profile || {},
                 ...(userData.type === 'visitor' ? { visitor_level: 'free' } : {})
               };
               const { data: recoveryProfile, error: recoveryErr } = await safeSupabase
@@ -1332,20 +1386,18 @@ export class SupabaseService {
 
 
       // 2. Créer le profil utilisateur
-      const userPayload = {
+      const userPayload: UserDB = {
         id: authData.user.id,
         email,
-        name: userData.name || '',
+        name: userData.name,
         type: userData.type,
-        status: (userData.status || 'pending') as any,
-        profile: (userData.profile || {}) as UserProfile,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        status: (userData.status || 'pending') as any, // ✅ Inclure le status (pending_payment pour partners/exhibitors)
+        profile: userData.profile
       };
 
       // ✅ Définir le niveau visiteur par défaut à 'free' pour les visiteurs
       if (userData.type === 'visitor') {
-      (userPayload as any).visitor_level = 'free';
+        userPayload.visitor_level = 'free';
         // Les visiteurs gratuits sont actifs immédiatement
         if (!userData.status) {
           userPayload.status = 'active';
@@ -1364,7 +1416,7 @@ export class SupabaseService {
       }
 
 
-      // 3. Si c'est un exposant ou sponsor, créer l'entrée correspondante
+      // 3. Si c'est un exposant ou partenaire, créer l'entrée correspondante
       if (userData.type === 'exhibitor') {
         await this.createExhibitorProfile(authData.user.id, userData);
       } else if (userData.type === 'partner') {
@@ -1381,7 +1433,7 @@ export class SupabaseService {
   static async signIn(email: string, password: string, options?: { rememberMe?: boolean }): Promise<User | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       // AUTHENTIFICATION SUPABASE STANDARD
@@ -1483,7 +1535,7 @@ export class SupabaseService {
   static async createMiniSite(exhibitorId: string, miniSiteData: MiniSiteData): Promise<MiniSiteDB | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // CRITICAL FIX: Convertir les données du wizard en sections de mini-site
       const sections = miniSiteData.sections || [];
@@ -1611,7 +1663,7 @@ export class SupabaseService {
   static async updateEvent(eventId: string, eventData: Partial<Event>): Promise<Event> {
     if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const updateData: Record<string, unknown> = {};
 
@@ -1651,7 +1703,7 @@ export class SupabaseService {
   static async deleteEvent(eventId: string): Promise<void> {
     if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { error } = await safeSupabase
         .from('events')
@@ -1682,7 +1734,7 @@ export class SupabaseService {
       throw new Error('La date de fin est invalide');
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('events')
@@ -1715,13 +1767,12 @@ export class SupabaseService {
   static async getEvents(): Promise<Event[]> {
     if (!this.checkSupabaseConnection()) {return [];}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('events')
         .select('*')
-        .order('event_date', { ascending: true })
-        .limit(500);
+        .order('event_date', { ascending: true });
 
       if (error) {throw error;}
 
@@ -1741,7 +1792,7 @@ export class SupabaseService {
   }): Promise<EventsPageResult> {
     if (!this.checkSupabaseConnection()) {return { items: [], total: 0 };}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
 
@@ -1769,7 +1820,7 @@ export class SupabaseService {
   static async registerForEvent(eventId: string, userId: string): Promise<boolean> {
     if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Vérifier si déjà inscrit
       const { data: existing } = await safeSupabase
@@ -1825,7 +1876,7 @@ export class SupabaseService {
   static async getUserEventRegistrations(userId: string): Promise<any[]> {
     if (!this.checkSupabaseConnection()) {return [];}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('event_registrations')
@@ -1847,7 +1898,7 @@ export class SupabaseService {
   static async unregisterFromEvent(eventId: string, userId: string): Promise<boolean> {
     if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Vérifier si inscrit
       const { data: existing } = await safeSupabase
@@ -1894,7 +1945,7 @@ export class SupabaseService {
   static async isUserRegisteredForEvent(eventId: string, userId: string): Promise<boolean> {
     if (!this.checkSupabaseConnection()) {return false;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('event_registrations')
@@ -1912,7 +1963,7 @@ export class SupabaseService {
   static async getConversations(userId: string): Promise<ChatConversation[]> {
     if (!this.checkSupabaseConnection()) {return [];}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('conversations')
@@ -1960,7 +2011,7 @@ export class SupabaseService {
           receiverId: msg.receiver_id || '',
           content: msg.content || msg.text || '',
           type: (msg.message_type || 'text') as 'text' | 'file' | 'system',
-          timestamp: new Date(msg.created_at as string),
+          timestamp: new Date(msg.created_at),
           read: msg.read_at !== null
         }));
 
@@ -1970,7 +2021,7 @@ export class SupabaseService {
           lastMessage: lastMessage ? {
             id: lastMessage.id,
             senderId: lastMessage.sender?.id || lastMessage.sender_id || '',
-            receiverId: conv.participants?.find((id: string) => id !== lastMessage.sender?.id) || '',
+            receiverId: conv.participants.find((id: string) => id !== lastMessage.sender?.id) || '',
             content: lastMessage.content || lastMessage.text || '',
             type: (lastMessage.message_type || 'text') as 'text' | 'file' | 'system',
             timestamp: new Date(lastMessage.created_at),
@@ -1979,7 +2030,7 @@ export class SupabaseService {
           unreadCount, // ✅ Maintenant implémenté !
           messages, // FIX N+1: Return messages to avoid separate queries
           createdAt: new Date(conv.created_at),
-          updatedAt: new Date(conv.updated_at || conv.last_message_at || conv.created_at)
+          updatedAt: new Date(conv.updated_at)
         };
       });
     } catch (error) {
@@ -1991,7 +2042,7 @@ export class SupabaseService {
   static async getMessages(conversationId: string): Promise<ChatMessage[]> {
     if (!this.checkSupabaseConnection()) {return [];}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('messages')
@@ -2007,7 +2058,7 @@ export class SupabaseService {
         receiverId: msg.receiver_id,
         content: msg.content,
         type: msg.message_type,
-        timestamp: new Date(msg.created_at as string),
+        timestamp: new Date(msg.created_at),
         read: msg.read_at !== null
       }));
     } catch (error) {
@@ -2019,7 +2070,7 @@ export class SupabaseService {
   static async createConversation(userId1: string, userId2: string): Promise<ChatConversation | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Check if conversation already exists
       const { data: existing, error: existingError } = await safeSupabase
@@ -2071,7 +2122,7 @@ export class SupabaseService {
   static async sendMessage(conversationId: string, senderId: string, receiverId: string, content: string, type: 'text' | 'file' | 'image' | 'system' = 'text'): Promise<ChatMessage | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('messages')
@@ -2110,7 +2161,7 @@ export class SupabaseService {
   static async markMessagesAsRead(conversationId: string, userId: string): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { error } = await safeSupabase
         .from('messages')
@@ -2130,7 +2181,7 @@ export class SupabaseService {
   static async getMiniSite(exhibitorId: string): Promise<any | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Essayer d'abord avec l'ID fourni directement (pourrait être user_id ou exhibitor_id)
       let { data, error } = await safeSupabase
@@ -2257,7 +2308,7 @@ export class SupabaseService {
   static async getExhibitorProducts(exhibitorId: string): Promise<Product[]> {
     if (!this.checkSupabaseConnection()) {return [];}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Essayer d'abord avec exhibitor_id direct
       const { data: productsData, error: productsError } = await safeSupabase
@@ -2321,7 +2372,7 @@ export class SupabaseService {
 
   static async getMiniSiteViewCount(exhibitorId: string): Promise<number> {
     if (!this.checkSupabaseConnection()) {return 0;}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { count } = await safeSupabase
         .from('minisite_views')
@@ -2336,7 +2387,7 @@ export class SupabaseService {
   static async incrementMiniSiteViews(exhibitorId: string): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Record in minisite_views table for historical tracking
       const { data: userData } = await safeSupabase.auth.getUser();
@@ -2358,11 +2409,11 @@ export class SupabaseService {
   static async incrementPartnerViews(partnerId: string): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Atomically increment partner views if column exists
       // If not, we'll try to insert into a view tracking table later
-      const { error } = await safeSupabase.rpc('increment_partner_views', {
+      const { data, error } = await safeSupabase.rpc('increment_partner_views', {
         p_partner_id: partnerId
       });
 
@@ -2392,7 +2443,7 @@ export class SupabaseService {
   static async getPublishedMiniSites(): Promise<{ data: any[] | null; error: any }> {
     if (!this.checkSupabaseConnection()) {return { data: null, error: 'Supabase non connecté' };}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Récupérer tous les mini-sites publiés avec les infos des exposants
       const { data: minisites, error: minisitesError } = await safeSupabase
@@ -2407,20 +2458,20 @@ export class SupabaseService {
       }
 
       // Récupérer les infos des exposants pour chaque mini-site
-      const exhibitorIds = minisites.map((ms: any) => ms.exhibitor_id);
+      const exhibitorIds = minisites.map(ms => ms.exhibitor_id);
       const { data: exhibitors, error: exhibitorsError } = await safeSupabase
         .from('exhibitors')
         .select('id, user_id, company_name, logo_url, description, category, sector')
-        .or(exhibitorIds.map((id: string) => `user_id.eq.${id},id.eq.${id}`).join(','));
+        .or(exhibitorIds.map(id => `user_id.eq.${id},id.eq.${id}`).join(','));
 
       if (exhibitorsError) {
         console.warn('Erreur récupération exposants:', exhibitorsError);
       }
 
       // Combiner les données
-      const result = minisites.map((ms: any) => {
+      const result = minisites.map(ms => {
         const exhibitor = exhibitors?.find(
-          (e: any) => e.user_id === ms.exhibitor_id || e.id === ms.exhibitor_id
+          e => e.user_id === ms.exhibitor_id || e.id === ms.exhibitor_id
         );
 
         return {
@@ -2447,10 +2498,10 @@ export class SupabaseService {
   static async getExhibitorForMiniSite(exhibitorId: string): Promise<any | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // 1. Chercher d'abord dans la table exhibitors par ID
-      const { data: exhibitorData, error: _exhibitorError } = await safeSupabase
+      const { data: exhibitorData, error: exhibitorError } = await safeSupabase
         .from('exhibitors')
         .select('id, company_name, logo_url, description, website, contact_info, certifications')
         .eq('id', exhibitorId)
@@ -2462,14 +2513,15 @@ export class SupabaseService {
       }
 
       // 2. Fallback: chercher dans exhibitor_profiles par user_id (structure legacy)
-      const { data: profileData, error: _profileError } = await safeSupabase
+      console.log('[MiniSite] Pas trouvé dans exhibitors, recherche dans exhibitor_profiles...');
+      const { data: profileData, error: profileError } = await safeSupabase
         .from('exhibitor_profiles')
         .select('user_id, company_name, logo_url, description, website, phone, email')
         .eq('user_id', exhibitorId)
         .maybeSingle();
 
       if (profileData) {
-        console.log('[MiniSite] ✅ Exposant trouvé dans exhibitor_profiles:', profileData.company_name);
+        console.log('[MiniSite] Exposant trouvé dans exhibitor_profiles:', profileData.company_name);
         // Mapper les champs pour correspondre à la structure attendue
         return {
           id: profileData.user_id,
@@ -2485,6 +2537,7 @@ export class SupabaseService {
       }
 
       // 3. Fallback: chercher dans users si c'est un exposant
+      console.log('[MiniSite] Pas trouvé dans exhibitor_profiles, recherche dans users...');
       const { data: userData } = await safeSupabase
         .from('users')
         .select('id, name, email')
@@ -2505,6 +2558,7 @@ export class SupabaseService {
       }
 
       // 4. DERNIER FALLBACK: Vérifier via exhibitors.user_id au lieu de exhibitors.id
+      console.log('[MiniSite] Pas trouvé via ID, recherche via user_id dans exhibitors...');
       const { data: exhibitorByUserId } = await safeSupabase
         .from('exhibitors')
         .select('id, user_id, company_name, logo_url, description, website, contact_info')
@@ -2516,7 +2570,7 @@ export class SupabaseService {
         return exhibitorByUserId;
       }
 
-      console.debug('[MiniSite] Aucun exposant trouvé pour ID:', exhibitorId);
+      console.warn('[MiniSite] ❌ AUCUN exposant trouvé pour ID:', exhibitorId);
       return null;
     } catch (error) {
       console.error('Erreur récupération exposant pour mini-site:', error);
@@ -2527,7 +2581,7 @@ export class SupabaseService {
   static async getExhibitorByUserId(userId: string): Promise<any | null> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('exhibitors')
@@ -2547,7 +2601,7 @@ export class SupabaseService {
 	  static async updateExhibitor(exhibitorId: string, data: Partial<Exhibitor>): Promise<void> {
 	    if (!this.checkSupabaseConnection()) {return;}
 
-	    const safeSupabase = supabase! as any;
+	    const safeSupabase = supabase!;
 	    try {
 	      const updateData: Record<string, any> = {};
 	      if (data.companyName !== undefined) {updateData.company_name = data.companyName;}
@@ -2590,8 +2644,9 @@ export class SupabaseService {
 	  static async updateUserStatus(userId: string, status: User['status']): Promise<void> {
 	    if (!this.checkSupabaseConnection()) {return;}
 
-	    const safeSupabase = supabase! as any;
+	    const safeSupabase = supabase!;
 	    try {
+	      // @ts-expect-error - Supabase type inference issue with user status update
 	      const { error } = await safeSupabase
 	        .from('users')
 	        .update({ status })
@@ -2616,7 +2671,7 @@ export class SupabaseService {
 	  } | null> {
 	    if (!this.checkSupabaseConnection()) {return null;}
 
-	    const safeSupabase = supabase! as any;
+	    const safeSupabase = supabase!;
 	    try {
 	      const { data, error } = await safeSupabase
 	        .rpc('validate_exhibitor_atomic', {
@@ -2657,7 +2712,7 @@ export class SupabaseService {
 	  } | null> {
 	    if (!this.checkSupabaseConnection()) {return null;}
 
-	    const safeSupabase = supabase! as any;
+	    const safeSupabase = supabase!;
 	    try {
 	      const { data, error } = await safeSupabase
 	        .rpc('validate_partner_atomic', {
@@ -2670,7 +2725,7 @@ export class SupabaseService {
 	      const result = data?.[0];
 
 	      if (!result?.success) {
-	        throw new Error('Échec de la validation du sponsor');
+	        throw new Error('Échec de la validation du partenaire');
 	      }
 
 	      return {
@@ -2681,7 +2736,7 @@ export class SupabaseService {
 	        success: result.success
 	      };
 	    } catch (error) {
-	      console.error(`❌ Erreur validation sponsor ${partnerId}:`, error);
+	      console.error(`❌ Erreur validation partenaire ${partnerId}:`, error);
 	      throw error;
 	    }
 	  }
@@ -2689,20 +2744,20 @@ export class SupabaseService {
 	  static async createExhibitorProfile(userId: string, userData: Record<string, unknown>): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { error } = await safeSupabase
         .from('exhibitors')
         .insert([{
           id: userId, // Utilise l'ID utilisateur comme ID exposant
           user_id: userId,
-          company_name: (userData.profile as any)?.company,
-          category: (userData.profile as any)?.category || 'institutional',
-          sector: (userData.profile as any)?.sector || 'logistics',
-          description: (userData.profile as any)?.description || '',
+          company_name: userData.profile.company,
+          category: userData.profile.category || 'institutional',
+          sector: userData.profile.sector || 'logistics',
+          description: userData.profile.description || '',
           contact_info: {
             email: userData.email,
-            phone: (userData.profile as any)?.phone || ''
+            phone: userData.profile.phone || ''
           }
         }]);
 
@@ -2716,23 +2771,23 @@ export class SupabaseService {
   static async createPartnerProfile(userId: string, userData: Record<string, unknown>): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { error } = await safeSupabase
         .from('partners')
         .insert([{
-          id: userId, // Utilise l'ID utilisateur comme ID sponsor
+          id: userId, // Utilise l'ID utilisateur comme ID partenaire
           user_id: userId,
-          company_name: (userData.profile as any)?.company,
-          partner_type: (userData.profile as any)?.partnerType || 'institutional',
-          sector: (userData.profile as any)?.sector || 'services',
-          description: (userData.profile as any)?.description || '',
-          website: (userData.profile as any)?.website || ''
+          company_name: userData.profile.company,
+          partner_type: userData.profile.partnerType || 'institutional',
+          sector: userData.profile.sector || 'services',
+          description: userData.profile.description || '',
+          website: userData.profile.website || ''
         }]);
 
       if (error) {throw error;}
     } catch (error) {
-      console.error('❌ Erreur création profil sponsor:', error);
+      console.error('❌ Erreur création profil partenaire:', error);
 	      throw error;
 	    }
 	  }
@@ -2746,10 +2801,10 @@ export class SupabaseService {
 	  }): Promise<void> {
 	    if (!this.checkSupabaseConnection()) {return;}
 
-	    const safeSupabase = supabase! as any;
+	    const safeSupabase = supabase!;
 
 	    try {
-	      const { error } = await safeSupabase.functions.invoke('send-validation-email', {
+	      const { data, error } = await safeSupabase.functions.invoke('send-validation-email', {
 	        body: userData
 	      });
 
@@ -2763,10 +2818,10 @@ export class SupabaseService {
 	  static async sendRegistrationEmail(userData: Record<string, unknown>): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
-      const { error } = await safeSupabase.functions.invoke('send-registration-email', {
+      const { data, error } = await safeSupabase.functions.invoke('send-registration-email', {
         body: userData
       });
 
@@ -2825,7 +2880,7 @@ export class SupabaseService {
       throw new Error('Connexion Supabase non disponible');
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       const { data, error } = await safeSupabase
@@ -2870,12 +2925,12 @@ export class SupabaseService {
   }): Promise<User[]> {
     if (!this.checkSupabaseConnection()) {return [];}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Optimized: Select only necessary columns instead of *
       let query = safeSupabase.from('users').select('id, email, name, type, profile, status, created_at');
 
-      // Par défaut, afficher uniquement les exposants et sponsors (B2B)
+      // Par défaut, afficher uniquement les exposants et partenaires (B2B)
       // Pas les visiteurs ni les admins
       const hasSearchTerm = filters.searchTerm && filters.searchTerm.trim();
       const hasSector = filters.sector && filters.sector.trim();
@@ -2883,7 +2938,7 @@ export class SupabaseService {
 
       // Exclure visiteurs et admins si aucun type spécifié
       if (!filters.userType && !hasSector) {
-        // Par défaut, seuls les exposants et sponsors (entreprises B2B)
+        // Par défaut, seuls les exposants et partenaires (entreprises B2B)
         query = query.in('type', ['exhibitor', 'partner']);
       }
 
@@ -2931,7 +2986,7 @@ export class SupabaseService {
       // Filtrer les résultats côté client pour s'assurer d'avoir des données valides
       const transformedUsers = (data || []).map(this.transformUserDBToUser);
 
-      const users = transformedUsers.filter((u: any) => u && (u.profile?.firstName || u.profile?.company || u.profile?.companyName || u.name));
+      const users = transformedUsers.filter(u => u && (u.profile?.firstName || u.profile?.company || u.profile?.companyName || u.name));
 
       return users;
     } catch (error) {
@@ -2946,7 +3001,7 @@ export class SupabaseService {
   static async getRecommendations(userId: string, limit: number = 10): Promise<User[]> {
     if (!this.checkSupabaseConnection()) {return [];}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await safeSupabase
         .from('recommendations')
@@ -2956,7 +3011,7 @@ export class SupabaseService {
 
       if (error) {throw error;}
 
-      return (data || []).map((rec: Record<string, unknown>) => this.transformUserDBToUser(rec.recommended_user as UserDB | null));
+      return (data || []).map((rec: Record<string, unknown>) => this.transformUserDBToUser(rec.recommended_user));
     } catch (error) {
       console.error('Erreur lors de la récupération des recommandations:', error);
       return [];
@@ -2969,7 +3024,7 @@ export class SupabaseService {
 	  static async createNotification(userId: string, message: string, type: 'connection' | 'event' | 'message' | 'system'): Promise<void> {
 	    if (!this.checkSupabaseConnection()) {return;}
 
-	    const safeSupabase = supabase! as any;
+	    const safeSupabase = supabase!;
 	    try {
 	      // Utiliser la nouvelle structure de notifications avec title et category
 	      await safeSupabase.from('notifications').insert([{
@@ -2992,7 +3047,7 @@ export class SupabaseService {
 	  static async sendConnectionRequest(fromUserId: string, toUserId: string): Promise<boolean> {
 	    if (!this.checkSupabaseConnection()) {return false;}
 
-	    const safeSupabase = supabase! as any;
+	    const safeSupabase = supabase!;
 	    try {
 	      const { error } = await safeSupabase.from('connections').insert([{
 	        requester_id: fromUserId,
@@ -3018,7 +3073,7 @@ export class SupabaseService {
 	  static async acceptConnectionRequest(connectionId: string): Promise<boolean> {
 	    if (!this.checkSupabaseConnection()) {return false;}
 
-	    const safeSupabase = supabase! as any;
+	    const safeSupabase = supabase!;
 	    try {
 	      const { data, error } = await safeSupabase
 	        .from('connections')
@@ -3046,7 +3101,7 @@ export class SupabaseService {
 	  static async rejectConnectionRequest(connectionId: string): Promise<boolean> {
 	    if (!this.checkSupabaseConnection()) {return false;}
 
-	    const safeSupabase = supabase! as any;
+	    const safeSupabase = supabase!;
 	    try {
 	      const { error } = await safeSupabase
 	        .from('connections')
@@ -3068,7 +3123,7 @@ export class SupabaseService {
   static async getConnections(userId: string): Promise<User[]> {
     if (!this.checkSupabaseConnection()) {return [];}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // On récupère les IDs des utilisateurs connectés
       const { data: connections, error } = await safeSupabase
@@ -3115,7 +3170,7 @@ export class SupabaseService {
       return [];
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // D'abord, essayer de récupérer directement avec exhibitor_id
       let { data, error } = await safeSupabase
@@ -3153,6 +3208,13 @@ export class SupabaseService {
         throw error;
       }
 
+      // Helper pour parser une date sans décalage UTC
+      const parseLocalDate = (dateStr: string | Date): string => {
+        if (!dateStr) {return '';}
+        // Garder juste la partie YYYY-MM-DD pour éviter le décalage UTC
+        return String(dateStr).split('T')[0];
+      };
+
       // Helper pour parser une date string en Date locale
       const parseLocalDateToDate = (dateStr: string | Date): Date => {
         if (dateStr instanceof Date) {return dateStr;}
@@ -3185,7 +3247,7 @@ export class SupabaseService {
         id: row.id,
         exhibitorId: row.exhibitor_id || row.user_id, // Important: bookAppointment expects exhibitorId
         userId: row.exhibitor_id || row.user_id, // Keep for backward compat
-        date: parseLocalDateToDate(row.slot_date || row.date || ''),
+        date: parseLocalDateToDate(row.slot_date || row.date),
         startTime: row.start_time || row.startTime,
         endTime: row.end_time || row.endTime,
         duration: row.duration || 0,
@@ -3200,7 +3262,7 @@ export class SupabaseService {
     } catch (error) {
       const errorInfo = error as Record<string, unknown>;
       console.error('[TIME_SLOTS] Error fetching time slots:', {
-        exhibitorId: exhibitorIdOrUserId,
+        exhibitorId,
         message: (errorInfo.message as string) || String(error),
         details: ((errorInfo.details as string) || (errorInfo.hint as string)) || null,
         status: (errorInfo.status as string) || 'unknown'
@@ -3217,7 +3279,7 @@ export class SupabaseService {
 
   static async createTimeSlotsBulk(slotsData: Omit<TimeSlot, 'id' | 'currentBookings' | 'available'>[]): Promise<TimeSlot[]> {
      if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     if (slotsData.length === 0) {return [];}
 
@@ -3297,7 +3359,7 @@ export class SupabaseService {
 
   static async createTimeSlot(slotData: Omit<TimeSlot, 'id' | 'currentBookings' | 'available'>): Promise<TimeSlot> {
     if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Validation: la date ne doit pas être dans le passé
       const slotDate = (slotData as unknown as Record<string, unknown>).date || (slotData as unknown as Record<string, unknown>).slot_date;
@@ -3441,10 +3503,11 @@ export class SupabaseService {
         return new Date(year, month - 1, day);
       };
 
-      const created = data as any;
+      // Transform returned DB row into TimeSlot interface expected by frontend
+      const created = data as unknown as Record<string, unknown>;
       const transformed: TimeSlot = {
         id: created.id,
-        exhibitorId: created.exhibitor_id || created.user_id,
+        userId: created.exhibitor_id || created.user_id,
         date: created.slot_date ? parseLocalDateString(created.slot_date) : (created.date ? parseLocalDateString(created.date) : new Date()),
         startTime: created.start_time || created.startTime,
         endTime: created.end_time || created.endTime,
@@ -3474,7 +3537,7 @@ export class SupabaseService {
 
   static async updateTimeSlot(slotId: string, updateData: Partial<TimeSlot>): Promise<TimeSlot> {
     if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     const updates: Record<string, any> = {};
     if (updateData.date) {
@@ -3507,7 +3570,7 @@ export class SupabaseService {
 
     return {
        id: data.id,
-       exhibitorId: data.exhibitor_id,
+       userId: data.exhibitor_id,
        date: parseLocalDateString(data.slot_date),
        startTime: data.start_time,
        endTime: data.end_time,
@@ -3517,12 +3580,12 @@ export class SupabaseService {
        currentBookings: data.current_bookings,
        available: data.current_bookings < data.max_bookings,
        location: data.location
-    } as unknown as TimeSlot;
+    } as TimeSlot;
   }
 
   static async deleteTimeSlot(slotId: string): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { error } = await safeSupabase
         .from('time_slots')
@@ -3540,7 +3603,7 @@ export class SupabaseService {
   // ==================== APPOINTMENTS ====================
   static async getAppointments(): Promise<Appointment[]> {
     if (!this.checkSupabaseConnection()) {return [];}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // 1. Fetch appointments raw
       const { data: appointmentsRaw, error } = await safeSupabase
@@ -3555,8 +3618,8 @@ export class SupabaseService {
 
       if (!appointmentsRaw || appointmentsRaw.length === 0) {return [];}
 
-      const visitorIds = [...new Set(appointmentsRaw.map((a: any) => a.visitor_id))];
-      const exhibitorIds = [...new Set(appointmentsRaw.map((a: any) => a.exhibitor_id))];
+      const visitorIds = [...new Set(appointmentsRaw.map(a => a.visitor_id))];
+      const exhibitorIds = [...new Set(appointmentsRaw.map(a => a.exhibitor_id))];
 
       // 2. Fetch related data in parallel
       // Also query exhibitors table to resolve exhibitor_id → user_id
@@ -3567,17 +3630,17 @@ export class SupabaseService {
          safeSupabase.from('exhibitors').select('id, user_id, company_name, logo_url').in('id', exhibitorIds)
       ]);
 
-      const visitorsMap = new Map(visitorsResponse.data?.map((v: any) => [v.id, v]) || []);
-      const profilesMap = new Map(profilesResponse.data?.map((p: any) => [p.user_id, p]) || []);
+      const visitorsMap = new Map(visitorsResponse.data?.map(v => [v.id, v]) || []);
+      const profilesMap = new Map(profilesResponse.data?.map(p => [p.user_id, p]) || []);
       // Map: exhibitors.id → user_id  (for resolving exhibitor_id that is exhibitors.id)
-      const exhibitorsByIdMap = new Map(exhibitorsResponse.data?.map((e: any) => [e.id, e]) || []);
+      const exhibitorsByIdMap = new Map(exhibitorsResponse.data?.map(e => [e.id, e]) || []);
 
       // 3. Merge data
-      return appointmentsRaw.map((apt: any) => {
-          const visitor = visitorsMap.get(apt.visitor_id) as any;
-          const profile = profilesMap.get(apt.exhibitor_id) as any;
+      return appointmentsRaw.map(apt => {
+          const visitor = visitorsMap.get(apt.visitor_id);
+          const profile = profilesMap.get(apt.exhibitor_id);
           // Resolve the real user_id: if exhibitor_id is an exhibitors.id, look it up
-          const exhibitorRow = exhibitorsByIdMap.get(apt.exhibitor_id) as any;
+          const exhibitorRow = exhibitorsByIdMap.get(apt.exhibitor_id);
           const resolvedExhibitorUserId = exhibitorRow ? exhibitorRow.user_id : apt.exhibitor_id;
 
           return {
@@ -3609,7 +3672,7 @@ export class SupabaseService {
 
   static async updateAppointmentStatus(appointmentId: string, status: string): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { error } = await safeSupabase
         .from('appointments')
@@ -3635,7 +3698,7 @@ export class SupabaseService {
   }): Promise<any> {
     if (!this.checkSupabaseConnection()) {return null;}
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Vérifier le niveau du visiteur - les visiteurs "free" ne peuvent pas prendre de rendez-vous
       const { data: visitorData, error: visitorError } = await safeSupabase
@@ -3691,7 +3754,7 @@ export class SupabaseService {
 
   // ==================== MAPPING HELPERS ====================
   private static mapUserFromDB(data: UserDB): User {
-    return this.transformUserDBToUser(data)!;
+    return this.transformUserDBToUser(data);
   }
 
   private static mapExhibitorFromDB(data: ExhibitorDB): Exhibitor {
@@ -3708,8 +3771,7 @@ export class SupabaseService {
       images: data.images || [],
       specifications: data.specifications,
       price: data.price,
-      featured: data.featured || false,
-      technicalSpecs: []
+      featured: data.featured || false
     };
   }
 
@@ -3731,7 +3793,7 @@ export class SupabaseService {
       return [];
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // OPTIMIZATION: Select only needed fields instead of '*'
       let query = safeSupabase
@@ -3776,7 +3838,7 @@ export class SupabaseService {
     if (!this.checkSupabaseConnection()) {
       throw new Error('Supabase non configuré. Veuillez configurer vos variables d\'environnement Supabase.');
     }
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     const { data, error } = await (safeSupabase as any)
       .from('users')
       .insert([{
@@ -3799,7 +3861,7 @@ export class SupabaseService {
       throw new Error('Supabase non configuré. Veuillez configurer vos variables d\'environnement Supabase.');
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     const { data, error } = await (safeSupabase as any)
       .from('exhibitors')
       .insert([{
@@ -3830,13 +3892,13 @@ export class SupabaseService {
       throw new Error('Supabase non configuré. Veuillez configurer vos variables d\'environnement Supabase.');
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     // Prepare data matching the actual database schema
     const dbData = {
-      company_name: partnerData.organizationName || (partnerData as any).name, // Reverted to company_name
+      company_name: partnerData.organizationName || partnerData.name, // Reverted to company_name
       // name: partnerData.organizationName || partnerData.name,
-      partner_type: partnerData.partnerType || (partnerData as any).type || 'silver', // Changed to partner_type
+      partner_type: partnerData.partnerType || partnerData.type || 'silver', // Changed to partner_type
       // type: partnerData.partnerType || partnerData.type || 'silver',
       // category: partnerData.sector || 'General', // Commented out to debug schema cache error
       sector: partnerData.sector,
@@ -3885,7 +3947,7 @@ export class SupabaseService {
       contactEmail: partnerData.contactEmail,
       contactPhone: partnerData.contactPhone,
       contactPosition: partnerData.contactPosition
-    } as unknown as Partner;
+    } as Partner;
   }
 
   static async updatePartner(partnerId: string, partnerData: Partial<Partner>): Promise<void> {
@@ -3893,7 +3955,7 @@ export class SupabaseService {
       throw new Error('Supabase non configuré.');
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     // Champs non-sensibles (pas de trigger)
     const dbData: any = {};
@@ -3922,28 +3984,21 @@ export class SupabaseService {
     const tierData: any = {};
     if (partnerData.partnerType) {
       tierData.partner_type = partnerData.partnerType;
-      tierData.partnership_level = partnerData.partnerType; // priorité sur l'ancienne valeur
+      tierData.partner_tier = partnerData.partnerType;
     }
     if (partnerData.sponsorshipLevel) {tierData.sponsorship_level = partnerData.sponsorshipLevel;}
 
     if (Object.keys(tierData).length > 0) {
-      // Tenter via RPC admin (contourne le trigger enforce_sponsorship_level_admin_only)
+      // Tenter via RPC admin (contourne le trigger) — si la fonction n'existe pas, ignorer silencieusement
       const { error: rpcError } = await (safeSupabase as any).rpc('admin_update_partner_tier', {
         p_partner_id: partnerId,
         p_partner_type: tierData.partner_type ?? null,
-        p_partner_tier: null,
+        p_partner_tier: tierData.partner_tier ?? null,
         p_sponsorship_level: tierData.sponsorship_level ?? null,
       });
 
-      if (rpcError) {
-        // Fallback : update direct uniquement sur les colonnes existantes
-        const { error: directError } = await (safeSupabase as any)
-          .from('partners')
-          .update({ partner_type: tierData.partner_type, partnership_level: tierData.partnership_level })
-          .eq('id', partnerId);
-        if (directError) {
-          console.warn('Tier update failed:', directError.message);
-        }
+      if (rpcError && !rpcError.message?.includes('Could not find the function')) {
+        console.warn('Tier update skipped (trigger protection):', rpcError.message);
       }
     }
   }
@@ -3953,7 +4008,7 @@ export class SupabaseService {
       throw new Error('Supabase non configuré.');
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     const { error } = await (safeSupabase as any)
       .from('partners')
       .delete()
@@ -3970,7 +4025,7 @@ export class SupabaseService {
       throw new Error('Supabase non configuré.');
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     // Récupérer le token de session de l'utilisateur connecté
     const { data: { session } } = await safeSupabase.auth.getSession();
@@ -4023,7 +4078,7 @@ export class SupabaseService {
     if (!this.checkSupabaseConnection()) {
       throw new Error('Supabase non configuré. Veuillez configurer vos variables d\'environnement Supabase.');
     }
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     const { data, error } = await (safeSupabase as any)
       .from('products')
       .insert([{
@@ -4050,7 +4105,7 @@ export class SupabaseService {
       throw new Error('Supabase non configuré. Veuillez configurer vos variables d\'environnement Supabase.');
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     const upsertPayload: Record<string, unknown> = {
       exhibitor_id: exhibitorId,
       theme: siteData.theme,
@@ -4076,15 +4131,13 @@ export class SupabaseService {
 
   static async getRegistrationRequests(status?: 'pending' | 'approved' | 'rejected'): Promise<any[]> {
     if (!this.checkSupabaseConnection()) {return [];}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       let query = (safeSupabase as any).from('registration_requests').select('*');
       if (status) {
         query = query.eq('status', status);
       }
-      const { data, error } = await query
-        .order('created_at', { ascending: false })
-        .limit(1000);
+      const { data, error } = await query.order('created_at', { ascending: false });
       if (error) {throw error;}
       return data || [];
     } catch (error) {
@@ -4100,7 +4153,7 @@ export class SupabaseService {
     rejectionReason?: string
   ): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       // Step 1: Get the user_id from the registration request
       const { data: request, error: fetchError } = await (safeSupabase as any)
@@ -4175,7 +4228,7 @@ export class SupabaseService {
       throw new Error('Supabase non configuré.');
     }
 
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
     try {
       const { data, error } = await (safeSupabase as any)
         .from('registration_requests')
@@ -4208,7 +4261,7 @@ export class SupabaseService {
    */
   static async createConnection(addresseeId: string, message?: string): Promise<any> {
     if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
@@ -4253,7 +4306,7 @@ export class SupabaseService {
    */
   static async getUserConnections(userId?: string): Promise<any[]> {
     if (!this.checkSupabaseConnection()) {return [];}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
@@ -4303,7 +4356,7 @@ export class SupabaseService {
    */
   static async addFavorite(entityType: string, entityId: string): Promise<any> {
     if (!this.checkSupabaseConnection()) {throw new Error('Supabase not connected');}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
@@ -4349,7 +4402,7 @@ export class SupabaseService {
    */
   static async removeFavorite(entityType: string, entityId: string): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
@@ -4384,7 +4437,7 @@ export class SupabaseService {
    */
   static async getUserFavorites(userId?: string): Promise<any[]> {
     if (!this.checkSupabaseConnection()) {return [];}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
@@ -4405,7 +4458,7 @@ export class SupabaseService {
 
       // If the server returned 404 (table missing), return empty gracefully
       try {
-        const status = (error && ((error as any).status || (error as any).code)) || null;
+        const status = (error && (error.status || error.code)) || null;
         if (status === 404 || status === '404') {
           console.warn('Table user_favorites non trouvée — retour d\'un tableau vide.');
           return [];
@@ -4423,7 +4476,7 @@ export class SupabaseService {
    */
   static async getPendingConnections(userId?: string): Promise<any[]> {
     if (!this.checkSupabaseConnection()) {return [];}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
@@ -4473,7 +4526,7 @@ export class SupabaseService {
    */
   static async getDailyQuotas(userId?: string): Promise<any> {
     if (!this.checkSupabaseConnection()) {return null;}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       const { data: { user } } = await safeSupabase.auth.getUser();
@@ -4554,9 +4607,9 @@ export class SupabaseService {
 
       // Fallback: Utiliser quota_usage si daily_quotas n'existe pas
       const usage = {
-        connections_today: quotaData?.filter((q: any) => q.quota_type === 'connections').length || 0,
-        appointments_total: quotaData?.filter((q: any) => q.quota_type === 'appointments').length || 0,
-        favorites_total: quotaData?.filter((q: any) => q.quota_type === 'favorites').length || 0
+        connections_today: quotaData?.filter(q => q.quota_type === 'connections').length || 0,
+        appointments_total: quotaData?.filter(q => q.quota_type === 'appointments').length || 0,
+        favorites_total: quotaData?.filter(q => q.quota_type === 'favorites').length || 0
       };
 
       // FIXED: Format compatible avec networkingStore
@@ -4592,7 +4645,7 @@ export class SupabaseService {
     metadata?: any
   ): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
-    const safeSupabase = supabase! as any;
+    const safeSupabase = supabase!;
 
     try {
       await safeSupabase

@@ -1,10 +1,10 @@
 ﻿import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import { useTranslation } from '../../hooks/useTranslation';
 import { ROUTES } from '../../lib/routes';
 import { Loader } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from '../../lib/supabase';
 
 /**
  * OAuth Callback Page
@@ -13,36 +13,65 @@ import { toast } from 'sonner';
  */
 export default function OAuthCallbackPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { handleOAuthCallback } = useAuthStore();
-  const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const processOAuthCallback = async () => {
+    let settled = false;
+
+    // onAuthStateChange se déclenche avec SIGNED_IN une fois que Supabase a traité
+    // les tokens du hash URL — fonctionne pour OAuth ET magic links.
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
+      if (settled || event !== 'SIGNED_IN') return;
+      settled = true;
+      subscription.unsubscribe();
+
       try {
-
-        // Handle the OAuth callback and get user data
         await handleOAuthCallback();
-
         toast.success('Connexion réussie !');
 
-        // Redirect to dashboard after successful authentication
-        navigate(ROUTES.DASHBOARD, { replace: true });
+        const next = searchParams.get('next');
+        const { user } = useAuthStore.getState();
 
-      } catch (error: any) {
-        console.error('âŒ OAuth callback error:', error);
-        setError(error.message || 'Erreur lors de l\'authentification');
-        toast.error(error.message || 'Erreur lors de l\'authentification');
-
-        // Redirect to login page after error
-        setTimeout(() => {
-          navigate(ROUTES.LOGIN, { replace: true });
-        }, 3000);
+        if (next) {
+          navigate(next, { replace: true });
+        } else if (user?.type === 'visitor' && user?.visitor_level === 'free') {
+          navigate(ROUTES.BADGE, { replace: true });
+        } else if (user?.type === 'visitor') {
+          navigate(ROUTES.VISITOR_DASHBOARD, { replace: true });
+        } else if (user?.type === 'admin') {
+          navigate(ROUTES.ADMIN_DASHBOARD, { replace: true });
+        } else if (user?.type === 'partner') {
+          navigate(ROUTES.PARTNER_DASHBOARD, { replace: true });
+        } else if (user?.type === 'exhibitor') {
+          navigate(ROUTES.EXHIBITOR_DASHBOARD, { replace: true });
+        } else {
+          navigate(ROUTES.DASHBOARD, { replace: true });
+        }
+      } catch (err: any) {
+        console.error('❌ OAuth callback error:', err);
+        setError(err.message || "Erreur lors de l'authentification");
+        toast.error(err.message || "Erreur lors de l'authentification");
+        setTimeout(() => navigate(ROUTES.LOGIN, { replace: true }), 3000);
       }
-    };
+    });
 
-    processOAuthCallback();
-  }, [handleOAuthCallback, navigate]);
+    // Timeout de sécurité : 15s max
+    const timeout = setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        subscription.unsubscribe();
+        setError("Délai d'authentification dépassé. Veuillez réessayer.");
+        setTimeout(() => navigate(ROUTES.LOGIN, { replace: true }), 3000);
+      }
+    }, 15000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
+  }, [handleOAuthCallback, navigate, searchParams]);
 
   if (error) {
     return (

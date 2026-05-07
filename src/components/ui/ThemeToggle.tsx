@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🌓 Theme Toggle Button
  *
  * Beautiful toggle button for switching between light/dark modes
@@ -24,7 +24,7 @@ export function ThemeToggle() {
         }
         focus:outline-none focus:ring-2 focus:ring-offset-2
         ${isDark ? 'focus:ring-offset-gray-900' : 'focus:ring-offset-white'}
-        focus:ring-SIB-primary
+        focus:ring-indigo-600
       `}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={isDark ? 'Light Mode' : 'Dark Mode'}

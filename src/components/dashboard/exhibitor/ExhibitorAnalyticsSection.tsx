@@ -1,4 +1,4 @@
-import { Calendar, TrendingUp } from 'lucide-react';
+﻿import { Calendar, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '../../ui/Badge';
 import { Button } from '../../ui/Button';
@@ -44,7 +44,7 @@ export function ExhibitorAnalyticsSection({
     <div className="mb-12 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-gray-900">
-          <TrendingUp className="inline-block mr-3 text-SIB-primary" />
+          <TrendingUp className="inline-block mr-3 text-indigo-600" />
           {t('exhibitor.analytics_title')}
         </h2>
         <Badge variant="info" size="md">

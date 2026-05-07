@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Star, Verified, MapPin, Users, ExternalLink, Calendar, Globe, MessageCircle } from 'lucide-react';
+import { Star, Verified, MapPin, Users, ExternalLink, Calendar, Globe, MessageCircle, Hash } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
@@ -19,6 +19,7 @@ interface ExhibitorCardProps {
     logo?: string;
     country?: string;
     standArea?: number;
+    standNumber?: string;
     featured?: boolean;
     verified?: boolean;
     minisiteUrl?: string;
@@ -104,7 +105,7 @@ const ExhibitorCard: React.FC<ExhibitorCardProps> = memo(({
                 )}
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 flex-wrap gap-1">
                 <Badge
                   variant={getCategoryColor(exhibitor.category)}
                   size="sm"
@@ -117,6 +118,12 @@ const ExhibitorCard: React.FC<ExhibitorCardProps> = memo(({
                     type="exhibitor"
                     size="sm"
                   />
+                )}
+                {exhibitor.standNumber && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                    <Hash className="h-3 w-3" />
+                    Stand {exhibitor.standNumber}
+                  </span>
                 )}
               </div>
             </div>
@@ -248,9 +255,17 @@ const ExhibitorCard: React.FC<ExhibitorCardProps> = memo(({
 
           {/* Location & Footer */}
           <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-50">
-            <div className="flex items-center text-xs font-black text-slate-400 uppercase tracking-widest">
-              <MapPin className="h-4 w-4 mr-2 text-blue-500" />
-              {exhibitor.country || 'International'}
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center text-xs font-black text-slate-400 uppercase tracking-widest">
+                <MapPin className="h-4 w-4 mr-2 text-blue-500" />
+                {exhibitor.country || 'International'}
+              </div>
+              {exhibitor.standNumber && (
+                <div className="flex items-center gap-1 text-xs font-bold text-amber-700">
+                  <Hash className="h-3.5 w-3.5" />
+                  Stand {exhibitor.standNumber}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center space-x-2">

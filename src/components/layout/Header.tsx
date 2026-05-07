@@ -583,12 +583,12 @@ export const Header: React.FC = memo(() => {
             ) : (
               <div className="flex items-center space-x-3">
                 <Link to={ROUTES.LOGIN}>
-                  <Button variant="outline" size="sm" className="border-sib-primary text-sib-primary hover:bg-sib-primary hover:text-white">
+                  <Button variant="outline" size="sm" className="border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white">
                     {t('nav.login')}
                   </Button>
                 </Link>
                 <Link to={ROUTES.VISITOR_SUBSCRIPTION}>
-                  <Button size="sm" className="bg-sib-primary hover:bg-sib-dark text-white">
+                  <Button size="sm" className="bg-indigo-600 hover:bg-sib-dark text-white">
                     {t('nav.register')}
                   </Button>
                 </Link>

@@ -30,7 +30,7 @@ export const AboutSalonSection: React.FC = () => {
       icon: Award,
       title: t('about.excellence'),
       description: t('about.excellence_desc'),
-      color: 'bg-sib-gold/20 text-sib-gold'
+      color: 'bg-yellow-400/20 text-yellow-400'
     },
     {
       icon: Globe,

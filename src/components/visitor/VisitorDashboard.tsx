@@ -130,6 +130,10 @@ export default memo(function VisitorDashboard() {
                 <FileText className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
                 <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Lettre de Visa</span>
               </Link>
+              <Link to={ROUTES.INVITATION_LETTER} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
+                <FileText className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
+                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Lettre d'Invitation</span>
+              </Link>
               <Link to={ROUTES.NEWS} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
                 <BookOpen className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
                 <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Actualités</span>

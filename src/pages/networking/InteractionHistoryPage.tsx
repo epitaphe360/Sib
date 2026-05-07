@@ -3,10 +3,11 @@ import { InteractionHistory } from '../../components/networking/InteractionHisto
 
 export const InteractionHistoryPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <InteractionHistory />
     </div>
   );
 };
 
 export default InteractionHistoryPage;
+

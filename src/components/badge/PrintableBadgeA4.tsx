@@ -474,12 +474,21 @@ function Face3({ faceStyle, badge, config, primary, secondary, accessColor, acce
         <div style={{ background: accessColor, color: '#fff', borderRadius: '10mm', padding: '1mm 4mm', fontSize: '3mm', fontWeight: 700, marginBottom: '4mm', textTransform: 'uppercase' }}>
           {accessLabel}
         </div>
+        {/* Logo société pour exposants */}
+        {badge.userType === 'exhibitor' && badge.companyLogoUrl && (
+          <div style={{ margin: '0 auto 4mm', padding: '2mm 4mm', background: '#fff', border: `0.5mm solid ${secondary}`, borderRadius: '1.5mm', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <img src={badge.companyLogoUrl} alt="logo société" style={{ maxHeight: '15mm', maxWidth: '35mm', objectFit: 'contain' }} />
+          </div>
+        )}
         {qrParticipant && (
           <div style={{ background: '#fff', border: `0.5mm solid ${secondary}`, borderRadius: '2mm', padding: '2mm', display: 'inline-block', marginBottom: '1.5mm' }}>
             <img src={qrParticipant} alt="QR badge" style={{ width: '24mm', height: '24mm', display: 'block' }} />
           </div>
         )}
         <div style={{ fontSize: '2.5mm', color: '#9ca3af', fontFamily: 'monospace' }}>{badge.badgeCode}</div>
+        {badge.standNumber && (
+          <div style={{ fontSize: '2.8mm', color: accessColor, fontWeight: 700, marginTop: '1mm' }}>Stand {badge.standNumber}</div>
+        )}
       </div>
       <div style={{ background: primary, color: '#fff', padding: '2mm 4mm', textAlign: 'center' }}>
         <div style={{ fontWeight: 700, fontSize: '3mm' }}>{config.event_dates_display} · {config.event_location}</div>

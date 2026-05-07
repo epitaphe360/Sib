@@ -1,4 +1,4 @@
-import { Calendar, Clock, Target, Sparkles } from 'lucide-react';
+﻿import { Calendar, Clock, Target, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Card } from '../../ui/Card';
 import { useTranslation } from '../../../hooks/useTranslation';
@@ -14,8 +14,8 @@ export function ExhibitorInfoSection() {
       transition={{ delay: 0.5 }}
       className="mt-8"
     >
-      <Card className="SIB-glass-card border-l-4 border-l-SIB-gold overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-SIB-gold/5 to-transparent rounded-full blur-3xl" />
+      <Card className="SIB-glass-card border-l-4 border-l-yellow-400 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-yellow-400/5 to-transparent rounded-full blur-3xl" />
         <div className="p-6 relative">
           <div className="flex items-center space-x-3 mb-6">
             <div className="p-2.5 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl shadow-lg">

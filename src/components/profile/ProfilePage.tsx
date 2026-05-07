@@ -243,9 +243,9 @@ export default function ProfilePage() {
             animate={{ opacity: 1, x: 0 }}
             className="lg:col-span-1"
           >
-            <Card className="text-center border-t-4 border-t-SIB-gold">
+            <Card className="text-center border-t-4 border-t-yellow-400">
               <div className="relative">
-                <div className="h-32 bg-gradient-to-r from-SIB-primary via-SIB-secondary to-SIB-accent rounded-t-lg relative overflow-hidden">
+                <div className="h-32 bg-gradient-to-r from-indigo-600 via-indigo-500 to-SIB-accent rounded-t-lg relative overflow-hidden">
                    <MoroccanPattern className="opacity-10" color="white" scale={0.5} />
                 </div>
                 <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">

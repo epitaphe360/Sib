@@ -254,6 +254,25 @@ const PREVIEW_BADGE: UserBadge = {
   updatedAt: new Date(),
 };
 
+const EXHIBITOR_PREVIEW_BADGE: UserBadge = {
+  id: 'admin-preview-exhibitor', userId: 'admin-preview-exhibitor',
+  badgeCode: 'SIB2026-EXPO-01',
+  userType: 'exhibitor',
+  fullName: 'Prénom NOM',
+  companyName: 'Société Exposante',
+  email: 'exposant@example.com',
+  avatarUrl: undefined,
+  standNumber: 'B-12',
+  companyLogoUrl: undefined,
+  accessLevel: 'exhibitor',
+  validFrom: new Date('2026-11-25'),
+  validUntil: new Date('2026-11-29'),
+  status: 'active',
+  scanCount: 0,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
 // ─── Sous-composants ──────────────────────────────────────────────────────────
 
 function SectionCard({ title, icon: Icon, children, defaultOpen = true }: Readonly<{
@@ -804,8 +823,8 @@ function patchRemoveSession(days: BadgeDayProgram[], dayId: string, sIdx: number
 }
 
 // ── Composant aperçu mini-badge (toutes les faces ou A4 complet) ──
-function DynamicFacePreview({ contentType, config }: Readonly<{ contentType: FaceContent; config: BadgeConfig }>) {
-  if (contentType === 'identite_participant') return <Face3Preview config={config} />;
+function DynamicFacePreview({ contentType, config, badge = PREVIEW_BADGE }: Readonly<{ contentType: FaceContent; config: BadgeConfig; badge?: UserBadge }>) {
+  if (contentType === 'identite_participant') return <Face3Preview config={config} badge={badge} />;
   if (contentType === 'partenaires') return <Face4Preview config={config} />;
   if (contentType === 'carte_de_visite') return <Face2Preview config={{ ...config, face2_content: 'carte_de_visite' }} />;
   if (contentType === 'programme') return <Face2Preview config={{ ...config, face2_content: 'programme' }} />;
@@ -870,17 +889,18 @@ function DynamicFacePreview({ contentType, config }: Readonly<{ contentType: Fac
   );
 }
 
-function BadgePreviewContent({ config, previewAll, previewFace }: Readonly<{
+function BadgePreviewContent({ config, previewAll, previewFace, badge = PREVIEW_BADGE }: Readonly<{
   config: BadgeConfig;
   previewAll: boolean;
   previewFace: 1 | 2 | 3 | 4;
+  badge?: UserBadge;
 }>) {
   if (previewAll) {
     return (
       <>
         <div style={{ overflowY: 'auto', maxHeight: 900 }}>
           <div style={{ zoom: 0.78 }}>
-            <PrintableBadgeA4 badge={PREVIEW_BADGE} config={config as Parameters<typeof PrintableBadgeA4>[0]['config']} loadConfig={false} />
+            <PrintableBadgeA4 badge={badge} config={config as Parameters<typeof PrintableBadgeA4>[0]['config']} loadConfig={false} />
           </div>
         </div>
         <p className="text-center text-xs text-gray-400 mt-2 flex items-center justify-center gap-1">
@@ -895,7 +915,7 @@ function BadgePreviewContent({ config, previewAll, previewFace }: Readonly<{
   return (
     <>
       <div style={{ width: '100%', maxWidth: 660, margin: '0 auto', fontFamily: 'Arial, sans-serif', background: '#fff', border: '1px solid #e0e0e0', borderRadius: 6, overflow: 'hidden', fontSize: 11 }}>
-        <DynamicFacePreview contentType={activeContent} config={config} />
+        <DynamicFacePreview contentType={activeContent} config={config} badge={badge} />
       </div>
       <p className="text-center text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
         <Info className="h-3 w-3" />
@@ -970,7 +990,11 @@ function Face2Preview({ config }: Readonly<{ config: BadgeConfig }>) {
   );
 }
 
-function Face3Preview({ config }: Readonly<{ config: BadgeConfig }>) {
+function Face3Preview({ config, badge = PREVIEW_BADGE }: Readonly<{ config: BadgeConfig; badge?: UserBadge }>) {
+  const isExhibitor = badge.userType === 'exhibitor';
+  const accessColor = isExhibitor ? '#16a34a' : config.primary_color;
+  const accessLabel = isExhibitor ? 'EXPOSANT' : 'VISITEUR';
+  const qrData = JSON.stringify({ code: badge.badgeCode, userId: badge.userId, type: badge.userType });
   return (
     <>
       <div style={{ background: config.header_bg, padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -981,23 +1005,44 @@ function Face3Preview({ config }: Readonly<{ config: BadgeConfig }>) {
       </div>
       <div style={{ background: config.primary_color, color: '#fff', padding: '6px 10px', fontSize: 9, fontWeight: 'bold', lineHeight: 1.4 }}>
         <div>{config.badge_validity_text_fr}</div>
-        <div style={{ opacity: 0.75, marginTop: 2 }}>{config.badge_validity_text_en}</div>
+        <div style={{ opacity: 0.75, marginTop: 2, fontSize: 8 }}>{config.badge_validity_text_en}</div>
       </div>
       <div style={{ padding: '16px 12px', textAlign: 'center' }}>
-        <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#e5e7eb', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#9ca3af' }}>?</div>
-        <div style={{ fontWeight: 'bold', fontSize: 14, color: config.text_dark, marginBottom: 2 }}>Prénom NOM</div>
-        <div style={{ fontSize: 10, color: '#6b7280', marginBottom: 4 }}>Société / Organisation</div>
-        <div style={{ display: 'inline-block', background: config.primary_color, color: '#fff', borderRadius: 12, padding: '2px 10px', fontSize: 9, fontWeight: 'bold', marginBottom: 12 }}>VISITEUR</div>
-        <br />
-        <div style={{ display: 'inline-block', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 4, padding: 4, marginTop: 4 }}>
-          <div style={{ width: 60, height: 60, background: '#f3f4f6', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 7.5, color: '#9ca3af' }}>QR badge</div>
+        <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#e5e7eb', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#9ca3af' }}>👤</div>
+        <div style={{ fontWeight: 'bold', fontSize: 14, color: config.text_dark, marginBottom: 2 }}>{badge.fullName}</div>
+        <div style={{ fontSize: 10, color: '#6b7280', marginBottom: 4 }}>{badge.companyName ?? ''}</div>
+        <div style={{ display: 'inline-block', background: accessColor, color: '#fff', borderRadius: 12, padding: '2px 10px', fontSize: 9, fontWeight: 'bold', marginBottom: 10 }}>
+          {accessLabel}
         </div>
-        <div style={{ fontSize: 8, color: '#9ca3af', marginTop: 4 }}>SIB2026-XXXXXXXX</div>
+        {/* Logo société pour exposants */}
+        {isExhibitor && (
+          <div style={{ margin: '0 auto 10px', padding: '6px 10px', background: '#f9fafb', border: '1px dashed #d1d5db', borderRadius: 8, maxWidth: 120, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 40 }}>
+            {badge.companyLogoUrl
+              ? <img src={badge.companyLogoUrl} alt="logo société" style={{ maxHeight: 40, maxWidth: 100, objectFit: 'contain' }} />
+              : <>
+                  <span style={{ fontSize: 16 }}>🏢</span>
+                  <span style={{ fontSize: 8, color: '#9ca3af', marginTop: 2 }}>Logo Exposant</span>
+                </>
+            }
+          </div>
+        )}
+        <br />
+        {/* QR Code réel */}
+        <div style={{ display: 'inline-block', background: '#fff', border: `1px solid ${config.secondary_color}`, borderRadius: 4, padding: 4, marginTop: isExhibitor ? 0 : 4 }}>
+          <QRCodeSVG value={qrData} size={60} level="M" />
+        </div>
+        <div style={{ fontSize: 8, color: '#9ca3af', marginTop: 4, fontFamily: 'monospace' }}>{badge.badgeCode}</div>
+        {badge.standNumber && (
+          <div style={{ fontSize: 8, color: accessColor, fontWeight: 'bold', marginTop: 2 }}>Stand {badge.standNumber}</div>
+        )}
       </div>
       <div style={{ background: config.primary_color, color: '#fff', padding: '5px 10px', textAlign: 'center', fontSize: 9 }}>
         <div style={{ fontWeight: 'bold' }}>{config.event_dates_display} · {config.event_location}</div>
         <div style={{ opacity: 0.7 }}>{config.event_location_detail}</div>
       </div>
+    </>
+  );
+}
     </>
   );
 }
@@ -1258,8 +1303,11 @@ export default function AdminBadgeConfigPage() {
   const [previewVisible, setPreviewVisible] = useState(true);
   const [previewFace, setPreviewFace] = useState<1 | 2 | 3 | 4>(2);
   const [previewAll, setPreviewAll] = useState(false);
+  const [previewBadgeType, setPreviewBadgeType] = useState<'visitor' | 'exhibitor'>('visitor');
   const [activeSection, setActiveSection] = useState<string>('faces');
   const [selectedFace, setSelectedFace] = useState<1 | 2 | 3 | 4 | null>(null);
+
+  const previewBadge = previewBadgeType === 'exhibitor' ? EXHIBITOR_PREVIEW_BADGE : PREVIEW_BADGE;
 
   // ── Chargement depuis app_settings ──
   const loadConfig = useCallback(() => loadBadgeConfig(setConfig, setLoading, t('admin.badge_load_error')), [t]);
@@ -1727,6 +1775,25 @@ export default function AdminBadgeConfigPage() {
                   LIVE
                 </div>
               </div>
+              {/* Toggle visiteur / exposant */}
+              <div className="flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => setPreviewBadgeType('visitor')}
+                  className="flex-1 py-1 text-[11px] font-bold rounded-lg transition-all"
+                  style={{ background: previewBadgeType === 'visitor' ? '#1e3a5f' : '#f3f4f6', color: previewBadgeType === 'visitor' ? '#fff' : '#6b7280' }}
+                >
+                  👤 Visiteur
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPreviewBadgeType('exhibitor')}
+                  className="flex-1 py-1 text-[11px] font-bold rounded-lg transition-all"
+                  style={{ background: previewBadgeType === 'exhibitor' ? '#16a34a' : '#f3f4f6', color: previewBadgeType === 'exhibitor' ? '#fff' : '#6b7280' }}
+                >
+                  🏢 Exposant
+                </button>
+              </div>
               <div className="flex gap-1">
                 {([1, 2, 3, 4] as const).map(f => (
                   <button key={f} type="button" onClick={() => { setPreviewFace(f); setPreviewAll(false); }} className="flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all" style={{ background: !previewAll && previewFace === f ? '#6366f1' : '#f3f4f6', color: !previewAll && previewFace === f ? '#fff' : '#6b7280' }}>
@@ -1739,7 +1806,7 @@ export default function AdminBadgeConfigPage() {
               </div>
             </div>
             <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
-              <BadgePreviewContent config={config} previewAll={previewAll} previewFace={previewFace} />
+              <BadgePreviewContent config={config} previewAll={previewAll} previewFace={previewFace} badge={previewBadge} />
             </div>
             <div className="shrink-0 border-t p-3 bg-white" style={{ borderColor: '#e5e7eb' }}>
               <div className="grid grid-cols-2 gap-1.5">

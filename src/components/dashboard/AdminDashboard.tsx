@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Shield, AlertTriangle, BarChart3, FileText, Mail, Newspaper, Image, Calendar, Mic2, Building2 } from 'lucide-react';
+import { Shield, AlertTriangle, BarChart3, FileText, Mail, Newspaper, Image, Calendar, Mic2, Building2, KeyRound } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
 import { useAdminDashboard } from '../../hooks/useAdminDashboard';
@@ -130,6 +130,7 @@ export default function AdminDashboard() {
                 { to: ROUTES.ADMIN_EVENTS,          Icon: Calendar,   label: t('admin.cms_programme'),  sub: t('admin.cms_programme_desc') },
                 { to: ROUTES.ADMIN_SPEAKERS,        Icon: Mic2,       label: t('admin.cms_speakers'),   sub: t('admin.cms_speakers_desc') },
                 { to: ROUTES.ADMIN_SALONS,          Icon: Building2,  label: t('admin.cms_salons'),     sub: t('admin.cms_salons_desc') },
+                { to: ROUTES.ADMIN_CREDENTIALS,     Icon: KeyRound,   label: 'Accès / Mots de passe',   sub: 'Générer et envoyer les accès aux exposants & partenaires' },
               ] as const).map(({ to, Icon, label, sub }) => (
                 <motion.div
                   key={label}

@@ -458,6 +458,7 @@ export interface UserBadge {
   phone?: string;
   avatarUrl?: string;
   standNumber?: string; // Pour exposants
+  companyLogoUrl?: string; // Logo de la société pour exposants
   accessLevel: 'standard' | 'vip' | 'exhibitor' | 'partner' | 'admin';
   validFrom: Date;
   validUntil: Date;

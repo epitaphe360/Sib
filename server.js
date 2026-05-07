@@ -22,6 +22,7 @@ function escapeHtml(str) {
 }
 
 import { createClient } from '@supabase/supabase-js';
+import ws from 'ws';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -452,11 +453,76 @@ console.log('🔧 [INIT] SERVICE_ROLE_KEY:', SUPABASE_SERVICE_ROLE_KEY ? 'OK' : 
 
 const supabaseAdmin = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
   ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-      auth: { autoRefreshToken: false, persistSession: false }
+      auth: { autoRefreshToken: false, persistSession: false },
+      realtime: { transport: ws },
     })
   : null;
 
 console.log('🔧 [INIT] supabaseAdmin:', supabaseAdmin ? 'CRÉÉ ✅' : 'NULL ❌');
+
+/**
+ * API: Delete User (admin only)
+ * DELETE /api/admin/users/:id
+ */
+app.delete('/api/admin/users/:id', adminRateLimit, async (req, res) => {
+  if (!supabaseAdmin) {
+    return res.status(503).json({ success: false, error: 'Service admin non configuré' });
+  }
+
+  try {
+    const { id } = req.params;
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Non autorisé' });
+    }
+
+    // Vérifier le token JWT
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    if (authError || !user) {
+      return res.status(401).json({ success: false, error: 'Token invalide' });
+    }
+
+    // Vérifier rôle admin
+    const { data: adminData } = await supabaseAdmin
+      .from('users')
+      .select('type')
+      .eq('id', user.id)
+      .single();
+    if (adminData?.type !== 'admin') {
+      return res.status(403).json({ success: false, error: 'Accès refusé' });
+    }
+
+    // Empêcher de se supprimer soi-même
+    if (id === user.id) {
+      return res.status(400).json({ success: false, error: 'Vous ne pouvez pas supprimer votre propre compte' });
+    }
+
+    // Supprimer de la table users (cascade supprimera les données liées)
+    const { error: deleteError } = await supabaseAdmin
+      .from('users')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) {
+      console.error('❌ Erreur delete users:', deleteError.message);
+      return res.status(500).json({ success: false, error: deleteError.message });
+    }
+
+    // Supprimer le compte auth
+    try {
+      await supabaseAdmin.auth.admin.deleteUser(id);
+      console.log('✅ Compte auth supprimé:', id);
+    } catch (authErr) {
+      console.warn('⚠️ Compte auth non supprimé (peut-être déjà absent):', authErr.message);
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('❌ Erreur deleteUser:', error.message);
+    res.status(500).json({ success: false, error: 'Erreur interne du serveur' });
+  }
+});
 
 /**
  * API: Delete Exhibitor (admin only)
@@ -563,6 +629,41 @@ app.use((err, req, res, _next) => {
   res.status(500).json({ success: false, error: 'Erreur interne du serveur' });
 });
 
+/**
+ * API: Vérifier si un email existe dans public.users (pour magic link)
+ * GET /api/auth/check-email?email=xxx
+ * Pas d'auth requise — retourne seulement exists: true/false
+ */
+app.get('/api/auth/check-email', async (req, res) => {
+  if (!supabaseAdmin) {
+    return res.status(503).json({ success: false, error: 'Service non configuré' });
+  }
+  const { email } = req.query;
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ success: false, error: 'Email requis' });
+  }
+  const normalizedEmail = email.trim().toLowerCase();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(normalizedEmail)) {
+    return res.status(400).json({ success: false, error: 'Email invalide' });
+  }
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('users')
+      .select('id')
+      .eq('email', normalizedEmail)
+      .maybeSingle();
+    if (error) {
+      console.error('❌ check-email error:', error.message);
+      return res.status(500).json({ success: false, error: 'Erreur serveur' });
+    }
+    return res.json({ success: true, exists: !!data });
+  } catch (err) {
+    console.error('❌ check-email exception:', err.message);
+    return res.status(500).json({ success: false, error: 'Erreur serveur' });
+  }
+});
+
 // ============================================
 // FRONTEND HANDLING
 // Railway = backend API only. Frontend is on Vercel.
@@ -587,6 +688,70 @@ app.get('{*path}', (req, res) => {
         api: '/api/health'
       });
     }
+  }
+});
+
+/**
+ * API: Send Magic Link (bypass Supabase rate limits)
+ * POST /api/auth/magic-link
+ * Uses admin.generateLink + SMTP to send the email directly
+ */
+app.post('/api/auth/magic-link', async (req, res) => {
+  if (!supabaseAdmin) {
+    return res.status(503).json({ success: false, error: 'Service admin non configuré' });
+  }
+
+  try {
+    const { email } = req.body;
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ success: false, error: 'Email invalide' });
+    }
+
+    const appUrl = process.env.VITE_APP_URL || process.env.FRONTEND_URL || 'https://sib2026.vercel.app';
+    const redirectTo = `${appUrl}/auth/callback`;
+
+    // Générer le magic link via l'API admin (aucune limite de taux)
+    const { data, error: genError } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'magiclink',
+      email: email.toLowerCase().trim(),
+      options: { redirectTo },
+    });
+
+    if (genError || !data?.properties?.action_link) {
+      console.error('❌ generateLink error:', genError?.message);
+      return res.status(500).json({ success: false, error: 'Impossible de générer le lien' });
+    }
+
+    const magicLink = data.properties.action_link;
+
+    // Envoyer via SMTP
+    if (transporter) {
+      await transporter.sendMail({
+        from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@sib2026.ma'}>`,
+        to: email,
+        subject: 'Votre lien de connexion - SIB 2026',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #1a1a2e;">Connexion à SIB 2026</h2>
+            <p>Cliquez sur le bouton ci-dessous pour vous connecter :</p>
+            <a href="${magicLink}" style="display: inline-block; background: #c9a84c; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; margin: 16px 0;">
+              Se connecter
+            </a>
+            <p style="color: #666; font-size: 13px;">Ce lien est valable 1 heure et ne peut être utilisé qu'une seule fois.<br>Si vous n'avez pas demandé ce lien, ignorez cet email.</p>
+          </div>
+        `,
+        text: `Votre lien de connexion SIB 2026 :\n\n${magicLink}\n\nValable 1 heure.`,
+      });
+    } else {
+      // Pas de SMTP configuré : utiliser le lien généré directement via Supabase (l'email est envoyé par Supabase)
+      console.warn('⚠️ SMTP non configuré, lien généré mais non envoyé par ce serveur');
+    }
+
+    console.log('✅ Magic link envoyé à:', email);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('❌ Erreur magic-link:', error.message);
+    res.status(500).json({ success: false, error: 'Erreur interne' });
   }
 });
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Section "Les Univers du Salon" — 6 filières du bâtiment
  * Design : grille de cartes hover avec fond sombre/clair alterné
  */
@@ -71,7 +71,7 @@ export const ThemesSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-14"
         >
-          <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 text-sib-gold">
+          <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 text-yellow-400">
             Univers du Salon
           </p>
           <h2 className="font-heading font-bold text-4xl sm:text-5xl text-gray-900 uppercase tracking-wide mb-4">
@@ -81,9 +81,9 @@ export const ThemesSection: React.FC = () => {
             SIB 2026 réunit entreprises privées, organismes publics, fournisseurs de matériaux, architectes et ingénieurs autour de six filières officielles, avec Espace Démonstration, SIB Academy et rencontres B2B.
           </p>
           <div className="flex items-center justify-center gap-3 mt-6">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-sib-gold" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-sib-gold" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-sib-gold" />
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-yellow-400" />
+            <div className="w-1.5 h-1.5 rotate-45 bg-yellow-400" />
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-yellow-400" />
           </div>
         </motion.div>
 
@@ -132,13 +132,13 @@ const ThemeCard: React.FC<{
         className="absolute top-4 right-5 font-heading font-bold text-5xl pointer-events-none select-none transition-opacity duration-300"
         style={{ lineHeight: 1 }}
       >
-        <span className="text-sib-primary/7 group-hover:text-sib-gold/15">
+        <span className="text-indigo-600/7 group-hover:text-yellow-400/15">
           {theme.number}
         </span>
       </span>
 
       {/* Icône */}
-      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-sib-light/70 border border-slate-200 text-sib-primary group-hover:text-sib-gold transition-colors duration-300">
+      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-sib-light/70 border border-slate-200 text-indigo-600 group-hover:text-yellow-400 transition-colors duration-300">
         <theme.Icon className="h-6 w-6" />
       </div>
 
@@ -148,7 +148,7 @@ const ThemeCard: React.FC<{
       </h3>
 
       {/* Trait */}
-      <div className="h-0.5 w-8 rounded-full mb-3 bg-sib-gold/50 group-hover:bg-sib-gold transition-colors duration-300" />
+      <div className="h-0.5 w-8 rounded-full mb-3 bg-yellow-400/50 group-hover:bg-yellow-400 transition-colors duration-300" />
 
       {/* Description */}
       <p className="text-sm text-gray-500 leading-relaxed">

@@ -4,10 +4,24 @@ import App from './App';
 import './index.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { initializeSentry } from './lib/sentry';
-
-initializeSentry();
 import { ThemeProvider } from './context/ThemeContext';
 import { SalonProvider } from './contexts/SalonContext';
+
+// === DIAGNOSTIC GLOBAL ===
+console.log('[SIB] main.tsx chargé ✅');
+window.addEventListener('error', (e) => {
+  console.error('[SIB] Erreur globale:', e.message, 'Fichier:', e.filename, 'Ligne:', e.lineno, e.error);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('[SIB] Promise rejetée:', e.reason);
+});
+
+try {
+  initializeSentry();
+  console.log('[SIB] Sentry initialisé ✅');
+} catch (e) {
+  console.warn('[SIB] Sentry init échoué (non-bloquant):', e);
+}
 
 // Kill any existing service worker and clear ALL caches
 if ('serviceWorker' in navigator) {
@@ -44,17 +58,28 @@ const mount = (el: Element) => {
   }
 
   isMounted = true;
-  ReactDOM.createRoot(el as HTMLElement).render(
-    <React.StrictMode>
-      <ThemeProvider>
-        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <SalonProvider>
-            <App />
-          </SalonProvider>
-        </Router>
-      </ThemeProvider>
-    </React.StrictMode>
-  );
+  console.log('[SIB] Montage React sur:', el.id || el.tagName);
+
+  try {
+    ReactDOM.createRoot(el as HTMLElement).render(
+      <React.StrictMode>
+        <ThemeProvider>
+          <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <SalonProvider>
+              <App />
+            </SalonProvider>
+          </Router>
+        </ThemeProvider>
+      </React.StrictMode>
+    );
+    console.log('[SIB] ReactDOM.render() appelé ✅');
+  } catch (e) {
+    console.error('[SIB] CRASH au montage React:', e);
+    (el as HTMLElement).innerHTML = `<div style="padding:2rem;font-family:monospace;color:red;background:#fff">
+      <h2>Erreur au démarrage</h2>
+      <pre>${e instanceof Error ? e.stack : String(e)}</pre>
+    </div>`;
+  }
 };
 
 const initial = findMount();

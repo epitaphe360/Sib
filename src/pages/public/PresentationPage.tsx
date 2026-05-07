@@ -11,11 +11,11 @@ import {
 import { useTranslation } from '../../hooks/useTranslation';
 
 const defaultOrganisateurs = [
-  { name: 'Minist�re MUAT', role: 'Organisateur', desc: "Minist�re de l'Am�nagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville" },
-  { name: 'AMDIE', role: 'Organisateur', desc: "Agence Marocaine de D�veloppement des Investissements et des Exportations" },
-  { name: 'FMC', role: 'Co-organisateur', desc: "F�d�ration des Industries des Mat�riaux de Construction" },
-  { name: 'FNBTP', role: 'Co-organisateur', desc: 'F�d�ration Nationale du B�timent et des Travaux Publics' },
-  { name: 'URBACOM', role: 'Organisateur d�l�gu�', desc: '1?? agence conseil en communication et �v�nementiel, gestion d�l�gu�e depuis 2006' },
+  { name: 'Ministère MUAT', role: 'Organisateur', desc: "Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville" },
+  { name: 'AMDIE', role: 'Organisateur', desc: "Agence Marocaine de Développement des Investissements et des Exportations" },
+  { name: 'FMC', role: 'Co-organisateur', desc: "Fédération des Industries des Matériaux de Construction" },
+  { name: 'FNBTP', role: 'Co-organisateur', desc: 'Fédération Nationale du Bâtiment et des Travaux Publics' },
+  { name: 'URBACOM', role: 'Organisateur délégué', desc: '1?? agence conseil en communication et événementiel, gestion déléguée depuis 2006' },
 ];
 
 export default function PresentationPage() {
@@ -40,7 +40,7 @@ export default function PresentationPage() {
       icon: Building2,
       value: getCms('stat_exposants', '600'),
       label: getCms('stat_exposants_label', 'Exposants'),
-      sub: getCms('stat_exposants_sub', '1 500 marques repr�sent�es')
+      sub: getCms('stat_exposants_sub', '1 500 marques représentées')
     },
     {
       icon: Users,
@@ -52,21 +52,21 @@ export default function PresentationPage() {
       icon: Globe,
       value: getCms('stat_pays', '50'),
       label: getCms('stat_pays_label', 'Pays'),
-      sub: getCms('stat_pays_sub', 'repr�sent�s')
+      sub: getCms('stat_pays_sub', 'représentés')
     },
     {
       icon: Ruler,
-      value: getCms('stat_surface', '35 000 m�'),
+      value: getCms('stat_surface', '35 000 m²'),
       label: getCms('stat_surface_label', 'Surface'),
       sub: getCms('stat_surface_sub', "d'exposition")
     },
   ];
 
   const defaultAboutParagraphs = [
-    "Le Salon International du B�timent � SIB revient pour sa 20? �dition, c�l�brant ainsi ses 40 ann�es d'existence. Ce salon incontournable se d�roulera du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI d'El Jadida.",
-    "Fond� en 1986, le SIB s'est impos� comme le rendez-vous biennal de r�f�rence du secteur du b�timent au Maroc et en Afrique. Il r�unit 600 exposants et 1 500 marques internationales autour d'un m�me objectif : construire l'avenir. Avec 200 000 visiteurs professionnels, 50 pays repr�sent�s, 300 rencontres B2B planifi�es via URBA EVENT et 35 000 m� d'exposition, le SIB s'impose comme le hub africain de la construction et de l'innovation.",
-    "Organis� par le Minist�re de l'Am�nagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville et l'Agence Marocaine de D�veloppement des Investissements et des Exportations � AMDIE, et co-organis� par la F�d�ration des Industries des Mat�riaux de Construction � FMC et la F�d�ration Nationale du B�timent et des Travaux Publics � FNBTP, URBACOM en assure la gestion d�l�gu�e depuis 2006, garantissant la continuit�, la qualit� et la modernisation du salon � travers les ann�es.",
-    "Au-del� de sa port�e nationale, le SIB s'impose aujourd'hui comme le grand rendez-vous africain du b�timent et des mat�riaux de construction, un espace o� convergent les expertises du continent. Le salon propose 2 espaces de d�monstration, 30 applications techniques, 20 conf�rences anim�es par des experts marocains et internationaux, ainsi que des espaces th�matiques : SIB Academy, SIB Recrutement, SIB TV, Espace B2B et Espace D�monstration.",
+    "Le Salon International du Bâtiment – SIB revient pour sa 20? édition, célébrant ainsi ses 40 années d'existence. Ce salon incontournable se déroulera du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI d'El Jadida.",
+    "Fondé en 1986, le SIB s'est imposé comme le rendez-vous biennal de référence du secteur du bâtiment au Maroc et en Afrique. Il réunit 600 exposants et 1 500 marques internationales autour d'un même objectif : construire l'avenir. Avec 200 000 visiteurs professionnels, 50 pays représentés, 300 rencontres B2B planifiées via URBA EVENT et 35 000 m² d'exposition, le SIB s'imposee comme le hub africain de la construction et de l'innovation.",
+    "Organisé par le Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville et l'Agence Marocaine de Développement des Investissements et des Exportations – AMDIE, et co-organisé par la Fédération des Industries des Matériaux de Construction – FMC et la Fédération Nationale du Bâtiment et des Travaux Publics – FNBTP, URBACOM en assure la gestion déléguée depuis 2006, garantissant la continuité, la qualité et la modernisation du salon à travers les années.",
+    "Au-delà de sa portée nationale, le SIB s'impose aujourd'hui comme le grand rendez-vous africain du bâtiment et des matériaux de construction, un espace où convergent les expertises du continent. Le salon propose 2 espaces de démonstration, 30 applications techniques, 20 conférences animées par des experts marocains et internationaux, ainsi que des espaces thématiques : SIB Academy, SIB Recrutement, SIB TV, Espace B2B et Espace Démonstration.",
   ];
 
   const cmsParagraphs = (cms.about_text || '')
@@ -74,7 +74,7 @@ export default function PresentationPage() {
     .map((p) => p.trim())
     .filter(Boolean);
 
-  // N'utiliser le contenu CMS que s'il contient au moins 2 paragraphes complets (�vite d'afficher un placeholder tronqu�)
+  // N'utiliser le contenu CMS que s'il contient au moins 2 paragraphes complets (évite d'afficher un placeholder tronqué)
   const aboutParagraphs = cmsParagraphs.length >= 2 ? cmsParagraphs : defaultAboutParagraphs;
   const previewParagraphs = aboutParagraphs.slice(0, 2);
   const extraParagraphs = aboutParagraphs.slice(2);
@@ -94,7 +94,7 @@ export default function PresentationPage() {
         }
         py="py-16 md:py-24"
       />
-{/* Chiffres cl�s */}
+{/* Chiffres clés */}
       <div className="container mx-auto px-4 -mt-12 relative z-20">
         <StaggerReveal className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((s) => (
@@ -110,11 +110,11 @@ export default function PresentationPage() {
         </StaggerReveal>
       </div>
 
-      {/* Pr�sentation */}
+      {/* Présentation */}
       <div className="relative container mx-auto px-4 py-20 bg-gradient-to-b from-indigo-900 to-slate-50">
         <div className="max-w-6xl mx-auto">
           <ScrollReveal variant={fadeLeft}>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 font-display text-center lg:text-left">{getCms('about_title', 'Le Salon International du B�timent')}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 font-display text-center lg:text-left">{getCms('about_title', 'Le Salon International du Bâtiment')}</h2>
           </ScrollReveal>
 
           <div className="grid lg:grid-cols-2 gap-8 lg:items-stretch">
@@ -123,7 +123,7 @@ export default function PresentationPage() {
                 {videoPlaying ? (
                   <iframe
                     src="https://www.youtube.com/embed/Q5WupuWDju0?autoplay=1&rel=0&modestbranding=1"
-                    title="SIB 2026 � Pr�sentation officielle"
+                    title="SIB 2026 – Présentation officielle"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                     style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
@@ -193,7 +193,7 @@ export default function PresentationPage() {
                     onClick={() => setShowMore((prev) => !prev)}
                     className="inline-flex items-center rounded-full border border-indigo-200 px-4 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-50 transition-colors"
                   >
-                    {showMore ? getCms('about_read_less', 'R�duire') : getCms('about_read_more', 'Savoir plus')}
+                    {showMore ? getCms('about_read_less', 'Réduire') : getCms('about_read_more', 'Savoir plus')}
                   </button>
                 )}
               </div>
@@ -202,14 +202,14 @@ export default function PresentationPage() {
         </div>
       </div>
 
-      {/* Entr�e gratuite */}
+      {/* Entrée gratuite */}
       <div className="bg-gradient-to-r from-indigo-700 via-indigo-800 to-indigo-900 py-14">
         <div className="container mx-auto px-4 text-center">
           <ScrollReveal variant={scaleUp}>
             <Award className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-2">{getCms('free_entry_title', 'Entr�e Gratuite')}</h3>
+            <h3 className="text-2xl font-bold text-white mb-2">{getCms('free_entry_title', 'Entrée Gratuite')}</h3>
             <p className="text-indigo-100 max-w-xl mx-auto">
-              {getCms('free_entry_text', "L'acc�s au salon est enti�rement gratuit. Un badge �lectronique est requis et peut �tre obtenu en ligne ou sur place.")}
+              {getCms('free_entry_text', "L'accès au salon est entièrement gratuit. Un badge électronique est requis et peut être obtenu en ligne ou sur place.")}
           </p>
           <Link
             to={ROUTES.BADGE}
@@ -257,9 +257,9 @@ export default function PresentationPage() {
       <div className="bg-gradient-to-r from-indigo-800 via-indigo-900 to-indigo-950 text-white py-14">
         <div className="container mx-auto px-4 text-center">
           <ScrollReveal variant={fadeUp}>
-            <h3 className="text-2xl font-bold mb-4 font-display">{getCms('brochure_title', 'T�l�chargez la brochure SIB 2026')}</h3>
+            <h3 className="text-2xl font-bold mb-4 font-display">{getCms('brochure_title', 'Téléchargez la brochure SIB 2026')}</h3>
             <p className="text-white/70 mb-6 max-w-xl mx-auto">
-              {getCms('brochure_text', 'Retrouvez toutes les informations essentielles sur le salon, le programme et les modalit�s de participation.')}
+              {getCms('brochure_text', 'Retrouvez toutes les informations essentielles sur le salon, le programme et les modalités de participation.')}
             </p>
             <a
               href={getCms('brochure_url', 'https://sib.ma/backend/uploads/Brochure_SIB_2026_F_3175004ace.pdf')}

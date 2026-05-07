@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowLeft, ShoppingCart, CreditCard, Building2, CheckCircle,
+  ArrowLeft, ShoppingCart, CreditCard, Building2,
   Receipt, Calendar, Package, Loader2, Info, Shield,
 } from 'lucide-react';
 import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { PAYPAL_CLIENT_ID } from '../../services/paymentService';
 import { useTranslation } from '../../hooks/useTranslation';
 
-const TVA_RATE = 0.20;
+const TVA_RATE = 0.2;
 const MAD_TO_EUR = 11; // taux approximatif
 
 interface CartItem {
@@ -150,11 +150,11 @@ function PayPalPayButton({
   amountEUR,
   invoiceNumber,
   onSuccess,
-}: {
+}: Readonly<{
   amountEUR: string;
   invoiceNumber: string;
   onSuccess: (paypalOrderId: string) => void;
-}) {
+}>) {
   const [{ isPending }] = usePayPalScriptReducer();
   const { t } = useTranslation();
 
@@ -321,7 +321,7 @@ export default function RentalCheckoutPage() {
   if (!state?.cartItems?.length) { return null; }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
 
         {/* Header */}
@@ -456,31 +456,39 @@ export default function RentalCheckoutPage() {
                     <br />{t('checkout.exchange_rate')} {MAD_TO_EUR} MAD
                   </span>
                 </div>
-                {isProcessing ? (
-                  <div className="flex items-center justify-center gap-2 py-4 text-gray-500 text-sm">
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                    {t('checkout.processing')}
-                  </div>
-                ) : PAYPAL_CLIENT_ID ? (
-                  <PayPalScriptProvider
-                    options={{
-                      clientId: PAYPAL_CLIENT_ID,
-                      currency: 'EUR',
-                      intent: 'capture',
-                    }}
-                  >
-                    <PayPalPayButton
-                      amountEUR={amountEUR}
-                      invoiceNumber={invoiceNumber}
-                      onSuccess={(paypalOrderId) => processPayment('paypal', paypalOrderId)}
-                    />
-                  </PayPalScriptProvider>
-                ) : (
-                  <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-700">
-                    <Info className="h-4 w-4 shrink-0" />
-                    <span>{t('checkout.paypal_not_configured')}</span>
-                  </div>
-                )}
+                {(() => {
+                  if (isProcessing) {
+                    return (
+                      <div className="flex items-center justify-center gap-2 py-4 text-gray-500 text-sm">
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        {t('checkout.processing')}
+                      </div>
+                    );
+                  }
+                  if (PAYPAL_CLIENT_ID) {
+                    return (
+                      <PayPalScriptProvider
+                        options={{
+                          clientId: PAYPAL_CLIENT_ID,
+                          currency: 'EUR',
+                          intent: 'capture',
+                        }}
+                      >
+                        <PayPalPayButton
+                          amountEUR={amountEUR}
+                          invoiceNumber={invoiceNumber}
+                          onSuccess={(paypalOrderId) => processPayment('paypal', paypalOrderId)}
+                        />
+                      </PayPalScriptProvider>
+                    );
+                  }
+                  return (
+                    <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-700">
+                      <Info className="h-4 w-4 shrink-0" />
+                      <span>{t('checkout.paypal_not_configured')}</span>
+                    </div>
+                  );
+                })()}
               </motion.div>
             )}
 
@@ -536,4 +544,5 @@ export default function RentalCheckoutPage() {
     </div>
   );
 }
+
 

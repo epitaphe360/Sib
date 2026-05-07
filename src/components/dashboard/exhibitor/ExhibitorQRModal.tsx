@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import { Button } from '../../ui/Button';
@@ -38,7 +38,7 @@ export function ExhibitorQRModal({
         exit={{ scale: 0.95, opacity: 0 }}
         className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center relative overflow-hidden"
       >
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-SIB-primary via-SIB-secondary to-SIB-accent" />
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-indigo-600 via-indigo-500 to-SIB-accent" />
         <div className="mt-4">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('exhibitor.qr_modal_title')}</h2>
           <p className="text-gray-600 mb-6">{t('exhibitor.qr_modal_subtitle')}</p>

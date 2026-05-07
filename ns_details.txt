@@ -1,0 +1,807 @@
+
+admin|129
+  admin.system_operational|System Operational
+  admin.system_uptime|System Uptime
+  admin.api_calls_per_day|API Calls / Day
+  admin.storage_used|Storage Used
+  admin.items_need_attention|{{count}} items need your attention
+  admin.click_to_process|Click to process
+  admin.manage_proofs|Manage Proofs
+  admin.list_and_subscriptions|List & Subscriptions
+  admin.list_and_packs|List & Packs
+  admin.vip_visitors_management|VIP Visitors Management
+  admin.content_moderation|Content to Moderate
+  admin.active_contracts|Active Contracts
+  admin.manage_partners_action|Manage Partners
+  admin.manage_exhibitors_action|Manage Exhibitors
+  admin.manage_events_action|Manage Events
+  admin.manage_articles_action|Manage Articles
+  admin.create_pavilion_action|Create Pavilion
+  admin.manage_pavilions_action|Manage Pavilions
+  admin.manage_media_action|Manage Media
+  admin.validate_media|Validate Media
+  admin.sync_articles|Sync Articles
+  admin.syncing|Syncing...
+  admin.publication_control|Publication Control
+  admin.publication_warning|Enable/Disable GLOBAL visibility
+  admin.total_control|TOTAL CONTROL
+  admin.participant_management|Participant Management
+  admin.content_management|Content Management
+  admin.media_management_section|Media Management
+  admin.nav_and_stats|Navigation & Statistics
+  admin.analytics_trends|Analytics & Trends
+  admin.realtime_data|Real-time Data
+  admin.user_growth|User Growth (Last 6 months)
+  admin.total_users_chart|Total Users
+  admin.user_distribution|User Distribution
+  admin.platform_activity|Platform Activity (This week)
+  admin.weekly_traffic|Weekly Traffic
+  admin.chart_visits|Visits
+  admin.chart_pageviews|Page views
+  admin.metrics_label|Metrics
+  admin.performance_label|Performance
+  admin.users_label|Users
+  admin.system_health|System Health
+  admin.api_calls_24h|API Calls (24h)
+  admin.avg_response_time|Avg Response Time
+  admin.recent_activity|Recent System Activity
+  admin.view_all|View All
+  admin.active_exhibitors|Active Exhibitors
+  admin.registered_visitors|Registered Visitors
+  admin.official_partners|Official Partners
+  admin.conferences_workshops|Conferences & Workshops
+  admin.detailed_metrics|Detailed Metrics & Performance
+  admin.detailed_metrics_desc|Access full performance analytics for SIB 2026
+  admin.full_metrics|View Full Metrics
+  admin.admin_access_only|Admin Access Only
+  admin.email_templates_label|Email Templates
+  admin.customize_label|Customize
+  admin.online|online
+  admin.sync_label|Synchronization
+  admin.events_section|Events
+  admin.articles_section|Articles
+  admin.pavilions_section|Thematic Pavilions
+  admin.medias_section|Media
+  admin.users_management|User Management
+  admin.exhibitors_management|Exhibitors Management
+  admin.partners_management|Partners Management
+  admin.events_management|Events Management
+  admin.news_management|News Management
+  admin.pavilions_management|Pavilions Management
+  admin.vip_visitors|VIP Visitors Management
+  admin.live_studio_management|Liv---
+
+badge|71
+  badge.title|My Badge
+  badge.badge_info|Badge Information
+  badge.access_level|Access Level
+  badge.qr_code|QR Code
+  badge.download|Download
+  badge.print|Print
+  badge.share|Share
+  badge.active|Active
+  badge.badge_downloaded|Badge downloaded
+  badge.badge_generated_success|Badge generated successfully
+  badge.comment|Comment
+  badge.download_error|Download error
+  badge.download_print_info|Download or print your access badge
+  badge.download_png|Download PNG
+  badge.error_generating|Error generating badge
+  badge.error_loading|Error loading badge
+  badge.generate_badge_info|Generate your access badge for the event
+  badge.generate_my_badge|Generate my badge
+  badge.generating|Generating badge...
+  badge.instruction_1|Click below to generate your badge
+  badge.instruction_1_desc|Your personalized access badge will be created with your information
+  badge.instruction_2|Download or print your badge
+  badge.instruction_2_desc|You can download as PNG or print directly from here
+  badge.instruction_3|Show your badge at the entrance
+  badge.instruction_3_desc|Present your badge to gain entry to the event
+  badge.instruction_4|Keep your badge with you
+  badge.instruction_4_desc|Show your badge to security or at partner stands
+  badge.last_scan|Last scan
+  badge.login_required|Login required
+  badge.must_login_badge|You must be logged in to generate your badge
+  badge.my_access_badge|My access badge
+  badge.print.camera_activated|Camera activated
+  badge.print.error_camera|Camera error - please allow camera access
+  badge.print.error_printing|Printing error occurred
+  badge.print.generated|Badge printed
+  badge.print.sent|Badge sent to printer
+  badge.regenerate|Regenerate
+  badge.regenerating|Regenerating badge...
+  badge.scanner.activated|Scanner activated
+  badge.scanner.deactivated|Scanner deactivated
+  badge.scanner.error_camera|Camera error
+  badge.scanner.error_lead|Lead capture error
+  badge.scanner.error_processing|Error processing scan
+  badge.scanner.error_start|Error starting scanner
+  badge.scanner.error_stats|Error loading statistics
+  badge.scanner.error_stop|Error stopping scanner
+  badge.scanner.error_validate|Validation error
+  badge.scanner.error_validation|Badge validation error
+  badge.scanner.expired|Badge expired
+  badge.scanner.inactive|Badge inactive
+  badge.scanner.invalid|Invalid badge
+  badge.scans_done|Scans completed
+  badge.stand_number|Stand number
+  badge.statistics|Statistics
+  badge.status|Status
+  badge.usage_instructions|How to use your badge
+  badge.valid_from|Valid from
+  badge.vip_advantage_1|Priority entrance to the event
+  badge.vip_advantage_2|Access to VIP lounge and special areas
+  badge.vip_advantage_3|Exclusive networking opportunities
+  badge.vip_advantages|VIP Advantages
+  badge.access_badge|Access Your Badge
+  badge.authorized_zones|Authorized Zones
+  badge.automatic_rotation|Automatic Rotation
+  badge.loading_badge|Loading your badge...
+  badge.max_security|Maximum Security
+  badge.regener---
+
+marketing|105
+  marketing.dashboard_title|Marketing Dashboard
+  marketing.welcome|Welcome to your marketing space
+  marketing.overview|Overview
+  marketing.campaigns|Campaigns
+  marketing.analytics|Analytics
+  marketing.reports|Reports
+  marketing.media_library|Media Library
+  marketing.featured_badges|Featured Badges
+  marketing.create_campaign|Create Campaign
+  marketing.campaign_title|Campaign Title
+  marketing.campaign_description|Description
+  marketing.campaign_start_date|Start Date
+  marketing.campaign_end_date|End Date
+  marketing.campaign_budget|Budget
+  marketing.campaign_status|Status
+  marketing.active|Active
+  marketing.inactive|Inactive
+  marketing.draft|Draft
+  marketing.published|Published
+  marketing.pending|Pending
+  marketing.statistics|Statistics
+  marketing.views|Views
+  marketing.clicks|Clicks
+  marketing.conversions|Conversions
+  marketing.engagement|Engagement
+  marketing.reach|Reach
+  marketing.impressions|Impressions
+  marketing.ctr|Click Through Rate
+  marketing.cpc|Cost Per Click
+  marketing.roi|ROI
+  marketing.filter_status|Filter by Status
+  marketing.filter_date|Filter by Date
+  marketing.sort|Sort
+  marketing.sort_newest|Newest
+  marketing.sort_oldest|Oldest
+  marketing.action_edit|Edit
+  marketing.action_delete|Delete
+  marketing.action_publish|Publish
+  marketing.action_duplicate|Duplicate
+  marketing.badge|MARKETING CONTROL CENTER
+  marketing.title|Content Strategy Hub
+  marketing.subtitle|Manage the SIB 2026 narrative experience. Publish impactful content and analyze 
+  marketing.btn_new_content|New Content
+  marketing.tabs.explore|Explore
+  marketing.tabs.media_library|Media Library
+  marketing.tabs.articles_news|Articles & News
+  marketing.stats.total_media|Total Media
+  marketing.stats.total|Total
+  marketing.stats.webinars|Webinars
+  marketing.stats.podcasts|Podcasts
+  marketing.stats.capsules|Capsules
+  marketing.stats.online|Online
+  marketing.stats.drafts|Drafts
+  marketing.filters|Filters
+  marketing.filters.filter_by|Filter by:
+  marketing.filters.status|Status:
+  marketing.filters.all|All
+  marketing.filters.webinars|Webinars
+  marketing.filters.podcasts|Podcasts
+  marketing.filters.capsules|Capsules
+  marketing.filters.published|Published
+  marketing.filters.drafts|Drafts
+  marketing.filters.best_moments|Best Moments
+  marketing.filters.capsule_inside|Inside Capsule
+  marketing.filters.webinar|Webinar
+  marketing.filters.live_studio|Live Studio
+  marketing.filters.podcast|Podcast
+  marketing.filters.testimonial|Testimonial
+  marketing.media.add_media|Add media
+  marketing.media.no_media|No media found
+  marketing.media.no_media_found|No media found
+  marketing.media.no_media_desc|Add photos, videos or podcasts to get started
+  marketing.media.start_adding|Add photos, videos or podcasts to get started
+  marketing.media.publish|Publish
+  marketing.media.unpublish|Unpublish
+  marketing.media.copy|Copy
+  marketing.media.copied|Shortcode copied!
+  marketing.media.deleted|Media deleted
+  marketing.media.a---
+
+partner|220
+  partner.activation_required|Activation Required
+  partner.payment_validation_needed|To access your partner space, please finalize payment of your partnership pack.
+  partner.finalize_payment|Finalize Payment
+  partner.access_denied|Access Denied
+  partner.reserved_partners|This section is reserved for official SIB partners
+  partner.hero_subtitle|Partner Dashboard
+  partner.dashboard_title|Partner Dashboard
+  partner.tier_label|Partner
+  partner.confirm_reject_title|Confirm rejection
+  partner.confirm_reject_body|Are you sure you want to reject this appointment? This action is irreversible.
+  partner.virtual_badge|Virtual Partner Badge
+  partner.roi_performance|ROI Performance
+  partner.dashboard_live|LIVE Dashboard
+  partner.tabs.overview|Overview
+  partner.tabs.profile|Profile
+  partner.tabs.networking|Networking
+  partner.tabs.analytics|Analytics
+  partner.payment_validation_required|Payment Validation Required
+  partner.payment_activation_message|Your partner profile will be activated after payment validation by our team.
+  partner.make_payment|Make Payment
+  partner.stats.profile_views|Profile Views
+  partner.stats.connections|Connections
+  partner.stats.appointments|Appointments
+  partner.stats.messages|Messages
+  partner.quotas.title|Your Partner Quotas
+  partner.quotas.appointments|Appointments
+  partner.quotas.team_members|Team Members
+  partner.quotas.media_files|Media Files
+  partner.recent_activity|Recent Activity
+  partner.ai_generation|AI Profile Generation
+  partner.ai_description|Let our AI automatically create your partner profile from your website
+  partner.ai_button|­ƒñû Generate with AI
+  partner.manual_management|Manual Management
+  partner.edit_basic_info|Ô£Å´©Å Edit Basic Info
+  partner.media_catalog|­ƒô© Media Catalog
+  partner.appointments_management|Appointment Management
+  partner.appointments_description|Track and manage your appointment requests
+  partner.confirmed_appointments|confirmed appointments
+  partner.pending|Pending Requests
+  partner.no_pending_requests|No pending requests
+  partner.pending_requests_appear_here|New requests will appear here
+  partner.no_message|No message
+  partner.accept|Accept
+  partner.reject|Reject
+  partner.share_scheduling_link|Share Your Scheduling Link
+  partner.share_calendar_description|Share your calendar with your contacts
+  partner.copy_virtual_booth_link|­ƒöù Copy My Virtual Booth Link
+  partner.analytics_titles.brand_visibility|Brand Visibility (Last 7 days)
+  partner.analytics_titles.engagement_channels|Engagement Channels
+  partner.global_roi_performance|Global ROI Performance
+  partner.export_pdf_report|Export PDF Report
+  partner.analytics_titles.metrics_distribution|Metrics Distribution
+  partner.autofill_profile_ai|Auto-fill with AI
+  partner.autofill_description|Let our AI analyze your website and fill your profile
+  partner.edit_profile_manually|Edit Profile Manually
+  partner.update_company_info|Update Company Information
+  partner.dashboard|Partner Sp---
+
+visitor|159
+  visitor.registration.free.title|Free Visitor Registration
+  visitor.registration.free.subtitle|Standard access to SIB 2026
+  visitor.registration.free.badge_access|Show Access
+  visitor.registration.free.badge_qr|QR Badge
+  visitor.registration.free.badge_free|Free
+  visitor.form.firstname|First Name
+  visitor.form.lastname|Last Name
+  visitor.form.email|Professional Email
+  visitor.form.phone|Phone
+  visitor.form.country|Country
+  visitor.form.sector|Business Sector
+  visitor.form.position|Job Title
+  visitor.form.company|Company / Organization
+  visitor.form.password|Password
+  visitor.form.confirm_password|Confirm Password
+  visitor.form.submit|Complete Registration
+  visitor.form.submitting|Processing...
+  visitor.validation.firstname_required|First name is required
+  visitor.validation.lastname_required|Last name is required
+  visitor.validation.email_invalid|Invalid email address
+  visitor.validation.phone_invalid|Invalid phone number
+  visitor.validation.country_required|Country is required
+  visitor.validation.sector_required|Business sector is required
+  visitor.validation.password_length|Password must be at least 12 characters
+  visitor.validation.password_requirements|Password must contain uppercase, lowercase, number and special character
+  visitor.validation.password_match|Passwords do not match
+  visitor.validation.check_errors|Please correct the highlighted errors
+  visitor.sector.authority|B├ótiment Authority
+  visitor.sector.transport|B├ótiment Transport
+  visitor.sector.logistics|Logistics
+  visitor.sector.consulting|Consulting
+  visitor.sector.technology|Technology
+  visitor.sector.student|Student
+  visitor.sector.media|Media/Press
+  visitor.sector.institutional|Institutional
+  visitor.sector.other|Other
+  visitor.free.features.title|Included with your free account:
+  visitor.free.features.list.1|Access to public show areas
+  visitor.free.features.list.2|Standard digital badge
+  visitor.free.features.list.3|SIB Newsletter
+  visitor.free.features.list.4|Access to standard mobile app
+  visitor.upsell.vip.title|Looking for more benefits?
+  visitor.upsell.vip.button|Discover VIP Offer
+  visitor.message.email_check_error|Error checking email. Please try again.
+  visitor.message.account_exists|An account already exists with this email
+  visitor.message.account_exists_desc|Please log in directly.
+  visitor.message.email_sent|Welcome email sent!
+  visitor.message.success_title|Registration Successful!
+  visitor.message.success_desc|Your free visitor account has been created successfully.
+  visitor.message.redirect|Redirecting to your space...
+  visitor.dashboard|My Space
+  visitor.my_profile|My Profile
+  visitor.my_appointments|My Appointments
+  visitor.my_favorites|My Favorites
+  visitor.upgrade|Upgrade Account
+  visitor.subscription_level|Subscription Level
+  visitor.member_since|Member Since
+  visitor.my_badge|My Digital Badge
+  visitor.discover_exhibitors|Discover Exhibitors
+  visitor.registrations_title|Registration---
+
+exhibitor|149
+  exhibitor.dashboard|Exhibitor Space
+  exhibitor.my_profile|My Profile
+  exhibitor.my_booth|My Booth
+  exhibitor.appointments|My Appointments
+  exhibitor.messages|My Messages
+  exhibitor.analytics|Statistics
+  exhibitor.booth_size|Booth Size
+  exhibitor.booth_location|Booth Location
+  exhibitor.error_load_appointments|Unable to load appointments
+  exhibitor.error_load_dashboard|Unable to load dashboard
+  exhibitor.error_toggle_visibility|Unable to change visibility
+  exhibitor.error_unauthorized_confirm|You are not authorized to confirm this appointment
+  exhibitor.error_accept_failed|Unable to accept the appointment
+  exhibitor.error_unauthorized_reject|You are not authorized to reject this appointment
+  exhibitor.confirm_reject|Are you sure you want to reject this appointment? This action is irreversible.
+  exhibitor.error_reject_failed|Unable to reject the appointment
+  exhibitor.toast_profile_visible|Ô£à Your profile is now publicly visible
+  exhibitor.toast_profile_hidden|­ƒöÆ Your profile is now hidden from the public
+  exhibitor.header.published_tooltip_hide|Hide my profile from the public
+  exhibitor.header.published_tooltip_show|Show my profile to the public
+  exhibitor.header.changing|ÔÅ│ Changing...
+  exhibitor.header.published_status|Ô£ô Published
+  exhibitor.header.hidden_status|­ƒöÆ Hidden
+  exhibitor.header.virtual_badge|Virtual Badge
+  exhibitor.header.create_edit_minisite|Create/Edit Mini-Site
+  exhibitor.status.confirmed|Confirmed
+  exhibitor.status.pending|Pending
+  exhibitor.status.completed|Completed
+  exhibitor.stats.mini_site_views|Mini-Site Views
+  exhibitor.stats.appointments|Appointments
+  exhibitor.stats.downloads|Downloads
+  exhibitor.stats.messages|Messages
+  exhibitor.modals.views_title|Your Mini-Site Views
+  exhibitor.modals.views_chart_title|Views Evolution
+  exhibitor.modals.views_footer|Your mini-site is attracting attention! Keep it updated.
+  exhibitor.modals.appointments_title|Appointment Details
+  exhibitor.modals.appointments_chart_title|Breakdown by status
+  exhibitor.modals.appointments_action|Manage my appointments
+  exhibitor.modals.downloads_title|Catalog Downloads
+  exhibitor.modals.downloads_chart_title|Downloads by period
+  exhibitor.modals.messages_title|Messaging Activity
+  exhibitor.modals.messages_chart_title|Messages received
+  exhibitor.modals.messages_action|View my messages
+  exhibitor.chart_minisite_views|Mini-Site Views
+  exhibitor.chart_downloads|Downloads
+  exhibitor.chart_messages|Messages
+  exhibitor.chart_connections|Connections
+  exhibitor.qr_download_success|Download Successful
+  exhibitor.qr_download_success_text|Your booth QR code has been downloaded successfully!
+  exhibitor.qr_download_error|Download Error
+  exhibitor.qr_download_error_text|An error occurred while downloading the QR code.
+  exhibitor.quota_b2b|B2B Appointments
+  exhibitor.quota_team|Team Members
+  exhibitor.quota_demo|Demo Sessions
+  exhibitor.quota_scans|Badge Scans/Day
+  exhibitor.quota_media|Me---
+
+countdown|54
+  countdown.add_to_calendar|Add to Calendar
+  countdown.address|Address
+  countdown.calendar_added|Added to your calendar
+  countdown.calendar_description|Event reminder added
+  countdown.conferences|Conferences
+  countdown.contact_hours|Contact Hours
+  countdown.contact_org|Contact Organization
+  countdown.copied_clipboard|Copied to clipboard
+  countdown.copy_failed|Copy failed
+  countdown.countries|Countries
+  countdown.day|Day
+  countdown.day1_networking|Opening Networking
+  countdown.day1_opening|Official Opening
+  countdown.day1_plenary|Plenary Session
+  countdown.day1_title|Day 1: Opening & Networking
+  countdown.day2_b2b|B2B Meetings
+  countdown.day2_demos|Live Demonstrations
+  countdown.day2_title|Day 2: B2B & Workshops
+  countdown.day2_workshops|Workshops
+  countdown.day3_awards|Awards Ceremony
+  countdown.day3_closing|Closing Session
+  countdown.day3_roundtables|Round Tables
+  countdown.day3_title|Day 3: Closing & Awards
+  countdown.days|Days
+  countdown.days_plural|Days
+  countdown.event_address|Event Address
+  countdown.event_started|Event has started
+  countdown.event_welcome|Welcome to SIB 2026
+  countdown.exhibitors|Exhibitors
+  countdown.hour|Hour
+  countdown.hours|Hours
+  countdown.info_catering|Catering Information
+  countdown.info_parking|Parking Information
+  countdown.info_registration|Registration Details
+  countdown.info_shuttles|Shuttle Services
+  countdown.info_wifi|WiFi Access
+  countdown.key_figures|Key Figures
+  countdown.location_access|Location & Access
+  countdown.minute|Minute
+  countdown.minutes|Minutes
+  countdown.months|Months
+  countdown.opening_in|Opening in
+  countdown.practical_info|Practical Information
+  countdown.program_3days|3-Day Program
+  countdown.reminder_set|Reminder set
+  countdown.schedule|Schedule
+  countdown.second|Second
+  countdown.seconds|Seconds
+  countdown.set_reminder|Set Reminder
+  countdown.share_countdown|Share Countdown
+  countdown.share_title|Share SIB 2026
+  countdown.venue|Venue
+  countdown.visitors|Visitors
+  countdown.weeks|Weeks
+dashboard|51
+  dashboard.admin_title|Administration Dashboard
+  dashboard.admin_subtitle|Manage all SIB 2026 resources
+  dashboard.restricted_access|Restricted Access - Administrators Only
+  dashboard.restricted_message|This section is reserved for SIB administrators
+  dashboard.back_to_dashboard|Back to Dashboard
+  dashboard.loading_metrics|Loading metrics...
+  dashboard.metrics_error|Error loading metrics
+  dashboard.retry|Retry
+  dashboard.total_users|Total Users
+  dashboard.active_users|Active Users
+  dashboard.total_exhibitors|Total Exhibitors
+  dashboard.total_partners|Total Partners
+  dashboard.total_visitors|Total Visitors
+  dashboard.statistics|Statistics
+  dashboard.system_health|System Health
+  dashboard.user_growth|User Growth
+  dashboard.activity_overview|Activity Overview
+  dashboard.traffic_analytics|Traffic Analytics
+  dashboard.recent_activity|Recent Activity
+  dashboard.registration_requests|Registration Requests
+  dashboa---
+
+upgrade|59
+  upgrade.partner_title|Partner Subscription Plans
+  upgrade.partner_description|Increase your visibility at SIB 2026
+  upgrade.visitor_title|Visitor Upgrades
+  upgrade.visitor_description|Access premium features
+  upgrade.payment_method|Payment Method
+  upgrade.card|Credit Card
+  upgrade.paypal|PayPal
+  upgrade.bank_transfer|Bank Transfer
+  upgrade.amount|Amount
+  upgrade.total|Total
+  upgrade.free.badge|Basic digital badge
+  upgrade.free.exhibition|Exhibition area access
+  upgrade.free.publicConferences|Public conferences
+  upgrade.free.b2bMeetings|B2B meetings
+  upgrade.free.unlimitedNetworking|Unlimited networking
+  upgrade.free.exclusiveEvents|Exclusive events
+  upgrade.free.workshops|Specialized workshops
+  upgrade.free.gala|Gala evening
+  upgrade.vip.premiumBadge|Premium badge with photo
+  upgrade.vip.fullAccess|Full 3-day access
+  upgrade.vip.b2bRequests|10 active B2B meeting requests
+  upgrade.vip.unlimitedNetworking|Unlimited networking
+  upgrade.vip.inauguration|Inauguration invitation
+  upgrade.vip.workshops|Specialized workshops
+  upgrade.vip.exclusiveGala|Exclusive gala evening
+  upgrade.vip.networkingLunches|Networking lunches
+  upgrade.vip.vipConferences|VIP conferences
+  upgrade.vip.privateLounge|Private lounge access
+  upgrade.testimonial1.content|The VIP Pass transformed my participation. I got 8 strategic meetings and signed
+  upgrade.testimonial2.content|The exclusive VIP events allowed me to meet key decision-makers. Exceptional ROI
+  upgrade.testimonial3.content|Access to unlimited networking is well worth the investment. I highly recommend 
+  upgrade.hero.title|Upgrade to Premium VIP Pass
+  upgrade.hero.subtitle|Unlock all features and maximize your return on investment at SIB 2026
+  upgrade.hero.launchOffer|Launch offer: 300Ôé¼ instead of 950Ôé¼
+  upgrade.freeCard.title|Free Pass
+  upgrade.freeCard.subtitle|Limited access
+  upgrade.freeCard.currentPass|Your current pass
+  upgrade.vipCard.recommended|Ô¡É RECOMMENDED
+  upgrade.vipCard.title|Premium VIP Pass
+  upgrade.vipCard.subtitle|Full 3-day access
+  upgrade.vipCard.cta|Upgrade to Premium VIP
+  upgrade.benefits.title|Why go Premium?
+  upgrade.benefits.b2bTitle|Strategic B2B Meetings
+  upgrade.benefits.b2bDesc|10 active requests to meet key decision-makers. Automatic release after response
+  upgrade.benefits.networkTitle|Premium Networking
+  upgrade.benefits.networkDesc|Unlimited access to exclusive events: gala, lunches, private lounge with 500+ de
+  upgrade.benefits.badgeTitle|Ultra-Secure Badge
+  upgrade.benefits.badgeDesc|Premium badge with photo and encrypted QR code. Priority access to all VIP areas
+  upgrade.testimonials.title|What our VIP members say
+  upgrade.roi.title|Guaranteed ROI
+  upgrade.roi.description|Our VIP members generate an average of <span class="font-bold text-yellow-300">Ôé¼
+  upgrade.roi.cta|Become VIP Now
+  upgrade.faq.title|Frequently Asked Questions
+  upgrade.faq.q1|What payment methods do you accept?
+  upgrade.faq.a1|Credit cards ---
+
+payment|89
+  payment.alreadyPremium|You are already a Premium VIP subscriber!
+  payment.userNotConnected|User not connected
+  payment.requestCreated|Payment request created
+  payment.requestError|Error creating the request
+  payment.stripeError|Error during card payment
+  payment.stripeErrorToast|Card payment error
+  payment.paypalSuccess|PayPal payment successful!
+  payment.paypalCaptureError|Error capturing PayPal payment
+  payment.paypalErrorToast|PayPal payment error
+  payment.cmiError|Error during CMI payment
+  payment.cmiErrorToast|CMI payment error
+  payment.selectImage|Please select an image
+  payment.photoMaxSize|Photo must not exceed 5MB
+  payment.authCreationError|Error creating secure account
+  payment.profileCompleted|VIP profile completed successfully
+  payment.profileUpdateError|Error updating profile
+  payment.simulatedSuccess|­ƒÄë VIP payment successfully simulated!
+  payment.simulationError|Error during payment simulation
+  payment.preparing|Preparing payment...
+  payment.redirecting|Redirecting to payment...
+  payment.pleaseWait|Please wait, we are preparing your bank transfer payment request.
+  payment.error.missingReference|Please enter the transfer reference
+  payment.success.proofSubmitted|Proof submitted! Your payment will be validated within 24-48h.
+  payment.error.generic|Error: {{message}}
+  payment.error.notFound|User or payment request not found.
+  payment.instructions.title|Payment Instructions
+  payment.instructions.subtitle|Premium VIP Pass -
+  payment.status.pendingTitle|Request pending validation
+  payment.status.pendingDescription|Your request has been received. Please proceed with the transfer to finalize you
+  payment.status.approvedTitle|Payment approved!
+  payment.status.approvedDescription|You now have access to the Premium VIP Pass.
+  payment.status.rejectedTitle|Payment rejected
+  payment.status.rejectedReason|Reason:
+  payment.bank.title|Bank Information
+  payment.bank.bankName|Bank
+  payment.bank.accountHolder|Account Holder
+  payment.bank.iban|IBAN
+  payment.bank.bic|BIC/SWIFT
+  payment.bank.mandatoryReference|Mandatory Reference
+  payment.bank.referenceNote|Must be included in the transfer description
+  payment.instructions.stepsTitle|Instructions
+  payment.instructions.step1|Make a transfer of <strong>{{amount}} EUR</strong> to the specified account.
+  payment.instructions.step2|Include the reference <strong>{{reference}}</strong> in the description.
+  payment.instructions.step3|Keep your proof of transfer.
+  payment.instructions.step4|Enter the reference below for validation.
+  payment.proof.title|Submit your proof
+  payment.proof.referenceLabel|Transfer reference
+  payment.proof.referenceHint|Transaction number or bank reference
+  payment.proof.urlLabel|Proof URL (optional)
+  payment.proof.urlHint|Link to your proof (Google Drive, Dropbox, etc.)
+  payment.proof.submitting|Sending...
+  payment.proof.submit|Submit proof
+  payment.proof.submittedTitle|Proof submitted
+  payment.proof.submittedDate|Sub---
+
+login|26
+  login.demo_accounts|Quick login - Demo accounts
+  login.demo_admin|Main Admin
+  login.demo_exhibitors|Exhibitors
+  login.demo_partners|Partners
+  login.demo_visitors|Visitors
+  login.demo_free|Free
+  login.demo_vip|VIP
+  login.paymentRequired|Payment required to access VIP dashboard.
+  login.paymentRequiredFull|Payment required to access VIP dashboard. Please finalize your payment.
+  login.connectionError|Connection error
+  login.fillAllFields|Please fill in all fields
+  login.wrongCredentials|Incorrect email or password
+  login.googleError|Error during Google login
+  login.linkedinError|Error during LinkedIn login
+  login.demoMarketing|Marketing
+  login.demoServiceClient|Customer Service
+  login.demoAdmin|Administrator
+  login.demoConnect|Login
+  login.demoBadgeConnect|Badge Printing Login
+  login.demoAdminConnect|Admin Login
+  login.demoPasswordNote|Password: Demo2026! (Service2026! for customer service)
+  login.quickAccess|Quick Access - Demo
+  login.testFeatures|Test all features
+  login.viewAccounts|View accounts
+  login.noAccount|No account yet?
+  login.createAccount|Create an account
+marketing|105
+  marketing.dashboard_title|Marketing Dashboard
+  marketing.welcome|Welcome to your marketing space
+  marketing.overview|Overview
+  marketing.campaigns|Campaigns
+  marketing.analytics|Analytics
+  marketing.reports|Reports
+  marketing.media_library|Media Library
+  marketing.featured_badges|Featured Badges
+  marketing.create_campaign|Create Campaign
+  marketing.campaign_title|Campaign Title
+  marketing.campaign_description|Description
+  marketing.campaign_start_date|Start Date
+  marketing.campaign_end_date|End Date
+  marketing.campaign_budget|Budget
+  marketing.campaign_status|Status
+  marketing.active|Active
+  marketing.inactive|Inactive
+  marketing.draft|Draft
+  marketing.published|Published
+  marketing.pending|Pending
+  marketing.statistics|Statistics
+  marketing.views|Views
+  marketing.clicks|Clicks
+  marketing.conversions|Conversions
+  marketing.engagement|Engagement
+  marketing.reach|Reach
+  marketing.impressions|Impressions
+  marketing.ctr|Click Through Rate
+  marketing.cpc|Cost Per Click
+  marketing.roi|ROI
+  marketing.filter_status|Filter by Status
+  marketing.filter_date|Filter by Date
+  marketing.sort|Sort
+  marketing.sort_newest|Newest
+  marketing.sort_oldest|Oldest
+  marketing.action_edit|Edit
+  marketing.action_delete|Delete
+  marketing.action_publish|Publish
+  marketing.action_duplicate|Duplicate
+  marketing.badge|MARKETING CONTROL CENTER
+  marketing.title|Content Strategy Hub
+  marketing.subtitle|Manage the SIB 2026 narrative experience. Publish impactful content and analyze 
+  marketing.btn_new_content|New Content
+  marketing.tabs.explore|Explore
+  marketing.tabs.media_library|Media Library
+  marketing.tabs.articles_news|Articles & News
+  marketing.stats.total_media|Total Media
+  marketing.stats.total|Total
+  marketing.stats.webinars|Webinars
+  marketing.stats.podcasts|Podcasts
+  marketing.stats.capsules|Capsules
+  mark---
+
+networking|68
+  networking.ai_powered|Powered by AI SIB v3.0
+  networking.hero_title|Networking
+  networking.hero_subtitle|Intelligent
+  networking.hero_desc|Connect with leaders in the global construction industry through our predictive 
+  networking.login_required|Login Required
+  networking.hub_restricted|The Networking Hub is reserved for registered members.
+  networking.discover_recommendations|Log in to discover your personalized recommendations.
+  networking.login_button|Log In
+  networking.signup_button|Sign Up
+  networking.precise_matching|Precise Matching
+  networking.matching_interests|Based on your interests
+  networking.global_network|Global Network
+  networking.countries_represented|+50 countries represented
+  networking.secure_access|Secure Access
+  networking.verified_profiles|Verified profiles
+  networking.ecosystem_title|The SIB ecosystem at your fingertips
+  networking.b2b_space|Pre-scheduled B2B Space
+  networking.b2b_desc|Targeted meetings with decision-makers
+  networking.afterworks|Afterworks & Receptions
+  networking.afterworks_desc|Informal and friendly networking
+  networking.roundtables|Sectoral Roundtables
+  networking.roundtables_desc|In-depth expert discussions
+  networking.lounge_zone|Business & VIP Lounge Zone
+  networking.lounge_desc|Work and relaxation spaces
+  networking.find_contacts|Find the right contacts
+  networking.smart_matching|Smart Matching
+  networking.send_message|Send Message
+  networking.request_meeting|Request Meeting
+  networking.messages|Messages
+  networking.meetings|Meetings
+  networking.recommendations|Recommendations
+  networking.description|Smart connections based on your profile
+  networking.connections|My Connections
+  networking.favorites|My Favorites
+  networking.find_matches|Find Matches
+  networking.compatibility|Compatibility
+  networking.matchmaking_title|Network Matchmaking
+  networking.compatibility_level_excellent|Excellent
+  networking.compatibility_level_good|Good
+  networking.compatibility_level_fair|Fair
+  networking.compatibility_level_poor|Poor
+  networking.ai_reserved_premium|Reserved for Premium/VIP accounts
+  networking.confirm.cancel|Cancel Appointment
+  networking.error.acceptance|Error accepting appointment
+  networking.error.cancellation|Error cancelling appointment
+  networking.error.duplicate_appointment|This appointment already exists
+  networking.error.duplicate_slot|This time slot is already taken
+  networking.error.generation|Error generating recommendations
+  networking.error.invalid_dates|Invalid date range
+  networking.error.loading_data|Error loading data
+  networking.error.login_required|Login required
+  networking.error.must_be_logged|You must be logged in
+  networking.error.no_exhibitor|Exhibitor not found
+  networking.error.no_slot|Time slot not found
+  networking.error.past_slot|This time slot is in the past
+  networking.error.profile_not_found|Profile not found
+  networking.error.quota_reached_free|Free quota has been reached
+  networking.error.recom---
+
+dashboard|51
+  dashboard.admin_title|Administration Dashboard
+  dashboard.admin_subtitle|Manage all SIB 2026 resources
+  dashboard.restricted_access|Restricted Access - Administrators Only
+  dashboard.restricted_message|This section is reserved for SIB administrators
+  dashboard.back_to_dashboard|Back to Dashboard
+  dashboard.loading_metrics|Loading metrics...
+  dashboard.metrics_error|Error loading metrics
+  dashboard.retry|Retry
+  dashboard.total_users|Total Users
+  dashboard.active_users|Active Users
+  dashboard.total_exhibitors|Total Exhibitors
+  dashboard.total_partners|Total Partners
+  dashboard.total_visitors|Total Visitors
+  dashboard.statistics|Statistics
+  dashboard.system_health|System Health
+  dashboard.user_growth|User Growth
+  dashboard.activity_overview|Activity Overview
+  dashboard.traffic_analytics|Traffic Analytics
+  dashboard.recent_activity|Recent Activity
+  dashboard.registration_requests|Registration Requests
+  dashboard.pending_approvals|Pending Approvals
+  dashboard.content_moderation|Content Moderation
+  dashboard.settings|Settings
+  dashboard.reports|Reports
+  dashboard.exports|Exports
+  dashboard.quick_actions|Quick Actions
+  dashboard.notifications|Notifications
+  dashboard.logout|Logout
+  dashboard.your_quotas|Your Quotas
+  dashboard.exhibitor_quotas|Your Exhibitor Quotas
+  dashboard.visit_activity_7days|Visit Activity (Last 7 days)
+  dashboard.appointment_status|Appointment Status
+  dashboard.interest_areas|Interest Areas
+  dashboard.visitor_engagement_7days|Visitor Engagement (Last 7 days)
+  dashboard.brand_exposure_7days|Brand Exposure (Last 7 days)
+  dashboard.engagement_channels|Engagement Channels
+  dashboard.appointments|Appointments
+  dashboard.bio_help|Help with bio
+  dashboard.complete_profile|Complete Your Profile
+  dashboard.completion_help|Profile completion help
+  dashboard.completion_score|Profile Completion Score
+  dashboard.contacts|Contacts
+  dashboard.event_goals|Event Goals
+  dashboard.login_to_see_stats|Login to see your statistics
+  dashboard.minisite_views|Minisite Views
+  dashboard.partnership_types|Partnership Types
+  dashboard.products|Products
+  dashboard.profile_tips|Profile Tips
+  dashboard.profile_views|Profile Views
+  dashboard.visibility|Visibility
+  dashboard.why_complete|Why complete your profile?
+detail|8
+  detail.overview|Overview
+  detail.contact|Contact Us
+  detail.book_appointment|Book Appointment
+  detail.add_favorite|Add to Favorites
+  detail.share|Share
+  detail.products|Products
+  detail.services|Services
+  detail.team|Team
+enhanced_networking|5
+  enhanced_networking.title|Advanced Networking
+  enhanced_networking.ai_matching|AI Matching
+  enhanced_networking.analytics|Analytics
+  enhanced_networking.compatibility_score|Compatibility Score
+  enhanced_networking.mutual_connections|Mutual Connections
+error|2
+  error.auto_generation|Auto-generation error
+  error.recommendation|Recommendation error
+errors|9
+  errors.accept_appointment|Unable to accept appointment
+  errors.reject---

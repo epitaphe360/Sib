@@ -67,6 +67,7 @@
   ADMIN_EMAIL_TEMPLATES: '/admin/email-templates',
   ADMIN_CONFIG: '/admin/config',
   ADMIN_BADGE_CONFIG: '/admin/badge-config',
+  ADMIN_CREDENTIALS: '/admin/credentials',
   CONTACT: '/contact',
   CONTACT_SUCCESS: '/contact/success',
   PARTNERSHIP: '/partnership',
@@ -240,6 +241,10 @@
 
   // Sponsor — pages dédiées
   PARTNER_SCANS: '/partner/scans',
+
+  // Programme — Contrôle d'accès sessions
+  ADMIN_SESSION_CHECKIN: '/admin/session-checkin',
+  ADMIN_SESSION_REGISTRATIONS: '/admin/session-registrations',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

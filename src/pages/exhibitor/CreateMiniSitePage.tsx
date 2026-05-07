@@ -30,7 +30,7 @@ export const CreateMiniSitePage: React.FC = () => {
 
   if (showTemplateSelector) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-slate-50">
         <div className="max-w-7xl mx-auto p-6">
           {/* Back Button */}
           <Link to={ROUTES.EXHIBITOR_DASHBOARD} className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-6">
@@ -95,4 +95,5 @@ export const CreateMiniSitePage: React.FC = () => {
     />
   );
 };
+
 
