@@ -749,23 +749,37 @@ app.post('/api/auth/magic-link', async (req, res) => {
 
     // Envoyer le magicLink généré via SMTP
     if (transporter) {
-      await transporter.sendMail({
-        from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@sib2026.ma'}>`,
-        to: normalizedEmail,
-        subject: 'Votre lien de connexion - SIB 2026',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2 style="color: #1a1a2e;">Connexion à SIB 2026</h2>
-            <p>Cliquez sur le bouton ci-dessous pour vous connecter :</p>
-            <a href="${magicLink}" style="display: inline-block; background: #c9a84c; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; margin: 16px 0;">
-              Se connecter
-            </a>
-            <p style="color: #666; font-size: 13px;">Ce lien est valable 1 heure et ne peut être utilisé qu'une seule fois.<br>Si vous n'avez pas demandé ce lien, ignorez cet email.</p>
-          </div>
-        `,
-        text: `Votre lien de connexion SIB 2026 :\n\n${magicLink}\n\nValable 1 heure.`,
-      });
-      console.log('✅ Magic link envoyé via SMTP à:', normalizedEmail);
+      try {
+        await transporter.sendMail({
+          from: `"SIB 2026" <${process.env.SMTP_USER || 'contact@sib2026.ma'}>`,
+          to: normalizedEmail,
+          subject: 'Votre lien de connexion - SIB 2026',
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h2 style="color: #1a1a2e;">Connexion à SIB 2026</h2>
+              <p>Cliquez sur le bouton ci-dessous pour vous connecter :</p>
+              <a href="${magicLink}" style="display: inline-block; background: #c9a84c; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; margin: 16px 0;">
+                Se connecter
+              </a>
+              <p style="color: #666; font-size: 13px;">Ce lien est valable 1 heure et ne peut être utilisé qu'une seule fois.<br>Si vous n'avez pas demandé ce lien, ignorez cet email.</p>
+            </div>
+          `,
+          text: `Votre lien de connexion SIB 2026 :\n\n${magicLink}\n\nValable 1 heure.`,
+        });
+        console.log('✅ Magic link envoyé via SMTP à:', normalizedEmail);
+      } catch (smtpErr) {
+        // SMTP inaccessible (DNS/réseau) → fallback Supabase OTP
+        console.warn('⚠️ SMTP failed:', smtpErr.message, '— fallback Supabase OTP');
+        const { error: otpError } = await supabaseAdmin.auth.signInWithOtp({
+          email: normalizedEmail,
+          options: { emailRedirectTo: redirectTo, shouldCreateUser: true },
+        });
+        if (otpError) {
+          console.error('❌ signInWithOtp fallback error:', otpError.message);
+          return res.status(500).json({ success: false, error: otpError.message });
+        }
+        console.log('✅ Magic link envoyé via Supabase OTP (fallback) à:', normalizedEmail);
+      }
     } else {
       console.warn('⚠️ SMTP non configuré');
     }
