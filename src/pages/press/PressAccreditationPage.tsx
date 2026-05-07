@@ -7,7 +7,6 @@ import { Input } from '../../components/ui/Input';
 import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { useTranslation } from '../../hooks/useTranslation';
-import { useTranslation } from '../../hooks/useTranslation';
 
 interface PressForm {
   firstName: string;
@@ -22,23 +21,14 @@ interface PressForm {
 }
 
 const MEDIA_TYPES = [
-  { id: 'tv', label: 'Télévision / Audiovisuel' },
+  { id: 'tv', label: 'Television / Audiovisuel' },
   { id: 'radio', label: 'Radio' },
-  { id: 'print', label: 'Presse Écrite' },
+  { id: 'print', label: 'Presse Ecrite' },
   { id: 'web', label: 'Presse Digitale / Web' },
   { id: 'agency', label: 'Agence de Presse' },
   { id: 'freelance', label: 'Journaliste Freelance / Blogueur' },
 ];
 
-  const { t } = useTranslation();
-  const mediaTypeLabels: Record<string, string> = {
-    tv: t('press.media_tv'),
-    radio: t('press.media_radio'),
-    print: t('press.media_print'),
-    web: t('press.media_web'),
-    agency: t('press.media_agency'),
-    freelance: t('press.media_freelance'),
-  };
 export default function PressAccreditationPage() {
   const { t } = useTranslation();
   const mediaTypeLabels: Record<string, string> = {
@@ -82,10 +72,9 @@ export default function PressAccreditationPage() {
           status: 'pending',
         },
       ]);
-t('press.submit_success')
       if (error) {
         if (error.code === '42P01') {
-          throw net('press.submit_error')uante');
+          throw new Error(t('press.submit_error'));
         } else {
           throw error;
         }
@@ -94,15 +83,15 @@ t('press.submit_success')
       setIsSuccess(true);
       toast.success(t('press.submit_success'));
     } catch (err: any) {
-      console.error('Erreur accréditation presse:', err);
+      console.error('Erreur accreditation presse:', err);
       toast.error(t('press.submit_error'));
     } finally {
-      setIsSubmitting(false);{t('press.received_title')}</h2>
-            <p className="text-gray-600 mb-6">
-              {t('press.received_desc')}
+      setIsSubmitting(false);
+    }
+  };
 
   if (isSuccess) {
-    return ({t('press.back_home')}
+    return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-md w-full">
           <Card className="p-8 text-center">
@@ -121,9 +110,8 @@ t('press.submit_success')
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 relative overf{t('press.title')}</h1>
-          <p className="text-lg text-gray-600">
-            {t('press.subtitle')}
+    <div className="min-h-screen bg-gray-50 py-12 relative overflow-hidden">
+      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-indigo-100 opacity-50 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-cyan-100 opacity-50 blur-3xl pointer-events-none" />
 
       <div className="max-w-3xl mx-auto px-4 relative z-10">
@@ -132,24 +120,22 @@ t('press.submit_success')
             <Camera className="h-8 w-8 text-indigo-600" />
           </span>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('press.title')}</h1>
-          <p className="text-lg text-gray-600">{t('press.personal_info')}
+          <p className="text-lg text-gray-600">
             {t('press.subtitle')}
           </p>
-        </div>{t('invitation.first_name')}
+        </div>
 
         <Card className="p-8 shadow-xl border-t-4 border-t-blue-600">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Informations personnelles */}
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-900 border-b pb-2">{t('press.personal_info')}</h3>
-{t('press.first_name_ph')}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('invitation.first_name')} *</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <Input
-                      required{t('invitation.last_name')}
+                      required
                       className="pl-10"
                       value={form.firstName}
                       onChange={(e) => setForm({ ...form, firstName: e.target.value })}
@@ -157,13 +143,12 @@ t('press.submit_success')
                     />
                   </div>
                 </div>
-{t('press.last_name_ph')}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('invitation.last_name')} *</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <Input
-                      required{t('press.email_pro')}
+                      required
                       className="pl-10"
                       value={form.lastName}
                       onChange={(e) => setForm({ ...form, lastName: e.target.value })}
@@ -171,14 +156,13 @@ t('press.submit_success')
                     />
                   </div>
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('press.email_pro')} *</label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <Input
                       type="email"
-                      required{t('invitation.phone')}
+                      required
                       className="pl-10"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -186,7 +170,6 @@ t('press.submit_success')
                     />
                   </div>
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('invitation.phone')} *</label>
                   <div className="relative">
@@ -194,49 +177,45 @@ t('press.submit_success')
                     <Input
                       required
                       className="pl-10"
-                <h3 className="font-semibold text-gray-900 border-b pb-2">{t('press.media_profession')}</h3>
+                      value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
                       placeholder="+212 600 000 000"
-                    />{t('press.media_name')}
+                    />
                   </div>
                 </div>
               </div>
 
-              {/* Informations professionnelles */}
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-900 border-b pb-2">{t('press.media_profession')}</h3>
-{t('press.media_name_ph')}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('press.media_name')} *</label>
                   <div className="relative">
                     <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <Input
-                      required{t('press.media_type_label')}
+                      required
                       className="pl-10"
                       value={form.mediaName}
                       onChange={(e) => setForm({ ...form, mediaName: e.target.value })}
                       placeholder={t('press.media_name_ph')}
                     />
                   </div>
-                </div>{t('common.select')}</option>
-                    {MEDIA_TYPES.map(type => (
-                      <option key={type.id} value={type.id}>{mediaTypeLabels[type.id] ?? 
+                </div>
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('press.media_type_label')} *</label>
                   <select
                     required
                     className="w-full h-12 bg-white border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     value={form.mediaType}
-                    onChange={(e) => setForm({ ...form, mediaType: e.target.value {t('press.job_title')}
+                    onChange={(e) => setForm({ ...form, mediaType: e.target.value })}
                   >
                     <option value="">{t('common.select')}</option>
                     {MEDIA_TYPES.map(type => (
                       <option key={type.id} value={type.id}>{mediaTypeLabels[type.id] ?? type.label}</option>
-                    ))}{t('press.job_title_ph')}
+                    ))}
                   </select>
                 </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('press.country_origin')}title')} *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('press.job_title')} *</label>
                   <Input
                     required
                     value={form.jobTitle}
@@ -244,7 +223,6 @@ t('press.submit_success')
                     placeholder={t('press.job_title_ph')}
                   />
                 </div>
-{t('press.country_ph')}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('press.country_origin')} *</label>
                   <div className="relative">
@@ -252,10 +230,10 @@ t('press.submit_success')
                     <Input
                       required
                       className="pl-10"
-                      value={form.country}{t('press.coverage_plan')}
+                      value={form.country}
                       onChange={(e) => setForm({ ...form, country: e.target.value })}
                       placeholder={t('press.country_ph')}
-                    />{t('press.coverage_plan_ph')}
+                    />
                   </div>
                 </div>
               </div>
@@ -264,7 +242,7 @@ t('press.submit_success')
             <div className="pt-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('press.coverage_plan')}</label>
               <textarea
-                classNam{t('press.important_note_title')}</strong> {t('press.important_note')}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[100px]"
                 placeholder={t('press.coverage_plan_ph')}
                 value={form.coveragePlan}
                 onChange={(e) => setForm({ ...form, coveragePlan: e.target.value })}
@@ -273,8 +251,8 @@ t('press.submit_success')
 
             <div className="bg-indigo-50 p-4 rounded-lg flex gap-3 text-sm text-indigo-900 mt-6">
               <Camera className="h-5 w-5 flex-shrink-0 text-indigo-600 mt-0.5" />
-              <div>t('press.submitting') : (
-                <>{t('press.submit')}le')}</strong> {t('press.important_note')}
+              <div>
+                <strong>{t('press.important_note_title')}</strong> {t('press.important_note')}
               </div>
             </div>
 
@@ -293,5 +271,3 @@ t('press.submit_success')
     </div>
   );
 }
-
-

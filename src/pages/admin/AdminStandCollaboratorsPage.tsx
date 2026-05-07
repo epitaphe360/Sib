@@ -188,7 +188,7 @@ export default function AdminStandCollaboratorsPage() {
       if (error) throw error;
       toast.success(t('admin.collab_deleted'));
       setCollaborators(prev => prev.filter(c => c.id !== id));
-    catch { toast.error(t('admin.collab_delete_error')); }
+    } catch { toast.error(t('admin.collab_delete_error')); }
     finally { setDeletingId(null); }
   };
 

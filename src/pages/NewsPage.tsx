@@ -26,8 +26,6 @@ import { useNewsStore } from '../store/newsStore';
 import { motion } from 'framer-motion';
 import { CONFIG } from '../lib/config';
 import ArticleCard from '../components/news/ArticleCard';
-import { PageHero } from '../components/ui/PageHero';
-import { SectionHeader } from '../components/ui/SectionHeader';
 
 // Helper function to translate article content
 function getTranslatedArticle(article: any, t: any) {
@@ -86,7 +84,7 @@ export default function NewsPage() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      'Événement': 'bg-indigo-100 text-indigo-800',
+      'Événement': 'bg-blue-100 text-blue-800',
       'Innovation': 'bg-purple-100 text-purple-800',
       'Partenariat': 'bg-green-100 text-green-800',
       'Durabilité': 'bg-emerald-100 text-emerald-800',
@@ -120,23 +118,25 @@ export default function NewsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <PageHero
-        badge={<><BookOpen className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Actualités SIB</span></>}
-        title={<>Actualités du <span className="text-yellow-300">Bâtiment</span> SIB</>}
-        subtitle="Restez informé des dernières nouvelles du secteur du bâtiment et des actualités SIB 2026"
-        py="py-16 md:py-20"
-      />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-8"
+          >
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              Actualités du Bâtiment SIB
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Restez informé des dernières nouvelles du secteur du bâtiment et des actualités SIB 2026
+            </p>
+          </motion.div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-8"
-        >
-        <div className="flex flex-col lg:flex-row gap-4 items-center">
+          {/* Search and Filters */}
+          <div className="flex flex-col lg:flex-row gap-4 items-center">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
@@ -144,7 +144,7 @@ export default function NewsPage() {
                 placeholder="Rechercher dans les actualités..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -152,7 +152,6 @@ export default function NewsPage() {
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
-                className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filtres
@@ -163,7 +162,6 @@ export default function NewsPage() {
                 onClick={handleRefreshFromOfficialSite}
                 disabled={isLoading}
                 title={t('ui.sync_official')}
-                className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
               >
                 {isLoading ? (
                   <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -180,14 +178,14 @@ export default function NewsPage() {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
-              className="mt-4 p-4 bg-indigo-50 rounded-xl"
+              className="mt-4 p-4 bg-gray-50 rounded-lg"
             >
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setCategory(CONFIG.defaults.category)}
                   className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                     selectedCategory === CONFIG.defaults.category
-                      ? 'bg-indigo-600 text-white'
+                      ? 'bg-blue-100 text-blue-700'
                       : 'bg-white text-gray-600 hover:bg-gray-100'
                   }`}
                 >
@@ -199,7 +197,7 @@ export default function NewsPage() {
                     onClick={() => setCategory(category)}
                     className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                       selectedCategory === category
-                        ? 'bg-indigo-600 text-white'
+                        ? 'bg-blue-100 text-blue-700'
                         : 'bg-white text-gray-600 hover:bg-gray-100'
                     }`}
                   >
@@ -209,9 +207,11 @@ export default function NewsPage() {
               </div>
             </motion.div>
           )}
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Featured Articles */}
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Featured Articles */}
         {featuredArticles.length > 0 && !selectedCategory && !searchTerm && (
           <div className="mb-12">
@@ -322,12 +322,12 @@ export default function NewsPage() {
           viewport={{ once: true }}
           className="mt-16"
         >
-          <Card className="bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 text-white">
+          <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
             <div className="p-8 text-center">
               <h3 className="text-2xl font-bold mb-4">
                 Restez informé des actualités SIB
               </h3>
-              <p className="text-indigo-100 mb-6 max-w-2xl mx-auto">
+              <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
                 Recevez les dernières nouvelles du secteur du bâtiment et les actualités
                 exclusives de SIB 2026 directement dans votre boîte mail
               </p>
@@ -340,7 +340,7 @@ export default function NewsPage() {
                 <Button
                   variant="default"
                   size="lg"
-                  className="bg-white text-indigo-600 hover:bg-indigo-50"
+                  className="bg-white text-blue-600 hover:bg-blue-50"
                   onClick={(e) => {
                     e.preventDefault();
                     const emailInput = e.currentTarget.parentElement?.querySelector('input[type="email"]') as HTMLInputElement;
@@ -362,7 +362,7 @@ export default function NewsPage() {
                 </Button>
               </div>
 
-              <p className="text-xs text-indigo-200 mt-4">
+              <p className="text-xs text-blue-200 mt-4">
                 Newsletter hebdomadaire • Désabonnement facile • Données protégées
               </p>
             </div>
@@ -397,7 +397,7 @@ export default function NewsPage() {
                   <button
                     key={topic}
                     onClick={() => setSearchTerm(topic)}
-                    className="px-3 py-2 bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 rounded-lg text-sm font-medium transition-colors"
+                    className="px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm font-medium transition-colors"
                   >
                     #{topic}
                   </button>
@@ -416,8 +416,8 @@ export default function NewsPage() {
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Card className="text-center p-6">
-              <div className="bg-indigo-100 p-3 rounded-lg w-12 h-12 mx-auto mb-3">
-                <BookOpen className="h-6 w-6 text-indigo-600" />
+              <div className="bg-blue-100 p-3 rounded-lg w-12 h-12 mx-auto mb-3">
+                <BookOpen className="h-6 w-6 text-blue-600" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">
                 {articles.length}
@@ -460,5 +460,4 @@ export default function NewsPage() {
     </div>
   );
 };
-
 

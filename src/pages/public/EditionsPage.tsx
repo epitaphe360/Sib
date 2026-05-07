@@ -1,9 +1,7 @@
-﻿import React from 'react';
+import React from 'react';
 import { Calendar, Users, Building2 } from 'lucide-react';
 import { usePageContent } from '../../hooks/usePageContent';
 import { ScrollReveal, HeroReveal, fadeUp } from '../../components/ui/motion';
-import { PageHero } from '../../components/ui/PageHero';
-import { useTranslation } from '../../hooks/useTranslation';
 
 interface Edition {
   year: number;
@@ -41,7 +39,6 @@ const defaultEditions: Edition[] = [
 
 export default function EditionsPage() {
   const cms = usePageContent('editions');
-  const { t } = useTranslation();
 
   const getCms = (key: string, fallback: string) => {
     const value = cms[key];
@@ -72,13 +69,21 @@ export default function EditionsPage() {
   })();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <PageHero
-        badge={<><Calendar className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{getCms('hero_badge', "40 ans d'histoire")}</span></>}
-        title={<>{cms.hero_title ? cms.hero_title.split(' ').slice(0, 2).join(' ') : 'Nos'} <span className="text-yellow-300">{cms.hero_title ? cms.hero_title.split(' ').slice(2).join(' ') : 'Éditions'}</span></>}
-        subtitle={cms.hero_subtitle || "Depuis 1986, le SIB accompagne l'essor du secteur du bâtiment au Maroc et en Afrique."}
-        py="py-16 md:py-20"
-      />
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero */}
+      <HeroReveal>
+      <div className="text-white py-16" style={{background: 'linear-gradient(135deg, #0077B6 0%, #009FE3 100%)'}}>
+        <div className="container mx-auto px-4 text-center">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
+            {getCms('hero_badge', "40 ans d'histoire")}
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Nos Éditions'}</h1>
+          <p className="text-lg text-white/70 max-w-2xl mx-auto">
+            {cms.hero_subtitle || 'Depuis 1986, le SIB accompagne l\'essor du secteur du bâtiment au Maroc et en Afrique.'}
+          </p>
+        </div>
+      </div>
+      </HeroReveal>
 
       {/* Timeline */}
       <ScrollReveal variant={fadeUp} delay={0.1}>
@@ -86,7 +91,7 @@ export default function EditionsPage() {
         <div className="max-w-4xl mx-auto">
           <div className="relative">
             {/* Vertical line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-yellow-400 via-indigo-300 to-gray-200" />
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-sib-gold via-sib-navy/30 to-gray-200" />
 
             <div className="space-y-6">
               {editions.map((ed, i) => {
@@ -96,7 +101,7 @@ export default function EditionsPage() {
                     {/* Dot */}
                     <div className={`relative z-10 w-16 h-16 flex-shrink-0 rounded-full flex items-center justify-center text-sm font-bold ${
                       isCurrent
-                        ? 'bg-yellow-400 text-indigo-900 shadow-lg shadow-yellow-400/30'
+                        ? 'bg-sib-gold text-sib-navy shadow-lg shadow-sib-gold/30'
                         : 'bg-white border-2 border-gray-200 text-gray-700'
                     }`}>
                       {ed.year}
@@ -105,16 +110,16 @@ export default function EditionsPage() {
                     {/* Content */}
                     <div className={`flex-1 rounded-xl p-6 ${
                       isCurrent
-                        ? 'bg-indigo-600 text-white shadow-lg'
+                        ? 'bg-sib-navy text-white shadow-lg'
                         : 'bg-white border border-gray-100 shadow-sm'
                     }`}>
                       <div className="flex flex-wrap items-center gap-3 mb-1">
-                        <span className={`text-lg font-bold ${isCurrent ? 'text-yellow-400' : 'text-indigo-600'}`}>
-                          {ed.edition} {t('editions.edition_label')}
+                        <span className={`text-lg font-bold ${isCurrent ? 'text-sib-gold' : 'text-sib-navy'}`}>
+                          {ed.edition} Édition
                         </span>
                         {isCurrent && (
-                          <span className="px-2 py-0.5 rounded-full bg-yellow-400/20 text-yellow-600 text-xs font-semibold">
-                            {t('editions.upcoming')}
+                          <span className="px-2 py-0.5 rounded-full bg-sib-gold/20 text-sib-gold text-xs font-semibold">
+                            À venir
                           </span>
                         )}
                       </div>
@@ -141,12 +146,12 @@ export default function EditionsPage() {
                       <div className="flex flex-wrap gap-4 text-sm mt-1">
                         {ed.exposants && (
                           <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/70' : 'text-gray-500'}`}>
-                            <Building2 className="w-4 h-4" /> {ed.exposants} {t('editions.exhibitors_label')}
+                            <Building2 className="w-4 h-4" /> {ed.exposants} exposants
                           </span>
                         )}
                         {ed.visiteurs && (
                           <span className={`flex items-center gap-1.5 ${isCurrent ? 'text-white/70' : 'text-gray-500'}`}>
-                            <Users className="w-4 h-4" /> {ed.visiteurs} {t('editions.visitors_label')}
+                            <Users className="w-4 h-4" /> {ed.visiteurs} visiteurs
                           </span>
                         )}
                       </div>

@@ -1043,9 +1043,6 @@ function Face3Preview({ config, badge = PREVIEW_BADGE }: Readonly<{ config: Badg
     </>
   );
 }
-    </>
-  );
-}
 
 function Face4Preview({ config }: Readonly<{ config: BadgeConfig }>) {
   return (

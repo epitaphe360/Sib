@@ -28,7 +28,13 @@ export const supportedLanguages: Language[] = [
     code: 'ar',
     name: 'Arabic',
     nativeName: 'العربية',
-    flag: '🇸🇦',
+    flag: '🇲🇦',
+  },
+  {
+    code: 'es',
+    name: 'Spanish',
+    nativeName: 'Español',
+    flag: '🇪🇸',
   },
 ];
 
@@ -83,7 +89,7 @@ export const useLanguageStore = create<LanguageState>()(
             console.warn('⚠️ i18next changeLanguage failed (non-blocking):', i18nError);
           }
 
-          // Mettre à jour la direction du texte pour l'arabe
+          // Mettre à jour la direction du texte pour l'arabe (RTL)
           document.documentElement.dir = languageCode === 'ar' ? 'rtl' : 'ltr';
           document.documentElement.lang = languageCode;
 

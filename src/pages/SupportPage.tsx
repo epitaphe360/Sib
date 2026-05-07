@@ -1,12 +1,9 @@
-import { Card } from '../components/ui/Card';
+﻿import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useTranslation } from '../hooks/useTranslation';
 import { HelpCircle, MessageCircle, FileText, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 import { CONFIG, getSupportEmail, getSupportPhone, getSupportMessage } from '../lib/config';
-import { PageHero } from '../components/ui/PageHero';
-import { SectionHeader } from '../components/ui/SectionHeader';
-import { motion } from 'framer-motion';
 
 export default function SupportPage() {
   const { t } = useTranslation();
@@ -16,26 +13,23 @@ export default function SupportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <PageHero
-        badge={<><HelpCircle className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{t('support.title')}</span></>}
-        title={<>{t('support.title')}</>}
-        subtitle={t('support.description')}
-        py="py-16 md:py-20"
-      />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            {t('support.title')}
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            {t('support.description')}
+          </p>
+        </div>
 
         {/* Support Categories */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
-        >
-          <Card className="p-8 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all border border-gray-100">
-            <div className="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-              <HelpCircle className="h-8 w-8 text-indigo-600" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <Card className="p-8 text-center">
+            <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+              <HelpCircle className="h-8 w-8 text-blue-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               {t('support.technicalTitle')}
@@ -48,7 +42,7 @@ export default function SupportPage() {
             </Button>
           </Card>
 
-          <Card className="p-8 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all border border-gray-100">
+          <Card className="p-8 text-center">
             <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
               <MessageCircle className="h-8 w-8 text-green-600" />
             </div>
@@ -63,7 +57,7 @@ export default function SupportPage() {
             </Button>
           </Card>
 
-          <Card className="p-8 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all border border-gray-100">
+          <Card className="p-8 text-center">
             <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
               <FileText className="h-8 w-8 text-purple-600" />
             </div>
@@ -77,16 +71,13 @@ export default function SupportPage() {
               {t('support.contactExhibitor')}
             </Button>
           </Card>
-        </motion.div>
+        </div>
 
         {/* FAQ Section */}
-        <Card className="p-8 mb-12 border border-gray-100">
-          <SectionHeader
-            align="center"
-            badge={<>{t('support.faqTitle')}</>}
-            badgeClass="bg-indigo-50 text-indigo-700 border-indigo-200"
-            title={<>{t('support.faqTitle')}</>}
-          />
+        <Card className="p-8 mb-12">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+            {t('support.faqTitle')}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
@@ -123,7 +114,7 @@ export default function SupportPage() {
 
         {/* Contact Information */}
         <Card className="p-8 text-center">
-          <Phone className="h-16 w-16 text-indigo-600 mx-auto mb-6" />
+          <Phone className="h-16 w-16 text-blue-600 mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             {t('support.immediateHelp')}
           </h2>
@@ -164,6 +155,5 @@ export default function SupportPage() {
     </div>
   );
 }
-
 
 

@@ -390,6 +390,7 @@ export const EditMediaPage: React.FC = () => {
           <div className="flex items-center justify-between pt-6 border-t border-gray-200">
             <Link to={ROUTES.ADMIN_MEDIA_MANAGE} className="text-gray-600 hover:text-gray-900">
               {t('common.cancel')}
+            </Link>
             <button
               type="submit"
               disabled={submitting}

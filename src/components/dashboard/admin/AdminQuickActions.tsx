@@ -7,12 +7,12 @@ import {
 import { ROUTES } from '../../../lib/routes';
 
 interface AdminQuickActionsProps {
-  adminMetrics: Record<string, unknown>;
-  t: (key: string, params?: Record<string, string | number> | string) => string;
+  adminMetrics: Record<string, number | unknown>;
+  t: (key: string, params?: Record<string, unknown>) => string;
 }
 
-/** Lien d'action uniforme - navy + or sur hover */
-function ActionLink({ to, icon, label }: Readonly<{ to: string; icon: React.ReactNode; label: string }>) {
+/** Lien d'action uniforme â€” navy + or sur hover */
+function ActionLink({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
   return (
     <Link to={to}>
       <motion.div
@@ -28,7 +28,7 @@ function ActionLink({ to, icon, label }: Readonly<{ to: string; icon: React.Reac
 }
 
 /** Titre de colonne uniforme */
-function ColHeader({ icon, label }: Readonly<{ icon: React.ReactNode; label: string }>) {
+function ColHeader({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <div className="flex items-center gap-2 mb-4 pb-3 border-b border-sib-gray-100">
       <span className="text-[#C9A84C]">{icon}</span>
@@ -37,7 +37,7 @@ function ColHeader({ icon, label }: Readonly<{ icon: React.ReactNode; label: str
   );
 }
 
-export function AdminQuickActions({ adminMetrics: m, t }: Readonly<AdminQuickActionsProps>) {
+export function AdminQuickActions({ adminMetrics: m, t }: AdminQuickActionsProps) {
   const metrics = m as any;
 
   return (

@@ -13,9 +13,6 @@ import {
   MapPin,
   Globe,
   BadgeCheck,
-  QrCode,
-  Bell,
-  Mail,
 } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
 
@@ -34,7 +31,7 @@ interface AdminActionsPanelProps {
   adminMetrics: Record<string, number | unknown>;
   showRegistrationRequests: boolean;
   onToggleRegistrationRequests: () => void;
-  t: (key: string, params?: Record<string, string | number> | string) => string;
+  t: (key: string, params?: Record<string, unknown>) => string;
 }
 
 // ─── Tuile générique ───────────────────────────────────────────────────────
@@ -144,8 +141,8 @@ export function AdminActionsPanel({
             <div>
               <SectionTitle
                 icon={<AlertCircle className="h-4 w-4" style={{ color: '#f59e0b' }} />}
-                label={t('admin.urgencies')}
-                sub={t('admin.actions_needing_response')}
+                label="Urgences"
+                sub="Actions nécessitant une réponse"
                 color="#f59e0b"
               />
               <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -153,13 +150,13 @@ export function AdminActionsPanel({
                   <Tile Icon={ClipboardList} label={t('admin.registration_requests')} sub={t('admin.click_to_process')} badge={pendingVal} urgent={pendingVal > 0} color="#f59e0b" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PAYMENT_VALIDATION}>
-                  <Tile Icon={CreditCard} label={t('admin.payment_validation')} sub={t('admin.activate_dashboards')} color="#f59e0b" />
+                  <Tile Icon={CreditCard} label={t('admin.payment_validation')} sub="Activer les tableaux de bord" color="#f59e0b" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PUBLICATION_CONTROL}>
                   <Tile Icon={FileText} label={t('admin.content_moderation')} sub={t('admin.required_actions')} badge={pendingMod} urgent={pendingMod > 0} color="#f59e0b" />
                 </Link>
                 <Link to={ROUTES.ADMIN_VISA_LETTERS}>
-                  <Tile Icon={Globe} label={t('admin.visa_letters')} sub={t('admin.visa_invitation_requests')} color="#f59e0b" />
+                  <Tile Icon={Globe} label="Lettres Visa" sub="Demandes d'invitation" color="#f59e0b" />
                 </Link>
               </motion.div>
             </div>
@@ -168,24 +165,24 @@ export function AdminActionsPanel({
             <div>
               <SectionTitle
                 icon={<Users className="h-4 w-4" style={{ color: '#6366f1' }} />}
-                label={t('admin.participant_management')}
+                label="Gestion Participants"
                 color="#6366f1"
               />
               <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <Link to={ROUTES.ADMIN_EXHIBITORS}>
-                  <Tile Icon={Building2} label={t('admin.manage_exhibitors')} sub={t('admin.n_registered', { count: metrics.totalExhibitors || 0 })} color="#6366f1" />
+                  <Tile Icon={Building2} label="Gestion Exposants" sub={`${metrics.totalExhibitors || 0} inscrits`} color="#6366f1" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PARTNERS_MANAGE}>
-                  <Tile Icon={Handshake} label={t('admin.manage_sponsors')} sub={t('admin.n_active', { count: metrics.totalPartners || 0 })} color="#6366f1" />
+                  <Tile Icon={Handshake} label="Gestion Sponsors" sub={`${metrics.totalPartners || 0} actifs`} color="#6366f1" />
                 </Link>
                 <Link to={ROUTES.ADMIN_VIP_VISITORS}>
                   <Tile Icon={Crown} label={t('admin.vip_visitors_management')} sub={t('admin.view_list')} color="#6366f1" />
                 </Link>
                 <Link to={ROUTES.ADMIN_USERS}>
-                  <Tile Icon={Users} label={t('admin.users_label')} sub={t('admin.n_accounts', { count: metrics.totalUsers || 0 })} color="#6366f1" />
+                  <Tile Icon={Users} label={t('admin.users_label')} sub={`${metrics.totalUsers || 0} comptes`} color="#6366f1" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PRESS_ACCREDITATIONS}>
-                  <Tile Icon={Mic} label={t('admin.press_media_mgmt')} sub={t('admin.journalists_media')} color="#6366f1" />
+                  <Tile Icon={Mic} label="Gestion Presse Média" sub="Journalistes & médias" color="#6366f1" />
                 </Link>
               </motion.div>
             </div>
@@ -194,21 +191,15 @@ export function AdminActionsPanel({
             <div>
               <SectionTitle
                 icon={<Calendar className="h-4 w-4" style={{ color: '#10b981' }} />}
-                label={t('admin.content_section')}
+                label="Contenu"
                 color="#10b981"
               />
               <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Link to={ROUTES.ADMIN_EVENTS}>
-                  <Tile Icon={Calendar} label={t('admin.events_label')} sub={t('admin.n_scheduled', { count: metrics.totalEvents || 0 })} color="#10b981" />
+                  <Tile Icon={Calendar} label="Événements" sub={`${metrics.totalEvents || 0} programmés`} color="#10b981" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PAVILIONS}>
-                  <Tile Icon={LayoutGrid} label={t('admin.pavilions_label')} sub={t('admin.n_stands', { count: metrics.totalExhibitors || 0 })} color="#10b981" />
-                </Link>
-                <Link to={ROUTES.ADMIN_SESSION_REGISTRATIONS}>
-                  <Tile Icon={Calendar} label={t('admin.session_registrations')} sub={t('admin.manage_and_export')} color="#10b981" />
-                </Link>
-                <Link to={ROUTES.ADMIN_SESSION_CHECKIN}>
-                  <Tile Icon={QrCode} label={t('admin.qr_scanner_sessions')} sub={t('admin.access_control')} color="#10b981" />
+                  <Tile Icon={LayoutGrid} label="Pavillons" sub={`${metrics.totalExhibitors || 0} stands`} color="#10b981" />
                 </Link>
               </motion.div>
             </div>
@@ -217,18 +208,18 @@ export function AdminActionsPanel({
             <div>
               <SectionTitle
                 icon={<Video className="h-4 w-4" style={{ color: '#8b5cf6' }} />}
-                label={t('admin.media_and_stats')}
+                label="Médias & Statistiques"
                 color="#8b5cf6"
               />
               <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Link to={ROUTES.ADMIN_MEDIA_MANAGE}>
-                  <Tile Icon={Video} label={t('admin.media_management')} sub={t('admin.library')} color="#8b5cf6" />
+                  <Tile Icon={Video} label="Gestion Media" sub="Bibliothèque" color="#8b5cf6" />
                 </Link>
                 <Link to={ROUTES.ADMIN_MEDIA_LIBRARY}>
-                  <Tile Icon={ImageIcon} label={t('admin.image_video_library')} sub={t('admin.photos_videos_assets')} color="#8b5cf6" />
+                  <Tile Icon={ImageIcon} label="Bibliothèque Images & Vidéos" sub="Photos · Vidéos · Assets" color="#8b5cf6" />
                 </Link>
                 <Link to={ROUTES.METRICS}>
-                  <Tile Icon={BarChart3} label={t('admin.statistics')} sub={t('admin.platform_metrics')} color="#8b5cf6" />
+                  <Tile Icon={BarChart3} label="Statistiques" sub="Métriques plateforme" color="#8b5cf6" />
                 </Link>
               </motion.div>
             </div>
@@ -237,25 +228,19 @@ export function AdminActionsPanel({
             <div>
               <SectionTitle
                 icon={<Package className="h-4 w-4" style={{ color: '#0ea5e9' }} />}
-                label={t('admin.new_modules')}
-                sub={t('admin.sib_2026_features')}
+                label="Nouveaux Modules"
+                sub="Fonctionnalités SIB 2026"
                 color="#0ea5e9"
               />
               <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <Link to={ROUTES.ADMIN_RENTAL}>
-                  <Tile Icon={Package} label={t('admin.equipment_rental')} sub={t('admin.stock_orders')} color="#0ea5e9" />
+                  <Tile Icon={Package} label="Location Matériel" sub="Stock & Commandes" color="#0ea5e9" />
                 </Link>
                 <Link to={ROUTES.ADMIN_STAND_COLLABORATORS}>
-                  <Tile Icon={UserPlus} label={t('admin.stand_collaborators')} sub={t('admin.team_management')} color="#0ea5e9" />
+                  <Tile Icon={UserPlus} label="Collaborateurs Stand" sub="Gestion équipes" color="#0ea5e9" />
                 </Link>
                 <Link to={ROUTES.ADMIN_BADGE_CONFIG}>
-                  <Tile Icon={BadgeCheck} label={t('admin.badge_a4')} sub={t('admin.bifold_customization')} color="#0ea5e9" />
-                </Link>
-                <Link to={ROUTES.ADMIN_INVITATIONS}>
-                  <Tile Icon={Mail} label={t('admin.invitations')} sub={t('admin.invitation_letters')} color="#0ea5e9" />
-                </Link>
-                <Link to={ROUTES.ADMIN_PUSH_NOTIFICATIONS}>
-                  <Tile Icon={Bell} label={t('admin.push_notifications')} sub={t('admin.send_alerts')} color="#0ea5e9" />
+                  <Tile Icon={BadgeCheck} label="Badge A4" sub="Personnalisation bifold" color="#0ea5e9" />
                 </Link>
               </motion.div>
             </div>
@@ -264,22 +249,22 @@ export function AdminActionsPanel({
             <div>
               <SectionTitle
                 icon={<ShieldAlert className="h-4 w-4" style={{ color: '#ef4444' }} />}
-                label={t('admin.audit_and_validation')}
-                sub={t('admin.tracking_quality_control')}
+                label="Audit & Validation"
+                sub="Suivi et contrôle qualité"
                 color="#ef4444"
               />
               <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Link to={ROUTES.ADMIN_ACTIVITY}>
-                  <Tile Icon={ActivitySquare} label={t('admin.activity_log')} sub={t('admin.full_audit')} color="#ef4444" />
+                  <Tile Icon={ActivitySquare} label="Journal d'Activité" sub="Audit complet" color="#ef4444" />
                 </Link>
                 <Link to={ROUTES.ADMIN_VALIDATION}>
-                  <Tile Icon={CheckSquare} label={t('admin.account_validation')} sub={t('admin.approve_reject')} badge={(metrics as any).pendingValidations || null} urgent={(metrics as any).pendingValidations > 0} color="#ef4444" />
+                  <Tile Icon={CheckSquare} label="Validation Comptes" sub="Approuver / Rejeter" badge={(metrics as any).pendingValidations || null} urgent={(metrics as any).pendingValidations > 0} color="#ef4444" />
                 </Link>
                 <Link to={ROUTES.ADMIN_MODERATION}>
-                  <Tile Icon={ShieldAlert} label={t('admin.moderation_label')} sub={t('admin.reported_content')} badge={(metrics as any).contentModerations || null} urgent={(metrics as any).contentModerations > 0} color="#ef4444" />
+                  <Tile Icon={ShieldAlert} label="Modération" sub="Contenu signalé" badge={(metrics as any).contentModerations || null} urgent={(metrics as any).contentModerations > 0} color="#ef4444" />
                 </Link>
                 <Link to={ROUTES.ADMIN_SECURITY_ZONES}>
-                  <Tile Icon={MapPin} label={t('admin.security_zones')} sub={t('admin.add_modify')} color="#ef4444" />
+                  <Tile Icon={MapPin} label="Zones de Contrôle" sub="Ajouter / Modifier" color="#ef4444" />
                 </Link>
               </motion.div>
             </div>
@@ -298,7 +283,7 @@ export function AdminActionsPanel({
                   </div>
                   <div>
                     <div className="font-bold text-lg text-indigo-900">{t('admin.total_control')}</div>
-                    <div className="text-indigo-400 text-xs mt-1">{t('admin.publication_full_control')}</div>
+                    <div className="text-indigo-400 text-xs mt-1">Contrôle publication et accès complet</div>
                   </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-indigo-400" />

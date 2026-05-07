@@ -2,8 +2,6 @@ import React from 'react';
 import { Download, FileText, Calendar } from 'lucide-react';
 import { usePageContent } from '../../hooks/usePageContent';
 import { ScrollReveal, HeroReveal, fadeUp, fadeLeft } from '../../components/ui/motion';
-import { useTranslation } from '../../hooks/useTranslation';
-import { PageHero } from '../../components/ui/PageHero';
 
 interface DocGroup {
   year: string;
@@ -54,7 +52,6 @@ const defaultDocuments: DocGroup[] = [
 
 export default function TelechargementPage() {
   const cms = usePageContent('telechargements');
-  const { t } = useTranslation();
 
   const documents: DocGroup[] = (() => {
     const raw = cms.documents_json;
@@ -79,13 +76,18 @@ export default function TelechargementPage() {
   })();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <PageHero
-        badge={<><Download className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Documents SIB</span></>}
-        title={<>{(cms.hero_title || t('page.downloads.title')).split(' ').slice(0,1).join(' ')} <span className="text-yellow-300">{(cms.hero_title || t('page.downloads.title')).split(' ').slice(1).join(' ')}</span></>}
-        subtitle={cms.hero_subtitle || t('page.downloads.subtitle')}
-        py="py-16 md:py-20"
-      />
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero */}
+      <HeroReveal>
+      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Téléchargements'}</h1>
+          <p className="text-lg text-white/70 max-w-2xl mx-auto">
+            {cms.hero_subtitle || 'Retrouvez les brochures, bilans et dossiers de presse des différentes éditions du SIB.'}
+          </p>
+        </div>
+      </div>
+      </HeroReveal>
 
       {/* Documents */}
       <div className="container mx-auto px-4 py-16">
@@ -94,8 +96,8 @@ export default function TelechargementPage() {
             <ScrollReveal key={group.year} variant={fadeLeft} delay={gi * 0.1}>
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <Calendar className="w-6 h-6 text-yellow-500" />
-                <h2 className="text-2xl font-bold text-indigo-800 font-display">{group.label}</h2>
+                <Calendar className="w-6 h-6 text-sib-gold" />
+                <h2 className="text-2xl font-bold text-sib-navy font-display">{group.label}</h2>
               </div>
               <div className="grid gap-3">
                 {group.docs.map((doc, i) => (
@@ -104,14 +106,14 @@ export default function TelechargementPage() {
                     href={doc.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between bg-white rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-yellow-400/30 transition-all group"
+                    className="flex items-center justify-between bg-white rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-sib-gold/30 transition-all group"
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-lg bg-red-50 flex items-center justify-center">
                         <FileText className="w-6 h-6 text-red-500" />
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900 group-hover:text-indigo-800 transition-colors">
+                        <div className="font-semibold text-gray-900 group-hover:text-sib-navy transition-colors">
                           {doc.name}
                         </div>
                         {doc.size && (
@@ -119,7 +121,7 @@ export default function TelechargementPage() {
                         )}
                       </div>
                     </div>
-                    <Download className="w-5 h-5 text-gray-300 group-hover:text-yellow-500 transition-colors" />
+                    <Download className="w-5 h-5 text-gray-300 group-hover:text-sib-gold transition-colors" />
                   </a>
                   </ScrollReveal>
                 ))}
@@ -132,4 +134,3 @@ export default function TelechargementPage() {
     </div>
   );
 }
-

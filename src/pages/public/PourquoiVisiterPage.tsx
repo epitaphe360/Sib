@@ -4,8 +4,7 @@ import { Lightbulb, Network, GraduationCap, Gift, TrendingUp, Globe, MapPin, Cal
 import { ROUTES } from '../../lib/routes';
 import { usePageContent } from '../../hooks/usePageContent';
 import { motion } from 'framer-motion';
-import { useTranslation } from '../../hooks/useTranslation';
-import { PageHero } from '../../components/ui/PageHero';
+import { MoroccanPattern } from '../../components/ui/MoroccanDecor';
 
 const arguments_visiter = [
   { icon: Lightbulb, title: 'Découvrir les innovations', desc: 'Le salon offre une réponse complète aux besoins des particuliers et des professionnels dans un espace et un temps maîtrisé.' },
@@ -32,7 +31,6 @@ const transports = [
 
 export default function PourquoiVisiterPage() {
   const cms = usePageContent('pourquoi-visiter');
-  const { t } = useTranslation();
 
   const getCms = (key: string, fallback: string) => {
     const value = cms[key];
@@ -114,23 +112,37 @@ export default function PourquoiVisiterPage() {
   const infoTextColors = ['text-[#00AEEF]', 'text-[#52B847]', 'text-[#E63329]', 'text-[#52B847]'];
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-white">
 
-      <PageHero
-        badge={<><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">🎫 {t('visiter.hero_badge')}</span></>}
-        title={<>{cms.hero_title || t('visiter.hero_title')}</>}
-        subtitle={cms.hero_subtitle || t('visiter.hero_subtitle')}
-        py="py-16 md:py-20"
-        actions={
-          <Link
-            to={ROUTES.BADGE}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-yellow-400 text-indigo-900 rounded-xl font-bold text-base hover:bg-yellow-300 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-          >
-            {getCms('hero_cta', t('visiter.hero_cta'))}
-            <ArrowRight className="h-5 w-5" />
-          </Link>
-        }
-      />
+      {/* ── HERO ── */}
+      <section className="relative bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 text-white py-20 overflow-hidden">
+        {/* Orbes animés */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-16 w-80 h-80 bg-[#00AEEF]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#52B847]/10 rounded-full blur-3xl pointer-events-none" />
+        <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 text-xs font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest">
+              🎫 Entrée gratuite — SIB 2026
+            </span>
+            <h1 className="text-4xl md:text-5xl font-black mb-5 leading-tight">
+              {cms.hero_title || <>Pourquoi Visiter <span className="text-[#52B847]">le SIB</span> ?</>}
+            </h1>
+            <p className="text-lg text-white/80 max-w-3xl mx-auto mb-8">
+              {cms.hero_subtitle || '5 jours pour découvrir, apprendre et connecter avec les acteurs majeurs du bâtiment au Maroc et en Afrique.'}
+            </p>
+            <Link
+              to={ROUTES.BADGE}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#52B847] text-white rounded-xl font-bold text-base hover:bg-[#3D9B35] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              {getCms('hero_cta', 'Obtenez votre badge gratuit')}
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
       {/* ── 6 RAISONS ── */}
       <section className="py-16 md:py-20 bg-white relative overflow-hidden">
@@ -138,9 +150,9 @@ export default function PourquoiVisiterPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-              {getCms('reasons_title', t('visiter.reasons_title'))}
+              {getCms('reasons_title', <><span style={{ color: '#00AEEF' }}>6 bonnes raisons</span> de visiter</>)}
             </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">{t('visiter.reasons_subtitle')}</p>
+            <p className="text-gray-500 max-w-2xl mx-auto">Le salon incontournable du bâtiment en Afrique du Nord</p>
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {arguments_visiter.map((arg, i) => (
@@ -171,7 +183,7 @@ export default function PourquoiVisiterPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              {getCms('infos_title', t('visiter.infos_title'))}
+              {getCms('infos_title', 'Infos Pratiques')}
             </h2>
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -204,7 +216,7 @@ export default function PourquoiVisiterPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              {getCms('transport_title', t('visiter.transport_title'))}
+              {getCms('transport_title', "Comment s'y rendre ?")}
             </h2>
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -235,15 +247,15 @@ export default function PourquoiVisiterPage() {
       <section className="py-16 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h3 className="text-3xl font-bold mb-4">{getCms('cta_title', t('visiter.cta_title'))}</h3>
+            <h3 className="text-3xl font-bold mb-4">{getCms('cta_title', 'Prêt à visiter ?')}</h3>
             <p className="text-white/75 max-w-xl mx-auto mb-8">
-              {getCms('cta_text', t('visiter.cta_text'))}
+              {getCms('cta_text', "L'entrée est gratuite. Inscrivez-vous dès maintenant pour obtenir votre badge électronique.")}
             </p>
             <Link
               to={ROUTES.BADGE}
               className="inline-flex items-center gap-2 px-8 py-4 bg-[#52B847] text-white rounded-xl font-bold text-base hover:bg-[#3D9B35] transition-all duration-300 shadow-lg hover:scale-105"
             >
-              {getCms('cta_button', t('auth.register_free'))}
+              {getCms('cta_button', "S'inscrire gratuitement")}
               <ArrowRight className="h-5 w-5" />
             </Link>
           </motion.div>

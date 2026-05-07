@@ -7,7 +7,7 @@ interface AdminAlertsSectionProps {
   adminMetrics: Record<string, number | unknown>;
   showRegistrationRequests: boolean;
   onToggleRegistrationRequests: () => void;
-  t: (key: string, params?: Record<string, string | number> | string) => string;
+  t: (key: string, params?: Record<string, unknown>) => string;
 }
 
 export function AdminAlertsSection({ adminMetrics: m, showRegistrationRequests, onToggleRegistrationRequests, t }: AdminAlertsSectionProps) {

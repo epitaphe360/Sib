@@ -1,19 +1,20 @@
 ﻿import { Card } from '../components/ui/Card';
 import { useTranslation } from '../hooks/useTranslation';
-import { PageHero } from '../components/ui/PageHero';
-import { Shield } from 'lucide-react';
 
 export default function PrivacyPage() {
   const { t } = useTranslation();
   return (
-    <div className="min-h-screen bg-slate-50 pb-12">
-      <PageHero
-        badge={<><Shield className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Confidentialité</span></>}
-        title={<>{t('legal.privacy_title')}</>}
-        subtitle={`${t('legal.last_update')} : ${new Date().toLocaleDateString('fr-FR')}`}
-        py="py-14 md:py-18"
-      />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-gray-50 pb-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            {t('legal.privacy_title')}
+          </h1>
+          <p className="text-xl text-gray-600">
+            {t('legal.last_update')}: {new Date().toLocaleDateString('fr-FR')}
+          </p>
+        </div>
 
         <Card className="p-8">
           <div className="prose prose-lg max-w-none">

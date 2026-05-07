@@ -8,8 +8,6 @@ import {
 import { ROUTES } from '../lib/routes';
 import { useAuthStore } from '../store/authStore';
 import { AccreditationGate } from '../components/common/AccreditationGate';
-import { useTranslation } from '../hooks/useTranslation';
-import { MoroccanDecor } from '../components/ui/MoroccanDecor';
 
 /* ─────────────────────────────────────────────────────────────
    DATA PAR SALON
@@ -176,10 +174,8 @@ interface SalonPageProps {
 
 export default function SalonPage({ salonId }: SalonPageProps) {
   const salon = SALON_DATA[salonId];
-  const { isAuthenticated } = use
-  const { t } = useTranslation();AuthStore();
+  const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
   if (!salon) {
     navigate(ROUTES.SALON_SELECTION);
@@ -187,30 +183,31 @@ export default function SalonPage({ salonId }: SalonPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#F9F9FF]">
 
       {/* ── HERO ────────────────────────────────────── */}
       <section
         className="relative text-white overflow-hidden"
         style={{ background: salon.gradient }}
       >
-        {/* Moroccan Pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.05] pointer-events-none overflow-hidden">
-          <MoroccanDecor className="w-full h-full" />
-        </div>
-
-        {/* Floating orbs */}
-        <div className="absolute top-10 right-20 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute bottom-10 left-16 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none" />
+        {/* Grid pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.07] pointer-events-none"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px)',
+            backgroundSize: '32px 32px',
+          }}
+        />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           {/* Back */}
           <Link
             to={ROUTES.SALON_SELECTION}
             className="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium mb-6 transition-colors"
-          >{t('salon.back_all')}
+          >
             <ArrowLeft className="w-4 h-4" />
-            {t('salon.back_all')}
+            Tous les salons
           </Link>
 
           <div className="flex flex-col sm:flex-row sm:items-start gap-5">
@@ -232,10 +229,10 @@ export default function SalonPage({ salonId }: SalonPageProps) {
               {/* Info chips */}
               <div className="flex flex-wrap gap-2">
                 {[
-                  { icon: Calendar, text: salon.dates },${t('salon.visitors_label')}` },
-                  { icon: Building2, text: `${salon.exhibitors} ${t('salon.exhibitors_label')}
-                  { icon: Users, text: `${salon.visitors} ${t('salon.visitors_label')}` },
-                  { icon: Building2, text: `${salon.exhibitors} ${t('salon.exhibitors_label')}` },
+                  { icon: Calendar, text: salon.dates },
+                  { icon: MapPin, text: salon.location },
+                  { icon: Users, text: `${salon.visitors} visiteurs` },
+                  { icon: Building2, text: `${salon.exhibitors} exposants` },
                 ].map((chip) => (
                   <span
                     key={chip.text}
@@ -253,7 +250,7 @@ export default function SalonPage({ salonId }: SalonPageProps) {
         {/* Wave */}
         <div className="absolute bottom-0 left-0 right-0 leading-none">
           <svg viewBox="0 0 1440 40" className="w-full" preserveAspectRatio="none" style={{ display: 'block' }}>
-            <path d="M0,20 C480,40 960,0 1440,20 L1440,40 L0,40 Z" fill="#f8fafc" />
+            <path d="M0,20 C480,40 960,0 1440,20 L1440,40 L0,40 Z" fill="#F9F9FF" />
           </svg>
         </div>
       </section>
@@ -270,17 +267,17 @@ export default function SalonPage({ salonId }: SalonPageProps) {
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${salon.color}15` }}>
                 <Lock className="w-5 h-5" style={{ color: salon.color }} />
-              </div>{t('auth.login_required')}</span> — {t('salon.register_prompt', { code: salon.code })}
+              </div>
               <p className="text-[#647483] text-sm">
-                <span className="font-bold text-[#333333]">{t('auth.login_required')}</span> — {t('salon.register_prompt', { code: salon.code })}
+                <span className="font-bold text-[#333333]">Connexion requise</span> — Inscrivez-vous gratuitement pour accéder à toutes les fonctionnalités du {salon.code}.
               </p>
             </div>
-            <div{t('nav.login')}
+            <div className="flex gap-2 w-full sm:w-auto flex-shrink-0">
+              <Link to={ROUTES.LOGIN} className="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-full border-2 text-sm font-bold transition-all" style={{ borderColor: salon.color, color: salon.color }}>
+                Connexion
               </Link>
               <Link to={ROUTES.REGISTER} className="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-full text-white text-sm font-bold transition-all hover:opacity-90" style={{ background: salon.gradient }}>
-                {t('nav.register')}
-              <Link to={ROUTES.REGISTER} className="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-full text-white text-sm font-bold transition-all hover:opacity-90" style={{ background: salon.gradient }}>
-                {t('nav.register')}
+                S'inscrire
               </Link>
             </div>
           </div>
@@ -291,9 +288,9 @@ export default function SalonPage({ salonId }: SalonPageProps) {
           {/* ── LEFT COLUMN (2/3) ── */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* Description */}{t('salon.about_prefix')}
+            {/* Description */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 shadow-sm">
-              <h2 className="text-lg font-black text-[#333333] mb-3">{t('salon.about_prefix')} {salon.code}</h2>
+              <h2 className="text-lg font-black text-[#333333] mb-3">À propos du {salon.code}</h2>
               <p className="text-[#647483] leading-relaxed text-sm sm:text-base">{salon.description}</p>
               <ul className="mt-4 space-y-2">
                 {salon.highlights.map((h) => (
@@ -305,9 +302,9 @@ export default function SalonPage({ salonId }: SalonPageProps) {
               </ul>
             </div>
 
-            {/* Fonctionnalités */}{t('salon.features_available')}
+            {/* Fonctionnalités */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 shadow-sm">
-              <h2 className="text-lg font-black text-[#333333] mb-4">{t('salon.features_available')}</h2>
+              <h2 className="text-lg font-black text-[#333333] mb-4">Fonctionnalités disponibles</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {salon.features.map((f, i) => (
                   <AccreditationGate key={f.title} requiredLevel={i > 1 ? 2 : 1} mode="blur">
@@ -326,9 +323,9 @@ export default function SalonPage({ salonId }: SalonPageProps) {
               </div>
             </div>
 
-            {/* Programme */}{t('salon.program_title')}
+            {/* Programme */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 shadow-sm">
-              <h2 className="text-lg font-black text-[#333333] mb-4">{t('salon.program_title')}</h2>
+              <h2 className="text-lg font-black text-[#333333] mb-4">Programme du salon</h2>
               <div className="space-y-3">
                 {salon.program.map((p) => (
                   <div key={p.day} className="flex items-center gap-3 p-3 rounded-xl border border-gray-50 hover:border-gray-100 transition-colors">
@@ -353,9 +350,9 @@ export default function SalonPage({ salonId }: SalonPageProps) {
                     {isAuthenticated && (
                       <button
                         className="flex-shrink-0 text-xs font-bold px-3 py-1.5 rounded-full transition-colors"
-                        st{t('common.add')}backgroundColor: `${salon.color}15`, color: salon.color }}
+                        style={{ backgroundColor: `${salon.color}15`, color: salon.color }}
                       >
-                        + {t('common.add')}
+                        + Ajouter
                       </button>
                     )}
                   </div>
@@ -367,15 +364,15 @@ export default function SalonPage({ salonId }: SalonPageProps) {
           {/* ── RIGHT COLUMN (1/3) ── */}
           <div className="space-y-5">
 
-            {/* Accreditation levels card */}{t('salon.your_access')}
+            {/* Accreditation levels card */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <h3 className="text-sm font-black text-[#333333] mb-3 uppercase tracking-wide">{t('salon.your_access')}</h3>
-              <div className="space-yt('salon.level_standard'), icon: Users, color: '#4598D1' },
-                  { level: 2, label: t('salon.level_vip'), icon: Star, color: '#FFD700' },
-                  { level: 3, label: t('salon.level_exhibitor'), icon: Award, color: '#EB9A44' },
-                  { level: 4, label: t('salon.level_sponsor')level_vip'), icon: Star, color: '#FFD700' },
-                  { level: 3, label: t('salon.level_exhibitor'), icon: Award, color: '#EB9A44' },
-                  { level: 4, label: t('salon.level_sponsor'), icon: Shield, color: '#4CAF50' },
+              <h3 className="text-sm font-black text-[#333333] mb-3 uppercase tracking-wide">Votre accès</h3>
+              <div className="space-y-2">
+                {[
+                  { level: 1, label: 'Visiteur Standard', icon: Users, color: '#4598D1' },
+                  { level: 2, label: 'Visiteur VIP', icon: Star, color: '#FFD700' },
+                  { level: 3, label: 'Exposant', icon: Award, color: '#EB9A44' },
+                  { level: 4, label: 'Sponsor', icon: Shield, color: '#4CAF50' },
                 ].map((lvl) => (
                   <div
                     key={lvl.level}
@@ -393,9 +390,9 @@ export default function SalonPage({ salonId }: SalonPageProps) {
                 <Link
                   to={ROUTES.REGISTER}
                   className="mt-4 flex items-center justify-center gap-2 w-full py-3 rounded-xl text-white text-sm font-bold transition-opacity hover:opacity-90"
-                  {t('auth.register_free')}lon.gradient }}
+                  style={{ background: salon.gradient }}
                 >
-                  {t('auth.register_free')}
+                  S'inscrire gratuitement
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               )}
@@ -404,25 +401,25 @@ export default function SalonPage({ salonId }: SalonPageProps) {
             {/* Contact / RDV */}
             <div
               className="rounded-2xl p-5 border"
-              style={{ background: salon.gradient, borderColor: '{t('salon.exhibit_at')} {salon.code} ?</h3>
+              style={{ background: salon.gradient, borderColor: 'transparent' }}
+            >
+              <h3 className="text-sm font-black text-white mb-2">Exposer au {salon.code} ?</h3>
               <p className="text-white/75 text-xs mb-4 leading-relaxed">
-                {t('salon.exhibit_cta_desc', { visitors: salon.visitors })}
-              <p className="text-white/75 text-xs mb-4 leading-relaxed">
-                {t('salon.exhibit_cta_desc', { visitors: salon.visitors })}
+                Réservez votre stand et bénéficiez d'une visibilité maximale auprès de {salon.visitors} visiteurs professionnels.
               </p>
               <Link
                 to={ROUTES.EXHIBITOR_SUBSCRIPTION}
                 className="flex items-center justify-center gap-2 w-full py-3 bg-white rounded-xl text-sm font-bold transition-all hover:shadow-md"
                 style={{ color: salon.color }}
-              >{t('salon.request_stand')}
+              >
                 <MessageCircle className="w-4 h-4" />
-                {t('salon.request_stand')}
+                Demander un stand
               </Link>
             </div>
 
-            {/* Venue */}{t('salon.venue_title')}
+            {/* Venue */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <h3 className="text-sm font-black text-[#333333] mb-3">{t('salon.venue_title')}</h3>
+              <h3 className="text-sm font-black text-[#333333] mb-3">Lieu du salon</h3>
               <div className="space-y-2">
                 <div className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: salon.color }} />

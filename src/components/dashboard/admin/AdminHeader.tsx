@@ -9,7 +9,7 @@ interface AdminHeaderProps {
   adminMetrics: Record<string, number | unknown>;
   isLoading: boolean;
   onRefresh: () => void;
-  t: (key: string, params?: Record<string, string | number> | string) => string;
+  t: (key: string, params?: Record<string, unknown>) => string;
 }
 
 const SIB_DATE = new Date('2026-11-25T00:00:00');
