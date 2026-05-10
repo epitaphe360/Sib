@@ -493,7 +493,6 @@ export async function seedTemplates(supabase: any) {
       .upsert(siteTemplates, { onConflict: 'id' });
 
     if (error) {throw error;}
-    console.log('Templates seeded successfully');
     return data;
   } catch (error) {
     console.error('Error seeding templates:', error);

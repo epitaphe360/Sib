@@ -73,7 +73,6 @@ export default function ContactPage() {
           message: formData.message.trim()
         });
       } catch (emailError) {
-        console.warn('âš ï¸ Email non envoyé (Edge Function manquante):', emailError);
         // Ne pas bloquer l'utilisateur si l'email échoue
       }
 

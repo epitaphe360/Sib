@@ -362,7 +362,6 @@ export class MediaService {
     try {
       // Valider que mediaId n'est pas undefined ou vide
       if (!mediaId || mediaId === 'undefined') {
-        console.warn('⚠️ getMediaStats appelé avec mediaId invalide:', mediaId);
         return null;
       }
 

@@ -138,7 +138,6 @@ export default function UserManagementPage() {
 
         if (!data || data.length === 0) {
 
-          console.warn('Aucun utilisateur retourné par Supabase. Vérifiez les politiques RLS.');
 
         }
 
@@ -702,7 +701,7 @@ export default function UserManagementPage() {
 
                 <Users className="h-5 w-5 text-indigo-600" />
 
-                <span className="text-indigo-800 font-medium">Gestion Utilisateurs</span>
+                <span className="text-indigo-800 font-medium">{t('user_mgmt.gestion_utilisateurs', 'Gestion Utilisateurs')}</span>
 
                 <Badge variant="info" size="sm">{userStats.total} utilisateurs</Badge>
 
@@ -734,7 +733,7 @@ export default function UserManagementPage() {
 
             </div>
 
-            <div className="text-sm text-gray-600">Total Utilisateurs</div>
+            <div className="text-sm text-gray-600">{t('user_mgmt.total_utilisateurs', 'Total Utilisateurs')}</div>
 
           </Card>
 
@@ -754,7 +753,7 @@ export default function UserManagementPage() {
 
             </div>
 
-            <div className="text-sm text-gray-600">Comptes Actifs</div>
+            <div className="text-sm text-gray-600">{t('user_mgmt.comptes_actifs', 'Comptes Actifs')}</div>
 
           </Card>
 
@@ -774,7 +773,7 @@ export default function UserManagementPage() {
 
             </div>
 
-            <div className="text-sm text-gray-600">En Attente</div>
+            <div className="text-sm text-gray-600">{t('user_mgmt.en_attente', 'En Attente')}</div>
 
           </Card>
 
@@ -794,7 +793,7 @@ export default function UserManagementPage() {
 
             </div>
 
-            <div className="text-sm text-gray-600">Suspendus</div>
+            <div className="text-sm text-gray-600">{t('user_mgmt.suspendus', 'Suspendus')}</div>
 
           </Card>
 
@@ -820,7 +819,7 @@ export default function UserManagementPage() {
 
             </div>
 
-            <div className="text-sm text-gray-600">Exposants</div>
+            <div className="text-sm text-gray-600">{t('user_mgmt.exposants', 'Exposants')}</div>
 
           </Card>
 
@@ -840,7 +839,7 @@ export default function UserManagementPage() {
 
             </div>
 
-            <div className="text-sm text-gray-600">Sponsors</div>
+            <div className="text-sm text-gray-600">{t('user_mgmt.sponsors', 'Sponsors')}</div>
 
           </Card>
 
@@ -860,7 +859,7 @@ export default function UserManagementPage() {
 
             </div>
 
-            <div className="text-sm text-gray-600">Visiteurs</div>
+            <div className="text-sm text-gray-600">{t('user_mgmt.visiteurs', 'Visiteurs')}</div>
 
           </Card>
 
@@ -880,7 +879,7 @@ export default function UserManagementPage() {
 
             </div>
 
-            <div className="text-sm text-gray-600">Administrateurs</div>
+            <div className="text-sm text-gray-600">{t('user_mgmt.administrateurs', 'Administrateurs')}</div>
 
           </Card>
 
@@ -998,15 +997,15 @@ export default function UserManagementPage() {
 
                     >
 
-                      <option value="">Tous les types</option>
+                      <option value="">{t('user_mgmt.tous_les_types', 'Tous les types')}</option>
 
-                      <option value="exhibitor">Exposants</option>
+                      <option value="exhibitor">{t('user_mgmt.exposants', 'Exposants')}</option>
 
-                      <option value="partner">Sponsors</option>
+                      <option value="partner">{t('user_mgmt.sponsors', 'Sponsors')}</option>
 
-                      <option value="visitor">Visiteurs</option>
+                      <option value="visitor">{t('user_mgmt.visiteurs', 'Visiteurs')}</option>
 
-                      <option value="admin">Administrateurs</option>
+                      <option value="admin">{t('user_mgmt.administrateurs', 'Administrateurs')}</option>
 
                     </select>
 
@@ -1032,15 +1031,15 @@ export default function UserManagementPage() {
 
                     >
 
-                      <option value="">Tous les statuts</option>
+                      <option value="">{t('user_mgmt.tous_les_statuts', 'Tous les statuts')}</option>
 
-                      <option value="active">Actifs</option>
+                      <option value="active">{t('user_mgmt.actifs', 'Actifs')}</option>
 
-                      <option value="pending">En attente</option>
+                      <option value="pending">{t('user_mgmt.en_attente_1', 'En attente')}</option>
 
-                      <option value="suspended">Suspendus</option>
+                      <option value="suspended">{t('user_mgmt.suspendus', 'Suspendus')}</option>
 
-                      <option value="rejected">Rejetés</option>
+                      <option value="rejected">{t('user_mgmt.rejetes', 'Rejetés')}</option>
 
                     </select>
 
@@ -1564,7 +1563,7 @@ export default function UserManagementPage() {
 
           <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
 
-            <h2 className="text-xl font-bold mb-6">Créer un nouvel utilisateur</h2>
+            <h2 className="text-xl font-bold mb-6">{t('user_mgmt.creer_un_nouvel_utilisateur', 'Créer un nouvel utilisateur')}</h2>
 
             <form onSubmit={handleCreateUserSubmit} className="space-y-4">
 
@@ -1572,7 +1571,7 @@ export default function UserManagementPage() {
 
                 <div>
 
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('user_mgmt.nom_complet', 'Nom complet *')}</label>
 
                   <input type="text" required value={newUserForm.name}
 
@@ -1586,7 +1585,7 @@ export default function UserManagementPage() {
 
                 <div>
 
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Entreprise</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('user_mgmt.entreprise', 'Entreprise')}</label>
 
                   <input type="text" value={newUserForm.company}
 
@@ -1602,7 +1601,7 @@ export default function UserManagementPage() {
 
               <div>
 
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('user_mgmt.email', 'Email *')}</label>
 
                 <input type="email" required value={newUserForm.email}
 
@@ -1620,7 +1619,7 @@ export default function UserManagementPage() {
 
                 <div>
 
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('user_mgmt.type', 'Type *')}</label>
 
                   <select value={newUserForm.type}
 
@@ -1628,13 +1627,13 @@ export default function UserManagementPage() {
 
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
-                    <option value="visitor">Visiteur</option>
+                    <option value="visitor">{t('user_mgmt.visiteur', 'Visiteur')}</option>
 
-                    <option value="exhibitor">Exposant</option>
+                    <option value="exhibitor">{t('user_mgmt.exposant', 'Exposant')}</option>
 
-                    <option value="partner">Sponsor</option>
+                    <option value="partner">{t('user_mgmt.sponsor', 'Sponsor')}</option>
 
-                    <option value="admin">Administrateur</option>
+                    <option value="admin">{t('user_mgmt.administrateur', 'Administrateur')}</option>
 
                   </select>
 
@@ -1642,7 +1641,7 @@ export default function UserManagementPage() {
 
                 <div>
 
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Pays</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('user_mgmt.pays', 'Pays')}</label>
 
                   <input type="text" value={newUserForm.country}
 
@@ -1690,21 +1689,21 @@ export default function UserManagementPage() {
 
           <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
 
-            <h2 className="text-xl font-bold mb-4">Détail utilisateur</h2>
+            <h2 className="text-xl font-bold mb-4">{t('user_mgmt.detail_utilisateur', 'Détail utilisateur')}</h2>
 
-            <div className="mb-2"><b>Nom :</b> {viewUser.name}</div>
+            <div className="mb-2"><b>{t('user_mgmt.nom', 'Nom :')}</b> {viewUser.name}</div>
 
-            <div className="mb-2"><b>Email :</b> {viewUser.email}</div>
+            <div className="mb-2"><b>{t('user_mgmt.email_1', 'Email :')}</b> {viewUser.email}</div>
 
-            <div className="mb-2"><b>Type :</b> {getUserTypeLabel(viewUser.type)}</div>
+            <div className="mb-2"><b>{t('user_mgmt.type_1', 'Type :')}</b> {getUserTypeLabel(viewUser.type)}</div>
 
-            <div className="mb-2"><b>Entreprise :</b> {viewUser.company}</div>
+            <div className="mb-2"><b>{t('user_mgmt.entreprise_1', 'Entreprise :')}</b> {viewUser.company}</div>
 
-            <div className="mb-2"><b>Pays :</b> {viewUser.country}</div>
+            <div className="mb-2"><b>{t('user_mgmt.pays_1', 'Pays :')}</b> {viewUser.country}</div>
 
-            <div className="mb-2"><b>Statut :</b> {getStatusLabel(viewUser.status)}</div>
+            <div className="mb-2"><b>{t('user_mgmt.statut', 'Statut :')}</b> {getStatusLabel(viewUser.status)}</div>
 
-            <Button variant="default" onClick={() => setViewUser(null)}>Fermer</Button>
+            <Button variant="default" onClick={() => setViewUser(null)}>{t('user_mgmt.fermer', 'Fermer')}</Button>
 
           </div>
 

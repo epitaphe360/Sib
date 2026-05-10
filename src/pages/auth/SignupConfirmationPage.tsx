@@ -133,7 +133,6 @@ export default function SignupConfirmationPage() {
       // ✅ Envoyer email de bienvenue
       await EmailService.sendWelcomeEmail(email, 'Utilisateur', userType);
     } catch (error) {
-      console.warn('Email resend failed:', error);
     }
   };
 

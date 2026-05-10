@@ -13,6 +13,9 @@ import {
   MapPin,
   Globe,
   BadgeCheck,
+  Settings2,
+  Newspaper, BookOpen, Mic2, Building, Bell, Radio, ThumbsUp, Mail,
+  QrCode, ClipboardCheck, KeyRound, Tag,
 } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
 
@@ -184,6 +187,9 @@ export function AdminActionsPanel({
                 <Link to={ROUTES.ADMIN_PRESS_ACCREDITATIONS}>
                   <Tile Icon={Mic} label="Gestion Presse Média" sub="Journalistes & médias" color="#6366f1" />
                 </Link>
+                <Link to={ROUTES.ADMIN_INVITATIONS}>
+                  <Tile Icon={Mail} label="Invitations" sub="Gérer les invitations" color="#6366f1" />
+                </Link>
               </motion.div>
             </div>
 
@@ -201,6 +207,15 @@ export function AdminActionsPanel({
                 <Link to={ROUTES.ADMIN_PAVILIONS}>
                   <Tile Icon={LayoutGrid} label="Pavillons" sub={`${metrics.totalExhibitors || 0} stands`} color="#10b981" />
                 </Link>
+                <Link to={ROUTES.ADMIN_NEWS}>
+                  <Tile Icon={Newspaper} label="Actualités" sub="Publier des news" color="#10b981" />
+                </Link>
+                <Link to={ROUTES.ADMIN_CONTENT}>
+                  <Tile Icon={BookOpen} label="Gestion Contenu" sub="Pages & articles" color="#10b981" />
+                </Link>
+                <Link to={ROUTES.ADMIN_SPEAKERS}>
+                  <Tile Icon={Mic2} label="Conférenciers" sub="Speakers & intervenants" color="#10b981" />
+                </Link>
               </motion.div>
             </div>
 
@@ -217,6 +232,12 @@ export function AdminActionsPanel({
                 </Link>
                 <Link to={ROUTES.ADMIN_MEDIA_LIBRARY}>
                   <Tile Icon={ImageIcon} label="Bibliothèque Images & Vidéos" sub="Photos · Vidéos · Assets" color="#8b5cf6" />
+                </Link>
+                <Link to={ROUTES.ADMIN_LIVE_EVENTS}>
+                  <Tile Icon={Radio} label="Événements Live" sub="Streaming & direct" color="#8b5cf6" />
+                </Link>
+                <Link to={ROUTES.ADMIN_PARTNER_MEDIA_APPROVAL}>
+                  <Tile Icon={ThumbsUp} label="Approbation Médias" sub="Contenus partenaires" color="#8b5cf6" />
                 </Link>
                 <Link to={ROUTES.METRICS}>
                   <Tile Icon={BarChart3} label="Statistiques" sub="Métriques plateforme" color="#8b5cf6" />
@@ -242,6 +263,15 @@ export function AdminActionsPanel({
                 <Link to={ROUTES.ADMIN_BADGE_CONFIG}>
                   <Tile Icon={BadgeCheck} label="Badge A4" sub="Personnalisation bifold" color="#0ea5e9" />
                 </Link>
+                <Link to={ROUTES.ADMIN_SALONS}>
+                  <Tile Icon={Building} label="Gestion Salons" sub="Multi-salons SIB/SIR/SIP" color="#0ea5e9" />
+                </Link>
+                <Link to={ROUTES.ADMIN_INVOICES}>
+                  <Tile Icon={FileText} label="Facturation" sub="Toutes les factures" color="#0ea5e9" />
+                </Link>
+                <Link to={ROUTES.ADMIN_PRICING}>
+                  <Tile Icon={Tag} label="Gestion des Tarifs" sub="Exposant · Partenaire · VIP" color="#0ea5e9" />
+                </Link>
               </motion.div>
             </div>
 
@@ -265,6 +295,36 @@ export function AdminActionsPanel({
                 </Link>
                 <Link to={ROUTES.ADMIN_SECURITY_ZONES}>
                   <Tile Icon={MapPin} label="Zones de Contrôle" sub="Ajouter / Modifier" color="#ef4444" />
+                </Link>
+                <Link to={ROUTES.ADMIN_SESSION_CHECKIN}>
+                  <Tile Icon={QrCode} label="Scanner Sessions" sub="Contrôle accès QR code" color="#ef4444" />
+                </Link>
+                <Link to={ROUTES.ADMIN_SESSION_REGISTRATIONS}>
+                  <Tile Icon={ClipboardCheck} label="Inscriptions Sessions" sub="Toutes les inscriptions" color="#ef4444" />
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* ── CONFIGURATION SYSTÈME ────────────────────────────── */}
+            <div>
+              <SectionTitle
+                icon={<Settings2 className="h-4 w-4" style={{ color: '#C9A84C' }} />}
+                label="Configuration Système"
+                sub="Clés API, services externes et paramètres"
+                color="#C9A84C"
+              />
+              <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <Link to={ROUTES.ADMIN_CONFIG}>
+                  <Tile Icon={Settings2} label="Configuration APIs" sub="Supabase · SMTP · PayPal · Firebase · OpenAI" color="#C9A84C" />
+                </Link>
+                <Link to={ROUTES.ADMIN_EMAIL_TEMPLATES}>
+                  <Tile Icon={FileText} label="Modèles d'emails" sub="Templates HTML envoi" color="#C9A84C" />
+                </Link>
+                <Link to={ROUTES.ADMIN_PUSH_NOTIFICATIONS}>
+                  <Tile Icon={Bell} label="Notifications Push" sub="Alertes & messages" color="#C9A84C" />
+                </Link>
+                <Link to={ROUTES.ADMIN_CREDENTIALS}>
+                  <Tile Icon={KeyRound} label="Credentials Utilisateurs" sub="Envoyer mots de passe" color="#C9A84C" />
                 </Link>
               </motion.div>
             </div>

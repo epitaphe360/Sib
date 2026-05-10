@@ -11,6 +11,7 @@ import { useAuthStore } from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
 import { PAYPAL_CLIENT_ID } from '../../services/paymentService';
+import { createInvoice } from '../../services/invoiceService';
 import { useTranslation } from '../../hooks/useTranslation';
 
 const TVA_RATE = 0.2;
@@ -270,7 +271,23 @@ export default function RentalCheckoutPage() {
         });
       if (paymentError) { throw paymentError; }
 
-      // 3. Envoyer l'email de confirmation (non-bloquant)
+      // 3. Générer la facture dans la table invoices (non-bloquant)
+      createInvoice({
+        user_id: user.id,
+        user_type: userType,
+        user_email: user.email ?? '',
+        user_name: (user as any).full_name || user.email || '',
+        vat_rate: TVA_RATE * 100,
+        currency: 'MAD',
+        notes: `Location matériel SIB 2026 — Ref: ${invoiceNumber} — Paiement: ${method === 'paypal' ? 'PayPal' : 'CMI'} (${paymentRef})`,
+        lines: cartItems.map((ci, i) => ({
+          description: `${ci.name} × ${ci.quantity} — ${totalDays} jour${totalDays > 1 ? 's' : ''} (${rentalStart} → ${rentalEnd})`,
+          quantity: ci.quantity * totalDays,
+          unit_price: ci.price_per_day,
+        })),
+      }).catch(err => console.warn('[Invoice] Non-blocking error:', err));
+
+      // 4. Envoyer l'email de confirmation (non-bloquant)
       supabase.functions.invoke('send-email-notification', {
         body: {
           to: user.email,

@@ -69,19 +69,11 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       // Pas besoin de les créer dynamiquement via l'API client (causerait une erreur RLS)
 
       // DEBUG: Vérifier le fichier avant upload
-      console.log('🎯 [IMAGE UPLOADER] Avant upload:', {
-        fileName: file.name,
-        fileType: file.type,
-        fileSize: file.size,
-        bucket: bucketName,
-        folder: folderName
-      });
 
       // Télécharger l'image
       setUploadProgress(50);
       const imageUrl = await StorageService.uploadImage(file, bucketName, folderName);
 
-      console.log('✅ [IMAGE UPLOADER] Upload réussi:', imageUrl);
 
       // Mise à jour réussie
       setUploadProgress(100);

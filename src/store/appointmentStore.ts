@@ -29,7 +29,6 @@ async function sendAppointmentNotifications(
   try {
     const supabase = getSupabaseClient();
     if (!supabase) {
-      console.warn('Supabase not configured, skipping notifications');
       return;
     }
 
@@ -65,7 +64,6 @@ async function sendAppointmentNotifications(
     }
 
     if (!visitorProfile?.email || !resolvedExhibitorProfile?.email) {
-      console.warn('Missing email addresses for notification');
       return;
     }
 
@@ -126,7 +124,6 @@ async function sendAppointmentNotifications(
       });
     } catch (pushError) {
       // Push notifications sont optionnelles, ne pas faire échouer si indisponibles
-      console.warn('Push notification failed:', pushError);
     }
   } catch (error) {
     console.error('Failed to send appointment notifications:', error);
@@ -342,7 +339,6 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
       }
 
       // Si aucune méthode n'est disponible, retourner un tableau vide
-      console.warn('Aucune méthode de récupération des rendez-vous disponible');
       set({ appointments: [], isLoading: false });
     } catch (error) {
       console.error('Erreur lors de la récupération des rendez-vous:', error);
@@ -356,7 +352,6 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     // Validation: exhibitorId must be a valid UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!exhibitorId || !uuidRegex.test(exhibitorId)) {
-      console.warn('[APPOINTMENT] Invalid exhibitorId format:', exhibitorId);
       set({ timeSlots: [], isLoading: false });
       return;
     }
@@ -415,59 +410,47 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
       }
 
       // Si aucune méthode n'est disponible, charger les données de démonstration
-      console.warn('Aucune méthode de récupération des créneaux disponible - Chargement des données de démo');
       const demoSlots = generateDemoTimeSlots();
       set({ timeSlots: demoSlots, isLoading: false });
     } catch (err) {
       console.error('Erreur lors de la récupération des créneaux:', err);
       // En cas d'erreur, charger les données de démonstration avec avertissement
-      console.warn('⚠️ Fallback vers données de démo suite à une erreur réseau');
       const demoSlots = generateDemoTimeSlots();
       set({ timeSlots: demoSlots, isLoading: false });
     }
   },
 
   bookAppointment: async (timeSlotId, message) => {
-    console.log('🔴🔴🔴 bookAppointment CALLED 🔴🔴🔴', { timeSlotId, message });
 
     // 🔒 PROTECTION ATOMIQUE contre les race conditions
     // Utilisation d'une Promise singleton pour garantir qu'un seul booking est en cours
     if (bookingPromise) {
-      console.log('⚠️ Booking already in progress, blocking');
       logger.warn('Tentative de booking concurrent détectée et bloquée');
       throw new Error('Une réservation est déjà en cours. Veuillez patienter.');
     }
 
-    console.log('✅ No concurrent booking, proceeding...');
 
     // Créer la Promise singleton
     bookingPromise = (async () => {
-      console.log('📦 Inside bookingPromise IIFE');
       const { appointments, timeSlots } = get();
-      console.log('📊 Current state:', { appointmentsCount: appointments.length, timeSlotsCount: timeSlots.length });
       set({ isBooking: true });
 
     try {
-      console.log('🔑 Getting user from authStore...');
       // Récupérer l'utilisateur connecté directement du store
       const resolvedUser = useAuthStore.getState().user;
-      console.log('👤 Resolved user:', resolvedUser?.id, resolvedUser?.email);
 
       // CRITICAL: User must be authenticated
       if (!resolvedUser?.id) {
-        console.log('❌ User not authenticated!');
         logger.error('User not authenticated during appointment booking', { user: resolvedUser });
         throw new Error('Vous devez être connecté pour réserver un rendez-vous.');
       }
 
       const visitorId = resolvedUser.id;
-      console.log('✅ User authenticated:', visitorId);
       logger.info('[appointmentStore] User authenticated for booking', { visitorId });
 
       // 🔐 SÉCURITÉ: Vérification de quota côté serveur (protection contre bypass côté client)
       // La vérification sera faite dans la fonction RPC book_appointment_atomic
       const supabase = supabaseClient;
-      console.log('🔌 Supabase client ready:', !!supabase);
 
       // OPTIMISATION: On saute la vérification RPC préalable pour éviter les faux positifs dues aux caches ou logiques divergentes.
       // On laisse book_appointment_atomic faire l'autorité finale.
@@ -496,44 +479,31 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
       */
 
       // Prevent duplicate booking of the same time slot by the same visitor (UX seulement)
-      console.log('🔍 Checking for duplicate bookings...');
       if (appointments.some(a => a.visitorId === visitorId && a.timeSlotId === timeSlotId)) {
-        console.log('❌ Duplicate booking detected!');
         throw new Error('Vous avez déjà réservé ce créneau');
       }
-      console.log('✅ No duplicate booking');
 
     // CRITICAL: Validate time slot ownership
-    console.log('🔍 Looking for slot in timeSlots array:', timeSlotId);
-    console.log('📋 Available slots:', timeSlots.map(s => ({ id: s.id, exhibitorId: s.exhibitorId })));
     const slot = timeSlots.find(s => s.id === timeSlotId);
 
     if (!slot) {
-      console.log('❌ Slot NOT found in timeSlots!');
       throw new Error('Créneau non trouvé. Veuillez actualiser la page.');
     }
-    console.log('✅ Slot found:', slot);
 
     const exhibitorIdForSlot = slot.exhibitorId;
-    console.log('🏢 ExhibitorId for slot:', exhibitorIdForSlot);
 
     if (!exhibitorIdForSlot) {
-      console.log('❌ Slot has no exhibitorId!');
       // Time slot exists but has no owner - data integrity violation
       throw new Error('Ce créneau n\'a pas de propriétaire valide. Veuillez contacter le support.');
     }
-    console.log('✅ ExhibitorId is valid');
 
     // NOUVELLE RÈGLE: Vérifier qu'on n'a pas déjà un RDV avec cet exposant/sponsor
-    console.log('🔍 Checking if user already has appointment with this exhibitor...');
     const hasExistingAppointment = appointments.some(
       a => a.visitorId === visitorId && a.exhibitorId === exhibitorIdForSlot && a.status !== 'cancelled'
     );
     if (hasExistingAppointment) {
-      console.log('❌ User already has appointment with this exhibitor!');
       throw new Error('Vous avez déjà un rendez-vous avec cet exposant/sponsor');
     }
-    console.log('✅ No existing appointment with this exhibitor');
 
     // VALIDATION TEMPORELLE: Vérifier que le créneau est valide (date + heure de début)
     const slotDate = slot.date ? new Date(slot.date) : null;
@@ -551,33 +521,25 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     const salonEnd = new Date('2026-11-29T23:59:59');
 
     if (!slotDate) {
-      console.log('❌ Slot has no date!');
       throw new Error('Ce créneau n\'a pas de date valide');
     }
 
     if (!slotStartDateTime || slotStartDateTime < now) {
-      console.log('❌ Slot is in the past!');
       throw new Error('Ce créneau est dans le passé. Veuillez choisir un créneau futur.');
     }
 
     if (slotDate < salonStart || slotDate > salonEnd) {
-      console.log('❌ Slot is outside salon dates!');
       throw new Error('Ce créneau est en dehors des dates du salon (25-29 Novembre 2026)');
     }
-    console.log('✅ Slot date is valid');
 
     // Additional validation: Verify slot is not already fully booked
-    console.log('🔍 Checking availability:', { available: slot.available, currentBookings: slot.currentBookings, maxBookings: slot.maxBookings });
     if (!slot.available || (slot.currentBookings || 0) >= (slot.maxBookings || 1)) {
-      console.log('❌ Slot is full!');
       throw new Error('Ce créneau est complet. Veuillez en choisir un autre.');
     }
-    console.log('✅ Slot is available');
 
     // ATOMIC BOOKING: Use RPC function with row-level locking
     // This prevents ALL race conditions and overbooking
     // Note: supabase already imported at line 438
-    console.log('🚀 Calling book_appointment_atomic RPC...', { timeSlotId, visitorId, exhibitorIdForSlot });
     logger.info('[appointmentStore] Calling book_appointment_atomic RPC', { timeSlotId, visitorId, exhibitorIdForSlot });
 
     // Signature from 20251224 migration: (p_time_slot_id, p_visitor_id, p_exhibitor_id, p_notes, p_meeting_type)
@@ -589,25 +551,20 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
       p_meeting_type: 'in-person'
     });
 
-    console.log('📩 RPC Response:', { data, error });
     logger.info('[appointmentStore] RPC response', { data, error });
 
     if (error) {
-      console.log('❌ RPC Error:', error);
       logger.error('[appointmentStore] RPC error', { error });
       throw new Error(error.message || 'Erreur lors de la réservation');
     }
 
     // The function returns a JSONB object
     const result = data;
-    console.log('📊 RPC Result:', result);
 
     if (!result || !result.success) {
-      console.log('❌ Booking failed:', result);
       logger.error('[appointmentStore] Booking failed', { result });
       throw new Error(result?.error || result?.error_message || 'Erreur lors de la réservation');
     }
-    console.log('✅✅✅ BOOKING SUCCESS! ✅✅✅');
 
     logger.info('[appointmentStore] Booking successful', { appointmentId: result.appointment_id });
 
@@ -687,7 +644,6 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     try {
       await sendAppointmentNotifications(appointment, 'cancelled');
     } catch (notifError) {
-      console.warn('Failed to send cancellation notification:', notifError);
       // Ne pas faire échouer l'annulation si la notification échoue
     }
 
@@ -749,7 +705,6 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
             // Envoyer notification email/push aux participants
             await sendAppointmentNotifications(appointment, 'confirmed');
           } catch (notifError) {
-            console.warn('Erreur notification:', notifError);
           }
         }
 
@@ -769,7 +724,6 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
           }
         }
       } catch (err) {
-        console.warn('Failed to persist appointment status to Supabase', err);
         throw err; // Don't update local state if server update failed
       }
     }
@@ -859,7 +813,6 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
       void notifyInterestedVisitors(newSlot);
       return;
     } catch (err) {
-      console.warn('createTimeSlot error', err);
       // fallback to local
       const newSlot: TimeSlot = {
         ...slot,

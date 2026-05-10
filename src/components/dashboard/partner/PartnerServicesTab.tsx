@@ -92,6 +92,14 @@ const services = [
     color: 'bg-rose-600',
     highlight: false,
   },
+  {
+    title: 'Mes Factures',
+    description: 'Consultez et téléchargez vos factures partenaire SIB 2026.',
+    icon: FileText,
+    link: ROUTES.PARTNER_INVOICES,
+    color: 'bg-slate-700',
+    highlight: false,
+  },
 ];
 
 export function PartnerServicesTab() {

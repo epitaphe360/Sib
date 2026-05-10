@@ -487,7 +487,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                     onChange={(e) => setFormData({ ...formData, sector: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Sélectionnez un secteur</option>
+                    <option value="">{t('exhibitor_sim.selectionnez_un_secteur', 'Sélectionnez un secteur')}</option>
                     {sectors.map((sector) => (
                       <option key={sector} value={sector}>{sector}</option>
                     ))}
@@ -503,14 +503,14 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="bâtiment-industry">Industrie bâtiment</option>
-                    <option value="construction-services">Services BTP</option>
-                    <option value="logistics">Logistique</option>
-                    <option value="technology">Technologie</option>
-                    <option value="equipment">Équipements</option>
-                    <option value="consulting">Conseil</option>
-                    <option value="institutional">Institutionnel</option>
-                    <option value="other">Autre</option>
+                    <option value="bâtiment-industry">{t('exhibitor_sim.industrie_batiment', 'Industrie bâtiment')}</option>
+                    <option value="construction-services">{t('exhibitor_sim.services_btp', 'Services BTP')}</option>
+                    <option value="logistics">{t('exhibitor_sim.logistique', 'Logistique')}</option>
+                    <option value="technology">{t('exhibitor_sim.technologie', 'Technologie')}</option>
+                    <option value="equipment">{t('exhibitor_sim.equipements', 'Équipements')}</option>
+                    <option value="consulting">{t('exhibitor_sim.conseil', 'Conseil')}</option>
+                    <option value="institutional">{t('exhibitor_sim.institutionnel', 'Institutionnel')}</option>
+                    <option value="other">{t('exhibitor_sim.autre', 'Autre')}</option>
                   </select>
                 </div>
 
@@ -525,7 +525,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                       onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white cursor-pointer"
                     >
-                      <option value="">Sélectionnez un pays</option>
+                      <option value="">{t('exhibitor_sim.selectionnez_un_pays', 'Sélectionnez un pays')}</option>
                       <optgroup label="Afrique du Nord & Moyen-Orient">
                         <option value="Maroc">???? Maroc</option>
                         <option value="Tunisie">???? Tunisie</option>
@@ -661,7 +661,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                     onChange={(e) => setFormData({ ...formData, employeeCount: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Sélectionnez</option>
+                    <option value="">{t('exhibitor_sim.selectionnez', 'Sélectionnez')}</option>
                     <option value="1-10">1-10 employés</option>
                     <option value="11-50">11-50 employés</option>
                     <option value="51-200">51-200 employés</option>
@@ -679,8 +679,8 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                     onChange={(e) => setFormData({ ...formData, revenue: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Sélectionnez</option>
-                    <option value="< 1M">Moins de 1M€</option>
+                    <option value="">{t('exhibitor_sim.selectionnez', 'Sélectionnez')}</option>
+                    <option value="< 1M">{t('exhibitor_sim.moins_de_1m', 'Moins de 1M€')}</option>
                     <option value="1M-5M">1M€ - 5M€</option>
                     <option value="5M-10M">5M€ - 10M€</option>
                     <option value="10M-50M">10M€ - 50M€</option>
@@ -957,9 +957,9 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                     onChange={(e) => setFormData({ ...formData, paymentStatus: e.target.value as 'pending' | 'partial' | 'completed' })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="pending">En attente</option>
-                    <option value="partial">Acompte versé</option>
-                    <option value="completed">Paiement complet</option>
+                    <option value="pending">{t('exhibitor_sim.en_attente', 'En attente')}</option>
+                    <option value="partial">{t('exhibitor_sim.acompte_verse', 'Acompte versé')}</option>
+                    <option value="completed">{t('exhibitor_sim.paiement_complet', 'Paiement complet')}</option>
                   </select>
                 </div>
 
@@ -1035,11 +1035,11 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                           onChange={(e) => updateProduct(index, 'category', e.target.value)}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
-                          <option value="">Sélectionnez une catégorie</option>
-                          <option value="Software">Logiciel</option>
-                          <option value="Hardware">Équipement</option>
-                          <option value="Service">Service</option>
-                          <option value="Consulting">Conseil</option>
+                          <option value="">{t('exhibitor_sim.selectionnez_une_categorie', 'Sélectionnez une catégorie')}</option>
+                          <option value="Software">{t('exhibitor_sim.logiciel', 'Logiciel')}</option>
+                          <option value="Hardware">{t('exhibitor_sim.equipement', 'Équipement')}</option>
+                          <option value="Service">{t('exhibitor_sim.service', 'Service')}</option>
+                          <option value="Consulting">{t('exhibitor_sim.conseil', 'Conseil')}</option>
                         </select>
                       </div>
                     </div>
@@ -1140,7 +1140,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg">
                   <div>
-                    <h3 className="font-medium text-gray-900">Exposant vérifié</h3>
+                    <h3 className="font-medium text-gray-900">{t('exhibitor_sim.exposant_verifie', 'Exposant vérifié')}</h3>
                     <p className="text-sm text-gray-600">
                       Marque l'exposant comme vérifié par l'administration
                     </p>
@@ -1158,7 +1158,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
 
                 <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg">
                   <div>
-                    <h3 className="font-medium text-gray-900">Exposant mis en avant</h3>
+                    <h3 className="font-medium text-gray-900">{t('exhibitor_sim.exposant_mis_en_avant', 'Exposant mis en avant')}</h3>
                     <p className="text-sm text-gray-600">
                       Affiche l'exposant en vedette sur la page d'accueil
                     </p>
@@ -1176,7 +1176,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
 
                 <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg">
                   <div>
-                    <h3 className="font-medium text-gray-900">Profil publié</h3>
+                    <h3 className="font-medium text-gray-900">{t('exhibitor_sim.profil_publie', 'Profil publié')}</h3>
                     <p className="text-sm text-gray-600">
                       Rend le profil visible publiquement sur la plateforme
                     </p>
@@ -1214,7 +1214,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
               {/* Logo Preview */}
               {formData.logo && (
                 <Card className="p-4">
-                  <h4 className="font-semibold text-gray-900 mb-3">Logo de l'entreprise</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">{t('exhibitor_sim.logo_de_lentreprise', 'Logo de l\'entreprise')}</h4>
                   <div className="flex justify-center">
                     <img
                       src={formData.logo}
@@ -1231,67 +1231,67 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
               {/* Récapitulatif */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="p-4">
-                  <h4 className="font-semibold text-gray-900 mb-3">Entreprise</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">{t('exhibitor_sim.entreprise', 'Entreprise')}</h4>
                   <div className="space-y-2 text-sm">
-                    <div><strong>Nom :</strong> {formData.companyName}</div>
-                    <div><strong>Catégorie :</strong> {formData.category}</div>
-                    <div><strong>Secteur :</strong> {formData.sector}</div>
-                    <div><strong>Pays :</strong> {formData.country}</div>
-                    <div><strong>Site web :</strong> {formData.website}</div>
-                    {formData.establishedYear && <div><strong>Création :</strong> {formData.establishedYear}</div>}
-                    {formData.employeeCount && <div><strong>Employés :</strong> {formData.employeeCount}</div>}
-                    {formData.revenue && <div><strong>CA :</strong> {formData.revenue}</div>}
+                    <div><strong>{t('exhibitor_sim.nom', 'Nom :')}</strong> {formData.companyName}</div>
+                    <div><strong>{t('exhibitor_sim.categorie', 'Catégorie :')}</strong> {formData.category}</div>
+                    <div><strong>{t('exhibitor_sim.secteur', 'Secteur :')}</strong> {formData.sector}</div>
+                    <div><strong>{t('exhibitor_sim.pays', 'Pays :')}</strong> {formData.country}</div>
+                    <div><strong>{t('exhibitor_sim.site_web', 'Site web :')}</strong> {formData.website}</div>
+                    {formData.establishedYear && <div><strong>{t('exhibitor_sim.creation', 'Création :')}</strong> {formData.establishedYear}</div>}
+                    {formData.employeeCount && <div><strong>{t('exhibitor_sim.employes', 'Employés :')}</strong> {formData.employeeCount}</div>}
+                    {formData.revenue && <div><strong>{t('exhibitor_sim.ca', 'CA :')}</strong> {formData.revenue}</div>}
                   </div>
                 </Card>
 
                 <Card className="p-4">
-                  <h4 className="font-semibold text-gray-900 mb-3">Contact</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">{t('exhibitor_sim.contact', 'Contact')}</h4>
                   <div className="space-y-2 text-sm">
-                    <div><strong>Nom :</strong> {formData.contactName}</div>
-                    <div><strong>Poste :</strong> {formData.position}</div>
-                    <div><strong>Email :</strong> {formData.email}</div>
-                    <div><strong>Téléphone :</strong> {formData.phone}</div>
-                    {formData.address && <div><strong>Adresse :</strong> {formData.address}</div>}
-                    {formData.city && <div><strong>Ville :</strong> {formData.city}</div>}
-                    {formData.zipCode && <div><strong>Code postal :</strong> {formData.zipCode}</div>}
+                    <div><strong>{t('exhibitor_sim.nom', 'Nom :')}</strong> {formData.contactName}</div>
+                    <div><strong>{t('exhibitor_sim.poste', 'Poste :')}</strong> {formData.position}</div>
+                    <div><strong>{t('exhibitor_sim.email', 'Email :')}</strong> {formData.email}</div>
+                    <div><strong>{t('exhibitor_sim.telephone', 'Téléphone :')}</strong> {formData.phone}</div>
+                    {formData.address && <div><strong>{t('exhibitor_sim.adresse', 'Adresse :')}</strong> {formData.address}</div>}
+                    {formData.city && <div><strong>{t('exhibitor_sim.ville', 'Ville :')}</strong> {formData.city}</div>}
+                    {formData.zipCode && <div><strong>{t('exhibitor_sim.code_postal', 'Code postal :')}</strong> {formData.zipCode}</div>}
                   </div>
                 </Card>
 
                 <Card className="p-4">
-                  <h4 className="font-semibold text-gray-900 mb-3">Commercial</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">{t('exhibitor_sim.commercial', 'Commercial')}</h4>
                   <div className="space-y-2 text-sm">
-                    <div><strong>Package :</strong> {packages.find(p => p.type === formData.packageType)?.name}</div>
-                    <div><strong>Taille stand :</strong> {formData.standSize}</div>
-                    <div><strong>Valeur :</strong> {formData.contractValue}</div>
-                    <div><strong>Paiement :</strong> {formData.paymentStatus}</div>
+                    <div><strong>{t('exhibitor_sim.package', 'Package :')}</strong> {packages.find(p => p.type === formData.packageType)?.name}</div>
+                    <div><strong>{t('exhibitor_sim.taille_stand', 'Taille stand :')}</strong> {formData.standSize}</div>
+                    <div><strong>{t('exhibitor_sim.valeur', 'Valeur :')}</strong> {formData.contractValue}</div>
+                    <div><strong>{t('exhibitor_sim.paiement', 'Paiement :')}</strong> {formData.paymentStatus}</div>
                   </div>
                 </Card>
 
                 <Card className="p-4">
-                  <h4 className="font-semibold text-gray-900 mb-3">Produits</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">{t('exhibitor_sim.produits', 'Produits')}</h4>
                   <div className="space-y-1 text-sm">
                     {formData.products.map((product) => (
                       <div key={`preview-${product.name}`}>• {product.name} ({product.category})</div>
                     ))}
                     {formData.products.length === 0 && (
-                      <div className="text-gray-500">Aucun produit ajouté</div>
+                      <div className="text-gray-500">{t('exhibitor_sim.aucun_produit_ajoute', 'Aucun produit ajouté')}</div>
                     )}
                   </div>
                 </Card>
 
                 {(formData.certifications || formData.markets) && (
                   <Card className="p-4">
-                    <h4 className="font-semibold text-gray-900 mb-3">Compléments</h4>
+                    <h4 className="font-semibold text-gray-900 mb-3">{t('exhibitor_sim.complements', 'Compléments')}</h4>
                     <div className="space-y-2 text-sm">
                       {formData.certifications && (
                         <div>
-                          <strong>Certifications :</strong>
+                          <strong>{t('exhibitor_sim.certifications', 'Certifications :')}</strong>
                           <div className="mt-1 text-gray-600">{formData.certifications}</div>
                         </div>
                       )}
                       {formData.markets && (
                         <div>
-                          <strong>Marchés :</strong>
+                          <strong>{t('exhibitor_sim.marches', 'Marchés :')}</strong>
                           <div className="mt-1 text-gray-600">{formData.markets}</div>
                         </div>
                       )}
@@ -1300,23 +1300,23 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                 )}
 
                 <Card className="p-4">
-                  <h4 className="font-semibold text-gray-900 mb-3">Statuts</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">{t('exhibitor_sim.statuts', 'Statuts')}</h4>
                   <div className="space-y-2 text-sm">
                     <div>
-                      <strong>Vérifié :</strong> {formData.verified ? '? Oui' : '? Non'}
+                      <strong>{t('exhibitor_sim.verifie', 'Vérifié :')}</strong> {formData.verified ? '? Oui' : '? Non'}
                     </div>
                     <div>
-                      <strong>Mis en avant :</strong> {formData.featured ? '? Oui' : '? Non'}
+                      <strong>{t('exhibitor_sim.mis_en_avant', 'Mis en avant :')}</strong> {formData.featured ? '? Oui' : '? Non'}
                     </div>
                     <div>
-                      <strong>Publié :</strong> {formData.isPublished ? '? Oui' : '? Non'}
+                      <strong>{t('exhibitor_sim.publie', 'Publié :')}</strong> {formData.isPublished ? '? Oui' : '? Non'}
                     </div>
                   </div>
                 </Card>
               </div>
 
               <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-medium text-blue-900 mb-2">Processus de validation</h4>
+                <h4 className="font-medium text-blue-900 mb-2">{t('exhibitor_sim.processus_de_validation', 'Processus de validation')}</h4>
                 <p className="text-sm text-blue-700">
                   Après soumission, le dossier sera examiné par l'équipe commerciale puis validé par l'administration.
                   L'exposant recevra un email de confirmation une fois son compte activé.

@@ -4,6 +4,7 @@
  */
 import 'dotenv/config';
 import express from 'express';
+import compression from 'compression';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import nodemailer from 'nodemailer';
@@ -30,6 +31,22 @@ const __dirname = path.dirname(__filename);
 const app = express();
 // Use port 3000 in development, 5000 in production
 const PORT = process.env.PORT || (process.env.NODE_ENV === 'production' ? 5000 : 3000);
+
+// ── Trust Cloudflare proxy ──────────────────────────────────────────────────
+// Cloudflare IP ranges — allows rate limiting to work on real client IPs
+// and HTTPS detection via X-Forwarded-Proto to work correctly.
+app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal',
+  // Cloudflare IPv4 ranges (https://www.cloudflare.com/ips-v4)
+  '173.245.48.0/20', '103.21.244.0/22', '103.22.200.0/22',
+  '103.31.4.0/22', '141.101.64.0/18', '108.162.192.0/18',
+  '190.93.240.0/20', '188.114.96.0/20', '197.234.240.0/22',
+  '198.41.128.0/17', '162.158.0.0/15', '104.16.0.0/13',
+  '104.24.0.0/14', '172.64.0.0/13', '131.0.72.0/22',
+]);
+
+// ── Gzip/Brotli compression ─────────────────────────────────────────────────
+// Compresses all API responses. Cloudflare will also compress at edge.
+app.use(compression({ threshold: 1024 }));
 
 // JSON body parser for API endpoints
 app.use(express.json());
@@ -105,13 +122,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// Security headers
+// Security headers + Cloudflare cache hints
 app.use((req, res, next) => {
   res.header('X-Content-Type-Options', 'nosniff');
   res.header('X-Frame-Options', 'DENY');
   res.header('X-XSS-Protection', '1; mode=block');
   res.header('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  // Tell Cloudflare: API responses are private (not cached at edge by default)
+  // Individual routes can override with Cache-Control: public, s-maxage=...
+  if (req.path.startsWith('/api/')) {
+    res.header('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.header('CDN-Cache-Control', 'no-store');
+  }
   next();
 });
 
@@ -449,6 +472,9 @@ app.get('/api/health', (req, res) => {
 
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
+// PgBouncer pooler URL (transaction mode, port 6543) — défini après upgrade Supabase Pro
+// Si absent, supabase-js utilise le REST API (pas de connexion directe DB de toute façon)
+const SUPABASE_DB_POOLER_URL = process.env.SUPABASE_DB_POOLER_URL || null;
 
 console.log('🔧 [INIT] SUPABASE_URL:', SUPABASE_URL ? 'OK' : 'MANQUANT');
 console.log('🔧 [INIT] SERVICE_ROLE_KEY:', SUPABASE_SERVICE_ROLE_KEY ? 'OK' : 'MANQUANT');

@@ -1,6 +1,6 @@
 ﻿/**
- * Service de paiement pour les upgrades de niveau sponsor
- * Gère PayPal, CMI et virement pour les paiements sponsors
+ * Service de paiement pour les upgrades de niveau partenaire
+ * Gère PayPal, CMI et virement pour les paiements partenaires
  *
  * ✅ FIX P0-3: Import des montants depuis Single Source of Truth
  */
@@ -8,17 +8,14 @@
 import { PartnerTier, getPartnerTierConfig } from '../config/partnerTiers';
 import { PARTNER_BILLING } from '../config/partnerBilling';
 
-// ✅ Constantes de prix (base de calcul) - Import depuis SSOT
-const TIER_PRICES = {
-  partner: PARTNER_BILLING.partner.amount * 100,              // Convert MAD to centimes
-  silver: PARTNER_BILLING.silver.amount * 100,                // Convert MAD to centimes
-  gold: PARTNER_BILLING.gold.amount * 100,                    // Convert MAD to centimes
-  official_sponsor: PARTNER_BILLING.official_sponsor.amount * 100 // Convert MAD to centimes
-};
+// ✅ Constantes de prix (base de calcul) - Calculé dynamiquement depuis SSOT
+const TIER_PRICES = Object.fromEntries(
+  Object.entries(PARTNER_BILLING).map(([key, config]) => [key, config.amount * 100])
+) as Record<PartnerTier, number>;
 
-// Conversion EUR/MAD pour CMI — configurable via VITE_EUR_TO_MAD_RATE
-const EUR_TO_MAD_RATE = Number(import.meta.env.VITE_EUR_TO_MAD_RATE) || 11;
-const USD_TO_EUR_RATE = Number(import.meta.env.VITE_USD_TO_EUR_RATE) || 0.92;
+// Conversion EUR/MAD pour CMI
+const EUR_TO_MAD_RATE = 11;
+const USD_TO_EUR_RATE = 0.92;
 
 /**
  * Convertit USD en EUR
@@ -60,7 +57,7 @@ export async function redirectToStripeCheckout(sessionId: string): Promise<void>
 }
 
 /**
- * PAYPAL: Crée un ordre PayPal pour upgrade sponsor
+ * PAYPAL: Crée un ordre PayPal pour upgrade partenaire
  */
 export async function createPayPalPartnerOrder(
   userId: string,
@@ -206,7 +203,7 @@ export async function createCMIPartnerPayment(
 }
 
 /**
- * Met à jour le niveau sponsor après paiement réussi
+ * Met à jour le niveau partenaire après paiement réussi
  */
 export async function upgradePartnerTier(
   userId: string,
@@ -216,7 +213,7 @@ export async function upgradePartnerTier(
   try {
     const { supabase } = await import('../lib/supabase');
 
-    // Mettre à jour le niveau sponsor
+    // Mettre à jour le niveau partenaire
     const { error: updateError } = await supabase
       .from('users')
       .update({
@@ -234,7 +231,7 @@ export async function upgradePartnerTier(
     await supabase.from('notifications').insert({
       user_id: userId,
       type: 'system',
-      message: `Votre niveau sponsor a été mis à jour vers ${getPartnerTierConfig(targetTier).displayName}!`,
+      message: `Votre niveau partenaire a été mis à jour vers ${getPartnerTierConfig(targetTier).displayName}!`,
       read: false,
       created_at: new Date().toISOString()
     });
@@ -431,7 +428,7 @@ export async function approvePartnerBankTransfer(
 
     if (updateRequestError) {throw updateRequestError;}
 
-    // Mettre à jour le tier du sponsor
+    // Mettre à jour le tier du partenaire
     const { error: updateUserError } = await supabase
       .from('users')
       .update({

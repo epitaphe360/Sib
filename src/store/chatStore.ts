@@ -80,7 +80,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
       const user = useAuthStore.getState().user;
 
       if (!user) {
-        console.warn('⚠️ No authenticated user found');
         set({ conversations: [], messages: {}, isLoading: false });
         return;
       }
@@ -180,7 +179,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
     const user = useAuthStore.getState().user;
 
     if (!user) {
-      console.warn('⚠️ Cannot mark as read: no authenticated user');
       return;
     }
 

@@ -61,7 +61,6 @@ export const apiService = {
    */
   async getAll(tableName: string) {
     if (!isSupabaseReady() || !supabase) {
-      console.warn('Supabase is not configured. Returning empty array.');
       return [];
     }
 
@@ -86,7 +85,6 @@ export const apiService = {
    */
   async getById(tableName: string, id: string) {
     if (!isSupabaseReady() || !supabase) {
-      console.warn('Supabase is not configured. Returning null.');
       return null;
     }
 

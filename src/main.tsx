@@ -8,7 +8,6 @@ import { ThemeProvider } from './context/ThemeContext';
 import { SalonProvider } from './contexts/SalonContext';
 
 // === DIAGNOSTIC GLOBAL ===
-console.log('[SIB] main.tsx chargé ✅');
 window.addEventListener('error', (e) => {
   console.error('[SIB] Erreur globale:', e.message, 'Fichier:', e.filename, 'Ligne:', e.lineno, e.error);
 });
@@ -18,9 +17,7 @@ window.addEventListener('unhandledrejection', (e) => {
 
 try {
   initializeSentry();
-  console.log('[SIB] Sentry initialisé ✅');
 } catch (e) {
-  console.warn('[SIB] Sentry init échoué (non-bloquant):', e);
 }
 
 // Kill any existing service worker and clear ALL caches
@@ -53,12 +50,10 @@ let isMounted = false;
 
 const mount = (el: Element) => {
   if (isMounted) {
-    console.warn('SIB: Already mounted, skipping duplicate mount');
     return;
   }
 
   isMounted = true;
-  console.log('[SIB] Montage React sur:', el.id || el.tagName);
 
   try {
     ReactDOM.createRoot(el as HTMLElement).render(
@@ -72,7 +67,6 @@ const mount = (el: Element) => {
         </ThemeProvider>
       </React.StrictMode>
     );
-    console.log('[SIB] ReactDOM.render() appelé ✅');
   } catch (e) {
     console.error('[SIB] CRASH au montage React:', e);
     (el as HTMLElement).innerHTML = `<div style="padding:2rem;font-family:monospace;color:red;background:#fff">
@@ -95,5 +89,4 @@ if (initial) {
     }
   });
   observer.observe(document.documentElement, { childList: true, subtree: true });
-  console.warn("SIB Plugin: conteneur non trouvé au chargement, en attente d'Elementor ou #root…");
 }

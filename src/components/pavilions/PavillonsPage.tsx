@@ -406,7 +406,6 @@ export default function PavillonsPage() {
           exhibitors: countByPavilion[p.id] || p.exhibitors,
         })));
       } catch (err) {
-        console.warn('Impossible de charger les compteurs exposants par pavillon:', err);
       }
     };
 

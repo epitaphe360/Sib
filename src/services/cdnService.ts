@@ -221,7 +221,6 @@ class CDNService {
    */
   async purgeCache(urls: string[]): Promise<boolean> {
     if (!this.config) {
-      console.warn('CDN not configured');
       return false;
     }
 

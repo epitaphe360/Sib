@@ -14,7 +14,6 @@ export const lazyRetry = (componentImport: ComponentImporter) =>
       return await componentImport();
     } catch (error) {
       // Don't log as error to avoid confusing users, just warn
-      console.warn('Chunk load failed, attempting recovery:', error);
 
       // SSR safety check
       if (typeof window === 'undefined') {
@@ -39,7 +38,6 @@ export const lazyRetry = (componentImport: ComponentImporter) =>
         } catch {
           // Ignore storage errors
         }
-        console.warn('Deployment mismatch detected. Refreshing app...');
 
         // Unregister service workers before reloading
         if ('serviceWorker' in navigator) {

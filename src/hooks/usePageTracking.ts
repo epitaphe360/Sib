@@ -34,7 +34,6 @@ export function usePageTracking() {
 
       if (error) {
         // Log visible en dev pour diagnostiquer les problèmes RLS/table
-        console.warn('[PageTracking] Échec insertion page_views:', error.message, '| code:', error.code);
       }
     };
 

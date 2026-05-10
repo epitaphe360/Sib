@@ -21,6 +21,7 @@ import { badgeTranslations } from './badge';
 import { networkingTranslations } from './networking';
 import { accommodationTranslations } from './accommodation';
 import { visitorTranslations } from './visitor';
+import { extraTranslations } from './extra';
 
 type TranslationObject = Record<string, string>;
 type LanguageTranslations = Record<string, TranslationObject>;
@@ -65,7 +66,8 @@ export const allTranslations = mergeTranslations(
   networkingTranslations,
   badgeTranslations,
   accommodationTranslations,
-  visitorTranslations
+  visitorTranslations,
+  extraTranslations
 );
 
 // Après fusion, s'assurer que les langues cibles (en, ar) contiennent

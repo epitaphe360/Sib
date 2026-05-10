@@ -140,7 +140,6 @@ export default function BadgeScannerPage() {
         lastScanTime
       });
 
-      console.log('Stats chargées:', { totalScans, todayScans, uniqueVisitors });
     } catch (err) {
       console.error(t('badge.scanner.error_stats'), err);
     }
@@ -161,7 +160,6 @@ export default function BadgeScannerPage() {
       result.addEventListener('change', handler);
       permissionListenerRef.current = { result, handler };
     } catch (err) {
-      console.warn('Permission API not supported:', err);
       setCameraPermission('prompt');
     }
   };
@@ -230,13 +228,11 @@ export default function BadgeScannerPage() {
   const onScanSuccess = async (decodedText: string) => {
     // Protection contre les scans multiples
     if (isProcessingRef.current) {
-      console.log('Scan ignoré - traitement en cours');
       return;
     }
 
     // Bloquer immédiatement les nouveaux scans
     isProcessingRef.current = true;
-    console.log('QR Code scanné:', decodedText);
 
     // Arrêter le scanner IMMÉDIATEMENT
     try {
@@ -262,10 +258,8 @@ export default function BadgeScannerPage() {
       try {
         const parsed = JSON.parse(decodedText);
         qrData = parsed.token || parsed.badge_code || parsed.qr_data || decodedText;
-        console.log('?? QR JSON parsé, extracted:', qrData.substring(0, 30) + '...');
       } catch {
         // Pas du JSON, c'est un code brut (statique ou JWT direct)
-        console.log('?? QR brut (non-JSON):', qrData.substring(0, 30) + '...');
       }
 
       // Valider le badge (supporte statique ET dynamique)
@@ -293,7 +287,6 @@ export default function BadgeScannerPage() {
   const onScanError = (errorMessage: string) => {
     // Ignorer les erreurs "No QR code found" (normales pendant le scan)
     if (!errorMessage.includes('No QR code found')) {
-      console.warn('Scan error:', errorMessage);
     }
   };
 
@@ -305,7 +298,6 @@ export default function BadgeScannerPage() {
     try {
       const { supabase } = await import('../lib/supabase');
 
-      console.log('?? Validation badge, longueur:', qrData.length, 'premiers chars:', qrData.substring(0, 20));
 
       // Appeler la fonction universelle validate_scanned_badge
       // Elle détecte automatiquement si c'est un badge statique ou un JWT dynamique
@@ -318,7 +310,6 @@ export default function BadgeScannerPage() {
         throw new Error(error.message);
       }
 
-      console.log('?? Réponse validation:', data);
 
       if (!data || !data.success) {
         throw new Error(data?.error || data?.message || 'Badge non trouvé');
@@ -357,7 +348,6 @@ export default function BadgeScannerPage() {
         description: `${scanned.fullName} - ${scanned.companyName || scanned.userType + ' ' + scanned.userLevel}`
       });
 
-      console.log('? Badge validé avec succès:', scanned);
 
       // Enregistrer le lead si l'utilisateur est un exposant/sponsor
       if (user && (user.type === 'exhibitor' || user.type === 'partner')) {
@@ -405,7 +395,6 @@ export default function BadgeScannerPage() {
         created_at: new Date().toISOString()
       });
 
-      console.log('Lead enregistré:', badge.fullName);
     } catch (err) {
       console.error(t('badge.scanner.error_lead'), err);
       // Ne pas bloquer le scan si l'enregistrement du lead échoue

@@ -88,7 +88,6 @@ export default function ExhibitorManagementPage() {
         markets: [],
       }));
       setExhibitors(mapped as unknown as Exhibitor[]);
-      console.log(`✅ Admin: ${mapped.length} exposants chargés`);
     } catch (error) {
       console.error('Erreur lors du chargement des exposants:', error);
       toast.error('Impossible de récupérer la liste des exposants.');
@@ -100,11 +99,10 @@ export default function ExhibitorManagementPage() {
   const handleDelete = async (id: string, name: string) => {
     if (window.confirm(`Êtes-vous sûr de vouloir supprimer l'exposant "${name}" ? Cette action est irréversible.`)) {
       try {
-        console.log('🗑️ [DELETE] Début suppression exposant:', { id, name });
 
         // Récupérer le token pour l'API admin serveur
         const { data: { session } } = await supabase.auth.getSession();
-        console.log('🔑 [DELETE] Session récupérée:', {
+        console.log('Session info:', {
           hasSession: !!session,
           hasToken: !!session?.access_token,
           userId: session?.user?.id,
@@ -117,7 +115,6 @@ export default function ExhibitorManagementPage() {
         }
 
         const apiUrl = `/api/admin/exhibitors/${id}`;
-        console.log('📡 [DELETE] Appel API:', { method: 'DELETE', url: apiUrl });
 
         const response = await fetch(apiUrl, {
           method: 'DELETE',
@@ -125,13 +122,6 @@ export default function ExhibitorManagementPage() {
             'Authorization': `Bearer ${session.access_token}`,
             'Content-Type': 'application/json'
           }
-        });
-
-        console.log('📥 [DELETE] Réponse HTTP:', {
-          status: response.status,
-          statusText: response.statusText,
-          ok: response.ok,
-          contentType: response.headers.get('content-type')
         });
 
         // Vérifier si la réponse est du JSON
@@ -143,14 +133,12 @@ export default function ExhibitorManagementPage() {
         }
 
         const result = await response.json();
-        console.log('📦 [DELETE] Corps de la réponse:', result);
 
         if (!response.ok || !result.success) {
           console.error('❌ [DELETE] Échec:', { status: response.status, result });
           throw new Error(result.error || `Échec HTTP ${response.status}`);
         }
 
-        console.log('✅ [DELETE] Suppression réussie:', result.deleted);
 
         // Supprimer immédiatement du state local
         setExhibitors(exhibitors.filter(e => e.id !== id));

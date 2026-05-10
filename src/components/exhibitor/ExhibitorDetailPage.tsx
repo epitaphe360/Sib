@@ -179,12 +179,12 @@ export default function ExhibitorDetailPage() {
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#accueil" className="text-gray-700 hover:text-blue-600 transition-colors">Accueil</a>
-              <a href="#apropos" className="text-gray-700 hover:text-blue-600 transition-colors">À propos</a>
-              <a href="#produits" className="text-gray-700 hover:text-blue-600 transition-colors">Produits</a>
-              <a href="#actualites" className="text-gray-700 hover:text-blue-600 transition-colors">Actualités</a>
-              <a href="#galerie" className="text-gray-700 hover:text-blue-600 transition-colors">Galerie</a>
-              <a href="#disponibilites" className="text-gray-700 hover:text-blue-600 transition-colors">Disponibilités</a>
+              <a href="#accueil" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.accueil', 'Accueil')}</a>
+              <a href="#apropos" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.a_propos', 'À propos')}</a>
+              <a href="#produits" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.produits', 'Produits')}</a>
+              <a href="#actualites" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.actualites', 'Actualités')}</a>
+              <a href="#galerie" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.galerie', 'Galerie')}</a>
+              <a href="#disponibilites" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.disponibilites', 'Disponibilités')}</a>
             </div>
 
             <div className="flex items-center space-x-3">
@@ -707,7 +707,7 @@ export default function ExhibitorDetailPage() {
                       <Mail className="h-5 w-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Email</p>
+                      <p className="font-medium text-gray-900">{t('exhibitor_detail.email', 'Email')}</p>
                       <p className="text-gray-600">{exhibitor.contactInfo?.email || 'Non renseigné'}</p>
                     </div>
                   </div>
@@ -716,7 +716,7 @@ export default function ExhibitorDetailPage() {
                       <Phone className="h-5 w-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Téléphone</p>
+                      <p className="font-medium text-gray-900">{t('exhibitor_detail.telephone', 'Téléphone')}</p>
                       <p className="text-gray-600">{exhibitor.contactInfo?.phone || 'Non renseigné'}</p>
                     </div>
                   </div>
@@ -725,7 +725,7 @@ export default function ExhibitorDetailPage() {
                       <MapPin className="h-5 w-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Adresse</p>
+                      <p className="font-medium text-gray-900">{t('exhibitor_detail.adresse', 'Adresse')}</p>
                       <p className="text-gray-600">
                         {[exhibitor.contactInfo?.address, exhibitor.contactInfo?.city, exhibitor.contactInfo?.country]
                           .filter(Boolean).join(', ') || 'Non renseignée'}
@@ -742,19 +742,19 @@ export default function ExhibitorDetailPage() {
                 <ul className="space-y-3">
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">Réponse sous 24h ouvrées</span>
+                    <span className="text-gray-600">{t('exhibitor_detail.reponse_sous_24h_ouvrees', 'Réponse sous 24h ouvrées')}</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">Devis gratuit et personnalisé</span>
+                    <span className="text-gray-600">{t('exhibitor_detail.devis_gratuit_et_personnalise', 'Devis gratuit et personnalisé')}</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">Accompagnement technique complet</span>
+                    <span className="text-gray-600">{t('exhibitor_detail.accompagnement_technique_complet', 'Accompagnement technique complet')}</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">Support multilingue</span>
+                    <span className="text-gray-600">{t('exhibitor_detail.support_multilingue', 'Support multilingue')}</span>
                   </li>
                 </ul>
               </div>
@@ -839,12 +839,12 @@ export default function ExhibitorDetailPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     >
-                      <option value="">Sélectionnez un sujet</option>
-                      <option value="quote">Demande de devis</option>
-                      <option value="information">Demande d'informations</option>
-                      <option value="partnership">Partenariat commercial</option>
-                      <option value="support">Support technique</option>
-                      <option value="other">Autre</option>
+                      <option value="">{t('exhibitor_detail.selectionnez_un_sujet', 'Sélectionnez un sujet')}</option>
+                      <option value="quote">{t('exhibitor_detail.demande_de_devis', 'Demande de devis')}</option>
+                      <option value="information">{t('exhibitor_detail.demande_dinformations', 'Demande d\'informations')}</option>
+                      <option value="partnership">{t('exhibitor_detail.partenariat_commercial', 'Partenariat commercial')}</option>
+                      <option value="support">{t('exhibitor_detail.support_technique', 'Support technique')}</option>
+                      <option value="other">{t('exhibitor_detail.autre', 'Autre')}</option>
                     </select>
                   </div>
 
@@ -950,17 +950,17 @@ export default function ExhibitorDetailPage() {
 
             {/* Quick Links */}
             <div>
-              <h4 className="font-semibold text-white mb-4">Liens rapides</h4>
+              <h4 className="font-semibold text-white mb-4">{t('exhibitor_detail.liens_rapides', 'Liens rapides')}</h4>
               <ul className="space-y-2">
-                <li><a href="#apropos" className="text-gray-400 hover:text-white transition-colors">À propos</a></li>
-                <li><a href="#produits" className="text-gray-400 hover:text-white transition-colors">Produits</a></li>
-                <li><a href="#actualites" className="text-gray-400 hover:text-white transition-colors">Actualités</a></li>
+                <li><a href="#apropos" className="text-gray-400 hover:text-white transition-colors">{t('exhibitor_detail.a_propos', 'À propos')}</a></li>
+                <li><a href="#produits" className="text-gray-400 hover:text-white transition-colors">{t('exhibitor_detail.produits', 'Produits')}</a></li>
+                <li><a href="#actualites" className="text-gray-400 hover:text-white transition-colors">{t('exhibitor_detail.actualites', 'Actualités')}</a></li>
               </ul>
             </div>
 
             {/* SIB Info */}
             <div>
-              <h4 className="font-semibold text-white mb-4">SIB 2026</h4>
+              <h4 className="font-semibold text-white mb-4">{t('exhibitor_detail.sib_2026', 'SIB 2026')}</h4>
               <div className="space-y-2 text-sm text-gray-400">
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-4 w-4" />
@@ -968,7 +968,7 @@ export default function ExhibitorDetailPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4" />
-                  <span>Casablanca, Maroc</span>
+                  <span>{t('exhibitor_detail.casablanca_maroc', 'Casablanca, Maroc')}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Building2 className="h-4 w-4" />

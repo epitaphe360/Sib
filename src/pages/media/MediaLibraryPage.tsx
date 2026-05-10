@@ -77,31 +77,31 @@ export const MediaLibraryPage: React.FC = () => {
               <Library className="w-8 h-8" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold mb-2">Bibliothèque Média</h1>
-              <p className="text-xl text-white/90">Tous les contenus SIB en un seul endroit</p>
+              <h1 className="text-4xl font-bold mb-2">{t('media_lib.bibliotheque_media', 'Bibliothèque Média')}</h1>
+              <p className="text-xl text-white/90">{t('media_lib.tous_les_contenus_sib_en_un_seul_endroit', 'Tous les contenus SIB en un seul endroit')}</p>
             </div>
           </div>
 
           {/* Stats Grid - Masqué temporairement */}
           {/* <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <p className="text-white/70 text-xs mb-1">Total</p>
+              <p className="text-white/70 text-xs mb-1">{t('media_lib.total', 'Total')}</p>
               <p className="text-2xl font-bold">{stats.total}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <p className="text-white/70 text-xs mb-1">Webinaires</p>
+              <p className="text-white/70 text-xs mb-1">{t('media_lib.webinaires', 'Webinaires')}</p>
               <p className="text-2xl font-bold">{stats.webinars}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <p className="text-white/70 text-xs mb-1">Podcasts</p>
+              <p className="text-white/70 text-xs mb-1">{t('media_lib.podcasts', 'Podcasts')}</p>
               <p className="text-2xl font-bold">{stats.podcasts}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <p className="text-white/70 text-xs mb-1">Capsules</p>
+              <p className="text-white/70 text-xs mb-1">{t('media_lib.capsules', 'Capsules')}</p>
               <p className="text-2xl font-bold">{stats.capsules}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-              <p className="text-white/70 text-xs mb-1">Témoignages</p>
+              <p className="text-white/70 text-xs mb-1">{t('media_lib.temoignages', 'Témoignages')}</p>
               <p className="text-2xl font-bold">{stats.testimonials}</p>
             </div>
           </div> */}
@@ -133,13 +133,13 @@ export const MediaLibraryPage: React.FC = () => {
                 onChange={(e) => setTypeFilter(e.target.value as MediaType | 'all')}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
-                <option value="all">Tous les types</option>
-                <option value="webinar">Webinaires</option>
-                <option value="podcast">Podcasts</option>
-                <option value="capsule_inside">Capsules Inside</option>
-                <option value="live_studio">Live Studio</option>
-                <option value="best_moments">Best Moments</option>
-                <option value="testimonial">Témoignages</option>
+                <option value="all">{t('media_lib.tous_les_types', 'Tous les types')}</option>
+                <option value="webinar">{t('media_lib.webinaires', 'Webinaires')}</option>
+                <option value="podcast">{t('media_lib.podcasts', 'Podcasts')}</option>
+                <option value="capsule_inside">{t('media_lib.capsules_inside', 'Capsules Inside')}</option>
+                <option value="live_studio">{t('media_lib.live_studio', 'Live Studio')}</option>
+                <option value="best_moments">{t('media_lib.best_moments', 'Best Moments')}</option>
+                <option value="testimonial">{t('media_lib.temoignages', 'Témoignages')}</option>
               </select>
             </div>
 
@@ -165,8 +165,8 @@ export const MediaLibraryPage: React.FC = () => {
         ) : filteredMedia.length === 0 ? (
           <div className="text-center py-20">
             <Library className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">Aucun média trouvé</h3>
-            <p className="text-gray-500">Essayez de modifier vos filtres de recherche</p>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('media_lib.aucun_media_trouve', 'Aucun média trouvé')}</h3>
+            <p className="text-gray-500">{t('media_lib.essayez_de_modifier_vos_filtres_de_reche', 'Essayez de modifier vos filtres de recherche')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -190,32 +190,32 @@ export const MediaLibraryPage: React.FC = () => {
             </p>
             <div className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-6">
               <p className="text-gray-700 mb-4">
-                <span className="font-semibold text-indigo-700">Les contenus suivants seront progressivement ajoutés :</span>
+                <span className="font-semibold text-indigo-700">{t('media_lib.les_contenus_suivants_seront_progressive', 'Les contenus suivants seront progressivement ajoutés :')}</span>
               </p>
               <ul className="space-y-2 text-left max-w-md mx-auto">
                 <li className="flex items-center gap-3 text-gray-700">
                   <Video className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Webinaires exclusifs</span>
+                  <span>{t('media_lib.webinaires_exclusifs', 'Webinaires exclusifs')}</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <Mic className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Épisodes de podcasts</span>
+                  <span>{t('media_lib.episodes_de_podcasts', 'Épisodes de podcasts')}</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <Play className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Capsules "Inside SIB"</span>
+                  <span>{t('media_lib.capsules_inside_sib', 'Capsules "Inside SIB"')}</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <Video className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Interviews Live Studio</span>
+                  <span>{t('media_lib.interviews_live_studio', 'Interviews Live Studio')}</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <Star className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Best Moments de l'événement</span>
+                  <span>{t('media_lib.best_moments_de_levenement', 'Best Moments de l\'événement')}</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700">
                   <MessageSquare className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                  <span>Témoignages de participants</span>
+                  <span>{t('media_lib.temoignages_de_participants', 'Témoignages de participants')}</span>
                 </li>
               </ul>
             </div>

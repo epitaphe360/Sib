@@ -84,7 +84,6 @@ export default function PaymentSuccessPage() {
           return;
         }
       } catch (paymentCheckError) {
-        console.warn('Payment status check failed:', paymentCheckError);
       }
 
       // Try to find and process pending payment (fallback)
@@ -105,7 +104,6 @@ export default function PaymentSuccessPage() {
           return;
         }
       } catch (paymentError) {
-        console.warn('Payment records check failed:', paymentError);
       }
 
       setError(t('payment.error.verificationFailed'));

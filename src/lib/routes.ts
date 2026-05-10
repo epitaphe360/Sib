@@ -186,6 +186,9 @@
   HALL_MAP: '/map',
   CATALOG: '/catalog',
   ADMIN_PRESS_ACCREDITATIONS: '/admin/press-accreditations',
+  ADMIN_SESSION_CHECKIN: '/security/scanner',
+  ADMIN_SESSION_REGISTRATIONS: '/admin/session-registrations',
+  ADMIN_CREDENTIALS: '/admin/credentials',
   SPEAKERS: '/speakers',
   ADMIN_SPEAKERS: '/admin/speakers',
 
@@ -237,11 +240,18 @@
 
   // Exposant — pages dédiées
   EXHIBITOR_SCANS: '/exhibitor/scans',
-  EXHIBITOR_TEAM: '/exhibitor/team',
 
   // Sponsor — pages dédiées
   PARTNER_SCANS: '/partner/scans',
-  PARTNER_TEAM: '/partner/team',
+
+  // MODULE FACTURATION
+  ADMIN_INVOICES:    '/admin/facturation',
+  EXHIBITOR_INVOICES: '/exposant/mes-factures',
+  PARTNER_INVOICES:   '/partenaire/mes-factures',
+  VISITOR_INVOICES:   '/visitor/mes-factures',
+
+  // GESTION TARIFS
+  ADMIN_PRICING:     '/admin/tarifs',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

@@ -164,7 +164,6 @@ export default function VisitorFreeRegistration() {
 
   const onSubmit = async (data: FreeVisitorForm) => {
 
-    console.log('?? [FREE VISITOR] Tentative soumission:', data);
 
     setIsSubmitting(true);
 
@@ -178,7 +177,6 @@ export default function VisitorFreeRegistration() {
 
       // 1. Vérification préalable : L'email existe-t-il déjà ?
 
-      console.log('?? [FREE VISITOR] Vérification si email existe déjà...');
 
       const emailToCheck = data.email.toLowerCase().trim();
 
@@ -212,7 +210,6 @@ export default function VisitorFreeRegistration() {
 
       if (existingUser) {
 
-        console.warn('?? [FREE VISITOR] Email déjà existant:', existingUser);
 
         let accountType = 'visiteur';
 
@@ -268,7 +265,6 @@ export default function VisitorFreeRegistration() {
 
 
 
-      console.log('? [FREE VISITOR] Email disponible');
 
 
 
@@ -305,7 +301,6 @@ export default function VisitorFreeRegistration() {
 
         if (authError.message === 'User already registered') {
 
-            console.warn('?? [FREE VISITOR] Email existe dans Auth mais pas dans users (compte orphelin).');
 
             toast.error(
 
@@ -347,7 +342,6 @@ export default function VisitorFreeRegistration() {
 
       if (authData.user.identities && authData.user.identities.length === 0) {
 
-        console.warn('?? [FREE VISITOR] Email déjà enregistré dans auth (identities vide).');
 
         toast.error(
 
@@ -459,7 +453,6 @@ export default function VisitorFreeRegistration() {
 
         } else {
 
-          console.log('? Badge QR généré avec succès');
 
         }
 
@@ -467,7 +460,6 @@ export default function VisitorFreeRegistration() {
 
         // Non bloquant - la fonction Edge peut ne pas être déployée en dev
 
-        console.warn('?? Edge Function generate-visitor-badge non déployée');
 
       }
 
@@ -477,7 +469,6 @@ export default function VisitorFreeRegistration() {
 
       try {
 
-        console.log('?? [FREE] Envoi email de bienvenue...');
 
         const emailController = new AbortController();
 
@@ -527,7 +518,6 @@ export default function VisitorFreeRegistration() {
 
         } else {
 
-          console.log('? Email de bienvenue envoyé avec succès:', emailResult.messageId);
 
           toast.success(`?? ${t('visitor.message.email_sent')}`, { duration: 3000 });
 
@@ -537,7 +527,6 @@ export default function VisitorFreeRegistration() {
 
         // Non bloquant - le serveur peut ne pas être accessible en dev
 
-        console.warn('?? Erreur envoi email (non bloquant):', emailError);
 
       }
 
@@ -551,7 +540,6 @@ export default function VisitorFreeRegistration() {
 
       // Succès !
 
-      console.log('? [FREE VISITOR] Inscription réussie ! Affichage du modal de succès.');
 
       setShowSuccess(true);
 
@@ -1102,19 +1090,12 @@ export default function VisitorFreeRegistration() {
                 className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 text-lg font-semibold rounded-lg shadow-lg transition-all duration-200 flex items-center justify-center"
 
                 onClick={(e) => {
-
-                  console.log('??? [FREE VISITOR] CLICK BOUTON', {
-
+                  console.log('Debug:', {
                     isSubmitting,
-
                     isValid,
-
                     isDirty,
-
                     errorsCount: Object.keys(errors).length,
-
                     formData: watch()
-
                   });
 
                   // Ne pas e.preventDefault() car on veut que le type="submit" fonctionne

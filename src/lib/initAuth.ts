@@ -47,7 +47,6 @@ function handleNoActiveSession() {
   const createdAt = createdAtDate && !Number.isNaN(createdAtDate.getTime()) ? createdAtDate.getTime() : 0;
   const wasJustCreated = (Date.now() - createdAt) < 5000;
   if (useAuthStore.getState().isAuthenticated && !wasJustCreated) {
-    console.warn('[AUTH] Session invalide ou expiree detectee au demarrage, nettoyage du store...');
     useAuthStore.getState().logout();
   }
 }
@@ -55,7 +54,6 @@ function handleNoActiveSession() {
 async function restoreUserProfile(email: string) {
   const userProfile = await SupabaseService.getUserByEmail(email);
   if (!userProfile) {
-    console.warn('[AUTH] Profil utilisateur introuvable, deconnexion...');
     useAuthStore.getState().logout();
     return;
   }
@@ -78,7 +76,6 @@ export async function initializeAuth() {
     cleanupCorruptedStorage();
 
     if (!supabase) {
-      console.warn('[AUTH] Supabase non configure');
       authInitialized = true;
       useAuthStore.setState({ isLoading: false });
       return;
@@ -89,7 +86,6 @@ export async function initializeAuth() {
     if (error) {
       console.error('[AUTH] Erreur verification session:', error);
       if (useAuthStore.getState().isAuthenticated) {
-        console.warn('[AUTH] Erreur session Supabase, nettoyage du store...');
         useAuthStore.getState().logout();
       }
       authInitialized = true;

@@ -149,7 +149,6 @@ export async function createPaymentRecord(params: {
   status: 'pending' | 'approved' | 'rejected';
 }) {
   try {
-    console.log('💳 Creating payment record for user:', params.userId);
 
     // ✅ Verify user exists before attempting INSERT
     const { data: userExists, error: userCheckError } = await supabase
@@ -202,12 +201,6 @@ export async function createPaymentRecord(params: {
       throw new Error('Payment record created but no data returned - possible RLS issue');
     }
 
-    console.log('✅ Payment record created successfully:', {
-      id: data[0].id,
-      user_id: data[0].user_id,
-      amount: data[0].amount,
-      status: data[0].status
-    });
 
     return data[0];
   } catch (error) {

@@ -1,397 +1,238 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useTranslation } from '../hooks/useTranslation';
-import {
-  Building2,
-  Check,
-  ArrowRight,
-  Loader,
-  Crown,
-  Clock,
-  CheckCircle
-} from 'lucide-react';
+import { Crown, Building2, CreditCard, Loader2, ArrowLeft, Check, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
+import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import useAuthStore from '../store/authStore';
 import { ROUTES } from '../lib/routes';
 import { supabase } from '../lib/supabase';
 import {
-  generateVisitorPaymentReference,
-  formatVisitorAmount
-} from '../config/visitorBankTransferConfig';
+  PAYPAL_CLIENT_ID,
+  capturePayPalOrder,
+  createCMIPaymentRequest,
+} from '../services/paymentService';
+import { createInvoice } from '../services/invoiceService';
+import { generateVisitorPaymentReference } from '../config/visitorBankTransferConfig';
+
+const VIP_AMOUNT_EUR = 700;
+
+// ── Bouton PayPal interne ─────────────────────────────────────────────────────
+function PayPalPayButton({ onSuccess }: Readonly<{ onSuccess: (orderId: string) => void }>) {
+  const [{ isPending }] = usePayPalScriptReducer();
+  if (isPending) {
+    return <div className="flex justify-center py-4"><Loader2 className="h-6 w-6 animate-spin text-purple-500" /></div>;
+  }
+  return (
+    <PayPalButtons
+      style={{ layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay', height: 48 }}
+      createOrder={(_data, actions) =>
+        actions.order.create({
+          intent: 'CAPTURE',
+          purchase_units: [{
+            amount: { currency_code: 'EUR', value: VIP_AMOUNT_EUR.toString() },
+            description: 'Pass Premium VIP SIB 2026',
+          }],
+        })
+      }
+      onApprove={async (_data, actions) => {
+        const result = await actions.order!.capture();
+        onSuccess(result.id!);
+      }}
+      onError={() => toast.error('Erreur PayPal. Veuillez réessayer.')}
+    />
+  );
+}
 
 export default function VisitorPaymentPage() {
   const { user } = useAuthStore();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'cmi' | 'bank_transfer' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const initializedRef = useRef(false);
 
-  // Redirect if already VIP or create payment request - runs ONCE
-  useEffect(() => {
-    if (initializedRef.current) {return;}
-
-    // Get user from store directly (stable reference)
-    const currentUser = useAuthStore.getState().user;
-    if (!currentUser) {return;}
-
-    initializedRef.current = true;
-
-    if (currentUser.visitor_level === 'premium' || currentUser.visitor_level === 'vip') {
-      toast.success(t('payment.alreadyPremium'));
-      navigate(ROUTES.VISITOR_DASHBOARD, { replace: true });
-      return;
-    }
-
-    createBankTransferRequest();
-  }, []); // Empty deps - runs only on mount
-
-  async function createBankTransferRequest() {
-    try {
-      if (!user) {
-        console.warn('⚠️ User not loaded yet, waiting...');
-        // Attendre que le user soit chargé
-        setTimeout(() => {
-          if (!useAuthStore.getState().user) {
-            toast.error(t('payment.userNotConnected'));
-            navigate(ROUTES.LOGIN);
-          } else {
-            // Réessayer avec le user maintenant chargé
-            createBankTransferRequest();
-          }
-        }, 500);
-        return;
-      }
-
-      console.log('🔄 Creating bank transfer request for user:', user.id);
-
-      // Vérifier si une demande existe déjà
-      const { data: existingRequest } = await supabase
-        .from('payment_requests')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('status', 'pending')
-        .maybeSingle();
-
-      if (existingRequest) {
-        console.log('✅ Existing payment request found:', existingRequest.id);
-        // Rediriger vers la page de virement existante
-        navigate(`/visitor/bank-transfer?request_id=${existingRequest.id}`);
-        return;
-      }
-
-      console.log('📝 Creating new payment request...');
-
-      // Créer une nouvelle demande de paiement
-      const paymentReference = generateVisitorPaymentReference(user.id);
-
-      const { data: newRequest, error } = await supabase
-        .from('payment_requests')
-        .insert({
-          user_id: user.id,
-          amount: 700,
-          currency: 'EUR',
-          payment_method: 'bank_transfer',
-          status: 'pending',
-          requested_level: 'premium',
-          transfer_reference: paymentReference
-        })
-        .select('id')
-        .single();
-
-      if (error) {
-        console.error('❌ Error creating payment request:', error);
-        throw error;
-      }
-
-      console.log('✅ Payment request created:', newRequest.id);
-      toast.success(t('payment.requestCreated'));
-
-      // Petit délai pour que l'utilisateur voit le toast
-      setTimeout(() => {
-        navigate(`/visitor/bank-transfer?request_id=${newRequest.id}`);
-      }, 500);
-
-    } catch (error) {
-      console.error('❌ Error in createBankTransferRequest:', error);
-      toast.error(t('payment.requestError'));
-
-      // En cas d'erreur, rediriger vers le dashboard avec un message
-      setTimeout(() => {
-        navigate(ROUTES.VISITOR_DASHBOARD);
-      }, 2000);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const handlePayPalApprove = async (data: Record<string, unknown>) => {
-    if (!user) {return;}
-
+  // ── Flux PayPal ─────────────────────────────────────────────────────────────
+  const handlePayPalSuccess = useCallback(async (orderId: string) => {
+    if (!user) { return; }
     setIsProcessing(true);
-    setError(null);
-
     try {
-      // Capture PayPal order
-      const captureData = await capturePayPalOrder(data.orderID as string, user.id);
+      await capturePayPalOrder(orderId, user.id);
 
-      // Create payment record
-      await createPaymentRecord({
-        userId: user.id,
-        amount: PAYMENT_AMOUNTS.VIP_PASS,
+      // Upgrade visiteur → premium
+      await supabase.from('users').update({ status: 'active', visitor_level: 'premium' }).eq('id', user.id);
+
+      // Générer facture automatiquement
+      createInvoice({
+        user_id: user.id,
+        user_type: 'visitor',
+        user_email: user.email ?? '',
+        user_name: (user as any).full_name || (user as any).name || user.email || '',
+        vat_rate: 0,
         currency: 'EUR',
-        paymentMethod: 'paypal',
-        transactionId: data.orderID as string,
-        status: 'approved', // PayPal approves instantly
-      });
+        notes: `Pass Premium VIP SIB 2026 — PayPal (${orderId})`,
+        lines: [{ description: 'Pass Premium VIP SIB 2026', quantity: 1, unit_price: VIP_AMOUNT_EUR }],
+      }).catch(err => console.warn('[Invoice] Non-blocking error:', err));
 
-      toast.success(t('payment.paypalSuccess'));
-      navigate('/visitor/payment-success');
-    } catch (err: unknown) {
-      const errorInfo = err as Record<string, unknown>;
-      console.error('PayPal capture error:', err);
-      setError((errorInfo.message as string) || t('payment.paypalCaptureError'));
-      toast.error(t('payment.paypalCaptureErrorToast'));
-    } finally {
+      toast.success('Paiement confirmé ! Bienvenue en tant que VIP.');
+      navigate(ROUTES.VISITOR_PAYMENT_SUCCESS, { replace: true });
+    } catch (err: any) {
+      toast.error(err?.message || 'Erreur lors de la confirmation du paiement');
       setIsProcessing(false);
     }
-  };
+  }, [user, navigate]);
 
-  const handleCMIPayment = async () => {
-    if (!user) {return;}
-
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      // Create payment record
-      await createPaymentRecord({
-        userId: user.id,
-        amount: convertEURtoMAD(PAYMENT_AMOUNTS.VIP_PASS),
-        currency: 'MAD',
-        paymentMethod: 'cmi',
-        status: 'pending',
-      });
-
-      // Create CMI payment request
-      const cmiData = await createCMIPaymentRequest(user.id, user.email);
-
-      // Redirect to CMI payment gateway
-      window.location.href = cmiData.paymentUrl as string;
-    } catch (err: unknown) {
-      const errorInfo = err as Record<string, unknown>;
-      console.error('CMI payment error:', err);
-      setError((errorInfo.message as string) || t('payment.cmiError'));
-      toast.error(t('payment.cmiErrorToast'));
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  // DEV ONLY: Simulate successful payment
-  const handleSimulateSuccess = import.meta.env.DEV ? async () => {
-    if (!user) {return;}
-    if (!user.profile?.hasPassword) {
-      setShowUpgradeForm(true);
-      return;
-    }
-    await completeVIPUpgrade();
-  } : undefined;
-
-  // Handler pour photo upload
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        toast.error(t('payment.selectImage'));
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error(t('payment.photoMaxSize'));
-        return;
-      }
-      setPhotoFile(file);
-      setValue('photo', e.target.files);
-      const reader = new FileReader();
-      reader.onloadend = () => setPhotoPreview(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Compléter les données VIP manquantes pour visiteur FREE
-  const onSubmitUpgradeData = async (data: UpgradeVIPForm) => {
-    if (!user) {return;}
-    setIsProcessing(true);
-
-    try {
-      // 1. Upload photo si fournie
-      let photoUrl = user.profile?.photoUrl || '';
-      if (photoFile) {
-        const fileExt = photoFile.name.split('.').pop() || 'jpg';
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('visitor-photos')
-          .upload(fileName, photoFile);
-
-        if (!uploadError && uploadData) {
-          const { data: urlData } = supabase.storage
-            .from('visitor-photos')
-            .getPublicUrl(fileName);
-          photoUrl = urlData.publicUrl;
-        }
-      }
-
-      // 2. Créer compte auth avec password
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: user.email,
-        password: data.password,
-        options: {
-          data: {
-            name: user.name,
-            type: 'visitor',
-            visitor_level: 'premium'
-          }
-        }
-      });
-
-      if (authError) {
-        console.error('Erreur création auth:', authError);
-        toast.error(t('payment.authCreationError'));
-        return;
-      }
-
-      // 3. Mettre à jour profil avec données complètes
-      await supabase.from('users').update({
-        profile: {
-          ...user.profile,
-          position: data.position || user.profile?.position,
-          company: data.company || user.profile?.company,
-          photoUrl,
-          hasPassword: true
-        }
-      }).eq('id', user.id);
-
-      // 4. Mettre à jour le store local
-      setUser({
-        ...user,
-        profile: {
-          ...user.profile,
-          position: data.position || user.profile?.position,
-          company: data.company || user.profile?.company,
-          photoUrl,
-          hasPassword: true
-        }
-      });
-
-      toast.success(t('payment.profileCompleted'));
-      setShowUpgradeForm(false);
-
-      // Maintenant faire l'upgrade VIP
-      await completeVIPUpgrade();
-    } catch (error) {
-      console.error('Erreur upgrade données:', error);
-      toast.error(t('payment.profileUpdateError'));
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  // Finaliser l'upgrade VIP
-  const completeVIPUpgrade = async () => {
-    if (!user) {return;}
+  // ── Flux CMI ─────────────────────────────────────────────────────────────────
+  const handleCMI = useCallback(async () => {
+    if (!user) { return; }
     setIsProcessing(true);
     try {
-      const transactionId = crypto.randomUUID();
-      // Create payment record (may fail if table doesn't exist - non-blocking)
-      try {
-        await createPaymentRecord({
-          userId: user.id,
-          amount: PAYMENT_AMOUNTS.VIP_PASS,
-          currency: 'EUR',
-          paymentMethod: 'bank_transfer',
-          status: 'approved',
-          transactionId
-        });
-      } catch (paymentError) {
-        console.warn('Payment record creation skipped:', paymentError);
-      }
-
-      // Update user status AND visitor_level to premium
-      const { error } = await supabase
-        .from('users')
-        .update({
-          status: 'active',
-          visitor_level: 'premium'
-        })
-        .eq('id', user.id);
-
-      if (error) {
-        console.error('Error updating user:', error);
-        throw error;
-      }
-
-      // Show success toast
-      toast.success(t('payment.upgradeSuccess'));
-
-      // Send Receipt Email
-      try {
-        await EmailService.sendPaymentReceipt(
-          user.email,
-          user.name,
-          PAYMENT_AMOUNTS.VIP_PASS,
-          'EUR',
-          transactionId
-        );
-      } catch (emailErr) {
-        console.warn('Failed to send receipt email', emailErr);
-      }
-
-      // Navigate to success page
-      navigate(ROUTES.VISITOR_PAYMENT_SUCCESS);
-    } catch (err) {
-      console.error('VIP upgrade error:', err);
-      toast.error(t('payment.upgradeError'));
-    } finally {
+      const cmiData = await createCMIPaymentRequest(user.id, user.email ?? '');
+      globalThis.location.href = cmiData.paymentUrl as string;
+    } catch (err: any) {
+      toast.error(err?.message || 'Erreur CMI. Veuillez réessayer.');
       setIsProcessing(false);
     }
-  };
+  }, [user]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">{t('payment.preparing')}</p>
-        </div>
-      </div>
-    );
-  }
+  // ── Flux Virement bancaire ────────────────────────────────────────────────────
+  const handleBankTransfer = useCallback(async () => {
+    if (!user) { return; }
+    setIsProcessing(true);
+    try {
+      const { data: existing } = await supabase
+        .from('payment_requests').select('id').eq('user_id', user.id).eq('status', 'pending').maybeSingle();
+      if (existing) {
+        navigate(`/visitor/bank-transfer?request_id=${existing.id}`);
+        return;
+      }
+      const ref = generateVisitorPaymentReference(user.id);
+      const { data: newReq, error } = await supabase
+        .from('payment_requests')
+        .insert({ user_id: user.id, amount: VIP_AMOUNT_EUR, currency: 'EUR', payment_method: 'bank_transfer', status: 'pending', requested_level: 'premium', transfer_reference: ref })
+        .select('id').single();
+      if (error) { throw error; }
+      navigate(`/visitor/bank-transfer?request_id=${newReq.id}`);
+    } catch (err: any) {
+      toast.error(err?.message || 'Erreur. Veuillez réessayer.');
+      setIsProcessing(false);
+    }
+  }, [user, navigate]);
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Redirection en cours */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
-          <Crown className="h-16 w-16 mx-auto mb-4 text-purple-600" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            {t('payment.redirecting')}
-          </h1>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">
-            {t('payment.pleaseWait')}
-          </p>
-        </motion.div>
+    <PayPalScriptProvider options={{ clientId: PAYPAL_CLIENT_ID, currency: 'EUR', intent: 'capture' }}>
+      <div className="min-h-screen bg-slate-50 py-10">
+        <div className="max-w-xl mx-auto px-4">
+
+          {/* Header */}
+          <button onClick={() => navigate(ROUTES.VISITOR_DASHBOARD)} className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mb-6 text-sm">
+            <ArrowLeft className="w-4 h-4" /> Retour au tableau de bord
+          </button>
+
+          {/* Prix */}
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-br from-purple-700 to-indigo-700 rounded-2xl p-6 text-white mb-6 shadow-lg">
+            <div className="flex items-center gap-3 mb-3">
+              <Crown className="w-7 h-7 text-yellow-300" />
+              <h1 className="text-xl font-bold">Pass Premium VIP SIB 2026</h1>
+            </div>
+            <p className="text-purple-200 text-sm mb-4">Accès complet au salon, networking avancé, badge officiel</p>
+            <div className="bg-white/10 rounded-xl p-4 flex items-center justify-between">
+              <span className="text-purple-100 text-sm">Montant total</span>
+              <span className="text-2xl font-extrabold text-yellow-300">{VIP_AMOUNT_EUR.toLocaleString('fr-FR')} EUR</span>
+            </div>
+            <ul className="mt-4 space-y-1">
+              {['Accès illimité au salon', 'Badge VIP nominatif', 'Sessions networking VIP', 'Conférences & séminaires'].map(b => (
+                <li key={b} className="flex items-center gap-2 text-sm text-purple-100">
+                  <Check className="w-3.5 h-3.5 text-yellow-300 flex-shrink-0" />{b}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Choix méthode */}
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="bg-white rounded-2xl border shadow-sm p-6 mb-4">
+            <h2 className="text-base font-semibold text-gray-800 mb-4">Choisissez votre mode de paiement</h2>
+
+            <div className="space-y-3 mb-6">
+              {/* PayPal */}
+              <button onClick={() => setPaymentMethod('paypal')}
+                className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${paymentMethod === 'paypal' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <CreditCard className="w-5 h-5 text-blue-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold text-gray-800 text-sm">PayPal</p>
+                  <p className="text-xs text-gray-500">Paiement immédiat — carte ou compte PayPal</p>
+                </div>
+                {paymentMethod === 'paypal' && <Check className="w-5 h-5 text-blue-600 ml-auto" />}
+              </button>
+
+              {/* CMI */}
+              <button onClick={() => setPaymentMethod('cmi')}
+                className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${paymentMethod === 'cmi' ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                  <CreditCard className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold text-gray-800 text-sm">CMI / Carte bancaire marocaine</p>
+                  <p className="text-xs text-gray-500">Visa, Mastercard — CMI Maroc</p>
+                </div>
+                {paymentMethod === 'cmi' && <Check className="w-5 h-5 text-emerald-600 ml-auto" />}
+              </button>
+
+              {/* Virement bancaire */}
+              <button onClick={() => setPaymentMethod('bank_transfer')}
+                className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${paymentMethod === 'bank_transfer' ? 'border-amber-500 bg-amber-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <Building2 className="w-5 h-5 text-amber-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold text-gray-800 text-sm">Virement bancaire</p>
+                  <p className="text-xs text-gray-500">Attijariwafa bank — validation sous 24–48h</p>
+                </div>
+                {paymentMethod === 'bank_transfer' && <Check className="w-5 h-5 text-amber-600 ml-auto" />}
+              </button>
+            </div>
+
+            {/* Zone de paiement selon méthode choisie */}
+            {paymentMethod === 'paypal' && (
+              <div>
+                {isProcessing ? (
+                  <div className="flex items-center justify-center py-6 gap-3">
+                    <Loader2 className="w-6 h-6 animate-spin text-purple-600" />
+                    <span className="text-gray-600 text-sm">Confirmation du paiement…</span>
+                  </div>
+                ) : (
+                  <PayPalPayButton onSuccess={handlePayPalSuccess} />
+                )}
+              </div>
+            )}
+
+            {paymentMethod === 'cmi' && (
+              <button onClick={handleCMI} disabled={isProcessing}
+                className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors">
+                {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : <CreditCard className="w-5 h-5" />}
+                {isProcessing ? 'Redirection…' : 'Payer par CMI'}
+              </button>
+            )}
+
+            {paymentMethod === 'bank_transfer' && (
+              <button onClick={handleBankTransfer} disabled={isProcessing}
+                className="w-full py-3 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors">
+                {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : <Building2 className="w-5 h-5" />}
+                {isProcessing ? 'Chargement…' : 'Obtenir les coordonnées bancaires'}
+              </button>
+            )}
+          </motion.div>
+
+          {/* Sécurité */}
+          <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
+            <ShieldCheck className="w-4 h-4" />
+            <span>Paiement sécurisé — Vos données sont protégées</span>
+          </div>
+        </div>
       </div>
-    </div>
+    </PayPalScriptProvider>
   );
 }
-
 

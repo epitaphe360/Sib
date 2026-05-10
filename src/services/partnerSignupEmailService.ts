@@ -78,7 +78,6 @@ export async function sendPartnerPaymentInstructions(
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.warn('⚠️ Erreur envoi email paiement:', errorText);
         // Ne pas retourner d'erreur car la payment_request est créée
         return {
           success: true,
@@ -88,7 +87,6 @@ export async function sendPartnerPaymentInstructions(
       }
 
       const result = await response.json();
-      console.log('✅ Email de paiement envoyé avec succès:', result);
 
       return { success: true, requestId: paymentRequest.id };
     } catch (emailError) {

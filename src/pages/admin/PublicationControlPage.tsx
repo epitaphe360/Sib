@@ -56,17 +56,11 @@ export default function PublicationControlPage() {
         throw new Error('Supabase client not initialized');
       }
       // Load partners
-      console.log('🔍  [PublicationControl] Chargement des sponsors...');
       const { data: partnersData, error: partnersError } = await supabase
         .from('partners')
         .select('id, company_name, partnership_level, is_published, contact_info')
         .order('company_name');
 
-      console.log('📊 [PublicationControl] Sponsors reçus:', {
-        count: partnersData?.length || 0,
-        error: partnersError?.message,
-        data: partnersData
-      });
 
       if (partnersError) {
         console.error('❌ Erreur partners:', partnersError);
@@ -75,17 +69,11 @@ export default function PublicationControlPage() {
       setPartners(partnersData || []);
 
       // Load exhibitors
-      console.log('🔍  [PublicationControl] Chargement des exposants...');
       const { data: exhibitorsData, error: exhibitorsError } = await supabase
         .from('exhibitors')
         .select('id, company_name, category, sector, is_published, contact_info')
         .order('company_name');
 
-      console.log('📊 [PublicationControl] Exposants reçus:', {
-        count: exhibitorsData?.length || 0,
-        error: exhibitorsError?.message,
-        data: exhibitorsData
-      });
 
       if (exhibitorsError) {
         console.error('❌ Erreur exhibitors:', exhibitorsError);
@@ -177,7 +165,6 @@ export default function PublicationControlPage() {
         return;
       }
 
-      console.log(`🔄 Mise à jour de ${allPartners.length} sponsors...`);
 
       // Update using a valid condition that matches all records
       const { error } = await supabase
@@ -225,7 +212,6 @@ export default function PublicationControlPage() {
         return;
       }
 
-      console.log(`🔄 Mise à jour de ${allExhibitors.length} exposants...`);
 
       // Update using a valid condition that matches all records
       const { error } = await supabase

@@ -144,18 +144,15 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
 
   const loadMiniSiteData = async () => {
     if (!exhibitorId) {
-      console.warn('[MiniSite] No exhibitorId provided');
       return;
     }
 
     setIsLoading(true);
     setError(null);
-    console.log(`[MiniSite] Loading data for exhibitor: ${exhibitorId}`);
 
     try {
       // Charger le mini-site
       const miniSite = await SupabaseService.getMiniSite(exhibitorId);
-      console.log('[MiniSite] Received site data:', miniSite);
 
       // IMPORTANT: On ne bloque plus si miniSite est null - on génère un fallback
       if (!miniSite) {
@@ -180,12 +177,10 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
 
       // Charger les informations de l'exposant
       const exhibitor = await SupabaseService.getExhibitorForMiniSite(exhibitorId);
-      console.log('[MiniSite] Received exhibitor data:', exhibitor);
 
       if (exhibitor) {
         setExhibitorData(exhibitor);
       } else {
-        console.warn(`[MiniSite] Exhibitor profile not found for ID: ${exhibitorId}, using fallback`);
         // Créer des données exposant par défaut
         setExhibitorData({
           id: exhibitorId,
@@ -204,7 +199,6 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
 
       // Charger les produits
       const exhibitorProducts = await SupabaseService.getExhibitorProducts(exhibitorId);
-      console.log('[MiniSite] Received products:', exhibitorProducts?.length);
       setProducts(exhibitorProducts);
 
       // Incrémenter les vues en fire-and-forget (ne bloque pas le chargement)

@@ -168,7 +168,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                     </Button>
                     <Button
                       onClick={() => {
-                        console.log('🔴 PreviewModal: Bouton "Confirmer et envoyer" cliqué!');
                         onConfirm();
                       }}
                       disabled={isLoading}

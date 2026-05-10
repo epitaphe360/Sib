@@ -91,6 +91,12 @@ export function ExhibitorQuickActions({ onOpenQR, onOpenBadge }: Readonly<Exhibi
       Icon: User,
       link: ROUTES.EXHIBITOR_PROFILE,
     },
+    {
+      title: 'Mes Factures',
+      description: 'Consultez et téléchargez vos factures SIB 2026',
+      Icon: FileText,
+      link: ROUTES.EXHIBITOR_INVOICES,
+    },
   ];
 
   return (

@@ -73,7 +73,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             stats.profileViews = profileViewsCount || 0;
           }
         } catch (err) {
-          console.log('Table profile_views non disponible');
         }
       }
 
@@ -88,7 +87,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
           stats.connections = connectionsCount || 0;
         }
       } catch (err) {
-        console.log('Erreur lors du chargement des connexions');
       }
 
       // Compter les rendez-vous POUR CET UTILISATEUR UNIQUEMENT
@@ -128,7 +126,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
           stats.appointments = appointmentsCount || 0;
         }
       } catch (err) {
-        console.log('Erreur lors du chargement des rendez-vous');
       }
 
       // Compter les messages non lus POUR CET UTILISATEUR
@@ -153,7 +150,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
           }
         }
       } catch (err) {
-        console.log('Erreur lors du chargement des messages');
       }
 
       // Compter les téléchargements de catalogue (seulement pour exhibitors/partners)
@@ -168,7 +164,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             stats.catalogDownloads = downloadsCount || 0;
           }
         } catch (err) {
-          console.log('Table downloads non disponible');
         }
       }
 
@@ -203,7 +198,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             }
           }
         } catch (err) {
-          console.log('Table minisite_views non disponible');
         }
       }
 
@@ -223,7 +217,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             stats.miniSiteViews = partner.views || 0;
           }
         } catch (err) {
-          console.log('Erreur chargement vues sponsor');
         }
       }
 
@@ -236,7 +229,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         .limit(10);
 
       if (activitiesError) {
-        console.warn('Erreur lors de la récupération des activités:', activitiesError);
       }
 
       // Récupérer les infos des acteurs si nécessaire

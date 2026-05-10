@@ -88,7 +88,6 @@ export const checkUrlAccessibility = async (url: string): Promise<boolean> => {
     });
     return true; // Si pas d'erreur, l'URL est accessible
   } catch (error) {
-    console.warn('URL non accessible:', error);
     return false;
   }
 };

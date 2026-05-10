@@ -29,14 +29,12 @@ function getCachedTranslation(text: string, targetLang: string): string | null {
     if (cached) {
       const parsed: CachedTranslation = JSON.parse(cached);
       if (Date.now() - parsed.timestamp < CACHE_EXPIRY) {
-        console.log('[Translation] Using cached translation');
         return parsed.text;
       } else {
         localStorage.removeItem(cacheKey);
       }
     }
   } catch (error) {
-    console.warn('[Translation] Cache read error:', error);
   }
 
   return null;
@@ -54,7 +52,6 @@ function setCachedTranslation(text: string, targetLang: string, translated: stri
     };
     localStorage.setItem(cacheKey, JSON.stringify(cached));
   } catch (error) {
-    console.warn('[Translation] Cache write error:', error);
   }
 }
 
@@ -127,7 +124,6 @@ async function translateWithMyMemory(text: string, targetLanguage: string = 'en'
     });
 
     if (!response.ok) {
-      console.warn('[Translation] API returned error:', response.status);
       return text;
     }
 
@@ -158,7 +154,6 @@ async function translateLongText(text: string, targetLanguage: string = 'en'): P
 
   try {
     const chunks = splitText(text, 400);
-    console.log(`[Translation] Splitting text into ${chunks.length} chunks`);
 
     const translatedChunks: string[] = [];
 
@@ -201,12 +196,10 @@ export async function translateArticle(
     return { title: '', excerpt: '', content: '' };
   }
 
-  console.log('[Translation] Starting article translation to', targetLanguage);
 
   // Si l'article est déjà dans la langue cible, pas besoin de traduire
   const currentLang = detectLanguage(article.title || article.excerpt || '');
   if (currentLang === targetLanguage) {
-    console.log('[Translation] Article already in target language');
     return {
       title: article.title || '',
       excerpt: article.excerpt || '',
@@ -224,7 +217,6 @@ export async function translateArticle(
     // Traduction séquentielle du contenu (long) avec division
     const translatedContent = await translateLongText(article.content || '', targetLanguage);
 
-    console.log('[Translation] Article translation completed');
 
     return {
       title: translatedTitle,
@@ -253,9 +245,7 @@ export function clearTranslationCache(): void {
         localStorage.removeItem(key);
       }
     });
-    console.log('[Translation] Cache cleared');
   } catch (error) {
-    console.warn('[Translation] Cache clear error:', error);
   }
 }
 

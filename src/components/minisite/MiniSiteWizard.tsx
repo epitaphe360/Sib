@@ -78,7 +78,6 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
           exhibitorId = exhibitor.id;
         }
       } catch (err) {
-        console.warn('Utilisation du userId comme exhibitorId:', err);
       }
 
       await SupabaseService.createMiniSite(exhibitorId, miniSiteData);
@@ -89,7 +88,6 @@ export default function MiniSiteWizard({ onSuccess }: MiniSiteWizardProps) {
           published: true
         });
       } catch (pubErr) {
-        console.warn('⚠️ Publication automatique échouée:', pubErr);
       }
 
       setSuccess(true);

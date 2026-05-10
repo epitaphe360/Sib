@@ -91,7 +91,6 @@ export class PavillionsService {
   static async getAllPavilions(): Promise<Pavilion[]> {
     // Return static data if Supabase is not configured
     if (!isSupabaseReady() || !supabase) {
-      console.warn('Supabase not configured. Returning static pavilions data.');
       return STATIC_PAVILIONS;
     }
 
@@ -107,7 +106,6 @@ export class PavillionsService {
       if (error) {
         // If table doesn't exist, return static data
         if (error.code === '42P01' || error.message?.includes('does not exist')) {
-          console.warn('Pavilions table does not exist. Returning static data.');
           return STATIC_PAVILIONS;
         }
         console.error('Error fetching pavilions:', error);
@@ -124,7 +122,6 @@ export class PavillionsService {
   static async getPavilionBySlug(slug: string): Promise<Pavilion | null> {
     // Return static data if Supabase is not configured
     if (!isSupabaseReady() || !supabase) {
-      console.warn('Supabase not configured. Returning static pavilion data.');
       return STATIC_PAVILIONS.find(p => p.slug === slug) || null;
     }
 
@@ -141,7 +138,6 @@ export class PavillionsService {
       if (error) {
         // If table doesn't exist, return static data
         if (error.code === '42P01' || error.message?.includes('does not exist')) {
-          console.warn('Pavilions table does not exist. Returning static data.');
           return STATIC_PAVILIONS.find(p => p.slug === slug) || null;
         }
         console.error('Error fetching pavilion:', error);
@@ -158,7 +154,6 @@ export class PavillionsService {
   static async getFeaturedPavilions(): Promise<Pavilion[]> {
     // Return static data if Supabase is not configured
     if (!isSupabaseReady() || !supabase) {
-      console.warn('Supabase not configured. Returning static featured pavilions.');
       return STATIC_PAVILIONS.filter(p => p.featured);
     }
 
@@ -175,7 +170,6 @@ export class PavillionsService {
       if (error) {
         // If table doesn't exist, return static data
         if (error.code === '42P01' || error.message?.includes('does not exist')) {
-          console.warn('Pavilions table does not exist. Returning static data.');
           return STATIC_PAVILIONS.filter(p => p.featured);
         }
         console.error('Error fetching featured pavilions:', error);

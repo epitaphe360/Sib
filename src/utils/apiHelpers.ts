@@ -113,7 +113,6 @@ export async function withRetry<T>(
         maxDelayMs
       );
 
-      console.warn(`Attempt ${attempt + 1}/${maxRetries + 1} failed, retrying in ${delayMs}ms...`, error);
       await delay(delayMs);
     }
   }

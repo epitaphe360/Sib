@@ -142,9 +142,7 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
 	          companyName: exhibitorToUpdate.companyName,
 	          status: newStatus,
 	        });
-	        console.log('✅ Email de validation envoyé');
 	      } catch (emailError) {
-	        console.warn('⚠️ Email de validation non envoyé:', emailError);
 	        // Ne pas bloquer la mise à jour si l'email échoue
 	      }
 
@@ -171,7 +169,6 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
     const { exhibitors } = get();
     const filters = { ...get().filters, ...newFilters };
 
-    console.log('🔍 Filtre appliqué:', filters, `sur ${exhibitors.length} exposants`);
 
     const filtered = exhibitors.filter(exhibitor => {
       const sector = exhibitor.sector || '';
@@ -195,7 +192,6 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
       return exhibitor.verified && isPubliclyVisible && matchesCategory && matchesSector && matchesSearch;
     });
 
-    console.log(`📊 ${filtered.length} exposants après filtrage`);
     set({ filters, filteredExhibitors: filtered });
   },
 

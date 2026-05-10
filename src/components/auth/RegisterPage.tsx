@@ -213,14 +213,12 @@ export default function RegisterPage() {
   // Log des erreurs de validation
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
-      console.log('⚠️ [INSCRIPTION] Erreurs de validation détectées:', errors);
     }
   }, [errors]);
 
   // Log au changement d'étape (désactivé en production)
   useEffect(() => {
     if (currentStep === 5 && Object.keys(errors).length > 0) {
-      console.warn('⚠️ [Étape 5] Erreurs détectées:', errors);
     }
   }, [currentStep, errors]);
 
@@ -309,26 +307,22 @@ export default function RegisterPage() {
     // À l'étape 4 pour les visiteurs, tous les champs sont optionnels
     // Donc on ignore la validation et passe à l'étape suivante
     if (currentStep === 4 && watchedAccountType === 'visitor') {
-      console.log('✅ [INSCRIPTION] Étape 4 visiteur - passage sans validation (champs optionnels)');
       if (currentStep < 5) {
         setCurrentStep(currentStep + 1);
-        console.log('🔂 [INSCRIPTION] Passage à l\'étape', currentStep + 1);
       }
       return;
     }
 
     const fieldsToValidate = getFieldsForStep(currentStep);
-    console.log('🔍 [INSCRIPTION] Champs à valider:', fieldsToValidate);
 
     // Debug: log les valeurs actuelles des champs
     const currentValues = fieldsToValidate.reduce((acc, field) => ({
       ...acc,
       [field]: watch(field)
     }), {});
-    console.log('📝 [INSCRIPTION] Valeurs actuelles:', currentValues);
 
     const isValid = await trigger(fieldsToValidate);
-    console.log('🔍 [INSCRIPTION] Résultat validation trigger:', {
+    console.log('Validation result:', {
       isValid,
       errors: Object.keys(errors).length > 0 ? errors : 'None'
     });
@@ -337,10 +331,8 @@ export default function RegisterPage() {
       // Validations manuelles pour les champs conditionnels non couverts par le trigger
       if (currentStep === 2 && watchedSector === 'Autre') {
         const customSectorValue = watch('customSector');
-        console.log('🔍 [INSCRIPTION] Validation customSector:', customSectorValue);
         if (!customSectorValue || customSectorValue.length < 2) {
           setError('customSector', { message: "Veuillez préciser votre secteur d'activité" });
-          console.warn('❌ [INSCRIPTION] Erreur customSector manquante');
           return;
         }
       }
@@ -350,17 +342,14 @@ export default function RegisterPage() {
           const phoneValue = watch('phone');
           if (!phoneValue || phoneValue.length < 8) {
             setError('phone', { message: 'Numéro de téléphone requis (minimum 8 caractères)' });
-            console.warn('❌ [INSCRIPTION] Erreur téléphone manquant (exposant/sponsor)');
             return;
           }
         }
         // Validation custom position pour tous les types
         if (watchedPosition === 'Autre') {
           const customPositionValue = watch('customPosition');
-          console.log('🔍 [INSCRIPTION] Validation customPosition:', customPositionValue);
           if (!customPositionValue || customPositionValue.length < 2) {
             setError('customPosition', { message: 'Veuillez préciser votre fonction' });
-            console.warn('❌ [INSCRIPTION] Erreur customPosition manquante');
             return;
           }
         }
@@ -368,7 +357,6 @@ export default function RegisterPage() {
         // 🆕 Vérifier si l'email existe déjà dans la base de données
         const emailValue = watch('email');
         if (emailValue) {
-          console.log('🔍 [INSCRIPTION - Étape 3] Vérification de l\'email:', emailValue);
 
           setIsCheckingEmail(true);
 
@@ -388,7 +376,6 @@ export default function RegisterPage() {
           }
 
           if (existingUser) {
-            console.warn('⚠️ [INSCRIPTION - Étape 3] Email déjà existant:', existingUser);
             const roleLabel = existingUser.role === 'exhibitor' ? 'exposant' :
                              existingUser.role === 'partner' ? 'sponsor' : 'visiteur';
 
@@ -418,18 +405,14 @@ export default function RegisterPage() {
             return;
           }
 
-          console.log('✅ [INSCRIPTION - Étape 3] Email disponible');
         }
       }
     }
 
     if (isValid && currentStep < 5) {
-      console.log('✅ [INSCRIPTION] Validation réussie - progression vers étape', currentStep + 1);
       setCurrentStep(currentStep + 1);
     } else if (!isValid) {
       const errorFields = Object.keys(errors);
-      console.warn('❌ [INSCRIPTION] Validation échouée - erreurs sur:', errorFields);
-      console.warn('❌ [INSCRIPTION] Détails erreurs:', errors);
 
       // Afficher toast pour feedback immédiat
       if (errorFields.length > 0) {
@@ -440,10 +423,8 @@ export default function RegisterPage() {
   };
 
   const prevStep = () => {
-    console.log('⬅️ [INSCRIPTION] prevStep appelé', { currentStep });
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      console.log('🔂 [INSCRIPTION] Retour à l\'\u00e9tape', currentStep - 1);
     }
   };
 
@@ -459,19 +440,11 @@ export default function RegisterPage() {
   };
 
   const onSubmit = async (data: RegistrationForm) => {
-    console.log('🚀 [INSCRIPTION] onSubmit appelé');
-    console.log('📝 [INSCRIPTION] Données formulaire brutes:', {
-      ...data,
-      password: '***',
-      confirmPassword: '***'
-    });
 
     setIsSubmitting(true);
     try {
-      console.log('📝 [INSCRIPTION] Démarrage appel registerUser dans le store...');
 
       // 🆕 Vérification finale : L'email existe-t-il déjà ? (filet de sécurité)
-      console.log('🔍 [INSCRIPTION - Vérification finale] Contrôle de l\'email avant création...');
       const emailToCheck = data.email.toLowerCase().trim();
 
       // Vérifier dans la table users
@@ -490,7 +463,6 @@ export default function RegisterPage() {
       }
 
       if (existingUser) {
-        console.warn('⚠️ [INSCRIPTION] Email déjà existant dans la table users');
         const roleLabel = existingUser.role === 'exhibitor' ? 'exposant' :
                          existingUser.role === 'partner' ? 'sponsor' : 'visiteur';
         toast.error(`⚠️ Cet email est déjà enregistré en tant que ${roleLabel}. Connectez-vous pour accéder à votre compte.`);
@@ -523,7 +495,6 @@ export default function RegisterPage() {
         return;
       }
 
-      console.log('✅ [INSCRIPTION] Email disponible, création du compte...');
 
       const timestamp = new Date().getTime();
 
@@ -531,52 +502,41 @@ export default function RegisterPage() {
       await registerUser(data);
 
       const duration = new Date().getTime() - timestamp;
-      console.log(`✅ [INSCRIPTION] registerUser terminé succès en ${duration}ms`);
 
       // 📧 Send welcome email (non-blocking)
       try {
-        console.log('📧 [INSCRIPTION] Envoi email de bienvenue...');
         const { EmailService } = await import('../../services/emailService');
         const firstName = data.firstName || data.accountType;
         const accountTypeLabel = data.accountType === 'visitor' ? 'visiteur' :
                                 data.accountType === 'exhibitor' ? 'exposant' : 'sponsor';
 
         await EmailService.sendWelcomeEmail(data.email, firstName, accountTypeLabel);
-        console.log('✅ [INSCRIPTION] Email de bienvenue envoyé');
       } catch (emailError) {
-        console.warn('⚠️ Welcome email failed:', emailError);
         // Non-blocking error - registration is already complete
       }
 
       // Si c'est un exposant ou sponsor, afficher un toast indiquant validation admin requise
       if (data.accountType && data.accountType !== 'visitor') {
         const label = data.accountType === 'exhibitor' ? 'exposant' : 'sponsor';
-        console.log(`ℹ️ [INSCRIPTION] Compte ${label} - validation admin requise`);
         toast.success(`Inscription réussie — votre compte ${label} sera activé par un administrateur. Vous recevrez un email une fois validé.`);
       }
 
       // Tenter une connexion automatique pour les visiteurs
       if (data.accountType === 'visitor') {
-        console.log('🔑 [INSCRIPTION] Tentative de connexion automatique pour visiteur...');
         try {
           await login(data.email, data.password, { rememberMe: true });
-          console.log('✅ [INSCRIPTION] Connexion automatique réussie');
           toast.success('Connexion automatique réussie — redirection vers votre tableau de bord.');
         } catch (loginError) {
           // Ne pas bloquer l'inscription si la connexion automatique échoue
-          console.warn('⚠️ [INSCRIPTION] Connexion automatique échouée:', loginError);
           toast.error('Connexion automatique impossible — veuillez vous connecter manuellement.');
         }
       }
 
       // Afficher la modal de succès
-      console.log('✅ [INSCRIPTION] Affichage modal de succès');
       setShowSuccess(true);
 
       // Rediriger vers la page de confirmation après 3 secondes
-      console.log('📍 [INSCRIPTION] Redirection programmée dans 3s...');
       setTimeout(() => {
-        console.log('📍 [INSCRIPTION] Redirection vers confirmation');
         navigate(`${ROUTES.SIGNUP_CONFIRMATION}?email=${encodeURIComponent(data.email)}&type=${data.accountType}`);
       }, 3000);
     } catch (error) {
@@ -668,14 +628,12 @@ export default function RegisterPage() {
 
     if (errorMessages.length > 0) {
       toast.error(`Erreur de validation : ${errorMessages[0]}`);
-      console.log('⚠️ [INSCRIPTION] Premier message d\'erreur:', errorMessages[0]);
     } else {
       toast.error('Veuillez vérifier les champs du formulaire');
     }
 
     // Trouver le premier champ avec erreur et scroller vers lui
     const firstErrorField = Object.keys(errors)[0];
-    console.log('🔍 [INSCRIPTION] Premier champ en erreur:', firstErrorField);
 
     // Scroller vers le champ en erreur après un court délai
     setTimeout(() => {
@@ -1365,7 +1323,7 @@ export default function RegisterPage() {
                       disabled={isSubmitting}
                       data-testid="btn-submit"
                       onClick={() => {
-                        console.log('👆 [INSCRIPTION] Click sur "Créer mon compte"', {
+                        console.log('Debug submit:', {
                           isSubmitting,
                           currentStep,
                           errorsCount: Object.keys(errors).length,
@@ -1376,7 +1334,6 @@ export default function RegisterPage() {
                         // Appeler handleSubmit manuellement
                         handleSubmit(
                           (data) => {
-                            console.log('✅ [INSCRIPTION] Validation réussie, appel onSubmit');
                             onSubmit(data);
                           },
                           (errors) => {

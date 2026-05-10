@@ -68,13 +68,11 @@ export default function ResetPasswordPage() {
             try {
               await (supabase as any).auth.setSession({ access_token, refresh_token });
             } catch (e) {
-              console.warn('Could not set session from tokens', e);
             }
           })();
         }
       }
     } catch (e) {
-      console.warn('reset token parsing failed', e);
     }
   }, []);
 
@@ -114,10 +112,8 @@ export default function ResetPasswordPage() {
               })
               .eq('id', user.id);
 
-            console.log('✅ hasPassword mis à jour');
           }
         } catch (profileErr) {
-          console.warn('⚠️ Erreur mise à jour profil (non bloquant):', profileErr);
         }
 
         setMessage(t('resetPassword.success'));

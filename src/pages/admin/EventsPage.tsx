@@ -105,13 +105,13 @@ export default function EventsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'confirmed':
-        return <Badge variant="success"><CheckCircle className="h-3 w-3 mr-1" />Confirmé</Badge>;
+        return <Badge variant="success"><CheckCircle className="h-3 w-3 mr-1" />{t('events_admin.confirme', 'Confirmé')}</Badge>;
       case 'pending':
-        return <Badge variant="warning"><AlertTriangle className="h-3 w-3 mr-1" />En attente</Badge>;
+        return <Badge variant="warning"><AlertTriangle className="h-3 w-3 mr-1" />{t('events_admin.en_attente', 'En attente')}</Badge>;
       case 'cancelled':
-        return <Badge variant="error"><XCircle className="h-3 w-3 mr-1" />Annulé</Badge>;
+        return <Badge variant="error"><XCircle className="h-3 w-3 mr-1" />{t('events_admin.annule', 'Annulé')}</Badge>;
       case 'completed':
-        return <Badge variant="info">Terminé</Badge>;
+        return <Badge variant="info">{t('events_admin.termine', 'Terminé')}</Badge>;
       default:
         return <Badge variant="info">{status}</Badge>;
     }
@@ -135,7 +135,7 @@ export default function EventsPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <RefreshCw className="h-12 w-12 text-blue-500 animate-spin mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900">Chargement des événements...</h3>
+          <h3 className="text-lg font-medium text-gray-900">{t('events_admin.chargement_des_evenements', 'Chargement des événements...')}</h3>
         </div>
       </div>
     );
@@ -146,7 +146,7 @@ export default function EventsPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center p-6 bg-white rounded-lg shadow-md">
           <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Erreur de chargement</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">{t('events_admin.erreur_de_chargement', 'Erreur de chargement')}</h3>
           <p className="text-gray-600">{error}</p>
           <Button onClick={() => window.location.reload()} className="mt-4">
             <RefreshCw className="h-4 w-4 mr-2" />
@@ -170,7 +170,7 @@ export default function EventsPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Gestion des Événements</h1>
+              <h1 className="text-3xl font-bold text-gray-900">{t('events_admin.gestion_des_evenements', 'Gestion des Événements')}</h1>
               <p className="text-gray-600 mt-2">
                 Administration et organisation des événements SIB 2026
               </p>
@@ -190,7 +190,7 @@ export default function EventsPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Événements</p>
+                  <p className="text-sm font-medium text-gray-600">{t('events_admin.total_evenements', 'Total Événements')}</p>
                   <p className="text-3xl font-bold text-gray-900">{events.length}</p>
                 </div>
                 <Calendar className="h-8 w-8 text-blue-600" />
@@ -202,7 +202,7 @@ export default function EventsPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Confirmés</p>
+                  <p className="text-sm font-medium text-gray-600">{t('events_admin.confirmes', 'Confirmés')}</p>
                   <p className="text-3xl font-bold text-green-600">
                     {events.filter(e => e.status === 'confirmed').length}
                   </p>
@@ -216,7 +216,7 @@ export default function EventsPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Participants Totaux</p>
+                  <p className="text-sm font-medium text-gray-600">{t('events_admin.participants_totaux', 'Participants Totaux')}</p>
                   <p className="text-3xl font-bold text-purple-600">
                     {events.reduce((sum, e) => sum + e.registered, 0).toLocaleString()}
                   </p>
@@ -230,7 +230,7 @@ export default function EventsPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Taux d'occupation</p>
+                  <p className="text-sm font-medium text-gray-600">{t('events_admin.taux_doccupation', 'Taux d\'occupation')}</p>
                   <p className="text-3xl font-bold text-orange-600">
                     {events.length > 0 && events.reduce((sum, e) => sum + e.capacity, 0) > 0
                       ? Math.round((events.reduce((sum, e) => sum + e.registered, 0) /
@@ -264,7 +264,7 @@ export default function EventsPage() {
                 onChange={(e) => setSelectedType(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Tous les types</option>
+                <option value="">{t('events_admin.tous_les_types', 'Tous les types')}</option>
                 {eventTypes.map(type => (
                   <option key={type.value} value={type.value}>{type.label}</option>
                 ))}
@@ -275,11 +275,11 @@ export default function EventsPage() {
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Tous les statuts</option>
-                <option value="confirmed">Confirmé</option>
-                <option value="pending">En attente</option>
-                <option value="cancelled">Annulé</option>
-                <option value="completed">Terminé</option>
+                <option value="">{t('events_admin.tous_les_statuts', 'Tous les statuts')}</option>
+                <option value="confirmed">{t('events_admin.confirme', 'Confirmé')}</option>
+                <option value="pending">{t('events_admin.en_attente', 'En attente')}</option>
+                <option value="cancelled">{t('events_admin.annule', 'Annulé')}</option>
+                <option value="completed">{t('events_admin.termine', 'Terminé')}</option>
               </select>
 
               <Button variant="outline">
@@ -342,14 +342,14 @@ export default function EventsPage() {
                     {event.virtual && (
                       <div className="flex items-center text-sm text-blue-600">
                         <Video className="h-4 w-4 mr-2" />
-                        <span>Événement virtuel</span>
+                        <span>{t('events_admin.evenement_virtuel', 'Événement virtuel')}</span>
                       </div>
                     )}
                   </div>
 
                   {event.speakers && event.speakers.length > 0 && (
                     <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Intervenants :</h4>
+                      <h4 className="text-sm font-medium text-gray-900 mb-2">{t('events_admin.intervenants', 'Intervenants :')}</h4>
                       <div className="space-y-1">
                         {event.speakers.slice(0, 2).map((speaker) => (
                           <div key={speaker.name} className="text-sm text-gray-600">

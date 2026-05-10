@@ -175,7 +175,6 @@ export const useNewsStore = create<NewsState>((set, get) => ({
         .range(offset, offset + state.pageSize - 1);
 
       if (error) {
-        console.warn('⚠️ Erreur Supabase, utilisation du fallback:', error);
         throw error;
       }
 
@@ -219,11 +218,9 @@ export const useNewsStore = create<NewsState>((set, get) => ({
           source: 'sibs' as const,
           views: article.views || 0
         }));
-        console.log(`✅ ${pageArticles.length} articles chargés depuis Supabase (page)`);
       } else {
         // Utiliser les articles de fallback
         pageArticles = fallbackArticles;
-        console.log('📰 Utilisation des articles de fallback');
       }
 
       const mergedArticles = reset

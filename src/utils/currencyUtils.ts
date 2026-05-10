@@ -59,9 +59,6 @@ export async function getExchangeRate(
   }
 
   // 4. Fallback au taux statique
-  console.warn(
-    `[currencyUtils] Impossible de récupérer le taux ${from}→${to}. Fallback: ${fallbackRate}`
-  );
   return fallbackRate;
 }
 

@@ -74,7 +74,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         try {
           await StorageService.deleteImage(imageUrl, bucket);
         } catch (err) {
-          console.warn('Impossible de supprimer l\'ancienne image', err);
         }
       }
 

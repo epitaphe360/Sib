@@ -1,0 +1,2548 @@
+sector.technology|Technologie
+sector.construction_industry|Industrie du Bâtiment
+sector.port_industry|Industrie du Bâtiment
+sector.automation|Automatisation
+sector.equipment|Équipement
+sector.operations_management|Exploitation & Gestion
+exhibitor_levels.basic_9|9m² Basique
+exhibitor_levels.standard_18|18m² Standard
+exhibitor_levels.premium_36|36m² Premium
+exhibitor_levels.elite_54plus|54m²+ Élite
+pages.events.type_ted_talk|Ted Talk
+pages.events.info_dates_location|{dates} · {location}
+pages.news.min_read|min de lecture
+pages.news.categories|Catégories
+pages.news.all_categories|Toutes les catégories
+pages.news.featured|En vedette
+pages.news.trending|Tendance
+article.sibs_2026|SIB 2026 : Le Salon International du Bâtiment et de la Logistique
+article.sibs_excerpt|Découvrez le plus grand événement bâtiment d\
+article.sibs_content|SIB 2026 est le rendez-vous incontournable des professionnels du secteur du bâtiment et logistique. Cet événement majeur réunira les acteurs clés de l\
+article.innovation_title|Innovation BTP : Les Technologies qui Transforment nos Bâtiments
+article.innovation_excerpt|Intelligence artificielle, automatisation, IoT : les bâtiments modernes adoptent les technologies de pointe pour améliorer leur efficacité.
+article.innovation_content|Les bâtiments du monde entier investissent massivement dans les nouvelles technologies. De l\
+article.durability_title|Développement Durable : Les Bâtiments s\
+article.durability_excerpt|Les initiatives écologiques se multiplient dans les bâtiments pour réduire l\
+article.durability_content|Face aux enjeux climatiques, les bâtiments adoptent des stratégies ambitieuses pour réduire leur impact environnemental. Énergies renouvelables, électrification des quais, gestion des déchets : tour d\
+article.mediterranean_title|Le Commerce Bâtiment en Méditerranée : Perspectives 2026
+article.mediterranean_excerpt|Analyse des tendances du commerce construction méditerranéen et des opportunités pour les acteurs du secteur.
+article.mediterranean_content|La Méditerranée reste un carrefour stratégique pour le commerce mondial. Avec l\
+article.careers_title|Formation et Emploi : Les Métiers du Bâtiment de Demain
+article.careers_excerpt|Le secteur du bâtiment recrute ! Découvrez les formations et les opportunités de carrière dans l\
+article.careers_content|Le secteur du bâtiment est en pleine mutation et recherche de nouveaux talents. Des métiers traditionnels aux nouvelles spécialités liées à la digitalisation, les opportunités sont nombreuses pour ceux qui souhaitent faire carrière dans ce domaine.
+article.security_title|Sécurité Chantier : Les Nouvelles Normes Internationales
+article.security_excerpt|Les standards de sécurité évoluent pour répondre aux nouveaux défis du transport construction mondial.
+article.security_content|La sécurité reste une priorité absolue dans les installations BTP. Cybersécurité, contrôle des accès, prévention des risques : découvrez les dernières réglementations et innovations en matière de sécurité bâtiment.
+admin.title|Administration
+admin.dashboard|Tableau de bord
+admin.welcome|Bienvenue, {{name}}
+admin.system_operational|Système Opérationnel
+admin.system_uptime|Disponibilité système
+admin.api_calls_per_day|Appels API / jour
+admin.storage_used|Stockage utilisé
+admin.required_actions|Actions Requises
+admin.items_need_attention|{{count}} éléments nécessitent votre attention
+admin.registration_requests|Demandes d\
+admin.click_to_process|Cliquer pour traiter
+admin.payment_validation|Validation paiements
+admin.manage_proofs|Gérer les justificatifs
+admin.exhibitors|Exposants
+admin.partners|Sponsors
+admin.visitors|Visiteurs
+admin.visits|Visites
+admin.list_and_subscriptions|Liste & Abonnements
+admin.list_and_packs|Liste & Packs
+admin.vip_visitors_management|Gestion Visiteurs VIP
+admin.view_list|Consulter la liste
+admin.content_moderation|Contenus à modérer
+admin.active_contracts|Contrats actifs
+admin.create_partner|Créer un sponsor
+admin.manage_partners_action|Gérer les sponsors
+admin.create_exhibitor|Créer un exposant
+admin.manage_exhibitors_action|Gérer les exposants
+admin.create_event|Créer un événement
+admin.manage_events_action|Gérer les événements
+admin.create_article|Créer un article
+admin.manage_articles_action|Gérer les articles
+admin.create_pavilion_action|Créer un pavillon
+admin.manage_pavilions_action|Gérer les pavillons
+admin.manage_media_action|Gérer les médias
+admin.validate_media|Valider les médias
+admin.sync_articles|Sync articles
+admin.syncing|Synchronisation...
+admin.publication_control|Contrôle de Publication
+admin.publication_warning|Activer/Désactiver la visibilité GLOBALE
+admin.total_control|CONTRÔLE TOTAL
+admin.quick_actions|Actions Rapides & Navigation
+admin.participant_management|Gestion Participants
+admin.content_management|Gestion Contenu
+admin.media_management_section|Gestion Médias
+admin.nav_and_stats|Navigation & Statistiques
+admin.realtime_data|Données en temps réel
+admin.user_growth|Croissance des Utilisateurs (6 derniers mois)
+admin.total_users_chart|Total Utilisateurs
+admin.user_distribution|Distribution des Utilisateurs
+admin.platform_activity|Activité Plateforme (Cette semaine)
+admin.weekly_traffic|Trafic Hebdomadaire
+admin.chart_visits|Visites
+admin.chart_pageviews|Pages vues
+admin.metrics_label|Métriques
+admin.performance_label|Performance
+admin.users_label|Utilisateurs
+admin.pavilions_label|Pavillons
+admin.events_label|Événements
+admin.system_health|Santé Système
+admin.avg_response_time|Temps réponse moyen
+admin.recent_activity|Activité Système Récente
+admin.view_all|Voir tout
+admin.active_exhibitors|Exposants Actifs
+admin.registered_visitors|Visiteurs Inscrits
+admin.official_partners|Sponsors Officiels
+admin.conferences_workshops|Conférences & Ateliers
+admin.detailed_metrics|Métriques & Performance Détaillées
+admin.detailed_metrics_desc|Accédez aux analyses complètes de performance du salon SIB 2026
+admin.full_metrics|Voir les Métriques Complètes
+admin.admin_access_only|Accès Admin Uniquement
+admin.email_templates_label|Templates Emails
+admin.customize_label|Personnaliser
+admin.online|en ligne
+admin.sync_label|Synchronisation
+admin.events_section|Événements
+admin.articles_section|Articles
+admin.pavilions_section|Pavillons Thématiques
+admin.medias_section|Médias
+admin.users_management|Gestion des utilisateurs
+admin.exhibitors_management|Gestion des exposants
+admin.partners_management|Gestion des sponsors
+admin.events_management|Gestion des événements
+admin.news_management|Gestion des articles
+admin.pavilions_management|Gestion des pavillons thématiques
+admin.vip_visitors|Gestion des visiteurs VIP
+admin.live_studio_management|Gestion des Lives Studio
+admin.media_manager|Gestionnaire de médias
+admin.analytics|Statistiques
+admin.settings|Paramètres
+admin.salons_title|Gestion des salons
+admin.salons_subtitle|Créez et gérez les éditions du salon
+admin.salons_new|Nouveau salon
+admin.salons_active|Salons actifs
+admin.salons_default|Salon par défaut
+admin.salons_empty|Aucun salon créé
+admin.salons_load_error|Erreur de chargement : 
+admin.salons_upload_error|Erreur upload : 
+admin.salons_name_slug_required|Le nom et le slug sont obligatoires.
+admin.salons_updated|Salon mis à jour.
+admin.salons_created|Salon créé.
+admin.salons_toggled|Salon mis à jour :
+admin.salons_activated|activé
+admin.salons_deactivated|désactivé
+admin.salons_set_default|défini par défaut
+admin.salons_unset_default|retiré du défaut
+admin.salons_delete_confirm|Supprimer le salon "{name}" ? Cette action est irréversible.
+admin.salons_deleted|Salon supprimé.
+admin.salons_modal_edit|Modifier le salon
+admin.salons_modal_create|Créer un salon
+admin.salons_location|Lieu
+admin.total_users|Utilisateurs totaux
+admin.active_users_count|{{count}} utilisateurs actifs
+admin.total_exhibitors|Exposants totaux
+admin.total_partners|Sponsors totaux
+admin.pending_approval|En attente d\
+admin.approve|Approuver
+admin.reject|Rejeter
+admin.edit|Modifier
+admin.delete|Supprimer
+admin.edit_profile|Modifier le profil
+admin.media_management|Gestion des médias
+admin.new_exhibitor|Nouvel Exposant
+admin.new_partner|Nouveau Sponsor
+admin.new_event|Nouvel Événement
+admin.new_article|Nouvel Article
+admin.manage_exhibitors_desc|Gérez tous les exposants de la plateforme
+admin.manage_partners_desc|Gérez tous les sponsors de la plateforme
+admin.manage_events_desc|Gérez tous les événements de la plateforme
+admin.manage_users_desc|Gérez tous les utilisateurs de la plateforme
+admin.manage_news_desc|Gérez tous les articles et actualités de la plateforme
+admin.back_to_media|Retour à la gestion des médias
+admin.total_events|Total Événements
+admin.upcoming|À venir
+admin.types|Types
+admin.this_month|Ce mois
+admin.total_articles|Total Articles
+admin.published|Publiés
+admin.loading_events|Chargement des événements...
+admin.loading_articles|Chargement des articles...
+admin.search_event|Rechercher un événement...
+admin.search_article|Rechercher un article...
+admin.all_types|Tous les types
+admin.media_management_title|Gestion des Médias
+admin.media_management_desc|Validez, modérez et gérez tous les contenus médias
+admin.new_media|Créer Nouveau Média
+admin.total_media|Total Médias
+admin.pending|En attente
+admin.rejected|Rejetés
+admin.status_published|Publié
+admin.status_pending|En attente
+admin.status_rejected|Rejeté
+admin.loading|Chargement...
+admin.no_media_found|Aucun média trouvé
+admin.confirm_delete_media|Êtes-vous sûr de vouloir supprimer ce média ?
+admin.pavilions_management_title|Gestion des Pavillons Thématiques
+admin.pavilions_management_desc|Administration et organisation des pavillons SIB 2026
+admin.create_pavilion|Créer Pavillon
+admin.total_pavilions|Total Pavillons
+admin.active_pavilions|Actifs
+admin.total_exhibitors_in_pavilions|Exposants
+visitor.registration.free.title|Inscription Visiteur Gratuit
+visitor.registration.free.subtitle|Accès standard au salon SIB 2026
+visitor.registration.free.badge_access|Accès Salon
+visitor.registration.free.badge_qr|Badge QR
+visitor.registration.free.badge_free|Gratuit
+visitor.form.firstname|Prénom
+visitor.form.lastname|Nom
+visitor.form.email|Email professionnel
+visitor.form.phone|Téléphone
+visitor.form.country|Pays
+visitor.form.sector|Secteur d\
+visitor.form.position|Poste occupé
+visitor.form.company|Entreprise / Organisme
+visitor.form.password|Mot de passe
+visitor.form.confirm_password|Confirmer le mot de passe
+visitor.form.submit|Valider l\
+visitor.form.submitting|Traitement en cours...
+visitor.validation.firstname_required|Le prénom est requis
+visitor.validation.lastname_required|Le nom est requis
+visitor.validation.email_invalid|Adresse email invalide
+visitor.validation.phone_invalid|Numéro de téléphone invalide
+visitor.validation.country_required|Le pays est requis
+visitor.validation.sector_required|Le secteur d\
+visitor.validation.password_length|Le mot de passe doit faire au moins 12 caractères
+visitor.validation.password_requirements|Le mot de passe doit contenir majuscule, minuscule, chiffre et caractère spécial
+visitor.validation.password_match|Les mots de passe ne correspondent pas
+visitor.validation.check_errors|Veuillez corriger les erreurs surlignées en rouge
+visitor.sector.authority|Autorité urbaine
+visitor.sector.logistics|Logistique
+visitor.sector.consulting|Consulting
+visitor.sector.student|Étudiant
+visitor.sector.media|Média/Presse
+visitor.sector.institutional|Institutionnel
+visitor.free.features.title|Inclus avec votre compte gratuit :
+visitor.free.features.list.1|Accès aux zones publiques du salon
+visitor.free.features.list.2|Badge numérique simple
+visitor.free.features.list.3|Newsletter SIB
+visitor.free.features.list.4|Accès à l\
+visitor.upsell.vip.title|Vous souhaitez plus d\
+visitor.upsell.vip.button|Découvrir l\
+visitor.message.email_check_error|Erreur lors de la vérification de l\
+visitor.message.account_exists|Un compte existe déjà avec cet email
+visitor.message.account_exists_desc|Veuillez vous connecter directement.
+visitor.message.email_sent|Email de bienvenue envoyé !
+visitor.message.success_title|Inscription réussie !
+visitor.message.success_desc|Votre compte visiteur gratuit a été créé avec succès.
+visitor.message.redirect|Redirection vers votre espace...
+visitor.my_profile|Mon profil
+visitor.my_appointments|Mes rendez-vous
+visitor.my_favorites|Mes favoris
+visitor.subscription_level|Niveau d\
+visitor.member_since|Membre depuis
+visitor.my_badge|Mon badge numérique
+visitor.discover_exhibitors|Découvrir les exposants
+visitor.registrations_title|Inscriptions
+visitor.event_past|Passé
+visitor.b2b_management_title|Gestion des Rendez-vous B2B
+visitor.b2b_management_subtitle|Organisez vos rencontres avec les exposants
+visitor.confirmed_agenda|Agenda Confirmé
+visitor.no_upcoming_confirmed|Aucun rendez-vous confirmé à venir
+visitor.past_appointments|Rendez-vous Passés
+visitor.no_past_appointments|Aucun rendez-vous passé
+visitor.cancelled_appointments|Rendez-vous Annulés
+visitor.no_cancelled_appointments|Aucun rendez-vous annulé
+visitor.appointment_cancelled|Annulé
+visitor.select_next_meeting|Sélectionnez votre prochaine rencontre stratégique
+visitor.error_loading_appointments|Impossible de charger les rendez-vous. Veuillez réessayer.
+visitor.unauthorized_access|Accès non autorisé
+visitor.please_login|Veuillez vous connecter pour accéder à cette page
+visitor.visitor_area|Espace Visiteur
+visitor.my_virtual_badge|Mon Badge Virtuel
+visitor.connected|Connecté
+visitor.appointments_remaining|Rendez-vous restants
+visitor.b2b_appointments|Rendez-vous B2B
+visitor.refused|Refusés
+visitor.exhibitors_visited|Exposants visités
+visitor.appointments_booked|Rendez-vous réservés
+visitor.level_label|Niveau
+visitor.events_registered|Événements inscrits
+visitor.vip_benefits_title|Avantages VIP
+visitor.vip_benefits_subtitle|Profitez de tous les privilèges premium
+visitor.vip_appointments|10 Rendez-vous B2B
+visitor.vip_appointments_desc|Profitez de 10 rendez-vous pour maximiser vos contacts
+visitor.vip_messaging|Messagerie Illimitée
+visitor.vip_messaging_desc|Contactez tous les exposants sans limite
+visitor.vip_badge|Badge VIP Visible
+visitor.vip_badge_desc|Soyez identifié comme visiteur premium
+visitor.vip_ai_matching|Matching IA Privilégié
+visitor.vip_ai_matching_desc|Algorithme prioritaire pour trouver les meilleurs contacts
+visitor.vip_webinars|Accès Webinaires Exclusifs
+visitor.vip_webinars_desc|Contenus réservés aux VIP
+visitor.vip_support_priority|Support Prioritaire
+visitor.vip_support_desc|Assistance dédiée 24/7
+visitor.vip_news_priority|Actualités en Avant-Première
+visitor.vip_news_desc|Recevez les news en priorité
+visitor.ai_networking|Réseautage IA
+visitor.ai_networking_desc|Découvrez les contacts pertinents avec notre IA
+visitor.explore_network|Explorer le réseau
+visitor.configure_matching|Configurer le matching
+visitor.schedule_appointment|Planifier un rendez-vous
+visitor.schedule_appointment_desc|Réservez un créneau avec un exposant
+visitor.program_appointment|Programmer un rendez-vous
+visitor.your_activity|Votre Activité
+visitor.your_activity_desc|Suivez vos statistiques en temps réel
+visitor.live|LIVE
+visitor.visits|Visites
+visitor.interactions|Interactions
+visitor.currently|Actuellement
+visitor.previous_period|Période précédente
+visitor.confirmed_appointments|Rendez-vous confirmés
+visitor.connections_established|Connexions établies
+visitor.messaging|Messagerie
+visitor.messaging_desc|Communiquez directement avec les exposants
+visitor.open_messaging|Ouvrir la messagerie
+events.unregister|Se désinscrire
+appointments.calendar|Calendrier
+partner.activation_required|Activation Requise
+partner.payment_validation_needed|Pour accéder à votre espace sponsor, veuillez finaliser le paiement de votre pack de partenariat.
+partner.finalize_payment|Finaliser le paiement
+partner.access_denied|Accès refusé
+partner.reserved_partners|Cette section est réservée aux sponsors officiels SIB
+partner.hero_subtitle|Tableau de bord sponsor
+partner.dashboard_title|Tableau de Bord Sponsor
+partner.tier_label|Sponsor
+partner.confirm_reject_title|Confirmer le refus
+partner.confirm_reject_body|Êtes-vous sûr de vouloir refuser ce rendez-vous ? Cette action est irréversible.
+partner.virtual_badge|Badge Virtuel Sponsor
+partner.roi_performance|Performance ROI
+partner.dashboard_live|Dashboard LIVE
+partner.tabs.overview|Vue d\
+partner.tabs.profile|Profil
+partner.tabs.networking|Réseautage
+partner.tabs.analytics|Analytiques
+partner.payment_validation_required|Validation de Paiement Requise
+partner.payment_activation_message|Votre profil sponsor sera activé après validation de votre paiement par notre équipe.
+partner.make_payment|Effectuer le paiement
+partner.stats.profile_views|Vues profil
+partner.stats.connections|Connexions
+partner.stats.appointments|Rendez-vous
+partner.stats.messages|Messages
+partner.quotas.title|Vos Quotas Sponsor
+partner.quotas.appointments|Rendez-vous
+partner.quotas.team_members|Membres équipe
+partner.quotas.media_files|Fichiers média
+partner.recent_activity|Activité Récente
+partner.ai_generation|Génération Profile IA
+partner.ai_description|Laissez notre IA créer automatiquement votre profil sponsor à partir de votre site web
+partner.ai_button|🤖 Générer avec l\
+partner.manual_management|Gestion Manuelle
+partner.edit_basic_info|✏️ Modifier les informations de base
+partner.media_catalog|📸 Catalogue média
+partner.appointments_management|Gestion des Rendez-vous
+partner.appointments_description|Suivez et gérez vos demandes de rendez-vous
+partner.confirmed_appointments|rendez-vous confirmés
+partner.no_pending_requests|Aucune demande en attente
+partner.pending_requests_appear_here|Les nouvelles demandes apparaîtront ici
+partner.no_message|Aucun message
+partner.share_scheduling_link|Partager votre lien de planification
+partner.share_calendar_description|Partagez votre calendrier avec vos contacts
+partner.copy_virtual_booth_link|🔗 Copier le lien de mon stand virtuel
+partner.analytics_titles.brand_visibility|Visibilité de marque (7 derniers jours)
+partner.analytics_titles.engagement_channels|Canaux d\
+partner.global_roi_performance|Performance ROI Globale
+partner.export_pdf_report|Exporter le rapport PDF
+partner.analytics_titles.metrics_distribution|Distribution des métriques
+partner.autofill_profile_ai|Remplir automatiquement avec IA
+partner.autofill_description|Laissez notre IA analyser votre site web et remplir votre profil
+partner.edit_profile_manually|Modifier le profil manuellement
+partner.update_company_info|Mettre à jour les informations de l\
+chat.messages|Messages
+visitor.discover_exhibitors_desc|Explorez les stands et trouvez les solutions qui vous intéressent
+visitor.view_exhibitors|Voir les exposants
+visitor.confirmed_count|{{count}} Confirmés
+visitor.pending_count|{{count}} En attente
+visitor.tab_upcoming|À venir ({{count}})
+visitor.tab_past|Passés ({{count}})
+visitor.tab_cancelled|Annulés ({{count}})
+visitor.ics_downloaded|Fichier .ics téléchargé
+visitor.google_calendar_opened|Ouverture de Google Calendar
+visitor.outlook_opened|Ouverture d\
+visitor.open_google_calendar|Ouvrir dans Google Calendar
+visitor.retry_appointment|Relancer
+visitor.choose_b2b_slot|Choisir un créneau B2B
+visitor.choose_b2b_slot_desc|Sélectionnez votre prochaine rencontre stratégique
+partner.my_profile|Mon profil
+partner.my_events|Mes événements
+partner.my_booth|Mon stand
+partner.analytics|Mon rapport
+partner.contacts|Mes contacts
+exhibitor.my_profile|Mon profil
+exhibitor.my_booth|Mon stand
+exhibitor.appointments|Mes rendez-vous
+exhibitor.messages|Mes messages
+exhibitor.analytics|Statistiques
+exhibitor.booth_size|Taille du stand
+exhibitor.booth_location|Localisation du stand
+exhibitor.error_load_appointments|Impossible de charger les rendez-vous
+exhibitor.error_load_dashboard|Impossible de charger le tableau de bord
+exhibitor.error_toggle_visibility|Impossible de modifier la visibilité
+exhibitor.error_unauthorized_confirm|Vous n\
+exhibitor.error_accept_failed|Impossible d\
+exhibitor.error_unauthorized_reject|Vous n\
+exhibitor.confirm_reject|Êtes-vous sûr de vouloir refuser ce rendez-vous ? Cette action est irréversible.
+exhibitor.error_reject_failed|Impossible de refuser le rendez-vous
+exhibitor.toast_profile_visible|✅ Votre profil est maintenant visible publiquement
+exhibitor.toast_profile_hidden|🔒 Votre profil est maintenant masqué du public
+exhibitor.header.published_tooltip_hide|Masquer mon profil du public
+exhibitor.header.published_tooltip_show|Afficher mon profil au public
+exhibitor.header.changing|⏳ Changement...
+exhibitor.header.published_status|✓ Publié
+exhibitor.header.hidden_status|🔒 Masqué
+exhibitor.header.virtual_badge|Badge Virtuel
+exhibitor.header.create_edit_minisite|Créer/Éditer Mini-Site
+exhibitor.status.confirmed|Confirmés
+exhibitor.status.pending|En attente
+exhibitor.status.completed|Terminés
+exhibitor.stats.mini_site_views|Vues Mini-Site
+exhibitor.stats.appointments|Rendez-vous
+exhibitor.stats.downloads|Téléchargements
+exhibitor.stats.messages|Messages
+exhibitor.modals.views_title|Vues de votre Mini-Site
+exhibitor.modals.views_text|{{count}} visites ont été enregistrées sur votre mini-site.
+exhibitor.modals.views_chart_title|Évolution des vues
+exhibitor.modals.views_footer|Votre mini-site attire l\
+exhibitor.modals.appointments_title|Détails des Rendez-vous
+exhibitor.modals.appointments_text|{{count}} rendez-vous sont actuellement enregistrés dans votre espace exposant.
+exhibitor.modals.appointments_chart_title|Répartition par statut
+exhibitor.modals.appointments_action|Gérer mes rendez-vous
+exhibitor.modals.downloads_title|Téléchargements de Catalogues
+exhibitor.modals.downloads_text|{{count}} téléchargements de vos catalogues ont été effectués.
+exhibitor.modals.downloads_chart_title|Téléchargements par période
+exhibitor.modals.messages_title|Activité Messagerie
+exhibitor.modals.messages_text|{{count}} messages ont été reçus via votre espace exposant.
+exhibitor.modals.messages_chart_title|Messages reçus
+exhibitor.modals.messages_action|Voir mes messages
+exhibitor.chart_minisite_views|Vues Mini-Site
+exhibitor.chart_downloads|Téléchargements
+exhibitor.chart_messages|Messages
+exhibitor.chart_connections|Connexions
+exhibitor.qr_download_success|Téléchargement Réussi
+exhibitor.qr_download_success_text|Le QR code de votre stand a été téléchargé avec succès !
+exhibitor.qr_download_error|Erreur de Téléchargement
+exhibitor.qr_download_error_text|Une erreur s\
+exhibitor.quota_b2b|Rendez-vous B2B
+exhibitor.quota_team|Membres équipe
+exhibitor.quota_demo|Sessions démo
+exhibitor.quota_scans|Scans badges/jour
+exhibitor.quota_media|Fichiers média
+exhibitor.stats_views|Vues Mini-Site
+exhibitor.stats_requests|Demandes de RDV
+exhibitor.stats_downloads|Téléchargements
+exhibitor.stats_messages|Messages
+exhibitor.calendar_title|Gestion Calendaire
+exhibitor.calendar_hub|Hub
+exhibitor.calendar_subtitle|Centralisez vos disponibilités et gérez vos rendez-vous stratégiques dans un espace dédié haut de gamme.
+exhibitor.tab_availability|Mes Disponibilités
+exhibitor.tab_appointments|Agenda Personnel
+exhibitor.analytics_title|Performance & Analytics
+exhibitor.analytics_realtime|Données en temps réel
+exhibitor.analytics_visits|Visites
+exhibitor.analytics_interactions|Interactions
+exhibitor.analytics_appointment_status|Statut des Rendez-vous
+exhibitor.analytics_activity_breakdown|Répartition des Activités
+exhibitor.analytics_empty_title|Vos statistiques apparaîtront ici
+exhibitor.analytics_empty_desc|Configurez votre mini-site et commencez à recevoir des visites pour voir vos données de performance.
+exhibitor.analytics_no_appointments|Aucun rendez-vous enregistré
+exhibitor.analytics_no_activity|Aucune activité enregistrée
+exhibitor.alert_pending_singular|demande de rendez-vous en attente
+exhibitor.alert_pending_plural|demandes de rendez-vous en attente
+exhibitor.alert_pending_hint|Répondez dès maintenant pour confirmer votre agenda.
+exhibitor.alert_pending_cta|Voir les demandes
+exhibitor.period_this_week|Cette semaine
+exhibitor.period_last_week|Semaine dernière
+exhibitor.period_current|Actuellement
+exhibitor.period_previous|Période précédente
+exhibitor.period_confirmed|Rendez-vous confirmés
+exhibitor.period_new_connections|Nouvelles connexions
+exhibitor.quick_actions_title|Actions Rapides
+exhibitor.quick_actions_subtitle|Accès direct à vos outils essentiels
+exhibitor.quick_actions.create_minisite_ai|Créer Mini-Site IA
+exhibitor.quick_actions.create_minisite_ai_desc|Générer votre mini-site avec l\
+exhibitor.quick_actions.networking_ai|Networking IA
+exhibitor.quick_actions.networking_ai_desc|Trouvez des contacts pertinents avec l\
+exhibitor.quick_actions.edit_minisite|Éditer Mini-Site
+exhibitor.quick_actions.edit_minisite_desc|Personnaliser votre page de présentation
+exhibitor.quick_actions.advanced_networking|Réseautage Avancé
+exhibitor.quick_actions.advanced_networking_desc|Explorez et connectez-vous avec des contacts qualifiés
+exhibitor.quick_actions.ai_matching|Matching IA
+exhibitor.quick_actions.ai_matching_desc|Trouvez les meilleurs sponsors grâce à l\
+exhibitor.quick_actions.profile|Mon Profil
+exhibitor.quick_actions.profile_desc|Gérer vos informations et préférences
+exhibitor.quick_actions.qr_code|QR Code
+exhibitor.quick_actions.qr_code_desc|Afficher votre QR code pour faciliter les échanges
+exhibitor.appointments_received|Rendez-vous reçus
+exhibitor.appointments_received_subtitle|Gérez vos demandes et confirmations
+exhibitor.appointments_upcoming|À venir
+exhibitor.appointments_past|Passés
+exhibitor.appointments_cancelled|Annulés
+exhibitor.appointments_loading|Chargement des rendez-vous...
+exhibitor.appointments_no_pending|Aucune demande en attente
+exhibitor.appointments_no_pending_hint|Les nouvelles demandes apparaîtront ici
+exhibitor.appointments_badge_new|Nouveau
+exhibitor.appointments_request_from|Demande de
+exhibitor.appointments_no_message|Aucun message
+exhibitor.appointments_confirming|⏳ Confirmation...
+exhibitor.appointments_accept|✓ Accepter
+exhibitor.appointments_rejecting|⏳ Refus...
+exhibitor.appointments_reject|✕ Refuser
+exhibitor.appointments_confirmed_upcoming|Rendez-vous confirmés à venir
+exhibitor.appointments_with|Avec
+exhibitor.appointments_badge_confirmed|✓ Confirmé
+exhibitor.appointments_no_past|Aucun rendez-vous passé
+exhibitor.appointments_no_past_hint|L\
+exhibitor.appointments_badge_completed|Terminé
+exhibitor.appointments_no_cancelled|Aucun rendez-vous annulé
+exhibitor.appointments_no_cancelled_hint|Les annulations apparaîtront ici
+exhibitor.appointments_badge_cancelled|Annulé
+exhibitor.activity_recent_title|Activité Récente
+exhibitor.activity_none|Aucune activité récente
+exhibitor.activity_view_all|Voir toute l\
+exhibitor.activity.view_all|Toutes les Activités
+exhibitor.activity.none|Aucune activité récente
+exhibitor.info_title|Informations Importantes
+exhibitor.info_subtitle|Détails essentiels du salon
+exhibitor.info_booth_opening|Stand Ouverture
+exhibitor.info_every_day|Tous les jours du salon
+exhibitor.info_objective|Objectif 2026
+exhibitor.info_expected_visitors|visiteurs attendus
+exhibitor.qr_modal_title|QR Code Stand Exposant
+exhibitor.qr_modal_subtitle|Scannez ce code pour accéder rapidement à votre stand
+exhibitor.qr_label_company|Entreprise :
+exhibitor.qr_label_contact|Contact :
+exhibitor.qr_label_email|Email :
+exhibitor.qr_label_stand|Stand :
+exhibitor.qr_not_assigned|Non attribué
+exhibitor.qr_valid_until|Valide jusqu\
+exhibitor.qr_downloading|⏳ Téléchargement...
+exhibitor.qr_download|📥 Télécharger
+exhibitor.ics_downloaded|Fichier .ics téléchargé
+exhibitor.google_calendar_opened|Ouverture de Google Calendar
+exhibitor.outlook_opened|Ouverture d\
+exhibitor.error_generic|Une erreur est survenue
+admin.verified|Vérifié
+status.confirmed|Confirmé
+status.pending|En attente
+status.completed|Terminé
+status.cancelled|Annulé
+actions.accept|Accepter
+actions.view|Voir
+actions.manage|Gérer
+actions.access|Accéder
+errors.accept_appointment|Impossible d\
+errors.reject_appointment|Impossible de refuser le rendez-vous
+errors.unregister_event|Impossible de se désinscrire de l\
+common.events|Événements
+common.connections|Connexions
+common.impressions|Impressions
+common.interactions|Interactions
+common.back_to_dashboard|Retour au Tableau de Bord
+common.days.mon|Lun
+common.days.tue|Mar
+common.days.wed|Mer
+common.days.thu|Jeu
+common.days.fri|Ven
+common.days.sat|Sam
+common.days.sun|Dim
+home.book_appointment|Réserver un rendez-vous
+home.verified|Vérifié
+home.featured_partners_title|Sponsors à la Une
+home.featured_partners_desc|Les organisations leaders qui soutiennent SIB 2026
+home.discover_all|Découvrez tous les sponsors
+home.discover_all_exhibitors|Découvrez tous les exposants
+home.featured_exhibitors_title|Exposants à la Une
+home.featured_exhibitors_desc|Les meilleurs exposants du salon
+home.views|vues
+home.benefits|avantages
+home.see_profile|Voir le Profil
+home.contact_partner|Contacter
+home.products|produits
+home.make_appointment|Prendre RDV
+home.ai_assistant|Assistant IA
+home.ai_assistant_toast|SIB AI Assistant v3.0 - Connectez-vous pour accéder à l\
+categories.institutional|Institutionnel
+categories.bâtiment-industry|Industrie du Bâtiment
+categories.bâtiment-operations|Exploitation & Gestion
+categories.academic|Académique & Formation
+home.networking_label|Réseautage Intelligent
+home.networking_title|Connectez-vous avec les Bons Sponsors
+home.networking_desc|Trouvez et connectez-vous avec des professionnels du secteur de la construction
+home.feature_matching|Correspondance Intelligente
+home.feature_matching_desc|Notre IA analyse vos profils pour trouver les meilleures correspondances
+home.feature_chat|Messagerie en Temps Réel
+home.feature_chat_desc|Communiquez instantanément avec vos contacts
+home.feature_appointments|Rendez-vous Planifiés
+home.feature_appointments_desc|Organisez vos rencontres avec un calendrier intégré
+home.feature_global|Plateforme Mondiale
+home.feature_global_desc|Connectez-vous avec des professionnels du monde entier
+home.cta_networking|Explorer le Réseautage
+home.cta_member|Devenir Membre
+home.stats_professionals|Professionnels
+home.stats_countries|Pays
+home.stats_exhibitors|Exposants
+home.stats_satisfaction|Satisfaction
+home.trusted_by|Ils nous font confiance
+home.logo_showcase_title|Nos Partenaires & Exposants
+salon.exhibitors|Exposants
+salon.visitors|Visiteurs Professionnels
+salon.conferences|Conférences & Panels
+salon.countries|Pays Représentés
+hero.countdown.title|Ouverture dans
+hero.countdown.subtitle|Parc d\
+hero.stats.location|El Jadida, Maroc
+hero.stats.participants|200 000+ Visiteurs
+hero.stats.exhibitors|600+ Exposants · 50 Pays
+hero.cta.discover|Découvrir
+time.days|Jours
+time.hours|Heures
+time.minutes|Minutes
+time.seconds|Secondes
+time.day|Jour
+time.hour|Heure
+time.minute|Minute
+time.second|Seconde
+stats.exhibitors|Exposants
+stats.visitors|Visiteurs
+stats.countries|Pays
+stats.conferences|Conférences
+login.remember_me|Se souvenir de moi
+login.button|Se connecter
+login.connecting|Connexion
+login.demo_accounts|Connexion rapide - Comptes de démonstration
+login.demo_admin|Admin Principal
+login.demo_exhibitors|Exposants
+login.demo_partners|Sponsors
+login.demo_visitors|Visiteurs
+login.demo_free|Gratuit
+login.demo_vip|VIP
+actions.share|Partager
+actions.next|Suivant
+actions.previous|Précédent
+actions.success|Succès
+actions.error|Erreur
+messages.confirm_delete|Êtes-vous sûr de vouloir supprimer ?
+messages.confirm_action|Êtes-vous sûr ?
+messages.saved|Sauvegardé avec succès
+messages.deleted|Supprimé avec succès
+messages.error|Une erreur s\
+messages.no_data|Aucune donnée disponible
+profile.name|Nom
+profile.email|Email
+profile.phone|Téléphone
+profile.company|Entreprise
+profile.sector|Secteur
+profile.description|Description
+profile.website|Site web
+profile.location|Localisation
+profile.logo|Logo
+profile.about|À propos
+networking.ai_powered|Propulsé par l\
+networking.hero_title|Réseautage
+networking.hero_subtitle|Intelligent
+networking.hero_desc|Connectez-vous avec les leaders de l\
+networking.login_required|Connexion requise
+networking.hub_restricted|Le Hub de Réseautage est réservé aux membres inscrits.
+networking.discover_recommendations|Connectez-vous pour découvrir vos recommandations personnalisées.
+networking.login_button|Se connecter
+networking.signup_button|S\
+networking.precise_matching|Matching Précis
+networking.matching_interests|Basé sur vos intérêts
+networking.global_network|Réseau Global
+networking.countries_represented|+50 pays représentés
+networking.secure_access|Accès Sécurisé
+networking.verified_profiles|Profils vérifiés
+networking.ecosystem_title|L\
+networking.b2b_space|Espace B2B pré-programmé
+networking.b2b_desc|Rencontres ciblées avec des décideurs
+networking.afterworks|Afterworks & réceptions
+networking.afterworks_desc|Networking informel et convivial
+networking.roundtables|Tables rondes sectorielles
+networking.roundtables_desc|Échanges d\
+networking.lounge_zone|Zone Lounge Business & VIP
+networking.lounge_desc|Espaces de travail et de détente
+networking.find_contacts|Trouvez les bons contacts
+networking.smart_matching|Matching intelligent
+networking.request_meeting|Demander un rendez-vous
+networking.messages|Messages
+networking.recommendations|Recommandations
+dashboard.admin_title|Tableau de Bord Admin
+dashboard.admin_subtitle|Gérer tous les ressources SIB 2026
+dashboard.restricted_access|Accès Restreint - Administrateurs Uniquement
+dashboard.restricted_message|Cette section est réservée aux administrateurs SIB
+dashboard.back_to_dashboard|Retour au Tableau de Bord
+dashboard.loading_metrics|Chargement des métriques...
+dashboard.metrics_error|Erreur de chargement des métriques
+dashboard.retry|Réessayer
+dashboard.total_users|Utilisateurs Totaux
+dashboard.active_users|Utilisateurs Actifs
+dashboard.system_health|Santé Système
+dashboard.user_growth|Croissance Utilisateurs
+dashboard.activity_overview|Aperçu Activité
+dashboard.traffic_analytics|Analytique Trafic
+dashboard.registration_requests|Demandes d\
+dashboard.pending_approvals|Approbations En Attente
+dashboard.content_moderation|Modération Contenu
+dashboard.settings|Paramètres
+dashboard.reports|Rapports
+dashboard.exports|Exports
+dashboard.logout|Déconnexion
+dashboard.your_quotas|Vos Quotas
+dashboard.exhibitor_quotas|Vos Quotas Exposant
+dashboard.visit_activity_7days|Activité de Visite (7 derniers jours)
+dashboard.appointment_status|Statut des Rendez-vous
+dashboard.interest_areas|Centres d\
+dashboard.visitor_engagement_7days|Engagement Visiteurs (7 derniers jours)
+dashboard.brand_exposure_7days|Exposition de Marque (7 derniers jours)
+dashboard.engagement_channels|Canaux d\
+visitor.my_tickets|Mes Billets
+visitor.appointment_confirmed|Rendez-vous Confirmé
+visitor.appointment_declined|Rendez-vous Refusé
+visitor.no_appointments|Aucun Rendez-vous
+visitor.appointment_status|Statut des Rendez-vous
+visitor.appointment_scheduled|Rendez-vous Programmé
+visitor.loading_appointments|Chargement des Rendez-vous...
+visitor.error_loading|Impossible de charger les Rendez-vous. Veuillez réessayer.
+visitor.quota_remaining|Quota Restant
+partner.event_registration|Inscription Événement
+partner.attendees|Participants
+partner.contribution_level|Niveau de Contribution
+exhibitor.visitor_interactions|Interactions Visiteurs
+exhibitor.booth_analytics|Analytique du Stand
+exhibitor.my_products|Mes Produits
+contact.description|Entrez en contact avec notre équipe
+contact.first_name|Prénom
+contact.last_name|Nom
+contact.send|Envoyer
+venue.title|Plan de l\
+venue.description|Explorez la carte interactive pour localiser les stands
+venue.how_to_use|Comment utiliser la carte
+venue.step1_title|Parcourez la carte
+venue.step1_desc|Faites défiler la carte pour voir tous les stands disponibles
+venue.step2_title|Survolez un stand
+venue.step2_desc|Passez votre souris sur un stand pour voir un aperçu
+venue.step3_title|Cliquez pour plus
+venue.step3_desc|Cliquez sur un stand pour accéder à la fiche complète
+news.description|Restez informé sur les derniers événements
+news.search_placeholder|Chercher une actualité
+news.filter|Filtrer
+news.all_categories|Toutes les catégories
+news.views|Vues
+partnership.title|Partenariats SIB 2026
+partnership.description|Rejoignez l\
+partnership.premium|Sponsor Premium
+partnership.gold|Sponsor Or
+partnership.silver|Sponsor Argent
+partnership.become|Devenir Sponsor
+partnership.contact|Nous Contacter
+marketing.stats.online|En Ligne
+marketing.stats.drafts|Brouillons
+marketing.filters|Filtres
+marketing.filters.filter_by|Filtrer par :
+marketing.filters.status|Statut :
+marketing.filters.all|Tous
+marketing.filters.webinars|Webinaires
+marketing.filters.podcasts|Podcasts
+marketing.filters.capsules|Capsules
+marketing.filters.published|Publiés
+marketing.filters.drafts|Brouillons
+marketing.filters.best_moments|Moments Forts
+marketing.filters.capsule_inside|Capsule Inside
+marketing.filters.webinar|Webinaire
+marketing.filters.live_studio|Live Studio
+marketing.filters.podcast|Podcast
+marketing.filters.testimonial|Témoignage
+marketing.media.add_media|Ajouter un média
+marketing.media.no_media|Aucun média trouvé
+marketing.media.no_media_found|Aucun média trouvé
+marketing.media.no_media_desc|Ajoutez des photos, vidéos ou podcasts pour commencer
+marketing.media.start_adding|Ajoutez des photos, vidéos ou podcasts pour commencer
+marketing.media.publish|Publier
+marketing.media.unpublish|Dépublier
+marketing.media.copy|Copier
+marketing.media.copied|Shortcode copié !
+marketing.media.deleted|Média supprimé
+marketing.media.added|Média ajouté
+marketing.media.error_update|Erreur de mise à jour
+marketing.media.error_delete|Erreur de suppression
+marketing.media.title|Titre
+marketing.media.description|Description
+marketing.media.type|Type de média
+marketing.media.video_url|URL Vidéo / Audio
+marketing.media.shortcode_copied|Shortcode copié !
+marketing.status.published|Publié
+marketing.status.draft|Brouillon
+marketing.articles.title|Gestion des Articles
+marketing.articles.subtitle|Créez et gérez les articles pour sibevent.com
+marketing.articles.create_new|Créer un Nouvel Article
+marketing.articles.published_count|Publiés
+marketing.articles.drafts_count|Brouillons
+marketing.articles.shortcodes_info|Utilisation des shortcodes
+marketing.articles.shortcodes_desc|Copiez le shortcode d\
+marketing.articles.example|Exemple :
+marketing.articles.no_articles|Aucun article pour le moment
+marketing.articles.author|Auteur
+marketing.articles.category|Catégorie
+marketing.articles.edit|Éditer
+marketing.articles.publish|Publier
+marketing.articles.unpublish|Dépublier
+marketing.articles.delete|Supprimer
+marketing.articles.published_badge|Publié
+marketing.articles.draft_badge|Brouillon
+subscription.title|Plans d\
+subscription.description|Choisissez votre plan
+subscription.visitor|Visiteur
+subscription.partner|Sponsor
+subscription.exhibitor|Exposant
+subscription.features|Caractéristiques
+subscription.included|Inclus
+subscription.not_included|Non inclus
+subscription.upgrade|Améliorer
+subscription.current_plan|Plan actuel
+legal.terms_title|Conditions d\
+legal.privacy_title|Politique de Confidentialité
+legal.cookies_title|Politique de Cookies
+legal.last_update|Dernière mise à jour
+legal.acceptance|Acceptation
+legal.usage|Utilisation acceptable
+legal.data_collection|Collecte de données
+legal.contact|Nous Contacter
+support.title|Support et Aide
+support.description|Nous sommes là pour vous aider
+support.contact_form|Formulaire de Contact
+support.faq|Questions Fréquentes
+support.technicalTitle|Support Technique
+support.technicalDesc|Problèmes techniques, bugs, ou difficultés d\
+support.contactTechnical|Contacter le Support
+support.commercialTitle|Support Commercial
+support.commercialDesc|Questions sur les tarifs, partenariats, ou informations sur l\
+support.contactCommercial|Contact Commercial
+support.exhibitorTitle|Support Exposant
+support.exhibitorDesc|Aide pour la création de profil, gestion de stand, ou fonctionnalités exposant.
+support.contactExhibitor|Support Exposant
+support.faqTitle|Questions Fréquentes
+support.loginProblems|Problèmes de connexion
+support.forgotPassword|J\
+support.forgotPasswordAnswer|Utilisez le lien "Mot de passe oublié" sur la page de connexion.
+support.accountNotActivated|Mon compte n\
+support.accountNotActivatedAnswer|Vérifiez vos emails ou contactez le support pour l\
+support.platformFeatures|Fonctionnalités de la plateforme
+support.howToAppointment|Comment prendre un rendez-vous ?
+support.howToAppointmentAnswer|Accédez à la section "Networking" et sélectionnez un exposant.
+support.howToEditProfile|Comment modifier mon profil ?
+support.howToEditProfileAnswer|Allez dans "Mon Profil" dans le menu utilisateur.
+support.immediateHelp|Besoin d\
+support.teamAvailable|Notre équipe de support est disponible pour répondre à toutes vos questions.
+support.emergencies|Urgences
+support.openTicket|Ouvrir un ticket
+support.sendEmail|Envoyer un email
+resetPassword.minLength|Le mot de passe doit contenir au moins 12 caractères
+resetPassword.maxLength|Le mot de passe ne doit pas dépasser 72 caractères
+resetPassword.uppercaseRequired|Doit contenir au moins une majuscule
+resetPassword.lowercaseRequired|Doit contenir au moins une minuscule
+resetPassword.digitRequired|Doit contenir au moins un chiffre
+resetPassword.specialRequired|Doit contenir au moins un caractère spécial
+resetPassword.confirmRequired|Veuillez confirmer votre mot de passe
+resetPassword.passwordsMismatch|Les mots de passe ne correspondent pas
+resetPassword.supabaseNotConfigured|Supabase non configuré.
+resetPassword.errorResetting|Erreur lors de la réinitialisation du mot de passe.
+resetPassword.success|✅ Mot de passe défini avec succès. Vous pouvez maintenant vous connecter.
+resetPassword.title|Réinitialiser le mot de passe
+resetPassword.linkExpired|Le lien de réinitialisation semble incomplet ou expiré. Assurez-vous d\
+resetPassword.newPasswordLabel|Nouveau mot de passe
+resetPassword.newPasswordPlaceholder|Nouveau mot de passe (min. 12 caractères)
+resetPassword.confirmLabel|Confirmer le mot de passe
+resetPassword.confirmPlaceholder|Confirmer le mot de passe
+resetPassword.loading|En cours...
+resetPassword.submit|Changer le mot de passe
+signupSuccess.welcomeMessage|Bienvenue sur SIB 2026 !
+signupSuccess.title|🎉 Inscription Réussie !
+signupSuccess.visitorSuccess|Félicitations ! Votre compte visiteur a été créé avec succès.
+signupSuccess.registrationSuccess|Félicitations ! Votre demande d\
+signupSuccess.exhibitor|exposant
+signupSuccess.partner|sponsor
+signupSuccess.registrationEmail|Email d\
+signupSuccess.accessTo|✅ Vous avez accès à :
+signupSuccess.nextSteps|📋 Prochaines Étapes
+signupSuccess.catalogFeature|Parcourez les 600+ exposants de SIB 2026
+signupSuccess.catalogLabel|Catalogue complet :
+signupSuccess.programFeature|Découvrez les conférences et événements
+signupSuccess.programLabel|Programme :
+signupSuccess.networkingFeature|Planifiez vos rendez-vous avec les exposants
+signupSuccess.networkingLabel|Networking :
+signupSuccess.profileFeature|Complétez votre profil et explorez les opportunités
+signupSuccess.profileLabel|Profil :
+signupSuccess.confirmationEmail|Un email récapitulatif vous a été envoyé. Veuillez vérifier votre boîte de réception.
+signupSuccess.confirmationLabel|Email de confirmation :
+signupSuccess.validationStep|Notre équipe examinera votre demande sous 48 heures ouvrées.
+signupSuccess.validationLabel|Validation :
+signupSuccess.activationStep|Une fois validé, vous recevrez un email avec vos accès complets.
+signupSuccess.activationLabel|Activation :
+signupSuccess.goToDashboard|Aller au tableau de bord
+signupSuccess.autoRedirect|Redirection automatique dans {{countdown}}s...
+signupSuccess.login|Se connecter
+signupSuccess.questions|Questions ?
+signupSuccess.contactSupport|Contactez notre support
+payment.alreadyPremium|Vous êtes déjà abonné Premium VIP !
+payment.userNotConnected|Utilisateur non connecté
+payment.requestCreated|Demande de paiement créée
+payment.requestError|Erreur lors de la création de la demande
+payment.stripeError|Erreur lors du paiement par carte bancaire
+payment.stripeErrorToast|Erreur de paiement par carte bancaire
+payment.paypalSuccess|Paiement PayPal réussi !
+payment.paypalCaptureError|Erreur lors de la capture PayPal
+payment.paypalErrorToast|Erreur de paiement PayPal
+payment.cmiError|Erreur lors du paiement CMI
+payment.cmiErrorToast|Erreur de paiement CMI
+payment.selectImage|Veuillez sélectionner une image
+payment.photoMaxSize|La photo ne doit pas dépasser 5MB
+payment.authCreationError|Erreur lors de la création du compte sécurisé
+payment.profileCompleted|Profil VIP complété avec succès
+payment.profileUpdateError|Erreur lors de la mise à jour du profil
+payment.simulatedSuccess|🎉 Paiement VIP simulé avec succès !
+payment.simulationError|Erreur lors de la simulation du paiement
+payment.preparing|Préparation du paiement...
+payment.redirecting|Redirection vers le paiement...
+payment.pleaseWait|Veuillez patienter, nous préparons votre demande de paiement par virement bancaire.
+login.paymentRequired|Paiement requis pour accéder au tableau de bord VIP.
+login.paymentRequiredFull|Paiement requis pour accéder au tableau de bord VIP. Veuillez finaliser votre paiement.
+login.connectionError|Erreur de connexion
+login.fillAllFields|Veuillez remplir tous les champs
+login.wrongCredentials|Email ou mot de passe incorrect
+login.googleError|Erreur lors de la connexion Google
+login.linkedinError|Erreur lors de la connexion LinkedIn
+login.demoMarketing|Marketing
+login.demoServiceClient|Service Clientèle
+login.demoAdmin|Administrateur
+login.demoConnect|Connexion
+login.demoBadgeConnect|Connexion Impression Badges
+login.demoAdminConnect|Connexion Admin
+login.demoPasswordNote|Mot de passe: Demo2026! (Service2026! pour service clientèle)
+login.quickAccess|Accès rapide - Démo
+login.testFeatures|Testez toutes les fonctionnalités
+login.viewAccounts|Voir les comptes
+login.noAccount|Pas encore de compte ?
+login.createAccount|Créer un compte
+sub.info.contactOrg|URBACOM
+sub.visitorFree.cta|S\
+sub.visitorFree.f1|Accès au site du salon
+sub.visitorFree.f2|Consultation des exposants
+sub.visitorFree.f3|Demandes de rendez-vous
+sub.visitorFree.f4|Messagerie directe
+sub.visitorFree.f5|Mini-sites des exposants
+sub.visitorFree.f6|Événements en direct
+sub.visitorFree.b1|Accès complet à l\
+sub.visitorFree.b2|Consultation des profils publics
+sub.visitorFree.b3|Voir les événements et conférences
+sub.visitorFree.b4|Badge visiteur gratuit
+sub.visitorVip.name|Visiteur Premium
+sub.visitorVip.desc|Accès prioritaire + 10 rendez-vous
+sub.visitorVip.cta|Inscription Visiteur VIP
+sub.visitorVip.f1|Accès au site du salon
+sub.visitorVip.f2|Consultation des exposants
+sub.visitorVip.f3|Demandes de rendez-vous (10)
+sub.visitorVip.f4|Messagerie directe
+sub.visitorVip.f5|Mini-sites des exposants
+sub.visitorVip.f6|Événements en direct
+sub.visitorVip.f7|Badge VIP prioritaire
+sub.visitorVip.f8|Accès prioritaire aux nouveautés
+sub.visitorVip.b1|10 demandes de rendez-vous actives
+sub.visitorVip.b2|Messagerie directe avec les exposants
+sub.visitorVip.b3|Badge VIP virtuel avec QR code
+sub.visitorVip.b4|Priorité dans les algorithmes de recommandation
+sub.visitorVip.b5|Accès exclusif aux webinaires
+sub.visitorVip.b6|Support prioritaire
+sub.exh9m.name|Exposant 9m² (Base)
+sub.exh9m.desc|Profil & présence de base
+sub.exh9m.cta|Inscription Exposant
+sub.exh9m.f1|Profil d\
+sub.exh9m.f2|Logo sur le site
+sub.exh9m.f3|Présentation courte
+sub.exh9m.f4|Mini-site personnalisé
+sub.exh9m.f5|Gestion des rendez-vous
+sub.exh9m.f6|Store produits
+sub.exh9m.f7|Tableau de bord exposant
+sub.exh9m.f8|Formulaire de contact
+sub.exh9m.b1|Profil d\
+sub.exh9m.b2|Présence sur le site
+sub.exh9m.b3|Logo et description
+sub.exh9m.b4|Formulaire de contact basique
+sub.exh9m.b5|Accès tableau de bord
+sub.exh18m.name|Exposant 18m² (Standard)
+sub.exh18m.desc|Mini-site + 15 rendez-vous
+sub.exh18m.cta|Inscription Exposant
+sub.exh18m.f1|Profil d\
+sub.exh18m.f2|Logo sur le site
+sub.exh18m.f3|Mini-site personnalisé
+sub.exh18m.f4|Gestion des rendez-vous (15)
+sub.exh18m.f5|Store produits & filtrage
+sub.exh18m.f6|URL personnalisée
+sub.exh18m.f7|Tableau de bord complet
+sub.exh18m.f8|Support standard
+sub.exh18m.b1|Mini-site dédié avec URL personnalisée
+sub.exh18m.b2|15 créneaux de rendez-vous disponibles
+sub.exh18m.b3|Présentation complète de produits/services
+sub.exh18m.b4|Système de filtrage des visiteurs
+sub.exh18m.b5|Messagerie intégrée
+sub.exh18m.b6|Accès aux analytics basiques
+sub.exh36m.name|Exposant 36m² (Premium)
+sub.exh36m.desc|Mise en avant + 30 rendez-vous
+sub.exh36m.cta|Inscription Exposant
+sub.exh36m.f1|Profil d\
+sub.exh36m.f2|Mini-site personnalisé
+sub.exh36m.f3|Mise en avant "À la Une"
+sub.exh36m.f4|Gestion des rendez-vous (30)
+sub.exh36m.f5|Store produits avancé
+sub.exh36m.f6|Accès API Supabase limité
+sub.exh36m.f7|Outils de réseautage avancés
+sub.exh36m.f8|Support prioritaire
+sub.exh36m.f9|Badge virtuel personnalisé
+sub.exh36m.b1|Mise en avant sur la page d\
+sub.exh36m.b2|30 créneaux de rendez-vous
+sub.exh36m.b3|Mini-site premium avec médias illimités
+sub.exh36m.b4|Intégration API personnalisée
+sub.exh36m.b5|Messagerie directe et chat
+sub.exh36m.b6|Analytics détaillés
+sub.exh36m.b7|Support technique prioritaire
+sub.exh54m.name|Exposant 54m²+ (Elite)
+sub.exh54m.desc|Visibilité maximale + créneaux illimités
+sub.exh54m.cta|Inscription Exposant
+sub.exh54m.f1|Profil d\
+sub.exh54m.f2|Mini-site Premium
+sub.exh54m.f3|Mise en avant permanente
+sub.exh54m.f4|Rendez-vous illimités
+sub.exh54m.f5|Store produits complet
+sub.exh54m.f6|Accès API Supabase complet
+sub.exh54m.f7|Outils de réseautage illimités
+sub.exh54m.f8|Support VIP 24/7
+sub.exh54m.f9|Personnalisation avancée
+sub.exh54m.b1|Mise en avant permanente et prioritaire
+sub.exh54m.b2|Créneaux de rendez-vous illimités
+sub.exh54m.b3|Mini-site avec scripts personnalisés
+sub.exh54m.b4|Accès API complet pour intégrations
+sub.exh54m.b5|Stockage médias illimité
+sub.exh54m.b6|Chat et messagerie illimitée
+sub.exh54m.b7|Support technique VIP dédié
+sub.exh54m.b8|Priorité algorithmique
+sub.partSilver.name|Sponsor Silver (200 000 MAD)
+sub.partSilver.desc|Visibilité & communication
+sub.partSilver.cta|Devenir Sponsor Silver
+sub.partSilver.f1|Logo sur tous les supports
+sub.partSilver.f2|Logo plan officiel
+sub.partSilver.f3|1 bannière web
+sub.partSilver.f4|200 invitations
+sub.partSilver.f5|Publicité réseaux sociaux
+sub.partSilver.f6|Publicité écrans salon
+sub.partSilver.f7|Salle conférence 1h
+sub.partSilver.f8|Catalogue officiel
+sub.partSilver.f9|Reportage photos/vidéos
+sub.partGold.name|Sponsor Gold (350 000 MAD)
+sub.partGold.desc|Visibilité renforcée
+sub.partGold.cta|Devenir Sponsor Gold
+sub.partGold.f1|Logo sur tous les supports
+sub.partGold.f2|Logo plan officiel
+sub.partGold.f3|2 bannières web
+sub.partGold.f4|500 invitations
+sub.partGold.f5|Jingles et opening SIB TV
+sub.partGold.f6|Salle conférence 1h30
+sub.partGold.f7|Catalogue 3ème couverture
+sub.partGold.f8|Mot du DG + présentation
+sub.partGold.f9|Reportage complet post-salon
+sub.partOfficiel.name|Partenaire Officiel (500 000 MAD)
+sub.partOfficiel.desc|Visibilité maximale — Sponsor stratégique
+sub.partOfficiel.cta|Devenir Partenaire Officiel
+sub.partOfficiel.f1|Logo sur tous les supports
+sub.partOfficiel.f2|4 bannières web
+sub.partOfficiel.f3|1 000 invitations
+sub.partOfficiel.f4|Rubans badges visiteurs
+sub.partOfficiel.f5|Habillage façade salon
+sub.partOfficiel.f6|Salle conférence 2h
+sub.partOfficiel.f7|Catalogue 4ème couverture + signet
+sub.partOfficiel.f8|Citation conférence de presse
+sub.partOfficiel.f9|Rapport final + pressbook
+sub.partOfficiel.f10|Publicité totems d\
+sub.partOfficiel.f11|Posts sponsorisés réseaux sociaux
+partSupport.pageTitle|Support Sponsor
+partSupport.pageSubtitle|Assistance technique, formation et support commercial dédiés
+partSupport.backToDashboard|Retour au tableau de bord
+partSupport.premiumSupport|Support Premium 24/7
+partSupport.responseTime|Temps de réponse: 2h 15m
+partSupport.activeTickets|Tickets actifs
+partSupport.resolvedThisMonth|Résolus ce mois
+partSupport.avgResponseTime|Temps de réponse moyen
+partSupport.clientSatisfaction|Satisfaction client
+partSupport.quickActions|Actions Rapides
+partSupport.createTicket|Créer un ticket
+partSupport.createTicketDesc|Signaler un problème ou faire une demande
+partSupport.contactSupport|Contacter le support
+partSupport.contactSupportDesc|Parler directement avec un conseiller
+partSupport.knowledgeBase|Base de connaissances
+partSupport.knowledgeBaseDesc|Trouver des réponses aux questions fréquentes
+partSupport.scheduleTraining|Planifier une formation
+partSupport.scheduleTrainingDesc|Réserver une session de formation personnalisée
+partSupport.recentTickets|Tickets Récents
+partSupport.ticket|Ticket
+partSupport.statusInProgress|En cours
+partSupport.statusResolved|Résolu
+partSupport.statusPending|En attente
+partSupport.statusClosed|Fermé
+partSupport.priorityHigh|Haute
+partSupport.priorityMedium|Moyenne
+partSupport.priorityLow|Basse
+partSupport.category|Catégorie:
+partSupport.createdAt|Créé le:
+partSupport.lastUpdate|Dernière MAJ:
+partSupport.assignedTo|Assigné à:
+partSupport.reply|Répondre
+partSupport.markResolved|Marquer résolu
+partSupport.supportCategories|Catégories de Support
+partSupport.technicalSupport|Support Technique
+partSupport.technicalSupportDesc|Problèmes techniques, bugs, intégrations
+partSupport.trainingOnboarding|Formation & Onboarding
+partSupport.trainingOnboardingDesc|Sessions de formation, guides d\
+partSupport.commercial|Commercial
+partSupport.commercialDesc|Questions commerciales, contrats, facturation
+partSupport.administrative|Administratif
+partSupport.administrativeDesc|Mises à jour profil, documents, accès
+partSupport.activeTicketsLabel|Tickets actifs:
+partSupport.avgResolution|Résolution moyenne:
+partSupport.contactSupportTitle|Contact Support
+partSupport.phoneSupport|Support Téléphonique
+partSupport.phoneAvailability|24/7 - Disponible immédiatement
+partSupport.emailSupport|Support Email
+partSupport.emailResponseTime|Réponse sous 2h
+partSupport.liveChat|Chat en Ligne
+partSupport.liveChatAvailability|Disponible 8h-18h
+partSupport.liveChatLocation|Chat en bas à droite
+partSupport.ticket1Title|Problème d\
+partSupport.ticket1Desc|Impossible d\
+partSupport.ticket1Category|Technique
+partSupport.ticket2Title|Demande de formation équipe commerciale
+partSupport.ticket2Desc|Besoin de formation sur les nouveaux outils de prospection.
+partSupport.ticket2Category|Formation
+partSupport.ticket3Title|Mise à jour des informations société
+partSupport.ticket3Desc|Changement d\
+partSupport.ticket3Category|Administratif
+detail.overview|Aperçu
+detail.contact|Nous Contacter
+detail.book_appointment|Réserver un Rendez-vous
+detail.add_favorite|Ajouter aux Favoris
+detail.share|Partager
+detail.products|Produits
+detail.services|Services
+detail.team|Équipe
+networking.description|Connexions intelligentes basées sur votre profil
+networking.favorites|Mes Favoris
+networking.find_matches|Trouver des correspondances
+networking.compatibility|Compatibilité
+api.title|API SIB
+api.description|Intégrez SIB dans vos applications
+api.documentation|Documentation API
+api.authentication|Authentification
+api.endpoints|Points de Terminaison
+api.rate_limiting|Limitation de Débit
+api.webhook|Webhooks
+api.get_started|Commencer
+badge.badge_info|Informations du Badge
+badge.access_level|Niveau d\
+badge.share|Partager
+enhanced_networking.title|Réseautage Avancé
+enhanced_networking.ai_matching|Appariement IA
+enhanced_networking.analytics|Analytique
+enhanced_networking.compatibility_score|Score de Compatibilité
+enhanced_networking.mutual_connections|Connexions Mutuelles
+upgrade.partner_title|Plans d\
+upgrade.partner_description|Élevez votre visibilité au SIB 2026
+upgrade.visitor_title|Mises à Jour de Visiteur
+upgrade.visitor_description|Accédez aux fonctionnalités premium
+upgrade.payment_method|Méthode de Paiement
+upgrade.card|Carte de Crédit
+upgrade.paypal|PayPal
+upgrade.bank_transfer|Virement Bancaire
+upgrade.amount|Montant
+upgrade.total|Total
+payment.error.missingReference|Veuillez renseigner la référence du virement
+payment.success.proofSubmitted|Justificatif enregistré ! Votre paiement sera validé sous 24-48h.
+payment.error.generic|Erreur: {{message}}
+common.copiedToClipboard|Copié dans le presse-papier
+payment.error.notFound|Utilisateur ou demande de paiement introuvable.
+payment.instructions.title|Instructions de Paiement
+payment.instructions.subtitle|Pass Premium VIP - 
+payment.status.pendingTitle|Demande en attente de validation
+payment.status.pendingDescription|Votre demande a bien été reçue. Veuillez procéder au virement pour finaliser votre inscription.
+payment.status.approvedTitle|Paiement approuvé !
+payment.status.approvedDescription|Vous avez maintenant accès au Pass Premium VIP.
+payment.status.rejectedTitle|Paiement refusé
+payment.status.rejectedReason|Raison: 
+payment.bank.title|Informations Bancaires
+payment.bank.bankName|Banque
+payment.bank.accountHolder|Titulaire du compte
+payment.bank.iban|IBAN
+payment.bank.bic|BIC/SWIFT
+payment.bank.mandatoryReference|Référence obligatoire
+payment.bank.referenceNote|À indiquer impérativement dans le libellé du virement
+payment.instructions.stepsTitle|Instructions
+payment.instructions.step1|Effectuez un virement de <strong>{{amount}} EUR</strong> sur le compte indiqué.
+payment.instructions.step2|Indiquez la référence <strong>{{reference}}</strong> dans le libellé.
+payment.instructions.step3|Conservez votre preuve de virement.
+payment.instructions.step4|Renseignez la référence ci-dessous pour validation.
+payment.proof.title|Soumettre votre justificatif
+payment.proof.referenceLabel|Référence du virement
+payment.proof.referenceHint|Numéro de transaction ou référence bancaire
+payment.proof.urlLabel|URL du justificatif (optionnel)
+payment.proof.urlHint|Lien vers votre justificatif (Google Drive, Dropbox, etc.)
+payment.proof.submitting|Envoi en cours...
+payment.proof.submit|Soumettre le justificatif
+payment.proof.submittedTitle|Justificatif soumis
+payment.proof.submittedDate|Soumis le {{date}}
+payment.proof.processingNote|Votre demande est en cours de traitement. Vous serez notifié dès validation.
+payment.support.needHelp|Besoin d\
+payment.success.confirmed|Paiement confirmé ! Vous êtes maintenant VIP.
+payment.success.validated|Paiement validé ! Vous êtes maintenant VIP.
+payment.success.welcomeVip|Bienvenue dans le Club VIP !
+payment.error.verificationFailed|Impossible de vérifier le paiement. Contactez le support.
+payment.error.verificationError|Erreur lors de la vérification du paiement
+payment.verification.loading|Vérification du paiement...
+payment.verification.pleaseWait|Veuillez patienter quelques instants
+payment.error.title|Erreur de paiement
+payment.error.retry|Réessayer le paiement
+payment.error.contactSupport|Contacter le support
+payment.success.title|Paiement réussi !
+payment.success.welcomeClub|Bienvenue dans le Club VIP
+payment.success.description|Votre Pass Premium VIP est maintenant actif ! Vous avez désormais accès à toutes les fonctionnalités exclusives de SIB 2026.
+payment.success.emailSent|Un email de confirmation a été envoyé à <strong>{{email}}</strong>
+payment.success.nextSteps|Prochaines étapes
+payment.success.step1Title|Téléchargez votre badge VIP
+payment.success.step1Desc|Badge premium avec photo et QR code sécurisé
+payment.success.step2Title|Accédez à votre tableau de bord VIP
+payment.success.step2Desc|Toutes les fonctionnalités premium sont maintenant débloquées
+payment.success.step3Title|Planifiez vos rendez-vous B2B
+payment.success.step3Desc|Rendez-vous B2B ILLIMITÉS disponibles immédiatement
+payment.success.downloadBadge|Télécharger mon badge VIP
+payment.success.goToDashboard|Accéder à mon tableau de bord VIP
+payment.success.benefit1Title|Networking Illimité
+payment.success.benefit1Desc|Rencontrez tous les décideurs
+payment.success.benefit2Title|RDV B2B Illimités
+payment.success.benefit2Desc|Planifiez vos rendez-vous stratégiques
+payment.success.benefit3Title|Événements Exclusifs
+payment.success.benefit3Desc|Gala, ateliers, conférences VIP
+upgrade.free.badge|Badge numérique basique
+upgrade.free.exhibition|Accès zone exposition
+upgrade.free.publicConferences|Conférences publiques
+upgrade.free.b2bMeetings|Rendez-vous B2B
+upgrade.free.unlimitedNetworking|Networking illimité
+upgrade.free.exclusiveEvents|Événements exclusifs
+upgrade.free.workshops|Ateliers spécialisés
+upgrade.free.gala|Soirée gala
+upgrade.vip.premiumBadge|Badge Premium avec photo
+upgrade.vip.fullAccess|Accès complet 5 jours
+upgrade.vip.b2bRequests|10 demandes de RDV B2B actives
+upgrade.vip.unlimitedNetworking|Networking illimité
+upgrade.vip.inauguration|Invitation inauguration
+upgrade.vip.workshops|Ateliers spécialisés
+upgrade.vip.exclusiveGala|Soirée gala exclusive
+upgrade.vip.networkingLunches|Déjeuners networking
+upgrade.vip.vipConferences|Conférences VIP
+upgrade.vip.privateLounge|Accès lounge privé
+upgrade.testimonial1.content|Le Pass VIP a transformé ma participation. J\
+upgrade.testimonial2.content|Les événements exclusifs VIP m\
+upgrade.testimonial3.content|L\
+upgrade.hero.title|Passez au Pass Premium VIP
+upgrade.hero.subtitle|Débloquez toutes les fonctionnalités et maximisez votre retour sur investissement au SIB 2026
+upgrade.hero.launchOffer|Offre de lancement : 300€ au lieu de 950€
+upgrade.freeCard.title|Pass Gratuit
+upgrade.freeCard.subtitle|Accès limité
+upgrade.freeCard.currentPass|Votre pass actuel
+upgrade.vipCard.recommended|⭐ RECOMMANDÉ
+upgrade.vipCard.title|Pass Premium VIP
+upgrade.vipCard.subtitle|Accès complet 5 jours
+upgrade.vipCard.cta|Passer au Premium VIP
+upgrade.benefits.title|Pourquoi passer Premium ?
+upgrade.benefits.b2bTitle|RDV B2B Stratégiques
+upgrade.benefits.b2bDesc|10 demandes actives pour rencontrer les décideurs clés. Libération automatique après réponse.
+upgrade.benefits.networkTitle|Networking Premium
+upgrade.benefits.networkDesc|Accès illimité aux événements exclusifs : gala, déjeuners, lounge privé avec 500+ décideurs.
+upgrade.benefits.badgeTitle|Badge Ultra-Sécurisé
+upgrade.benefits.badgeDesc|Badge premium avec photo et QR code crypté. Accès prioritaire à toutes les zones VIP.
+upgrade.testimonials.title|Ce que disent nos membres VIP
+upgrade.roi.title|ROI Garanti
+upgrade.roi.description|Nos membres VIP génèrent en moyenne <span class="font-bold text-yellow-300">15 000€</span> de nouvelles opportunités commerciales lors du salon. Investissez 300€, récoltez des milliers.
+upgrade.roi.cta|Devenir VIP Maintenant
+upgrade.faq.title|Questions fréquentes
+upgrade.faq.q1|Quels moyens de paiement acceptez-vous ?
+upgrade.faq.a1|Cartes bancaires (Visa, Mastercard), PayPal, et cartes marocaines (CMI).
+upgrade.faq.q2|L\
+upgrade.faq.a2|Oui ! Votre compte est activé instantanément et vous recevez votre badge VIP par email.
+upgrade.faq.q3|Puis-je annuler après paiement ?
+upgrade.faq.a3|Remboursement complet possible jusqu\
+users.title|Gestion des Utilisateurs
+users.total|Total des Utilisateurs
+users.active|Utilisateurs Actifs
+users.search|Rechercher des utilisateurs
+users.filter|Filtrer par type
+users.status|Statut
+users.action|Actions
+users.delete|Supprimer
+partner_detail.about|À Propos
+partner_detail.projects|Projets
+partner_detail.contact_info|Informations de Contact
+partner_detail.request_meeting|Demander une Réunion
+partner_detail.back|Retour
+product_detail.specifications|Spécifications
+product_detail.price|Prix
+product_detail.availability|Disponibilité
+product_detail.request_demo|Demander une Démo
+product_detail.contact_supplier|Contacter le Fournisseur
+password.reset_title|Réinitialiser le Mot de Passe
+password.reset_description|Entrez votre nouveau mot de passe
+password.new_password|Nouveau Mot de Passe
+password.confirm|Confirmer
+password.error|Erreur lors de la réinitialisation
+auth.forgotten_password|Mot de passe oublié
+auth.forgotten_password_desc|Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+auth.email_placeholder|votre@email.com
+auth.send_reset_link|Envoyer le lien
+auth.go_login|Aller à la page de connexion
+common.error_401|401 - Accès non autorisé
+common.error_401_desc|Veuillez vous connecter pour accéder à cette page.
+common.error_403|403 - Accès interdit
+common.error_403_desc|Vous n\
+common.back_dashboard|Retour au tableau de bord
+common.sending|Envoi...
+ui.sync_official|Synchroniser avec le site officiel
+ui.share_article|Partager cet article
+ui.back_to_top|Retour en haut
+ui.search_by|Rechercher par...
+admin_media.create_title_example|Ex: Interview Innovation BTP
+admin_media.create_description_placeholder|Décrivez le contenu du média...
+admin_media.duration_example|120
+admin_media.tags_example|Ex: Innovation, Tech, Interview
+admin_media.manager_title|Gestionnaire de Médias
+accommodation.badge|Hébergement Sponsors
+accommodation.hotels_partners|Hôtels sponsors
+accommodation.vip_discount|Réduction VIP
+accommodation.april_dates|Novembre 2026
+accommodation.vip_advantage_title|🌟 Avantage Visiteurs VIP
+accommodation.vip_advantage_desc|En tant que visiteur VIP, bénéficiez de tarifs préférentiels exclusifs sur tous nos hôtels sponsors
+accommodation.vip_benefit_1|Jusqu\
+accommodation.vip_benefit_2|Réservation prioritaire garantie
+accommodation.vip_benefit_3|Surclassement gratuit selon disponibilité
+accommodation.featured_partner|⭐ Sponsor Premium
+accommodation.standard_rate|Tarif Standard
+accommodation.vip_rate|Tarif VIP
+accommodation.amenity_wifi|WiFi Gratuit
+accommodation.amenity_parking|Parking
+accommodation.amenity_pool|Piscine
+accommodation.amenity_spa|Spa
+accommodation.amenity_restaurant|Restaurant
+accommodation.amenity_gym|Salle de sport
+accommodation.amenity_casino|Casino
+accommodation.amenity_beach|Accès plage
+accommodation.amenity_golf|Golf
+accommodation.amenity_bar|Bar
+accommodation.amenity_terrace|Terrasse
+security.title|Sécurité
+security.two_factor|Authentification à deux facteurs
+security.enable_2fa|Activer 2FA
+security.disable_2fa|Désactiver 2FA
+security.totp|Application d\
+security.sms|SMS
+security.email|Email
+security.backup_codes|Codes de secours
+security.password|Mot de passe
+security.change_password|Changer le mot de passe
+security.change_password_desc|Modifiez votre mot de passe temporaire pour sécuriser votre compte.
+security.current_password|Mot de passe actuel
+security.new_password|Nouveau mot de passe
+security.confirm_password|Confirmer le nouveau mot de passe
+security.new_password_placeholder|Minimum 8 caractères
+security.confirm_password_placeholder|Retapez le nouveau mot de passe
+security.password_requirements|Minimum 8 caractères. Utilisez des lettres, chiffres et symboles.
+security.change_password_btn|Mettre à jour le mot de passe
+security.password_changed|Mot de passe modifié avec succès !
+security.passwords_mismatch|Les mots de passe ne correspondent pas.
+security.password_too_short|Le mot de passe doit contenir au moins 8 caractères.
+security.current_password_wrong|Le mot de passe actuel est incorrect.
+security.fields_required|Tous les champs sont obligatoires.
+security.sessions|Sessions actives
+security.api_keys|Clés API
+security.audit_logs|Journaux d\
+notifications.title|Notifications
+notifications.mark_all_read|Tout marquer comme lu
+notifications.no_notifications|Aucune notification
+notifications.new|Nouveau
+notifications.unread|Non lu
+notifications.settings|Paramètres de notification
+notifications.email_notifications|Notifications par email
+notifications.push_notifications|Notifications push
+notifications.sms_notifications|Notifications SMS
+notifications.preferences|Préférences
+analytics.pageviews|Pages vues
+analytics.conversions|Conversions
+analytics.export|Exporter
+analytics.week|Cette semaine
+analytics.month|Ce mois
+analytics.year|Cette année
+analytics.custom|Personnalisé
+payments.title|Paiements
+payments.methods|Méthodes de paiement
+payments.history|Historique
+payments.invoices|Factures
+payments.refunds|Remboursements
+payments.pending|En attente
+payments.completed|Complété
+payments.failed|Échoué
+payments.amount|Montant
+payments.date|Date
+payments.status|Statut
+payments.download_invoice|Télécharger la facture
+partner.activity.title|Activité du Sponsor
+partner.activity.connection_established|Connexion établie
+partner.activity.connected_with|Connecté avec
+partner.activity.new_message|Nouveau message
+partner.activity.event_participation|Participation à un événement
+partner.activity.stand_visit|Visite de stand
+partner.activity.product_inquiry|Enquête produit
+partner.activity.meeting_scheduled|Réunion programmée
+partner.activity.meeting_confirmed|Réunion confirmée
+partner.activity.meeting_completed|Réunion complétée
+partner.activity.meeting_cancelled|Réunion annulée
+partner.activity.lead_generated|Prospect généré
+partner.activity.download|Télécharger les ressources
+partner.activity.brochure_request|Demande de brochure
+partner.activity.contact_request|Demande de contact
+partner.activity.quote_request|Demande de devis
+partner.activity.demo_request|Demande de démo
+partner.activity.partnership_interest|Intérêt pour partenariat
+partner.activity.event_interest|Intérêt pour événement
+partner.activity.network_join|Rejoindre le réseau
+partner.activity.filter_all|Tous
+partner.activity.filter_connections|Connexions
+partner.activity.filter_messages|Messages
+partner.activity.filter_meetings|Réunions
+partner.activity.filter_inquiries|Demandes
+partner.activity.timestamp_today|Aujourd\
+partner.activity.timestamp_yesterday|Hier
+partner.activity.timestamp_this_week|Cette semaine
+partner.activity.timestamp_this_month|Ce mois
+partner.activity.total_connections|Connexions totales
+partner.activity.total_messages|Messages totaux
+partner.activity.total_meetings|Réunions totales
+partner.leads.title|Gestion des Prospects
+partner.leads.overview|Vue d\
+partner.leads.total_leads|Prospects totaux
+partner.leads.new_leads|Nouveaux prospects
+partner.leads.qualified_leads|Prospects qualifiés
+partner.leads.contacted|Contactés
+partner.leads.converted|Convertis
+partner.leads.source_event|Source: Événement
+partner.leads.source_website|Source: Site web
+partner.leads.source_email|Source: Email
+partner.leads.source_referral|Source: Recommandation
+partner.leads.source_other|Source: Autre
+partner.leads.stage_new|Étape: Nouveau
+partner.leads.stage_contacted|Étape: Contacté
+partner.leads.stage_qualified|Étape: Qualifié
+partner.leads.stage_proposal|Étape: Proposition
+partner.leads.stage_negotiation|Étape: Négociation
+partner.leads.stage_won|Étape: Gagné
+partner.leads.stage_lost|Étape: Perdu
+partner.leads.quality_high|Qualité: Haute
+partner.leads.quality_medium|Qualité: Moyenne
+partner.leads.quality_low|Qualité: Basse
+partner.leads.tip_follow_up|Conseil: Effectuez un suivi 48h après le contact initial
+partner.leads.tip_personalize|Conseil: Personnalisez chaque approche de prospect
+partner.leads.tip_document|Conseil: Documentez toutes les interactions
+partner.leads.tip_timing|Conseil: Le timing est clé pour la conversion
+partner.leads.tip_interests|Conseil: Identifiez les intérêts spécifiques du prospect
+partner.events.title|Gestion des Événements
+partner.events.overview|Vue d\
+partner.events.upcoming|Événements à venir
+partner.events.past|Événements passés
+partner.events.registered|Événements inscrits
+partner.events.status_scheduled|Statut: Programmé
+partner.events.status_ongoing|Statut: En cours
+partner.events.status_completed|Statut: Complété
+partner.events.status_cancelled|Statut: Annulé
+partner.events.registration_open|Inscription ouverte
+partner.events.registration_closed|Inscription fermée
+partner.events.capacity|Capacité
+partner.events.attendees|Participants
+partner.events.program|Programme
+partner.events.speakers|Conférenciers
+partner.events.location|Localisation
+partner.events.date_time|Date et Heure
+networking.matchmaking_title|Appariement de Réseau
+networking.compatibility_level_excellent|Excellent
+networking.compatibility_level_good|Bon
+networking.compatibility_level_fair|Acceptable
+networking.compatibility_level_poor|Faible
+partner.activity.message_from|{name} vous a envoyé un message
+partner.activity.participated_in|Vous avez participé à {event}
+partner.activity.sponsoring_activated|Sponsoring activé
+partner.activity.logo_displayed|Votre logo est maintenant affiché sur {page}
+partner.activity.profile_viewed|Profil consulté
+partner.activity.views_today|Votre profil a été consulté {count} fois aujourd\
+partner.activity.content_shared|Contenu partagé
+partner.activity.article_shared|Votre article "{title}" a été partagé
+partner.activity.system_alert|Alerte système
+partner.activity.metrics_update|Mise à jour de vos métriques de performance disponible
+partner.activity.just_now|À l\
+partner.activity.hours_ago|Il y a {n}h
+partner.activity.days_ago|Il y a {n}j
+partner.activity.type.connection|Connexion
+partner.activity.type.message|Message
+partner.activity.type.event|Événement
+partner.activity.type.sponsorship|Sponsoring
+partner.activity.type.consultation|Consultation
+partner.activity.type.content|Contenu
+partner.activity.type.alert|Alerte
+partner.activity.type.meeting|Rendez-vous
+partner.activity.filter.all|Toutes les activités
+partner.activity.filter.networking|Réseautage
+partner.activity.filter.communication|Communication
+partner.activity.filter.events|Événements
+partner.activity.filter.sponsorship|Sponsoring
+partner.activity.filter.engagement|Engagement
+partner.activity.filter.content|Contenu
+partner.activity.filter.meetings|Rendez-vous
+partner.activity.filter.system|Système
+partner.activity.full_history|Historique Complet des Activités
+partner.activity.realtime|Temps Réel
+partner.activity.stats.total|Activités totales
+partner.activity.stats.today|Aujourd\
+partner.activity.stats.this_week|Cette semaine
+partner.activity.history|Historique des Activités
+partner.activity.no_activity|Aucune activité trouvée
+partner.activity.try_filters|Essayez de modifier vos filtres de recherche
+partner.leads.exhibitor|Exposant
+partner.leads.visitor|Visiteur
+partner.leads.other|Autre
+partner.leads.connected|Connecté
+partner.leads.pending|En attente
+partner.leads.rejected|Rejeté
+partner.leads.active_followup|Suivi actif
+partner.leads.awaiting_response|En attente de réponse
+partner.leads.sources.events|Événements SIB
+partner.leads.sources.networking|Networking Sponsors
+partner.leads.sources.referrals|Références Clients
+partner.leads.sources.marketing|Campagnes Marketing
+partner.leads.funnel.generated|Leads Générés
+partner.leads.funnel.qualified|Qualifiés
+partner.leads.funnel.proposal|Proposition
+partner.leads.funnel.negotiation|Négociation
+partner.leads.funnel.conversion|Conversion
+partner.leads.subtitle|Gérez vos leads qualifiés et suivez leur progression dans le pipeline commercial
+partner.leads.premium_program|Programme Leads Premium
+partner.leads.conversion_rate|12% Taux de Conversion
+partner.leads.generated|Leads générés
+partner.leads.qualified|Leads qualifiés
+partner.leads.conversion|Taux de conversion
+partner.leads.estimated_value|Valeur estimée
+partner.leads.recent|Leads Récents
+partner.leads.tips.title|Conseils de Gestion des Leads
+partner.leads.tips.qualification|Qualification Rapide
+partner.leads.tips.qualification_desc|Contactez les leads chauds dans les 24h pour maximiser vos chances de conversion
+partner.leads.tips.followup|Suivi Régulier
+partner.leads.tips.followup_desc|Planifiez des points de suivi hebdomadaires pour maintenir l\
+partner.leads.tips.personalization|Personnalisation
+partner.leads.tips.personalization_desc|Adaptez vos propositions aux besoins spécifiques de chaque prospect
+partner.leads.tips.measure|Mesure des Résultats
+partner.leads.tips.measure_desc|Analysez régulièrement vos taux de conversion pour optimiser votre approche
+partner.status.upcoming|À venir
+partner.status.draft|Brouillon
+partner.events.available|Événements disponibles
+partner.events.loading|Chargement des événements...
+partner.events.none|Aucun événement disponible pour le moment.
+partner.priority|Prioritaire
+visitor.premium_feature|Fonctionnalité Premium
+networking.ai_reserved_premium|Réservé aux comptes Premium/VIP
+visitor.upgrade_level|Améliorer mon niveau
+networking.excellent_match|Excellent
+networking.good_match|Bon
+networking.potential_match|Potentiel
+networking.low_match|Faible
+nav.my_account|Mon compte
+nav.my_profile|Mon Profil
+nav.admin_profile|Mon Profil Admin
+nav.admin_dashboard|Tableau de Bord Admin
+nav.payment_validation|Validation Paiements
+nav.metrics|Métriques & Performance
+nav.qr_scanner|Scanner QR (Sécurité)
+nav.badge_print|Impression Badges (Service Clientèle)
+nav.digital_badge|Mon Badge Digital
+nav.admin_zone|Zone Administrateur
+nav.exhibitor_dashboard|Tableau de Bord Exposant
+nav.b2b_networking|Réseautage B2B
+nav.minisite_editor|Éditeur de Mini-Site
+nav.my_slots|Mes Créneaux RDV
+nav.messages|Messages & Contact
+nav.partner_dashboard|Tableau de Bord Sponsor
+nav.vip_networking|Networking VIP
+nav.partner_subscription|Abonnement Sponsor
+nav.visitor_dashboard|Tableau de Bord Visiteur
+nav.visitor_settings|Paramètres Visiteur
+nav.my_appointments|Mes Rendez-vous
+footer.navigation|Navigation
+footer.nav_home|Accueil
+footer.nav_exhibitors_catalog|Catalogue Exposants
+footer.nav_networking|Réseautage B2B
+footer.nav_conferences|Conférences
+footer.nav_news|Actualités
+footer.media_platform|Plateforme Média
+footer.strategic_contact|Contact Stratégique
+exhibitors.catalog_label|SIB 2026 • Catalogue Exposants
+exhibitors.leaders_count|leaders de l\
+exhibitors.filters|Filtres
+exhibitors.all_sectors|Tous les secteurs
+exhibitors.select_max|Sélectionnez au maximum {{max}}
+exhibitors.no_results_desc|Aucun exposant ne correspond à vos critères actuels. Essayez d\
+exhibitors.reset_search|Réinitialiser la recherche
+home.about_sibs|À propos du SIB
+home.discover_exhibitors_btn|Découvrir les Exposants
+home.see_partners_btn|Voir les Sponsors
+home.discover_all_partners_subtitle|Découvrez tous les sponsors officiels du salon
+home.no_partners_available|Aucun sponsor disponible pour le moment
+home.discover_all_exhibitors_subtitle|Découvrez tous les exposants participants au salon
+contact.select_subject|Sélectionnez un sujet
+contact.subject_exhibitor|Devenir exposant
+contact.subject_visitor|S\
+contact.subject_partnership|Partenariat
+contact.subject_support|Support technique
+contact.subject_other|Autre
+contact.sending|Envoi en cours...
+contact.weekdays|Lundi - Vendredi
+contact.saturday|Samedi
+contact.sunday|Dimanche
+contact.closed|Fermé
+contact.contact_info|Informations de contact
+contact.opening_hours|Horaires d\
+contact.follow_us|Suivez-nous
+contact.follow_us_desc|Restez informé des dernières actualités de SIB 2026
+contact.characters|caractères
+contact.required_fields|Veuillez remplir tous les champs obligatoires
+contact.invalid_email|Veuillez entrer une adresse email valide
+contact.message_too_short|Le message doit contenir au moins 10 caractères
+about.title|SIB 2026 — Le rendez-vous incontournable du monde bâtiment
+about.dates|25-29 Novembre
+about.location_city|El Jadida
+about.location_country|Maroc 🇲🇦
+services.need_help|Besoin d\
+services.help_desc|Nos équipes commerciales sont disponibles pour vous aider
+services.send_message|Envoyer un message
+services.whatsapp_desc|Contactez-nous directement par message
+services.send_email|Envoyer un email
+services.email_desc|Envoyez un email à notre équipe
+services.phone|Téléphone
+services.phone_desc|Appelez-nous directement
+services.call_now|Appeler maintenant
+services.hours|Horaires
+services.hours_desc|Nous sommes disponibles:<br />Lundi - Vendredi: 9h-18h
+services.timezone|Fuseau horaire: GMT+1
+services.ready_to_chat|Prêt à discuter avec notre équipe ?
+services.whatsapp_cta|Démarrer une conversation WhatsApp
+services.whatsapp_fast|Utilisez WhatsApp pour une réponse rapide et instantanée
+media.gallery_badge|Galerie SIB
+media.gallery_title|SIB en Images
+media.gallery_desc|Découvrez l\
+media.view_gallery|Voir toute la galerie
+partners.catalog_label|SIB 2026 \\u2022 Catalogue Sponsors
+partners.page_title|Sponsors
+partners.page_subtitle|Découvrez les organisations et institutions qui soutiennent l\
+partners.leaders_count|sponsors stratégiques \\u00e0 découvrir.
+partners.search_placeholder|Chercher un sponsor
+partners.filters|Filtres
+partners.sort_by|Trier par:
+partners.sort_name|Nom
+partners.sort_sector|Secteur
+partners.sort_type|Type
+partners.sort_country|Pays
+partners.export|Exporter
+partners.no_results|Aucun sponsor trouvé pour votre recherche
+partners.clear_filters|Effacer les filtres
+partners.total|Total Sponsors
+partners.institutional|Institutionnel
+partners.verified_only|Vérifiés uniquement
+partners.featured_only|En vedette uniquement
+partners.export_limit|Limite d\
+partners.export_error|Erreur lors de l\
+partners.country|Pays
+accommodation.dist.2km|À 2 km
+accommodation.dist.2.5km|À 2,5 km
+accommodation.dist.3km|À 3 km
+accommodation.dist.4km|À 4 km
+accommodation.dist.5km|À 5 km
+accommodation.dist.6km|À 6 km
+accommodation.hotel.ibis.desc|Hôtel Ibis - Hôtel économique avec excellent service
+accommodation.hotel.mazagan.desc|Resort Mazagan Beach - Resort de luxe 5 étoiles
+accommodation.hotel.provence.desc|Hôtel Provence - Hôtel 4 étoiles près du centre des congrès
+accommodation.hotel.pullman.desc|Hôtel Pullman - Hôtel international 4 étoiles
+accommodation.hotel.royal.desc|Hôtel Royal - Hôtel 3 étoiles avec bonnes installations
+accommodation.hotel.suisse.desc|Hôtel Suisse - Hôtel 4 étoiles en centre-ville
+accommodation.room.deluxe_double|Chambre Deluxe Double
+accommodation.room.deluxe_single|Chambre Deluxe Simple
+accommodation.room.garden_pool_double|Chambre Double Vue Jardin et Piscine
+accommodation.room.garden_pool_single|Chambre Simple Vue Jardin et Piscine
+accommodation.room.suite_full_ocean|Suite Vue Complète Océan
+accommodation.room.suite_junior_double|Junior Suite Double
+accommodation.room.suite_junior_single|Junior Suite Simple
+accommodation.room.suite_partial_ocean|Suite Vue Partielle Océan
+badge.badge_downloaded|Badge téléchargé
+badge.badge_generated_success|Badge généré avec succès
+badge.comment|Commentaire
+badge.download_error|Erreur de téléchargement
+badge.download_print_info|Téléchargez ou imprimez votre badge d\
+badge.download_png|Télécharger PNG
+badge.error_generating|Erreur lors de la génération du badge
+badge.error_loading|Erreur lors du chargement du badge
+badge.generate_badge_info|Générez votre badge d\
+badge.generate_my_badge|Générer mon badge
+badge.generating|Génération du badge en cours...
+badge.instruction_1|Cliquez ci-dessous pour générer votre badge
+badge.instruction_1_desc|Votre badge d\
+badge.instruction_2|Téléchargez ou imprimez votre badge
+badge.instruction_2_desc|Vous pouvez télécharger en PNG ou imprimer directement
+badge.instruction_3|Montrez votre badge à l\
+badge.instruction_3_desc|Présentez votre badge pour accéder à l\
+badge.instruction_4|Gardez votre badge avec vous
+badge.instruction_4_desc|Montrez votre badge aux agents de sécurité ou aux stands sponsors
+badge.last_scan|Dernier scan
+badge.login_required|Connexion requise
+badge.must_login_badge|Vous devez être connecté pour générer votre badge
+badge.my_access_badge|Mon badge d\
+badge.print.camera_activated|Caméra activée
+badge.print.error_camera|Erreur caméra - veuillez autoriser l\
+badge.print.error_printing|Erreur lors de l\
+badge.print.generated|Badge imprimé
+badge.print.sent|Badge envoyé à l\
+badge.regenerating|Régénération du badge en cours...
+badge.scanner.activated|Scanner activé
+badge.scanner.deactivated|Scanner désactivé
+badge.scanner.error_camera|Erreur caméra
+badge.scanner.error_lead|Erreur de capture de lead
+badge.scanner.error_processing|Erreur lors du traitement du scan
+badge.scanner.error_start|Erreur au démarrage du scanner
+badge.scanner.error_stats|Erreur lors du chargement des statistiques
+badge.scanner.error_stop|Erreur à l\
+badge.scanner.error_validate|Erreur de validation
+badge.scanner.error_validation|Erreur de validation du badge
+badge.scanner.expired|Badge expiré
+badge.scanner.inactive|Badge inactif
+badge.scanner.invalid|Badge invalide
+badge.scans_done|Scans terminés
+badge.stand_number|Numéro de stand
+badge.statistics|Statistiques
+badge.usage_instructions|Comment utiliser votre badge
+badge.valid_from|Valide à partir de
+badge.vip_advantage_1|Entrée prioritaire à l\
+badge.vip_advantage_2|Accès au salon VIP et aux zones spéciales
+badge.vip_advantage_3|Opportunités de réseautage exclusives
+badge.vip_advantages|Avantages VIP
+common.bookmarked_add|Ajouter aux favoris
+common.bookmarked_remove|Retirer des favoris
+common.comment|Commentaire
+common.comments|Commentaires
+common.generating_pdf|Génération du PDF...
+common.like|Aimer
+common.loading_article|Chargement de l\
+common.newsletter_placeholder|Entrez votre adresse e-mail
+common.newsletter_subscribe|S\
+common.newsletter_subtitle|Recevez les dernières nouvelles et mises à jour sur SIB
+common.newsletter_title|Abonnement à la newsletter
+common.related_articles|Articles connexes
+common.share_link_copied|Lien copié dans le presse-papiers
+common.share_link_error|Erreur lors de la copie du lien
+common.source|Source
+common.views|Vues
+exhibitors.count|exposants
+minisite.list.subtitle|Explorez les mini-sites de nos exposants et sponsors
+minisite.list.title|Mini-sites
+minisite.search.no_match|Aucun mini-site ne correspond à votre recherche
+minisite.search.no_sites_yet|Aucun mini-site disponible pour le moment
+minisite.search.not_found|Mini-site non trouvé
+minisite.search.placeholder|Chercher des mini-sites...
+navigation.news|Actualités
+payment.paypalCaptureErrorToast|Erreur de paiement PayPal. Veuillez réessayer.
+actions.open|Ouvrir
+admin.all_categories|Toutes les catégories
+admin.create_first_article|Créer votre premier article
+admin.featured|À l\
+admin.no_articles_criteria|Aucun article ne correspond aux critères sélectionnés
+admin.no_articles_found|Aucun article trouvé
+admin.platform_statistics|Statistiques de la plateforme
+appointments.no_appointments_date|Aucun rendez-vous prévu pour cette date
+auth.bio|Biographie
+auth.bio_placeholder|Parlez-nous de vous
+auth.company_placeholder|Nom de votre entreprise
+auth.country|Pays
+auth.login_required|Connexion requise
+auth.phone|Téléphone
+auth.please_login|Veuillez vous connecter pour continuer
+auth.premium_required|Accès Premium requis
+badge.access_badge|Accéder à votre badge
+badge.authorized_zones|Zones autorisées
+badge.automatic_rotation|Rotation automatique
+badge.loading_badge|Chargement de votre badge...
+badge.max_security|Sécurité maximale
+badge.regenerate_qr|Régénérer le code QR
+badge.secure_qr_jwt|Jeton JWT sécurisé
+badge.security_info|Informations de sécurité
+badge.total_access|Accès complet
+badge.unknown_level|Niveau d\
+calendar.add_new_slot|Ajouter un créneau
+calendar.available_spots|Places disponibles
+calendar.create_first_slot|Créer votre premier créneau
+calendar.default_location|Lieu par défaut
+calendar.event_days_description|Consultez la disponibilité sur tous les jours de l\
+calendar.grid_view|Vue grille
+calendar.list_view|Vue liste
+calendar.no_availability_message|Aucune disponibilité programmée
+calendar.no_slots|Aucun créneau disponible
+calendar.no_slots_configured|Aucun créneau configuré
+calendar.plan_availability|Planifiez votre disponibilité
+calendar.this_week|Cette semaine
+calendar.title|Calendrier de disponibilité
+calendar.total_slots|Nombre total de créneaux
+common.b2b_meetings|Réunions B2B
+common.back_home|Retour à l\
+common.categories|Catégories
+common.close_error|Fermer l\
+common.complete_dashboard|Tableau de bord complet
+common.load_more|Charger plus
+common.networking|Networking
+common.not_verified|Non vérifié
+common.public_conferences|Conférences publiques
+common.unlimited|Illimité
+common.update_success|Mise à jour effectuée avec succès
+common.updated|Mis à jour
+common.upgrade|Passer à une version supérieure
+common.view_all|Voir tous
+common.vip_zones|Zones VIP
+countdown.add_to_calendar|Ajouter au calendrier
+countdown.address|Adresse
+countdown.calendar_added|Ajouté à votre calendrier
+countdown.calendar_description|Rappel d\
+countdown.conferences|Conférences
+countdown.contact_hours|Heures de contact
+countdown.contact_org|Organisation à contacter
+countdown.copied_clipboard|Copié dans le presse-papiers
+countdown.copy_failed|Copie échouée
+countdown.countries|Pays
+countdown.day|Jour
+countdown.day1_networking|Networking d\
+countdown.day1_opening|Ouverture officielle
+countdown.day1_plenary|Séance plénière
+countdown.day1_title|Jour 1 : Ouverture et networking
+countdown.day2_b2b|Réunions B2B
+countdown.day2_demos|Démonstrations en direct
+countdown.day2_title|Jour 2 : B2B et ateliers
+countdown.day2_workshops|Ateliers
+countdown.day3_awards|Cérémonie des prix
+countdown.day3_closing|Séance de clôture
+countdown.day3_roundtables|Tables rondes
+countdown.day3_title|Jour 3 : Clôture et prix
+countdown.days_plural|Jours
+countdown.event_address|Adresse de l\
+countdown.event_started|L\
+countdown.event_welcome|Bienvenue à SIB 2026
+countdown.exhibitors|Exposants
+countdown.hour|Heure
+countdown.info_catering|Informations de restauration
+countdown.info_parking|Informations de stationnement
+countdown.info_registration|Détails de l\
+countdown.info_shuttles|Services de navette
+countdown.info_wifi|Accès WiFi
+countdown.key_figures|Chiffres clés
+countdown.location_access|Lieu et accès
+countdown.minute|Minute
+countdown.months|Mois
+countdown.opening_in|Ouverture dans
+countdown.practical_info|Informations pratiques
+countdown.program_3days|Programme sur 5 jours
+countdown.reminder_set|Rappel défini
+countdown.schedule|Calendrier
+countdown.second|Seconde
+countdown.set_reminder|Définir un rappel
+countdown.share_countdown|Partager le décompte
+countdown.share_title|Partager SIB 2026
+countdown.venue|Lieu
+countdown.visitors|Visiteurs
+countdown.weeks|Semaines
+dashboard.appointments|Rendez-vous
+dashboard.bio_help|Aide sur la biographie
+dashboard.completion_help|Aide sur la complétude du profil
+dashboard.completion_score|Score de complétude du profil
+dashboard.contacts|Contacts
+dashboard.event_goals|Objectifs d\
+dashboard.login_to_see_stats|Connectez-vous pour voir vos statistiques
+dashboard.minisite_views|Vues du minisite
+dashboard.partnership_types|Types de partenariat
+dashboard.products|Produits
+dashboard.profile_tips|Conseils pour le profil
+dashboard.profile_views|Vues du profil
+dashboard.visibility|Visibilité
+dashboard.why_complete|Pourquoi compléter votre profil ?
+error.auto_generation|Erreur de génération automatique
+error.generic|Une erreur s\
+error.recommendation|Erreur de recommandation
+errors.back_to_home|Retour à l\
+errors.error_message|Message d\
+errors.oops|Oups !
+errors.reload_page|Recharger la page
+errors.unexpected_error|Une erreur inattendue s\
+errors.view_stack_trace|Voir les détails
+exhibitors.company_info|Informations sur l\
+exhibitors.company_size|Taille de l\
+form.activity_sector|Secteur d\
+form.confirm_and_send|Confirmer et envoyer
+form.contact_information|Coordonnées
+form.country|Pays
+form.description|Description
+form.edit_information|Modifier les informations
+form.email|Email
+form.ensure_correct_before_submit|Veuillez vérifier que toutes les informations sont correctes avant de soumettre
+form.error.generic|Erreur lors de la soumission du formulaire
+form.full_name|Nom complet
+form.organization_information|Informations sur l\
+form.organization_name|Nom de l\
+form.partnership_type|Type de partenariat
+form.phone|Téléphone
+form.position|Poste
+form.request_review_warning|Votre soumission sera examinée par notre équipe
+form.sending|Envoi en cours...
+form.status.saving|Enregistrement de vos modifications...
+form.success.updated|Vos informations ont été mises à jour
+form.verify_information|Vérifiez vos informations
+form.website|Site web
+matching.form.collaboration_types|Types de collaboration
+matching.form.goals|Vos objectifs
+matching.form.interests|Vos intérêts
+matching.form.save|Enregistrer les préférences
+matching.form.sectors|Vos secteurs
+matching.results.contact|Contacter cette personne
+matching.subtitle|Recommandations de networking IA
+matching.title|Matching de networking
+media.action.listen_now|Écouter maintenant
+media.capsule.added_to_favorites|Ajouté aux favoris
+media.capsule.link_copied|Lien copié
+media.capsule.not_found|Contenu multimédia non trouvé
+media.capsule.save|Enregistrer
+media.capsule.saved|Enregistré
+media.detail.views|vues
+media.error.loading_capsule|Erreur lors du chargement du contenu multimédia
+media.filter.all_categories|Toutes les catégories
+media.info.audio_unavailable|Audio actuellement indisponible
+media.info.try_filter|Essayez d\
+media.podcast.featured_episode|Épisode en vedette
+media.podcast.no_results|Aucun podcast trouvé
+media.podcast.page_subtitle|Écoutez les perspectives d\
+media.podcast.page_title|Podcasts
+media.podcast.search_placeholder|Rechercher des podcasts...
+media.stats.hours|heures
+media.stats.listening|Temps d\
+media.stats.listens|Écoutes
+media.stats.total_episodes|Nombre total d\
+media.testimonial.no_results|Aucun témoignage trouvé
+media.testimonial.no_results_desc|Soyez le premier à partager votre expérience
+media.testimonial.satisfaction|Taux de satisfaction
+media.testimonial.search_placeholder|Rechercher des témoignages...
+media.testimonial.subtitle|Entendez des visiteurs et des exposants
+media.testimonial.title|Témoignages
+minisite.ai_info|Laissez l\
+minisite.ai_unavailable|La génération IA est temporairement indisponible
+minisite.auto_creation_title|Générer votre minisite automatiquement
+minisite.auto_generate_button|Générer avec IA
+minisite.back_to_dashboard|Retour au tableau de bord
+minisite.button_next|Suivant
+minisite.button_previous|Précédent
+minisite.create.title|Créer votre minisite
+minisite.creation_error|Erreur lors de la création du minisite
+minisite.default_company|Nom de l\
+minisite.delete_image|Supprimer l\
+minisite.editor.add_section|Ajouter une section
+minisite.editor.click_to_edit|Cliquez pour modifier
+minisite.editor.customize|Personnalisez votre minisite
+minisite.editor.empty_state|Aucun contenu ajouté
+minisite.error_title|Erreur de création du minisite
+minisite.generate_button|Générer un minisite
+minisite.generating|Génération de votre minisite...
+minisite.generating_auto|Génération avec IA...
+minisite.hero.cta_placeholder|Texte du bouton d\
+minisite.hero.tips.cta|Utilisez un appel à l\
+minisite.hero.tips.image|Utilisez une image de haute qualité qui représente votre entreprise
+minisite.invalid_url|Format d\
+minisite.login_required|Connexion requise pour créer un minisite
+minisite.manual_alternative|Ou créer manuellement
+minisite.page.create_subtitle|Choisissez comment vous souhaitez créer votre minisite
+minisite.page.create_title|Créer votre minisite
+minisite.page.scratch_desc|Construire à partir de zéro avec personnalisation complète
+minisite.page.scratch_option|Commencer à partir de zéro
+minisite.page.template_desc|Laissez l\
+minisite.page.template_option|Génération IA
+minisite.placeholder_company|Entrez le nom de votre entreprise
+minisite.placeholder_description|Décrivez votre entreprise et vos offres
+minisite.placeholder_products|Listez vos principaux produits ou services
+minisite.placeholder_socials|Ajoutez les liens de vos réseaux sociaux
+minisite.placeholder_url|Entrez l\
+minisite.preview.create|Créer
+minisite.preview.edit|Modifier
+minisite.preview.products_found|produits trouvés
+minisite.preview.verify|Vérifier et publier
+minisite.section.gallery_desc|Mettez en valeur vos produits et services
+minisite.section.gallery_empty|Ajoutez des images à votre galerie
+minisite.section.gallery_order|Faites glisser pour réorganiser votre galerie
+minisite.section.gallery_title|Galerie d\
+minisite.section.products|Produits
+minisite.section.products_title|Produits en vedette
+minisite.step_company|Informations sur l\
+minisite.step_description|Description de l\
+minisite.step_documents|Documents
+minisite.step_logo|Logo de l\
+minisite.step_products|Produits
+minisite.step_socials|Réseaux sociaux
+minisite.success_emoji|🎉
+minisite.success_message|Votre minisite a été créé avec succès
+minisite.success_title|Minisite créé !
+minisite.unknown_error|Une erreur inconnue s\
+minisite.view_my_minisite|Voir mon minisite
+minisite.wizard_title|Assistant de création de minisite
+months.april|Avril
+networking.confirm.cancel|Annuler le rendez-vous
+networking.error.acceptance|Erreur lors de l\
+networking.error.cancellation|Erreur lors de l\
+networking.error.duplicate_appointment|Ce rendez-vous existe déjà
+networking.error.duplicate_slot|Ce créneau est déjà pris
+networking.error.generation|Erreur lors de la génération des recommandations
+networking.error.invalid_dates|Plage de dates invalide
+networking.error.loading_data|Erreur lors du chargement des données
+networking.error.login_required|Connexion requise
+networking.error.must_be_logged|Vous devez être connecté
+networking.error.no_exhibitor|Exposant non trouvé
+networking.error.no_slot|Créneau non trouvé
+networking.error.past_slot|Ce créneau est dans le passé
+networking.error.profile_not_found|Profil non trouvé
+networking.error.quota_reached_free|Quota gratuit atteint
+networking.error.recommendations|Erreur lors du chargement des recommandations
+networking.error.refusal|Erreur lors du refus du rendez-vous
+networking.error.search|Erreur de recherche
+networking.error.slot_taken|Ce créneau est déjà pris
+networking.generation.loading|Génération des recommandations...
+networking.restricted|Cette fonctionnalité est restreinte
+networking.search.no_results|Aucun résultat trouvé
+networking.search_room|Rechercher des salles de networking
+networking.success.appointment_cancelled|Rendez-vous annulé
+networking.success.generated|Recommandations générées avec succès
+networking.success.recommendations|Recommandations chargées
+payment.pending_description|Votre paiement est en cours de traitement
+payment.pending_title|Paiement en attente
+payment.see_bank_details|Détails du virement bancaire
+products.error_saving_images|Erreur lors de l\
+products.min_one_image|Veuillez ajouter au moins une image de produit
+products.product_images|Images de produit
+products.upload_images_desc|Téléchargez jusqu\
+profile.about_placeholder|Parlez-nous de vous et de vos intérêts
+profile.change_photo|Changer la photo
+profile.country|Pays
+profile.first_name|Prénom
+profile.last_name|Nom de famille
+profile.not_found|Profil non trouvé
+profile.position|Poste
+quota.remaining_unlimited|Rendez-vous illimités
+quota.unlimited|Illimité
+quota.upgrade_for_more|Passer à une version supérieure pour plus de rendez-vous
+status.available|Disponible
+status.full|Complet
+status.no_spots|Aucune place disponible
+status.spots_available|Places disponibles
+sub.info.title1|Informations sur l\
+ui.add_remove_favorite|Ajouter aux favoris
+ui.backward_10s|Reculer de 10 s
+ui.book_appointment|Réserver un rendez-vous
+ui.contact_directly|Contacter directement
+ui.contact_info|Informations de contact
+ui.forward_10s|Avancer de 10 s
+ui.search|Rechercher
+upload.max_size|La taille maximale du fichier est de 5 Mo
+upload.must_be_image|Le fichier doit être une image
+upload.upload_error|Erreur d\
+visitor.action_required|Action requise
+visitor.appointment_with|Rendez-vous avec
+visitor.b2b_reserved_message|Les rendez-vous B2B sont réservés aux visiteurs Premium et VIP
+visitor.browse_program|Parcourir le programme
+visitor.my_schedule|Mon planning
+visitor.networking_hub|Hub de networking
+visitor.networking_hub_desc|Votre espace personnel de networking et de gestion de contacts
+visitor.new_invitations|Nouvelles invitations
+visitor.no_message|Aucun message
+visitor.no_registered_events|Aucun événement inscrit
+visitor.personal|Mon
+visitor.view_full_program|Voir le programme complet
+whatsapp.available_24_7|Disponible 24h/24 et 7j/7
+whatsapp.chat_team|Discutez avec notre équipe
+whatsapp.contact_whatsapp|Contacter via WhatsApp
+whatsapp.need_help|Besoin d\
+pages.webinars.title|Webinaires SIB
+pages.webinars.description|Découvrez nos webinaires sponsorisés en replay. Sessions exclusives avec les experts de l\
+pages.webinars.loading|Chargement des webinaires...
+pages.webinars.total_webinars|Webinaires au total
+pages.webinars.hours_content|heures de contenu
+pages.webinars.expert_speakers|experts de l\
+pages.webinars.filter_all|Tous
+pages.webinars.filter_recent|Récents
+pages.webinars.filter_popular|Populaires
+pages.webinars.search_webinars|Rechercher des webinaires...
+pages.webinars.no_results|Aucun webinaire trouvé
+pages.webinars.no_category|Non catégorisé
+pages.webinars.duration|Durée
+pages.webinars.participants|Participants
+pages.capsules.title|Capsules Vidéo SIB
+pages.capsules.description|Contenus courts et impactants sur l\
+pages.capsules.loading|Chargement des capsules...
+pages.capsules.total_capsules|Capsules disponibles
+pages.capsules.total_views|vues au total
+pages.capsules.trending_now|Tendance maintenant
+pages.capsules.filter_all|Tous
+pages.capsules.filter_recent|Récentes
+pages.capsules.filter_popular|Populaires
+pages.capsules.search_capsules|Rechercher des capsules...
+pages.capsules.no_results|Aucune capsule trouvée
+pages.capsules.add_to_favorites|Ajouter aux favoris
+pages.capsules.remove_from_favorites|Retirer des favoris
+pages.live.title|Studio en Direct SIB
+pages.live.description|Participez à nos émissions en direct. Interviews, débats et nouveautés du secteur de la construction en temps réel.
+pages.live.loading|Chargement des émissions...
+pages.live.coming_soon|À venir
+pages.live.past_streams|Émissions précédentes
+pages.live.total_viewers|spectateurs
+pages.live.scheduled_broadcasts|Émissions programmées
+pages.live.average_duration|Durée moyenne
+pages.live.filter_all|Tous
+pages.live.filter_upcoming|À venir
+pages.live.filter_past|Passées
+pages.live.search_streams|Rechercher des émissions...
+pages.live.no_results|Aucune émission trouvée
+pages.moments.title|Meilleurs Moments SIB
+pages.moments.description|Revivez les plus beaux moments de SIB. Interviews, annonces marquantes et instants mémorables de l\
+pages.moments.loading|Chargement des moments...
+pages.moments.featured_moments|Moments en vedette
+pages.moments.total_moments|Moments disponibles
+pages.moments.event_highlights|Temps forts de l\
+pages.moments.curated_by|Curé par l\
+pages.moments.filter_all|Tous
+pages.moments.filter_recent|Récents
+pages.moments.filter_popular|Populaires
+pages.moments.search_moments|Rechercher des moments...
+pages.moments.no_results|Aucun moment trouvé
+pages.moments.share_moment|Partager ce moment
+media.back_to_home|Retour à l\
+media.loading_content|Chargement du contenu...
+media.error_loading|Erreur lors du chargement du contenu
+media.retry|Réessayer
+common.featured|À la une
+common.speakers|Intervenants
+common.watch_replay|Voir le replay
+common.results|Résultats
+common.all_items|Tous les éléments
+common.modify_filters|Essayez de modifier vos filtres de recherche
+common.coming_soon|Les contenus seront bientôt disponibles
+auth.select_country|Sélectionner un pays
+form.select.placeholder|Sélectionner...
+media.capsule.removed_from_favorites|Retiré des favoris
+nav.calendar|Calendrier
+pages.partners.category_industry|Industrie
+pages.partners.category_service|Service
+pages.partners.category_technology|Technologie
+siteBuilder.loadError|Erreur de chargement du modèle
+siteBuilder.published|Site publié avec succès
+siteBuilder.saveError|Erreur lors de la sauvegarde
+siteBuilder.saved|Modifications sauvegardées
+siteBuilder.search_image|Rechercher une image...
+siteBuilder.search_template|Rechercher un modèle...
+siteBuilder.siteName|Nom du site
+siteBuilder.templateLoadError|Erreur de chargement du modèle
+sub.info.titleHighlight|premium
+sub.pavSection.title1|Nos formules
+sub.pavSection.titleHighlight|d\
+sub.whySection.title1|Pourquoi nous
+sub.whySection.title2|choisir ?
+exhibitor.detail.back_to_catalog|Retour au Catalogue
+exhibitor.detail.sib_official|SIB 2026 OFFICIAL
+exhibitor.detail.loading|Chargement de l\
+exhibitor.detail.validation_warning|⚠️ Fiche en cours de validation - Ce profil n\
+exhibitor.detail.schedule_b2b|Planifier un RDV B2B
+exhibitor.detail.contact_btn|Contact
+exhibitor.detail.share_btn|Partager
+exhibitor.detail.brochure_pdf|Brochure PDF (Digital)
+exhibitor.detail.salon_location|Emplacement Salon
+exhibitor.detail.main_pavilion|Pavillon Principal
+exhibitor.detail.direct_contact|Contact Direct
+exhibitor.detail.visit_website|Visiter le site web
+exhibitor.detail.tab_overview|Vue d\
+exhibitor.detail.tab_products|Produits
+exhibitor.detail.tab_about|À propos
+exhibitor.detail.tab_contact|Contact
+exhibitor.detail.tab_minisite|Mini-site
+exhibitor.detail.email_unavailable|Adresse email non disponible
+exhibitor.detail.link_copied|Lien copié dans le presse-papiers !
+exhibitor.detail.copy_error|Impossible de copier le lien
+exhibitor.detail.brochure_unavailable|Brochure non disponible pour cet exposant
+exhibitor.detail.download_started|Téléchargement de la brochure démarré
+exhibitor.category.institutional|Institutionnel
+exhibitor.category.port_industry|Industrie du Bâtiment
+exhibitor.category.operations|Exploitation & Gestion
+exhibitor.category.academic|Académique & Formation
+partner.notFound|Sponsor non disponible
+partner.notFoundDesc|Ce sponsor n\
+partner.notFoundGeneric|Le sponsor que vous recherchez n\
+partner.backToList|Voir tous les sponsors
+partner.discoverSIB|Découvrir SIB 2026
+partner.areYouPartner|Vous êtes sponsor ?
+partner.completeProfile|Complétez votre profil depuis votre tableau de bord pour apparaître dans notre annuaire des sponsors.
+partner.detail.back_to_partners|Retour aux sponsors
+partner.detail.official_site|Site officiel
+partner.detail.contact_btn|Contacter
+partner.detail.share_btn|Partager
+partner.detail.tab_overview|Vue d\
+partner.detail.tab_about|À propos
+partner.detail.tab_expertise|Expertise
+partner.detail.tab_projects|Projets
+partner.detail.tab_gallery|Galerie
+partner.detail.tab_news|Actualités
+partner.detail.tab_contact|Contact
+partner.detail.who_we_are|Qui sommes-nous ?
+partner.detail.our_mission|Notre Mission
+partner.detail.our_vision|Notre Vision
+partner.detail.our_values|Nos Valeurs
+partner.detail.certifications|Certifications
+partner.detail.awards|Récompenses
+partner.detail.testimonials_title|Ce que disent Nos Partenaires
+partner.detail.contributions_title|Contributions au Salon SIB 2026
+partner.detail.about_title|À propos de {{name}}
+partner.detail.our_history|Notre Histoire
+partner.detail.founded_in|Fondé en {{year}}
+partner.detail.clients_title|Ils nous font confiance
+partner.detail.expertise_title|Nos Domaines d\
+partner.detail.projects_title|Nos Projets
+partner.detail.gallery_title|Galerie Photos
+partner.detail.news_title|Dernières Actualités
+partner.detail.read_more|Lire plus
+partner.detail.view_details|Voir les détails
+partner.detail.contact_info_title|Informations de Contact
+partner.detail.contact_coordinates|Coordonnées
+partner.detail.contact_sib|Contact SIB
+partner.detail.send_message|Envoyer un message
+partner.detail.close|Fermer
+partner.detail.share|Partager
+partner.detail.certif_accred|Certifications & Accréditations
+partner.detail.expertise_title2|Domaines d\
+partner.detail.project_progress|Avancement
+partner.detail.project_satisfaction|Satisfaction
+partner.detail.project_roi|ROI
+partner.detail.contact_title|Nous Contacter
+partner.detail.presentation_discover|Découvrez {{name}}
+partner.detail.presentation_video|Vidéo de présentation
+partner.detail.validation_warning|⚠️ Fiche en cours de validation - Ce profil n\
+partner.detail.link_copied|Lien copié dans le presse-papiers !
+partner.detail.copy_error|Impossible de copier le lien
+partner.detail.status.completed|Terminé
+partner.detail.status.active|En cours
+partner.detail.status.planned|Planifié
+partners.page.badge|Sponsors & Sponsors
+partners.page.tier_all|Tous les niveaux
+partners.page.country_label|Pays
+partners.page.all_countries|Tous les pays
+partners.page.displayed_count|{{shown}} affichés sur {{total}} sponsors
+partners.page.load_more|Charger plus
+partners.page.loading|Chargement...
+partners.page.organizers|Organisateurs
+partners.page.co_organizers|Co-organisateurs
+partners.page.official_sponsors|Partenaire Officiel
+partners.page.delegated_organizers|Organisateur Délégué
+partners.page.delegated_organizers_short|Org. Délégué
+partners.page.partners_section|Nos Partenaires
+partners.page.press_partners|Nos Partenaires Presse
+partners.page.press|Presse
+partners.page.total|Total
+partners.page.filters_btn|Filtres
+partners.page.tier_level|Niveau sponsor
+partners.page.partner_singular|sponsor
+partners.page.partner_plural|sponsors
+exhibitors.page.sector_construction|Exploitation Bâtiment
+exhibitors.page.sector_regulation|Régulation Bâtiment
+exhibitors.page.sector_logistics|Hub Logistique
+exhibitors.page.country_placeholder|Ex: Casablanca
+exhibitors.page.displayed_count|{{shown}} affichés sur {{total}} exposants
+exhibitors.page.load_more|Charger plus
+exhibitors.page.loading|Chargement...
+admin.pub_hidden|Pub Hidden
+admin.push_calculating|Push Calculating
+admin.push_compose|Push Compose
+admin.push_devices_targeted|Push Devices Targeted
+admin.push_history|Push History
+admin.push_now|Push Now
+admin.push_recipients|Push Recipients
+admin.push_sending|Push Sending
+admin.visa_dob|Visa Dob
+admin.visa_nationality|Visa Nationality
+admin.visa_organization|Visa Organization
+admin.zones_icon_click|Zones Icon Click
+admin.zones_modified|Zones Modified
+analytics.chart_devis|Chart Devis
+analytics.chart_leads|Chart Leads
+analytics.chart_rdv|Chart Rdv
+analytics.conversion_funnel|Conversion Funnel
+analytics.conversion_pct|Conversion Pct
+analytics.cost_per_lead|Cost Per Lead
+analytics.deals_converted|Deals Converted
+analytics.deals_generated|Deals Generated
+analytics.devis_requests|Devis Requests
+analytics.estimated_revenue|Estimated Revenue
+analytics.funnel_deals|Funnel Deals
+analytics.investment|Investment
+analytics.leads_by_sector|Leads By Sector
+analytics.leads_generated|Leads Generated
+analytics.leads_qualified|Leads Qualified
+analytics.metric_connections|Metric Connections
+analytics.monthly_evolution|Monthly Evolution
+analytics.period_1y|Period 1y
+analytics.period_30d|Period 30d
+analytics.period_7d|Period 7d
+analytics.period_90d|Period 90d
+analytics.qualification_pct|Qualification Pct
+analytics.roi_positive|Roi Positive
+analytics.roi_ratio|Roi Ratio
+catalog.advanced_filters|Advanced Filters
+catalog.cat_finitions|Cat Finitions
+catalog.cat_gros_oeuvre|Cat Gros Oeuvre
+catalog.cat_innovation|Cat Innovation
+catalog.cat_materiaux|Cat Materiaux
+catalog.cat_mep_cvc|Cat Mep Cvc
+catalog.clear|Clear
+catalog.construction_phases|Construction Phases
+catalog.featured|Featured
+catalog.pdf_sheet|Pdf Sheet
+catalog.regions_covered|Regions Covered
+catalog.sheet|Sheet
+catalog.technical_specs|Technical Specs
+chat.typing|Typing
+chatbot.qr_custom_program|QR Custom Program
+chatbot.qr_discover|QR Discover
+chatbot.qr_impact|QR Impact
+chatbot.qr_manage_rdv|QR Manage Rdv
+chatbot.qr_my_rdv|QR My Rdv
+chatbot.qr_nav|QR Nav
+chatbot.qr_optimize|QR Optimize
+chatbot.qr_program|QR Program
+chatbot.qr_rdv_system|QR Rdv System
+chatbot.qr_recommendations|QR Recommendations
+chatbot.qr_roi|QR Roi
+chatbot.qr_see_program|QR See Program
+chatbot.qr_sponsored|QR Sponsored
+chatbot.sugg_favorites|Sugg Favorites
+chatbot.sugg_favorites_desc|Sugg Favorites Desc
+chatbot.sugg_full_program|Sugg Full Program
+chatbot.sugg_full_program_desc|Sugg Full Program Desc
+chatbot.sugg_manage_planning|Sugg Manage Planning
+chatbot.sugg_manage_rdv_desc|Sugg Manage Rdv Desc
+chatbot.sugg_my_agenda|Sugg My Agenda
+chatbot.sugg_my_agenda_desc|Sugg My Agenda Desc
+chatbot.sugg_my_rdv|Sugg My Rdv
+chatbot.sugg_my_rdv_short|Sugg My Rdv Short
+chatbot.sugg_personal_agenda|Sugg Personal Agenda
+chatbot.sugg_rdv_programmed|Sugg Rdv Programmed
+chatbot.sugg_recommendations_short|Sugg Recommendations Short
+chatbot.sugg_roi_detail|Sugg Roi Detail
+chatbot.sugg_roi_detail_desc|Sugg Roi Detail Desc
+chatbot.sugg_roi_return|Sugg Roi Return
+chatbot.sugg_roi_short|Sugg Roi Short
+chatbot.sugg_validation|Sugg Validation
+chatbot.sugg_validation_desc|Sugg Validation Desc
+chatbot.typing_indicator|Typing Indicator
+checkin.present|Present
+checkin.starting_scanner|Starting Scanner
+checkin.verifying|Verifying
+checkout.cmi_desc|Cmi Desc
+checkout.exchange_rate|Exchange Rate
+checkout.ordered_items|Ordered Items
+checkout.paypal_desc|Paypal Desc
+checkout.subtotal_ht|Subtotal Ht
+checkout.tva|Tva
+common.accept|Accept
+common.archived|Archived
+common.change|Change
+common.dates|Dates
+common.draft|Draft
+common.entry|Entry
+common.in_progress|In Progress
+common.past|Past
+common.upcoming|Upcoming
+event_form.featured|Featured
+event_form.restricted_desc|Restricted Desc
+event_form.sp_bio|Sp Bio
+event_form.sp_expertise|Sp Expertise
+hallmap.available|Available
+hallmap.corridor_eo|Corridor Eo
+hallmap.corridor_ns|Corridor Ns
+hallmap.entrance|Entrance
+hallmap.sector_breakdown|Sector Breakdown
+hallmap.stands_occupied|Stands Occupied
+hallmap.surface|Surface
+hallmap.venue|Venue
+invitation.letter_lang|Letter Lang
+invitation.my_requests|My Requests
+invitation.nationality|Nationality
+invitation.position|Position
+invitation.sending|Sending
+media_signup.submitted_toast|Submitted Toast
+metrics.eng_connections|Eng Connections
+metrics.pav_academic|Pav Academic
+metrics.pav_industry|Pav Industry
+metrics.pav_institutional|Pav Institutional
+metrics.pav_museum|Pav Museum
+metrics.pav_performance|Pav Performance
+metrics.perf_average|Perf Average
+metrics.perf_excellent|Perf Excellent
+metrics.perf_good|Perf Good
+metrics.perf_low|Perf Low
+metrics.restricted_desc|Restricted Desc
+metrics.target_reached|Target Reached
+minisite.full_editor|Full Editor
+moderation.approving|Approving
+moderation.changes_header|Changes Header
+moderation.err_rejection|Err Rejection
+moderation.priority_high|Priority High
+moderation.priority_low|Priority Low
+moderation.priority_medium|Priority Medium
+nav.my_ebadge|My Ebadge
+nav.my_ebadge_qr|My Ebadge QR
+nav.salons|Salons
+nav.standard|Standard
+news_form.featured_checkbox|Featured Checkbox
+news_form.keywords_header|Keywords Header
+news_form.publishing|Publishing
+pages.podcasts.description|Podcasts.description
+pages.podcasts.title|Podcasts.title
+pages.testimonials.description|Testimonials.description
+pages.testimonials.title|Testimonials.title
+partner.countdown_days|Countdown Days
+partner.countdown_hours|Countdown Hours
+partner.countdown_minutes|Countdown Minutes
+partner.countdown_seconds|Countdown Seconds
+partner.faq_a1|Faq A1
+partner.faq_a2|Faq A2
+partner.faq_a3|Faq A3
+partner.faq_a4|Faq A4
+partner.faq_q1|Faq Q1
+partner.faq_q2|Faq Q2
+partner.faq_q3|Faq Q3
+partner.faq_q4|Faq Q4
+partner.hero_discover|Hero Discover
+partner.pricing_collapse|Pricing Collapse
+partner.pricing_included|Pricing Included
+partner.pricing_popular|Pricing Popular
+press.received_desc|Received Desc
+press.submitting|Submitting
+products.toast_added|Toast Added
+register.chars|Chars
+register.checking|Checking
+register.custom_position|Custom Position
+register.custom_sector|Custom Sector
+register.describe_self|Describe Self
+register.linkedin|LinkedIn
+register.min_50|Min 50
+register.objectives_heading|Objectives Heading
+register.objectives_subheading|Objectives Subheading
+register.org_desc|Org Desc
+register.prev|Prev
+register.pwd_digit|Pwd Digit
+register.pwd_lowercase|Pwd Lowercase
+register.pwd_min_chars|Pwd Min Chars
+register.pwd_requirements|Pwd Requirements
+register.pwd_special|Pwd Special
+register.pwd_uppercase|Pwd Uppercase
+register.redirecting|Redirecting
+register.step1_desc|Step1 Desc
+register.step1_heading|Step1 Heading
+register.step1_subheading|Step1 Subheading
+register.step2_desc|Step2 Desc
+register.step2_heading|Step2 Heading
+register.step2_subheading|Step2 Subheading
+register.step3_desc|Step3 Desc
+register.step3_heading|Step3 Heading
+register.step3_subheading|Step3 Subheading
+register.step4_desc|Step4 Desc
+register.step4_heading|Step4 Heading
+register.step4_subheading|Step4 Subheading
+register.step5_desc|Step5 Desc
+register.step5_heading|Step5 Heading
+register.step5_subheading|Step5 Subheading
+register.strength_excellent|Strength Excellent
+register.strength_good|Strength Good
+register.strength_medium|Strength Medium
+register.strength_weak|Strength Weak
+register.validation_desc|Validation Desc
+rental.my_orders|My Orders
+rentalSuccess.thanks_cmi_post|Thanks Cmi Post
+rentalSuccess.thanks_cmi_pre|Thanks Cmi Pre
+rentalSuccess.thanks_paypal_post|Thanks Paypal Post
+rentalSuccess.thanks_paypal_pre|Thanks Paypal Pre
+salon.dates_tbc|Dates Tbc
+salon.discover_companies|Discover Companies
+salon.explore|Explore
+salon.institutional_sponsors|Institutional Sponsors
+salon.past_edition|Past Edition
+salon.programme_desc|Programme Desc
+salon.tbc|Tbc
+satisfaction.axes|Axes
+satisfaction.connections|Connections
+satisfaction.priority_high|Priority High
+satisfaction.priority_low|Priority Low
+satisfaction.priority_medium|Priority Medium
+satisfaction.program|Program
+satisfaction.testimonials|Testimonials
+satisfaction.verified_sponsors|Verified Sponsors
+scans.exported|Exported
+scans.lines_exported|Lines Exported
+scans.unknown|Unknown
+scans.vip|Vip
+scans.you|You
+session_reg.csv_header|Csv Header
+session_reg.stat_present|Stat Present
+session_reg.stat_rate|Stat Rate
+team.print_action|Print Action
+team.print_badges|Print Badges
+transfer.sending|Sending
+visitor.sector.materials|Sector.materials
+visitor.sector.paint|Sector.paint
+visitor.sector.realestate|Sector.realestate
+visitor.sector.tiles|Sector.tiles
+visitor.sector.woodwork|Sector.woodwork
+visitor_settings.business_sector|Business Sector
+visitor_settings.include_recommendations|Include Recommendations
+visitor_settings.individual|Individual
+visitor_settings.my_quotas_desc|My Quotas Desc
+visitor_settings.nav_interests|Nav Interests
+visitor_settings.nav_privacy|Nav Privacy
+visitor_settings.nav_quotas|Nav Quotas
+visitor_settings.notif_inapp|Notif Inapp
+visitor_settings.notif_inapp_desc|Notif Inapp Desc
+visitor_settings.notif_push|Notif Push
+visitor_settings.notif_push_desc|Notif Push Desc
+visitor_settings.quota_b2b|Quota B2b
+visitor_settings.rgpd_desc|Rgpd Desc
+visitor_settings.upgrade_desc|Upgrade Desc
+visitor_settings.visibility_connections|Visibility Connections

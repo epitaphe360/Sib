@@ -179,7 +179,6 @@ export default function PaymentValidationPage() {
         throw queryError;
       }
 
-      console.log('Payment requests trouvées:', paymentsData?.length || 0);
 
       // Si on a des paiements, récupérer les infos utilisateurs séparément
       let enrichedData: PaymentRequest[] = [];
@@ -195,7 +194,6 @@ export default function PaymentValidationPage() {
           .in('id', userIds);
 
         if (usersError) {
-          console.warn('Erreur chargement utilisateurs:', usersError);
         }
 
         // Créer un map des utilisateurs
@@ -243,7 +241,6 @@ export default function PaymentValidationPage() {
 
       if (rpcError) {
         // Si la RPC n'existe pas, faire une mise à jour directe
-        console.warn('RPC approve_payment_request non disponible, mise à jour directe');
 
         const { error: updateError } = await supabase
           .from('payment_requests')
@@ -297,7 +294,6 @@ export default function PaymentValidationPage() {
       });
 
       if (rpcError) {
-        console.warn('RPC reject_payment_request non disponible, mise à jour directe');
 
         const { error: updateError } = await supabase
           .from('payment_requests')

@@ -260,7 +260,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     const { user } = useAuthStore.getState();
     if (!user) {
       set({ error: 'User not authenticated.', isLoading: false });
-      console.log('❌ No user authenticated');
       return;
     }
     set({ isLoading: true, error: null });
@@ -277,7 +276,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
   },
 
   generateRecommendations: async (userId: string) => {
-    console.log('🎯 generateRecommendations called for userId:', userId);
     set({ isLoading: true, error: null });
     try {
       await get().fetchRecommendations();
@@ -429,7 +427,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
         navigateFn(`/messages?userId=${userId}`);
       } else {
         // Pas de fallback window.location.href — le appelant doit toujours fournir navigateFn
-        console.warn('[networkingStore] handleMessage appelé sans navigateFn, navigation ignorée');
       }
     } else {
       toast.success(`💬 Message envoyé à ${userName} de ${company}.`);

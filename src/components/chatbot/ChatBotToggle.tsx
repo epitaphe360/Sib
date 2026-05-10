@@ -21,7 +21,6 @@ export const ChatBotToggle: React.FC<ChatBotToggleProps> = ({
     >
       <button
         onClick={() => {
-          console.log('🤖 ChatBot button clicked'); // Debug log
           onClick();
         }}
         onMouseEnter={() => setIsHovered(true)}

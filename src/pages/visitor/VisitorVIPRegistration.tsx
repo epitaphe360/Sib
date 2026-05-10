@@ -113,24 +113,19 @@ export default function VisitorVIPRegistration() {
   };
 
   const onSubmit = async (data: VIPVisitorForm) => {
-    console.log('?? onSubmit APPELÉ avec données:', JSON.stringify(data, null, 2));
     setIsSubmitting(true);
 
     try {
       const fullName = `${data.firstName} ${data.lastName}`.trim();
-      console.log('?? Full name:', fullName);
 
       // 1. Upload photo to Supabase Storage (OPTIONNEL - ne bloque pas)
       let photoUrl = '';
       if (photoFile) {
-        console.log('?? Upload photo en cours...');
-        console.log('   ?? Fichier:', photoFile.name, 'Taille:', photoFile.size);
         try {
           const fileExt = photoFile.name.split('.').pop() || 'jpg';
           const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
           const filePath = `${fileName}`;
 
-          console.log('   ?? Upload vers visitor-photos/', filePath);
           const { error: uploadError, data: uploadData } = await supabase.storage
             .from('visitor-photos')
             .upload(filePath, photoFile, {
@@ -139,27 +134,20 @@ export default function VisitorVIPRegistration() {
             });
 
           if (uploadError) {
-            console.warn('?? Photo upload échoué (non bloquant):', uploadError);
-            console.warn('   Code:', uploadError.message);
             toast.warning('Photo non uploadée (non bloquant)');
           } else {
-            console.log('   ? Upload réussi:', uploadData);
             const { data: urlData } = supabase.storage
               .from('visitor-photos')
               .getPublicUrl(filePath);
             photoUrl = urlData.publicUrl;
-            console.log('? Photo uploadée:', photoUrl);
           }
         } catch (photoErr) {
-          console.warn('?? Erreur photo (non bloquant):', photoErr);
           toast.warning('Photo non uploadée (non bloquant)');
         }
       } else {
-        console.log('?? Pas de photo sélectionnée');
       }
 
       // 2. Vérification préalable : L'email existe-t-il déjà ?
-      console.log('?? [VIP INSCRIPTION] Vérification si email existe déjà...');
       const emailToCheck = data.email.toLowerCase().trim();
 
       const { data: existingUser, error: checkError } = await supabase
@@ -176,7 +164,6 @@ export default function VisitorVIPRegistration() {
       }
 
       if (existingUser) {
-        console.warn('?? [VIP INSCRIPTION] Email déjà existant:', existingUser);
         let accountType = 'visiteur';
         if (existingUser.type === 'exhibitor') {
           accountType = 'exposant';
@@ -200,16 +187,11 @@ export default function VisitorVIPRegistration() {
         return;
       }
 
-      console.log('? [VIP INSCRIPTION] Email disponible');
 
       // 3. Auth: Check if logged in or need to sign up
       let userId = currentUser?.id;
 
       if (!userId) {
-        console.log('?? Création compte auth...');
-        console.log('   ?? Email:', data.email);
-        console.log('   ?? Password length:', data.password.length);
-        console.log('   ?? Name:', fullName);
 
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email: data.email,
@@ -243,13 +225,10 @@ export default function VisitorVIPRegistration() {
           throw new Error('Échec création utilisateur');
         }
         userId = authData.user.id;
-        console.log('? Auth user créé:', userId);
       } else {
-        console.log('? Utilisateur déjà connecté, on passe la création Auth:', userId);
       }
 
       // 4. Update or Create user profile
-      console.log('?? Mise à jour profil utilisateur...');
       const { error: userError } = await supabase
         .from('users')
         .upsert([{
@@ -277,7 +256,6 @@ export default function VisitorVIPRegistration() {
         console.error('? Erreur profil (UPSERT):', userError);
         throw userError;
       }
-      console.log('? Profil utilisateur synchronisé');
 
       // 5. CRITICAL: Update local auth store
       const localUser = {
@@ -331,18 +309,14 @@ export default function VisitorVIPRegistration() {
           .single();
 
         if (paymentError) {
-          console.warn('?? Erreur payment_request (non bloquant):', paymentError);
         } else {
           paymentRequestId = prData?.id || null;
-          console.log('? Payment request créé:', paymentRequestId);
         }
       } catch (e) {
-        console.warn('?? Erreur payment_request (non bloquant):', e);
       }
 
       // 7. Send email via Node.js server (SMTP - non bloquant)
       try {
-        console.log('?? [VIP] Envoi email de bienvenue...');
         const emailController = new AbortController();
         const emailTimeout = setTimeout(() => emailController.abort(), 5000);
 
@@ -361,16 +335,12 @@ export default function VisitorVIPRegistration() {
         clearTimeout(emailTimeout);
         const emailResult = await emailResponse.json();
         if (emailResult.success) {
-          console.log('? Email VIP envoyé:', emailResult.messageId);
         } else {
-          console.warn('?? Email non envoyé:', emailResult.error);
         }
       } catch (e) {
-        console.warn('?? Erreur email (non bloquant):', e);
       }
 
       // 8. Success - Redirect DIRECTLY to bank transfer page (skip VisitorPaymentPage)
-      console.log('? [VIP] SUCCÈS COMPLET - Redirection vers coordonnées bancaires...');
       toast.success('Compte créé ! Redirection vers les instructions de paiement...');
 
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -379,7 +349,6 @@ export default function VisitorVIPRegistration() {
         ? `/visitor/bank-transfer?request_id=${paymentRequestId}`
         : ROUTES.VISITOR_PAYMENT;
 
-      console.log('?? Navigation vers', bankTransferUrl);
       navigate(bankTransferUrl, { replace: true });
 
     } catch (error: any) {

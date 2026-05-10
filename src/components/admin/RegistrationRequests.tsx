@@ -75,7 +75,6 @@ export default function RegistrationRequests() {
         });
         toast.success(`Demande approuvée et email envoyé à ${request.first_name} ${request.last_name}`);
       } catch (emailError) {
-        console.warn('⚠️ Email non envoyé:', emailError);
         toast.success(`Demande approuvée pour ${request.first_name} ${request.last_name} (email non envoyé)`);
       }
 
@@ -113,7 +112,6 @@ export default function RegistrationRequests() {
         });
         toast.success(`Demande rejetée et email envoyé à ${request.first_name} ${request.last_name}`);
       } catch (emailError) {
-        console.warn('⚠️ Email non envoyé:', emailError);
         toast.success(`Demande rejetée pour ${request.first_name} ${request.last_name} (email non envoyé)`);
       }
 

@@ -150,7 +150,6 @@ class AIScrapperService {
     this.apiKey = this.allowClientAI ? (import.meta.env.VITE_OPENAI_API_KEY || '') : '';
 
     if (!this.allowClientAI) {
-      console.warn('⚠️ AI scrapper client direct is disabled. Use Edge Function scrape-and-create-minisite.');
       return;
     }
 
@@ -770,7 +769,6 @@ Cherche dans le HTML:
 
       return initialData;
     } catch (error) {
-      console.warn('Erreur lors de l\'amélioration des données:', error);
       return initialData;
     }
   }

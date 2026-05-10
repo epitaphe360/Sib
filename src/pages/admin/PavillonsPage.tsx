@@ -246,7 +246,6 @@ export default function PavillonsPage() {
         break;
 
       default:
-        console.log(`Action ${action} for pavilion ${pavilionId}`);
     }
   };
 
@@ -268,7 +267,6 @@ export default function PavillonsPage() {
         break;
 
       default:
-        console.log(`Action ${action} for demo ${demoId}`);
     }
   };
 

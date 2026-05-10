@@ -73,10 +73,6 @@ export class RoleVerificationService {
       const rolesMatch = data.type === expectedRole;
 
       if (!rolesMatch) {
-        console.warn(
-          `[RoleVerification] SECURITY ALERT: Role mismatch detected!`,
-          `User ${userId} claims role "${expectedRole}" but database shows "${data.type}"`
-        );
       }
 
       // Allow active users OR pending_payment users if explicitly allowed

@@ -48,15 +48,27 @@ export default function ProfilePage() {
     const loadStats = async () => {
       if (!user?.id || !isSupabaseReady() || !supabase) {return;}
       try {
+        // Résoudre l'exhibitor_id pour les utilisateurs de type exhibiteur
+        const exhibitorRes = await supabase
+          .from('exhibitors')
+          .select('id')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        const exhibitorId = exhibitorRes.data?.id;
+
+        const appointmentsFilter = exhibitorId
+          ? `visitor_id.eq.${user.id},exhibitor_id.eq.${exhibitorId}`
+          : `visitor_id.eq.${user.id}`;
+
         const [connectionsRes, appointmentsRes, messagesRes] = await Promise.all([
           supabase
             .from('connections')
             .select('id', { count: 'exact', head: true })
-            .or(`user_id.eq.${user.id},connected_user_id.eq.${user.id}`),
+            .or(`requester_id.eq.${user.id},addressee_id.eq.${user.id}`),
           supabase
             .from('appointments')
             .select('id', { count: 'exact', head: true })
-            .or(`visitor_id.eq.${user.id},exhibitor_id.eq.${user.id}`),
+            .or(appointmentsFilter),
           supabase
             .from('messages')
             .select('id', { count: 'exact', head: true })

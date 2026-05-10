@@ -191,7 +191,6 @@ export class SpeedNetworkingService {
     });
 
     // Here you would send actual notifications (email, push, etc.)
-    console.log('Notifications sent to', schedules.size, 'participants');
   }
 
   /**

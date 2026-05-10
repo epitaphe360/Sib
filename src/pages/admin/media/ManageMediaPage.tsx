@@ -340,7 +340,7 @@ export const ManageMediaPage: React.FC = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => navigate(`/media/${item.type}/${item.id}`)}
+                        onClick={() => navigate(ROUTES.MEDIA_DETAIL.replace(':id', item.id))}
                         title={t('common.view')}
                       >
                         <Eye className="h-4 w-4" />

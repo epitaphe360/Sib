@@ -6,7 +6,6 @@ try {
     import('@sentry/react').then(module => {
       Sentry = module;
     }).catch(() => {
-      console.warn('Sentry not available - logging will continue without it');
     });
   }
 } catch {
@@ -43,7 +42,6 @@ class Logger {
       }[level];
 
       const logMessage = `[${timestamp}] ${level.toUpperCase()}: ${message}`;
-      console.log(`%c${logMessage}`, `color: ${color}`, context || '');
     }
 
     // Send to Sentry in production (if available)

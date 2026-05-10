@@ -60,7 +60,6 @@ export class AiAgentService {
         };
 
       } catch (error) {
-        console.warn(`⚠️ Échec avec ${agentUrl}:`, error);
         lastError = error as Error;
         continue; // Essayer l'URL suivante
       }

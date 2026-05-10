@@ -141,11 +141,11 @@ export default function PartnersPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
-        return <Badge variant="success">Actif</Badge>;
+        return <Badge variant="success">{t('admin_partners.actif', 'Actif')}</Badge>;
       case 'inactive':
-        return <Badge variant="error">Inactif</Badge>;
+        return <Badge variant="error">{t('admin_partners.inactif', 'Inactif')}</Badge>;
       case 'pending':
-        return <Badge variant="warning">En attente</Badge>;
+        return <Badge variant="warning">{t('admin_partners.en_attente', 'En attente')}</Badge>;
       default:
         return <Badge variant="info">{status}</Badge>;
     }
@@ -193,7 +193,7 @@ export default function PartnersPage() {
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Gestion des Sponsors</h1>
+              <h1 className="text-3xl font-bold text-gray-900">{t('admin_partners.gestion_des_sponsors', 'Gestion des Sponsors')}</h1>
               <p className="text-gray-600 mt-2">
                 Administration complète des sponsors et sponsors SIB
               </p>
@@ -213,7 +213,7 @@ export default function PartnersPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Sponsors</p>
+                  <p className="text-sm font-medium text-gray-600">{t('admin_partners.total_sponsors', 'Total Sponsors')}</p>
                   <p className="text-3xl font-bold text-gray-900">{partners.length}</p>
                 </div>
                 <Crown className="h-8 w-8 text-blue-600" />
@@ -225,7 +225,7 @@ export default function PartnersPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Actifs</p>
+                  <p className="text-sm font-medium text-gray-600">{t('admin_partners.actifs', 'Actifs')}</p>
                   <p className="text-3xl font-bold text-green-600">
                     {partners.filter(p => p.status === 'active').length}
                   </p>
@@ -239,7 +239,7 @@ export default function PartnersPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Sponsors Officiels</p>
+                  <p className="text-sm font-medium text-gray-600">{t('admin_partners.sponsors_officiels', 'Sponsors Officiels')}</p>
                   <p className="text-3xl font-bold text-yellow-600">
                     {partners.filter(p => ['official_sponsor', 'organizer'].includes(p.partner_type)).length}
                   </p>
@@ -253,7 +253,7 @@ export default function PartnersPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Valeur Totale</p>
+                  <p className="text-sm font-medium text-gray-600">{t('admin_partners.valeur_totale', 'Valeur Totale')}</p>
                   <p className="text-2xl font-bold text-indigo-600">
                     {formatContractValue(partners.reduce((sum, p) => sum + p.contract_value, 0))}
                   </p>
@@ -267,7 +267,7 @@ export default function PartnersPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">En Attente</p>
+                  <p className="text-sm font-medium text-gray-600">{t('admin_partners.en_attente_1', 'En Attente')}</p>
                   <p className="text-3xl font-bold text-orange-600">
                     {partners.filter(p => p.status === 'pending').length}
                   </p>
@@ -305,13 +305,13 @@ export default function PartnersPage() {
                     onChange={(e) => updateFilter('partner_type', e.target.value)}
                     className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
                   >
-                    <option value="">Tous les types</option>
-                    <option value="organizer">Organisateur</option>
-                    <option value="co_organizer">Co-Organisateur</option>
-                    <option value="official_sponsor">Partenaire Officiel</option>
-                    <option value="delegated_organizer">Org. Délégué</option>
-                    <option value="partner">Sponsor</option>
-                    <option value="press_partner">Partenaire Presse</option>
+                    <option value="">{t('admin_partners.tous_les_types', 'Tous les types')}</option>
+                    <option value="organizer">{t('admin_partners.organisateur', 'Organisateur')}</option>
+                    <option value="co_organizer">{t('admin_partners.coorganisateur', 'Co-Organisateur')}</option>
+                    <option value="official_sponsor">{t('admin_partners.partenaire_officiel', 'Partenaire Officiel')}</option>
+                    <option value="delegated_organizer">{t('admin_partners.org_delegue', 'Org. Délégué')}</option>
+                    <option value="partner">{t('admin_partners.sponsor', 'Sponsor')}</option>
+                    <option value="press_partner">{t('admin_partners.partenaire_presse', 'Partenaire Presse')}</option>
                   </select>
                 </div>
               </div>
@@ -325,10 +325,10 @@ export default function PartnersPage() {
                     onChange={(e) => updateFilter('status', e.target.value)}
                     className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
                   >
-                    <option value="">Tous les statuts</option>
-                    <option value="active">Actif</option>
-                    <option value="inactive">Inactif</option>
-                    <option value="pending">En attente</option>
+                    <option value="">{t('admin_partners.tous_les_statuts', 'Tous les statuts')}</option>
+                    <option value="active">{t('admin_partners.actif', 'Actif')}</option>
+                    <option value="inactive">{t('admin_partners.inactif', 'Inactif')}</option>
+                    <option value="pending">{t('admin_partners.en_attente', 'En attente')}</option>
                   </select>
                 </div>
               </div>
@@ -356,13 +356,13 @@ export default function PartnersPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Organisation</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Type</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Secteur</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Pays</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Valeur Contrat</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Statut</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Actions</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">{t('admin_partners.organisation', 'Organisation')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">{t('admin_partners.type', 'Type')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">{t('admin_partners.secteur', 'Secteur')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">{t('admin_partners.pays', 'Pays')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">{t('admin_partners.valeur_contrat', 'Valeur Contrat')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">{t('admin_partners.statut', 'Statut')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">{t('admin_partners.actions', 'Actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -462,26 +462,26 @@ export default function PartnersPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-3">Informations Générales</h3>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-3">{t('admin_partners.informations_generales', 'Informations Générales')}</h3>
                     <div className="space-y-3">
                       <div className="flex items-start space-x-2">
                         <Building2 className="h-5 w-5 text-gray-400 mt-0.5" />
                         <div>
-                          <p className="text-xs text-gray-600">Secteur</p>
+                          <p className="text-xs text-gray-600">{t('admin_partners.secteur', 'Secteur')}</p>
                           <p className="text-sm font-medium text-gray-900">{selectedPartner.sector}</p>
                         </div>
                       </div>
                       <div className="flex items-start space-x-2">
                         <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
                         <div>
-                          <p className="text-xs text-gray-600">Pays</p>
+                          <p className="text-xs text-gray-600">{t('admin_partners.pays', 'Pays')}</p>
                           <p className="text-sm font-medium text-gray-900">{selectedPartner.country}</p>
                         </div>
                       </div>
                       <div className="flex items-start space-x-2">
                         <Globe className="h-5 w-5 text-gray-400 mt-0.5" />
                         <div>
-                          <p className="text-xs text-gray-600">Site Web</p>
+                          <p className="text-xs text-gray-600">{t('admin_partners.site_web', 'Site Web')}</p>
                           <a
                             href={selectedPartner.website || '#'}
                             target="_blank"
@@ -496,12 +496,12 @@ export default function PartnersPage() {
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-3">Contact Principal</h3>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-3">{t('admin_partners.contact_principal', 'Contact Principal')}</h3>
                     <div className="space-y-3">
                       <div className="flex items-start space-x-2">
                         <Users className="h-5 w-5 text-gray-400 mt-0.5" />
                         <div>
-                          <p className="text-xs text-gray-600">Nom</p>
+                          <p className="text-xs text-gray-600">{t('admin_partners.nom', 'Nom')}</p>
                           <p className="text-sm font-medium text-gray-900">{selectedPartner.contact_info.name}</p>
                           <p className="text-xs text-gray-600">{selectedPartner.contact_info.position}</p>
                         </div>
@@ -509,14 +509,14 @@ export default function PartnersPage() {
                       <div className="flex items-start space-x-2">
                         <Mail className="h-5 w-5 text-gray-400 mt-0.5" />
                         <div>
-                          <p className="text-xs text-gray-600">Email</p>
+                          <p className="text-xs text-gray-600">{t('admin_partners.email', 'Email')}</p>
                           <p className="text-sm font-medium text-gray-900">{selectedPartner.contact_info.email}</p>
                         </div>
                       </div>
                       <div className="flex items-start space-x-2">
                         <Phone className="h-5 w-5 text-gray-400 mt-0.5" />
                         <div>
-                          <p className="text-xs text-gray-600">Téléphone</p>
+                          <p className="text-xs text-gray-600">{t('admin_partners.telephone', 'Téléphone')}</p>
                           <p className="text-sm font-medium text-gray-900">{selectedPartner.contact_info.phone}</p>
                         </div>
                       </div>
@@ -525,12 +525,12 @@ export default function PartnersPage() {
                 </div>
 
                 <div className="mt-6">
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3">Description</h3>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3">{t('admin_partners.description', 'Description')}</h3>
                   <p className="text-sm text-gray-700">{selectedPartner.description}</p>
                 </div>
 
                 <div className="mt-6">
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3">Contributions</h3>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3">{t('admin_partners.contributions', 'Contributions')}</h3>
                   <div className="flex flex-wrap gap-2">
                     {selectedPartner.contributions.map((contribution) => (
                       <Badge key={contribution} variant="info">{contribution}</Badge>
@@ -541,13 +541,13 @@ export default function PartnersPage() {
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs text-gray-600">Valeur du Contrat</p>
+                      <p className="text-xs text-gray-600">{t('admin_partners.valeur_du_contrat', 'Valeur du Contrat')}</p>
                       <p className="text-lg font-bold text-green-600">
                         {formatContractValue(selectedPartner.contract_value)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-600">Date de Création</p>
+                      <p className="text-xs text-gray-600">{t('admin_partners.date_de_creation', 'Date de Création')}</p>
                       <p className="text-sm font-medium text-gray-900">
                         {formatDate(selectedPartner.created_at)}
                       </p>

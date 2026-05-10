@@ -133,7 +133,6 @@ export default function MiniSitePreviewSimple() {
         SupabaseService.getExhibitorProducts(exhibitorId)
       ]);
 
-      console.log('[MiniSite] Data:', { miniSite, exhibitor, products: prods });
 
       if (!miniSite) {
         setError('Mini-site non trouvé');
@@ -142,7 +141,6 @@ export default function MiniSitePreviewSimple() {
 
       // Si l'exposant n'est pas trouvé, créer une structure minimale pour éviter l'erreur
       if (!exhibitor) {
-        console.warn('[MiniSite] Exhibitor data missing, using fallback');
         setExhibitorData({
           id: exhibitorId!,
           company_name: 'Exposant',

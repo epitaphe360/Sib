@@ -225,7 +225,6 @@ const useAuthStore = create<AuthState>()(
             profileData: profileData
           });
         } catch (regRequestError) {
-          console.warn('⚠️ Erreur création demande inscription (non bloquante):', regRequestError);
           // Ne pas bloquer l'inscription - le compte est déjà créé
         }
 
@@ -237,7 +236,6 @@ const useAuthStore = create<AuthState>()(
             userType
           });
         } catch (emailError) {
-          console.warn('⚠️ Erreur envoi email:', emailError);
           // Ne pas bloquer l'inscription si l'email échoue
         }
       }
@@ -326,10 +324,8 @@ const useAuthStore = create<AuthState>()(
             lastName: userData.lastName,
             companyName: userData.companyName ?? ''
           });
-          console.log('✅ Email de confirmation envoyé');
         } catch (emailError) {
           // L'email a échoué mais l'inscription est valide
-          console.warn('⚠️ Impossible d\'envoyer l\'email de confirmation:', emailError);
           // Ne pas bloquer l'inscription
         }
 
@@ -427,7 +423,6 @@ const useAuthStore = create<AuthState>()(
     try {
       // Sign out from Supabase
       await supabase.auth.signOut();
-      console.log('✅ Déconnexion Supabase réussie');
     } catch (error) {
       console.error('❌ Erreur lors de la déconnexion Supabase:', error);
     }
@@ -441,7 +436,6 @@ const useAuthStore = create<AuthState>()(
       localStorage.removeItem('sib-auth-storage');
       localStorage.removeItem('sb-sbyizudifmqakzxjlndr-auth-token');
       sessionStorage.clear();
-      console.log('✅ LocalStorage et sessionStorage nettoyés');
     } catch (error) {
       console.error('❌ Erreur nettoyage storage:', error);
     }
@@ -470,8 +464,6 @@ const useAuthStore = create<AuthState>()(
     set({ isLoading: true });
 
     try {
-      console.log('🔄 Début mise à jour profil pour:', user.id);
-      console.log('📊 Données à fusionner:', Object.keys(profileData));
 
       // ✅ Fusionner les données de manière robuste — exclure les valeurs undefined
       // pour ne pas écraser des champs valides existants
@@ -483,7 +475,6 @@ const useAuthStore = create<AuthState>()(
         ...definedUpdates
       };
 
-      console.log('✅ Profil fusionné, envoi vers Supabase...');
 
       // ✅ Envoyer la mise à jour vers Supabase
       const updatedUser = await SupabaseService.updateUser(user.id, {
@@ -499,7 +490,7 @@ const useAuthStore = create<AuthState>()(
       set({ user: updatedUser, isLoading: false });
 
       // ✅ Vérifier que les données sont bien sauvegardées
-      console.log('✅ Profil mis à jour avec succès:', {
+      console.log('✅ Profil mis à jour:', {
         userId: user.id,
         sectors: updatedUser.profile.sectors?.length || 0,
         interests: updatedUser.profile.interests?.length || 0,
@@ -526,7 +517,6 @@ const useAuthStore = create<AuthState>()(
     if (lastActivity) {
       const elapsed = Date.now() - parseInt(lastActivity, 10);
       if (elapsed > SESSION_TIMEOUT_MS) {
-        console.log('[Auth] Session timeout - logging out due to inactivity');
         get().logout();
         return false;
       }
@@ -553,7 +543,6 @@ const useAuthStore = create<AuthState>()(
 
     // Set new timeout
     sessionTimeoutId = setTimeout(() => {
-      console.log('[Auth] Session expired due to inactivity');
       get().logout();
     }, SESSION_TIMEOUT_MS);
   }

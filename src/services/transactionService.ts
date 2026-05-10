@@ -341,7 +341,6 @@ export async function rollbackOperation(
 ): Promise<TransactionResult<{ message: string }>> {
   try {
     // Log the rollback event
-    console.warn(`⚠️ Transaction rollback requested for ${operationId}: ${reason}`);
 
     // In a production system, you might:
     // 1. Flag the operation for review

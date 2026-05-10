@@ -158,7 +158,6 @@ export default function MediaManager() {
       // Note: Les buckets ne peuvent pas être créés via l'API client à cause des policies RLS
       // Ils doivent être créés via les migrations SQL dans Supabase
       toast.error('Les buckets doivent être créés via SQL dans Supabase (voir migrations/)');
-      console.warn('Création de bucket désactivée - utiliser les migrations SQL à la place');
       // await StorageService.createBucketIfNotExists(newBucketName, isPublicBucket);
       setNewBucketName('');
       // fetchBuckets(); // Pas besoin car rien n'a été créé

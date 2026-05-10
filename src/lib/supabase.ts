@@ -740,7 +740,6 @@ function getSupabaseClient(): ReturnType<typeof createClient<Database>> | null {
     if (!_initAttempted) {
       _initAttempted = true;
       if (import.meta.env.DEV) {
-        console.warn('⚠️ Supabase non configuré — vérifiez votre .env');
       }
     }
     return null;

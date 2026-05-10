@@ -46,7 +46,6 @@ export class EmailService {
    */
   private static async sendViaSupabase(options: SendEmailOptions): Promise<boolean> {
     try {
-      console.log('📧 Sending email via Supabase Edge Function...', options.to);
 
       const { data, error } = await supabase.functions.invoke('send-template-email', {
         body: {
@@ -64,7 +63,6 @@ export class EmailService {
         return false;
       }
 
-      console.log('✅ Email sent successfully via Edge Function:', data);
       return true;
 
     } catch (error) {
@@ -84,7 +82,6 @@ export class EmailService {
     accountType: string
   ): Promise<boolean> {
     try {
-      console.log('📧 Sending welcome email via send-visitor-welcome-email...');
 
       // Map accountType to visitor level
       const levelMap: Record<string, string> = {
@@ -112,7 +109,6 @@ export class EmailService {
         return false;
       }
 
-      console.log('✅ Welcome email sent successfully');
       return true;
 
     } catch (error) {

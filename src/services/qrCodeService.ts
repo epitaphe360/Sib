@@ -48,10 +48,6 @@ const getJWTSecret = (): string => {
     }
     // Development only: use a deterministic fixed dev secret so scans still work
     // across hot-reloads. Never use this in production.
-    console.warn(
-      '⚠️ [DEV] VITE_JWT_SECRET not set — using insecure dev fallback. ' +
-      'Configure VITE_JWT_SECRET before deploying to production.'
-    );
     return 'dev-only-secret-do-not-use-in-production-32ch';
   }
 
@@ -63,7 +59,6 @@ const getJWTSecret = (): string => {
     if (import.meta.env.PROD) {
       throw new Error(msg);
     }
-    console.warn(msg);
   }
 
   return secret;

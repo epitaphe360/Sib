@@ -84,9 +84,7 @@ export class AdminMetricsService {
           const payload = await resp.json();
           return { ...defaultMetrics, ...payload } as AdminMetrics;
         }
-        console.warn('AdminMetricsService: metrics-server returned', resp.status);
       } catch (err) {
-        console.warn('AdminMetricsService: fetch to metrics-server failed', err);
       }
     }
 
@@ -108,7 +106,6 @@ export class AdminMetricsService {
           const res = await query;
           results[key] = (res && typeof res.count === 'number') ? res.count : undefined;
         } catch (err) {
-          console.warn(`AdminMetricsService: query ${key} failed`, err);
           results[key] = undefined;
         }
       };
@@ -187,7 +184,6 @@ export class AdminMetricsService {
             };
           }
         } catch (err) {
-          console.warn('AdminMetricsService: engagement fallback failed', err);
         }
       }
 

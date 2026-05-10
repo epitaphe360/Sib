@@ -37,7 +37,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
       setIsInitialized(true);
     } catch (error) {
-      console.warn('⚠️ Failed to initialize theme:', error);
       setIsInitialized(true);
     }
   }, []);

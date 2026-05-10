@@ -151,6 +151,9 @@ const PourquoiVisiterPage = lazyRetry(() => import('./pages/public/PourquoiVisit
 const InfosPratiquesPage = lazyRetry(() => import('./pages/public/InfosPratiquesPage'));
 const AdminPressAccreditationsPage = lazyRetry(() => import('./pages/admin/PressAccreditationsPage'));
 const AdminSpeakersPage = lazyRetry(() => import('./pages/admin/SpeakersManagementPage'));
+const SessionCheckinPage = lazyRetry(() => import('./pages/admin/SessionCheckinPage'));
+const SessionRegistrationsPage = lazyRetry(() => import('./pages/admin/SessionRegistrationsPage'));
+const AdminCredentialsPage = lazyRetry(() => import('./pages/admin/AdminCredentialsPage'));
 const HallMapPage = lazyRetry(() => import('./pages/HallMapPage'));
 const CatalogPage = lazyRetry(() => import('./pages/CatalogPage'));
 const ProductDetailPage = lazyRetry(() => import('./pages/ProductDetailPage'));
@@ -195,6 +198,13 @@ const MatchmakingDashboard = lazyRetry(() => import('./components/networking/Mat
 const LiveEventManager = lazyRetry(() => import('./pages/admin/media/LiveEventManager').then((m) => ({ default: m.LiveEventManager })));
 const ChatBot = lazyRetry(() => import('./components/chatbot/ChatBot').then((m) => ({ default: m.ChatBot })));
 const ChatBotToggle = lazyRetry(() => import('./components/chatbot/ChatBotToggle').then((m) => ({ default: m.ChatBotToggle })));
+
+// ── MODULE FACTURATION ─────────────────────────────────────────────────────
+const AdminInvoicesPage = lazyRetry(() => import('./pages/admin/AdminInvoicesPage'));
+const AdminPricingPage  = lazyRetry(() => import('./pages/admin/AdminPricingPage'));
+const ExhibitorInvoicesPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorInvoicesPage'));
+const PartnerInvoicesPage = lazyRetry(() => import('./pages/partner/PartnerInvoicesPage'));
+const VisitorInvoicesPage = lazyRetry(() => import('./pages/visitor/VisitorInvoicesPage'));
 const WhatsAppFloatingWidget = lazyRetry(() => import('./components/whatsapp/WhatsAppFloatingWidget').then((m) => ({ default: m.WhatsAppFloatingWidget })));
 const DevSubscriptionSwitcher = lazyRetry(() => import('./components/dev/DevSubscriptionSwitcher'));
 const SalonSelectionPage = lazyRetry(() => import('./pages/SalonSelectionPage'));
@@ -234,7 +244,6 @@ if (import.meta.env.DEV) {
     // Make available in browser console for debugging
     (window as any).cleanupAuth = cleanupAuth;
     (window as any).checkAuthStatus = checkAuthStatus;
-    console.log('🛠️ Dev tools disponibles: checkAuthStatus(), cleanupAuth()');
   });
 }
 
@@ -452,6 +461,7 @@ const App = () => {
             {/* ── SIB 2026 Nouveaux Modules ─────────────────────────────── */}            {/* Impression badges — accessible depuis session auth active */}
             <Route path={ROUTES.TEAM_BADGES_PRINT} element={<TeamBadgesPrintPage />} />            {/* Exposant */}
             <Route path={ROUTES.EXHIBITOR_TEAM} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorTeamPage /></ProtectedRoute>} />
+            <Route path={ROUTES.INVITATION_LETTER} element={<ProtectedRoute requiredRole="visitor"><InvitationLetterPage userType="visitor" /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_INVITATION_LETTER} element={<ProtectedRoute requiredRole="exhibitor"><InvitationLetterPage userType="exhibitor" /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_RENTAL} element={<ProtectedRoute requiredRole="exhibitor"><RentalCatalogPage userType="exhibitor" /></ProtectedRoute>} />
             {/* Sponsor / Sponsor */}
@@ -465,6 +475,13 @@ const App = () => {
             <Route path={ROUTES.ADMIN_INVITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminInvitationsPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_RENTAL} element={<ProtectedRoute requiredRole="admin"><AdminRentalPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_STAND_COLLABORATORS} element={<ProtectedRoute requiredRole="admin"><AdminStandCollaboratorsPage /></ProtectedRoute>} />
+
+            {/* MODULE FACTURATION */}
+            <Route path={ROUTES.ADMIN_INVOICES}     element={<ProtectedRoute requiredRole="admin"><AdminInvoicesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_PRICING}      element={<ProtectedRoute requiredRole="admin"><AdminPricingPage  /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_INVOICES} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorInvoicesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_INVOICES}   element={<ProtectedRoute requiredRole="partner"><PartnerInvoicesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.VISITOR_INVOICES}   element={<ProtectedRoute requiredRole="visitor"><VisitorInvoicesPage /></ProtectedRoute>} />
 
             {/* Catalogue location public */}
             <Route path={ROUTES.RENTAL_CATALOG} element={<RentalCatalogPage />} />
@@ -536,6 +553,9 @@ const App = () => {
             <Route path={ROUTES.NETWORKING_MATCHMAKING} element={<ProtectedRoute><MatchmakingDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_SPEAKERS} element={<ProtectedRoute requiredRole="admin"><AdminSpeakersPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PRESS_ACCREDITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminPressAccreditationsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SESSION_CHECKIN} element={<ProtectedRoute requiredRole="admin"><SessionCheckinPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SESSION_REGISTRATIONS} element={<ProtectedRoute requiredRole="admin"><SessionRegistrationsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_CREDENTIALS} element={<ProtectedRoute requiredRole="admin"><AdminCredentialsPage /></ProtectedRoute>} />
             <Route path={ROUTES.NOT_FOUND} element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
               <p className="text-xl text-gray-600 mb-8">Page non trouvée</p>

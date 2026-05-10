@@ -90,10 +90,8 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      'react': path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
-    dedupe: ['react', 'react-dom'],
+    dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'use-sync-external-store', 'use-sync-external-store/shim/with-selector', 'zustand'],
   },
   build: {
     rollupOptions: {
@@ -121,6 +119,9 @@ export default defineConfig(({ mode }) => ({
           'pdf-vendor': ['jspdf', 'jspdf-autotable'],
           'qr-vendor': ['qrcode.react'],
           'exceljs-vendor': ['exceljs'],
+          'translations-fr': ['./src/store/translations.fr'],
+          'translations-en': ['./src/store/translations.en'],
+          'translations-ar': ['./src/store/translations.ar'],
         },
       },
     },
@@ -150,6 +151,7 @@ export default defineConfig(({ mode }) => ({
       '@supabase/supabase-js',
       'framer-motion',
       'zustand',
+      'use-sync-external-store/shim/with-selector',
       'clsx',
       'tailwind-merge',
       'react-hook-form',

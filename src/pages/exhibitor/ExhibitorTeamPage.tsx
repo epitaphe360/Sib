@@ -136,7 +136,6 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
 
       // Si la fonction Edge n'existe pas encore, on insère sans auth_user_id
       if (authError) {
-        console.warn('Edge function non disponible, insertion sans compte auth:', authError.message);
         authUserId = null;
       }
 

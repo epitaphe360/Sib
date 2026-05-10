@@ -59,7 +59,6 @@ class PushNotificationService {
    */
   async initialize() {
     if (!this.isSupported) {
-      console.warn('⚠️ Push notifications not supported on this browser');
       return false;
     }
 
@@ -74,7 +73,6 @@ class PushNotificationService {
       KNOWN_PLACEHOLDERS.includes(firebaseConfig.projectId);
 
     if (isPlaceholderKey) {
-      console.info('ℹ️ Firebase credentials not configured (local dev). Push notifications disabled.');
       return false;
     }
 
@@ -86,7 +84,6 @@ class PushNotificationService {
       // Request permission from user
       const permission = await Notification.requestPermission();
       if (permission !== 'granted') {
-        console.warn('⚠️ User denied notification permission');
         return false;
       }
 
@@ -96,7 +93,6 @@ class PushNotificationService {
       });
 
       if (token) {
-        console.log('✅ Firebase messaging token obtained:', token.substring(0, 20) + '...');
         // Register token with backend
         await this.registerToken(token);
       }
@@ -121,7 +117,6 @@ class PushNotificationService {
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session?.user) {
-        console.warn('⚠️ User not authenticated, skipping token registration');
         return;
       }
 
@@ -143,7 +138,6 @@ class PushNotificationService {
         return;
       }
 
-      console.log('✅ Device token registered in database');
     } catch (error) {
       console.error('❌ Error registering token:', error);
     }
@@ -249,7 +243,6 @@ class PushNotificationService {
         return false;
       }
 
-      console.log('✅ Notification sent successfully');
       return true;
     } catch (error) {
       console.error('❌ Error sending notification:', error);
@@ -365,7 +358,6 @@ class PushNotificationService {
    */
   async requestPermission(): Promise<boolean> {
     if (!this.isSupported) {
-      console.warn('⚠️ Push notifications not supported');
       return false;
     }
 

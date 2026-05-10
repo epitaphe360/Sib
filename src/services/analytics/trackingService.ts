@@ -102,7 +102,6 @@ class TrackingService {
 
     // Console en développement
     if (process.env.NODE_ENV === 'development') {
-      console.log('📊 Événement suivi:', event);
     }
   }
 
@@ -139,7 +138,6 @@ class TrackingService {
     }
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('📄 Vue de page:', { path, title });
     }
   }
 

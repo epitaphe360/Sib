@@ -35,7 +35,6 @@ export const LanguageSelector: React.FC = () => {
     }
 
     try {
-      console.log('🌍 Changing language to:', languageCode);
       await setLanguage(languageCode);
       setIsOpen(false);
 

@@ -52,7 +52,6 @@ async function setInIndexedDB(key: string, value: string): Promise<void> {
       transaction.onerror = () => reject(transaction.error);
     });
   } catch (error) {
-    console.warn('IndexedDB setItem failed:', error);
     throw error;
   }
 }
@@ -74,7 +73,6 @@ async function getFromIndexedDB(key: string): Promise<string | null> {
       request.onerror = () => reject(request.error);
     });
   } catch (error) {
-    console.warn('IndexedDB getItem failed:', error);
     return null;
   }
 }
@@ -94,7 +92,6 @@ async function removeFromIndexedDB(key: string): Promise<void> {
       transaction.onerror = () => reject(transaction.error);
     });
   } catch (error) {
-    console.warn('IndexedDB removeItem failed:', error);
     throw error;
   }
 }
@@ -114,7 +111,6 @@ async function clearIndexedDB(): Promise<void> {
       transaction.onerror = () => reject(transaction.error);
     });
   } catch (error) {
-    console.warn('IndexedDB clear failed:', error);
     throw error;
   }
 }
@@ -129,7 +125,6 @@ function isLocalStorageAvailable(): boolean {
     localStorage.removeItem(testKey);
     return true;
   } catch (error) {
-    console.warn('⚠️ localStorage not available (Tracking Prevention or quota exceeded)');
     return false;
   }
 }
@@ -148,7 +143,6 @@ export const secureStorage = {
         localStorage.setItem(key, value);
         return;
       } catch (error) {
-        console.warn(`⚠️ localStorage.setItem failed for ${key}, falling back to IndexedDB`, error);
       }
     }
 
@@ -173,7 +167,6 @@ export const secureStorage = {
           return value;
         }
       } catch (error) {
-        console.warn(`⚠️ localStorage.getItem failed for ${key}, falling back to IndexedDB`, error);
       }
     }
 
@@ -196,7 +189,6 @@ export const secureStorage = {
       try {
         localStorage.removeItem(key);
       } catch (error) {
-        console.warn(`⚠️ localStorage.removeItem failed for ${key}`, error);
       }
     }
 
@@ -204,7 +196,6 @@ export const secureStorage = {
     try {
       await removeFromIndexedDB(key);
     } catch (error) {
-      console.warn(`⚠️ IndexedDB.removeItem failed for ${key}`, error);
     }
   },
 
@@ -216,18 +207,14 @@ export const secureStorage = {
     if (isLocalStorageAvailable()) {
       try {
         localStorage.clear();
-        console.log('✅ [localStorage] Cleared');
       } catch (error) {
-        console.warn('⚠️ localStorage.clear failed', error);
       }
     }
 
     // Clear IndexedDB
     try {
       await clearIndexedDB();
-      console.log('✅ [IndexedDB] Cleared');
     } catch (error) {
-      console.warn('⚠️ IndexedDB.clear failed', error);
     }
   },
 
@@ -239,7 +226,6 @@ export const secureStorage = {
     try {
       return localStorage.getItem(key);
     } catch (error) {
-      console.warn(`⚠️ localStorage.getItem failed for ${key}`, error);
       return null;
     }
   },

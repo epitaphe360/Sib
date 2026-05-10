@@ -28,7 +28,6 @@ class Logger {
    */
   log(...args: any[]): void {
     if (isDevelopment) {
-      console.log(...args);
     }
   }
 
@@ -37,7 +36,6 @@ class Logger {
    */
   warn(...args: any[]): void {
     if (isDevelopment) {
-      console.warn(...args);
     }
   }
 
@@ -63,9 +61,7 @@ class Logger {
    */
   info(message: string, context?: LogContext): void {
     if (isDevelopment) {
-      console.info(message, context);
     } else {
-      console.info(message);
     }
   }
 
@@ -74,7 +70,6 @@ class Logger {
    */
   success(message: string, context?: LogContext): void {
     if (isDevelopment) {
-      console.log(`✅ ${message}`, context);
     }
   }
 

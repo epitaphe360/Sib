@@ -104,7 +104,6 @@ export class NewsScraperService {
               articles.push(article);
             }
           } catch (error) {
-            console.warn(`Error parsing article ${index}:`, error);
           }
         });
       }
@@ -223,7 +222,6 @@ export class NewsScraperService {
       };
 
     } catch (error) {
-      console.warn(`Error parsing article element:`, error);
       return null;
     }
   }

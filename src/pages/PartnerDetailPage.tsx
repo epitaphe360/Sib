@@ -1166,19 +1166,19 @@ export default function PartnerDetailPage() {
                           <div className="text-lg font-bold text-blue-600">
                             {project.kpis.progress}%
                           </div>
-                          <div className="text-xs text-gray-600">Avancement</div>
+                          <div className="text-xs text-gray-600">{t('partner_detail_page.avancement', 'Avancement')}</div>
                         </div>
                         <div className="text-center border-x border-gray-200">
                           <div className="text-lg font-bold text-green-600">
                             {project.kpis.satisfaction}%
                           </div>
-                          <div className="text-xs text-gray-600">Satisfaction</div>
+                          <div className="text-xs text-gray-600">{t('partner_detail_page.satisfaction', 'Satisfaction')}</div>
                         </div>
                         <div className="text-center">
                           <div className="text-lg font-bold text-purple-600">
                             {project.kpis.roi}%
                           </div>
-                          <div className="text-xs text-gray-600">ROI</div>
+                          <div className="text-xs text-gray-600">{t('partner_detail_page.roi', 'ROI')}</div>
                         </div>
                       </div>
 
@@ -1220,7 +1220,7 @@ export default function PartnerDetailPage() {
                         <Building2 className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Entreprise</p>
+                        <p className="text-sm text-gray-500">{t('partner_detail_page.entreprise', 'Entreprise')}</p>
                         <p className="font-medium text-gray-900">{partner.name}</p>
                       </div>
                     </div>
@@ -1230,7 +1230,7 @@ export default function PartnerDetailPage() {
                         <MapPin className="h-5 w-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Localisation</p>
+                        <p className="text-sm text-gray-500">{t('partner_detail_page.localisation', 'Localisation')}</p>
                         <p className="font-medium text-gray-900">{partner.country}</p>
                       </div>
                     </div>
@@ -1240,7 +1240,7 @@ export default function PartnerDetailPage() {
                         <Phone className="h-5 w-5 text-purple-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Téléphone</p>
+                        <p className="text-sm text-gray-500">{t('partner_detail_page.telephone', 'Téléphone')}</p>
                         <p className="font-medium text-gray-900">+212 5 22 XX XX XX</p>
                       </div>
                     </div>
@@ -1250,7 +1250,7 @@ export default function PartnerDetailPage() {
                         <Mail className="h-5 w-5 text-orange-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Email</p>
+                        <p className="text-sm text-gray-500">{t('partner_detail_page.email', 'Email')}</p>
                         <p className="font-medium text-gray-900">contact@{partner?.name?.toLowerCase().replace(/\s+/g, '') || 'contact'}.com</p>
                       </div>
                     </div>
@@ -1261,7 +1261,7 @@ export default function PartnerDetailPage() {
                           <Globe className="h-5 w-5 text-indigo-600" />
                         </div>
                         <div>
-                          <p className="text-sm text-gray-500">Site web</p>
+                          <p className="text-sm text-gray-500">{t('partner_detail_page.site_web', 'Site web')}</p>
                           <a href={partner.website} className="font-medium text-blue-600 hover:underline">
                             {partner.website}
                           </a>
@@ -1279,8 +1279,8 @@ export default function PartnerDetailPage() {
                         <Users className="h-7 w-7 text-white" />
                       </div>
                       <div>
-                        <p className="font-bold text-gray-900">Ahmed El Mansouri</p>
-                        <p className="text-sm text-gray-600">Directeur Partenariats</p>
+                        <p className="font-bold text-gray-900">{t('partner_detail_page.ahmed_el_mansouri', 'Ahmed El Mansouri')}</p>
+                        <p className="text-sm text-gray-600">{t('partner_detail_page.directeur_partenariats', 'Directeur Partenariats')}</p>
                       </div>
                     </div>
                     <div className="space-y-2 text-sm text-gray-700">
@@ -1540,30 +1540,30 @@ export default function PartnerDetailPage() {
               {/* Détails Techniques */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">Détails Techniques</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.details_techniques', 'Détails Techniques')}</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Statut:</span>
+                      <span className="text-gray-600">{t('partner_detail_page.statut', 'Statut:')}</span>
                       <Badge className={getStatusColor(selectedProject.status)} size="sm">
                         {getStatusLabel(selectedProject.status)}
                       </Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Début:</span>
+                      <span className="text-gray-600">{t('partner_detail_page.debut', 'Début:')}</span>
                       <span className="font-medium">{formatDate(selectedProject.startDate)}</span>
                     </div>
                     {selectedProject.endDate && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Fin prévue:</span>
+                        <span className="text-gray-600">{t('partner_detail_page.fin_prevue', 'Fin prévue:')}</span>
                         <span className="font-medium">{formatDate(selectedProject.endDate)}</span>
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Budget:</span>
+                      <span className="text-gray-600">{t('partner_detail_page.budget', 'Budget:')}</span>
                       <span className="font-bold text-green-600">{selectedProject.budget}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Équipe:</span>
+                      <span className="text-gray-600">{t('partner_detail_page.equipe', 'Équipe:')}</span>
                       <span className="font-medium">
                         {selectedProject.status === 'completed' ? '45 experts' :
                          selectedProject.status === 'active' ? '32 experts' : '15 experts'}
@@ -1573,11 +1573,11 @@ export default function PartnerDetailPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">KPIs du Projet</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.kpis_du_projet', 'KPIs du Projet')}</h4>
                   <div className="space-y-3">
                     <div>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">Avancement</span>
+                        <span className="text-gray-600">{t('partner_detail_page.avancement', 'Avancement')}</span>
                         <span className="font-medium">{selectedProject.kpis.progress}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1590,7 +1590,7 @@ export default function PartnerDetailPage() {
 
                     <div>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">Satisfaction</span>
+                        <span className="text-gray-600">{t('partner_detail_page.satisfaction', 'Satisfaction')}</span>
                         <span className="font-medium">{selectedProject.kpis.satisfaction}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1603,7 +1603,7 @@ export default function PartnerDetailPage() {
 
                     <div>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">ROI</span>
+                        <span className="text-gray-600">{t('partner_detail_page.roi', 'ROI')}</span>
                         <span className="font-medium">{selectedProject.kpis.roi}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1619,7 +1619,7 @@ export default function PartnerDetailPage() {
 
               {/* Technologies Utilisées */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Technologies Utilisées</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.technologies_utilisees', 'Technologies Utilisées')}</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.technologies.map((tech: string) => (
                     <Badge key={tech} variant="info" size="sm">
@@ -1631,7 +1631,7 @@ export default function PartnerDetailPage() {
 
               {/* Chronologie du Projet */}
               <div className="mb-8">
-                <h4 className="font-semibold text-gray-900 mb-4">Chronologie du Projet</h4>
+                <h4 className="font-semibold text-gray-900 mb-4">{t('partner_detail_page.chronologie_du_projet', 'Chronologie du Projet')}</h4>
                 <div className="space-y-4">
                   {selectedProject.timeline.map((phase: Project['timeline'][0]) => (
                     <div key={phase.phase} className="flex items-start space-x-4">
@@ -1653,7 +1653,7 @@ export default function PartnerDetailPage() {
 
               {/* Sponsors du Projet */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Sponsors du Projet</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.sponsors_du_projet', 'Sponsors du Projet')}</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.partners.map((partnerName: string) => (
                     <Badge key={partnerName} variant="success" size="sm">
@@ -1666,7 +1666,7 @@ export default function PartnerDetailPage() {
 
               {/* Documents et Ressources */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Documents & Ressources</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.documents_ressources', 'Documents & Ressources')}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {selectedProject.documents.map((doc: Project['documents'][0]) => (
                     <div key={doc.name} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
@@ -1683,7 +1683,7 @@ export default function PartnerDetailPage() {
 
               {/* Galerie Photos */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Galerie du Projet</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.galerie_du_projet', 'Galerie du Projet')}</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {selectedProject.gallery.map((image: string, index: number) => (
                     <img

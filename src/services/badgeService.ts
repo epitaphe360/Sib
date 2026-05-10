@@ -38,7 +38,6 @@ export async function getUserBadge(userId: string): Promise<UserBadge | null> {
     }
 
     if (currentUser.id !== userId) {
-      console.warn(`⚠️ SECURITY ALERT: Unauthorized badge access attempt: ${currentUser.id} trying to access ${userId}`);
       throw new Error('Unauthorized: Cannot access badge for other user');
     }
 

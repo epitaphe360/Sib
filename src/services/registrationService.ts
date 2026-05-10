@@ -236,7 +236,6 @@ export async function generateVisitorBadge(
     });
 
     if (badgeError) {
-      console.warn('Erreur génération badge:', badgeError);
       // Ne pas bloquer l'inscription
       return { success: false, error: badgeError };
     }
@@ -268,7 +267,6 @@ export async function sendVisitorWelcomeEmail(
     });
 
     if (emailError) {
-      console.warn('Erreur envoi email:', emailError);
       return { success: false, error: emailError };
     }
 
@@ -287,7 +285,6 @@ export async function sendPasswordSetupEmail(
   isInitialSetup: boolean = true
 ): Promise<{ success: boolean; error?: Error }> {
   try {
-    console.log('📧 Envoi email de définition de mot de passe...');
 
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(
       email,
@@ -297,11 +294,9 @@ export async function sendPasswordSetupEmail(
     );
 
     if (resetError) {
-      console.warn('⚠️ Reset password email failed:', resetError);
       return { success: false, error: resetError };
     }
 
-    console.log('✅ Email de définition de mot de passe envoyé');
     return { success: true };
   } catch (error) {
     console.error('Erreur sendPasswordSetupEmail:', error);

@@ -348,12 +348,10 @@ class AnalyticsService {
 
         case 'xlsx':
           // Nécessite une bibliothèque comme xlsx
-          console.warn('Export XLSX non implémenté, utiliser CSV à la place');
           return this.exportAsCSV(report);
 
         case 'pdf':
           // Nécessite une bibliothèque comme jsPDF
-          console.warn('Export PDF non implémenté, utiliser JSON à la place');
           return this.exportAsJSON(report);
 
         default:

@@ -88,7 +88,6 @@ export async function lookupBadgeByCode(badgeCode: string): Promise<BadgeLookupR
     const user = userData as AnyRecord | null;
 
     if (userError) {
-      console.warn('User not found for badge:', userError);
     }
 
     // Récupérer les infos sponsor séparément (évite l'erreur FK PostgREST)

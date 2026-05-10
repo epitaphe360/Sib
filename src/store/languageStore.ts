@@ -1,8 +1,25 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import i18n from '../i18n/config';
-import { allTranslations } from './translations';
+import { fr as frTranslations } from './translations.fr';
 import { migratePersistedStorage } from './persistMigration';
+
+// Cache pour éviter de recharger les traductions à chaque changement de langue
+const loadedTranslations: Record<string, Record<string, string>> = {
+  fr: frTranslations,
+};
+
+async function loadLanguage(code: string): Promise<Record<string, string>> {
+  if (loadedTranslations[code]) return loadedTranslations[code];
+  if (code === 'en') {
+    const m = await import('./translations.en');
+    loadedTranslations['en'] = m.en;
+  } else if (code === 'ar') {
+    const m = await import('./translations.ar');
+    loadedTranslations['ar'] = m.ar;
+  }
+  return loadedTranslations[code] ?? frTranslations;
+}
 
 export interface Language {
   code: string;
@@ -30,12 +47,6 @@ export const supportedLanguages: Language[] = [
     nativeName: 'العربية',
     flag: '🇲🇦',
   },
-  {
-    code: 'es',
-    name: 'Spanish',
-    nativeName: 'Español',
-    flag: '🇪🇸',
-  },
 ];
 
 interface LanguageState {
@@ -54,14 +65,6 @@ const LEGACY_LANGUAGE_STORAGE_KEY = 'sibs-language-storage';
 
 migratePersistedStorage(LANGUAGE_STORAGE_KEY, LEGACY_LANGUAGE_STORAGE_KEY);
 
-// Utiliser le dictionnaire de traductions enrichi
-const translations = allTranslations;
-
-// Vérification silencieuse des traductions
-if (!translations || !translations.fr) {
-  console.error('❌ ERREUR: Traductions non chargées!', { translations });
-}
-
 export const useLanguageStore = create<LanguageState>()(
   persist(
     (set, get) => ({
@@ -69,24 +72,21 @@ export const useLanguageStore = create<LanguageState>()(
       isLoading: false,
 
       setLanguage: async (languageCode: string) => {
-        console.log('🌍 setLanguage appelé avec:', languageCode);
         set({ isLoading: true });
 
         try {
-          // Vérifier que la langue est supportée
           const language = supportedLanguages.find(lang => lang.code === languageCode);
           if (!language) {
             throw new Error(`Langue non supportée: ${languageCode}`);
           }
 
-          console.log('🌍 Langue trouvée:', language.nativeName);
+          // Lazy-load la langue si pas encore chargée
+          await loadLanguage(languageCode);
 
           // Synchroniser avec i18next
           try {
             await i18n.changeLanguage(languageCode);
-            console.log('🌍 i18next mis à jour');
           } catch (i18nError) {
-            console.warn('⚠️ i18next changeLanguage failed (non-blocking):', i18nError);
           }
 
           // Mettre à jour la direction du texte pour l'arabe (RTL)
@@ -95,15 +95,13 @@ export const useLanguageStore = create<LanguageState>()(
 
           // Mettre à jour le titre de la page
           const titleKey = 'hero.title';
-          const translatedTitle = translations[languageCode]?.[titleKey] || translations.fr[titleKey] || 'SIB';
+          const langDict = loadedTranslations[languageCode] ?? frTranslations;
+          const translatedTitle = langDict[titleKey] || frTranslations[titleKey] || 'SIB';
           document.title = `${translatedTitle} - SIB 2026`;
 
-          // IMPORTANT: Mettre à jour l'état en dernier pour déclencher le re-render
           set({ currentLanguage: languageCode, isLoading: false });
-          console.log('✅ Langue changée avec succès vers:', languageCode);
 
         } catch (_error) {
-          console.error('❌ Erreur lors du changement de langue:', _error);
           set({ isLoading: false });
           throw _error;
         }
@@ -120,7 +118,7 @@ export const useLanguageStore = create<LanguageState>()(
 
       translateText: (key: string, fallback?: string) => {
         const { currentLanguage } = get();
-        const languageTranslations = translations[currentLanguage] || translations.fr;
+        const languageTranslations = loadedTranslations[currentLanguage] ?? frTranslations;
 
         // D'abord, essayer la clé telle quelle (pour 'nav.home' par exemple)
         if (key in languageTranslations) {
@@ -135,15 +133,10 @@ export const useLanguageStore = create<LanguageState>()(
           if (value && typeof value === 'object' && k in value) {
             value = (value as Record<string, unknown>)[k];
           } else {
-            // Clé non trouvée, retourner fallback ou la clé
-            if (key.startsWith('nav.')) {
-              console.warn(`⚠️ Traduction manquante: ${key}`);
-            }
             return fallback || key;
           }
         }
 
-        // Retourner la valeur si c'est une chaîne, sinon fallback ou clé
         return typeof value === 'string' ? value : (fallback || key);
       }
     }),

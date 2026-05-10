@@ -41,7 +41,6 @@ export default function SpeakersPage() {
 
       if (error) {
         if (error.code === '42P01') {
-          console.warn("Table speakers not found.");
           setSpeakers([]);
         } else {
           throw error;

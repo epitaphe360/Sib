@@ -138,6 +138,10 @@ export default memo(function VisitorDashboard() {
                 <BookOpen className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
                 <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Actualités</span>
               </Link>
+              <Link to={ROUTES.VISITOR_INVOICES} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
+                <FileText className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
+                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Ma Facture</span>
+              </Link>
               {ctx.userLevel === 'free' && (
                 <Link to={ROUTES.VISITOR_UPGRADE} className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-[#C9A84C]/40 bg-[#C9A84C]/5 hover:bg-[#C9A84C]/10 transition-all group text-center">
                   <Crown className="h-6 w-6 text-[#C9A84C]" />

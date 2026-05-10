@@ -27,7 +27,6 @@ export function useAuthRedirect() {
       // Décode et navigue vers l'URL de redirection
       try {
         const decodedUrl = decodeURIComponent(redirectUrl);
-        console.log('🔄 Redirection post-connexion vers:', decodedUrl);
         navigate(decodedUrl, { replace: true });
       } catch (e) {
         console.error('Erreur décodage URL de redirection:', e);

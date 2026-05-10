@@ -49,7 +49,6 @@ export default function LoginPage() {
   // ✅ Helper function pour rediriger vers le bon dashboard après connexion
   const redirectToDashboard = (user: any) => {
     if (redirectUrl) {
-      console.log('🔄 Redirection post-connexion vers:', redirectUrl);
       navigate(redirectUrl, { replace: true });
       return;
     }
@@ -127,17 +126,23 @@ export default function LoginPage() {
 
       // Envoyer le magic link via Supabase (SMTP custom configuré, aucun rate limit)
       const appUrl = import.meta.env.VITE_APP_URL || globalThis.location.origin;
-      await supabase.auth.signInWithOtp({
+      const { error: otpError } = await supabase.auth.signInWithOtp({
         email: normalizedEmail,
         options: {
           emailRedirectTo: `${appUrl}/auth/callback`,
-          shouldCreateUser: true,
+          shouldCreateUser: false,
         },
       });
 
+      if (otpError) {
+        setMagicError(`Erreur d'envoi : ${otpError.message}`);
+        return;
+      }
+
       setMagicSent(true);
-    } catch {
-      setMagicSent(true);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Erreur inconnue';
+      setMagicError(`Erreur : ${msg}`);
     } finally {
       setMagicLoading(false);
     }

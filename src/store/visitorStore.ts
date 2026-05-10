@@ -201,7 +201,6 @@ interface VisitorState {
 // Utiliser le client Supabase importé directement
 const getSupabaseClient = () => {
   if (!isSupabaseReady()) {
-    console.warn('⚠️ Supabase non configuré');
     return null;
   }
   return supabase;
@@ -246,7 +245,6 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
 
           // Si aucun profil n'existe, créer un profil par défaut
           if (!userProfile) {
-            console.warn('Aucun profil trouvé pour l\'utilisateur, création d\'un profil par défaut');
             const { data: newProfile, error: createError } = await supabaseClient
               .from('users')
               .insert([{
@@ -434,7 +432,6 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
           });
         }
       } else {
-        console.warn('Supabase client non disponible');
         set({ isLoading: false });
       }
     } catch (error) {

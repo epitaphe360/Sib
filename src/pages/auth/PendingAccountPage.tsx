@@ -117,7 +117,6 @@ export default function PendingAccountPage() {
 
       if (uploadError) {
         // Si le bucket n'existe pas, on cree l'URL manuellement
-        console.warn('Upload error (bucket may not exist):', uploadError);
 
         // Mise a jour du statut sans URL reelle pour la demo
         const { error: updateError } = await supabase

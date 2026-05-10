@@ -104,11 +104,9 @@ export default function PublicAvailabilityCalendar({
   };
 
   const handleAddTimeSlot = async () => {
-    console.log('🔵 handleAddTimeSlot appelé', { newSlot, isLoading });
 
     if (!newSlot.date || !newSlot.startTime || !newSlot.endTime) {
       toast.error('Veuillez remplir tous les champs requis');
-      console.log('❌ Champs manquants:', { date: newSlot.date, startTime: newSlot.startTime, endTime: newSlot.endTime });
       return;
     }
 
@@ -127,7 +125,6 @@ export default function PublicAvailabilityCalendar({
       return;
     }
 
-    console.log('✅ Validation passée, création du créneau...');
     setIsLoading(true);
     try {
       const duration = calculateDuration(newSlot.startTime, newSlot.endTime);
@@ -140,7 +137,6 @@ export default function PublicAvailabilityCalendar({
 
       if (selectedSlot) {
         // MODE MODIFICATION: Update existing slot
-        console.log('🔄 Modification du créneau:', selectedSlot.id);
         result = await SupabaseService.updateTimeSlot(selectedSlot.id, {
           date: newSlot.date as unknown as Date,
           startTime: newSlot.startTime,
@@ -155,7 +151,6 @@ export default function PublicAvailabilityCalendar({
         if (result) {setTimeSlots(prev => prev.map(s => s.id === selectedSlot.id ? result! : s));}
       } else {
         // MODE CRÉATION: Create new slot
-        console.log('➕ Création d\'un nouveau créneau');
         result = await SupabaseService.createTimeSlot({
           exhibitorId: userId,
           date: newSlot.date as unknown as Date,
