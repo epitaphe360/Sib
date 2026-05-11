@@ -13,7 +13,7 @@ const generateSlotId = (prefix: string, index: number): string => {
 };
 
 /**
- * Créneaux de démonstration pour les sponsors
+ * Créneaux de démonstration pour les partenaires
  * Ces créneaux couvrent les 5 jours du salon avec différents types de rendez-vous
  */
 export const DEMO_TIME_SLOTS: Omit<TimeSlot, 'id'>[] = [

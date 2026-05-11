@@ -20,14 +20,14 @@ try {
 } catch (e) {
 }
 
-// Kill any existing service worker and clear ALL caches
-if ('serviceWorker' in navigator) {
+// In development: unregister any stale service workers to prevent them from
+// intercepting Vite HMR requests and slowing down the dev server
+if (import.meta.env.DEV && 'serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
     for (const registration of registrations) {
       registration.unregister();
     }
   }).catch(() => {});
-  // Also clear Cache API caches to remove stale SW-cached assets
   if ('caches' in window) {
     caches.keys().then((names) => {
       for (const name of names) {

@@ -20,6 +20,7 @@ import { ThemeToggle } from '../ui/ThemeToggle';
 import { useTranslation } from '../../hooks/useTranslation';
 import { MoroccanPattern } from '../ui/MoroccanDecor';
 import { isAuthInitialized } from '../../lib/initAuth';
+import { useNavVisibilityStore } from '../../store/navVisibilityStore';
 
 // OPTIMIZATION: Memoized Header component to prevent unnecessary re-renders
 export const Header: React.FC = memo(() => {
@@ -30,7 +31,9 @@ export const Header: React.FC = memo(() => {
   const [isVisiterMenuOpen, setIsVisiterMenuOpen] = useState(false);
   const [isSponsorsMenuOpen, setIsSponsorsMenuOpen] = useState(false);
   const [isMediaMenuOpen, setIsMediaMenuOpen] = useState(false);
+  const [isProgrammeMenuOpen, setIsProgrammeMenuOpen] = useState(false);
   const { user, isAuthenticated, isLoading, logout } = useAuthStore();
+  const navIsVisible = useNavVisibilityStore(s => s.isVisible);
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -89,40 +92,40 @@ export const Header: React.FC = memo(() => {
   // MENU : LE SALON
   // ══════════════════════════════════════════════
   const salonMenuItems = [
-    { name: t('salon.presentation'), href: ROUTES.PRESENTATION, description: t('salon.presentation_desc') },
-    { name: t('salon.nouveautes'), href: ROUTES.NOUVEAUTES, description: t('salon.nouveautes_desc') },
-    { name: t('salon.secteurs'), href: ROUTES.SECTEURS, description: t('salon.secteurs_desc') },
-    { name: t('salon.editions'), href: ROUTES.EDITIONS, description: t('salon.editions_desc') },
-    { name: t('salon.telechargements'), href: ROUTES.TELECHARGEMENTS, description: t('salon.telechargements_desc') },
-  ];
+    navIsVisible('salon.presentation') && { name: t('salon.presentation'), href: ROUTES.PRESENTATION, description: t('salon.presentation_desc') },
+    navIsVisible('salon.nouveautes')   && { name: t('salon.nouveautes'), href: ROUTES.NOUVEAUTES, description: t('salon.nouveautes_desc') },
+    navIsVisible('salon.secteurs')     && { name: t('salon.secteurs'), href: ROUTES.SECTEURS, description: t('salon.secteurs_desc') },
+    navIsVisible('salon.editions')     && { name: t('salon.editions'), href: ROUTES.EDITIONS, description: t('salon.editions_desc') },
+    navIsVisible('salon.telechargements') && { name: t('salon.telechargements'), href: ROUTES.TELECHARGEMENTS, description: t('salon.telechargements_desc') },
+  ].filter(Boolean) as { name: string; href: string; description: string }[];
 
   // ══════════════════════════════════════════════
   // MENU : EXPOSER
   // ══════════════════════════════════════════════
   const exposerMenuItems = [
-    { name: t('exposer.pourquoi'), href: ROUTES.POURQUOI_EXPOSER, description: t('exposer.pourquoi_desc') },
-    { name: t('exposer.espaces'), href: ROUTES.ESPACES_SIB, description: t('exposer.espaces_desc') },
-    { name: t('exposer.reserver'), href: ROUTES.REGISTER_EXHIBITOR, description: t('exposer.reserver_desc') },
-    { name: t('exposer.annuaire'), href: ROUTES.EXHIBITORS, description: t('exposer.annuaire_desc') },
-  ];
+    navIsVisible('exposer.pourquoi') && { name: t('exposer.pourquoi'), href: ROUTES.POURQUOI_EXPOSER, description: t('exposer.pourquoi_desc') },
+    navIsVisible('exposer.espaces')  && { name: t('exposer.espaces'), href: ROUTES.ESPACES_SIB, description: t('exposer.espaces_desc') },
+    navIsVisible('exposer.reserver') && { name: t('exposer.reserver'), href: ROUTES.REGISTER_EXHIBITOR, description: t('exposer.reserver_desc') },
+    navIsVisible('exposer.annuaire') && { name: t('exposer.annuaire'), href: ROUTES.EXHIBITORS, description: t('exposer.annuaire_desc') },
+  ].filter(Boolean) as { name: string; href: string; description: string }[];
 
   // ══════════════════════════════════════════════
   // MENU : VISITER
   // ══════════════════════════════════════════════
   const visiterMenuItems = [
-    { name: t('visiter.pourquoi'), href: ROUTES.POURQUOI_VISITER, description: t('visiter.pourquoi_desc') },
-    { name: t('visiter.infos'), href: ROUTES.INFOS_PRATIQUES, description: t('visiter.infos_desc') },
-    { name: t('visiter.badge'), href: ROUTES.REGISTER_VISITOR, description: t('visiter.badge_desc') },
-    { name: t('visiter.vip'), href: ROUTES.VISITOR_VIP_REGISTRATION, description: t('visiter.vip_desc') },
-  ];
+    navIsVisible('visiter.pourquoi') && { name: t('visiter.pourquoi'), href: ROUTES.POURQUOI_VISITER, description: t('visiter.pourquoi_desc') },
+    navIsVisible('visiter.infos')    && { name: t('visiter.infos'), href: ROUTES.INFOS_PRATIQUES, description: t('visiter.infos_desc') },
+    navIsVisible('visiter.badge')    && { name: t('visiter.badge'), href: ROUTES.REGISTER_VISITOR, description: t('visiter.badge_desc') },
+    navIsVisible('visiter.vip')      && { name: t('visiter.vip'), href: ROUTES.VISITOR_VIP_REGISTRATION, description: t('visiter.vip_desc') },
+  ].filter(Boolean) as { name: string; href: string; description: string }[];
 
   // ══════════════════════════════════════════════
   // MENU : PARTENAIRES
   // ══════════════════════════════════════════════
   const sponsorsMenuItems = [
-    { name: t('sponsors.devenir'), href: ROUTES.PARTNER_SUBSCRIPTION, description: t('sponsors.devenir_desc') },
-    { name: t('sponsors.annuaire'), href: ROUTES.PARTNERS, description: t('sponsors.annuaire_desc') },
-  ];
+    navIsVisible('sponsors.devenir')  && { name: t('sponsors.devenir'), href: ROUTES.PARTNER_SUBSCRIPTION, description: t('sponsors.devenir_desc') },
+    navIsVisible('sponsors.annuaire') && { name: t('sponsors.annuaire'), href: ROUTES.PARTNERS, description: t('sponsors.annuaire_desc') },
+  ].filter(Boolean) as { name: string; href: string; description: string }[];
 
   // ══════════════════════════════════════════════
   // MENU : MÉDIAS (conditionnel)
@@ -131,14 +134,14 @@ export const Header: React.FC = memo(() => {
   const { mediaVisible } = useMediaVisibilityStore();
 
   const mediaMenuItems = mediaVisible ? [
-    { name: t('media.webinars'), href: ROUTES.WEBINARS, description: t('media.webinars_desc'), icon: Video },
-    { name: t('media.podcasts'), href: ROUTES.PODCASTS, description: t('media.podcasts_desc'), icon: Mic },
-    { name: t('media.capsules'), href: ROUTES.CAPSULES_INSIDE, description: t('media.capsules_desc'), icon: Play },
-    { name: t('media.live_studio'), href: ROUTES.LIVE_STUDIO, description: t('media.live_studio_desc'), icon: Video },
-    { name: t('media.best_moments'), href: ROUTES.BEST_MOMENTS, description: t('media.best_moments_desc'), icon: Play },
-    { name: t('media.testimonials'), href: ROUTES.TESTIMONIALS, description: t('media.testimonials_desc'), icon: Video },
-    { name: t('media.library'), href: ROUTES.MEDIA_LIBRARY, description: t('media.library_desc'), icon: Play },
-  ] : [];
+    navIsVisible('medias.webinars')     && { name: t('media.webinars'), href: ROUTES.WEBINARS, description: t('media.webinars_desc'), icon: Video },
+    navIsVisible('medias.podcasts')     && { name: t('media.podcasts'), href: ROUTES.PODCASTS, description: t('media.podcasts_desc'), icon: Mic },
+    navIsVisible('medias.capsules')     && { name: t('media.capsules'), href: ROUTES.CAPSULES_INSIDE, description: t('media.capsules_desc'), icon: Play },
+    navIsVisible('medias.live_studio')  && { name: t('media.live_studio'), href: ROUTES.LIVE_STUDIO, description: t('media.live_studio_desc'), icon: Video },
+    navIsVisible('medias.best_moments') && { name: t('media.best_moments'), href: ROUTES.BEST_MOMENTS, description: t('media.best_moments_desc'), icon: Play },
+    navIsVisible('medias.testimonials') && { name: t('media.testimonials'), href: ROUTES.TESTIMONIALS, description: t('media.testimonials_desc'), icon: Video },
+    navIsVisible('medias.library')      && { name: t('media.library'), href: ROUTES.MEDIA_LIBRARY, description: t('media.library_desc'), icon: Play },
+  ].filter(Boolean) as { name: string; href: string; description: string; icon: React.FC<{ className?: string }> }[] : [];
   return (
     <header className="fixed top-0 left-0 right-0 z-[200] transition-all duration-500 bg-white/80 backdrop-blur-[14px] border-b border-[rgba(231,209,146,0.15)] shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)]" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       {/* Grain doré ultra-subtil */}
@@ -165,6 +168,7 @@ export const Header: React.FC = memo(() => {
           <nav className="hidden lg:flex items-center gap-0 xl:gap-0.5 flex-1 justify-center">
 
             {/* Le Salon ▼ */}
+            {navIsVisible('salon') && (
             <div className="relative" onMouseEnter={() => setIsSalonMenuOpen(true)} onMouseLeave={() => setIsSalonMenuOpen(false)}>
               <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap">
                 <span>{t('nav.le_salon')}</span>
@@ -183,8 +187,10 @@ export const Header: React.FC = memo(() => {
                 </div>
               )}
             </div>
+            )}
 
             {/* Exposer ▼ */}
+            {navIsVisible('exposer') && (
             <div className="relative" onMouseEnter={() => setIsExposerMenuOpen(true)} onMouseLeave={() => setIsExposerMenuOpen(false)}>
               <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap">
                 <span>{t('nav.exposer')}</span>
@@ -203,8 +209,10 @@ export const Header: React.FC = memo(() => {
                 </div>
               )}
             </div>
+            )}
 
             {/* Visiter ▼ */}
+            {navIsVisible('visiter') && (
             <div className="relative" onMouseEnter={() => setIsVisiterMenuOpen(true)} onMouseLeave={() => setIsVisiterMenuOpen(false)}>
               <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap">
                 <span>{t('nav.visiter')}</span>
@@ -223,8 +231,10 @@ export const Header: React.FC = memo(() => {
                 </div>
               )}
             </div>
+            )}
 
             {/* Sponsors ▼ */}
+            {navIsVisible('sponsors') && (
             <div className="relative" onMouseEnter={() => setIsSponsorsMenuOpen(true)} onMouseLeave={() => setIsSponsorsMenuOpen(false)}>
               <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap">
                 <span>{t('nav.partners')}</span>
@@ -243,20 +253,43 @@ export const Header: React.FC = memo(() => {
                 </div>
               )}
             </div>
+            )}
 
             {/* Divider */}
             <div className="w-[1px] h-5 bg-slate-200 mx-0.5 xl:mx-1" />
 
-            {/* Programme (lien direct) */}
-            <Link
-              to={ROUTES.EVENTS}
-              className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 group whitespace-nowrap"
-            >
-              {t('nav.programme')}
-              <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-            </Link>
+            {/* Programme ▼ */}
+            {navIsVisible('programme') && (
+            <div className="relative" onMouseEnter={() => setIsProgrammeMenuOpen(true)} onMouseLeave={() => setIsProgrammeMenuOpen(false)}>
+              <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap">
+                <span>{t('nav.programme')}</span>
+                <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              </button>
+              {isProgrammeMenuOpen && (
+                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                  {navIsVisible('programme.programme') && (
+                  <Link to={ROUTES.EVENTS} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
+                    <div>
+                      <div className="font-semibold text-slate-900">{t('nav.programme')}</div>
+                      <div className="text-xs text-slate-500">{t('nav.programme_desc')}</div>
+                    </div>
+                  </Link>
+                  )}
+                  {navIsVisible('programme.intervenants') && (
+                  <Link to={ROUTES.SPEAKERS} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
+                    <div>
+                      <div className="font-semibold text-slate-900">{t('visiter.speakers')}</div>
+                      <div className="text-xs text-slate-500">{t('visiter.speakers_desc')}</div>
+                    </div>
+                  </Link>
+                  )}
+                </div>
+              )}
+            </div>
+            )}
 
             {/* Réseautage (lien direct) */}
+            {navIsVisible('networking') && (
             <Link
               to={ROUTES.NETWORKING}
               className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 group whitespace-nowrap"
@@ -264,9 +297,10 @@ export const Header: React.FC = memo(() => {
               {t('nav.networking')}
               <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             </Link>
+            )}
 
             {/* Médias ▼ (conditionnel) */}
-            {mediaVisible && (
+            {mediaVisible && navIsVisible('medias') && (
             <div className="relative" onMouseEnter={() => setIsMediaMenuOpen(true)} onMouseLeave={() => setIsMediaMenuOpen(false)}>
               <button className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap">
                 <Video className="w-3 h-3 xl:w-3.5 xl:h-3.5" style={{ color: '#C9A84C' }} />
@@ -293,6 +327,7 @@ export const Header: React.FC = memo(() => {
             )}
 
             {/* Contact */}
+            {navIsVisible('contact') && (
             <Link
               to="/contact"
               className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap"
@@ -300,6 +335,7 @@ export const Header: React.FC = memo(() => {
               <span>{t('nav.contact')}</span>
               <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             </Link>
+            )}
           </nav>
 
           {/* Actions & Profile Luxe */}
@@ -643,6 +679,7 @@ export const Header: React.FC = memo(() => {
               )}
 
               {/* ══ Le Salon ══ */}
+              {navIsVisible('salon') && (
               <div className="border-b border-gray-200 pb-2">
                 <button onClick={toggleSalonMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('nav.le_salon')}
@@ -655,8 +692,10 @@ export const Header: React.FC = memo(() => {
                   </Link>
                 ))}
               </div>
+              )}
 
               {/* ══ Exposer ══ */}
+              {navIsVisible('exposer') && (
               <div className="border-b border-gray-200 pb-2">
                 <button onClick={toggleExposerMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('nav.exposer')}
@@ -669,8 +708,10 @@ export const Header: React.FC = memo(() => {
                   </Link>
                 ))}
               </div>
+              )}
 
               {/* ══ Visiter ══ */}
+              {navIsVisible('visiter') && (
               <div className="border-b border-gray-200 pb-2">
                 <button onClick={toggleVisiterMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('nav.visiter')}
@@ -683,8 +724,10 @@ export const Header: React.FC = memo(() => {
                   </Link>
                 ))}
               </div>
+              )}
 
               {/* ══ Sponsors ══ */}
+              {navIsVisible('sponsors') && (
               <div className="border-b border-gray-200 pb-2">
                 <button onClick={toggleSponsorsMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('nav.partners')}
@@ -697,8 +740,10 @@ export const Header: React.FC = memo(() => {
                   </Link>
                 ))}
               </div>
+              )}
 
               {/* ══ Programme (lien direct) ══ */}
+              {navIsVisible('programme') && (
               <Link
                 to={ROUTES.EVENTS}
                 className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
@@ -706,8 +751,10 @@ export const Header: React.FC = memo(() => {
               >
                 {t('nav.programme')}
               </Link>
+              )}
 
               {/* ══ Réseautage (lien direct) ══ */}
+              {navIsVisible('networking') && (
               <Link
                 to={ROUTES.NETWORKING}
                 className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
@@ -715,9 +762,10 @@ export const Header: React.FC = memo(() => {
               >
                 {t('nav.networking')}
               </Link>
+              )}
 
               {/* ══ Médias ══ */}
-              {mediaVisible && mediaMenuItems.length > 0 && (
+              {mediaVisible && navIsVisible('medias') && mediaMenuItems.length > 0 && (
               <div className="border-t border-gray-200 pt-2">
                 <button onClick={toggleMediaMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
                   <span className="flex items-center"><Video className="w-4 h-4 mr-2" />{t('media.menu_title')}</span>
@@ -739,6 +787,7 @@ export const Header: React.FC = memo(() => {
               )}
 
               {/* ══ Contact ══ */}
+              {navIsVisible('contact') && (
               <div className="border-t border-gray-200 pt-2 mt-2">
                 <Link
                   to={ROUTES.CONTACT}
@@ -748,6 +797,7 @@ export const Header: React.FC = memo(() => {
                   {t('nav.contact')}
                 </Link>
               </div>
+              )}
             </div>
           </div>
         )}

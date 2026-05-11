@@ -3,11 +3,18 @@ import { toast } from 'sonner';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/authStore';
 
+interface SessionMeta {
+  title?: string;
+  time?: string;
+  date?: string;
+  description?: string;
+}
+
 interface ProgrammeRegistrationState {
   isRegistered: boolean;
   count: number;
   isLoading: boolean;
-  register: () => Promise<void>;
+  register: (meta?: SessionMeta) => Promise<void>;
   unregister: () => Promise<void>;
 }
 
@@ -54,7 +61,7 @@ export function useProgrammeRegistration(sessionId: string): ProgrammeRegistrati
     fetchStatus();
   }, [fetchStatus]);
 
-  const register = useCallback(async () => {
+  const register = useCallback(async (meta?: SessionMeta) => {
     if (!supabase || !user) { return; }
     setIsLoading(true);
     try {
@@ -67,15 +74,29 @@ export function useProgrammeRegistration(sessionId: string): ProgrammeRegistrati
         user_id: user.id,
         registration_type: regType,
         status: 'confirmed',
+        ...(meta?.title && { session_title: meta.title }),
+        ...(meta?.time && { session_time: meta.time }),
+        ...(meta?.date && { session_date: meta.date }),
+        ...(meta?.description && { session_description: meta.description }),
       });
-      if (error) { throw error; }
+      if (error) {
+        // 23505 = unique_violation : déjà inscrit (état stale)
+        if ((error as any).code === '23505') {
+          setIsRegistered(true);
+          toast.info('Vous êtes déjà inscrit à cette session.');
+          return;
+        }
+        console.error('Erreur inscription programme:', (error as any).message || error);
+        toast.error('Erreur lors de l\'inscription. Veuillez réessayer.');
+        return;
+      }
 
       setIsRegistered(true);
       setCount(c => c + 1);
       toast.success('Inscription confirmée ! Session ajoutée à votre programme.');
-    } catch (err) {
-      console.error('Erreur inscription session programme:', err);
-      throw err;
+    } catch (err: any) {
+      console.error('Erreur inscription session programme:', err?.message || err?.code || err);
+      toast.error('Erreur lors de l\'inscription. Veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }
@@ -95,9 +116,9 @@ export function useProgrammeRegistration(sessionId: string): ProgrammeRegistrati
       setIsRegistered(false);
       setCount(c => Math.max(0, c - 1));
       toast.info('Désinscription effectuée.');
-    } catch (err) {
-      console.error('Erreur désinscription session programme:', err);
-      throw err;
+    } catch (err: any) {
+      console.error('Erreur désinscription session programme:', err?.message || err?.code || err);
+      toast.error('Erreur lors de la désinscription. Veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }

@@ -296,7 +296,8 @@ export class SupabaseService {
       const userData = usersData && usersData.length > 0 ? usersData[0] : null;
 
       if (!userData) {
-        throw new Error('Aucun profil utilisateur trouvé pour cet email');
+        // Pas de profil dans public.users → retourner null (session Supabase valide mais profil absent)
+        return null;
       }
 
       // Si c'est un exposant, récupérer les données d'exhibitor

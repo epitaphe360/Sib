@@ -8,6 +8,7 @@ import { MediaCard } from '../../components/media/MediaCard';
 import { ROUTES } from '../../lib/routes';
 
 export const MediaLibraryPage: React.FC = () => {
+  const { t } = useTranslation();
   const [media, setMedia] = useState<MediaContent[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');

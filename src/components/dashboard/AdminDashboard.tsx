@@ -11,6 +11,7 @@ import {
   AdminChartsSection,
   SystemHealthPanel,
   ActivityFeed,
+  AdminNavVisibility,
 } from './admin';
 
 export default function AdminDashboard() {
@@ -148,6 +149,20 @@ export default function AdminDashboard() {
             </motion.div>
           </div>
         </motion.div>
+
+        {/* Premium section divider */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="my-8 flex items-center gap-4 origin-left"
+        >
+          <div className="w-2 h-2 rounded bg-indigo-400" />
+          <div className="flex-1 h-px bg-gradient-to-r from-indigo-200 to-transparent" />
+        </motion.div>
+
+        <AdminNavVisibility />
 
         {/* Premium section divider */}
         <motion.div

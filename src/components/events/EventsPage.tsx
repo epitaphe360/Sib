@@ -86,11 +86,15 @@ const SessionRegisterButton: React.FC<Readonly<{
 
   const handleClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (isRegistered) {
-      await unregister();
-    } else {
-      await register();
-      setShowCalendar(true);
+    try {
+      if (isRegistered) {
+        await unregister();
+      } else {
+        await register({ title: sessionTitle, time: sessionTime, date: sessionDate, description: sessionDescription });
+        setShowCalendar(true);
+      }
+    } catch {
+      // Erreurs déjà gérées et affichées dans register/unregister
     }
   };
 

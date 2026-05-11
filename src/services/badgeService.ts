@@ -21,7 +21,7 @@ interface BadgeDBRecord {
 
 /**
  * Service de gestion des badges utilisateurs avec QR code
- * Supporte tous les types d'utilisateurs: visiteurs, exposants, sponsors
+ * Supporte tous les types d'utilisateurs: visiteurs, exposants, partenaires
  */
 
 /**
@@ -38,6 +38,7 @@ export async function getUserBadge(userId: string): Promise<UserBadge | null> {
     }
 
     if (currentUser.id !== userId) {
+      console.warn(`⚠️ SECURITY ALERT: Unauthorized badge access attempt: ${currentUser.id} trying to access ${userId}`);
       throw new Error('Unauthorized: Cannot access badge for other user');
     }
 
@@ -355,11 +356,13 @@ export function getBadgeColor(accessLevel: string): string {
     case 'partner_silver':
       return '#C0C0C0'; // Argent
     case 'partner_official_sponsor':
-      return '#E0E0E0'; // Partenaire Officiel
+      return '#E0E0E0'; // Sponsor Officiel
     case 'partner_organizer':
       return '#6f42c1'; // Violet
     case 'visitor_free':
       return '#9E9E9E'; // Gris
+    case 'press':
+      return '#C9A84C'; // Or (presse)
     case 'standard':
     default:
       return '#28a745'; // Vert par défaut
@@ -383,15 +386,17 @@ export function getAccessLevelLabel(accessLevel: string): string {
     case 'visitor_free':
       return 'Visiteur';
     case 'partner':
-      return 'Sponsor';
+      return 'Partenaire';
     case 'partner_silver':
       return 'Sponsor Silver';
     case 'partner_gold':
       return 'Sponsor Gold';
     case 'partner_official_sponsor':
-      return 'Partenaire Officiel';
+      return 'Sponsor Officiel';
     case 'partner_organizer':
       return 'Organisateur';
+    case 'press':
+      return 'Presse';
     case 'standard':
     default:
       return 'Standard';

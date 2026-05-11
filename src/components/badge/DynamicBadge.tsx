@@ -74,6 +74,7 @@ export function DynamicBadge({ user, onClose, overrideRole, overrideCompany }: R
     const html = [
       '<!DOCTYPE html><html><head>',
       '<meta charset="utf-8">',
+      `<base href="${window.location.origin}/">`,
       '<title>Badge SIB 2026</title>',
       '<style>* { margin: 0; padding: 0; box-sizing: border-box; }',
       'body { font-family: Segoe UI, sans-serif; background: white; }',

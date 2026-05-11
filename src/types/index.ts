@@ -459,7 +459,7 @@ export interface UserBadge {
   avatarUrl?: string;
   standNumber?: string; // Pour exposants
   companyLogoUrl?: string; // Logo de la société pour exposants
-  accessLevel: 'standard' | 'vip' | 'exhibitor' | 'partner' | 'admin';
+  accessLevel: 'standard' | 'vip' | 'exhibitor' | 'partner' | 'admin' | 'press';
   validFrom: Date;
   validUntil: Date;
   status: 'active' | 'expired' | 'revoked' | 'pending';

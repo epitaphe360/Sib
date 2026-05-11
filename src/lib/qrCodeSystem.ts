@@ -72,10 +72,10 @@ const salonEvents: EventAccess[] = [
   },
   {
     eventId: 'partner-roundtable',
-    eventName: 'Table Ronde Sponsors : Avenir des Bâtiments Intelligents',
+    eventName: 'Table Ronde Partenaires : Avenir des Bâtiments Intelligents',
     eventType: 'partner',
     requiredLevel: 'partner',
-    description: 'Discussion stratégique réservée aux sponsors sur les investissements et innovations.',
+    description: 'Discussion stratégique réservée aux partenaires sur les investissements et innovations.',
     startTime: new Date('2026-02-06T14:00:00'),
     endTime: new Date('2026-02-06T16:30:00'),
     location: 'Salle Executive',
@@ -234,7 +234,7 @@ export function canAccessEvent(
       if (userType === 'partner') {
         return { canAccess: true, event };
       }
-      return { canAccess: false, reason: 'Réservé aux sponsors.', event };
+      return { canAccess: false, reason: 'Réservé aux partenaires.', event };
 
     case 'gala':
       if (userType === 'partner') {
@@ -353,14 +353,14 @@ export function getHighestAccessLevel(
       };
 
     case 'partner': {
-      const partnerLevel = userLevel === 'official_sponsor' ? 'Partenaire Officiel' :
+      const partnerLevel = userLevel === 'official_sponsor' ? 'Sponsor Officiel' :
                           userLevel === 'gold' ? 'Sponsor Gold' :
-                          userLevel === 'silver' ? 'Sponsor Silver' : 'Sponsor';
+                          userLevel === 'silver' ? 'Sponsor Silver' : 'Partenaire';
       return {
         level: partnerLevel,
-        description: 'Accès privilégié aux événements sponsors et networking exclusif.',
+        description: 'Accès privilégié aux événements partenaires et networking exclusif.',
         capabilities: [
-          'Événements sponsors exclusifs',
+          'Événements partenaires exclusifs',
           'Networking premium illimité',
           'Accès lounge exécutif',
           'Priorité sur les rendez-vous',

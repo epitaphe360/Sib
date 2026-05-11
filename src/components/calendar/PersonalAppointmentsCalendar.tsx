@@ -24,9 +24,14 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
     isLoading
   } = useAppointmentStore();
 
-  const { days: programmeDays } = useProgrammeStore();
+  const { days: programmeDays, loadFromSupabase } = useProgrammeStore();
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all');
-  const [programmeRegs, setProgrammeRegs] = useState<{ session_id: string }[]>([]);
+  const [programmeRegs, setProgrammeRegs] = useState<{
+    session_id: string;
+    session_title?: string;
+    session_time?: string;
+    session_date?: string;
+  }[]>([]);
   const [localSlots, setLocalSlots] = useState<{ id: string; slot_date: string; start_time: string; end_time: string }[]>([]);
   const [exhibitorDbId, setExhibitorDbId] = useState<string | null>(null);
 
@@ -54,6 +59,11 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
     fetchAppointments();
   }, [fetchAppointments]);
 
+  // Synchroniser le programme depuis Supabase pour avoir les IDs à jour
+  useEffect(() => {
+    loadFromSupabase();
+  }, [loadFromSupabase]);
+
   // Charger les créneaux horaires directement par ID (contourne le problème exhibitor_id vs user_id)
   useEffect(() => {
     if (!supabase || appointments.length === 0) { return; }
@@ -71,7 +81,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
     if (!supabase || !user?.id) { return; }
     supabase
       .from('programme_registrations')
-      .select('session_id')
+      .select('session_id, session_title, session_time, session_date')
       .eq('user_id', user.id)
       .eq('status', 'confirmed')
       .then(({ data }) => setProgrammeRegs(data ?? []));
@@ -144,11 +154,43 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
   // Retourne les sessions du programme inscrites pour un jour donné
   const getProgrammeSessionsForDay = (day: Date) => {
     const dayIndex = SALON_DAYS.findIndex(d => d.toDateString() === day.toDateString());
-    if (dayIndex < 0) { return []; }
-    const programmeDay = programmeDays[dayIndex];
-    if (!programmeDay) { return []; }
-    const registeredIds = new Set(programmeRegs.map(r => r.session_id));
-    return programmeDay.sessions.filter(s => registeredIds.has(s.id) && s.type !== 'pause');
+
+    // 1. Sessions avec session_date stockée directement (nouvelles inscriptions)
+    const fromMeta = programmeRegs
+      .filter(r => {
+        if (!r.session_date) { return false; }
+        // session_date peut être "Mercredi 25 novembre 2026" ou "2026-11-25"
+        const regDate = r.session_date;
+        if (regDate.includes('-')) {
+          const d = new Date(regDate);
+          return d.toDateString() === day.toDateString();
+        }
+        // Comparaison textuelle partielle (ex: "25 novembre")
+        const dayNum = day.getDate().toString();
+        return regDate.includes(dayNum);
+      })
+      .map(r => ({
+        id: r.session_id,
+        title: r.session_title ?? r.session_id,
+        time: r.session_time ?? '',
+        type: 'officiel' as const,
+        speakers: [] as string[],
+        description: '',
+      }));
+
+    // 2. Fallback : chercher dans le store par ID (anciennes inscriptions)
+    if (dayIndex >= 0) {
+      const programmeDay = programmeDays[dayIndex];
+      if (programmeDay) {
+        const registeredIds = new Set(programmeRegs.map(r => r.session_id));
+        const fromStore = programmeDay.sessions
+          .filter(s => registeredIds.has(s.id) && s.type !== 'pause')
+          .filter(s => !fromMeta.some(m => m.id === s.id));
+        return [...fromMeta, ...fromStore];
+      }
+    }
+
+    return fromMeta;
   };
 
   const hasAnyItems = weekAppointments.length > 0 || programmeRegs.length > 0;

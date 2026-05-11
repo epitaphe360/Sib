@@ -181,7 +181,7 @@ export default function AvailabilityCalendar({ user, showBooking = false, onBook
             Disponibilités de {user?.profile?.firstName || 'l\'utilisateur'}
           </h3>
           <p className="text-sm text-gray-600 mt-1">
-            {user.type === 'partner' ? 'Sponsor' : 'Exposant'} • {timeSlots.filter(s => s.available).length} créneau{timeSlots.filter(s => s.available).length !== 1 ? 'x' : ''} disponible{timeSlots.filter(s => s.available).length !== 1 ? 's' : ''}
+            {user.type === 'partner' ? 'Partenaire' : 'Exposant'} • {timeSlots.filter(s => s.available).length} créneau{timeSlots.filter(s => s.available).length !== 1 ? 'x' : ''} disponible{timeSlots.filter(s => s.available).length !== 1 ? 's' : ''}
           </p>
           <div className="mt-2 inline-flex items-center px-2 py-1 rounded bg-blue-50 text-blue-700 text-xs font-medium">
             📅 SIB 2026 : 25-29 novembre uniquement

@@ -10,7 +10,7 @@ const resources = {
         home: 'Accueil',
         dashboard: 'Tableau de bord',
         exhibitors: 'Exposants',
-        partners: 'Sponsors',
+        partners: 'Partenaires',
         pavilions: 'Pavillons',
         information: 'Informations',
         events: 'Événements',
@@ -27,7 +27,7 @@ const resources = {
         events_desc: 'Calendrier des événements',
         news_desc: 'Actualités et nouveautés',
         subscriptions_desc: 'Gérez vos abonnements',
-        accommodation_desc: 'Hôtels sponsors & tarifs préférentiels'
+        accommodation_desc: 'Hôtels partenaires & tarifs préférentiels'
       },
       exhibitor_levels: {
         basic_9: '9m² Basique',
@@ -172,7 +172,7 @@ const resources = {
         manage_proofs: 'Gérer les preuves',
         exhibitors: 'Exposants',
         list_and_subscriptions: 'Liste & Abonnements',
-        partners: 'Sponsors',
+        partners: 'Partenaires',
         list_and_packs: 'Liste & Packs',
         vip_visitors_management: 'Gestion Visiteurs VIP',
         view_list: 'Consulter la liste',
@@ -185,7 +185,7 @@ const resources = {
         active_users_count: '{{count}} actifs',
         active_exhibitors: 'Exposants Actifs',
         online_count: '{{count}} en ligne',
-        official_partners: 'Sponsors Officiels',
+        official_partners: 'Partenaires Officiels',
         visitors: 'Visiteurs',
         analysis_trends: 'Analyse & Tendances',
         realtime_data: 'Données en temps réel',
@@ -199,8 +199,8 @@ const resources = {
         participants_management: 'Gestion Participants',
         create_exhibitor: 'Créer un exposant',
         manage_exhibitors: 'Gérer les exposants',
-        create_partner: 'Créer un sponsor',
-        manage_partners: 'Gérer les sponsors',
+        create_partner: 'Créer un partenaire',
+        manage_partners: 'Gérer les partenaires',
         publication_control_title: '🔥 CONTRÔLE PUBLICATION - MODE VALIDATION CLIENT',
         publication_control_desc: '⚠️ Activer/Désactiver la visibilité GLOBALE',
         total_control: 'CONTRÔLE TOTAL',
@@ -333,11 +333,7 @@ const resources = {
           profile: 'Mon Profil Exposant',
           profile_desc: 'Mettez à jour vos informations',
           qr_code: 'QR Code Stand',
-          qr_code_desc: 'Générez votre QR code personnalisé',
-          advanced_networking: 'Réseautage Avancé',
-          advanced_networking_desc: 'Explorez et connectez-vous avec des contacts qualifiés',
-          ai_matching: 'Matching IA',
-          ai_matching_desc: 'Trouvez les meilleurs sponsors grâce à l\'intelligence artificielle'
+          qr_code_desc: 'Générez votre QR code personnalisé'
         },
         header: {
           published_tooltip_hide: 'Cliquez pour masquer votre profil',
@@ -426,7 +422,7 @@ const resources = {
         vip_appointments: 'RDV Illimités',
         vip_appointments_desc: 'Planifiez autant de rendez-vous B2B que vous le souhaitez',
         vip_messaging: 'Messagerie Prioritaire',
-        vip_messaging_desc: 'Contactez directement les exposants et sponsors',
+        vip_messaging_desc: 'Contactez directement les exposants et partenaires',
         vip_badge: 'Badge VIP',
         vip_badge_desc: 'Badge distinctif avec accès à toutes les zones',
         vip_ai_matching: 'Matching IA',
@@ -443,7 +439,7 @@ const resources = {
         explore_network: 'Explorer le réseau',
         configure_matching: 'Configurer le matching',
         // Appointments Section
-        schedule_appointment_desc: 'Organisez vos rendez-vous B2B avec les exposants et sponsors',
+        schedule_appointment_desc: 'Organisez vos rendez-vous B2B avec les exposants et partenaires',
         program_appointment: 'Programmer un RDV',
         appointments_remaining: 'RDV Restants',
         quota_reached: 'Quota atteint pour le niveau {{level}}. Passez VIP pour des RDV illimités !',
@@ -459,7 +455,7 @@ const resources = {
         connections_established: 'Connexions Établies',
         // Messaging Section
         messaging: 'Messagerie',
-        messaging_desc: 'Échangez avec les exposants et sponsors',
+        messaging_desc: 'Échangez avec les exposants et partenaires',
         open_messaging: 'Ouvrir la Messagerie',
         // Networking Hub Section
         personal: 'Votre Hub',
@@ -483,15 +479,15 @@ const resources = {
         appointment_with: 'rendez-vous avec'
       },
       partner: {
-        title: 'Espace Sponsor',
+        title: 'Espace Partenaire',
         activation_required: 'Activation Requise',
         payment_validation_needed: 'Votre compte est en attente de validation de paiement.',
         finalize_payment: 'Finaliser le Paiement',
         payment_validation_required: 'Validation Requise',
-        payment_activation_message: 'Pour activer votre compte sponsor et accéder à toutes les fonctionnalités, veuillez procéder au règlement de votre adhésion.',
+        payment_activation_message: 'Pour activer votre compte partenaire et accéder à toutes les fonctionnalités, veuillez procéder au règlement de votre adhésion.',
         make_payment: 'Procéder au Paiement',
         access_denied: 'Accès Réservé',
-        reserved_partners: 'Cet espace est réservé aux sponsors. Veuillez vous connecter avec un compte sponsor.',
+        reserved_partners: 'Cet espace est réservé aux partenaires. Veuillez vous connecter avec un compte partenaire.',
         dashboard_live: 'Dashboard Live',
         virtual_badge: 'Mon Badge Virtuel',
         roi_performance: 'Performance ROI',
@@ -518,10 +514,10 @@ const resources = {
           media_files: 'Fichiers Media'
         },
         ai_generation: 'Génération IA',
-        ai_description: 'Laissez notre IA analyser votre site web et remplir automatiquement votre profil sponsor avec vos logos, descriptions et services.',
+        ai_description: 'Laissez notre IA analyser votre site web et remplir automatiquement votre profil partenaire avec vos logos, descriptions et services.',
         ai_button: 'Auto-Fill avec SIB AI',
         manual_management: 'Gestion Manuelle',
-        manual_description: 'Modifiez manuellement tous les détails de votre profil sponsor.',
+        manual_description: 'Modifiez manuellement tous les détails de votre profil partenaire.',
         manual_button: 'Éditer le Profil',
         edit_basic_info: 'Modifier les informations de base',
         media_catalog: 'Catalogue Média & Documents',
@@ -552,12 +548,12 @@ const resources = {
         edit_profile_manually: 'Édition Manuelle du Profil',
         update_company_info: 'Mettez à jour les informations de votre entreprise.',
         // Added from duplicate block
-        notFound: 'Sponsor introuvable',
-        notFoundDesc: "Nous ne trouvons pas le sponsor que vous recherchez.",
-        notFoundGeneric: 'Aucun sponsor trouvé',
+        notFound: 'Partenaire introuvable',
+        notFoundDesc: "Nous ne trouvons pas le partenaire que vous recherchez.",
+        notFoundGeneric: 'Aucun partenaire trouvé',
         backToList: 'Retour à la liste',
         discoverSIBs: 'Découvrir SIB',
-        areYouPartner: 'Êtes-vous un sponsor ?',
+        areYouPartner: 'Êtes-vous un partenaire ?',
         completeProfile: 'Complétez votre profil pour plus de visibilité',
         back_to_dashboard: 'Retour au tableau de bord',
         priority: 'Prioritaire',
@@ -662,12 +658,12 @@ const resources = {
         download_invoice: 'Télécharger la facture'
       },
       partner_legacy: {
-        notFound: 'Sponsor introuvable',
-        notFoundDesc: "Nous ne trouvons pas le sponsor que vous recherchez.",
-        notFoundGeneric: 'Aucun sponsor trouvé',
+        notFound: 'Partenaire introuvable',
+        notFoundDesc: "Nous ne trouvons pas le partenaire que vous recherchez.",
+        notFoundGeneric: 'Aucun partenaire trouvé',
         backToList: 'Retour à la liste',
         discoverSIBs: 'Découvrir SIB',
-        areYouPartner: 'Êtes-vous un sponsor ?',
+        areYouPartner: 'Êtes-vous un partenaire ?',
         completeProfile: 'Complétez votre profil pour plus de visibilité',
         back_to_dashboard: 'Retour au tableau de bord',
         priority: 'Prioritaire',
@@ -676,9 +672,9 @@ const resources = {
         payment_validation_needed: 'Votre compte est créé mais nécessite une validation de paiement pour activer l\'accès au tableau de bord.',
         finalize_payment: 'Finaliser le Paiement',
         access_denied: 'Accès Non Autorisé',
-        reserved_partners: 'Ce tableau de bord est réservé aux sponsors SIB 2026.',
+        reserved_partners: 'Ce tableau de bord est réservé aux partenaires SIB 2026.',
         payment_validation_required: 'Validation de Paiement Requise',
-        payment_activation_message: 'Pour activer toutes les fonctionnalités de votre compte sponsor "Premium", veuillez finaliser votre règlement. Accès actuellement limité à la soumission de preuve.',
+        payment_activation_message: 'Pour activer toutes les fonctionnalités de votre compte partenaire "Premium", veuillez finaliser votre règlement. Accès actuellement limité à la soumission de preuve.',
         make_payment: 'Effectuer le Paiement',
         dashboard_live: 'Dashboard Live',
         ai_generation: 'Génération IA Intelligent',
@@ -701,8 +697,8 @@ const resources = {
         },
         events: {
           title: 'Événements Sponsorisés',
-          subtitle: 'Gérez vos événements sponsors et suivez leur impact',
-          program: 'Programme Événements Sponsors',
+          subtitle: 'Gérez vos événements partenaires et suivez leur impact',
+          program: 'Programme Événements Partenaires',
           available: 'Événements disponibles',
           loading: 'Chargement des événements...',
           none: 'Aucun événement disponible pour le moment.',
@@ -729,7 +725,7 @@ const resources = {
           awaiting_response: 'En attente de réponse',
           sources: {
             events: 'Événements SIB',
-            networking: 'Réseautage Sponsors',
+            networking: 'Réseautage Partenaires',
             referrals: 'Références Clients',
             marketing: 'Campagnes Marketing'
           },
@@ -753,7 +749,7 @@ const resources = {
           }
         },
         activity: {
-          title: 'Activité Sponsor',
+          title: 'Activité Partenaire',
           subtitle: 'Suivez toutes vos interactions et engagements SIB',
           full_history: 'Historique Complet des Activités',
           realtime: 'Temps Réel',
@@ -861,18 +857,18 @@ const resources = {
         restrooms: 'Toilettes'
       },
       accommodation: {
-        badge: 'Hébergement Sponsors',
+        badge: 'Hébergement Partenaires',
         title: 'Hébergement à El Jadida',
-        subtitle: 'Profitez de tarifs préférentiels dans nos hôtels sponsors',
-        hotels_partners: 'Hôtels sponsors',
+        subtitle: 'Profitez de tarifs préférentiels dans nos hôtels partenaires',
+        hotels_partners: 'Hôtels partenaires',
         vip_discount: 'Réduction VIP',
         april_dates: 'Novembre 2026',
         vip_advantage_title: '🌟 Avantage Visiteurs VIP',
-        vip_advantage_desc: 'En tant que visiteur VIP, bénéficiez de tarifs préférentiels exclusifs sur tous nos hôtels sponsors',
+        vip_advantage_desc: 'En tant que visiteur VIP, bénéficiez de tarifs préférentiels exclusifs sur tous nos hôtels partenaires',
         vip_benefit_1: 'Jusqu\'à -20% sur tous les hôtels',
         vip_benefit_2: 'Réservation prioritaire garantie',
         vip_benefit_3: 'Surclassement gratuit selon disponibilité',
-        featured_partner: '⭐ Sponsor Premium',
+        featured_partner: '⭐ Partenaire Premium',
         standard_rate: 'Tarif Standard',
         vip_rate: 'Tarif VIP',
         per_night: 'par nuit',
@@ -1221,7 +1217,7 @@ const resources = {
         company_example: 'Atlas BTP Solutions',
         country_example: 'Maroc',
         website_placeholder: 'https://votre-site.com',
-        description_example: 'Sponsor logistique premium spécialisé dans les services BTP, offrant des solutions de stockage de matériaux, de distribution et de gestion de chantier.'
+        description_example: 'Partenaire logistique premium spécialisé dans les services BTP, offrant des solutions de stockage de matériaux, de distribution et de gestion de chantier.'
       },
       admin_media: {
         manager_title: 'Gestionnaire de médias administrateur',
@@ -1821,11 +1817,7 @@ const resources = {
           profile: 'My Exhibitor Profile',
           profile_desc: 'Update your information',
           qr_code: 'Booth QR Code',
-          qr_code_desc: 'Generate your personalized QR code',
-          advanced_networking: 'Advanced Networking',
-          advanced_networking_desc: 'Explore and connect with qualified contacts',
-          ai_matching: 'AI Matching',
-          ai_matching_desc: 'Find the best partners using artificial intelligence'
+          qr_code_desc: 'Generate your personalized QR code'
         },
         header: {
           published_tooltip_hide: 'Click to hide your profile',

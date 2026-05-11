@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, FileText, Download, User, Globe, Calendar, Hash, Clock, CheckCircle, XCircle, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jsPDF } from 'jspdf';
@@ -6,6 +6,7 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { ROUTES } from '../../lib/routes';
 import useAuthStore from '../../store/authStore';
+import { useTranslation } from '../../hooks/useTranslation';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 
@@ -20,11 +21,12 @@ interface VisaFormData {
   address: string;
 }
 
+type Status = 'pending' | 'approved' | 'rejected';
+
 interface VisaRequest {
   id: string;
-  status: 'pending' | 'approved' | 'rejected';
-  rejection_reason: string | null;
-  created_at: string;
+  user_id: string;
+  user_email: string;
   first_name: string;
   last_name: string;
   passport_number: string;
@@ -33,18 +35,26 @@ interface VisaRequest {
   organization: string | null;
   job_title: string | null;
   address: string | null;
+  status: Status;
+  rejection_reason: string | null;
+  created_at: string;
+  reviewed_at: string | null;
 }
 
-function buildVisaPDF(data: {
-  firstName: string; lastName: string; passportNumber: string; nationality: string;
-  dateOfBirth: string; organization: string; jobTitle: string;
-}, userId: string, refNum: string) {
+const STATUS_CONFIG = {
+  pending:  { label: 'En attente',  bg: 'bg-amber-100',  text: 'text-amber-800',  Icon: Clock       },
+  approved: { label: 'Approuvée', bg: 'bg-green-100',  text: 'text-green-800',  Icon: CheckCircle },
+  rejected: { label: 'Refusée',   bg: 'bg-red-100',    text: 'text-red-800',    Icon: XCircle     },
+};
+
+function buildVisaPDF(req: VisaRequest) {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const today = new Date();
   const dateStr = today.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
   const marginLeft = 25;
   const marginRight = 185;
   const pageWidth = marginRight - marginLeft;
+  const refNum = `SIB2026-VISA-${req.id.slice(0, 6).toUpperCase()}`;
   let y = 25;
 
   doc.setFont('helvetica', 'bold');
@@ -80,7 +90,7 @@ function buildVisaPDF(data: {
 
   doc.setTextColor(20, 20, 20);
   doc.setFontSize(11);
-  const fullName = `${data.firstName.toUpperCase()} ${data.lastName.toUpperCase()}`;
+  const fullName = `${req.first_name.toUpperCase()} ${req.last_name.toUpperCase()}`;
   doc.text('Messieurs/Mesdames,', marginLeft, y);
   y += 8;
 
@@ -101,13 +111,12 @@ function buildVisaPDF(data: {
 
   const fields: [string, string][] = [
     ['Nom complet', fullName],
-    ['Numero de passeport', data.passportNumber || '-'],
-    ['Nationalite', data.nationality || '-'],
-    ['Date de naissance', data.dateOfBirth || '-'],
-    ['Organisation', data.organization || '-'],
-    ['Fonction', data.jobTitle || '-'],
+    ['Numero de passeport', req.passport_number],
+    ['Nationalite', req.nationality],
+    ['Date de naissance', req.date_of_birth || '-'],
+    ['Organisation', req.organization || '-'],
+    ['Fonction', req.job_title || '-'],
   ];
-
   fields.forEach(([label, value]) => {
     doc.setFont('helvetica', 'bold');
     doc.text(`${label} :`, marginLeft + 4, y);
@@ -150,89 +159,75 @@ function buildVisaPDF(data: {
   return doc;
 }
 
+const emptyForm: VisaFormData = {
+  firstName: '', lastName: '', passportNumber: '', nationality: '',
+  dateOfBirth: '', organization: '', jobTitle: '', address: '',
+};
+
 export default function VisaLetterPage() {
   const { user } = useAuthStore();
+  const { t } = useTranslation();
   const profile = user?.profile || {};
 
-  const [existingRequest, setExistingRequest] = useState<VisaRequest | null | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
+  const [requests, setRequests] = useState<VisaRequest[]>([]);
+  const [loadingRequests, setLoadingRequests] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [downloading, setDownloading] = useState(false);
 
   const [form, setForm] = useState<VisaFormData>({
+    ...emptyForm,
     firstName: (profile.firstName as string) || '',
     lastName: (profile.lastName as string) || '',
-    passportNumber: '',
     nationality: (profile.country as string) || '',
-    dateOfBirth: '',
     organization: (profile.companyName as string) || '',
     jobTitle: (profile.position as string) || '',
-    address: '',
   });
 
-  useEffect(() => {
+  const fetchRequests = useCallback(async () => {
     if (!user?.id) { return; }
-    supabase
+    setLoadingRequests(true);
+    const { data, error } = await (supabase as any)
       .from('visa_letter_requests')
       .select('*')
       .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
-      .then(({ data, error }) => {
-        if (error) { console.error(error); }
-        setExistingRequest(data ?? null);
-        setLoading(false);
-      });
-  }, [user?.id]);
+      .order('created_at', { ascending: false });
+    if (error) { toast.error(t('common.load_error')); }
+    else { setRequests(data || []); }
+    setLoadingRequests(false);
+  }, [user, t]);
+
+  useEffect(() => { fetchRequests(); }, [fetchRequests]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async () => {
-    if (!user?.id || !user?.email) { return; }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user?.id) { return; }
     setSubmitting(true);
-    const { data, error } = await supabase.from('visa_letter_requests').insert({
+    const { error } = await (supabase as any).from('visa_letter_requests').insert({
       user_id: user.id,
-      user_email: user.email,
-      first_name: form.firstName.trim(),
-      last_name: form.lastName.trim(),
-      passport_number: form.passportNumber.trim(),
-      nationality: form.nationality.trim(),
+      user_email: user.email || '',
+      first_name: form.firstName,
+      last_name: form.lastName,
+      passport_number: form.passportNumber,
+      nationality: form.nationality,
       date_of_birth: form.dateOfBirth || null,
-      organization: form.organization.trim() || null,
-      job_title: form.jobTitle.trim() || null,
-      address: form.address.trim() || null,
+      organization: form.organization || null,
+      job_title: form.jobTitle || null,
+      address: form.address || null,
       status: 'pending',
-    }).select().single();
-
+    });
     if (error) {
-      toast.error('Erreur lors de la soumission. Veuillez réessayer.');
-      console.error(error);
+      toast.error(t('visa.submit_error') || 'Erreur lors de la soumission');
     } else {
-      setExistingRequest(data as VisaRequest);
-      toast.success('Demande envoyée ! Vous serez notifié par email une fois validée.');
+      toast.success(t('visa.submit_success') || 'Demande envoyée — en attente de validation admin');
+      setForm(emptyForm);
+      setShowForm(false);
+      fetchRequests();
     }
     setSubmitting(false);
-  };
-
-  const handleDownloadPDF = () => {
-    if (existingRequest?.status !== 'approved') { return; }
-    setDownloading(true);
-    const refNum = `SIB2026-VISA-${existingRequest.id.slice(0, 6).toUpperCase()}`;
-    const doc = buildVisaPDF({
-      firstName: existingRequest.first_name,
-      lastName: existingRequest.last_name,
-      passportNumber: existingRequest.passport_number,
-      nationality: existingRequest.nationality,
-      dateOfBirth: existingRequest.date_of_birth || '',
-      organization: existingRequest.organization || '',
-      jobTitle: existingRequest.job_title || '',
-    }, user?.id || '', refNum);
-    doc.save(`lettre_invitation_visa_SIB2026_${existingRequest.last_name.toLowerCase()}.pdf`);
-    setDownloading(false);
-    toast.success('Lettre téléchargée avec succès.');
   };
 
   const isValid = form.firstName && form.lastName && form.passportNumber && form.nationality;
@@ -242,225 +237,186 @@ export default function VisaLetterPage() {
       <div className="max-w-3xl mx-auto px-4">
         <Link to={ROUTES.VISITOR_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Retour au tableau de bord
+          {t('visa.back')}
         </Link>
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Lettre d'invitation visa</h1>
-          <p className="mt-2 text-gray-600">
-            Soumettez votre demande. L'équipe SIB 2026 la validera et vous recevrez la lettre officielle par email.
-          </p>
+        <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">{t('visa.title')}</h1>
+            <p className="mt-2 text-gray-600">{t('visa.subtitle')}</p>
+          </div>
+          {!showForm && (
+            <Button
+              onClick={() => setShowForm(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <Send className="h-4 w-4 mr-2" />
+              Nouvelle demande
+            </Button>
+          )}
         </div>
 
-        {loading ? (
-          <div className="flex justify-center py-16">
-            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        ) : null}
-
-        {!loading && existingRequest ? (
-          /* ── Demande existante ── */
-          <Card className="p-8">
-            {existingRequest.status === 'pending' && (
-              <div className="flex flex-col items-center text-center gap-4 py-6">
-                <div className="p-4 bg-amber-50 rounded-full">
-                  <Clock className="h-10 w-10 text-amber-500" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-900">Demande en cours de traitement</h2>
-                <p className="text-gray-600 max-w-md">
-                  Votre demande a été soumise le{' '}
-                  <strong>{new Date(existingRequest.created_at).toLocaleDateString('fr-FR')}</strong>.
-                  L'équipe SIB 2026 la traitera dans les plus brefs délais. Vous recevrez un email dès validation.
-                </p>
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
-                  <Clock className="h-4 w-4" /> En attente de validation
-                </span>
-              </div>
-            )}
-
-            {existingRequest.status === 'approved' && (
-              <div className="flex flex-col items-center text-center gap-4 py-6">
-                <div className="p-4 bg-green-50 rounded-full">
-                  <CheckCircle className="h-10 w-10 text-green-500" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-900">Lettre approuvée !</h2>
-                <p className="text-gray-600 max-w-md">
-                  Votre lettre d'invitation officielle a été validée par l'équipe SIB 2026. Téléchargez-la ci-dessous.
-                </p>
-                <Button
-                  onClick={handleDownloadPDF}
-                  disabled={downloading}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-base"
-                >
-                  <Download className="h-5 w-5 mr-2" />
-                  {downloading ? 'Préparation...' : 'Télécharger la lettre PDF'}
-                </Button>
-              </div>
-            )}
-
-            {existingRequest.status === 'rejected' && (
-              <div className="flex flex-col items-center text-center gap-4 py-6">
-                <div className="p-4 bg-red-50 rounded-full">
-                  <XCircle className="h-10 w-10 text-red-500" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-900">Demande refusée</h2>
-                {existingRequest.rejection_reason && (
-                  <div className="w-full max-w-md bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-800 text-left">
-                    <strong>Motif :</strong> {existingRequest.rejection_reason}
-                  </div>
-                )}
-                <p className="text-gray-500 text-sm">
-                  Pour toute question, contactez <a href="mailto:Sib2026@urbacom.net" className="text-blue-600 underline">Sib2026@urbacom.net</a>.
-                </p>
-              </div>
-            )}
-          </Card>
-        ) : null}
-
-        {!loading && !existingRequest && (
-          /* ── Formulaire ── */
-          <>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <div className="flex gap-3">
-                <FileText className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-blue-800">
-                  <p className="font-medium mb-1">Comment ça fonctionne ?</p>
-                  <ol className="list-decimal ml-4 space-y-1">
-                    <li>Remplissez le formulaire ci-dessous</li>
-                    <li>L'équipe SIB valide votre demande (sous 48h)</li>
-                    <li>Vous recevez la lettre officielle par email + disponible ici</li>
-                  </ol>
-                </div>
-              </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="flex gap-3">
+            <FileText className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-blue-800">
+              <p className="font-medium mb-1">{t('visa.about_title')}</p>
+              <p>{t('visa.about_text')}</p>
             </div>
+          </div>
+        </div>
 
-            <Card className="p-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Informations du participant</h2>
-
+        {showForm && (
+          <Card className="p-8 mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">{t('visa.participant_info')}</h2>
+            <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <User className="inline h-4 w-4 mr-1" />Prénom <span className="text-red-500">*</span>
+                    <User className="inline h-4 w-4 mr-1" />{t('visa.first_name')} <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    name="firstName"
-                    value={form.firstName}
-                    onChange={handleChange}
+                  <input name="firstName" value={form.firstName} onChange={handleChange} required
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="Tel que sur le passeport"
-                  />
+                    placeholder={t('visa.first_name_ph')} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <User className="inline h-4 w-4 mr-1" />Nom <span className="text-red-500">*</span>
+                    <User className="inline h-4 w-4 mr-1" />{t('visa.last_name')} <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    name="lastName"
-                    value={form.lastName}
-                    onChange={handleChange}
+                  <input name="lastName" value={form.lastName} onChange={handleChange} required
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="Tel que sur le passeport"
-                  />
+                    placeholder={t('visa.last_name_ph')} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <Hash className="inline h-4 w-4 mr-1" />N° de passeport <span className="text-red-500">*</span>
+                    <Hash className="inline h-4 w-4 mr-1" />{t('visa.passport_number')} <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    name="passportNumber"
-                    value={form.passportNumber}
-                    onChange={handleChange}
+                  <input name="passportNumber" value={form.passportNumber} onChange={handleChange} required
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="Ex: AB1234567"
-                  />
+                    placeholder="Ex: AB1234567" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <Globe className="inline h-4 w-4 mr-1" />Nationalité <span className="text-red-500">*</span>
+                    <Globe className="inline h-4 w-4 mr-1" />{t('visa.nationality')} <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    name="nationality"
-                    value={form.nationality}
-                    onChange={handleChange}
+                  <input name="nationality" value={form.nationality} onChange={handleChange} required
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="Ex: Française, Sénégalaise..."
-                  />
+                    placeholder="Ex: Française, Sénégalaise..." />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <Calendar className="inline h-4 w-4 mr-1" />Date de naissance
+                    <Calendar className="inline h-4 w-4 mr-1" />{t('visa.birth_date')}
                   </label>
-                  <input
-                    type="date"
-                    name="dateOfBirth"
-                    value={form.dateOfBirth}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  />
+                  <input type="date" name="dateOfBirth" value={form.dateOfBirth} onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
                 </div>
                 <div>
-                  <label htmlFor="organization" className="block text-sm font-medium text-gray-700 mb-1">Organisation / Entreprise</label>
-                  <input
-                    id="organization"
-                    name="organization"
-                    value={form.organization}
-                    onChange={handleChange}
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('visa.organization')}</label>
+                  <input name="organization" value={form.organization} onChange={handleChange}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="Nom de votre entreprise"
-                  />
+                    placeholder="Nom de votre entreprise" />
                 </div>
                 <div>
-                  <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 mb-1">Fonction / Titre</label>
-                  <input
-                    id="jobTitle"
-                    name="jobTitle"
-                    value={form.jobTitle}
-                    onChange={handleChange}
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('visa.job_title')}</label>
+                  <input name="jobTitle" value={form.jobTitle} onChange={handleChange}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="Ex: Directeur Général, Ingénieur..."
-                  />
+                    placeholder="Ex: Directeur Général, Ingénieur..." />
                 </div>
                 <div>
-                  <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Adresse professionnelle</label>
-                  <input
-                    id="address"
-                    name="address"
-                    value={form.address}
-                    onChange={handleChange}
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('visa.address')}</label>
+                  <input name="address" value={form.address} onChange={handleChange}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="Ville, Pays"
-                  />
+                    placeholder="Ville, Pays" />
                 </div>
               </div>
-
-              <div className="mt-8 flex justify-end">
-                <Button
-                  onClick={handleSubmit}
-                  disabled={!isValid || submitting}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6"
-                >
-                  <Send className="h-5 w-5 mr-2" />
-                  {submitting ? 'Envoi en cours...' : 'Soumettre ma demande'}
+              <div className="mt-8 flex justify-end gap-3">
+                <Button type="button" onClick={() => setShowForm(false)}
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-700">
+                  Annuler
+                </Button>
+                <Button type="submit" disabled={!isValid || submitting}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6">
+                  <Send className="h-4 w-4 mr-2" />
+                  {submitting ? 'Envoi en cours...' : 'Soumettre la demande'}
                 </Button>
               </div>
-            </Card>
-
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-sm">
-              <div className="bg-white rounded-lg p-4 border">
-                <p className="font-semibold text-gray-700">Dates</p>
-                <p className="text-gray-500">25-29 Novembre 2026</p>
-              </div>
-              <div className="bg-white rounded-lg p-4 border">
-                <p className="font-semibold text-gray-700">Lieu</p>
-                <p className="text-gray-500">Parc d'Exposition Mohammed VI</p>
-              </div>
-              <div className="bg-white rounded-lg p-4 border">
-                <p className="font-semibold text-gray-700">Ville</p>
-                <p className="text-gray-500">El Jadida, Maroc</p>
-              </div>
-            </div>
-          </>
+            </form>
+          </Card>
         )}
+
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Mes demandes</h2>
+          {loadingRequests ? (
+            <div className="flex justify-center py-10">
+              <div className="w-7 h-7 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : requests.length === 0 ? (
+            <div className="text-center py-12 text-gray-500 bg-white rounded-lg border">
+              <FileText className="h-10 w-10 mx-auto mb-3 text-gray-300" />
+              <p>Aucune demande pour l&apos;instant.</p>
+              <p className="text-sm mt-1">Cliquez sur &quot;Nouvelle demande&quot; pour soumettre votre dossier.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {requests.map(req => {
+                const cfg = STATUS_CONFIG[req.status];
+                return (
+                  <Card key={req.id} className="p-5">
+                    <div className="flex items-start justify-between gap-4 flex-wrap">
+                      <div>
+                        <p className="font-semibold text-gray-900">{req.first_name} {req.last_name}</p>
+                        <p className="text-sm text-gray-500 mt-0.5">
+                          Passeport : {req.passport_number} · {req.nationality}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          Soumise le {new Date(req.created_at).toLocaleDateString('fr-FR')}
+                        </p>
+                        {req.status === 'rejected' && req.rejection_reason && (
+                          <p className="text-sm text-red-600 mt-2 bg-red-50 px-3 py-1.5 rounded">
+                            Motif : {req.rejection_reason}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${cfg.bg} ${cfg.text}`}>
+                          <cfg.Icon className="h-4 w-4" />
+                          {cfg.label}
+                        </span>
+                        {req.status === 'approved' && (
+                          <Button
+                            onClick={() => {
+                              const doc = buildVisaPDF(req);
+                              doc.save(`lettre_visa_SIB2026_${req.last_name.toLowerCase()}.pdf`);
+                            }}
+                            className="bg-green-600 hover:bg-green-700 text-white text-sm"
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            Télécharger PDF
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-sm">
+          <div className="bg-white rounded-lg p-4 border">
+            <p className="font-semibold text-gray-700">{t('visa.dates')}</p>
+            <p className="text-gray-500">25-29 Novembre 2026</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 border">
+            <p className="font-semibold text-gray-700">{t('visa.venue')}</p>
+            <p className="text-gray-500">Parc d&apos;Exposition Mohammed VI</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 border">
+            <p className="font-semibold text-gray-700">{t('visa.city')}</p>
+            <p className="text-gray-500">El Jadida, Maroc</p>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { supabase } from '../../lib/supabase';
 import useAuthStore from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
+import { createInvoice } from '../../services/invoiceService';
 import {
   CreditCard,
   Clock,
@@ -122,7 +123,7 @@ const STATUS_CONFIG = {
 
 const USER_TYPE_CONFIG = {
   visitor: { label: 'Visiteur', icon: User, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-  partner: { label: 'Sponsor', icon: Users, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+  partner: { label: 'Partenaire', icon: Users, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
   exhibitor: { label: 'Exposant', icon: Building2, color: 'text-orange-600', bgColor: 'bg-orange-50' },
   admin: { label: 'Admin', icon: Globe, color: 'text-purple-600', bgColor: 'bg-purple-50' }
 };
@@ -179,6 +180,7 @@ export default function PaymentValidationPage() {
         throw queryError;
       }
 
+      console.log('Payment requests trouvées:', paymentsData?.length || 0);
 
       // Si on a des paiements, récupérer les infos utilisateurs séparément
       let enrichedData: PaymentRequest[] = [];
@@ -194,6 +196,7 @@ export default function PaymentValidationPage() {
           .in('id', userIds);
 
         if (usersError) {
+          console.warn('Erreur chargement utilisateurs:', usersError);
         }
 
         // Créer un map des utilisateurs
@@ -241,6 +244,7 @@ export default function PaymentValidationPage() {
 
       if (rpcError) {
         // Si la RPC n'existe pas, faire une mise à jour directe
+        console.warn('RPC approve_payment_request non disponible, mise à jour directe');
 
         const { error: updateError } = await supabase
           .from('payment_requests')
@@ -257,15 +261,37 @@ export default function PaymentValidationPage() {
         // Mettre à jour le statut utilisateur
         const request = requests.find(r => r.id === requestId);
         if (request?.user_id) {
-          const userUpdate: Record<string, unknown> = { status: 'active', payment_status: 'paid' };
-          if (request.users?.type === 'visitor') {
-            userUpdate.visitor_level = 'vip';
-          }
           await supabase
             .from('users')
-            .update(userUpdate)
+            .update({ status: 'active', payment_status: 'paid' })
             .eq('id', request.user_id);
         }
+      }
+
+      // Générer la facture automatiquement dans invoices (non-bloquant)
+      const req = requests.find(r => r.id === requestId);
+      if (req?.user_id && req.users) {
+        let userType: 'visitor' | 'exhibitor' | 'partner' = 'visitor';
+        if (req.users.type === 'exhibitor') { userType = 'exhibitor'; }
+        else if (req.users.type === 'partner') { userType = 'partner'; }
+        const ref = req.transfer_reference || requestId;
+        const notesSuffix = notes ? ` — ${notes}` : '';
+        const invoiceNotes = `Virement bancaire validé — Réf: ${ref}${notesSuffix}`;
+        createInvoice({
+          user_id: req.user_id,
+          user_type: userType,
+          user_email: req.users.email,
+          user_name: req.users.name || req.users.company_name || req.users.email,
+          payment_request_id: requestId,
+          vat_rate: 0,
+          currency: req.currency || 'EUR',
+          notes: invoiceNotes,
+          lines: [{
+            description: req.description || 'Pass Premium VIP SIB 2026',
+            quantity: 1,
+            unit_price: req.amount,
+          }],
+        }).catch(err => console.warn('[Invoice] Erreur génération facture:', err));
       }
 
       toast.success('Paiement approuvé avec succès !');
@@ -294,6 +320,7 @@ export default function PaymentValidationPage() {
       });
 
       if (rpcError) {
+        console.warn('RPC reject_payment_request non disponible, mise à jour directe');
 
         const { error: updateError } = await supabase
           .from('payment_requests')
@@ -467,7 +494,7 @@ export default function PaymentValidationPage() {
                 {[
                   { value: 'all', label: 'Tous', icon: Globe },
                   { value: 'visitor', label: 'Visiteurs', icon: User },
-                  { value: 'partner', label: 'Sponsors', icon: Users },
+                  { value: 'partner', label: 'Partenaires', icon: Users },
                   { value: 'exhibitor', label: 'Exposants', icon: Building2 }
                 ].map(({ value, label, icon: Icon }) => (
                   <button
@@ -613,7 +640,7 @@ export default function PaymentValidationPage() {
 
                       {request.metadata?.partnerTier && (
                         <div className="bg-gray-50 rounded-xl p-4">
-                          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Niveau Sponsor</p>
+                          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Niveau Partenaire</p>
                           <p className="font-semibold text-gray-900">
                             {request.metadata.partnerTier === 'gold' && '🥇 Sponsor Gold'}
                             {request.metadata.partnerTier === 'silver' && '🥈 Sponsor Silver'}

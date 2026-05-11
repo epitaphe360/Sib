@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   Tag, Crown, Building2, Handshake, Pencil, Check, X,
-  RefreshCw, AlertCircle, Save, DollarSign,
+  RefreshCw, AlertCircle, Save, DollarSign, ArrowLeft,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import useAuthStore from '../../store/authStore';
@@ -59,8 +60,9 @@ function EditableRow({ row, onSaved }: Readonly<EditCellProps>) {
         .update({ amount: parsed, currency, updated_at: new Date().toISOString(), updated_by: user?.id ?? null })
         .eq('id', row.id)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Aucune ligne mise à jour — ID introuvable');
       toast.success(`Prix mis à jour : ${row.label}`);
       onSaved(data as PricingRow);
       setEditing(false);
@@ -231,6 +233,7 @@ export default function AdminPricingPage() {
   const [rows, setRows] = useState<PricingRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -266,6 +269,15 @@ export default function AdminPricingPage() {
 
         {/* En-tête */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          {/* Retour */}
+          <button
+            onClick={() => navigate('/admin/dashboard')}
+            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-indigo-600 transition-colors mb-5"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Retour au Tableau de bord
+          </button>
+
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-md">

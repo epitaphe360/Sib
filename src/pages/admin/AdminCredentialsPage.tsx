@@ -75,7 +75,7 @@ export default function AdminCredentialsPage() {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, email, first_name, last_name, type, company_name, created_at')
+        .select('id, email, name, type, profile, created_at')
         .in('type', ['exhibitor', 'partner'])
         .order('type')
         .order('created_at', { ascending: false });
@@ -86,9 +86,9 @@ export default function AdminCredentialsPage() {
         (data ?? []).map((u: any) => ({
           id: u.id,
           email: u.email ?? '',
-          name: [u.first_name, u.last_name].filter(Boolean).join(' ') || u.email?.split('@')[0] || '—',
+          name: u.name || u.email?.split('@')[0] || '—',
           type: u.type,
-          company: u.company_name,
+          company: u.profile?.company_name ?? u.profile?.company ?? null,
           lastSentAt: null,
           status: 'idle',
         }))
@@ -103,8 +103,8 @@ export default function AdminCredentialsPage() {
   // ── Chargement log audit ────────────────────────────────────────────────
   const loadAuditLog = useCallback(async () => {
     const { data } = await supabase
-      .from('admin_audit_log')
-      .select('*')
+      .from('audit_logs')
+      .select('id, action, actor_id, entity_id, metadata, created_at')
       .eq('action', 'send_credentials')
       .order('created_at', { ascending: false })
       .limit(50);

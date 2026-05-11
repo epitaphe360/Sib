@@ -925,6 +925,12 @@ export const extraTranslations = {
     'visiter.pourquoi_desc': 'Les raisons de participer au SIB 2026',
     'visiter.vip': 'Accès VIP',
     'visiter.vip_desc': "Profitez d'une expérience premium",
+    'visiter.hebergement': 'Hébergement',
+    'visiter.hebergement_desc': 'Trouvez votre hébergement pour le salon',
+    'visiter.speakers': 'Intervenants',
+    'visiter.speakers_desc': 'Découvrez les experts qui interviennent au SIB 2026',
+    'visiter.plan': 'Plan du salon',
+    'visiter.plan_desc': 'Orientez-vous dans les halls d\'exposition',
 
     // === VISITOR ===
     'visitor.ai_networking': 'Matching IA',

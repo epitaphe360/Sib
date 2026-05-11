@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ArrowLeft, Camera, CheckCircle, XCircle, UserPlus, Globe,
   Mail, Phone, Building2, Search, Printer, BadgeCheck, Newspaper,
@@ -10,6 +10,8 @@ import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
 import { useTranslation } from '../../hooks/useTranslation';
+import PrintableBadgeA4 from '../../components/badge/PrintableBadgeA4';
+import type { UserBadge } from '../../types';
 
 interface PressAccreditation {
   id: string;
@@ -47,105 +49,85 @@ function PressBadge({ acc, onClose }: { acc: PressAccreditation; onClose: () => 
   const { t } = useTranslation();
   const badgeRef = useRef<HTMLDivElement>(null);
   const num = badgeNum(acc.id);
-  const initials = (acc.first_name[0] || '') + (acc.last_name[0] || '');
-  const qr = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=SIB2026-PRESS-${num}&bgcolor=0F2034&color=C9A84C&qzone=1`;
 
-  const handlePrint = () => {
-    const el = badgeRef.current;
-    if (!el) return;
-    const win = window.open('', '_blank');
-    if (!win) return;
-    win.document.write(`<!DOCTYPE html>
-<html><head><meta charset="utf-8">
-<title>Badge Presse - ${acc.first_name} ${acc.last_name}</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    width: 100%; height: 100%;
-    background: #ffffff;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    display: flex; justify-content: center; align-items: center;
-  }
-  .badge-wrap {
-    display: inline-block;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-  @media print {
-    html, body { background: white; }
-    @page { size: A6 landscape; margin: 8mm; }
-    .badge-wrap {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    * {
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-      color-adjust: exact !important;
-    }
-  }
-</style>
-</head>
-<body>
-  <div class="badge-wrap">${el.outerHTML}</div>
-  <script>window.onload = function(){ window.print(); setTimeout(function(){ window.close(); }, 500); };</script>
-</body></html>`);
-    win.document.close();
+  // Construction du UserBadge compatible PrintableBadgeA4
+  const badge: UserBadge = {
+    id: acc.id,
+    userId: acc.id,
+    badgeCode: `SIB2026-PRESS-${num}`,
+    userType: 'visitor',           // type de base compatible
+    fullName: `${acc.first_name} ${acc.last_name}`,
+    companyName: acc.media_name,
+    position: acc.job_title,
+    email: acc.email,
+    phone: acc.phone,
+    accessLevel: 'press' as UserBadge['accessLevel'],
+    validFrom: new Date('2026-11-25'),
+    validUntil: new Date('2026-11-29'),
+    status: 'active',
+    scanCount: 0,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
+
+  const handlePrint = useCallback(() => {
+    const el = badgeRef.current;
+    if (!el) { return; }
+    const html = [
+      '<!DOCTYPE html><html><head>',
+      '<meta charset="utf-8">',
+      `<base href="${window.location.origin}/">`,
+      `<title>Badge Presse - ${acc.first_name} ${acc.last_name}</title>`,
+      '<style>* { margin: 0; padding: 0; box-sizing: border-box; }',
+      'body { font-family: Segoe UI, sans-serif; background: white; }',
+      '@page { size: A4; margin: 10mm; }',
+      '@media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }',
+      '</style>',
+      '<script>window.onafterprint=function(){window.close();};window.onload=function(){setTimeout(function(){window.print();},500);};</script>',
+      '</head><body>',
+      el.innerHTML,
+      '</body></html>',
+    ].join('');
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    if (!w) {
+      URL.revokeObjectURL(url);
+      toast.error('Autorisez les popups pour ce site dans Chrome, puis réessayez.');
+      return;
+    }
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }, [acc]);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full"
+        className="bg-white rounded-2xl shadow-2xl w-full overflow-hidden"
+        style={{ maxWidth: 880 }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-[#0F2034] text-lg">{t('admin.press_badge_title')}</h3>
-          <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100 text-gray-500"><X className="w-5 h-5" /></button>
+        <div className="flex justify-between items-center px-5 py-3 border-b border-gray-100">
+          <h3 className="font-bold text-[#0F2034] text-base">{t('admin.press_badge_title')}</h3>
+          <button onClick={onClose} className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-500"><X className="w-5 h-5" /></button>
         </div>
 
-        {/* Badge */}
-        <div ref={badgeRef} style={{ width: 320, background: 'linear-gradient(135deg,#0F2034 60%,#1B365D)', borderRadius: 12, overflow: 'hidden', color: 'white', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', margin: '0 auto' }}>
-          {/* Top bar */}
-          <div style={{ background: '#C9A84C', padding: '6px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontWeight: 800, fontSize: 11, letterSpacing: 3, color: '#0F2034' }}>SIB 2026</span>
-            <span style={{ fontWeight: 800, fontSize: 11, letterSpacing: 2, color: '#0F2034' }}>PRESSE</span>
-          </div>
-
-          {/* Body */}
-          <div style={{ padding: '16px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-            {/* Avatar */}
-            <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(201,168,76,0.25)', border: '2px solid #C9A84C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 700, color: '#C9A84C', flexShrink: 0 }}>
-              {initials.toUpperCase()}
-            </div>
-            {/* Info */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontWeight: 800, fontSize: 16, lineHeight: 1.2, color: '#FFFFFF' }}>{acc.first_name}</div>
-              <div style={{ fontWeight: 800, fontSize: 16, lineHeight: 1.2, color: '#FFFFFF' }}>{acc.last_name.toUpperCase()}</div>
-              <div style={{ fontSize: 11, color: '#C9A84C', marginTop: 4, fontWeight: 600 }}>{acc.job_title}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.75)', marginTop: 2 }}>{acc.media_name}</div>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>{acc.media_type} · {acc.country}</div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div style={{ padding: '0 16px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-            <div>
-              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.45)', letterSpacing: 1, textTransform: 'uppercase' }}>Badge N°</div>
-              <div style={{ fontSize: 14, fontWeight: 800, color: '#C9A84C', letterSpacing: 2 }}>{num}</div>
-              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)' }}>Salon International du Bâtiment</div>
-            </div>
-            <img src={qr} alt="QR Code" style={{ width: 60, height: 60, borderRadius: 6, border: '1px solid rgba(201,168,76,0.3)' }} />
-          </div>
+        {/* Badge A4 complet avec config de /admin/badge-config */}
+        <div ref={badgeRef} className="overflow-auto max-h-[75vh]">
+          <PrintableBadgeA4 badge={badge} loadConfig />
         </div>
 
-        <button
-          onClick={handlePrint}
-          className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 bg-[#0F2034] hover:bg-[#1B365D] text-white rounded-lg text-sm font-semibold transition-colors"
-        >
-          <Printer className="w-4 h-4" /> {t('admin.press_print_badge')}
-        </button>
+        <div className="flex gap-3 px-5 py-4 border-t border-gray-100">
+          <button
+            onClick={handlePrint}
+            className="flex-1 flex items-center justify-center gap-2 bg-[#0F2034] hover:bg-[#1B365D] text-white py-2.5 rounded-xl text-sm font-semibold transition-colors"
+          >
+            <Printer className="w-4 h-4" /> {t('admin.press_print_badge')}
+          </button>
+          <button onClick={onClose} className="px-4 py-2.5 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-xl text-sm font-medium transition-colors">
+            {t('common.close') || 'Fermer'}
+          </button>
+        </div>
       </motion.div>
     </div>
   );

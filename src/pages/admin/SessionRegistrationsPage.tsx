@@ -152,7 +152,7 @@ export default function SessionRegistrationsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <PageHero
-        badge={{ label: t('session_reg.admin_badge'), variant: 'admin' }}
+        badge={<span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-white/20 text-white px-3 py-1 rounded-full">{t('session_reg.admin_badge')}</span>}
         title={t('session_reg.page_title')}
         subtitle={t('session_reg.page_subtitle')}
         py="py-12 md:py-16"
