@@ -1,0 +1,46 @@
+/**
+ * Traductions pour form
+ */
+
+export const formTranslations = {
+  fr: {
+    'form.activity_sector': '[form.activity_sector]',
+    'form.confirm_and_send': '[form.confirm_and_send]',
+    'form.contact_information': '[form.contact_information]',
+    'form.country': '[form.country]',
+    'form.description': '[form.description]',
+    'form.edit_information': '[form.edit_information]',
+    'form.email': '[form.email]',
+    'form.ensure_correct_before_submit': '[form.ensure_correct_before_submit]',
+    'form.full_name': '[form.full_name]',
+    'form.organization_information': '[form.organization_information]',
+    'form.organization_name': '[form.organization_name]',
+    'form.partnership_type': '[form.partnership_type]',
+    'form.phone': '[form.phone]',
+    'form.position': '[form.position]',
+    'form.request_review_warning': '[form.request_review_warning]',
+    'form.sending': '[form.sending]',
+    'form.verify_information': '[form.verify_information]',
+    'form.website': '[form.website]',
+  },
+  ar: {
+    'form.activity_sector': '[form.activity_sector]',
+    'form.confirm_and_send': '[form.confirm_and_send]',
+    'form.contact_information': '[form.contact_information]',
+    'form.country': '[form.country]',
+    'form.description': '[form.description]',
+    'form.edit_information': '[form.edit_information]',
+    'form.email': '[form.email]',
+    'form.ensure_correct_before_submit': '[form.ensure_correct_before_submit]',
+    'form.full_name': '[form.full_name]',
+    'form.organization_information': '[form.organization_information]',
+    'form.organization_name': '[form.organization_name]',
+    'form.partnership_type': '[form.partnership_type]',
+    'form.phone': '[form.phone]',
+    'form.position': '[form.position]',
+    'form.request_review_warning': '[form.request_review_warning]',
+    'form.sending': '[form.sending]',
+    'form.verify_information': '[form.verify_information]',
+    'form.website': '[form.website]',
+  },
+};

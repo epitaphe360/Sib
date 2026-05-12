@@ -1,0 +1,46 @@
+/**
+ * Traductions pour checkin
+ */
+
+export const checkinTranslations = {
+  fr: {
+    'checkin.access_control': '[checkin.access_control]',
+    'checkin.already_at': '[checkin.already_at]',
+    'checkin.attendees_count': '[checkin.attendees_count]',
+    'checkin.attendees_list': '[checkin.attendees_list]',
+    'checkin.badge_absent': '[checkin.badge_absent]',
+    'checkin.badge_present': '[checkin.badge_present]',
+    'checkin.choose_session': '[checkin.choose_session]',
+    'checkin.loading': '[checkin.loading]',
+    'checkin.next_scan': '[checkin.next_scan]',
+    'checkin.no_attendees': '[checkin.no_attendees]',
+    'checkin.page_subtitle': '[checkin.page_subtitle]',
+    'checkin.page_title': '[checkin.page_title]',
+    'checkin.present': '[checkin.present]',
+    'checkin.scan_qr': '[checkin.scan_qr]',
+    'checkin.search_ph': '[checkin.search_ph]',
+    'checkin.select_session': '[checkin.select_session]',
+    'checkin.starting_scanner': '[checkin.starting_scanner]',
+    'checkin.verifying': '[checkin.verifying]',
+  },
+  ar: {
+    'checkin.access_control': '[checkin.access_control]',
+    'checkin.already_at': '[checkin.already_at]',
+    'checkin.attendees_count': '[checkin.attendees_count]',
+    'checkin.attendees_list': '[checkin.attendees_list]',
+    'checkin.badge_absent': '[checkin.badge_absent]',
+    'checkin.badge_present': '[checkin.badge_present]',
+    'checkin.choose_session': '[checkin.choose_session]',
+    'checkin.loading': '[checkin.loading]',
+    'checkin.next_scan': '[checkin.next_scan]',
+    'checkin.no_attendees': '[checkin.no_attendees]',
+    'checkin.page_subtitle': '[checkin.page_subtitle]',
+    'checkin.page_title': '[checkin.page_title]',
+    'checkin.present': '[checkin.present]',
+    'checkin.scan_qr': '[checkin.scan_qr]',
+    'checkin.search_ph': '[checkin.search_ph]',
+    'checkin.select_session': '[checkin.select_session]',
+    'checkin.starting_scanner': '[checkin.starting_scanner]',
+    'checkin.verifying': '[checkin.verifying]',
+  },
+};
