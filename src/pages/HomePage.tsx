@@ -8,10 +8,8 @@ import { LogoShowcaseSection } from '../components/home/LogoShowcaseSection';
 import { NetworkingSection } from '../components/home/NetworkingSection';
 import { ServicesSection } from '../components/home/ServicesSection';
 import { RentalBanner } from '../components/common/RentalBanner';
-import { useTranslation } from '../hooks/useTranslation';
 
 export default function HomePage() {
-  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen">

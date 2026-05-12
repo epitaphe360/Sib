@@ -74,11 +74,15 @@ export default function AppointmentCalendar() {
   // Filtrer les rendez-vous pour l'utilisateur connecté seulement
   const userAppointments = appointments.filter(app => {
     if (!authUser?.id) {return false;}
-    const uid = authUser.id;
-    // Vérifier si l'utilisateur est visiteur ou exposant dans ce rendez-vous
-    const isVisitor = app.visitorId === uid || (app as any).visitor_id === uid;
-    const isExhibitor = app.exhibitorId === uid || (app as any).exhibitorUserId === uid;
-    return isVisitor || isExhibitor;
+    // Pour les visiteurs: afficher leurs rendez-vous
+    if (authUser.type === 'visitor') {
+      return app.visitorId === authUser.id;
+    }
+    // Pour les exposants: afficher les rendez-vous qu'ils reçoivent
+    if (authUser.type === 'exhibitor') {
+      return app.exhibitorId === authUser.id;
+    }
+    return false;
   });
 
   // Vérification d'authentification
@@ -150,7 +154,7 @@ export default function AppointmentCalendar() {
     try {
       // CRITICAL: Only exhibitors can create slots (security check)
       if (authUser?.type !== 'exhibitor' && authUser?.type !== 'partner') {
-        toast.error('Seuls les exposants et sponsors peuvent créer des créneaux');
+        toast.error('Seuls les exposants et partenaires peuvent créer des créneaux');
         return;
       }
 
@@ -267,7 +271,7 @@ export default function AppointmentCalendar() {
       const visitorId = authUser?.id || 'user1';
       const userType = authUser?.type;
 
-      // Les exposants et sponsors peuvent toujours réserver sans restriction de quota visiteur
+      // Les exposants et partenaires peuvent toujours réserver sans restriction de quota visiteur
       const isExhibitorOrPartner = userType === 'exhibitor' || userType === 'partner';
 
       if (!isExhibitorOrPartner) {
@@ -321,8 +325,8 @@ export default function AppointmentCalendar() {
 
   const handleRejectAppointment = async (appointmentId: string) => {
     try {
-      await cancelAppointment(appointmentId);
-      toast.success('Rendez-vous refusé et annulé.');
+      await updateAppointmentStatus(appointmentId, 'rejected');
+      toast.success('Rendez-vous refusé.');
     } catch {
       toast.error('Erreur lors du refus.');
     }
@@ -520,9 +524,9 @@ export default function AppointmentCalendar() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900">
-                    {userAppointments.filter(a => a.status === 'cancelled').length}
+                    {userAppointments.filter(a => a.status === 'cancelled' || a.status === 'rejected').length}
                   </p>
-                  <p className="text-sm text-gray-600">Annulés</p>
+                  <p className="text-sm text-gray-600">Annulés/Refusés</p>
                 </div>
               </div>
             </Card>

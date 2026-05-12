@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback, useEffect, memo } from 'react';
+import React, { useState, useCallback, useEffect, memo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Menu,
@@ -18,7 +18,6 @@ import { useMediaVisibilityStore } from '../../store/mediaVisibilityStore';
 import { LanguageSelector } from '../ui/LanguageSelector';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { useTranslation } from '../../hooks/useTranslation';
-import { MoroccanPattern } from '../ui/MoroccanDecor';
 import { isAuthInitialized } from '../../lib/initAuth';
 import { useNavVisibilityStore } from '../../store/navVisibilityStore';
 

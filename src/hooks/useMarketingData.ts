@@ -33,7 +33,7 @@ export function useMarketingData() {
         .from('media_contents')
         .select('id, type, title, description, thumbnail_url, status, created_at, category, views_count, likes_count, shares_count')
         .order('created_at', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) {throw error;}
       setMediaItems((data as MediaItem[]) || []);
@@ -51,7 +51,7 @@ export function useMarketingData() {
         .from('news_articles')
         .select('id, title, content, excerpt, author, category, tags, image_url, published_at, created_at, published')
         .order('created_at', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) {throw error;}
 

@@ -94,6 +94,8 @@ interface BadgeConfig {
   face4_content: FaceContent;
   // Sponsors sélectionnés pour la face partenaires
   featured_sponsors: FeaturedSponsor[];
+  partners_rows_config: number[]; // logos par ligne, ex: [2, 3, 4]
+  partners_logo_height: number;   // hauteur logos en mm
   // Infos pratiques (Face 1 option)
   opening_hours: string;
   location_address: string;
@@ -153,6 +155,8 @@ const DEFAULT_CONFIG: BadgeConfig = {
   face3_content: 'identite_participant',
   face4_content: 'partenaires',
   featured_sponsors: [],
+  partners_rows_config: [3, 3],
+  partners_logo_height: 13,
   opening_hours: 'de 9h30 à 18h30 · Vendredi & Samedi / de 9h à 17h30 · Dimanche',
   location_address: 'ICEC - Ain Sebaa, Casablanca',
   location_qr_url: '',
@@ -511,9 +515,33 @@ function Face4({ faceStyle, config, primary, secondary, qrAppStore, qrPlayStore 
   if (config.face4_content === 'app_promo') {
     return <Face1 faceStyle={faceStyle} config={{ ...config, face1_content: 'app_promo' }} primary={primary} secondary={secondary} qrAppStore={qrAppStore} qrPlayStore={qrPlayStore} />;
   }
-  // Option partenaires (défaut) — utilise featured_sponsors si disponibles, sinon fallback logos statiques
+  // Option partenaires (défaut) — lignes configurables via partners_rows_config
   const sponsors: FeaturedSponsor[] = (config.featured_sponsors ?? []).slice().sort((a, b) => a.order - b.order);
   const hasSponsors = sponsors.length > 0;
+  const logoH = `${config.partners_logo_height ?? 13}mm`;
+  const rowsConfig = config.partners_rows_config ?? [3, 3];
+
+  type LogoItem = { key: string; url: string; label: string; sub?: string };
+  const allLogos: LogoItem[] = hasSponsors
+    ? sponsors.map(sp => ({ key: sp.id, url: sp.logo_url, label: sp.name, sub: sp.role }))
+    : [
+        { key: 'aegis', url: config.logo_aegis_url, label: config.logo_aegis_label || "Sous l'égide de" },
+        { key: 'organizer', url: config.logo_organizer_url, label: config.logo_organizer_label },
+        { key: 'delegate', url: config.logo_delegate_url, label: config.logo_delegate_label },
+        { key: 'sponsor_1', url: config.logo_sponsor_1_url, label: config.logo_sponsor_1_label },
+        { key: 'sponsor_2', url: config.logo_sponsor_2_url, label: config.logo_sponsor_2_label },
+        { key: 'sponsor_3', url: config.logo_sponsor_3_url, label: config.logo_sponsor_3_label },
+        { key: 'badging', url: config.logo_badging_url, label: config.logo_badging_label },
+        { key: 'digital', url: config.logo_digital_url, label: config.logo_digital_label },
+        { key: 'media', url: config.logo_media_url, label: config.logo_media_label },
+      ];
+
+  const logoRows: LogoItem[][] = [];
+  let off = 0;
+  rowsConfig.forEach(cnt => {
+    if (off < allLogos.length) { logoRows.push(allLogos.slice(off, off + cnt)); off += cnt; }
+  });
+
   return (
     <div style={{ ...faceStyle, display: 'flex', flexDirection: 'column' }}>
       <div style={{ background: primary, padding: '3mm 4mm', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -522,77 +550,25 @@ function Face4({ faceStyle, config, primary, secondary, qrAppStore, qrPlayStore 
           : <span style={{ color: secondary, fontWeight: 900, fontSize: '5mm' }}>{config.event_name}</span>}
         <span style={{ color: secondary, fontWeight: 700, fontSize: '3.5mm' }}>{config.event_edition}</span>
       </div>
-      {hasSponsors ? (
-        /* Affichage dynamique depuis featured_sponsors */
-        <div style={{ flex: 1, padding: '3mm 4mm', display: 'flex', flexDirection: 'column', gap: '2mm' }}>
-          {config.partners_section_title && (
-            <div style={{ textAlign: 'center', fontSize: '2.5mm', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5mm', marginBottom: '1mm' }}>
-              {config.partners_section_title}
-            </div>
-          )}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3mm', justifyContent: 'center', alignItems: 'center' }}>
-            {sponsors.map(sp => (
-              <div key={sp.id} style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8mm' }}>
-                {sp.logo_url
-                  ? <img src={sp.logo_url} alt={sp.name} style={{ maxHeight: '13mm', maxWidth: '30mm', objectFit: 'contain' }} />
-                  : <div style={{ height: '11mm', width: '28mm', background: '#f3f4f6', borderRadius: '1mm', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5mm', color: '#9ca3af', fontWeight: 600 }}>{sp.name}</div>}
-                <div style={{ fontSize: '2mm', color: '#6b7280', fontWeight: 600 }}>{sp.role}</div>
+      <div style={{ flex: 1, padding: '3mm 4mm', display: 'flex', flexDirection: 'column', gap: '2.5mm', justifyContent: 'center' }}>
+        {config.partners_section_title && (
+          <div style={{ textAlign: 'center', fontSize: '2.5mm', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5mm', marginBottom: '1mm' }}>
+            {config.partners_section_title}
+          </div>
+        )}
+        {logoRows.map((row, ri) => (
+          <div key={ri} style={{ display: 'flex', gap: '3mm', justifyContent: 'center', alignItems: 'center' }}>
+            {row.map(item => (
+              <div key={item.key} style={{ flex: 1, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8mm' }}>
+                {item.url
+                  ? <img src={item.url} alt={item.label} style={{ maxHeight: logoH, maxWidth: '30mm', objectFit: 'contain' }} />
+                  : <div style={{ height: logoH, minWidth: '20mm', background: '#f3f4f6', borderRadius: '1mm', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5mm', color: '#9ca3af', fontWeight: 600, padding: '0 2mm' }}>{item.label}</div>}
+                {item.sub && <div style={{ fontSize: '2mm', color: '#6b7280', fontWeight: 600 }}>{item.sub}</div>}
               </div>
             ))}
           </div>
-        </div>
-      ) : (
-        /* Fallback logos statiques */
-        <div style={{ flex: 1, padding: '3mm 4mm', display: 'flex', flexDirection: 'column', gap: '2.5mm', alignItems: 'center' }}>
-          <div style={{ textAlign: 'center', width: '100%' }}>
-            <div style={{ fontSize: '2.5mm', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5mm', marginBottom: '1.5mm' }}>{config.logo_aegis_label || "Sous l'égide de"}</div>
-            {config.logo_aegis_url
-              ? <img src={config.logo_aegis_url} alt={config.logo_aegis_label} style={{ maxHeight: '14mm', maxWidth: '50mm', objectFit: 'contain', margin: '0 auto', display: 'block' }} />
-              : <div style={{ height: '10mm', width: '40mm', background: '#f3f4f6', borderRadius: '1mm', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5mm', color: '#9ca3af' }}>Logo</div>}
-          </div>
-          <hr style={{ border: 'none', borderTop: '0.3mm solid #e5e7eb', width: '90%', margin: '0' }} />
-          <div style={{ display: 'flex', gap: '4mm', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-            {[
-              { url: config.logo_organizer_url, label: config.logo_organizer_label },
-              { url: config.logo_delegate_url, label: config.logo_delegate_label },
-            ].map(({ url, label }) => (
-              <div key={label} style={{ textAlign: 'center' }}>
-                {url
-                  ? <img src={url} alt={label} style={{ height: '12mm', maxWidth: '28mm', objectFit: 'contain' }} />
-                  : <div style={{ height: '10mm', width: '26mm', background: '#f3f4f6', borderRadius: '1mm', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5mm', color: '#9ca3af' }}>{label}</div>}
-              </div>
-            ))}
-          </div>
-          <hr style={{ border: 'none', borderTop: '0.3mm solid #e5e7eb', width: '90%', margin: '0' }} />
-          <div style={{ display: 'flex', gap: '3mm', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
-            {([1, 2, 3] as const).map(n => {
-              const sUrl = config[`logo_sponsor_${n}_url` as keyof BadgeConfig] as string;
-              const sLbl = config[`logo_sponsor_${n}_label` as keyof BadgeConfig] as string;
-              return (
-                <div key={n} style={{ textAlign: 'center' }}>
-                  {sUrl
-                    ? <img src={sUrl} alt={sLbl} style={{ height: '10mm', maxWidth: '24mm', objectFit: 'contain' }} />
-                    : <div style={{ height: '9mm', width: '22mm', background: '#f3f4f6', borderRadius: '1mm', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2mm', color: '#9ca3af' }}>{sLbl}</div>}
-                </div>
-              );
-            })}
-          </div>
-          <hr style={{ border: 'none', borderTop: '0.3mm solid #e5e7eb', width: '90%', margin: '0' }} />
-          <div style={{ display: 'flex', gap: '3mm', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
-            {(['badging', 'digital', 'media'] as const).map(type => {
-              const pUrl = config[`logo_${type}_url` as keyof BadgeConfig] as string;
-              const pLbl = config[`logo_${type}_label` as keyof BadgeConfig] as string;
-              return (
-                <div key={type} style={{ textAlign: 'center' }}>
-                  {pUrl
-                    ? <img src={pUrl} alt={pLbl} style={{ height: '9mm', maxWidth: '22mm', objectFit: 'contain' }} />
-                    : <div style={{ height: '8mm', width: '20mm', background: '#f3f4f6', borderRadius: '1mm', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2mm', color: '#9ca3af' }}>{pLbl}</div>}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+        ))}
+      </div>
       <div style={{ background: primary, color: '#fff', padding: '2mm 4mm', textAlign: 'center' }}>
         <div style={{ fontWeight: 700, fontSize: '3mm' }}>{config.event_dates_display} · {config.event_location}</div>
         <div style={{ opacity: 0.7, fontSize: '2.5mm' }}>{config.event_location_detail}</div>

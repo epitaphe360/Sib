@@ -33,7 +33,7 @@ interface SignUpPayload {
   name: string;
   type: User['type'];
   profile: Partial<UserProfile>;
-  visitor_level?: 'free' | 'premium' | 'vip';
+  visitor_level?: 'free' | 'vip';
 }
 
 interface OAuthError extends Error {
@@ -304,16 +304,21 @@ const useAuthStore = create<AuthState>()(
 
       // Créer une demande d'inscription pour exposants et sponsors
       if (userType === 'exhibitor' || userType === 'partner') {
-        await SupabaseService.createRegistrationRequest({
-          userType: userType,
-          email: userData.email,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          companyName: userData.companyName ?? '',
-          position: userData.position ?? '',
-          phone: userData.phone ?? '',
-          profileData: userData
-        });
+        // Ne pas bloquer l'inscription si la création de demande échoue (RLS ou erreur réseau)
+        try {
+          await SupabaseService.createRegistrationRequest({
+            userType: userType,
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            companyName: userData.companyName ?? '',
+            position: userData.position ?? '',
+            phone: userData.phone ?? '',
+            profileData: userData
+          });
+        } catch (regRequestError) {
+          // Le compte est créé - ne pas bloquer l'inscription
+        }
 
         // Envoyer l'email de confirmation (ne pas bloquer si échec)
         try {

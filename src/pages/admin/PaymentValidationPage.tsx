@@ -154,7 +154,7 @@ export default function PaymentValidationPage() {
         .from('payment_requests')
         .select('*')
         .order('created_at', { ascending: false })
-        .range(0, 49);
+        .range(0, 499);
 
       // Filtrer par statut
       if (filter !== 'all') {
@@ -261,9 +261,16 @@ export default function PaymentValidationPage() {
         // Mettre à jour le statut utilisateur
         const request = requests.find(r => r.id === requestId);
         if (request?.user_id) {
+          const requestAny = request as any;
+          const levelUpdate: Record<string, string> = { status: 'active' };
+          if (request.users?.type === 'partner') {
+            levelUpdate.partner_tier = requestAny.requested_level || 'standard';
+          } else if (request.users?.type === 'visitor') {
+            levelUpdate.visitor_level = requestAny.requested_level || 'vip';
+          }
           await supabase
             .from('users')
-            .update({ status: 'active', payment_status: 'paid' })
+            .update(levelUpdate)
             .eq('id', request.user_id);
         }
       }

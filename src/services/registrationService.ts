@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ✅ FIX P0-4: Service unifié d'inscription
  *
  * Centralise la logique commune entre:
@@ -131,6 +131,7 @@ export async function createAuthUser(
   }
 ): Promise<{ userId: string; error?: Error }> {
   try {
+        if (!supabase) throw new Error('Supabase not initialized');
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -157,6 +158,7 @@ export async function createUserProfile(
   data: RegistrationData
 ): Promise<{ success: boolean; error?: Error }> {
   try {
+        if (!supabase) throw new Error('Supabase not initialized');
     const fullName = `${data.firstName} ${data.lastName}`.trim();
 
     const baseProfile = {
@@ -202,7 +204,7 @@ export async function createUserProfile(
       };
     }
 
-    const { error: userError } = await supabase
+    const { error: userError } = await (supabase as any)
       .from('users')
       .insert([userRecord]);
 
@@ -225,6 +227,7 @@ export async function generateVisitorBadge(
   level: VisitorLevel
 ): Promise<{ success: boolean; emailSent?: boolean; error?: Error }> {
   try {
+        if (!supabase) throw new Error('Supabase not initialized');
     const { data, error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
       body: {
         userId,
@@ -257,6 +260,7 @@ export async function sendVisitorWelcomeEmail(
   level: VisitorLevel
 ): Promise<{ success: boolean; error?: Error }> {
   try {
+        if (!supabase) throw new Error('Supabase not initialized');
     const { error: emailError } = await supabase.functions.invoke('send-visitor-welcome-email', {
       body: {
         userId,
@@ -285,6 +289,7 @@ export async function sendPasswordSetupEmail(
   isInitialSetup: boolean = true
 ): Promise<{ success: boolean; error?: Error }> {
   try {
+        if (!supabase) throw new Error('Supabase not initialized');
 
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(
       email,
@@ -312,7 +317,9 @@ export async function registerUser(
   options: RegistrationOptions = {}
 ): Promise<RegistrationResult> {
   try {
+        if (!supabase) throw new Error('Supabase not initialized');
     const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       skipEmailVerification = false,
       autoGenerateBadge = true
     } = options;
@@ -378,7 +385,7 @@ export async function registerUser(
 
     // 5. Déconnecter immédiatement si pas de mot de passe défini
     if (!hasPassword) {
-      await supabase.auth.signOut();
+      await supabase!.auth.signOut();
     }
 
     return {

@@ -113,7 +113,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
     },
     {
       type: 'official_sponsor',
-      name: 'Partenaire Officiel',
+      name: 'Sponsor Officiel',
       description: 'Sponsor stratégique — visibilité maximale',
       price: '500 000 MAD',
       color: 'bg-rose-100 text-rose-600'
@@ -167,6 +167,15 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
     'Support logistique'
   ];
 
+  const toggleContribution = (contribution: string) => {
+    setFormData(prev => ({
+      ...prev,
+      contributions: prev.contributions.includes(contribution)
+        ? prev.contributions.filter(c => c !== contribution)
+        : [...prev.contributions, contribution]
+    }));
+  };
+
   const handleNextStep = () => {
     if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
@@ -202,7 +211,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
           if (existingUser) {
             userId = existingUser.id;
           } else {
-          // Créer l'utilisateur pour le sponsor
+          // Créer l'utilisateur pour le partenaire
           const userData = {
             email: formData.email,
             name: formData.contactName,
@@ -262,12 +271,12 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
       if (editMode && partnerToEdit) {
         // Mode édition - mise à jour uniquement
         await SupabaseService.updatePartner(partnerToEdit.id, partnerData);
-        toast.success(`Sponsor modifié : ${formData.organizationName}`);
+        toast.success(`Partenaire modifié : ${formData.organizationName}`);
         navigate(ROUTES.ADMIN_PARTNERS_MANAGE);
       } else {
         // Mode création
         await SupabaseService.createPartner(partnerData);
-        toast.success(`Sponsor créé : ${formData.organizationName} (${formData.contactName})`);
+        toast.success(`Partenaire créé : ${formData.organizationName} (${formData.contactName})`);
 
         // Reset form et redirection
         setFormData({
@@ -288,7 +297,8 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
           employees: '',
           logo: '',
           verified: false,
-          featured: false
+          featured: false,
+          isPublished: false
         });
 
         setCurrentStep(1);
@@ -298,7 +308,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
       setIsSubmitting(false);
 
     } catch (error) {
-      console.error(`Erreur ${editMode ? 'modification' : 'création'} sponsor:`, error);
+      console.error(`Erreur ${editMode ? 'modification' : 'création'} partenaire:`, error);
       setIsSubmitting(false);
       toast.error(`Erreur ${editMode ? 'modification' : 'création'} : ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
     }
@@ -323,10 +333,10 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {editMode ? 'Modifier le Sponsor' : 'Créer un Nouveau Sponsor'}
+              {editMode ? 'Modifier le Partenaire' : 'Créer un Nouveau Partenaire'}
             </h1>
             <p className="text-gray-600">
-              {editMode ? 'Mettre à jour les informations du Partenaire Officiel' : 'Enregistrer un nouveau Partenaire Officiel SIB 2026'}
+              {editMode ? 'Mettre à jour les informations du partenaire officiel' : 'Enregistrer un nouveau partenaire officiel SIB 2026'}
             </p>
           </motion.div>
         </div>
@@ -384,7 +394,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   Informations sur l'organisation
                 </h2>
                 <p className="text-gray-600">
-                  Renseignez les informations générales du sponsor
+                  Renseignez les informations générales du partenaire
                 </p>
               </div>
 
@@ -400,8 +410,8 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       value={formData.organizationName}
                       onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="Nom de l'organisation sponsor"
-                      aria-label="Nom de l'organisation sponsor"
+                      placeholder="Nom de l'organisation partenaire"
+                      aria-label="Nom de l'organisation partenaire"
                     />
                   </div>
                 </div>
@@ -587,7 +597,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   Logo de l'organisation
                 </label>
                 <p className="text-sm text-gray-500 mb-3">
-                  Téléchargez le logo du sponsor (format recommandé: PNG ou JPG, max 5MB)
+                  Téléchargez le logo du partenaire (format recommandé: PNG ou JPG, max 5MB)
                 </p>
                 <ImageUploader
                   initialImageUrl={formData.logo}
@@ -767,7 +777,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   Contributions au salon {editMode ? '' : '*'}
                 </label>
                 <p className="text-sm text-gray-500 mb-3">
-                  Sélectionnez les contributions que ce sponsor apportera
+                  Sélectionnez les contributions que ce partenaire apportera
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {availableContributions.map((contribution) => (
@@ -809,7 +819,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                     />
                     <CheckCircle className={`h-4 w-4 ${formData.verified ? 'text-blue-500' : 'text-gray-400'}`} />
-                    <span className="text-sm font-medium text-gray-700">Sponsor Vérifié</span>
+                    <span className="text-sm font-medium text-gray-700">Partenaire Vérifié</span>
                   </label>
                 </div>
               </div>
@@ -835,9 +845,9 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg">
                   <div>
-                    <h3 className="font-medium text-gray-900">Sponsor vérifié</h3>
+                    <h3 className="font-medium text-gray-900">Partenaire vérifié</h3>
                     <p className="text-sm text-gray-600">
-                      Marque le sponsor comme vérifié par l'administration
+                      Marque le partenaire comme vérifié par l'administration
                     </p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -845,6 +855,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       type="checkbox"
                       checked={formData.verified}
                       onChange={(e) => setFormData({ ...formData, verified: e.target.checked })}
+                      aria-label="Partenaire vérifié"
                       className="sr-only peer"
                     />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
@@ -853,9 +864,9 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
 
                 <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg">
                   <div>
-                    <h3 className="font-medium text-gray-900">Sponsor mis en avant</h3>
+                    <h3 className="font-medium text-gray-900">Partenaire mis en avant</h3>
                     <p className="text-sm text-gray-600">
-                      Affiche le sponsor en vedette sur la page d'accueil
+                      Affiche le partenaire en vedette sur la page d'accueil
                     </p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -863,6 +874,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       type="checkbox"
                       checked={formData.featured}
                       onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                      aria-label="Partenaire mis en avant"
                       className="sr-only peer"
                     />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
@@ -881,6 +893,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       type="checkbox"
                       checked={formData.isPublished}
                       onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
+                      aria-label="Profil publié"
                       className="sr-only peer"
                     />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
@@ -963,8 +976,8 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
               <div className="bg-purple-50 p-4 rounded-lg">
                 <h4 className="font-medium text-purple-900 mb-2">Activation du partenariat</h4>
                 <p className="text-sm text-purple-700">
-                  Le sponsor recevra un email avec ses identifiants de connexion et l'accès
-                  à son espace sponsor sera activé immédiatement.
+                  Le partenaire recevra un email avec ses identifiants de connexion et l'accès
+                  à son espace partenaire sera activé immédiatement.
                 </p>
               </div>
             </motion.div>
@@ -1014,7 +1027,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   ) : (
                     <>
                       <CheckCircle className="h-4 w-4 mr-2" />
-                      {editMode ? 'Enregistrer les modifications' : 'Créer le Sponsor'}
+                      {editMode ? 'Enregistrer les modifications' : 'Créer le Partenaire'}
                     </>
                   )}
                 </Button>

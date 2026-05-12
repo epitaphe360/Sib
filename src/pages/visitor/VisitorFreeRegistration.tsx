@@ -223,9 +223,7 @@ export default function VisitorFreeRegistration() {
 
         } else if (existingUser.type === 'visitor') {
 
-          const level = existingUser.visitor_level === 'premium' ? 'VIP' :
-
-                       existingUser.visitor_level === 'standard' ? 'Standard' : 'Gratuit';
+          const level = existingUser.visitor_level === 'vip' ? 'VIP' : 'Gratuit';
 
           accountType = `visiteur ${level}`;
 

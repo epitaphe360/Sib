@@ -34,7 +34,7 @@ export default function LoginPage() {
   const [magicLoading, setMagicLoading] = useState(false);
   const [magicError, setMagicError] = useState('');
   const [error, setError] = useState('');
-  const { login, loginWithGoogle, isLoading, isGoogleLoading } = useAuthStore();
+  const { login, isLoading } = useAuthStore();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [demoLoading, setDemoLoading] = useState<string | null>(null);
@@ -83,8 +83,8 @@ export default function LoginPage() {
 
       if (user) {
         // 🔴 CRITICAL: Block VIP visitors who haven't paid
-        if (user.type === 'visitor' && (user.visitor_level === 'vip' || user.visitor_level === 'premium') && user.status === 'pending_payment') {
-          await supabase.auth.signOut();
+        if (user.type === 'visitor' && user.visitor_level === 'vip' && user.status === 'pending_payment') {
+          await supabase!.auth.signOut();
           setError(t('login.paymentRequired'));
           setTimeout(() => {
             navigate(ROUTES.VISITOR_SUBSCRIPTION, { state: { userId: user.id, email: user.email, paymentRequired: true } });
@@ -115,7 +115,9 @@ export default function LoginPage() {
       const normalizedEmail = magicEmail.trim().toLowerCase();
 
       // Vérifier l'existence via RPC SECURITY DEFINER (bypasse RLS, pas de service_role)
-      const { data: exists, error: rpcError } = await supabase.rpc('check_email_exists', {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const supabaseAny = supabase as any;
+      const { data: exists, error: rpcError } = await supabaseAny.rpc('check_email_exists', {
         p_email: normalizedEmail,
       });
 
@@ -126,7 +128,7 @@ export default function LoginPage() {
 
       // Envoyer le magic link via Supabase (SMTP custom configuré, aucun rate limit)
       const appUrl = import.meta.env.VITE_APP_URL || globalThis.location.origin;
-      const { error: otpError } = await supabase.auth.signInWithOtp({
+      const { error: otpError } = await supabase!.auth.signInWithOtp({
         email: normalizedEmail,
         options: {
           emailRedirectTo: `${appUrl}/auth/callback`,
@@ -165,9 +167,9 @@ export default function LoginPage() {
       const { user } = useAuthStore.getState();
 
       // 🔴 CRITICAL: Block VIP visitors who haven't paid
-      if (user?.type === 'visitor' && (user?.visitor_level === 'vip' || user?.visitor_level === 'premium') && user?.status === 'pending_payment') {
+      if (user?.type === 'visitor' && user?.visitor_level === 'vip' && user?.status === 'pending_payment') {
         // Log out immediately
-        await supabase.auth.signOut();
+        await supabase!.auth.signOut();
 
         // Show payment required error
         setError(t('login.paymentRequiredFull'));
@@ -203,46 +205,6 @@ export default function LoginPage() {
         }
       }
 
-      setError(errorMessage);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    setError('');
-
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          }
-        }
-      });
-
-      if (error) {throw error;}
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : t('login.googleError');
-      setError(errorMessage);
-    }
-  };
-
-  const handleLinkedInLogin = async () => {
-    setError('');
-
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'linkedin_oidc',
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`
-        }
-      });
-
-      if (error) {throw error;}
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : t('login.linkedinError');
       setError(errorMessage);
     }
   };

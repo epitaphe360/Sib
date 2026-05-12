@@ -61,7 +61,7 @@ export const PartnerLeadsPage: React.FC = () => {
         `)
         .eq('requester_id', user?.id)
         .order('created_at', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) {
         console.error('Erreur chargement connexions:', error);

@@ -214,7 +214,7 @@ interface NetworkingState {
   refreshAnalytics: () => void;
 
   // AI and insights
-  loadAIInsights: () => void;
+  loadAIInsights: () => Promise<void>;
 
   // Modal Actions
   setShowAppointmentModal: (show: boolean) => void;
@@ -426,7 +426,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       if (navigateFn) {
         navigateFn(`/messages?userId=${userId}`);
       } else {
-        // Pas de fallback window.location.href — le appelant doit toujours fournir navigateFn
+        window.location.href = `/messages?userId=${userId}`;
       }
     } else {
       toast.success(`💬 Message envoyé à ${userName} de ${company}.`);

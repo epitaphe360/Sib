@@ -224,7 +224,7 @@ export default function ExhibitorSignUpPage() {
             status: 'pending',
             payment_method: 'bank_transfer',
             reference: paymentReference,
-            description: `Abonnement Exposant SIB 2026 - ${subscriptionLevel} (${standArea}mÂ²)`,
+            description: `Abonnement Exposant SIB 2026 - ${subscriptionLevel} (${standArea}m²)`,
             metadata: {
               subscriptionLevel,
               standArea,

@@ -76,16 +76,18 @@ export default function AvailabilityManager({ userId, userType, onAvailabilityUp
     }
     setIsLoading(true);
     try {
-      const newTimeSlot = await SupabaseService.createTimeSlot({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const slotPayload: any = {
         userId,
-        date: newSlot.date,
+        date: new Date(newSlot.date + 'T00:00:00'),
         startTime: newSlot.startTime,
         endTime: newSlot.endTime,
         duration: calculateDuration(newSlot.startTime, newSlot.endTime),
         type: newSlot.type,
         maxBookings: newSlot.maxBookings,
         location: newSlot.location || undefined
-      });
+      };
+      const newTimeSlot = await SupabaseService.createTimeSlot(slotPayload);
 
       toast.success('Créneau ajouté avec succès');
       setTimeSlots(prev => [...prev, newTimeSlot]);

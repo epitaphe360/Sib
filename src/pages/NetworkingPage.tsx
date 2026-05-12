@@ -449,10 +449,11 @@ export default function NetworkingPage() {
 
 
     // Vérifier si l'utilisateur a déjà un RDV avec cet exposant
+    // Exclure 'cancelled' ET 'rejected' : un RDV refusé peut être re-demandé
 
     const hasExistingAppointment = appointments.some(
 
-      apt => apt.exhibitorId === profile.id && apt.visitorId === user?.id && apt.status !== 'cancelled'
+      apt => apt.exhibitorId === profile.id && apt.visitorId === user?.id && apt.status !== 'cancelled' && apt.status !== 'rejected'
 
     );
 
@@ -1780,7 +1781,7 @@ export default function NetworkingPage() {
 
                                 const hasAppointment = appointments.some(
 
-                                  apt => apt.exhibitorId === profile.id && apt.visitorId === user?.id && apt.status !== 'cancelled'
+                                  apt => apt.exhibitorId === profile.id && apt.visitorId === user?.id && apt.status !== 'cancelled' && apt.status !== 'rejected'
 
                                 );
 
@@ -2334,7 +2335,7 @@ export default function NetworkingPage() {
 
                               const hasAppointment = appointments.some(
 
-                                apt => apt.exhibitorId === profile.id && apt.visitorId === user?.id && apt.status !== 'cancelled'
+                                apt => apt.exhibitorId === profile.id && apt.visitorId === user?.id && apt.status !== 'cancelled' && apt.status !== 'rejected'
 
                               );
 
@@ -3526,7 +3527,7 @@ export default function NetworkingPage() {
 
                 const existingAppointment = appointments.find(
 
-                  apt => apt.exhibitorId === selectedExhibitorForRDV.id && apt.visitorId === user?.id && apt.status !== 'cancelled'
+                  apt => apt.exhibitorId === selectedExhibitorForRDV.id && apt.visitorId === user?.id && apt.status !== 'cancelled' && apt.status !== 'rejected'
 
                 );
 

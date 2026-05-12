@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import {
@@ -61,12 +61,12 @@ export default function PartnerMediaApprovalPage() {
         .from('pending_partner_media')
         .select('id, title, description, type, category, thumbnail_url, video_url, duration, created_at, creator_name, creator_email, partner_company, created_by_id')
         .order('created_at', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) {throw error;}
       setPendingMedia(data || []);
     } catch (error) {
-      console.error('Erreur chargement médias:', error);
+      console.error('Erreur chargement m�dias:', error);
       toast.error(t('admin.media_load_error'));
     } finally {
       setIsLoading(false);
@@ -155,7 +155,7 @@ export default function PartnerMediaApprovalPage() {
         {/* Header */}
         <div className="mb-8">
           <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
-            ← {t('common.back_dashboard')}
+            ? {t('common.back_dashboard')}
           </Link>
           <div className="flex items-center justify-between">
             <div>
@@ -297,7 +297,7 @@ export default function PartnerMediaApprovalPage() {
                     }}
                     className="text-gray-400 hover:text-gray-600"
                   >
-                    ✕
+                    ?
                   </button>
                 </div>
 

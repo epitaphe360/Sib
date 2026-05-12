@@ -48,7 +48,7 @@ interface VisitorProfile {
   country: string;
   phone: string;
   avatar?: string;
-  passType: 'free' | 'premium';
+  passType: 'free' | 'vip';
   registrationStatus: 'pending' | 'confirmed' | 'cancelled';
 
   // Spécifique aux visiteurs
@@ -342,7 +342,7 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
           // Récupérer les informations du salon (configuration globale) (optimized: 60% bandwidth reduction)
           const { data: salonConfig, error: salonError } = await supabaseClient
             .from('salon_config')
-            .select('name, start_date, end_date, venue')
+            .select('name, start_date, end_date, venue, city, country, address, opening_time, closing_time, exhibitors_count, visitors_count, conferences_count, countries_count')
             .maybeSingle();
 
           if (salonError) {console.warn('Erreur lors de la récupération des infos salon:', salonError);}
@@ -402,13 +402,13 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
               title: notif.title,
               message: notif.message,
               timestamp: new Date(notif.created_at),
-              read: notif.read || false,
+              read: notif.is_read || false,
               actionUrl: notif.action_url
             })),
             salonInfo: salonConfig ? {
               name: salonConfig.name || 'SIB 2026',
               dates: {
-                start: salonConfig.start_time ? new Date(salonConfig.start_time) : new Date(),
+                start: salonConfig.start_date ? new Date(salonConfig.start_date) : new Date(),
                 end: salonConfig.end_date ? new Date(salonConfig.end_date) : new Date()
               },
               location: {
@@ -673,7 +673,7 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
     try {
       const { error } = await supabaseClient
         .from('appointments')
-        .update({ status: 'cancelled' })
+        .update({ status: 'rejected' })
         .eq('id', requestId)
         .eq('visitor_id', visitorProfile.id);
 
@@ -722,7 +722,7 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
     if (supabaseClient) {
       supabaseClient
         .from('notifications')
-        .update({ read: true })
+        .update({ is_read: true })
         .eq('id', notificationId)
         .then(({ error }: { error: unknown }) => {
           if (error) {console.error('Erreur lors de la mise à jour de la notification:', error);}

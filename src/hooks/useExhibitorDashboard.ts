@@ -187,18 +187,30 @@ export function useExhibitorDashboard() {
   const myAppointments = useMemo(() => {
     if (!user?.id || !appointments) {return [];}
     return appointments.filter((a) =>
-      // Cas 1: champ brut exhibitor_id (= exhibitors.id) matche exhibitorDbId
-      (exhibitorDbId && (a as any).exhibitor_id === exhibitorDbId) ||
-      // Cas 2: exhibitorId transformé (= users.id) matche exhibitorDbId
-      (exhibitorDbId && a.exhibitorId === exhibitorDbId) ||
-      // Cas 3: exhibitorUserId transformé (= users.id) matche user.id
-      (a as any).exhibitorUserId === user.id ||
-      // Cas 4: exhibitorId transformé (= users.id) matche user.id
-      a.exhibitorId === user.id ||
-      (a as any).exhibitor?.user_id === user.id ||
-      (a as any).exhibitor?.id === user.id
+      // Ne jamais inclure les RDV que l'utilisateur a lui-même envoyés (il est le visitor)
+      a.visitorId !== user.id &&
+      (
+        // Cas 1: champ brut exhibitor_id (= exhibitors.id) matche exhibitorDbId
+        (exhibitorDbId && (a as any).exhibitor_id === exhibitorDbId) ||
+        // Cas 2: exhibitorId transformé (= users.id) matche exhibitorDbId
+        (exhibitorDbId && a.exhibitorId === exhibitorDbId) ||
+        // Cas 3: exhibitorUserId transformé (= users.id) matche user.id
+        (a as any).exhibitorUserId === user.id ||
+        // Cas 4: exhibitorId transformé (= users.id) matche user.id
+        a.exhibitorId === user.id ||
+        (a as any).exhibitor?.user_id === user.id ||
+        (a as any).exhibitor?.id === user.id
+      )
     );
   }, [appointments, user?.id, exhibitorDbId]);
+
+  // RDV envoyés par l'utilisateur (lui = visitor/demandeur) — en attente de réponse
+  const sentAppointments = useMemo(() => {
+    if (!user?.id || !appointments) {return [];}
+    return appointments.filter(
+      (a) => a.visitorId === user.id && (a.status === 'pending' || a.status === 'confirmed')
+    );
+  }, [appointments, user?.id]);
 
   const appointmentStatusData = useMemo(
     () => [
@@ -247,11 +259,11 @@ export function useExhibitorDashboard() {
     const now = new Date();
     return receivedAppointments.filter(
       (a) => a.status === 'completed' ||
-             (a.status !== 'pending' && a.status !== 'cancelled' && a.startTime != null && new Date(a.startTime) < now)
+             (a.status !== 'pending' && a.status !== 'cancelled' && a.status !== 'rejected' && a.startTime != null && new Date(a.startTime) < now)
     );
   }, [receivedAppointments]);
   const cancelledAppointments = useMemo(
-    () => receivedAppointments.filter((a) => a.status === 'cancelled'),
+    () => receivedAppointments.filter((a) => a.status === 'cancelled' || a.status === 'rejected'),
     [receivedAppointments]
   );
 
@@ -267,7 +279,7 @@ export function useExhibitorDashboard() {
     connections: dashboardStats?.connections?.value || 0,
   });
 
-  const exhibitorLevel = getExhibitorLevelByArea(user?.profile?.standArea || 9);
+  const exhibitorLevel = getExhibitorLevelByArea(user?.profile?.standArea ?? 9);
 
   // ─── Handlers ─────────────────────────────────────────────────────────────
   const togglePublished = async () => {
@@ -326,7 +338,8 @@ export function useExhibitorDashboard() {
     setConfirmRejectId(null);
     setProcessingAppointment(appointmentId);
     try {
-      await cancelAppointment(appointmentId);
+      await updateAppointmentStatus(appointmentId, 'rejected');
+      await fetchAppointments();
     } catch (err) {
       console.error('Erreur lors du refus:', err);
       setError(t('exhibitor.error_reject_failed'));
@@ -478,6 +491,7 @@ export function useExhibitorDashboard() {
     upcomingAppointments,
     pastAppointments,
     cancelledAppointments,
+    sentAppointments,
     predictions,
     exhibitorLevel,
     exhibitorDbId,

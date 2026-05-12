@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
+import { supabase } from '../lib/supabase';
 import {
   Check, X, Crown, Zap, Star, Award,
   Globe, Users, GraduationCap, Landmark,
@@ -35,12 +36,15 @@ interface SubscriptionTier {
   color: string;
 }
 
-const exhibitorTiers: SubscriptionTier[] = [
+type PriceMap = Record<string, { price: number; currency: string }>;
+
+function getExhibitorTiers(priceMap: PriceMap = {}): SubscriptionTier[] {
+  return [
   {
     id: 'exhibitor-9m',
     name: 'Exposant 9m² (Base)',
-    price: 0,
-    currency: 'Sur devis',
+    price: priceMap['exhibitor-9m']?.price ?? 0,
+    currency: priceMap['exhibitor-9m']?.currency ?? 'Sur devis',
     icon: <Star className="w-8 h-8" />,
     description: 'Profil & présence de base',
     level: '9m2',
@@ -67,8 +71,8 @@ const exhibitorTiers: SubscriptionTier[] = [
   {
     id: 'exhibitor-18m',
     name: 'Exposant 18m² (Standard)',
-    price: 0,
-    currency: 'Sur devis',
+    price: priceMap['exhibitor-18m']?.price ?? 0,
+    currency: priceMap['exhibitor-18m']?.currency ?? 'Sur devis',
     icon: <Star className="w-8 h-8" />,
     description: 'Mini-site + 15 rendez-vous',
     level: '18m2',
@@ -96,8 +100,8 @@ const exhibitorTiers: SubscriptionTier[] = [
   {
     id: 'exhibitor-36m',
     name: 'Exposant 36m² (Premium)',
-    price: 0,
-    currency: 'Sur devis',
+    price: priceMap['exhibitor-36m']?.price ?? 0,
+    currency: priceMap['exhibitor-36m']?.currency ?? 'Sur devis',
     icon: <Award className="w-8 h-8" />,
     description: 'Mise en avant + 30 rendez-vous',
     level: '36m2',
@@ -127,8 +131,8 @@ const exhibitorTiers: SubscriptionTier[] = [
   {
     id: 'exhibitor-54m',
     name: 'Exposant 54m²+ (Elite)',
-    price: 0,
-    currency: 'Sur devis',
+    price: priceMap['exhibitor-54m']?.price ?? 0,
+    currency: priceMap['exhibitor-54m']?.currency ?? 'Sur devis',
     icon: <Crown className="w-8 h-8" />,
     description: 'Visibilité maximale + créneaux illimités',
     level: '54m2',
@@ -157,11 +161,35 @@ const exhibitorTiers: SubscriptionTier[] = [
     color: 'bg-red-50',
   },
 ];
+}
 
 export default function ExhibitorSubscriptionPage() {
   const navigate = useNavigate();
   // t used for future translations
   const { t: _t } = useTranslation();
+  const [priceMap, setPriceMap] = useState<ExPriceMap>({});
+
+  useEffect(() => {
+    supabase
+      .from('pricing_config')
+      .select('level, amount, currency')
+      .eq('category', 'exhibitor')
+      .eq('is_active', true)
+      .then(({ data }) => {
+        if (!data) return;
+        const map: ExPriceMap = {};
+        data.forEach(row => {
+          const id = row.level === '9m2' ? 'exhibitor-9m'
+            : row.level === '18m2' ? 'exhibitor-18m'
+            : row.level === '36m2' ? 'exhibitor-36m'
+            : row.level === '54m2' ? 'exhibitor-54m' : null;
+          if (id) map[id] = { price: row.amount, currency: row.currency };
+        });
+        if (Object.keys(map).length > 0) setPriceMap(map);
+      });
+  }, []);
+
+  const exhibitorTiers = getExhibitorTiers(priceMap);
 
   const handleSubscribe = (tierId: string) => {
     const tier = exhibitorTiers.find(t => t.id === tierId);

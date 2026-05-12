@@ -1,4 +1,4 @@
-Ôªøimport React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, Search, LogIn, LogOut, MessageCircle, Shield } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -24,11 +24,11 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
     'all',
     'BTP & Construction',
     'Architecture & Design',
-    'Mat√©riaux & √âquipements',
-    '√ânergie & D√©veloppement Durable',
+    'MatÈriaux & …quipements',
+    '…nergie & DÈveloppement Durable',
     'Innovation & Technologies',
     'Financement & Investissement',
-    'M√©dias & Communication',
+    'MÈdias & Communication',
     'Infrastructures',
     'Habitat & Immobilier'
   ];
@@ -52,7 +52,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
         .select('id, name, sector, description, capacity, participants, moderator, status, tags, event_id')
         .eq('event_id', eventId)
         .order('sector', { ascending: true })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) {throw error;}
       setRooms(data || []);
@@ -106,7 +106,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
 
   const handleJoinRoom = async (roomId: string) => {
     if (!user) {
-      toast.error('Vous devez √™tre connect√©');
+      toast.error('Vous devez Ítre connectÈ');
       return;
     }
 
@@ -120,7 +120,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
       }
 
       if (room.participants.includes(user.id)) {
-        toast.error('Vous √™tes d√©j√† dans cette salle');
+        toast.error('Vous Ítes dÈj‡ dans cette salle');
         return;
       }
 
@@ -142,7 +142,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
       toast.success(`Vous avez rejoint ${room.name}`);
     } catch (error) {
       console.error('Error joining room:', error);
-      toast.error('Erreur lors de l\'entr√©e dans la salle');
+      toast.error('Erreur lors de l\'entrÈe dans la salle');
     }
   };
 
@@ -166,7 +166,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
         setCurrentRoom(null);
       }
 
-      toast.success('Vous avez quitt√© la salle');
+      toast.success('Vous avez quittÈ la salle');
     } catch (error) {
       console.error('Error leaving room:', error);
       toast.error('Erreur lors de la sortie');
@@ -194,9 +194,9 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">üö™ Salles de Networking</h1>
+        <h1 className="text-3xl font-bold mb-2">?? Salles de Networking</h1>
         <p className="text-gray-600">
-          Rejoignez des discussions th√©matiques et √©largissez votre r√©seau
+          Rejoignez des discussions thÈmatiques et Èlargissez votre rÈseau
         </p>
       </div>
 
@@ -227,7 +227,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
                     : 'bg-gray-100 hover:bg-gray-200'
                 }`}
               >
-                {sector === 'all' ? 'üìÅ Tous les secteurs' : sector}
+                {sector === 'all' ? '?? Tous les secteurs' : sector}
               </button>
             ))}
           </div>
@@ -238,7 +238,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
       {filteredRooms.length === 0 ? (
         <div className="text-center py-12">
           <Users className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <p className="text-gray-500">Aucune salle trouv√©e</p>
+          <p className="text-gray-500">Aucune salle trouvÈe</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -301,7 +301,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
                 {room.moderator && (
                   <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
                     <Shield className="w-4 h-4" />
-                    <span>Mod√©r√© par {room.moderator}</span>
+                    <span>ModÈrÈ par {room.moderator}</span>
                   </div>
                 )}
 
@@ -328,7 +328,7 @@ export const NetworkingRooms: React.FC<NetworkingRoomsProps> = ({ eventId }) => 
                     className="w-full"
                   >
                     <LogIn className="w-4 h-4 mr-2" />
-                    {isFull ? 'Salle pleine' : room.status === 'closed' ? 'Ferm√©e' : 'Rejoindre'}
+                    {isFull ? 'Salle pleine' : room.status === 'closed' ? 'FermÈe' : 'Rejoindre'}
                   </Button>
                 )}
               </div>

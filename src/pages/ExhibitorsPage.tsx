@@ -431,7 +431,7 @@ export default function ExhibitorsPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-72 overflow-y-auto p-1">
                     {filteredSlots.map(slot => {
                       const isSelected = selectedTimeSlot === slot.id;
-                      const booked = appointments.find(a => a.timeSlotId === slot.id && a.visitorId === user?.id);
+                      const booked = appointments.find(a => a.timeSlotId === slot.id && a.visitorId === user?.id && a.status !== 'cancelled' && a.status !== 'rejected');
                       const dateLabel = new Date(slot.date as any).toLocaleDateString('fr-FR', {
                         weekday: 'long', day: '2-digit', month: 'long'
                       });

@@ -498,8 +498,9 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
     }
 
     // NOUVELLE RÈGLE: Vérifier qu'on n'a pas déjà un RDV avec cet exposant/sponsor
+    // Exclure 'cancelled' ET 'rejected' : un RDV refusé doit pouvoir être re-demandé
     const hasExistingAppointment = appointments.some(
-      a => a.visitorId === visitorId && a.exhibitorId === exhibitorIdForSlot && a.status !== 'cancelled'
+      a => a.visitorId === visitorId && a.exhibitorId === exhibitorIdForSlot && a.status !== 'cancelled' && a.status !== 'rejected'
     );
     if (hasExistingAppointment) {
       throw new Error('Vous avez déjà un rendez-vous avec cet exposant/sponsor');

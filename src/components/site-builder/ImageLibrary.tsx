@@ -1,4 +1,4 @@
-ï»¿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Upload, Search, Trash2, Grid3x3, List } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { supabase } from '../../lib/supabase';
@@ -36,7 +36,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
         .from('site_images')
         .select('id, url, name, size, createdAt:created_at')
         .order('created_at', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) {throw error;}
       setImages(data || []);
@@ -64,7 +64,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
         }
 
         if (file.size > 5 * 1024 * 1024) {
-          toast.error(`${file.name} dÃ©passe 5MB`);
+          toast.error(`${file.name} dépasse 5MB`);
           continue;
         }
 
@@ -98,10 +98,10 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
       }
 
       setImages([...uploadedImages, ...images]);
-      toast.success(`${uploadedImages.length} image(s) ajoutÃ©e(s)`);
+      toast.success(`${uploadedImages.length} image(s) ajoutée(s)`);
     } catch (error) {
       console.error('Error uploading images:', error);
-      toast.error('Erreur lors du tÃ©lÃ©chargement');
+      toast.error('Erreur lors du téléchargement');
     } finally {
       setUploading(false);
     }
@@ -127,7 +127,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
       if (dbError) {throw dbError;}
 
       setImages(images.filter(img => img.id !== image.id));
-      toast.success('Image supprimÃ©e');
+      toast.success('Image supprimée');
     } catch (error) {
       console.error('Error deleting image:', error);
       toast.error('Erreur lors de la suppression');
@@ -149,7 +149,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
       <div className="bg-white rounded-lg w-full max-w-5xl h-[80vh] flex flex-col">
         {/* Header */}
         <div className="p-6 border-b flex items-center justify-between">
-          <h2 className="text-2xl font-bold">BibliothÃ¨que d'images</h2>
+          <h2 className="text-2xl font-bold">Bibliothèque d'images</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded">
             <X className="w-6 h-6" />
           </button>
@@ -236,7 +236,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
                           onSelect(image.url);
                         }}
                       >
-                        SÃ©lectionner
+                        Sélectionner
                       </Button>
                       <Button
                         size="sm"
@@ -284,7 +284,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
                         onSelect(image.url);
                       }}
                     >
-                      SÃ©lectionner
+                      Sélectionner
                     </Button>
                     <Button
                       size="sm"

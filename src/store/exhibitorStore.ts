@@ -80,7 +80,9 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
           companyName.toLowerCase().includes(search) ||
           description.toLowerCase().includes(search);
 
-        return exhibitor.verified && matchesCategory && matchesSector && matchesSearch;
+        return exhibitor.verified &&
+          (exhibitor.isPublished === true || exhibitor.miniSite?.published === true) &&
+          matchesCategory && matchesSector && matchesSearch;
       });
 
       set({
@@ -131,8 +133,8 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
 	      });
 
 	      // 2. Mettre à jour le statut de l'utilisateur (dans la table 'users')
-	      await SupabaseService.updateUserStatus(exhibitorId, userStatus);
-
+      // BUGFIX: passer exhibitorToUpdate.userId (users.id), pas exhibitorId (exhibitors.id)
+      await SupabaseService.updateUserStatus(exhibitorToUpdate.userId, userStatus);
 	      // 3. Envoyer l'email de validation/rejet (ne pas bloquer si échec)
 	      try {
 	        await SupabaseService.sendValidationEmail({

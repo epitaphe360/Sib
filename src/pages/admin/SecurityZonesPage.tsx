@@ -10,7 +10,7 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { ROUTES } from '../../lib/routes';
 import {
-  getZones, addZone, updateZone, deleteZone, resetZones,
+  getZonesDB, addZoneDB, updateZoneDB, deleteZoneDB, resetZonesDB,
   ControlZone
 } from '../../services/zonesService';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -31,6 +31,7 @@ const emptyForm: ZoneForm = { name: '', icon: '📍', description: '' };
 export default function SecurityZonesPage() {
   const { t } = useTranslation();
   const [zones, setZones] = useState<ControlZone[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editZone, setEditZone] = useState<ControlZone | null>(null);
   const [form, setForm] = useState<ZoneForm>(emptyForm);
@@ -38,11 +39,22 @@ export default function SecurityZonesPage() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
 
+  const loadZones = async () => {
+    setIsLoading(true);
+    try {
+      setZones(await getZonesDB());
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setZones(getZones());
+    loadZones();
   }, []);
 
-  const refresh = () => setZones(getZones());
+  const refresh = async () => {
+    setZones(await getZonesDB());
+  };
 
   const openAdd = () => {
     setEditZone(null);
@@ -65,34 +77,46 @@ export default function SecurityZonesPage() {
     setShowEmojiPicker(false);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.name.trim()) {
       toast.error(t('admin.zones_name_required'));
       return;
     }
-    if (editZone) {
-      updateZone(editZone.id, { name: form.name.trim(), icon: form.icon, description: form.description.trim() });
-      toast.success(`${t('admin.zones_zone')} "${form.name}" ${t('admin.zones_modified')}`);
-    } else {
-      addZone({ name: form.name.trim(), icon: form.icon, description: form.description.trim() });
-      toast.success(`${t('admin.zones_zone')} "${form.name}" ${t('admin.zones_created')}`);
+    try {
+      if (editZone) {
+        await updateZoneDB(editZone.id, { name: form.name.trim(), icon: form.icon, description: form.description.trim() });
+        toast.success(`${t('admin.zones_zone')} "${form.name}" ${t('admin.zones_modified')}`);
+      } else {
+        await addZoneDB({ name: form.name.trim(), icon: form.icon, description: form.description.trim() });
+        toast.success(`${t('admin.zones_zone')} "${form.name}" ${t('admin.zones_created')}`);
+      }
+      await refresh();
+      closeModal();
+    } catch {
+      toast.error('Erreur lors de la sauvegarde de la zone');
     }
-    refresh();
-    closeModal();
   };
 
-  const handleDelete = (id: string) => {
-    deleteZone(id);
-    toast.success(t('admin.zones_deleted'));
-    setConfirmDelete(null);
-    refresh();
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteZoneDB(id);
+      toast.success(t('admin.zones_deleted'));
+      setConfirmDelete(null);
+      await refresh();
+    } catch {
+      toast.error('Erreur lors de la suppression de la zone');
+    }
   };
 
-  const handleReset = () => {
-    resetZones();
-    toast.success(t('admin.zones_reset_success'));
-    setConfirmReset(false);
-    refresh();
+  const handleReset = async () => {
+    try {
+      await resetZonesDB();
+      toast.success(t('admin.zones_reset_success'));
+      setConfirmReset(false);
+      await refresh();
+    } catch {
+      toast.error('Erreur lors de la réinitialisation');
+    }
   };
 
   return (
@@ -290,7 +314,12 @@ export default function SecurityZonesPage() {
 
         {/* Zones list */}
         <Card className="overflow-hidden">
-          {zones.length === 0 ? (
+          {isLoading ? (
+            <div className="py-16 text-center">
+              <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-3" />
+              <p className="text-sm text-gray-400">Chargement des zones…</p>
+            </div>
+          ) : zones.length === 0 ? (
             <div className="py-16 text-center">
               <MapPin className="h-10 w-10 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500 font-medium">{t('admin.zones_empty')}</p>

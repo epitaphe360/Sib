@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import {
@@ -57,14 +57,14 @@ export default function PartnerMediaLibraryPage() {
         .eq('created_by_id', user.id)
         .eq('created_by_type', 'partner')
         .order('created_at', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       const { data, error } = await query;
 
       if (error) {throw error;}
       setMedia(data || []);
     } catch (error) {
-      console.error('Erreur chargement médias:', error);
+      console.error('Erreur chargement m�dias:', error);
     } finally {
       setIsLoading(false);
     }
@@ -132,7 +132,7 @@ export default function PartnerMediaLibraryPage() {
         {/* Header */}
         <div className="mb-8">
           <Link to={ROUTES.PARTNER_DASHBOARD} className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
-            ← {t('common.back_dashboard')}
+            ? {t('common.back_dashboard')}
           </Link>
           <div className="flex items-center justify-between">
             <div>

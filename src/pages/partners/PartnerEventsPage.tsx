@@ -46,7 +46,7 @@ export const PartnerEventsPage: React.FC = () => {
           registrations:event_registrations(count)
         `)
         .order('start_date', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) { throw error; }
       if (data) { setEvents(data as unknown as Event[]); }

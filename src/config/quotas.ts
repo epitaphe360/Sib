@@ -8,7 +8,6 @@
 export const VISITOR_QUOTAS: Record<string, number> = {
   free: 0,           // FREE: Aucun rendez-vous
   vip: 1000,         // VIP: 1000 RDV
-  premium: 1000,     // PREMIUM: 1000 RDV
   exhibitor: 1000,   // EXPOSANT: 1000 RDV
   partner: 1000,     // PARTENAIRE: 1000 RDV
   admin: 1000,       // ADMIN: 1000 RDV
@@ -17,7 +16,7 @@ export const VISITOR_QUOTAS: Record<string, number> = {
 
 /**
  * Retourne le quota de rendez-vous B2B pour un niveau/type donné
- * @param level - Le niveau de visiteur (free, premium, vip) OU le type d'utilisateur (exhibitor, partner, admin)
+ * @param level - Le niveau de visiteur (free, vip) OU le type d'utilisateur (exhibitor, partner, admin)
  * @returns Le nombre de RDV autorisés (999999 = illimité)
  */
 export const getVisitorQuota = (level: string | undefined): number => {
@@ -35,7 +34,6 @@ export const calculateRemainingQuota = (
 
 export const VISITOR_LEVELS: Record<string, { label: string, color: string, icon: string, access: string[] }> = {
   free: { label: 'Free Pass', color: '#6c757d', icon: '🟢', access: ['Accès limité', 'Badge uniquement', 'Aucun rendez-vous'] },
-  // premium removed - consolidated to vip
   vip: { label: 'Premium VIP Pass', color: '#ffd700', icon: '👑', access: ['Invitation inauguration', '10 demandes de rendez-vous B2B', 'Networking illimité', 'Ateliers spécialisés', 'Soirée gala exclusive', 'Conférences', 'Déjeuners networking'] }
 };
 

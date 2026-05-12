@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, FileText, Download, User, Globe, Calendar, Hash, Clock, CheckCircle, XCircle, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jsPDF } from 'jspdf';
@@ -167,7 +167,8 @@ const emptyForm: VisaFormData = {
 export default function VisaLetterPage() {
   const { user } = useAuthStore();
   const { t } = useTranslation();
-  const profile = user?.profile || {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const profile = (user?.profile || {}) as Record<string, unknown>;
 
   const [requests, setRequests] = useState<VisaRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
@@ -421,3 +422,4 @@ export default function VisaLetterPage() {
     </div>
   );
 }
+

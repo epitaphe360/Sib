@@ -1658,7 +1658,7 @@ export default function ExhibitorDetailPage() {
 
                       const isSelected = selectedTimeSlot === slot.id;
 
-                      const booked = appointments.find(a => a.timeSlotId === slot.id && a.visitorId === user?.id);
+                      const booked = appointments.find(a => a.timeSlotId === slot.id && a.visitorId === user?.id && a.status !== 'cancelled' && a.status !== 'rejected');
 
                       const dateLabel = new Date(slot.date as any).toLocaleDateString('fr-FR', {
 

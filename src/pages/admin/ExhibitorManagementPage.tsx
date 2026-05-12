@@ -48,7 +48,7 @@ export default function ExhibitorManagementPage() {
     try {
       let query = supabase!
         .from('exhibitors')
-        .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, contact_info, created_at, updated_at')
+        .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, stand_area, contact_info, created_at, updated_at')
         .order('company_name', { ascending: true });
 
       if (currentSalon) {
@@ -80,6 +80,7 @@ export default function ExhibitorManagementPage() {
         featured: e.featured ?? false,
         isPublished: false,
         standNumber: e.stand_number,
+        standArea: e.stand_area,
         contactInfo: e.contact_info || {},
         products: [],
         miniSite: null,
@@ -101,14 +102,7 @@ export default function ExhibitorManagementPage() {
       try {
 
         // Récupérer le token pour l'API admin serveur
-        const { data: { session } } = await supabase.auth.getSession();
-        console.log('Session info:', {
-          hasSession: !!session,
-          hasToken: !!session?.access_token,
-          userId: session?.user?.id,
-          userEmail: session?.user?.email,
-          tokenPreview: session?.access_token?.substring(0, 20) + '...'
-        });
+        const { data: { session } } = await supabase!.auth.getSession();
 
         if (!session?.access_token) {
           throw new Error('Pas de session active - veuillez vous reconnecter');

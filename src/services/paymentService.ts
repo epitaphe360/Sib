@@ -228,7 +228,7 @@ export async function upgradeUserToVIP(userId: string, paymentRequestId: string)
     // Update user visitor_level to premium
     const { error: userError } = await supabase
       .from('users')
-      .update({ visitor_level: 'premium' })
+      .update({ visitor_level: 'vip' })
       .eq('id', userId);
 
     if (userError) {throw userError;}

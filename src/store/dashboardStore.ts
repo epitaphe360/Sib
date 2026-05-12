@@ -48,7 +48,9 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
 
       // Calculer les statistiques RÉELLES depuis les tables (pas depuis profile.stats)
       // Les profile.stats sont des données de démo, on les ignore
-      const isExhibitorOrPartner = userProfile?.role === 'exhibitor' || userProfile?.role === 'partner';
+      const isExhibitorOrPartner =
+        userProfile?.role === 'exhibitor' || (userProfile as any)?.type === 'exhibitor' ||
+        userProfile?.role === 'partner'   || (userProfile as any)?.type === 'partner';
 
       const stats: DashboardStats = {
         profileViews: 0,

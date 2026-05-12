@@ -24,10 +24,10 @@ export function useAdminDashboard() {
 
     const channel = supabase
       ?.channel('admin-users-changes')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'users' }, () => {
+      ?.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'users' }, () => {
         fetchMetrics();
       })
-      .subscribe();
+      ?.subscribe();
 
     return () => {
       if (pollingRef.current) {clearInterval(pollingRef.current);}

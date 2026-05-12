@@ -8,7 +8,7 @@ import { ROUTES } from '../../../lib/routes';
 
 interface AdminQuickActionsProps {
   adminMetrics: Record<string, number | unknown>;
-  t: (key: string, params?: Record<string, unknown>) => string;
+  t: (key: string, params?: Record<string, string | number> | string) => string;
 }
 
 /** Lien d'action uniforme â€” navy + or sur hover */

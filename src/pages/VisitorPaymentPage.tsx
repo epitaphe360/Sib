@@ -58,7 +58,7 @@ export default function VisitorPaymentPage() {
       await capturePayPalOrder(orderId, user.id);
 
       // Upgrade visiteur → premium
-      await supabase.from('users').update({ status: 'active', visitor_level: 'premium' }).eq('id', user.id);
+      await supabase.from('users').update({ status: 'active', visitor_level: 'vip' }).eq('id', user.id);
 
       // Générer facture automatiquement
       createInvoice({

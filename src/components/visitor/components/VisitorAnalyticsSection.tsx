@@ -105,7 +105,7 @@ export function VisitorAnalyticsSection({
         />
       </div>
 
-      {(userLevel === 'vip' || userLevel === 'premium') && predictions.length > 0 && (
+      {userLevel === 'vip' && predictions.length > 0 && (
         <div className="mb-6">
           <AIPredictions predictions={predictions} />
         </div>

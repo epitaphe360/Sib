@@ -1,4 +1,4 @@
-ï»¿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../lib/routes';
 import {
@@ -50,13 +50,13 @@ export const ManageMediaPage: React.FC = () => {
         .from('media_contents')
         .select('id, type, title, description, thumbnail_url, category, views_count, status, is_published, created_at, published_date:published_at')
         .order('created_at', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) {throw error;}
       setMedia(data || []);
     } catch (error) {
       console.error('Error loading media:', error);
-      toast.error('Erreur lors du chargement des mÃ©dias');
+      toast.error('Erreur lors du chargement des médias');
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ export const ManageMediaPage: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('ÃŠtes-vous sÃ»r de vouloir supprimer ce mÃ©dia ?')) {return;}
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce média ?')) {return;}
 
     try {
       const { error } = await supabase
@@ -98,7 +98,7 @@ export const ManageMediaPage: React.FC = () => {
         .eq('id', id);
 
       if (error) {throw error;}
-      toast.success('MÃ©dia supprimÃ© avec succÃ¨s');
+      toast.success('Média supprimé avec succès');
       loadMedia();
     } catch (error) {
       console.error('Error deleting media:', error);
@@ -114,11 +114,11 @@ export const ManageMediaPage: React.FC = () => {
         .eq('id', id);
 
       if (error) {throw error;}
-      toast.success(currentStatus ? 'MÃ©dia dÃ©publiÃ©' : 'MÃ©dia publiÃ©');
+      toast.success(currentStatus ? 'Média dépublié' : 'Média publié');
       loadMedia();
     } catch (error) {
       console.error('Error toggling publish status:', error);
-      toast.error('Erreur lors de la mise Ã  jour');
+      toast.error('Erreur lors de la mise à jour');
     }
   };
 
@@ -141,7 +141,7 @@ export const ManageMediaPage: React.FC = () => {
       capsule_inside: 'Capsule Inside',
       live_studio: 'Live Studio',
       best_moments: 'Best Moments',
-      testimonial: 'TÃ©moignage'
+      testimonial: 'Témoignage'
     };
     return labels[type] || type;
   };
@@ -169,15 +169,15 @@ export const ManageMediaPage: React.FC = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Gestion des MÃ©dias</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Gestion des Médias</h1>
               <p className="text-gray-600 mt-2">
-                {filteredMedia.length} mÃ©dia{filteredMedia.length > 1 ? 's' : ''} trouvÃ©{filteredMedia.length > 1 ? 's' : ''}
+                {filteredMedia.length} média{filteredMedia.length > 1 ? 's' : ''} trouvé{filteredMedia.length > 1 ? 's' : ''}
               </p>
             </div>
             <Button asChild>
               <Link to="/admin/media/create">
                 <Plus className="h-4 w-4 mr-2" />
-                CrÃ©er un mÃ©dia
+                Créer un média
               </Link>
             </Button>
           </div>
@@ -192,7 +192,7 @@ export const ManageMediaPage: React.FC = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Rechercher un mÃ©dia..."
+                  placeholder="Rechercher un média..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -213,7 +213,7 @@ export const ManageMediaPage: React.FC = () => {
                 <option value="capsule_inside">Capsules Inside</option>
                 <option value="live_studio">Live Studio</option>
                 <option value="best_moments">Best Moments</option>
-                <option value="testimonial">TÃ©moignages</option>
+                <option value="testimonial">Témoignages</option>
               </select>
             </div>
           </div>
@@ -238,7 +238,7 @@ export const ManageMediaPage: React.FC = () => {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              PubliÃ©s ({media.filter(m => m.is_published).length})
+              Publiés ({media.filter(m => m.is_published).length})
             </button>
             <button
               onClick={() => setFilterStatus('draft')}
@@ -260,15 +260,15 @@ export const ManageMediaPage: React.FC = () => {
               <Video className="h-16 w-16 mx-auto" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Aucun mÃ©dia trouvÃ©
+              Aucun média trouvé
             </h3>
             <p className="text-gray-600 mb-4">
-              Commencez par crÃ©er votre premier mÃ©dia
+              Commencez par créer votre premier média
             </p>
             <Button asChild>
               <Link to="/admin/media/create">
                 <Plus className="h-4 w-4 mr-2" />
-                CrÃ©er un mÃ©dia
+                Créer un média
               </Link>
             </Button>
           </div>
@@ -299,7 +299,7 @@ export const ManageMediaPage: React.FC = () => {
                       variant={item.is_published ? 'default' : 'secondary'}
                       className={item.is_published ? 'bg-green-600' : 'bg-yellow-600'}
                     >
-                      {item.is_published ? 'PubliÃ©' : 'Brouillon'}
+                      {item.is_published ? 'Publié' : 'Brouillon'}
                     </Badge>
                   </div>
 
@@ -372,7 +372,7 @@ export const ManageMediaPage: React.FC = () => {
                       {item.is_published ? (
                         <>
                           <X className="h-4 w-4 mr-1" />
-                          DÃ©publier
+                          Dépublier
                         </>
                       ) : (
                         <>

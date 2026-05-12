@@ -25,7 +25,6 @@ export function useVisitorDashboard() {
     appointments,
     fetchAppointments,
     updateAppointmentStatus,
-    cancelAppointment,
     isLoading: isAppointmentsLoading,
   } = useAppointmentStore();
   const { fetchVisitorData } = useVisitorStore();
@@ -97,24 +96,25 @@ export function useVisitorDashboard() {
     [receivedAppointments]
   );
   const refusedAppointments = useMemo(
-    () => receivedAppointments.filter((a) => a.status === 'cancelled'),
+    () => receivedAppointments.filter((a) => a.status === 'rejected'),
     [receivedAppointments]
   );
-  const now = new Date();
   const upcomingAppointments = useMemo(
-    () =>
-      receivedAppointments.filter(
-        (a) => new Date(a.startTime || (a.createdAt as unknown as string) || 0) > now && a.status !== 'cancelled'
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    () => {
+      const now = new Date();
+      return receivedAppointments.filter(
+        (a) => new Date(a.startTime || (a.createdAt as unknown as string) || 0) > now && a.status !== 'cancelled' && a.status !== 'rejected'
+      );
+    },
     [receivedAppointments]
   );
   const pastAppointments = useMemo(
-    () =>
-      receivedAppointments.filter(
+    () => {
+      const now = new Date();
+      return receivedAppointments.filter(
         (a) => new Date(a.startTime || (a.createdAt as unknown as string) || 0) < now
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      );
+    },
     [receivedAppointments]
   );
 
@@ -128,7 +128,7 @@ export function useVisitorDashboard() {
     setFilteredPast(pastAppointments);
     setFilteredCancelled(refusedAppointments);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [upcomingAppointments.length, pastAppointments.length, refusedAppointments.length]);
+  }, [upcomingAppointments, pastAppointments, refusedAppointments]);
 
   // ─── Level & quota ───────────────────────────────────────────────────────────
   const userLevel: string =
@@ -182,6 +182,11 @@ export function useVisitorDashboard() {
   // ─── Handlers ────────────────────────────────────────────────────────────────
   const handleAccept = useCallback(
     async (appointmentId: string) => {
+      const appointment = appointments.find((a) => a.id === appointmentId);
+      if (!appointment || appointment.visitorId !== user?.id) {
+        setError(t('errors.unauthorized'));
+        return;
+      }
       try {
         await updateAppointmentStatus(appointmentId, 'confirmed');
       } catch (err) {
@@ -189,19 +194,24 @@ export function useVisitorDashboard() {
         setError(t('errors.accept_appointment'));
       }
     },
-    [updateAppointmentStatus, t]
+    [appointments, user, updateAppointmentStatus, t]
   );
 
   const handleReject = useCallback(
     async (appointmentId: string) => {
+      const appointment = appointments.find((a) => a.id === appointmentId);
+      if (!appointment || appointment.visitorId !== user?.id) {
+        setError(t('errors.unauthorized'));
+        return;
+      }
       try {
-        await cancelAppointment(appointmentId);
+        await updateAppointmentStatus(appointmentId, 'rejected');
       } catch (err) {
         console.error("Erreur refus:", err);
         setError(t('errors.reject_appointment'));
       }
     },
-    [cancelAppointment, t]
+    [appointments, user, updateAppointmentStatus, t]
   );
 
   const handleRequestAnother = useCallback((exhibitorId: string) => {

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, X, Star, Sparkles, TrendingUp } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -12,17 +12,17 @@ interface SiteTemplateSelectorProps {
 }
 
 const categories = [
-  { id: 'all', name: 'Tous', icon: '🎨' },
-  { id: 'corporate', name: 'Corporate', icon: '🏢' },
-  { id: 'ecommerce', name: 'E-commerce', icon: '🛍️' },
-  { id: 'portfolio', name: 'Portfolio', icon: '🎭' },
-  { id: 'event', name: 'Événement', icon: '🎪' },
-  { id: 'landing', name: 'Landing Page', icon: '🚀' },
-  { id: 'startup', name: 'Startup', icon: '💡' },
-  { id: 'agency', name: 'Agence', icon: '✨' },
-  { id: 'product', name: 'Produit', icon: '📦' },
-  { id: 'blog', name: 'Blog', icon: '📝' },
-  { id: 'minimal', name: 'Minimal', icon: '⚪' }
+  { id: 'all', name: 'Tous', icon: '??' },
+  { id: 'corporate', name: 'Corporate', icon: '??' },
+  { id: 'ecommerce', name: 'E-commerce', icon: '???' },
+  { id: 'portfolio', name: 'Portfolio', icon: '??' },
+  { id: 'event', name: '�v�nement', icon: '??' },
+  { id: 'landing', name: 'Landing Page', icon: '??' },
+  { id: 'startup', name: 'Startup', icon: '??' },
+  { id: 'agency', name: 'Agence', icon: '?' },
+  { id: 'product', name: 'Produit', icon: '??' },
+  { id: 'blog', name: 'Blog', icon: '??' },
+  { id: 'minimal', name: 'Minimal', icon: '?' }
 ];
 
 export const SiteTemplateSelector: React.FC<SiteTemplateSelectorProps> = ({ onSelect, onClose }) => {
@@ -42,7 +42,7 @@ export const SiteTemplateSelector: React.FC<SiteTemplateSelectorProps> = ({ onSe
         .from('site_templates')
         .select('id, name, description, category, thumbnail, sections, premium, popularity')
         .order('popularity', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) {throw error;}
       setTemplates(data || []);
@@ -74,7 +74,7 @@ export const SiteTemplateSelector: React.FC<SiteTemplateSelectorProps> = ({ onSe
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-2xl font-bold">Choisissez un template</h2>
-              <p className="text-gray-500">Démarrez avec un design professionnel</p>
+              <p className="text-gray-500">D�marrez avec un design professionnel</p>
             </div>
             <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded">
               <X className="w-6 h-6" />
@@ -123,7 +123,7 @@ export const SiteTemplateSelector: React.FC<SiteTemplateSelectorProps> = ({ onSe
           ) : filteredTemplates.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-gray-400">
               <Search className="w-16 h-16 mb-4 opacity-20" />
-              <p>Aucun template trouvé</p>
+              <p>Aucun template trouv�</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -147,7 +147,7 @@ export const SiteTemplateSelector: React.FC<SiteTemplateSelectorProps> = ({ onSe
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-6xl">
-                        {categories.find(c => c.id === template.category)?.icon || '🎨'}
+                        {categories.find(c => c.id === template.category)?.icon || '??'}
                       </div>
                     )}
 
@@ -206,14 +206,14 @@ export const SiteTemplateSelector: React.FC<SiteTemplateSelectorProps> = ({ onSe
         {selectedTemplate && (
           <div className="p-4 border-t flex justify-between items-center">
             <p className="text-sm text-gray-600">
-              Template sélectionné: <strong>{templates.find(t => t.id === selectedTemplate)?.name}</strong>
+              Template s�lectionn�: <strong>{templates.find(t => t.id === selectedTemplate)?.name}</strong>
             </p>
             <div className="flex gap-2">
               <Button variant="outline" onClick={onClose}>
                 Annuler
               </Button>
               <Button onClick={() => handleSelect(selectedTemplate)}>
-                Créer mon site
+                Cr�er mon site
               </Button>
             </div>
           </div>

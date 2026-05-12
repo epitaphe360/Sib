@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Download, CalendarPlus } from 'lucide-react';
+import { Calendar, Clock, Download, CalendarPlus, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '../../ui/Badge';
 import { Button } from '../../ui/Button';
@@ -16,6 +16,7 @@ interface ExhibitorAppointmentSectionProps {
   upcomingAppointments: Appointment[];
   pastAppointments: Appointment[];
   cancelledAppointments: Appointment[];
+  sentAppointments?: Appointment[];
   isAppointmentsLoading: boolean;
   processingAppointment: string | null;
   onAccept: (id: string) => void;
@@ -26,6 +27,7 @@ export function ExhibitorAppointmentSection({
   upcomingAppointments,
   pastAppointments,
   cancelledAppointments,
+  sentAppointments = [],
   isAppointmentsLoading,
   processingAppointment,
   onAccept,
@@ -192,6 +194,28 @@ export function ExhibitorAppointmentSection({
           )}
         </div>
       </Card>
+
+      {/* ── Mes demandes envoyées ── */}
+      {sentAppointments.length > 0 && (
+        <Card className="sib-glass-card overflow-hidden mb-8">
+          <div className="p-6 bg-gradient-to-br from-white via-blue-50/20 to-indigo-50/20">
+            <div className="flex items-center space-x-3 mb-5">
+              <div className="p-2.5 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
+                <Send className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">Mes demandes envoyées</h3>
+                <p className="text-xs text-gray-500">Rendez-vous que vous avez demandés — en attente de confirmation par l'autre partie</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              {sentAppointments.map((app: any, index) => (
+                <SentRequestCard key={app.id} app={app} index={index} t={t} />
+              ))}
+            </div>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }
@@ -362,6 +386,53 @@ function CancelledCard({ app, t }: { app: any; t: (key: string) => string }) {
           </div>
         </div>
         <Badge variant="error" className="text-xs">{t('exhibitor.appointments_badge_cancelled')}</Badge>
+      </div>
+    </motion.div>
+  );
+}
+
+function SentRequestCard({ app, index, t }: { app: any; index: number; t: (key: string) => string }) {
+  const targetName = app.exhibitor?.companyName || app.exhibitor?.name || 'Exposant';
+  const isConfirmed = app.status === 'confirmed';
+
+  return (
+    <motion.div
+      key={app.id}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className={`group relative bg-white rounded-xl p-4 shadow-md border-2 transition-all duration-300 ${
+        isConfirmed
+          ? 'border-emerald-100 hover:border-emerald-300'
+          : 'border-blue-100 hover:border-blue-300'
+      }`}
+    >
+      <div className="flex items-start space-x-4">
+        <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ${
+          isConfirmed
+            ? 'bg-gradient-to-br from-emerald-500 to-teal-500'
+            : 'bg-gradient-to-br from-blue-500 to-indigo-500'
+        }`}>
+          {targetName.charAt(0).toUpperCase()}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="font-bold text-gray-900 mb-1">
+            Demande envoyée à <span className="text-blue-700">{targetName}</span>
+          </div>
+          {app.message && (
+            <div className="text-sm text-gray-500 italic leading-relaxed line-clamp-2">{app.message}</div>
+          )}
+        </div>
+        <div className="flex-shrink-0">
+          {isConfirmed ? (
+            <Badge variant="success" className="text-xs font-bold">Confirmé ✓</Badge>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-700 border border-amber-200">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse inline-block" />
+              En attente
+            </span>
+          )}
+        </div>
       </div>
     </motion.div>
   );

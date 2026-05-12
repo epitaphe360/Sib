@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  Search, Brain, Sparkles, ArrowLeft, Clock, Target,
-  Building2, Globe, MapPin, ExternalLink, ChevronRight,
+  Search, Brain, Sparkles, ArrowLeft, Target,
+  Building2, Globe, ExternalLink, ChevronRight,
   Zap, Info, X, RotateCcw
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
@@ -13,7 +13,6 @@ import {
   QUICK_SEARCH_SUGGESTIONS,
 } from '../services/advancedMatchingService';
 import { runAIMatching, type AIMatchingResponse } from '../services/aiMatchingService';
-import { ROUTES } from '../lib/routes';
 
 // ─── Composant score ring ──────────────────────────────────────────────────────
 
@@ -54,7 +53,7 @@ function ResultCard({
   index,
   onViewProfile,
 }: {
-  result: MatchingResponse['results'][0];
+  result: AIMatchingResponse['results'][0];
   index: number;
   onViewProfile: (id: string) => void;
 }) {
@@ -102,7 +101,7 @@ function ResultCard({
 
             {/* Raisons du match */}
             <div className="flex flex-wrap gap-1.5 mt-3">
-              {result.matchReasons.map((reason, i) => (
+              {result.matchReasons.map((reason: string, i: number) => (
                 <span
                   key={i}
                   className="inline-flex items-center text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-2.5 py-0.5 gap-1"
@@ -307,7 +306,7 @@ export default function AdvancedMatchingPage() {
 
         {/* Tags extraits */}
         <AnimatePresence>
-          {response && response.extractedTagLabels.length > 0 && (
+          {response && (response as AIMatchingResponse & { extractedTagLabels?: string[] }).extractedTagLabels?.length && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -315,7 +314,7 @@ export default function AdvancedMatchingPage() {
             >
               <Info className="h-4 w-4 text-blue-500 flex-shrink-0" />
               <span className="text-xs text-blue-600 font-medium">IA a compris :</span>
-              {response.extractedTagLabels.map((label, i) => (
+              {((response as AIMatchingResponse & { extractedTagLabels?: string[] }).extractedTagLabels ?? []).map((label: string, i: number) => (
                 <Badge key={i} variant="info" className="text-xs">
                   {label}
                 </Badge>

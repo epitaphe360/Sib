@@ -1,0 +1,29 @@
+name: sib_zone_scanner
+description: SIB Zone Scanner - Application agents de sécurité (contrôle accès par QR code)
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Supabase (auth + DB)
+  supabase_flutter: ^2.5.0
+  # Scanner QR/Code-barres (caméra native)
+  mobile_scanner: ^5.2.3
+  # Cache images (photo badge)
+  cached_network_image: ^3.3.1
+  # Persistance locale (token session)
+  shared_preferences: ^2.3.0
+  # Formatage dates
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PROJECT_URL = 'https://sbyizudifmqakzxjlndr.supabase.co';
-const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieWl6dWRpZm1xYWt6eGpsbmRyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTkxODcwMSwiZXhwIjoyMDkxNDk0NzAxfQ.-dbIT8rJ1cDoP-USJejVZku6R5MCg_UXvnuEHY1--cY';
+const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const MIGRATIONS_DIR = path.join(__dirname, 'supabase', 'migrations');
 
 function apiRequest(methods, urlPath, body) {

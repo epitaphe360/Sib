@@ -168,6 +168,7 @@ export default memo(function ExhibitorDashboard() {
           upcomingAppointments={ctx.upcomingAppointments}
           pastAppointments={ctx.pastAppointments}
           cancelledAppointments={ctx.cancelledAppointments}
+          sentAppointments={ctx.sentAppointments}
           isAppointmentsLoading={ctx.isAppointmentsLoading}
           processingAppointment={ctx.processingAppointment}
           onAccept={ctx.handleAccept}

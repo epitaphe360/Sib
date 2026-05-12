@@ -21,6 +21,15 @@ export function usePartnerDashboard() {
   const [isPublished, setIsPublished] = useState<boolean | null>(null);
   const [isTogglingPublish, setIsTogglingPublish] = useState(false);
   const [confirmRejectId, setConfirmRejectId] = useState<string | null>(null);
+  // BUGFIX: Résoudre l'ID de la table 'partners' (différent de users.id)
+  const [partnerDbId, setPartnerDbId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user?.id || user.type !== 'partner') {return;}
+    supabase!.from('partners').select('id').eq('user_id', user.id).maybeSingle()
+      .then(({ data }) => { if (data) {setPartnerDbId((data as any).id);} })
+      .catch(() => {});
+  }, [user?.id]);
 
   useEffect(() => {
     if (!user || user.type !== 'partner') {return;}
@@ -72,7 +81,10 @@ export function usePartnerDashboard() {
     }
   };
 
-  const receivedAppointments = appointments.filter(a => user && user.id && a.exhibitorId === user.id);
+  // BUGFIX: filter avec partnerDbId (partners.id) et non user.id (users.id)
+  const receivedAppointments = appointments.filter(a =>
+    user && user.id && (a.exhibitorId === partnerDbId || (!partnerDbId && a.exhibitorId === user.id))
+  );
   const pendingAppointments = receivedAppointments.filter(a => a.status === 'pending');
   const confirmedAppointments = receivedAppointments.filter(a => a.status === 'confirmed');
 
@@ -102,7 +114,8 @@ export function usePartnerDashboard() {
 
   const handleAccept = async (appointmentId: string) => {
     const appointment = appointments.find(a => a.id === appointmentId);
-    if (!appointment || !user?.id || appointment.exhibitorId !== user.id) {
+    const effectiveId = partnerDbId || user?.id;
+    if (!appointment || !effectiveId || appointment.exhibitorId !== effectiveId) {
       toast.error("Vous n'êtes pas autorisé à confirmer ce rendez-vous");
       return;
     }
@@ -119,7 +132,8 @@ export function usePartnerDashboard() {
 
   const handleReject = (appointmentId: string) => {
     const appointment = appointments.find(a => a.id === appointmentId);
-    if (!appointment || !user?.id || appointment.exhibitorId !== user.id) {
+    const effectiveId = partnerDbId || user?.id;
+    if (!appointment || !effectiveId || appointment.exhibitorId !== effectiveId) {
       toast.error("Vous n'êtes pas autorisé à refuser ce rendez-vous");
       return;
     }
@@ -130,7 +144,8 @@ export function usePartnerDashboard() {
     setConfirmRejectId(null);
     setProcessingAppointment(appointmentId);
     try {
-      await cancelAppointment(appointmentId);
+      await updateAppointmentStatus(appointmentId, 'rejected');
+      await fetchAppointments();
     } catch (err) {
       console.error('Erreur refus:', err);
       toast.error("Impossible de refuser le rendez-vous");

@@ -67,7 +67,7 @@ export default function PaymentSuccessPage() {
       }
 
       // If user is already active with premium level, they're VIP
-      if (userData?.status === 'active' && userData?.visitor_level === 'premium') {
+      if (userData?.status === 'active' && userData?.visitor_level === 'vip') {
         setIsUpgraded(true);
         await refreshUserData();
         toast.success(t('payment.success.confirmed'));

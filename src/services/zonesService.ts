@@ -1,7 +1,10 @@
 /**
  * Service de gestion des zones de contrôle d'accès
- * Persiste en localStorage avec fallback sur les zones par défaut.
+ * Source de vérité : table Supabase `control_zones` (définie par l'administrateur).
+ * Fallback lecture seule sur localStorage pour mode hors-ligne.
  */
+
+import { supabase } from '../lib/supabase';
 
 export interface ControlZone {
   id: string;
@@ -24,7 +27,15 @@ export const DEFAULT_ZONES: ControlZone[] = [
   { id: 'technical_area',  name: 'Zone Technique',    icon: '🔧', description: 'Infrastructure et support technique',          createdAt: '2026-01-01T00:00:00.000Z' },
 ];
 
-export function getZones(): ControlZone[] {
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+type DbZoneRow = { id: string; name: string; icon: string; description: string; created_at: string };
+
+function dbRowToZone(row: DbZoneRow): ControlZone {
+  return { id: row.id, name: row.name, icon: row.icon, description: row.description, createdAt: row.created_at };
+}
+
+function getZonesLocal(): ControlZone[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) { return DEFAULT_ZONES; }
@@ -35,12 +46,84 @@ export function getZones(): ControlZone[] {
   }
 }
 
+// ── Async DB functions (à utiliser dans tous les nouveaux composants) ──────
+
+/**
+ * Charge les zones depuis Supabase (source de vérité admin).
+ * Met à jour le cache localStorage pour usage hors-ligne.
+ */
+export async function getZonesDB(): Promise<ControlZone[]> {
+  try {
+    const { data, error } = await supabase
+      .from('control_zones')
+      .select('id, name, icon, description, created_at')
+      .order('created_at', { ascending: true });
+
+    if (error) { throw error; }
+
+    const zones = (data ?? []).map(dbRowToZone);
+    // Mise en cache pour mode hors-ligne
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(zones));
+    return zones.length > 0 ? zones : DEFAULT_ZONES;
+  } catch {
+    return getZonesLocal();
+  }
+}
+
+export async function addZoneDB(zone: Omit<ControlZone, 'id' | 'createdAt'>): Promise<ControlZone> {
+  const id = `zone_${Date.now()}`;
+  const { data, error } = await supabase
+    .from('control_zones')
+    .insert({ id, name: zone.name, icon: zone.icon, description: zone.description })
+    .select('id, name, icon, description, created_at')
+    .single();
+
+  if (error) { throw error; }
+  return dbRowToZone(data);
+}
+
+export async function updateZoneDB(id: string, updates: Partial<Omit<ControlZone, 'id' | 'createdAt'>>): Promise<void> {
+  const patch: Partial<{ name: string; icon: string; description: string }> = {};
+  if (updates.name !== undefined)        { patch.name = updates.name; }
+  if (updates.icon !== undefined)        { patch.icon = updates.icon; }
+  if (updates.description !== undefined) { patch.description = updates.description; }
+
+  const { error } = await supabase.from('control_zones').update(patch).eq('id', id);
+  if (error) { throw error; }
+}
+
+export async function deleteZoneDB(id: string): Promise<void> {
+  const { error } = await supabase.from('control_zones').delete().eq('id', id);
+  if (error) { throw error; }
+}
+
+export async function resetZonesDB(): Promise<ControlZone[]> {
+  // Supprimer toutes les zones existantes
+  const { error: delError } = await supabase.from('control_zones').delete().neq('id', '');
+  if (delError) { throw delError; }
+
+  // Réinsérer les zones par défaut
+  const rows = DEFAULT_ZONES.map(z => ({
+    id: z.id, name: z.name, icon: z.icon, description: z.description, created_at: z.createdAt,
+  }));
+  const { error: insertError } = await supabase.from('control_zones').insert(rows);
+  if (insertError) { throw insertError; }
+
+  return DEFAULT_ZONES;
+}
+
+// ── Legacy sync functions (rétrocompatibilité) ─────────────────────────────
+
+export function getZones(): ControlZone[] {
+  return getZonesLocal();
+}
+
 export function saveZones(zones: ControlZone[]): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(zones));
 }
 
 export function addZone(zone: Omit<ControlZone, 'id' | 'createdAt'>): ControlZone {
-  const zones = getZones();
+  const zones = getZonesLocal();
   const newZone: ControlZone = {
     ...zone,
     id: `zone_${Date.now()}`,
@@ -51,13 +134,13 @@ export function addZone(zone: Omit<ControlZone, 'id' | 'createdAt'>): ControlZon
 }
 
 export function updateZone(id: string, updates: Partial<Omit<ControlZone, 'id' | 'createdAt'>>): void {
-  const zones = getZones();
+  const zones = getZonesLocal();
   const updated = zones.map(z => z.id === id ? { ...z, ...updates } : z);
   saveZones(updated);
 }
 
 export function deleteZone(id: string): void {
-  const zones = getZones();
+  const zones = getZonesLocal();
   saveZones(zones.filter(z => z.id !== id));
 }
 

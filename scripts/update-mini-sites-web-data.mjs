@@ -5,7 +5,7 @@
  */
 
 const SUPABASE_URL = 'https://sbyizudifmqakzxjlndr.supabase.co';
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo';
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const headers = {
   'apikey': SERVICE_KEY,
   'Authorization': `Bearer ${SERVICE_KEY}`,

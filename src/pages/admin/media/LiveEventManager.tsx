@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Radio, Play, Square, Settings, Users, Eye, MessageCircle, Clock, Calendar } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
@@ -59,7 +59,7 @@ export const LiveEventManager: React.FC = () => {
         .select('id, title, description, content_url:video_url, thumbnail_url, scheduled_date, is_live, viewers_count, host_name, guest_name, stream_key, rtmp_url, created_at')
         .eq('type', 'live_studio')
         .order('scheduled_date', { ascending: false })
-        .range(0, 49);
+        .range(0, 199);
 
       if (error) {throw error;}
       setLiveEvents(data || []);
@@ -165,7 +165,7 @@ export const LiveEventManager: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
                 <Badge variant="destructive" className="animate-pulse">
-                  🔴 {t('admin.live_on_air')}
+                  ?? {t('admin.live_on_air')}
                 </Badge>
                 <h2 className="text-2xl font-bold text-gray-900">
                   {currentLive.title}

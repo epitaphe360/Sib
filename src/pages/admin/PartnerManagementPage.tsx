@@ -100,7 +100,7 @@ export default function PartnerManagementPage() {
   const handleDelete = async (id: string, name: string) => {
     if (window.confirm(`Êtes-vous sûr de vouloir supprimer le sponsor "${name}" ? Cette action est irréversible.`)) {
       try {
-        const { error } = await supabase
+        const { error } = await supabase!
           .from('partners')
           .delete()
           .eq('id', id);

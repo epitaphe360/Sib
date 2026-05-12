@@ -102,6 +102,8 @@ interface BadgeConfig {
   face4_content: FaceContent;
   // Sponsors sélectionnés pour la face partenaires
   featured_sponsors: FeaturedSponsor[];
+  partners_rows_config: number[]; // logos par ligne, ex: [2, 3, 4]
+  partners_logo_height: number;   // hauteur logos en mm (6-25)
   // Infos pratiques (Face 1)
   dates_label: string;
   opening_hours: string;
@@ -212,6 +214,8 @@ const DEFAULT_CONFIG: BadgeConfig = {
   face3_content: 'identite_participant',
   face4_content: 'partenaires',
   featured_sponsors: [],
+  partners_rows_config: [3, 3],
+  partners_logo_height: 13,
   dates_label: 'du 25 au 29 Novembre 2026',
   opening_hours: 'de 9h30 à 18h30 · Mer–Sam / de 9h à 17h30 · Dim',
   location_address: 'El Jadida – Parc d\'Exposition Mohammed VI',
@@ -437,7 +441,7 @@ interface DbPartner {
   id: string;
   company_name: string | null;
   logo_url: string | null;
-  subscription_type: string | null;
+  partnership_level: string | null;
   verified: boolean | null;
 }
 
@@ -459,9 +463,14 @@ const SUBSCRIPTION_LABEL: Record<string, string> = {
   organisateur: 'Organisateur',
   co_organisateur: 'Co-Organisateur',
   sponsor_officiel: 'Partenaire Officiel',
+  official_sponsor: 'Partenaire Officiel',
   org_delegue: 'Org. Délégué',
   nos_partenaires: 'Nos Partenaires',
   presse: 'Presse',
+  gold: 'Gold',
+  silver: 'Silver',
+  bronze: 'Bronze',
+  platinum: 'Platinum',
 };
 
 function SponsorPicker({ selected, onChange }: Readonly<{
@@ -485,7 +494,7 @@ function SponsorPicker({ selected, onChange }: Readonly<{
       setLoading(true);
       const { data } = await supabase
         .from('partners')
-        .select('id, company_name, logo_url, subscription_type, verified')
+        .select('id, company_name, logo_url, partnership_level, verified')
         .not('company_name', 'is', null)
         .order('company_name');
       setPartners((data ?? []) as DbPartner[]);
@@ -644,7 +653,7 @@ function SponsorPicker({ selected, onChange }: Readonly<{
                     className="mt-1 w-full rounded px-1.5 py-0.5 text-[10px] text-gray-500 bg-white border border-gray-100 focus:outline-none focus:border-indigo-300 placeholder-gray-300"
                   />
                 </div>
-                <button type="button" onClick={() => toggle(partners.find(p => p.id === s.id) ?? { id: s.id, company_name: s.name, logo_url: s.logo_url, subscription_type: null, verified: null })} className="p-1 rounded text-red-400 hover:bg-red-500/10 transition-colors shrink-0" title="Retirer">
+                <button type="button" onClick={() => toggle(partners.find(p => p.id === s.id) ?? { id: s.id, company_name: s.name, logo_url: s.logo_url, partnership_level: null, verified: null })} className="p-1 rounded text-red-400 hover:bg-red-500/10 transition-colors shrink-0" title="Retirer">
                   <X className="h-3.5 w-3.5" />
                 </button>
               </div>
@@ -764,7 +773,7 @@ function SponsorPicker({ selected, onChange }: Readonly<{
                     : <div className="h-7 w-12 rounded bg-gray-100 flex items-center justify-center text-[8px] text-gray-400 shrink-0">logo</div>}
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-gray-800 truncate">{p.company_name}</p>
-                    <p className="text-[10px] text-gray-400">{SUBSCRIPTION_LABEL[p.subscription_type ?? ''] ?? p.subscription_type ?? 'Partenaire'}{p.verified ? ' · ✓ Vérifié' : ''}</p>
+                    <p className="text-[10px] text-gray-400">{SUBSCRIPTION_LABEL[p.partnership_level ?? ''] ?? p.partnership_level ?? 'Partenaire'}{p.verified ? ' · ✓ Vérifié' : ''}</p>
                   </div>
                 </button>
               );
@@ -1045,6 +1054,33 @@ function Face3Preview({ config, badge = PREVIEW_BADGE }: Readonly<{ config: Badg
 }
 
 function Face4Preview({ config }: Readonly<{ config: BadgeConfig }>) {
+  const sponsors = (config.featured_sponsors ?? []).slice().sort((a, b) => a.order - b.order);
+  const hasSponsors = sponsors.length > 0;
+  const logoH = config.partners_logo_height ?? 13;
+  const logoHpx = Math.round(logoH * 3.78 * 0.52);
+  const rowsConfig = config.partners_rows_config ?? [3, 3];
+
+  type LogoItem = { key: string; url: string; label: string; sub?: string };
+  const allLogos: LogoItem[] = hasSponsors
+    ? sponsors.map(sp => ({ key: sp.id, url: sp.logo_url, label: sp.name, sub: sp.role }))
+    : [
+        { key: 'aegis', url: config.logo_aegis_url, label: config.logo_aegis_label || "Sous l'égide de" },
+        { key: 'organizer', url: config.logo_organizer_url, label: config.logo_organizer_label },
+        { key: 'delegate', url: config.logo_delegate_url, label: config.logo_delegate_label },
+        { key: 'sponsor_1', url: config.logo_sponsor_1_url, label: config.logo_sponsor_1_label },
+        { key: 'sponsor_2', url: config.logo_sponsor_2_url, label: config.logo_sponsor_2_label },
+        { key: 'sponsor_3', url: config.logo_sponsor_3_url, label: config.logo_sponsor_3_label },
+        { key: 'badging', url: config.logo_badging_url, label: config.logo_badging_label },
+        { key: 'digital', url: config.logo_digital_url, label: config.logo_digital_label },
+        { key: 'media', url: config.logo_media_url, label: config.logo_media_label },
+      ];
+
+  const logoRows: LogoItem[][] = [];
+  let off = 0;
+  rowsConfig.forEach(cnt => {
+    if (off < allLogos.length) { logoRows.push(allLogos.slice(off, off + cnt)); off += cnt; }
+  });
+
   return (
     <>
       <div style={{ background: config.header_bg, padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1053,54 +1089,19 @@ function Face4Preview({ config }: Readonly<{ config: BadgeConfig }>) {
           : <span style={{ color: config.secondary_color, fontWeight: 'bold', fontSize: 12 }}>{config.event_name}</span>}
         <span style={{ color: config.secondary_color, fontWeight: 700, fontSize: 11 }}>{config.event_edition}</span>
       </div>
-      <div style={{ padding: '10px 12px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 10 }}>
-          <div style={{ fontSize: 8, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>{config.logo_aegis_label || "Sous l'égide de"}</div>
-          {config.logo_aegis_url
-            ? <img src={config.logo_aegis_url} alt={config.logo_aegis_label} style={{ maxHeight: 32, maxWidth: 120, objectFit: 'contain', margin: '0 auto', display: 'block' }} />
-            : <div style={{ height: 28, width: 120, background: '#f3f4f6', borderRadius: 4, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, color: '#9ca3af' }}>Logo</div>}
-        </div>
-        <hr style={{ border: 'none', borderTop: '1px solid #e5e7eb', marginBottom: 8 }} />
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 8, flexWrap: 'wrap' }}>
-          {[
-            { url: config.logo_organizer_url, label: config.logo_organizer_label },
-            { url: config.logo_delegate_url, label: config.logo_delegate_label },
-          ].map(({ url, label }) => (
-            <div key={label} style={{ textAlign: 'center' }}>
-              {url
-                ? <img src={url} alt={label} style={{ height: 28, maxWidth: 70, objectFit: 'contain' }} />
-                : <div style={{ height: 28, width: 70, background: '#f3f4f6', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 7, color: '#9ca3af' }}>{label}</div>}
-            </div>
-          ))}
-        </div>
-        <hr style={{ border: 'none', borderTop: '1px solid #e5e7eb', marginBottom: 8 }} />
-        <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 8 }}>
-          {([1, 2, 3] as const).map(n => {
-            const sUrl = config[`logo_sponsor_${n}_url` as keyof BadgeConfig] as string;
-            const sLbl = config[`logo_sponsor_${n}_label` as keyof BadgeConfig] as string;
-            return (
-              <div key={n} style={{ textAlign: 'center' }}>
-                {sUrl
-                  ? <img src={sUrl} alt={sLbl} style={{ height: 24, maxWidth: 60, objectFit: 'contain' }} />
-                  : <div style={{ height: 24, width: 60, background: '#f3f4f6', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 7, color: '#9ca3af' }}>{sLbl}</div>}
+      <div style={{ flex: 1, padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 6, justifyContent: 'center' }}>
+        {logoRows.map((row, ri) => (
+          <div key={ri} style={{ display: 'flex', gap: 4, justifyContent: 'center', alignItems: 'center' }}>
+            {row.map(item => (
+              <div key={item.key} style={{ flex: 1, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                {item.url
+                  ? <img src={item.url} alt={item.label} style={{ maxHeight: logoHpx, maxWidth: 70, objectFit: 'contain' }} />
+                  : <div style={{ height: logoHpx, minWidth: 40, background: '#f3f4f6', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 7, color: '#9ca3af', padding: '0 4px' }}>{item.label}</div>}
+                {item.sub && <div style={{ fontSize: 7, color: '#6b7280', fontWeight: 600 }}>{item.sub}</div>}
               </div>
-            );
-          })}
-        </div>
-        <hr style={{ border: 'none', borderTop: '1px solid #e5e7eb', marginBottom: 8 }} />
-        <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap' }}>
-          {(['badging', 'digital', 'media'] as const).map(type => {
-            const pUrl = config[`logo_${type}_url` as keyof BadgeConfig] as string;
-            const pLbl = config[`logo_${type}_label` as keyof BadgeConfig] as string;
-            return (
-              <div key={type} style={{ textAlign: 'center' }}>
-                {pUrl
-                  ? <img src={pUrl} alt={pLbl} style={{ height: 22, maxWidth: 60, objectFit: 'contain' }} />
-                  : <div style={{ height: 22, width: 60, background: '#f3f4f6', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 7, color: '#9ca3af' }}>{pLbl}</div>}
-              </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ))}
       </div>
       <div style={{ background: config.primary_color, color: '#fff', padding: '5px 10px', textAlign: 'center', fontSize: 9 }}>
         <div style={{ fontWeight: 'bold' }}>{config.event_dates_display} · {config.event_location}</div>
@@ -1205,6 +1206,63 @@ function FaceDetailSection({ faceLabel, faceContent, config, set, setConfig, onN
         </Field>
         <Field label="Sponsors à afficher sur le badge" hint="Sélectionnez les partenaires et définissez leur rôle. Ordre = ordre d'affichage.">
           <SponsorPicker selected={config.featured_sponsors} onChange={sponsors => setConfig(prev => ({ ...prev, featured_sponsors: sponsors }))} />
+        </Field>
+        <Field label="Disposition des logos par ligne" hint="Chaque ligne peut avoir un nombre différent de logos. Exemple : Ligne 1 → 2, Ligne 2 → 3, Ligne 3 → 4.">
+          <div className="space-y-2">
+            {(config.partners_rows_config ?? [3, 3]).map((count, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <span className="text-xs text-gray-500 w-16 shrink-0">Ligne {idx + 1}</span>
+                <div className="flex items-center gap-0 border border-gray-200 rounded-lg overflow-hidden bg-white">
+                  <button
+                    type="button"
+                    className="px-3 py-1.5 text-gray-600 hover:bg-gray-100 text-sm font-medium transition-colors"
+                    onClick={() => {
+                      const next = [...(config.partners_rows_config ?? [3, 3])];
+                      next[idx] = Math.max(1, count - 1);
+                      setConfig(prev => ({ ...prev, partners_rows_config: next }));
+                    }}
+                  >−</button>
+                  <span className="w-8 text-center text-sm font-semibold text-gray-700 select-none">{count}</span>
+                  <button
+                    type="button"
+                    className="px-3 py-1.5 text-gray-600 hover:bg-gray-100 text-sm font-medium transition-colors"
+                    onClick={() => {
+                      const next = [...(config.partners_rows_config ?? [3, 3])];
+                      next[idx] = Math.min(8, count + 1);
+                      setConfig(prev => ({ ...prev, partners_rows_config: next }));
+                    }}
+                  >+</button>
+                </div>
+                <span className="text-xs text-gray-400 flex-1">{count} logo{count > 1 ? 's' : ''}</span>
+                {(config.partners_rows_config ?? [3, 3]).length > 1 && (
+                  <button
+                    type="button"
+                    className="text-xs text-red-400 hover:text-red-600 transition-colors px-1"
+                    onClick={() => {
+                      const next = (config.partners_rows_config ?? [3, 3]).filter((_, i) => i !== idx);
+                      setConfig(prev => ({ ...prev, partners_rows_config: next }));
+                    }}
+                  >✕</button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              className="text-xs text-indigo-600 hover:text-indigo-800 font-medium transition-colors mt-1"
+              onClick={() => setConfig(prev => ({ ...prev, partners_rows_config: [...(prev.partners_rows_config ?? [3, 3]), 3] }))}
+            >+ Ajouter une ligne</button>
+          </div>
+        </Field>
+        <Field label="Hauteur des logos (mm)">
+          <div className="flex items-center gap-3">
+            <input
+              type="range" min={6} max={25}
+              value={config.partners_logo_height ?? 13}
+              onChange={e => setConfig(prev => ({ ...prev, partners_logo_height: Number(e.target.value) }))}
+              className="flex-1 accent-indigo-600"
+            />
+            <span className="text-sm font-semibold text-gray-700 w-14 text-right">{config.partners_logo_height ?? 13} mm</span>
+          </div>
         </Field>
       </SectionCard>
 

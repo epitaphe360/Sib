@@ -13,7 +13,7 @@ interface UserDB {
   name: string;
   type: 'exhibitor' | 'partner' | 'visitor' | 'admin' | 'security';
   profile: UserProfile;
-  visitor_level?: 'free' | 'premium' | 'vip';
+  visitor_level?: 'free' | 'vip';
   status?: 'active' | 'pending' | 'suspended' | 'rejected';
   created_at: string;
   updated_at: string;
@@ -3762,7 +3762,7 @@ export class SupabaseService {
       }
 
       // Apply pagination
-      const limit = options?.limit || 50; // Default 50 items
+      const limit = options?.limit || 500; // Default 500 items
       const offset = options?.offset || 0;
       query = query.range(offset, offset + limit - 1);
 
@@ -4139,7 +4139,7 @@ export class SupabaseService {
           await (safeSupabase as any)
             .from('partners')
             .update({ verified: true })
-            .eq('id', request.user_id);
+            .eq('user_id', request.user_id);
         }
 
         // Step 5: If exhibitor, also update exhibitors table verified status

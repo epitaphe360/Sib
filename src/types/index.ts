@@ -76,7 +76,7 @@ export interface UserProfile {
   visitObjectives?: string[];
   competencies?: string[];
   // Networking system fields
-  passType?: 'free' | 'premium' | 'vip';
+  passType?: 'free' | 'vip';
   status?: 'active' | 'pending' | 'suspended' | 'rejected';
   // Exhibitor specific fields
   standNumber?: string; // Numéro de stand pour les exposants
@@ -232,7 +232,7 @@ export interface Appointment {
   exhibitorId?: string;
   visitorId: string;
   timeSlotId?: string;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'rejected';
   message?: string;
   notes?: string;
   rating?: number;
