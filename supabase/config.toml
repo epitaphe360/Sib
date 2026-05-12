@@ -31,7 +31,7 @@ file_size_limit = "50MiB"
 
 [auth]
 enabled = true
-site_url = "https://sib-production.up.railway.app"
+site_url = "https://sib2026.vercel.app"
 additional_redirect_urls = [
   "https://sib-production.up.railway.app/**",
   "https://sib-production.up.railway.app/auth/callback",
