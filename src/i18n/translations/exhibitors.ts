@@ -32,5 +32,6 @@ export const exhibitorsTranslations = {
     'exhibitors.page.loading': '[exhibitors.page.loading]',
     'exhibitors.reset_search': '[exhibitors.reset_search]',
     'exhibitors.select_max': '[exhibitors.select_max]',
-  },
+    'exhibitors.count': '[exhibitors.count]',
+},
 };

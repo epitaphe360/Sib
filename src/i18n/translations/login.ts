@@ -22,5 +22,12 @@ export const loginTranslations = {
     'login.remember_me': '[login.remember_me]',
     'login.subtitle': '[login.subtitle]',
     'login.title': '[login.title]',
-  },
+    'login.connectionerror': '[login.connectionerror]',
+    'login.createaccount': '[login.createaccount]',
+    'login.fillallfields': '[login.fillallfields]',
+    'login.noaccount': '[login.noaccount]',
+    'login.paymentrequired': '[login.paymentrequired]',
+    'login.paymentrequiredfull': '[login.paymentrequiredfull]',
+    'login.wrongcredentials': '[login.wrongcredentials]',
+},
 };

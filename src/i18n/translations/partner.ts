@@ -392,5 +392,12 @@ export const partnerTranslations = {
     'partner.priority': '[partner.priority]',
     'partner.status.draft': '[partner.status.draft]',
     'partner.status.upcoming': '[partner.status.upcoming]',
-  },
+    'partner.areyoupartner': '[partner.areyoupartner]',
+    'partner.backtolist': '[partner.backtolist]',
+    'partner.completeprofile': '[partner.completeprofile]',
+    'partner.discoversib': '[partner.discoversib]',
+    'partner.notfound': '[partner.notfound]',
+    'partner.notfounddesc': '[partner.notfounddesc]',
+    'partner.notfoundgeneric': '[partner.notfoundgeneric]',
+},
 };
