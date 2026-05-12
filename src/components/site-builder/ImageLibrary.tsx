@@ -64,7 +64,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
         }
 
         if (file.size > 5 * 1024 * 1024) {
-          toast.error(`${file.name} dépasse 5MB`);
+          toast.error(`${file.name} dÃ©passe 5MB`);
           continue;
         }
 
@@ -98,10 +98,10 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
       }
 
       setImages([...uploadedImages, ...images]);
-      toast.success(`${uploadedImages.length} image(s) ajoutée(s)`);
+      toast.success(`${uploadedImages.length} image(s) ajoutÃ©e(s)`);
     } catch (error) {
       console.error('Error uploading images:', error);
-      toast.error('Erreur lors du téléchargement');
+      toast.error('Erreur lors du tÃ©lÃ©chargement');
     } finally {
       setUploading(false);
     }
@@ -127,7 +127,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
       if (dbError) {throw dbError;}
 
       setImages(images.filter(img => img.id !== image.id));
-      toast.success('Image supprimée');
+      toast.success('Image supprimÃ©e');
     } catch (error) {
       console.error('Error deleting image:', error);
       toast.error('Erreur lors de la suppression');
@@ -149,7 +149,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
       <div className="bg-white rounded-lg w-full max-w-5xl h-[80vh] flex flex-col">
         {/* Header */}
         <div className="p-6 border-b flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Bibliothèque d'images</h2>
+          <h2 className="text-2xl font-bold">BibliothÃ¨que d'images</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded">
             <X className="w-6 h-6" />
           </button>
@@ -236,7 +236,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
                           onSelect(image.url);
                         }}
                       >
-                        Sélectionner
+                        SÃ©lectionner
                       </Button>
                       <Button
                         size="sm"
@@ -284,7 +284,7 @@ export const ImageLibrary: React.FC<ImageLibraryProps> = ({ onSelect, onClose })
                         onSelect(image.url);
                       }}
                     >
-                      Sélectionner
+                      SÃ©lectionner
                     </Button>
                     <Button
                       size="sm"

@@ -66,7 +66,7 @@ export default function PartnerMediaApprovalPage() {
       if (error) {throw error;}
       setPendingMedia(data || []);
     } catch (error) {
-      console.error('Erreur chargement médias:', error);
+      console.error('Erreur chargement mÃ©dias:', error);
       toast.error(t('admin.media_load_error'));
     } finally {
       setIsLoading(false);

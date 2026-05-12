@@ -19,7 +19,7 @@ export const authTranslations = {
     'auth.please_login': '[auth.please_login]',
     'auth.premium_required': '[auth.premium_required]',
     'auth.select_country': '[auth.select_country]',
-    'auth.send_reset_link': '[auth.send_reset_link]',,
+    'auth.send_reset_link': '[auth.send_reset_link]',
     'auth.login': '[auth.login]',
 
   },

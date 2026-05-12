@@ -64,7 +64,7 @@ export default function PartnerMediaLibraryPage() {
       if (error) {throw error;}
       setMedia(data || []);
     } catch (error) {
-      console.error('Erreur chargement médias:', error);
+      console.error('Erreur chargement mÃ©dias:', error);
     } finally {
       setIsLoading(false);
     }
