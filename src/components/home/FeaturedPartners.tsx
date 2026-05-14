@@ -15,7 +15,7 @@ import { LogoShowcaseSection } from './LogoShowcaseSection';
 
 export const FeaturedPartners: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
   const [partners, setPartners] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -58,12 +58,12 @@ export const FeaturedPartners: React.FC = () => {
 
   const getTierLabel = (tier: string) => {
     const labels: Record<string, string> = {
-      'organizer': 'Organisateurs',
-      'co_organizer': 'Co-organisateurs',
-      'official_sponsor': 'Partenaire Officiel',
-      'delegated_organizer': 'Organisateur Délégué',
-      'partner': 'Nos Partenaires',
-      'press_partner': 'Nos Partenaires Presse'
+      'organizer': t('pages.partners.tier_organizer'),
+      'co_organizer': t('pages.partners.tier_co_organizer'),
+      'official_sponsor': t('pages.partners.tier_official_sponsor'),
+      'delegated_organizer': t('pages.partners.tier_delegated_organizer'),
+      'partner': t('pages.partners.tier_partner'),
+      'press_partner': t('pages.partners.tier_press_partner')
     };
     return labels[tier] || tier;
   };
@@ -140,7 +140,11 @@ export const FeaturedPartners: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {partners.map((partner, index) => (
+          {partners.map((partner, index) => {
+            const displayName = (currentLanguage === 'en' && partner.name_en) ? partner.name_en : partner.name;
+            const displaySector = (currentLanguage === 'en' && partner.sector_en) ? partner.sector_en : partner.sector;
+            const displayDescription = (currentLanguage === 'en' && partner.description_en) ? partner.description_en : partner.description;
+            return (
             <motion.div
               key={partner.id}
               initial={{ opacity: 0, y: 20 }}
@@ -162,7 +166,7 @@ export const FeaturedPartners: React.FC = () => {
                   <div className="flex justify-center mb-6">
                     <LogoWithFallback
                       src={partner.logo}
-                      alt={partner.name}
+                      alt={displayName}
                       className="h-24 w-24 rounded-sm object-contain border bg-white p-2"
                       style={{ borderColor: 'rgba(231,209,146,0.3)' }}
                     />
@@ -171,9 +175,9 @@ export const FeaturedPartners: React.FC = () => {
                   {/* Nom et secteur centrés */}
                   <div className="text-center mb-4">
                     <h3 className="font-bold text-gray-900 text-xl mb-2 leading-tight px-2">
-                      {partner.name}
+                      {displayName}
                     </h3>
-                    <p className="text-sm font-medium" style={{ color: '#C9A84C' }}>{translateSector(partner.sector, t)}</p>
+                    <p className="text-sm font-medium" style={{ color: '#C9A84C' }}>{displaySector || translateSector(partner.sector, t)}</p>
                   </div>
 
                   {/* Tier */}
@@ -186,7 +190,7 @@ export const FeaturedPartners: React.FC = () => {
 
                   {/* Description */}
                   <p className="text-gray-600 text-sm line-clamp-4 mb-6 flex-grow text-center leading-relaxed">
-                    {partner.description}
+                    {displayDescription}
                   </p>
 
                   {/* Stats */}
@@ -223,7 +227,8 @@ export const FeaturedPartners: React.FC = () => {
                 </div>
               </Card>
             </motion.div>
-          ))}
+          );
+          })}
         </div>
 
         <div className="text-center">

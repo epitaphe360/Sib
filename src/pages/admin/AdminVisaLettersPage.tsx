@@ -36,7 +36,7 @@ interface VisaRequest {
 
 // ─── PDF helper (même logique que VisaLetterPage) ─────────────────────────────
 
-function buildVisaPDF(req: VisaRequest) {
+async function buildVisaPDF(req: VisaRequest) {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const today = new Date();
   const dateStr = today.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
@@ -44,7 +44,30 @@ function buildVisaPDF(req: VisaRequest) {
   const marginRight = 185;
   const pageWidth = marginRight - marginLeft;
   const refNum = `SIB2026-VISA-${req.id.slice(0, 6).toUpperCase()}`;
-  let y = 25;
+  let y = 15;
+
+  // Logo SIB 2026
+  try {
+    const logoDataUrl = await new Promise<string>((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        canvas.getContext('2d')!.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = reject;
+      img.src = '/logo-sib2026.png';
+    });
+    const logoH = 22;
+    const logoW = logoH; // logo carré (ratio 1:1)
+    doc.addImage(logoDataUrl, 'PNG', 105 - logoW / 2, y, logoW, logoH);
+    y += logoH + 6;
+  } catch {
+    y += 10;
+  }
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
@@ -136,7 +159,7 @@ function buildVisaPDF(req: VisaRequest) {
   doc.setTextColor(80, 80, 80);
   doc.text('URBACOM - 63, Imm B, Res LE YACHT, Bd de la Corniche 7eme etage N185, Casablanca 20510', marginLeft, y);
   y += 5;
-  doc.text('Sib2026@urbacom.net  |  www.sibevent.com', marginLeft, y);
+  doc.text('Sib2026@urbacom.net  |  www.sib.ma', marginLeft, y);
 
   doc.setDrawColor(200, 200, 200);
   doc.setLineWidth(0.4);
@@ -417,7 +440,7 @@ export default function AdminVisaLettersPage() {
                       {req.status === 'approved' && (
                         <div className="flex gap-3">
                           <Button
-                            onClick={() => { const doc = buildVisaPDF(req); doc.save(`visa_SIB2026_${req.last_name}.pdf`); }}
+                            onClick={async () => { const doc = await buildVisaPDF(req); doc.save(`visa_SIB2026_${req.last_name}.pdf`); }}
                             className="bg-green-600 hover:bg-green-700 text-white text-sm"
                           >
                             <Download className="h-4 w-4 mr-1" /> {t('admin.visa_download_pdf')}

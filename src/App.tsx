@@ -1,4 +1,4 @@
-﻿import React, { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { lazyRetry } from './utils/lazyRetry';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
@@ -179,7 +179,7 @@ const PartnerMediaUploadPage = lazyRetry(() => import('./pages/partners/PartnerM
 const PartnerMediaAnalyticsPage = lazyRetry(() => import('./pages/partners/PartnerMediaAnalyticsPage'));
 const PartnerMediaLibraryPage = lazyRetry(() => import('./pages/partners/PartnerMediaLibraryPage'));
 
-// ── SIB 2026 Nouveaux Modules ──────────────────────────────────────────────
+// -- SIB 2026 Nouveaux Modules ----------------------------------------------
 const TeamBadgesPrintPage = lazyRetry(() => import('./pages/exhibitor/TeamBadgesPrintPage'));
 const InvitationLetterPage = lazyRetry(() => import('./pages/InvitationLetterPage'));
 const RentalCatalogPage = lazyRetry(() => import('./pages/RentalCatalogPage'));
@@ -200,7 +200,7 @@ const LiveEventManager = lazyRetry(() => import('./pages/admin/media/LiveEventMa
 const ChatBot = lazyRetry(() => import('./components/chatbot/ChatBot').then((m) => ({ default: m.ChatBot })));
 const ChatBotToggle = lazyRetry(() => import('./components/chatbot/ChatBotToggle').then((m) => ({ default: m.ChatBotToggle })));
 
-// ── MODULE FACTURATION ─────────────────────────────────────────────────────
+// -- MODULE FACTURATION -----------------------------------------------------
 const AdminInvoicesPage = lazyRetry(() => import('./pages/admin/AdminInvoicesPage'));
 const AdminPricingPage  = lazyRetry(() => import('./pages/admin/AdminPricingPage'));
 const ExhibitorInvoicesPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorInvoicesPage'));
@@ -225,6 +225,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isPrintRoute = location.pathname.startsWith('/print/');
   const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
+  const isHomePage = location.pathname === '/';
   if (isPrintRoute) {
     return <>{children}</>;
   }
@@ -232,7 +233,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col">
       <SkipToContent />
       {isUrbaRoute ? <UrbaEventNav /> : <Header />}
-      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : 'pt-16 sm:pt-20 xl:pt-28'}`}>
+      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : isHomePage ? 'pt-0' : 'pt-20 sm:pt-24 xl:pt-32'}`}>
         {children}
       </main>
     </div>
@@ -377,7 +378,7 @@ const App = () => {
             <Route path={ROUTES.PARTNER_PROFILE} element={<ProtectedRoute requiredRole="partner"><ProfilePage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_SETTINGS} element={<ProtectedRoute requiredRole="partner"><VisitorProfileSettings /></ProtectedRoute>} />
 
-            {/* Pages sponsors détaillées */}
+            {/* Pages sponsors d�taill�es */}
             <Route path={ROUTES.PARTNER_ACTIVITY} element={<ProtectedRoute requiredRole="partner"><PartnerActivityPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_ANALYTICS} element={<ProtectedRoute requiredRole="partner"><PartnerAnalyticsPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_EVENTS} element={<ProtectedRoute requiredRole="partner"><PartnerEventsPage /></ProtectedRoute>} />
@@ -395,7 +396,7 @@ const App = () => {
 
 
             <Route path={ROUTES.VISITOR_SETTINGS} element={<ProtectedRoute requiredRole="visitor"><VisitorProfileSettings /></ProtectedRoute>} />
-            {/* BUG FIX: Route VISITOR_SUBSCRIPTION dupliquée - supprimée car déjà définie ligne 180 comme route publique */}
+            {/* BUG FIX: Route VISITOR_SUBSCRIPTION dupliqu�e - supprim�e car d�j� d�finie ligne 180 comme route publique */}
             <Route path={ROUTES.VISITOR_UPGRADE} element={<ProtectedRoute requiredRole="visitor"><VisitorUpgradePage /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_PAYMENT} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><VisitorPaymentPage /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_BANK_TRANSFER} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><VisitorBankTransferPage /></ProtectedRoute>} />
@@ -406,7 +407,7 @@ const App = () => {
             <Route path={ROUTES.BADGE_DIGITAL} element={<ProtectedRoute><DigitalBadge /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_SCANNER} element={<ProtectedRoute><BadgeScannerPage /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_PRINT_STATION} element={<ProtectedRoute requiredRole={['admin', 'security']}><BadgePrintStationPage /></ProtectedRoute>} />
-            {/* FIXED: Permettre aux admins d'accéder au scanner QR (pas seulement 'security') */}
+            {/* FIXED: Permettre aux admins d'acc�der au scanner QR (pas seulement 'security') */}
             <Route path={ROUTES.SECURITY_SCANNER} element={<ProtectedRoute requiredRole={['admin', 'exhibitor', 'partner', 'security']}><QRScanner /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_UPGRADE} element={<ProtectedRoute requiredRole="partner"><PartnerUpgradePage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_PAYMENT_SELECTION} element={<ProtectedRoute requiredRole="partner"><PartnerPaymentSelectionPage /></ProtectedRoute>} />
@@ -463,7 +464,7 @@ const App = () => {
             <Route path={ROUTES.ADMIN_PUSH_NOTIFICATIONS} element={<ProtectedRoute requiredRole="admin"><PushNotificationsPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_SALONS} element={<ProtectedRoute requiredRole="admin"><SalonsManagementPage /></ProtectedRoute>} />
 
-            {/* ── SIB 2026 Nouveaux Modules ─────────────────────────────── */}            {/* Impression badges — accessible depuis session auth active */}
+            {/* -- SIB 2026 Nouveaux Modules ------------------------------- */}            {/* Impression badges � accessible depuis session auth active */}
             <Route path={ROUTES.TEAM_BADGES_PRINT} element={<TeamBadgesPrintPage />} />            {/* Exposant */}
             <Route path={ROUTES.EXHIBITOR_TEAM} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorTeamPage /></ProtectedRoute>} />
             <Route path={ROUTES.INVITATION_LETTER} element={<ProtectedRoute requiredRole="visitor"><InvitationLetterPage userType="visitor" /></ProtectedRoute>} />
@@ -473,7 +474,7 @@ const App = () => {
             <Route path={ROUTES.PARTNER_TEAM} element={<ProtectedRoute requiredRole="partner"><ExhibitorTeamPage userType="partner" /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_INVITATION_LETTER} element={<ProtectedRoute requiredRole="partner"><InvitationLetterPage userType="partner" /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_RENTAL} element={<ProtectedRoute requiredRole="partner"><RentalCatalogPage userType="partner" /></ProtectedRoute>} />
-            {/* Sponsor Média */}
+            {/* Sponsor M�dia */}
             <Route path={ROUTES.REGISTER_MEDIA_PARTNER} element={<MediaPartnerSignUpPage />} />
             <Route path={ROUTES.MEDIA_PARTNER_DASHBOARD} element={<ProtectedRoute requiredRole="partner"><MediaPartnerDashboard /></ProtectedRoute>} />
             {/* Admin */}
@@ -563,18 +564,18 @@ const App = () => {
             <Route path={ROUTES.ADMIN_CREDENTIALS} element={<ProtectedRoute requiredRole="admin"><AdminCredentialsPage /></ProtectedRoute>} />
             <Route path={ROUTES.NOT_FOUND} element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-              <p className="text-xl text-gray-600 mb-8">Page non trouvée</p>
-              <Link to={ROUTES.HOME} className="px-6 py-3 bg-sib-brand text-white rounded-lg hover:bg-sib-brand-dark" aria-label="Retour à l'accueil">
-                Retour à l'accueil
+              <p className="text-xl text-gray-600 mb-8">Page non trouv�e</p>
+              <Link to={ROUTES.HOME} className="px-6 py-3 bg-sib-brand text-white rounded-lg hover:bg-sib-brand-dark" aria-label="Retour � l'accueil">
+                Retour � l'accueil
               </Link>
             </div>} />
 
             {/* 404 catch-all route - must be last */}
             <Route path="*" element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-              <p className="text-xl text-gray-600 mb-8">Page non trouvée</p>
-              <Link to={ROUTES.HOME} className="px-6 py-3 bg-sib-brand text-white rounded-lg hover:bg-sib-brand-dark" aria-label="Retour à l'accueil">
-                Retour à l'accueil
+              <p className="text-xl text-gray-600 mb-8">Page non trouv�e</p>
+              <Link to={ROUTES.HOME} className="px-6 py-3 bg-sib-brand text-white rounded-lg hover:bg-sib-brand-dark" aria-label="Retour � l'accueil">
+                Retour � l'accueil
               </Link>
             </div>} />
           </Routes>
@@ -584,7 +585,7 @@ const App = () => {
 
       {!isPrintRoute && (
       <Suspense fallback={null}>
-        {/* ChatBot — caché sur les pages admin, exposant et visiteur dashboard */}
+        {/* ChatBot � cach� sur les pages admin, exposant et visiteur dashboard */}
         {!isAdminRoute && !isExhibitorRoute && !isVisitorDashboardRoute && (
         <>
         <ChatBot

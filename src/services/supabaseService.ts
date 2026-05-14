@@ -24,9 +24,13 @@ interface UserDB {
 interface PartnerDB {
   id: string;
   company_name: string;
+  name_en?: string;
   partner_type: string;
+  category_en?: string;
   sector?: string;
+  sector_en?: string;
   description?: string;
+  description_en?: string;
   logo_url?: string;
   website?: string;
   verified: boolean;
@@ -42,10 +46,14 @@ interface PartnerDB {
 interface PartnerUI {
   id: string;
   name: string;
+  name_en?: string | null;
   partner_tier: string;
   category: string;
+  category_en?: string | null;
   sector?: string;
+  sector_en?: string | null;
   description: string;
+  description_en?: string | null;
   logo?: string;
   website?: string;
   country: string;
@@ -730,7 +738,7 @@ export class SupabaseService {
       const { data, error, count } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`,
+          `id, company_name, name_en, partner_type, category_en, sector, sector_en, description, description_en, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`,
           { count: 'exact' }
         )
         // Afficher les partenaires publiés (true) OU dont is_published n'est pas renseigné (null)
@@ -744,13 +752,17 @@ export class SupabaseService {
       const items = (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
         name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
+        name_en: partner.name_en || null,
         partner_tier: SupabaseService.normalizePartnerTier(
           typeof partner.partner_type === 'string' ? partner.partner_type : null,
           partner.partnership_level
         ),
         category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
+        category_en: partner.category_en || null,
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
+        sector_en: partner.sector_en || null,
         description: typeof partner.description === 'string' ? partner.description : '',
+        description_en: partner.description_en || null,
         logo: partner.logo_url,
         website: partner.website,
         country: (partner.contact_info as any)?.country || (partner.contact_info as any)?.pays || '',
@@ -791,7 +803,7 @@ export class SupabaseService {
       const { data, error } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`
+          `id, company_name, name_en, partner_type, category_en, sector, sector_en, description, description_en, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`
         )
         .or('is_published.eq.true,is_published.is.null')
         .order('featured', { ascending: false })
@@ -802,13 +814,17 @@ export class SupabaseService {
       return (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
         name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
+        name_en: partner.name_en || null,
         partner_tier: SupabaseService.normalizePartnerTier(
           typeof partner.partner_type === 'string' ? partner.partner_type : null,
           partner.partnership_level
         ),
         category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
+        category_en: partner.category_en || null,
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
+        sector_en: partner.sector_en || null,
         description: typeof partner.description === 'string' ? partner.description : '',
+        description_en: partner.description_en || null,
         logo: partner.logo_url,
         website: partner.website,
         country: (partner.contact_info as any)?.country || (partner.contact_info as any)?.pays || '',

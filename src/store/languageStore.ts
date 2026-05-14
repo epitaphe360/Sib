@@ -2,22 +2,18 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import i18n from '../i18n/config';
 import { fr as frTranslations } from './translations.fr';
+import { en as enTranslations } from './translations.en';
+import { ar as arTranslations } from './translations.ar';
 import { migratePersistedStorage } from './persistMigration';
 
-// Cache pour éviter de recharger les traductions à chaque changement de langue
+// Toutes les traductions chargées de façon synchrone pour éviter les bugs de timing
 const loadedTranslations: Record<string, Record<string, string>> = {
   fr: frTranslations,
+  en: enTranslations,
+  ar: arTranslations,
 };
 
 async function loadLanguage(code: string): Promise<Record<string, string>> {
-  if (loadedTranslations[code]) return loadedTranslations[code];
-  if (code === 'en') {
-    const m = await import('./translations.en');
-    loadedTranslations['en'] = m.en;
-  } else if (code === 'ar') {
-    const m = await import('./translations.ar');
-    loadedTranslations['ar'] = m.ar;
-  }
   return loadedTranslations[code] ?? frTranslations;
 }
 
@@ -142,7 +138,15 @@ export const useLanguageStore = create<LanguageState>()(
     }),
     {
       name: LANGUAGE_STORAGE_KEY,
-      partialize: (state) => ({ currentLanguage: state.currentLanguage })
+      partialize: (state) => ({ currentLanguage: state.currentLanguage }),
+      onRehydrateStorage: () => (state) => {
+        if (state?.currentLanguage && state.currentLanguage !== 'fr') {
+          // Synchroniser i18next avec la langue restaurée depuis le localStorage
+          i18n.changeLanguage(state.currentLanguage).catch(() => {});
+          document.documentElement.dir = state.currentLanguage === 'ar' ? 'rtl' : 'ltr';
+          document.documentElement.lang = state.currentLanguage;
+        }
+      }
     }
   )
 );
