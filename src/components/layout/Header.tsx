@@ -33,7 +33,8 @@ export const Header: React.FC = memo(() => {
   const [isProgrammeMenuOpen, setIsProgrammeMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { user, isAuthenticated, isLoading, logout } = useAuthStore();
-  const navIsVisible = useNavVisibilityStore(s => s.isVisible);
+  const navItems = useNavVisibilityStore(s => s.items);
+  const navIsVisible = (key: string) => { const f = navItems.find(i => i.key === key); return f ? f.visible : true; };
   const { t } = useTranslation();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
