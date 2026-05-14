@@ -45,9 +45,6 @@ const VisitorProfileSettings = lazyRetry(() => import('./components/visitor/Visi
 const AdminDashboard = lazyRetry(() => import('./components/dashboard/AdminDashboard'));
 const EmailTemplatesManager = lazyRetry(() => import('./pages/admin/EmailTemplatesManager'));
 const ExhibitorDashboard = lazyRetry(() => import('./components/dashboard/ExhibitorDashboard'));
-const ExhibitorScansPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorScansPage'));
-const ExhibitorTeamPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorTeamPage'));
-const PartnerScansPage = lazyRetry(() => import('./pages/partner/PartnerScansPage'));
 const PartnerDashboard = lazyRetry(() => import('./components/dashboard/PartnerDashboard'));
 const ExhibitorValidation = lazyRetry(() => import('./components/admin/ExhibitorValidation'));
 const ModerationPanel = lazyRetry(() => import('./components/admin/ModerationPanel'));
@@ -75,6 +72,10 @@ const PaymentInstructionsPage = lazyRetry(() => import('./pages/visitor/PaymentI
 const PaymentValidationPage = lazyRetry(() => import('./pages/admin/PaymentValidationPage'));
 const AdminRegistrationRequestsPage = lazyRetry(() => import('./pages/admin/AdminRegistrationRequestsPage'));
 const BadgePage = lazyRetry(() => import('./pages/BadgePage'));
+const CatalogueFormPage = lazyRetry(() => import('./pages/catalogue/CatalogueFormPage'));
+const CatalogueManagementPage = lazyRetry(() => import('./pages/admin/CatalogueManagementPage'));
+const PromoCodesPage = lazyRetry(() => import('./pages/admin/PromoCodesPage'));
+const AdminBadgeConfigPage = lazyRetry(() => import('./pages/admin/AdminBadgeConfigPage'));
 const PartnerUpgradePage = lazyRetry(() => import('./pages/PartnerUpgradePage'));
 const BadgeScannerPage = lazyRetry(() => import('./pages/BadgeScannerPage'));
 const PartnerBankTransferPage = lazyRetry(() => import('./pages/partner/PartnerBankTransferPage'));
@@ -129,8 +130,6 @@ const PartnerSupportPageComponent = lazyRetry(() => import('./pages/partners/Par
 // Admin media approval
 const PartnerMediaApprovalPage = lazyRetry(() => import('./pages/admin/PartnerMediaApprovalPage'));
 const VIPVisitorsPage = lazyRetry(() => import('./pages/admin/VIPVisitorsPage'));
-const SecurityZonesPage = lazyRetry(() => import('./pages/admin/SecurityZonesPage'));
-const AdminVisaLettersPage = lazyRetry(() => import('./pages/admin/AdminVisaLettersPage'));
 
 // Error pages
 const UnauthorizedPage = lazyRetry(() => import('./pages/UnauthorizedPage'));
@@ -151,9 +150,6 @@ const PourquoiVisiterPage = lazyRetry(() => import('./pages/public/PourquoiVisit
 const InfosPratiquesPage = lazyRetry(() => import('./pages/public/InfosPratiquesPage'));
 const AdminPressAccreditationsPage = lazyRetry(() => import('./pages/admin/PressAccreditationsPage'));
 const AdminSpeakersPage = lazyRetry(() => import('./pages/admin/SpeakersManagementPage'));
-const SessionCheckinPage = lazyRetry(() => import('./pages/admin/SessionCheckinPage'));
-const SessionRegistrationsPage = lazyRetry(() => import('./pages/admin/SessionRegistrationsPage'));
-const AdminCredentialsPage = lazyRetry(() => import('./pages/admin/AdminCredentialsPage'));
 const HallMapPage = lazyRetry(() => import('./pages/HallMapPage'));
 const CatalogPage = lazyRetry(() => import('./pages/CatalogPage'));
 const ProductDetailPage = lazyRetry(() => import('./pages/ProductDetailPage'));
@@ -170,7 +166,6 @@ const MediaDetailPage = lazyRetry(() => import('./pages/media/MediaDetailPage'))
 
 // Admin Media pages
 const MediaManagementPage = lazyRetry(() => import('./pages/admin/media/MediaManagementPage'));
-const AdminMediaLibraryPage = lazyRetry(() => import('./pages/admin/media/MediaLibraryPage'));
 const CreateMediaPage = lazyRetry(() => import('./pages/admin/media/CreateMediaPage'));
 const EditMediaPage = lazyRetry(() => import('./pages/admin/media/EditMediaPage'));
 
@@ -178,38 +173,28 @@ const EditMediaPage = lazyRetry(() => import('./pages/admin/media/EditMediaPage'
 const PartnerMediaUploadPage = lazyRetry(() => import('./pages/partners/PartnerMediaUploadPage'));
 const PartnerMediaAnalyticsPage = lazyRetry(() => import('./pages/partners/PartnerMediaAnalyticsPage'));
 const PartnerMediaLibraryPage = lazyRetry(() => import('./pages/partners/PartnerMediaLibraryPage'));
-
-// -- SIB 2026 Nouveaux Modules ----------------------------------------------
-const TeamBadgesPrintPage = lazyRetry(() => import('./pages/exhibitor/TeamBadgesPrintPage'));
-const InvitationLetterPage = lazyRetry(() => import('./pages/InvitationLetterPage'));
-const RentalCatalogPage = lazyRetry(() => import('./pages/RentalCatalogPage'));
-const RentalCheckoutPage = lazyRetry(() => import('./pages/rental/RentalCheckoutPage'));
-const RentalPaymentSuccessPage = lazyRetry(() => import('./pages/rental/RentalPaymentSuccessPage'));
-const AdminInvitationsPage = lazyRetry(() => import('./pages/admin/AdminInvitationsPage'));
-const AdminRentalPage = lazyRetry(() => import('./pages/admin/AdminRentalPage'));
-const AdminStandCollaboratorsPage = lazyRetry(() => import('./pages/admin/AdminStandCollaboratorsPage'));
-const AdminConfigPage = lazyRetry(() => import('./pages/admin/AdminConfigPage'));
-const AdminBadgeConfigPage = lazyRetry(() => import('./pages/admin/AdminBadgeConfigPage'));
-const PushNotificationsPage = lazyRetry(() => import('./pages/admin/PushNotificationsPage'));
-const SalonsManagementPage = lazyRetry(() => import('./pages/admin/SalonsManagementPage'));
-const MediaPartnerDashboard = lazyRetry(() => import('./components/dashboard/MediaPartnerDashboard'));
-const MediaPartnerSignUpPage = lazyRetry(() => import('./pages/auth/MediaPartnerSignUpPage'));
 const MatchmakingDashboard = lazyRetry(() => import('./components/networking/MatchmakingDashboard').then((m) => ({ default: m.MatchmakingDashboard })));
-const B2BNetworkingAIPage = lazyRetry(() => import('./pages/networking/B2BNetworkingAIPage'));
 const LiveEventManager = lazyRetry(() => import('./pages/admin/media/LiveEventManager').then((m) => ({ default: m.LiveEventManager })));
 const ChatBot = lazyRetry(() => import('./components/chatbot/ChatBot').then((m) => ({ default: m.ChatBot })));
 const ChatBotToggle = lazyRetry(() => import('./components/chatbot/ChatBotToggle').then((m) => ({ default: m.ChatBotToggle })));
-
-// -- MODULE FACTURATION -----------------------------------------------------
-const AdminInvoicesPage = lazyRetry(() => import('./pages/admin/AdminInvoicesPage'));
-const AdminPricingPage  = lazyRetry(() => import('./pages/admin/AdminPricingPage'));
-const ExhibitorInvoicesPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorInvoicesPage'));
-const PartnerInvoicesPage = lazyRetry(() => import('./pages/partner/PartnerInvoicesPage'));
-const VisitorInvoicesPage = lazyRetry(() => import('./pages/visitor/VisitorInvoicesPage'));
 const WhatsAppFloatingWidget = lazyRetry(() => import('./components/whatsapp/WhatsAppFloatingWidget').then((m) => ({ default: m.WhatsAppFloatingWidget })));
 const DevSubscriptionSwitcher = lazyRetry(() => import('./components/dev/DevSubscriptionSwitcher'));
 const SalonSelectionPage = lazyRetry(() => import('./pages/SalonSelectionPage'));
 const SalonPage = lazyRetry(() => import('./pages/SalonPage'));
+
+// MODULE 3 â€” Location de matÃ©riel
+const RentalCatalogPage = lazyRetry(() => import('./pages/RentalCatalogPage'));
+const AdminRentalPage = lazyRetry(() => import('./pages/admin/AdminRentalPage'));
+const RentalCheckoutPage = lazyRetry(() => import('./pages/rental/RentalCheckoutPage'));
+const RentalPaymentSuccessPage = lazyRetry(() => import('./pages/rental/RentalPaymentSuccessPage'));
+
+// MODULE 4 â€” Location de chapiteaux
+const ChapiteauPublicPage = lazyRetry(() => import('./pages/public/ChapiteauPublicPage'));
+const ChapiteauCatalogPage = lazyRetry(() => import('./pages/chapiteau/ChapiteauCatalogPage'));
+const ChapiteauCheckoutPage = lazyRetry(() => import('./pages/chapiteau/ChapiteauCheckoutPage'));
+const ChapiteauPaymentSuccessPage = lazyRetry(() => import('./pages/chapiteau/ChapiteauPaymentSuccessPage'));
+const AdminChapiteauPage = lazyRetry(() => import('./pages/admin/AdminChapiteauPage'));
+
 import { useLanguageStore } from './store/languageStore';
 import { ROUTES } from './lib/routes';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -220,20 +205,18 @@ import { useAuthStore } from './store/authStore';
 import { UrbaEventNav } from './components/layout/UrbaEventNav';
 
 const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];
+// Pages fullscreen avec leur propre header â€” header global masquÃ©, pt-0
+const NO_HEADER_ROUTES = ['/admin/badge-config'];
 
 function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-  const isPrintRoute = location.pathname.startsWith('/print/');
   const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
-  const isHomePage = location.pathname === '/';
-  if (isPrintRoute) {
-    return <>{children}</>;
-  }
+  const isNoHeader = NO_HEADER_ROUTES.some(r => location.pathname.startsWith(r));
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className={`flex flex-col${isNoHeader ? '' : ' min-h-screen'}`}>
       <SkipToContent />
-      {isUrbaRoute ? <UrbaEventNav /> : <Header />}
-      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : isHomePage ? 'pt-0' : 'pt-20 sm:pt-24 xl:pt-32'}`}>
+      {!isNoHeader && (isUrbaRoute ? <UrbaEventNav /> : <Header />)}
+      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : isNoHeader ? '' : 'pt-16 sm:pt-20 xl:pt-28'}`}>
         {children}
       </main>
     </div>
@@ -246,6 +229,7 @@ if (import.meta.env.DEV) {
     // Make available in browser console for debugging
     (window as any).cleanupAuth = cleanupAuth;
     (window as any).checkAuthStatus = checkAuthStatus;
+    console.log('ðŸ› ï¸ Dev tools disponibles: checkAuthStatus(), cleanupAuth()');
   });
 }
 
@@ -253,11 +237,6 @@ if (import.meta.env.DEV) {
 const App = () => {
   const [isChatBotOpen, setIsChatBotOpen] = React.useState(false);
   const { currentLanguage } = useLanguageStore();
-  const location = useLocation();
-  const isPrintRoute = location.pathname.startsWith('/print/');
-  const isAdminRoute = location.pathname.startsWith('/admin/') || location.pathname === '/admin';
-  const isExhibitorRoute = location.pathname.startsWith('/exhibitor/') || location.pathname === '/exhibitor';
-  const isVisitorDashboardRoute = location.pathname.startsWith('/visitor/dashboard') || location.pathname === '/visitor/dashboard';
 
   // Tracking des visites de pages pour le trafic hebdomadaire (admin dashboard)
   usePageTracking();
@@ -340,7 +319,6 @@ const App = () => {
             <Route path={ROUTES.PAVILIONS} element={<PavillonsPage />} />
             <Route path={ROUTES.METRICS} element={<ProtectedRoute><MetricsPage /></ProtectedRoute>} />
             <Route path={ROUTES.NETWORKING} element={<NetworkingPage />} />
-            <Route path={ROUTES.B2B_NETWORKING_AI} element={<ProtectedRoute><B2BNetworkingAIPage /></ProtectedRoute>} />
             <Route path={ROUTES.INTERACTION_HISTORY} element={<ProtectedRoute><InteractionHistoryPage /></ProtectedRoute>} />
             <Route path={ROUTES.NETWORKING_ROOMS} element={<ProtectedRoute><NetworkingRoomsPage /></ProtectedRoute>} />
             <Route path={ROUTES.SPEED_NETWORKING} element={<ProtectedRoute><SpeedNetworkingPage /></ProtectedRoute>} />
@@ -371,14 +349,13 @@ const App = () => {
             <Route path={`${ROUTES.EXHIBITOR_PROFILE}/edit`} element={<ProtectedRoute requiredRole="exhibitor"><ProfileEdit /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_PROFILE_EDIT} element={<ProtectedRoute requiredRole="exhibitor"><ProfileEdit /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_DASHBOARD} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorDashboard /></ProtectedRoute>} />
-            <Route path={ROUTES.EXHIBITOR_SCANS} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorScansPage /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_DASHBOARD} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><VisitorDashboard /></ProtectedRoute>} />
             {/* Partner routes - NEW */}
             <Route path={ROUTES.PARTNER_DASHBOARD} element={<ProtectedRoute requiredRole="partner"><PartnerDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_PROFILE} element={<ProtectedRoute requiredRole="partner"><ProfilePage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_SETTINGS} element={<ProtectedRoute requiredRole="partner"><VisitorProfileSettings /></ProtectedRoute>} />
 
-            {/* Pages sponsors détaillées */}
+            {/* Pages partenaires dÃ©taillÃ©es */}
             <Route path={ROUTES.PARTNER_ACTIVITY} element={<ProtectedRoute requiredRole="partner"><PartnerActivityPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_ANALYTICS} element={<ProtectedRoute requiredRole="partner"><PartnerAnalyticsPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_EVENTS} element={<ProtectedRoute requiredRole="partner"><PartnerEventsPage /></ProtectedRoute>} />
@@ -388,7 +365,6 @@ const App = () => {
             <Route path={ROUTES.PARTNER_PROFILE_EDIT} element={<ProtectedRoute requiredRole="partner"><PartnerProfileEditPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_SATISFACTION} element={<ProtectedRoute requiredRole="partner"><PartnerSatisfactionPage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_SUPPORT_PAGE} element={<ProtectedRoute requiredRole="partner"><PartnerSupportPageComponent /></ProtectedRoute>} />
-            <Route path={ROUTES.PARTNER_SCANS} element={<ProtectedRoute requiredRole="partner"><PartnerScansPage /></ProtectedRoute>} />
 
             {/* Pages erreur */}
             <Route path={ROUTES.UNAUTHORIZED} element={<UnauthorizedPage />} />
@@ -396,7 +372,7 @@ const App = () => {
 
 
             <Route path={ROUTES.VISITOR_SETTINGS} element={<ProtectedRoute requiredRole="visitor"><VisitorProfileSettings /></ProtectedRoute>} />
-            {/* BUG FIX: Route VISITOR_SUBSCRIPTION dupliquée - supprimée car déjà définie ligne 180 comme route publique */}
+            {/* BUG FIX: Route VISITOR_SUBSCRIPTION dupliquÃ©e - supprimÃ©e car dÃ©jÃ  dÃ©finie ligne 180 comme route publique */}
             <Route path={ROUTES.VISITOR_UPGRADE} element={<ProtectedRoute requiredRole="visitor"><VisitorUpgradePage /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_PAYMENT} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><VisitorPaymentPage /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_BANK_TRANSFER} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><VisitorBankTransferPage /></ProtectedRoute>} />
@@ -407,7 +383,7 @@ const App = () => {
             <Route path={ROUTES.BADGE_DIGITAL} element={<ProtectedRoute><DigitalBadge /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_SCANNER} element={<ProtectedRoute><BadgeScannerPage /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_PRINT_STATION} element={<ProtectedRoute requiredRole={['admin', 'security']}><BadgePrintStationPage /></ProtectedRoute>} />
-            {/* FIXED: Permettre aux admins d'accéder au scanner QR (pas seulement 'security') */}
+            {/* FIXED: Permettre aux admins d'accÃ©der au scanner QR (pas seulement 'security') */}
             <Route path={ROUTES.SECURITY_SCANNER} element={<ProtectedRoute requiredRole={['admin', 'exhibitor', 'partner', 'security']}><QRScanner /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_UPGRADE} element={<ProtectedRoute requiredRole="partner"><PartnerUpgradePage /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_PAYMENT_SELECTION} element={<ProtectedRoute requiredRole="partner"><PartnerPaymentSelectionPage /></ProtectedRoute>} />
@@ -441,8 +417,6 @@ const App = () => {
             <Route path={ROUTES.ADMIN_PAYMENT_VALIDATION} element={<ProtectedRoute requiredRole="admin"><PaymentValidationPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_REGISTRATION_REQUESTS} element={<ProtectedRoute requiredRole="admin"><AdminRegistrationRequestsPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_VIP_VISITORS} element={<ProtectedRoute requiredRole="admin"><VIPVisitorsPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_SECURITY_ZONES} element={<ProtectedRoute requiredRole="admin"><SecurityZonesPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_VISA_LETTERS} element={<ProtectedRoute requiredRole="admin"><AdminVisaLettersPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_USERS} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_CREATE_USER} element={<ProtectedRoute requiredRole="admin"><CreateUserPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PARTNERS} element={<ProtectedRoute requiredRole="admin"><AdminPartnersPage /></ProtectedRoute>} />
@@ -457,42 +431,8 @@ const App = () => {
             <Route path={ROUTES.ADMIN_PARTNERS_MANAGE} element={<ProtectedRoute requiredRole="admin"><PartnerManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.MARKETING_DASHBOARD} element={<ProtectedRoute requiredRole={["admin", "marketing"]}><MarketingDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PUBLICATION_CONTROL} element={<ProtectedRoute requiredRole="admin"><PublicationControlPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_MEDIA} element={<ProtectedRoute requiredRole="admin"><AdminMediaLibraryPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_MEDIA} element={<ProtectedRoute requiredRole="admin"><MediaManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_USERS_LIST} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminConfigPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_BADGE_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminBadgeConfigPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_PUSH_NOTIFICATIONS} element={<ProtectedRoute requiredRole="admin"><PushNotificationsPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_SALONS} element={<ProtectedRoute requiredRole="admin"><SalonsManagementPage /></ProtectedRoute>} />
-
-            {/* -- SIB 2026 Nouveaux Modules ------------------------------- */}            {/* Impression badges — accessible depuis session auth active */}
-            <Route path={ROUTES.TEAM_BADGES_PRINT} element={<TeamBadgesPrintPage />} />            {/* Exposant */}
-            <Route path={ROUTES.EXHIBITOR_TEAM} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorTeamPage /></ProtectedRoute>} />
-            <Route path={ROUTES.INVITATION_LETTER} element={<ProtectedRoute requiredRole="visitor"><InvitationLetterPage userType="visitor" /></ProtectedRoute>} />
-            <Route path={ROUTES.EXHIBITOR_INVITATION_LETTER} element={<ProtectedRoute requiredRole="exhibitor"><InvitationLetterPage userType="exhibitor" /></ProtectedRoute>} />
-            <Route path={ROUTES.EXHIBITOR_RENTAL} element={<ProtectedRoute requiredRole="exhibitor"><RentalCatalogPage userType="exhibitor" /></ProtectedRoute>} />
-            {/* Sponsor / Sponsor */}
-            <Route path={ROUTES.PARTNER_TEAM} element={<ProtectedRoute requiredRole="partner"><ExhibitorTeamPage userType="partner" /></ProtectedRoute>} />
-            <Route path={ROUTES.PARTNER_INVITATION_LETTER} element={<ProtectedRoute requiredRole="partner"><InvitationLetterPage userType="partner" /></ProtectedRoute>} />
-            <Route path={ROUTES.PARTNER_RENTAL} element={<ProtectedRoute requiredRole="partner"><RentalCatalogPage userType="partner" /></ProtectedRoute>} />
-            {/* Sponsor Média */}
-            <Route path={ROUTES.REGISTER_MEDIA_PARTNER} element={<MediaPartnerSignUpPage />} />
-            <Route path={ROUTES.MEDIA_PARTNER_DASHBOARD} element={<ProtectedRoute requiredRole="partner"><MediaPartnerDashboard /></ProtectedRoute>} />
-            {/* Admin */}
-            <Route path={ROUTES.ADMIN_INVITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminInvitationsPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_RENTAL} element={<ProtectedRoute requiredRole="admin"><AdminRentalPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_STAND_COLLABORATORS} element={<ProtectedRoute requiredRole="admin"><AdminStandCollaboratorsPage /></ProtectedRoute>} />
-
-            {/* MODULE FACTURATION */}
-            <Route path={ROUTES.ADMIN_INVOICES}     element={<ProtectedRoute requiredRole="admin"><AdminInvoicesPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_PRICING}      element={<ProtectedRoute requiredRole="admin"><AdminPricingPage  /></ProtectedRoute>} />
-            <Route path={ROUTES.EXHIBITOR_INVOICES} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorInvoicesPage /></ProtectedRoute>} />
-            <Route path={ROUTES.PARTNER_INVOICES}   element={<ProtectedRoute requiredRole="partner"><PartnerInvoicesPage /></ProtectedRoute>} />
-            <Route path={ROUTES.VISITOR_INVOICES}   element={<ProtectedRoute requiredRole="visitor"><VisitorInvoicesPage /></ProtectedRoute>} />
-
-            {/* Catalogue location public */}
-            <Route path={ROUTES.RENTAL_CATALOG} element={<RentalCatalogPage />} />
-            <Route path={ROUTES.RENTAL_CHECKOUT} element={<ProtectedRoute><RentalCheckoutPage /></ProtectedRoute>} />
-            <Route path={ROUTES.RENTAL_PAYMENT_SUCCESS} element={<ProtectedRoute><RentalPaymentSuccessPage /></ProtectedRoute>} />
 
             {/* New routes for footer links */}
             <Route path={ROUTES.CONTACT} element={<ContactPage />} />
@@ -530,7 +470,6 @@ const App = () => {
 
             {/* Admin Media routes - protected */}
             <Route path={ROUTES.ADMIN_MEDIA_MANAGE} element={<ProtectedRoute requiredRole="admin"><MediaManagementPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_MEDIA_LIBRARY} element={<ProtectedRoute requiredRole="admin"><AdminMediaLibraryPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_MEDIA_CREATE} element={<ProtectedRoute requiredRole="admin"><CreateMediaPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_MEDIA_EDIT} element={<ProtectedRoute requiredRole="admin"><EditMediaPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PARTNER_MEDIA_APPROVAL} element={<ProtectedRoute requiredRole="admin"><PartnerMediaApprovalPage /></ProtectedRoute>} />
@@ -559,35 +498,52 @@ const App = () => {
             <Route path={ROUTES.NETWORKING_MATCHMAKING} element={<ProtectedRoute><MatchmakingDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_SPEAKERS} element={<ProtectedRoute requiredRole="admin"><AdminSpeakersPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PRESS_ACCREDITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminPressAccreditationsPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_SESSION_CHECKIN} element={<ProtectedRoute requiredRole="admin"><SessionCheckinPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_SESSION_REGISTRATIONS} element={<ProtectedRoute requiredRole="admin"><SessionRegistrationsPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_CREDENTIALS} element={<ProtectedRoute requiredRole="admin"><AdminCredentialsPage /></ProtectedRoute>} />
+
+            {/* Catalogue routes */}
+            <Route path={ROUTES.CATALOGUE_FILL} element={<CatalogueFormPage />} />
+            <Route path={ROUTES.ADMIN_CATALOGUE} element={<ProtectedRoute requiredRole="admin"><CatalogueManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_PROMO_CODES} element={<ProtectedRoute requiredRole="admin"><PromoCodesPage /></ProtectedRoute>} />
+
+            {/* MODULE 3 â€” Location de matÃ©riel */}
+            <Route path={ROUTES.RENTAL_CATALOG} element={<RentalCatalogPage userType="exhibitor" />} />
+            <Route path={ROUTES.EXHIBITOR_RENTAL} element={<ProtectedRoute requiredRole="exhibitor"><RentalCatalogPage userType="exhibitor" /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_RENTAL} element={<ProtectedRoute requiredRole="partner"><RentalCatalogPage userType="partner" /></ProtectedRoute>} />
+            <Route path={ROUTES.RENTAL_CHECKOUT} element={<ProtectedRoute><RentalCheckoutPage /></ProtectedRoute>} />
+            <Route path={ROUTES.RENTAL_PAYMENT_SUCCESS} element={<RentalPaymentSuccessPage />} />
+            <Route path={ROUTES.ADMIN_RENTAL} element={<ProtectedRoute requiredRole="admin"><AdminRentalPage /></ProtectedRoute>} />
+
+            {/* MODULE 4 â€” Location de chapiteaux */}
+            <Route path={ROUTES.CHAPITEAU_CATALOG} element={<ChapiteauPublicPage />} />
+            <Route path={ROUTES.EXHIBITOR_CHAPITEAU} element={<ProtectedRoute requiredRole="exhibitor"><ChapiteauCatalogPage userType="exhibitor" /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_CHAPITEAU} element={<ProtectedRoute requiredRole="partner"><ChapiteauCatalogPage userType="partner" /></ProtectedRoute>} />
+            <Route path={ROUTES.CHAPITEAU_CHECKOUT} element={<ProtectedRoute><ChapiteauCheckoutPage /></ProtectedRoute>} />
+            <Route path={ROUTES.CHAPITEAU_PAYMENT_SUCCESS} element={<ChapiteauPaymentSuccessPage />} />
+            <Route path={ROUTES.ADMIN_CHAPITEAU} element={<ProtectedRoute requiredRole="admin"><AdminChapiteauPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_BADGE_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminBadgeConfigPage /></ProtectedRoute>} />
+
             <Route path={ROUTES.NOT_FOUND} element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-              <p className="text-xl text-gray-600 mb-8">Page non trouvée</p>
-              <Link to={ROUTES.HOME} className="px-6 py-3 bg-sib-brand text-white rounded-lg hover:bg-sib-brand-dark" aria-label="Retour à l'accueil">
-                Retour à l'accueil
+              <p className="text-xl text-gray-600 mb-8">Page non trouvÃ©e</p>
+              <Link to={ROUTES.HOME} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700" aria-label="Retour Ã  l'accueil">
+                Retour Ã  l'accueil
               </Link>
             </div>} />
 
             {/* 404 catch-all route - must be last */}
             <Route path="*" element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-              <p className="text-xl text-gray-600 mb-8">Page non trouvée</p>
-              <Link to={ROUTES.HOME} className="px-6 py-3 bg-sib-brand text-white rounded-lg hover:bg-sib-brand-dark" aria-label="Retour à l'accueil">
-                Retour à l'accueil
+              <p className="text-xl text-gray-600 mb-8">Page non trouvÃ©e</p>
+              <Link to={ROUTES.HOME} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700" aria-label="Retour Ã  l'accueil">
+                Retour Ã  l'accueil
               </Link>
             </div>} />
           </Routes>
         </Suspense>
       </AppShell>
-      {!isPrintRoute && <Footer />}
+      <Footer />
 
-      {!isPrintRoute && (
       <Suspense fallback={null}>
-        {/* ChatBot — caché sur les pages admin, exposant et visiteur dashboard */}
-        {!isAdminRoute && !isExhibitorRoute && !isVisitorDashboardRoute && (
-        <>
+        {/* ChatBot */}
         <ChatBot
           isOpen={isChatBotOpen}
           onToggle={() => setIsChatBotOpen(!isChatBotOpen)}
@@ -608,13 +564,10 @@ const App = () => {
           offsetSide={24}
           defaultVisible={true}
         />
-        </>
-        )}
 
         {/* Dev Tools - Subscription Switcher (Development Only) */}
         {import.meta.env.DEV && <DevSubscriptionSwitcher />}
       </Suspense>
-      )}
 
       <Toaster position="top-right" />
     </ErrorBoundary>

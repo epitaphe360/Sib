@@ -235,6 +235,14 @@
   PARTNER_RENTAL: '/partner/rental',
   ADMIN_RENTAL: '/admin/rental',
 
+  // MODULE 4 — Location de chapiteaux
+  CHAPITEAU_CATALOG: '/chapiteau',
+  CHAPITEAU_CHECKOUT: '/chapiteau/checkout',
+  CHAPITEAU_PAYMENT_SUCCESS: '/chapiteau/payment-success',
+  EXHIBITOR_CHAPITEAU: '/exhibitor/chapiteau',
+  PARTNER_CHAPITEAU: '/partner/chapiteau',
+  ADMIN_CHAPITEAU: '/admin/chapiteau',
+
   // MODULE 6 — Sponsor Média
   REGISTER_MEDIA_PARTNER: '/register/media-partner',
   MEDIA_PARTNER_DASHBOARD: '/media-partner/dashboard',
@@ -253,6 +261,13 @@
 
   // GESTION TARIFS
   ADMIN_PRICING:     '/admin/tarifs',
+
+  // MODULE CODES PROMO
+  ADMIN_PROMO_CODES: '/admin/promo-codes',
+
+  // MODULE CATALOGUE EXPOSANTS
+  ADMIN_CATALOGUE:   '/admin/catalogue',
+  CATALOGUE_FILL:    '/catalogue/fill/:token',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

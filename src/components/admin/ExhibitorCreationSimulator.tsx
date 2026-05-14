@@ -1,5 +1,6 @@
 ﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   ArrowLeft,
   Plus,
@@ -81,6 +82,7 @@ interface ExhibitorCreationSimulatorProps {
 }
 
 export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode = false }: ExhibitorCreationSimulatorProps) {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuthStore();

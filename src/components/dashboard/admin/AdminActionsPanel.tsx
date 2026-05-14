@@ -213,6 +213,9 @@ export function AdminActionsPanel({
                 <Link to={ROUTES.ADMIN_CONTENT}>
                   <Tile Icon={BookOpen} label="Gestion Contenu" sub="Pages & articles" color="#10b981" />
                 </Link>
+                <Link to={ROUTES.ADMIN_CATALOGUE}>
+                  <Tile Icon={BookOpen} label="Catalogue Exposants" sub="Fiches & invitations" color="#10b981" />
+                </Link>
                 <Link to={ROUTES.ADMIN_SPEAKERS}>
                   <Tile Icon={Mic2} label="Conférenciers" sub="Speakers & intervenants" color="#10b981" />
                 </Link>
@@ -271,6 +274,9 @@ export function AdminActionsPanel({
                 </Link>
                 <Link to={ROUTES.ADMIN_PRICING}>
                   <Tile Icon={Tag} label="Gestion des Tarifs" sub="Exposant · Partenaire · VIP" color="#0ea5e9" />
+                </Link>
+                <Link to={ROUTES.ADMIN_PROMO_CODES}>
+                  <Tile Icon={BadgeCheck} label="Codes Promo VIP" sub="Remises visiteurs premium" color="#0ea5e9" />
                 </Link>
               </motion.div>
             </div>
