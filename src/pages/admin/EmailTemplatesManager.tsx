@@ -125,7 +125,27 @@ export default function EmailTemplatesManager() {
     return content
       .replace(/{{name}}/g, 'Jean Dupont')
       .replace(/{{email}}/g, 'jean.dupont@example.com')
-      .replace(/{{level}}/g, 'VIP Premium');
+      .replace(/{{level}}/g, 'VIP Premium')
+      .replace(/{{company_name}}/g, 'BTP Solutions Maroc')
+      .replace(/{{contact_name}}/g, 'Mohamed Alami')
+      .replace(/{{sector}}/g, 'Matériaux de Construction')
+      .replace(/{{partnership_type}}/g, 'Sponsor Or')
+      .replace(/{{partnership_level}}/g, 'Sponsor Or')
+      .replace(/{{dashboard_url}}/g, 'https://sib2026.vercel.app/dashboard')
+      .replace(/{{rejection_reason}}/g, 'Dossier incomplet — merci de fournir les documents manquants.')
+      .replace(/{{other_party_name}}/g, 'LafargeHolcim Maroc')
+      .replace(/{{appointment_date}}/g, '26 novembre 2026')
+      .replace(/{{appointment_time}}/g, '10h30')
+      .replace(/{{location}}/g, 'Hall B — Stand 42')
+      .replace(/{{meeting_subject}}/g, 'Présentation gamme produits BTP')
+      .replace(/{{invoice_number}}/g, 'FAC-2026-0001234')
+      .replace(/{{items_summary}}/g, 'Chapiteau 5×5m × 1')
+      .replace(/{{rental_start}}/g, '25/11/2026')
+      .replace(/{{rental_end}}/g, '29/11/2026')
+      .replace(/{{total_ttc}}/g, '15 000')
+      .replace(/{{payment_method}}/g, 'PayPal')
+      .replace(/{{reset_url}}/g, 'https://sib2026.vercel.app/reset-password?token=xxx')
+      .replace(/{{payment_ref}}/g, 'PAY-2026-XXXXX');
   };
 
   if (loading) {

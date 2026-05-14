@@ -260,6 +260,9 @@ export function AdminActionsPanel({
                 <Link to={ROUTES.ADMIN_RENTAL}>
                   <Tile Icon={Package} label="Location Matériel" sub="Stock & Commandes" color="#0ea5e9" />
                 </Link>
+                <Link to={ROUTES.ADMIN_CHAPITEAU}>
+                  <Tile Icon={Package} label="Location Chapiteau" sub="Tentes & Commandes" color="#0ea5e9" />
+                </Link>
                 <Link to={ROUTES.ADMIN_STAND_COLLABORATORS}>
                   <Tile Icon={UserPlus} label="Collaborateurs Stand" sub="Gestion équipes" color="#0ea5e9" />
                 </Link>
