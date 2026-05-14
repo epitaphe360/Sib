@@ -1,4 +1,4 @@
-﻿import { Network, Calendar, Target, ArrowRight, TrendingUp, Brain } from 'lucide-react';
+﻿import { Network, Calendar, Target, ArrowRight, TrendingUp, Brain, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card } from '../../ui/Card';
@@ -22,21 +22,24 @@ export function VisitorQuickActions({ userLevel, remaining }: VisitorQuickAction
     <motion.div variants={containerVariants} initial="hidden" animate="visible"
       className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
 
-      {/* Réseautage Avancé */}
+      {/* Réseautage B2B IA */}
       <motion.div variants={itemVariants}>
-        <Card className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-full">
+        <Card className="p-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-full border border-purple-100">
           <div className="flex items-start space-x-3 mb-4">
-            <div className="p-2 bg-[#1B365D]/10 rounded-lg">
-              <Network className="h-5 w-5 text-[#1B365D]" />
+            <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+              <Brain className="h-5 w-5 text-white" />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900">{t('visitor.ai_networking')}</h3>
-              <p className="text-gray-600 text-sm mt-1">{t('visitor.ai_networking_desc')}</p>
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                Réseautage B2B IA
+                <span className="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full font-medium">Nouveau</span>
+              </h3>
+              <p className="text-gray-600 text-sm mt-1">Connexions intelligentes et icebreakers générés par DeepSeek AI.</p>
             </div>
           </div>
-          <Link to={ROUTES.NETWORKING}>
-            <Button className="w-full bg-[#1B365D] hover:bg-[#0F2034] text-white shadow-md transition-all">
-              <Network className="h-4 w-4 mr-2" />{t('visitor.explore_network')}
+          <Link to={ROUTES.B2B_NETWORKING_AI}>
+            <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white shadow-md transition-all">
+              <Sparkles className="h-4 w-4 mr-2" />{t('visitor.explore_network', 'Explorer mes connexions IA')}
             </Button>
           </Link>
         </Card>

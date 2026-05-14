@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Activity, X, Calendar, BookOpen, FileText, Crown, BookMarked, Search } from 'lucide-react';
+import { Users, Activity, X, Calendar, Crown, Zap, Lock, Star, ArrowRight, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { DashboardSkeleton } from '../ui/Skeleton';
@@ -15,12 +15,10 @@ import {
   VisitorQuickActions,
   VisitorAnalyticsSection,
   VisitorCommunicationCards,
-  VisitorNetworkingHub,
   VisitorAvailabilityModal,
 } from './components';
 import { getVisitorQuota } from '../../config/quotas';
 import { useTranslation } from '../../hooks/useTranslation';
-import { ProgrammeRegistrationsSection } from '../programme/ProgrammeRegistrationsSection';
 
 export default memo(function VisitorDashboard() {
   const { t } = useTranslation();
@@ -110,47 +108,119 @@ export default memo(function VisitorDashboard() {
         {/* Quick actions */}
         <VisitorQuickActions userLevel={ctx.userLevel} remaining={ctx.remaining} />
 
-        {/* Accès rapides — fonctionnalités supplémentaires */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mb-8">
-          <div className="bg-white rounded-xl shadow-sib border border-sib-gray-100 overflow-hidden">
-            <div className="bg-[#0F2034] px-6 py-4 flex items-center gap-3">
-              <BookMarked className="h-4 w-4 text-[#C9A84C]" />
-              <span className="text-white font-semibold text-sm">Accès Rapides</span>
+        {/* Bloc upgrade FREE */}
+        {ctx.userLevel === 'free' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mb-8"
+          >
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0F2034] via-[#1B365D] to-[#0F2034] border border-[#C9A84C]/30 shadow-2xl">
+              {/* Fond décoratif */}
+              <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '28px 28px' }} />
+              <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#C9A84C]/10 rounded-full blur-3xl" />
+              <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl" />
+
+              <div className="relative z-10 p-6 md:p-8">
+                {/* Badge FREE limité */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/20 border border-amber-400/40 rounded-full text-amber-300 text-xs font-bold uppercase tracking-wider">
+                    <Lock className="w-3 h-3" /> Compte FREE — Accès limité
+                  </span>
+                </div>
+
+                <div className="flex flex-col lg:flex-row lg:items-center gap-8">
+                  {/* Texte principal */}
+                  <div className="flex-1">
+                    <h2 className="text-2xl md:text-3xl font-black text-white mb-2 leading-tight">
+                      Débloquez l'expérience <span className="text-[#C9A84C]">SIB 2026</span> complète
+                    </h2>
+                    <p className="text-white/60 text-sm mb-6 max-w-lg">
+                      Avec un badge payant, accédez aux fonctionnalités exclusives réservées aux professionnels du bâtiment.
+                    </p>
+
+                    {/* Liste des avantages */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
+                      {[
+                        { icon: <Star className="w-3.5 h-3.5 text-[#C9A84C]" />, text: 'Rendez-vous B2B avec les exposants' },
+                        { icon: <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />, text: 'Accès aux séminaires & conférences' },
+                        { icon: <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />, text: 'Badge officiel nominatif imprimable' },
+                        { icon: <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />, text: "Lettre d'invitation & visa officielle" },
+                        { icon: <Star className="w-3.5 h-3.5 text-[#C9A84C]" />, text: 'Accès VIP Lounge & networking exclusif' },
+                        { icon: <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />, text: 'Catalogue exposants complet' },
+                      ].map((item, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          {item.icon}
+                          <span className="text-white/80 text-xs">{item.text}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Boutons CTA */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Link
+                        to={ROUTES.VISITOR_UPGRADE}
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#C9A84C] hover:bg-[#B8963E] text-[#0F2034] font-black text-sm rounded-xl transition-all shadow-lg shadow-[#C9A84C]/30 hover:shadow-[#C9A84C]/50 hover:scale-[1.02]"
+                      >
+                        <Crown className="w-4 h-4" />
+                        Passer en Standard ou VIP
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                      <Link
+                        to={ROUTES.VISITOR_VIP_REGISTRATION}
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/15 text-white font-bold text-sm rounded-xl border border-white/20 transition-all"
+                      >
+                        <Zap className="w-4 h-4 text-[#C9A84C]" />
+                        Voir les offres VIP
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Comparaison rapide FREE vs VIP */}
+                  <div className="lg:w-72 bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                      <div className="text-center p-2 bg-white/5 rounded-lg">
+                        <div className="text-xs text-white/50 mb-1 font-semibold uppercase tracking-wide">FREE</div>
+                        <div className="text-red-400 font-black text-lg">0</div>
+                        <div className="text-white/40 text-[10px]">RDV B2B</div>
+                      </div>
+                      <div className="text-center p-2 bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-lg">
+                        <div className="text-xs text-[#C9A84C] mb-1 font-semibold uppercase tracking-wide">VIP</div>
+                        <div className="text-[#C9A84C] font-black text-lg">∞</div>
+                        <div className="text-white/40 text-[10px]">RDV B2B</div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        { label: 'Accès conférences', free: false, paid: true },
+                        { label: 'Badge nominatif', free: false, paid: true },
+                        { label: 'Lettre visa', free: false, paid: true },
+                        { label: 'Networking B2B', free: false, paid: true },
+                      ].map((row, i) => (
+                        <div key={i} className="flex items-center justify-between text-xs">
+                          <span className="text-white/60">{row.label}</span>
+                          <div className="flex gap-4">
+                            <span className={row.free ? 'text-emerald-400' : 'text-red-400/70'}>
+                              {row.free ? '✓' : '✗'}
+                            </span>
+                            <span className="text-emerald-400">✓</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <Link
+                      to={ROUTES.VISITOR_UPGRADE}
+                      className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 bg-[#C9A84C] hover:bg-[#B8963E] text-[#0F2034] font-black text-xs rounded-lg transition-all"
+                    >
+                      <Crown className="w-3.5 h-3.5" /> Upgrader maintenant
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="p-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-              <Link to={ROUTES.EVENTS} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
-                <Calendar className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
-                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Programme & Séminaires</span>
-              </Link>
-              <Link to={ROUTES.CATALOG} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
-                <Search className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
-                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Catalogue Exposants</span>
-              </Link>
-              <Link to={ROUTES.VISITOR_VISA_LETTER} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
-                <FileText className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
-                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Lettre de Visa</span>
-              </Link>
-              <Link to={ROUTES.INVITATION_LETTER} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
-                <FileText className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
-                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Lettre d'Invitation</span>
-              </Link>
-              <Link to={ROUTES.NEWS} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
-                <BookOpen className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
-                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Actualités</span>
-              </Link>
-              <Link to={ROUTES.VISITOR_INVOICES} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-sib-gray-100 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all group text-center">
-                <FileText className="h-6 w-6 text-[#1B365D] group-hover:text-[#C9A84C] transition-colors" />
-                <span className="text-xs font-semibold text-gray-700 group-hover:text-[#1B365D]">Ma Facture</span>
-              </Link>
-              {ctx.userLevel === 'free' && (
-                <Link to={ROUTES.VISITOR_UPGRADE} className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-[#C9A84C]/40 bg-[#C9A84C]/5 hover:bg-[#C9A84C]/10 transition-all group text-center">
-                  <Crown className="h-6 w-6 text-[#C9A84C]" />
-                  <span className="text-xs font-bold text-[#A88830]">Passer VIP</span>
-                </Link>
-              )}
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
 
         {/* Analytics */}
         <VisitorAnalyticsSection
@@ -167,38 +237,6 @@ export default memo(function VisitorDashboard() {
 
         {/* Communication cards */}
         <VisitorCommunicationCards userLevel={ctx.userLevel} />
-
-        {/* Mes sessions du programme */}
-        <ProgrammeRegistrationsSection accent="indigo" />
-
-        {/* Networking hub */}
-        <VisitorNetworkingHub
-          activeTab={ctx.activeTab}
-          setActiveTab={ctx.setActiveTab}
-          historyTab={ctx.historyTab}
-          setHistoryTab={ctx.setHistoryTab}
-          userLevel={ctx.userLevel}
-          upcomingAppointments={ctx.upcomingAppointments}
-          pastAppointments={ctx.pastAppointments}
-          refusedAppointments={ctx.refusedAppointments}
-          filteredUpcoming={ctx.filteredUpcoming}
-          filteredPast={ctx.filteredPast}
-          filteredCancelled={ctx.filteredCancelled}
-          setFilteredUpcoming={ctx.setFilteredUpcoming}
-          setFilteredPast={ctx.setFilteredPast}
-          setFilteredCancelled={ctx.setFilteredCancelled}
-          confirmedCount={ctx.confirmedAppointments.length}
-          pendingCount={ctx.pendingAppointments.length}
-          isAppointmentsLoading={ctx.isAppointmentsLoading}
-          getUpcomingEvents={ctx.getUpcomingEvents}
-          isEventPast={ctx.isEventPast}
-          handleUnregisterFromEvent={ctx.handleUnregisterFromEvent}
-          handleAccept={ctx.handleAccept}
-          handleReject={ctx.handleReject}
-          handleRequestAnother={ctx.handleRequestAnother}
-          getExhibitorName={ctx.getExhibitorName}
-          registeredEventsCount={ctx.registeredEvents.length}
-        />
 
         {/* Availability modal */}
         <VisitorAvailabilityModal

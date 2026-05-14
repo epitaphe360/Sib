@@ -746,6 +746,25 @@ function getSupabaseClient(): ReturnType<typeof createClient<Database>> | null {
   }
 
   _initAttempted = true;
+
+  // ✅ Purger les tokens de session invalides AVANT de créer le client,
+  // pour éviter que GoTrueClient._initialize() ne tente un refresh voué à l'échec
+  // et génère un AuthApiError "Invalid Refresh Token" dans la console.
+  try {
+    const tokenKey = `sb-${url.replace('https://', '').split('.')[0]}-auth-token`;
+    const raw = localStorage.getItem(tokenKey);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const expiresAt: number = parsed?.expires_at ?? 0;
+      // Si le token est expiré depuis plus de 5 minutes, on le supprime maintenant
+      if (expiresAt && Date.now() / 1000 > expiresAt + 300) {
+        localStorage.removeItem(tokenKey);
+      }
+    }
+  } catch {
+    // Ignore — on continue même si le nettoyage échoue
+  }
+
   supabaseClientInstance = createClient<Database>(url, key, {
     auth: {
       autoRefreshToken: true,

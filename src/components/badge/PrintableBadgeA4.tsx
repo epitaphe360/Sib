@@ -606,7 +606,7 @@ export default function PrintableBadgeA4({
       .from('app_settings')
       .select('value')
       .eq('key', 'badge_config_v1')
-      .single()
+      .maybeSingle()
       .then(({ data }) => {
         if (data?.value) {
           try {

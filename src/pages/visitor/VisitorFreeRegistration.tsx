@@ -36,6 +36,8 @@ import { ROUTES } from '../../lib/routes';
 
 import { COUNTRIES } from '../../data/countries';
 
+import { initializeAuth } from '../../lib/initAuth';
+
 
 
 // Schema défini au niveau module pour éviter les problèmes de hooks
@@ -534,7 +536,8 @@ export default function VisitorFreeRegistration() {
 
       // NE PAS déconnecter l'utilisateur (Allow login)
 
-
+      // Synchroniser le store Zustand avec la session Supabase créée par signUp()
+      await initializeAuth();
 
       // Succès !
 

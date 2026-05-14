@@ -1,0 +1,141 @@
+﻿App.tsx L240: console.log('🛠️ Dev tools disponibles: checkAuthStatus(), cleanupAuth()');
+main.tsx L11: console.log('[SIB] main.tsx chargé ✅');
+main.tsx L21: console.log('[SIB] Sentry initialisé ✅');
+main.tsx L61: console.log('[SIB] Montage React sur:', el.id || el.tagName);
+main.tsx L75: console.log('[SIB] ReactDOM.render() appelé ✅');
+components\auth\LoginPage.tsx L52: console.log('🔄 Redirection post-connexion vers:', redirectUrl);
+components\auth\RegisterPage.tsx L216: console.log('⚠️ [INSCRIPTION] Erreurs de validation détectées:', errors);
+components\auth\RegisterPage.tsx L312: console.log('✅ [INSCRIPTION] Étape 4 visiteur - passage sans validation (champs optionnels)');
+components\auth\RegisterPage.tsx L315: console.log('🔂 [INSCRIPTION] Passage à l\'étape', currentStep + 1);
+components\auth\RegisterPage.tsx L321: console.log('🔍 [INSCRIPTION] Champs à valider:', fieldsToValidate);
+components\auth\RegisterPage.tsx L328: console.log('📝 [INSCRIPTION] Valeurs actuelles:', currentValues);
+components\auth\RegisterPage.tsx L331: console.log('🔍 [INSCRIPTION] Résultat validation trigger:', {
+components\auth\RegisterPage.tsx L340: console.log('🔍 [INSCRIPTION] Validation customSector:', customSectorValue);
+components\auth\RegisterPage.tsx L360: console.log('🔍 [INSCRIPTION] Validation customPosition:', customPositionValue);
+components\auth\RegisterPage.tsx L371: console.log('🔍 [INSCRIPTION - Étape 3] Vérification de l\'email:', emailValue);
+components\auth\RegisterPage.tsx L421: console.log('✅ [INSCRIPTION - Étape 3] Email disponible');
+components\auth\RegisterPage.tsx L427: console.log('✅ [INSCRIPTION] Validation réussie - progression vers étape', currentStep + 1);
+components\auth\RegisterPage.tsx L443: console.log('⬅️ [INSCRIPTION] prevStep appelé', { currentStep });
+components\auth\RegisterPage.tsx L446: console.log('🔂 [INSCRIPTION] Retour à l\'\u00e9tape', currentStep - 1);
+components\auth\RegisterPage.tsx L462: console.log('🚀 [INSCRIPTION] onSubmit appelé');
+components\auth\RegisterPage.tsx L463: console.log('📝 [INSCRIPTION] Données formulaire brutes:', {
+components\auth\RegisterPage.tsx L471: console.log('📝 [INSCRIPTION] Démarrage appel registerUser dans le store...');
+components\auth\RegisterPage.tsx L474: console.log('🔍 [INSCRIPTION - Vérification finale] Contrôle de l\'email avant création...');
+components\auth\RegisterPage.tsx L526: console.log('✅ [INSCRIPTION] Email disponible, création du compte...');
+components\auth\RegisterPage.tsx L534: console.log(`✅ [INSCRIPTION] registerUser terminé succès en ${duration}ms`);
+components\auth\RegisterPage.tsx L538: console.log('📧 [INSCRIPTION] Envoi email de bienvenue...');
+components\auth\RegisterPage.tsx L545: console.log('✅ [INSCRIPTION] Email de bienvenue envoyé');
+components\auth\RegisterPage.tsx L554: console.log(`ℹ️ [INSCRIPTION] Compte ${label} - validation admin requise`);
+components\auth\RegisterPage.tsx L560: console.log('🔑 [INSCRIPTION] Tentative de connexion automatique pour visiteur...');
+components\auth\RegisterPage.tsx L563: console.log('✅ [INSCRIPTION] Connexion automatique réussie');
+components\auth\RegisterPage.tsx L573: console.log('✅ [INSCRIPTION] Affichage modal de succès');
+components\auth\RegisterPage.tsx L577: console.log('📍 [INSCRIPTION] Redirection programmée dans 3s...');
+components\auth\RegisterPage.tsx L579: console.log('📍 [INSCRIPTION] Redirection vers confirmation');
+components\auth\RegisterPage.tsx L671: console.log('⚠️ [INSCRIPTION] Premier message d\'erreur:', errorMessages[0]);
+components\auth\RegisterPage.tsx L678: console.log('🔍 [INSCRIPTION] Premier champ en erreur:', firstErrorField);
+components\auth\RegisterPage.tsx L1368: console.log('👆 [INSCRIPTION] Click sur "Créer mon compte"', {
+components\auth\RegisterPage.tsx L1379: console.log('✅ [INSCRIPTION] Validation réussie, appel onSubmit');
+components\calendar\BulkSlotGenerator.tsx L98: console.log(`Génération de ${slotsToCreate.length} créneaux...`);
+components\calendar\PublicAvailabilityCalendar.tsx L107: console.log('🔵 handleAddTimeSlot appelé', { newSlot, isLoading });
+components\calendar\PublicAvailabilityCalendar.tsx L111: console.log('❌ Champs manquants:', { date: newSlot.date, startTime: newSlot.startTime, endTime: newSlot.endTime });
+components\calendar\PublicAvailabilityCalendar.tsx L130: console.log('✅ Validation passée, création du créneau...');
+components\calendar\PublicAvailabilityCalendar.tsx L143: console.log('🔄 Modification du créneau:', selectedSlot.id);
+components\calendar\PublicAvailabilityCalendar.tsx L158: console.log('➕ Création d\'un nouveau créneau');
+components\chatbot\ChatBotToggle.tsx L24: console.log('🤖 ChatBot button clicked'); // Debug log
+components\minisite\MiniSitePreview.tsx L153: console.log(`[MiniSite] Loading data for exhibitor: ${exhibitorId}`);
+components\minisite\MiniSitePreview.tsx L158: console.log('[MiniSite] Received site data:', miniSite);
+components\minisite\MiniSitePreview.tsx L183: console.log('[MiniSite] Received exhibitor data:', exhibitor);
+components\minisite\MiniSitePreview.tsx L207: console.log('[MiniSite] Received products:', exhibitorProducts?.length);
+components\minisite\MiniSitePreviewSimple.tsx L136: console.log('[MiniSite] Data:', { miniSite, exhibitor, products: prods });
+components\ui\ImageUploader.tsx L72: console.log('🎯 [IMAGE UPLOADER] Avant upload:', {
+components\ui\ImageUploader.tsx L84: console.log('✅ [IMAGE UPLOADER] Upload réussi:', imageUrl);
+components\ui\LanguageSelector.tsx L38: console.log('🌍 Changing language to:', languageCode);
+components\ui\PreviewModal.tsx L171: console.log('🔴 PreviewModal: Bouton "Confirmer et envoyer" cliqué!');
+pages\BadgeScannerPage.tsx L285: console.log('Stats chargées:', { totalScans, todayScans, uniqueVisitors });
+pages\BadgeScannerPage.tsx L465: console.log('Scan ignoré - traitement en cours');
+pages\BadgeScannerPage.tsx L477: console.log('QR Code scanné:', decodedText);
+pages\BadgeScannerPage.tsx L529: console.log('?? QR JSON parsé, extracted:', qrData.substring(0, 30) + '...');
+pages\BadgeScannerPage.tsx L535: console.log('?? QR brut (non-JSON):', qrData.substring(0, 30) + '...');
+pages\BadgeScannerPage.tsx L615: console.log('?? Validation badge, longueur:', qrData.length, 'premiers chars:', qrData.substring(0, 20));
+pages\BadgeScannerPage.tsx L641: console.log('?? Réponse validation:', data);
+pages\BadgeScannerPage.tsx L719: console.log('? Badge validé avec succès:', scanned);
+pages\BadgeScannerPage.tsx L815: console.log('Lead enregistré:', badge.fullName);
+pages\NetworkingPage.tsx L91: console.log('?? NetworkingPage - user check:', {
+pages\NetworkingPage.tsx L107: console.log('? Access blocked: free visitor');
+pages\NetworkingPage.tsx L127: console.log('? Access granted:', user.type);
+pages\NetworkingPage.tsx L255: console.log('?? Loading networking data for user:', user.type, user.id);
+pages\NetworkingPage.tsx L277: console.log('? Networking data loaded successfully');
+pages\NetworkingPage.tsx L297: console.log('?? Permissions updated for:', user.type);
+pages\NetworkingPage.tsx L363: console.log('?? Starting search with filters:', { searchTerm, ...searchFilters });
+pages\NetworkingPage.tsx L381: console.log('? Search results:', results.length, 'users found');
+pages\NetworkingPage.tsx L507: console.log('?? Modal opened, fetching time slots for:', selectedExhibitorForRDV.id);
+pages\NetworkingPage.tsx L521: console.log('?? Time slots loaded:', currentSlots.length, currentSlots);
+pages\NetworkingPage.tsx L539: console.log('?? BUTTON CLICKED!');
+pages\NetworkingPage.tsx L541: console.log('[NetworkingPage] handleConfirmAppointment started', { selectedExhibitorForRDV, selectedTimeSlot });
+pages\NetworkingPage.tsx L563: console.log('? Validation passed, proceeding with booking...');
+pages\NetworkingPage.tsx L579: console.log('?? Quota check:', { userType, visitorLevel, quotaKey, quota });
+pages\NetworkingPage.tsx L591: console.log('?? User appointments:', userAppointments.length);
+pages\NetworkingPage.tsx L619: console.log('?? Calling bookAppointment with:', { selectedTimeSlot, appointmentMessage });
+pages\NetworkingPage.tsx L629: console.log('? [NetworkingPage] Appointment booking succeeded');
+pages\NetworkingPage.tsx L663: console.log('[NetworkingPage] Error message:', errorMessage);
+pages\NetworkingPage.tsx L3737: console.log('?? SLOT CLICKED:', slot.id, slot);
+pages\ProfileMatchingPage.tsx L525: console.log('? Données mises à jour en base:', {
+pages\ResetPasswordPage.tsx L117: console.log('✅ hasPassword mis à jour');
+pages\VisitorPaymentPage.tsx L70: console.log('🔄 Creating bank transfer request for user:', user.id);
+pages\VisitorPaymentPage.tsx L81: console.log('✅ Existing payment request found:', existingRequest.id);
+pages\VisitorPaymentPage.tsx L87: console.log('📝 Creating new payment request...');
+pages\VisitorPaymentPage.tsx L111: console.log('✅ Payment request created:', newRequest.id);
+pages\admin\ExhibitorManagementPage.tsx L91: console.log(`✅ Admin: ${mapped.length} exposants chargés`);
+pages\admin\ExhibitorManagementPage.tsx L103: console.log('🗑️ [DELETE] Début suppression exposant:', { id, name });
+pages\admin\ExhibitorManagementPage.tsx L107: console.log('🔑 [DELETE] Session récupérée:', {
+pages\admin\ExhibitorManagementPage.tsx L120: console.log('📡 [DELETE] Appel API:', { method: 'DELETE', url: apiUrl });
+pages\admin\ExhibitorManagementPage.tsx L130: console.log('📥 [DELETE] Réponse HTTP:', {
+pages\admin\ExhibitorManagementPage.tsx L146: console.log('📦 [DELETE] Corps de la réponse:', result);
+pages\admin\ExhibitorManagementPage.tsx L153: console.log('✅ [DELETE] Suppression réussie:', result.deleted);
+pages\admin\PavillonsPage.tsx L249: console.log(`Action ${action} for pavilion ${pavilionId}`);
+pages\admin\PavillonsPage.tsx L271: console.log(`Action ${action} for demo ${demoId}`);
+pages\admin\PaymentValidationPage.tsx L182: console.log('Payment requests trouvées:', paymentsData?.length || 0);
+pages\admin\PublicationControlPage.tsx L59: console.log('🔍  [PublicationControl] Chargement des sponsors...');
+pages\admin\PublicationControlPage.tsx L65: console.log('📊 [PublicationControl] Sponsors reçus:', {
+pages\admin\PublicationControlPage.tsx L78: console.log('🔍  [PublicationControl] Chargement des exposants...');
+pages\admin\PublicationControlPage.tsx L84: console.log('📊 [PublicationControl] Exposants reçus:', {
+pages\admin\PublicationControlPage.tsx L180: console.log(`🔄 Mise à jour de ${allPartners.length} sponsors...`);
+pages\admin\PublicationControlPage.tsx L228: console.log(`🔄 Mise à jour de ${allExhibitors.length} exposants...`);
+pages\auth\ExhibitorSignUpPage.tsx L99: console.log('🔴 Erreurs de validation:', errors);
+pages\auth\ExhibitorSignUpPage.tsx L190: console.log('🟡 handlePreviewSubmit: Ouverture preview modal');
+pages\auth\ExhibitorSignUpPage.tsx L195: console.log('🟢 onSubmit APPELÉ! Données:', { email: data.email, firstName: data.firstName, company: data.companyName });
+pages\media\MediaDetailPage.tsx L56: console.log('▶️ Play button clicked', {
+pages\media\MediaDetailPage.tsx L77: console.log('⬇️ Download button clicked', { resources_url: media?.resources_url });
+pages\media\MediaDetailPage.tsx L92: console.log('🔗 Share button clicked');
+pages\media\MediaDetailPage.tsx L119: console.log('❤️ Favorite button clicked');
+pages\visitor\VisitorFreeRegistration.tsx L167: console.log('?? [FREE VISITOR] Tentative soumission:', data);
+pages\visitor\VisitorFreeRegistration.tsx L181: console.log('?? [FREE VISITOR] Vérification si email existe déjà...');
+pages\visitor\VisitorFreeRegistration.tsx L271: console.log('? [FREE VISITOR] Email disponible');
+pages\visitor\VisitorFreeRegistration.tsx L462: console.log('? Badge QR généré avec succès');
+pages\visitor\VisitorFreeRegistration.tsx L480: console.log('?? [FREE] Envoi email de bienvenue...');
+pages\visitor\VisitorFreeRegistration.tsx L530: console.log('? Email de bienvenue envoyé avec succès:', emailResult.messageId);
+pages\visitor\VisitorFreeRegistration.tsx L554: console.log('? [FREE VISITOR] Inscription réussie ! Affichage du modal de succès.');
+pages\visitor\VisitorFreeRegistration.tsx L1106: console.log('??? [FREE VISITOR] CLICK BOUTON', {
+pages\visitor\VisitorVIPRegistration.tsx L231: console.log('?? onSubmit APPELÉ avec données:', JSON.stringify(data, null, 2));
+pages\visitor\VisitorVIPRegistration.tsx L241: console.log('?? Full name:', fullName);
+pages\visitor\VisitorVIPRegistration.tsx L251: console.log('?? Upload photo en cours...');
+pages\visitor\VisitorVIPRegistration.tsx L253: console.log('   ?? Fichier:', photoFile.name, 'Taille:', photoFile.size);
+pages\visitor\VisitorVIPRegistration.tsx L265: console.log('   ?? Upload vers visitor-photos/', filePath);
+pages\visitor\VisitorVIPRegistration.tsx L291: console.log('   ? Upload réussi:', uploadData);
+pages\visitor\VisitorVIPRegistration.tsx L301: console.log('? Photo uploadée:', photoUrl);
+pages\visitor\VisitorVIPRegistration.tsx L315: console.log('?? Pas de photo sélectionnée');
+pages\visitor\VisitorVIPRegistration.tsx L323: console.log('?? [VIP INSCRIPTION] Vérification si email existe déjà...');
+pages\visitor\VisitorVIPRegistration.tsx L405: console.log('? [VIP INSCRIPTION] Email disponible');
+pages\visitor\VisitorVIPRegistration.tsx L417: console.log('?? Création compte auth...');
+pages\visitor\VisitorVIPRegistration.tsx L419: console.log('   ?? Email:', data.email);
+pages\visitor\VisitorVIPRegistration.tsx L421: console.log('   ?? Password length:', data.password.length);
+pages\visitor\VisitorVIPRegistration.tsx L423: console.log('   ?? Name:', fullName);
+pages\visitor\VisitorVIPRegistration.tsx L491: console.log('? Auth user créé:', userId);
+pages\visitor\VisitorVIPRegistration.tsx L495: console.log('? Utilisateur déjà connecté, on passe la création Auth:', userId);
+pages\visitor\VisitorVIPRegistration.tsx L503: console.log('?? Mise à jour profil utilisateur...');
+pages\visitor\VisitorVIPRegistration.tsx L559: console.log('? Profil utilisateur synchronisé');
+pages\visitor\VisitorVIPRegistration.tsx L673: console.log('? Payment request créé:', paymentRequestId);
+pages\visitor\VisitorVIPRegistration.tsx L689: console.log('?? [VIP] Envoi email de bienvenue...');
+pages\visitor\VisitorVIPRegistration.tsx L727: console.log('? Email VIP envoyé:', emailResult.messageId);
+pages\visitor\VisitorVIPRegistration.tsx L745: console.log('? [VIP] SUCCÈS COMPLET - Redirection vers coordonnées bancaires...');
+pages\visitor\VisitorVIPRegistration.tsx L763: console.log('?? Navigation vers', bankTransferUrl);

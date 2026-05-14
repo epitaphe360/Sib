@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle, Crown, Download, ArrowRight, Loader } from 'lucide-react';
@@ -206,7 +207,7 @@ export default function PaymentSuccessPage() {
                 {t('payment.success.description')}
               </p>
               <div className="inline-block bg-green-50 border border-green-200 rounded-lg p-4">
-                <p className="text-sm text-green-800" dangerouslySetInnerHTML={{ __html: t('payment.success.emailSent', { email: (user?.email || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') }) }} />
+                <p className="text-sm text-green-800" dangerouslySetInnerHTML={{ __html: sanitizeHtml(t('payment.success.emailSent', { email: user?.email || '' })) }} />
               </div>
             </motion.div>
 

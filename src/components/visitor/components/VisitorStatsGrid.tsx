@@ -39,13 +39,13 @@ export function VisitorStatsGrid({
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible"
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
       {statItems.map((stat) => (
         <motion.div key={stat.label} variants={itemVariants}>
-          <Card className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-transparent hover:border-current group">
+          <Card className="p-4 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-transparent hover:border-current group">
             <div className="flex items-center">
-              <div className={`p-3 bg-gradient-to-br ${stat.gradient} rounded-lg shadow-md group-hover:scale-110 transition-transform duration-300`}>
-                <stat.icon className="h-8 w-8 text-white" />
+              <div className={`p-2 bg-gradient-to-br ${stat.gradient} rounded-lg shadow-md group-hover:scale-110 transition-transform duration-300`}>
+                <stat.icon className="h-5 w-5 text-white" />
               </div>
               <div className="ml-4 flex-1">
                 <p className="text-sm font-medium text-gray-600">{stat.label}</p>

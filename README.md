@@ -2,7 +2,7 @@
 
 > **20ème édition** | 25 – 29 Novembre 2026 | Parc d'Exposition Mohammed VI, El Jadida, Maroc
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-2.5.0-blue)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?logo=typescript)
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase)
@@ -38,11 +38,12 @@ SIB 2026 est une **plateforme digitale complète** pour le Salon International d
 
 | Indicateur | Valeur |
 |---|---|
-| Pages / routes | 130+ |
-| Composants React | 130+ |
-| Stores Zustand | 14 |
-| Services métier | 30+ |
-| Migrations SQL | 21+ |
+| Pages / routes | 150+ |
+| Composants React | 160+ |
+| Stores Zustand | 17 |
+| Services métier | 50+ |
+| Edge Functions Supabase | 30+ |
+| Migrations SQL | 25+ |
 | Rôles utilisateurs | 6 |
 | Salons supportés | 5 (SIB, SIR, SIP, BTP, SIE) |
 | Langues | 3 (FR, EN, AR) |
@@ -164,12 +165,14 @@ SIB 2026 est une **plateforme digitale complète** pour le Salon International d
 
 ### Paiements & Abonnements
 
-- **PayPal** — Paiements internationaux en EUR
-- **CMI** — Cartes bancaires marocaines (MAD)
+- **PayPal** — Paiements internationaux en EUR (SDK + webhooks)
+- **CMI** — Cartes bancaires marocaines (MAD) avec webhooks de confirmation
+- **Stripe** — Paiements par carte internationale (Checkout Session + webhooks)
 - **Virement bancaire** — Avec upload de justificatif, validation manuelle admin
 - **Pass VIP Visiteur** — 300 EUR (accès fonctionnalités premium)
 - Workflow d'approbation admin avec notifications automatiques
 - Statuts : `pending` → `pending_payment` → `active` / `rejected`
+- Gestion des abonnements partenaires avec niveaux de sponsoring
 
 ### Emails & Notifications
 
@@ -190,8 +193,9 @@ SIB 2026 est une **plateforme digitale complète** pour le Salon International d
 - Salles de networking — sessions B2B programmées
 - Speed networking — sessions courtes et intensives
 - Planificateur de rendez-vous — créneaux synchronisés entre participants
-- Messagerie interne — chat temps réel entre participants
+- Messagerie interne — chat temps réel avec pièces jointes
 - Score de compatibilité visible par secteur d'activité
+- Edge Function `match-exhibitors` — matching côté serveur via Supabase
 
 ### Mini-Site Exposant (Builder)
 
@@ -203,6 +207,9 @@ SIB 2026 est une **plateforme digitale complète** pour le Salon International d
 - Compteur de vues et statistiques d'audience
 - Export PDF du mini-site
 - Design responsive (mobile, tablette, desktop)
+- **IA Scraper** — Edge Function `scrape-and-create-minisite` : création automatique du mini-site par scraping du site web de l'exposant
+- Bibliothèque de templates prédéfinis (templateLibraryService)
+- CDN de médias avec optimisation et redimensionnement (cdnService)
 
 ### Médiathèque
 
@@ -229,6 +236,10 @@ SIB 2026 est une **plateforme digitale complète** pour le Salon International d
 - Suivi des check-ins par jour et par zone
 - Export PDF du badge individuel
 - Badge VIP avec design personnalisé
+- Edge Function `generate-visitor-badge` — génération badge côté serveur
+- Edge Function `generate-qr` — génération QR codes dynamiques
+- **Application Flutter dédiée** (`sib_zone_scanner/`) — scanner mobile natif iOS/Android
+- Email de scan automatique (`send-scan-email`) à chaque check-in
 
 ### Analytics & Reporting
 
@@ -257,6 +268,8 @@ SIB 2026 est une **plateforme digitale complète** pour le Salon International d
 - Localisation des exposants par stand
 - Informations stands consultables depuis le plan
 - Export PDF du plan de salle
+- Métriques par pavillon (affluence, check-ins, densité) via `pavilionMetrics`
+- Gestion des zones de scan par pavillon (`zonesService`)
 
 ### Gestion de Contenu (CMS)
 
@@ -265,6 +278,34 @@ SIB 2026 est une **plateforme digitale complète** pour le Salon International d
 - Modération de contenu par l'équipe admin
 - Gestion des accréditations presse
 - Pages statiques éditables (À propos, Pourquoi visiter, etc.)
+- **Synchronisation automatique des actualités** — Edge Function `sync-news-articles` (scraping)
+- **Audio articles** — Text-to-speech via Edge Function `convert-text-to-speech` (articleAudioService)
+- Feature flags dynamiques — activation/désactivation fonctionnalités sans redéploiement
+
+### Sécurité & Authentification avancée
+
+- **2FA TOTP** — Authentification à deux facteurs avec applications authenticator (Edge Functions `generate-totp-secret`, `verify-totp-token`)
+- **Codes de secours** — Génération et validation de backup codes (Edge Function `generate-backup-codes`)
+- **Notifications push** — FCM via Edge Functions `send-push-notification`, `broadcast-push-notification`
+- **Comptes collaborateurs** — Création de sous-comptes via `create-collaborator-account`
+- Vérification reCAPTCHA côté serveur (Edge Function `verify-recaptcha`)
+- Synchronisation hors-ligne — file d'attente d'actions en mode offline (`offlineSyncService`)
+
+### Dashboards — Interface unifiée
+
+| Dashboard | Rôle | Composants clés |
+|---|---|---|
+| **AdminDashboard** | Super admin | AdminMetricsGrid, AdminChartsSection, ActivityFeed, SystemHealthPanel |
+| **ExhibitorDashboard** | Exposant | ExhibitorStatsGrid, ExhibitorHeader, ExhibitorAppointmentSection, ExhibitorAnalyticsSection |
+| **PartnerDashboard** | Partenaire / sponsor | Métriques ROI, upload médias, analytics |
+| **MarketingDashboard** | Équipe marketing | Funnel inscriptions, CMS, analytics |
+| **MediaPartnerDashboard** | Partenaires média | Accès médiathèque, statistiques diffusion |
+| **DashboardPage** | Routing dynamique | Redirige vers le dashboard du rôle actif |
+
+**Améliorations UI dashboards (v2.5)** :
+- KPIs en grille 2×2 compacte sur mobile (`grid-cols-2 md:grid-cols-4`)
+- Headers allégés (`py-5`, icônes `h-7 w-7`, titres `text-xl`)
+- ChatBot et WhatsApp masqués automatiquement sur les pages admin, exposant et visiteur
 
 ---
 
@@ -341,26 +382,64 @@ Sib/
 │   │   ├── partner/                    # Espace partenaire
 │   │   └── admin/                      # Pages administration
 │   │
-│   ├── services/                       # 30+ services métier
-│   │   ├── paymentService.ts           # PayPal, CMI, virement bancaire
+│   ├── services/                       # 50+ services métier
+│   │   ├── paymentService.ts           # PayPal, CMI, Stripe, virement bancaire
 │   │   ├── emailService.ts             # Envoi d'emails transactionnels
+│   │   ├── emailTemplateService.ts     # Templates d'emails éditables
 │   │   ├── advancedMatchingService.ts  # Algorithme de matching IA
-│   │   ├── badgeService.ts             # Génération et impression badges
+│   │   ├── aiMatchingService.ts        # Matching IA côté serveur
+│   │   ├── aiAgentService.ts           # Agent IA conversationnel
+│   │   ├── aiScrapperService.ts        # Scraping automatique mini-sites
+│   │   ├── badgeService.ts             # Génération et gestion badges
+│   │   ├── badgePrintService.ts        # Impression badges physiques
 │   │   ├── analyticsService.ts         # Tracking et analytics
-│   │   ├── appointmentService.ts       # Gestion des rendez-vous
-│   │   ├── networkingService.ts        # Networking B2B
-│   │   └── ...
+│   │   ├── articleAudioService.ts      # Text-to-speech articles
+│   │   ├── auditService.ts             # Journal d'audit activités
+│   │   ├── cdnService.ts               # Gestion CDN et médias
+│   │   ├── chatFileUploadService.ts    # Upload pièces jointes chat
+│   │   ├── exportService.ts            # Export Excel / PDF
+│   │   ├── featureFlagService.ts       # Feature flags dynamiques
+│   │   ├── invoiceService.ts           # Génération factures PDF
+│   │   ├── mediaService.ts             # Médiathèque vidéos & podcasts
+│   │   ├── mobilePushService.ts        # Push notifications mobile
+│   │   ├── nativeFeaturesService.ts    # Fonctionnalités natives Capacitor
+│   │   ├── networkingScoring.ts        # Scoring algorithme networking
+│   │   ├── newsScraperService.ts       # Scraping articles d'actualité
+│   │   ├── notificationService.ts      # Notifications in-app
+│   │   ├── offlineSyncService.ts       # Sync hors-ligne / file d'attente
+│   │   ├── partnerPaymentService.ts    # Paiements & abonnements partenaires
+│   │   ├── pavilionMetrics.ts          # Métriques pavillons & zones
+│   │   ├── pushNotificationService.ts  # Firebase FCM
+│   │   ├── qrCodeService.ts            # Génération QR codes
+│   │   ├── realtimeService.ts          # Abonnements Supabase Realtime
+│   │   ├── recommendationService.ts    # Recommandations personnalisées
+│   │   ├── roleVerificationService.ts  # Vérification rôles côté client
+│   │   ├── searchService.ts            # Recherche full-text
+│   │   ├── securityService.ts          # RPC Supabase opérations sécurisées
+│   │   ├── speedNetworking.ts          # Sessions speed networking
+│   │   ├── storageService.ts           # Upload Supabase Storage
+│   │   ├── templateLibraryService.ts   # Bibliothèque templates mini-sites
+│   │   ├── transactionService.ts       # Historique transactions
+│   │   └── zonesService.ts             # Zones de scan & contrôle d'accès
 │   │
-│   ├── store/                          # 14 stores Zustand
+│   ├── store/                          # 17 stores Zustand
 │   │   ├── authStore.ts                # Authentification & session
 │   │   ├── dashboardStore.ts           # État global dashboard
 │   │   ├── exhibitorStore.ts           # Profil exposant
 │   │   ├── networkingStore.ts          # Matching & networking
 │   │   ├── appointmentStore.ts         # Rendez-vous
-│   │   ├── chatStore.ts                # Messagerie
+│   │   ├── chatStore.ts                # Messagerie interne
+│   │   ├── chatbotStore.ts             # État chatbot IA
 │   │   ├── eventStore.ts               # Événements & inscriptions
-│   │   ├── adminDashboardStore.ts      # Métriques admin
-│   │   └── ...
+│   │   ├── adminDashboardStore.ts      # Métriques admin temps réel
+│   │   ├── visitorStore.ts             # Profil & quotas visiteur
+│   │   ├── mediaVisibilityStore.ts     # Visibilité médias (admin)
+│   │   ├── programmeStore.ts           # Programme conférences
+│   │   ├── navigationStore.ts          # État navigation globale
+│   │   ├── navVisibilityStore.ts       # Visibilité éléments nav
+│   │   ├── languageStore.ts            # Langue active (fr/en/ar)
+│   │   ├── filterStore.ts              # Filtres catalogue exposants
+│   │   └── newsStore.ts                # Articles et actualités
 │   │
 │   ├── lib/                            # Configuration & utilitaires
 │   │   ├── supabase.ts                 # Client Supabase configuré
@@ -551,7 +630,7 @@ npm run metrics-server
 ### Commandes npm disponibles
 
 ```bash
-npm run dev              # Serveur de développement Vite (port 9324)
+npm run dev              # Serveur de développement Vite (port 9323)
 npm run build            # Build production avec injection version
 npm run build:vercel     # Build optimisé pour Vercel
 npm run build:railway    # Build pour déploiement Railway
@@ -561,6 +640,8 @@ npm run preview          # Prévisualiser le build de production
 npm run start:server     # Démarrer le serveur Express.js
 npm run metrics-server   # Démarrer le serveur métriques admin
 npm run seed:templates   # Initialiser les templates mini-sites
+npm run test:unit        # Tests unitaires Vitest
+npm run test:e2e         # Tests E2E Playwright
 ```
 
 ---
@@ -572,6 +653,9 @@ npm run seed:templates   # Initialiser les templates mini-sites
 ```bash
 # Auto-deploy automatique sur push vers la branche main
 git push origin main
+
+# Déploiement manuel (recommandé)
+npx vercel --prod --archive=tgz
 
 # Build command configuré dans vercel.json
 npm run build:vercel
@@ -609,12 +693,51 @@ supabase db push
 ### Edge Functions — Supabase
 
 ```bash
-# Déployer toutes les fonctions email
+# Déployer toutes les fonctions
+supabase functions deploy --all
+
+# Ou individuellement
 supabase functions deploy send-contact-email
 supabase functions deploy send-registration-email
 supabase functions deploy send-validation-email
 supabase functions deploy send-exhibitor-payment-instructions
 ```
+
+#### Catalogue complet des Edge Functions (30+)
+
+| Fonction | Rôle |
+|---|---|
+| `send-contact-email` | Email formulaire de contact |
+| `send-registration-email` | Confirmation d'inscription avec QR code |
+| `send-validation-email` | Email de validation compte par admin |
+| `send-exhibitor-payment-instructions` | Instructions paiement exposant |
+| `send-partner-payment-instructions` | Instructions paiement partenaire |
+| `send-visitor-welcome-email` | Email de bienvenue visiteur |
+| `send-credentials` | Envoi identifiants de connexion |
+| `send-email-notification` | Notifications email génériques |
+| `send-template-email` | Email depuis template éditeur admin |
+| `send-scan-email` | Email de confirmation check-in QR |
+| `send-push-notification` | Push notification ciblée (FCM) |
+| `broadcast-push-notification` | Push notification en masse |
+| `create-paypal-order` | Initialisation paiement PayPal |
+| `capture-paypal-order` | Capture paiement PayPal |
+| `paypal-webhook` | Webhooks PayPal (IPN) |
+| `create-cmi-payment` | Initialisation paiement CMI |
+| `cmi-webhook` | Webhooks CMI (notifications paiement) |
+| `create-stripe-checkout` | Session Checkout Stripe |
+| `stripe-webhook` | Webhooks Stripe |
+| `generate-visitor-badge` | Génération badge visiteur (PDF) |
+| `generate-qr` | Génération QR codes dynamiques |
+| `generate-totp-secret` | Secret 2FA TOTP |
+| `verify-totp-token` | Vérification token 2FA |
+| `generate-backup-codes` | Codes de secours 2FA |
+| `verify-recaptcha` | Vérification reCAPTCHA v3 |
+| `scrape-and-create-minisite` | Scraping site web → mini-site auto |
+| `match-exhibitors` | Matching IA exposants côté serveur |
+| `sync-news-articles` | Synchronisation articles actualités |
+| `convert-text-to-speech` | Text-to-speech articles audio |
+| `create-collaborator-account` | Création comptes collaborateurs |
+| `delete-exhibitor` | Suppression sécurisée exposant |
 
 ---
 
@@ -677,14 +800,16 @@ npx artillery run tests/load/smoke.yml
 |---|---|
 | Row Level Security | Politiques RLS sur toutes les tables Supabase |
 | JWT | Tokens signés Supabase avec expiration automatique |
-| Rate limiting | Limitation des tentatives de login et d'envoi d'email |
-| reCAPTCHA v3 | Protège tous les formulaires publics contre les bots |
+| Rate limiting | Limitation des tentatives de login (5/15 min — `rateLimiter.ts`) |
+| reCAPTCHA v3 | Vérification côté serveur via Edge Function `verify-recaptcha` |
+| 2FA TOTP | Authentification à deux facteurs avec backup codes |
 | CORS | Liste blanche des origines autorisées uniquement |
 | HTTPS | Forcé en production via Vercel et Railway |
 | Session timeout | Déconnexion automatique après 30 min d'inactivité |
-| XSS | DOMPurify appliqué sur tout contenu utilisateur affiché |
-| Service Role Key | Jamais exposée côté client, serveur uniquement |
-| Audit Log | Traçabilité complète de toutes les actions admin |
+| XSS | `sanitizeHtml()` appliqué sur tout `dangerouslySetInnerHTML` |
+| Service Role Key | Jamais exposée côté client, serveur uniquement (`server.js`) |
+| Audit Log | Traçabilité complète via `auditService.ts` |
+| Opérations atomiques | RPC Supabase pour les opérations critiques (`securityService.ts`) |
 
 ### Cycle de vie d'un compte
 
@@ -711,17 +836,20 @@ active (compte opérationnel)
 
 ## Internationalisation
 
-La plateforme supporte **3 langues** via i18next avec détection automatique :
+La plateforme supporte **3 langues** via un système custom et i18next :
 
 | Langue | Code | Direction | Statut |
 |---|---|---|---|
 | Français | `fr` | LTR (gauche à droite) | Complet |
 | Anglais | `en` | LTR (gauche à droite) | Complet |
-| Arabe | `ar` | RTL (droite à gauche) | Partiel |
+| Arabe | `ar` | RTL (droite à gauche) | Complet |
 
+- Système custom : `useTranslation` hook + `languageStore` (Zustand)
+- Fichiers de traductions : `translations.fr.ts`, `translations.en.ts`, `translations.ar.ts`
 - Détection automatique via `i18next-browser-languagedetector`
 - Support RTL complet pour l'arabe avec adaptation CSS automatique
 - Sélecteur de langue accessible dans la navigation principale
+- 2 systèmes parallèles : store Zustand (principal) + i18next (pages publiques)
 
 ---
 
@@ -776,4 +904,17 @@ chore:    Maintenance (dépendances, configuration)
 
 ---
 
-*Développé pour SIB 2026 — Powered by React 18, Supabase, Vercel & Railway*
+---
+
+## Applications annexes
+
+| Application | Technologie | Description |
+|---|---|---|
+| `sib_zone_scanner/` | Flutter + Supabase | Scanner QR mobile natif — contrôle d'accès zones |
+| `sib-app/` | Capacitor (React → iOS/Android) | App mobile SIB 2026 |
+| `luxury-next/` | Next.js | Projet landing page séparé |
+| `server/ai-agent/` | Node.js | Agent IA backend pour chatbot |
+
+---
+
+*Développé pour SIB 2026 — Powered by React 18, Supabase, Vercel & Railway — v2.5.0*

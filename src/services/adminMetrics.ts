@@ -356,10 +356,9 @@ export class AdminMetricsService {
         .from('users')
         .select('id', { count: 'exact', head: true })
         .eq('type', 'exhibitor')
-        .gte('last_seen', fifteenMinutesAgo);
+        .gte('updated_at', fifteenMinutesAgo);
       return count || 0;
     } catch (err) {
-      console.error('AdminMetricsService.getOnlineExhibitors error', err);
       return 0;
     }
   }

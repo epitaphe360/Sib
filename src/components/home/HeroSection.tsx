@@ -57,20 +57,23 @@ export const HeroSection: React.FC = () => {
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-8">
             <img
-              src="/logo-ministere.png"
-              alt="Royaume du Maroc - Ministère de l'Équipement et de l'Eau"
-              className="h-24 md:h-32 w-auto object-contain transition-transform hover:scale-105 duration-300"
-              onError={(e) => {
-                const target = e.currentTarget;
-                target.onerror = null;
-                target.src = '/logo-ministere.svg';
-              }}
+              src="/logo-ministere.jpeg"
+              alt="Royaume du Maroc - Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville"
+              className="h-48 md:h-64 w-auto object-contain transition-transform hover:scale-105 duration-300"
             />
           </div>
         </div>
       </div>
 
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white overflow-hidden min-h-[90vh] flex items-center">
+      <section className="relative text-white overflow-hidden min-h-[90vh] flex items-center">
+      {/* Photo d'arrière-plan */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/sib_hero.webp')" }}
+      />
+      {/* Overlay sombre pour lisibilité du texte */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0a1a35]/80 via-[#1B365D]/70 to-[#0a2a1a]/75" />
+
       {/* Moroccan Zellige Pattern Background */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{

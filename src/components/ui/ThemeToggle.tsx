@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export function ThemeToggle() {
   const { isDark, toggleTheme } = useTheme();

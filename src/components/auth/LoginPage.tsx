@@ -128,10 +128,14 @@ export default function LoginPage() {
 
       // Envoyer le magic link via Supabase (SMTP custom configuré, aucun rate limit)
       const appUrl = import.meta.env.VITE_APP_URL || globalThis.location.origin;
+      const nextUrl = redirectUrl || '';
+      const callbackUrl = nextUrl
+        ? `${appUrl}/auth/callback?next=${encodeURIComponent(nextUrl)}`
+        : `${appUrl}/auth/callback`;
       const { error: otpError } = await supabase!.auth.signInWithOtp({
         email: normalizedEmail,
         options: {
-          emailRedirectTo: `${appUrl}/auth/callback`,
+          emailRedirectTo: callbackUrl,
           shouldCreateUser: false,
         },
       });

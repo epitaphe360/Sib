@@ -31,13 +31,14 @@ export default function OAuthCallbackPage() {
         await handleOAuthCallback();
         toast.success('Connexion réussie !');
 
+        // Attendre un tick pour que Zustand propage le state
+        await new Promise(resolve => setTimeout(resolve, 100));
+
         const next = searchParams.get('next');
         const { user } = useAuthStore.getState();
 
         if (next) {
           navigate(next, { replace: true });
-        } else if (user?.type === 'visitor' && user?.visitor_level === 'free') {
-          navigate(ROUTES.BADGE, { replace: true });
         } else if (user?.type === 'visitor') {
           navigate(ROUTES.VISITOR_DASHBOARD, { replace: true });
         } else if (user?.type === 'admin') {
@@ -47,7 +48,7 @@ export default function OAuthCallbackPage() {
         } else if (user?.type === 'exhibitor') {
           navigate(ROUTES.EXHIBITOR_DASHBOARD, { replace: true });
         } else {
-          navigate(ROUTES.DASHBOARD, { replace: true });
+          navigate(ROUTES.VISITOR_DASHBOARD, { replace: true });
         }
       } catch (err: any) {
         console.error('❌ OAuth callback error:', err);

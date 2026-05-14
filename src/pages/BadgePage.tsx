@@ -13,7 +13,33 @@ import { Card } from '../components/ui/Card';
 import PrintableBadgeA4 from '../components/badge/PrintableBadgeA4';
 
 function handlePrintBadge() {
-  globalThis.print();
+  const badgeEl = document.getElementById('printable-badge-a4');
+  if (!badgeEl) {
+    globalThis.print();
+    return;
+  }
+  const printWin = window.open('', '_blank', 'width=794,height=1123');
+  if (!printWin) {
+    globalThis.print();
+    return;
+  }
+  const baseUrl = window.location.origin;
+  printWin.document.write(
+    '<!DOCTYPE html><html><head>' +
+    '<base href="' + baseUrl + '">' +
+    '<style>' +
+    '@page{size:A4 portrait;margin:0}' +
+    'html,body{margin:0;padding:0;width:210mm;height:297mm;overflow:hidden}' +
+    '</style></head><body>' +
+    badgeEl.outerHTML +
+    '</body></html>'
+  );
+  printWin.document.close();
+  printWin.focus();
+  setTimeout(() => {
+    printWin.print();
+    printWin.close();
+  }, 800);
 }
 
 export default function BadgePage() {
@@ -88,11 +114,14 @@ export default function BadgePage() {
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-8">
       <style>{`
-        @media print {
-          body * { visibility: hidden; }
-          .badge-a4-print, .badge-a4-print * { visibility: visible; }
-          .badge-a4-print { position: fixed; inset: 0; }
-          .no-print { display: none !important; }
+        .badge-scale-wrapper {
+          transform-origin: top left;
+          transform: scale(0.48);
+          width: 210mm;
+          height: 297mm;
+          position: absolute;
+          top: 12px;
+          left: 12px;
         }
       `}</style>
 
@@ -146,7 +175,20 @@ export default function BadgePage() {
 
       {badge && (
         <div className="badge-a4-print">
-          <PrintableBadgeA4 badge={badge} loadConfig={true} />
+          {/* Conteneur de hauteur calculée : 297mm * 0.48 */}
+          <div
+            style={{
+              background: '#e5e7eb',
+              borderRadius: '8px',
+              padding: '12px',
+              height: 'calc(297mm * 0.48 + 24px)',
+              position: 'relative',
+            }}
+          >
+            <div className="badge-scale-wrapper">
+              <PrintableBadgeA4 badge={badge} loadConfig={true} />
+            </div>
+          </div>
         </div>
       )}
     </div>

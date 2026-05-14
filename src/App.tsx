@@ -195,6 +195,7 @@ const SalonsManagementPage = lazyRetry(() => import('./pages/admin/SalonsManagem
 const MediaPartnerDashboard = lazyRetry(() => import('./components/dashboard/MediaPartnerDashboard'));
 const MediaPartnerSignUpPage = lazyRetry(() => import('./pages/auth/MediaPartnerSignUpPage'));
 const MatchmakingDashboard = lazyRetry(() => import('./components/networking/MatchmakingDashboard').then((m) => ({ default: m.MatchmakingDashboard })));
+const B2BNetworkingAIPage = lazyRetry(() => import('./pages/networking/B2BNetworkingAIPage'));
 const LiveEventManager = lazyRetry(() => import('./pages/admin/media/LiveEventManager').then((m) => ({ default: m.LiveEventManager })));
 const ChatBot = lazyRetry(() => import('./components/chatbot/ChatBot').then((m) => ({ default: m.ChatBot })));
 const ChatBotToggle = lazyRetry(() => import('./components/chatbot/ChatBotToggle').then((m) => ({ default: m.ChatBotToggle })));
@@ -253,6 +254,9 @@ const App = () => {
   const { currentLanguage } = useLanguageStore();
   const location = useLocation();
   const isPrintRoute = location.pathname.startsWith('/print/');
+  const isAdminRoute = location.pathname.startsWith('/admin/') || location.pathname === '/admin';
+  const isExhibitorRoute = location.pathname.startsWith('/exhibitor/') || location.pathname === '/exhibitor';
+  const isVisitorDashboardRoute = location.pathname.startsWith('/visitor/dashboard') || location.pathname === '/visitor/dashboard';
 
   // Tracking des visites de pages pour le trafic hebdomadaire (admin dashboard)
   usePageTracking();
@@ -335,6 +339,7 @@ const App = () => {
             <Route path={ROUTES.PAVILIONS} element={<PavillonsPage />} />
             <Route path={ROUTES.METRICS} element={<ProtectedRoute><MetricsPage /></ProtectedRoute>} />
             <Route path={ROUTES.NETWORKING} element={<NetworkingPage />} />
+            <Route path={ROUTES.B2B_NETWORKING_AI} element={<ProtectedRoute><B2BNetworkingAIPage /></ProtectedRoute>} />
             <Route path={ROUTES.INTERACTION_HISTORY} element={<ProtectedRoute><InteractionHistoryPage /></ProtectedRoute>} />
             <Route path={ROUTES.NETWORKING_ROOMS} element={<ProtectedRoute><NetworkingRoomsPage /></ProtectedRoute>} />
             <Route path={ROUTES.SPEED_NETWORKING} element={<ProtectedRoute><SpeedNetworkingPage /></ProtectedRoute>} />
@@ -579,7 +584,9 @@ const App = () => {
 
       {!isPrintRoute && (
       <Suspense fallback={null}>
-        {/* ChatBot */}
+        {/* ChatBot — caché sur les pages admin, exposant et visiteur dashboard */}
+        {!isAdminRoute && !isExhibitorRoute && !isVisitorDashboardRoute && (
+        <>
         <ChatBot
           isOpen={isChatBotOpen}
           onToggle={() => setIsChatBotOpen(!isChatBotOpen)}
@@ -600,6 +607,8 @@ const App = () => {
           offsetSide={24}
           defaultVisible={true}
         />
+        </>
+        )}
 
         {/* Dev Tools - Subscription Switcher (Development Only) */}
         {import.meta.env.DEV && <DevSubscriptionSwitcher />}

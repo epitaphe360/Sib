@@ -1,0 +1,2 @@
+﻿components\partner\PartnerProfileCreationModal.tsx L217: placeholder="Entreprise BTP spécialisée en construction durable, rénovation et gestion de projets de bâtiments à l'échelle nationale."
+pages\PartnerDetailPage.tsx L891: return "Ingénierie et expertise en construction couvrant la conception, la réalisation et la maintenance des bâtiments et infrastructures BTP.";

@@ -5,6 +5,7 @@ import { Button } from '../ui/Button';
 import { RentalBanner } from '../common/RentalBanner';
 import { ROUTES } from '../../lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
 
 export function ServicesSection() {
   const { t } = useTranslation();
@@ -95,7 +96,7 @@ export function ServicesSection() {
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               {t('services.hours')}
             </h3>
-            <p className="text-sm text-gray-600 mb-4 flex-grow" dangerouslySetInnerHTML={{ __html: t('services.hours_desc') }} />
+            <p className="text-sm text-gray-600 mb-4 flex-grow" dangerouslySetInnerHTML={{ __html: sanitizeHtml(t('services.hours_desc')) }} />
             <div className="text-xs text-gray-500 mt-auto">
               {t('services.timezone')}
             </div>

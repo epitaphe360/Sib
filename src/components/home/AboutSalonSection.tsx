@@ -21,6 +21,7 @@ import {
 import { ROUTES } from '../../lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
 import { MoroccanPattern } from '../ui/MoroccanDecor';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
 
 export const AboutSalonSection: React.FC = () => {
   const { t } = useTranslation();
@@ -84,9 +85,9 @@ export const AboutSalonSection: React.FC = () => {
               <h2 className="text-3xl lg:text-5xl font-light text-[#1A1A1A] mb-6" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
                 SIB 2026 — <span style={{ color: '#C9A84C' }}>{t('home.about_subtitle')}</span>
               </h2>
-              <p className="text-lg text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: t('about.desc1') }} />
-              <p className="text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: t('about.desc2') }} />
-              <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: t('about.desc3') }} />
+              <p className="text-lg text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: sanitizeHtml(t('about.desc1')) }} />
+              <p className="text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: sanitizeHtml(t('about.desc2')) }} />
+              <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: sanitizeHtml(t('about.desc3')) }} />
             </div>
 
             {/* Features Grid */}

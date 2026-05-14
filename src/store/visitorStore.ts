@@ -342,7 +342,7 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
           // Récupérer les informations du salon (configuration globale) (optimized: 60% bandwidth reduction)
           const { data: salonConfig, error: salonError } = await supabaseClient
             .from('salon_config')
-            .select('name, start_date, end_date, venue, city, country, address, opening_time, closing_time, exhibitors_count, visitors_count, conferences_count, countries_count')
+            .select('name, start_date, end_date, venue, location')
             .maybeSingle();
 
           if (salonError) {console.warn('Erreur lors de la récupération des infos salon:', salonError);}
@@ -413,19 +413,19 @@ export const useVisitorStore = create<VisitorState>((set, get) => ({
               },
               location: {
                 venue: salonConfig.venue || '',
-                city: salonConfig.city || '',
-                country: salonConfig.country || '',
-                address: salonConfig.address || ''
+                city: '',
+                country: '',
+                address: salonConfig.location || ''
               },
               hours: {
-                opening: salonConfig.opening_time || '09:00',
-                closing: salonConfig.closing_time || '18:00'
+                opening: '09:00',
+                closing: '18:00'
               },
               stats: {
-                exhibitors: salonConfig.exhibitors_count || 0,
-                visitors: salonConfig.visitors_count || 0,
-                conferences: salonConfig.conferences_count || 0,
-                countries: salonConfig.countries_count || 0
+                exhibitors: 0,
+                visitors: 0,
+                conferences: 0,
+                countries: 0
               }
             } : null,
             isLoading: false

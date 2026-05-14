@@ -33,14 +33,14 @@ export function VisitorHeader({
     >
       <div className="rounded-2xl shadow-2xl mb-6 overflow-hidden">
         <div className="h-1 w-full bg-gradient-to-r from-[#C9A84C] via-[#E8C96A] to-[#C9A84C]" />
-        <div className="bg-[#0F2034] p-8">
+        <div className="bg-[#0F2034] p-5">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-center space-x-4">
-              <div className="bg-[#C9A84C]/15 backdrop-blur-sm p-4 rounded-xl border border-[#C9A84C]/30">
-                <Sparkles className="h-10 w-10 text-[#C9A84C]" />
+              <div className="bg-[#C9A84C]/15 backdrop-blur-sm p-3 rounded-xl border border-[#C9A84C]/30">
+                <Sparkles className="h-7 w-7 text-[#C9A84C]" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white mb-1">{t('visitor.visitor_area')}</h1>
+                <h1 className="text-xl font-bold text-white mb-1">{t('visitor.visitor_area')}</h1>
                 <p className="text-slate-300">
                   {t('visitor.welcome_message', { name: user.name, level: userLevel.toUpperCase() })}
                 </p>

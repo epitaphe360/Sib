@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Shield, AlertTriangle, BarChart3, FileText, Mail, Newspaper, Image, Calendar, Mic2, Building2 } from 'lucide-react';
+import { Shield, AlertTriangle, BarChart3 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
 import { useAdminDashboard } from '../../hooks/useAdminDashboard';
@@ -95,72 +95,6 @@ export default function AdminDashboard() {
           onToggleRegistrationRequests={() => ctx.setShowRegistrationRequests(v => !v)}
           t={t}
         />
-
-        {/* Acces CMS explicites */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.4 }}
-          className="mb-8"
-        >
-          <div
-            className="rounded-2xl border border-gray-100 p-5 bg-white shadow-sm"
-          >
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h3 className="text-base font-bold text-indigo-900 tracking-wide uppercase" style={{ letterSpacing: '0.08em' }}>Accès CMS</h3>
-                <p className="text-xs mt-1 text-gray-500">Gestion complète du contenu et des templates</p>
-              </div>
-              <div className="w-8 h-0.5 rounded-full bg-indigo-300" />
-            </div>
-
-            <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
-              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              {([
-                { to: ROUTES.ADMIN_CONTENT,         Icon: FileText,   label: 'Contenu pages',   sub: 'Modifier les contenus des pages' },
-                { to: ROUTES.ADMIN_EMAIL_TEMPLATES, Icon: Mail,       label: 'Templates email', sub: 'Editer les emails envoyes' },
-                { to: ROUTES.ADMIN_NEWS,            Icon: Newspaper,  label: 'Actualites',      sub: 'Gerer les articles et news' },
-                { to: ROUTES.ADMIN_MEDIA,           Icon: Image,      label: 'Medias',          sub: 'Bibliotheque images/videos' },
-                { to: ROUTES.ADMIN_EVENTS,          Icon: Calendar,   label: 'Programme',       sub: 'Gerer le programme scientifique' },
-                { to: ROUTES.ADMIN_SPEAKERS,        Icon: Mic2,       label: 'Intervenants',    sub: 'Gerer les speakers du salon' },
-                { to: ROUTES.ADMIN_SALONS,          Icon: Building2,  label: 'Salons',          sub: 'Gerer les editions du salon' },
-              ] as const).map(({ to, Icon, label, sub }) => (
-                <motion.div
-                  key={label}
-                  variants={{ hidden: { opacity: 0, y: 14, scale: 0.94 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 160, damping: 14 } } }}
-                  whileHover={{ y: -4, scale: 1.03, boxShadow: '0 0 24px rgba(201,168,76,0.18)' }}
-                  whileTap={{ scale: 0.97 }}
-                >
-                  <Link to={to} className="block p-4 rounded-xl h-full transition-colors bg-gray-50 border border-gray-100"
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(99,102,241,0.4)'; (e.currentTarget as HTMLElement).style.background = 'rgba(99,102,241,0.05)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgb(243,244,246)'; (e.currentTarget as HTMLElement).style.background = '#f8fafc'; }}
-                  >
-                    <div className="flex items-center gap-2 font-semibold text-sm text-indigo-900"><Icon className="h-4 w-4 text-indigo-500" /> {label}</div>
-                    <p className="text-xs mt-1.5 text-gray-500">{sub}</p>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Premium section divider */}
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="my-8 flex items-center gap-4 origin-left"
-        >
-          <div className="w-2 h-2 rounded bg-indigo-400" />
-          <div className="flex-1 h-px bg-gradient-to-r from-indigo-200 to-transparent" />
-        </motion.div>
 
         <AdminNavVisibility />
 

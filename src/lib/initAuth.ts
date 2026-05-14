@@ -13,6 +13,20 @@ export function isAuthInitialized(): boolean {
 }
 
 /**
+ * Efface les clés de session Supabase du localStorage pour forcer une nouvelle connexion.
+ */
+function clearInvalidSession() {
+  try {
+    const prefix = 'sb-sbyizudifmqakzxjlndr-auth-token';
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith(prefix) || k === 'sib-auth-storage')
+      .forEach((k) => localStorage.removeItem(k));
+  } catch {
+    // ignore
+  }
+}
+
+/**
  * Initialize auth state from Supabase session
  * Call this at app startup to restore user session
  */
@@ -81,12 +95,44 @@ export async function initializeAuth() {
       return;
     }
 
+    // ✅ Écouter les événements Supabase — notamment SIGNED_OUT déclenché automatiquement
+    // quand le SDK détecte un refresh token invalide (évite l'erreur console non capturée)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        // Le SDK a invalidé la session (refresh token expiré/révoqué)
+        // Nettoyer le store React sans appeler supabase.auth.signOut() à nouveau
+        useAuthStore.setState({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+          isLoading: false,
+        });
+        clearInvalidSession();
+      }
+    });
+
     const { data: { session }, error } = await supabase.auth.getSession();
 
+    // Une fois la session vérifiée, on n'a plus besoin du listener temporaire
+    subscription.unsubscribe();
+
     if (error) {
-      console.error('[AUTH] Erreur verification session:', error);
-      if (useAuthStore.getState().isAuthenticated) {
+      const msg = (error as { message?: string }).message ?? '';
+      const isTokenError =
+        msg.includes('Refresh Token') ||
+        msg.includes('refresh_token') ||
+        msg.includes('Invalid') ||
+        (error as { status?: number }).status === 400;
+
+      if (isTokenError) {
+        // Token invalide côté serveur — nettoyer silencieusement
+        clearInvalidSession();
         useAuthStore.getState().logout();
+      } else {
+        console.error('[AUTH] Erreur verification session:', error);
+        if (useAuthStore.getState().isAuthenticated) {
+          useAuthStore.getState().logout();
+        }
       }
       authInitialized = true;
       useAuthStore.setState({ isLoading: false });
@@ -104,6 +150,7 @@ export async function initializeAuth() {
     authInitialized = true;
   } catch (error) {
     console.error('[AUTH] Erreur initialisation auth:', error);
+    clearInvalidSession();
     useAuthStore.getState().logout();
     authInitialized = true;
     useAuthStore.setState({ isLoading: false });

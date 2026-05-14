@@ -67,7 +67,7 @@ export function ExhibitorStatsGrid({ dashboardStats, onStatClick }: ExhibitorSta
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+      className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
     >
       {stats.map((stat) => (
         <motion.div
@@ -76,10 +76,10 @@ export function ExhibitorStatsGrid({ dashboardStats, onStatClick }: ExhibitorSta
           className="cursor-pointer"
           onClick={() => onStatClick(stat.type)}
         >
-          <Card className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-transparent hover:border-current group">
+          <Card className="p-4 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-transparent hover:border-current group">
             <div className="flex items-center justify-between mb-3">
-              <div className={`p-3 bg-gradient-to-br ${stat.gradient} rounded-lg shadow-md group-hover:scale-110 transition-transform duration-300`}>
-                <stat.icon className="h-6 w-6 text-white" />
+              <div className={`p-2 bg-gradient-to-br ${stat.gradient} rounded-lg shadow-md group-hover:scale-110 transition-transform duration-300`}>
+                <stat.icon className="h-5 w-5 text-white" />
               </div>
               <div
                 className={`text-sm font-medium px-3 py-1 rounded-full ${
@@ -94,7 +94,7 @@ export function ExhibitorStatsGrid({ dashboardStats, onStatClick }: ExhibitorSta
               </div>
             </div>
             <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
-            <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+            <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
           </Card>
         </motion.div>
       ))}

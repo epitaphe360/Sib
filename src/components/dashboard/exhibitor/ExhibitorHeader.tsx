@@ -38,14 +38,14 @@ export function ExhibitorHeader({
         {/* Ligne gold */}
         <div className="h-1 w-full bg-gradient-to-r from-[#C9A84C] via-[#E8C96A] to-[#C9A84C]" />
 
-        <div className="relative max-w-7xl mx-auto px-6 py-8">
+        <div className="relative max-w-7xl mx-auto px-6 py-5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center space-x-4 w-full md:w-auto">
-              <div className="bg-[#C9A84C]/15 border border-[#C9A84C]/30 p-4 rounded-xl">
-                <Building2 className="h-10 w-10 text-[#C9A84C]" />
+              <div className="bg-[#C9A84C]/15 border border-[#C9A84C]/30 p-3 rounded-xl">
+                <Building2 className="h-7 w-7 text-[#C9A84C]" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white mb-1">{t('exhibitor.my_booth')}</h1>
+                <h1 className="text-xl font-bold text-white mb-1">{t('exhibitor.my_booth')}</h1>
                 <p className="text-slate-300">
                   {t('dashboard.welcome')} {user?.profile?.firstName || 'Exposant'},{' '}
                   {t('exhibitor.booth_location')} ✨

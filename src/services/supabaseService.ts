@@ -1738,7 +1738,7 @@ export class SupabaseService {
       const { data, error } = await safeSupabase
         .from('events')
         .select('*')
-        .order('event_date', { ascending: true });
+        .order('start_date', { ascending: true });
 
       if (error) {throw error;}
 
@@ -1766,7 +1766,7 @@ export class SupabaseService {
       const { data, error, count } = await safeSupabase
         .from('events')
         .select('*', { count: 'exact' })
-        .order('event_date', { ascending: true })
+        .order('start_date', { ascending: true })
         .range(offset, offset + limit - 1);
 
       if (error) {throw error;}

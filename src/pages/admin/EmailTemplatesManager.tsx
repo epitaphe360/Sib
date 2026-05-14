@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { Save, Eye, Code, Type, Mail, ArrowLeft } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 
 interface EmailTemplate {
   id: string;
@@ -330,7 +331,7 @@ export default function EmailTemplatesManager() {
                         {previewMode === 'html' ? (
                           <div
                             dangerouslySetInnerHTML={{
-                              __html: getPreviewContent(formData.html_content)
+                              __html: sanitizeHtml(getPreviewContent(formData.html_content))
                             }}
                           />
                         ) : (

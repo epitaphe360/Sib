@@ -133,7 +133,7 @@ export class OAuthService {
         .from('users')
         .select('id, email, name, type, status, profile, visitor_level, created_at, updated_at')
         .eq('id', session.user.id)
-        .single();
+        .maybeSingle();
 
       if (profileError) {
         console.error('❌ Error getting user profile:', profileError);

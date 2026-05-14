@@ -1,0 +1,230 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\samye\\OneDrive\\Desktop\\devellopement\\SIB\\Sib\\playwright.config.ts",
+    "rootDir": "C:/Users/samye/OneDrive/Desktop/devellopement/SIB/Sib",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "C:\\Users\\samye\\OneDrive\\Desktop\\devellopement\\SIB\\Sib\\tests\\global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/samye/OneDrive/Desktop/devellopement/SIB/Sib/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/samye/OneDrive/Desktop/devellopement/SIB/Sib",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev -- --port 9324",
+      "port": 9324,
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "stdout": "pipe",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "tests\\e2e\\all-modules.spec.ts",
+      "file": "tests/e2e/all-modules.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Public Pages - Navigation & Rendering",
+          "file": "tests/e2e/all-modules.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "HOME: should render homepage with hero section",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4350,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-16T21:18:29.659Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\samye\\OneDrive\\Desktop\\devellopement\\SIB\\Sib\\test-results\\tests-e2e-all-modules-Publ-7e183--homepage-with-hero-section-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "627eff88bfb73c713757-dc8ef7b909ca4fb459e8",
+              "file": "tests/e2e/all-modules.spec.ts",
+              "line": 12,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Media Pages",
+          "file": "tests/e2e/all-modules.spec.ts",
+          "line": 70,
+          "column": 6,
+          "specs": [
+            {
+              "title": "WEBINARS: should render webinars page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1332,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-16T21:18:34.081Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\samye\\OneDrive\\Desktop\\devellopement\\SIB\\Sib\\test-results\\tests-e2e-all-modules-Medi-f1747-should-render-webinars-page-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "627eff88bfb73c713757-33acf740c598aef4c09a",
+              "file": "tests/e2e/all-modules.spec.ts",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "MEDIA_LIBRARY: should render media library",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1688,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-16T21:18:35.421Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\samye\\OneDrive\\Desktop\\devellopement\\SIB\\Sib\\test-results\\tests-e2e-all-modules-Medi-043cb-should-render-media-library-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "627eff88bfb73c713757-a67af047e5a37397d31f",
+              "file": "tests/e2e/all-modules.spec.ts",
+              "line": 86,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-04-16T21:18:28.106Z",
+    "duration": 9079.502,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

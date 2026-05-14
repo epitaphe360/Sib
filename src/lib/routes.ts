@@ -7,6 +7,7 @@
   PAVILIONS: '/pavilions',
   METRICS: '/metrics',
   NETWORKING: '/networking',
+  B2B_NETWORKING_AI: '/networking/b2b-ai',
   EVENTS: '/events',
   LOGIN: '/login',
   DEMO_ACCOUNTS: '/demo',
