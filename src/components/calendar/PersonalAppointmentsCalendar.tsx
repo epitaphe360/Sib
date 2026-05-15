@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
-import { Calendar, Clock, User, MapPin, Video, Globe, CheckCircle, XCircle, AlertCircle, ChevronLeft, ChevronRight, Sparkles, CalendarDays, Users } from 'lucide-react';
+import { Calendar, Clock, User, MapPin, Video, Globe, CheckCircle, XCircle, AlertCircle, Sparkles, CalendarDays, Users } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -8,6 +8,7 @@ import { useAppointmentStore } from '../../store/appointmentStore';
 import useAuthStore from '../../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { getSalonDateStrings } from '../../config/salonInfo';
 
 interface PersonalAppointmentsCalendarProps {
   userType: 'exhibitor' | 'partner' | 'visitor';
@@ -26,7 +27,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
     isLoading
   } = useAppointmentStore();
 
-  const [selectedWeek, setSelectedWeek] = useState(new Date('2026-04-01T00:00:00'));
+  const [selectedWeek, setSelectedWeek] = useState(new Date('2026-11-25T00:00:00'));
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all');
 
   useEffect(() => {
@@ -114,12 +115,8 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
     }
   };
 
-  const getWeekDays = (date: Date) => {
-    return [
-      new Date('2026-04-01T00:00:00'),
-      new Date('2026-04-02T00:00:00'),
-      new Date('2026-04-03T00:00:00')
-    ];
+  const getWeekDays = (_date: Date) => {
+    return getSalonDateStrings().map(d => new Date(`${d}T00:00:00`));
   };
 
   const weekDays = getWeekDays(selectedWeek);
@@ -234,7 +231,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
         </div>
 
         {/* Grille Temporelle Premium */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {weekDays.map((day, index) => {
             const dayAppointments = weekAppointments.filter(appointment => {
               const slot = timeSlots.find(s => s.id === appointment.timeSlotId);
@@ -275,7 +272,9 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                         isToday || hasAppointments ? 'text-white' : 'text-gray-900'
                       }`}>
                         {day.getDate()}
-                        <span className="text-base font-bold opacity-40 uppercase tracking-widest">AVR</span>
+                        <span className="text-base font-bold opacity-40 uppercase tracking-widest">
+                          {day.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '').toUpperCase()}
+                        </span>
                       </div>
                     </div>
                     {isToday && (
