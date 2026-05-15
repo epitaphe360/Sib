@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, memo } from 'react';
+﻿import React, { useState, useCallback, useEffect, memo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Menu,
@@ -10,6 +10,7 @@ import {
   Video,
   Mic,
   Play,
+  ArrowLeft,
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { Button } from '../ui/Button';
@@ -652,7 +653,32 @@ export const Header: React.FC = memo(() => {
             </button>
           </div>
         </div>
-
+        {/* ── Barre retour au Tableau de bord (admin / exposant / partenaire) ── */}
+        {isAuthenticated && user && (() => {
+          let dashboardRoute: string | null = null;
+          const label = t('common.back_dashboard');
+          if (user.type === 'admin' && location.pathname.startsWith('/admin/') && location.pathname !== ROUTES.ADMIN_DASHBOARD) {
+            dashboardRoute = ROUTES.ADMIN_DASHBOARD;
+          } else if (user.type === 'exhibitor' && location.pathname.startsWith('/exhibitor/') && location.pathname !== ROUTES.EXHIBITOR_DASHBOARD) {
+            dashboardRoute = ROUTES.EXHIBITOR_DASHBOARD;
+          } else if (user.type === 'partner' && location.pathname.startsWith('/partner') && location.pathname !== ROUTES.PARTNER_DASHBOARD) {
+            dashboardRoute = ROUTES.PARTNER_DASHBOARD;
+          }
+          if (!dashboardRoute) return null;
+          return (
+            <div className="border-t border-[#E7D192]/20 bg-[#FDFAF4]">
+              <div className="flex items-center px-4 sm:px-6 lg:px-8 h-8">
+                <Link
+                  to={dashboardRoute}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1B365D]/70 hover:text-[#C9A84C] transition-colors"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  {label}
+                </Link>
+              </div>
+            </div>
+          );
+        })()}
         {/* Overlay sombre pour fermer le menu en tapant dehors */}
         {isMenuOpen && (
           <div
