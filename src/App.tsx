@@ -258,6 +258,8 @@ if (import.meta.env.DEV) {
 
 const App = () => {
   const [isChatBotOpen, setIsChatBotOpen] = React.useState(false);
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith('/admin');
   const { currentLanguage } = useLanguageStore();
 
   // Tracking des visites de pages pour le trafic hebdomadaire (admin dashboard)
@@ -591,27 +593,31 @@ const App = () => {
       <Footer />
 
       <Suspense fallback={null}>
-        {/* ChatBot */}
-        <ChatBot
-          isOpen={isChatBotOpen}
-          onToggle={() => setIsChatBotOpen(!isChatBotOpen)}
-        />
+        {/* ChatBot — masqué sur les pages admin */}
+        {!isAdminPage && (
+          <ChatBot
+            isOpen={isChatBotOpen}
+            onToggle={() => setIsChatBotOpen(!isChatBotOpen)}
+          />
+        )}
 
         {/* ChatBot Toggle Button */}
-        {!isChatBotOpen && (
+        {!isAdminPage && !isChatBotOpen && (
           <ChatBotToggle
             onClick={() => setIsChatBotOpen(true)}
             hasUnreadMessages={false}
           />
         )}
 
-        {/* WhatsApp Floating Widget */}
-        <WhatsAppFloatingWidget
-          position="bottom-right"
-          offsetBottom={100}
-          offsetSide={24}
-          defaultVisible={true}
-        />
+        {/* WhatsApp Floating Widget — masqué sur les pages admin */}
+        {!isAdminPage && (
+          <WhatsAppFloatingWidget
+            position="bottom-right"
+            offsetBottom={100}
+            offsetSide={24}
+            defaultVisible={true}
+          />
+        )}
 
         {/* Dev Tools - Subscription Switcher (Development Only) */}
         {import.meta.env.DEV && <DevSubscriptionSwitcher />}
