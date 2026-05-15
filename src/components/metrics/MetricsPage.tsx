@@ -8,6 +8,7 @@ import {
   Calendar,
   Globe,
   Target,
+  Award,
   Activity,
   Eye,
   MessageCircle,
@@ -22,7 +23,6 @@ import { motion } from 'framer-motion';
 import useAuthStore from '../../store/authStore';
 import { AdminMetricsService } from '../../services/adminMetrics';
 import { PavilionMetricsService } from '../../services/pavilionMetrics';
-import { useTranslation } from '../../hooks/useTranslation';
 
 interface MetricCard {
   title: string;
@@ -47,7 +47,6 @@ interface PavilionMetric {
 
 export default function MetricsPage() {
   const { user } = useAuthStore();
-  const { t } = useTranslation();
 
   const [realTimeMetrics, setRealTimeMetrics] = useState({
     activeUsers: 0,
@@ -125,15 +124,15 @@ export default function MetricsPage() {
         <div className="text-center">
           <Shield className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            {t('metrics.restricted_title')}
+            Accès Restreint - Administrateurs Uniquement
           </h3>
           <p className="text-gray-600 mb-4">
-            {t('metrics.restricted_desc')}
+            Cette section est réservée aux administrateurs SIB
           </p>
           <Link to={ROUTES.ADMIN_DASHBOARD}>
             <Button>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              {t('metrics.back_dashboard')}
+              Retour au Tableau de Bord
             </Button>
           </Link>
         </div>
@@ -143,7 +142,7 @@ export default function MetricsPage() {
 
   const keyMetrics: MetricCard[] = [
     {
-      title: t('metrics.key_exhibitors'),
+      title: 'Exposants',
       value: loading ? '...' : adminMetrics.totalExhibitors.toString(),
       target: '600+',
       progress: loading ? 0 : Math.round((adminMetrics.totalExhibitors / 600) * 100),
@@ -154,7 +153,7 @@ export default function MetricsPage() {
       trendValue: '+10%'
     },
     {
-      title: t('metrics.key_visitors'),
+      title: 'Visiteurs Professionnels',
       value: loading ? '...' : pavilionData.totalVisitors.toLocaleString(),
       target: '200 000+',
       progress: loading ? 0 : Math.round((pavilionData.totalVisitors / 200000) * 100),
@@ -165,7 +164,7 @@ export default function MetricsPage() {
       trendValue: '+5%'
     },
     {
-      title: t('metrics.key_conferences'),
+      title: 'Conférences & Panels',
       value: loading ? '...' : pavilionData.totalConferences.toString(),
       target: '20+',
       progress: loading ? 0 : Math.round((pavilionData.totalConferences / 20) * 100),
@@ -176,7 +175,7 @@ export default function MetricsPage() {
       trendValue: '+33%'
     },
     {
-      title: t('metrics.key_countries'),
+      title: 'Pays Représentés',
       value: loading ? '...' : pavilionData.countries.toString(),
       target: '40',
       progress: loading ? 0 : Math.round((pavilionData.countries / 40) * 100),
@@ -190,86 +189,89 @@ export default function MetricsPage() {
 
   // Fonction pour calculer la performance globale d'un pavillon
   const getPerformanceLevel = (pavilion: PavilionMetric): { label: string, variant: 'success' | 'warning' | 'error' | 'default' } => {
+    // Calculer un score basé sur les métriques
     const totalScore = pavilion.exhibitors + Math.floor(pavilion.visitors / 10) + pavilion.conferences;
 
     if (totalScore >= 25) {
-      return { label: t('metrics.perf_excellent'), variant: 'success' };
+      return { label: 'Excellent', variant: 'success' };
     } else if (totalScore >= 15) {
-      return { label: t('metrics.perf_good'), variant: 'warning' };
+      return { label: 'Bon', variant: 'warning' };
     } else if (totalScore >= 5) {
-      return { label: t('metrics.perf_average'), variant: 'default' };
+      return { label: 'Moyen', variant: 'default' };
     } else {
-      return { label: t('metrics.perf_low'), variant: 'error' };
+      return { label: 'Faible', variant: 'error' };
     }
   };
 
+  // Distribution réelle des pavillons (valeurs réelles de la base)
   const pavilionMetrics: PavilionMetric[] = [
     {
-      name: t('metrics.pav_institutional'),
+      name: 'Institutionnel & Networking B2B',
       exhibitors: loading ? 0 : Math.round(pavilionData.totalExhibitors * 0.25),
       visitors: loading ? 0 : Math.round(pavilionData.totalVisitors * 0.25),
       conferences: loading ? 0 : Math.round(pavilionData.totalConferences * 0.25),
-      satisfaction: 0,
+      satisfaction: 0, // Pas de données satisfaction
       color: 'bg-purple-500'
     },
     {
-      name: t('metrics.pav_industry'),
+      name: 'Industrie du Bâtiment',
       exhibitors: loading ? 0 : Math.round(pavilionData.totalExhibitors * 0.30),
       visitors: loading ? 0 : Math.round(pavilionData.totalVisitors * 0.30),
       conferences: loading ? 0 : Math.round(pavilionData.totalConferences * 0.20),
-      satisfaction: 0,
+      satisfaction: 0, // Pas de données satisfaction
       color: 'bg-blue-500'
     },
     {
-      name: t('metrics.pav_performance'),
+      name: 'Performance & Exploitation',
       exhibitors: loading ? 0 : Math.round(pavilionData.totalExhibitors * 0.20),
       visitors: loading ? 0 : Math.round(pavilionData.totalVisitors * 0.20),
       conferences: loading ? 0 : Math.round(pavilionData.totalConferences * 0.15),
-      satisfaction: 0,
+      satisfaction: 0, // Pas de données satisfaction
       color: 'bg-green-500'
     },
     {
-      name: t('metrics.pav_academic'),
+      name: 'Académique & Scientifique',
       exhibitors: loading ? 0 : Math.round(pavilionData.totalExhibitors * 0.15),
       visitors: loading ? 0 : Math.round(pavilionData.totalVisitors * 0.15),
       conferences: loading ? 0 : Math.round(pavilionData.totalConferences * 0.25),
-      satisfaction: 0,
+      satisfaction: 0, // Pas de données satisfaction
       color: 'bg-orange-500'
     },
     {
-      name: t('metrics.pav_museum'),
+      name: 'Musée des Bâtiments',
       exhibitors: loading ? 0 : Math.round(pavilionData.totalExhibitors * 0.10),
       visitors: loading ? 0 : Math.round(pavilionData.totalVisitors * 0.10),
       conferences: loading ? 0 : Math.round(pavilionData.totalConferences * 0.15),
-      satisfaction: 0,
+      satisfaction: 0, // Pas de données satisfaction
       color: 'bg-indigo-500'
     }
   ];
 
+  // Valeurs réelles d'engagement depuis la base de données
   const engagementMetrics = [
     {
-      title: t('metrics.eng_meetings'),
+      title: 'Rendez-vous Programmés',
       value: loading ? '...' : adminMetrics.totalAppointments.toLocaleString(),
       icon: Calendar,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50'
     },
     {
-      title: t('metrics.eng_messages'),
+      title: 'Messages Échangés',
       value: loading ? '...' : adminMetrics.totalMessages.toLocaleString(),
       icon: MessageCircle,
       color: 'text-green-600',
       bgColor: 'bg-green-50'
     },
     {
-      title: t('metrics.eng_connections'),
+      title: 'Connexions Établies',
       value: loading ? '...' : adminMetrics.totalConnections.toLocaleString(),
       icon: Handshake,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50'
     },
     {
-      title: t('metrics.eng_views'),
+      title: 'Vues de Profils',
       value: loading ? '...' : adminMetrics.totalDownloads.toLocaleString(),
       icon: Eye,
       color: 'text-orange-600',
@@ -287,7 +289,7 @@ export default function MetricsPage() {
             <Link to={ROUTES.ADMIN_DASHBOARD}>
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                {t('metrics.back_dashboard')}
+                Retour au Tableau de Bord Admin
               </Button>
             </Link>
           </div>
@@ -297,10 +299,10 @@ export default function MetricsPage() {
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {t('metrics.page_title')}
+              Métriques & Performance SIB 2026
             </h1>
             <p className="text-gray-600">
-              {t('metrics.page_subtitle')}
+              Suivi en temps réel des indicateurs clés de performance du salon
             </p>
           </motion.div>
         </div>
@@ -310,7 +312,7 @@ export default function MetricsPage() {
         {/* Métriques Clés */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {t('metrics.kpi_title')}
+            Indicateurs Clés de Performance
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {keyMetrics.map((metric, index) => {
@@ -347,7 +349,7 @@ export default function MetricsPage() {
                           {metric.value}
                         </div>
                         <div className="text-sm text-gray-600">
-                          {t('metrics.objective', { target: metric.target })}
+                          Objectif: {metric.target}
                         </div>
                       </div>
 
@@ -370,7 +372,7 @@ export default function MetricsPage() {
                       {metric.progress >= 100 && (
                         <Badge variant="success" size="sm">
                           <Target className="h-3 w-3 mr-1" />
-                          {t('metrics.target_reached')}
+                          Objectif Atteint
                         </Badge>
                       )}
                     </div>
@@ -384,7 +386,7 @@ export default function MetricsPage() {
         {/* Métriques Temps Réel */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {t('metrics.realtime_title')}
+            Activité en Temps Réel
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <motion.div
@@ -405,7 +407,7 @@ export default function MetricsPage() {
                     {realTimeMetrics.activeUsers.toLocaleString()}
                   </div>
                   <div className="text-blue-100 text-sm">
-                    {t('metrics.total_users')}
+                    Total Utilisateurs
                   </div>
                 </div>
               </Card>
@@ -429,7 +431,7 @@ export default function MetricsPage() {
                     {realTimeMetrics.onlineExhibitors}
                   </div>
                   <div className="text-green-100 text-sm">
-                    {t('metrics.total_exhibitors')}
+                    Total Exposants
                   </div>
                 </div>
               </Card>
@@ -453,7 +455,7 @@ export default function MetricsPage() {
                     {realTimeMetrics.scheduledMeetings}
                   </div>
                   <div className="text-purple-100 text-sm">
-                    {t('metrics.total_meetings')}
+                    Total Rendez-vous
                   </div>
                 </div>
               </Card>
@@ -477,7 +479,7 @@ export default function MetricsPage() {
                     {realTimeMetrics.messagesExchanged.toLocaleString()}
                   </div>
                   <div className="text-orange-100 text-sm">
-                    {t('metrics.total_messages')}
+                    Messages Échangés
                   </div>
                 </div>
               </Card>
@@ -488,7 +490,7 @@ export default function MetricsPage() {
         {/* Performance par Pavillon */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {t('metrics.pavilion_title')}
+            Performance par Pavillon
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {pavilionMetrics.map((pavilion, index) => (
@@ -512,30 +514,30 @@ export default function MetricsPage() {
                         <div className="text-2xl font-bold text-gray-900">
                           {pavilion.exhibitors}
                         </div>
-                        <div className="text-xs text-gray-600">{t('metrics.col_exhibitors')}</div>
+                        <div className="text-xs text-gray-600">Exposants</div>
                       </div>
                       <div className="text-center">
                         <div className="text-2xl font-bold text-gray-900">
                           {pavilion.visitors.toLocaleString()}
                         </div>
-                        <div className="text-xs text-gray-600">{t('metrics.col_visitors')}</div>
+                        <div className="text-xs text-gray-600">Visiteurs</div>
                       </div>
                       <div className="text-center">
                         <div className="text-2xl font-bold text-gray-900">
                           {pavilion.conferences}
                         </div>
-                        <div className="text-xs text-gray-600">{t('metrics.col_conferences')}</div>
+                        <div className="text-xs text-gray-600">Conférences</div>
                       </div>
                       <div className="text-center">
                         <div className="text-2xl font-bold text-gray-400">
                           N/A
                         </div>
-                        <div className="text-xs text-gray-600">{t('metrics.col_satisfaction')}</div>
+                        <div className="text-xs text-gray-600">Satisfaction</div>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">{t('metrics.global_performance')}</span>
+                      <span className="text-sm text-gray-600">Performance Globale</span>
                       <Badge variant={getPerformanceLevel(pavilion).variant} size="sm">
                         <Activity className="h-3 w-3 mr-1" />
                         {getPerformanceLevel(pavilion).label}
@@ -551,7 +553,7 @@ export default function MetricsPage() {
         {/* Métriques d'Engagement */}
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {t('metrics.engagement_title')}
+            Engagement & Interactions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {engagementMetrics.map((metric, index) => {

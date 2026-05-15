@@ -8,10 +8,13 @@
 import { PartnerTier, getPartnerTierConfig } from '../config/partnerTiers';
 import { PARTNER_BILLING } from '../config/partnerBilling';
 
-// ✅ Constantes de prix (base de calcul) - Calculé dynamiquement depuis SSOT
-const TIER_PRICES = Object.fromEntries(
-  Object.entries(PARTNER_BILLING).map(([key, config]) => [key, config.amount * 100])
-) as Record<PartnerTier, number>;
+// ✅ Constantes de prix (base de calcul) - Import depuis SSOT
+const TIER_PRICES = {
+  partner: PARTNER_BILLING.partner.amount * 100,              // Convert MAD to centimes
+  silver: PARTNER_BILLING.silver.amount * 100,                // Convert MAD to centimes
+  gold: PARTNER_BILLING.gold.amount * 100,                    // Convert MAD to centimes
+  official_sponsor: PARTNER_BILLING.official_sponsor.amount * 100 // Convert MAD to centimes
+};
 
 // Conversion EUR/MAD pour CMI
 const EUR_TO_MAD_RATE = 11;
@@ -208,13 +211,10 @@ export async function createCMIPartnerPayment(
 export async function upgradePartnerTier(
   userId: string,
   targetTier: PartnerTier,
-  _paymentRequestId: string
+  paymentRequestId: string
 ): Promise<{ success: boolean }> {
   try {
-    const { supabase: _sb } = await import('../lib/supabase');
-    if (!_sb) throw new Error('Supabase not initialized');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const supabase = _sb as any;
+    const { supabase } = await import('../lib/supabase');
 
     // Mettre à jour le niveau partenaire
     const { error: updateError } = await supabase
@@ -235,7 +235,7 @@ export async function upgradePartnerTier(
       user_id: userId,
       type: 'system',
       message: `Votre niveau partenaire a été mis à jour vers ${getPartnerTierConfig(targetTier).displayName}!`,
-      is_read: false,
+      read: false,
       created_at: new Date().toISOString()
     });
 
@@ -304,10 +304,7 @@ export async function createPartnerBankTransferRequest(
   currentTier?: PartnerTier
 ): Promise<{ requestId: string; success: boolean }> {
   try {
-    const { supabase: _sb } = await import('../lib/supabase');
-    if (!_sb) throw new Error('Supabase not initialized');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const supabase = _sb as any;
+    const { supabase } = await import('../lib/supabase');
 
     // Calculer le montant (full ou upgrade)
     const amountCents = TIER_PRICES[targetTier];
@@ -368,10 +365,7 @@ export async function createPartnerBankTransferRequest(
  */
 export async function getPartnerBankTransferRequests(userId: string): Promise<any[]> {
   try {
-    const { supabase: _sb } = await import('../lib/supabase');
-    if (!_sb) throw new Error('Supabase not initialized');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const supabase = _sb as any;
+    const { supabase } = await import('../lib/supabase');
 
     const { data, error } = await supabase
       .from('payment_requests')
@@ -398,10 +392,7 @@ export async function approvePartnerBankTransfer(
   notes?: string
 ): Promise<{ success: boolean }> {
   try {
-    const { supabase: _sb } = await import('../lib/supabase');
-    if (!_sb) throw new Error('Supabase not initialized');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const supabase = _sb as any;
+    const { supabase } = await import('../lib/supabase');
 
     // Récupérer la demande
     const { data: request, error: fetchError } = await supabase
@@ -457,7 +448,7 @@ export async function approvePartnerBankTransfer(
       type: 'success',
       title: 'Paiement approuvé',
       message: `Votre paiement par virement pour le niveau ${request.requested_level} a été approuvé. Votre compte est maintenant activé !`,
-      is_read: false,
+      read: false,
       created_at: new Date().toISOString()
     });
 
@@ -477,10 +468,7 @@ export async function rejectPartnerBankTransfer(
   reason: string
 ): Promise<{ success: boolean }> {
   try {
-    const { supabase: _sb } = await import('../lib/supabase');
-    if (!_sb) throw new Error('Supabase not initialized');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const supabase = _sb as any;
+    const { supabase } = await import('../lib/supabase');
 
     // Récupérer la demande
     const { data: request, error: fetchError } = await supabase
@@ -510,7 +498,7 @@ export async function rejectPartnerBankTransfer(
       type: 'error',
       title: 'Paiement refusé',
       message: `Votre demande de paiement pour le niveau ${request.requested_level} a été refusée. Raison: ${reason}`,
-      is_read: false,
+      read: false,
       created_at: new Date().toISOString()
     });
 

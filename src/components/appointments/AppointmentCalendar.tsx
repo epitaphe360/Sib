@@ -325,8 +325,8 @@ export default function AppointmentCalendar() {
 
   const handleRejectAppointment = async (appointmentId: string) => {
     try {
-      await updateAppointmentStatus(appointmentId, 'rejected');
-      toast.success('Rendez-vous refusé.');
+      await cancelAppointment(appointmentId);
+      toast.success('Rendez-vous refusé et annulé.');
     } catch {
       toast.error('Erreur lors du refus.');
     }
@@ -524,9 +524,9 @@ export default function AppointmentCalendar() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900">
-                    {userAppointments.filter(a => a.status === 'cancelled' || a.status === 'rejected').length}
+                    {userAppointments.filter(a => a.status === 'cancelled').length}
                   </p>
-                  <p className="text-sm text-gray-600">Annulés/Refusés</p>
+                  <p className="text-sm text-gray-600">Annulés</p>
                 </div>
               </div>
             </Card>

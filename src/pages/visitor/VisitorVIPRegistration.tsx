@@ -2,7 +2,7 @@
  * Formulaire d'inscription Visiteur VIP PREMIUM
  * Workflow complet avec photo, mot de passe et paiement obligatoire
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -64,8 +64,6 @@ interface AppliedPromo {
   used_count: number;
 }
 
-const BADGE_PRICE = 700;
-
 export default function VisitorVIPRegistration() {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,15 +73,33 @@ export default function VisitorVIPRegistration() {
   const [appliedPromo, setAppliedPromo] = useState<AppliedPromo | null>(null);
   const [isCheckingPromo, setIsCheckingPromo] = useState(false);
   const [promoError, setPromoError] = useState('');
+  const [badgePrice, setBadgePrice] = useState(700);
+  const [priceCurrency, setPriceCurrency] = useState('MAD');
   const navigate = useNavigate();
   const { user: currentUser, setUser } = useAuthStore();
 
-  let finalPrice = BADGE_PRICE;
+  useEffect(() => {
+    (supabase as any)
+      .from('pricing_config')
+      .select('amount, currency')
+      .eq('category', 'visitor')
+      .eq('level', 'vip')
+      .eq('is_active', true)
+      .maybeSingle()
+      .then(({ data }: { data: { amount: number; currency: string } | null }) => {
+        if (data) {
+          setBadgePrice(data.amount);
+          setPriceCurrency(data.currency);
+        }
+      });
+  }, []);
+
+  let finalPrice = badgePrice;
   if (appliedPromo) {
     if (appliedPromo.discount_type === 'percentage') {
-      finalPrice = Math.max(0, Math.round(BADGE_PRICE * (1 - appliedPromo.discount_value / 100)));
+      finalPrice = Math.max(0, Math.round(badgePrice * (1 - appliedPromo.discount_value / 100)));
     } else {
-      finalPrice = Math.max(0, BADGE_PRICE - appliedPromo.discount_value);
+      finalPrice = Math.max(0, badgePrice - appliedPromo.discount_value);
     }
   }
 
@@ -348,8 +364,8 @@ export default function VisitorVIPRegistration() {
         let discountAmount = 0;
         if (appliedPromo) {
           discountAmount = appliedPromo.discount_type === 'percentage'
-            ? Math.round(BADGE_PRICE * appliedPromo.discount_value / 100)
-            : Math.min(BADGE_PRICE, appliedPromo.discount_value);
+            ? Math.round(badgePrice * appliedPromo.discount_value / 100)
+            : Math.min(badgePrice, appliedPromo.discount_value);
         }
 
         const { data: prData, error: paymentError } = await supabase
@@ -357,7 +373,7 @@ export default function VisitorVIPRegistration() {
           .insert([{
             user_id: userId,
             amount: finalPrice,
-            original_amount: BADGE_PRICE,
+            original_amount: badgePrice,
             promo_code_id: appliedPromo?.id || null,
             promo_discount_amount: discountAmount,
             status: 'pending',
@@ -767,7 +783,7 @@ export default function VisitorVIPRegistration() {
                           </span>
                         </div>
                         <p className="text-xs text-emerald-600 mt-1">
-                          Prix réduit : <strong>{finalPrice} MAD</strong> au lieu de {BADGE_PRICE} MAD
+                          Prix réduit : <strong>{finalPrice} {priceCurrency}</strong> au lieu de {badgePrice} {priceCurrency}
                         </p>
                       </div>
                       <button type="button" onClick={removePromo} className="p-1 rounded-lg hover:bg-emerald-100 transition-colors">
@@ -808,9 +824,9 @@ export default function VisitorVIPRegistration() {
                 <p className="text-sm text-indigo-900">
                   <strong>Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page de paiement sécurisé{' '}
                   {appliedPromo ? (
-                    <><span className="line-through text-gray-400">{BADGE_PRICE} MAD</span>{' '}<strong className="text-emerald-700">{finalPrice} MAD</strong> (code promo appliqué)</>
+                    <><span className="line-through text-gray-400">{badgePrice} {priceCurrency}</span>{' '}<strong className="text-emerald-700">{finalPrice} {priceCurrency}</strong> (code promo appliqué)</>
                   ) : (
-                    <strong>{BADGE_PRICE} MAD</strong>
+                    <strong>{badgePrice} {priceCurrency}</strong>
                   )}. Votre accès VIP sera activé immédiatement après validation du paiement.
                 </p>
               </div>
@@ -829,7 +845,7 @@ export default function VisitorVIPRegistration() {
                 ) : (
                   <>
                     <Crown className="h-5 w-5 mr-2" />
-                    Créer mon compte VIP et payer — {finalPrice} MAD
+                    Créer mon compte VIP et payer — {finalPrice} {priceCurrency}
                   </>
                 )}
               </Button>

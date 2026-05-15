@@ -1,614 +1,654 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+﻿import { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  Building2, MapPin, Phone, Mail, Globe, User,
-  ChevronLeft, ChevronRight, CheckCircle, Loader2,
-  Facebook, Instagram, Linkedin, AlertCircle,
-} from 'lucide-react';
-import { supabase } from '../../lib/supabase';
-import { toast } from 'sonner';
-import ImageUploader from '../../components/ui/upload/ImageUploader';
-import { CatalogueFicheCard } from '../../components/catalogue/CatalogueFicheCard';
-import type { CatalogueEntry } from '../../components/catalogue/CatalogueFicheCard';
+  Building2, MapPin, User, Tag, Globe,
+  ChevronRight, ChevronLeft, CheckCircle, Loader2, AlertCircle,
+  Facebook, Instagram, Linkedin, Twitter, Youtube, Send, Mail,
+} from "lucide-react";
+import { supabase } from "../../lib/supabase";
+import { toast } from "sonner";
+import ImageUploader from "../../components/ui/upload/ImageUploader";
+import { CatalogueFicheCard } from "../../components/catalogue/CatalogueFicheCard";
+import type { CatalogueEntry } from "../../components/catalogue/CatalogueFicheCard";
+
+// ─── Config ───────────────────────────────────────────────────────────────────
 
 const STEPS = [
-  { id: 1, title: 'Identité', icon: Building2, description: 'Logo, raison sociale, stand' },
-  { id: 2, title: 'Coordonnées', icon: MapPin, description: 'Adresse, téléphone, email, web' },
-  { id: 3, title: 'Représentant', icon: User, description: 'Contact principal' },
-  { id: 4, title: 'Description', icon: Building2, description: 'Activité, marques, produits' },
-  { id: 5, title: 'Réseaux & Validation', icon: CheckCircle, description: 'Réseaux sociaux, aperçu' },
+  { id: 1, title: "Identification", icon: Building2, desc: "Société, logo, stand" },
+  { id: 2, title: "Coordonnées",    icon: MapPin,    desc: "Adresse & contacts"   },
+  { id: 3, title: "Représentant",   icon: User,      desc: "Contact au SIB"       },
+  { id: 4, title: "Activité",       icon: Tag,       desc: "Produits & services"  },
+  { id: 5, title: "Réseaux",        icon: Globe,     desc: "Social & aperçu"      },
 ];
 
-// Champs obligatoires par étape
-const REQUIRED_FIELDS: Record<number, (keyof CatalogueEntry)[]> = {
-  1: ['company_name'],
-  2: ['phone', 'email'],
-  3: ['contact_name', 'contact_title'],
-  4: ['activity_description'],
+const HALLS   = ["A","B","C","D","E","Plein air"];
+const SECTORS = [
+  "Bâtiment & Gros Œuvre","Matériaux de Construction","Menuiserie & Boiserie",
+  "Carrelage & Revêtements","Plomberie & Sanitaires","Climatisation & Ventilation",
+  "Électricité & Domotique","Peintures & Finitions","Isolation & Étanchéité",
+  "Équipements Industriels","Quincaillerie & Outillage","Architecture & Design",
+  "Immobilier & Promotion","Services & Ingénierie","Autre",
+];
+const TITLES  = [
+  "Directeur Général","PDG","DGA","Directeur Commercial","Directeur Technique",
+  "Responsable Export","Chef de Projet","Manager","Autre",
+];
+const REQUIRED: Record<number, (keyof CatalogueEntry)[]> = {
+  1: ["company_name"],
+  2: ["phone","email"],
+  3: ["contact_name","contact_title"],
+  4: ["activity_description"],
   5: [],
 };
 
-function calcCompletion(data: Partial<CatalogueEntry>): number {
-  const fields: (keyof CatalogueEntry)[] = [
-    'company_name', 'logo_url', 'stand_number', 'hall', 'country_flag',
-    'address', 'city', 'country', 'phone', 'email', 'website',
-    'contact_name', 'contact_title',
-    'activity_description', 'brands_represented', 'products_origin_country',
+// ─── Dynamic field config (loaded from DB) ────────────────────────────────────
+
+interface FieldConfig { label: string; placeholder: string; required: boolean; visible: boolean; }
+type FormConfig = Record<string, FieldConfig>;
+
+const DEFAULT_CONFIG: FormConfig = {
+  logo_url:               { label: "Logo de l'entreprise",             placeholder: "",                                 required: false, visible: true },
+  company_name:           { label: "Raison sociale",                   placeholder: "Nom officiel de l'entreprise",    required: true,  visible: true },
+  sector:                 { label: "Secteur d'activité",              placeholder: "",                                 required: false, visible: true },
+  stand_number:           { label: "N° Stand",                         placeholder: "Ex : 17-A",                        required: false, visible: true },
+  hall:                   { label: "Hall / Pavillon",                   placeholder: "",                                 required: false, visible: true },
+  country_flag:           { label: "Nationalité (code ISO 2 lettres)",  placeholder: "MA  FR  IT…",                      required: false, visible: true },
+  address:                { label: "Adresse",                           placeholder: "Zone Industrielle, Rue, N°…",     required: false, visible: true },
+  zip_code:               { label: "Code postal",                       placeholder: "20000",                            required: false, visible: true },
+  city:                   { label: "Ville",                             placeholder: "Casablanca",                       required: false, visible: true },
+  country:                { label: "Pays",                              placeholder: "Maroc",                            required: false, visible: true },
+  phone:                  { label: "Téléphone",                         placeholder: "+212 5 22 00 00 00",               required: true,  visible: true },
+  fax:                    { label: "Fax",                               placeholder: "+212 5 22 00 00 01",               required: false, visible: true },
+  gsm:                    { label: "GSM / Mobile",                      placeholder: "+212 6 00 00 00 00",               required: false, visible: true },
+  email:                  { label: "Email",                             placeholder: "contact@entreprise.ma",            required: true,  visible: true },
+  website:                { label: "Site web",                          placeholder: "https://www.entreprise.ma",        required: false, visible: true },
+  contact_name:           { label: "Nom & Prénom",                      placeholder: "Mme / M. Prénom NOM",              required: true,  visible: true },
+  contact_title:          { label: "Titre / Fonction",                   placeholder: "",                                 required: true,  visible: true },
+  contact_direct_phone:   { label: "Tél. direct",                       placeholder: "+212 6 …",                         required: false, visible: true },
+  contact_direct_email:   { label: "Email direct",                      placeholder: "nom@entreprise.ma",                required: false, visible: true },
+  activity_description:   { label: "Description de l'activité",         placeholder: "Décrivez l'activité principale…", required: true,  visible: true },
+  products_services:      { label: "Produits / Services exposés au SIB", placeholder: "Liste des produits ou services…",  required: false, visible: true },
+  brands_represented:     { label: "Marques représentées",              placeholder: "MARQUE A, MARQUE B, MARQUE C",     required: false, visible: true },
+  products_origin_country:{ label: "Pays d'origine des produits",       placeholder: "Maroc, France, Italie…",           required: false, visible: true },
+  facebook_url:           { label: "Facebook",                          placeholder: "https://facebook.com/…",           required: false, visible: true },
+  instagram_url:          { label: "Instagram",                         placeholder: "https://instagram.com/…",          required: false, visible: true },
+  linkedin_url:           { label: "LinkedIn",                          placeholder: "https://linkedin.com/company/…",   required: false, visible: true },
+  twitter_url:            { label: "X / Twitter",                       placeholder: "https://x.com/…",                  required: false, visible: true },
+  youtube_url:            { label: "YouTube",                           placeholder: "https://youtube.com/@…",           required: false, visible: true },
+};
+
+const FIELD_STEPS: Record<string, number> = {
+  logo_url: 1, company_name: 1, sector: 1, stand_number: 1, hall: 1, country_flag: 1,
+  address: 2, zip_code: 2, city: 2, country: 2, phone: 2, fax: 2, gsm: 2, email: 2, website: 2,
+  contact_name: 3, contact_title: 3, contact_direct_phone: 3, contact_direct_email: 3,
+  activity_description: 4, products_services: 4, brands_represented: 4, products_origin_country: 4,
+  facebook_url: 5, instagram_url: 5, linkedin_url: 5, twitter_url: 5, youtube_url: 5,
+};
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function calcPct(d: Partial<CatalogueEntry>): number {
+  const keys: (keyof CatalogueEntry)[] = [
+    "company_name","logo_url","sector","stand_number","hall",
+    "address","city","country","phone","email",
+    "contact_name","contact_title","activity_description","brands_represented",
   ];
-  const filled = fields.filter((f) => {
-    const v = data[f];
-    return v !== undefined && v !== null && String(v).trim() !== '';
-  }).length;
-  return Math.round((filled / fields.length) * 100);
+  const n = keys.filter((k) => { const v = d[k]; return v != null && String(v).trim() !== ""; }).length;
+  return Math.round((n / keys.length) * 100);
 }
 
-const HALLS = ['A', 'B', 'C', 'D', 'Plein air'];
-const CONTACT_TITLES = [
-  'Directeur Général', 'PDG', 'DGA', 'Directeur Commercial',
-  'Responsable Export', 'Chef de Projet', 'Manager', 'Autre',
-];
+// ─── ProgressRing ─────────────────────────────────────────────────────────────
+
+function ProgressRing({ pct }: { pct: number }) {
+  const r = 38;
+  const circ = 2 * Math.PI * r;
+  return (
+    <div className="relative w-28 h-28 mx-auto">
+      <svg className="w-28 h-28 -rotate-90" viewBox="0 0 96 96">
+        <circle cx="48" cy="48" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
+        <circle cx="48" cy="48" r={r} fill="none" stroke="#C9A84C" strokeWidth="8"
+          strokeLinecap="round"
+          strokeDasharray={circ}
+          strokeDashoffset={circ * (1 - pct / 100)}
+          style={{ transition: "stroke-dashoffset 0.7s ease-out" }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-3xl font-black text-white leading-none">{pct}</span>
+        <span className="text-[10px] text-[#C9A84C] font-bold tracking-wider mt-0.5">%</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Field sub-components ─────────────────────────────────────────────────────
+
+const I  = "w-full px-4 py-3 border-2 border-slate-100 rounded-2xl text-sm bg-white text-slate-800 placeholder:text-slate-300 focus:outline-none focus:border-[#C9A84C] hover:border-slate-200 transition-all";
+const L  = "block text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em] mb-1.5";
+
+function Inp({ label, req, ...p }: React.InputHTMLAttributes<HTMLInputElement> & { label: string; req?: boolean }) {
+  return (
+    <div>
+      <label className={L}>{label}{req && <span className="text-[#C9A84C] ml-0.5">*</span>}</label>
+      <input {...p} className={I} />
+    </div>
+  );
+}
+function Sel({ label, req, children, ...p }: React.SelectHTMLAttributes<HTMLSelectElement> & { label: string; req?: boolean }) {
+  return (
+    <div>
+      <label className={L}>{label}{req && <span className="text-[#C9A84C] ml-0.5">*</span>}</label>
+      <select {...p} className={I + " cursor-pointer"}>{children}</select>
+    </div>
+  );
+}
+function Txt({ label, req, ...p }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label: string; req?: boolean }) {
+  return (
+    <div>
+      <label className={L}>{label}{req && <span className="text-[#C9A84C] ml-0.5">*</span>}</label>
+      <textarea {...p} className={I + " resize-none"} />
+    </div>
+  );
+}
+function SocialField({ icon: Icon, bg, label, field, value, onChange, onBlur }: {
+  icon: React.ComponentType<{className?: string}>;
+  bg: string; label: string; field: keyof CatalogueEntry;
+  value: string; onChange: (f: keyof CatalogueEntry, v: string) => void; onBlur: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className={`w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 ${bg} shadow-md`}>
+        <Icon className="w-5 h-5 text-white" />
+      </div>
+      <div className="flex-1">
+        <label className={L}>{label}</label>
+        <input type="text" className={I} value={value} placeholder="https://..."
+          onChange={(e) => onChange(field, e.target.value)} onBlur={onBlur} />
+      </div>
+    </div>
+  );
+}
+
+// ─── Page principale ──────────────────────────────────────────────────────────
 
 export default function CatalogueFormPage() {
   const { token } = useParams<{ token: string }>();
-  const [entry, setEntry] = useState<CatalogueEntry | null>(null);
-  const [form, setForm] = useState<Partial<CatalogueEntry>>({});
-  const [step, setStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [tokenInvalid, setTokenInvalid] = useState(false);
+  const [entry,     setEntry]     = useState<CatalogueEntry | null>(null);
+  const [form,      setForm]      = useState<Partial<CatalogueEntry>>({});
+  const [step,      setStep]      = useState(1);
+  const [loading,   setLoading]   = useState(true);
+  const [saving,    setSaving]    = useState(false);
+  const [submitting,setSubmitting]= useState(false);
+  const [invalid,   setInvalid]   = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [config,    setConfig]    = useState<FormConfig>(DEFAULT_CONFIG);
 
-  // Charger la fiche par token
   useEffect(() => {
-    if (!token) { setTokenInvalid(true); setIsLoading(false); return; }
-
-    supabase
-      .from('catalogue_entries')
-      .select('*')
-      .eq('token', token)
-      .maybeSingle()
+    if (!token) { setInvalid(true); setLoading(false); return; }
+    supabase.from("catalogue_entries").select("*").eq("token", token).maybeSingle()
       .then(({ data, error }) => {
-        if (error || !data) { setTokenInvalid(true); }
+        if (error || !data) setInvalid(true);
         else {
           setEntry(data as CatalogueEntry);
           setForm(data as Partial<CatalogueEntry>);
-          if (data.status === 'completed' || data.status === 'validated') setSubmitted(true);
+          if (data.status === "completed" || data.status === "validated") setSubmitted(true);
         }
-        setIsLoading(false);
+        setLoading(false);
       });
   }, [token]);
 
-  // Sauvegarde automatique (debounced)
-  const saveProgress = useCallback(async (updatedForm: Partial<CatalogueEntry>) => {
-    if (!entry?.id) return;
-    setIsSaving(true);
-    const completion = calcCompletion(updatedForm);
-    const statusUpdate = completion >= 100 ? 'completed'
-      : completion > 0 ? 'in_progress'
-      : 'invited';
+  // Charger la config des champs depuis la DB (labels, required, visible)
+  useEffect(() => {
+    (supabase as any).from("catalogue_form_fields")
+      .select("field_key,label,placeholder,required,visible")
+      .then(({ data }: { data: Array<{ field_key: string; label: string; placeholder: string; required: boolean; visible: boolean }> | null }) => {
+        if (data) {
+          setConfig((prev) => {
+            const c = { ...prev };
+            data.forEach((f) => { c[f.field_key] = { label: f.label, placeholder: f.placeholder, required: f.required, visible: f.visible }; });
+            return c;
+          });
+        }
+      });
+  }, []);
 
-    await supabase
-      .from('catalogue_entries')
-      .update({
-        ...updatedForm,
-        completion_percent: completion,
-        status: statusUpdate,
-        ...(completion >= 100 && !entry.completed_at ? { completed_at: new Date().toISOString() } : {}),
-      })
-      .eq('id', entry.id);
-    setIsSaving(false);
+  const save = useCallback(async (f: Partial<CatalogueEntry>) => {
+    if (!entry?.id) return;
+    setSaving(true);
+    const pct = calcPct(f);
+    const status = pct >= 100 ? "completed" : pct > 0 ? "in_progress" : "invited";
+    await supabase.from("catalogue_entries").update({
+      ...f, completion_percent: pct, status,
+      ...(pct >= 100 && !entry.completed_at ? { completed_at: new Date().toISOString() } : {}),
+    }).eq("id", entry.id);
+    setSaving(false);
   }, [entry]);
 
-  const handleChange = (field: keyof CatalogueEntry, value: string) => {
-    const updated = { ...form, [field]: value };
-    setForm(updated);
-  };
-
-  const handleBlurSave = () => {
-    saveProgress(form);
-  };
-
-  const canProceed = (): boolean => {
-    const required = REQUIRED_FIELDS[step] || [];
-    return required.every((f) => {
-      const v = form[f];
-      return v !== undefined && v !== null && String(v).trim() !== '';
-    });
-  };
-
-  const handleNext = async () => {
-    await saveProgress(form);
-    if (step < STEPS.length) setStep(step + 1);
-  };
-
-  const handlePrev = () => {
-    if (step > 1) setStep(step - 1);
-  };
-
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-    await saveProgress({ ...form, status: 'completed' as CatalogueEntry['status'], completed_at: new Date().toISOString() });
-    await supabase
-      .from('catalogue_entries')
-      .update({ status: 'completed', completed_at: new Date().toISOString() })
-      .eq('id', entry!.id);
-    toast.success('Votre fiche catalogue a été envoyée avec succès !');
+  const set  = (k: keyof CatalogueEntry, v: string) => setForm((p) => ({ ...p, [k]: v }));
+  const blur = () => save(form);
+  const fc = (key: string) => config[key] ?? DEFAULT_CONFIG[key] ?? { label: key, placeholder: "", required: false, visible: true };
+  const canNext = () => Object.entries(config)
+    .filter(([key, c]) => c.required && c.visible && FIELD_STEPS[key] === step)
+    .every(([key]) => { const v = (form as any)[key]; return v != null && String(v).trim() !== ""; });
+  const next = async () => { await save(form); if (step < 5) setStep((s) => s + 1); };
+  const prev = () => { if (step > 1) setStep((s) => s - 1); };
+  const submit = async () => {
+    setSubmitting(true);
+    await supabase.from("catalogue_entries").update({
+      ...form, status: "completed",
+      completed_at: new Date().toISOString(),
+      completion_percent: calcPct(form),
+    }).eq("id", entry!.id);
+    toast.success("Fiche envoyée avec succès !");
     setSubmitted(true);
-    setIsSubmitting(false);
+    setSubmitting(false);
   };
 
-  const completion = calcCompletion(form);
+  const pct     = calcPct(form);
+  const CurIcon = STEPS[step - 1].icon;
 
-  // ─── ÉTATS SPÉCIAUX ───────────────────────────────────────────────
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="h-10 w-10 animate-spin text-[#C9A84C]" />
+  // ── Loading ───────────────────────────────────────────────────────────────
+  if (loading) return (
+    <div className="min-h-screen bg-[#0B1C3D] flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-14 h-14 border-4 border-white/10 border-t-[#C9A84C] rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-white/40 text-sm">Chargement…</p>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (tokenInvalid) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-        <div className="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center">
-          <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-gray-900 mb-2">Lien invalide ou expiré</h1>
-          <p className="text-gray-500 text-sm">
-            Ce lien de formulaire est invalide ou a expiré. Contactez l'équipe SIB 2026 pour obtenir un nouveau lien.
-          </p>
-          <a
-            href="mailto:Sib2026@urbacom.net"
-            className="mt-6 inline-block bg-[#0B1C3D] text-white px-6 py-2 rounded-lg text-sm font-semibold"
-          >
-            Contacter l'équipe
-          </a>
+  // ── Token invalide ────────────────────────────────────────────────────────
+  if (invalid) return (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+      <div className="bg-white rounded-3xl shadow-xl p-10 max-w-sm w-full text-center border border-slate-100">
+        <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <AlertCircle className="h-8 w-8 text-red-400" />
         </div>
+        <h1 className="text-xl font-black text-slate-900 mb-2">Lien invalide</h1>
+        <p className="text-slate-400 text-sm mb-6 leading-relaxed">Ce lien est invalide ou a expiré. Contactez l'équipe SIB 2026 pour en obtenir un nouveau.</p>
+        <a href="mailto:Sib2026@urbacom.net"
+          className="inline-flex items-center gap-2 bg-[#0B1C3D] text-white px-6 py-3 rounded-2xl text-sm font-bold hover:bg-[#162d5e] transition">
+          <Mail className="w-4 h-4" /> Contacter l'équipe
+        </a>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (submitted) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-        <div className="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center">
-          <CheckCircle className="h-14 w-14 text-green-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Fiche envoyée !</h1>
-          <p className="text-gray-500 text-sm mb-4">
-            Votre fiche catalogue pour <strong>{form.company_name}</strong> a été reçue et sera intégrée au catalogue officiel SIB 2026.
-          </p>
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
-            Notre équipe validera votre fiche dans les meilleurs délais. Vous recevrez une confirmation par email.
-          </div>
+  // ── Fiche déjà soumise ────────────────────────────────────────────────────
+  if (submitted) return (
+    <div className="min-h-screen bg-[#0B1C3D] flex items-center justify-center px-4">
+      <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center">
+        <div className="w-20 h-20 bg-green-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+          <CheckCircle className="h-10 w-10 text-green-500" />
         </div>
+        <div className="inline-block bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-wider uppercase">SIB 2026</div>
+        <h1 className="text-2xl font-black text-slate-900 mb-2">Fiche envoyée !</h1>
+        <p className="text-slate-500 text-sm mb-6 leading-relaxed">
+          La fiche catalogue de <strong className="text-[#0B1C3D]">{form.company_name}</strong> a bien été transmise à l'équipe SIB 2026.
+        </p>
+        <div className="bg-amber-50 border-2 border-amber-100 rounded-2xl p-4 text-sm text-amber-800 text-left leading-relaxed">
+          <strong>Prochaine étape :</strong> Notre équipe validera votre fiche et vous contactera par email pour confirmation.
+        </div>
+        <p className="mt-5 text-xs text-slate-300">
+          Questions ? <a href="mailto:Sib2026@urbacom.net" className="text-[#C9A84C] hover:underline">Sib2026@urbacom.net</a>
+        </p>
       </div>
-    );
-  }
+    </div>
+  );
 
-  // ─── FORMULAIRE PRINCIPAL ─────────────────────────────────────────
-  const slideVariants = {
-    enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 40 : -40 }),
-    center: { opacity: 1, x: 0 },
-    exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -40 : 40 }),
-  };
-
+  // ── Render principal ──────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex min-h-screen">
 
-      {/* ─── HEADER ───────────────────────────────────────────────── */}
-      <div className="bg-[#0B1C3D] text-white">
-        <div className="max-w-2xl mx-auto px-4 py-5 flex items-center justify-between">
-          <div>
-            <div className="text-xs tracking-widest text-[#C9A84C] uppercase mb-0.5">SIB 2026</div>
-            <div className="font-bold text-lg">Fiche Catalogue Officiel</div>
+      {/* ═══════════════ SIDEBAR ═══════════════════════════════════════════ */}
+      <aside className="hidden lg:flex w-[280px] flex-shrink-0 flex-col bg-[#0B1C3D] sticky top-0 h-screen overflow-y-auto">
+        <div className="flex flex-col h-full p-6">
+
+          {/* Logo */}
+          <div className="mb-8">
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-9 h-9 bg-[#C9A84C] rounded-xl flex items-center justify-center shadow-lg shadow-[#C9A84C]/20">
+                <Building2 className="w-4.5 h-4.5 text-[#0B1C3D]" />
+              </div>
+              <div>
+                <div className="text-[#C9A84C] text-[11px] font-black tracking-[0.2em] uppercase">SIB 2026</div>
+                <div className="text-white/30 text-[9px] tracking-wider uppercase">Salon Int. du Bâtiment</div>
+              </div>
+            </div>
+            <h1 className="text-white text-xl font-black leading-snug">
+              Fiche<br /><span className="text-[#C9A84C]">Catalogue</span> Officiel
+            </h1>
           </div>
-          <div className="text-right">
-            <div className="text-2xl font-bold text-[#C9A84C]">{completion}%</div>
-            <div className="text-xs text-slate-400">complété</div>
+
+          {/* Progress ring */}
+          <div className="flex flex-col items-center py-6 border-y border-white/10 mb-6">
+            <ProgressRing pct={pct} />
+            <p className="mt-3 text-white/40 text-xs text-center">
+              {pct < 30 ? "Commencez à remplir la fiche" : pct < 70 ? "Bonne progression !" : pct < 100 ? "Presque terminé !" : "Fiche complète ✓"}
+            </p>
+          </div>
+
+          {/* Step list */}
+          <nav className="space-y-1 flex-1">
+            {STEPS.map((s) => {
+              const done    = step > s.id;
+              const current = step === s.id;
+              return (
+                <button key={s.id}
+                  onClick={() => done && setStep(s.id)}
+                  className={[
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all",
+                    current ? "bg-white/10 ring-1 ring-white/20" :
+                    done    ? "hover:bg-white/5 cursor-pointer" :
+                              "opacity-25 cursor-default",
+                  ].join(" ")}
+                >
+                  <div className={[
+                    "w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-all",
+                    done    ? "bg-green-500 shadow-md shadow-green-500/30" :
+                    current ? "bg-[#C9A84C] shadow-md shadow-[#C9A84C]/30" :
+                              "bg-white/10",
+                  ].join(" ")}>
+                    {done ? <CheckCircle className="w-4 h-4 text-white" /> : <s.icon className="w-4 h-4 text-white" />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-xs font-bold text-white leading-tight">{s.id}. {s.title}</div>
+                    <div className="text-[10px] text-white/35 truncate">{s.desc}</div>
+                  </div>
+                  {current && <ChevronRight className="w-3 h-3 text-[#C9A84C] flex-shrink-0" />}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Company footer */}
+          {form.company_name && (
+            <div className="mt-5 pt-4 border-t border-white/10">
+              <div className="text-[9px] text-white/25 uppercase tracking-[0.15em] mb-1">Entreprise</div>
+              <div className="text-white text-sm font-bold truncate">{form.company_name}</div>
+            </div>
+          )}
+        </div>
+      </aside>
+
+      {/* ═══════════════ MAIN ══════════════════════════════════════════════ */}
+      <div className="flex-1 flex flex-col bg-[#EEF2F7] min-h-screen">
+
+        {/* Mobile top bar */}
+        <div className="lg:hidden bg-[#0B1C3D] px-4 pt-3 pb-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-[#C9A84C] rounded-lg flex items-center justify-center">
+                <Building2 className="w-3 h-3 text-[#0B1C3D]" />
+              </div>
+              <span className="text-white text-sm font-bold">SIB 2026 · Fiche Catalogue</span>
+            </div>
+            <span className="text-[#C9A84C] text-sm font-black">{pct}%</span>
+          </div>
+          <div className="flex items-center gap-1 mb-2">
+            {STEPS.map((s, i) => (
+              <div key={s.id} className="flex items-center flex-1">
+                <div className={[
+                  "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
+                  step > s.id  ? "bg-green-500 text-white" :
+                  step === s.id ? "bg-[#C9A84C] text-[#0B1C3D]" :
+                                  "bg-white/10 text-white/30",
+                ].join(" ")}>{step > s.id ? "✓" : s.id}</div>
+                {i < 4 && <div className={`flex-1 h-0.5 mx-0.5 rounded-full ${step > s.id ? "bg-green-500" : "bg-white/10"}`} />}
+              </div>
+            ))}
+          </div>
+          <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+            <div className="h-full bg-[#C9A84C] rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
           </div>
         </div>
-        {/* Barre de progression globale */}
-        <div className="h-1 bg-slate-700">
-          <div
-            className="h-full bg-[#C9A84C] transition-all duration-500"
-            style={{ width: `${completion}%` }}
-          />
-        </div>
-      </div>
 
-      {/* ─── STEPS ────────────────────────────────────────────────── */}
-      <div className="max-w-2xl mx-auto px-4 py-4">
-        <div className="flex items-center gap-1">
-          {STEPS.map((s, idx) => (
-            <div key={s.id} className="flex items-center flex-1">
-              <button
-                onClick={() => idx < step - 1 && setStep(s.id)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all flex-shrink-0 ${
-                  step > s.id
-                    ? 'bg-green-500 text-white cursor-pointer'
-                    : step === s.id
-                    ? 'bg-[#C9A84C] text-[#0B1C3D]'
-                    : 'bg-gray-200 text-gray-400 cursor-default'
-                }`}
-              >
-                {step > s.id ? <CheckCircle className="w-4 h-4" /> : s.id}
-              </button>
-              {idx < STEPS.length - 1 && (
-                <div className={`flex-1 h-0.5 mx-1 ${step > s.id ? 'bg-green-400' : 'bg-gray-200'}`} />
+        {/* Content */}
+        <div className="flex-1 flex flex-col items-center px-4 py-6 lg:py-10">
+          <div className="w-full max-w-2xl">
+
+            {/* Step header */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-11 h-11 bg-[#C9A84C] rounded-2xl flex items-center justify-center shadow-lg shadow-[#C9A84C]/30 flex-shrink-0">
+                <CurIcon className="w-5 h-5 text-[#0B1C3D]" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Étape {step} sur 5</div>
+                <div className="text-lg font-black text-[#0B1C3D] leading-tight">{STEPS[step - 1].title}</div>
+              </div>
+              {saving && (
+                <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span className="hidden sm:inline">Sauvegarde…</span>
+                </div>
               )}
             </div>
-          ))}
-        </div>
-        <div className="mt-2">
-          <span className="text-sm font-semibold text-gray-800">{STEPS[step - 1].title}</span>
-          <span className="text-xs text-gray-400 ml-2">{STEPS[step - 1].description}</span>
-        </div>
-      </div>
 
-      {/* ─── CONTENU ──────────────────────────────────────────────── */}
-      <div className="max-w-2xl mx-auto px-4 pb-10">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <AnimatePresence mode="wait" custom={1}>
-            <motion.div
-              key={step}
-              custom={1}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.22 }}
-              className="p-6 space-y-5"
-            >
+            {/* Form card */}
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div key={step}
+                  initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="p-6 lg:p-8 space-y-5">
 
-              {/* ── ÉTAPE 1 : Identité ────────────────────────────── */}
-              {step === 1 && (
-                <>
-                  <h2 className="text-lg font-bold text-gray-900">Identité de l'entreprise</h2>
-
-                  {/* Logo */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Logo *</label>
-                    <ImageUploader
-                      currentImage={form.logo_url}
-                      onUpload={(url) => { handleChange('logo_url', url); saveProgress({ ...form, logo_url: url }); }}
-                      bucket="catalogue-logos"
-                      label="Télécharger le logo"
-                    />
-                  </div>
-
-                  {/* Raison sociale */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Raison sociale *</label>
-                    <input
-                      type="text"
-                      value={form.company_name || ''}
-                      onChange={(e) => handleChange('company_name', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="Nom officiel de l'entreprise"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* N° Stand */}
+                  {/* ── Étape 1 ─────────────────────────────────────── */}
+                  {step === 1 && <>
+                    {fc("logo_url").visible && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">N° Stand</label>
-                      <input
-                        type="text"
-                        value={form.stand_number || ''}
-                        onChange={(e) => handleChange('stand_number', e.target.value)}
-                        onBlur={handleBlurSave}
-                        placeholder="Ex: 17a"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                      />
+                      <label className={L}>{fc("logo_url").label}</label>
+                      <div className="border-2 border-dashed border-slate-200 rounded-2xl overflow-hidden hover:border-[#C9A84C]/40 transition-colors bg-slate-50/50">
+                        <ImageUploader
+                          currentImage={form.logo_url}
+                          onUpload={(url) => { set("logo_url", url); save({ ...form, logo_url: url }); }}
+                          bucket="catalogue-logos" label="Cliquez ou glissez le logo ici"
+                        />
+                      </div>
                     </div>
+                    )}
 
-                    {/* Hall */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Hall</label>
-                      <select
-                        value={form.hall || ''}
-                        onChange={(e) => { handleChange('hall', e.target.value); handleBlurSave(); }}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                      >
+                    {fc("company_name").visible && (
+                    <Inp label={fc("company_name").label} req={fc("company_name").required} type="text"
+                      value={form.company_name || ""} placeholder={fc("company_name").placeholder}
+                      onChange={(e) => set("company_name", e.target.value)} onBlur={blur} />
+                    )}
+
+                    {fc("sector").visible && (
+                    <Sel label={fc("sector").label}
+                      value={form.sector || ""} onChange={(e) => { set("sector", e.target.value); blur(); }}>
+                      <option value="">Sélectionner un secteur</option>
+                      {SECTORS.map((s) => <option key={s} value={s}>{s}</option>)}
+                    </Sel>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-4">
+                      {fc("stand_number").visible && (
+                      <Inp label={fc("stand_number").label} type="text" value={form.stand_number || ""} placeholder={fc("stand_number").placeholder}
+                        onChange={(e) => set("stand_number", e.target.value)} onBlur={blur} />
+                      )}
+                      {fc("hall").visible && (
+                      <Sel label={fc("hall").label}
+                        value={form.hall || ""} onChange={(e) => { set("hall", e.target.value); blur(); }}>
                         <option value="">Sélectionner</option>
                         {HALLS.map((h) => <option key={h} value={h}>{h}</option>)}
-                      </select>
+                      </Sel>
+                      )}
                     </div>
-                  </div>
 
-                  {/* Drapeau pays */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Pays (code ISO)</label>
-                    <input
-                      type="text"
-                      value={form.country_flag || ''}
-                      onChange={(e) => handleChange('country_flag', e.target.value.toUpperCase().slice(0, 2))}
-                      onBlur={handleBlurSave}
-                      placeholder="Ex: MA, FR, DE…"
-                      maxLength={2}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                    <p className="text-xs text-gray-400 mt-1">Code ISO 2 lettres pour afficher le drapeau</p>
-                  </div>
-                </>
-              )}
-
-              {/* ── ÉTAPE 2 : Coordonnées ─────────────────────────── */}
-              {step === 2 && (
-                <>
-                  <h2 className="text-lg font-bold text-gray-900">Coordonnées</h2>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      <MapPin className="inline h-3.5 w-3.5 mr-1" />Adresse
-                    </label>
-                    <input
-                      type="text"
-                      value={form.address || ''}
-                      onChange={(e) => handleChange('address', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="Z.I., Rue, N°…"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
+                    {fc("country_flag").visible && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
-                      <input
-                        type="text"
-                        value={form.city || ''}
-                        onChange={(e) => handleChange('city', e.target.value)}
-                        onBlur={handleBlurSave}
-                        placeholder="Casablanca"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                      />
+                      <Inp label={fc("country_flag").label} type="text"
+                        value={form.country_flag || ""} placeholder={fc("country_flag").placeholder}
+                        maxLength={2}
+                        onChange={(e) => set("country_flag", e.target.value.toUpperCase().slice(0, 2))} onBlur={blur} />
+                      <p className="text-[11px] text-slate-400 mt-1.5 pl-1">Code 2 lettres — ex : MA = Maroc, FR = France</p>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Pays</label>
-                      <input
-                        type="text"
-                        value={form.country || ''}
-                        onChange={(e) => handleChange('country', e.target.value)}
-                        onBlur={handleBlurSave}
-                        placeholder="Maroc"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                      />
+                    )}
+                  </>}
+
+                  {/* ── Étape 2 ─────────────────────────────────────── */}
+                  {step === 2 && <>
+                    {fc("address").visible && (
+                    <Inp label={fc("address").label} type="text" value={form.address || ""}
+                      placeholder={fc("address").placeholder}
+                      onChange={(e) => set("address", e.target.value)} onBlur={blur} />
+                    )}
+
+                    <div className="grid grid-cols-3 gap-3">
+                      {fc("zip_code").visible && (
+                      <Inp label={fc("zip_code").label} type="text" value={form.zip_code || ""} placeholder={fc("zip_code").placeholder}
+                        onChange={(e) => set("zip_code", e.target.value)} onBlur={blur} />
+                      )}
+                      {fc("city").visible && (
+                      <div className="col-span-2">
+                        <Inp label={fc("city").label} type="text" value={form.city || ""} placeholder={fc("city").placeholder}
+                          onChange={(e) => set("city", e.target.value)} onBlur={blur} />
+                      </div>
+                      )}
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        <Phone className="inline h-3.5 w-3.5 mr-1" />Téléphone *
-                      </label>
-                      <input
-                        type="tel"
-                        value={form.phone || ''}
-                        onChange={(e) => handleChange('phone', e.target.value)}
-                        onBlur={handleBlurSave}
-                        placeholder="+212 5 22 000 000"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                      />
+                    {fc("country").visible && (
+                    <Inp label={fc("country").label} type="text" value={form.country || ""} placeholder={fc("country").placeholder}
+                      onChange={(e) => set("country", e.target.value)} onBlur={blur} />
+                    )}
+
+                    <div className="grid grid-cols-2 gap-4">
+                      {fc("phone").visible && (
+                      <Inp label={fc("phone").label} req={fc("phone").required} type="tel" value={form.phone || ""} placeholder={fc("phone").placeholder}
+                        onChange={(e) => set("phone", e.target.value)} onBlur={blur} />
+                      )}
+                      {fc("fax").visible && (
+                      <Inp label={fc("fax").label} type="tel" value={form.fax || ""} placeholder={fc("fax").placeholder}
+                        onChange={(e) => set("fax", e.target.value)} onBlur={blur} />
+                      )}
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Tél. 2 (optionnel)</label>
-                      <input
-                        type="tel"
-                        value={form.phone2 || ''}
-                        onChange={(e) => handleChange('phone2', e.target.value)}
-                        onBlur={handleBlurSave}
-                        placeholder="+212 6 00 000 000"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                      />
+
+                    {fc("gsm").visible && (
+                    <Inp label={fc("gsm").label} type="tel" value={form.gsm || ""} placeholder={fc("gsm").placeholder}
+                      onChange={(e) => set("gsm", e.target.value)} onBlur={blur} />
+                    )}
+
+                    {fc("email").visible && (
+                    <Inp label={fc("email").label} req={fc("email").required} type="email" value={form.email || ""} placeholder={fc("email").placeholder}
+                      onChange={(e) => set("email", e.target.value)} onBlur={blur} />
+                    )}
+
+                    {fc("website").visible && (
+                    <Inp label={fc("website").label} type="url" value={form.website || ""} placeholder={fc("website").placeholder}
+                      onChange={(e) => set("website", e.target.value)} onBlur={blur} />
+                    )}
+                  </>}
+
+                  {/* ── Étape 3 ─────────────────────────────────────── */}
+                  {step === 3 && <>
+                    <div className="bg-amber-50 border-2 border-amber-100 rounded-2xl px-4 py-3 text-[13px] text-amber-800 leading-relaxed">
+                      Représentant officiel de l'entreprise au SIB 2026 — personne à contacter sur le stand.
                     </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      <Mail className="inline h-3.5 w-3.5 mr-1" />Email *
-                    </label>
-                    <input
-                      type="email"
-                      value={form.email || ''}
-                      onChange={(e) => handleChange('email', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="contact@entreprise.com"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
+                    <Inp label="Nom & Prénom" req type="text" value={form.contact_name || ""}
+                      placeholder="Mme / M. Prénom NOM"
+                      onChange={(e) => set("contact_name", e.target.value)} onBlur={blur} />
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      <Globe className="inline h-3.5 w-3.5 mr-1" />Site web
-                    </label>
-                    <input
-                      type="url"
-                      value={form.website || ''}
-                      onChange={(e) => handleChange('website', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="https://www.entreprise.com"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
-                </>
-              )}
-
-              {/* ── ÉTAPE 3 : Représentant ────────────────────────── */}
-              {step === 3 && (
-                <>
-                  <h2 className="text-lg font-bold text-gray-900">Représentant</h2>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      <User className="inline h-3.5 w-3.5 mr-1" />Nom complet *
-                    </label>
-                    <input
-                      type="text"
-                      value={form.contact_name || ''}
-                      onChange={(e) => handleChange('contact_name', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="M. Prénom NOM"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Titre / Fonction *</label>
-                    <select
-                      value={form.contact_title || ''}
-                      onChange={(e) => { handleChange('contact_title', e.target.value); handleBlurSave(); }}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    >
+                    <Sel label="Titre / Fonction" req value={form.contact_title || ""}
+                      onChange={(e) => { set("contact_title", e.target.value); blur(); }}>
                       <option value="">Sélectionner un titre</option>
-                      {CONTACT_TITLES.map((t) => <option key={t} value={t}>{t}</option>)}
-                    </select>
-                  </div>
-                </>
-              )}
+                      {TITLES.map((t) => <option key={t} value={t}>{t}</option>)}
+                    </Sel>
 
-              {/* ── ÉTAPE 4 : Description ─────────────────────────── */}
-              {step === 4 && (
-                <>
-                  <h2 className="text-lg font-bold text-gray-900">Description commerciale</h2>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Inp label="Tél. direct" type="tel" value={form.contact_direct_phone || ""}
+                        placeholder="+212 6 …"
+                        onChange={(e) => set("contact_direct_phone", e.target.value)} onBlur={blur} />
+                      <Inp label="Email direct" type="email" value={form.contact_direct_email || ""}
+                        placeholder="nom@entreprise.ma"
+                        onChange={(e) => set("contact_direct_email", e.target.value)} onBlur={blur} />
+                    </div>
+                  </>}
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Activité détaillée *
-                    </label>
-                    <textarea
-                      value={form.activity_description || ''}
-                      onChange={(e) => handleChange('activity_description', e.target.value)}
-                      onBlur={handleBlurSave}
-                      rows={4}
-                      placeholder="Fabrication et commercialisation de…"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none resize-none"
-                    />
-                  </div>
+                  {/* ── Étape 4 ─────────────────────────────────────── */}
+                  {step === 4 && <>
+                    {fc("activity_description").visible && (
+                    <Txt label={fc("activity_description").label} req={fc("activity_description").required} rows={4}
+                      value={form.activity_description || ""}
+                      placeholder={fc("activity_description").placeholder}
+                      onChange={(e) => set("activity_description", e.target.value)} onBlur={blur} />
+                    )}
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Marque(s) représentée(s)</label>
-                    <input
-                      type="text"
-                      value={form.brands_represented || ''}
-                      onChange={(e) => handleChange('brands_represented', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="MARQUE1, MARQUE2, MARQUE3"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
+                    {fc("products_services").visible && (
+                    <Txt label={fc("products_services").label} rows={3}
+                      value={form.products_services || ""}
+                      placeholder={fc("products_services").placeholder}
+                      onChange={(e) => set("products_services", e.target.value)} onBlur={blur} />
+                    )}
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Pays d'origine des produits</label>
-                    <input
-                      type="text"
-                      value={form.products_origin_country || ''}
-                      onChange={(e) => handleChange('products_origin_country', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="Ex: Multinationale Suisse, Maroc, France…"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
-                </>
-              )}
+                    {fc("brands_represented").visible && (
+                    <div>
+                      <Inp label={fc("brands_represented").label} type="text" value={form.brands_represented || ""}
+                        placeholder={fc("brands_represented").placeholder}
+                        onChange={(e) => set("brands_represented", e.target.value)} onBlur={blur} />
+                      <p className="text-[11px] text-slate-400 mt-1.5 pl-1">Séparer les marques par des virgules</p>
+                    </div>
+                    )}
 
-              {/* ── ÉTAPE 5 : Réseaux + Aperçu ───────────────────── */}
-              {step === 5 && (
-                <>
-                  <h2 className="text-lg font-bold text-gray-900">Réseaux sociaux</h2>
+                    {fc("products_origin_country").visible && (
+                    <Inp label={fc("products_origin_country").label} type="text" value={form.products_origin_country || ""}
+                      placeholder={fc("products_origin_country").placeholder}
+                      onChange={(e) => set("products_origin_country", e.target.value)} onBlur={blur} />
+                    )}
+                  </>}
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      <Facebook className="inline h-3.5 w-3.5 mr-1 text-blue-600" />Facebook
-                    </label>
-                    <input
-                      type="text"
-                      value={form.facebook_url || ''}
-                      onChange={(e) => handleChange('facebook_url', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="https://facebook.com/votrepage ou NomPage"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
+                  {/* ── Étape 5 ─────────────────────────────────────── */}
+                  {step === 5 && <>
+                    <div className="space-y-4">
+                      {fc("facebook_url").visible  && <SocialField icon={Facebook}  bg="bg-[#1877F2]"   label={fc("facebook_url").label}  field="facebook_url"  value={form.facebook_url  || ""} onChange={set} onBlur={blur} />}
+                      {fc("instagram_url").visible && <SocialField icon={Instagram} bg="bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600" label={fc("instagram_url").label} field="instagram_url" value={form.instagram_url || ""} onChange={set} onBlur={blur} />}
+                      {fc("linkedin_url").visible  && <SocialField icon={Linkedin}  bg="bg-[#0A66C2]"   label={fc("linkedin_url").label}  field="linkedin_url"  value={form.linkedin_url  || ""} onChange={set} onBlur={blur} />}
+                      {fc("twitter_url").visible   && <SocialField icon={Twitter}   bg="bg-black"        label={fc("twitter_url").label}   field="twitter_url"   value={form.twitter_url   || ""} onChange={set} onBlur={blur} />}
+                      {fc("youtube_url").visible   && <SocialField icon={Youtube}   bg="bg-[#FF0000]"   label={fc("youtube_url").label}   field="youtube_url"   value={form.youtube_url   || ""} onChange={set} onBlur={blur} />}
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      <Instagram className="inline h-3.5 w-3.5 mr-1 text-pink-500" />Instagram
-                    </label>
-                    <input
-                      type="text"
-                      value={form.instagram_url || ''}
-                      onChange={(e) => handleChange('instagram_url', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="https://instagram.com/votrepage"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
+                    {entry && (
+                      <div className="mt-6 pt-6 border-t-2 border-dashed border-slate-100">
+                        <div className="flex items-center gap-2 mb-4">
+                          <CheckCircle className="w-4 h-4 text-[#C9A84C]" />
+                          <span className="text-sm font-black text-[#0B1C3D]">Aperçu de votre fiche catalogue</span>
+                        </div>
+                        <CatalogueFicheCard entry={{ ...entry, ...form } as CatalogueEntry} printMode={false} />
+                      </div>
+                    )}
+                  </>}
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      <Linkedin className="inline h-3.5 w-3.5 mr-1 text-blue-700" />LinkedIn
-                    </label>
-                    <input
-                      type="text"
-                      value={form.linkedin_url || ''}
-                      onChange={(e) => handleChange('linkedin_url', e.target.value)}
-                      onBlur={handleBlurSave}
-                      placeholder="https://linkedin.com/company/votrepage"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                    />
-                  </div>
+                </motion.div>
+              </AnimatePresence>
 
-                  {/* Aperçu de la fiche */}
-                  <div className="mt-6">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-3">Aperçu de votre fiche catalogue</h3>
-                    <CatalogueFicheCard
-                      entry={{ ...entry!, ...form } as CatalogueEntry}
-                      printMode={false}
-                    />
-                  </div>
-                </>
-              )}
+              {/* ─ Navigation ──────────────────────────────────────── */}
+              <div className="flex items-center justify-between border-t-2 border-slate-50 px-6 lg:px-8 py-4 bg-slate-50/40">
+                <button onClick={prev} disabled={step === 1}
+                  className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-slate-500 border-2 border-slate-200 rounded-2xl disabled:opacity-25 hover:border-slate-300 hover:text-slate-700 transition-all">
+                  <ChevronLeft className="w-4 h-4" /> Précédent
+                </button>
 
-            </motion.div>
-          </AnimatePresence>
-
-          {/* ─── NAVIGATION ─────────────────────────────────────────── */}
-          <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4 bg-gray-50">
-            <button
-              onClick={handlePrev}
-              disabled={step === 1}
-              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-600 rounded-lg disabled:opacity-30 hover:bg-gray-200 transition"
-            >
-              <ChevronLeft className="h-4 w-4" /> Précédent
-            </button>
-
-            <div className="flex items-center gap-2 text-xs text-gray-400">
-              {isSaving && <><Loader2 className="h-3 w-3 animate-spin" /> Sauvegarde…</>}
-              {!isSaving && <span>{completion}% complété</span>}
+                {step < 5 ? (
+                  <button onClick={next} disabled={!canNext()}
+                    className="flex items-center gap-2 px-7 py-2.5 text-sm font-black bg-[#C9A84C] text-[#0B1C3D] rounded-2xl disabled:opacity-40 hover:bg-[#b8973b] active:scale-95 transition-all shadow-lg shadow-[#C9A84C]/25">
+                    Suivant <ChevronRight className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <button onClick={submit} disabled={submitting}
+                    className="flex items-center gap-2 px-7 py-2.5 text-sm font-black bg-[#0B1C3D] text-white rounded-2xl disabled:opacity-50 hover:bg-[#162d5e] active:scale-95 transition-all shadow-lg shadow-[#0B1C3D]/20">
+                    {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    Envoyer ma fiche
+                  </button>
+                )}
+              </div>
             </div>
 
-            {step < STEPS.length ? (
-              <button
-                onClick={handleNext}
-                disabled={!canProceed()}
-                className="flex items-center gap-1 px-5 py-2 text-sm font-bold bg-[#0B1C3D] text-white rounded-lg disabled:opacity-40 hover:bg-[#1a3060] transition"
-              >
-                Suivant <ChevronRight className="h-4 w-4" />
-              </button>
-            ) : (
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting || completion < 40}
-                className="flex items-center gap-2 px-6 py-2 text-sm font-bold bg-[#C9A84C] text-[#0B1C3D] rounded-lg disabled:opacity-40 hover:bg-[#e6c06b] transition"
-              >
-                {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
-                Envoyer ma fiche
-              </button>
-            )}
+            {/* Footer */}
+            <p className="text-center text-[11px] text-slate-400 mt-6">
+              SIB 2026 · Salon International du Bâtiment ·{" "}
+              <a href="mailto:Sib2026@urbacom.net" className="text-[#C9A84C] hover:underline">Sib2026@urbacom.net</a>
+            </p>
           </div>
         </div>
       </div>

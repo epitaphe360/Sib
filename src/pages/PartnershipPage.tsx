@@ -1,34 +1,34 @@
 ﻿import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
+import { useTranslation } from '../hooks/useTranslation';
 import { Handshake, Star, TrendingUp, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { getSupportEmail, getSupportPhone, getSupportMessage } from '../lib/config';
-import { PageHero } from '../components/ui/PageHero';
-import { SectionHeader } from '../components/ui/SectionHeader';
 
 export default function PartnershipPage() {
+  const { t } = useTranslation();
   const handleContact = () => {
     toast.success(getSupportMessage('partnership'));
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <PageHero
-        badge={<><Handshake className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Partenariats</span></>}
-        title={<>Partenariats <span className="text-yellow-300">SIB 2026</span></>}
-        subtitle="Rejoignez l'écosystème bâtiment international et bénéficiez d'une visibilité exceptionnelle auprès des décideurs du secteur."
-        py="py-16 md:py-20"
-      />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Partenariats SIB 2026
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Rejoignez l'écosystème bâtiment international et bénéficiez d'une visibilité exceptionnelle auprès des décideurs du secteur.
+          </p>
+        </div>
 
         {/* Partnership Types */}
-        <div className="mb-12">
-          <SectionHeader badge="Offres" title="Types de Partenariat" align="center" />
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          <Card className="p-8 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
-            <div className="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Star className="h-8 w-8 text-indigo-600" />
+          <Card className="p-8 text-center">
+            <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Star className="h-8 w-8 text-blue-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               Partenaire Premium
@@ -47,7 +47,7 @@ export default function PartnershipPage() {
             </Button>
           </Card>
 
-          <Card className="p-8 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+          <Card className="p-8 text-center">
             <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
               <TrendingUp className="h-8 w-8 text-green-600" />
             </div>
@@ -68,7 +68,7 @@ export default function PartnershipPage() {
             </Button>
           </Card>
 
-          <Card className="p-8 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+          <Card className="p-8 text-center">
             <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
               <Users className="h-8 w-8 text-purple-600" />
             </div>
@@ -91,8 +91,10 @@ export default function PartnershipPage() {
         </div>
 
         {/* Benefits Section */}
-        <Card className="p-8 mb-12 bg-white">
-          <SectionHeader badge="Avantages" title="Avantages du Partenariat" align="center" />
+        <Card className="p-8 mb-12">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+            Avantages du Partenariat
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
@@ -124,8 +126,8 @@ export default function PartnershipPage() {
         </Card>
 
         {/* Contact Section */}
-        <Card className="p-8 text-center bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
-          <Handshake className="h-16 w-16 text-indigo-600 mx-auto mb-6" />
+        <Card className="p-8 text-center">
+          <Handshake className="h-16 w-16 text-blue-600 mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Prêt à nous rejoindre ?
           </h2>

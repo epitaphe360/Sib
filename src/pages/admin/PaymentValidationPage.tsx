@@ -5,7 +5,6 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { supabase } from '../../lib/supabase';
 import useAuthStore from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
-import { createInvoice } from '../../services/invoiceService';
 import {
   CreditCard,
   Clock,
@@ -154,7 +153,7 @@ export default function PaymentValidationPage() {
         .from('payment_requests')
         .select('*')
         .order('created_at', { ascending: false })
-        .range(0, 499);
+        .range(0, 49);
 
       // Filtrer par statut
       if (filter !== 'all') {
@@ -261,44 +260,11 @@ export default function PaymentValidationPage() {
         // Mettre à jour le statut utilisateur
         const request = requests.find(r => r.id === requestId);
         if (request?.user_id) {
-          const requestAny = request as any;
-          const levelUpdate: Record<string, string> = { status: 'active' };
-          if (request.users?.type === 'partner') {
-            levelUpdate.partner_tier = requestAny.requested_level || 'standard';
-          } else if (request.users?.type === 'visitor') {
-            levelUpdate.visitor_level = requestAny.requested_level || 'vip';
-          }
           await supabase
             .from('users')
-            .update(levelUpdate)
+            .update({ status: 'active', payment_status: 'paid' })
             .eq('id', request.user_id);
         }
-      }
-
-      // Générer la facture automatiquement dans invoices (non-bloquant)
-      const req = requests.find(r => r.id === requestId);
-      if (req?.user_id && req.users) {
-        let userType: 'visitor' | 'exhibitor' | 'partner' = 'visitor';
-        if (req.users.type === 'exhibitor') { userType = 'exhibitor'; }
-        else if (req.users.type === 'partner') { userType = 'partner'; }
-        const ref = req.transfer_reference || requestId;
-        const notesSuffix = notes ? ` — ${notes}` : '';
-        const invoiceNotes = `Virement bancaire validé — Réf: ${ref}${notesSuffix}`;
-        createInvoice({
-          user_id: req.user_id,
-          user_type: userType,
-          user_email: req.users.email,
-          user_name: req.users.name || req.users.company_name || req.users.email,
-          payment_request_id: requestId,
-          vat_rate: 0,
-          currency: req.currency || 'EUR',
-          notes: invoiceNotes,
-          lines: [{
-            description: req.description || 'Pass Premium VIP SIB 2026',
-            quantity: 1,
-            unit_price: req.amount,
-          }],
-        }).catch(err => console.warn('[Invoice] Erreur génération facture:', err));
       }
 
       toast.success('Paiement approuvé avec succès !');

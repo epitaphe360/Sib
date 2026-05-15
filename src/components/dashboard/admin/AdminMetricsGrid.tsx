@@ -82,10 +82,10 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
   ];
 
   return (
-    <div className="mb-8">
+    <div className="mb-16">
       {/* Hero section — divider premium */}
       <motion.div
-        className="flex items-center justify-between mb-6 pb-4"
+        className="flex items-center justify-between mb-12 pb-8"
         initial={{ opacity: 0, y: -12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-40px' }}
@@ -108,7 +108,7 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
 
       {/* Stats grid — ÉNORME display */}
       <motion.div
-        className="grid grid-cols-2 md:grid-cols-4 gap-4"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -129,7 +129,7 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
 
             {/* Card container */}
             <div
-              className="relative rounded-2xl border p-5 h-full flex flex-col shadow-luxury backdrop-blur-md"
+              className="relative rounded-2xl border p-8 h-full flex flex-col shadow-luxury backdrop-blur-md"
               style={{
                 background: 'rgba(255,255,255,0.95)',
                 borderColor: 'rgba(30,58,95,0.1)',
@@ -139,17 +139,17 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
               <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: color }} />
 
               {/* Icon circle */}
-              <div className="mb-3 inline-flex w-fit">
+              <div className="mb-6 inline-flex w-fit">
                 <div className="p-3 rounded-xl" style={{ background: `${color}18`, border: `1px solid ${color}30` }}>
                   <Icon className="h-6 w-6" style={{ color }} />
                 </div>
               </div>
 
-              {/* Number in serif */}
-              <div className="mb-2 flex-1">
-                <div className="font-serif font-bold tracking-tight leading-none mb-1" style={{ fontSize: '2.5rem', color }}>
+              {/* HUGE number in serif */}
+              <div className="mb-4 flex-1">
+                <div className="font-serif font-bold tracking-tight leading-none mb-1" style={{ fontSize: '3.5rem', color }}>
                   <AnimatedNumber value={typeof value === 'number' ? value : parseInt(value)} delay={idx * 0.08} />
-                  <span className="text-xl ml-1" style={{ color }}>
+                  <span className="text-2xl ml-1" style={{ color }}>
                     {suffix}
                   </span>
                 </div>
@@ -166,7 +166,7 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
               </div>
 
               {/* Bottom divider */}
-              <div className="mt-3 pt-3 border-t border-[#1e3a5f]/08" />
+              <div className="mt-6 pt-6 border-t border-[#1e3a5f]/08" />
 
               {/* Trend badge */}
               <div className="flex items-center gap-1.5 text-xs mt-4 font-medium" style={{ color }}>

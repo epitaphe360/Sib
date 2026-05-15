@@ -74,8 +74,11 @@ const AdminRegistrationRequestsPage = lazyRetry(() => import('./pages/admin/Admi
 const BadgePage = lazyRetry(() => import('./pages/BadgePage'));
 const CatalogueFormPage = lazyRetry(() => import('./pages/catalogue/CatalogueFormPage'));
 const CatalogueManagementPage = lazyRetry(() => import('./pages/admin/CatalogueManagementPage'));
+const CatalogueEntryEditPage = lazyRetry(() => import('./pages/admin/CatalogueEntryEditPage'));
+const CatalogueFormConfigPage = lazyRetry(() => import('./pages/admin/CatalogueFormConfigPage'));
 const PromoCodesPage = lazyRetry(() => import('./pages/admin/PromoCodesPage'));
 const AdminBadgeConfigPage = lazyRetry(() => import('./pages/admin/AdminBadgeConfigPage'));
+const AdminPricingPage = lazyRetry(() => import('./pages/admin/AdminPricingPage'));
 const PartnerUpgradePage = lazyRetry(() => import('./pages/PartnerUpgradePage'));
 const BadgeScannerPage = lazyRetry(() => import('./pages/BadgeScannerPage'));
 const PartnerBankTransferPage = lazyRetry(() => import('./pages/partner/PartnerBankTransferPage'));
@@ -195,6 +198,28 @@ const ChapiteauCheckoutPage = lazyRetry(() => import('./pages/chapiteau/Chapitea
 const ChapiteauPaymentSuccessPage = lazyRetry(() => import('./pages/chapiteau/ChapiteauPaymentSuccessPage'));
 const AdminChapiteauPage = lazyRetry(() => import('./pages/admin/AdminChapiteauPage'));
 
+// Routes manquantes — admin
+const SecurityZonesPage = lazyRetry(() => import('./pages/admin/SecurityZonesPage'));
+const AdminConfigPage = lazyRetry(() => import('./pages/admin/AdminConfigPage'));
+const PushNotificationsPage = lazyRetry(() => import('./pages/admin/PushNotificationsPage'));
+const AdminVisaLettersPage = lazyRetry(() => import('./pages/admin/AdminVisaLettersPage'));
+const AdminStandCollaboratorsPage = lazyRetry(() => import('./pages/admin/AdminStandCollaboratorsPage'));
+const SalonsManagementPage = lazyRetry(() => import('./pages/admin/SalonsManagementPage'));
+const AdminInvitationsPage = lazyRetry(() => import('./pages/admin/AdminInvitationsPage'));
+const SessionRegistrationsPage = lazyRetry(() => import('./pages/admin/SessionRegistrationsPage'));
+const AdminCredentialsPage = lazyRetry(() => import('./pages/admin/AdminCredentialsPage'));
+const AdminInvoicesPage = lazyRetry(() => import('./pages/admin/AdminInvoicesPage'));
+const AdminMediaLibraryPage = lazyRetry(() => import('./pages/admin/media/MediaLibraryPage'));
+// Routes manquantes — exposant / partenaire / visiteur
+const ExhibitorTeamPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorTeamPage'));
+const TeamBadgesPrintPage = lazyRetry(() => import('./pages/exhibitor/TeamBadgesPrintPage'));
+const ExhibitorScansPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorScansPage'));
+const ExhibitorInvoicesPage = lazyRetry(() => import('./pages/exhibitor/ExhibitorInvoicesPage'));
+const PartnerScansPage = lazyRetry(() => import('./pages/partner/PartnerScansPage'));
+const PartnerInvoicesPage = lazyRetry(() => import('./pages/partner/PartnerInvoicesPage'));
+const VisitorInvoicesPage = lazyRetry(() => import('./pages/visitor/VisitorInvoicesPage'));
+const InvitationLetterPage = lazyRetry(() => import('./pages/InvitationLetterPage'));
+
 import { useLanguageStore } from './store/languageStore';
 import { ROUTES } from './lib/routes';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -205,18 +230,15 @@ import { useAuthStore } from './store/authStore';
 import { UrbaEventNav } from './components/layout/UrbaEventNav';
 
 const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];
-// Pages fullscreen avec leur propre header — header global masqué, pt-0
-const NO_HEADER_ROUTES = ['/admin/badge-config'];
 
 function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
-  const isNoHeader = NO_HEADER_ROUTES.some(r => location.pathname.startsWith(r));
   return (
-    <div className={`flex flex-col${isNoHeader ? '' : ' min-h-screen'}`}>
+    <div className="min-h-screen flex flex-col">
       <SkipToContent />
-      {!isNoHeader && (isUrbaRoute ? <UrbaEventNav /> : <Header />)}
-      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : isNoHeader ? '' : 'pt-16 sm:pt-20 xl:pt-28'}`}>
+      {isUrbaRoute ? <UrbaEventNav /> : <Header />}
+      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : 'pt-16 sm:pt-20 xl:pt-28'}`}>
         {children}
       </main>
     </div>
@@ -498,10 +520,35 @@ const App = () => {
             <Route path={ROUTES.NETWORKING_MATCHMAKING} element={<ProtectedRoute><MatchmakingDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_SPEAKERS} element={<ProtectedRoute requiredRole="admin"><AdminSpeakersPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PRESS_ACCREDITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminPressAccreditationsPage /></ProtectedRoute>} />
+            {/* Routes admin manquantes */}
+            <Route path={ROUTES.ADMIN_SECURITY_ZONES} element={<ProtectedRoute requiredRole="admin"><SecurityZonesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminConfigPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_PUSH_NOTIFICATIONS} element={<ProtectedRoute requiredRole="admin"><PushNotificationsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_VISA_LETTERS} element={<ProtectedRoute requiredRole="admin"><AdminVisaLettersPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_STAND_COLLABORATORS} element={<ProtectedRoute requiredRole="admin"><AdminStandCollaboratorsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SALONS} element={<ProtectedRoute requiredRole="admin"><SalonsManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_INVITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminInvitationsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SESSION_REGISTRATIONS} element={<ProtectedRoute requiredRole="admin"><SessionRegistrationsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_CREDENTIALS} element={<ProtectedRoute requiredRole="admin"><AdminCredentialsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_INVOICES} element={<ProtectedRoute requiredRole="admin"><AdminInvoicesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_MEDIA_LIBRARY} element={<ProtectedRoute requiredRole="admin"><AdminMediaLibraryPage /></ProtectedRoute>} />
+            {/* Routes exposant / partenaire / visiteur manquantes */}
+            <Route path={ROUTES.EXHIBITOR_TEAM} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorTeamPage /></ProtectedRoute>} />
+            <Route path={ROUTES.TEAM_BADGES_PRINT} element={<ProtectedRoute requiredRole="exhibitor"><TeamBadgesPrintPage /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_SCANS} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorScansPage /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_INVOICES} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorInvoicesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_SCANS} element={<ProtectedRoute requiredRole="partner"><PartnerScansPage /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_INVOICES} element={<ProtectedRoute requiredRole="partner"><PartnerInvoicesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.VISITOR_INVOICES} element={<ProtectedRoute requiredRole="visitor"><VisitorInvoicesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.INVITATION_LETTER} element={<ProtectedRoute><InvitationLetterPage /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_INVITATION_LETTER} element={<ProtectedRoute requiredRole="exhibitor"><InvitationLetterPage /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_INVITATION_LETTER} element={<ProtectedRoute requiredRole="partner"><InvitationLetterPage /></ProtectedRoute>} />
 
             {/* Catalogue routes */}
             <Route path={ROUTES.CATALOGUE_FILL} element={<CatalogueFormPage />} />
             <Route path={ROUTES.ADMIN_CATALOGUE} element={<ProtectedRoute requiredRole="admin"><CatalogueManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_CATALOGUE_EDIT} element={<ProtectedRoute requiredRole="admin"><CatalogueEntryEditPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_CATALOGUE_FORM_CONFIG} element={<ProtectedRoute requiredRole="admin"><CatalogueFormConfigPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PROMO_CODES} element={<ProtectedRoute requiredRole="admin"><PromoCodesPage /></ProtectedRoute>} />
 
             {/* MODULE 3 — Location de matériel */}
@@ -520,6 +567,7 @@ const App = () => {
             <Route path={ROUTES.CHAPITEAU_PAYMENT_SUCCESS} element={<ChapiteauPaymentSuccessPage />} />
             <Route path={ROUTES.ADMIN_CHAPITEAU} element={<ProtectedRoute requiredRole="admin"><AdminChapiteauPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_BADGE_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminBadgeConfigPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_PRICING} element={<ProtectedRoute requiredRole="admin"><AdminPricingPage /></ProtectedRoute>} />
 
             <Route path={ROUTES.NOT_FOUND} element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>

@@ -13,7 +13,7 @@ interface UserDB {
   name: string;
   type: 'exhibitor' | 'partner' | 'visitor' | 'admin' | 'security';
   profile: UserProfile;
-  visitor_level?: 'free' | 'vip';
+  visitor_level?: 'free' | 'premium' | 'vip';
   status?: 'active' | 'pending' | 'suspended' | 'rejected';
   created_at: string;
   updated_at: string;
@@ -24,13 +24,9 @@ interface UserDB {
 interface PartnerDB {
   id: string;
   company_name: string;
-  name_en?: string;
   partner_type: string;
-  category_en?: string;
   sector?: string;
-  sector_en?: string;
   description?: string;
-  description_en?: string;
   logo_url?: string;
   website?: string;
   verified: boolean;
@@ -46,14 +42,10 @@ interface PartnerDB {
 interface PartnerUI {
   id: string;
   name: string;
-  name_en?: string | null;
   partner_tier: string;
   category: string;
-  category_en?: string | null;
   sector?: string;
-  sector_en?: string | null;
   description: string;
-  description_en?: string | null;
   logo?: string;
   website?: string;
   country: string;
@@ -282,6 +274,7 @@ export class SupabaseService {
   // ==================== USER MANAGEMENT ====================
   static async getUserByEmail(email: string): Promise<User | null> {
     if (!this.checkSupabaseConnection()) {
+      console.warn('⚠️ Supabase non configuré');
       return null;
     }
 
@@ -304,8 +297,7 @@ export class SupabaseService {
       const userData = usersData && usersData.length > 0 ? usersData[0] : null;
 
       if (!userData) {
-        // Pas de profil dans public.users → retourner null (session Supabase valide mais profil absent)
-        return null;
+        throw new Error('Aucun profil utilisateur trouvé pour cet email');
       }
 
       // Si c'est un exposant, récupérer les données d'exhibitor
@@ -321,8 +313,10 @@ export class SupabaseService {
           if (!exhibitorError && exhibitorResult) {
             exhibitorData = exhibitorResult;
           } else if (exhibitorError) {
+            console.warn('⚠️ Erreur lors de la récupération des données exposant:', exhibitorError.message);
           }
         } catch (e) {
+          console.warn('⚠️ Exception lors de la récupération des données exposant:', e);
         }
       }
 
@@ -361,6 +355,7 @@ export class SupabaseService {
             }
           }
         } catch (e) {
+          console.warn('⚠️ Erreur lors de la récupération des projets partenaire:', e);
         }
       }
 
@@ -380,35 +375,16 @@ export class SupabaseService {
   static async deleteUser(userId: string): Promise<void> {
     if (!this.checkSupabaseConnection()) {return;}
     const safeSupabase = supabase!;
-
-    // Récupérer le token de session
-    const { data: { session } } = await safeSupabase.auth.getSession();
-    if (!session?.access_token) {
-      throw new Error('Session expirée - reconnectez-vous');
-    }
-
     try {
-      // Appel à la route serveur qui supprime dans users + auth.users
-      const baseUrl = window.location.origin;
-      const response = await fetch(`${baseUrl}/api/admin/users/${userId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const result = await response.json();
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Échec de la suppression');
-      }
-    } catch (fetchError: any) {
-      // Fallback: suppression directe via Supabase (si RLS le permet)
+      // Soft-delete: marquer l'utilisateur comme supprimé
       const { error } = await safeSupabase
         .from('users')
-        .delete()
+        .update({ status: 'deleted', updated_at: new Date().toISOString() })
         .eq('id', userId);
-      if (error) {throw new Error(`Erreur suppression: ${error.message}`);}
+      if (error) {throw new Error(`Erreur suppression utilisateur ${userId}: ${error.message}`);}
+    } catch (error) {
+      console.error(`Erreur deleteUser ${userId}:`, error);
+      throw error;
     }
   }
 
@@ -418,6 +394,7 @@ export class SupabaseService {
     const safeSupabase = supabase!;
     try {
       // ✅ Étape 1: Vérifier que l'utilisateur existe et que nous avons les droits d'accès
+      console.log('🔍 Vérification de l\'utilisateur avant mise à jour:', userId);
       const { data: existingUser, error: checkError } = await safeSupabase
         .from('users')
         .select('id')
@@ -444,6 +421,7 @@ export class SupabaseService {
       updateData.updated_at = new Date().toISOString();
 
       // ✅ Étape 3: Effectuer la mise à jour avec gestion appropriée des résultats
+      console.log('📝 Mise à jour utilisateur:', userId, Object.keys(updateData));
       const { data, error } = await safeSupabase
         .from('users')
         .update(updateData)
@@ -462,6 +440,7 @@ export class SupabaseService {
       }
 
       const updatedData = Array.isArray(data) ? data[0] : data;
+      console.log('✅ Utilisateur mis à jour avec succès:', userId);
       return this.transformUserDBToUser(updatedData);
     } catch (error) {
       console.error(`❌ Erreur mise à jour utilisateur ${userId}:`, error);
@@ -499,6 +478,7 @@ export class SupabaseService {
     offset?: number;
   }): Promise<ExhibitorsPageResult> {
     if (!this.checkSupabaseConnection()) {
+      console.warn('⚠️ Supabase non configuré - aucun exposant disponible');
       return { items: [], total: 0 };
     }
 
@@ -551,6 +531,7 @@ export class SupabaseService {
 
   static async getExhibitors(): Promise<Exhibitor[]> {
     if (!this.checkSupabaseConnection()) {
+      console.warn('⚠️ Supabase non configuré - aucun exposant disponible');
       return [];
     }
 
@@ -580,9 +561,11 @@ export class SupabaseService {
       }
 
       if (!exhibitorsData || exhibitorsData.length === 0) {
+        console.log('ℹ️ Aucun exposant dans la table exhibitors');
         return [];
       }
 
+      console.log(`✅ ${exhibitorsData.length} exposants chargés depuis 'exhibitors'`);
       return exhibitorsData.map((e: object) => {
         return this.transformExhibitorDBToExhibitor(e as ExhibitorDB);
       });
@@ -599,6 +582,7 @@ export class SupabaseService {
    */
   static async getExhibitorById(id: string): Promise<Exhibitor | null> {
     if (!this.checkSupabaseConnection()) {
+      console.warn('⚠️ Supabase non configuré');
       return null;
     }
 
@@ -679,6 +663,7 @@ export class SupabaseService {
         };
       }
 
+      console.warn(`Exposant ${id} non trouvé`);
       return null;
 
     } catch (error) {
@@ -726,6 +711,7 @@ export class SupabaseService {
     offset?: number;
   }): Promise<PartnersPageResult> {
     if (!this.checkSupabaseConnection()) {
+      console.warn('⚠️ Supabase non configuré - aucun partenaire disponible');
       return { items: [], total: 0 };
     }
 
@@ -738,7 +724,7 @@ export class SupabaseService {
       const { data, error, count } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, name_en, partner_type, category_en, sector, sector_en, description, description_en, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`,
+          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`,
           { count: 'exact' }
         )
         // Afficher les partenaires publiés (true) OU dont is_published n'est pas renseigné (null)
@@ -752,17 +738,13 @@ export class SupabaseService {
       const items = (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
         name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
-        name_en: partner.name_en || null,
         partner_tier: SupabaseService.normalizePartnerTier(
           typeof partner.partner_type === 'string' ? partner.partner_type : null,
           partner.partnership_level
         ),
         category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
-        category_en: partner.category_en || null,
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
-        sector_en: partner.sector_en || null,
         description: typeof partner.description === 'string' ? partner.description : '',
-        description_en: partner.description_en || null,
         logo: partner.logo_url,
         website: partner.website,
         country: (partner.contact_info as any)?.country || (partner.contact_info as any)?.pays || '',
@@ -794,6 +776,7 @@ export class SupabaseService {
 
   static async getPartners(): Promise<PartnerUI[]> {
     if (!this.checkSupabaseConnection()) {
+      console.warn('⚠️ Supabase non configuré - aucun partenaire disponible');
       return [];
     }
 
@@ -803,7 +786,7 @@ export class SupabaseService {
       const { data, error } = await safeSupabase
         .from('partners')
         .select(
-          `id, company_name, name_en, partner_type, category_en, sector, sector_en, description, description_en, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`
+          `id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published, established_year, employees`
         )
         .or('is_published.eq.true,is_published.is.null')
         .order('featured', { ascending: false })
@@ -814,17 +797,13 @@ export class SupabaseService {
       return (data || []).map((partner: PartnerDB) => ({
         id: partner.id,
         name: typeof partner.company_name === 'string' ? partner.company_name : 'Partenaire',
-        name_en: partner.name_en || null,
         partner_tier: SupabaseService.normalizePartnerTier(
           typeof partner.partner_type === 'string' ? partner.partner_type : null,
           partner.partnership_level
         ),
         category: (typeof partner.partner_type === 'object') ? 'Partenaire' : (partner.partner_type || 'partner'),
-        category_en: partner.category_en || null,
         sector: typeof partner.sector === 'string' ? partner.sector : 'Autre',
-        sector_en: partner.sector_en || null,
         description: typeof partner.description === 'string' ? partner.description : '',
-        description_en: partner.description_en || null,
         logo: partner.logo_url,
         website: partner.website,
         country: (partner.contact_info as any)?.country || (partner.contact_info as any)?.pays || '',
@@ -1048,6 +1027,7 @@ export class SupabaseService {
   // ==================== RECOMMENDATIONS ====================
   static async getRecommendationsForUser(userId: string, limit: number = 10): Promise<{ itemId: string; itemType: string; similarityScore: number }[]> {
     if (!this.checkSupabaseConnection()) {
+      console.warn("⚠️ Supabase non configuré - impossible de récupérer les recommandations");
       return [];
     }
 
@@ -1200,6 +1180,7 @@ export class SupabaseService {
     const endTime = eventDB.end_time || eventDB.end_date;
 
     if (!startTime) {
+      console.warn('Event sans start_time:', eventDB.id);
       // Utiliser une date par défaut
       const defaultDate = new Date();
       return {
@@ -1238,6 +1219,7 @@ export class SupabaseService {
 
     // Vérifier que les dates sont valides
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      console.warn('Event avec dates invalides:', eventDB.id, startTime, endTime);
       const defaultDate = new Date();
       return {
         id: eventDB.id,
@@ -1293,6 +1275,7 @@ export class SupabaseService {
     const safeSupabase = supabase!;
     try {
       // 1. Créer l'utilisateur dans Supabase Auth
+      console.log('📝 Tentative de création utilisateur:', { email, type: userData.type });
 
       const signUpOptions: any = {
         data: {
@@ -1307,6 +1290,13 @@ export class SupabaseService {
         options: signUpOptions
       });
 
+      console.log('📝 Réponse signUp:', {
+        user: authData?.user?.id,
+        email: authData?.user?.email,
+        confirmed: authData?.user?.email_confirmed_at,
+        session: !!authData?.session,
+        error: authError
+      });
 
       if (authError) {
         console.error('❌ Erreur Auth (Détails):', {
@@ -1323,6 +1313,7 @@ export class SupabaseService {
           authError.message?.toLowerCase().includes('user already');
 
         if (isAlreadyRegistered) {
+          console.warn('⚠️ Auth user déjà existant — vérification du profil users...');
           // Se connecter pour récupérer l'ID de l'auth user
           const { data: signInData, error: signInErr } = await safeSupabase.auth.signInWithPassword({ email, password });
           if (!signInErr && signInData?.user) {
@@ -1338,6 +1329,7 @@ export class SupabaseService {
               throw new Error('Un compte existe déjà avec cet email. Veuillez vous connecter.');
             } else {
               // Profil manquant → le créer maintenant et continuer
+              console.log('✅ Profil manquant détecté — création du profil...');
               const recoveryPayload: UserDB = {
                 id: signInData.user.id,
                 email,
@@ -1353,6 +1345,7 @@ export class SupabaseService {
                 .select()
                 .single();
               if (!recoveryErr && recoveryProfile) {
+                console.log('✅ Profil récupéré avec succès');
                 return this.transformUserDBToUser(recoveryProfile);
               }
             }
@@ -1368,6 +1361,7 @@ export class SupabaseService {
 
       // ⚠️ Vérifier si l'email n'est pas confirmé
       if (!authData.user.email_confirmed_at) {
+        console.warn('⚠️ Email non confirmé! Session:', authData.session ? 'OUI' : 'NON');
       }
 
 
@@ -1476,6 +1470,7 @@ export class SupabaseService {
         usersPolicyRecursion = message.includes('infinite recursion detected in policy for relation "users"');
 
         if (usersPolicyRecursion) {
+          console.warn('⚠️ Policy RLS récursive détectée sur users, fallback sur auth.user');
           user = this.transformAuthUserToUser(data.user, email);
         } else {
           throw profileError;
@@ -1489,6 +1484,7 @@ export class SupabaseService {
         }
 
         // Profil absent dans users (inscription partielle) → le créer automatiquement
+        console.warn('⚠️ Profil absent dans users, création automatique...');
         const authUser = data.user;
         const userPayload = {
           id: authUser.id,
@@ -1502,6 +1498,7 @@ export class SupabaseService {
         const { data: created } = await safeSupabase.from('users').insert([userPayload]).select().single();
         if (created) {
           user = this.transformUserDBToUser(created);
+          console.log('✅ Profil recréé automatiquement');
         } else {
           throw new Error('Profil utilisateur introuvable. Veuillez contacter le support.');
         }
@@ -1633,6 +1630,7 @@ export class SupabaseService {
           .update({ minisite_created: true })
           .eq('id', exhibitorId);
       } catch (updateErr) {
+        console.warn('Impossible de marquer minisite_created:', updateErr);
       }
 
       return data;
@@ -1754,7 +1752,7 @@ export class SupabaseService {
       const { data, error } = await safeSupabase
         .from('events')
         .select('*')
-        .order('start_date', { ascending: true });
+        .order('event_date', { ascending: true });
 
       if (error) {throw error;}
 
@@ -1782,7 +1780,7 @@ export class SupabaseService {
       const { data, error, count } = await safeSupabase
         .from('events')
         .select('*', { count: 'exact' })
-        .order('start_date', { ascending: true })
+        .order('event_date', { ascending: true })
         .range(offset, offset + limit - 1);
 
       if (error) {throw error;}
@@ -2176,6 +2174,7 @@ export class SupabaseService {
       // 1. L'exhibitor.id - donc chercher le user_id associé pour trouver le mini-site
       // 2. Le user_id - donc chercher l'exhibitor.id pour trouver le mini-site
       if (!data) {
+        console.log('[MiniSite] Pas trouvé par exhibitor_id direct, recherche via exhibitors table...');
 
         // Stratégie 1: L'ID fourni est exhibitors.id, chercher son user_id
         const { data: exhibitorById } = await safeSupabase
@@ -2220,6 +2219,7 @@ export class SupabaseService {
 
       if (error || !data) {
         if (error) {
+          console.warn('[MiniSite] Erreur:', error.message);
         }
 
         // FALLBACK: Si l'exposant existe mais n'a pas de mini-site dans la table 'mini_sites',
@@ -2232,6 +2232,7 @@ export class SupabaseService {
           .maybeSingle();
 
         if (exhibitorCheck) {
+             console.log('[MiniSite] Exposant trouvé sans mini-site (Custom). Génération structure par défaut.');
              return {
                 id: `default-${exhibitorCheck.id}`,
                 exhibitor_id: exhibitorCheck.user_id, // L'ID attendu par le frontend pour les produits, etc.
@@ -2381,6 +2382,7 @@ export class SupabaseService {
         p_exhibitor_id: exhibitorId
       });
     } catch (error: any) {
+      console.warn('Erreur incrementMiniSiteViews:', error.message);
     }
   }
 
@@ -2397,6 +2399,7 @@ export class SupabaseService {
 
       if (error) {throw error;}
     } catch (error) {
+       console.warn('Erreur incrementPartnerViews:', error);
        // Fallback manual increment if RPC missing
        try {
          const { data: partner } = await safeSupabase
@@ -2442,6 +2445,7 @@ export class SupabaseService {
         .or(exhibitorIds.map(id => `user_id.eq.${id},id.eq.${id}`).join(','));
 
       if (exhibitorsError) {
+        console.warn('Erreur récupération exposants:', exhibitorsError);
       }
 
       // Combiner les données
@@ -2484,10 +2488,12 @@ export class SupabaseService {
         .maybeSingle();
 
       if (exhibitorData) {
+        console.log('[MiniSite] Exposant trouvé dans exhibitors:', exhibitorData.company_name);
         return exhibitorData;
       }
 
       // 2. Fallback: chercher dans exhibitor_profiles par user_id (structure legacy)
+      console.log('[MiniSite] Pas trouvé dans exhibitors, recherche dans exhibitor_profiles...');
       const { data: profileData, error: profileError } = await safeSupabase
         .from('exhibitor_profiles')
         .select('user_id, company_name, logo_url, description, website, phone, email')
@@ -2495,6 +2501,7 @@ export class SupabaseService {
         .maybeSingle();
 
       if (profileData) {
+        console.log('[MiniSite] Exposant trouvé dans exhibitor_profiles:', profileData.company_name);
         // Mapper les champs pour correspondre à la structure attendue
         return {
           id: profileData.user_id,
@@ -2510,6 +2517,7 @@ export class SupabaseService {
       }
 
       // 3. Fallback: chercher dans users si c'est un exposant
+      console.log('[MiniSite] Pas trouvé dans exhibitor_profiles, recherche dans users...');
       const { data: userData } = await safeSupabase
         .from('users')
         .select('id, name, email')
@@ -2518,6 +2526,7 @@ export class SupabaseService {
         .maybeSingle();
 
       if (userData) {
+        console.log('[MiniSite] Exposant basique trouvé dans users:', userData.name);
         return {
           id: userData.id,
           company_name: userData.name || 'Exposant',
@@ -2529,6 +2538,7 @@ export class SupabaseService {
       }
 
       // 4. DERNIER FALLBACK: Vérifier via exhibitors.user_id au lieu de exhibitors.id
+      console.log('[MiniSite] Pas trouvé via ID, recherche via user_id dans exhibitors...');
       const { data: exhibitorByUserId } = await safeSupabase
         .from('exhibitors')
         .select('id, user_id, company_name, logo_url, description, website, contact_info')
@@ -2536,9 +2546,11 @@ export class SupabaseService {
         .maybeSingle();
 
       if (exhibitorByUserId) {
+        console.log('[MiniSite] ✅ Exposant trouvé via user_id:', exhibitorByUserId.company_name);
         return exhibitorByUserId;
       }
 
+      console.warn('[MiniSite] ❌ AUCUN exposant trouvé pour ID:', exhibitorId);
       return null;
     } catch (error) {
       console.error('Erreur récupération exposant pour mini-site:', error);
@@ -2814,6 +2826,7 @@ export class SupabaseService {
     message: string;
   }): Promise<void> {
     try {
+      console.log('📧 Sending contact email via Backend API...');
       // Use relative URL so it works in both dev and production
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -2828,6 +2841,7 @@ export class SupabaseService {
         console.error('❌ Failed to send contact email:', err);
         // We log but don't crash, as the message is saved in DB
       } else {
+        console.log('✅ Contact email sent successfully');
       }
     } catch (error) {
       console.error('❌ Email send failed:', error);
@@ -2903,7 +2917,7 @@ export class SupabaseService {
       const hasLocation = filters.location && filters.location.trim();
 
       // Exclure visiteurs et admins si aucun type spécifié
-      if (!filters.userType) {
+      if (!filters.userType && !hasSector) {
         // Par défaut, seuls les exposants et partenaires (entreprises B2B)
         query = query.in('type', ['exhibitor', 'partner']);
       }
@@ -2923,9 +2937,9 @@ export class SupabaseService {
         );
       }
 
-      // Filtre par secteur — profile.sectors est un tableau JSON, on cherche via ilike sur sa représentation texte
+      // Filtre par secteur
       if (hasSector) {
-        query = query.ilike('profile->>sectors', `%${filters.sector!.trim()}%`);
+        query = query.eq('profile->>sector', filters.sector);
       }
 
       // Filtre par type d'utilisateur
@@ -2933,19 +2947,9 @@ export class SupabaseService {
         query = query.eq('type', filters.userType);
       }
 
-      // Filtre par région — mappe région → liste de pays (noms français stockés en DB)
+      // Filtre par localisation (pays)
       if (hasLocation) {
-        const REGION_COUNTRIES: Record<string, string[]> = {
-          afrique: ['Afrique du Sud','Algérie','Angola','Bénin','Botswana','Burkina Faso','Burundi','Cap-Vert','Cameroun','Comores','Congo','Congo (RDC)','Côte d\'Ivoire','Djibouti','Égypte','Érythrée','Éthiopie','Gabon','Gambie','Ghana','Guinée','Guinée équatoriale','Guinée-Bissau','Kenya','Lesotho','Libéria','Libye','Madagascar','Malawi','Mali','Maroc','Maurice','Mauritanie','Mozambique','Namibie','Niger','Nigéria','Ouganda','République Centrafricaine','Rwanda','Sénégal','Seychelles','Sierra Leone','Somalie','Soudan','Soudan du Sud','Tanzanie','Tchad','Togo','Tunisie','Zambie','Zimbabwe'],
-          europe: ['Albanie','Allemagne','Andorre','Arménie','Autriche','Azerbaïdjan','Belgique','Biélorussie','Bosnie-Herzégovine','Bulgarie','Chypre','Croatie','Danemark','Espagne','Estonie','Finlande','France','Géorgie','Grèce','Hongrie','Irlande','Islande','Italie','Lettonie','Liechtenstein','Lituanie','Luxembourg','Macédoine du Nord','Malte','Moldavie','Monaco','Monténégro','Norvège','Pays-Bas','Pologne','Portugal','République Tchèque','Roumanie','Royaume-Uni','Russie','Serbie','Slovaquie','Slovénie','Suède','Suisse','Ukraine'],
-          asie: ['Afghanistan','Arabie Saoudite','Bahreïn','Bangladesh','Bhoutan','Brunei','Cambodge','Chine','Corée du Sud','Corée du Nord','Émirats Arabes Unis','Inde','Indonésie','Irak','Iran','Israël','Japon','Jordanie','Kazakhstan','Kirghizistan','Koweït','Laos','Liban','Malaisie','Maldives','Mongolie','Myanmar','Népal','Oman','Ouzbékistan','Pakistan','Philippines','Qatar','Singapour','Sri Lanka','Syrie','Tadjikistan','Thaïlande','Timor oriental','Turkménistan','Turquie','Viêt Nam','Yémen'],
-          amerique: ['Argentine','Bahamas','Belize','Bolivie','Brésil','Canada','Chili','Colombie','Costa Rica','Cuba','États-Unis','Guatemala','Guyana','Haïti','Honduras','Jamaïque','Mexique','Nicaragua','Panama','Paraguay','Pérou','République Dominicaine','Suriname','Uruguay','Venezuela'],
-        };
-        const regionKey = filters.location!.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        const countryList = REGION_COUNTRIES[regionKey] || REGION_COUNTRIES[filters.location!.trim().toLowerCase()];
-        if (countryList && countryList.length > 0) {
-          query = query.in('profile->>country', countryList);
-        }
+        query = query.eq('profile->>country', filters.location);
       }
 
       // Exclure les utilisateurs sans profil valide
@@ -3137,10 +3141,12 @@ export class SupabaseService {
 
     // Validate UUID format (must be 36 chars with hyphens)
     if (!exhibitorIdOrUserId || !exhibitorIdOrUserId.includes('-') || exhibitorIdOrUserId.length !== 36) {
+      console.warn('[TIME_SLOTS] Invalid ID format:', exhibitorIdOrUserId);
       return [];
     }
 
     if (!exhibitorIdOrUserId) {
+      console.warn('[TIME_SLOTS] ID is empty');
       return [];
     }
 
@@ -3258,6 +3264,7 @@ export class SupabaseService {
     if (slotsData.length === 0) {return [];}
 
     try {
+        console.log(`[BULK_CREATE] Processing ${slotsData.length} slots...`);
 
         // Résoudre l'exhibitor_id (on suppose que tous les slots sont pour le même user)
         let resolvedExhibitorId: string | null = null;
@@ -3273,6 +3280,7 @@ export class SupabaseService {
             if (exhibitor) {
                 resolvedExhibitorId = exhibitor.id;
             } else {
+                 console.warn('[BULK_CREATE] Exhibitor not found for user, creating one...');
                   // Fallback creation logic similar to createTimeSlot
                  const { data: user } = await safeSupabase.from('users').select('name').eq('id', userId).single();
                   const { data: newExhibitor } = await safeSupabase
@@ -3307,6 +3315,7 @@ export class SupabaseService {
 
         if (error) {throw error;}
 
+        console.log(`[BULK_CREATE] Successfully created ${data?.length} slots`);
 
         return data.map((dbSlot: any) => ({
             id: dbSlot.id,
@@ -3358,6 +3367,7 @@ export class SupabaseService {
             .maybeSingle();
 
           if (exhError || !exhibitor) {
+            console.warn('⚠️ [CREATE_SLOT] Exhibitor introuvable pour userId:', userId, 'création automatique...');
 
             // Créer automatiquement l'exhibitor si il n'existe pas
             const { data: user } = await safeSupabase
@@ -3396,8 +3406,10 @@ export class SupabaseService {
             }
 
             exhibitorId = newExhibitor.id;
+            console.log('✅ [CREATE_SLOT] Exhibitor créé automatiquement:', { userId, exhibitorId });
           } else {
             exhibitorId = exhibitor.id;
+            console.log('✅ [CREATE_SLOT] Exhibitor résolu:', { userId, exhibitorId });
           }
         }
       }
@@ -3422,6 +3434,7 @@ export class SupabaseService {
       };
 
       // LOG DÉTAILLÉ POUR DEBUG
+      console.log('🔍 [CREATE_SLOT] Payload à insérer:', JSON.stringify(insertPayload, null, 2));
 
       // Check for existing slot to avoid 409 Conflict
       const { data: existingSlot } = await safeSupabase
@@ -3435,6 +3448,7 @@ export class SupabaseService {
       let data, error;
 
       if (existingSlot) {
+        console.log('⚠️ [CREATE_SLOT] Le créneau existe déjà, retour du créneau existant.');
         data = existingSlot;
         error = null;
       } else {
@@ -3459,6 +3473,7 @@ export class SupabaseService {
         throw error;
       }
 
+      console.log('✅ [CREATE_SLOT] Créneau créé avec succès:', data);
 
       // Helper pour parser une date sans décalage UTC
       const parseLocalDateString = (dateStr: string | Date): Date => {
@@ -3484,6 +3499,7 @@ export class SupabaseService {
         location: created.location
       };
 
+      console.log('✅ [CREATE_SLOT] Transformation réussie:', transformed);
       return transformed;
     } catch (error) {
       try {
@@ -3576,6 +3592,7 @@ export class SupabaseService {
         .order('created_at', { ascending: false });
 
       if (error) {
+         console.warn("Error fetching appointments raw:", error.message);
          throw error;
       }
 
@@ -3752,6 +3769,7 @@ export class SupabaseService {
     status?: string;
   }): Promise<User[]> {
     if (!this.checkSupabaseConnection()) {
+      console.warn('⚠️ Supabase non configuré');
       return [];
     }
 
@@ -3778,13 +3796,14 @@ export class SupabaseService {
       }
 
       // Apply pagination
-      const limit = options?.limit || 500; // Default 500 items
+      const limit = options?.limit || 50; // Default 50 items
       const offset = options?.offset || 0;
       query = query.range(offset, offset + limit - 1);
 
       const { data, error } = await query;
 
       if (error) {
+        console.warn('Erreur lors de la récupération des utilisateurs:', error.message);
         return [];
       }
 
@@ -3959,6 +3978,7 @@ export class SupabaseService {
       });
 
       if (rpcError && !rpcError.message?.includes('Could not find the function')) {
+        console.warn('Tier update skipped (trigger protection):', rpcError.message);
       }
     }
   }
@@ -4011,8 +4031,10 @@ export class SupabaseService {
         throw new Error(result.error || 'Échec de la suppression');
       }
 
+      console.log('Exposant supprimé via API admin:', result.deleted);
     } catch (fetchError: any) {
       // Fallback: essayer directement via Supabase (si RLS le permet)
+      console.warn('API admin non disponible, tentative directe...', fetchError.message);
 
       const { data, error } = await (safeSupabase as any)
         .from('exhibitors')
@@ -4155,7 +4177,7 @@ export class SupabaseService {
           await (safeSupabase as any)
             .from('partners')
             .update({ verified: true })
-            .eq('user_id', request.user_id);
+            .eq('id', request.user_id);
         }
 
         // Step 5: If exhibitor, also update exhibitors table verified status
@@ -4418,6 +4440,7 @@ export class SupabaseService {
       try {
         const status = (error && (error.status || error.code)) || null;
         if (status === 404 || status === '404') {
+          console.warn('Table user_favorites non trouvée — retour d\'un tableau vide.');
           return [];
         }
       } catch (e) {
@@ -4635,7 +4658,9 @@ export class SupabaseService {
         raw: error
       };
       // Log to console (could be extended to remote logging)
+      console.warn('Supabase Error:', structured);
     } catch (e) {
+      console.warn('Supabase Error Logger failed', e);
     }
   }
 

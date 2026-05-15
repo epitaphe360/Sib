@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+﻿import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Crown, Building2, CreditCard, Loader2, ArrowLeft, Check, ShieldCheck } from 'lucide-react';
@@ -15,10 +15,8 @@ import {
 import { createInvoice } from '../services/invoiceService';
 import { generateVisitorPaymentReference } from '../config/visitorBankTransferConfig';
 
-const VIP_AMOUNT_EUR = 700;
-
 // ── Bouton PayPal interne ─────────────────────────────────────────────────────
-function PayPalPayButton({ onSuccess }: Readonly<{ onSuccess: (orderId: string) => void }>) {
+function PayPalPayButton({ onSuccess, amount, currency }: Readonly<{ onSuccess: (orderId: string) => void; amount: number; currency: string }>) {
   const [{ isPending }] = usePayPalScriptReducer();
   if (isPending) {
     return <div className="flex justify-center py-4"><Loader2 className="h-6 w-6 animate-spin text-purple-500" /></div>;
@@ -30,7 +28,7 @@ function PayPalPayButton({ onSuccess }: Readonly<{ onSuccess: (orderId: string) 
         actions.order.create({
           intent: 'CAPTURE',
           purchase_units: [{
-            amount: { currency_code: 'EUR', value: VIP_AMOUNT_EUR.toString() },
+            amount: { currency_code: currency, value: amount.toString() },
             description: 'Pass Premium VIP SIB 2026',
           }],
         })
@@ -49,6 +47,24 @@ export default function VisitorPaymentPage() {
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'cmi' | 'bank_transfer' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [vipAmount, setVipAmount] = useState(700);
+  const [vipCurrency, setVipCurrency] = useState('EUR');
+
+  useEffect(() => {
+    supabase
+      .from('pricing_config')
+      .select('amount, currency')
+      .eq('category', 'visitor')
+      .eq('level', 'vip')
+      .eq('is_active', true)
+      .maybeSingle()
+      .then(({ data }: { data: { amount: number; currency: string } | null }) => {
+        if (data) {
+          setVipAmount(data.amount);
+          setVipCurrency(data.currency);
+        }
+      });
+  }, []);
 
   // ── Flux PayPal ─────────────────────────────────────────────────────────────
   const handlePayPalSuccess = useCallback(async (orderId: string) => {
@@ -69,7 +85,7 @@ export default function VisitorPaymentPage() {
         vat_rate: 0,
         currency: 'EUR',
         notes: `Pass Premium VIP SIB 2026 — PayPal (${orderId})`,
-        lines: [{ description: 'Pass Premium VIP SIB 2026', quantity: 1, unit_price: VIP_AMOUNT_EUR }],
+        lines: [{ description: 'Pass Premium VIP SIB 2026', quantity: 1, unit_price: vipAmount }],
       }).catch(err => console.warn('[Invoice] Non-blocking error:', err));
 
       toast.success('Paiement confirmé ! Bienvenue en tant que VIP.');
@@ -78,7 +94,7 @@ export default function VisitorPaymentPage() {
       toast.error(err?.message || 'Erreur lors de la confirmation du paiement');
       setIsProcessing(false);
     }
-  }, [user, navigate]);
+  }, [user, navigate, vipAmount, vipCurrency]);
 
   // ── Flux CMI ─────────────────────────────────────────────────────────────────
   const handleCMI = useCallback(async () => {
@@ -107,7 +123,7 @@ export default function VisitorPaymentPage() {
       const ref = generateVisitorPaymentReference(user.id);
       const { data: newReq, error } = await supabase
         .from('payment_requests')
-        .insert({ user_id: user.id, amount: VIP_AMOUNT_EUR, currency: 'EUR', payment_method: 'bank_transfer', status: 'pending', requested_level: 'premium', transfer_reference: ref })
+        .insert({ user_id: user.id, amount: vipAmount, currency: vipCurrency, payment_method: 'bank_transfer', status: 'pending', requested_level: 'premium', transfer_reference: ref })
         .select('id').single();
       if (error) { throw error; }
       navigate(`/visitor/bank-transfer?request_id=${newReq.id}`);
@@ -115,10 +131,10 @@ export default function VisitorPaymentPage() {
       toast.error(err?.message || 'Erreur. Veuillez réessayer.');
       setIsProcessing(false);
     }
-  }, [user, navigate]);
+  }, [user, navigate, vipAmount, vipCurrency]);
 
   return (
-    <PayPalScriptProvider options={{ clientId: PAYPAL_CLIENT_ID, currency: 'EUR', intent: 'capture' }}>
+    <PayPalScriptProvider options={{ clientId: PAYPAL_CLIENT_ID, currency: vipCurrency, intent: 'capture' }}>
       <div className="min-h-screen bg-slate-50 py-10">
         <div className="max-w-xl mx-auto px-4">
 
@@ -137,7 +153,7 @@ export default function VisitorPaymentPage() {
             <p className="text-purple-200 text-sm mb-4">Accès complet au salon, networking avancé, badge officiel</p>
             <div className="bg-white/10 rounded-xl p-4 flex items-center justify-between">
               <span className="text-purple-100 text-sm">Montant total</span>
-              <span className="text-2xl font-extrabold text-yellow-300">{VIP_AMOUNT_EUR.toLocaleString('fr-FR')} EUR</span>
+              <span className="text-2xl font-extrabold text-yellow-300">{vipAmount.toLocaleString('fr-FR')} {vipCurrency}</span>
             </div>
             <ul className="mt-4 space-y-1">
               {['Accès illimité au salon', 'Badge VIP nominatif', 'Sessions networking VIP', 'Conférences & séminaires'].map(b => (
@@ -203,7 +219,7 @@ export default function VisitorPaymentPage() {
                     <span className="text-gray-600 text-sm">Confirmation du paiement…</span>
                   </div>
                 ) : (
-                  <PayPalPayButton onSuccess={handlePayPalSuccess} />
+                  <PayPalPayButton onSuccess={handlePayPalSuccess} amount={vipAmount} currency={vipCurrency} />
                 )}
               </div>
             )}

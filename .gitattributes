@@ -1,0 +1,28 @@
+# Forcer LF pour tous les fichiers texte (evite CRLF sur Windows -> probleme nixpacks/Railway)
+* text=auto eol=lf
+
+# Fichiers explicitement en LF
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.js   text eol=lf
+*.jsx  text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.md   text eol=lf
+*.css  text eol=lf
+*.html text eol=lf
+*.sql  text eol=lf
+*.sh   text eol=lf
+*.env  text eol=lf
+
+# Fichiers binaires - pas de conversion
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.eot  binary

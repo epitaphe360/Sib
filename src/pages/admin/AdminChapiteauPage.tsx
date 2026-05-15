@@ -155,8 +155,8 @@ export default function AdminChapiteauPage() {
       const { data: { publicUrl } } = (supabase as any).storage.from('media').getPublicUrl(path);
       setFormData(prev => ({ ...prev, image_url: publicUrl }));
       toast.success('Image téléchargée');
-    } catch {
-      toast.error("Erreur upload image");
+    } catch (err: any) {
+      toast.error(`Erreur upload image : ${err?.message || err}`);
     } finally {
       setUploading(false);
     }
@@ -737,8 +737,8 @@ export default function AdminChapiteauPage() {
                   className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition">
                   Annuler
                 </button>
-                <button onClick={handleSaveItem} disabled={isSaving}
-                  className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white rounded-lg transition"
+                <button onClick={handleSaveItem} disabled={isSaving || uploading}
+                  className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white rounded-lg transition disabled:opacity-60"
                   style={{ background: 'linear-gradient(135deg, #0B1C3D, #1e3a5f)' }}>
                   {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                   {editingId ? 'Enregistrer' : 'Créer'}

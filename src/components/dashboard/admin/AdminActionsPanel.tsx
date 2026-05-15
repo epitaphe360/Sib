@@ -190,6 +190,9 @@ export function AdminActionsPanel({
                 <Link to={ROUTES.ADMIN_INVITATIONS}>
                   <Tile Icon={Mail} label="Invitations" sub="Gérer les invitations" color="#6366f1" />
                 </Link>
+                <Link to={ROUTES.ADMIN_CATALOGUE}>
+                  <Tile Icon={ClipboardList} label="Catalogue Exposants" sub="Fiches & relances" color="#10b981" />
+                </Link>
               </motion.div>
             </div>
 

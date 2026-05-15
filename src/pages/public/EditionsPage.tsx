@@ -72,7 +72,7 @@ export default function EditionsPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
       <HeroReveal>
-      <div className="text-white py-16" style={{background: 'linear-gradient(135deg, #0077B6 0%, #009FE3 100%)'}}>
+      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <span className="inline-block px-4 py-1.5 rounded-full bg-sib-gold/20 text-sib-gold text-sm font-semibold mb-4">
             {getCms('hero_badge', "40 ans d'histoire")}

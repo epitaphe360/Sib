@@ -266,8 +266,10 @@
   ADMIN_PROMO_CODES: '/admin/promo-codes',
 
   // MODULE CATALOGUE EXPOSANTS
-  ADMIN_CATALOGUE:   '/admin/catalogue',
-  CATALOGUE_FILL:    '/catalogue/fill/:token',
+  ADMIN_CATALOGUE:             '/admin/catalogue',
+  ADMIN_CATALOGUE_EDIT:        '/admin/catalogue/:entryId/edit',
+  ADMIN_CATALOGUE_FORM_CONFIG: '/admin/catalogue/form-config',
+  CATALOGUE_FILL:              '/catalogue/fill/:token',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

@@ -2,17 +2,19 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  Search, Brain, Sparkles, ArrowLeft, Target,
-  Building2, Globe, ExternalLink, ChevronRight,
+  Search, Brain, Sparkles, ArrowLeft, Clock, Target,
+  Building2, Globe, MapPin, ExternalLink, ChevronRight,
   Zap, Info, X, RotateCcw
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import {
+  runAdvancedMatching,
   QUICK_SEARCH_SUGGESTIONS,
+  type MatchingResponse,
 } from '../services/advancedMatchingService';
-import { runAIMatching, type AIMatchingResponse } from '../services/aiMatchingService';
+import { ROUTES } from '../lib/routes';
 
 // ─── Composant score ring ──────────────────────────────────────────────────────
 
@@ -53,7 +55,7 @@ function ResultCard({
   index,
   onViewProfile,
 }: {
-  result: AIMatchingResponse['results'][0];
+  result: MatchingResponse['results'][0];
   index: number;
   onViewProfile: (id: string) => void;
 }) {
@@ -101,7 +103,7 @@ function ResultCard({
 
             {/* Raisons du match */}
             <div className="flex flex-wrap gap-1.5 mt-3">
-              {result.matchReasons.map((reason: string, i: number) => (
+              {result.matchReasons.map((reason, i) => (
                 <span
                   key={i}
                   className="inline-flex items-center text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-2.5 py-0.5 gap-1"
@@ -148,7 +150,7 @@ export default function AdvancedMatchingPage() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [response, setResponse] = useState<AIMatchingResponse | null>(null);
+  const [response, setResponse] = useState<MatchingResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -167,7 +169,7 @@ export default function AdvancedMatchingPage() {
     setError(null);
 
     try {
-      const result = await runAIMatching(q);
+      const result = await runAdvancedMatching(q, 20);
       setResponse(result);
     } catch (err) {
       setError('Erreur lors du matching. Veuillez réessayer.');
@@ -306,7 +308,7 @@ export default function AdvancedMatchingPage() {
 
         {/* Tags extraits */}
         <AnimatePresence>
-          {response && (response as AIMatchingResponse & { extractedTagLabels?: string[] }).extractedTagLabels?.length && (
+          {response && response.extractedTagLabels.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -314,7 +316,7 @@ export default function AdvancedMatchingPage() {
             >
               <Info className="h-4 w-4 text-blue-500 flex-shrink-0" />
               <span className="text-xs text-blue-600 font-medium">IA a compris :</span>
-              {((response as AIMatchingResponse & { extractedTagLabels?: string[] }).extractedTagLabels ?? []).map((label: string, i: number) => (
+              {response.extractedTagLabels.map((label, i) => (
                 <Badge key={i} variant="info" className="text-xs">
                   {label}
                 </Badge>
@@ -339,17 +341,11 @@ export default function AdvancedMatchingPage() {
             >
               {/* Méta résultats */}
               <div className="flex items-center justify-between mb-4">
-                <p className="text-sm text-gray-600 flex items-center gap-2">
+                <p className="text-sm text-gray-600">
                   <strong>{response.results.length}</strong> résultat{response.results.length !== 1 ? 's' : ''} sur{' '}
                   <strong>{response.totalCandidates}</strong> exposants analysés
                   {' '}
                   <span className="text-gray-400">({response.durationMs}ms)</span>
-                  {response.usedAI && (
-                    <span className="inline-flex items-center gap-1 text-xs bg-violet-100 text-violet-700 border border-violet-200 rounded-full px-2 py-0.5 ml-1">
-                      <Sparkles className="h-3 w-3" />
-                      IA vectorielle
-                    </span>
-                  )}
                 </p>
                 <button
                   onClick={handleReset}

@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+﻿import { useState, useEffect, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   BookOpen, ArrowLeft, Search, Send, RefreshCw,
-  Phone, Eye, CheckCircle, Clock, AlertCircle,
+  Phone, Eye, CheckCircle, AlertCircle,
   Loader2, Filter, Download, Printer,
-  ChevronUp, ChevronDown,
+  ChevronUp, ChevronDown, Building2, Users, Pencil, Settings2,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
@@ -15,8 +15,19 @@ import { CataloguePagePrint } from '../../components/catalogue/CataloguePagePrin
 import type { CatalogueEntry } from '../../components/catalogue/CatalogueFicheCard';
 
 type FilterStatus = 'all' | 'not_sent' | 'invited' | 'in_progress' | 'completed' | 'validated';
+type FilterSource = 'all' | 'exhibitor' | 'partner';
 type ActiveTab = 'list' | 'phone' | 'print';
 type SortField = 'company_name' | 'completion_percent' | 'last_reminder_at' | 'status';
+
+interface MergedParticipant {
+  /** source ID: exhibitor.id or partner.id */
+  id: string;
+  source_type: 'exhibitor' | 'partner';
+  company_name: string;
+  contact_email: string;
+  stand_number?: string;
+  entry?: CatalogueEntry;
+}
 
 const STATUS_LABEL: Record<string, string> = {
   not_sent: 'Non envoyé',
@@ -42,106 +53,176 @@ function daysSince(dateStr?: string | null): number | null {
   return Math.floor((Date.now() - new Date(dateStr).getTime()) / 86400000);
 }
 
-/** Entrées qui ont besoin d'une relance téléphonique */
-function needsPhoneCall(entry: CatalogueEntry): boolean {
-  const days = daysSince(entry.last_reminder_at || entry.invited_at);
+function pStatus(p: MergedParticipant): string {
+  return p.entry?.status ?? 'not_sent';
+}
+
+function pCompletion(p: MergedParticipant): number {
+  return p.entry?.completion_percent ?? 0;
+}
+
+function needsPhoneCall(p: MergedParticipant): boolean {
+  if (!p.entry) return false;
+  const days = daysSince(p.entry.last_reminder_at || p.entry.invited_at);
   return (
-    (entry.status === 'invited' || entry.status === 'in_progress') &&
-    entry.reminder_count >= 2 &&
+    (p.entry.status === 'invited' || p.entry.status === 'in_progress') &&
+    p.entry.reminder_count >= 2 &&
     (days === null || days >= 14)
   );
 }
 
-/** Entrées éligibles à une relance email automatique */
-function eligibleForReminder(entry: CatalogueEntry): boolean {
-  if (entry.status === 'completed' || entry.status === 'validated') return false;
-  const days = daysSince(entry.last_reminder_at || entry.invited_at);
+function eligibleForReminder(p: MergedParticipant): boolean {
+  if (!p.contact_email) return false;
+  if (!p.entry) return true;
+  if (p.entry.status === 'completed' || p.entry.status === 'validated') return false;
+  const days = daysSince(p.entry.last_reminder_at || p.entry.invited_at);
   return days === null || days >= 7;
 }
 
 export default function CatalogueManagementPage() {
   const { user } = useAuthStore();
-  const [entries, setEntries] = useState<CatalogueEntry[]>([]);
+  const navigate = useNavigate();
+  const [participants, setParticipants] = useState<MergedParticipant[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
+  const [filterSource, setFilterSource] = useState<FilterSource>('all');
   const [filterCompletion, setFilterCompletion] = useState<'all' | 'low' | 'mid' | 'high'>('all');
   const [activeTab, setActiveTab] = useState<ActiveTab>('list');
   const [sortField, setSortField] = useState<SortField>('company_name');
   const [sortAsc, setSortAsc] = useState(true);
   const [sendingId, setSendingId] = useState<string | null>(null);
   const [validatingId, setValidatingId] = useState<string | null>(null);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newEntry, setNewEntry] = useState({ company_name: '', contact_email: '', stand_number: '', hall: '' });
-  const [isCreating, setIsCreating] = useState(false);
   const [batchSending, setBatchSending] = useState(false);
 
-  const fetchEntries = useCallback(async () => {
+  const fetchAll = useCallback(async () => {
     setIsLoading(true);
-    const { data, error } = await (supabase as any)
-      .from('catalogue_entries')
-      .select('*')
-      .order('company_name', { ascending: true });
+    const [exhibitorsRes, partnersRes, entriesRes] = await Promise.all([
+      (supabase as any).from('exhibitors').select('id, company_name, stand_number, contact_info').order('company_name'),
+      (supabase as any).from('partners').select('id, company_name, contact_info').order('company_name'),
+      (supabase as any).from('catalogue_entries').select('*'),
+    ]);
+    if (exhibitorsRes.error) toast.error('Erreur chargement exposants : ' + exhibitorsRes.error.message);
+    if (partnersRes.error) toast.error('Erreur chargement partenaires : ' + partnersRes.error.message);
+    if (entriesRes.error) toast.error('Erreur chargement catalogue : ' + entriesRes.error.message);
 
-    if (error) {
-      toast.error('Erreur chargement catalogue : ' + error.message);
-    } else {
-      setEntries((data || []) as CatalogueEntry[]);
+    const exhibitors: any[] = exhibitorsRes.data || [];
+    const partners: any[] = partnersRes.data || [];
+    const entries: CatalogueEntry[] = entriesRes.data || [];
+
+    const merged: MergedParticipant[] = [];
+    for (const ex of exhibitors) {
+      const entry = entries.find((e) => (e as any).exhibitor_id === ex.id);
+      merged.push({
+        id: ex.id,
+        source_type: 'exhibitor',
+        company_name: ex.company_name || '',
+        contact_email: (ex.contact_info as any)?.email || '',
+        stand_number: ex.stand_number || '',
+        entry,
+      });
     }
+    for (const pt of partners) {
+      const entry = entries.find((e) => (e as any).partner_id === pt.id);
+      merged.push({
+        id: pt.id,
+        source_type: 'partner',
+        company_name: pt.company_name || '',
+        contact_email: (pt.contact_info as any)?.email || '',
+        entry,
+      });
+    }
+    setParticipants(merged);
     setIsLoading(false);
   }, []);
 
-  useEffect(() => { fetchEntries(); }, [fetchEntries]);
+  useEffect(() => { fetchAll(); }, [fetchAll]);
 
   // ─── FILTRES & TRI ──────────────────────────────────────────────
-  const filtered = entries
-    .filter((e) => {
-      if (filterStatus !== 'all' && e.status !== filterStatus) return false;
-      if (filterCompletion === 'low' && e.completion_percent >= 25) return false;
-      if (filterCompletion === 'mid' && (e.completion_percent < 25 || e.completion_percent > 75)) return false;
-      if (filterCompletion === 'high' && e.completion_percent <= 75) return false;
+  const filtered = participants
+    .filter((p) => {
+      if (filterSource !== 'all' && p.source_type !== filterSource) return false;
+      const st = pStatus(p);
+      if (filterStatus !== 'all' && st !== filterStatus) return false;
+      const pct = pCompletion(p);
+      if (filterCompletion === 'low' && pct >= 25) return false;
+      if (filterCompletion === 'mid' && (pct < 25 || pct > 75)) return false;
+      if (filterCompletion === 'high' && pct <= 75) return false;
       if (search) {
         const q = search.toLowerCase();
         return (
-          (e.company_name || '').toLowerCase().includes(q) ||
-          (e.contact_email || '').toLowerCase().includes(q) ||
-          (e.stand_number || '').toLowerCase().includes(q)
+          p.company_name.toLowerCase().includes(q) ||
+          p.contact_email.toLowerCase().includes(q) ||
+          (p.stand_number || '').toLowerCase().includes(q)
         );
       }
       return true;
     })
     .sort((a, b) => {
-      let va: string | number = a[sortField] as string | number ?? '';
-      let vb: string | number = b[sortField] as string | number ?? '';
-      if (typeof va === 'string') va = va.toLowerCase();
-      if (typeof vb === 'string') vb = vb.toLowerCase();
+      let va: string | number;
+      let vb: string | number;
+      if (sortField === 'company_name') {
+        va = a.company_name.toLowerCase();
+        vb = b.company_name.toLowerCase();
+      } else if (sortField === 'completion_percent') {
+        va = pCompletion(a);
+        vb = pCompletion(b);
+      } else if (sortField === 'status') {
+        va = pStatus(a);
+        vb = pStatus(b);
+      } else {
+        va = a.entry?.last_reminder_at ?? '';
+        vb = b.entry?.last_reminder_at ?? '';
+      }
       return sortAsc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
     });
 
-  const phoneList = entries.filter(needsPhoneCall);
+  const phoneList = participants.filter(needsPhoneCall);
 
   // ─── KPIs ────────────────────────────────────────────────────────
   const kpis = {
-    total: entries.length,
-    validated: entries.filter((e) => e.status === 'validated').length,
-    completed: entries.filter((e) => e.status === 'completed').length,
-    in_progress: entries.filter((e) => e.status === 'in_progress').length,
-    not_sent: entries.filter((e) => e.status === 'not_sent').length,
-    avg_completion: entries.length
-      ? Math.round(entries.reduce((s, e) => s + e.completion_percent, 0) / entries.length)
+    total: participants.length,
+    validated: participants.filter((p) => pStatus(p) === 'validated').length,
+    completed: participants.filter((p) => pStatus(p) === 'completed').length,
+    in_progress: participants.filter((p) => pStatus(p) === 'in_progress').length,
+    not_sent: participants.filter((p) => pStatus(p) === 'not_sent').length,
+    avg_completion: participants.length
+      ? Math.round(participants.reduce((s, p) => s + pCompletion(p), 0) / participants.length)
       : 0,
   };
 
   // ─── ACTIONS ────────────────────────────────────────────────────
-  const handleSendInvitation = async (entry: CatalogueEntry, type: 'initial' | 'reminder_1' | 'reminder_2' | 'manual') => {
-    setSendingId(entry.id);
+  const handleSendInvitation = async (
+    p: MergedParticipant,
+    type: 'initial' | 'reminder_1' | 'reminder_2' | 'manual'
+  ) => {
+    if (!p.contact_email) { toast.error('Email manquant pour ' + p.company_name); return; }
+    setSendingId(p.id);
     try {
+      let entryId = p.entry?.id;
+      if (!entryId) {
+        const insertData: any = {
+          company_name: p.company_name,
+          contact_email: p.contact_email,
+          stand_number: p.stand_number || null,
+          source_type: p.source_type,
+        };
+        if (p.source_type === 'exhibitor') insertData.exhibitor_id = p.id;
+        else insertData.partner_id = p.id;
+        const { data: newEntry, error: insertError } = await (supabase as any)
+          .from('catalogue_entries')
+          .insert(insertData)
+          .select()
+          .maybeSingle();
+        if (insertError) throw insertError;
+        entryId = newEntry.id;
+      }
       const { error } = await supabase.functions.invoke('send-catalogue-invitation', {
-        body: { catalogue_entry_id: entry.id, type, sent_by: user?.id },
+        body: { catalogue_entry_id: entryId, type, sent_by: user?.id },
       });
       if (error) throw error;
-      toast.success(`Email envoyé à ${entry.contact_email}`);
-      fetchEntries();
+      toast.success(`Email envoyé à ${p.contact_email}`);
+      fetchAll();
     } catch (err: any) {
       toast.error(err?.message || 'Erreur envoi email');
     } finally {
@@ -149,16 +230,17 @@ export default function CatalogueManagementPage() {
     }
   };
 
-  const handleValidate = async (entry: CatalogueEntry) => {
-    setValidatingId(entry.id);
+  const handleValidate = async (p: MergedParticipant) => {
+    if (!p.entry) return;
+    setValidatingId(p.id);
     try {
       const { error } = await (supabase as any)
         .from('catalogue_entries')
         .update({ status: 'validated', validated_at: new Date().toISOString(), validated_by: user?.id })
-        .eq('id', entry.id);
+        .eq('id', p.entry.id);
       if (error) throw error;
-      toast.success(`Fiche validée : ${entry.company_name}`);
-      fetchEntries();
+      toast.success(`Fiche validée : ${p.company_name}`);
+      fetchAll();
     } catch (err: any) {
       toast.error(err?.message || 'Erreur validation');
     } finally {
@@ -166,66 +248,89 @@ export default function CatalogueManagementPage() {
     }
   };
 
-  const handleMarkPhoneContacted = async (entry: CatalogueEntry) => {
-    const note = window.prompt(`Note pour ${entry.company_name} :`, '');
+  const handleOpenEdit = async (p: MergedParticipant) => {
+    if (p.entry) {
+      navigate(ROUTES.ADMIN_CATALOGUE_EDIT.replace(':entryId', p.entry.id));
+      return;
+    }
+    // Créer une fiche vide pour cet exposant / partenaire
+    const token = crypto.randomUUID();
+    const insert: Record<string, any> = {
+      token,
+      status: 'not_sent',
+      completion_percent: 0,
+      company_name: p.company_name,
+      contact_email: p.contact_email,
+      email: p.contact_email,
+      source_type: p.source_type,
+    };
+    if (p.source_type === 'exhibitor') insert.exhibitor_id = p.id;
+    else insert.partner_id = p.id;
+    const { data, error } = await (supabase as any)
+      .from('catalogue_entries')
+      .insert(insert)
+      .select('id')
+      .maybeSingle();
+    if (error || !data) {
+      toast.error('Impossible de créer la fiche : ' + (error?.message ?? 'erreur inconnue'));
+      return;
+    }
+    navigate(ROUTES.ADMIN_CATALOGUE_EDIT.replace(':entryId', data.id));
+  };
+
+  const handleMarkPhoneContacted = async (p: MergedParticipant) => {
+    if (!p.entry) return;
+    const note = window.prompt(`Note pour ${p.company_name} :`, '');
     if (note === null) return;
     await (supabase as any)
       .from('catalogue_entries')
       .update({ last_phone_contact_at: new Date().toISOString(), phone_contact_note: note || 'Contacté' })
-      .eq('id', entry.id);
+      .eq('id', p.entry.id);
     await (supabase as any).from('catalogue_reminders_log').insert({
-      catalogue_entry_id: entry.id,
+      catalogue_entry_id: p.entry.id,
       reminder_type: 'phone',
       sent_by: user?.id,
       note: note || 'Contacté par téléphone',
     });
     toast.success('Contact téléphonique enregistré');
-    fetchEntries();
+    fetchAll();
   };
 
   const handleBatchReminders = async () => {
-    const eligible = entries.filter(eligibleForReminder);
+    const eligible = participants.filter(eligibleForReminder);
     if (eligible.length === 0) { toast.info('Aucune relance à envoyer'); return; }
     setBatchSending(true);
     let sent = 0;
-    for (const e of eligible) {
-      const type = e.reminder_count === 0 ? 'initial'
-        : e.reminder_count === 1 ? 'reminder_1'
-        : 'reminder_2';
+    for (const p of eligible) {
+      if (!p.contact_email) continue;
       try {
+        let entryId = p.entry?.id;
+        if (!entryId) {
+          const insertData: any = {
+            company_name: p.company_name,
+            contact_email: p.contact_email,
+            stand_number: p.stand_number || null,
+            source_type: p.source_type,
+          };
+          if (p.source_type === 'exhibitor') insertData.exhibitor_id = p.id;
+          else insertData.partner_id = p.id;
+          const { data: ne, error: ie } = await (supabase as any)
+            .from('catalogue_entries').insert(insertData).select().maybeSingle();
+          if (ie) continue;
+          entryId = ne.id;
+        }
+        const type = !p.entry ? 'initial'
+          : p.entry.reminder_count === 0 ? 'initial'
+          : p.entry.reminder_count === 1 ? 'reminder_1' : 'reminder_2';
         await supabase.functions.invoke('send-catalogue-invitation', {
-          body: { catalogue_entry_id: e.id, type, sent_by: user?.id },
+          body: { catalogue_entry_id: entryId, type, sent_by: user?.id },
         });
         sent++;
-      } catch {
-        // continuer
-      }
+      } catch { /* continuer */ }
     }
     setBatchSending(false);
     toast.success(`${sent} relance${sent > 1 ? 's' : ''} envoyée${sent > 1 ? 's' : ''}`);
-    fetchEntries();
-  };
-
-  const handleCreateEntry = async () => {
-    if (!newEntry.company_name || !newEntry.contact_email) {
-      toast.error('Raison sociale et email requis');
-      return;
-    }
-    setIsCreating(true);
-    const { error } = await (supabase as any).from('catalogue_entries').insert({
-      company_name: newEntry.company_name,
-      contact_email: newEntry.contact_email,
-      stand_number: newEntry.stand_number || null,
-      hall: newEntry.hall || null,
-    });
-    if (error) { toast.error(error.message); }
-    else {
-      toast.success('Fiche créée');
-      setShowCreateModal(false);
-      setNewEntry({ company_name: '', contact_email: '', stand_number: '', hall: '' });
-      fetchEntries();
-    }
-    setIsCreating(false);
+    fetchAll();
   };
 
   const toggleSort = (field: SortField) => {
@@ -243,28 +348,26 @@ export default function CatalogueManagementPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
 
-        {/* Breadcrumb */}
         <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-6">
           <ArrowLeft className="h-4 w-4 mr-1" /> Tableau de bord admin
         </Link>
 
-        {/* Header */}
         <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
           <div className="flex items-center gap-3">
             <div className="bg-[#0B1C3D] p-3 rounded-xl">
               <BookOpen className="h-6 w-6 text-[#C9A84C]" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Catalogue Exposants</h1>
-              <p className="text-sm text-gray-500">SIB 2026 — Gestion des fiches catalogue</p>
+              <h1 className="text-2xl font-bold text-gray-900">Catalogue Exposants &amp; Partenaires</h1>
+              <p className="text-sm text-gray-500">SIB 2026 — Envoi des invitations et suivi des fiches</p>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap">
             <button
-              onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 bg-[#0B1C3D] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#1a3060] transition"
+              onClick={() => navigate(ROUTES.ADMIN_CATALOGUE_FORM_CONFIG)}
+              className="flex items-center gap-2 bg-[#0B1C3D] text-[#C9A84C] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#1a3060] transition"
             >
-              + Nouvelle fiche
+              <Settings2 className="h-4 w-4" /> Configurer le formulaire
             </button>
             <button
               onClick={handleBatchReminders}
@@ -283,7 +386,6 @@ export default function CatalogueManagementPage() {
           </div>
         </div>
 
-        {/* KPI Cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
           {[
             { label: 'Total', value: kpis.total, color: 'bg-slate-700' },
@@ -306,7 +408,6 @@ export default function CatalogueManagementPage() {
           ))}
         </div>
 
-        {/* Progression globale */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 mb-6">
           <div className="flex justify-between text-sm mb-2">
             <span className="font-medium text-gray-700">Progression moyenne du catalogue</span>
@@ -320,7 +421,6 @@ export default function CatalogueManagementPage() {
           </div>
         </div>
 
-        {/* Tabs */}
         <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-6 w-fit">
           {([
             { id: 'list', label: 'Liste', icon: Filter },
@@ -343,7 +443,6 @@ export default function CatalogueManagementPage() {
         {/* ── TAB: LISTE ──────────────────────────────────────────── */}
         {activeTab === 'list' && (
           <>
-            {/* Filtres */}
             <div className="flex flex-wrap gap-3 mb-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -356,6 +455,28 @@ export default function CatalogueManagementPage() {
                 />
               </div>
 
+              <div className="flex gap-1">
+                {([
+                  { id: 'all', label: 'Tous' },
+                  { id: 'exhibitor', label: 'Exposants' },
+                  { id: 'partner', label: 'Partenaires' },
+                ] as const).map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => setFilterSource(s.id)}
+                    className={`flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold transition border ${
+                      filterSource === s.id
+                        ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]'
+                        : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    {s.id === 'exhibitor' && <Building2 className="h-3 w-3" />}
+                    {s.id === 'partner' && <Users className="h-3 w-3" />}
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+
               {(['all', 'not_sent', 'invited', 'in_progress', 'completed', 'validated'] as FilterStatus[]).map((s) => (
                 <button
                   key={s}
@@ -366,7 +487,7 @@ export default function CatalogueManagementPage() {
                       : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  {s === 'all' ? 'Tous' : STATUS_LABEL[s]}
+                  {s === 'all' ? 'Tous statuts' : STATUS_LABEL[s]}
                 </button>
               ))}
 
@@ -382,7 +503,6 @@ export default function CatalogueManagementPage() {
               </select>
             </div>
 
-            {/* Tableau */}
             {isLoading ? (
               <div className="flex justify-center py-16">
                 <Loader2 className="h-8 w-8 animate-spin text-[#C9A84C]" />
@@ -397,24 +517,16 @@ export default function CatalogueManagementPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
-                      <th
-                        className="text-left px-4 py-3 font-semibold text-gray-600 cursor-pointer hover:text-gray-900"
-                        onClick={() => toggleSort('company_name')}
-                      >
+                      <th className="text-left px-4 py-3 font-semibold text-gray-600 cursor-pointer hover:text-gray-900" onClick={() => toggleSort('company_name')}>
                         <span className="flex items-center gap-1">Société <SortIcon field="company_name" /></span>
                       </th>
+                      <th className="text-left px-4 py-3 font-semibold text-gray-600">Type</th>
                       <th className="text-left px-4 py-3 font-semibold text-gray-600">Stand</th>
                       <th className="text-left px-4 py-3 font-semibold text-gray-600">Email</th>
-                      <th
-                        className="text-left px-4 py-3 font-semibold text-gray-600 cursor-pointer hover:text-gray-900"
-                        onClick={() => toggleSort('status')}
-                      >
+                      <th className="text-left px-4 py-3 font-semibold text-gray-600 cursor-pointer hover:text-gray-900" onClick={() => toggleSort('status')}>
                         <span className="flex items-center gap-1">Statut <SortIcon field="status" /></span>
                       </th>
-                      <th
-                        className="text-left px-4 py-3 font-semibold text-gray-600 cursor-pointer hover:text-gray-900"
-                        onClick={() => toggleSort('completion_percent')}
-                      >
+                      <th className="text-left px-4 py-3 font-semibold text-gray-600 cursor-pointer hover:text-gray-900" onClick={() => toggleSort('completion_percent')}>
                         <span className="flex items-center gap-1">Progression <SortIcon field="completion_percent" /></span>
                       </th>
                       <th className="text-left px-4 py-3 font-semibold text-gray-600">Dernier contact</th>
@@ -422,90 +534,106 @@ export default function CatalogueManagementPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filtered.map((entry) => {
-                      const days = daysSince(entry.last_reminder_at || entry.invited_at);
-                      const needsPhone = needsPhoneCall(entry);
+                    {filtered.map((p) => {
+                      const st = pStatus(p);
+                      const days = daysSince(p.entry?.last_reminder_at || p.entry?.invited_at);
+                      const needsPhone = needsPhoneCall(p);
+                      const noEmail = !p.contact_email;
                       return (
-                        <tr key={entry.id} className={`border-b border-gray-50 hover:bg-gray-50 ${needsPhone ? 'bg-red-50' : ''}`}>
+                        <tr key={`${p.source_type}-${p.id}`} className={`border-b border-gray-50 hover:bg-gray-50 ${needsPhone ? 'bg-red-50' : ''}`}>
                           <td className="px-4 py-3">
-                            <span className="font-medium text-gray-900">{entry.company_name || <span className="text-gray-400">—</span>}</span>
-                            {needsPhone && (
-                              <span className="ml-2 text-xs text-red-600 font-semibold">📞 Appel requis</span>
+                            <span className="font-medium text-gray-900">{p.company_name || '—'}</span>
+                            {needsPhone && <span className="ml-2 text-xs text-red-600 font-semibold">📞 Appel requis</span>}
+                          </td>
+                          <td className="px-4 py-3">
+                            {p.source_type === 'exhibitor' ? (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-100">
+                                <Building2 className="h-3 w-3" /> Exposant
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-violet-50 text-violet-700 border border-violet-100">
+                                <Users className="h-3 w-3" /> Partenaire
+                              </span>
                             )}
                           </td>
                           <td className="px-4 py-3 text-gray-500 text-xs">
-                            {entry.stand_number && `Stand ${entry.stand_number}`}
-                            {entry.hall && ` — Hall ${entry.hall}`}
+                            {p.stand_number ? `Stand ${p.stand_number}` : <span className="text-gray-300">—</span>}
+                            {p.entry?.hall && ` — Hall ${p.entry.hall}`}
                           </td>
-                          <td className="px-4 py-3 text-gray-500 text-xs truncate max-w-[160px]">
-                            {entry.contact_email}
+                          <td className="px-4 py-3 text-xs truncate max-w-[160px]">
+                            {noEmail
+                              ? <span className="text-red-400 font-semibold">Email manquant</span>
+                              : <span className="text-gray-500">{p.contact_email}</span>}
                           </td>
                           <td className="px-4 py-3">
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[entry.status]}`}>
-                              {STATUS_LABEL[entry.status]}
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[st]}`}>
+                              {STATUS_LABEL[st]}
                             </span>
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2">
                               <div className="w-20 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                <div
-                                  className="h-full rounded-full transition-all"
-                                  style={{
-                                    width: `${entry.completion_percent}%`,
-                                    background: COMPLETION_COLOR(entry.completion_percent),
-                                  }}
-                                />
+                                <div className="h-full rounded-full transition-all" style={{ width: `${pCompletion(p)}%`, background: COMPLETION_COLOR(pCompletion(p)) }} />
                               </div>
-                              <span className="text-xs font-semibold text-gray-600">{entry.completion_percent}%</span>
+                              <span className="text-xs font-semibold text-gray-600">{pCompletion(p)}%</span>
                             </div>
                           </td>
                           <td className="px-4 py-3 text-xs text-gray-400">
                             {days !== null ? `Il y a ${days}j` : '—'}
-                            {entry.reminder_count > 0 && (
-                              <span className="ml-1 text-gray-400">({entry.reminder_count} envoi{entry.reminder_count > 1 ? 's' : ''})</span>
+                            {(p.entry?.reminder_count ?? 0) > 0 && (
+                              <span className="ml-1 text-gray-400">({p.entry!.reminder_count} envoi{p.entry!.reminder_count > 1 ? 's' : ''})</span>
                             )}
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center justify-end gap-1">
-                              {entry.status === 'not_sent' && (
+                              {st === 'not_sent' && !noEmail && (
                                 <button
-                                  onClick={() => handleSendInvitation(entry, 'initial')}
-                                  disabled={sendingId === entry.id}
+                                  onClick={() => handleSendInvitation(p, 'initial')}
+                                  disabled={sendingId === p.id}
                                   title="Envoyer invitation"
                                   className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 disabled:opacity-50"
                                 >
-                                  {sendingId === entry.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+                                  {sendingId === p.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
                                 </button>
                               )}
-                              {(entry.status === 'invited' || entry.status === 'in_progress') && (
+                              {(st === 'invited' || st === 'in_progress') && !noEmail && (
                                 <button
-                                  onClick={() => handleSendInvitation(entry, entry.reminder_count === 1 ? 'reminder_1' : 'reminder_2')}
-                                  disabled={sendingId === entry.id}
+                                  onClick={() => handleSendInvitation(p, (p.entry?.reminder_count ?? 0) === 1 ? 'reminder_1' : 'reminder_2')}
+                                  disabled={sendingId === p.id}
                                   title="Envoyer relance"
                                   className="p-1.5 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 disabled:opacity-50"
                                 >
-                                  {sendingId === entry.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+                                  {sendingId === p.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
                                 </button>
                               )}
-                              {entry.status === 'completed' && (
+                              {st === 'completed' && p.entry && (
                                 <button
-                                  onClick={() => handleValidate(entry)}
-                                  disabled={validatingId === entry.id}
+                                  onClick={() => handleValidate(p)}
+                                  disabled={validatingId === p.id}
                                   title="Valider la fiche"
                                   className="p-1.5 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 disabled:opacity-50"
                                 >
-                                  {validatingId === entry.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle className="h-3.5 w-3.5" />}
+                                  {validatingId === p.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle className="h-3.5 w-3.5" />}
                                 </button>
                               )}
-                              <a
-                                href={`/catalogue/fill/${entry.token}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="Voir le formulaire"
-                                className="p-1.5 rounded-lg bg-gray-50 text-gray-500 hover:bg-gray-100"
+                              <button
+                                onClick={() => handleOpenEdit(p)}
+                                title="Éditer la fiche (admin)"
+                                className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100"
                               >
-                                <Eye className="h-3.5 w-3.5" />
-                              </a>
+                                <Pencil className="h-3.5 w-3.5" />
+                              </button>
+                              {p.entry?.token && (
+                                <a
+                                  href={`/catalogue/fill/${p.entry.token}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title="Voir le formulaire"
+                                  className="p-1.5 rounded-lg bg-gray-50 text-gray-500 hover:bg-gray-100"
+                                >
+                                  <Eye className="h-3.5 w-3.5" />
+                                </a>
+                              )}
                             </div>
                           </td>
                         </tr>
@@ -524,13 +652,10 @@ export default function CatalogueManagementPage() {
             <div className="flex items-center gap-2 mb-4">
               <AlertCircle className="h-5 w-5 text-red-500" />
               <span className="font-semibold text-gray-800">
-                {phoneList.length} exposant{phoneList.length > 1 ? 's' : ''} à contacter par téléphone
+                {phoneList.length} participant{phoneList.length > 1 ? 's' : ''} à contacter par téléphone
               </span>
-              <span className="text-xs text-gray-400 ml-2">
-                (≥ 2 emails envoyés, aucune réponse depuis 14 jours)
-              </span>
+              <span className="text-xs text-gray-400 ml-2">(≥ 2 emails envoyés, aucune réponse depuis 14 jours)</span>
             </div>
-
             {phoneList.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-2xl border border-dashed">
                 <CheckCircle className="h-10 w-10 text-green-400 mx-auto mb-3" />
@@ -550,30 +675,24 @@ export default function CatalogueManagementPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {phoneList.map((entry) => {
-                      const days = daysSince(entry.last_reminder_at);
+                    {phoneList.map((p) => {
+                      const days = daysSince(p.entry?.last_reminder_at);
                       return (
-                        <tr key={entry.id} className="border-b border-gray-50 hover:bg-red-50">
-                          <td className="px-4 py-3 font-medium text-gray-900">{entry.company_name || '—'}</td>
-                          <td className="px-4 py-3 text-gray-600">{entry.contact_name || '—'}</td>
+                        <tr key={`phone-${p.id}`} className="border-b border-gray-50 hover:bg-red-50">
+                          <td className="px-4 py-3 font-medium text-gray-900">{p.company_name || '—'}</td>
+                          <td className="px-4 py-3 text-gray-600">{p.entry?.contact_name || '—'}</td>
                           <td className="px-4 py-3 font-mono text-blue-700">
-                            {entry.phone ? (
-                              <a href={`tel:${entry.phone}`} className="hover:underline">{entry.phone}</a>
-                            ) : (
-                              <span className="text-gray-400">—</span>
-                            )}
+                            {p.entry?.phone
+                              ? <a href={`tel:${p.entry.phone}`} className="hover:underline">{p.entry.phone}</a>
+                              : <span className="text-gray-400">—</span>}
                           </td>
                           <td className="px-4 py-3">
-                            <span className="font-bold" style={{ color: COMPLETION_COLOR(entry.completion_percent) }}>
-                              {entry.completion_percent}%
-                            </span>
+                            <span className="font-bold" style={{ color: COMPLETION_COLOR(pCompletion(p)) }}>{pCompletion(p)}%</span>
                           </td>
-                          <td className="px-4 py-3 text-xs text-gray-400">
-                            {days !== null ? `Il y a ${days}j` : '—'}
-                          </td>
+                          <td className="px-4 py-3 text-xs text-gray-400">{days !== null ? `Il y a ${days}j` : '—'}</td>
                           <td className="px-4 py-3 text-right">
                             <button
-                              onClick={() => handleMarkPhoneContacted(entry)}
+                              onClick={() => handleMarkPhoneContacted(p)}
                               className="flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-semibold hover:bg-red-200 transition ml-auto"
                             >
                               <Phone className="h-3.5 w-3.5" /> Contacté
@@ -595,7 +714,7 @@ export default function CatalogueManagementPage() {
             <div className="flex items-center gap-3 mb-4">
               <Download className="h-5 w-5 text-gray-600" />
               <span className="font-semibold text-gray-800">
-                Catalogue imprimable — {entries.filter((e) => e.status === 'validated' || e.status === 'completed').length} fiches validées/complétées
+                Catalogue imprimable — {participants.filter((p) => pStatus(p) === 'validated' || pStatus(p) === 'completed').length} fiches validées/complétées
               </span>
               <button
                 onClick={() => window.print()}
@@ -605,81 +724,13 @@ export default function CatalogueManagementPage() {
               </button>
             </div>
             <CataloguePagePrint
-              entries={entries.filter((e) => e.status === 'validated' || e.status === 'completed')}
-              title="Catalogue Officiel Exposants SIB 2026"
+              entries={participants.filter((p) => p.entry && (pStatus(p) === 'validated' || pStatus(p) === 'completed')).map((p) => p.entry!)}
+              title="Catalogue Officiel SIB 2026"
             />
           </div>
         )}
 
       </div>
-
-      {/* ── MODAL CRÉATION ──────────────────────────────────────────── */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Nouvelle fiche catalogue</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Raison sociale *</label>
-                <input
-                  type="text"
-                  value={newEntry.company_name}
-                  onChange={(e) => setNewEntry({ ...newEntry, company_name: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email contact *</label>
-                <input
-                  type="email"
-                  value={newEntry.contact_email}
-                  onChange={(e) => setNewEntry({ ...newEntry, contact_email: e.target.value })}
-                  placeholder="Destinataire du lien formulaire"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Stand</label>
-                  <input
-                    type="text"
-                    value={newEntry.stand_number}
-                    onChange={(e) => setNewEntry({ ...newEntry, stand_number: e.target.value })}
-                    placeholder="17a"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Hall</label>
-                  <select
-                    value={newEntry.hall}
-                    onChange={(e) => setNewEntry({ ...newEntry, hall: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
-                  >
-                    <option value="">—</option>
-                    {['A', 'B', 'C', 'D', 'Plein air'].map((h) => <option key={h}>{h}</option>)}
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-3 mt-6">
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="flex-1 border border-gray-200 rounded-lg py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
-              >
-                Annuler
-              </button>
-              <button
-                onClick={handleCreateEntry}
-                disabled={isCreating}
-                className="flex-1 bg-[#0B1C3D] text-white rounded-lg py-2 text-sm font-bold hover:bg-[#1a3060] disabled:opacity-50"
-              >
-                {isCreating ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : 'Créer & Envoyer'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

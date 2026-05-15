@@ -1,11 +1,11 @@
 ﻿import { useState, useEffect } from 'react';
-import { Calendar, Clock, User, Video, BookOpen, Sparkles, CalendarDays } from 'lucide-react';
+import { Calendar, Clock, User, MapPin, Video, Globe, CheckCircle, XCircle, AlertCircle, ChevronLeft, ChevronRight, Sparkles, CalendarDays, Users } from 'lucide-react';
+import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Appointment } from '../../types';
 import { useAppointmentStore } from '../../store/appointmentStore';
 import useAuthStore from '../../store/authStore';
-import { useProgrammeStore } from '../../store/programmeStore';
-import { supabase } from '../../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 
@@ -14,107 +14,45 @@ interface PersonalAppointmentsCalendarProps {
   standalone?: boolean;
 }
 
-export default function PersonalAppointmentsCalendar({ userType, standalone = true }: Readonly<PersonalAppointmentsCalendarProps>) {
+export default function PersonalAppointmentsCalendar({ userType, standalone = true }: PersonalAppointmentsCalendarProps) {
   const { user } = useAuthStore();
   const {
     appointments,
+    timeSlots,
     fetchAppointments,
+    fetchTimeSlots,
     updateAppointmentStatus,
     cancelAppointment,
     isLoading
   } = useAppointmentStore();
 
-  const { days: programmeDays, loadFromSupabase } = useProgrammeStore();
+  const [selectedWeek, setSelectedWeek] = useState(new Date('2026-04-01T00:00:00'));
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all');
-  const [programmeRegs, setProgrammeRegs] = useState<{
-    session_id: string;
-    session_title?: string;
-    session_time?: string;
-    session_date?: string;
-  }[]>([]);
-  const [localSlots, setLocalSlots] = useState<{ id: string; slot_date: string; start_time: string; end_time: string }[]>([]);
-  const [exhibitorDbId, setExhibitorDbId] = useState<string | null>(null);
-
-  // ── Jours du salon ──────────────────────────────────────────
-  const SALON_DAYS = [
-    new Date('2026-11-25T00:00:00'),
-    new Date('2026-11-26T00:00:00'),
-    new Date('2026-11-27T00:00:00'),
-    new Date('2026-11-28T00:00:00'),
-    new Date('2026-11-29T00:00:00'),
-  ];
-
-  // Résoudre exhibitorDbId (exhibitors.id) pour le filtre multi-cas
-  useEffect(() => {
-    if (!supabase || !user?.id) { return; }
-    supabase
-      .from('exhibitors')
-      .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle()
-      .then(({ data }) => { if (data) { setExhibitorDbId((data as any).id); } });
-  }, [user?.id]);
 
   useEffect(() => {
     fetchAppointments();
-  }, [fetchAppointments]);
-
-  // Synchroniser le programme depuis Supabase pour avoir les IDs à jour
-  useEffect(() => {
-    loadFromSupabase();
-  }, [loadFromSupabase]);
-
-  // Charger les créneaux horaires directement par ID (contourne le problème exhibitor_id vs user_id)
-  useEffect(() => {
-    if (!supabase || appointments.length === 0) { return; }
-    const ids = [...new Set(appointments.map(a => a.timeSlotId).filter(Boolean))];
-    if (ids.length === 0) { return; }
-    supabase
-      .from('time_slots')
-      .select('id, slot_date, start_time, end_time')
-      .in('id', ids)
-      .then(({ data }) => setLocalSlots(data ?? []));
-  }, [appointments]);
-
-  // Charger les inscriptions au programme de l'utilisateur
-  useEffect(() => {
-    if (!supabase || !user?.id) { return; }
-    supabase
-      .from('programme_registrations')
-      .select('session_id, session_title, session_time, session_date')
-      .eq('user_id', user.id)
-      .eq('status', 'confirmed')
-      .then(({ data }) => setProgrammeRegs(data ?? []));
-  }, [user?.id]);
+    if (user?.id) {
+      fetchTimeSlots(user.id);
+    }
+  }, [fetchAppointments, fetchTimeSlots, user?.id]);
 
   // Filtrer les rendez-vous selon le type d'utilisateur
   const getFilteredAppointments = () => {
     if (!user) {return [];}
 
-    // Tous les RDV où l'utilisateur est le visiteur (cas universel : exposant qui booke chez un autre exposant)
-    const asVisitor = appointments.filter(apt => apt.visitorId === user.id);
+    let filteredByUser: Appointment[] = [];
 
-    // Tous les RDV où l'utilisateur est l'exposant (logique multi-cas exhibitorId)
-    const asExhibitor = userType !== 'visitor'
-      ? appointments.filter(apt =>
-          (exhibitorDbId && (apt as any).exhibitor_id === exhibitorDbId) ||
-          (exhibitorDbId && apt.exhibitorId === exhibitorDbId) ||
-          (apt as any).exhibitorUserId === user.id ||
-          apt.exhibitorId === user.id ||
-          (apt as any).exhibitor?.user_id === user.id ||
-          (apt as any).exhibitor?.id === user.id
-        )
-      : [];
-
-    // Fusion dédupliquée
-    const merged = [...asVisitor];
-    for (const apt of asExhibitor) {
-      if (!merged.some(a => a.id === apt.id)) { merged.push(apt); }
+    if (userType === 'visitor') {
+      // Pour les visiteurs : rendez-vous qu'ils ont demandés
+      filteredByUser = appointments.filter(apt => apt.visitorId === user.id);
+    } else {
+      // Pour les exposants/partenaires : rendez-vous qu'ils reçoivent
+      filteredByUser = appointments.filter(apt => apt.exhibitorId === user.id);
     }
 
-    if (filter === 'all') {return merged;}
-    if (filter === 'cancelled') {return merged.filter(apt => apt.status === 'cancelled' || apt.status === 'rejected');}
-    return merged.filter(apt => apt.status === filter);
+    // Appliquer le filtre de statut
+    if (filter === 'all') {return filteredByUser;}
+    return filteredByUser.filter(apt => apt.status === filter);
   };
 
   const handleAccept = async (appointmentId: string) => {
@@ -122,17 +60,17 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
       await updateAppointmentStatus(appointmentId, 'confirmed');
       toast.success('Rendez-vous confirmé');
       fetchAppointments();
-    } catch {
+    } catch (error) {
       toast.error('Erreur lors de la confirmation');
     }
   };
 
   const handleReject = async (appointmentId: string) => {
     try {
-      await updateAppointmentStatus(appointmentId, 'rejected');
+      await cancelAppointment(appointmentId);
       toast.success('Rendez-vous refusé');
       fetchAppointments();
-    } catch {
+    } catch (error) {
       toast.error('Erreur lors du refus');
     }
   };
@@ -144,65 +82,57 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
       await cancelAppointment(appointmentId);
       toast.success('Rendez-vous annulé');
       fetchAppointments();
-    } catch {
+    } catch (error) {
       toast.error('Erreur lors de l\'annulation');
     }
   };
 
-  const weekDays = SALON_DAYS;
-  const weekAppointments = getFilteredAppointments();
-
-  // Retourne les sessions du programme inscrites pour un jour donné
-  const getProgrammeSessionsForDay = (day: Date) => {
-    const dayIndex = SALON_DAYS.findIndex(d => d.toDateString() === day.toDateString());
-
-    // 1. Sessions avec session_date stockée directement (nouvelles inscriptions)
-    const fromMeta = programmeRegs
-      .filter(r => {
-        if (!r.session_date) { return false; }
-        // session_date peut être "Mercredi 25 novembre 2026" ou "2026-11-25"
-        const regDate = r.session_date;
-        if (regDate.includes('-')) {
-          const d = new Date(regDate);
-          return d.toDateString() === day.toDateString();
-        }
-        // Comparaison textuelle partielle (ex: "25 novembre")
-        const dayNum = day.getDate().toString();
-        return regDate.includes(dayNum);
-      })
-      .map(r => ({
-        id: r.session_id,
-        title: r.session_title ?? r.session_id,
-        time: r.session_time ?? '',
-        type: 'officiel' as const,
-        speakers: [] as string[],
-        description: '',
-      }));
-
-    // 2. Fallback : chercher dans le store par ID (anciennes inscriptions)
-    if (dayIndex >= 0) {
-      const programmeDay = programmeDays[dayIndex];
-      if (programmeDay) {
-        const registeredIds = new Set(programmeRegs.map(r => r.session_id));
-        const fromStore = programmeDay.sessions
-          .filter(s => registeredIds.has(s.id) && s.type !== 'pause')
-          .filter(s => !fromMeta.some(m => m.id === s.id));
-        return [...fromMeta, ...fromStore];
-      }
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'confirmed': return <CheckCircle className="w-4 h-4 text-green-600" />;
+      case 'pending': return <AlertCircle className="w-4 h-4 text-yellow-600" />;
+      case 'cancelled': return <XCircle className="w-4 h-4 text-red-600" />;
+      default: return <Clock className="w-4 h-4 text-gray-600" />;
     }
-
-    return fromMeta;
   };
 
-  const hasAnyItems = weekAppointments.length > 0 || programmeRegs.length > 0;
-
-  const getAppointmentTitle = (apt?: Appointment) => {
-    if (!apt) { return userType === 'visitor' ? 'RDV avec Exposant' : 'RDV avec Visiteur'; }
-    // Si l'utilisateur courant est le visiteur dans ce RDV → l'autre côté est l'exposant
-    if (apt.visitorId === user?.id) {
-      return apt.exhibitor?.companyName || apt.exhibitor?.name || 'Avec Exposant';
+  const getStatusColor = (status: string): 'success' | 'warning' | 'error' | 'default' => {
+    switch (status) {
+      case 'confirmed': return 'success';
+      case 'pending': return 'warning';
+      case 'cancelled': return 'error';
+      default: return 'default';
     }
-    return apt.visitor?.name || 'Avec Visiteur';
+  };
+
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'virtual': return <Video className="w-4 h-4" />;
+      case 'in-person': return <MapPin className="w-4 h-4" />;
+      case 'hybrid': return <Globe className="w-4 h-4" />;
+      default: return <User className="w-4 h-4" />;
+    }
+  };
+
+  const getWeekDays = (date: Date) => {
+    return [
+      new Date('2026-04-01T00:00:00'),
+      new Date('2026-04-02T00:00:00'),
+      new Date('2026-04-03T00:00:00')
+    ];
+  };
+
+  const weekDays = getWeekDays(selectedWeek);
+  // Pour cette démo, on simule que les appointments ont des timeSlots
+  // Dans une vraie implémentation, il faudrait faire un join avec les timeSlots
+  const weekAppointments = getFilteredAppointments();
+
+  const getAppointmentTitle = () => {
+    if (userType === 'visitor') {
+      return `RDV avec Exposant`;
+    } else {
+      return `RDV avec Visiteur`;
+    }
   };
 
   return (
@@ -250,8 +180,8 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                 { label: 'Total', value: getFilteredAppointments().length, color: 'blue' },
                 { label: 'Confirmés', value: getFilteredAppointments().filter(apt => apt.status === 'confirmed').length, color: 'emerald' },
                 { label: 'En attente', value: getFilteredAppointments().filter(apt => apt.status === 'pending').length, color: 'amber' }
-              ].map((stat) => (
-                <div key={stat.label} className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 text-center min-w-[120px] hover:bg-white/10 transition-colors">
+              ].map((stat, i) => (
+                <div key={i} className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 text-center min-w-[120px] hover:bg-white/10 transition-colors">
                   <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1">{stat.value}</div>
                   <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">{stat.label}</div>
                 </div>
@@ -304,17 +234,16 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
         </div>
 
         {/* Grille Temporelle Premium */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {weekDays.map((day, index) => {
             const dayAppointments = weekAppointments.filter(appointment => {
-              const slot = localSlots.find(s => s.id === appointment.timeSlotId);
+              const slot = timeSlots.find(s => s.id === appointment.timeSlotId);
               if (!slot) {return false;}
-              const slotDate = new Date(slot.slot_date);
+              const slotDate = new Date(slot.date);
               return slotDate.toDateString() === day.toDateString();
             });
-            const daySessions = getProgrammeSessionsForDay(day);
             const isToday = day.toDateString() === new Date().toDateString();
-            const hasAppointments = dayAppointments.length > 0 || daySessions.length > 0;
+            const hasAppointments = dayAppointments.length > 0;
 
             return (
               <motion.div
@@ -322,7 +251,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`flex flex-col h-full min-h-[420px] rounded-[2.5rem] bg-white border-2 transition-all duration-500 overflow-hidden group ${
+                className={`flex flex-col h-full min-h-[500px] rounded-[2.5rem] bg-white border-2 transition-all duration-500 overflow-hidden group ${
                   isToday
                     ? 'border-blue-500 shadow-2xl shadow-blue-900/10'
                     : 'border-gray-50 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/5'
@@ -330,7 +259,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
               >
                 {/* Header du Jour Stylisé */}
                 <div className={`p-8 relative overflow-hidden ${
-                  (() => { if (isToday) { return 'bg-blue-600'; } if (hasAppointments) { return 'bg-slate-900'; } return 'bg-gray-50'; })()
+                  isToday ? 'bg-blue-600' : hasAppointments ? 'bg-slate-900' : 'bg-gray-50'
                 }`}>
                   {/* Pattern marocain en background du header */}
                   <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
@@ -346,7 +275,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                         isToday || hasAppointments ? 'text-white' : 'text-gray-900'
                       }`}>
                         {day.getDate()}
-                        <span className="text-base font-bold opacity-40 uppercase tracking-widest">NOV</span>
+                        <span className="text-base font-bold opacity-40 uppercase tracking-widest">AVR</span>
                       </div>
                     </div>
                     {isToday && (
@@ -360,24 +289,9 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                 {/* Liste des RDV */}
                 <div className="p-6 space-y-4 flex-1 bg-gradient-to-b from-transparent to-gray-50/30">
                   <AnimatePresence mode="popLayout">
-                    {dayAppointments.length > 0 ? dayAppointments.map((appointment) => {
-                      const slot = localSlots.find(s => s.id === appointment.timeSlotId);
-                      const displayTime = slot ? slot.start_time : 'TBD';
-                      const aptBorderClass = (() => {
-                        if (appointment.status === 'confirmed') { return 'border-emerald-100 hover:border-emerald-400'; }
-                        if (appointment.status === 'pending') { return 'border-amber-100 hover:border-amber-400'; }
-                        return 'border-red-100 hover:border-red-400';
-                      })();
-                      const aptIconClass = (() => {
-                        if (appointment.status === 'confirmed') { return 'bg-emerald-50 text-emerald-600'; }
-                        if (appointment.status === 'pending') { return 'bg-amber-50 text-amber-600'; }
-                        return 'bg-red-50 text-red-600';
-                      })();
-                      const aptBadgeClass = (() => {
-                        if (appointment.status === 'confirmed') { return 'bg-emerald-500 text-white border-emerald-500/20'; }
-                        if (appointment.status === 'pending') { return 'bg-amber-500 text-white border-amber-500/20'; }
-                        return 'bg-red-500 text-white border-red-500/20';
-                      })();
+                    {dayAppointments.length > 0 ? dayAppointments.map((appointment, aptIndex) => {
+                      const slot = timeSlots.find(s => s.id === appointment.timeSlotId);
+                      const displayTime = slot ? slot.startTime : 'TBD';
 
                       return (
                         <motion.div
@@ -386,11 +300,19 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.95 }}
-                          className={`p-5 rounded-3xl border-2 bg-white group/card hover:shadow-xl transition-all duration-300 relative ${aptBorderClass}`}
+                          className={`p-5 rounded-3xl border-2 bg-white group/card hover:shadow-xl transition-all duration-300 relative ${
+                            appointment.status === 'confirmed' ? 'border-emerald-100 hover:border-emerald-400' :
+                            appointment.status === 'pending' ? 'border-amber-100 hover:border-amber-400' :
+                            'border-red-100 hover:border-red-400'
+                          }`}
                         >
                           <div className="flex items-start justify-between mb-4">
                             <div className="flex items-center gap-3">
-                              <div className={`p-2.5 rounded-2xl transform group-hover/card:rotate-6 transition-transform ${aptIconClass}`}>
+                              <div className={`p-2.5 rounded-2xl transform group-hover/card:rotate-6 transition-transform ${
+                                appointment.status === 'confirmed' ? 'bg-emerald-50 text-emerald-600' :
+                                appointment.status === 'pending' ? 'bg-amber-50 text-amber-600' :
+                                'bg-red-50 text-red-600'
+                              }`}>
                                 <Clock className="w-5 h-5" />
                               </div>
                               <div>
@@ -398,7 +320,11 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                                 <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Session B2B</div>
                               </div>
                             </div>
-                            <div className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest border ${aptBadgeClass}`}>
+                            <div className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest border ${
+                              appointment.status === 'confirmed' ? 'bg-emerald-500 text-white border-emerald-500/20' :
+                              appointment.status === 'pending' ? 'bg-amber-500 text-white border-amber-500/20' :
+                              'bg-red-500 text-white border-red-500/20'
+                            }`}>
                               {appointment.status}
                             </div>
                           </div>
@@ -408,7 +334,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                               <div className="p-1.5 bg-gray-100 rounded-lg">
                                  <User className="w-4 h-4 text-blue-500" />
                               </div>
-                              <span>{getAppointmentTitle(appointment)}</span>
+                              <span>{getAppointmentTitle()}</span>
                             </div>
                             {appointment.meetingLink && (
                               <div className="flex items-center gap-3 text-xs font-bold text-blue-600 bg-blue-50/50 p-3 rounded-2xl border border-blue-100/50">
@@ -420,7 +346,7 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
 
                           {/* Actions Contextuelles */}
                           <div className="flex gap-2 mt-4">
-                            {appointment.visitorId !== user?.id && appointment.status === 'pending' && (
+                            {userType !== 'visitor' && appointment.status === 'pending' && (
                               <>
                                 <button
                                   onClick={() => handleAccept(appointment.id)}
@@ -448,54 +374,24 @@ export default function PersonalAppointmentsCalendar({ userType, standalone = tr
                           </div>
                         </motion.div>
                       );
-                    }) : null}
-                  </AnimatePresence>
-
-                  {/* Sessions du programme */}
-                  {daySessions.length > 0 && (
-                    <div className="mt-2 space-y-3">
-                      <div className="flex items-center gap-2 mb-2">
-                        <BookOpen className="w-3.5 h-3.5 text-violet-500" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-violet-500">Programme</span>
-                      </div>
-                      {daySessions.map((session) => (
-                        <div
-                          key={session.id}
-                          className="p-3 rounded-2xl border-2 border-violet-100 bg-violet-50/50 hover:border-violet-300 transition-all"
-                        >
-                          <div className="flex items-center gap-2 mb-1">
-                            <Clock className="w-3.5 h-3.5 text-violet-500 flex-shrink-0" />
-                            <span className="text-sm font-black text-violet-700">{session.time}</span>
-                          </div>
-                          <p className="text-xs font-semibold text-gray-700 leading-snug line-clamp-2">{session.title}</p>
-                          <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-violet-200 text-violet-700">
-                            {session.type}
-                          </span>
+                    }) : (
+                      <div className="h-full flex flex-col items-center justify-center py-12 px-6 text-center">
+                        <div className="w-20 h-20 bg-gray-100 rounded-3xl flex items-center justify-center mb-6 border-2 border-dashed border-gray-200 group-hover:border-blue-200 transition-colors">
+                          <Calendar className="w-10 h-10 text-gray-300 group-hover:text-blue-200 transition-all pointer-events-none" />
                         </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Placeholder Disponible — seulement si aucun RDV ET aucune session */}
-                  {dayAppointments.length === 0 && daySessions.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
-                      <div className="w-20 h-20 bg-gray-100 rounded-3xl flex items-center justify-center mb-6 border-2 border-dashed border-gray-200 group-hover:border-blue-200 transition-colors">
-                        <Calendar className="w-10 h-10 text-gray-300 group-hover:text-blue-200 transition-all pointer-events-none" />
+                        <p className="text-gray-400 font-black text-xs uppercase tracking-[0.2em] mb-1">Disponible</p>
+                        <p className="text-gray-300 text-[10px] font-medium max-w-[150px]">Aucun rendez-vous sur ce créneau pour le moment</p>
                       </div>
-                      <p className="text-gray-400 font-black text-xs uppercase tracking-[0.2em] mb-1">Disponible</p>
-                      <p className="text-gray-300 text-[10px] font-medium max-w-[150px]">Aucun rendez-vous sur ce créneau pour le moment</p>
-                    </div>
-                  )}
+                    )}
+                  </AnimatePresence>
                 </div>
               </motion.div>
             );
           })}
         </div>
 
-
-
         {/* Empty State Premium */}
-        {!hasAnyItems && !isLoading && (
+        {getFilteredAppointments().length === 0 && !isLoading && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

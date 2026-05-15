@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import { LogIn, Eye, EyeOff } from 'lucide-react';
-import { useTranslation } from '../hooks/useTranslation';
 
 interface QuickAccount {
   email: string;
@@ -15,7 +14,6 @@ interface QuickAccount {
 
 export const DemoAccountsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const [showPasswords, setShowPasswords] = useState(false);
   const [loggingIn, setLoggingIn] = useState<string | null>(null);
 
@@ -52,7 +50,7 @@ export const DemoAccountsPage: React.FC = () => {
 
       if (error) {throw error;}
 
-      toast.success(`${t('demo.login_success')}${account.label}`);
+      toast.success(`✅ Connecté: ${account.label}`);
 
       // Redirection selon le type
       const routes: Record<string, string> = {
@@ -64,7 +62,7 @@ export const DemoAccountsPage: React.FC = () => {
       };
       navigate(routes[account.type] || '/');
     } catch (error: any) {
-      toast.error(error.message || t('demo.login_error'));
+      toast.error(error.message || 'Erreur de connexion');
     } finally {
       setLoggingIn(null);
     }
@@ -80,10 +78,10 @@ export const DemoAccountsPage: React.FC = () => {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <h1 style={{ fontSize: '2.5rem', color: 'white', marginBottom: '10px' }}>
-            {t('demo.title')}
+            ⚡ COMPTES RAPIDES
           </h1>
           <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>
-            {t('demo.subtitle')}
+            Cliquez sur un compte pour vous connecter instantanément
           </p>
           <button
             onClick={() => setShowPasswords(!showPasswords)}
@@ -101,7 +99,7 @@ export const DemoAccountsPage: React.FC = () => {
             }}
           >
             {showPasswords ? <EyeOff size={18} /> : <Eye size={18} />}
-            {showPasswords ? t('demo.hide_passwords') : t('demo.show_passwords')}
+            {showPasswords ? 'Masquer mots de passe' : 'Afficher mots de passe'}
           </button>
         </div>
 
@@ -159,7 +157,7 @@ export const DemoAccountsPage: React.FC = () => {
                 fontSize: '0.85rem',
                 color: '#94a3b8'
               }}>
-                {t('demo.demo_account')}
+                Compte de démonstration prêt à l'emploi
               </div>
               {showPasswords && (
                 <div style={{
@@ -184,7 +182,7 @@ export const DemoAccountsPage: React.FC = () => {
           borderRadius: '12px'
         }}>
           <p style={{ color: '#64748b', fontSize: '0.9rem' }}>
-            {t('demo.default_password')} <code style={{ color: '#60a5fa' }}>Demo2026!</code> |
+            💡 Mot de passe par défaut: <code style={{ color: '#60a5fa' }}>Demo2026!</code> |
             Admin: <code style={{ color: '#f87171' }}>Demo2026!</code>
           </p>
         </div>

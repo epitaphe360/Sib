@@ -10,9 +10,8 @@ import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { ROUTES } from '../lib/routes';
 import { supabase } from '../lib/supabase';
-import { useTranslation } from '../hooks/useTranslation';
 
-// --- Types -------------------------------------------------------------------
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface Booth {
   id: string;
@@ -33,7 +32,7 @@ interface Hall {
   color: string; bgColor: string;
 }
 
-// --- Static Data -------------------------------------------------------------
+// ─── Static Data ─────────────────────────────────────────────────────────────
 
 const SECTORS = [
   { id: 'all', label: 'Tous', color: '#6B7280' },
@@ -95,25 +94,9 @@ const STATIC_BOOTHS: Booth[] = [
   { id: 'D06', exhibitorId: '36', exhibitorName: 'IoT Bâtiment', sector: 'innovation', surface: '9m²', x: 580, y: 432, width: 42, height: 42, hall: 'D', color: '#EF4444', occupied: true, certifications: ['CE'] },
 ];
 
-// --- Component ----------------------------------------------------------------
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function HallMapPage() {
-  const { t } = useTranslation();
-  const sectorLabels: Record<string, string> = {
-    all: t('catalog.cat_all'),
-    gros_oeuvre: t('catalog.cat_gros_oeuvre'),
-    second_oeuvre: t('catalog.cat_second_oeuvre'),
-    mep_cvc: t('catalog.cat_mep_cvc'),
-    finitions: t('catalog.cat_finitions'),
-    innovation: t('catalog.cat_innovation'),
-    materiaux: t('catalog.cat_materiaux'),
-  };
-  const hallThemes: Record<string, string> = {
-    A: t('hallmap.hall_a_theme'),
-    B: t('hallmap.hall_b_theme'),
-    C: t('hallmap.hall_c_theme'),
-    D: t('hallmap.hall_d_theme'),
-  };
   const [booths, setBooths] = useState<Booth[]>(STATIC_BOOTHS);
   const [isLoadingBooths, setIsLoadingBooths] = useState(true);
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
@@ -195,18 +178,18 @@ export default function HallMapPage() {
   const occupiedCount = booths.filter(b => b.occupied).length;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b sticky top-16 z-10 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <LayoutGrid className="h-6 w-6 text-indigo-600" />
-                {t('hallmap.title')}
+                <LayoutGrid className="h-6 w-6 text-blue-600" />
+                Plan Interactif des Halls — SIB 2026
               </h1>
               <p className="text-gray-500 text-sm mt-0.5">
-                {t('hallmap.venue')} · {isLoadingBooths ? t('common.loading') : `${occupiedCount}/${booths.length} ${t('hallmap.stands_occupied')}`}
+                Parc d'Exposition Mohammed VI, El Jadida · 25–29 Novembre 2026 · {isLoadingBooths ? 'Chargement...' : `${occupiedCount}/${booths.length} stands occupés`}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -229,10 +212,10 @@ export default function HallMapPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="text"
-                placeholder={t('hallmap.search_placeholder')}
+                placeholder="Rechercher un exposant..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="flex items-center gap-2 overflow-x-auto pb-1">
@@ -245,7 +228,7 @@ export default function HallMapPage() {
                   }`}
                   style={activeSector === s.id ? { backgroundColor: s.color } : {}}
                 >
-                  {s.label ? sectorLabels[s.id] ?? s.label : ''}
+                  {s.label}
                 </button>
               ))}
             </div>
@@ -283,15 +266,15 @@ export default function HallMapPage() {
                 {/* Main corridors */}
                 <rect x="398" y="0" width="24" height="640" fill="#CBD5E1" rx="2" />
                 <rect x="0" y="298" width="800" height="24" fill="#CBD5E1" rx="2" />
-                <text x="410" y="294" fontSize="9" fill="#94A3B8">{t('hallmap.corridor_ns')}</text>
-                <text x="10" y="310" fontSize="9" fill="#94A3B8">{t('hallmap.corridor_eo')}</text>
+                <text x="410" y="294" fontSize="9" fill="#94A3B8">Allée principale N-S</text>
+                <text x="10" y="310" fontSize="9" fill="#94A3B8">Allée principale E-O</text>
 
                 {/* Halls backgrounds */}
                 {HALLS.map(hall => (
                   <g key={hall.id}>
                     <rect x={hall.x} y={hall.y} width={hall.width} height={hall.height} rx="10" fill={hall.bgColor} stroke={hall.color} strokeWidth="2.5" />
                     <text x={hall.x + 12} y={hall.y + 20} fontSize="13" fontWeight="bold" fill={hall.color}>{hall.name}</text>
-                    <text x={hall.x + 12} y={hall.y + 34} fontSize="9" fill="#6B7280">{hallThemes[hall.id] ?? hall.theme}</text>
+                    <text x={hall.x + 12} y={hall.y + 34} fontSize="9" fill="#6B7280">{hall.theme}</text>
                   </g>
                 ))}
 
@@ -334,7 +317,7 @@ export default function HallMapPage() {
 
                 {/* Entrance */}
                 <rect x="320" y="622" width="160" height="18" rx="4" fill="#1E40AF" />
-                <text x="400" y="633" textAnchor="middle" fontSize="10" fill="white" fontWeight="bold">{t('hallmap.entrance')}</text>
+                <text x="400" y="633" textAnchor="middle" fontSize="10" fill="white" fontWeight="bold">▼ ENTRÉE PRINCIPALE</text>
               </svg>
             </div>
           </div>
@@ -342,7 +325,7 @@ export default function HallMapPage() {
           {/* Legend */}
           <div className="mt-4 bg-white rounded-xl shadow-sm border p-4">
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2 text-sm">
-              <Info className="h-4 w-4 text-gray-400" /> {t('hallmap.legend')}
+              <Info className="h-4 w-4 text-gray-400" /> Légende
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {SECTORS.filter(s => s.id !== 'all').map(s => (
@@ -353,7 +336,7 @@ export default function HallMapPage() {
               ))}
               <div className="flex items-center gap-2 text-xs">
                 <div className="w-4 h-4 rounded-sm bg-gray-200 border border-gray-300 flex-shrink-0" />
-                <span className="text-gray-400">{t('hallmap.available')}</span>
+                <span className="text-gray-400">Disponible</span>
               </div>
             </div>
           </div>
@@ -393,7 +376,7 @@ export default function HallMapPage() {
                       </div>
                       <div className="flex items-center gap-2 text-gray-600">
                         <MapPin className="h-4 w-4 flex-shrink-0" />
-                        <span className="text-gray-600">{t('hallmap.surface')} {selectedBooth.surface}</span>
+                        <span>Surface : {selectedBooth.surface}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: selectedBooth.color }} />
@@ -403,13 +386,13 @@ export default function HallMapPage() {
                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
                           selectedBooth.occupied ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                         }`}>
-                          {selectedBooth.occupied ? t('hallmap.stand_occupied') : t('hallmap.available')}
+                          {selectedBooth.occupied ? '✓ Stand occupé' : '⚡ Disponible'}
                         </span>
                       </div>
                       {selectedBooth.certifications && selectedBooth.certifications.length > 0 && (
                         <div className="flex flex-wrap gap-1 pt-1">
                           {selectedBooth.certifications.map(c => (
-                            <span key={c} className="px-1.5 py-0.5 bg-indigo-50 text-indigo-700 text-xs rounded border border-indigo-200">{c}</span>
+                            <span key={c} className="px-1.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded border border-blue-200">{c}</span>
                           ))}
                         </div>
                       )}
@@ -418,9 +401,9 @@ export default function HallMapPage() {
                     {selectedBooth.occupied && (
                       <Link
                         to={`${ROUTES.EXHIBITORS}/${selectedBooth.exhibitorId}`}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium transition-colors"
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors"
                       >
-                        {t('hallmap.view_profile')} <ArrowRight className="h-4 w-4" />
+                        Voir le profil exposant <ArrowRight className="h-4 w-4" />
                       </Link>
                     )}
                     {!selectedBooth.occupied && (
@@ -428,7 +411,7 @@ export default function HallMapPage() {
                         to={ROUTES.CONTACT}
                         className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 text-sm font-medium transition-colors"
                       >
-                        {t('hallmap.book_stand')} <ArrowRight className="h-4 w-4" />
+                        Réserver ce stand <ArrowRight className="h-4 w-4" />
                       </Link>
                     )}
                   </div>
@@ -442,14 +425,14 @@ export default function HallMapPage() {
               >
                 <Card>
                   <div className="p-5">
-                    <h3 className="font-bold text-gray-900 mb-4 text-sm">{t('hallmap.hall_occupancy')}</h3>
+                    <h3 className="font-bold text-gray-900 mb-4 text-sm">Occupation des halls</h3>
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm text-gray-600 mb-1">
-                      <span>{t('hallmap.total_occupied')}</span>
+                        <span>Total stands occupés</span>
                         <span className="font-semibold text-gray-900">{occupiedCount} / {BOOTHS.length}</span>
                       </div>
                       <div className="w-full bg-gray-100 rounded-full h-2">
-                        <div className="bg-indigo-600 h-2 rounded-full transition-all" style={{ width: `${(occupiedCount / BOOTHS.length) * 100}%` }} />
+                        <div className="bg-blue-600 h-2 rounded-full transition-all" style={{ width: `${(occupiedCount / BOOTHS.length) * 100}%` }} />
                       </div>
                       <div className="space-y-2 pt-1">
                         {HALLS.map(hall => {
@@ -479,7 +462,7 @@ export default function HallMapPage() {
           <Card>
             <div className="p-5">
               <h3 className="font-bold text-gray-900 mb-3 text-sm flex items-center gap-2">
-                <Users className="h-4 w-4 text-gray-400" /> {t('hallmap.sector_breakdown')}
+                <Users className="h-4 w-4 text-gray-400" /> Répartition sectorielle
               </h3>
               <div className="space-y-2">
                 {SECTORS.filter(s => s.id !== 'all').map(s => {
@@ -495,7 +478,7 @@ export default function HallMapPage() {
                     >
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: s.color }} />
-                        <span className="text-gray-600">{sectorLabels[s.id] ?? s.label}</span>
+                        <span className="text-gray-600">{s.label}</span>
                       </div>
                       <span className="font-semibold text-gray-900">{count}</span>
                     </button>
@@ -506,13 +489,12 @@ export default function HallMapPage() {
           </Card>
 
           {/* Info */}
-          <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-xs text-indigo-700 space-y-1">
-            <p className="font-semibold">{t('hallmap.nav_title')}</p>
-            <p>{t('hallmap.nav_hint')}</p>
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-xs text-blue-700 space-y-1">
+            <p className="font-semibold">💡 Navigation</p>
+            <p>Cliquez sur un stand pour voir les détails. Faites glisser la carte pour la déplacer, utilisez les boutons +/- pour zoomer.</p>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

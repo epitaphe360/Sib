@@ -44,7 +44,7 @@ export const EditionSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-xs font-bold tracking-[0.25em] uppercase text-yellow-400"
+            className="text-xs font-bold tracking-[0.25em] uppercase text-sib-gold"
           >
             Depuis 1986
           </motion.p>
@@ -57,7 +57,7 @@ export const EditionSection: React.FC = () => {
             className="mt-4"
           >
             <div className="relative inline-block">
-              <span className="absolute inset-0 -translate-y-3 select-none pointer-events-none text-indigo-600/8 font-heading font-bold tracking-tight" style={{ fontSize: 'clamp(5rem, 18vw, 11rem)', lineHeight: 1 }}>
+              <span className="absolute inset-0 -translate-y-3 select-none pointer-events-none text-sib-primary/8 font-heading font-bold tracking-tight" style={{ fontSize: 'clamp(5rem, 18vw, 11rem)', lineHeight: 1 }}>
                 40
               </span>
               <h2 className="relative font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-slate-900 tracking-tight">
@@ -69,9 +69,9 @@ export const EditionSection: React.FC = () => {
               de l'Urbanisme et de la Décoration, au niveau national et international.
             </p>
             <div className="mt-6 flex items-center justify-center gap-3">
-              <div className="h-px w-20 bg-gradient-to-r from-transparent to-yellow-400" />
-              <div className="w-1.5 h-1.5 rotate-45 bg-yellow-400" />
-              <div className="h-px w-20 bg-gradient-to-l from-transparent to-yellow-400" />
+              <div className="h-px w-20 bg-gradient-to-r from-transparent to-sib-gold" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-sib-gold" />
+              <div className="h-px w-20 bg-gradient-to-l from-transparent to-sib-gold" />
             </div>
           </motion.div>
         </div>
@@ -89,9 +89,9 @@ export const EditionSection: React.FC = () => {
               <Card
                 hover
                 padding="lg"
-                className={m.highlight ? 'border-yellow-400/35 bg-yellow-400/5' : ''}
+                className={m.highlight ? 'border-sib-gold/35 bg-sib-gold/5' : ''}
               >
-                <div className={m.highlight ? 'text-yellow-400' : 'text-indigo-600'}>
+                <div className={m.highlight ? 'text-sib-gold' : 'text-sib-primary'}>
                   <div className="font-heading font-bold text-4xl">{m.year}</div>
                   <div className="mt-2 h-0.5 w-10 rounded-full bg-current opacity-40" />
                 </div>
@@ -104,7 +104,7 @@ export const EditionSection: React.FC = () => {
                 </p>
 
                 {m.highlight && (
-                  <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-yellow-400/30 bg-white/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-yellow-400">
+                  <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-sib-gold/30 bg-white/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-sib-gold">
                     <span>✦</span>
                     Édition anniversaire
                   </div>

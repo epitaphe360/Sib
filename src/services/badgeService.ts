@@ -361,8 +361,6 @@ export function getBadgeColor(accessLevel: string): string {
       return '#6f42c1'; // Violet
     case 'visitor_free':
       return '#9E9E9E'; // Gris
-    case 'press':
-      return '#C9A84C'; // Or (presse)
     case 'standard':
     default:
       return '#28a745'; // Vert par défaut
@@ -395,8 +393,6 @@ export function getAccessLevelLabel(accessLevel: string): string {
       return 'Sponsor Officiel';
     case 'partner_organizer':
       return 'Organisateur';
-    case 'press':
-      return 'Presse';
     case 'standard':
     default:
       return 'Standard';

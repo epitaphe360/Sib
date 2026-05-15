@@ -1464,7 +1464,7 @@ export default function AdminBadgeConfigPage() {
   ] as const;
 
   return (
-    <div className="flex flex-col bg-gray-50" style={{ height: '100dvh' }}>
+    <div className="flex flex-col bg-gray-50 h-[calc(100dvh-4rem)] sm:h-[calc(100dvh-5rem)] xl:h-[calc(100dvh-7rem)]">
       {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
       <header className="shrink-0 flex items-center justify-between px-5 border-b bg-white" style={{ height: 52, borderColor: '#e5e7eb' }}>
         <div className="flex items-center gap-3">

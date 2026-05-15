@@ -66,7 +66,7 @@ export default function AdminDashboard() {
   }
 
   return (
-      <div className="min-h-screen" style={{ background: 'radial-gradient(ellipse at 50% -5%, #0f2240 0%, #07101e 55%, #04080f 100%)' }}>
+      <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         <AdminHeader
@@ -108,12 +108,12 @@ export default function AdminDashboard() {
         >
           <div
             className="rounded-2xl border p-5"
-            style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(16px)' }}
+            style={{ background: '#f8f9fa', borderColor: '#e5e7eb' }}
           >
             <div className="flex items-center justify-between mb-5">
               <div>
-                <h3 className="text-base font-bold text-white tracking-wide uppercase" style={{ letterSpacing: '0.08em' }}>Accès CMS</h3>
-                <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>Gestion complète du contenu et des templates</p>
+                <h3 className="text-base font-bold text-gray-900 tracking-wide uppercase" style={{ letterSpacing: '0.08em' }}>Accès CMS</h3>
+                <p className="text-xs mt-1 text-gray-500">Gestion complète du contenu et des templates</p>
               </div>
               <div className="w-8 h-0.5 rounded-full" style={{ background: '#C9A84C' }} />
             </div>
@@ -140,12 +140,12 @@ export default function AdminDashboard() {
                   whileHover={{ y: -4, scale: 1.03, boxShadow: '0 0 24px rgba(201,168,76,0.18)' }}
                   whileTap={{ scale: 0.97 }}
                 >
-                  <Link to={to} className="block p-4 rounded-xl h-full transition-colors" style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.35)'; (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.05)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}
+                  <Link to={to} className="block p-4 rounded-xl h-full transition-colors" style={{ border: '1px solid #e5e7eb', background: '#ffffff' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.5)'; (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.06)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#e5e7eb'; (e.currentTarget as HTMLElement).style.background = '#ffffff'; }}
                   >
-                    <div className="flex items-center gap-2 font-semibold text-sm text-white/80"><Icon className="h-4 w-4" style={{ color: '#C9A84C' }} /> {label}</div>
-                    <p className="text-xs mt-1.5" style={{ color: 'rgba(255,255,255,0.35)' }}>{sub}</p>
+                    <div className="flex items-center gap-2 font-semibold text-sm text-gray-800"><Icon className="h-4 w-4" style={{ color: '#C9A84C' }} /> {label}</div>
+                    <p className="text-xs mt-1.5 text-gray-500">{sub}</p>
                   </Link>
                 </motion.div>
               ))}
@@ -188,14 +188,14 @@ export default function AdminDashboard() {
 
         {/* Métriques détaillées — navy sobre */}
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.4 }} className="mb-4">
-          <div className="bg-[#0F2034] rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="p-3 rounded-xl bg-[#C9A84C]/15 border border-[#C9A84C]/30">
                 <BarChart3 className="h-6 w-6 text-[#C9A84C]" />
               </div>
               <div>
-                <h3 className="text-white font-heading font-bold">{t('admin.detailed_metrics')}</h3>
-                <p className="text-slate-400 text-sm">{t('admin.detailed_metrics_desc')}</p>
+                <h3 className="text-gray-900 font-heading font-bold">{t('admin.detailed_metrics')}</h3>
+                <p className="text-gray-500 text-sm">{t('admin.detailed_metrics_desc')}</p>
               </div>
             </div>
             <Link to={ROUTES.METRICS}>

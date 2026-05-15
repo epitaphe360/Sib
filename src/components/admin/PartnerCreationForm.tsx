@@ -167,15 +167,6 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
     'Support logistique'
   ];
 
-  const toggleContribution = (contribution: string) => {
-    setFormData(prev => ({
-      ...prev,
-      contributions: prev.contributions.includes(contribution)
-        ? prev.contributions.filter(c => c !== contribution)
-        : [...prev.contributions, contribution]
-    }));
-  };
-
   const handleNextStep = () => {
     if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
@@ -297,8 +288,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
           employees: '',
           logo: '',
           verified: false,
-          featured: false,
-          isPublished: false
+          featured: false
         });
 
         setCurrentStep(1);
@@ -855,7 +845,6 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       type="checkbox"
                       checked={formData.verified}
                       onChange={(e) => setFormData({ ...formData, verified: e.target.checked })}
-                      aria-label="Partenaire vérifié"
                       className="sr-only peer"
                     />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
@@ -874,7 +863,6 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       type="checkbox"
                       checked={formData.featured}
                       onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                      aria-label="Partenaire mis en avant"
                       className="sr-only peer"
                     />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
@@ -893,7 +881,6 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                       type="checkbox"
                       checked={formData.isPublished}
                       onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
-                      aria-label="Profil publié"
                       className="sr-only peer"
                     />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>

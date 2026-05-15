@@ -32,6 +32,15 @@ export interface CatalogueEntry {
   instagram_url?: string;
   linkedin_url?: string;
   twitter_url?: string;
+  // Champs étendus SIB 2026
+  sector?: string;
+  fax?: string;
+  gsm?: string;
+  zip_code?: string;
+  contact_direct_phone?: string;
+  contact_direct_email?: string;
+  youtube_url?: string;
+  products_services?: string;
 }
 
 interface CatalogueFicheCardProps {

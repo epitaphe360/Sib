@@ -1,9 +1,12 @@
-﻿import { Link } from 'react-router-dom';
-import { MapPin, Clock, Ticket, Bus, Train, Car, Plane, Hotel, Calendar, ArrowRight } from 'lucide-react';
+﻿import React from 'react';
+import { Link } from 'react-router-dom';
+import { MapPin, Clock, Ticket, Bus, Train, Car, Plane, Hotel, Calendar } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { usePageContent } from '../../hooks/usePageContent';
-import { motion } from 'framer-motion';
-import { MoroccanPattern } from '../../components/ui/MoroccanDecor';
+import {
+  ScrollReveal, StaggerReveal, StaggerItem, HoverCard, HeroReveal,
+  fadeUp, fadeLeft, fadeRight, scaleUp,
+} from '../../components/ui/motion';
 
 const defaultHoraires = [
   { jour: 'Mardi 25 Novembre', heures: '9h00 – 19h00' },
@@ -45,7 +48,7 @@ export default function InfosPratiquesPage() {
     }
     try {
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed.map(String) : [];
+      return Array.isArray(parsed) ? parsed.map((b: unknown) => String(b)) : [];
     } catch {
       return [
         "D'un badge électronique téléchargeable sur le site ou à l'accueil du salon",
@@ -67,195 +70,174 @@ export default function InfosPratiquesPage() {
   })();
 
   return (
-    <div className="min-h-screen bg-white">
-
-      {/* ── HERO ── */}
-      <section className="relative bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 text-white py-20 overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-16 w-80 h-80 bg-[#00AEEF]/20 rounded-full blur-3xl pointer-events-none" />
-        <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 text-xs font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest">
-              📍 SIB 2026 — El Jadida
-            </span>
-            <h1 className="text-4xl md:text-5xl font-black mb-5 leading-tight">
-              {cms.hero_title || <>Infos <span style={{ color: '#52B847' }}>Pratiques</span></>}
-            </h1>
-            <p className="text-lg text-white/80 max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero */}
+      <div className="bg-gradient-to-br from-sib-navy to-sib-navy/90 text-white py-16 overflow-hidden">
+        <div className="container mx-auto px-4 text-center">
+          <HeroReveal>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display">{cms.hero_title || 'Infos Pratiques'}</h1>
+          </HeroReveal>
+          <HeroReveal delay={0.15}>
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">
               {cms.hero_subtitle || "Tout ce qu'il faut savoir pour préparer votre visite au SIB 2026."}
             </p>
-          </motion.div>
+          </HeroReveal>
         </div>
-      </section>
+      </div>
 
-      {/* ── SECTIONS ── */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-
-          {/* Lieu */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="h-1.5 w-full bg-[#00AEEF]" />
-            <div className="p-8">
-              <div className="flex items-start gap-4">
-                <div className="bg-[#00AEEF] p-3 rounded-xl flex-shrink-0">
-                  <MapPin className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900">{getCms('lieu_title', "Parc d'Exposition Mohammed VI")}</h2>
-                  <p className="text-gray-500 mt-1 text-sm">
-                    {cms.lieu_adresse || "Route Nationale 1 vers Azemmour, Région Casablanca - Settat, 24000 — EL JADIDA"}
-                  </p>
-                  <p className="text-gray-500 text-sm mt-2">
-                    {getCms('lieu_context', "Implanté au cœur du Pôle urbain Mazagan (PUMA), le Parc d'Exposition Mohammed VI se voit efficacement desservi et stratégiquement connecté aux autres villes du royaume.")}
-                  </p>
-                </div>
+      {/* Lieu */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">          <ScrollReveal variant={fadeLeft}>          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+            <div className="flex items-start gap-4 mb-6">
+              <MapPin className="w-8 h-8 text-sib-gold flex-shrink-0 mt-1" />
+              <div>
+                <h2 className="text-2xl font-bold text-sib-navy font-display">Parc d'Exposition Mohammed VI</h2>
+                <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('lieu_title', "Parc d'Exposition Mohammed VI")}</h2>
+                <p className="text-gray-600 mt-2">
+                  {cms.lieu_adresse || 'Adresse : Route Nationale 1 vers Azemmour, Région Casablanca - Settat, 24000 — EL JADIDA'}
+                </p>
+                <p className="text-gray-500 text-sm mt-2">
+                  {getCms('lieu_context', "Implanté au cœur du Pôle urbain Mazagan (PUMA), le Parc d'Exposition Mohammed VI se voit efficacement desservi et stratégiquement connecté aux autres villes du royaume.")}
+                </p>
               </div>
             </div>
-          </motion.div>
+          </div>
+          </ScrollReveal>
 
           {/* Horaires */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="h-1.5 w-full bg-[#52B847]" />
-            <div className="p-8">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="bg-[#52B847] p-3 rounded-xl">
-                  <Clock className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-900">{getCms('horaires_title', 'Horaires')}</h2>
-              </div>
-              <div className="grid gap-2">
-                {horaires.map((h) => (
-                  <div key={h.jour} className="flex items-center justify-between bg-slate-50 rounded-xl px-5 py-3">
-                    <span className="font-medium text-gray-700 text-sm flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-[#52B847]" />{h.jour}
-                    </span>
-                    <span className="font-bold text-[#52B847] text-sm">{h.heures}</span>
-                  </div>
-                ))}
-              </div>
+          <ScrollReveal variant={fadeRight} delay={0.1}>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <Clock className="w-7 h-7 text-sib-gold" />
+              <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('horaires_title', 'Horaires')}</h2>
             </div>
-          </motion.div>
+            <div className="grid gap-3">
+              {horaires.map((h) => (
+                <div key={h.jour} className="flex items-center justify-between bg-gray-50 rounded-xl px-6 py-4">
+                  <span className="font-semibold text-gray-800 flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-sib-navy" />
+                    {h.jour}
+                  </span>
+                  <span className="text-sib-navy font-bold">{h.heures}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          </ScrollReveal>
 
           {/* Tarifs */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="h-1.5 w-full bg-[#E63329]" />
-            <div className="p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-[#E63329] p-3 rounded-xl">
-                  <Ticket className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-900">{getCms('tarifs_title', 'Tarifs')}</h2>
-              </div>
-              <p className="text-gray-600 mb-4 text-sm">
-                {cms.tarifs_intro || "L'entrée est"} <strong>gratuite</strong>{!cms.tarifs_intro && " tout au long des 5 jours d'exposition. Toutefois, l'accès au salon sera conditionné par la présentation :"}
-              </p>
-              <ul className="space-y-2 mb-5">
-                {tarifsBullets.map((bullet, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#E63329] mt-2 flex-shrink-0" />
-                    {bullet}
-                  </li>
-                ))}
-              </ul>
-              <Link to={ROUTES.BADGE}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 transition-colors">
-                {getCms('tarifs_cta', 'Obtenir mon badge gratuit')}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+          <ScrollReveal variant={scaleUp} delay={0.15}>
+          <div className="bg-sib-gold/10 rounded-2xl p-8 mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Ticket className="w-7 h-7 text-sib-gold" />
+              <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('tarifs_title', 'Tarifs')}</h2>
             </div>
-          </motion.div>
+            <p className="text-gray-700 mb-4">
+              {cms.tarifs_intro || "L'entrée est"} <strong>gratuite</strong>{!cms.tarifs_intro && ' tout au long des 5 jours d\'exposition. Toutefois, l\'accès au salon sera conditionné par la présentation :'}
+            </p>
+            <ul className="space-y-2 text-gray-600 ml-4">
+              {tarifsBullets.map((bullet, idx) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-sib-gold mt-2 flex-shrink-0" />
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+            <Link
+              to={ROUTES.BADGE}
+              className="inline-block mt-6 px-6 py-3 bg-sib-navy text-white rounded-lg font-semibold hover:bg-sib-navy/90 transition-colors"
+            >
+              {getCms('tarifs_cta', 'Obtenir mon badge gratuit')}
+            </Link>
+          </div>
+          </ScrollReveal>
 
           {/* Comment venir */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="h-1.5 w-full bg-[#00AEEF]" />
-            <div className="p-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">{getCms('venir_title', 'Comment venir ?')}</h2>
-              <div className="space-y-6">
-                {/* Navettes */}
-                <div className="border-l-4 border-[#52B847] pl-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Bus className="w-5 h-5 text-[#52B847]" />
-                    <h3 className="font-bold text-gray-900 text-sm">{venirSections?.[0]?.title ?? 'Par Navettes SIB'}</h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">{venirSections?.[0]?.desc ?? "Des navettes seront mises gratuitement à disposition des visiteurs."}</p>
-                  <p className="text-xs text-gray-400 italic">{venirSections?.[0]?.note ?? 'Les points de pick-up seront confirmés ultérieurement.'}</p>
+          <ScrollReveal variant={fadeUp} delay={0.2}>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+            <h2 className="text-2xl font-bold text-sib-navy mb-8 font-display">{getCms('venir_title', 'Comment venir ?')}</h2>
+
+            <div className="space-y-8">
+              {/* Navettes */}
+              <div className="border-l-4 border-sib-gold pl-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <Bus className="w-6 h-6 text-sib-navy" />
+                  <h3 className="text-lg font-bold text-gray-900">{venirSections?.[0]?.title ?? 'Par Navettes SIB'}</h3>
                 </div>
-                {/* Voiture */}
-                <div className="border-l-4 border-[#00AEEF] pl-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Car className="w-5 h-5 text-[#00AEEF]" />
-                    <h3 className="font-bold text-gray-900 text-sm">{venirSections?.[1]?.title ?? 'Par voiture'}</h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-1">{venirSections?.[1]?.desc ?? "Accès rapide par l'autoroute Casablanca–El Jadida. Trajet depuis Casablanca : 50 minutes."}</p>
-                  <p className="text-xs text-gray-400 italic">{venirSections?.[1]?.note ?? "Nous invitons nos visiteurs à privilégier le covoiturage."}</p>
-                  <p className="text-xs text-gray-500 mt-1">Parking : <strong>2 500 places</strong> + parking VIP 52 places + autocars 50 places.</p>
-                </div>
-                {/* Train */}
-                <div className="border-l-4 border-[#E63329] pl-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Train className="w-5 h-5 text-[#E63329]" />
-                    <h3 className="font-bold text-gray-900 text-sm">{venirSections?.[2]?.title ?? 'Par train'}</h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">{venirSections?.[2]?.desc ?? "Accès depuis la gare d'Azemmour — Parc d'Expositions Mohammed VI (PEM6)."}</p>
-                  <div className="bg-[#E63329]/5 rounded-lg p-3 text-xs text-gray-600">
-                    {venirSections?.[2]?.note ?? "L'ONCF propose une réduction de 30% à bord de tous les trains durant la période du salon."}
-                  </div>
-                </div>
-                {/* Avion */}
-                <div className="border-l-4 border-[#00AEEF] pl-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Plane className="w-5 h-5 text-[#00AEEF]" />
-                    <h3 className="font-bold text-gray-900 text-sm">{venirSections?.[3]?.title ?? 'Par avion'}</h3>
-                  </div>
-                  <p className="text-sm text-gray-600">{venirSections?.[3]?.desc ?? "Le parc se situe à seulement 1h de route depuis l'aéroport Mohammed V."}</p>
+                <p className="text-gray-600 mb-4">
+                  {venirSections?.[0]?.desc ?? "Des navettes seront mises gratuitement à disposition des visiteurs du Parc d'Exposition à destination ou en provenance de Casablanca."}
+                </p>
+                <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm">
+                  <p className="text-gray-500 italic">{venirSections?.[0]?.note ?? 'Les points de pick-up seront confirmés ultérieurement.'}</p>
                 </div>
               </div>
+
+              {/* Voiture */}
+              <div className="border-l-4 border-gray-200 pl-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <Car className="w-6 h-6 text-sib-navy" />
+                  <h3 className="text-lg font-bold text-gray-900">{venirSections?.[1]?.title ?? 'Par voiture'}</h3>
+                </div>
+                <p className="text-gray-600 mb-2">
+                  {venirSections?.[1]?.desc ?? "Accès rapide par l'autoroute Casablanca–El Jadida (sortie Azemmour) ou depuis la route nationale Azemmour–El Jadida. Trajet depuis Casablanca : 50 minutes."}
+                </p>
+                <p className="text-gray-500 text-sm italic">
+                  {venirSections?.[1]?.note ?? "« Afin d'accompagner la transition écologique, nous invitons nos visiteurs à privilégier le covoiturage. »"}
+                </p>
+                <p className="text-gray-600 mt-2 text-sm">Parking : <strong>2 500 places</strong> + parking VIP 52 places + parking autocars 50 places.</p>
+              </div>
+
+              {/* Train */}
+              <div className="border-l-4 border-gray-200 pl-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <Train className="w-6 h-6 text-sib-navy" />
+                  <h3 className="text-lg font-bold text-gray-900">{venirSections?.[2]?.title ?? 'Par train'}</h3>
+                </div>
+                <p className="text-gray-600 mb-2">
+                  {venirSections?.[2]?.desc ?? "Accès facile depuis la gare d'Azemmour — Parc d'Expositions Mohammed VI (PEM6)."}
+                </p>
+                <div className="bg-sib-gold/10 rounded-lg p-3 text-sm">
+                  <p className="text-gray-700">
+                    {venirSections?.[2]?.note ?? "L'ONCF, partenaire Transport et Logistique du SIB, propose une réduction de 30% à bord de tous les trains en provenance ou en direction de la gare PEM6 durant la période du salon."}
+                  </p>
+                </div>
+              </div>
+
+              {/* Avion */}
+              <div className="border-l-4 border-gray-200 pl-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <Plane className="w-6 h-6 text-sib-navy" />
+                  <h3 className="text-lg font-bold text-gray-900">{venirSections?.[3]?.title ?? 'Par avion'}</h3>
+                </div>
+                <p className="text-gray-600">
+                  {venirSections?.[3]?.desc ?? "Le parc se situe à seulement 1h de route depuis l'aéroport Mohammed V."}
+                </p>
+              </div>
             </div>
-          </motion.div>
+          </div>
+          </ScrollReveal>
 
           {/* Hébergement */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="h-1.5 w-full bg-[#52B847]" />
-            <div className="p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-[#52B847] p-3 rounded-xl">
-                  <Hotel className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-900">{getCms('hebergement_title', 'Hébergement')}</h2>
-              </div>
-              <p className="text-sm text-gray-600 mb-4">
-                Les exposants et visiteurs disposent d'une multitude de choix pour séjourner à proximité du parc.
-                La ville d'El Jadida propose un choix varié d'hôtels dont les prix peuvent s'adapter à toutes les bourses.
-              </p>
-              <Link to={ROUTES.ACCOMMODATION}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#52B847] text-white rounded-xl font-semibold text-sm hover:bg-[#3D9B35] transition-colors">
-                {getCms('hebergement_cta', 'Voir les hébergements')}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+          <ScrollReveal variant={fadeLeft} delay={0.25}>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Hotel className="w-7 h-7 text-sib-gold" />
+              <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('hebergement_title', 'Hébergement')}</h2>
             </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className="py-14 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h3 className="text-2xl font-bold mb-3">Prêt à nous rejoindre ?</h3>
-            <p className="text-white/75 mb-6 text-sm">Entrée gratuite — badge électronique obligatoire.</p>
-            <Link to={ROUTES.BADGE}
-              className="inline-flex items-center gap-2 px-7 py-3 bg-[#52B847] text-white rounded-xl font-bold text-sm hover:bg-[#3D9B35] transition-all shadow-lg hover:scale-105">
-              Obtenir mon badge gratuit <ArrowRight className="h-4 w-4" />
+            <p className="text-gray-600 mb-4">
+              Les exposants et visiteurs disposent d'une multitude de choix pour séjourner à proximité du parc.
+              La ville d'El Jadida propose un choix varié d'hôtels dont les prix peuvent s'adapter à toutes les bourses.
+            </p>
+            <Link
+              to={ROUTES.ACCOMMODATION}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-sib-gold text-sib-navy rounded-lg font-semibold hover:bg-sib-gold/90 transition-colors"
+            >
+              {getCms('hebergement_cta', 'Voir les hébergements')}
             </Link>
-          </motion.div>
+          </div>
+          </ScrollReveal>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
