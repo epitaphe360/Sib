@@ -8,3 +8,4 @@ export { PartnerAnalyticsTab } from './PartnerAnalyticsTab';
 export { PartnerServicesTab } from './PartnerServicesTab';
 export { PartnerRejectModal } from './PartnerRejectModal';
 export { PartnerEditorModal } from './PartnerEditorModal';
+export { PartnerQuickActions } from './PartnerQuickActions';

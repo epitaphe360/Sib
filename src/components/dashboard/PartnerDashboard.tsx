@@ -1,4 +1,5 @@
-﻿import { AnimatePresence, motion } from 'framer-motion';
+﻿import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Shield, CreditCard, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { RentalBanner } from '../common/RentalBanner';
@@ -20,12 +21,18 @@ import {
   PartnerEditorModal,
 } from './partner';
 import { useTranslation } from '../../hooks/useTranslation';
+import { ExhibitorCalendarSection, ExhibitorActivitySection, ExhibitorScannedVisitors } from './exhibitor';
+import { PartnerQuickActions } from './partner';
+import { DynamicBadge } from '../badge/DynamicBadge';
 import { ProgrammeRegistrationsSection } from '../programme/ProgrammeRegistrationsSection';
 
 export default function PartnerDashboard() {
   const ctx = usePartnerDashboard();
   const { t } = useTranslation();
   const { user } = ctx;
+  const [calendarTab, setCalendarTab] = useState<'availability' | 'appointments'>('appointments');
+  const [scansOpen, setScansOpen] = useState(false);
+  const [showBadgeModal, setShowBadgeModal] = useState(false);
 
   // ── Early returns (before render) ────────────────────────────────────────
   if (user?.status === 'pending_payment') {
@@ -107,6 +114,15 @@ export default function PartnerDashboard() {
         <div className="pt-6">
           <RentalBanner variant="compact" to="/partner/rental" />
         </div>
+
+        <ExhibitorCalendarSection
+          userId={user.id}
+          activeTab={calendarTab}
+          onTabChange={setCalendarTab}
+        />
+
+        <PartnerQuickActions onOpenBadge={() => setShowBadgeModal(true)} />
+
         <PartnerTabNav activeTab={ctx.activeTab} onTabChange={ctx.setActiveTab} />
 
         <AnimatePresence mode="wait">
@@ -154,6 +170,16 @@ export default function PartnerDashboard() {
           </motion.div>
         </AnimatePresence>
 
+        <ExhibitorActivitySection
+          activities={(ctx.dashboard?.recentActivity ?? []).map((a: any) => ({ ...a, timestamp: a.timestamp instanceof Date ? a.timestamp.toISOString() : a.timestamp }))}
+          onViewAll={() => {}}
+        />
+
+        <ExhibitorScannedVisitors
+          isExpanded={scansOpen}
+          onToggle={() => setScansOpen(v => !v)}
+        />
+
         {/* Mes sessions du programme — visible depuis tous les onglets */}
         <ProgrammeRegistrationsSection accent="amber" />
 
@@ -182,6 +208,10 @@ export default function PartnerDashboard() {
           onSave={() => { ctx.setShowEditorModal(false); ctx.fetchDashboard(); }}
           onClose={() => ctx.setShowEditorModal(false)}
         />
+      )}
+
+      {showBadgeModal && (
+        <DynamicBadge user={user} onClose={() => setShowBadgeModal(false)} />
       )}
     </div>
   );
