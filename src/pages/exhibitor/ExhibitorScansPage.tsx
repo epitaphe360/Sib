@@ -399,7 +399,7 @@ export default function ExhibitorScansPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* En-tête page */}
-      <div className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-10">
+      <div className="bg-white border-b border-gray-100 shadow-sm sticky top-16 sm:top-20 xl:top-28 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link

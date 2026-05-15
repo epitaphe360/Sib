@@ -569,7 +569,7 @@ export default function NetworkingPage() {
       </div>
 
       {/* Navigation Sticky avec Glassmorphism - RESPONSIVE AMÉLIORÉ */}
-      <div className="sticky top-0 z-50 bg-white/70 backdrop-blur-2xl border-b border-slate-200/50 shadow-sm">
+      <div className="sticky top-16 sm:top-20 xl:top-28 z-50 bg-white/70 backdrop-blur-2xl border-b border-slate-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
           <div className="flex items-center justify-center py-2 sm:py-4">
             <nav className="flex items-center space-x-0.5 sm:space-x-1 md:space-x-2 bg-slate-100/50 p-1 sm:p-1.5 rounded-xl sm:rounded-2xl border border-slate-200/50 overflow-x-auto max-w-full">

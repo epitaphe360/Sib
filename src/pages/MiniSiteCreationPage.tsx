@@ -59,7 +59,7 @@ export default function MiniSiteCreationPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Onglets */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
+      <div className="bg-white border-b border-gray-200 px-6 py-4 sticky top-16 sm:top-20 xl:top-28 z-10 shadow-sm">
         <div className="max-w-7xl mx-auto flex gap-2">
           <button
             onClick={() => setActiveTab('ai')}
