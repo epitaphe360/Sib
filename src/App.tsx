@@ -553,8 +553,8 @@ const App = () => {
             <Route path={ROUTES.PARTNER_INVOICES} element={<ProtectedRoute requiredRole="partner"><PartnerInvoicesPage /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_INVOICES} element={<ProtectedRoute requiredRole="visitor"><VisitorInvoicesPage /></ProtectedRoute>} />
             <Route path={ROUTES.INVITATION_LETTER} element={<ProtectedRoute><InvitationLetterPage /></ProtectedRoute>} />
-            <Route path={ROUTES.EXHIBITOR_INVITATION_LETTER} element={<ProtectedRoute requiredRole="exhibitor"><InvitationLetterPage /></ProtectedRoute>} />
-            <Route path={ROUTES.PARTNER_INVITATION_LETTER} element={<ProtectedRoute requiredRole="partner"><InvitationLetterPage /></ProtectedRoute>} />
+            <Route path={ROUTES.EXHIBITOR_INVITATION_LETTER} element={<ProtectedRoute requiredRole="exhibitor"><InvitationLetterPage userType="exhibitor" /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_INVITATION_LETTER} element={<ProtectedRoute requiredRole="partner"><InvitationLetterPage userType="partner" /></ProtectedRoute>} />
 
             {/* Catalogue routes */}
             <Route path={ROUTES.CATALOGUE_FILL} element={<CatalogueFormPage />} />

@@ -46,7 +46,7 @@ export default function PartnerDashboard() {
       if (canvas) {
         const link = document.createElement('a');
         const companyName = user?.profile?.company || 'partenaire';
-        link.download = qr-code-.png;
+        link.download = `qr-code-${companyName}.png`;
         link.href = canvas.toDataURL();
         link.click();
       }
@@ -166,7 +166,7 @@ export default function PartnerDashboard() {
                 <div className="p-2.5 bg-[#1B365D]/8 rounded-xl group-hover:scale-110 transition-transform">
                   <stat.Icon className="h-5 w-5 text-[#1B365D]" />
                 </div>
-                <span className={	ext-xs font-bold px-2 py-0.5 rounded-full }>{stat.growth}</span>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${stat.growthType === 'positive' ? 'bg-green-100 text-green-700' : stat.growthType === 'negative' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}`}>{stat.growth}</span>
               </div>
               <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">{stat.label}</p>
               <p className="text-2xl font-bold text-slate-900">{stat.value}</p>

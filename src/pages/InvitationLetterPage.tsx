@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FileText, ArrowLeft, Plus, Clock, CheckCircle, XCircle,
-  Loader2, User, Building, Mail, Phone, Globe, Passport,
-  Calendar, Languages, Send
+  Loader2, Calendar, Send
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/authStore';
@@ -113,11 +112,12 @@ const emptyForm = {
 };
 
 interface InvitationLetterPageProps {
-  userType: 'exhibitor' | 'partner';
+  userType?: 'exhibitor' | 'partner';
 }
 
-export default function InvitationLetterPage({ userType }: InvitationLetterPageProps) {
+export default function InvitationLetterPage({ userType: userTypeProp }: Readonly<InvitationLetterPageProps>) {
   const { user } = useAuthStore();
+  const userType: 'exhibitor' | 'partner' = userTypeProp ?? (user?.type === 'partner' ? 'partner' : 'exhibitor');
   const { t } = useTranslation();
 
   const dateLabelMap: Record<string, string> = {

@@ -7,6 +7,24 @@
 /* Supprime les entêtes/pieds natifs du navigateur à l'impression (URL, date, n° page) */
 @page { margin: 0mm; }
 
+/* =========================================================
+   Header transparent — page d'accueil (hero image derrière)
+   ========================================================= */
+header.header-transparent nav button:not(:hover),
+header.header-transparent nav > div > a:not(:hover),
+header.header-transparent nav > a:not(:hover) {
+  color: rgba(255, 255, 255, 0.92);
+}
+header.header-transparent nav button:hover,
+header.header-transparent nav > div > a:hover,
+header.header-transparent nav > a:hover {
+  color: #E7D192;
+}
+/* Grain doré invisible en mode transparent */
+header.header-transparent > .absolute {
+  opacity: 0;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
