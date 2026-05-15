@@ -233,12 +233,22 @@ const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salo
 
 function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
+  const { user, isAuthenticated } = useAuthStore();
   const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
+  // La barre "Retour au tableau de bord" ajoute h-8 (32px) au header fixe
+  const hasBackBar = isAuthenticated && user && (
+    (user.type === 'admin' && location.pathname.startsWith('/admin/') && location.pathname !== ROUTES.ADMIN_DASHBOARD) ||
+    (user.type === 'exhibitor' && location.pathname.startsWith('/exhibitor/') && location.pathname !== ROUTES.EXHIBITOR_DASHBOARD) ||
+    (user.type === 'partner' && location.pathname.startsWith('/partner') && location.pathname !== ROUTES.PARTNER_DASHBOARD)
+  );
+  let mainPt = 'pt-16 sm:pt-20 xl:pt-28';
+  if (isUrbaRoute) mainPt = 'pt-[66px]';
+  else if (hasBackBar) mainPt = 'pt-24 sm:pt-28 xl:pt-36';
   return (
     <div className="min-h-screen flex flex-col">
       <SkipToContent />
       {isUrbaRoute ? <UrbaEventNav /> : <Header />}
-      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : 'pt-16 sm:pt-20 xl:pt-28'}`}>
+      <main id="main-content" className={`flex-1 ${mainPt}`}>
         {children}
       </main>
     </div>
