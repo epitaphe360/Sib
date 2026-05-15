@@ -1,6 +1,6 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Shield, CreditCard, Activity } from 'lucide-react';
+import { Shield, CreditCard, Activity, Calendar, Users, FileText, Crown, Handshake, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { RentalBanner } from '../common/RentalBanner';
 import { Card } from '../ui/Card';
@@ -21,7 +21,9 @@ import {
   PartnerEditorModal,
 } from './partner';
 import { useTranslation } from '../../hooks/useTranslation';
-import { ExhibitorCalendarSection, ExhibitorActivitySection, ExhibitorScannedVisitors } from './exhibitor';
+import { ExhibitorCalendarSection, ExhibitorActivitySection, ExhibitorScannedVisitors, ExhibitorQRModal } from './exhibitor';
+import { QuotaSummaryCard } from '../common/QuotaWidget';
+import { getPartnerQuota, type PartnerTier } from '../../config/partnerTiers';
 import { PartnerQuickActions } from './partner';
 import { DynamicBadge } from '../badge/DynamicBadge';
 import { ProgrammeRegistrationsSection } from '../programme/ProgrammeRegistrationsSection';
@@ -33,6 +35,25 @@ export default function PartnerDashboard() {
   const [calendarTab, setCalendarTab] = useState<'availability' | 'appointments'>('appointments');
   const [scansOpen, setScansOpen] = useState(false);
   const [showBadgeModal, setShowBadgeModal] = useState(false);
+  const qrCodeRef = useRef<HTMLCanvasElement>(null);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [isDownloadingQR, setIsDownloadingQR] = useState(false);
+
+  const downloadQRCode = async () => {
+    setIsDownloadingQR(true);
+    try {
+      const canvas = qrCodeRef.current as unknown as HTMLCanvasElement | null;
+      if (canvas) {
+        const link = document.createElement('a');
+        const companyName = user?.profile?.company || 'partenaire';
+        link.download = qr-code-.png;
+        link.href = canvas.toDataURL();
+        link.click();
+      }
+    } finally {
+      setIsDownloadingQR(false);
+    }
+  };
 
   // ── Early returns (before render) ────────────────────────────────────────
   if (user?.status === 'pending_payment') {
@@ -115,13 +136,65 @@ export default function PartnerDashboard() {
           <RentalBanner variant="compact" to="/partner/rental" />
         </div>
 
+        {/* Bannière RDV en attente */}
+        {ctx.pendingAppointments.length > 0 && (
+          <div className="mb-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-amber-100 rounded-xl">
+                <Calendar className="h-5 w-5 text-amber-600" />
+              </div>
+              <div>
+                <p className="font-bold text-amber-900 text-sm">
+                  {ctx.pendingAppointments.length} rendez-vous en attente de confirmation
+                </p>
+                <p className="text-xs text-amber-700">Allez dans l'onglet Networking pour les traiter</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Stats Grid — toujours visible */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[
+            { label: 'Vues du profil', value: ctx.dashboardStats?.profileViews?.value?.toLocaleString() || '0', growth: ctx.dashboardStats?.profileViews?.growth || '--', growthType: ctx.dashboardStats?.profileViews?.growthType || 'neutral', Icon: Crown },
+            { label: 'Connexions', value: ctx.dashboardStats?.connections?.value?.toString() || '0', growth: ctx.dashboardStats?.connections?.growth || '--', growthType: ctx.dashboardStats?.connections?.growthType || 'neutral', Icon: Handshake },
+            { label: 'Rendez-vous', value: ctx.dashboardStats?.appointments?.value?.toString() || '0', growth: ctx.dashboardStats?.appointments?.growth || '--', growthType: ctx.dashboardStats?.appointments?.growthType || 'neutral', Icon: Calendar },
+            { label: 'Messages', value: ctx.dashboardStats?.messages?.value?.toString() || '0', growth: ctx.dashboardStats?.messages?.growth || '--', growthType: ctx.dashboardStats?.messages?.growthType || 'neutral', Icon: Zap },
+          ].map((stat) => (
+            <div key={stat.label} className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all group">
+              <div className="flex items-center justify-between mb-3">
+                <div className="p-2.5 bg-[#1B365D]/8 rounded-xl group-hover:scale-110 transition-transform">
+                  <stat.Icon className="h-5 w-5 text-[#1B365D]" />
+                </div>
+                <span className={	ext-xs font-bold px-2 py-0.5 rounded-full }>{stat.growth}</span>
+              </div>
+              <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">{stat.label}</p>
+              <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Quotas — toujours visible */}
+        <div className="mb-8">
+          <QuotaSummaryCard
+            title="Mes quotas partenaire"
+            level={ctx.partnerTier}
+            type="partner"
+            quotas={[
+              { label: 'Rendez-vous B2B', current: ctx.confirmedAppointments.length, limit: getPartnerQuota(ctx.partnerTier as PartnerTier, 'appointments'), icon: <Calendar className="h-4 w-4" /> },
+              { label: 'Membres équipe', current: 0, limit: getPartnerQuota(ctx.partnerTier as PartnerTier, 'teamMembers'), icon: <Users className="h-4 w-4" /> },
+              { label: 'Médias uploadés', current: ctx.dashboardStats?.catalogDownloads?.value || 0, limit: getPartnerQuota(ctx.partnerTier as PartnerTier, 'mediaUploads'), icon: <FileText className="h-4 w-4" /> },
+            ]}
+          />
+        </div>
+
         <ExhibitorCalendarSection
           userId={user.id}
           activeTab={calendarTab}
           onTabChange={setCalendarTab}
         />
 
-        <PartnerQuickActions onOpenBadge={() => setShowBadgeModal(true)} />
+        <PartnerQuickActions onOpenBadge={() => setShowBadgeModal(true)} onOpenQR={() => setShowQRModal(true)} />
 
         <PartnerTabNav activeTab={ctx.activeTab} onTabChange={ctx.setActiveTab} />
 
@@ -134,12 +207,7 @@ export default function PartnerDashboard() {
             transition={{ duration: 0.4, ease: 'circOut' }}
           >
             {ctx.activeTab === 'overview' && (
-              <PartnerOverviewTab
-                dashboardStats={ctx.dashboardStats}
-                dashboard={ctx.dashboard}
-                partnerTier={ctx.partnerTier}
-                confirmedAppointments={ctx.confirmedAppointments}
-              />
+              <PartnerOverviewTab />
             )}
             {ctx.activeTab === 'profile' && (
               <PartnerProfileTab
@@ -207,6 +275,16 @@ export default function PartnerDashboard() {
           partnerId={user.id}
           onSave={() => { ctx.setShowEditorModal(false); ctx.fetchDashboard(); }}
           onClose={() => ctx.setShowEditorModal(false)}
+        />
+      )}
+
+      {showQRModal && (
+        <ExhibitorQRModal
+          user={user}
+          qrCodeRef={qrCodeRef}
+          isDownloadingQR={isDownloadingQR}
+          onDownload={downloadQRCode}
+          onClose={() => setShowQRModal(false)}
         />
       )}
 
