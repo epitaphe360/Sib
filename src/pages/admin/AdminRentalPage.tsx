@@ -5,12 +5,13 @@ import {
   Package, Loader2, Plus, Edit2, Save, X, Trash2,
   TrendingUp, ShoppingBag, AlertTriangle, Search,
   CheckCircle2, CreditCard, Filter, RefreshCw, Image as ImageIcon,
-  ChevronDown, Download, ArrowLeft,
+  ChevronDown, Download, ArrowLeft, FileText,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { ROUTES } from '../../lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useInvoiceConfig, type InvoiceConfig } from '../../hooks/useInvoiceConfig';
 
 interface RentalItem {
   id: string;
@@ -96,10 +97,19 @@ const Pill: React.FC<Readonly<{ cfg: { label: string; color: string } }>> = ({ c
 
 export default function AdminRentalPage() {
   const { t } = useTranslation();
-  const [items, setItems]     = useState<RentalItem[]>([]);
+  const TAB_LABELS: Record<'items' | 'orders' | 'config', string> = {
+    items: `📦 ${t('admin.rental_tab_items')}`,
+    orders: `🛍️ ${t('admin.rental_tab_orders')}`,
+    config: '⚙️ Configuration Facture',
+  };
   const [orders, setOrders]   = useState<RentalOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [tab, setTab]         = useState<'items' | 'orders'>('items');
+  const [tab, setTab]         = useState<'items' | 'orders' | 'config'>('items');
+
+  /* invoice config */
+  const { config: invoiceConfig, loading: configLoading, saving: configSaving, save: saveInvoiceConfig } = useInvoiceConfig();
+  const [localConfig, setLocalConfig] = useState<InvoiceConfig | null>(null);
+  const cfgChanged = localConfig !== null;
 
   /* item form */
   const [showForm, setShowForm]       = useState(false);
@@ -459,12 +469,12 @@ export default function AdminRentalPage() {
 
       {/* Tabs */}
       <div className="flex gap-2 mb-6 flex-wrap">
-        {(['items', 'orders'] as const).map(tabKey => (
+        {(['items', 'orders', 'config'] as const).map(tabKey => (
           <button key={tabKey} onClick={() => setTab(tabKey)}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
               tab === tabKey ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:border-emerald-300'
             }`}>
-            {tabKey === 'items' ? `📦 ${t('admin.rental_tab_items')}` : `🛍️ ${t('admin.rental_tab_orders')}`}
+            {TAB_LABELS[tabKey]}
           </button>
         ))}
         {tab === 'items' && (
@@ -1052,6 +1062,157 @@ export default function AdminRentalPage() {
             </div>
           )}
         </>
+      )}
+      {/* ════════════════ CONFIG TAB ════════════════ */}
+      {tab === 'config' && (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+          {configLoading ? (
+            <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-emerald-600" /></div>
+          ) : (() => {
+            const cfg = localConfig ?? invoiceConfig;
+            const set = (field: keyof InvoiceConfig) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+              setLocalConfig({ ...(localConfig ?? invoiceConfig), [field]: field === 'vat_rate' ? Number(e.target.value) : e.target.value });
+
+            return (
+              <div className="space-y-8">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-emerald-100 p-2.5 rounded-xl">
+                      <FileText className="h-5 w-5 text-emerald-700" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-bold text-gray-900">Configuration de la Facture</h2>
+                      <p className="text-sm text-gray-500">Informations affichées sur toutes les factures générées</p>
+                    </div>
+                  </div>
+                  {cfgChanged && (
+                    <button
+                      onClick={() => void saveInvoiceConfig(localConfig ?? invoiceConfig).then(() => setLocalConfig(null))}
+                      disabled={configSaving}
+                      className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm disabled:opacity-50"
+                    >
+                      {configSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                      Sauvegarder
+                    </button>
+                  )}
+                </div>
+
+                {/* Prévisualisation logo */}
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 flex items-center gap-4">
+                  <img
+                    src="/logo-sib2026.png"
+                    alt="Logo SIB 2026"
+                    className="h-12 w-auto object-contain"
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">Logo utilisé sur les factures</p>
+                    <p className="text-xs text-gray-500 mt-0.5">/logo-sib2026.png (fichier public)</p>
+                  </div>
+                </div>
+
+                {/* Section Émetteur */}
+                <section>
+                  <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100">
+                    Informations Émetteur
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {([
+                      { field: 'emitter_name',    label: 'Nom affiché *',          placeholder: 'SIB 2026' },
+                      { field: 'emitter_org',     label: 'Organisation / Raison sociale', placeholder: 'Salon International du Bâtiment' },
+                      { field: 'emitter_address', label: 'Adresse postale *',      placeholder: 'Casablanca, Maroc' },
+                      { field: 'emitter_email',   label: 'Email de contact *',     placeholder: 'contact@sib2026.ma' },
+                      { field: 'emitter_phone',   label: 'Téléphone',              placeholder: '+212 5XX XX XX XX' },
+                      { field: 'emitter_ice',     label: 'N° ICE / Identifiant fiscal', placeholder: 'ICE : XXXXXXXXXX' },
+                      { field: 'emitter_website', label: 'Site web',               placeholder: 'www.sib2026.ma' },
+                    ] as const).map(({ field, label, placeholder }) => (
+                      <div key={field}>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+                        <input
+                          type="text"
+                          value={cfg[field]}
+                          onChange={set(field)}
+                          placeholder={placeholder}
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                {/* Section Facture */}
+                <section>
+                  <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100">
+                    Paramètres Facture
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="invoice-prefix" className="block text-xs font-medium text-gray-600 mb-1">Préfixe numéro de facture *</label>
+                      <input
+                        id="invoice-prefix"
+                        type="text"
+                        value={cfg.invoice_prefix}
+                        onChange={set('invoice_prefix')}
+                        placeholder="FAC-RENT-2026-"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                      <p className="text-xs text-gray-400 mt-1">Exemple : FAC-RENT-2026-4325189</p>
+                    </div>
+                    <div>
+                      <label htmlFor="invoice-vat" className="block text-xs font-medium text-gray-600 mb-1">Taux TVA (%)</label>
+                      <input
+                        id="invoice-vat"
+                        type="number"
+                        min="0" max="100" step="1"
+                        value={cfg.vat_rate}
+                        onChange={set('vat_rate')}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label htmlFor="invoice-logo" className="block text-xs font-medium text-gray-600 mb-1">URL logo personnalisé</label>
+                      <input
+                        id="invoice-logo"
+                        type="text"
+                        value={cfg.logo_url}
+                        onChange={set('logo_url')}
+                        placeholder="Laisser vide pour utiliser /logo-sib2026.png"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                  </div>
+                </section>
+
+                {/* Section Pied de page */}
+                <section>
+                  <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100">
+                    Pied de page
+                  </h3>
+                  <textarea
+                    value={cfg.footer_text}
+                    onChange={set('footer_text')}
+                    rows={2}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                    placeholder="SIB 2026 · Salon International du Bâtiment · Casablanca, Maroc"
+                  />
+                </section>
+
+                {/* Bouton sauvegarde bas */}
+                <div className="flex justify-end pt-2">
+                  <button
+                    onClick={() => void saveInvoiceConfig(localConfig ?? invoiceConfig).then(() => setLocalConfig(null))}
+                    disabled={configSaving}
+                    className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold shadow-sm disabled:opacity-50"
+                  >
+                    {configSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                    Sauvegarder la configuration
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
       )}
     </div>
   );

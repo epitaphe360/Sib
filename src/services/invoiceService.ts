@@ -10,6 +10,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { supabase } from '../lib/supabase';
 import { BANK_TRANSFER_INFO } from '../config/bankTransferConfig';
+import { loadInvoiceConfig, INVOICE_CONFIG_DEFAULTS } from '../hooks/useInvoiceConfig';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -171,7 +172,8 @@ const USER_TYPE_LABELS: Record<UserType, string> = {
 /**
  * Génère et télécharge un PDF de facture (client-side, jsPDF + autoTable)
  */
-export function downloadInvoicePDF(invoice: Invoice): void {
+export async function downloadInvoicePDF(invoice: Invoice): Promise<void> {
+  const cfg = await loadInvoiceConfig();
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const lines = invoice.invoice_lines ?? [];
   const currency = invoice.currency.toUpperCase();
@@ -181,21 +183,31 @@ export function downloadInvoicePDF(invoice: Invoice): void {
   const margin = 20;
   let y = margin;
 
-  // ── En-tête émetteur ────────────────────────────────────────────────────────
+  // ── En-tête émetteur ──────────────────────────────────────────────
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(30, 64, 175); // bleu SIB
-  doc.text('URBACOM', margin, y);
+  doc.setTextColor(5, 150, 105); // vert émeraude SIB
+  doc.text(cfg.emitter_name, margin, y);
 
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(80, 80, 80);
   y += 6;
-  doc.text('Organisateur du Salon International du Bâtiment - SIB 2026', margin, y);
+  doc.text(cfg.emitter_org, margin, y);
   y += 5;
-  doc.text('El Jadida, Maroc', margin, y);
-  y += 5;
-  doc.text(`Banque: ${BANK_TRANSFER_INFO.bankName} | IBAN: ${BANK_TRANSFER_INFO.iban}`, margin, y);
+  doc.text(cfg.emitter_address, margin, y);
+  if (cfg.emitter_email) {
+    y += 5;
+    doc.text(cfg.emitter_email, margin, y);
+  }
+  if (cfg.emitter_phone) {
+    y += 5;
+    doc.text(cfg.emitter_phone, margin, y);
+  }
+  if (cfg.emitter_ice) {
+    y += 5;
+    doc.text(cfg.emitter_ice, margin, y);
+  }
 
   // ── Titre FACTURE ────────────────────────────────────────────────────────────
   doc.setFontSize(22);
@@ -326,7 +338,7 @@ export function downloadInvoicePDF(invoice: Invoice): void {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(150, 150, 150);
   doc.text(
-    'SIB 2026 - Salon International du Bâtiment | El Jadida, Maroc | 25-29 Novembre 2026 | www.sib2026.ma',
+    cfg.footer_text || INVOICE_CONFIG_DEFAULTS.footer_text,
     pageW / 2,
     pageH - 8,
     { align: 'center' }

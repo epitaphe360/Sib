@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
+import { loadInvoiceConfig, INVOICE_CONFIG_DEFAULTS } from '../../hooks/useInvoiceConfig';
 
 interface SuccessState {
   invoiceNumber: string;
@@ -32,7 +33,11 @@ interface SuccessState {
   userEmail: string;
 }
 
-function buildInvoicePrintHtml(s: SuccessState): string {
+function buildInvoicePrintHtml(
+  s: SuccessState,
+  logoUrl: string,
+  cfg = INVOICE_CONFIG_DEFAULTS,
+): string {
   const dateStart = new Date(s.rentalStart + 'T12:00:00').toLocaleDateString('fr-FR', {
     day: 'numeric', month: 'long', year: 'numeric',
   });
@@ -63,7 +68,7 @@ function buildInvoicePrintHtml(s: SuccessState): string {
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, sans-serif; font-size: 13px; color: #1f2937; background: #fff; padding: 40px; }
     .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 2px solid #059669; }
-    .logo { font-size: 22px; font-weight: 700; color: #059669; }
+    .logo { display: block; height: 52px; width: auto; }
     .logo-sub { font-size: 13px; color: #6b7280; margin-top: 4px; }
     .invoice-meta { text-align: right; }
     .invoice-meta .num { font-size: 16px; font-weight: 700; color: #1f2937; }
@@ -92,8 +97,10 @@ function buildInvoicePrintHtml(s: SuccessState): string {
 <body>
   <div class="header">
     <div>
-      <div class="logo">SIB 2026</div>
-      <div class="logo-sub">Salon International du Bâtiment · Casablanca</div>
+      <img src="${logoUrl}" alt="${cfg.emitter_name}" class="logo"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div style="display:none;font-size:22px;font-weight:700;color:#059669">${cfg.emitter_name}</div>
+      <div class="logo-sub">${cfg.emitter_org} · ${cfg.emitter_address}</div>
     </div>
     <div class="invoice-meta">
       <div class="num">FACTURE N° ${s.invoiceNumber}</div>
@@ -105,7 +112,7 @@ function buildInvoicePrintHtml(s: SuccessState): string {
   <div class="info-grid">
     <div class="info-box">
       <h3>Émetteur</h3>
-      <p><strong>SIB 2026</strong><br>Office des Foires et Expositions<br>Casablanca, Maroc<br>contact@sib2026.ma</p>
+      <p><strong>${cfg.emitter_name}</strong><br>${cfg.emitter_org}<br>${cfg.emitter_address}<br>${cfg.emitter_email}${cfg.emitter_phone ? '<br>' + cfg.emitter_phone : ''}${cfg.emitter_ice ? '<br>' + cfg.emitter_ice : ''}</p>
     </div>
     <div class="info-box">
       <h3>Client</h3>
@@ -155,7 +162,7 @@ function buildInvoicePrintHtml(s: SuccessState): string {
   </div>
 
   <div class="footer">
-    SIB 2026 · Salon International du Bâtiment · Casablanca, Maroc · contact@sib2026.ma · www.sib2026.ma
+    ${cfg.footer_text}
   </div>
 </body>
 </html>`;
@@ -182,8 +189,10 @@ export default function RentalPaymentSuccessPage() {
   const dateStart = new Date(rentalStart + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
   const dateEnd = new Date(rentalEnd + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  const handlePrintInvoice = () => {
-    const html = buildInvoicePrintHtml(state);
+  const handlePrintInvoice = async () => {
+    const logoUrl = `${window.location.origin}/logo-sib2026.png`;
+    const cfg = await loadInvoiceConfig();
+    const html = buildInvoicePrintHtml(state, logoUrl, cfg);
     const win = window.open('', '_blank', 'width=900,height=700');
     if (!win) { return; }
     win.document.write(html);
