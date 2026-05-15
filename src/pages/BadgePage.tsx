@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Download, Printer, RefreshCw, AlertTriangle, CheckCircle, XCircle, Scan } from 'lucide-react';
+import { Download, Printer, RefreshCw, AlertTriangle, ArrowLeft } from 'lucide-react';
 import PrintableBadgeA4 from '../components/badge/PrintableBadgeA4';
 import useAuthStore from '../store/authStore';
 import { useTranslation } from '../hooks/useTranslation';
@@ -12,6 +13,7 @@ import {
 import { UserBadge } from '../types';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import { getPostLoginRedirectUrl } from '../hooks/useAuthRedirect';
 
 export default function BadgePage() {
   const { user } = useAuthStore();
@@ -155,6 +157,13 @@ export default function BadgePage() {
       </style>
 
       <div className="no-print mb-8 text-center">
+        <Link
+          to={getPostLoginRedirectUrl(user?.type)}
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-4"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {t('common.back_to_dashboard')}
+        </Link>
         <h1 className="text-3xl font-bold mb-2">🎫 {t('badge.my_access_badge')}</h1>
         <p className="text-gray-600">
           {badge
