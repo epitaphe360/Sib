@@ -49,7 +49,9 @@ export default function NetworkingPage() {
     });
 
     // Bloquer UNIQUEMENT les visiteurs free (pas les exposants ni les partenaires)
-    if (isAuthenticated && user?.type === 'visitor' && user?.visitor_level === 'free') {
+    // Un visiteur est "free" si visitor_level === 'free' OU si visitor_level n'est pas défini
+    const isFreeVisitor = user?.type === 'visitor' && (user?.visitor_level === 'free' || !user?.visitor_level);
+    if (isAuthenticated && isFreeVisitor) {
       console.log('❌ Access blocked: free visitor');
       toast.error(t('networking.restricted'), {
         duration: 6000
