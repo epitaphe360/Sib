@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Shield, CreditCard, Activity, Calendar, Users, FileText, Crown, Handshake, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { RentalBanner } from '../common/RentalBanner';
+import ChapiteauBanner from '../common/ChapiteauBanner';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
@@ -134,6 +135,9 @@ export default function PartnerDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <div className="pt-6">
           <RentalBanner variant="compact" to="/partner/rental" />
+          <div className="mt-4">
+            <ChapiteauBanner variant="compact" to={ROUTES.PARTNER_CHAPITEAU} />
+          </div>
         </div>
 
         {/* Bannière RDV en attente */}
