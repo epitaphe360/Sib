@@ -241,8 +241,10 @@ function AppShell({ children }: { children: React.ReactNode }) {
     (user.type === 'exhibitor' && location.pathname.startsWith('/exhibitor/') && location.pathname !== ROUTES.EXHIBITOR_DASHBOARD) ||
     (user.type === 'partner' && location.pathname.startsWith('/partner') && location.pathname !== ROUTES.PARTNER_DASHBOARD)
   );
+  const isHomePage = location.pathname === '/';
   let mainPt = 'pt-16 sm:pt-20 xl:pt-28';
   if (isUrbaRoute) mainPt = 'pt-[66px]';
+  else if (isHomePage) mainPt = 'pt-0';
   else if (hasBackBar) mainPt = 'pt-24 sm:pt-28 xl:pt-36';
   return (
     <div className="min-h-screen flex flex-col">

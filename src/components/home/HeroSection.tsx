@@ -60,7 +60,7 @@ export const HeroSection: React.FC = () => {
       {/* Gradient sombre en haut pour lisibilité du menu transparent */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-transparent pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24 lg:py-36">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-32 sm:pt-36 xl:pt-44 pb-24 lg:pb-36">
         <div className="max-w-2xl">
 
           {/* Titre */}
