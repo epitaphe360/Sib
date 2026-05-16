@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -11,7 +11,7 @@ import { useAuthStore } from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
 import { PAYPAL_CLIENT_ID } from '../../services/paymentService';
-import { createInvoice } from '../../services/invoiceService';
+
 
 const TVA_RATE   = 0.2;
 const MAD_TO_EUR = 11;
@@ -214,13 +214,18 @@ export default function AdvertisingCheckoutPage() {
         });
         if (error) { throw error; }
 
-        // Décrémenter le stock
-        await (supabase as any).rpc
-          ? (supabase as any)
-              .from('ad_space_types')
-              .update({ stock_available: ci.stock_available - ci.quantity })
-              .eq('id', ci.id)
-          : null;
+        // Décrémenter le stock (fetch + update atomique)
+        const { data: spaceData } = await (supabase as any)
+          .from('ad_space_types')
+          .select('stock_available')
+          .eq('id', ci.id)
+          .maybeSingle();
+        if (spaceData?.stock_available != null) {
+          await (supabase as any)
+            .from('ad_space_types')
+            .update({ stock_available: Math.max(0, spaceData.stock_available - ci.quantity) })
+            .eq('id', ci.id);
+        }
       }
 
       // Envoi email de confirmation
@@ -235,10 +240,12 @@ export default function AdvertisingCheckoutPage() {
           paymentMethod: method,
           paymentRef,
         });
-        await createInvoice({
-          to:      userProfile?.email ?? user.email ?? '',
-          subject: `Facture ${invoiceNumber} — Espaces Publicitaires SIB 2026`,
-          html,
+        await (supabase as any).functions.invoke('send-template-email', {
+          body: {
+            to:      userProfile?.email ?? user.email ?? '',
+            subject: `Facture ${invoiceNumber} — Espaces Publicitaires SIB 2026`,
+            html,
+          },
         });
       } catch {
         // Echec email non bloquant

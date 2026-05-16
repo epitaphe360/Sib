@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -48,6 +48,23 @@ const CATEGORY_LABELS: Record<string, string> = {
   conference:   'Sponsoring conférence',
   autre:        'Autre',
 };
+
+/* ── Helpers statut réservation ─────────────────────────────────────────────── */
+function bookingStatusClass(status: string): string {
+  if (status === 'active')    { return 'bg-green-100 text-green-700'; }
+  if (status === 'approved')  { return 'bg-blue-100 text-blue-700'; }
+  if (status === 'rejected')  { return 'bg-red-100 text-red-700'; }
+  if (status === 'expired')   { return 'bg-gray-100 text-gray-600'; }
+  return 'bg-yellow-100 text-yellow-700';
+}
+
+function bookingStatusLabel(status: string): string {
+  if (status === 'active')    { return '✓ Actif'; }
+  if (status === 'approved')  { return 'Approuvé'; }
+  if (status === 'rejected')  { return 'Refusé'; }
+  if (status === 'expired')   { return 'Expiré'; }
+  return 'En attente';
+}
 
 /* ── Props ──────────────────────────────────────────────────────────────────── */
 interface AdvertisingCatalogPageProps {
@@ -347,18 +364,8 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
                     <span className="text-sm font-bold text-[#C9A84C]">
                       {b.total_amount?.toLocaleString('fr-MA')} MAD
                     </span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
-                      b.status === 'active'    ? 'bg-green-100 text-green-700' :
-                      b.status === 'approved'  ? 'bg-blue-100 text-blue-700' :
-                      b.status === 'rejected'  ? 'bg-red-100 text-red-700' :
-                      b.status === 'expired'   ? 'bg-gray-100 text-gray-600' :
-                      'bg-yellow-100 text-yellow-700'
-                    }`}>
-                      {b.status === 'active'   ? '✓ Actif' :
-                       b.status === 'approved' ? 'Approuvé' :
-                       b.status === 'rejected' ? 'Refusé' :
-                       b.status === 'expired'  ? 'Expiré' :
-                       'En attente'}
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${bookingStatusClass(b.status)}`}>
+                      {bookingStatusLabel(b.status)}
                     </span>
                   </div>
                 </div>
@@ -371,7 +378,13 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
       {/* ── Panier drawer ───────────────────────────────────────────────────────── */}
       {showCart && (
         <div className="fixed inset-0 z-50 flex">
-          <div className="flex-1 bg-black/40 backdrop-blur-sm" onClick={() => setShowCart(false)} />
+          <button
+            type="button"
+            aria-label="Fermer le panier"
+            className="flex-1 bg-black/40 backdrop-blur-sm cursor-default"
+            onClick={() => setShowCart(false)}
+            onKeyDown={e => e.key === 'Escape' && setShowCart(false)}
+          />
           <motion.div
             initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}

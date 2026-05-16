@@ -191,7 +191,7 @@ export default function AdminAdvertisingPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Supprimer cet espace ? Les réservations existantes resteront archivées.')) { return; }
+    if (!globalThis.confirm('Supprimer cet espace ? Les réservations existantes resteront archivées.')) { return; }
     const { error } = await (supabase as any).from('ad_space_types').delete().eq('id', id);
     if (error) { toast.error(error.message); return; }
     toast.success('Espace supprimé');
@@ -243,7 +243,7 @@ export default function AdminAdvertisingPage() {
     updateBookingStatus(id, 'active', { activated_at: new Date().toISOString() });
 
   const rejectBooking = async (id: string) => {
-    const reason = window.prompt('Raison du refus (facultatif) :') ?? '';
+    const reason = globalThis.prompt('Raison du refus (facultatif) :') ?? '';
     updateBookingStatus(id, 'rejected', { admin_notes: reason });
   };
 
@@ -265,7 +265,7 @@ export default function AdminAdvertisingPage() {
         new Date(b.created_at).toLocaleDateString('fr-FR'),
       ]),
     ];
-    const csv  = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const csv  = rows.map(r => r.map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
@@ -389,23 +389,23 @@ export default function AdminAdvertisingPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Nom */}
                     <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Nom *</label>
-                      <input value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                      <label htmlFor="adform-name" className="block text-xs font-semibold text-gray-600 mb-1">Nom *</label>
+                      <input id="adform-name" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
                         className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30"
                         placeholder="Ex: Bannière Homepage" />
                     </div>
                     {/* Description */}
                     <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Description</label>
-                      <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
+                      <label htmlFor="adform-desc" className="block text-xs font-semibold text-gray-600 mb-1">Description</label>
+                      <textarea id="adform-desc" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
                         rows={3}
                         className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30 resize-none"
                         placeholder="Description détaillée visible par les exposants/partenaires" />
                     </div>
                     {/* Catégorie */}
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Catégorie</label>
-                      <select value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
+                      <label htmlFor="adform-category" className="block text-xs font-semibold text-gray-600 mb-1">Catégorie</label>
+                      <select id="adform-category" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
                         className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30">
                         {CATEGORIES.map(c => (
                           <option key={c} value={c}>{CATEGORY_EMOJIS[c]} {CATEGORY_LABELS[c]}</option>
@@ -414,42 +414,42 @@ export default function AdminAdvertisingPage() {
                     </div>
                     {/* Audience */}
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Audience cible</label>
-                      <input value={form.audience} onChange={e => setForm(p => ({ ...p, audience: e.target.value }))}
+                      <label htmlFor="adform-audience" className="block text-xs font-semibold text-gray-600 mb-1">Audience cible</label>
+                      <input id="adform-audience" value={form.audience} onChange={e => setForm(p => ({ ...p, audience: e.target.value }))}
                         className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30"
                         placeholder="Ex: ~3 500 visiteurs inscrits" />
                     </div>
                     {/* Prix */}
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Prix (MAD HT)</label>
-                      <input type="number" min={0} value={form.price}
+                      <label htmlFor="adform-price" className="block text-xs font-semibold text-gray-600 mb-1">Prix (MAD HT)</label>
+                      <input id="adform-price" type="number" min={0} value={form.price}
                         onChange={e => setForm(p => ({ ...p, price: +e.target.value }))}
                         className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30" />
                     </div>
                     {/* Durée */}
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Durée (jours)</label>
-                      <input type="number" min={1} value={form.duration_days}
+                      <label htmlFor="adform-duration" className="block text-xs font-semibold text-gray-600 mb-1">Durée (jours)</label>
+                      <input id="adform-duration" type="number" min={1} value={form.duration_days}
                         onChange={e => setForm(p => ({ ...p, duration_days: +e.target.value }))}
                         className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30" />
                     </div>
                     {/* Stock total */}
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Stock total</label>
-                      <input type="number" min={0} value={form.stock_total}
+                      <label htmlFor="adform-stock-total" className="block text-xs font-semibold text-gray-600 mb-1">Stock total</label>
+                      <input id="adform-stock-total" type="number" min={0} value={form.stock_total}
                         onChange={e => setForm(p => ({ ...p, stock_total: +e.target.value }))}
                         className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30" />
                     </div>
                     {/* Stock dispo */}
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Stock disponible</label>
-                      <input type="number" min={0} value={form.stock_available}
+                      <label htmlFor="adform-stock-avail" className="block text-xs font-semibold text-gray-600 mb-1">Stock disponible</label>
+                      <input id="adform-stock-avail" type="number" min={0} value={form.stock_available}
                         onChange={e => setForm(p => ({ ...p, stock_available: +e.target.value }))}
                         className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30" />
                     </div>
                     {/* Image */}
                     <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Image</label>
+                      <label htmlFor="adform-image" className="block text-xs font-semibold text-gray-600 mb-1">Image</label>
                       <div className="flex items-center gap-3">
                         {form.image_url && (
                           <img src={form.image_url} alt="" className="w-16 h-10 object-cover rounded-lg" />
@@ -459,7 +459,7 @@ export default function AdminAdvertisingPage() {
                             ? <Loader2 className="w-4 h-4 animate-spin" />
                             : <ImageIcon className="w-4 h-4" />}
                           {uploadingImage ? 'Upload…' : 'Choisir une image'}
-                          <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                          <input id="adform-image" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                         </label>
                         {form.image_url && (
                           <button onClick={() => setForm(p => ({ ...p, image_url: '' }))}
