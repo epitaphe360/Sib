@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Download, CalendarPlus, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '../../ui/Badge';
@@ -340,8 +340,8 @@ function ConfirmedCard({ app, index, t }: { app: any; index: number; t: (key: st
       <div className="flex gap-2 pt-3 border-t border-gray-100">
         {[
           { label: '.ics', icon: Download, action: () => { downloadICS(app); toast.success('Fichier .ics téléchargé'); } },
-          { label: 'Google', icon: CalendarPlus, action: () => { window.open(getGoogleCalendarLink(app), '_blank'); } },
-          { label: 'Outlook', icon: CalendarPlus, action: () => { window.open(getOutlookCalendarLink(app), '_blank'); } },
+          { label: 'Google', icon: CalendarPlus, action: () => { globalThis.open(getGoogleCalendarLink(app), '_blank'); } },
+          { label: 'Outlook', icon: CalendarPlus, action: () => { globalThis.open(getOutlookCalendarLink(app), '_blank'); } },
         ].map(({ label, icon: Icon, action }) => (
           <Button key={label} size="sm" variant="outline" className="flex-1 text-xs" onClick={action}>
             <Icon className="h-3 w-3 mr-1" />

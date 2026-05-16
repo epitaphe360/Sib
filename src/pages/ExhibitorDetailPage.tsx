@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 
 import { RentalBanner } from '../components/common/RentalBanner';
 
@@ -242,7 +242,7 @@ export default function ExhibitorDetailPage() {
 
     if (exhibitor?.contactInfo?.email) {
 
-      window.open(`mailto:${exhibitor.contactInfo.email}`, '_blank');
+      globalThis.open(`mailto:${exhibitor.contactInfo.email}`, '_blank');
 
     } else {
 

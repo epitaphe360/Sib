@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Edit, Trash2, Search, Filter, Building2, MapPin, Globe, CheckCircle, XCircle } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
@@ -98,7 +98,7 @@ export default function ExhibitorManagementPage() {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer l'exposant "${name}" ? Cette action est irréversible.`)) {
+    if (globalThis.confirm(`Êtes-vous sûr de vouloir supprimer l'exposant "${name}" ? Cette action est irréversible.`)) {
       try {
 
         // Récupérer le token pour l'API admin serveur

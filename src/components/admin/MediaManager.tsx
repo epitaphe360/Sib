@@ -170,7 +170,7 @@ export default function MediaManager() {
   };
 
   const handleDeleteBucket = async (bucketName: string) => {
-    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer le bucket "${bucketName}" et tous ses fichiers ? Cette action est irréversible.`)) {
+    if (!globalThis.confirm(`Êtes-vous sûr de vouloir supprimer le bucket "${bucketName}" et tous ses fichiers ? Cette action est irréversible.`)) {
       return;
     }
 
@@ -194,7 +194,7 @@ export default function MediaManager() {
 
   const handleDeleteFile = async (fileName: string) => {
     if (!selectedBucket) {return;}
-    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer le fichier "${fileName}" ? Cette action est irréversible.`)) {
+    if (!globalThis.confirm(`Êtes-vous sûr de vouloir supprimer le fichier "${fileName}" ? Cette action est irréversible.`)) {
       return;
     }
 

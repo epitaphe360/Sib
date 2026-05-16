@@ -21,14 +21,20 @@ import {
   PartnerServicesTab,
   PartnerRejectModal,
   PartnerEditorModal,
+  PartnerQuickActions,
 } from './partner';
 import { useTranslation } from '../../hooks/useTranslation';
 import { ExhibitorCalendarSection, ExhibitorActivitySection, ExhibitorScannedVisitors, ExhibitorQRModal } from './exhibitor';
 import { QuotaSummaryCard } from '../common/QuotaWidget';
 import { getPartnerQuota, type PartnerTier } from '../../config/partnerTiers';
-import { PartnerQuickActions } from './partner';
 import { DynamicBadge } from '../badge/DynamicBadge';
 import { ProgrammeRegistrationsSection } from '../programme/ProgrammeRegistrationsSection';
+
+function growthBadgeClass(type: string): string {
+  if (type === 'positive') { return 'bg-green-100 text-green-700'; }
+  if (type === 'negative') { return 'bg-red-100 text-red-700'; }
+  return 'bg-gray-100 text-gray-600';
+}
 
 export default function PartnerDashboard() {
   const ctx = usePartnerDashboard();
@@ -44,7 +50,7 @@ export default function PartnerDashboard() {
   const downloadQRCode = async () => {
     setIsDownloadingQR(true);
     try {
-      const canvas = qrCodeRef.current as unknown as HTMLCanvasElement | null;
+      const canvas = qrCodeRef.current as HTMLCanvasElement | null;
       if (canvas) {
         const link = document.createElement('a');
         const companyName = user?.profile?.company || 'partenaire';
@@ -174,7 +180,7 @@ export default function PartnerDashboard() {
                 <div className="p-2.5 bg-[#1B365D]/8 rounded-xl group-hover:scale-110 transition-transform">
                   <stat.Icon className="h-5 w-5 text-[#1B365D]" />
                 </div>
-                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${stat.growthType === 'positive' ? 'bg-green-100 text-green-700' : stat.growthType === 'negative' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}`}>{stat.growth}</span>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${growthBadgeClass(stat.growthType)}`}>{stat.growth}</span>
               </div>
               <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">{stat.label}</p>
               <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
@@ -189,9 +195,9 @@ export default function PartnerDashboard() {
             level={ctx.partnerTier}
             type="partner"
             quotas={[
-              { label: 'Rendez-vous B2B', current: ctx.confirmedAppointments.length, limit: getPartnerQuota(ctx.partnerTier as PartnerTier, 'appointments'), icon: <Calendar className="h-4 w-4" /> },
-              { label: 'Membres équipe', current: 0, limit: getPartnerQuota(ctx.partnerTier as PartnerTier, 'teamMembers'), icon: <Users className="h-4 w-4" /> },
-              { label: 'Médias uploadés', current: ctx.dashboardStats?.catalogDownloads?.value || 0, limit: getPartnerQuota(ctx.partnerTier as PartnerTier, 'mediaUploads'), icon: <FileText className="h-4 w-4" /> },
+              { label: 'Rendez-vous B2B', current: ctx.confirmedAppointments.length, limit: getPartnerQuota(ctx.partnerTier, 'appointments'), icon: <Calendar className="h-4 w-4" /> },
+              { label: 'Membres équipe', current: 0, limit: getPartnerQuota(ctx.partnerTier, 'teamMembers'), icon: <Users className="h-4 w-4" /> },
+              { label: 'Médias uploadés', current: ctx.dashboardStats?.catalogDownloads?.value || 0, limit: getPartnerQuota(ctx.partnerTier, 'mediaUploads'), icon: <FileText className="h-4 w-4" /> },
             ]}
           />
         </div>

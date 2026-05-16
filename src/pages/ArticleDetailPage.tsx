@@ -1,4 +1,4 @@
-import { toast } from 'sonner';
+﻿import { toast } from 'sonner';
 import { sanitizeArticleContent } from '../utils/sanitizeHtml';
 import { useTranslation } from '../hooks/useTranslation';
 import { useArticleTranslation } from '../hooks/useArticleTranslation';
@@ -137,7 +137,7 @@ export default function ArticleDetailPage() {
     if (platform === 'native' && navigator.share) {
       navigator.share(shareData).catch(() => {});
     } else if (urls[platform as keyof typeof urls]) {
-      window.open(urls[platform as keyof typeof urls], '_blank', 'width=600,height=400');
+      globalThis.open(urls[platform as keyof typeof urls], '_blank', 'width=600,height=400');
     } else {
       navigator.clipboard.writeText(shareData.url)
         .then(() => toast.success(t('common.share_link_copied')))

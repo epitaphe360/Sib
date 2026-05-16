@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 
 import { SupabaseService } from '../services/supabaseService';
 
@@ -519,7 +519,7 @@ export default function UserManagementPage() {
 
 
 
-    if (window.confirm(confirmMessage)) {
+    if (globalThis.confirm(confirmMessage)) {
 
       setIsLoading(true);
 

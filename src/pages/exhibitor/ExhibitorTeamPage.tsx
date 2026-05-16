@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -207,7 +207,7 @@ export default function ExhibitorTeamPage({ userType = 'exhibitor' }: ExhibitorT
       return;
     }
     const url = `/print/badges-equipe?owner_id=${encodeURIComponent(user.id)}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    globalThis.open(url, '_blank', 'noopener,noreferrer');
   }, [collaborators, user?.id]);
 
   return (

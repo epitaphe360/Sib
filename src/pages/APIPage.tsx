@@ -1,4 +1,4 @@
-import { Card } from '../components/ui/Card';
+﻿import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Code, Key, FileText, Zap } from 'lucide-react';
 import { toast } from 'sonner';
@@ -158,13 +158,13 @@ export default function APIPage() {
             Consultez notre documentation détaillée pour intégrer pleinement l'API SIB.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button onClick={() => window.open(CONFIG.urls.api.docs, '_blank')} size="lg">
+            <Button onClick={() => globalThis.open(CONFIG.urls.api.docs, '_blank')} size="lg">
               Voir la Documentation
             </Button>
             <Button
               variant="outline"
               size="lg"
-              onClick={() => window.open(`mailto:${getSupportEmail('api')}`)}
+              onClick={() => globalThis.open(`mailto:${getSupportEmail('api')}`)}
             >
               Support API
             </Button>

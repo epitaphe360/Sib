@@ -280,7 +280,7 @@ export default function CatalogueManagementPage() {
 
   const handleMarkPhoneContacted = async (p: MergedParticipant) => {
     if (!p.entry) return;
-    const note = window.prompt(`Note pour ${p.company_name} :`, '');
+    const note = globalThis.prompt(`Note pour ${p.company_name} :`, '');
     if (note === null) return;
     await (supabase as any)
       .from('catalogue_entries')

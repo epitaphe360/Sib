@@ -141,7 +141,7 @@ export default function PartnershipPage() {
             <Button
               variant="outline"
               size="lg"
-              onClick={() => window.open(`mailto:${getSupportEmail('commercial')}`)}
+              onClick={() => globalThis.open(`mailto:${getSupportEmail('commercial')}`)}
             >
               Envoyer un email
             </Button>

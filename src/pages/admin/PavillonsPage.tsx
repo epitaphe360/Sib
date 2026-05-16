@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
@@ -226,7 +226,7 @@ export default function PavillonsPage() {
     switch (action) {
       case 'view':
         // Navigation vers la page publique de visualisation
-        window.open(`/pavilions#${pavilionId}`, '_blank');
+        globalThis.open(`/pavilions#${pavilionId}`, '_blank');
         break;
 
       case 'edit':

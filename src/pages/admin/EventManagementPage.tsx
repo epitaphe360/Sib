@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -498,7 +498,7 @@ function SessionRow({
           </button>
           <button
             onClick={() => {
-              if (window.confirm(`Supprimer "${session.title}" ?`)) {
+              if (globalThis.confirm(`Supprimer "${session.title}" ?`)) {
                 removeSession(dayId, session.id);
                 toast.success('Session supprimée');
               }
@@ -585,7 +585,7 @@ function DayAccordion({ day }: { day: DayProgram }) {
             </button>
             <button
               onClick={() => {
-                if (window.confirm(`Supprimer "${day.dayLabel}" et toutes ses sessions ?`)) {
+                if (globalThis.confirm(`Supprimer "${day.dayLabel}" et toutes ses sessions ?`)) {
                   removeDay(day.id);
                   toast.success('Journée supprimée');
                 }
@@ -744,7 +744,7 @@ export default function EventManagementPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  if (window.confirm('Réinitialiser tout le programme aux valeurs par défaut ?')) {
+                  if (globalThis.confirm('Réinitialiser tout le programme aux valeurs par défaut ?')) {
                     resetToDefault();
                     toast.success('Programme réinitialisé');
                   }

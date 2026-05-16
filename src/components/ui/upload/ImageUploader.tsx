@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { StorageService } from '../../../services/storage/storageService';
 import { X, Check, AlertCircle, Image as ImageIcon, RefreshCw } from 'lucide-react';
 
@@ -101,7 +101,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   const removeImage = async () => {
     if (disableDelete) {return;}
 
-    if (imageUrl && window.confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
+    if (imageUrl && globalThis.confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
       setIsUploading(true);
       try {
         if (imageUrl.includes(bucket)) {

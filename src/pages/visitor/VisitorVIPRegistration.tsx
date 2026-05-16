@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Formulaire d'inscription Visiteur VIP PREMIUM
  * Workflow complet avec photo, mot de passe et paiement obligatoire
  */
@@ -243,7 +243,7 @@ export default function VisitorVIPRegistration() {
         toast.error(`Cet email est déjà enregistré en tant que ${accountType}. Connectez-vous pour accéder à votre compte.`);
 
         setTimeout(() => {
-          if (window.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
+          if (globalThis.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
             navigate(ROUTES.LOGIN);
           }
         }, 2000);

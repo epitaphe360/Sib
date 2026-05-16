@@ -86,7 +86,7 @@ export function DynamicBadge({ user, onClose, overrideRole, overrideCompany }: R
     ].join('');
     const blob = new Blob([html], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
-    const w = window.open(url, '_blank');
+    const w = globalThis.open(url, '_blank');
     if (!w) { URL.revokeObjectURL(url); return; }
     w.onload = () => { w.print(); URL.revokeObjectURL(url); };
   }, []);

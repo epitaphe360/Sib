@@ -397,7 +397,7 @@ export default function RegisterPage() {
 
             // Proposer la redirection vers login après 2s
             setTimeout(() => {
-              if (window.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
+              if (globalThis.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
                 navigate(ROUTES.LOGIN);
               }
             }, 2000);
@@ -486,7 +486,7 @@ export default function RegisterPage() {
         }, 300);
 
         setTimeout(() => {
-          if (window.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
+          if (globalThis.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
             navigate(ROUTES.LOGIN);
           }
         }, 2000);
@@ -574,7 +574,7 @@ export default function RegisterPage() {
 
           // Proposer la redirection vers login après 3s
           setTimeout(() => {
-            const shouldRedirect = window.confirm(
+            const shouldRedirect = globalThis.confirm(
               'Voulez-vous être redirigé vers la page de connexion ?\n\n' +
               'Cliquez sur "Mot de passe oublié" si vous ne vous souvenez plus de vos identifiants.'
             );

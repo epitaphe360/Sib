@@ -56,7 +56,7 @@ export default function MediaDetailPage() {
 
     if (mediaUrl) {
       setIsPlaying(true);
-      window.open(mediaUrl, '_blank');
+      globalThis.open(mediaUrl, '_blank');
       toast.success('Lecture en cours...');
     } else {
       toast.error('URL du média non disponible');
@@ -70,7 +70,7 @@ export default function MediaDetailPage() {
     }
 
     if (media?.resources_url) {
-      window.open(media.resources_url, '_blank');
+      globalThis.open(media.resources_url, '_blank');
       toast.success('Téléchargement des ressources en cours...');
     } else {
       toast.error('Aucune ressource disponible pour ce média');

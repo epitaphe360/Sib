@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Radio, Play, Square, Settings, Users, Eye, MessageCircle, Clock, Calendar } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
@@ -363,7 +363,7 @@ export const LiveEventManager: React.FC = () => {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => window.open(`/media/live-studio/${event.id}`, '_blank')}
+                            onClick={() => globalThis.open(`/media/live-studio/${event.id}`, '_blank')}
                           >
                             <Eye className="h-4 w-4 mr-2" />
                             {t('common.view')}

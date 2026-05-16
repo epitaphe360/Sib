@@ -90,7 +90,7 @@ function PressBadge({ acc, onClose }: { acc: PressAccreditation; onClose: () => 
     ].join('');
     const blob = new Blob([html], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
-    const w = window.open(url, '_blank');
+    const w = globalThis.open(url, '_blank');
     if (!w) {
       URL.revokeObjectURL(url);
       toast.error('Autorisez les popups pour ce site dans Chrome, puis réessayez.');

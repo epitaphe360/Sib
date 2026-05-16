@@ -9,7 +9,6 @@ import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../store/authStore';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
-import { useTranslation } from '../../hooks/useTranslation';
 
 interface ChapiteauItem {
   id: string;
@@ -36,10 +35,9 @@ interface ChapiteauCatalogPageProps {
   userType: 'exhibitor' | 'partner';
 }
 
-export default function ChapiteauCatalogPage({ userType }: ChapiteauCatalogPageProps) {
+export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCatalogPageProps>) {
   const { user } = useAuthStore();
   const navigate  = useNavigate();
-  const { t }     = useTranslation();
 
   const [items, setItems]       = useState<ChapiteauItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);

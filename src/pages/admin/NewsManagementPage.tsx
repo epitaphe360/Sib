@@ -22,7 +22,7 @@ export default function NewsManagementPage() {
   }, [fetchNews]);
 
   const handleDelete = async (id: string, title: string) => {
-    if (window.confirm(t('common.delete_confirm', { name: title }))) {
+    if (globalThis.confirm(t('common.delete_confirm', { name: title }))) {
       try {
         await deleteNewsArticle(id);
 

@@ -109,7 +109,7 @@ export default function PartnerSignUpPage() {
   useEffect(() => {
     const draft = loadFromLocalStorage();
     if (draft) {
-      const confirmed = window.confirm(
+      const confirmed = globalThis.confirm(
         'Un brouillon de formulaire a été trouvé. Voulez-vous le reprendre ?'
       );
       if (confirmed) {

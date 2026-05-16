@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+﻿import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -87,7 +87,6 @@ const Pill: React.FC<Readonly<{ cfg: { label: string; color: string } }>> = ({ c
 );
 
 export default function AdminChapiteauPage() {
-  const { t } = useTranslation();
   const [items, setItems]     = useState<ChapiteauItem[]>([]);
   const [orders, setOrders]   = useState<ChapiteauOrder[]>([]);
   const [tab, setTab]         = useState<'items' | 'orders'>('items');
@@ -190,7 +189,7 @@ export default function AdminChapiteauPage() {
     try {
       const payload = {
         ...formData,
-        surface_m2: formData.surface_m2 !== '' ? Number(formData.surface_m2) : null,
+        surface_m2: formData.surface_m2 === '' ? null : Number(formData.surface_m2),
         price_per_day: Number(formData.price_per_day),
         stock_total: Number(formData.stock_total),
         stock_available: Number(formData.stock_available),
@@ -214,7 +213,7 @@ export default function AdminChapiteauPage() {
   };
 
   const handleDeleteItem = async (id: string) => {
-    if (!window.confirm('Supprimer cet article ?')) return;
+    if (!globalThis.confirm('Supprimer cet article ?')) return;
     const { error } = await (supabase as any).from('chapiteau_items').delete().eq('id', id);
     if (error) { toast.error('Erreur suppression'); return; }
     toast.success('Article supprimé');
@@ -547,8 +546,9 @@ export default function AdminChapiteauPage() {
                                 className="bg-blue-50/30 px-6 py-4 border-t border-blue-100/50">
                                 <div className="flex flex-wrap gap-4 items-end">
                                   <div>
-                                    <label className="block text-xs font-semibold text-gray-500 mb-1">Statut commande</label>
+                                    <label htmlFor={`status-${order.id}`} className="block text-xs font-semibold text-gray-500 mb-1">Statut commande</label>
                                     <select
+                                      id={`status-${order.id}`}
                                       value={order.status}
                                       disabled={updatingId === order.id}
                                       onChange={e => updateOrderStatus(order.id, 'status', e.target.value)}
@@ -559,8 +559,9 @@ export default function AdminChapiteauPage() {
                                     </select>
                                   </div>
                                   <div>
-                                    <label className="block text-xs font-semibold text-gray-500 mb-1">Statut paiement</label>
+                                    <label htmlFor={`pay-status-${order.id}`} className="block text-xs font-semibold text-gray-500 mb-1">Statut paiement</label>
                                     <select
+                                      id={`pay-status-${order.id}`}
                                       value={order.payment_status}
                                       disabled={updatingId === order.id}
                                       onChange={e => updateOrderStatus(order.id, 'payment_status', e.target.value)}
@@ -624,7 +625,7 @@ export default function AdminChapiteauPage() {
               <div className="p-6 space-y-4">
                 {/* Image */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Photo</label>
+                  <label htmlFor="chap-photo" className="block text-sm font-semibold text-gray-700 mb-2">Photo</label>
                   <div className="flex items-center gap-4">
                     {formData.image_url ? (
                       <img src={formData.image_url} alt="preview"
@@ -635,7 +636,7 @@ export default function AdminChapiteauPage() {
                       </div>
                     )}
                     <div>
-                      <input ref={fileRef} type="file" accept="image/*" className="hidden"
+                      <input id="chap-photo" ref={fileRef} type="file" accept="image/*" className="hidden"
                         onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
                       <button onClick={() => fileRef.current?.click()} disabled={uploading}
                         className="px-3 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition">
@@ -654,14 +655,14 @@ export default function AdminChapiteauPage() {
                 {/* Nom */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Nom *</label>
-                    <input value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                    <label htmlFor="chap-name" className="block text-sm font-semibold text-gray-700 mb-1">Nom *</label>
+                    <input id="chap-name" value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
                       placeholder="ex: Chapiteau 5×5m"
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Taille *</label>
-                    <input value={formData.size_label} onChange={e => setFormData(p => ({ ...p, size_label: e.target.value }))}
+                    <label htmlFor="chap-size" className="block text-sm font-semibold text-gray-700 mb-1">Taille *</label>
+                    <input id="chap-size" value={formData.size_label} onChange={e => setFormData(p => ({ ...p, size_label: e.target.value }))}
                       placeholder="ex: 5×5m"
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
                   </div>
@@ -670,20 +671,20 @@ export default function AdminChapiteauPage() {
                 {/* Surface + Prix */}
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Surface (m²)</label>
-                    <input type="number" min="0" value={formData.surface_m2}
+                    <label htmlFor="chap-surface" className="block text-sm font-semibold text-gray-700 mb-1">Surface (m²)</label>
+                    <input id="chap-surface" type="number" min="0" value={formData.surface_m2}
                       onChange={e => setFormData(p => ({ ...p, surface_m2: e.target.value }))}
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Prix/jour (MAD)</label>
-                    <input type="number" min="0" value={formData.price_per_day}
+                    <label htmlFor="chap-price" className="block text-sm font-semibold text-gray-700 mb-1">Prix/jour (MAD)</label>
+                    <input id="chap-price" type="number" min="0" value={formData.price_per_day}
                       onChange={e => setFormData(p => ({ ...p, price_per_day: Number(e.target.value) }))}
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Devise</label>
-                    <select value={formData.currency}
+                    <label htmlFor="chap-currency" className="block text-sm font-semibold text-gray-700 mb-1">Devise</label>
+                    <select id="chap-currency" value={formData.currency}
                       onChange={e => setFormData(p => ({ ...p, currency: e.target.value }))}
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none">
                       <option>MAD</option><option>EUR</option><option>USD</option>
@@ -694,14 +695,14 @@ export default function AdminChapiteauPage() {
                 {/* Stock */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Stock total</label>
-                    <input type="number" min="1" value={formData.stock_total}
+                    <label htmlFor="chap-stock-total" className="block text-sm font-semibold text-gray-700 mb-1">Stock total</label>
+                    <input id="chap-stock-total" type="number" min="1" value={formData.stock_total}
                       onChange={e => setFormData(p => ({ ...p, stock_total: Number(e.target.value) }))}
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Stock disponible</label>
-                    <input type="number" min="0" value={formData.stock_available}
+                    <label htmlFor="chap-stock-avail" className="block text-sm font-semibold text-gray-700 mb-1">Stock disponible</label>
+                    <input id="chap-stock-avail" type="number" min="0" value={formData.stock_available}
                       onChange={e => setFormData(p => ({ ...p, stock_available: Number(e.target.value) }))}
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
                   </div>
@@ -709,8 +710,8 @@ export default function AdminChapiteauPage() {
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
-                  <textarea rows={3} value={formData.description}
+                  <label htmlFor="chap-desc" className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+                  <textarea id="chap-desc" rows={3} value={formData.description}
                     onChange={e => setFormData(p => ({ ...p, description: e.target.value }))}
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none resize-none" />
                 </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import {
@@ -330,7 +330,7 @@ export default function PartnerMediaLibraryPage() {
                         size="sm"
                         variant="outline"
                         className="w-full"
-                        onClick={() => window.open(item.video_url, '_blank')}
+                        onClick={() => globalThis.open(item.video_url, '_blank')}
                       >
                         <Eye className="w-4 h-4 mr-2" />
                         {t('media.view')}

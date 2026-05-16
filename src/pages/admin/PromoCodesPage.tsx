@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -185,7 +185,7 @@ export default function PromoCodesPage() {
 
   // ── Supprimer ─────────────────────────────────────────────────────────────
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Supprimer ce code promo ? Cette action est irréversible.')) return;
+    if (!globalThis.confirm('Supprimer ce code promo ? Cette action est irréversible.')) return;
     setDeletingId(id);
     const { error } = await (supabase as any).from('promo_codes').delete().eq('id', id);
     if (error) toast.error('Erreur : ' + error.message);

@@ -145,7 +145,7 @@ export default function SupportPage() {
             <Button
               variant="outline"
               size="lg"
-              onClick={() => window.open(`mailto:${getSupportEmail('technical')}`)}
+              onClick={() => globalThis.open(`mailto:${getSupportEmail('technical')}`)}
             >
               {t('support.sendEmail')}
             </Button>

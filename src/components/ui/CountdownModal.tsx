@@ -362,7 +362,7 @@ export const CountdownModal: React.FC<CountdownModalProps> = ({ isOpen, onClose 
 
                   const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(calendarEvent.title)}&dates=${calendarEvent.start.replace(/[-:]/g, '').replace('.000', '')}Z/${calendarEvent.end.replace(/[-:]/g, '').replace('.000', '')}Z&location=${encodeURIComponent(calendarEvent.location)}&details=${encodeURIComponent(calendarEvent.description)}`;
 
-                  window.open(googleCalendarUrl, '_blank');
+                  globalThis.open(googleCalendarUrl, '_blank');
                   toast.success(t('countdown.calendar_added'));
                 }}
               >

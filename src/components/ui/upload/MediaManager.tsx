@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { StorageService } from '../../../services/storage/storageService';
 import {
   FilePlus,
@@ -131,7 +131,7 @@ const MediaManager: React.FC<MediaManagerProps> = ({
   const handleFileDelete = async (file: MediaFile) => {
     if (!allowDelete) {return;}
 
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer "${file.name}" ?`)) {
+    if (globalThis.confirm(`Êtes-vous sûr de vouloir supprimer "${file.name}" ?`)) {
       try {
         await StorageService.deleteImage(file.url, bucket);
         await loadFiles();

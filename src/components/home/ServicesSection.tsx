@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { MessageCircle, Mail, Phone, Clock, Package } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -15,7 +15,7 @@ export function ServicesSection() {
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent('Bonjour, je souhaiterais entrer en contact avec votre équipe commerciale');
-    window.open(`https://wa.me/${whatsappNumber.replace(/\s/g, '')}?text=${message}`, '_blank');
+    globalThis.open(`https://wa.me/${whatsappNumber.replace(/\s/g, '')}?text=${message}`, '_blank');
   };
 
   return (

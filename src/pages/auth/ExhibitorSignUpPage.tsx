@@ -131,7 +131,7 @@ export default function ExhibitorSignUpPage() {
   useEffect(() => {
     const draft = loadFromLocalStorage();
     if (draft && Object.keys(draft).length > 0) {
-      const loadDraft = window.confirm('Un brouillon a été trouvé. Voulez-vous le restaurer ?');
+      const loadDraft = globalThis.confirm('Un brouillon a été trouvé. Voulez-vous le restaurer ?');
       if (loadDraft) {
         Object.entries(draft).forEach(([key, value]) => {
           setValue(key as keyof ExhibitorSignUpFormValues, value);

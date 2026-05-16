@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+﻿import React, { useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -193,7 +193,7 @@ export default function RentalPaymentSuccessPage() {
     const logoUrl = `${window.location.origin}/logo-sib2026.png`;
     const cfg = await loadInvoiceConfig();
     const html = buildInvoicePrintHtml(state, logoUrl, cfg);
-    const win = window.open('', '_blank', 'width=900,height=700');
+    const win = globalThis.open('', '_blank', 'width=900,height=700');
     if (!win) { return; }
     win.document.write(html);
     win.document.close();

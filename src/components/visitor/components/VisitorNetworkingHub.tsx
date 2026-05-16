@@ -278,12 +278,12 @@ export function VisitorNetworkingHub({
                                       <Download className="h-3 w-3 mr-1" />.ics
                                     </Button>
                                     <Button size="sm" variant="outline"
-                                      onClick={() => { window.open(getGoogleCalendarLink(app), '_blank'); toast.success('Ouverture de Google Calendar'); }}
+                                      onClick={() => { globalThis.open(getGoogleCalendarLink(app), '_blank'); toast.success('Ouverture de Google Calendar'); }}
                                       className="flex-1 bg-white/5 hover:bg-white/10 border-white/10 text-white text-xs" title="Ouvrir dans Google Calendar">
                                       <CalendarPlus className="h-3 w-3 mr-1" />Google
                                     </Button>
                                     <Button size="sm" variant="outline"
-                                      onClick={() => { window.open(getOutlookCalendarLink(app), '_blank'); toast.success("Ouverture d'Outlook"); }}
+                                      onClick={() => { globalThis.open(getOutlookCalendarLink(app), '_blank'); toast.success("Ouverture d'Outlook"); }}
                                       className="flex-1 bg-white/5 hover:bg-white/10 border-white/10 text-white text-xs">
                                       <CalendarPlus className="h-3 w-3 mr-1" />Outlook
                                     </Button>

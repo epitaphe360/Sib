@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Page Station d'Impression de Badges - Service Clientèle
  *
  * Cette page est utilisée par le personnel du stand "Service Clientèle"
@@ -406,7 +406,7 @@ export default function BadgePrintStationPage() {
 </html>`;
 
       // Ouvrir une fenêtre d'impression
-      const printWindow = window.open('', '_blank', 'width=600,height=800');
+      const printWindow = globalThis.open('', '_blank', 'width=600,height=800');
       if (!printWindow) {
         toast.error('Veuillez autoriser les popups pour l\'impression');
         setIsPrinting(false);

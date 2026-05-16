@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+﻿import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { toast } from 'sonner';
 import {
   Layout,
@@ -257,7 +257,7 @@ export default function MiniSiteBuilder() {
 
   const removeSection = useCallback((id: string) => {
     const section = sections.find(s => s.id === id);
-    if (!window.confirm(`Supprimer la section "${section?.title}" ?`)) {return;}
+    if (!globalThis.confirm(`Supprimer la section "${section?.title}" ?`)) {return;}
     setSections(prev => prev.filter(s => s.id !== id).map((s, i) => ({ ...s, order: i })));
     if (activeSection === id) {setActiveSection(null);}
     toast.success('Section supprimée');
@@ -305,7 +305,7 @@ export default function MiniSiteBuilder() {
       toast.error('Sauvegardez d\'abord votre mini-site');
       return;
     }
-    window.open(`/minisite/${exhibitorId}`, '_blank', 'noopener,noreferrer');
+    globalThis.open(`/minisite/${exhibitorId}`, '_blank', 'noopener,noreferrer');
   }, [exhibitorId]);
 
   // ─── Computed ─────────────────────────────────────────────────────────────

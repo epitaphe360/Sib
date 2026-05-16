@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+﻿import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { SupabaseService } from '../../services/supabaseService';
@@ -411,7 +411,7 @@ export default function MiniSiteEditor() {
 
   const removeSection = useCallback((id: string) => {
     const section = sections.find(s => s.id === id);
-    if (!window.confirm(`Supprimer la section "${section?.title}" ?`)) {return;}
+    if (!globalThis.confirm(`Supprimer la section "${section?.title}" ?`)) {return;}
     setSections(prev => prev.filter(s => s.id !== id).map((s, i) => ({ ...s, order: i })));
     if (activeSection === id) {setActiveSection(null);}
     toast.success(`Section supprimée`);
@@ -475,7 +475,7 @@ export default function MiniSiteEditor() {
   }, []);
 
   const removeProduct = useCallback((sectionId: string, productIndex: number) => {
-    if (!window.confirm('Supprimer ce produit ?')) {return;}
+    if (!globalThis.confirm('Supprimer ce produit ?')) {return;}
     setSections(prev => prev.map(s => {
       if (s.id !== sectionId || s.type !== 'products' || !s.content.products) {return s;}
       return { ...s, content: { ...s.content, products: s.content.products.filter((_, i) => i !== productIndex) } };
@@ -536,7 +536,7 @@ export default function MiniSiteEditor() {
 
   const handlePreview = useCallback(() => {
     if (!exhibitorId) { toast.error('Sauvegardez d\'abord votre mini-site'); return; }
-    window.open(`/minisite/${exhibitorId}`, '_blank');
+    globalThis.open(`/minisite/${exhibitorId}`, '_blank');
   }, [exhibitorId]);
 
   // ─── Logo upload ──────────────────────────────────────────────────────────

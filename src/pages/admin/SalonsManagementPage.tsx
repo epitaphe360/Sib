@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft, Plus, Edit, Trash2, Search, Star, StarOff,
@@ -213,7 +213,7 @@ export default function SalonsManagementPage() {
   // ── Suppression ───────────────────────────────────────────────────────────────
 
   const handleDelete = async (salon: Salon) => {
-    if (!window.confirm(t('admin.salons_delete_confirm').replace('{name}', salon.name))) {return;}
+    if (!globalThis.confirm(t('admin.salons_delete_confirm').replace('{name}', salon.name))) {return;}
     try {
       const { error } = await supabase!.from('salons').delete().eq('id', salon.id);
       if (error) {throw error;}
