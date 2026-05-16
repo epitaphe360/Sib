@@ -243,6 +243,13 @@
   PARTNER_CHAPITEAU: '/partner/chapiteau',
   ADMIN_CHAPITEAU: '/admin/chapiteau',
 
+  // MODULE 5 — Vente d'espaces publicitaires
+  EXHIBITOR_ADVERTISING: '/exhibitor/advertising',
+  PARTNER_ADVERTISING: '/partner/advertising',
+  ADVERTISING_CHECKOUT: '/advertising/checkout',
+  ADVERTISING_PAYMENT_SUCCESS: '/advertising/payment-success',
+  ADMIN_ADVERTISING: '/admin/advertising',
+
   // MODULE 6 — Sponsor Média
   REGISTER_MEDIA_PARTNER: '/register/media-partner',
   MEDIA_PARTNER_DASHBOARD: '/media-partner/dashboard',

@@ -25,6 +25,7 @@ import { DashboardSkeleton } from '../ui/Skeleton';
 import { ErrorMessage } from '../common/ErrorMessage';
 import { RentalBanner } from '../common/RentalBanner';
 import ChapiteauBanner from '../common/ChapiteauBanner';
+import AdvertisingBanner from '../common/AdvertisingBanner';
 import { ROUTES } from '../../lib/routes';
 import { QuotaSummaryCard } from '../common/QuotaWidget';
 import { MiniSiteSetupModal } from '../exhibitor/MiniSiteSetupModal';
@@ -141,6 +142,10 @@ export default memo(function ExhibitorDashboard() {
 
         <div className="mt-4">
           <ChapiteauBanner variant="compact" to={ROUTES.EXHIBITOR_CHAPITEAU} />
+        </div>
+
+        <div className="mt-4">
+          <AdvertisingBanner variant="compact" to={ROUTES.EXHIBITOR_ADVERTISING} />
         </div>
 
         <ExhibitorStatsGrid

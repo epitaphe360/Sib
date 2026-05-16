@@ -15,7 +15,7 @@ class _ResultScreenState extends State<ResultScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _scaleController;
   late final Animation<double> _scaleAnim;
-  int _countdown = 2;
+  int _countdown = 4;
   Timer? _timer;
 
   @override

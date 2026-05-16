@@ -198,6 +198,12 @@ const ChapiteauCheckoutPage = lazyRetry(() => import('./pages/chapiteau/Chapitea
 const ChapiteauPaymentSuccessPage = lazyRetry(() => import('./pages/chapiteau/ChapiteauPaymentSuccessPage'));
 const AdminChapiteauPage = lazyRetry(() => import('./pages/admin/AdminChapiteauPage'));
 
+// MODULE 5 — Vente d'espaces publicitaires
+const AdvertisingCatalogPage = lazyRetry(() => import('./pages/advertising/AdvertisingCatalogPage'));
+const AdvertisingCheckoutPage = lazyRetry(() => import('./pages/advertising/AdvertisingCheckoutPage'));
+const AdvertisingPaymentSuccessPage = lazyRetry(() => import('./pages/advertising/AdvertisingPaymentSuccessPage'));
+const AdminAdvertisingPage = lazyRetry(() => import('./pages/admin/AdminAdvertisingPage'));
+
 // Routes manquantes — admin
 const SecurityZonesPage = lazyRetry(() => import('./pages/admin/SecurityZonesPage'));
 const AdminConfigPage = lazyRetry(() => import('./pages/admin/AdminConfigPage'));
@@ -580,6 +586,13 @@ const App = () => {
             <Route path={ROUTES.CHAPITEAU_CHECKOUT} element={<ProtectedRoute><ChapiteauCheckoutPage /></ProtectedRoute>} />
             <Route path={ROUTES.CHAPITEAU_PAYMENT_SUCCESS} element={<ChapiteauPaymentSuccessPage />} />
             <Route path={ROUTES.ADMIN_CHAPITEAU} element={<ProtectedRoute requiredRole="admin"><AdminChapiteauPage /></ProtectedRoute>} />
+
+            {/* MODULE 5 — Vente d'espaces publicitaires */}
+            <Route path={ROUTES.EXHIBITOR_ADVERTISING} element={<ProtectedRoute requiredRole="exhibitor"><AdvertisingCatalogPage userType="exhibitor" /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_ADVERTISING} element={<ProtectedRoute requiredRole="partner"><AdvertisingCatalogPage userType="partner" /></ProtectedRoute>} />
+            <Route path={ROUTES.ADVERTISING_CHECKOUT} element={<ProtectedRoute requiredRole={['exhibitor', 'partner']}><AdvertisingCheckoutPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADVERTISING_PAYMENT_SUCCESS} element={<ProtectedRoute requiredRole={['exhibitor', 'partner']}><AdvertisingPaymentSuccessPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_ADVERTISING} element={<ProtectedRoute requiredRole="admin"><AdminAdvertisingPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_BADGE_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminBadgeConfigPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PRICING} element={<ProtectedRoute requiredRole="admin"><AdminPricingPage /></ProtectedRoute>} />
 

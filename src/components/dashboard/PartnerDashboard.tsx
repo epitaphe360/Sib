@@ -4,6 +4,7 @@ import { Shield, CreditCard, Activity, Calendar, Users, FileText, Crown, Handsha
 import { Link } from 'react-router-dom';
 import { RentalBanner } from '../common/RentalBanner';
 import ChapiteauBanner from '../common/ChapiteauBanner';
+import AdvertisingBanner from '../common/AdvertisingBanner';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
@@ -137,6 +138,9 @@ export default function PartnerDashboard() {
           <RentalBanner variant="compact" to="/partner/rental" />
           <div className="mt-4">
             <ChapiteauBanner variant="compact" to={ROUTES.PARTNER_CHAPITEAU} />
+          </div>
+          <div className="mt-4">
+            <AdvertisingBanner variant="compact" to={ROUTES.PARTNER_ADVERTISING} />
           </div>
         </div>
 

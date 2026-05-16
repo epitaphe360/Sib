@@ -15,7 +15,7 @@ import {
   BadgeCheck,
   Settings2,
   Newspaper, BookOpen, Mic2, Building, Bell, Radio, ThumbsUp, Mail,
-  QrCode, ClipboardCheck, KeyRound, Tag,
+  QrCode, ClipboardCheck, KeyRound, Tag, Megaphone,
 } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
 
@@ -265,6 +265,9 @@ export function AdminActionsPanel({
                 </Link>
                 <Link to={ROUTES.ADMIN_CHAPITEAU}>
                   <Tile Icon={Package} label="Location Chapiteau" sub="Tentes & Commandes" color="#0ea5e9" />
+                </Link>
+                <Link to={ROUTES.ADMIN_ADVERTISING}>
+                  <Tile Icon={Megaphone} label="Espaces Pub" sub="Réservations & Catalogue" color="#C9A84C" />
                 </Link>
                 <Link to={ROUTES.ADMIN_STAND_COLLABORATORS}>
                   <Tile Icon={UserPlus} label="Collaborateurs Stand" sub="Gestion équipes" color="#0ea5e9" />
