@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Download, Printer, RefreshCw, AlertTriangle, ArrowLeft } from 'lucide-react';
+import { Download, Printer, RefreshCw, AlertTriangle, ArrowLeft, Scan } from 'lucide-react';
 import PrintableBadgeA4 from '../components/badge/PrintableBadgeA4';
 import useAuthStore from '../store/authStore';
 import { useTranslation } from '../hooks/useTranslation';
