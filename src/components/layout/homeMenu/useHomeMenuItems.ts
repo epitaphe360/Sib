@@ -24,7 +24,7 @@ export function useHomeMenuItems(): ResolvedHomeMenuItem[] {
         description: t(item.descKey),
         href:
           item.key === 'visiter'
-            ? `${homeBase}#badges`
+            ? `${homeBase}#visiter`
             : item.key === 'international' && isPremiumHomePath(pathname)
               ? `${homeBase}#international`
               : item.href,

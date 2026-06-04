@@ -49,7 +49,7 @@ export const HomeMenuVariant2: React.FC<HomeMenuPanelProps> = ({ items, onNaviga
       </div>
       <div className="px-5 py-3 border-t border-neutral-100 dark:border-neutral-800 bg-primary-50/50 dark:bg-primary-900/20">
         <Link
-          to={`${items[1]?.href ?? '/accueil/2'}#badges`}
+          to={items[1]?.href ?? `${'/accueil/2'}#visiter`}
           onClick={onNavigate}
           className="inline-flex items-center gap-2 text-sm font-bold text-primary-700 dark:text-primary-300 hover:text-primary-900"
         >

@@ -17,7 +17,12 @@ const HomeVariant4 = lazyRetry(() => import('./pages/home/HomeVariant4'));
 const HomeVariant5 = lazyRetry(() => import('./pages/home/HomeVariant5'));
 const HomeVariant6 = lazyRetry(() => import('./pages/home/HomeVariant6'));
 const HomeVariant7 = lazyRetry(() => import('./pages/home/HomeVariant7'));
-const HomeVariant8 = lazyRetry(() => import('./pages/home/HomeVariant8'));
+const HomeVariant8 = lazyRetry(() => import(
+'./pages/home/HomeVariant8'
+));
+const Sib2026OptimizedPage = lazyRetry(() => import(
+'./pages/home/Sib2026OptimizedPage'
+));
 const HomeMenuDesignPage = lazyRetry(() => import('./pages/design/HomeMenuDesignPage'));
 const ExhibitorsPage = lazyRetry(() => import('./pages/ExhibitorsPage'));
 const NetworkingPage = lazyRetry(() => import('./pages/NetworkingPage'));
@@ -297,6 +302,7 @@ const App = () => {
             <Route path={ROUTES.HOME_P6} element={<HomeVariant6 />} />
             <Route path={ROUTES.HOME_P7} element={<HomeVariant7 />} />
             <Route path={ROUTES.HOME_P8} element={<HomeVariant8 />} />
+            <Route path={ROUTES.HOME_P9} element={<Sib2026OptimizedPage />} />
             <Route path={ROUTES.DESIGN_HOME_MENU} element={<HomeMenuDesignPage />} />
             <Route path={ROUTES.SALON_SELECTION} element={<SalonSelectionPage />} />
             <Route path={ROUTES.SALON_SIR} element={<SalonPage salonId="sir" />} />

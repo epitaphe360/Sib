@@ -23,6 +23,7 @@ import { MoroccanPattern } from '../ui/MoroccanDecor';
 import { isAuthInitialized } from '../../lib/initAuth';
 import { HomeNavMenuBlockDesktop, HomeNavMenuBlockMobile } from './homeMenu/HomeNavMenuBlock';
 import { isPremiumHomePath, getPremiumHomeBase, SIB2026 } from '../home/sib2026/tokens';
+import { getActiveHomeMenuVariant } from '../../config/homeVariants';
 
 // OPTIMIZATION: Memoized Header component to prevent unnecessary re-renders
 export const Header: React.FC = memo(() => {
@@ -169,7 +170,7 @@ export const Header: React.FC = memo(() => {
                     isOpen={isHomeMenuOpen}
                     onOpen={openHomeMenu}
                     onClose={closeHomeMenu}
-                    variant={1}
+                    variant={getActiveHomeMenuVariant()}
                   />
                 </div>
                 <div className="flex flex-1 items-center justify-center gap-0 xl:gap-1 min-w-0">

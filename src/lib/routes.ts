@@ -7,7 +7,10 @@
   HOME_P5: '/accueil/5',
   HOME_P6: '/accueil/6',
   HOME_P7: '/accueil/7',
-  HOME_P8: '/accueil/8',
+    HOME_P8: 
+'/accueil/8',
+  HOME_P9: 
+'/accueil/9',
   EXHIBITORS: '/exhibitors',
   EXHIBITOR_DETAIL: '/exhibitors/:id',
   PARTNERS: '/partners',

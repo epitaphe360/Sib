@@ -6,7 +6,7 @@ import { ROUTES } from '../lib/routes';
 
 
 
-export type HomePageVariantId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+export type HomePageVariantId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 
 
@@ -47,6 +47,24 @@ export const HOME_PAGE_VARIANTS: HomePageVariantDef[] = [
     label: 'P8 — Page officielle SIB 2026',
 
     inspiration: 'Design client',
+
+  },
+
+  {
+
+    id: 9,
+
+    route: ROUTES.HOME_P9,
+
+    icon: Image,
+
+    titleKey: 'nav.home_page.p9_title',
+
+    descKey: 'nav.home_page.p9_desc',
+
+    label: 'P9 — Optimisée (Fusion P7+P8)',
+
+    inspiration: 'Fusion P7+P8',
 
   },
 
@@ -186,9 +204,9 @@ export function getDefaultHomePageVariant(): HomePageVariantId {
 
   const n = Number(raw);
 
-  if (n >= 1 && n <= 8) return n as HomePageVariantId;
+  if (n >= 1 && n <= 9) return n as HomePageVariantId;
 
-  return 8;
+  return 9;
 
 }
 
