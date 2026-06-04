@@ -14,8 +14,9 @@ import { HomeHeroWorldClass } from '../../components/home/variants/HomeHeroWorld
 import { HomeHighlightsSection } from '../../components/home/HomeHighlightsSection';
 import { LatestNewsSection } from '../../components/home/LatestNewsSection';
 import { NetworkingSection } from '../../components/home/NetworkingSection';
+import { P9MultiProfileSection } from '../../components/home/variants/P9MultiProfileSection';
 
-/** Page d'accueil SIB 2026 Optimisée (P9) */
+/** Page d'accueil SIB 2026 Optimisée (P9) — Engagement Complet */
 export default function Sib2026OptimizedPage() {
   const menuItems = useHomeMenuItems();
 
@@ -28,6 +29,9 @@ export default function Sib2026OptimizedPage() {
       <Sib2026StatsBar />
       <Sib2026MissionSection />
       <Sib2026TimelineSection />
+
+      {/* Section Multi-Profils pour l'engagement */}
+      <P9MultiProfileSection />
 
       {/* Sections clés pour la narration et la conversion */}
       <HomeHighlightsSection />

@@ -1,4 +1,4 @@
-/** P7 — World Class : hero éditorial, parcours épuré, contenu riche */
+/** P7 — Urgence & FOMO : hero cinématique avec urgence, compte à rebours, dernières places */
 import { ThemesSection } from '../../components/home/ThemesSection';
 import { FeaturedPartners } from '../../components/home/FeaturedPartners';
 import { HomeVisitorExhibitSection } from '../../components/home/HomeVisitorExhibitSection';
@@ -12,6 +12,7 @@ import { HomeWorldClassPillars } from '../../components/home/variants/HomeWorldC
 import { HomePageShell } from '../../components/home/HomePageShell';
 import { HomeFigmaCoreSections } from '../../components/home/HomeFigmaCoreSections';
 import { StatsSection } from '../../components/home/StatsSection';
+import { P7UrgencySection } from '../../components/home/variants/P7UrgencySection';
 
 export default function HomeVariant7() {
   return (
@@ -19,6 +20,7 @@ export default function HomeVariant7() {
       <HomeHeroWorldClass />
       <StatsSection />
       <HomeWorldClassPillars />
+      <P7UrgencySection />
       <ThemesSection />
       <HomeVisitorExhibitSection />
       <FeaturedPartners />
