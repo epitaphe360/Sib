@@ -140,8 +140,8 @@ export const Header: React.FC = memo(() => {
       }`}
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
-      <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
-        <div className="flex justify-between items-center h-16 sm:h-18 xl:h-20">
+      <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10 overflow-visible">
+        <div className="flex justify-between items-center h-16 sm:h-18 xl:h-20 overflow-visible">
 
           {/* Logo */}
           <Link to={ROUTES.HOME} className="flex-shrink-0 flex items-center group">
@@ -155,7 +155,7 @@ export const Header: React.FC = memo(() => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-0 xl:gap-1 flex-1 justify-center">
+          <nav className="hidden lg:flex items-center gap-0 xl:gap-1 flex-1 justify-center overflow-visible">
             {isSib2026Home ? (
               <>
                 <HomeNavMenuBlockDesktop
@@ -659,7 +659,7 @@ export const Header: React.FC = memo(() => {
 
               {isSib2026Home ? (
                 <>
-                  <HomeNavMenuBlockMobile onNavigate={closeMenu} />
+                  <HomeNavMenuBlockMobile onNavigate={closeMenu} premium />
                   {sib2026NavItems.map((item) => (
                     <Link
                       key={item.name}
