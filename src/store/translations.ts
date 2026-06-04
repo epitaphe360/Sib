@@ -7,6 +7,7 @@ export const allTranslations = {
   fr: {
     'nav.home': 'Accueil',
     'nav.home_menu.subtitle_pages': 'Un salon pensé pour vous',
+    'nav.home_menu.menu_trigger': 'Le salon',
     'nav.home_menu.section_title': 'Un salon pensé pour vous',
     'nav.home_menu.section_title_lines': 'Un salon|pensé|pour vous',
     'nav.home_menu.exposer_title': 'EXPOSER',
@@ -2818,6 +2819,7 @@ export const allTranslations = {
   en: {
     'nav.home': 'Home',
     'nav.home_menu.subtitle_pages': 'A show designed for you',
+    'nav.home_menu.menu_trigger': 'The show',
     'nav.home_menu.section_title': 'A show designed for you',
     'nav.home_menu.section_title_lines': 'A show|designed|for you',
     'nav.home_menu.exposer_title': 'EXHIBIT',
