@@ -3,7 +3,10 @@ import bodyParser from 'body-parser';
 import { execFile, execFileSync } from 'child_process';
 import path from 'path';
 import fetch from 'node-fetch';
-import { createSupabaseServerClient } from '../supabaseNodeClient.js';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const { createSupabaseServerClient } = require('../supabaseNodeClient.cjs');
 import crypto from 'crypto';
 import fs from 'fs';
 

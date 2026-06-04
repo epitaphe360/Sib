@@ -3,7 +3,10 @@ import cors from 'cors';
 import pg from 'pg';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { createSupabaseServerClient } from './supabaseNodeClient.js';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const { createSupabaseServerClient } = require('./supabaseNodeClient.cjs');
 
 const { Pool } = pg;
 
