@@ -155,26 +155,34 @@ export const Header: React.FC = memo(() => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-0 xl:gap-1 flex-1 justify-center overflow-visible">
+          <nav
+            className={`hidden lg:flex items-center flex-1 min-w-0 overflow-visible ${
+              isSib2026Home ? 'gap-2 xl:gap-3' : 'gap-0 xl:gap-1 justify-center'
+            }`}
+          >
             {isSib2026Home ? (
               <>
-                <HomeNavMenuBlockDesktop
-                  premium
-                  homeTo={premiumHomeBase}
-                  isOpen={isHomeMenuOpen}
-                  onOpen={openHomeMenu}
-                  onClose={closeHomeMenu}
-                  variant={1}
-                />
-                {sib2026NavItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className="px-2 xl:px-3 py-2 text-[11px] xl:text-xs font-semibold uppercase tracking-[0.08em] text-white/90 hover:text-white transition-colors whitespace-nowrap"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                <div className="relative z-[210] shrink-0">
+                  <HomeNavMenuBlockDesktop
+                    premium
+                    homeTo={premiumHomeBase}
+                    isOpen={isHomeMenuOpen}
+                    onOpen={openHomeMenu}
+                    onClose={closeHomeMenu}
+                    variant={1}
+                  />
+                </div>
+                <div className="flex flex-1 items-center justify-center gap-0 xl:gap-1 min-w-0">
+                  {sib2026NavItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="px-2 xl:px-3 py-2 text-[11px] xl:text-xs font-semibold uppercase tracking-[0.08em] text-white/90 hover:text-white transition-colors whitespace-nowrap drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
               </>
             ) : (
               <>
