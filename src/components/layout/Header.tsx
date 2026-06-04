@@ -157,15 +157,25 @@ export const Header: React.FC = memo(() => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-0 xl:gap-1 flex-1 justify-center">
             {isSib2026Home ? (
-              sib2026NavItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className="px-2 xl:px-3 py-2 text-[11px] xl:text-xs font-semibold uppercase tracking-[0.08em] text-white/90 hover:text-white transition-colors whitespace-nowrap"
-                >
-                  {item.name}
-                </Link>
-              ))
+              <>
+                <HomeNavMenuBlockDesktop
+                  premium
+                  homeTo={premiumHomeBase}
+                  isOpen={isHomeMenuOpen}
+                  onOpen={openHomeMenu}
+                  onClose={closeHomeMenu}
+                  variant={1}
+                />
+                {sib2026NavItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className="px-2 xl:px-3 py-2 text-[11px] xl:text-xs font-semibold uppercase tracking-[0.08em] text-white/90 hover:text-white transition-colors whitespace-nowrap"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </>
             ) : (
               <>
             <HomeNavMenuBlockDesktop
@@ -632,14 +642,47 @@ export const Header: React.FC = memo(() => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden border-t border-neutral-200 dark:border-neutral-800 py-4 max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain bg-white relative z-[220]" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div
+            className={`lg:hidden border-t py-4 max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain relative z-[220] ${
+              isSib2026Home
+                ? 'border-white/15 bg-[#001A3D] text-white'
+                : 'border-neutral-200 dark:border-neutral-800 bg-white'
+            }`}
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
             <div className="space-y-2 pb-6">
               {/* Language & Theme on mobile */}
               <div className="flex items-center gap-3 px-3 py-2 lg:hidden">
                 <LanguageSelector />
-                <ThemeToggle />
+                {!isSib2026Home && <ThemeToggle />}
               </div>
 
+              {isSib2026Home ? (
+                <>
+                  <HomeNavMenuBlockMobile onNavigate={closeMenu} />
+                  {sib2026NavItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="block px-3 py-3 min-h-[44px] text-sm font-semibold uppercase tracking-wide text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      onClick={closeMenu}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                  <div className="px-3 pt-2">
+                    <Link
+                      to={ROUTES.EXHIBITOR_SUBSCRIPTION}
+                      className="block w-full text-center px-5 py-3 text-[11px] font-bold uppercase tracking-wide text-white rounded-sm"
+                      style={{ backgroundColor: SIB2026.orange }}
+                      onClick={closeMenu}
+                    >
+                      {t('mockup.nav.reserve')}
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <>
               {/* Raccourcis rapides mobile (quand authentifié) */}
               {isAuthenticated && (
                 <div className="flex items-center gap-2 px-3 py-2 sm:hidden border-b border-gray-200 pb-3">
@@ -744,6 +787,8 @@ export const Header: React.FC = memo(() => {
                   {t('nav.contact')}
                 </Link>
               </div>
+                </>
+              )}
             </div>
           </div>
         )}
