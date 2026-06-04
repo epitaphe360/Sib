@@ -4,7 +4,7 @@
 */
 
 const express = require('express');
-const { createClient } = require('@supabase/supabase-js');
+const { createSupabaseServerClient } = require('./supabaseNodeClient.cjs');
 const crypto = require('crypto');
 
 const PORT = process.env.PORT || 4001;
@@ -34,7 +34,7 @@ if (!METRICS_SECRET || METRICS_SECRET === 'dev-secret' || METRICS_SECRET.length 
 
 const EFFECTIVE_SECRET = METRICS_SECRET || crypto.randomBytes(32).toString('hex');
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+const supabase = createSupabaseServerClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const app = express();
 app.use(express.json({ limit: '1mb' }));
 

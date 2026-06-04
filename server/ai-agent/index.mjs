@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import { execFile, execFileSync } from 'child_process';
 import path from 'path';
 import fetch from 'node-fetch';
-import { createClient } from '@supabase/supabase-js';
+import { createSupabaseServerClient } from '../supabaseNodeClient.js';
 import crypto from 'crypto';
 import fs from 'fs';
 
@@ -36,10 +36,9 @@ function log(level, message, data = {}) {
   // Log dans Supabase si configuré
   if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
     try {
-      const supabase = createClient(
-        process.env.SUPABASE_URL, 
-        process.env.SUPABASE_SERVICE_ROLE_KEY,
-        { auth: { persistSession: false } }
+      const supabase = createSupabaseServerClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY
       );
       
       supabase.from('scraping_logs').insert([{
@@ -257,7 +256,7 @@ app.post('/generate', async (req, res) => {
       if (SUPABASE_URL && SUPABASE_KEY) {
         try {
           log('info', 'Attempting image upload to Supabase', { requestId });
-          const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false } });
+          const supabase = createSupabaseServerClient(SUPABASE_URL, SUPABASE_KEY);
 
           const isImageUrl = (u) => typeof u === 'string' && /^https?:\/\/.+\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(u);
 
