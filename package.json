@@ -15,6 +15,7 @@
     "build": "vite build && node scripts/inject-build-version.js",
     "extract-mockup": "node scripts/extract-mockup-assets.mjs",
     "build:figma": "node scripts/extract-mockup-assets.mjs",
+    "refresh:portraits": "node scripts/download-mockup-portraits.mjs",
     "build:sib2026-assets": "node scripts/build-sib2026-assets.mjs",
     "sync:sib-ma": "node scripts/sync-sib-ma-content.mjs",
     "sync:sib-ma:full": "node scripts/sync-sib-ma-content.mjs && node scripts/fetch-sib-ma-api.mjs && node scripts/build-sib2026-assets.mjs",
