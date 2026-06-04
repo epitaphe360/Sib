@@ -125,3 +125,16 @@
     padding-right: 1.5rem;
   }
 }
+
+/* Scroll margins pour les ancres */
+#visiter {
+  scroll-margin-top: 5rem;
+}
+
+#international {
+  scroll-margin-top: 5rem;
+}
+
+#badges {
+  scroll-margin-top: 5rem;
+}

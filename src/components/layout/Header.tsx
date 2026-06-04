@@ -24,7 +24,6 @@ import { isAuthInitialized } from '../../lib/initAuth';
 import { HomeNavMenuBlockDesktop, HomeNavMenuBlockMobile } from './homeMenu/HomeNavMenuBlock';
 import { PremiumSib2026DesktopNav } from './PremiumSib2026Nav';
 import { isPremiumHomePath, getPremiumHomeBase, SIB2026 } from '../home/sib2026/tokens';
-
 // OPTIMIZATION: Memoized Header component to prevent unnecessary re-renders
 export const Header: React.FC = memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
