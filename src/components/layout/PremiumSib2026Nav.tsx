@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
-import { useHomeMenuItems } from './homeMenu/useHomeMenuItems';
-import { HomeMenuSalonGridPanel } from './homeMenu/HomeMenuSalonGridPanel';
+import { HomePagesNavPanel } from './homeMenu/HomePagesNavPanel';
 import { SIB2026 } from '../home/sib2026/tokens';
 
 interface PremiumSib2026NavProps {
@@ -25,7 +24,6 @@ export const PremiumSib2026DesktopNav: React.FC<PremiumSib2026NavProps> = ({
   onClose,
 }) => {
   const { t } = useTranslation();
-  const menuItems = useHomeMenuItems();
 
   const navLinks = [
     { name: t('mockup.nav.about'), href: '/about' },
@@ -45,16 +43,12 @@ export const PremiumSib2026DesktopNav: React.FC<PremiumSib2026NavProps> = ({
       style={{ backgroundColor: 'rgba(0, 21, 48, 0.88)' }}
       onMouseLeave={onClose}
     >
-      <div
-        className="relative"
-        onMouseEnter={onOpen}
-        onMouseLeave={onClose}
-      >
+      <div className="relative">
         <button
           type="button"
           aria-expanded={isMenuOpen}
           aria-haspopup="true"
-          aria-label="Accueil — menu du salon"
+          aria-label="Accueil — choisir une page d'accueil (P1 à P8)"
           onClick={() => (isMenuOpen ? onClose() : onOpen())}
           className={`${linkClass} inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent`}
           style={
@@ -73,13 +67,8 @@ export const PremiumSib2026DesktopNav: React.FC<PremiumSib2026NavProps> = ({
         </button>
 
         {isMenuOpen && (
-          <div
-            className="absolute left-0 top-full z-[600] pt-2"
-            onMouseEnter={onOpen}
-            onMouseLeave={onClose}
-          >
-            <div className="absolute left-0 right-0 -top-2 h-3" aria-hidden />
-            <HomeMenuSalonGridPanel items={menuItems} onNavigate={onClose} dropdown />
+          <div className="absolute left-0 top-full z-[600] pt-2">
+            <HomePagesNavPanel onNavigate={onClose} />
           </div>
         )}
       </div>

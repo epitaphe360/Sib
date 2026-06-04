@@ -5,6 +5,7 @@ import { getDefaultHomePageVariant, getHomeRouteForVariant } from '../../../conf
 import { useTranslation } from '../../../hooks/useTranslation';
 import { useHomeMenuItems } from './useHomeMenuItems';
 import { HomeNavDropdown } from './HomeNavDropdown';
+import { HomePagesNavPanel } from './HomePagesNavPanel';
 import { HomeMenuSalonGridPanel } from './HomeMenuSalonGridPanel';
 import { SIB2026 } from '../../home/sib2026/tokens';
 import type { HomeMenuVariantId } from '../../../config/homeNavMenu';
@@ -111,12 +112,11 @@ export const HomeNavMenuBlockMobile: React.FC<{ onNavigate: () => void; premium?
           : 'border-b border-neutral-200 dark:border-neutral-800 pb-3 mb-2'
       }
     >
-      {premium && (
-        <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">
-          {t('nav.home')} — {t('nav.home_menu.subtitle_pages')}
-        </p>
+      {premium ? (
+        <HomePagesNavPanel onNavigate={onNavigate} compact />
+      ) : (
+        <HomeMenuSalonGridPanel items={items} onNavigate={onNavigate} compact />
       )}
-      <HomeMenuSalonGridPanel items={items} onNavigate={onNavigate} compact />
     </div>
   );
 };
