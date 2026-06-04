@@ -22,6 +22,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { MoroccanPattern } from '../ui/MoroccanDecor';
 import { isAuthInitialized } from '../../lib/initAuth';
 import { HomeNavMenuBlockDesktop, HomeNavMenuBlockMobile } from './homeMenu/HomeNavMenuBlock';
+import { PremiumSib2026DesktopNav } from './PremiumSib2026Nav';
 import { isPremiumHomePath, getPremiumHomeBase, SIB2026 } from '../home/sib2026/tokens';
 
 // OPTIMIZATION: Memoized Header component to prevent unnecessary re-renders
@@ -37,15 +38,6 @@ export const Header: React.FC = memo(() => {
   const location = useLocation();
   const isSib2026Home = isPremiumHomePath(location.pathname);
   const premiumHomeBase = getPremiumHomeBase(location.pathname);
-
-  const sib2026NavItems = [
-    { name: t('mockup.nav.about'), href: '/about' },
-    { name: t('mockup.nav.exhibit'), href: ROUTES.EXHIBITOR_SUBSCRIPTION },
-    { name: t('mockup.nav.visit'), href: `${premiumHomeBase}#visiter` },
-    { name: t('mockup.nav.program'), href: ROUTES.EVENTS },
-    { name: t('mockup.nav.international'), href: ROUTES.PAVILIONS },
-    { name: t('mockup.nav.info'), href: ROUTES.ACCOMMODATION },
-  ];
 
   // ✅ CRITICAL: Ne pas afficher "Se connecter" pendant l'initialisation
   const authReady = isAuthInitialized() && !isLoading;
@@ -157,33 +149,16 @@ export const Header: React.FC = memo(() => {
           {/* Desktop Navigation */}
           <nav
             className={`hidden lg:flex items-center flex-1 min-w-0 overflow-visible ${
-              isSib2026Home ? 'gap-2 xl:gap-3' : 'gap-0 xl:gap-1 justify-center'
+              isSib2026Home ? 'justify-center' : 'gap-0 xl:gap-1 justify-center'
             }`}
           >
             {isSib2026Home ? (
-              <>
-                <div className="relative z-[210] shrink-0">
-                  <HomeNavMenuBlockDesktop
-                    premium
-                    homeTo={premiumHomeBase}
-                    isOpen={isHomeMenuOpen}
-                    onOpen={openHomeMenu}
-                    onClose={closeHomeMenu}
-                    variant={1}
-                  />
-                </div>
-                <div className="flex flex-1 items-center justify-center gap-0 xl:gap-1 min-w-0">
-                  {sib2026NavItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className="px-2 xl:px-3 py-2 text-[11px] xl:text-xs font-semibold uppercase tracking-[0.08em] text-white/90 hover:text-white transition-colors whitespace-nowrap drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </>
+              <PremiumSib2026DesktopNav
+                homeBase={premiumHomeBase}
+                isMenuOpen={isHomeMenuOpen}
+                onOpen={openHomeMenu}
+                onClose={closeHomeMenu}
+              />
             ) : (
               <>
             <HomeNavMenuBlockDesktop
@@ -668,16 +643,48 @@ export const Header: React.FC = memo(() => {
               {isSib2026Home ? (
                 <>
                   <HomeNavMenuBlockMobile onNavigate={closeMenu} premium />
-                  {sib2026NavItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className="block px-3 py-3 min-h-[44px] text-sm font-semibold uppercase tracking-wide text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-                      onClick={closeMenu}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                  <Link
+                    to="/about"
+                    className="block px-3 py-3 min-h-[44px] text-sm font-semibold uppercase tracking-wide text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    onClick={closeMenu}
+                  >
+                    {t('mockup.nav.about')}
+                  </Link>
+                  <Link
+                    to={ROUTES.EXHIBITOR_SUBSCRIPTION}
+                    className="block px-3 py-3 min-h-[44px] text-sm font-semibold uppercase tracking-wide text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    onClick={closeMenu}
+                  >
+                    {t('mockup.nav.exhibit')}
+                  </Link>
+                  <Link
+                    to={`${premiumHomeBase}#visiter`}
+                    className="block px-3 py-3 min-h-[44px] text-sm font-semibold uppercase tracking-wide text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    onClick={closeMenu}
+                  >
+                    {t('mockup.nav.visit')}
+                  </Link>
+                  <Link
+                    to={ROUTES.EVENTS}
+                    className="block px-3 py-3 min-h-[44px] text-sm font-semibold uppercase tracking-wide text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    onClick={closeMenu}
+                  >
+                    {t('mockup.nav.program')}
+                  </Link>
+                  <Link
+                    to={ROUTES.PAVILIONS}
+                    className="block px-3 py-3 min-h-[44px] text-sm font-semibold uppercase tracking-wide text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    onClick={closeMenu}
+                  >
+                    {t('mockup.nav.international')}
+                  </Link>
+                  <Link
+                    to={ROUTES.ACCOMMODATION}
+                    className="block px-3 py-3 min-h-[44px] text-sm font-semibold uppercase tracking-wide text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    onClick={closeMenu}
+                  >
+                    {t('mockup.nav.info')}
+                  </Link>
                   <div className="px-3 pt-2">
                     <Link
                       to={ROUTES.EXHIBITOR_SUBSCRIPTION}
