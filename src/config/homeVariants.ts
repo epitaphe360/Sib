@@ -213,8 +213,16 @@ export function getDefaultHomePageVariant(): HomePageVariantId {
 
 
 export function getHomeRouteForVariant(id: HomePageVariantId): string {
-
   return HOME_PAGE_VARIANTS.find((v) => v.id === id)?.route ?? ROUTES.HOME_P8;
+}
 
+/**
+ * Retourne la variante de menu active (VITE_HOME_MENU_VARIANT)
+ */
+export function getActiveHomeMenuVariant(): number {
+  const raw = import.meta.env.VITE_HOME_MENU_VARIANT;
+  const n = Number(raw);
+  if (n >= 1 && n <= 6) return n;
+  return 1;
 }
 
