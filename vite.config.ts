@@ -118,7 +118,6 @@ export default defineConfig(({ mode }) => ({
           'utils-vendor': ['zustand', 'clsx', 'tailwind-merge'],
           'pdf-vendor': ['jspdf', 'jspdf-autotable'],
           'qr-vendor': ['qrcode.react'],
-          'exceljs-vendor': ['exceljs'],
           'translations-fr': ['./src/store/translations.fr'],
           'translations-en': ['./src/store/translations.en'],
           'translations-ar': ['./src/store/translations.ar'],
