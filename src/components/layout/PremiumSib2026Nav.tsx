@@ -48,7 +48,7 @@ export const PremiumSib2026DesktopNav: React.FC<PremiumSib2026NavProps> = ({
           type="button"
           aria-expanded={isMenuOpen}
           aria-haspopup="true"
-          aria-label="Accueil — choisir une page d'accueil (P1 à P8)"
+          aria-label="Accueil — choisir une page d'accueil (P1 à P9)"
           onClick={() => (isMenuOpen ? onClose() : onOpen())}
           className={`${linkClass} inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent`}
           style={
@@ -67,7 +67,7 @@ export const PremiumSib2026DesktopNav: React.FC<PremiumSib2026NavProps> = ({
         </button>
 
         {isMenuOpen && (
-          <div className="absolute left-0 top-full z-[600] pt-2">
+          <div className="absolute left-0 top-full z-[700] pt-2">
             <HomePagesNavPanel onNavigate={onClose} />
           </div>
         )}

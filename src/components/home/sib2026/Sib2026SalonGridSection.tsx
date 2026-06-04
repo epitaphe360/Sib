@@ -16,7 +16,7 @@ export interface SalonGridItem {
 
 const SalonGridCard: React.FC<{ item: SalonGridItem; onNavigate?: () => void }> = ({ item, onNavigate }) => {
   const Icon = item.icon;
-  const bg = getSalonCardBg(item.key);
+  const bg = getSalonCardBg(item.key, true);
   return (
     <Link
       to={item.href}

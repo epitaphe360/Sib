@@ -213,16 +213,12 @@ export function getDefaultHomePageVariant(): HomePageVariantId {
 
 
 export function getHomeRouteForVariant(id: HomePageVariantId): string {
-
   return HOME_PAGE_VARIANTS.find((v) => v.id === id)?.route ?? ROUTES.HOME_P8;
-
 }
 
-
-
-/** Variante courante depuis l’URL (/accueil/1 … /accueil/8). */
+/** Variante courante depuis l’URL (/accueil/1 … /accueil/9). */
 export function getHomePageVariantFromPath(pathname: string): HomePageVariantId | null {
-  const match = pathname.match(/^\/accueil\/([1-8])$/);
+  const match = pathname.match(/^\/accueil\/([1-9])$/);
   if (!match) return null;
   return Number(match[1]) as HomePageVariantId;
 }

@@ -4,6 +4,7 @@
   font-family: 'Montserrat', 'Open Sans', ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   color: #001a3d;
+  background-color: #fff;
 }
 
 .sib2026-page h1,
@@ -60,10 +61,10 @@
 .sib2026-hero-gradient {
   background: linear-gradient(
     105deg,
-    rgba(0, 26, 61, 0.97) 0%,
-    rgba(0, 26, 61, 0.88) 28%,
-    rgba(0, 26, 61, 0.45) 52%,
-    rgba(0, 26, 61, 0.08) 100%
+    rgba(0, 26, 61, 0.94) 0%,
+    rgba(0, 26, 61, 0.85) 35%,
+    rgba(0, 26, 61, 0.35) 65%,
+    rgba(0, 26, 61, 0) 100%
   );
 }
 

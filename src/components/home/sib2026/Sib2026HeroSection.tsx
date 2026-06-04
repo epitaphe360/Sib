@@ -24,7 +24,7 @@ export const Sib2026HeroSection: React.FC = () => {
 
   return (
 
-    <section className="relative min-h-[560px] sm:min-h-[620px] lg:min-h-[680px] flex items-end overflow-hidden home-hero-media">
+    <section className="relative min-h-[600px] sm:min-h-[680px] lg:min-h-[820px] flex items-center overflow-hidden home-hero-media">
 
       <Sib2026Picture
 
@@ -46,16 +46,11 @@ export const Sib2026HeroSection: React.FC = () => {
 
 
 
-      <div className="relative z-10 w-full sib2026-container pb-12 lg:pb-16 pt-32 lg:pt-36">
-
-        <div className="max-w-[540px] text-white">
-
-          <p className="sib2026-display text-[48px] sm:text-[56px] lg:text-[64px] font-extrabold leading-none mb-3">
-
+            <div className="relative z-10 w-full sib2026-container pb-20 lg:pb-32 pt-40 lg:pt-48">
+        <div className="max-w-[640px] text-white">
+          <p className="sib2026-display text-[64px] sm:text-[80px] lg:text-[110px] font-black leading-[0.9] mb-6 tracking-tight">
             <span>SIB </span>
-
             <span style={{ color: SIB2026.orange }}>2026</span>
-
           </p>
 
           <p
@@ -70,10 +65,8 @@ export const Sib2026HeroSection: React.FC = () => {
 
           </p>
 
-          <h1 className="sib2026-display text-xl sm:text-2xl lg:text-[28px] font-extrabold uppercase leading-[1.15] mb-8">
-
+                    <h1 className="sib2026-display text-2xl sm:text-3xl lg:text-[34px] font-black uppercase leading-[1.1] mb-10 tracking-wide whitespace-pre-line">
             {t('mockup.hero.headline')}
-
           </h1>
 
 

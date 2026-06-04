@@ -112,8 +112,8 @@ const SALON_CARD_PHOTOS: Record<(typeof CARD_KEY_ORDER)[number], string> = {
   international: '/sib-ma/5_833920f28a.png',
 };
 
-export function getSalonCardBg(key: string): { webp: string; jpg: string } {
-  if (key in SALON_CARD_PHOTOS) {
+export function getSalonCardBg(key: string, forceMockup = false): { webp: string; jpg: string } {
+  if (!forceMockup && key in SALON_CARD_PHOTOS) {
     const src = SALON_CARD_PHOTOS[key as (typeof CARD_KEY_ORDER)[number]];
     return { webp: src, jpg: src };
   }

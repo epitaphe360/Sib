@@ -14,9 +14,9 @@ export const SIB2026 = {
 
 export const SIB2026_HOME_ROUTE = '/accueil/8';
 
-const PREMIUM_HOME_RE = /^\/accueil\/[1-8]$/;
+const PREMIUM_HOME_RE = /^\/accueil\/[1-9]$/;
 
-/** Toutes les pages d'accueil client (P1–P8) + redirection / */
+/** Toutes les pages d'accueil client (P1–P9) + redirection / */
 export function isPremiumHomePath(pathname: string): boolean {
   return pathname === '/' || pathname === SIB2026_HOME_ROUTE || PREMIUM_HOME_RE.test(pathname);
 }

@@ -17,10 +17,10 @@ export const Sib2026MissionSection: React.FC = () => {
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] mb-5" style={{ color: SIB2026.orange }}>
               {t('mockup.mission.kicker')}
             </p>
-            <h2 className="sib2026-display text-[24px] lg:text-[30px] font-extrabold uppercase leading-[1.1] text-white mb-6">
+            <h2 className="sib2026-display text-[24px] lg:text-[30px] font-extrabold uppercase leading-[1.1] text-white mb-6 whitespace-pre-line">
               {t('mockup.mission.title')}
             </h2>
-            <p className="text-[13px] leading-relaxed mb-8 hidden lg:block" style={{ color: SIB2026.grayText }}>
+            <p className="text-[13px] leading-relaxed mb-8 hidden lg:block whitespace-pre-line" style={{ color: SIB2026.grayText }}>
               {t('mockup.mission.desc')}
             </p>
             <Link
@@ -49,4 +49,3 @@ export const Sib2026MissionSection: React.FC = () => {
     </section>
   );
 };
-
