@@ -20,10 +20,10 @@ const results: PageAudit[] = [];
 
 function getAllPages(dir: string): string[] {
   const files: string[] = [];
-  
+
   function walk(currentPath: string) {
     const entries = fs.readdirSync(currentPath, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = path.join(currentPath, entry.name);
       if (entry.isDirectory()) {
@@ -33,7 +33,7 @@ function getAllPages(dir: string): string[] {
       }
     }
   }
-  
+
   walk(dir);
   return files;
 }
@@ -57,7 +57,7 @@ async function audit() {
   console.log('╚════════════════════════════════════════════════════════════════╝\n');
 
   const pages = getAllPages(pagesDir).sort();
-  
+
   console.log(`📊 Scanning ${pages.length} pages...\n`);
 
   for (const pagePath of pages) {
@@ -65,7 +65,7 @@ async function audit() {
     const hasTranslation = checkFile(pagePath, /useTranslation/);
     const hasLanguageStore = checkFile(pagePath, /useLanguageStore/);
     const supportsArabic = hasTranslation || hasLanguageStore;
-    
+
     let reason = '';
     if (supportsArabic) {
       if (hasTranslation && hasLanguageStore) {
@@ -78,7 +78,7 @@ async function audit() {
     } else {
       reason = '❌ Pas de traduction détectée';
     }
-    
+
     results.push({
       name: path.basename(pagePath),
       path: pageName,
@@ -99,7 +99,7 @@ async function audit() {
   console.log('═══════════════════════════════════════════════════════════════════');
   console.log('RÉSUMÉ GLOBAL');
   console.log('═══════════════════════════════════════════════════════════════════\n');
-  
+
   console.log(`📈 Total des pages: ${totalPages}`);
   console.log(`✅ Pages avec traduction: ${supportedPages}/${totalPages} (${Math.round(supportedPages/totalPages*100)}%)`);
   console.log(`   - Utilisant useTranslation: ${withTranslation}`);
@@ -110,7 +110,7 @@ async function audit() {
     console.log('───────────────────────────────────────────────────────────────────');
     console.log('⚠️  PAGES SANS SUPPORT ARABE');
     console.log('───────────────────────────────────────────────────────────────────\n');
-    
+
     results.filter(r => !r.supportsArabic).forEach(page => {
       console.log(`❌ ${page.path}`);
     });
@@ -120,7 +120,7 @@ async function audit() {
   const categories: { [key: string]: PageAudit[] } = {};
   results.forEach(page => {
     const category = page.path.split('/')[0] || 'root';
-    if (!categories[category]) categories[category] = [];
+    if (!categories[category]) {categories[category] = [];}
     categories[category].push(page);
   });
 

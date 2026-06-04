@@ -11,32 +11,13 @@
   created_at: string;
 }
 
-// MODULE 1: Collaborateur de stand
-export interface StandCollaborator {
-  id: string;
-  owner_id: string;
-  owner_type: 'exhibitor' | 'partner';
-  exhibitor_id?: string;
-  partner_id?: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone?: string;
-  position: string;
-  auth_user_id?: string;
-  status: 'active' | 'inactive' | 'pending';
-  credentials_sent_at?: string;
-  badge_generated: boolean;
-  created_at: string;
-}
-
 export interface User {
   id: string;
   email: string;
   name: string;
-  type: 'exhibitor' | 'partner' | 'visitor' | 'admin' | 'security' | 'marketing' | 'media_partner';
-  visitor_level?: 'free' | 'vip';
-  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner' | 'media_partner'; // Type de sponsor SIB
+  type: 'exhibitor' | 'partner' | 'visitor' | 'admin' | 'security';
+  visitor_level?: 'free' | 'premium' | 'vip';
+  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de partenaire SIB
   profile: UserProfile;
   status: 'pending' | 'active' | 'suspended' | 'rejected' | 'pending_payment';
   projects?: PartnerProject[];
@@ -76,13 +57,14 @@ export interface UserProfile {
   visitObjectives?: string[];
   competencies?: string[];
   // Networking system fields
-  passType?: 'free' | 'vip';
+  passType?: 'free' | 'premium' | 'vip';
   status?: 'active' | 'pending' | 'suspended' | 'rejected';
   // Exhibitor specific fields
-  standNumber?: string; // Numéro de stand pour les exposants
+  standNumber?: string;
+  hallNumber?: string;
   standArea?: number; // Surface du stand en m² (9, 18, 36, 54+)
   // Partner specific fields
-  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de sponsor SIB
+  partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de partenaire SIB
 }
 
 export interface Exhibitor {
@@ -106,8 +88,9 @@ export interface Exhibitor {
   employeeCount?: string;
   revenue?: string;
   markets: string[];
-  standNumber?: string; // Numéro de stand pour la carte interactive
-  standArea?: number; // Surface en m2
+  standNumber?: string;
+  hallNumber?: string;
+  standArea?: number;
 }
 
 export interface Partner {
@@ -115,7 +98,7 @@ export interface Partner {
   userId: string;
   organizationName: string;
   organizationName_en?: string; // English translation
-  partnerType: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner' | 'media_partner';
+  partnerType: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner';
   sector: string;
   sector_en?: string; // English translation
   country: string;
@@ -199,7 +182,7 @@ export interface MiniSite {
 
 export interface MiniSiteSection {
   id: string;
-  type: 'hero' | 'about' | 'products' | 'news' | 'gallery' | 'team' | 'certifications' | 'contact';
+  type: 'hero' | 'about' | 'products' | 'news' | 'gallery' | 'team' | 'certifications';
   title: string;
   content: unknown;
   order: number;
@@ -232,7 +215,7 @@ export interface Appointment {
   exhibitorId?: string;
   visitorId: string;
   timeSlotId?: string;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'rejected';
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   message?: string;
   notes?: string;
   rating?: number;
@@ -458,8 +441,7 @@ export interface UserBadge {
   phone?: string;
   avatarUrl?: string;
   standNumber?: string; // Pour exposants
-  companyLogoUrl?: string; // Logo de la société pour exposants
-  accessLevel: 'standard' | 'vip' | 'exhibitor' | 'partner' | 'admin' | 'press';
+  accessLevel: 'standard' | 'vip' | 'exhibitor' | 'partner' | 'admin';
   validFrom: Date;
   validUntil: Date;
   status: 'active' | 'expired' | 'revoked' | 'pending';

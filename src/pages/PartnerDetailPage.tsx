@@ -61,7 +61,6 @@ import LogoWithFallback from '../components/ui/LogoWithFallback';
 import { motion } from 'framer-motion';
 import { CONFIG } from '../lib/config';
 import { SupabaseService } from '../services/supabaseService';
-import { useAuthStore } from '../store/authStore';
 
 interface Project {
   id: string;
@@ -98,7 +97,7 @@ interface Project {
 interface Partner {
   id: string;
   name: string;
-  type: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner';
+  type: 'platinum' | 'gold' | 'silver' | 'bronze' | 'institutional';
   category: string;
   description: string;
   longDescription?: string;
@@ -135,12 +134,11 @@ interface Partner {
   gallery?: string[];
 }
 
-// Les données du sponsor sont maintenant chargées depuis Supabase
+// Les données du partenaire sont maintenant chargées depuis Supabase
 
 export default function PartnerDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const { user } = useAuthStore();
   const [partner, setPartner] = useState<Partner | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedNews, setSelectedNews] = useState<{ title: string; date: Date; excerpt: string; image?: string } | null>(null);
@@ -168,14 +166,14 @@ export default function PartnerDetailPage() {
           setPartner(data);
           // Incrémenter les vues
           SupabaseService.incrementPartnerViews(id).catch(err =>
-            console.error("Erreur incrémentation vues sponsor:", err)
+            console.error("Erreur incrémentation vues partenaire:", err)
           );
         } else {
-          setError("Sponsor non trouvé");
+          setError("Partenaire non trouvé");
         }
       } catch (err) {
-        console.error("Erreur chargement sponsor:", err);
-        setError("Erreur lors du chargement du sponsor");
+        console.error("Erreur chargement partenaire:", err);
+        setError("Erreur lors du chargement du partenaire");
       } finally {
         setIsLoading(false);
       }
@@ -190,7 +188,7 @@ export default function PartnerDetailPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Chargement du sponsor...
+            Chargement du partenaire...
           </h3>
         </div>
       </div>
@@ -205,12 +203,12 @@ export default function PartnerDetailPage() {
             <Handshake className="h-10 w-10 text-white" />
           </div>
           <h2 className="text-2xl font-bold mb-3 text-gray-800">
-            {t('partner.notFound', 'Sponsor non disponible')}
+            {t('partner.notFound', 'Partenaire non disponible')}
           </h2>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            {error === "Sponsor non trouvé"
-              ? t('partner.notFoundDesc', "Ce sponsor n'a pas encore complété son profil ou n'est pas encore visible publiquement. Revenez bientôt pour découvrir notre réseau de sponsors !")
-              : error || t('partner.notFoundGeneric', "Le sponsor que vous recherchez n'existe pas ou a été supprimé.")}
+            {error === "Partenaire non trouvé"
+              ? t('partner.notFoundDesc', "Ce partenaire n'a pas encore complété son profil ou n'est pas encore visible publiquement. Revenez bientôt pour découvrir notre réseau de partenaires !")
+              : error || t('partner.notFoundGeneric', "Le partenaire que vous recherchez n'existe pas ou a été supprimé.")}
           </p>
 
           {/* Actions */}
@@ -218,7 +216,7 @@ export default function PartnerDetailPage() {
             <Link to={ROUTES.PARTNERS}>
               <Button variant="outline" className="group w-full sm:w-auto">
                 <ArrowLeft className="h-4 w-4 mr-2 transition-transform group-hover:-translate-x-1" />
-                {t('partner.backToList', 'Voir tous les sponsors')}
+                {t('partner.backToList', 'Voir tous les partenaires')}
               </Button>
             </Link>
             <Link to={ROUTES.HOME}>
@@ -232,9 +230,9 @@ export default function PartnerDetailPage() {
           {/* Message informatif */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
-              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous êtes sponsor ?')}</span>
+              <span className="font-semibold text-purple-600">{t('partner.areYouPartner', 'Vous êtes partenaire ?')}</span>
               <br />
-              {t('partner.completeProfile', 'Complétez votre profil depuis votre tableau de bord pour apparaître dans notre annuaire des sponsors.')}
+              {t('partner.completeProfile', 'Complétez votre profil depuis votre tableau de bord pour apparaître dans notre annuaire des partenaires.')}
             </p>
           </div>
         </Card>
@@ -244,11 +242,11 @@ export default function PartnerDetailPage() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'organizer': return Crown;
-      case 'official_sponsor': return Award;
-      case 'co_organizer': return Star;
-      case 'partner': return Building2;
-      case 'press_partner': return Handshake;
+      case 'institutional': return Crown;
+      case 'platinum': return Award;
+      case 'gold': return Star;
+      case 'silver': return Building2;
+      case 'bronze': return Handshake;
       default: return Building2;
     }
   };
@@ -257,11 +255,11 @@ export default function PartnerDetailPage() {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'organizer': return 'bg-purple-100 text-purple-600';
-      case 'official_sponsor': return 'bg-yellow-100 text-yellow-600';
-      case 'co_organizer': return 'bg-indigo-100 text-indigo-600';
-      case 'partner': return 'bg-gray-100 text-gray-600';
-      case 'press_partner': return 'bg-orange-100 text-orange-600';
+      case 'institutional': return 'bg-purple-100 text-purple-600';
+      case 'platinum': return 'bg-gray-100 text-gray-800';
+      case 'gold': return 'bg-yellow-100 text-yellow-600';
+      case 'silver': return 'bg-gray-100 text-gray-600';
+      case 'bronze': return 'bg-orange-100 text-orange-600';
       default: return 'bg-blue-100 text-blue-600';
     }
   };
@@ -290,9 +288,9 @@ export default function PartnerDetailPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed': return t('partner.detail.status.completed');
-      case 'active': return t('partner.detail.status.active');
-      case 'planned': return t('partner.detail.status.planned');
+      case 'completed': return 'Terminé';
+      case 'active': return 'En cours';
+      case 'planned': return 'Planifié';
       default: return status;
     }
   };
@@ -314,20 +312,20 @@ export default function PartnerDetailPage() {
     } else {
       // Fallback: copier le lien dans le presse-papiers
       navigator.clipboard.writeText(shareData.url)
-        .then(() => toast.success(t('partner.detail.link_copied')))
-        .catch(() => toast.error(t('partner.detail.copy_error')));
+        .then(() => toast.success('Lien copié dans le presse-papiers !'))
+        .catch(() => toast.error('Impossible de copier le lien'));
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Banner de validation — visible UNIQUEMENT par le propriétaire ou un admin */}
-      {partner.is_published === false && user && (user.id === (partner as any).userId || user.id === (partner as any).user_id || user.type === 'admin') && (
+      {/* Banner de validation pour les profils non publiés */}
+      {partner.is_published === false && (
         <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 px-4 shadow-lg">
           <div className="max-w-7xl mx-auto flex items-center justify-center space-x-3">
             <AlertCircle className="h-6 w-6 flex-shrink-0" />
             <p className="text-base font-semibold text-center">
-              {t('partner.detail.validation_warning')}
+              ?? Fiche en cours de validation - Ce profil n'est pas encore visible publiquement
             </p>
           </div>
         </div>
@@ -340,7 +338,7 @@ export default function PartnerDetailPage() {
             <Link to={ROUTES.PARTNERS}>
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                {t('partner.detail.back_to_partners')}
+                Retour aux partenaires
               </Button>
             </Link>
           </div>
@@ -393,14 +391,14 @@ export default function PartnerDetailPage() {
                     className="flex items-center space-x-2 text-blue-600 hover:text-blue-700"
                   >
                     <Globe className="h-4 w-4" />
-                    <span>{t('partner.detail.official_site')}</span>
+                    <span>Site officiel</span>
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 )}
 
                 <Button variant="default" size="sm" onClick={handleContact}>
                   <MessageCircle className="h-4 w-4 mr-2" />
-                  {t('partner.detail.contact_btn')}
+                  Contacter
                 </Button>
 
                 <Button variant="default" size="sm" onClick={handleShare}>
@@ -449,13 +447,13 @@ export default function PartnerDetailPage() {
         <div className="mb-8 overflow-x-auto">
           <nav className="flex space-x-2 md:space-x-4 min-w-max pb-2">
             {[
-              { id: 'overview', label: t('partner.detail.tab_overview'), icon: Eye },
-              { id: 'about', label: t('partner.detail.tab_about'), icon: Building2 },
-              { id: 'expertise', label: t('partner.detail.tab_expertise'), icon: Lightbulb },
-              { id: 'projects', label: t('partner.detail.tab_projects'), icon: Target },
-              { id: 'gallery', label: t('partner.detail.tab_gallery'), icon: ImageIcon },
-              { id: 'news', label: t('partner.detail.tab_news'), icon: BookOpen },
-              { id: 'contact', label: t('partner.detail.tab_contact'), icon: MessageCircle }
+              { id: 'overview', label: 'Vue d\'ensemble', icon: Eye },
+              { id: 'about', label: 'À propos', icon: Building2 },
+              { id: 'expertise', label: 'Expertise', icon: Lightbulb },
+              { id: 'projects', label: 'Projets', icon: Target },
+              { id: 'gallery', label: 'Galerie', icon: ImageIcon },
+              { id: 'news', label: 'Actualités', icon: BookOpen },
+              { id: 'contact', label: 'Contact', icon: MessageCircle }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -512,14 +510,19 @@ export default function PartnerDetailPage() {
                 </motion.div>
               ))}
             </div>
-            ) : null}
+            ) : (
+              <Card className="p-8 text-center bg-gradient-to-br from-blue-50 to-indigo-50">
+                <BarChart3 className="h-12 w-12 mx-auto mb-3 text-blue-300" />
+                <p className="text-gray-600 font-medium">Les chiffres clés seront disponibles bientôt</p>
+              </Card>
+            )}
 
             {/* Description longue avec vidéo */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <Card className="lg:col-span-2 p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                   <Building2 className="h-5 w-5 mr-2 text-blue-600" />
-                  {t('partner.detail.who_we_are')}
+                  Qui sommes-nous ?
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg mb-6">
                   {partner.longDescription || partner.description}
@@ -531,7 +534,7 @@ export default function PartnerDetailPage() {
                     <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
                       <div className="flex items-center mb-2">
                         <Target className="h-5 w-5 text-blue-600 mr-2" />
-                        <h4 className="font-semibold text-blue-900">{t('partner.detail.our_mission')}</h4>
+                        <h4 className="font-semibold text-blue-900">Notre Mission</h4>
                       </div>
                       <p className="text-sm text-blue-800">{partner.mission}</p>
                     </div>
@@ -540,7 +543,7 @@ export default function PartnerDetailPage() {
                     <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border border-purple-100">
                       <div className="flex items-center mb-2">
                         <Eye className="h-5 w-5 text-purple-600 mr-2" />
-                        <h4 className="font-semibold text-purple-900">{t('partner.detail.our_vision')}</h4>
+                        <h4 className="font-semibold text-purple-900">Notre Vision</h4>
                       </div>
                       <p className="text-sm text-purple-800">{partner.vision}</p>
                     </div>
@@ -565,12 +568,19 @@ export default function PartnerDetailPage() {
                         <Play className="h-8 w-8 text-blue-600 ml-1" />
                       </div>
                       <div className="absolute bottom-4 left-4 right-4 text-white">
-                        <p className="font-medium">{t('partner.detail.presentation_discover').replace('{{name}}', partner.name)}</p>
-                        <p className="text-sm text-white/80">{t('partner.detail.presentation_video')}</p>
+                        <p className="font-medium">Découvrez {partner.name}</p>
+                        <p className="text-sm text-white/80">Vidéo de présentation</p>
                       </div>
                     </button>
                   </div>
-                ) : null}
+                ) : (
+                  <div className="aspect-video bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
+                    <div className="text-center text-white p-6">
+                      <Sparkles className="h-12 w-12 mx-auto mb-3 opacity-80" />
+                      <p className="font-semibold">Vidéo bientôt disponible</p>
+                    </div>
+                  </div>
+                )}
               </Card>
             </div>
 
@@ -579,7 +589,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Heart className="h-5 w-5 mr-2 text-red-500" />
-                  {t('partner.detail.our_values')}
+                  Nos Valeurs
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   {partner.values.map((value, index) => {
@@ -601,7 +611,12 @@ export default function PartnerDetailPage() {
                   })}
                 </div>
               </Card>
-            ) : null}
+            ) : (
+              <Card className="p-6 text-center">
+                <Heart className="h-10 w-10 mx-auto mb-3 text-red-200" />
+                <p className="text-gray-500 font-medium">Les valeurs de l'organisation seront disponibles bientôt</p>
+              </Card>
+            )}
 
             {/* Certifications & Récompenses */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -610,7 +625,7 @@ export default function PartnerDetailPage() {
                 <Card className="p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
                     <Shield className="h-5 w-5 mr-2 text-green-600" />
-                    {t('partner.detail.certifications')}
+                    Certifications
                   </h3>
                   <div className="space-y-3">
                     {partner.certifications.map((cert, idx) => {
@@ -624,14 +639,19 @@ export default function PartnerDetailPage() {
                     })}
                   </div>
                 </Card>
-              ) : null}
+              ) : (
+                <Card className="p-6 text-center">
+                  <Shield className="h-10 w-10 mx-auto mb-3 text-green-200" />
+                  <p className="text-gray-500 font-medium">Les certifications seront disponibles bientôt</p>
+                </Card>
+              )}
 
               {/* Récompenses */}
               {partner.awards && partner.awards.length > 0 ? (
                 <Card className="p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
                     <Award className="h-5 w-5 mr-2 text-yellow-600" />
-                    {t('partner.detail.awards')}
+                    Récompenses
                   </h3>
                   <div className="space-y-3">
                     {partner.awards.map((award, idx) => {
@@ -650,7 +670,12 @@ export default function PartnerDetailPage() {
                     })}
                   </div>
                 </Card>
-              ) : null}
+              ) : (
+                <Card className="p-6 text-center">
+                  <Award className="h-10 w-10 mx-auto mb-3 text-yellow-200" />
+                  <p className="text-gray-500 font-medium">Les récompenses seront disponibles bientôt</p>
+                </Card>
+              )}
             </div>
 
             {/* Témoignages */}
@@ -658,7 +683,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Quote className="h-5 w-5 mr-2 text-blue-600" />
-                  {t('partner.detail.testimonials_title')}
+                  Ce que disent nos partenaires
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {partner.testimonials.map((testimonial, index) => (
@@ -688,13 +713,18 @@ export default function PartnerDetailPage() {
                   ))}
                 </div>
               </Card>
-            ) : null}
+            ) : (
+              <Card className="p-6 text-center bg-gradient-to-br from-blue-50 to-indigo-50">
+                <Quote className="h-10 w-10 mx-auto mb-3 text-blue-200" />
+                <p className="text-gray-500 font-medium">Les témoignages seront disponibles bientôt</p>
+              </Card>
+            )}
 
             {/* Contributions SIB */}
             <Card className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                 <Handshake className="h-5 w-5 mr-2 text-indigo-600" />
-                {t('partner.detail.contributions_title')}
+                Contributions au Salon SIB 2026
               </h3>
               {partner.contributions && partner.contributions.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -716,7 +746,12 @@ export default function PartnerDetailPage() {
                   );
                 })}
               </div>
-              ) : null}
+              ) : (
+                <div className="text-center py-6 text-gray-500">
+                  <Zap className="h-10 w-10 mx-auto mb-3 text-indigo-200" />
+                  <p className="font-medium">Les contributions seront disponibles bientôt</p>
+                </div>
+              )}
             </Card>
           </motion.div>
         )}
@@ -729,20 +764,20 @@ export default function PartnerDetailPage() {
             className="space-y-8"
           >
             <Card className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('partner.detail.about_title').replace('{{name}}', partner.name)}</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">À propos de {partner.name}</h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-6">{partner.longDescription || partner.description}</p>
 
                 {partner.mission && (
                   <div className="my-8 p-6 bg-blue-50 rounded-2xl border-l-4 border-blue-500">
-                    <h3 className="text-lg font-bold text-blue-900 mb-2">{t('partner.detail.our_mission')}</h3>
+                    <h3 className="text-lg font-bold text-blue-900 mb-2">Notre Mission</h3>
                     <p className="text-blue-800">{partner.mission}</p>
                   </div>
                 )}
 
                 {partner.vision && (
                   <div className="my-8 p-6 bg-purple-50 rounded-2xl border-l-4 border-purple-500">
-                    <h3 className="text-lg font-bold text-purple-900 mb-2">{t('partner.detail.our_vision')}</h3>
+                    <h3 className="text-lg font-bold text-purple-900 mb-2">Notre Vision</h3>
                     <p className="text-purple-800">{partner.vision}</p>
                   </div>
                 )}
@@ -753,11 +788,12 @@ export default function PartnerDetailPage() {
             <Card className="p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Clock className="h-5 w-5 mr-2 text-blue-600" />
-                {t('partner.detail.our_history')}
+                Notre Histoire
               </h3>
-              {partner.establishedYear ? (
-                <p className="text-gray-600">{t('partner.detail.founded_in').replace('{{year}}', String(partner.establishedYear))}</p>
-              ) : null}
+              <div className="text-center py-8">
+                <Clock className="h-10 w-10 mx-auto mb-3 text-blue-200" />
+                <p className="text-gray-500 font-medium">L'historique détaillé sera disponible bientôt</p>
+              </div>
             </Card>
 
             {/* Clients référents */}
@@ -765,7 +801,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Briefcase className="h-5 w-5 mr-2 text-green-600" />
-                  {t('partner.detail.clients_title')}
+                  Ils nous font confiance
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {partner.clients.map((client, idx) => {
@@ -778,7 +814,12 @@ export default function PartnerDetailPage() {
                   })}
                 </div>
               </Card>
-            ) : null}
+            ) : (
+              <Card className="p-6 text-center">
+                <Briefcase className="h-10 w-10 mx-auto mb-3 text-green-200" />
+                <p className="text-gray-500 font-medium">La liste des clients sera disponible bientôt</p>
+              </Card>
+            )}
           </motion.div>
         )}
 
@@ -794,7 +835,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <Layers className="h-5 w-5 mr-2 text-blue-600" />
-                  {t('partner.detail.expertise_title')}
+                  Nos Domaines d'Expertise
                 </h3>
                 <div className="space-y-4">
                   {(partner.expertise || []).length > 0 ? (partner.expertise || []).map((exp, index) => {
@@ -888,7 +929,7 @@ export default function PartnerDetailPage() {
                         return "Activités de recherche scientifique et d'innovation technologique pour développer de nouvelles solutions adaptées aux enjeux du secteur.";
                       }
                       if (lowerTitle.includes('naval') || lowerTitle.includes('marine')) {
-                        return "Ingénierie et expertise en construction couvrant la conception, la réalisation et la maintenance des bâtiments et infrastructures BTP.";
+                        return "Ingénierie et expertise navale couvrant la conception, la construction et la maintenance des chantiers et systèmes BTP.";
                       }
                       if (lowerTitle.includes('vts') || lowerTitle.includes('trafic') || lowerTitle.includes('surveillance')) {
                         return "Systèmes de surveillance et de gestion du trafic construction pour la sécurité de la navigation et la protection de l'environnement côtier.";
@@ -945,7 +986,7 @@ export default function PartnerDetailPage() {
                       if (lowerTitle.includes('compétitivité') || lowerTitle.includes('export') || lowerTitle.includes('marché')) {
                         return "Accompagnement des entreprises dans leur développement commercial, à l'export et sur les marchés internationaux.";
                       }
-                      // Fallback intelligent basé sur le contexte du sponsor
+                      // Fallback intelligent basé sur le contexte du partenaire
                       return `Expertise reconnue en ${title.toLowerCase()} au service de l'excellence et de l'innovation dans le secteur.`;
                     };
 
@@ -977,7 +1018,12 @@ export default function PartnerDetailPage() {
                         )}
                       </motion.div>
                     );
-                  }) : null}
+                  }) : (
+                    <div className="text-center py-6">
+                      <Layers className="h-10 w-10 mx-auto mb-3 text-blue-200" />
+                      <p className="text-gray-500 font-medium">Les domaines d'expertise seront disponibles bientôt</p>
+                    </div>
+                  )}
                 </div>
               </Card>
               {/* Expertise - Utiliser les vraies données de la DB */}
@@ -1006,7 +1052,7 @@ export default function PartnerDetailPage() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <GraduationCap className="h-5 w-5 mr-2 text-green-600" />
-                  {t('partner.detail.certif_accred')}
+                  Certifications & Accréditations
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {partner.certifications.map((cert, idx) => {
@@ -1020,7 +1066,12 @@ export default function PartnerDetailPage() {
                   })}
                 </div>
               </Card>
-            ) : null}
+            ) : (
+              <Card className="p-6 text-center">
+                <GraduationCap className="h-10 w-10 mx-auto mb-3 text-green-200" />
+                <p className="text-gray-500 font-medium">Les certifications seront disponibles bientôt</p>
+              </Card>
+            )}
           </motion.div>
         )}
 
@@ -1032,7 +1083,7 @@ export default function PartnerDetailPage() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">{t('partner.detail.gallery_title')}</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Galerie Photos</h2>
               {partner.gallery?.length > 0 && <Badge variant="info">{partner.gallery.length} photos</Badge>}
             </div>
 
@@ -1061,7 +1112,12 @@ export default function PartnerDetailPage() {
                 </motion.div>
               ))}
             </div>
-            ) : null}
+            ) : (
+              <div className="text-center py-12 text-gray-500">
+                <Camera className="h-12 w-12 mx-auto mb-4 text-blue-200" />
+                <p className="text-gray-600 font-medium">La galerie photo sera disponible bientôt</p>
+              </div>
+            )}
           </motion.div>
         )}
 
@@ -1072,7 +1128,7 @@ export default function PartnerDetailPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('partner.detail.news_title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Dernières Actualités</h2>
 
             {partner.news && partner.news.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1106,14 +1162,19 @@ export default function PartnerDetailPage() {
                           setShowNewsModal(true);
                         }}
                       >
-                        {t('partner.detail.read_more')} <ChevronRight className="h-4 w-4 ml-1" />
+                        Lire plus <ChevronRight className="h-4 w-4 ml-1" />
                       </Button>
                     </div>
                   </Card>
                 </motion.div>
               ))}
             </div>
-            ) : null}
+            ) : (
+              <div className="text-center py-12 text-gray-500">
+                <Newspaper className="h-12 w-12 mx-auto mb-4 text-blue-200" />
+                <p className="text-gray-600 font-medium">Les actualités seront disponibles bientôt</p>
+              </div>
+            )}
           </motion.div>
         )}
 
@@ -1124,7 +1185,7 @@ export default function PartnerDetailPage() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">{t('partner.detail.projects_title')}</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Nos Projets</h2>
               {partner.projects?.length > 0 && <Badge variant="success">{partner.projects.length} projets</Badge>}
             </div>
             {partner.projects && partner.projects.length > 0 ? (
@@ -1166,19 +1227,19 @@ export default function PartnerDetailPage() {
                           <div className="text-lg font-bold text-blue-600">
                             {project.kpis.progress}%
                           </div>
-                          <div className="text-xs text-gray-600">{t('partner_detail_page.avancement', 'Avancement')}</div>
+                          <div className="text-xs text-gray-600">Avancement</div>
                         </div>
                         <div className="text-center border-x border-gray-200">
                           <div className="text-lg font-bold text-green-600">
                             {project.kpis.satisfaction}%
                           </div>
-                          <div className="text-xs text-gray-600">{t('partner_detail_page.satisfaction', 'Satisfaction')}</div>
+                          <div className="text-xs text-gray-600">Satisfaction</div>
                         </div>
                         <div className="text-center">
                           <div className="text-lg font-bold text-purple-600">
                             {project.kpis.roi}%
                           </div>
-                          <div className="text-xs text-gray-600">{t('partner_detail_page.roi', 'ROI')}</div>
+                          <div className="text-xs text-gray-600">ROI</div>
                         </div>
                       </div>
 
@@ -1188,14 +1249,19 @@ export default function PartnerDetailPage() {
                         onClick={() => handleViewProjectDetails(project)}
                       >
                         <Eye className="h-4 w-4 mr-2" />
-                        {t('partner.detail.view_details')}
+                        Voir les détails
                       </Button>
                     </div>
                   </Card>
                 </motion.div>
               ))}
             </div>
-            ) : null}
+            ) : (
+              <Card className="p-8 text-center">
+                <Target className="h-12 w-12 mx-auto mb-3 text-blue-200" />
+                <p className="text-gray-600 font-medium">Les projets seront disponibles bientôt</p>
+              </Card>
+            )}
           </motion.div>
         )}
 
@@ -1207,12 +1273,12 @@ export default function PartnerDetailPage() {
           >
             <Card className="p-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-8">
-                {t('partner.detail.contact_info_title')}
+                Informations de Contact
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                  <h4 className="font-semibold text-gray-900 text-lg">{t('partner.detail.contact_coordinates')}</h4>
+                  <h4 className="font-semibold text-gray-900 text-lg">Coordonnées</h4>
 
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
@@ -1220,7 +1286,7 @@ export default function PartnerDetailPage() {
                         <Building2 className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">{t('partner_detail_page.entreprise', 'Entreprise')}</p>
+                        <p className="text-sm text-gray-500">Entreprise</p>
                         <p className="font-medium text-gray-900">{partner.name}</p>
                       </div>
                     </div>
@@ -1230,7 +1296,7 @@ export default function PartnerDetailPage() {
                         <MapPin className="h-5 w-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">{t('partner_detail_page.localisation', 'Localisation')}</p>
+                        <p className="text-sm text-gray-500">Localisation</p>
                         <p className="font-medium text-gray-900">{partner.country}</p>
                       </div>
                     </div>
@@ -1240,7 +1306,7 @@ export default function PartnerDetailPage() {
                         <Phone className="h-5 w-5 text-purple-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">{t('partner_detail_page.telephone', 'Téléphone')}</p>
+                        <p className="text-sm text-gray-500">Téléphone</p>
                         <p className="font-medium text-gray-900">+212 5 22 XX XX XX</p>
                       </div>
                     </div>
@@ -1250,7 +1316,7 @@ export default function PartnerDetailPage() {
                         <Mail className="h-5 w-5 text-orange-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">{t('partner_detail_page.email', 'Email')}</p>
+                        <p className="text-sm text-gray-500">Email</p>
                         <p className="font-medium text-gray-900">contact@{partner?.name?.toLowerCase().replace(/\s+/g, '') || 'contact'}.com</p>
                       </div>
                     </div>
@@ -1261,7 +1327,7 @@ export default function PartnerDetailPage() {
                           <Globe className="h-5 w-5 text-indigo-600" />
                         </div>
                         <div>
-                          <p className="text-sm text-gray-500">{t('partner_detail_page.site_web', 'Site web')}</p>
+                          <p className="text-sm text-gray-500">Site web</p>
                           <a href={partner.website} className="font-medium text-blue-600 hover:underline">
                             {partner.website}
                           </a>
@@ -1272,15 +1338,15 @@ export default function PartnerDetailPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 text-lg mb-4">{t('partner.detail.contact_sib')}</h4>
+                  <h4 className="font-semibold text-gray-900 text-lg mb-4">Contact SIB</h4>
                   <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
                     <div className="flex items-center space-x-4 mb-4">
                       <div className="h-14 w-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
                         <Users className="h-7 w-7 text-white" />
                       </div>
                       <div>
-                        <p className="font-bold text-gray-900">{t('partner_detail_page.ahmed_el_mansouri', 'Ahmed El Mansouri')}</p>
-                        <p className="text-sm text-gray-600">{t('partner_detail_page.directeur_partenariats', 'Directeur Partenariats')}</p>
+                        <p className="font-bold text-gray-900">Ahmed El Mansouri</p>
+                        <p className="text-sm text-gray-600">Directeur Partenariats</p>
                       </div>
                     </div>
                     <div className="space-y-2 text-sm text-gray-700">
@@ -1300,7 +1366,7 @@ export default function PartnerDetailPage() {
                       onClick={handleContact}
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />
-                      {t('partner.detail.send_message')}
+                      Envoyer un message
                     </Button>
                   </div>
                 </div>
@@ -1540,30 +1606,30 @@ export default function PartnerDetailPage() {
               {/* Détails Techniques */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.details_techniques', 'Détails Techniques')}</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">Détails Techniques</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">{t('partner_detail_page.statut', 'Statut:')}</span>
+                      <span className="text-gray-600">Statut:</span>
                       <Badge className={getStatusColor(selectedProject.status)} size="sm">
                         {getStatusLabel(selectedProject.status)}
                       </Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">{t('partner_detail_page.debut', 'Début:')}</span>
+                      <span className="text-gray-600">Début:</span>
                       <span className="font-medium">{formatDate(selectedProject.startDate)}</span>
                     </div>
                     {selectedProject.endDate && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">{t('partner_detail_page.fin_prevue', 'Fin prévue:')}</span>
+                        <span className="text-gray-600">Fin prévue:</span>
                         <span className="font-medium">{formatDate(selectedProject.endDate)}</span>
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span className="text-gray-600">{t('partner_detail_page.budget', 'Budget:')}</span>
+                      <span className="text-gray-600">Budget:</span>
                       <span className="font-bold text-green-600">{selectedProject.budget}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">{t('partner_detail_page.equipe', 'Équipe:')}</span>
+                      <span className="text-gray-600">Équipe:</span>
                       <span className="font-medium">
                         {selectedProject.status === 'completed' ? '45 experts' :
                          selectedProject.status === 'active' ? '32 experts' : '15 experts'}
@@ -1573,11 +1639,11 @@ export default function PartnerDetailPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.kpis_du_projet', 'KPIs du Projet')}</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">KPIs du Projet</h4>
                   <div className="space-y-3">
                     <div>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">{t('partner_detail_page.avancement', 'Avancement')}</span>
+                        <span className="text-gray-600">Avancement</span>
                         <span className="font-medium">{selectedProject.kpis.progress}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1590,7 +1656,7 @@ export default function PartnerDetailPage() {
 
                     <div>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">{t('partner_detail_page.satisfaction', 'Satisfaction')}</span>
+                        <span className="text-gray-600">Satisfaction</span>
                         <span className="font-medium">{selectedProject.kpis.satisfaction}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1603,7 +1669,7 @@ export default function PartnerDetailPage() {
 
                     <div>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">{t('partner_detail_page.roi', 'ROI')}</span>
+                        <span className="text-gray-600">ROI</span>
                         <span className="font-medium">{selectedProject.kpis.roi}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1619,7 +1685,7 @@ export default function PartnerDetailPage() {
 
               {/* Technologies Utilisées */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.technologies_utilisees', 'Technologies Utilisées')}</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Technologies Utilisées</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.technologies.map((tech: string) => (
                     <Badge key={tech} variant="info" size="sm">
@@ -1631,7 +1697,7 @@ export default function PartnerDetailPage() {
 
               {/* Chronologie du Projet */}
               <div className="mb-8">
-                <h4 className="font-semibold text-gray-900 mb-4">{t('partner_detail_page.chronologie_du_projet', 'Chronologie du Projet')}</h4>
+                <h4 className="font-semibold text-gray-900 mb-4">Chronologie du Projet</h4>
                 <div className="space-y-4">
                   {selectedProject.timeline.map((phase: Project['timeline'][0]) => (
                     <div key={phase.phase} className="flex items-start space-x-4">
@@ -1651,9 +1717,9 @@ export default function PartnerDetailPage() {
                 </div>
               </div>
 
-              {/* Sponsors du Projet */}
+              {/* Partenaires du Projet */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.sponsors_du_projet', 'Sponsors du Projet')}</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Partenaires du Projet</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.partners.map((partnerName: string) => (
                     <Badge key={partnerName} variant="success" size="sm">
@@ -1666,7 +1732,7 @@ export default function PartnerDetailPage() {
 
               {/* Documents et Ressources */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.documents_ressources', 'Documents & Ressources')}</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Documents & Ressources</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {selectedProject.documents.map((doc: Project['documents'][0]) => (
                     <div key={doc.name} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
@@ -1683,7 +1749,7 @@ export default function PartnerDetailPage() {
 
               {/* Galerie Photos */}
               <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">{t('partner_detail_page.galerie_du_projet', 'Galerie du Projet')}</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Galerie du Projet</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {selectedProject.gallery.map((image: string, index: number) => (
                     <img

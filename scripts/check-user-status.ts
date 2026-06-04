@@ -23,9 +23,9 @@ if (!email) {
 
 async function checkUser() {
   console.log(`🔍 Recherche de l'utilisateur: ${email}`);
-  
+
   const { data: { users }, error } = await supabase.auth.admin.listUsers();
-  
+
   if (error) {
     console.error('❌ Erreur listUsers:', error);
     return;

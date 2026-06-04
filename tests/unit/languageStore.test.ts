@@ -77,7 +77,7 @@ describe('languageStore', () => {
     it('should switch back from Arabic to LTR', async () => {
       await useLanguageStore.getState().setLanguage('ar');
       expect(document.documentElement.dir).toBe('rtl');
-      
+
       await useLanguageStore.getState().setLanguage('fr');
       expect(document.documentElement.dir).toBe('ltr');
     });

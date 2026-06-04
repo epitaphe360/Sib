@@ -258,8 +258,8 @@ function getPartnerPaymentInstructionHTML(data: PartnerPaymentInstructionRequest
   <div class="container">
     <!-- Header -->
     <div class="header">
-      <div class="logo">SIB 2026</div>
-      <p class="subtitle">Salon International du Batiment</p>
+      <div class="logo">⚓ SIB 2026</div>
+      <p class="subtitle">Salon International des Ports & Services Maritimes</p>
       <p class="subtitle">5-7 Février 2026 • Casablanca, Maroc</p>
     </div>
 
@@ -399,7 +399,7 @@ function getPartnerPaymentInstructionHTML(data: PartnerPaymentInstructionRequest
       <div class="contact-info">
         <h4>💬 Besoin d'aide ?</h4>
         <div class="contact-item">
-          <strong>Email :</strong> <a href="mailto:partenaires@sibevent.com">partenaires@sibevent.com</a>
+          <strong>Email :</strong> <a href="mailto:partenaires@sib.com">partenaires@sib.com</a>
         </div>
         <div class="contact-item">
           <strong>Téléphone :</strong> +212 5 22 XX XX XX
@@ -420,13 +420,13 @@ function getPartnerPaymentInstructionHTML(data: PartnerPaymentInstructionRequest
     <!-- Footer -->
     <div class="footer">
       <p style="margin-bottom: 10px;">
-        <strong>SIB 2026</strong> - Salon International du Batiment
+        <strong>SIB 2026</strong> - Salon International des Ports & Services Maritimes
       </p>
       <p style="margin: 5px 0;">
         5-7 Février 2026 • Mohammed VI Exhibition Center • Casablanca, Maroc
       </p>
       <p style="margin: 5px 0; font-size: 12px;">
-        © 2026 SIB. Tous droits réservés.
+        © 2024 SIB. Tous droits réservés.
       </p>
       <p style="margin-top: 15px; font-size: 11px; color: #9CA3AF;">
         Vous recevez cet email car vous vous êtes inscrit en tant que partenaire pour SIB 2026.
@@ -492,7 +492,7 @@ serve(async (req) => {
 
     const tierLabel = TIER_LABELS[partnerTier] || partnerTier;
     const emailPayload = {
-      from: 'SIB 2026 <noreply@sibevent.com>',
+      from: 'SIB 2026 <noreply@sib.com>',
       to: [email],
       subject: `🤝 Instructions de Paiement - Partenariat ${tierLabel} SIB 2026`,
       html: htmlContent,

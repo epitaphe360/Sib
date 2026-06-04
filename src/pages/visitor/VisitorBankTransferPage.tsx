@@ -22,9 +22,10 @@ import { Button } from '../../components/ui/Button';
 import {
   VISITOR_BANK_TRANSFER_INFO,
   generateVisitorPaymentReference,
-  formatVisitorAmount
+  formatVisitorAmount,
+  getVisitorBankTransferInstructions,
 } from '../../config/visitorBankTransferConfig';
-import { useTranslation } from '../../hooks/useTranslation';
+import { useVisitorPassPricing } from '../../hooks/useVisitorPassPricing';
 
 interface VisitorPaymentRequest {
   id: string;
@@ -45,7 +46,7 @@ export default function VisitorBankTransferPage() {
   const navigate = useNavigate();
   const requestId = searchParams.get('request_id');
   const { user } = useAuthStore();
-  const { t } = useTranslation();
+  const { price: configuredPrice, loading: pricingLoading } = useVisitorPassPricing();
 
   const [paymentRequest, setPaymentRequest] = useState<VisitorPaymentRequest | null>(null);
   const [loading, setLoading] = useState(true);
@@ -207,12 +208,12 @@ export default function VisitorBankTransferPage() {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  if (loading) {
+  if (loading || pricingLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">{t('transfer.loading')}</p>
+          <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
     );
@@ -220,7 +221,8 @@ export default function VisitorBankTransferPage() {
 
   const bankInfo = VISITOR_BANK_TRANSFER_INFO;
   const vipInfo = bankInfo.vipPass;
-  const instructions = bankInfo.instructions.fr;
+  const transferAmount = paymentRequest?.amount ?? configuredPrice ?? 0;
+  const instructions = getVisitorBankTransferInstructions(transferAmount, 'fr');
 
   const statusConfig = {
     pending: {
@@ -228,21 +230,21 @@ export default function VisitorBankTransferPage() {
       color: 'text-yellow-600',
       bg: 'bg-yellow-50',
       border: 'border-yellow-200',
-      label: t('transfer.status_pending')
+      label: 'En attente de validation'
     },
     approved: {
       icon: CheckCircle,
       color: 'text-green-600',
       bg: 'bg-green-50',
       border: 'border-green-200',
-      label: t('transfer.status_approved')
+      label: 'Paiement validé'
     },
     rejected: {
       icon: XCircle,
       color: 'text-red-600',
       bg: 'bg-red-50',
       border: 'border-red-200',
-      label: t('transfer.status_rejected')
+      label: 'Paiement refusé'
     }
   };
 
@@ -250,7 +252,7 @@ export default function VisitorBankTransferPage() {
   const StatusIcon = status.icon;
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -264,17 +266,17 @@ export default function VisitorBankTransferPage() {
             className="mb-4"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            {t('transfer.back_dashboard')}
+            Retour au tableau de bord
           </Button>
 
           <div className="flex items-center gap-4 mb-4">
             <Crown className="h-12 w-12 text-purple-600" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                {t('transfer.title')}
+                Virement Bancaire - Pass VIP
               </h1>
               <p className="text-gray-600 mt-1">
-                {t('transfer.subtitle')}
+                Instructions de paiement par virement
               </p>
             </div>
           </div>
@@ -298,11 +300,11 @@ export default function VisitorBankTransferPage() {
         </motion.div>
 
         {/* Montant */}
-        <Card className="p-6 mb-6 bg-gradient-to-r from-purple-50 to-indigo-50">
+        <Card className="p-6 mb-6 bg-gradient-to-r from-purple-50 to-blue-50">
           <div className="text-center">
-            <div className="text-sm text-gray-600 mb-2">{t('transfer.amount_label')}</div>
+            <div className="text-sm text-gray-600 mb-2">Montant à virer</div>
             <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-purple-600 mb-2">
-              {formatVisitorAmount(vipInfo.amount)}
+              {formatVisitorAmount(transferAmount)}
             </div>
             <div className="text-sm text-gray-500">
               {vipInfo.displayName} - {vipInfo.description}
@@ -314,20 +316,20 @@ export default function VisitorBankTransferPage() {
         <Card className="p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
             <Building2 className="h-6 w-6 text-purple-600" />
-            {t('transfer.bank_info_title')}
+            Coordonnées bancaires
           </h2>
 
           <div className="space-y-3">
             <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
               <div>
-                <div className="text-sm text-gray-600">{t('transfer.bank_label')}</div>
+                <div className="text-sm text-gray-600">Banque</div>
                 <div className="font-semibold">{bankInfo.bankName}</div>
               </div>
             </div>
 
             <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
               <div>
-                <div className="text-sm text-gray-600">{t('transfer.beneficiary_label')}</div>
+                <div className="text-sm text-gray-600">Bénéficiaire</div>
                 <div className="font-semibold">{bankInfo.accountHolder}</div>
               </div>
             </div>
@@ -363,7 +365,7 @@ export default function VisitorBankTransferPage() {
             <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border-2 border-purple-200">
               <div className="flex-1">
                 <div className="text-sm text-purple-600 font-semibold">
-                  {t('transfer.payment_ref_label')}
+                  ⚠️ Référence de paiement (OBLIGATOIRE)
                 </div>
                 <div className="font-mono font-bold text-lg mt-1">{transferReference}</div>
               </div>
@@ -381,14 +383,14 @@ export default function VisitorBankTransferPage() {
         {/* Instructions */}
         <Card className="p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Info className="h-6 w-6 text-indigo-600" />
+            <Info className="h-6 w-6 text-blue-600" />
             {instructions.title}
           </h2>
 
           <div className="space-y-6">
             {/* Étapes */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">{t('transfer.steps_title')}</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Étapes à suivre:</h3>
               <ol className="space-y-2">
                 {instructions.steps.map((step, index) => (
                   <li key={index} className="flex gap-3">
@@ -403,7 +405,7 @@ export default function VisitorBankTransferPage() {
 
             {/* Points importants */}
             <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
-              <h3 className="font-semibold text-yellow-900 mb-2">{t('transfer.important_title')}</h3>
+              <h3 className="font-semibold text-yellow-900 mb-2">Points importants:</h3>
               <ul className="space-y-1">
                 {instructions.important.map((point, index) => (
                   <li key={index} className="text-sm text-yellow-800">
@@ -414,11 +416,11 @@ export default function VisitorBankTransferPage() {
             </div>
 
             {/* Infos additionnelles */}
-            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-              <h3 className="font-semibold text-indigo-900 mb-2">{t('transfer.additional_title')}</h3>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-900 mb-2">Informations complémentaires:</h3>
               <ul className="space-y-1">
                 {instructions.additionalInfo.map((info, index) => (
-                  <li key={index} className="text-sm text-indigo-800">
+                  <li key={index} className="text-sm text-blue-800">
                     • {info}
                   </li>
                 ))}
@@ -432,13 +434,13 @@ export default function VisitorBankTransferPage() {
           <Card className="p-6 mb-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <Upload className="h-6 w-6 text-purple-600" />
-              {t('transfer.proof_title')}
+              Justificatif de virement
             </h2>
 
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('transfer.ref_label')}
+                  Référence du virement
                 </label>
                 <input
                   type="text"
@@ -451,7 +453,7 @@ export default function VisitorBankTransferPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('transfer.file_label')}
+                  Preuve de virement (PDF, JPG ou PNG - max 5MB)
                 </label>
                 <div className="flex items-center gap-3">
                   <input
@@ -471,8 +473,8 @@ export default function VisitorBankTransferPage() {
                         {selectedFile
                           ? selectedFile.name
                           : proofUrl
-                          ? t('transfer.file_change')
-                          : t('transfer.file_click')}
+                          ? 'Fichier déjà uploadé - Cliquez pour changer'
+                          : 'Cliquez pour sélectionner un fichier'}
                       </p>
                     </div>
                   </label>
@@ -483,17 +485,17 @@ export default function VisitorBankTransferPage() {
                 onClick={handleSubmitProof}
                 disabled={uploading || (!selectedFile && !proofUrl)}
                 size="lg"
-                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600"
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600"
               >
                 {uploading ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
-                    {t('transfer.sending')}
+                    Envoi en cours...
                   </>
                 ) : (
                   <>
                     <Check className="mr-2 h-5 w-5" />
-                    {t('transfer.send_proof')}
+                    Envoyer le justificatif
                   </>
                 )}
               </Button>
@@ -507,16 +509,16 @@ export default function VisitorBankTransferPage() {
             <div className="text-center">
               <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-green-900 mb-2">
-                {t('transfer.payment_validated')}
+                Paiement validé !
               </h3>
               <p className="text-green-700 mb-4">
-                {t('transfer.vip_active')}
+                Votre compte VIP est maintenant actif. Profitez de tous vos avantages Premium !
               </p>
               <Button
                 onClick={() => navigate('/visitor/dashboard')}
                 className="bg-green-600 hover:bg-green-700"
               >
-                {t('transfer.go_dashboard')}
+                Aller au tableau de bord
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
@@ -526,4 +528,3 @@ export default function VisitorBankTransferPage() {
     </div>
   );
 }
-

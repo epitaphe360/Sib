@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
@@ -21,7 +21,6 @@ import {
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { useChatStore } from '../../store/chatStore';
-import useAuthStore from '../../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
@@ -41,17 +40,13 @@ export default function ChatInterface() {
     startConversation
   } = useChatStore();
 
-  const { user: currentUser } = useAuthStore();
-
   const [messageInput, setMessageInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const handledTargetRef = useRef<string | null>(null);
   const [isCreatingConversation, setIsCreatingConversation] = useState(false);
   const [showNewConvModal, setShowNewConvModal] = useState(false);
   const [userSearch, setUserSearch] = useState('');
-  const [userList, setUserList] = useState<Array<{id: string, name: string, type: string}>>([])
+  const [userList, setUserList] = useState<Array<{id: string, name: string, type: string}>>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
-  const [userNameCache, setUserNameCache] = useState<Record<string, string>>({});
   const isBotParticipant = (participants: string[]) => participants.includes('sib-bot');
   const isBotSender = (senderId: string) => senderId === 'sib-bot';
 
@@ -59,40 +54,19 @@ export default function ChatInterface() {
     fetchConversations();
   }, [fetchConversations]);
 
-  // Charger les noms des participants depuis Supabase
-  useEffect(() => {
-    const allParticipantIds = conversations
-      .flatMap(c => c.participants)
-      .filter(id => id !== 'sib-bot' && id !== currentUser?.id && !userNameCache[id]);
-    const uniqueIds = [...new Set(allParticipantIds)];
-    if (uniqueIds.length === 0) {return;}
-    supabase!.from('users').select('id, name').in('id', uniqueIds).then(({ data }) => {
-      if (data) {
-        setUserNameCache(prev => ({
-          ...prev,
-          ...Object.fromEntries(data.map(u => [u.id, u.name]))
-        }));
-      }
-    });
-  }, [conversations, currentUser?.id]);
-
   // Auto-créer conversation si userId est en paramètre
+  // BUG FIX: ne plus bloquer sur conversations.length > 0
   useEffect(() => {
     if (!targetUserId || isCreatingConversation) {return;}
-    // Guard: ne traiter ce targetUserId qu'une seule fois pour éviter la boucle infinie
-    // (setActiveConversation → markAsRead → new conversations ref → effet re-run)
-    if (handledTargetRef.current === targetUserId) {return;}
 
     const existingConv = conversations.find(c => c.participants.includes(targetUserId));
     if (existingConv) {
-      handledTargetRef.current = targetUserId;
       setActiveConversation(existingConv.id);
       return;
     }
 
     // Créer la conversation dès que le chargement initial est terminé
     if (!isLoading) {
-      handledTargetRef.current = targetUserId;
       setIsCreatingConversation(true);
       startConversation(targetUserId)
         .then(convId => {
@@ -295,7 +269,7 @@ export default function ChatInterface() {
                     <MessageCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <p className="text-gray-500 text-sm mb-2 font-medium">Aucune conversation</p>
                     <p className="text-gray-400 text-xs mb-4">
-                      Commencez une nouvelle conversation en visitant le profil d'un exposant ou sponsor
+                      Commencez une nouvelle conversation en visitant le profil d'un exposant ou partenaire
                     </p>
                     <div className="flex flex-col gap-2">
                       <Link to={ROUTES.EXHIBITORS}>
@@ -305,7 +279,7 @@ export default function ChatInterface() {
                       </Link>
                       <Link to={ROUTES.PARTNERS}>
                         <Button variant="outline" size="sm" className="w-full">
-                          Voir les Sponsors
+                          Voir les Partenaires
                         </Button>
                       </Link>
                     </div>
@@ -314,12 +288,7 @@ export default function ChatInterface() {
                   <div className="space-y-1">
                     {conversations.map((conversation) => {
                       const isBot = isBotParticipant(conversation.participants);
-                      const otherParticipant = isBot
-                        ? 'Assistant SIB'
-                        : (() => {
-                            const otherId = conversation.participants.find(p => p !== currentUser?.id && p !== 'sib-bot');
-                            return otherId ? (userNameCache[otherId] || `Utilisateur ${otherId.substring(0, 8)}`) : 'Inconnu';
-                          })();
+                      const otherParticipant = isBot ? 'Assistant SIB' : 'Sarah Johnson';
                       const isOnline = conversation.participants.some(p => onlineUsers.includes(p));
 
                       return (
@@ -394,12 +363,7 @@ export default function ChatInterface() {
                         </div>
                         <div>
                           <h4 className="font-medium text-gray-900">
-                            {activeConv?.participants && isBotParticipant(activeConv.participants)
-                            ? 'Assistant SIB'
-                            : (() => {
-                                const otherId = activeConv?.participants.find(p => p !== currentUser?.id && p !== 'sib-bot');
-                                return otherId ? (userNameCache[otherId] || `Utilisateur ${otherId.substring(0, 8)}`) : 'Inconnu';
-                              })()}
+                            {activeConv?.participants && isBotParticipant(activeConv.participants) ? 'Assistant SIB' : 'Sarah Johnson'}
                           </h4>
                           <p className="text-sm text-gray-500">
                             {onlineUsers.includes(activeConv?.participants[1] || '') ? 'En ligne' : 'Hors ligne'}
@@ -426,7 +390,7 @@ export default function ChatInterface() {
                     <AnimatePresence>
                       {activeMessages.map((message) => {
                         const isBot = isBotSender(message.senderId);
-                        const isCurrentUser = message.senderId === currentUser?.id;
+                        const isCurrentUser = message.senderId === 'user1';
 
                         return (
                           <motion.div

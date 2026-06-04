@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -47,7 +47,7 @@ export default function PartnerBankTransferPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const requestId = searchParams.get('request_id');
-  const tier = (searchParams.get('tier') || 'partner') as PartnerTier;
+  const tier = (searchParams.get('tier') || 'museum') as PartnerTier;
   const { user } = useAuthStore();
 
   const [paymentRequest, setPaymentRequest] = useState<PartnerPaymentRequest | null>(null);
@@ -176,7 +176,7 @@ export default function PartnerBankTransferPage() {
         if (admins && admins.length > 0) {
           const notifications = admins.map(admin => ({
             user_id: admin.id,
-            title: 'Nouveau justificatif de paiement sponsor',
+            title: 'Nouveau justificatif de paiement partenaire',
             message: `${user?.companyName || user?.firstName + ' ' + user?.lastName} a soumis un justificatif de paiement pour validation.`,
             type: 'info',
             created_at: new Date().toISOString()
@@ -237,7 +237,7 @@ export default function PartnerBankTransferPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
@@ -267,7 +267,7 @@ export default function PartnerBankTransferPage() {
   const instructions = bankInfo.instructions.fr;
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -285,7 +285,7 @@ export default function PartnerBankTransferPage() {
           </Button>
 
           <div className="text-center">
-            <Building2 className="h-16 w-16 mx-auto mb-4 text-indigo-600" />
+            <Building2 className="h-16 w-16 mx-auto mb-4 text-blue-600" />
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
               Instructions de Virement Bancaire
             </h1>
@@ -343,9 +343,9 @@ export default function PartnerBankTransferPage() {
         )}
 
         {/* Bank Information Card */}
-        <Card className="p-6 mb-6 bg-gradient-to-r from-indigo-50 to-indigo-50">
+        <Card className="p-6 mb-6 bg-gradient-to-r from-blue-50 to-indigo-50">
           <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-            <Building2 className="h-6 w-6 mr-2 text-indigo-600" />
+            <Building2 className="h-6 w-6 mr-2 text-blue-600" />
             Informations Bancaires
           </h2>
 
@@ -422,7 +422,7 @@ export default function PartnerBankTransferPage() {
                 </Button>
               </div>
               <p className="text-xs text-red-600 mt-2 font-semibold">
-                ?? Cette référence DOIT figurer dans le libellé de votre virement
+                ⚠️ Cette référence DOIT figurer dans le libellé de votre virement
               </p>
             </div>
           </div>
@@ -456,12 +456,12 @@ export default function PartnerBankTransferPage() {
               </ul>
             </div>
 
-            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-              <h4 className="font-semibold text-indigo-900 mb-2 flex items-center">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
                 <Info className="h-5 w-5 mr-2" />
                 Informations complémentaires:
               </h4>
-              <ul className="space-y-1 text-sm text-indigo-800">
+              <ul className="space-y-1 text-sm text-blue-800">
                 {instructions.additionalInfo.map((item) => (
                   <li key={item}>• {item}</li>
                 ))}
@@ -474,7 +474,7 @@ export default function PartnerBankTransferPage() {
         {paymentRequest?.status === 'pending' && !paymentRequest.transfer_reference && (
           <Card className="p-6 mb-6">
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-              <Upload className="h-6 w-6 mr-2 text-indigo-600" />
+              <Upload className="h-6 w-6 mr-2 text-blue-600" />
               Soumettre votre preuve de paiement
             </h3>
 
@@ -491,11 +491,11 @@ export default function PartnerBankTransferPage() {
                     value={declaredAmount}
                     onChange={(e) => setDeclaredAmount(e.target.value)}
                     placeholder={paymentRequest?.amount ? `${paymentRequest.amount.toLocaleString('fr-FR')}` : '0'}
-                    className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
                 {paymentRequest?.amount && (
-                  <p className="text-xs text-indigo-600 mt-1">
+                  <p className="text-xs text-blue-600 mt-1">
                     Montant attendu : <strong>${paymentRequest.amount.toLocaleString('fr-FR')} USD</strong>
                   </p>
                 )}
@@ -507,7 +507,7 @@ export default function PartnerBankTransferPage() {
                 </label>
 
                 {/* File Upload */}
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 transition-colors">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
                   <input
                     type="file"
                     id="proof-upload"
@@ -522,7 +522,7 @@ export default function PartnerBankTransferPage() {
                     <Upload className="h-12 w-12 text-gray-400 mb-2" />
                     {selectedFile ? (
                       <div className="text-sm">
-                        <p className="font-semibold text-green-600 mb-1">? {selectedFile.name}</p>
+                        <p className="font-semibold text-green-600 mb-1">✓ {selectedFile.name}</p>
                         <p className="text-gray-500">
                           {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                         </p>
@@ -542,7 +542,7 @@ export default function PartnerBankTransferPage() {
                   {uploadProgress > 0 && uploadProgress < 100 && (
                     <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${uploadProgress}%` }}
                       ></div>
                     </div>
@@ -559,7 +559,7 @@ export default function PartnerBankTransferPage() {
                   value={proofUrl}
                   onChange={(e) => setProofUrl(e.target.value)}
                   placeholder="https://... (lien vers Google Drive, Dropbox, etc.)"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   disabled={!!selectedFile}
                 />
                 <p className="text-xs text-gray-500 mt-1">
@@ -591,12 +591,12 @@ export default function PartnerBankTransferPage() {
 
         {/* Submitted Proof Info */}
         {paymentRequest?.transfer_reference && (
-          <Card className="p-6 mb-6 bg-indigo-50 border-indigo-200">
+          <Card className="p-6 mb-6 bg-blue-50 border-blue-200">
             <div className="flex items-start">
-              <CheckCircle className="h-6 w-6 text-indigo-600 mr-3 mt-1 flex-shrink-0" />
+              <CheckCircle className="h-6 w-6 text-blue-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-indigo-900">Justificatif soumis avec succès</p>
-                <p className="text-indigo-800 text-sm mt-1">
+                <p className="font-semibold text-blue-900">Justificatif soumis avec succès</p>
+                <p className="text-blue-800 text-sm mt-1">
                   Date de soumission:{' '}
                   {new Date(paymentRequest.transfer_date || '').toLocaleDateString('fr-FR', {
                     day: 'numeric',
@@ -606,24 +606,24 @@ export default function PartnerBankTransferPage() {
                     minute: '2-digit'
                   })}
                 </p>
-                <p className="text-indigo-800 text-sm mt-1">
+                <p className="text-blue-800 text-sm mt-1">
                   <strong>Référence:</strong> {paymentRequest.transfer_reference}
                 </p>
                 {paymentRequest.transfer_proof_url && (
-                  <p className="text-indigo-800 text-sm mt-1">
+                  <p className="text-blue-800 text-sm mt-1">
                     <strong>Justificatif:</strong>{' '}
                     <a
                       href={paymentRequest.transfer_proof_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline hover:text-indigo-600"
+                      className="underline hover:text-blue-600"
                     >
                       Voir le document
                     </a>
                   </p>
                 )}
-                <p className="text-indigo-700 text-sm mt-3">
-                  ⏳ Votre demande est en cours de traitement. Vous serez notifié par email dès validation.
+                <p className="text-blue-700 text-sm mt-3">
+                  â³ Votre demande est en cours de traitement. Vous serez notifié par email dès validation.
                 </p>
               </div>
             </div>
@@ -633,7 +633,7 @@ export default function PartnerBankTransferPage() {
         {/* Features Included */}
         <Card className="p-6 mb-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4">
-            ? Inclus dans votre abonnement {tierInfo.displayName}
+            ✨ Inclus dans votre abonnement {tierInfo.displayName}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {tierInfo.features.map((feature) => (
@@ -653,19 +653,19 @@ export default function PartnerBankTransferPage() {
           <div className="space-y-2 text-sm text-gray-700">
             <p>
               <strong>Email:</strong>{' '}
-              <a href={`mailto:${bankInfo.support.email}`} className="text-indigo-600 hover:underline">
+              <a href={`mailto:${bankInfo.support.email}`} className="text-blue-600 hover:underline">
                 {bankInfo.support.email}
               </a>
             </p>
             <p>
               <strong>Téléphone:</strong>{' '}
-              <a href={`tel:${bankInfo.support.phone}`} className="text-indigo-600 hover:underline">
+              <a href={`tel:${bankInfo.support.phone}`} className="text-blue-600 hover:underline">
                 {bankInfo.support.phone}
               </a>
             </p>
             <p>
               <strong>WhatsApp:</strong>{' '}
-              <a href={`https://wa.me/${bankInfo.support.whatsapp.replace(/\s/g, '')}`} className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
+              <a href={`https://wa.me/${bankInfo.support.whatsapp.replace(/\s/g, '')}`} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
                 {bankInfo.support.whatsapp}
               </a>
             </p>
@@ -676,7 +676,6 @@ export default function PartnerBankTransferPage() {
     </div>
   );
 }
-
 
 
 

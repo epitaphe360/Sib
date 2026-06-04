@@ -14,22 +14,14 @@ export function usePartnerDashboard() {
   const dashboardStats = useDashboardStats();
   const { appointments, fetchAppointments, updateAppointmentStatus, cancelAppointment } = useAppointmentStore();
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'profile' | 'networking' | 'analytics' | 'services'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'profile' | 'networking' | 'analytics'>('overview');
   const [processingAppointment, setProcessingAppointment] = useState<string | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showScrapperModal, setShowScrapperModal] = useState(false);
   const [showEditorModal, setShowEditorModal] = useState(false);
   const [isPublished, setIsPublished] = useState<boolean | null>(null);
   const [isTogglingPublish, setIsTogglingPublish] = useState(false);
   const [confirmRejectId, setConfirmRejectId] = useState<string | null>(null);
-  // BUGFIX: Résoudre l'ID de la table 'partners' (différent de users.id)
-  const [partnerDbId, setPartnerDbId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!user?.id || user.type !== 'partner') {return;}
-    supabase!.from('partners').select('id').eq('user_id', user.id).maybeSingle()
-      .then(({ data }) => { if (data) {setPartnerDbId((data as any).id);} })
-      .catch(() => {});
-  }, [user?.id]);
 
   useEffect(() => {
     if (!user || user.type !== 'partner') {return;}
@@ -81,10 +73,7 @@ export function usePartnerDashboard() {
     }
   };
 
-  // BUGFIX: filter avec partnerDbId (partners.id) et non user.id (users.id)
-  const receivedAppointments = appointments.filter(a =>
-    user && user.id && (a.exhibitorId === partnerDbId || (!partnerDbId && a.exhibitorId === user.id))
-  );
+  const receivedAppointments = appointments.filter(a => user && user.id && a.exhibitorId === user.id);
   const pendingAppointments = receivedAppointments.filter(a => a.status === 'pending');
   const confirmedAppointments = receivedAppointments.filter(a => a.status === 'confirmed');
 
@@ -110,12 +99,11 @@ export function usePartnerDashboard() {
     { name: t('partner.stats.messages'), value: dashboardStats?.messages?.value || 0 },
   ], [dashboardStats, confirmedAppointments.length, t]);
 
-  const partnerTier = ((user as any)?.partner_tier || user?.profile?.partner_tier || 'partner') as string;
+  const partnerTier = ((user as any)?.partner_tier || user?.profile?.partner_tier || 'museum') as string;
 
   const handleAccept = async (appointmentId: string) => {
     const appointment = appointments.find(a => a.id === appointmentId);
-    const effectiveId = partnerDbId || user?.id;
-    if (!appointment || !effectiveId || appointment.exhibitorId !== effectiveId) {
+    if (!appointment || !user?.id || appointment.exhibitorId !== user.id) {
       toast.error("Vous n'êtes pas autorisé à confirmer ce rendez-vous");
       return;
     }
@@ -132,8 +120,7 @@ export function usePartnerDashboard() {
 
   const handleReject = (appointmentId: string) => {
     const appointment = appointments.find(a => a.id === appointmentId);
-    const effectiveId = partnerDbId || user?.id;
-    if (!appointment || !effectiveId || appointment.exhibitorId !== effectiveId) {
+    if (!appointment || !user?.id || appointment.exhibitorId !== user.id) {
       toast.error("Vous n'êtes pas autorisé à refuser ce rendez-vous");
       return;
     }
@@ -144,8 +131,7 @@ export function usePartnerDashboard() {
     setConfirmRejectId(null);
     setProcessingAppointment(appointmentId);
     try {
-      await updateAppointmentStatus(appointmentId, 'rejected');
-      await fetchAppointments();
+      await cancelAppointment(appointmentId);
     } catch (err) {
       console.error('Erreur refus:', err);
       toast.error("Impossible de refuser le rendez-vous");
@@ -161,6 +147,7 @@ export function usePartnerDashboard() {
     activeTab, setActiveTab,
     processingAppointment,
     showProfileModal, setShowProfileModal,
+    showScrapperModal, setShowScrapperModal,
     showEditorModal, setShowEditorModal,
     isPublished, isTogglingPublish,
     confirmRejectId, setConfirmRejectId,

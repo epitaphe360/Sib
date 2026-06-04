@@ -5,7 +5,7 @@
 ### Création du Projet
 - [ ] Compte Supabase créé sur https://supabase.com
 - [ ] Nouveau projet créé
-- [ ] Nom du projet : `SIB-2026-prod`
+- [ ] Nom du projet : `sib-2026-prod`
 - [ ] Région sélectionnée : Europe West (ou proche de vos utilisateurs)
 - [ ] Mot de passe database sauvegardé de manière sécurisée
 
@@ -48,7 +48,7 @@
 - [ ] Compte Railway créé sur https://railway.app
 - [ ] GitHub autorisé
 - [ ] Nouveau projet créé : "Deploy from GitHub repo"
-- [ ] Repository sélectionné : `epitaphe360/SIB 2026`
+- [ ] Repository sélectionné : `epitaphe360/sib-2026`
 - [ ] Branche sélectionnée : `main` (ou votre branche de prod)
 
 ### Variables d'Environnement

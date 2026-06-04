@@ -62,20 +62,36 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
     setError(null);
     setSuccess(false);
     setIsUploading(true);
-    setUploadProgress(10);
+    setUploadProgress(0);
+
+    // Simuler un progrès de téléchargement
+    const progressInterval = setInterval(() => {
+      setUploadProgress(prev => {
+        const newProgress = prev + Math.floor(Math.random() * 10);
+        return newProgress > 90 ? 90 : newProgress;
+      });
+    }, 200);
 
     try {
       // Note: Les buckets (partner-logos, exhibitor-logos) sont créés via les migrations SQL
       // Pas besoin de les créer dynamiquement via l'API client (causerait une erreur RLS)
 
       // DEBUG: Vérifier le fichier avant upload
+      console.log('🎯 [IMAGE UPLOADER] Avant upload:', {
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        bucket: bucketName,
+        folder: folderName
+      });
 
       // Télécharger l'image
-      setUploadProgress(50);
       const imageUrl = await StorageService.uploadImage(file, bucketName, folderName);
 
+      console.log('✅ [IMAGE UPLOADER] Upload réussi:', imageUrl);
 
       // Mise à jour réussie
+      clearInterval(progressInterval);
       setUploadProgress(100);
       setSuccess(true);
       onImageUploaded(imageUrl);
@@ -87,9 +103,11 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       }, 1000);
     } catch (err) {
       console.error('❌ [IMAGE UPLOADER] Erreur:', err);
+      clearInterval(progressInterval);
       setIsUploading(false);
       setUploadProgress(0);
       setError(err instanceof Error ? err.message : 'Erreur lors du téléchargement');
+      console.error('Erreur de téléchargement:', err);
     }
 
     // Nettoyer l'URL de l'objet pour éviter les fuites de mémoire

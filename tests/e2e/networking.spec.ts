@@ -104,7 +104,7 @@ async function loginWithRetry(page: Page, email: string): Promise<boolean> {
 
 async function mockExhibitorsRoute(page: Page, profiles = MOCK_PROFILES) {
   await page.route('**/rest/v1/exhibitor_profiles*', route => {
-    if (route.request().method() !== 'GET') return route.continue();
+    if (route.request().method() !== 'GET') {return route.continue();}
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -115,7 +115,7 @@ async function mockExhibitorsRoute(page: Page, profiles = MOCK_PROFILES) {
 
 async function mockMessagesRoute(page: Page, messages = MOCK_MESSAGES) {
   await page.route('**/rest/v1/messages*', route => {
-    if (route.request().method() !== 'GET') return route.continue();
+    if (route.request().method() !== 'GET') {return route.continue();}
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -126,7 +126,7 @@ async function mockMessagesRoute(page: Page, messages = MOCK_MESSAGES) {
 
 async function mockInteractionsRoute(page: Page, interactions = MOCK_INTERACTIONS) {
   await page.route('**/rest/v1/visitor_activities*', route => {
-    if (route.request().method() !== 'GET') return route.continue();
+    if (route.request().method() !== 'GET') {return route.continue();}
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -306,7 +306,7 @@ test.describe('NET-4 — Messagerie et chat', () => {
   test('NET-4-02: Aucune erreur console sur la page messages (exposant)', async ({ page }) => {
     const consoleErrors: string[] = [];
     page.on('console', msg => {
-      if (msg.type() === 'error') consoleErrors.push(msg.text());
+      if (msg.type() === 'error') {consoleErrors.push(msg.text());}
     });
     await mockMessagesRoute(page);
     await loginWithRetry(page, ACCOUNTS.exhibitor54m.email);

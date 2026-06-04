@@ -1,8 +1,9 @@
-﻿import React, { useState, useCallback, useEffect, memo } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useCallback, useEffect, memo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Menu,
   X,
+  Search,
   User,
   Calendar,
   MessageCircle,
@@ -10,7 +11,6 @@ import {
   Video,
   Mic,
   Play,
-  ArrowLeft,
 } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
 import { Button } from '../ui/Button';
@@ -19,28 +19,33 @@ import { useMediaVisibilityStore } from '../../store/mediaVisibilityStore';
 import { LanguageSelector } from '../ui/LanguageSelector';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { useTranslation } from '../../hooks/useTranslation';
+import { MoroccanPattern } from '../ui/MoroccanDecor';
 import { isAuthInitialized } from '../../lib/initAuth';
-import { useNavVisibilityStore } from '../../store/navVisibilityStore';
+import { HomeNavMenuBlockDesktop, HomeNavMenuBlockMobile } from './homeMenu/HomeNavMenuBlock';
+import { isPremiumHomePath, getPremiumHomeBase, SIB2026 } from '../home/sib2026/tokens';
 
 // OPTIMIZATION: Memoized Header component to prevent unnecessary re-renders
 export const Header: React.FC = memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isSalonMenuOpen, setIsSalonMenuOpen] = useState(false);
-  const [isExposerMenuOpen, setIsExposerMenuOpen] = useState(false);
-  const [isVisiterMenuOpen, setIsVisiterMenuOpen] = useState(false);
-  const [isSponsorsMenuOpen, setIsSponsorsMenuOpen] = useState(false);
+  const [isEventMenuOpen, setIsEventMenuOpen] = useState(false);
+  const [isParticipateMenuOpen, setIsParticipateMenuOpen] = useState(false);
   const [isMediaMenuOpen, setIsMediaMenuOpen] = useState(false);
-  const [isProgrammeMenuOpen, setIsProgrammeMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isHomeMenuOpen, setIsHomeMenuOpen] = useState(false);
   const { user, isAuthenticated, isLoading, logout } = useAuthStore();
-  const navItems = useNavVisibilityStore(s => s.items);
-  const navIsVisible = (key: string) => { const f = navItems.find(i => i.key === key); return f ? f.visible : true; };
   const { t } = useTranslation();
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
-  const isHeroMode = isHomePage && !scrolled;
-  const navigate = useNavigate();
+  const isSib2026Home = isPremiumHomePath(location.pathname);
+  const premiumHomeBase = getPremiumHomeBase(location.pathname);
+
+  const sib2026NavItems = [
+    { name: t('mockup.nav.about'), href: '/about' },
+    { name: t('mockup.nav.exhibit'), href: ROUTES.EXHIBITOR_SUBSCRIPTION },
+    { name: t('mockup.nav.visit'), href: `${premiumHomeBase}#visiter` },
+    { name: t('mockup.nav.program'), href: ROUTES.EVENTS },
+    { name: t('mockup.nav.international'), href: ROUTES.PAVILIONS },
+    { name: t('mockup.nav.info'), href: ROUTES.ACCOMMODATION },
+  ];
 
   // ✅ CRITICAL: Ne pas afficher "Se connecter" pendant l'initialisation
   const authReady = isAuthInitialized() && !isLoading;
@@ -49,11 +54,10 @@ export const Header: React.FC = memo(() => {
   useEffect(() => {
     setIsMenuOpen(false);
     setIsProfileOpen(false);
-    setIsSalonMenuOpen(false);
-    setIsExposerMenuOpen(false);
-    setIsVisiterMenuOpen(false);
-    setIsSponsorsMenuOpen(false);
+    setIsEventMenuOpen(false);
+    setIsParticipateMenuOpen(false);
     setIsMediaMenuOpen(false);
+    setIsHomeMenuOpen(false);
   }, [location.pathname]);
 
   // ✅ Fermer le menu mobile quand on clique en dehors (overlay)
@@ -67,268 +71,209 @@ export const Header: React.FC = memo(() => {
     return () => { document.body.style.overflow = ''; };
   }, [isMenuOpen]);
 
-  // Header transparent sur la page d'accueil
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
   // OPTIMIZATION: Memoized callbacks to prevent re-creating functions on every render
   const toggleMenu = useCallback(() => {
     setIsMenuOpen(prev => !prev);
+    // Fermer le profile dropdown quand on ouvre le menu
     setIsProfileOpen(false);
   }, []);
   const toggleProfile = useCallback(() => {
     setIsProfileOpen(prev => !prev);
+    // Fermer le menu mobile quand on ouvre le profile
     setIsMenuOpen(false);
   }, []);
-  const toggleSalonMenu = useCallback(() => setIsSalonMenuOpen(prev => !prev), []);
-  const toggleExposerMenu = useCallback(() => setIsExposerMenuOpen(prev => !prev), []);
-  const toggleVisiterMenu = useCallback(() => setIsVisiterMenuOpen(prev => !prev), []);
-  const toggleSponsorsMenu = useCallback(() => setIsSponsorsMenuOpen(prev => !prev), []);
+  const toggleEventMenu = useCallback(() => setIsEventMenuOpen(prev => !prev), []);
+  const toggleParticipateMenu = useCallback(() => setIsParticipateMenuOpen(prev => !prev), []);
   const toggleMediaMenu = useCallback(() => setIsMediaMenuOpen(prev => !prev), []);
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
   const closeProfile = useCallback(() => setIsProfileOpen(false), []);
+  const closeEventMenu = useCallback(() => setIsEventMenuOpen(false), []);
+  const closeParticipateMenu = useCallback(() => setIsParticipateMenuOpen(false), []);
+  const closeMediaMenu = useCallback(() => setIsMediaMenuOpen(false), []);
+  const openHomeMenu = useCallback(() => setIsHomeMenuOpen(true), []);
+  const closeHomeMenu = useCallback(() => setIsHomeMenuOpen(false), []);
 
-  const handleLogout = useCallback(async () => {
-    await logout();
+  const handleLogout = useCallback(() => {
+    logout();
     setIsProfileOpen(false);
-    navigate(ROUTES.HOME);
-  }, [logout, navigate]);
+  }, [logout]);
 
   const isFreeVisitor = user?.type === 'visitor' && (user?.visitor_level === 'free' || !user?.visitor_level);
 
-  // ══════════════════════════════════════════════
-  // MENU : LE SALON
-  // ══════════════════════════════════════════════
-  const salonMenuItems = [
-    navIsVisible('salon.presentation') && { name: t('salon.presentation'), href: ROUTES.PRESENTATION, description: t('salon.presentation_desc') },
-    navIsVisible('salon.nouveautes')   && { name: t('salon.nouveautes'), href: ROUTES.NOUVEAUTES, description: t('salon.nouveautes_desc') },
-    navIsVisible('salon.secteurs')     && { name: t('salon.secteurs'), href: ROUTES.SECTEURS, description: t('salon.secteurs_desc') },
-    navIsVisible('salon.editions')     && { name: t('salon.editions'), href: ROUTES.EDITIONS, description: t('salon.editions_desc') },
-    navIsVisible('salon.telechargements') && { name: t('salon.telechargements'), href: ROUTES.TELECHARGEMENTS, description: t('salon.telechargements_desc') },
-  ].filter(Boolean) as { name: string; href: string; description: string }[];
+  const navigation = [
+    { name: t('nav.partners'), href: ROUTES.PARTNERS },
+    { name: t('nav.exhibitors'), href: ROUTES.EXHIBITORS },
+    // Cacher le réseautage pour les visiteurs free
+    ...(isFreeVisitor ? [] : [{ name: t('nav.networking'), href: ROUTES.NETWORKING }]),
+  ];
 
-  // ══════════════════════════════════════════════
-  // MENU : EXPOSER
-  // ══════════════════════════════════════════════
-  const exposerMenuItems = [
-    navIsVisible('exposer.pourquoi') && { name: t('exposer.pourquoi'), href: ROUTES.POURQUOI_EXPOSER, description: t('exposer.pourquoi_desc') },
-    navIsVisible('exposer.espaces')  && { name: t('exposer.espaces'), href: ROUTES.ESPACES_SIB, description: t('exposer.espaces_desc') },
-    navIsVisible('exposer.reserver') && { name: t('exposer.reserver'), href: ROUTES.REGISTER_EXHIBITOR, description: t('exposer.reserver_desc') },
-    navIsVisible('exposer.annuaire') && { name: t('exposer.annuaire'), href: ROUTES.EXHIBITORS, description: t('exposer.annuaire_desc') },
-  ].filter(Boolean) as { name: string; href: string; description: string }[];
+  const eventMenuItems = [
+    { name: t('event.program'), href: ROUTES.EVENTS, description: t('event.program_desc') },
+    { name: t('event.pavilions'), href: ROUTES.PAVILIONS, description: t('event.pavilions_desc') },
+    { name: t('event.news'), href: ROUTES.NEWS, description: t('event.news_desc') },
+    { name: t('event.prepare_visit'), href: ROUTES.ACCOMMODATION, description: t('event.prepare_desc') },
+  ];
 
-  // ══════════════════════════════════════════════
-  // MENU : VISITER
-  // ══════════════════════════════════════════════
-  const visiterMenuItems = [
-    navIsVisible('visiter.pourquoi') && { name: t('visiter.pourquoi'), href: ROUTES.POURQUOI_VISITER, description: t('visiter.pourquoi_desc') },
-    navIsVisible('visiter.infos')    && { name: t('visiter.infos'), href: ROUTES.INFOS_PRATIQUES, description: t('visiter.infos_desc') },
-    navIsVisible('visiter.badge')    && { name: t('visiter.badge'), href: ROUTES.REGISTER_VISITOR, description: t('visiter.badge_desc') },
-    navIsVisible('visiter.vip')      && { name: t('visiter.vip'), href: ROUTES.VISITOR_VIP_REGISTRATION, description: t('visiter.vip_desc') },
-  ].filter(Boolean) as { name: string; href: string; description: string }[];
-
-  // ══════════════════════════════════════════════
-  // MENU : PARTENAIRES
-  // ══════════════════════════════════════════════
-  const sponsorsMenuItems = [
-    navIsVisible('sponsors.devenir')  && { name: t('sponsors.devenir'), href: ROUTES.PARTNER_SUBSCRIPTION, description: t('sponsors.devenir_desc') },
-    navIsVisible('sponsors.annuaire') && { name: t('sponsors.annuaire'), href: ROUTES.PARTNERS, description: t('sponsors.annuaire_desc') },
-  ].filter(Boolean) as { name: string; href: string; description: string }[];
-
-  // ══════════════════════════════════════════════
-  // MENU : MÉDIAS (conditionnel)
-  // ══════════════════════════════════════════════
+  const participateMenuItems = [
+    { name: t('participate.visitors'), href: ROUTES.VISITOR_SUBSCRIPTION, description: t('participate.visitors_desc') },
+    { name: t('participate.become_exhibitor'), href: ROUTES.EXHIBITOR_SUBSCRIPTION, description: t('participate.exhibitor_desc') },
+    { name: t('participate.become_partner'), href: ROUTES.PARTNER_SUBSCRIPTION, description: t('participate.partner_desc') },
+  ];
 
   const { mediaVisible } = useMediaVisibilityStore();
 
   const mediaMenuItems = mediaVisible ? [
-    navIsVisible('medias.webinars')     && { name: t('media.webinars'), href: ROUTES.WEBINARS, description: t('media.webinars_desc'), icon: Video },
-    navIsVisible('medias.podcasts')     && { name: t('media.podcasts'), href: ROUTES.PODCASTS, description: t('media.podcasts_desc'), icon: Mic },
-    navIsVisible('medias.capsules')     && { name: t('media.capsules'), href: ROUTES.CAPSULES_INSIDE, description: t('media.capsules_desc'), icon: Play },
-    navIsVisible('medias.live_studio')  && { name: t('media.live_studio'), href: ROUTES.LIVE_STUDIO, description: t('media.live_studio_desc'), icon: Video },
-    navIsVisible('medias.best_moments') && { name: t('media.best_moments'), href: ROUTES.BEST_MOMENTS, description: t('media.best_moments_desc'), icon: Play },
-    navIsVisible('medias.testimonials') && { name: t('media.testimonials'), href: ROUTES.TESTIMONIALS, description: t('media.testimonials_desc'), icon: Video },
-    navIsVisible('medias.library')      && { name: t('media.library'), href: ROUTES.MEDIA_LIBRARY, description: t('media.library_desc'), icon: Play },
-  ].filter(Boolean) as { name: string; href: string; description: string; icon: React.FC<{ className?: string }> }[] : [];
+    { name: t('media.webinars'), href: ROUTES.WEBINARS, description: t('media.webinars_desc'), icon: Video },
+    { name: t('media.podcasts'), href: ROUTES.PODCASTS, description: t('media.podcasts_desc'), icon: Mic },
+    { name: t('media.capsules'), href: ROUTES.CAPSULES_INSIDE, description: t('media.capsules_desc'), icon: Play },
+    { name: t('media.live_studio'), href: ROUTES.LIVE_STUDIO, description: t('media.live_studio_desc'), icon: Video },
+    { name: t('media.best_moments'), href: ROUTES.BEST_MOMENTS, description: t('media.best_moments_desc'), icon: Play },
+    { name: t('media.testimonials'), href: ROUTES.TESTIMONIALS, description: t('media.testimonials_desc'), icon: Video },
+    { name: t('media.library'), href: ROUTES.MEDIA_LIBRARY, description: t('media.library_desc'), icon: Play },
+  ] : [];
   return (
-    <header className={`fixed top-0 left-0 right-0 z-[200] transition-all duration-500 ${isHeroMode ? 'bg-transparent border-b border-white/10 shadow-none' : 'bg-white/80 backdrop-blur-[14px] border-b border-[rgba(231,209,146,0.15)] shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)]'}`} style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-      {/* Grain doré ultra-subtil */}
-      <div className="absolute inset-0 opacity-[0.015] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(231,209,146,1) 1px, transparent 0)', backgroundSize: '20px 20px' }}></div>
+    <header
+      className={`fixed top-0 left-0 right-0 z-[200] transition-all duration-300 ${
+        isSib2026Home
+          ? 'bg-transparent border-b border-transparent'
+          : 'bg-white/85 backdrop-blur-xl backdrop-saturate-150 border-b border-neutral-200/80 dark:bg-neutral-900/85 dark:border-neutral-800/80'
+      }`}
+      style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+    >
+      <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
+        <div className="flex justify-between items-center h-16 sm:h-18 xl:h-20">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex justify-between items-center h-20 sm:h-24 xl:h-32">
-
-          {/* Logo Premium */}
+          {/* Logo */}
           <Link to={ROUTES.HOME} className="flex-shrink-0 flex items-center group">
-            <div className="relative">
-              <div className="absolute -inset-2 bg-[#E7D192]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative w-auto flex items-center">
-                <img
-                  src="/logo-sib2026.png"
-                  alt="SIB - Salon International du Bâtiment"
-                  className="h-16 sm:h-24 xl:h-32 w-auto object-contain"
-                />
-              </div>
+            <div className="relative h-10 sm:h-12 xl:h-14 w-auto flex items-center transition-transform duration-300 group-hover:scale-[1.02]">
+              <img
+                src="/logo-sib2026.png"
+                alt="SIB - Salon International du Bâtiment"
+                className={`h-9 sm:h-11 xl:h-12 w-auto object-contain ${isSib2026Home ? 'brightness-0 invert' : ''}`}
+              />
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-0 xl:gap-0.5 flex-1 justify-center">
+          <nav className="hidden lg:flex items-center gap-0 xl:gap-1 flex-1 justify-center">
+            {isSib2026Home ? (
+              sib2026NavItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="px-2 xl:px-3 py-2 text-[11px] xl:text-xs font-semibold uppercase tracking-[0.08em] text-white/90 hover:text-white transition-colors whitespace-nowrap"
+                >
+                  {item.name}
+                </Link>
+              ))
+            ) : (
+              <>
+            <HomeNavMenuBlockDesktop
+              isOpen={isHomeMenuOpen}
+              onOpen={openHomeMenu}
+              onClose={closeHomeMenu}
+            />
 
-            {/* Le Salon ▼ */}
-            {navIsVisible('salon') && (
-            <div className="relative" onMouseEnter={() => setIsSalonMenuOpen(true)} onMouseLeave={() => setIsSalonMenuOpen(false)}>
-              <button className={`relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap ${isHeroMode ? 'text-white hover:text-[#C9A84C]' : 'text-slate-500 hover:text-[#C9A84C]'}`}>
-                <span>{t('nav.le_salon')}</span>
-                <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className="relative px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all group whitespace-nowrap"
+              >
+                {item.name}
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              </Link>
+            ))}
+
+            {/* Divider Vertical Minimaliste */}
+            <div className="w-[1px] h-5 bg-neutral-200 dark:bg-neutral-700 mx-2" />
+
+            {/* Event Dropdown Premium */}
+            <div className="relative" onMouseEnter={() => setIsEventMenuOpen(true)} onMouseLeave={() => setIsEventMenuOpen(false)}>
+              <button
+                className="px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all flex items-center gap-1 group whitespace-nowrap"
+              >
+                <span>{t('nav.event')}</span>
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
-              {isSalonMenuOpen && (
-                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
-                  {salonMenuItems.map((item) => (
-                    <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
+
+              {/* Dropdown Content */}
+              {isEventMenuOpen && (
+                <div className="absolute left-0 mt-0 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800 py-2 z-[250]">
+                  {eventMenuItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="flex items-start px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors group"
+                      onMouseEnter={() => setIsEventMenuOpen(true)}
+                      onMouseLeave={() => setIsEventMenuOpen(false)}
+                    >
                       <div>
-                        <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
+                        <div className="font-semibold text-neutral-900 dark:text-neutral-100">{item.name}</div>
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                       </div>
                     </Link>
                   ))}
                 </div>
               )}
             </div>
-            )}
 
-            {/* Exposer ▼ */}
-            {navIsVisible('exposer') && (
-            <div className="relative" onMouseEnter={() => setIsExposerMenuOpen(true)} onMouseLeave={() => setIsExposerMenuOpen(false)}>
-              <button className={`relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap ${isHeroMode ? 'text-white hover:text-[#C9A84C]' : 'text-slate-500 hover:text-[#C9A84C]'}`}>
-                <span>{t('nav.exposer')}</span>
-                <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+            {/* Participate Dropdown Premium */}
+            <div className="relative" onMouseEnter={() => setIsParticipateMenuOpen(true)} onMouseLeave={() => setIsParticipateMenuOpen(false)}>
+              <button
+                className="px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all flex items-center gap-1 group whitespace-nowrap"
+              >
+                <span>{t('nav.participate')}</span>
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
-              {isExposerMenuOpen && (
-                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
-                  {exposerMenuItems.map((item) => (
-                    <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
+
+              {/* Dropdown Content */}
+              {isParticipateMenuOpen && (
+                <div className="absolute left-0 mt-0 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800 py-2 z-[250]">
+                  {participateMenuItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="flex items-start px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors group"
+                      onMouseEnter={() => setIsParticipateMenuOpen(true)}
+                      onMouseLeave={() => setIsParticipateMenuOpen(false)}
+                    >
                       <div>
-                        <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
+                        <div className="font-semibold text-neutral-900 dark:text-neutral-100">{item.name}</div>
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                       </div>
                     </Link>
                   ))}
                 </div>
               )}
             </div>
-            )}
-
-            {/* Visiter ▼ */}
-            {navIsVisible('visiter') && (
-            <div className="relative" onMouseEnter={() => setIsVisiterMenuOpen(true)} onMouseLeave={() => setIsVisiterMenuOpen(false)}>
-              <button className={`relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap ${isHeroMode ? 'text-white hover:text-[#C9A84C]' : 'text-slate-500 hover:text-[#C9A84C]'}`}>
-                <span>{t('nav.visiter')}</span>
-                <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-              </button>
-              {isVisiterMenuOpen && (
-                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
-                  {visiterMenuItems.map((item) => (
-                    <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
-                      <div>
-                        <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-            )}
-
-            {/* Sponsors ▼ */}
-            {navIsVisible('sponsors') && (
-            <div className="relative" onMouseEnter={() => setIsSponsorsMenuOpen(true)} onMouseLeave={() => setIsSponsorsMenuOpen(false)}>
-              <button className={`relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap ${isHeroMode ? 'text-white hover:text-[#C9A84C]' : 'text-slate-500 hover:text-[#C9A84C]'}`}>
-                <span>{t('nav.partners')}</span>
-                <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-              </button>
-              {isSponsorsMenuOpen && (
-                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
-                  {sponsorsMenuItems.map((item) => (
-                    <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
-                      <div>
-                        <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-            )}
-
-            {/* Divider */}
-            <div className="w-[1px] h-5 bg-slate-200 mx-0.5 xl:mx-1" />
-
-            {/* Programme ▼ */}
-            {navIsVisible('programme') && (
-            <div className="relative" onMouseEnter={() => setIsProgrammeMenuOpen(true)} onMouseLeave={() => setIsProgrammeMenuOpen(false)}>
-              <button className={`relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap ${isHeroMode ? 'text-white hover:text-[#C9A84C]' : 'text-slate-500 hover:text-[#C9A84C]'}`}>
-                <span>{t('nav.programme')}</span>
-                <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-              </button>
-              {isProgrammeMenuOpen && (
-                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
-                  {navIsVisible('programme.programme') && (
-                  <Link to={ROUTES.EVENTS} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
-                    <div>
-                      <div className="font-semibold text-slate-900">{t('nav.programme')}</div>
-                      <div className="text-xs text-slate-500">{t('nav.programme_desc')}</div>
-                    </div>
-                  </Link>
-                  )}
-                  {navIsVisible('programme.intervenants') && (
-                  <Link to={ROUTES.SPEAKERS} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
-                    <div>
-                      <div className="font-semibold text-slate-900">{t('visiter.speakers')}</div>
-                      <div className="text-xs text-slate-500">{t('visiter.speakers_desc')}</div>
-                    </div>
-                  </Link>
-                  )}
-                </div>
-              )}
-            </div>
-            )}
-
-            {/* Réseautage (lien direct) */}
-            {navIsVisible('networking') && (
-            <Link
-              to={ROUTES.NETWORKING}
-              className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#C9A84C] transition-all duration-300 group whitespace-nowrap"
-            >
-              {t('nav.networking')}
-              <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-            </Link>
-            )}
-
-            {/* Médias ▼ (conditionnel) */}
-            {mediaVisible && navIsVisible('medias') && (
+            {mediaVisible && (
             <div className="relative" onMouseEnter={() => setIsMediaMenuOpen(true)} onMouseLeave={() => setIsMediaMenuOpen(false)}>
-              <button className={`relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap ${isHeroMode ? 'text-white hover:text-[#C9A84C]' : 'text-slate-500 hover:text-[#C9A84C]'}`}>
-                <Video className="w-3 h-3 xl:w-3.5 xl:h-3.5" style={{ color: '#C9A84C' }} />
+              <button
+                className="px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all flex items-center gap-1 group whitespace-nowrap"
+              >
+                <Video className="w-3 h-3 xl:w-3.5 xl:h-3.5 text-primary-600 dark:text-primary-400" />
                 <span>{t('media.menu_title')}</span>
-                <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
+
+              {/* Dropdown Content */}
               {isMediaMenuOpen && (
-                <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                <div className="absolute left-0 mt-0 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800 py-2 z-[250]">
                   {mediaMenuItems.map((item) => {
                     const Icon = item.icon;
                     return (
-                      <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group">
-                        <Icon className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-slate-300 group-hover:text-[#C9A84C] transition-colors" />
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className="flex items-start px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors group"
+                        onMouseEnter={() => setIsMediaMenuOpen(true)}
+                        onMouseLeave={() => setIsMediaMenuOpen(false)}
+                      >
+                        <Icon className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-neutral-400 group-hover:text-primary-600" />
                         <div>
-                          <div className="font-semibold text-slate-900">{item.name}</div>
-                          <div className="text-xs text-slate-500">{item.description}</div>
+                          <div className="font-semibold text-neutral-900 dark:text-neutral-100">{item.name}</div>
+                          <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                         </div>
                       </Link>
                     );
@@ -338,20 +283,40 @@ export const Header: React.FC = memo(() => {
             </div>
             )}
 
-            {/* Contact */}
-            {navIsVisible('contact') && (
+            {/* Contact Link */}
             <Link
               to="/contact"
-              className={`relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap ${isHeroMode ? 'text-white hover:text-[#C9A84C]' : 'text-slate-500 hover:text-[#C9A84C]'}`}
+              className="px-1 xl:px-2.5 py-2 text-xs xl:text-[13px] font-medium tracking-tight text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white transition-all flex items-center gap-1 group whitespace-nowrap"
             >
               <span>{t('nav.contact')}</span>
-              <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#E7D192] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
             </Link>
+              </>
             )}
           </nav>
 
           {/* Actions & Profile Luxe */}
           <div className="flex-shrink-0 flex items-center space-x-1 xl:space-x-3">
+            {isSib2026Home ? (
+              <div className="hidden lg:flex items-center gap-3">
+                <Link
+                  to={ROUTES.EXHIBITORS}
+                  className="p-2 text-white/85 hover:text-white transition-colors"
+                  aria-label={t('mockup.nav.search')}
+                >
+                  <Search className="h-5 w-5" strokeWidth={1.75} />
+                </Link>
+                <LanguageSelector />
+                <Link
+                  to={ROUTES.EXHIBITOR_SUBSCRIPTION}
+                  className="px-5 py-2.5 text-[11px] font-bold uppercase tracking-wide text-white whitespace-nowrap"
+                  style={{ backgroundColor: SIB2026.orange }}
+                >
+                  {t('mockup.nav.reserve')}
+                </Link>
+              </div>
+            ) : (
+            <>
             <div className="hidden xl:flex items-center gap-3">
                <LanguageSelector />
                <ThemeToggle />
@@ -360,14 +325,14 @@ export const Header: React.FC = memo(() => {
             {isAuthenticated ? (
               <>
               {/* Notifications - masqué sur mobile */}
-              <button data-testid="notifications-button" className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative">
+              <button data-testid="notifications-button" className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors relative">
                 <Bell className="h-5 w-5" />
                 </button>
 
                 {/* Messages - masqué sur mobile */}
                 <Link
                   to={ROUTES.MESSAGES}
-                  className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative"
+                  className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors relative"
                 >
                   <MessageCircle className="h-5 w-5" />
                 </Link>
@@ -375,7 +340,7 @@ export const Header: React.FC = memo(() => {
                 {/* Calendar - masqué sur mobile */}
                 <Link aria-label="Calendar"
                   to={ROUTES.APPOINTMENTS}
-                  className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+                  className="hidden sm:flex p-1.5 min-w-[36px] min-h-[36px] items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors"
                 >
                   <Calendar className="h-5 w-5" />
                 </Link>
@@ -385,72 +350,72 @@ export const Header: React.FC = memo(() => {
                   <button
                     onClick={toggleProfile}
                     data-testid="user-menu"
-                    className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex items-center space-x-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                   >
-                    <div className="h-8 w-8 rounded-full flex items-center justify-center" style={{backgroundColor: '#009FE3'}}>
+                    <div className="h-8 w-8 bg-primary-600 rounded-full flex items-center justify-center">
                       <User className="h-4 w-4 text-white" />
                     </div>
-                    <span className="hidden md:block text-sm font-medium text-gray-700">
+                    <span className="hidden md:block text-sm font-medium text-neutral-700 dark:text-neutral-200">
                       {user?.profile?.firstName || t('nav.my_account')}
                     </span>
                   </button>
 
                   {isProfileOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-[250]">
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-900 rounded-xl shadow-lg border border-neutral-200 dark:border-neutral-800 py-1 z-[250]">
                       {/* Menu Admin */}
                       {user?.type === 'admin' && (
                         <>
                           <Link
                             to={ROUTES.PROFILE}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.admin_profile')}
                           </Link>
                           <Link
                             to={ROUTES.DASHBOARD}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.admin_dashboard')}
                           </Link>
                           <Link
                             to={ROUTES.ADMIN_PAYMENT_VALIDATION}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.payment_validation')}
                           </Link>
                           <Link
                             to={ROUTES.METRICS}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.metrics')}
                           </Link>
                           <Link
                             to="/security/scanner"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🔍 {t('nav.qr_scanner')}
                           </Link>
                           <Link
                             to="/badge/print-station"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🖨️ {t('nav.badge_print')}
                           </Link>
                           <Link
                             to="/badge/digital"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🎫 {t('nav.digital_badge')}
                           </Link>
                           <hr className="my-1" />
-                          <div className="px-4 py-2 text-xs text-red-600 font-medium">
+                          <div className="px-4 py-2 text-xs text-danger-500 font-medium uppercase tracking-wider">
                             {t('nav.admin_zone')}
                           </div>
                         </>
@@ -461,56 +426,56 @@ export const Header: React.FC = memo(() => {
                         <>
                           <Link
                             to={ROUTES.PROFILE}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_profile')}
                           </Link>
                           <Link
                             to={ROUTES.DASHBOARD}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.exhibitor_dashboard')}
                           </Link>
                           <Link
                             to={ROUTES.NETWORKING}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.b2b_networking')}
                           </Link>
                           <Link
                             to={ROUTES.ADVANCED_MATCHING}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-1"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-1"
                             onClick={closeProfile}
                           >
                             🤖 Matching IA Avancé
                           </Link>
                           <Link
                             to={ROUTES.MINISITE_EDITOR}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.minisite_editor')}
                           </Link>
                           <Link
                             to={ROUTES.CALENDAR}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_slots')}
                           </Link>
                           <Link
                             to={ROUTES.CHAT}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.messages')}
                           </Link>
                           <Link
                             to="/badge/digital"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🎫 {t('nav.digital_badge')}
@@ -518,40 +483,40 @@ export const Header: React.FC = memo(() => {
                         </>
                       )}
 
-                      {/* Menu Sponsor */}
+                      {/* Menu Partenaire */}
                       {user?.type === 'partner' && (
                         <>
                           <Link
                             to={ROUTES.PROFILE}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_profile')}
                           </Link>
                           <Link
                             to={ROUTES.DASHBOARD}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.partner_dashboard')}
                           </Link>
                           <Link
                             to={ROUTES.NETWORKING}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.vip_networking')}
                           </Link>
                           <Link
                             to="/partner/payment-selection"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             💳 {t('nav.partner_subscription')}
                           </Link>
                           <Link
                             to="/badge/digital"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🎫 {t('nav.digital_badge')}
@@ -564,28 +529,28 @@ export const Header: React.FC = memo(() => {
                         <>
                           <Link
                             to={ROUTES.PROFILE}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_profile')}
                           </Link>
                           <Link
                             to={ROUTES.VISITOR_DASHBOARD}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.visitor_dashboard')}
                           </Link>
                           <Link
                             to={ROUTES.VISITOR_SETTINGS}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.visitor_settings')}
                           </Link>
                           <Link
                             to={ROUTES.APPOINTMENTS}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             {t('nav.my_appointments')}
@@ -593,7 +558,7 @@ export const Header: React.FC = memo(() => {
                           {!isFreeVisitor && (
                             <Link
                               to={ROUTES.ADVANCED_MATCHING}
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                               onClick={closeProfile}
                             >
                               🤖 Matching IA Avancé
@@ -601,7 +566,7 @@ export const Header: React.FC = memo(() => {
                           )}
                           <Link
                             to="/badge/digital"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             onClick={closeProfile}
                           >
                             🎫 {t('nav.digital_badge')}
@@ -612,7 +577,7 @@ export const Header: React.FC = memo(() => {
                       <hr className="my-1" />
                       <button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                        className="block w-full text-left px-4 py-2 text-sm text-danger-500 hover:bg-danger-50 dark:hover:bg-danger-500/10"
                       >
                         {t('nav.logout')}
                       </button>
@@ -624,61 +589,38 @@ export const Header: React.FC = memo(() => {
               // ✅ CRITICAL: Afficher un loader pendant l'initialisation de l'authentification
               <div className="flex items-center space-x-3">
                 <div className="animate-pulse flex items-center space-x-2">
-                  <div className="h-8 w-24 bg-gray-200 rounded"></div>
-                  <div className="h-8 w-28 bg-gray-200 rounded"></div>
+                  <div className="h-8 w-24 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
+                  <div className="h-8 w-28 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center gap-2">
                 <Link to={ROUTES.LOGIN}>
-                  <Button variant="outline" size="sm" className="border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white">
+                  <Button variant="ghost" size="sm">
                     {t('nav.login')}
                   </Button>
                 </Link>
                 <Link to={ROUTES.VISITOR_SUBSCRIPTION}>
-                  <Button size="sm" className="bg-indigo-600 hover:bg-sib-dark text-white">
+                  <Button variant="primary" size="sm">
                     {t('nav.register')}
                   </Button>
                 </Link>
               </div>
             )}
+            </>
+            )}
 
             {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600"
+              className="lg:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400"
               aria-label="Menu"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
-        {/* ── Barre retour au Tableau de bord (admin / exposant / partenaire) ── */}
-        {isAuthenticated && user && (() => {
-          let dashboardRoute: string | null = null;
-          const label = t('common.back_dashboard');
-          if (user.type === 'admin' && location.pathname.startsWith('/admin/') && location.pathname !== ROUTES.ADMIN_DASHBOARD) {
-            dashboardRoute = ROUTES.ADMIN_DASHBOARD;
-          } else if (user.type === 'exhibitor' && location.pathname.startsWith('/exhibitor/') && location.pathname !== ROUTES.EXHIBITOR_DASHBOARD) {
-            dashboardRoute = ROUTES.EXHIBITOR_DASHBOARD;
-          } else if (user.type === 'partner' && location.pathname.startsWith('/partner') && location.pathname !== ROUTES.PARTNER_DASHBOARD) {
-            dashboardRoute = ROUTES.PARTNER_DASHBOARD;
-          }
-          if (!dashboardRoute) return null;
-          return (
-            <div className="border-t border-[#E7D192]/20 bg-[#FDFAF4]">
-              <div className="flex items-center px-4 sm:px-6 lg:px-8 h-8">
-                <Link
-                  to={dashboardRoute}
-                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1B365D]/70 hover:text-[#C9A84C] transition-colors"
-                >
-                  <ArrowLeft className="h-3 w-3" />
-                  {label}
-                </Link>
-              </div>
-            </div>
-          );
-        })()}
+
         {/* Overlay sombre pour fermer le menu en tapant dehors */}
         {isMenuOpen && (
           <div
@@ -690,7 +632,7 @@ export const Header: React.FC = memo(() => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden border-t border-gray-200 py-4 max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain bg-white relative z-[220]" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="lg:hidden border-t border-neutral-200 dark:border-neutral-800 py-4 max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain bg-white relative z-[220]" style={{ WebkitOverflowScrolling: 'touch' }}>
             <div className="space-y-2 pb-6">
               {/* Language & Theme on mobile */}
               <div className="flex items-center gap-3 px-3 py-2 lg:hidden">
@@ -701,121 +643,90 @@ export const Header: React.FC = memo(() => {
               {/* Raccourcis rapides mobile (quand authentifié) */}
               {isAuthenticated && (
                 <div className="flex items-center gap-2 px-3 py-2 sm:hidden border-b border-gray-200 pb-3">
-                  <Link to={ROUTES.MESSAGES} onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 rounded-lg text-sm text-gray-700">
+                  <Link to={ROUTES.MESSAGES} onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm text-neutral-700 dark:text-neutral-200">
                     <MessageCircle className="h-4 w-4" />
                     <span>{t('nav.messages')}</span>
                   </Link>
-                  <Link to={ROUTES.APPOINTMENTS} onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 rounded-lg text-sm text-gray-700">
+                  <Link to={ROUTES.APPOINTMENTS} onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm text-neutral-700 dark:text-neutral-200">
                     <Calendar className="h-4 w-4" />
                     <span>{t('nav.calendar')}</span>
                   </Link>
-                  <button onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 rounded-lg text-sm text-gray-700 relative">
+                  <button onClick={closeMenu} className="flex items-center gap-1.5 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm text-neutral-700 dark:text-neutral-200 relative">
                     <Bell className="h-4 w-4" />
                   </button>
                 </div>
               )}
 
-              {/* ══ Le Salon ══ */}
-              {navIsVisible('salon') && (
-              <div className="border-b border-gray-200 pb-2">
-                <button onClick={toggleSalonMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t('nav.le_salon')}
-                  <span className={`transition-transform ${isSalonMenuOpen ? 'rotate-180' : ''}`}>▾</span>
-                </button>
-                {isSalonMenuOpen && salonMenuItems.map((item) => (
-                  <Link key={item.name} to={item.href} className="block px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
+              <HomeNavMenuBlockMobile onNavigate={closeMenu} />
+
+              {/* Navigation principale */}
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="block px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                  onClick={closeMenu}
+                >
+                  {item.name}
+                </Link>
+              ))}
+
+              {/* Mobile Event Menu */}
+              <div className="border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-2">
+                <div className="px-3 py-3 min-h-[44px] text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">
+                  {t('nav.event')}
+                </div>
+                {eventMenuItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className="block px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                    onClick={closeMenu}
+                  >
                     <div>{item.name}</div>
-                    <div className="text-xs text-gray-500">{item.description}</div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                   </Link>
                 ))}
               </div>
-              )}
 
-              {/* ══ Exposer ══ */}
-              {navIsVisible('exposer') && (
-              <div className="border-b border-gray-200 pb-2">
-                <button onClick={toggleExposerMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t('nav.exposer')}
-                  <span className={`transition-transform ${isExposerMenuOpen ? 'rotate-180' : ''}`}>▾</span>
-                </button>
-                {isExposerMenuOpen && exposerMenuItems.map((item) => (
-                  <Link key={item.name} to={item.href} className="block px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
+              {/* Mobile Participate Menu */}
+              <div className="border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-2">
+                <div className="px-3 py-3 min-h-[44px] text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">
+                  {t('nav.participate')}
+                </div>
+                {participateMenuItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className="block px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                    onClick={closeMenu}
+                  >
                     <div>{item.name}</div>
-                    <div className="text-xs text-gray-500">{item.description}</div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                   </Link>
                 ))}
               </div>
-              )}
 
-              {/* ══ Visiter ══ */}
-              {navIsVisible('visiter') && (
-              <div className="border-b border-gray-200 pb-2">
-                <button onClick={toggleVisiterMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t('nav.visiter')}
-                  <span className={`transition-transform ${isVisiterMenuOpen ? 'rotate-180' : ''}`}>▾</span>
-                </button>
-                {isVisiterMenuOpen && visiterMenuItems.map((item) => (
-                  <Link key={item.name} to={item.href} className="block px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
-                    <div>{item.name}</div>
-                    <div className="text-xs text-gray-500">{item.description}</div>
-                  </Link>
-                ))}
-              </div>
-              )}
-
-              {/* ══ Sponsors ══ */}
-              {navIsVisible('sponsors') && (
-              <div className="border-b border-gray-200 pb-2">
-                <button onClick={toggleSponsorsMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t('nav.partners')}
-                  <span className={`transition-transform ${isSponsorsMenuOpen ? 'rotate-180' : ''}`}>▾</span>
-                </button>
-                {isSponsorsMenuOpen && sponsorsMenuItems.map((item) => (
-                  <Link key={item.name} to={item.href} className="block px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
-                    <div>{item.name}</div>
-                    <div className="text-xs text-gray-500">{item.description}</div>
-                  </Link>
-                ))}
-              </div>
-              )}
-
-              {/* ══ Programme (lien direct) ══ */}
-              {navIsVisible('programme') && (
-              <Link
-                to={ROUTES.EVENTS}
-                className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
-                onClick={closeMenu}
-              >
-                {t('nav.programme')}
-              </Link>
-              )}
-
-              {/* ══ Réseautage (lien direct) ══ */}
-              {navIsVisible('networking') && (
-              <Link
-                to={ROUTES.NETWORKING}
-                className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
-                onClick={closeMenu}
-              >
-                {t('nav.networking')}
-              </Link>
-              )}
-
-              {/* ══ Médias ══ */}
-              {mediaVisible && navIsVisible('medias') && mediaMenuItems.length > 0 && (
-              <div className="border-t border-gray-200 pt-2">
-                <button onClick={toggleMediaMenu} className="w-full flex justify-between items-center px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <span className="flex items-center"><Video className="w-4 h-4 mr-2" />{t('media.menu_title')}</span>
-                  <span className={`transition-transform ${isMediaMenuOpen ? 'rotate-180' : ''}`}>▾</span>
-                </button>
-                {isMediaMenuOpen && mediaMenuItems.map((item) => {
+              {/* Mobile Media Menu */}
+              {mediaVisible && mediaMenuItems.length > 0 && (
+              <div className="border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-2">
+                <div className="px-3 py-3 min-h-[44px] text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest flex items-center">
+                  <Video className="w-4 h-4 mr-2" />
+                  {t('media.menu_title')}
+                </div>
+                {mediaMenuItems.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <Link key={item.name} to={item.href} className="flex items-start px-5 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMenu}>
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="flex items-start px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                      onClick={closeMenu}
+                    >
                       <Icon className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" />
                       <div>
                         <div>{item.name}</div>
-                        <div className="text-xs text-gray-500">{item.description}</div>
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</div>
                       </div>
                     </Link>
                   );
@@ -823,18 +734,16 @@ export const Header: React.FC = memo(() => {
               </div>
               )}
 
-              {/* ══ Contact ══ */}
-              {navIsVisible('contact') && (
-              <div className="border-t border-gray-200 pt-2 mt-2">
+              {/* Mobile Contact Link */}
+              <div className="border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-2">
                 <Link
-                  to={ROUTES.CONTACT}
-                  className="block px-3 py-3 min-h-[44px] text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
+                  to="/contact"
+                  className="block px-3 py-3 min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors font-medium"
                   onClick={closeMenu}
                 >
                   {t('nav.contact')}
                 </Link>
               </div>
-              )}
             </div>
           </div>
         )}

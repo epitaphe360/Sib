@@ -1,7 +1,6 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Edit, Trash2, Search, Filter, Handshake, MapPin, Globe, CheckCircle, Star } from 'lucide-react';
-import { PARTNER_TIERS } from '../../config/partnerTiers';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
@@ -11,7 +10,6 @@ import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { SupabaseService } from '../../services/supabaseService';
 import { useTranslation } from '../../hooks/useTranslation';
-import { useSalon } from '../../contexts/SalonContext';
 
 interface PartnerUI {
   id: string;
@@ -28,26 +26,8 @@ interface PartnerUI {
   contributions: string[];
 }
 
-const LEGACY_TIER_LABELS: Record<string, string> = {
-  gold: 'Partenaire Officiel',
-  silver: 'Nos Partenaires',
-  bronze: 'Nos Partenaires',
-  platinum: 'Partenaire Officiel',
-  platinium: 'Partenaire Officiel',
-  official_sponsor: 'Partenaire Officiel',
-  co_organiser: 'Co-organisateur',
-};
-
-function getTierLabel(tier: string): string {
-  if (!tier) return 'Standard';
-  const config = PARTNER_TIERS[tier as keyof typeof PARTNER_TIERS];
-  if (config) return config.displayName;
-  return LEGACY_TIER_LABELS[tier.toLowerCase()] ?? tier;
-}
-
 export default function PartnerManagementPage() {
   const { t } = useTranslation();
-  const { currentSalon } = useSalon();
   const [partners, setPartners] = useState<PartnerUI[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -57,50 +37,25 @@ export default function PartnerManagementPage() {
 
   useEffect(() => {
     fetchPartners();
-  }, [currentSalon]);
+  }, []);
 
   const fetchPartners = async () => {
     setIsLoading(true);
     try {
-      let query = supabase!
-        .from('partners')
-        .select('id, company_name, partner_type, sector, description, logo_url, website, verified, featured, partnership_level, contact_info, created_at, is_published')
-        .order('featured', { ascending: false });
-      if (currentSalon) {
-        if (currentSalon.is_default) {
-          query = query.or(`salon_id.eq.${currentSalon.id},salon_id.is.null`);
-        } else {
-          query = query.eq('salon_id', currentSalon.id);
-        }
-      }
-      const { data, error } = await query;
-      if (error) {throw error;}
-      setPartners((SupabaseService as any).mapPartners ? (SupabaseService as any).mapPartners(data) : (data || []).map((p: any) => ({
-        id: p.id,
-        name: p.company_name || 'Sponsor',
-        partner_tier: p.partnership_level || p.partner_type || 'partner',
-        category: p.partner_type || 'partner',
-        sector: p.sector || '',
-        description: p.description || '',
-        logo: p.logo_url,
-        website: p.website,
-        country: p.contact_info?.country || '',
-        verified: p.verified ?? false,
-        featured: p.featured ?? false,
-        contributions: [],
-      })));
+      const data = await SupabaseService.getPartners();
+      setPartners(data);
     } catch (error) {
-      console.error('Erreur lors du chargement des sponsors:', error);
-      toast.error('Impossible de récupérer la liste des sponsors.');
+      console.error('Erreur lors du chargement des partenaires:', error);
+      toast.error('Impossible de récupérer la liste des partenaires.');
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (globalThis.confirm(`Êtes-vous sûr de vouloir supprimer le sponsor "${name}" ? Cette action est irréversible.`)) {
+    if (window.confirm(`Êtes-vous sûr de vouloir supprimer le partenaire "${name}" ? Cette action est irréversible.`)) {
       try {
-        const { error } = await supabase!
+        const { error } = await supabase
           .from('partners')
           .delete()
           .eq('id', id);
@@ -110,7 +65,7 @@ export default function PartnerManagementPage() {
         // Supprimer immédiatement du state local
         setPartners(partners.filter(p => p.id !== id));
 
-        toast.success('Sponsor supprimé avec succès');
+        toast.success('Partenaire supprimé avec succès');
         // Ensuite faire un refresh complet
         setTimeout(() => fetchPartners(), 500);
       } catch (error) {
@@ -216,7 +171,7 @@ export default function PartnerManagementPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher un sponsor..."
+                placeholder="Rechercher un partenaire..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
@@ -253,24 +208,24 @@ export default function PartnerManagementPage() {
         {isLoading ? (
           <Card className="p-12 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Chargement des sponsors...</p>
+            <p className="text-gray-600">Chargement des partenaires...</p>
           </Card>
         ) : filteredPartners.length === 0 ? (
           <Card className="p-12 text-center">
             <Handshake className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              {searchTerm || filterTier !== 'all' || filterStatus !== 'all' ? 'Aucun sponsor trouvé' : 'Aucun sponsor'}
+              {searchTerm || filterTier !== 'all' || filterStatus !== 'all' ? 'Aucun partenaire trouvé' : 'Aucun partenaire'}
             </h3>
             <p className="text-gray-600 mb-6">
               {searchTerm || filterTier !== 'all' || filterStatus !== 'all'
                 ? 'Essayez de modifier vos critères de recherche'
-                : 'Commencez par créer votre premier sponsor'}
+                : 'Commencez par créer votre premier partenaire'}
             </p>
             {!searchTerm && filterTier === 'all' && filterStatus === 'all' && (
               <Link to={ROUTES.ADMIN_CREATE_PARTNER}>
                 <Button className="bg-gradient-to-r from-indigo-600 to-purple-600">
                   <Plus className="h-5 w-5 mr-2" />
-                  Créer un sponsor
+                  Créer un partenaire
                 </Button>
               </Link>
             )}
@@ -316,7 +271,7 @@ export default function PartnerManagementPage() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm font-medium bg-purple-50 text-purple-800 p-2 rounded-md">
                       <Star className="h-4 w-4 mr-2" />
-                      Pack: {getTierLabel(partner.partner_tier)}
+                      Pack: {partner.partner_tier ? partner.partner_tier.charAt(0).toUpperCase() + partner.partner_tier.slice(1) : 'Standard'}
                     </div>
                     {partner.country && (
                       <div className="flex items-center text-sm text-gray-600">

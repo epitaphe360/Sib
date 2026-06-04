@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 import { useLocation, Link } from 'react-router-dom';
 import { Card } from '../components/ui/Card';
@@ -14,7 +14,7 @@ export default function ContactSuccessPage() {
   // Si pas de données (accès direct à la page), rediriger vers contact
   if (!firstName || !email) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center py-12 px-4">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
         <Card className="max-w-md w-full p-8 text-center">
           <div className="mb-6">
             <div className="mx-auto w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
@@ -28,7 +28,7 @@ export default function ContactSuccessPage() {
             Il semblerait que vous ayez accédé à cette page directement. Veuillez remplir le formulaire de contact pour nous envoyer un message.
           </p>
           <Link to={ROUTES.CONTACT}>
-            <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
+            <Button className="w-full bg-blue-600 hover:bg-blue-700">
               <Mail className="h-4 w-4 mr-2" />
               Aller au formulaire de contact
             </Button>
@@ -39,7 +39,7 @@ export default function ContactSuccessPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
       <Card className="max-w-2xl w-full p-8 md:p-12">
         <div className="text-center">
           {/* Success Icon */}
@@ -57,36 +57,36 @@ export default function ContactSuccessPage() {
           {/* Personalized message */}
           <p className="text-lg text-gray-600 mb-8">
             Merci <span className="font-semibold text-gray-900">{firstName}</span> pour votre message. Notre équipe vous répondra dans les plus brefs délais à l'adresse{' '}
-            <span className="font-semibold text-indigo-600">{email}</span>.
+            <span className="font-semibold text-blue-600">{email}</span>.
           </p>
 
           {/* Additional info */}
-          <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mb-8">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
             <h2 className="text-lg font-semibold text-gray-900 mb-3">
               Et maintenant ?
             </h2>
             <ul className="text-left space-y-3 text-gray-700">
               <li className="flex items-start">
-                <span className="text-indigo-600 mr-2">?</span>
+                <span className="text-blue-600 mr-2">✓</span>
                 <span>Votre message a été enregistré dans notre système{messageId ? ` (Réf: ${messageId.substring(0, 8)})` : ''}</span>
               </li>
               <li className="flex items-start">
-                <span className="text-indigo-600 mr-2">?</span>
+                <span className="text-blue-600 mr-2">✓</span>
                 <span>Vous recevrez une confirmation par email dans quelques instants</span>
               </li>
               <li className="flex items-start">
-                <span className="text-indigo-600 mr-2">?</span>
+                <span className="text-blue-600 mr-2">✓</span>
                 <span>Notre équipe vous répondra sous 24-48 heures ouvrées</span>
               </li>
               <li className="flex items-start">
-                <span className="text-indigo-600 mr-2">?</span>
+                <span className="text-blue-600 mr-2">✓</span>
                 <span>Vérifiez vos spams si vous ne recevez pas notre réponse</span>
               </li>
             </ul>
           </div>
 
           {/* Call to action */}
-          <div className="bg-gradient-to-r from-indigo-50 to-indigo-50 border border-indigo-200 rounded-lg p-6 mb-8">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-8">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               En attendant notre réponse...
             </h3>
@@ -95,12 +95,12 @@ export default function ContactSuccessPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to={ROUTES.EXHIBITORS}>
-                <Button variant="outline" className="w-full sm:w-auto border-indigo-600 text-indigo-600 hover:bg-indigo-50">
+                <Button variant="outline" className="w-full sm:w-auto border-blue-600 text-blue-600 hover:bg-blue-50">
                   Découvrir les exposants
                 </Button>
               </Link>
               <Link to={ROUTES.EVENTS}>
-                <Button variant="outline" className="w-full sm:w-auto border-indigo-600 text-indigo-600 hover:bg-indigo-50">
+                <Button variant="outline" className="w-full sm:w-auto border-blue-600 text-blue-600 hover:bg-blue-50">
                   Voir le programme
                 </Button>
               </Link>
@@ -109,7 +109,7 @@ export default function ContactSuccessPage() {
 
           {/* Back to home */}
           <Link to={ROUTES.HOME}>
-            <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
+            <Button className="w-full bg-blue-600 hover:bg-blue-700">
               <Home className="h-4 w-4 mr-2" />
               Retour à l'accueil
             </Button>
@@ -121,16 +121,16 @@ export default function ContactSuccessPage() {
               Besoin d'aide immédiate ?{' '}
               <a
                 href="mailto:Sib2026@urbacom.net"
-                className="text-indigo-600 hover:text-indigo-800 font-medium"
+                className="text-blue-600 hover:text-blue-800 font-medium"
               >
                 Sib2026@urbacom.net
               </a>
               {' '}ou{' '}
               <a
-                href="tel:+212688500500"
-                className="text-indigo-600 hover:text-indigo-800 font-medium"
+                href="tel:+212123456789"
+                className="text-blue-600 hover:text-blue-800 font-medium"
               >
-                +212 6 88 50 05 00
+                +212 1 23 45 67 89
               </a>
             </p>
           </div>
@@ -139,7 +139,6 @@ export default function ContactSuccessPage() {
     </div>
   );
 }
-
 
 
 

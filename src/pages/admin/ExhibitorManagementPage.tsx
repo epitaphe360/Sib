@@ -1,6 +1,6 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Edit, Trash2, Search, Filter, Building2, MapPin, Globe, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Search, Filter, Building2, MapPin, Globe, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
@@ -11,26 +11,11 @@ import { supabase } from '../../lib/supabase';
 import { SupabaseService } from '../../services/supabaseService';
 import { Exhibitor } from '../../types';
 import { useTranslation } from '../../hooks/useTranslation';
-import { useSalon } from '../../contexts/SalonContext';
 
-const CATEGORY_LABELS: Record<string, string> = {
-  'construction_industry': 'Industrie du Bâtiment',
-  'port-industry': 'Industrie du Bâtiment',
-  'bâtiment-industry': 'Industrie du Bâtiment',
-  'port-operations': 'Exploitation & Gestion',
-  'bâtiment-operations': 'Exploitation & Gestion',
-  'institutional': 'Institutionnel',
-  'academic': 'Académique',
-  'material': 'Matériaux',
-  'equipment': 'Équipements',
-  'services': 'Services',
-  'technology': 'Technologies',
-};
-const getCategoryLabel = (cat: string) => CATEGORY_LABELS[cat] ?? 'Industrie du Bâtiment';
+const HALL_OPTIONS = ['A', 'B', 'C', 'D'] as const;
 
 export default function ExhibitorManagementPage() {
   const { t } = useTranslation();
-  const { currentSalon } = useSalon();
   const [exhibitors, setExhibitors] = useState<Exhibitor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -38,28 +23,20 @@ export default function ExhibitorManagementPage() {
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterStandArea, setFilterStandArea] = useState<string>('all');
+  const [savingField, setSavingField] = useState<{ id: string; field: 'hall' | 'stand' } | null>(null);
 
   useEffect(() => {
     fetchExhibitors();
-  }, [currentSalon]);
+  }, []);
 
   const fetchExhibitors = async () => {
     setIsLoading(true);
     try {
-      let query = supabase!
+      // Requête directe Supabase sans joins complexes pour l'admin
+      const { data, error } = await supabase!
         .from('exhibitors')
-        .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, stand_area, contact_info, created_at, updated_at')
+        .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, hall_number, contact_info, created_at, updated_at')
         .order('company_name', { ascending: true });
-
-      if (currentSalon) {
-        if (currentSalon.is_default) {
-          query = query.or(`salon_id.eq.${currentSalon.id},salon_id.is.null`);
-        } else {
-          query = query.eq('salon_id', currentSalon.id);
-        }
-      }
-
-      const { data, error } = await query;
 
       if (error) {
         console.error('❌ Erreur chargement exposants admin:', error);
@@ -80,7 +57,7 @@ export default function ExhibitorManagementPage() {
         featured: e.featured ?? false,
         isPublished: false,
         standNumber: e.stand_number,
-        standArea: e.stand_area,
+        hallNumber: e.hall_number,
         contactInfo: e.contact_info || {},
         products: [],
         miniSite: null,
@@ -89,6 +66,7 @@ export default function ExhibitorManagementPage() {
         markets: [],
       }));
       setExhibitors(mapped as unknown as Exhibitor[]);
+      console.log(`✅ Admin: ${mapped.length} exposants chargés`);
     } catch (error) {
       console.error('Erreur lors du chargement des exposants:', error);
       toast.error('Impossible de récupérer la liste des exposants.');
@@ -98,17 +76,26 @@ export default function ExhibitorManagementPage() {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (globalThis.confirm(`Êtes-vous sûr de vouloir supprimer l'exposant "${name}" ? Cette action est irréversible.`)) {
+    if (window.confirm(`Êtes-vous sûr de vouloir supprimer l'exposant "${name}" ? Cette action est irréversible.`)) {
       try {
+        console.log('🗑️ [DELETE] Début suppression exposant:', { id, name });
 
         // Récupérer le token pour l'API admin serveur
-        const { data: { session } } = await supabase!.auth.getSession();
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log('🔑 [DELETE] Session récupérée:', {
+          hasSession: !!session,
+          hasToken: !!session?.access_token,
+          userId: session?.user?.id,
+          userEmail: session?.user?.email,
+          tokenPreview: session?.access_token?.substring(0, 20) + '...'
+        });
 
         if (!session?.access_token) {
           throw new Error('Pas de session active - veuillez vous reconnecter');
         }
 
         const apiUrl = `/api/admin/exhibitors/${id}`;
+        console.log('📡 [DELETE] Appel API:', { method: 'DELETE', url: apiUrl });
 
         const response = await fetch(apiUrl, {
           method: 'DELETE',
@@ -116,6 +103,13 @@ export default function ExhibitorManagementPage() {
             'Authorization': `Bearer ${session.access_token}`,
             'Content-Type': 'application/json'
           }
+        });
+
+        console.log('📥 [DELETE] Réponse HTTP:', {
+          status: response.status,
+          statusText: response.statusText,
+          ok: response.ok,
+          contentType: response.headers.get('content-type')
         });
 
         // Vérifier si la réponse est du JSON
@@ -127,12 +121,14 @@ export default function ExhibitorManagementPage() {
         }
 
         const result = await response.json();
+        console.log('📦 [DELETE] Corps de la réponse:', result);
 
         if (!response.ok || !result.success) {
           console.error('❌ [DELETE] Échec:', { status: response.status, result });
           throw new Error(result.error || `Échec HTTP ${response.status}`);
         }
 
+        console.log('✅ [DELETE] Suppression réussie:', result.deleted);
 
         // Supprimer immédiatement du state local
         setExhibitors(exhibitors.filter(e => e.id !== id));
@@ -148,6 +144,48 @@ export default function ExhibitorManagementPage() {
         toast.error(`Erreur: ${error.message || 'Suppression échouée'}`);
       }
     }
+  };
+
+  const updateExhibitorLocation = async (
+    exhibitorId: string,
+    field: 'hallNumber' | 'standNumber',
+    value: string,
+    savingKey: 'hall' | 'stand',
+    successMessage: string,
+    errorMessage: string,
+  ) => {
+    const previous = exhibitors.find((e) => e.id === exhibitorId)?.[field];
+    if ((previous || '') === value) {return;}
+
+    setSavingField({ id: exhibitorId, field: savingKey });
+    setExhibitors((prev) =>
+      prev.map((e) =>
+        e.id === exhibitorId ? { ...e, [field]: value || undefined } : e
+      )
+    );
+
+    try {
+      await SupabaseService.updateExhibitor(exhibitorId, { [field]: value });
+      toast.success(successMessage);
+    } catch (error) {
+      setExhibitors((prev) =>
+        prev.map((e) =>
+          e.id === exhibitorId ? { ...e, [field]: previous } : e
+        )
+      );
+      console.error(errorMessage, error);
+      toast.error(errorMessage);
+    } finally {
+      setSavingField(null);
+    }
+  };
+
+  const handleHallChange = (exhibitorId: string, hallNumber: string) => {
+    updateExhibitorLocation(exhibitorId, 'hallNumber', hallNumber, 'hall', 'Hall mis à jour', 'Impossible de mettre à jour le hall');
+  };
+
+  const handleStandChange = (exhibitorId: string, standNumber: string) => {
+    updateExhibitorLocation(exhibitorId, 'standNumber', standNumber, 'stand', 'Stand mis à jour', 'Impossible de mettre à jour le stand');
   };
 
   const filteredExhibitors = exhibitors.filter(exhibitor => {
@@ -262,7 +300,7 @@ export default function ExhibitorManagementPage() {
               >
                 <option value="all">Tous les types d'abonnement</option>
                 {categories.map(cat => (
-                  <option key={cat} value={cat}>{getCategoryLabel(cat)}</option>
+                  <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
             </div>
@@ -359,19 +397,65 @@ export default function ExhibitorManagementPage() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm font-medium bg-blue-50 text-blue-800 p-2 rounded-md">
                       <Filter className="h-4 w-4 mr-2" />
-                      {getCategoryLabel(exhibitor.category)}
+                      Type: {exhibitor.category}
                     </div>
 
-                    {(exhibitor.standNumber || exhibitor.standArea) && (
-                      <div className="flex items-center text-sm font-medium bg-gray-50 text-gray-800 p-2 rounded-md">
-                        <Building2 className="h-4 w-4 mr-2 text-gray-500" />
-                        <span>
-                          {exhibitor.standNumber && `Stand ${exhibitor.standNumber}`}
-                          {exhibitor.standNumber && exhibitor.standArea && ' - '}
-                          {exhibitor.standArea && `${exhibitor.standArea} m²`}
-                        </span>
+                    <div className="space-y-2 text-sm bg-gray-50 text-gray-800 p-2 rounded-md">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-gray-500 shrink-0" />
+                        <label htmlFor={`stand-${exhibitor.id}`} className="text-gray-600 shrink-0 w-12">
+                          Stand
+                        </label>
+                        <input
+                          id={`stand-${exhibitor.id}`}
+                          type="text"
+                          defaultValue={exhibitor.standNumber || ''}
+                          key={`stand-${exhibitor.id}-${exhibitor.standNumber ?? ''}`}
+                          disabled={savingField?.id === exhibitor.id && savingField.field === 'stand'}
+                          placeholder="Ex: A12"
+                          onBlur={(e) => handleStandChange(exhibitor.id, e.target.value.trim())}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.currentTarget.blur();
+                            }
+                          }}
+                          className="flex-1 min-w-0 py-1 px-2 border border-gray-300 rounded-md bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60"
+                        />
+                        {savingField?.id === exhibitor.id && savingField.field === 'stand' && (
+                          <Loader2 className="h-4 w-4 animate-spin text-blue-500 shrink-0" aria-hidden="true" />
+                        )}
                       </div>
-                    )}
+
+                      <div className="flex items-center gap-2">
+                        <Building2 className="h-4 w-4 text-gray-500 shrink-0" />
+                        <label htmlFor={`hall-${exhibitor.id}`} className="text-gray-600 shrink-0 w-12">
+                          Hall
+                        </label>
+                        <select
+                          id={`hall-${exhibitor.id}`}
+                          value={exhibitor.hallNumber || ''}
+                          disabled={savingField?.id === exhibitor.id && savingField.field === 'hall'}
+                          onChange={(e) => handleHallChange(exhibitor.id, e.target.value)}
+                          className="flex-1 min-w-0 py-1 px-2 border border-gray-300 rounded-md bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60"
+                        >
+                          <option value="">Non défini</option>
+                          {HALL_OPTIONS.map((hall) => (
+                            <option key={hall} value={hall}>
+                              Hall {hall}
+                            </option>
+                          ))}
+                        </select>
+                        {savingField?.id === exhibitor.id && savingField.field === 'hall' && (
+                          <Loader2 className="h-4 w-4 animate-spin text-blue-500 shrink-0" aria-hidden="true" />
+                        )}
+                      </div>
+
+                      {exhibitor.standArea && (
+                        <p className="text-xs text-gray-500 pl-6">
+                          Surface : {exhibitor.standArea} m²
+                        </p>
+                      )}
+                    </div>
 
                     {exhibitor.contactInfo?.country && (
                       <div className="flex items-center text-sm text-gray-600">

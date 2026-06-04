@@ -4,7 +4,7 @@
  * Génération professionnelle de rapports
  */
 
-import ExcelJS from 'exceljs';
+import writeXlsxFile from 'write-excel-file/browser';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { logger } from '../lib/logger';
@@ -66,7 +66,7 @@ class ExportService {
   }
 
   /**
-   * Export to Excel (ExcelJS — sans vulnérabilités)
+   * Export to Excel (XLSX via SheetJS)
    */
   async exportToExcel<T extends Record<string, any>>(
     data: T[],
@@ -78,31 +78,18 @@ class ExportService {
       const headers = options.headers || Object.keys(data[0] || {});
       const fields = options.fields || Object.keys(data[0] || {});
 
-      // Build worksheet rows
-      const wb = new ExcelJS.Workbook();
-      const ws = wb.addWorksheet(options.title || 'Export');
-
-      // Header row
-      ws.addRow(headers);
-      ws.getRow(1).font = { bold: true };
-      ws.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2563EB' } };
-      ws.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
-
-      // Data rows
-      data.forEach((item) => {
-        const row = fields.map((field) => {
+      const headerRow = headers.map(h => ({ value: String(h) }));
+      const dataRows = data.map((item) =>
+        fields.map((field) => {
           const value = this.getNestedValue(item, field);
-          if (value === null || value === undefined) {return null;}
-          if (typeof value === 'number') {return value;}
-          return String(value);
-        });
-        ws.addRow(row);
-      });
+          if (value === null || value === undefined) {return { value: '' };}
+          if (typeof value === 'number') {return { value, type: Number };}
+          return { value: String(value) };
+        })
+      );
 
-      const buf = await wb.xlsx.writeBuffer();
-      const blob = new Blob([buf], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
+      const file = writeXlsxFile([headerRow, ...dataRows] as Parameters<typeof writeXlsxFile>[0]);
+      const blob = await file.toBlob();
 
       logger.info('Excel export successful', { rows: data.length });
       return blob;
@@ -333,11 +320,11 @@ class ExportService {
     }));
 
     const blob = await this.exportByFormat(data, format, {
-      filename: `sponsors_${Date.now()}`,
-      title: 'Liste des Sponsors - sib 2026',
+      filename: `partenaires_${Date.now()}`,
+      title: 'Liste des Partenaires - sib 2026',
     });
 
-    this.download(blob, `sponsors_${Date.now()}.${format}`);
+    this.download(blob, `partenaires_${Date.now()}.${format}`);
   }
 
   /**
@@ -398,7 +385,7 @@ class ExportService {
     const data = [
       { 'Métrique': 'Visiteurs Total', 'Valeur': stats.totalVisitors },
       { 'Métrique': 'Exposants Total', 'Valeur': stats.totalExhibitors },
-      { 'Métrique': 'Sponsors Total', 'Valeur': stats.totalPartners },
+      { 'Métrique': 'Partenaires Total', 'Valeur': stats.totalPartners },
       { 'Métrique': 'Rendez-vous Total', 'Valeur': stats.totalAppointments },
       { 'Métrique': 'Rendez-vous Confirmés', 'Valeur': stats.confirmedAppointments },
       { 'Métrique': 'Pages Vues', 'Valeur': stats.pageViews },

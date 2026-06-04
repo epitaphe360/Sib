@@ -1,9 +1,10 @@
-﻿import { Calendar, TrendingUp } from 'lucide-react';
+import { Calendar, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '../../ui/Badge';
 import { Button } from '../../ui/Button';
 import { LineChartCard, BarChartCard, PieChartCard } from '../charts';
 import { ExhibitorConversionFunnel } from '../../common/ConversionFunnel';
+import { AIPredictions, type Prediction } from '../../common/AIPredictions';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { ROUTES } from '../../../lib/routes';
 
@@ -27,6 +28,7 @@ interface ExhibitorAnalyticsSectionProps {
   receivedAppointments: unknown[];
   confirmedAppointments: unknown[];
   miniSiteViews: number;
+  predictions: Prediction[];
 }
 
 export function ExhibitorAnalyticsSection({
@@ -37,6 +39,7 @@ export function ExhibitorAnalyticsSection({
   receivedAppointments,
   confirmedAppointments,
   miniSiteViews,
+  predictions,
 }: ExhibitorAnalyticsSectionProps) {
   const { t } = useTranslation();
 
@@ -44,7 +47,7 @@ export function ExhibitorAnalyticsSection({
     <div className="mb-12 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-gray-900">
-          <TrendingUp className="inline-block mr-3 text-indigo-600" />
+          <TrendingUp className="inline-block mr-3 text-SIB-primary" />
           {t('exhibitor.analytics_title')}
         </h2>
         <Badge variant="info" size="md">
@@ -123,6 +126,13 @@ export function ExhibitorAnalyticsSection({
           appointmentsConfirmed={confirmedAppointments.length}
         />
       </div>
+
+      {/* AI predictions */}
+      {predictions.length > 0 && (
+        <div className="mb-6">
+          <AIPredictions predictions={predictions} />
+        </div>
+      )}
     </div>
   );
 }

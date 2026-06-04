@@ -1,569 +1,497 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Globe, Zap, Layers, BookOpen, TrendingUp, Eye,
-  Download, LayoutGrid, Info, Save, CheckCircle2,
-  AlertCircle, Loader2, ExternalLink, ChevronRight,
-  Clock, Edit3,
-} from 'lucide-react';
-import { supabase } from '../../lib/supabase';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
-import { useSalon } from '../../contexts/SalonContext';
+import {
+  Settings,
+  FileText,
+  Users,
+  Building2,
+  Calendar,
+  BarChart3,
+  Globe,
+  Shield,
+  Edit,
+  Save,
+  Eye,
+  ArrowLeft,
+  RefreshCw,
+  AlertTriangle
+} from 'lucide-react';
+import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { motion } from 'framer-motion';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-interface FieldDef {
-  key: string;
-  label: string;
-  type: 'text' | 'textarea';
-  placeholder?: string;
-}
-
-interface PageDef {
-  slug: string;
+interface ContentSection {
+  id: string;
   title: string;
-  Icon: React.FC<{ className?: string }>;
-  route: string;
-  fields: FieldDef[];
+  description: string;
+  icon_name: string; // Store icon name as string
+  color: string;
+  bg_color: string;
+  last_modified: string;
+  status: 'published' | 'draft' | 'archived';
+  content_data: any; // JSONB field for actual content
 }
 
-// ─── Définition des pages et de leurs champs éditables ────────────────────────
-const PAGES: PageDef[] = [
-  {
-    slug: 'presentation',
-    title: 'Présentation',
-    Icon: Globe,
-    route: ROUTES.PRESENTATION,
-    fields: [
-      { key: 'hero_badge', label: 'Bandeau hero', type: 'text', placeholder: "20ème Édition — 40 ans d'excellence" },
-      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Salon International du Bâtiment' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: "Depuis 1986, le SIB s'impose comme le rendez-vous incontournable du bâtiment, des matériaux et de la construction en Afrique. Pour sa 20ᵉ édition, le SIB 2026 célèbre 40 ans d'histoire, d'innovation et de rencontres." },
-      { key: 'hero_date', label: 'Hero — Date', type: 'text', placeholder: '25 – 29 Novembre 2026' },
-      { key: 'hero_location', label: 'Hero — Lieu', type: 'text', placeholder: "Parc d'Exposition Mohammed VI, El Jadida" },
-      { key: 'hero_hours', label: 'Hero — Horaires', type: 'text', placeholder: '9h00 – 19h00' },
-      { key: 'stat_exposants', label: 'Nombre d\'exposants', type: 'text', placeholder: '500' },
-      { key: 'stat_exposants_label', label: 'Stat exposants — Libellé', type: 'text', placeholder: 'Exposants' },
-      { key: 'stat_exposants_sub', label: 'Stat exposants — Sous-texte', type: 'text', placeholder: '1 500 marques représentées' },
-      { key: 'stat_visiteurs', label: 'Nombre de visiteurs', type: 'text', placeholder: '200 000' },
-      { key: 'stat_visiteurs_label', label: 'Stat visiteurs — Libellé', type: 'text', placeholder: 'Visiteurs' },
-      { key: 'stat_visiteurs_sub', label: 'Stat visiteurs — Sous-texte', type: 'text', placeholder: 'professionnels & grand public' },
-      { key: 'stat_pays', label: 'Nombre de pays', type: 'text', placeholder: '50' },
-      { key: 'stat_pays_label', label: 'Stat pays — Libellé', type: 'text', placeholder: 'Pays' },
-      { key: 'stat_pays_sub', label: 'Stat pays — Sous-texte', type: 'text', placeholder: 'représentés' },
-      { key: 'stat_surface', label: 'Surface d\'exposition', type: 'text', placeholder: '35 000 m²' },
-      { key: 'stat_surface_label', label: 'Stat surface — Libellé', type: 'text', placeholder: 'Surface' },
-      { key: 'stat_surface_sub', label: 'Stat surface — Sous-texte', type: 'text', placeholder: "d'exposition" },
-      { key: 'about_title', label: 'Titre section À propos', type: 'text', placeholder: 'Le Salon International du Bâtiment' },
-      { key: 'about_text', label: 'Texte À propos (remplace les paragraphes de présentation)', type: 'textarea', placeholder: "Le Salon International du Bâtiment – SIB revient pour sa 20ᵉ édition, célébrant ainsi ses 40 années d'existence. Ce salon incontournable se déroulera du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI d'El Jadida.\n\nFondé en 1986, le SIB s'est imposé comme le rendez-vous biennal de référence du secteur du bâtiment au Maroc et en Afrique. Il réunit 600 exposants et 1 500 marques internationales autour d'un même objectif : construire l'avenir. Avec 200 000 visiteurs professionnels, 50 pays représentés, 300 rencontres B2B planifiées via URBA EVENT et 35 000 m² d'exposition, le SIB s'impose comme le hub africain de la construction et de l'innovation.\n\nOrganisé par le Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville et l'Agence Marocaine de Développement des Investissements et des Exportations – AMDIE, et co-organisé par la Fédération des Industries des Matériaux de Construction – FMC et la Fédération Nationale du Bâtiment et des Travaux Publics – FNBTP, URBACOM en assure la gestion déléguée depuis 2006.\n\nAu-delà de sa portée nationale, le SIB s'impose aujourd'hui comme le grand rendez-vous africain du bâtiment et des matériaux de construction, un espace où convergent les expertises du continent. Le salon propose 2 espaces de démonstration, 30 applications techniques, 20 conférences animées par des experts marocains et internationaux, ainsi que des espaces thématiques : SIB Academy, SIB Recrutement, SIB TV, Espace B2B et Espace Démonstration." },
-      { key: 'about_read_more', label: 'Bouton en savoir plus', type: 'text', placeholder: 'Savoir plus' },
-      { key: 'about_read_less', label: 'Bouton réduire', type: 'text', placeholder: 'Réduire' },
-      { key: 'image_badge_date', label: 'Image — Badge date', type: 'text', placeholder: '25-29 Novembre 2026' },
-      { key: 'image_location_label', label: 'Image — Libellé emplacement', type: 'text', placeholder: 'Emplacement' },
-      { key: 'image_location_value', label: 'Image — Valeur emplacement', type: 'text', placeholder: "Parc d'Exposition Mohammed VI - EL JADIDA" },
-      { key: 'image_date_label', label: 'Image — Libellé date', type: 'text', placeholder: 'Date' },
-      { key: 'image_date_value', label: 'Image — Valeur date', type: 'text', placeholder: 'Du 25 au 29 Novembre 2026' },
-      { key: 'free_entry_title', label: 'Section entrée — Titre', type: 'text', placeholder: 'Entrée Gratuite' },
-      { key: 'free_entry_text', label: 'Section entrée — Texte', type: 'textarea', placeholder: "L'accès au salon est entièrement gratuit. Un badge électronique est requis et peut être obtenu en ligne ou sur place." },
-      { key: 'free_entry_cta', label: 'Section entrée — Bouton', type: 'text', placeholder: 'Obtenez votre badge' },
-      { key: 'organizers_title', label: 'Section organisateurs — Titre', type: 'text', placeholder: 'Organisateurs' },
-      { key: 'brochure_title', label: 'Section brochure — Titre', type: 'text', placeholder: 'Téléchargez la brochure SIB 2026' },
-      { key: 'brochure_text', label: 'Section brochure — Texte', type: 'textarea', placeholder: 'Retrouvez toutes les informations essentielles sur le salon, le programme et les modalités de participation.' },
-      { key: 'brochure_cta', label: 'Section brochure — Bouton', type: 'text', placeholder: 'Brochure SIB 2026 (PDF)' },
-      { key: 'brochure_url', label: 'Section brochure — URL PDF', type: 'text', placeholder: 'https://sib.ma/backend/uploads/Brochure_SIB_2026_F_3175004ace.pdf' },
-      { key: 'org_1_name', label: 'Organisateur 1 — Nom', type: 'text', placeholder: 'Ministère MUAT' },
-      { key: 'org_1_role', label: 'Organisateur 1 — Rôle', type: 'text', placeholder: 'Organisateur' },
-      { key: 'org_1_desc', label: 'Organisateur 1 — Description', type: 'textarea', placeholder: "Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville" },
-      { key: 'org_2_name', label: 'Organisateur 2 — Nom', type: 'text', placeholder: 'AMDIE' },
-      { key: 'org_2_role', label: 'Organisateur 2 — Rôle', type: 'text', placeholder: 'Organisateur' },
-      { key: 'org_2_desc', label: 'Organisateur 2 — Description', type: 'textarea', placeholder: 'Agence Marocaine de Développement des Investissements et des Exportations' },
-      { key: 'org_3_name', label: 'Organisateur 3 — Nom', type: 'text', placeholder: 'FMC' },
-      { key: 'org_3_role', label: 'Organisateur 3 — Rôle', type: 'text', placeholder: 'Co-organisateur' },
-      { key: 'org_3_desc', label: 'Organisateur 3 — Description', type: 'textarea', placeholder: 'Fédération des Industries des Matériaux de Construction' },
-      { key: 'org_4_name', label: 'Organisateur 4 — Nom', type: 'text', placeholder: 'FNBTP' },
-      { key: 'org_4_role', label: 'Organisateur 4 — Rôle', type: 'text', placeholder: 'Co-organisateur' },
-      { key: 'org_4_desc', label: 'Organisateur 4 — Description', type: 'textarea', placeholder: 'Fédération Nationale du Bâtiment et des Travaux Publics' },
-      { key: 'org_5_name', label: 'Organisateur 5 — Nom', type: 'text', placeholder: 'URBACOM' },
-      { key: 'org_5_role', label: 'Organisateur 5 — Rôle', type: 'text', placeholder: 'Organisateur délégué' },
-      { key: 'org_5_desc', label: 'Organisateur 5 — Description', type: 'textarea', placeholder: '1ʳᵉ agence conseil en communication et événementiel, gestion déléguée depuis 2006' },
-    ],
-  },
-  {
-    slug: 'nouveautes',
-    title: 'Nouveautés',
-    Icon: Zap,
-    route: ROUTES.NOUVEAUTES,
-    fields: [
-      { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: 'SIB 2026' },
-      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Nouveautés' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Découvrez les innovations et les changements majeurs de cette 20ème édition du SIB.' },
-      { key: 'item_1_title', label: 'Nouveauté 1 — Titre', type: 'text', placeholder: "40 ans d'excellence — Édition anniversaire" },
-      { key: 'item_1_desc', label: 'Nouveauté 1 — Description', type: 'textarea', placeholder: "Le SIB 2026 célèbre 40 ans d'histoire et sa 20ᵉ édition. Un événement pensé pour valoriser les savoir-faire, connecter les acteurs et ouvrir de nouveaux horizons." },
-      { key: 'item_2_title', label: 'Nouveauté 2 — Titre', type: 'text', placeholder: "35 000 m² d'exposition" },
-      { key: 'item_2_desc', label: 'Nouveauté 2 — Description', type: 'textarea', placeholder: "Un espace agrandi et optimisé au Parc d'Exposition Mohammed VI d'El Jadida (3ᵉ édition consécutive sur ce site). Parcours de visite fluide, structuré et immersif." },
-      { key: 'item_3_title', label: 'Nouveauté 3 — Titre', type: 'text', placeholder: '600 exposants — 1 500 marques' },
-      { key: 'item_3_desc', label: 'Nouveauté 3 — Description', type: 'textarea', placeholder: "Entreprises, institutions, start-ups et marques internationales de 50 pays réunies autour d'un même objectif : construire l'avenir. 80% de reconduction d'exposants." },
-      { key: 'item_4_title', label: 'Nouveauté 4 — Titre', type: 'text', placeholder: 'URBA EVENT — Plateforme B2B digitale' },
-      { key: 'item_4_desc', label: 'Nouveauté 4 — Description', type: 'textarea', placeholder: '300 rencontres B2B planifiées via la plateforme digitale connectée du salon. Application mobile pour badges, networking et gestion des rendez-vous.' },
-      { key: 'item_5_title', label: 'Nouveauté 5 — Titre', type: 'text', placeholder: '2 Espaces de Démonstration' },
-      { key: 'item_5_desc', label: 'Nouveauté 5 — Description', type: 'textarea', placeholder: 'Des zones dédiées aux applications réelles et à la performance des matériaux. 30 applications techniques pour voir les innovations en action.' },
-      { key: 'item_6_title', label: 'Nouveauté 6 — Titre', type: 'text', placeholder: 'SIB TV — Chaîne officielle du salon' },
-      { key: 'item_6_desc', label: 'Nouveauté 6 — Description', type: 'textarea', placeholder: 'Créée et produite par URBACOM, SIB TV diffuse sur YouTube et les réseaux sociaux du salon : interviews en direct, reportages exclusifs et capsules quotidiennes.' },
-      { key: 'item_7_title', label: 'Nouveauté 7 — Titre', type: 'text', placeholder: 'Entrée gratuite' },
-      { key: 'item_7_desc', label: 'Nouveauté 7 — Description', type: 'textarea', placeholder: "L'accès au salon est entièrement gratuit sur présentation d'un badge électronique téléchargeable en ligne, d'une invitation ou d'une carte de visite professionnelle." },
-      { key: 'item_8_title', label: 'Nouveauté 8 — Titre', type: 'text', placeholder: '20 conférences & programme scientifique' },
-      { key: 'item_8_desc', label: 'Nouveauté 8 — Description', type: 'textarea', placeholder: 'Un programme riche animé par des experts marocains et internationaux. Conférences, panels, forums et cérémonies officielles tout au long des 5 jours.' },
-      { key: 'item_9_title', label: 'Nouveauté 9 — Titre', type: 'text', placeholder: 'Campagne 360° & visibilité internationale' },
-      { key: 'item_9_desc', label: 'Nouveauté 9 — Description', type: 'textarea', placeholder: 'Affichage urbain, campagnes digitales ciblées (LinkedIn, Facebook, Instagram, Google), presse spécialisée BTP, radio, TV et emailings personnalisés.' },
-      { key: 'items_json', label: 'Nouveautés JSON (optionnel)', type: 'textarea', placeholder: '[{"title":"...","desc":"...","color":"bg-amber-50 text-amber-600"}]' },
-    ],
-  },
-  {
-    slug: 'secteurs-activites',
-    title: 'Secteurs d\'Activités',
-    Icon: Layers,
-    route: ROUTES.SECTEURS,
-    fields: [
-      { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: "10 secteurs d'activité" },
-      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Secteurs d\'Activités' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Le SIB couvre l\'ensemble de la chaîne de valeur du bâtiment...' },
-      { key: 'search_placeholder', label: 'Placeholder recherche', type: 'text', placeholder: 'Rechercher un secteur ou une sous-catégorie...' },
-      { key: 'empty_text', label: 'Texte aucun résultat', type: 'text', placeholder: 'Aucun secteur ne correspond à votre recherche.' },
-      { key: 'secteurs_json', label: 'Secteurs JSON (optionnel)', type: 'textarea', placeholder: '[{"id":1,"name":"...","subcategories":["...","..."]}]' },
-    ],
-  },
-  {
-    slug: 'editions',
-    title: 'Éditions',
-    Icon: BookOpen,
-    route: ROUTES.EDITIONS,
-    fields: [
-      { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: "40 ans d'histoire" },
-      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Nos Éditions' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Depuis 1986, le SIB accompagne l\'essor du secteur du bâtiment...' },
-      { key: 'timeline_json', label: 'Timeline JSON (optionnel)', type: 'textarea', placeholder: '[{"year":2026,"edition":"20ème","dates":"...","lieu":"..."}]' },
-    ],
-  },
-  {
-    slug: 'pourquoi-exposer',
-    title: 'Pourquoi Exposer',
-    Icon: TrendingUp,
-    route: ROUTES.POURQUOI_EXPOSER,
-    fields: [
-      { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: 'SIB 2026 — El Jadida' },
-      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Pourquoi Exposer au SIB ?' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: "Le rendez-vous incontournable du bâtiment en Afrique. Participez à l'édition anniversaire des 40 ans aux côtés de 600 exposants et 200 000 visiteurs professionnels." },
-      { key: 'hero_cta', label: 'Bouton hero', type: 'text', placeholder: 'Réservez votre stand' },
-      { key: 'reasons_title', label: 'Titre section raisons', type: 'text', placeholder: "6 raisons d'exposer" },
-      { key: 'reasons_subtitle', label: 'Sous-titre section raisons', type: 'text', placeholder: 'Le SIB offre une plateforme unique pour booster votre visibilité et développer vos affaires.' },
-      { key: 'stats_json', label: 'Stats JSON (optionnel)', type: 'textarea', placeholder: '[{"value":"600+","label":"Exposants"}]' },
-      { key: 'arg_1_title', label: 'Argument 1 — Titre', type: 'text', placeholder: '200 000+ visiteurs' },
-      { key: 'arg_1_desc', label: 'Argument 1 — Description', type: 'textarea', placeholder: "Architectes, ingénieurs, promoteurs, décideurs publics et privés venus du Maroc, d'Afrique et du monde entier." },
-      { key: 'arg_2_title', label: 'Argument 2 — Titre', type: 'text', placeholder: '50 pays représentés' },
-      { key: 'arg_2_desc', label: 'Argument 2 — Description', type: 'textarea', placeholder: "600 exposants et 1 500 marques internationales réunis sur 35 000 m² de surface d'exposition." },
-      { key: 'arg_3_title', label: 'Argument 3 — Titre', type: 'text', placeholder: 'Visibilité renforcée' },
-      { key: 'arg_3_desc', label: 'Argument 3 — Description', type: 'textarea', placeholder: 'Plan média international, présence digitale soutenue, couverture presse et vidéos diffusées sur SIB TV.' },
-      { key: 'arg_4_title', label: 'Argument 4 — Titre', type: 'text', placeholder: '300 rencontres B2B' },
-      { key: 'arg_4_desc', label: 'Argument 4 — Description', type: 'textarea', placeholder: 'Échanges ciblés organisés via URBA EVENT, la plateforme digitale connectée du salon.' },
-      { key: 'arg_5_title', label: 'Argument 5 — Titre', type: 'text', placeholder: '80% de reconduction' },
-      { key: 'arg_5_desc', label: 'Argument 5 — Description', type: 'textarea', placeholder: "Un taux de fidélisation exceptionnel, reflet de la confiance des exposants et de la qualité du salon." },
-      { key: 'arg_6_title', label: 'Argument 6 — Titre', type: 'text', placeholder: 'Édition anniversaire 40 ans' },
-      { key: 'arg_6_desc', label: 'Argument 6 — Description', type: 'textarea', placeholder: "Plus d'espace, plus d'exposants, des zones thématiques repensées et des espaces de démonstration interactifs." },
-      { key: 'sectors_title', label: 'Titre section secteurs', type: 'text', placeholder: 'Secteurs représentés' },
-      { key: 'sectors_json', label: 'Secteurs (liste JSON optionnelle)', type: 'textarea', placeholder: '["Gros Œuvre & Structure","Menuiserie & Fermeture"]' },
-      { key: 'cta_title', label: 'Titre CTA bas de page', type: 'text', placeholder: 'Prêt à exposer ?' },
-      { key: 'cta_text', label: 'Texte CTA bas de page', type: 'textarea', placeholder: "Réservez votre stand dès maintenant et bénéficiez des meilleurs emplacements pour la 20ème édition du SIB." },
-      { key: 'cta_button', label: 'Bouton CTA bas de page', type: 'text', placeholder: 'Demander un devis' },
-    ],
-  },
-  {
-    slug: 'pourquoi-visiter',
-    title: 'Pourquoi Visiter',
-    Icon: Eye,
-    route: ROUTES.POURQUOI_VISITER,
-    fields: [
-      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Pourquoi Visiter le SIB ?' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: '5 jours pour découvrir, apprendre et connecter avec les acteurs majeurs du bâtiment au Maroc et en Afrique.' },
-      { key: 'hero_cta', label: 'Bouton hero', type: 'text', placeholder: 'Obtenez votre badge gratuit' },
-      { key: 'reasons_title', label: 'Titre section raisons', type: 'text', placeholder: '6 bonnes raisons de visiter' },
-      { key: 'arg_1_title', label: 'Raison 1 — Titre', type: 'text', placeholder: 'Découvrir les innovations' },
-      { key: 'arg_1_desc', label: 'Raison 1 — Description', type: 'textarea', placeholder: 'Le salon offre une réponse complète aux besoins des particuliers et des professionnels dans un espace et un temps maîtrisé.' },
-      { key: 'arg_2_title', label: 'Raison 2 — Titre', type: 'text', placeholder: 'Networking & B2B' },
-      { key: 'arg_2_desc', label: 'Raison 2 — Description', type: 'textarea', placeholder: '300 rencontres B2B planifiées via URBA EVENT. Rencontrez fournisseurs, fabricants et professionnels de votre secteur.' },
-      { key: 'arg_3_title', label: 'Raison 3 — Titre', type: 'text', placeholder: '20 conférences & SIB Academy' },
-      { key: 'arg_3_desc', label: 'Raison 3 — Description', type: 'textarea', placeholder: 'Un programme scientifique riche animé par des experts marocains et internationaux. Pôle formation avec académies, instituts et centres professionnels.' },
-      { key: 'arg_4_title', label: 'Raison 4 — Titre', type: 'text', placeholder: 'Entrée gratuite' },
-      { key: 'arg_4_desc', label: 'Raison 4 — Description', type: 'textarea', placeholder: "L'accès au salon est entièrement gratuit sur présentation d'un badge électronique, d'une invitation ou d'une carte de visite professionnelle." },
-      { key: 'arg_5_title', label: 'Raison 5 — Titre', type: 'text', placeholder: 'Faire son choix & concrétiser' },
-      { key: 'arg_5_desc', label: 'Raison 5 — Description', type: 'textarea', placeholder: "La meilleure manière de s'informer, de faire son choix et de concrétiser dans les meilleures conditions tout investissement du secteur du BTP." },
-      { key: 'arg_6_title', label: 'Raison 6 — Titre', type: 'text', placeholder: '600 exposants, 50 pays' },
-      { key: 'arg_6_desc', label: 'Raison 6 — Description', type: 'textarea', placeholder: 'Découvrez 1 500 marques venues de 50 pays avec 600 exposants, répartis sur 35 000 m².' },
-      { key: 'infos_title', label: 'Titre section infos', type: 'text', placeholder: 'Infos Pratiques' },
-      { key: 'infos_json', label: 'Infos pratiques JSON (optionnel)', type: 'textarea', placeholder: '[{"label":"Dates","value":"25 – 29 Novembre 2026"}]' },
-      { key: 'transport_title', label: 'Titre section transport', type: 'text', placeholder: "Comment s'y rendre ?" },
-      { key: 'transport_json', label: 'Transport JSON (optionnel)', type: 'textarea', placeholder: '[{"title":"Par navettes","desc":"..."}]' },
-      { key: 'cta_title', label: 'Titre CTA bas de page', type: 'text', placeholder: 'Prêt à visiter ?' },
-      { key: 'cta_text', label: 'Texte CTA bas de page', type: 'textarea', placeholder: "L'entrée est gratuite et le badge électronique est disponible en ligne. Rejoignez 200 000 visiteurs au SIB 2026." },
-      { key: 'cta_button', label: 'Bouton CTA bas de page', type: 'text', placeholder: "S'inscrire gratuitement" },
-    ],
-  },
-  {
-    slug: 'telechargements',
-    title: 'Téléchargements',
-    Icon: Download,
-    route: ROUTES.TELECHARGEMENTS,
-    fields: [
-      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Téléchargements' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: 'Documents officiels, catalogues et bilans des éditions passées.' },
-      { key: 'documents_json', label: 'Documents JSON (optionnel)', type: 'textarea', placeholder: '[{"year":"2026","label":"SIB 2026","docs":[{"name":"Brochure","url":"https://..."}]}]' },
-    ],
-  },
-  {
-    slug: 'espaces-sib',
-    title: 'Espaces SIB',
-    Icon: LayoutGrid,
-    route: ROUTES.ESPACES_SIB,
-    fields: [
-      { key: 'hero_badge', label: 'Badge hero', type: 'text', placeholder: 'SIB 2026 — El Jadida' },
-      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Espaces SIB' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: "Parce que le SIB ne se résume pas qu'aux stands d'exposition, plusieurs espaces sont également mis en avant." },
-      { key: 'section_title', label: 'Titre section espaces', type: 'text', placeholder: '5 espaces dédiés' },
-      { key: 'section_subtitle', label: 'Sous-titre section espaces', type: 'text', placeholder: 'Des espaces conçus pour enrichir votre expérience au SIB.' },
-      { key: 'espace_1_title', label: 'Espace 1 — Titre', type: 'text', placeholder: '2 Espaces de Démonstration' },
-      { key: 'espace_1_desc', label: 'Espace 1 — Description', type: 'textarea', placeholder: "Le SIB 2026 dispose de 2 espaces de démonstration conçus pour permettre aux professionnels du bâtiment de présenter leurs innovations en direct. Ces plateformes offrent une opportunité unique d'interagir avec les visiteurs, de valoriser les pratiques exemplaires et de démontrer concrètement la performance des matériaux, solutions et applications techniques." },
-      { key: 'espace_2_title', label: 'Espace 2 — Titre', type: 'text', placeholder: 'Espace Formation — SIB Academy' },
-      { key: 'espace_2_desc', label: 'Espace 2 — Description', type: 'textarea', placeholder: "SIB Academy est le pôle formation du Salon. Cet espace regroupe les stands des Académies, Instituts, Universités, Écoles Privées et Centres Professionnels proposant des formations liées aux secteurs du Bâtiment, de l'Urbanisme et de l'Architecture. Plus de 20 conférences sont prévues avec des experts marocains et internationaux." },
-      { key: 'espace_3_title', label: 'Espace 3 — Titre', type: 'text', placeholder: 'Espace Recrutement' },
-      { key: 'espace_3_desc', label: 'Espace 3 — Description', type: 'textarea', placeholder: "En partenariat avec l'Anapec, le SIB met à disposition des visiteurs un espace où il est permis de déposer son CV, de passer des entretiens et de rencontrer ses futurs employeurs directement pendant le salon." },
-      { key: 'espace_4_title', label: 'Espace 4 — Titre', type: 'text', placeholder: 'SIB TV' },
-      { key: 'espace_4_desc', label: 'Espace 4 — Description', type: 'textarea', placeholder: "SIB TV est la chaîne web officielle du salon. Avec ses plateaux TV, elle assure une couverture médiatique complète de l'événement. Interviews, débats et reportages sont diffusés en continu pendant les 5 jours du salon, offrant une visibilité maximale aux exposants et sponsors." },
-      { key: 'espace_5_title', label: 'Espace 5 — Titre', type: 'text', placeholder: 'URBA EVENT — B2B' },
-      { key: 'espace_5_desc', label: 'Espace 5 — Description', type: 'textarea', placeholder: "URBA EVENT est le programme de rencontres d'affaires B2B du SIB. Pour l'édition 2026, 300 rencontres qualifiées sont planifiées entre exposants nationaux et internationaux. L'objectif : faciliter les partenariats stratégiques et la signature de contrats pendant les 5 jours du salon." },
-      { key: 'espaces_json', label: 'Espaces JSON (remplace les champs individuels si renseigné)', type: 'textarea', placeholder: '[{"title":"...","description":"..."}]' },
-      { key: 'cta_title', label: 'Titre CTA', type: 'text', placeholder: 'Intéressé par un espace ?' },
-      { key: 'cta_text', label: 'Texte CTA', type: 'textarea', placeholder: 'Contactez-nous pour en savoir plus sur les modalités de participation et de réservation.' },
-      { key: 'cta_button', label: 'Bouton CTA', type: 'text', placeholder: 'Contactez-nous' },
-      { key: 'cta_url', label: 'Lien CTA', type: 'text', placeholder: '/contact' },
-    ],
-  },
-  {
-    slug: 'infos-pratiques',
-    title: 'Infos Pratiques',
-    Icon: Info,
-    route: ROUTES.INFOS_PRATIQUES,
-    fields: [
-      { key: 'hero_title', label: 'Titre principal', type: 'text', placeholder: 'Infos Pratiques' },
-      { key: 'hero_subtitle', label: 'Sous-titre', type: 'textarea', placeholder: "Tout ce qu'il faut savoir pour préparer votre visite au SIB 2026." },
-      { key: 'lieu_title', label: 'Titre section lieu', type: 'text', placeholder: "Parc d'Exposition Mohammed VI" },
-      { key: 'lieu_adresse', label: 'Adresse du lieu', type: 'textarea', placeholder: 'Route Nationale 1 vers Azemmour, Région Casablanca - Settat, 24000 — EL JADIDA' },
-      { key: 'lieu_context', label: 'Contexte section lieu', type: 'textarea', placeholder: "Implanté au cœur du Pôle urbain Mazagan (PUMA), le Parc d'Exposition Mohammed VI se voit efficacement desservi et stratégiquement connecté aux autres villes du royaume." },
-      { key: 'horaires_title', label: 'Titre section horaires', type: 'text', placeholder: 'Horaires' },
-      { key: 'horaires_json', label: 'Horaires JSON (optionnel)', type: 'textarea', placeholder: '[{"jour":"Mardi 25 Novembre","heures":"9h00 – 19h00"}]' },
-      { key: 'tarifs_title', label: 'Titre section tarifs', type: 'text', placeholder: 'Tarifs' },
-      { key: 'tarifs_intro', label: 'Texte introduction tarifs', type: 'textarea', placeholder: 'L\'entrée est gratuite tout au long des 5 jours d\'exposition...' },
-      { key: 'tarifs_bullets_json', label: 'Tarifs bullets JSON (optionnel)', type: 'textarea', placeholder: '["Badge électronique...","Invitation...","Carte de visite..."]' },
-      { key: 'tarifs_cta', label: 'Bouton section tarifs', type: 'text', placeholder: 'Obtenir mon badge gratuit' },
-      { key: 'venir_title', label: 'Titre section transport', type: 'text', placeholder: 'Comment venir ?' },
-      { key: 'venir_json', label: 'Sections transport JSON (optionnel)', type: 'textarea', placeholder: '[{"title":"Par Navettes SIB","desc":"...","note":"..."}]' },
-      { key: 'hebergement_title', label: 'Titre section hébergement', type: 'text', placeholder: 'Hébergement' },
-      { key: 'navette_exposants', label: 'Navettes exposants', type: 'text', placeholder: 'Départ 08h30, Retour 19h00' },
-      { key: 'navette_visiteurs', label: 'Navettes visiteurs', type: 'text', placeholder: 'Départs 08h30 et 10h30 — Retours 17h30 et 18h30' },
-      { key: 'hebergement_text', label: 'Texte hébergement', type: 'textarea', placeholder: 'Les hôtels recommandés à proximité...' },
-      { key: 'hebergement_cta', label: 'Bouton section hébergement', type: 'text', placeholder: 'Voir les hébergements' },
-    ],
-  },
-];
+// Map icon names to Lucide React components
+const iconMap: { [key: string]: any } = {
+  Globe: Globe,
+  Building2: Building2,
+  Users: Users,
+  Calendar: Calendar,
+  FileText: FileText,
+  Shield: Shield,
+  BarChart3: BarChart3,
+};
 
-// ─── Composant principal ──────────────────────────────────────────────────────
 export default function ContentManagement() {
-  const { currentSalon } = useSalon();
-  const [selectedPage, setSelectedPage] = useState<PageDef | null>(null);
-  const [allContents, setAllContents] = useState<Record<string, Record<string, string>>>({});
-  const [editValues, setEditValues] = useState<Record<string, string>>({});
-  const [updatedDates, setUpdatedDates] = useState<Record<string, string>>({});
+  const [contentSections, setContentSections] = useState<ContentSection[]>([]);
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [error, setError] = useState<string | null>(null);
+  const [currentContentData, setCurrentContentData] = useState<any>({});
 
-  const getDefaultValuesForPage = useCallback((page: PageDef): Record<string, string> => {
-    return page.fields.reduce((acc, field) => {
-      acc[field.key] = field.placeholder ?? '';
-      return acc;
-    }, {} as Record<string, string>);
-  }, []);
-
-  const getPrefilledValuesForPage = useCallback((page: PageDef): Record<string, string> => {
-    const defaults = getDefaultValuesForPage(page);
-    const persisted = allContents[page.slug] ?? {};
-    return page.fields.reduce((acc, field) => {
-      const persistedValue = persisted[field.key];
-      acc[field.key] = typeof persistedValue === 'string' && persistedValue.length > 0
-        ? persistedValue
-        : defaults[field.key] ?? '';
-      return acc;
-    }, {} as Record<string, string>);
-  }, [allContents, getDefaultValuesForPage]);
-
-  // Chargement initial de tous les contenus
   useEffect(() => {
-    (async () => {
-      try {
-        let query = supabase
-          .from('page_contents')
-          .select('page_slug, content, updated_at');
-        if (currentSalon) {
-          if (currentSalon.is_default) {
-            query = query.or(`salon_id.eq.${currentSalon.id},salon_id.is.null`);
-          } else {
-            query = query.eq('salon_id', currentSalon.id);
-          }
-        }
-        const { data } = await query;
-        if (data) {
-          const contentMap: Record<string, Record<string, string>> = {};
-          const dateMap: Record<string, string> = {};
-          data.forEach((row: any) => {
-            contentMap[row.page_slug] = row.content ?? {};
-            dateMap[row.page_slug] = row.updated_at;
-          });
-          setAllContents(contentMap);
-          setUpdatedDates(dateMap);
-        }
-      } catch { /* silently fail */ }
-      setIsLoading(false);
-    })();
-  }, [currentSalon]);
-
-  const handlePageSelect = useCallback((page: PageDef) => {
-    setSelectedPage(page);
-    setEditValues(getPrefilledValuesForPage(page));
-    setSaveStatus('idle');
-  }, [getPrefilledValuesForPage]);
-
-  const handleFieldChange = useCallback((key: string, value: string) => {
-    setEditValues((prev) => ({ ...prev, [key]: value }));
+    fetchContentSections();
   }, []);
 
-  const handleSave = async () => {
-    if (!selectedPage) {return;}
-    setIsSaving(true);
-    setSaveStatus('idle');
+  const fetchContentSections = async () => {
+    setIsLoading(true);
+    setError(null);
     try {
-      const defaults = getDefaultValuesForPage(selectedPage);
-      const normalizedContent = Object.fromEntries(
-        Object.entries(editValues).filter(([key, value]) => {
-          const trimmed = (value ?? '').trim();
-          const defaultValue = (defaults[key] ?? '').trim();
-          return trimmed !== '' && trimmed !== defaultValue;
-        })
-      );
-
-      const { data: { user } } = await supabase.auth.getUser();
-      const upsertPayload: Record<string, unknown> = {
-        page_slug: selectedPage.slug,
-        content: normalizedContent,
-        updated_by: user?.id ?? null,
-        ...(currentSalon ? { salon_id: currentSalon.id } : {}),
-      };
-      const conflictCol = currentSalon ? 'page_slug,salon_id' : 'page_slug';
-      const { error } = await supabase.from('page_contents').upsert(
-        upsertPayload,
-        { onConflict: conflictCol }
-      );
-      if (error) {throw error;}
-      setAllContents((prev) => ({ ...prev, [selectedPage.slug]: normalizedContent }));
-      setUpdatedDates((prev) => ({ ...prev, [selectedPage.slug]: new Date().toISOString() }));
-      setSaveStatus('success');
-      setTimeout(() => setSaveStatus('idle'), 4000);
-    } catch {
-      setSaveStatus('error');
+      // Static content sections - these represent the different pages/sections that can be managed
+      const staticSections: ContentSection[] = [
+        {
+          id: 'home',
+          title: 'Page d\'Accueil',
+          description: 'Contenu principal de la page d\'accueil SIB',
+          icon_name: 'Globe',
+          color: 'text-blue-600',
+          bg_color: 'bg-blue-100',
+          last_modified: new Date().toISOString(),
+          status: 'published',
+          content_data: {}
+        },
+        {
+          id: 'pavilions',
+          title: 'Pavillons Thématiques',
+          description: 'Gestion des pavillons et de leurs contenus',
+          icon_name: 'Building2',
+          color: 'text-green-600',
+          bg_color: 'bg-green-100',
+          last_modified: new Date().toISOString(),
+          status: 'published',
+          content_data: {}
+        },
+        {
+          id: 'exhibitors',
+          title: 'Exposants',
+          description: 'Présentation et informations des exposants',
+          icon_name: 'Users',
+          color: 'text-purple-600',
+          bg_color: 'bg-purple-100',
+          last_modified: new Date().toISOString(),
+          status: 'published',
+          content_data: {}
+        },
+        {
+          id: 'events',
+          title: 'Événements',
+          description: 'Programmation et agenda des événements',
+          icon_name: 'Calendar',
+          color: 'text-orange-600',
+          bg_color: 'bg-orange-100',
+          last_modified: new Date().toISOString(),
+          status: 'published',
+          content_data: {}
+        },
+        {
+          id: 'news',
+          title: 'Actualités',
+          description: 'Articles et communiqués de presse',
+          icon_name: 'FileText',
+          color: 'text-indigo-600',
+          bg_color: 'bg-indigo-100',
+          last_modified: new Date().toISOString(),
+          status: 'published',
+          content_data: {}
+        },
+        {
+          id: 'partners',
+          title: 'Partenaires',
+          description: 'Informations sur les partenaires SIB',
+          icon_name: 'Shield',
+          color: 'text-red-600',
+          bg_color: 'bg-red-100',
+          last_modified: new Date().toISOString(),
+          status: 'published',
+          content_data: {}
+        },
+        {
+          id: 'metrics',
+          title: 'Métriques',
+          description: 'Statistiques et indicateurs de performance',
+          icon_name: 'BarChart3',
+          color: 'text-cyan-600',
+          bg_color: 'bg-cyan-100',
+          last_modified: new Date().toISOString(),
+          status: 'published',
+          content_data: {}
+        }
+      ];
+      setContentSections(staticSections);
+      if (selectedSectionId) {
+        const current = staticSections.find((s: ContentSection) => s.id === selectedSectionId);
+        setCurrentContentData(current?.content_data || {});
+      }
+    } catch (err) {
+      console.error('Error fetching content sections:', err);
+      setError('Failed to load content sections. Please try again later.');
     } finally {
-      setIsSaving(false);
+      setIsLoading(false);
     }
   };
 
-  const handleReset = () => {
-    if (!selectedPage) {return;}
-    setEditValues(getPrefilledValuesForPage(selectedPage));
-    setSaveStatus('idle');
+  const handleSectionSelect = (sectionId: string) => {
+    setSelectedSectionId(sectionId);
+    setIsEditing(false);
+    const section = contentSections.find(s => s.id === sectionId);
+    setCurrentContentData(section?.content_data || {});
   };
 
-  const formatDate = (iso: string) =>
-    iso
-      ? new Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso))
-      : null;
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
 
-  const hasCustomContent = (slug: string) =>
-    Object.values(allContents[slug] ?? {}).some((v) => v?.trim() !== '');
+  const handleSave = async () => {
+    if (!selectedSectionId) {return;}
+
+    setIsLoading(true);
+    setError(null);
+    try {
+      // Update local state - in a full implementation, this would save to a backend
+      const updatedSections = contentSections.map(section =>
+        section.id === selectedSectionId
+          ? { ...section, content_data: currentContentData, last_modified: new Date().toISOString() }
+          : section
+      );
+      setContentSections(updatedSections);
+      setIsEditing(false);
+      // Note: For persistent storage, implement backend API endpoint or use SupabaseService with proper authentication
+      console.log('Content saved locally. Implement backend persistence for production.');
+    } catch (err) {
+      console.error('Error saving content:', err);
+      setError('Failed to save content. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePreview = () => {
+    // Implement actual preview logic, e.g., open in new tab or modal
+  };
+
+  const handleContentChange = (key: string, value: any) => {
+    setCurrentContentData(prev => ({ ...prev, [key]: value }));
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'published':
+        return <Badge variant="success">Publié</Badge>;
+      case 'draft':
+        return <Badge variant="warning">Brouillon</Badge>;
+      case 'archived':
+        return <Badge variant="info">Archivé</Badge>;
+      default:
+        return <Badge variant="default">{status}</Badge>;
+    }
+  };
+
+  const selectedSectionData = contentSections.find(section => section.id === selectedSectionId);
+
+  if (isLoading && contentSections.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <RefreshCw className="h-12 w-12 text-blue-500 animate-spin mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900">Chargement du contenu...</h3>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center p-6 bg-white rounded-lg shadow-md">
+          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Erreur de chargement</h3>
+          <p className="text-gray-600">{error}</p>
+          <Button onClick={fetchContentSections} className="mt-4">
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Réessayer
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* En-tête */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Gestion du Contenu</h1>
-        <p className="text-gray-500 mt-2 max-w-2xl">
-          Modifiez le contenu des pages publiques du site SIB directement depuis l'interface
-          d'administration. Les modifications sont visibles immédiatement après sauvegarde.
-        </p>
-      </div>
-
-      {isLoading ? (
-        <div className="flex items-center justify-center py-40">
-          <Loader2 className="w-8 h-8 text-sib-navy animate-spin" />
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Panneau gauche — liste des pages */}
-          <div className="lg:col-span-4">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-                  Pages du site ({PAGES.length})
-                </p>
-              </div>
-              <ul className="divide-y divide-gray-50">
-                {PAGES.map((page) => {
-                  const isSelected = selectedPage?.slug === page.slug;
-                  const dated = updatedDates[page.slug];
-                  const hasContent = hasCustomContent(page.slug);
-                  return (
-                    <li key={page.slug}>
-                      <button
-                        onClick={() => handlePageSelect(page)}
-                        className={`w-full text-left px-5 py-4 flex items-center gap-4 transition-all hover:bg-gray-50 ${isSelected ? 'bg-blue-50 border-l-4 border-sib-navy' : 'border-l-4 border-transparent'}`}
-                      >
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${isSelected ? 'bg-sib-navy' : 'bg-gray-100'}`}>
-                          <page.Icon className={`w-5 h-5 ${isSelected ? 'text-white' : 'text-gray-500'}`} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className={`font-semibold text-sm truncate ${isSelected ? 'text-sib-navy' : 'text-gray-800'}`}>
-                            {page.title}
-                          </p>
-                          {dated ? (
-                            <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                              <Clock className="w-3 h-3" />
-                              {formatDate(dated)}
-                            </p>
-                          ) : (
-                            <p className="text-xs text-gray-400 mt-0.5">Non personnalisé</p>
-                          )}
-                        </div>
-                        {hasContent && (
-                          <span
-                            className="w-2.5 h-2.5 rounded-full bg-emerald-400 flex-shrink-0"
-                            title="Contenu personnalisé actif"
-                          />
-                        )}
-                        <ChevronRight className={`w-4 h-4 flex-shrink-0 ${isSelected ? 'text-sib-navy' : 'text-gray-300'}`} />
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center space-x-4 mb-4">
+            <Link to={ROUTES.ADMIN_DASHBOARD}>
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Retour au Dashboard
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Gestion du Contenu</h1>
+              <p className="text-gray-600 mt-2">
+                Administration centralisée de tous les contenus de l'application SIB
+              </p>
             </div>
           </div>
+        </div>
 
-          {/* Panneau droit — éditeur */}
-          <div className="lg:col-span-8">
-            {!selectedPage ? (
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm h-full flex items-center justify-center py-40">
-                <div className="text-center text-gray-400">
-                  <Edit3 className="w-14 h-14 mx-auto mb-4 opacity-20" />
-                  <p className="font-semibold text-gray-500">Sélectionnez une page à modifier</p>
-                  <p className="text-sm mt-1 text-gray-400">Cliquez sur une page dans le panneau de gauche</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Liste des sections */}
+          <div className="lg:col-span-1">
+            <Card>
+              <div className="p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                  <Settings className="h-5 w-5 mr-2 text-gray-600" />
+                  Sections Modifiables
+                </h2>
+
+                <div className="space-y-3">
+                  {contentSections.map((section) => {
+                    const IconComponent = iconMap[section.icon_name] || Settings;
+                    const isSelected = selectedSectionId === section.id;
+
+                    return (
+                      <motion.div
+                        key={section.id}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <button
+                          onClick={() => handleSectionSelect(section.id)}
+                          className={`w-full p-4 rounded-lg border text-left transition-all ${
+                            isSelected
+                              ? 'border-blue-500 bg-blue-50 shadow-md'
+                              : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          }`}
+                        >
+                          <div className="flex items-start space-x-3">
+                            <div className={`p-2 rounded-lg ${section.bg_color}`}>
+                              <IconComponent className={`h-4 w-4 ${section.color}`} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-medium text-gray-900 text-sm">
+                                {section.title}
+                              </h3>
+                              <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                                {section.description}
+                              </p>
+                              <div className="flex items-center justify-between mt-2">
+                                <span className="text-xs text-gray-500">
+                                  Modifié: {new Date(section.last_modified).toLocaleDateString('fr-FR')}
+                                </span>
+                                {getStatusBadge(section.status)}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
-            ) : (
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
-                {/* En-tête de l'éditeur */}
-                <div className="px-8 py-5 border-b border-gray-100 flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-sib-navy flex items-center justify-center flex-shrink-0">
-                      <selectedPage.Icon className="w-5 h-5 text-white" />
+            </Card>
+          </div>
+
+          {/* Éditeur de contenu */}
+          <div className="lg:col-span-2">
+            {selectedSectionData ? (
+              <Card>
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-3">
+                      <div className={`p-2 rounded-lg ${selectedSectionData.bg_color}`}>
+                        {selectedSectionData.icon_name && iconMap[selectedSectionData.icon_name] ? React.createElement(iconMap[selectedSectionData.icon_name], { className: `h-5 w-5 ${selectedSectionData.color}` }) : <Settings className={`h-5 w-5 ${selectedSectionData.color}`} />}
+                      </div>
+                      <div>
+                        <h2 className="text-xl font-semibold text-gray-900">
+                          {selectedSectionData.title}
+                        </h2>
+                        <p className="text-sm text-gray-600">
+                          {selectedSectionData.description}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="font-bold text-gray-900">{selectedPage.title}</h2>
-                      <a
-                        href={selectedPage.route}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-sib-gold hover:underline flex items-center gap-1"
-                      >
-                        <ExternalLink className="w-3 h-3" /> Voir la page en direct
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={handleReset}
-                      className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-                    >
-                      Annuler
-                    </button>
-                    <button
-                      onClick={handleSave}
-                      disabled={isSaving}
-                      className="px-6 py-2 bg-sib-navy text-white text-sm font-bold rounded-xl hover:bg-sib-navy/90 transition-colors disabled:opacity-50 flex items-center gap-2 shadow-sm"
-                    >
-                      {isSaving
-                        ? <Loader2 className="w-4 h-4 animate-spin" />
-                        : <Save className="w-4 h-4" />}
-                      Sauvegarder
-                    </button>
-                  </div>
-                </div>
 
-                {/* Messages de statut */}
-                {saveStatus === 'success' && (
-                  <div className="mx-8 mt-5 px-5 py-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-emerald-700 text-sm">
-                    <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-                    Modifications sauvegardées. Les visiteurs voient le nouveau contenu immédiatement.
-                  </div>
-                )}
-                {saveStatus === 'error' && (
-                  <div className="mx-8 mt-5 px-5 py-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-red-700 text-sm">
-                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                    Erreur lors de la sauvegarde. Vérifiez votre connexion et vos droits d'administration.
-                  </div>
-                )}
-
-                {/* Champs éditables */}
-                <div className="px-8 py-6 space-y-6">
-                  <div className="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-700 text-xs">
-                    <span className="text-base flex-shrink-0">💡</span>
-                    <span>
-                      Les champs sont préremplis avec le contenu actuel de la page. Seules les valeurs
-                      modifiées (différentes du contenu par défaut) sont enregistrées comme personnalisation.
-                    </span>
-                  </div>
-
-                  {selectedPage.fields.map((field) => (
-                    <div key={field.key}>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        {field.label}
-                      </label>
-                      {field.type === 'textarea' ? (
-                        <textarea
-                          value={editValues[field.key] ?? ''}
-                          onChange={(e) => handleFieldChange(field.key, e.target.value)}
-                          placeholder={field.placeholder ?? ''}
-                          rows={4}
-                          className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-800 resize-y focus:outline-none focus:ring-2 focus:ring-sib-navy/20 focus:border-sib-navy transition-colors placeholder:text-gray-300"
-                        />
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" onClick={handlePreview}>
+                        <Eye className="h-4 w-4 mr-2" />
+                        Prévisualiser
+                      </Button>
+                      {!isEditing ? (
+                        <Button variant="default" size="sm" onClick={handleEdit}>
+                          <Edit className="h-4 w-4 mr-2" />
+                          Modifier
+                        </Button>
                       ) : (
-                        <input
-                          type="text"
-                          value={editValues[field.key] ?? ''}
-                          onChange={(e) => handleFieldChange(field.key, e.target.value)}
-                          placeholder={field.placeholder ?? ''}
-                          className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-sib-navy/20 focus:border-sib-navy transition-colors placeholder:text-gray-300"
-                        />
+                        <Button variant="default" size="sm" onClick={handleSave} disabled={isLoading}>
+                          {isLoading ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                              Sauvegarde...
+                            </>
+                          ) : (
+                            <>
+                              <Save className="h-4 w-4 mr-2" />
+                              Sauvegarder
+                            </>
+                          )}
+                        </Button>
                       )}
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Zone d'édition */}
+                  <div className="space-y-6">
+                    {selectedSectionId === 'home' && (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Titre Principal
+                          </label>
+                          <input
+                            type="text"
+                            disabled={!isEditing}
+                            value={currentContentData.mainTitle || ''}
+                            onChange={(e) => handleContentChange('mainTitle', e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Description
+                          </label>
+                          <textarea
+                            rows={4}
+                            disabled={!isEditing}
+                            value={currentContentData.descriptionText || ''}
+                            onChange={(e) => handleContentChange('descriptionText', e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Statistiques Clés (séparées par des virgules)
+                          </label>
+                          <input
+                            type="text"
+                            disabled={!isEditing}
+                            value={currentContentData.keyStats ? currentContentData.keyStats.join(', ') : ''}
+                            onChange={(e) => handleContentChange('keyStats', e.target.value.split(',').map((s: string) => s.trim()))}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedSectionId === 'pavilions' && (
+                      <div className="space-y-4">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                          <p className="text-sm text-blue-800">
+                            <strong>Info:</strong> La gestion des pavillons se fait via la page dédiée
+                            "Gestion des Pavillons" dans le menu principal.
+                          </p>
+                          <Link to={ROUTES.ADMIN_PAVILIONS}>
+                            <Button variant="outline" size="sm" className="mt-2">
+                              <Building2 className="h-4 w-4 mr-2" />
+                              Aller à la Gestion des Pavillons
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedSectionId === 'events' && (
+                      <div className="space-y-4">
+                        <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                          <p className="text-sm text-orange-800">
+                            <strong>Info:</strong> La gestion des événements se fait via la page dédiée
+                            "Gestion des Événements" dans le menu principal.
+                          </p>
+                          <Link to={ROUTES.ADMIN_EVENTS}>
+                            <Button variant="outline" size="sm" className="mt-2">
+                              <Calendar className="h-4 w-4 mr-2" />
+                              Aller à la Gestion des Événements
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedSectionId === 'news' && (
+                      <div className="space-y-4">
+                        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                          <p className="text-sm text-indigo-800">
+                            <strong>Info:</strong> La gestion des actualités se fait via le système
+                            de création d'articles dans le menu principal.
+                          </p>
+                          <Link to={ROUTES.ADMIN_CREATE_NEWS}>
+                            <Button variant="outline" size="sm" className="mt-2">
+                              <FileText className="h-4 w-4 mr-2" />
+                              Créer un Article
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Sections génériques */}
+                    {(selectedSectionId === 'exhibitors' || selectedSectionId === 'partners' || selectedSectionId === 'metrics') && (
+                      <div className="space-y-4">
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                          <p className="text-sm text-gray-700">
+                            Cette section est gérée automatiquement par le système.
+                            Les modifications se font via les interfaces dédiées dans le menu principal.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </Card>
+            ) : (
+              <Card>
+                <div className="p-12 text-center">
+                  <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    Sélectionnez une Section
+                  </h3>
+                  <p className="text-gray-600">
+                    Choisissez une section dans la liste à gauche pour commencer l'édition du contenu
+                  </p>
+                </div>
+              </Card>
             )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
+

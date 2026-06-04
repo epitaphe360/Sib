@@ -1,6 +1,6 @@
-﻿/**
- * Section "Les Univers du Salon" — 6 filières du bâtiment
- * Design : grille de cartes hover avec fond sombre/clair alterné
+/**
+ * SIB 2026 — ThemesSection
+ * Les six filieres officielles, cartes epurees avec numerotation en ombre.
  */
 
 import React from 'react';
@@ -29,7 +29,7 @@ const themes = [
     Icon: Compass,
     number: '02',
     title: 'Menuiserie & Fermeture',
-    desc: 'Menuiserie bois, métallique et PVC, portes, fenêtres, volets, façades et systèmes d\'occultation.',
+    desc: "Menuiserie bois, métallique et PVC, portes, fenêtres, volets, façades et systèmes d'occultation.",
   },
   {
     Icon: Layers,
@@ -57,103 +57,94 @@ const themes = [
   },
 ];
 
+const ThemeCard: React.FC<{ theme: typeof themes[number]; index: number }> = ({ theme, index }) => {
+  const Icon = theme.Icon;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.55, delay: index * 0.07 }}
+      className="home-theme-card home-card-lift group relative rounded-2xl p-7 bg-white dark:bg-neutral-900 border shadow-sm overflow-hidden"
+    >
+      {/* Accent strip */}
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#F39200] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+      {/* Background number */}
+      <span
+        aria-hidden
+        className="absolute -top-2 right-4 font-bold text-7xl pointer-events-none select-none leading-none text-neutral-100 dark:text-neutral-800 group-hover:text-accent-500/20 transition-colors duration-500 tabular-nums"
+      >
+        {theme.number}
+      </span>
+
+      {/* Icon */}
+      <div className="home-theme-icon relative z-10 h-12 w-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110">
+        <Icon className="h-5 w-5" />
+      </div>
+
+      <h3 className="relative z-10 text-base font-semibold uppercase tracking-wide mb-3 text-neutral-900 dark:text-white">
+        {theme.title}
+      </h3>
+
+      <div className="relative z-10 h-0.5 w-10 rounded-full mb-4 bg-[#F39200]/40 group-hover:bg-[#F39200] group-hover:w-16 transition-all duration-300" />
+
+      <p className="relative z-10 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+        {theme.desc}
+      </p>
+    </motion.div>
+  );
+};
+
 export const ThemesSection: React.FC = () => {
   return (
-    <section className="relative py-20 lg:py-28 bg-gradient-to-b from-white via-sib-light/40 to-white overflow-hidden">
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-        {/* En-tête */}
+    <section className="home-light relative py-20 lg:py-28 bg-white dark:bg-neutral-950 overflow-hidden">
+      <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14"
+          className="text-center mb-14 max-w-3xl mx-auto"
         >
-          <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 text-yellow-400">
-            Univers du Salon
-          </p>
-          <h2 className="font-heading font-bold text-4xl sm:text-5xl text-gray-900 uppercase tracking-wide mb-4">
-            Les Filières du Bâtiment
+          <div className="home-section-kicker mb-4 flex justify-center">Secteurs d&apos;exposition</div>
+          <h2 className="home-section-title text-3xl lg:text-5xl tracking-tight leading-[1.05] mb-5">
+            Tous les secteurs du <span className="sib-text-gradient">bâtiment</span>
           </h2>
-          <p className="text-base text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            SIB 2026 réunit entreprises privées, organismes publics, fournisseurs de matériaux, architectes et ingénieurs autour de six filières officielles, avec Espace Démonstration, SIB Academy et rencontres B2B.
+          <p className="text-base lg:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Six filières officielles couvrant l&apos;ensemble de la chaîne de valeur — comme sur les grands salons BATIMAT, CONSTRUMAT et BIG5 — avec pavillons thématiques, démonstrations et rencontres B2B.
           </p>
           <div className="flex items-center justify-center gap-3 mt-6">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-yellow-400" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-yellow-400" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-yellow-400" />
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-accent-500" />
+            <div className="w-1.5 h-1.5 rotate-45 bg-accent-500" />
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-accent-500" />
           </div>
         </motion.div>
 
-        {/* Grille 3×2 */}
+        {/* Grid 3x2 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {themes.map((theme, i) => (
-            <ThemeCard key={i} theme={theme} index={i} />
+            <ThemeCard key={theme.number} theme={theme} index={i} />
           ))}
         </div>
 
-        {/* CTA bas */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-12"
+          className="text-center mt-14"
         >
           <Link to={ROUTES.EXHIBITORS}>
-            <Button size="lg" className="group">
+            <Button variant="primary" size="lg" className="group">
               Explorer les exposants
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
         </motion.div>
       </div>
     </section>
-  );
-};
-
-/* ── Carte thème ─────────────────────────────────────────────────────────── */
-const ThemeCard: React.FC<{
-  theme: typeof themes[0];
-  index: number;
-}> = ({ theme, index }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55, delay: index * 0.08 }}
-      className="group relative rounded-2xl p-6 bg-white/95 backdrop-blur border border-slate-200/80 shadow-sm hover:shadow-sib-lg hover:-translate-y-1 transition-all duration-300"
-    >
-      {/* Numéro de fond */}
-      <span
-        className="absolute top-4 right-5 font-heading font-bold text-5xl pointer-events-none select-none transition-opacity duration-300"
-        style={{ lineHeight: 1 }}
-      >
-        <span className="text-indigo-600/7 group-hover:text-yellow-400/15">
-          {theme.number}
-        </span>
-      </span>
-
-      {/* Icône */}
-      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-sib-light/70 border border-slate-200 text-indigo-600 group-hover:text-yellow-400 transition-colors duration-300">
-        <theme.Icon className="h-6 w-6" />
-      </div>
-
-      {/* Titre */}
-      <h3 className="font-heading font-bold text-lg uppercase tracking-wide mb-2 text-slate-900">
-        {theme.title}
-      </h3>
-
-      {/* Trait */}
-      <div className="h-0.5 w-8 rounded-full mb-3 bg-yellow-400/50 group-hover:bg-yellow-400 transition-colors duration-300" />
-
-      {/* Description */}
-      <p className="text-sm text-gray-500 leading-relaxed">
-        {theme.desc}
-      </p>
-    </motion.div>
   );
 };

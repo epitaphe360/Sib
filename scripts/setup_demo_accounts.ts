@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://sbyizudifmqakzxjlndr.supabase.co';
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
@@ -54,7 +54,7 @@ async function setupDemoAccounts() {
           // Essayer une autre approche: get user by email
           const { data: users } = await supabase.auth.admin.listUsers();
           const existingUser = users?.users?.find(u => u.email === account.email);
-          
+
           if (existingUser) {
             const { error: updateErr } = await supabase.auth.admin.updateUserById(
               existingUser.id,
@@ -86,7 +86,7 @@ async function setupDemoAccounts() {
               name: account.name,
               type: account.type,
               status: 'active',
-              profile: JSON.stringify({ 
+              profile: JSON.stringify({
                 role: account.type,
                 standArea: (account as any).standArea
               }),
@@ -117,11 +117,11 @@ async function setupDemoAccounts() {
   // Vérifier les comptes créés
   console.log('🔍 Vérification des comptes créés...\n');
   const { data: { users }, error: listError } = await supabase.auth.admin.listUsers();
-  
+
   if (listError) {
     console.log(`Erreur lors de la listage: ${listError.message}`);
   } else {
-    const demoUsers = users?.filter(u => 
+    const demoUsers = users?.filter(u =>
       u.email?.includes('@test.sib2026.ma') || u.email?.includes('@sib.com')
     );
     console.log(`✅ Comptes de démo trouvés: ${demoUsers?.length || 0}`);

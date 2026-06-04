@@ -43,6 +43,7 @@ class MobilePushService {
    */
   async initialize(userId: string): Promise<boolean> {
     if (!this.isNative) {
+      console.log('Not a native platform, skipping push notifications');
       return false;
     }
 
@@ -53,9 +54,11 @@ class MobilePushService {
       if (permStatus.receive === 'prompt') {
         const result = await PushNotifications.requestPermissions();
         if (result.receive !== 'granted') {
+          console.warn('Push notification permission not granted');
           return false;
         }
       } else if (permStatus.receive !== 'granted') {
+        console.warn('Push notification permission denied');
         return false;
       }
 
@@ -65,6 +68,7 @@ class MobilePushService {
       // Setup listeners
       this.setupListeners(userId);
 
+      console.log('✅ Push notifications initialized');
       return true;
     } catch (error) {
       console.error('❌ Error initializing push notifications:', error);
@@ -78,6 +82,7 @@ class MobilePushService {
   private setupListeners(userId: string): void {
     // Listener: registration réussie
     PushNotifications.addListener('registration', async (token: Token) => {
+      console.log('Push registration success, token: ' + token.value);
       this.pushToken = token.value;
 
       // Sauvegarder le token dans Supabase
@@ -91,6 +96,7 @@ class MobilePushService {
 
     // Listener: notification reçue (app au premier plan)
     PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
+      console.log('Push notification received:', notification);
 
       // Afficher une notification locale
       this.showLocalNotification({
@@ -102,6 +108,7 @@ class MobilePushService {
 
     // Listener: notification cliquée
     PushNotifications.addListener('pushNotificationActionPerformed', (action: ActionPerformed) => {
+      console.log('Push notification action performed:', action);
 
       // Gérer l'action (navigation, etc.)
       this.handleNotificationAction(action);
@@ -131,6 +138,7 @@ class MobilePushService {
         });
 
       if (error) {throw error;}
+      console.log('✅ Push token saved to database');
     } catch (error) {
       console.error('❌ Error saving push token:', error);
     }
@@ -225,6 +233,7 @@ class MobilePushService {
       // Unregister from native platform
       await PushNotifications.removeAllListeners();
 
+      console.log('✅ Push notifications unregistered');
     } catch (error) {
       console.error('❌ Error unregistering push notifications:', error);
     }

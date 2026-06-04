@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Page Station d'Impression de Badges - Service Clientèle
  *
  * Cette page est utilisée par le personnel du stand "Service Clientèle"
@@ -42,7 +42,6 @@ import {
   CreditCard,
   Badge,
   X,
-  UserPlus,
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -50,18 +49,16 @@ import {
   lookupBadgeByQRData,
   lookupBadgeByEmail,
   lookupBadgeByName,
-  lookupBadgeByUserId,
   recordPrint,
   getPrintHistory,
   getPrintStats,
   BadgeLookupResult,
   PrintRecord,
 } from '../services/badgePrintService';
-import { SupabaseService } from '../services/supabaseService';
 import { generateBadgeFromUser, getBadgeColor, getAccessLevelLabel } from '../services/badgeService';
 import PrintableBadge from '../components/badge/PrintableBadge';
 
-type Tab = 'scanner' | 'search' | 'history' | 'stats' | 'create';
+type Tab = 'scanner' | 'search' | 'history' | 'stats';
 type BadgeFormat = 'card' | 'badge';
 
 export default function BadgePrintStationPage() {
@@ -89,25 +86,7 @@ export default function BadgePrintStationPage() {
   const [badgeFormat, setBadgeFormat] = useState<BadgeFormat>('badge');
   const [printHistory, setPrintHistory] = useState<PrintRecord[]>([]);
   const [stats, setStats] = useState(getPrintStats());
-
-  // --- Nouveau visiteur ---
-  const [newVisitorForm, setNewVisitorForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    company: '',
-    position: '',
-    country: '',
-  });
-  const [isCreatingVisitor, setIsCreatingVisitor] = useState(false);
-  const [stationId] = useState(() => {
-    const stored = localStorage.getItem('badgeStationId');
-    if (stored) {return stored;}
-    const newId = `STATION-${Date.now().toString(36).toUpperCase()}`;
-    localStorage.setItem('badgeStationId', newId);
-    return newId;
-  });
+  const [stationId] = useState(() => `STATION-${Math.random().toString(36).slice(2, 6).toUpperCase()}`);
 
   const scannerRef = useRef<Html5Qrcode | null>(null);
 
@@ -394,7 +373,7 @@ export default function BadgePrintStationPage() {
       </div>
       ${!isCard ? `
         <div class="footer">
-          <div>25 - 29 Novembre 2026 • El Jadida, Maroc</div>
+          <div>1 - 3 Avril 2026 • El Jadida, Maroc</div>
           <div style="margin-top: 0.5mm">
             Valide du ${new Date(badge.validFrom).toLocaleDateString('fr-FR')} au ${new Date(badge.validUntil).toLocaleDateString('fr-FR')}
           </div>
@@ -406,7 +385,7 @@ export default function BadgePrintStationPage() {
 </html>`;
 
       // Ouvrir une fenêtre d'impression
-      const printWindow = globalThis.open('', '_blank', 'width=600,height=800');
+      const printWindow = window.open('', '_blank', 'width=600,height=800');
       if (!printWindow) {
         toast.error('Veuillez autoriser les popups pour l\'impression');
         setIsPrinting(false);
@@ -470,58 +449,6 @@ export default function BadgePrintStationPage() {
     setSearchQuery('');
   };
 
-  // Validation téléphone : au moins 8 chiffres (international ou local)
-  const isPhoneValid = (phone: string) => /^[+\d][\d\s().\\-]{6,}$/.test(phone.trim());
-
-  // --- Création visiteur sur place ---
-  const handleCreateVisitor = async () => {
-    const { firstName, lastName, email, phone } = newVisitorForm;
-    if (!firstName.trim() || !lastName.trim() || !email.trim()) {
-      toast.error('Prénom, nom et email sont obligatoires');
-      return;
-    }
-    if (!phone.trim()) {
-      toast.error('Le numéro de téléphone est obligatoire');
-      return;
-    }
-    if (!isPhoneValid(phone)) {
-      toast.error('Numéro de téléphone invalide (ex: +212 6 00 00 00 00)');
-      return;
-    }
-
-    setIsCreatingVisitor(true);
-    try {
-      const fullName = `${firstName.trim()} ${lastName.trim()}`;
-      const newUser = await SupabaseService.createUser({
-        type: 'visitor',
-        name: fullName,
-        email: email.trim().toLowerCase(),
-        status: 'active',
-        profile: {
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          phone: newVisitorForm.phone,
-          company: newVisitorForm.company,
-          position: newVisitorForm.position,
-          country: newVisitorForm.country || 'Maroc',
-        },
-      });
-
-      // Générer le badge puis le charger
-      await generateBadgeFromUser(newUser.id);
-      const result = await lookupBadgeByUserId(newUser.id);
-      setLookupResult(result);
-
-      toast.success(`Visiteur ${fullName} créé avec succès !`);
-      setNewVisitorForm({ firstName: '', lastName: '', email: '', phone: '', company: '', position: '', country: '' });
-      setActiveTab('scanner'); // Basculer vers le panneau d'aperçu
-    } catch (err: any) {
-      toast.error(err?.message || 'Erreur lors de la création du visiteur');
-    } finally {
-      setIsCreatingVisitor(false);
-    }
-  };
-
   // --- Cleanup ---
   useEffect(() => {
     return () => {
@@ -533,7 +460,6 @@ export default function BadgePrintStationPage() {
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: 'scanner', label: 'Scanner QR', icon: <QrCode className="w-5 h-5" /> },
     { id: 'search', label: 'Recherche', icon: <Search className="w-5 h-5" /> },
-    { id: 'create', label: 'Nouveau Visiteur', icon: <UserPlus className="w-5 h-5" /> },
     { id: 'history', label: 'Historique', icon: <History className="w-5 h-5" /> },
     { id: 'stats', label: 'Statistiques', icon: <BarChart3 className="w-5 h-5" /> },
   ];
@@ -829,173 +755,6 @@ export default function BadgePrintStationPage() {
                           ))}
                         </div>
                       )}
-                    </div>
-                  </Card>
-                </motion.div>
-              )}
-
-              {/* CREATE VISITOR TAB */}
-              {activeTab === 'create' && (
-                <motion.div
-                  key="create"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                >
-                  <Card>
-                    <div className="p-4 border-b border-gray-100">
-                      <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-                        <UserPlus className="w-5 h-5 text-blue-600" />
-                        Créer un Nouveau Visiteur
-                      </h2>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Enregistrez un visiteur sur place et imprimez son badge immédiatement.
-                      </p>
-                    </div>
-                    <div className="p-4 space-y-4">
-                      {/* Prénom & Nom */}
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                            Prénom <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            value={newVisitorForm.firstName}
-                            onChange={(e) => setNewVisitorForm(f => ({ ...f, firstName: e.target.value }))}
-                            placeholder="Jean"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                            Nom <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            value={newVisitorForm.lastName}
-                            onChange={(e) => setNewVisitorForm(f => ({ ...f, lastName: e.target.value }))}
-                            placeholder="Dupont"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Email */}
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
-                          Email <span className="text-red-500">*</span>
-                        </label>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                          <input
-                            type="email"
-                            value={newVisitorForm.email}
-                            onChange={(e) => setNewVisitorForm(f => ({ ...f, email: e.target.value }))}
-                            placeholder="jean.dupont@example.com"
-                            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Téléphone */}
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
-                          Téléphone <span className="text-red-500">*</span>
-                        </label>
-                        <div className="relative">
-                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                          <input
-                            type="tel"
-                            value={newVisitorForm.phone}
-                            onChange={(e) => setNewVisitorForm(f => ({ ...f, phone: e.target.value }))}
-                            placeholder="+212 6 00 00 00 00"
-                            className={`w-full pl-9 pr-3 py-2 border rounded-lg focus:ring-2 focus:border-blue-500 text-sm ${
-                              newVisitorForm.phone && !isPhoneValid(newVisitorForm.phone)
-                                ? 'border-red-400 focus:ring-red-400 bg-red-50'
-                                : 'border-gray-300 focus:ring-blue-500'
-                            }`}
-                          />
-                        </div>
-                        {newVisitorForm.phone && !isPhoneValid(newVisitorForm.phone) && (
-                          <p className="mt-1 text-xs text-red-600">Format invalide — ex: +212 6 00 00 00 00</p>
-                        )}
-                        {!newVisitorForm.phone && (
-                          <p className="mt-1 text-xs text-gray-400">Obligatoire</p>
-                        )}
-                      </div>
-
-                      {/* Entreprise & Poste */}
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">Entreprise</label>
-                          <div className="relative">
-                            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                            <input
-                              type="text"
-                              value={newVisitorForm.company}
-                              onChange={(e) => setNewVisitorForm(f => ({ ...f, company: e.target.value }))}
-                              placeholder="Nom de société"
-                              className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">Poste</label>
-                          <input
-                            type="text"
-                            value={newVisitorForm.position}
-                            onChange={(e) => setNewVisitorForm(f => ({ ...f, position: e.target.value }))}
-                            placeholder="Directeur, Ingénieur…"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Pays */}
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Pays</label>
-                        <div className="relative">
-                          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                          <input
-                            type="text"
-                            value={newVisitorForm.country}
-                            onChange={(e) => setNewVisitorForm(f => ({ ...f, country: e.target.value }))}
-                            placeholder="Maroc"
-                            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Submit */}
-                      <Button
-                        onClick={handleCreateVisitor}
-                        disabled={
-                          isCreatingVisitor ||
-                          !newVisitorForm.firstName ||
-                          !newVisitorForm.lastName ||
-                          !newVisitorForm.email ||
-                          !newVisitorForm.phone ||
-                          !isPhoneValid(newVisitorForm.phone)
-                        }
-                        className="w-full"
-                      >
-                        {isCreatingVisitor ? (
-                          <>
-                            <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                            Création en cours…
-                          </>
-                        ) : (
-                          <>
-                            <UserPlus className="w-4 h-4 mr-2" />
-                            Créer le visiteur et générer le badge
-                          </>
-                        )}
-                      </Button>
-
-                      <p className="text-xs text-gray-400 text-center">
-                        Le badge s'affichera dans le panneau de droite. Les champs marqués <span className="text-red-500">*</span> sont obligatoires.
-                      </p>
                     </div>
                   </Card>
                 </motion.div>

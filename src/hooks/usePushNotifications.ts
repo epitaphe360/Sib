@@ -33,6 +33,7 @@ export function usePushNotifications() {
 
         // Check if browser supports push notifications
         if (!PushNotificationService.isNotificationSupported()) {
+          console.info('ℹ️ Push notifications not supported on this browser');
           return;
         }
 
@@ -43,8 +44,10 @@ export function usePushNotifications() {
               '/firebase-messaging-sw.js',
               { scope: '/' }
             );
+            console.log('✅ Service Worker registered for push notifications:', registration.scope);
           }
         } catch (swError) {
+          console.warn('⚠️ Service Worker registration failed:', swError);
           // Continue even if service worker fails - web push might still work
         }
 
@@ -52,9 +55,11 @@ export function usePushNotifications() {
         const initialized = await PushNotificationService.initialize();
 
         if (initialized) {
+          console.log('✅ Push notifications initialized successfully');
 
           // Set up listener for foreground notifications
           PushNotificationService.onNotificationReceived((notification) => {
+            console.log('🔔 Received push notification:', notification);
 
             // You can add custom handling here, such as:
             // - Showing in-app notification toast
@@ -62,6 +67,7 @@ export function usePushNotifications() {
             // - Playing notification sound
           });
         } else {
+          console.info('ℹ️ Push notifications not initialized (permission denied or unsupported)');
         }
       } catch (error) {
         console.error('❌ Error initializing push notifications:', error);

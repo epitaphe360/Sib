@@ -1,4 +1,4 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { SupabaseService } from '../services/supabaseService';
 import { supabase } from '../lib/supabase';
@@ -33,7 +33,7 @@ interface SignUpPayload {
   name: string;
   type: User['type'];
   profile: Partial<UserProfile>;
-  visitor_level?: 'free' | 'vip';
+  visitor_level?: 'free' | 'premium' | 'vip';
 }
 
 interface OAuthError extends Error {
@@ -50,7 +50,7 @@ interface AuthState {
 
   // Actions
   login: (email: string, password: string, options?: { rememberMe?: boolean }) => Promise<void>;
-  signUp: (credentials: { email: string, password: string }, profileData: Partial<UserProfile> & { role?: User['type'] }) => Promise<{ error: Error | null; user?: User | null }>;
+  signUp: (credentials: { email: string, password: string }, profileData: Partial<UserProfile>) => Promise<{ error: Error | null; user?: User | null }>;
   register: (userData: RegistrationData) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   loginWithLinkedIn: () => Promise<void>;
@@ -174,12 +174,6 @@ const useAuthStore = create<AuthState>()(
         throw new Error('Le mot de passe doit contenir au moins 8 caractères');
       }
 
-      // Normalize user type — supports both `role` (legacy callers) and defaults to 'visitor'
-      const validTypes: User['type'][] = ['admin', 'exhibitor', 'partner', 'visitor', 'security'];
-      const userType: User['type'] = validTypes.includes(profileData.role as User['type'])
-        ? (profileData.role as User['type'])
-        : 'visitor';
-
       // Créer l'utilisateur via SupabaseService
       const newUser = await SupabaseService.signUp(
         credentials.email,
@@ -187,20 +181,19 @@ const useAuthStore = create<AuthState>()(
         {
           name: profileData.firstName && profileData.lastName
             ? `${profileData.firstName} ${profileData.lastName}`.trim()
-            : (profileData as Record<string, unknown>).name as string || '',
-          type: userType,
+            : profileData.name || '',
+          type: profileData.role || 'visitor',
           // ✅ Status selon le type: partner/exhibitor → pending_payment, visitor → active
-          status: (userType === 'partner' || userType === 'exhibitor')
+          status: (profileData.role === 'partner' || profileData.role === 'exhibitor')
             ? 'pending_payment'
             : profileData.status || 'active',
           profile: {
-            // Spread first so explicit guards below always win over undefined values
-            ...profileData,
             firstName: profileData.firstName || '',
             lastName: profileData.lastName || '',
             company: profileData.company || '',
             position: profileData.position || '',
-            phone: profileData.phone || ''
+            phone: profileData.phone || '',
+            ...profileData
           }
         }
       );
@@ -210,21 +203,22 @@ const useAuthStore = create<AuthState>()(
       }
 
 
-      // Créer demande d'inscription pour exposants et sponsors
-      if (userType === 'exhibitor' || userType === 'partner') {
+      // Créer demande d'inscription pour exposants et partenaires
+      if (profileData.role === 'exhibitor' || profileData.role === 'partner') {
 
         // ✅ Ne pas bloquer l'inscription si la création de demande échoue (erreur RLS possible)
         try {
           await SupabaseService.createRegistrationRequest({
-            userType,
+            userType: profileData.role,
             email: credentials.email,
             firstName: profileData.firstName || '',
             lastName: profileData.lastName || '',
-            companyName: (profileData as Record<string, unknown>).companyName as string || profileData.company || '',
+            companyName: profileData.companyName || profileData.company || '',
             phone: profileData.phone || '',
             profileData: profileData
           });
         } catch (regRequestError) {
+          console.warn('⚠️ Erreur création demande inscription (non bloquante):', regRequestError);
           // Ne pas bloquer l'inscription - le compte est déjà créé
         }
 
@@ -233,9 +227,10 @@ const useAuthStore = create<AuthState>()(
           await SupabaseService.sendRegistrationEmail({
             to: credentials.email,
             name: `${profileData.firstName || ''} ${profileData.lastName || ''}`.trim(),
-            userType
+            userType: profileData.role
           });
         } catch (emailError) {
+          console.warn('⚠️ Erreur envoi email:', emailError);
           // Ne pas bloquer l'inscription si l'email échoue
         }
       }
@@ -302,23 +297,18 @@ const useAuthStore = create<AuthState>()(
         });
       }
 
-      // Créer une demande d'inscription pour exposants et sponsors
+      // Créer une demande d'inscription pour exposants et partenaires
       if (userType === 'exhibitor' || userType === 'partner') {
-        // Ne pas bloquer l'inscription si la création de demande échoue (RLS ou erreur réseau)
-        try {
-          await SupabaseService.createRegistrationRequest({
-            userType: userType,
-            email: userData.email,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            companyName: userData.companyName ?? '',
-            position: userData.position ?? '',
-            phone: userData.phone ?? '',
-            profileData: userData
-          });
-        } catch (regRequestError) {
-          // Le compte est créé - ne pas bloquer l'inscription
-        }
+        await SupabaseService.createRegistrationRequest({
+          userType: userType,
+          email: userData.email,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          companyName: userData.companyName ?? '',
+          position: userData.position ?? '',
+          phone: userData.phone ?? '',
+          profileData: userData
+        });
 
         // Envoyer l'email de confirmation (ne pas bloquer si échec)
         try {
@@ -329,8 +319,10 @@ const useAuthStore = create<AuthState>()(
             lastName: userData.lastName,
             companyName: userData.companyName ?? ''
           });
+          console.log('✅ Email de confirmation envoyé');
         } catch (emailError) {
           // L'email a échoué mais l'inscription est valide
+          console.warn('⚠️ Impossible d\'envoyer l\'email de confirmation:', emailError);
           // Ne pas bloquer l'inscription
         }
 
@@ -428,6 +420,7 @@ const useAuthStore = create<AuthState>()(
     try {
       // Sign out from Supabase
       await supabase.auth.signOut();
+      console.log('✅ Déconnexion Supabase réussie');
     } catch (error) {
       console.error('❌ Erreur lors de la déconnexion Supabase:', error);
     }
@@ -441,6 +434,7 @@ const useAuthStore = create<AuthState>()(
       localStorage.removeItem('sib-auth-storage');
       localStorage.removeItem('sb-sbyizudifmqakzxjlndr-auth-token');
       sessionStorage.clear();
+      console.log('✅ LocalStorage et sessionStorage nettoyés');
     } catch (error) {
       console.error('❌ Erreur nettoyage storage:', error);
     }
@@ -469,17 +463,16 @@ const useAuthStore = create<AuthState>()(
     set({ isLoading: true });
 
     try {
+      console.log('🔄 Début mise à jour profil pour:', user.id);
+      console.log('📊 Données à fusionner:', Object.keys(profileData));
 
-      // ✅ Fusionner les données de manière robuste — exclure les valeurs undefined
-      // pour ne pas écraser des champs valides existants
-      const definedUpdates = Object.fromEntries(
-        Object.entries(profileData).filter(([, v]) => v !== undefined)
-      ) as Partial<UserProfile>;
+      // ✅ Fusionner les données de manière robuste
       const mergedProfile = {
         ...user.profile,
-        ...definedUpdates
+        ...profileData
       };
 
+      console.log('✅ Profil fusionné, envoi vers Supabase...');
 
       // ✅ Envoyer la mise à jour vers Supabase
       const updatedUser = await SupabaseService.updateUser(user.id, {
@@ -495,7 +488,7 @@ const useAuthStore = create<AuthState>()(
       set({ user: updatedUser, isLoading: false });
 
       // ✅ Vérifier que les données sont bien sauvegardées
-      console.log('✅ Profil mis à jour:', {
+      console.log('✅ Profil mis à jour avec succès:', {
         userId: user.id,
         sectors: updatedUser.profile.sectors?.length || 0,
         interests: updatedUser.profile.interests?.length || 0,
@@ -522,6 +515,7 @@ const useAuthStore = create<AuthState>()(
     if (lastActivity) {
       const elapsed = Date.now() - parseInt(lastActivity, 10);
       if (elapsed > SESSION_TIMEOUT_MS) {
+        console.log('[Auth] Session timeout - logging out due to inactivity');
         get().logout();
         return false;
       }
@@ -548,6 +542,7 @@ const useAuthStore = create<AuthState>()(
 
     // Set new timeout
     sessionTimeoutId = setTimeout(() => {
+      console.log('[Auth] Session expired due to inactivity');
       get().logout();
     }, SESSION_TIMEOUT_MS);
   }

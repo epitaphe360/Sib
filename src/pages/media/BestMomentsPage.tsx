@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { Star, ArrowLeft, Search, Play } from 'lucide-react';
@@ -6,7 +6,6 @@ import { mediaService } from '../../services/mediaService';
 import { MediaContent } from '../../types/media';
 import { MediaCard } from '../../components/media/MediaCard';
 import { ROUTES } from '../../lib/routes';
-import { PageHero } from '../../components/ui/PageHero';
 
 export const BestMomentsPage: React.FC = () => {
   const [moments, setMoments] = useState<MediaContent[]>([]);
@@ -37,13 +36,39 @@ export const BestMomentsPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <PageHero
-        badge={<><Star className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Meilleurs Moments</span></>}
-        title={<>{t('pages.moments.title')}</>}
-        subtitle={t('pages.moments.description')}
-        py="py-16 md:py-20"
-      />
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-orange-50">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link to={ROUTES.HOME} className="inline-flex items-center text-white/80 hover:text-white mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            {t('media.back_to_home')}
+          </Link>
+
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <Star className="w-8 h-8" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold mb-2">{t('pages.moments.title')}</h1>
+              <p className="text-xl text-white/90">{t('pages.moments.description')}</p>
+            </div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 mt-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white/70 text-sm mb-1">{t('pages.moments.featured_moments')}</p>
+                <p className="text-4xl font-bold">{moments.length}</p>
+                <p className="text-white/80 text-sm mt-2">
+                  {moments.reduce((sum, m) => sum + m.views_count, 0).toLocaleString()} {t('common.views')}
+                </p>
+              </div>
+              <Star className="w-16 h-16 text-white/30" />
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Search */}

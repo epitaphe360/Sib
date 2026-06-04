@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.sib2026.app',
+  appId: 'com.sib.app',
   appName: 'SIB 2026',
   webDir: 'dist',
   server: {

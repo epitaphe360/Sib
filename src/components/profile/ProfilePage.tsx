@@ -48,27 +48,15 @@ export default function ProfilePage() {
     const loadStats = async () => {
       if (!user?.id || !isSupabaseReady() || !supabase) {return;}
       try {
-        // Résoudre l'exhibitor_id pour les utilisateurs de type exhibiteur
-        const exhibitorRes = await supabase
-          .from('exhibitors')
-          .select('id')
-          .eq('user_id', user.id)
-          .maybeSingle();
-        const exhibitorId = exhibitorRes.data?.id;
-
-        const appointmentsFilter = exhibitorId
-          ? `visitor_id.eq.${user.id},exhibitor_id.eq.${exhibitorId}`
-          : `visitor_id.eq.${user.id}`;
-
         const [connectionsRes, appointmentsRes, messagesRes] = await Promise.all([
           supabase
             .from('connections')
             .select('id', { count: 'exact', head: true })
-            .or(`requester_id.eq.${user.id},addressee_id.eq.${user.id}`),
+            .or(`user_id.eq.${user.id},connected_user_id.eq.${user.id}`),
           supabase
             .from('appointments')
             .select('id', { count: 'exact', head: true })
-            .or(appointmentsFilter),
+            .or(`visitor_id.eq.${user.id},exhibitor_id.eq.${user.id}`),
           supabase
             .from('messages')
             .select('id', { count: 'exact', head: true })
@@ -150,7 +138,6 @@ export default function ProfilePage() {
     company: user?.profile.company || '',
     position: user?.profile.position || '',
     phone: user?.profile.phone || '',
-    country: user?.profile.country || '',
     linkedin: user?.profile.linkedin || '',
     website: user?.profile.website || '',
     bio: user?.profile.bio || '',
@@ -174,7 +161,6 @@ export default function ProfilePage() {
       company: user?.profile.company || '',
       position: user?.profile.position || '',
       phone: user?.profile.phone || '',
-      country: user?.profile.country || '',
       linkedin: user?.profile.linkedin || '',
       website: user?.profile.website || '',
       bio: user?.profile.bio || '',
@@ -255,9 +241,9 @@ export default function ProfilePage() {
             animate={{ opacity: 1, x: 0 }}
             className="lg:col-span-1"
           >
-            <Card className="text-center border-t-4 border-t-yellow-400">
+            <Card className="text-center border-t-4 border-t-SIB-gold">
               <div className="relative">
-                <div className="h-32 bg-gradient-to-r from-indigo-600 via-indigo-500 to-SIB-accent rounded-t-lg relative overflow-hidden">
+                <div className="h-32 bg-gradient-to-r from-SIB-primary via-SIB-secondary to-SIB-accent rounded-t-lg relative overflow-hidden">
                    <MoroccanPattern className="opacity-10" color="white" scale={0.5} />
                 </div>
                 <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
@@ -300,8 +286,7 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-center space-x-2 mb-4">
                   <Badge variant="info" size="sm">
                     {user.type === 'exhibitor' ? 'Exposant' :
-                     user.type === 'partner' ? 'Sponsor' :
-                     user.type === 'admin' ? 'Administrateur' : 'Visiteur'}
+                     user.type === 'partner' ? 'Partenaire' : 'Visiteur'}
                   </Badge>
                   {profileStats.connections > 0 && (
                     <Badge variant="success" size="sm">
@@ -470,11 +455,6 @@ export default function ProfilePage() {
                       <Mail className="h-4 w-4 text-gray-400" />
                       <p className="text-gray-900">{user.email}</p>
                     </div>
-                    {isEditing && (
-                      <p className="text-xs text-gray-400 mt-1">
-                        L'email ne peut pas être modifié ici. Contactez un administrateur pour changer d'adresse email.
-                      </p>
-                    )}
                   </div>
 
                   <div>
@@ -535,20 +515,10 @@ export default function ProfilePage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Pays
                     </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.country}
-                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Ex: MA, FR, ES..."
-                      />
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <MapPin className="h-4 w-4 text-gray-400" />
-                        <p className="text-gray-900">{user.profile.country || 'Non renseigné'}</p>
-                      </div>
-                    )}
+                    <div className="flex items-center space-x-2">
+                      <MapPin className="h-4 w-4 text-gray-400" />
+                      <p className="text-gray-900">{user.profile.country}</p>
+                    </div>
                   </div>
 
                   <div>
@@ -819,8 +789,7 @@ export default function ProfilePage() {
                     </label>
                     <Badge variant="info">
                       {user.type === 'exhibitor' ? 'Exposant' :
-                       user.type === 'partner' ? 'Sponsor' :
-                       user.type === 'admin' ? 'Administrateur' : 'Visiteur'}
+                       user.type === 'partner' ? 'Partenaire' : 'Visiteur'}
                     </Badge>
                   </div>
 

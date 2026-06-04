@@ -49,7 +49,7 @@ export default function AppointmentCalendar() {
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [bookingMessage, setBookingMessage] = useState('');
   const [newSlotData, setNewSlotData] = useState({
-    date: getMinSlotDate(), // Date par défaut: 25 novembre 2026
+    date: getMinSlotDate(), // Date par défaut: 1er avril 2026
     startTime: '09:00',
     endTime: '09:30',
     duration: 30,
@@ -170,7 +170,7 @@ export default function AppointmentCalendar() {
         return;
       }
 
-      // Validation de la date dans la plage du salon (25-29 novembre 2026)
+      // Validation de la date dans la plage du salon (1-3 avril 2026)
       const selectedDate = new Date(newSlotData.date + 'T00:00:00');
 
       if (!isDateInSalonRange(selectedDate)) {
@@ -590,12 +590,11 @@ export default function AppointmentCalendar() {
                     </h4>
                   </div>
 
-                  {/* Quick date navigation — jours du salon SIB 2026 */}
+                  {/* Quick date navigation */}
                   <div className="grid grid-cols-3 gap-2">
-                    {['2026-11-25', '2026-11-27', '2026-11-29'].map((dateStr, index) => {
+                    {['2026-04-01', '2026-04-02', '2026-04-03'].map((dateStr, index) => {
                       const date = new Date(dateStr + 'T00:00:00');
                       const isSelected = date.toDateString() === selectedDate.toDateString();
-                      const labels = ['25 Nov', '27 Nov', '29 Nov'];
 
                       return (
                         <button
@@ -609,7 +608,7 @@ export default function AppointmentCalendar() {
                         >
                           <span className="text-xs uppercase font-semibold">Jour {index + 1}</span>
                           <span className={`${isSelected ? 'text-blue-100' : 'text-gray-500'} text-[10px]`}>
-                            {labels[index]}
+                             {index + 1} Avr
                           </span>
                         </button>
                       );
@@ -627,7 +626,7 @@ export default function AppointmentCalendar() {
                     Créneaux disponibles - {formatDate(selectedDate)}
                   </h3>
                   <Badge variant="info" className="bg-blue-100 text-blue-800">
-                    Événement : 25-29 nov. 2026
+                    Événement : 1-3 avril 2026
                   </Badge>
                 </div>
               </div>
@@ -945,7 +944,7 @@ export default function AppointmentCalendar() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <p className="mt-1 text-xs text-blue-600 font-medium">
-                      ⚠️ Du 25 au 29 novembre 2026 (5 jours de l'événement)
+                      ⚠️ Uniquement les 1, 2 et 3 avril 2026 (3 jours de l'événement)
                     </p>
                   </div>
 

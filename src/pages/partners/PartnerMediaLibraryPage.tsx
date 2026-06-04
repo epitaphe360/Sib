@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import {
@@ -18,7 +18,6 @@ import { Badge } from '../../components/ui/Badge';
 import { supabase } from '../../lib/supabase';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
-import { useTranslation } from '../../hooks/useTranslation';
 
 interface PartnerMedia {
   id: string;
@@ -37,7 +36,6 @@ interface PartnerMedia {
 
 export default function PartnerMediaLibraryPage() {
   const { user } = useAuthStore();
-  const { t } = useTranslation();
   const [media, setMedia] = useState<PartnerMedia[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'pending_approval' | 'approved' | 'rejected'>('all');
@@ -57,7 +55,7 @@ export default function PartnerMediaLibraryPage() {
         .eq('created_by_id', user.id)
         .eq('created_by_type', 'partner')
         .order('created_at', { ascending: false })
-        .range(0, 199);
+        .range(0, 49);
 
       const { data, error } = await query;
 
@@ -76,28 +74,28 @@ export default function PartnerMediaLibraryPage() {
         return (
           <Badge variant="warning" className="flex items-center">
             <Clock className="w-3 h-3 mr-1" />
-            {t('media.status_pending')}
+            En attente de validation
           </Badge>
         );
       case 'approved':
         return (
           <Badge variant="success" className="flex items-center">
             <CheckCircle className="w-3 h-3 mr-1" />
-            {t('media.status_approved')}
+            Approuvé
           </Badge>
         );
       case 'published':
         return (
           <Badge variant="success" className="flex items-center">
             <CheckCircle className="w-3 h-3 mr-1" />
-            {t('media.status_published')}
+            Publié
           </Badge>
         );
       case 'rejected':
         return (
           <Badge variant="error" className="flex items-center">
             <XCircle className="w-3 h-3 mr-1" />
-            {t('media.status_rejected')}
+            Rejeté
           </Badge>
         );
       default:
@@ -127,24 +125,24 @@ export default function PartnerMediaLibraryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <Link to={ROUTES.PARTNER_DASHBOARD} className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
-            ? {t('common.back_dashboard')}
+            ← Retour au dashboard
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{t('media.title')}</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Ma Bibliothèque Médias</h1>
               <p className="mt-2 text-gray-600">
-                {t('media.subtitle')}
+                Gérez vos contenus médias soumis
               </p>
             </div>
             <Link to={ROUTES.PARTNER_MEDIA_UPLOAD}>
               <Button className="bg-orange-600 hover:bg-orange-700">
                 <Upload className="w-4 h-4 mr-2" />
-                {t('media.submit')}
+                Soumettre un média
               </Button>
             </Link>
           </div>
@@ -156,7 +154,7 @@ export default function PartnerMediaLibraryPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{t('media.stat_total')}</p>
+                  <p className="text-sm font-medium text-gray-600">Total</p>
                   <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
                 </div>
                 <Video className="h-8 w-8 text-gray-400" />
@@ -168,7 +166,7 @@ export default function PartnerMediaLibraryPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{t('media.stat_pending')}</p>
+                  <p className="text-sm font-medium text-gray-600">En attente</p>
                   <p className="text-3xl font-bold text-orange-600">{stats.pending}</p>
                 </div>
                 <Clock className="h-8 w-8 text-orange-600" />
@@ -180,7 +178,7 @@ export default function PartnerMediaLibraryPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{t('media.stat_approved')}</p>
+                  <p className="text-sm font-medium text-gray-600">Approuvés</p>
                   <p className="text-3xl font-bold text-green-600">{stats.approved}</p>
                 </div>
                 <CheckCircle className="h-8 w-8 text-green-600" />
@@ -192,7 +190,7 @@ export default function PartnerMediaLibraryPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{t('media.stat_rejected')}</p>
+                  <p className="text-sm font-medium text-gray-600">Rejetés</p>
                   <p className="text-3xl font-bold text-red-600">{stats.rejected}</p>
                 </div>
                 <XCircle className="h-8 w-8 text-red-600" />
@@ -207,50 +205,50 @@ export default function PartnerMediaLibraryPage() {
             variant={filter === 'all' ? 'default' : 'outline'}
             onClick={() => setFilter('all')}
           >
-            {t('media.filter_all')} ({stats.total})
+            Tous ({stats.total})
           </Button>
           <Button
             variant={filter === 'pending_approval' ? 'default' : 'outline'}
             onClick={() => setFilter('pending_approval')}
           >
-            {t('media.filter_pending')} ({stats.pending})
+            En attente ({stats.pending})
           </Button>
           <Button
             variant={filter === 'approved' ? 'default' : 'outline'}
             onClick={() => setFilter('approved')}
           >
-            {t('media.filter_approved')} ({stats.approved})
+            Approuvés ({stats.approved})
           </Button>
           <Button
             variant={filter === 'rejected' ? 'default' : 'outline'}
             onClick={() => setFilter('rejected')}
           >
-            {t('media.filter_rejected')} ({stats.rejected})
+            Rejetés ({stats.rejected})
           </Button>
         </div>
 
         {/* Loading */}
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : filteredMedia.length === 0 ? (
           <Card>
             <div className="p-12 text-center">
               <Video className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {filter === 'all' ? t('media.no_media') : filter === 'pending_approval' ? t('media.no_media_pending') : filter === 'approved' ? t('media.no_media_approved') : t('media.no_media_rejected')}
+                {filter === 'all' ? 'Aucun média' : `Aucun média ${filter === 'pending_approval' ? 'en attente' : filter === 'approved' ? 'approuvé' : 'rejeté'}`}
               </h3>
               <p className="text-gray-600 mb-4">
                 {filter === 'all'
-                  ? t('media.no_media_desc')
-                  : t('media.no_media_category_desc')}
+                  ? 'Commencez par soumettre votre premier contenu média'
+                  : 'Aucun contenu dans cette catégorie pour le moment'}
               </p>
               {filter === 'all' && (
                 <Link to={ROUTES.PARTNER_MEDIA_UPLOAD}>
                   <Button className="bg-orange-600 hover:bg-orange-700">
                     <Upload className="w-4 h-4 mr-2" />
-                    {t('media.submit')}
+                    Soumettre un média
                   </Button>
                 </Link>
               )}
@@ -300,12 +298,12 @@ export default function PartnerMediaLibraryPage() {
                         {item.type}
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
-                        <span className="font-medium mr-2">{t('media.submitted_on')}</span>
+                        <span className="font-medium mr-2">Soumis le:</span>
                         {new Date(item.created_at).toLocaleDateString('fr-FR')}
                       </div>
                       {item.approved_at && (
                         <div className="flex items-center text-sm text-gray-600">
-                          <span className="font-medium mr-2">{t('media.approved_on')}</span>
+                          <span className="font-medium mr-2">Approuvé le:</span>
                           {new Date(item.approved_at).toLocaleDateString('fr-FR')}
                         </div>
                       )}
@@ -317,7 +315,7 @@ export default function PartnerMediaLibraryPage() {
                         <div className="flex items-start">
                           <AlertCircle className="w-5 h-5 text-red-600 mr-2 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-sm font-medium text-red-900 mb-1">{t('media.rejection_reason')}</p>
+                            <p className="text-sm font-medium text-red-900 mb-1">Raison du rejet:</p>
                             <p className="text-sm text-red-700">{item.rejection_reason}</p>
                           </div>
                         </div>
@@ -330,10 +328,10 @@ export default function PartnerMediaLibraryPage() {
                         size="sm"
                         variant="outline"
                         className="w-full"
-                        onClick={() => globalThis.open(item.video_url, '_blank')}
+                        onClick={() => window.open(item.video_url, '_blank')}
                       >
                         <Eye className="w-4 h-4 mr-2" />
-                        {t('media.view')}
+                        Voir le média
                       </Button>
                     )}
                   </div>
@@ -346,4 +344,3 @@ export default function PartnerMediaLibraryPage() {
     </div>
   );
 }
-

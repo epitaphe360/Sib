@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
-import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle, Crown, Download, ArrowRight, Loader } from 'lucide-react';
@@ -45,9 +44,9 @@ export default function PaymentSuccessPage() {
 
   useEffect(() => {
     verifyPaymentAndUpgrade();
-  }, [verifyPaymentAndUpgrade]);
+  }, [user]);
 
-  const verifyPaymentAndUpgrade = useCallback(async () => {
+  async function verifyPaymentAndUpgrade() {
     if (!user) {return;}
 
     try {
@@ -68,7 +67,7 @@ export default function PaymentSuccessPage() {
       }
 
       // If user is already active with premium level, they're VIP
-      if (userData?.status === 'active' && userData?.visitor_level === 'vip') {
+      if (userData?.status === 'active' && userData?.visitor_level === 'premium') {
         setIsUpgraded(true);
         await refreshUserData();
         toast.success(t('payment.success.confirmed'));
@@ -85,6 +84,7 @@ export default function PaymentSuccessPage() {
           return;
         }
       } catch (paymentCheckError) {
+        console.warn('Payment status check failed:', paymentCheckError);
       }
 
       // Try to find and process pending payment (fallback)
@@ -105,6 +105,7 @@ export default function PaymentSuccessPage() {
           return;
         }
       } catch (paymentError) {
+        console.warn('Payment records check failed:', paymentError);
       }
 
       setError(t('payment.error.verificationFailed'));
@@ -114,13 +115,13 @@ export default function PaymentSuccessPage() {
     } finally {
       setIsVerifying(false);
     }
-  }, [user, t, refreshUserData]);
+  }
 
   if (isVerifying) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
         <Card className="p-12 text-center max-w-md">
-          <Loader className="h-16 w-16 mx-auto mb-6 text-indigo-600 animate-spin" />
+          <Loader className="h-16 w-16 mx-auto mb-6 text-blue-600 animate-spin" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('payment.verification.loading')}</h2>
           <p className="text-gray-600">{t('payment.verification.pleaseWait')}</p>
         </Card>
@@ -130,7 +131,7 @@ export default function PaymentSuccessPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center px-4">
         <Card className="p-12 text-center max-w-md">
           <div className="h-16 w-16 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center">
             <span className="text-3xl">X</span>
@@ -146,7 +147,7 @@ export default function PaymentSuccessPage() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => window.location.href = 'mailto:Sib2026@urbacom.net'}
+              onClick={() => window.location.href = 'mailto:support@sib2026.ma'}
               className="w-full"
             >
               {t('payment.error.contactSupport')}
@@ -158,7 +159,7 @@ export default function PaymentSuccessPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -207,7 +208,7 @@ export default function PaymentSuccessPage() {
                 {t('payment.success.description')}
               </p>
               <div className="inline-block bg-green-50 border border-green-200 rounded-lg p-4">
-                <p className="text-sm text-green-800" dangerouslySetInnerHTML={{ __html: sanitizeHtml(t('payment.success.emailSent', { email: user?.email || '' })) }} />
+                <p className="text-sm text-green-800" dangerouslySetInnerHTML={{ __html: t('payment.success.emailSent', { email: user?.email || '' }) }} />
               </div>
             </motion.div>
 
@@ -216,14 +217,14 @@ export default function PaymentSuccessPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-6 mb-8"
+              className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 mb-8"
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 {t('payment.success.nextSteps')}
               </h3>
               <div className="space-y-3 text-left">
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold mr-3">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold mr-3">
                     1
                   </div>
                   <div>
@@ -232,7 +233,7 @@ export default function PaymentSuccessPage() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold mr-3">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold mr-3">
                     2
                   </div>
                   <div>
@@ -241,7 +242,7 @@ export default function PaymentSuccessPage() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold mr-3">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold mr-3">
                     3
                   </div>
                   <div>
@@ -282,8 +283,8 @@ export default function PaymentSuccessPage() {
             <div className="mt-8 pt-8 border-t border-gray-200">
               <p className="text-sm text-gray-600">
               {t('payment.support.needHelp')}{' '}
-                <a href="mailto:Sib2026@urbacom.net" className="text-indigo-600 hover:text-indigo-700 font-semibold">
-                  Sib2026@urbacom.net
+                <a href="mailto:support@sib2026.ma" className="text-blue-600 hover:text-blue-700 font-semibold">
+                  support@sib2026.ma
                 </a>
               </p>
             </div>
@@ -298,17 +299,17 @@ export default function PaymentSuccessPage() {
           className="mt-8 grid md:grid-cols-3 gap-4"
         >
           <Card className="p-6 text-center">
-            <div className="text-3xl mb-2">??</div>
+            <div className="text-3xl mb-2">🤝</div>
             <h4 className="font-semibold text-gray-900 mb-1">{t('payment.success.benefit1Title')}</h4>
             <p className="text-sm text-gray-600">{t('payment.success.benefit1Desc')}</p>
           </Card>
           <Card className="p-6 text-center">
-            <div className="text-3xl mb-2">??</div>
+            <div className="text-3xl mb-2">📅</div>
             <h4 className="font-semibold text-gray-900 mb-1">{t('payment.success.benefit2Title')}</h4>
             <p className="text-sm text-gray-600">{t('payment.success.benefit2Desc')}</p>
           </Card>
           <Card className="p-6 text-center">
-            <div className="text-3xl mb-2">??</div>
+            <div className="text-3xl mb-2">🎉</div>
             <h4 className="font-semibold text-gray-900 mb-1">{t('payment.success.benefit3Title')}</h4>
             <p className="text-sm text-gray-600">{t('payment.success.benefit3Desc')}</p>
           </Card>
@@ -317,7 +318,6 @@ export default function PaymentSuccessPage() {
     </div>
   );
 }
-
 
 
 

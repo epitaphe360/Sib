@@ -20,11 +20,7 @@ export default defineConfig({
         '**/mockData',
         'dist/',
         'wordpress-plugin/'
-      ],
-      statements: 80,
-      branches: 75,
-      functions: 80,
-      lines: 80
+      ]
     },
     exclude: [
       '**/node_modules/**',

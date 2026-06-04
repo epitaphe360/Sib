@@ -1,7 +1,7 @@
 /**
  * Generic Email Sending Function
  *
- * Sends emails using SMTP (mail.sibevent.com)
+ * Sends emails using SMTP (mail.sib2026.ma)
  * Supports HTML and plain text emails
  */
 
@@ -15,13 +15,13 @@ const corsHeaders = {
 
 // Configuration SMTP
 const SMTP_CONFIG = {
-  hostname: Deno.env.get('SMTP_HOST') || 'mail.sibevent.com',
+  hostname: Deno.env.get('SMTP_HOST') || 'mail.sib2026.ma',
   port: parseInt(Deno.env.get('SMTP_PORT') || '587'),
-  username: Deno.env.get('SMTP_USERNAME') || 'Sib2026@urbacom.net',
+  username: Deno.env.get('SMTP_USERNAME') || 'contact@sib2026.ma',
   password: Deno.env.get('SMTP_PASSWORD') || 'S!P0RT@9083',
 };
 
-const DEFAULT_SENDER_EMAIL = 'Sib2026@urbacom.net';
+const DEFAULT_SENDER_EMAIL = 'contact@sib2026.ma';
 
 interface EmailRequest {
   to: string | string[];
@@ -71,7 +71,7 @@ Deno.serve(async (req: Request) => {
 
     // Connexion au serveur SMTP
     const client = new SmtpClient()
-    
+
     try {
       await client.connectTLS({
         hostname: SMTP_CONFIG.hostname,
@@ -84,7 +84,7 @@ Deno.serve(async (req: Request) => {
 
       // Préparation des destinataires
       const recipients = Array.isArray(to) ? to : [to]
-      
+
       // Envoi de l'email à chaque destinataire
       for (const recipient of recipients) {
         await client.send({

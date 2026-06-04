@@ -2,8 +2,8 @@
 // CDC requirement: PWA / mode offline réel
 // Strategy: Cache-First for static assets, Network-First for API data
 
-const CACHE_NAME = 'sib2026-v1';
-const API_CACHE_NAME = 'sib2026-api-v1';
+const CACHE_NAME = 'sib2026-v2';
+const API_CACHE_NAME = 'sib2026-api-v2';
 
 // Static assets to pre-cache
 const STATIC_ASSETS = [

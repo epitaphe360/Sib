@@ -10,7 +10,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const PROJECT_REF = 'sbyizudifmqakzxjlndr';
-const ACCESS_TOKEN = 'sbp_efaf677c6e29b3626871762d913f63408ad9465c';
+const ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN || '';
 const MIGRATIONS_DIR = path.join(__dirname, 'supabase', 'migrations');
 
 const API_URL = `https://api.supabase.com/v1/projects/${PROJECT_REF}/database/query`;
@@ -30,9 +30,20 @@ async function execSQL(sql, filename) {
 }
 
 async function run() {
+  if (!ACCESS_TOKEN) {
+    console.error('❌ Token manquant !\n');
+    console.log('📋 Pour générer un token :');
+    console.log('   1. Aller sur https://supabase.com/dashboard/account/tokens');
+    console.log('   2. Cliquer "Generate new token"');
+    console.log('   3. Copier le token et exécuter :\n');
+    console.log('   $env:SUPABASE_ACCESS_TOKEN = "sbp_xxxx"');
+    console.log('   node migrate-management-api.mjs\n');
+    process.exit(1);
+  }
+
   console.log('🔍 Test connexion Management API...');
   const test = await execSQL('SELECT 1 as ok');
-  if (test.status !== 200) {
+  if (test.status >= 400) {
     console.error('❌ Connexion échouée:', test.status, JSON.stringify(test.data));
     process.exit(1);
   }
@@ -47,9 +58,11 @@ async function run() {
     );
   `);
 
-  // Récupérer les migrations déjà appliquées
+  // Récupérer les migrations déjà appliquées (table peut ne pas exister)
   const trackRes = await execSQL('SELECT filename FROM _sib_migrations ORDER BY filename');
-  const alreadyApplied = new Set((trackRes.data || []).map(r => r.filename));
+  const alreadyApplied = new Set(
+    Array.isArray(trackRes.data) ? trackRes.data.map(r => r.filename) : []
+  );
 
   const files = fs.readdirSync(MIGRATIONS_DIR)
     .filter(f => f.endsWith('.sql'))
@@ -94,7 +107,7 @@ async function run() {
   console.log(`❌ Erreurs   : ${errors}`);
   console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
-  if (errors > 0) process.exit(1);
+  if (errors > 0) { process.exitCode = 1; }
 }
 
 run().catch(err => {

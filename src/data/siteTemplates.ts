@@ -1,4 +1,4 @@
-﻿// Site Templates Data
+// Site Templates Data
 // This file contains pre-configured templates for the site builder
 
 import type { SiteTemplate } from '../types/site-builder';
@@ -20,7 +20,7 @@ export const siteTemplates: SiteTemplate[] = [
         visible: true,
         content: {
           title: 'Excellence & Innovation',
-          subtitle: 'Votre sponsor de confiance depuis 20 ans',
+          subtitle: 'Votre partenaire de confiance depuis 20 ans',
           backgroundImage: '',
           ctaText: 'Découvrir nos services',
           ctaLink: '#services'
@@ -493,6 +493,7 @@ export async function seedTemplates(supabase: any) {
       .upsert(siteTemplates, { onConflict: 'id' });
 
     if (error) {throw error;}
+    console.log('Templates seeded successfully');
     return data;
   } catch (error) {
     console.error('Error seeding templates:', error);

@@ -95,6 +95,7 @@ export const BulkSlotGenerator: React.FC<BulkSlotGeneratorProps> = ({ userId, on
         }
       }
 
+      console.log(`Génération de ${slotsToCreate.length} créneaux...`);
 
       await SupabaseService.createTimeSlotsBulk(slotsToCreate);
 

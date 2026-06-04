@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Activity, X, Calendar, Crown, Zap, Lock, Star, ArrowRight, CheckCircle } from 'lucide-react';
+import { Users, Activity, X, QrCode, Download, Star, LogOut, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { DashboardSkeleton } from '../ui/Skeleton';
@@ -15,10 +15,12 @@ import {
   VisitorQuickActions,
   VisitorAnalyticsSection,
   VisitorCommunicationCards,
+  VisitorNetworkingHub,
   VisitorAvailabilityModal,
 } from './components';
 import { getVisitorQuota } from '../../config/quotas';
 import { useTranslation } from '../../hooks/useTranslation';
+import useAuthStore from '../../store/authStore';
 
 export default memo(function VisitorDashboard() {
   const { t } = useTranslation();
@@ -28,17 +30,22 @@ export default memo(function VisitorDashboard() {
 
   if (!ctx.isAuthenticated || !ctx.user) {
     return (
-      <div className="min-h-screen bg-sib-bg flex items-center justify-center">
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md border border-sib-gray-100">
-            <div className="w-20 h-20 mx-auto mb-4 bg-[#C9A84C]/15 rounded-full flex items-center justify-center border border-[#C9A84C]/30">
-              <Users className="h-10 w-10 text-[#C9A84C]" />
+      <div className="min-h-screen bg-white dark:bg-neutral-950 flex items-center justify-center p-6">
+        <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+          <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm p-8 max-w-md">
+            <div className="h-14 w-14 mx-auto mb-5 rounded-2xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center">
+              <Users className="h-7 w-7 text-primary-600 dark:text-primary-400" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('visitor.unauthorized_access')}</h3>
-            <p className="text-gray-600 mb-6">{t('visitor.please_login')}</p>
+            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2 tracking-tight">
+              {t('visitor.unauthorized_access')}
+            </h3>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6 leading-relaxed">
+              {t('visitor.please_login')}
+            </p>
             <Link to={ROUTES.LOGIN}>
-              <Button className="w-full bg-[#1B365D] hover:bg-[#0F2034] text-white">
-                <Activity className="h-4 w-4 mr-2" />{t('nav.login')}
+              <Button variant="primary" size="md" className="w-full">
+                <Activity className="h-4 w-4 mr-1.5" />
+                {t('nav.login')}
               </Button>
             </Link>
           </div>
@@ -47,9 +54,14 @@ export default memo(function VisitorDashboard() {
     );
   }
 
+  // ── Vue simplifiée pour visiteur FREE : QR code uniquement ──────────────
+  if (ctx.userLevel === 'free') {
+    return <VisitorFreeQRDashboard user={ctx.user} />;
+  }
+
   return (
-    <div className="min-h-screen bg-sib-bg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+      <div className="max-w-container mx-auto px-6 lg:px-8 py-10">
 
         {/* Pending payment banner */}
         {ctx.user.status === 'pending_payment' && <VisitorPendingPaymentBanner />}
@@ -80,19 +92,28 @@ export default memo(function VisitorDashboard() {
         </motion.div>
 
         {/* VIP benefits */}
-        {ctx.userLevel === 'vip' && <VisitorVIPBenefits />}
+        {(ctx.userLevel === 'premium' || ctx.userLevel === 'vip') && <VisitorVIPBenefits />}
 
         {/* Error banner */}
         {ctx.error && (
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
-            className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-lg">
-            <div className="flex items-center">
-              <X className="h-5 w-5 text-red-400 flex-shrink-0" />
-              <p className="ml-3 text-red-800 text-sm font-medium flex-1">{ctx.error}</p>
-              <button onClick={() => ctx.setError(null)} className="ml-auto text-red-600 hover:text-red-800">
-                <X className="h-5 w-5" />
-              </button>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="mb-6 p-4 bg-white dark:bg-neutral-900 border border-danger-200 dark:border-danger-500/30 rounded-2xl shadow-sm flex items-center gap-3"
+          >
+            <div className="h-9 w-9 rounded-lg bg-danger-50 dark:bg-danger-500/10 flex items-center justify-center shrink-0">
+              <X className="h-4 w-4 text-danger-600" />
             </div>
+            <p className="flex-1 text-sm font-medium text-neutral-800 dark:text-neutral-200">{ctx.error}</p>
+            <button
+              type="button"
+              onClick={() => ctx.setError(null)}
+              className="h-8 w-8 rounded-lg flex items-center justify-center text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              aria-label="Fermer"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </motion.div>
         )}
 
@@ -107,120 +128,6 @@ export default memo(function VisitorDashboard() {
 
         {/* Quick actions */}
         <VisitorQuickActions userLevel={ctx.userLevel} remaining={ctx.remaining} />
-
-        {/* Bloc upgrade FREE */}
-        {ctx.userLevel === 'free' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-8"
-          >
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0F2034] via-[#1B365D] to-[#0F2034] border border-[#C9A84C]/30 shadow-2xl">
-              {/* Fond décoratif */}
-              <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '28px 28px' }} />
-              <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#C9A84C]/10 rounded-full blur-3xl" />
-              <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl" />
-
-              <div className="relative z-10 p-6 md:p-8">
-                {/* Badge FREE limité */}
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/20 border border-amber-400/40 rounded-full text-amber-300 text-xs font-bold uppercase tracking-wider">
-                    <Lock className="w-3 h-3" /> Compte FREE — Accès limité
-                  </span>
-                </div>
-
-                <div className="flex flex-col lg:flex-row lg:items-center gap-8">
-                  {/* Texte principal */}
-                  <div className="flex-1">
-                    <h2 className="text-2xl md:text-3xl font-black text-white mb-2 leading-tight">
-                      Débloquez l'expérience <span className="text-[#C9A84C]">SIB 2026</span> complète
-                    </h2>
-                    <p className="text-white/60 text-sm mb-6 max-w-lg">
-                      Avec un badge payant, accédez aux fonctionnalités exclusives réservées aux professionnels du bâtiment.
-                    </p>
-
-                    {/* Liste des avantages */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
-                      {[
-                        { icon: <Star className="w-3.5 h-3.5 text-[#C9A84C]" />, text: 'Rendez-vous B2B avec les exposants' },
-                        { icon: <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />, text: 'Accès aux séminaires & conférences' },
-                        { icon: <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />, text: 'Badge officiel nominatif imprimable' },
-                        { icon: <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />, text: "Lettre d'invitation & visa officielle" },
-                        { icon: <Star className="w-3.5 h-3.5 text-[#C9A84C]" />, text: 'Accès VIP Lounge & networking exclusif' },
-                        { icon: <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />, text: 'Catalogue exposants complet' },
-                      ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-2">
-                          {item.icon}
-                          <span className="text-white/80 text-xs">{item.text}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Boutons CTA */}
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <Link
-                        to={ROUTES.VISITOR_UPGRADE}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#C9A84C] hover:bg-[#B8963E] text-[#0F2034] font-black text-sm rounded-xl transition-all shadow-lg shadow-[#C9A84C]/30 hover:shadow-[#C9A84C]/50 hover:scale-[1.02]"
-                      >
-                        <Crown className="w-4 h-4" />
-                        Passer en Standard ou VIP
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                      <Link
-                        to={ROUTES.VISITOR_VIP_REGISTRATION}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/15 text-white font-bold text-sm rounded-xl border border-white/20 transition-all"
-                      >
-                        <Zap className="w-4 h-4 text-[#C9A84C]" />
-                        Voir les offres VIP
-                      </Link>
-                    </div>
-                  </div>
-
-                  {/* Comparaison rapide FREE vs VIP */}
-                  <div className="lg:w-72 bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      <div className="text-center p-2 bg-white/5 rounded-lg">
-                        <div className="text-xs text-white/50 mb-1 font-semibold uppercase tracking-wide">FREE</div>
-                        <div className="text-red-400 font-black text-lg">0</div>
-                        <div className="text-white/40 text-[10px]">RDV B2B</div>
-                      </div>
-                      <div className="text-center p-2 bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-lg">
-                        <div className="text-xs text-[#C9A84C] mb-1 font-semibold uppercase tracking-wide">VIP</div>
-                        <div className="text-[#C9A84C] font-black text-lg">∞</div>
-                        <div className="text-white/40 text-[10px]">RDV B2B</div>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        { label: 'Accès conférences', free: false, paid: true },
-                        { label: 'Badge nominatif', free: false, paid: true },
-                        { label: 'Lettre visa', free: false, paid: true },
-                        { label: 'Networking B2B', free: false, paid: true },
-                      ].map((row, i) => (
-                        <div key={i} className="flex items-center justify-between text-xs">
-                          <span className="text-white/60">{row.label}</span>
-                          <div className="flex gap-4">
-                            <span className={row.free ? 'text-emerald-400' : 'text-red-400/70'}>
-                              {row.free ? '✓' : '✗'}
-                            </span>
-                            <span className="text-emerald-400">✓</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <Link
-                      to={ROUTES.VISITOR_UPGRADE}
-                      className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 bg-[#C9A84C] hover:bg-[#B8963E] text-[#0F2034] font-black text-xs rounded-lg transition-all"
-                    >
-                      <Crown className="w-3.5 h-3.5" /> Upgrader maintenant
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
 
         {/* Analytics */}
         <VisitorAnalyticsSection
@@ -238,6 +145,35 @@ export default memo(function VisitorDashboard() {
         {/* Communication cards */}
         <VisitorCommunicationCards userLevel={ctx.userLevel} />
 
+        {/* Networking hub */}
+        <VisitorNetworkingHub
+          activeTab={ctx.activeTab}
+          setActiveTab={ctx.setActiveTab}
+          historyTab={ctx.historyTab}
+          setHistoryTab={ctx.setHistoryTab}
+          userLevel={ctx.userLevel}
+          upcomingAppointments={ctx.upcomingAppointments}
+          pastAppointments={ctx.pastAppointments}
+          refusedAppointments={ctx.refusedAppointments}
+          filteredUpcoming={ctx.filteredUpcoming}
+          filteredPast={ctx.filteredPast}
+          filteredCancelled={ctx.filteredCancelled}
+          setFilteredUpcoming={ctx.setFilteredUpcoming}
+          setFilteredPast={ctx.setFilteredPast}
+          setFilteredCancelled={ctx.setFilteredCancelled}
+          confirmedCount={ctx.confirmedAppointments.length}
+          pendingCount={ctx.pendingAppointments.length}
+          isAppointmentsLoading={ctx.isAppointmentsLoading}
+          getUpcomingEvents={ctx.getUpcomingEvents}
+          isEventPast={ctx.isEventPast}
+          handleUnregisterFromEvent={ctx.handleUnregisterFromEvent}
+          handleAccept={ctx.handleAccept}
+          handleReject={ctx.handleReject}
+          handleRequestAnother={ctx.handleRequestAnother}
+          getExhibitorName={ctx.getExhibitorName}
+          registeredEventsCount={ctx.registeredEvents.length}
+        />
+
         {/* Availability modal */}
         <VisitorAvailabilityModal
           exhibitorId={ctx.showAvailabilityModal?.exhibitorId ?? null}
@@ -247,3 +183,130 @@ export default memo(function VisitorDashboard() {
     </div>
   );
 });
+
+// ── Tableau de bord simplifié visiteur FREE (QR code uniquement) ─────────────
+function VisitorFreeQRDashboard({ user }: { user: any }) {
+  const { t } = useTranslation();
+  const { signOut } = useAuthStore();
+
+  const visitorName = user?.name || user?.profile?.firstName || 'Visiteur';
+
+  async function handleLogout() {
+    await signOut();
+  }
+
+  return (
+    <div className="min-h-screen bg-primary-900">
+      {/* Header */}
+      <div className="bg-white/5 backdrop-blur-md border-b border-white/10 px-6 py-4">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-white h-10 w-10 rounded-xl flex items-center justify-center">
+              <Users className="h-5 w-5 text-primary-600" />
+            </div>
+            <div>
+              <span className="text-white font-semibold text-base tracking-tight">SIB 2026</span>
+              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-accent-500 mt-0.5">
+                Pass Visiteur Gratuit
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="inline-flex items-center gap-2 h-9 px-3 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors text-sm"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden sm:inline">Se déconnecter</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-3xl font-bold text-white tracking-tight">
+            Bienvenue, {visitorName}
+          </h1>
+          <p className="text-white/70 mt-2 text-sm">Votre badge d'accès au salon SIB 2026</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white rounded-2xl shadow-2xl border border-white/20 overflow-hidden mb-6"
+        >
+          <div className="bg-primary-700 px-6 py-5 text-center">
+            <div className="flex items-center justify-center gap-2 text-white">
+              <QrCode className="h-4 w-4 text-accent-500" />
+              <span className="text-sm font-semibold uppercase tracking-[0.18em]">Mon E-Badge QR Code</span>
+            </div>
+            <p className="text-white/75 text-xs mt-1.5">Présentez ce badge à l'entrée du salon</p>
+          </div>
+
+          <div className="p-8 text-center">
+            <div className="inline-flex flex-col items-center">
+              <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-6 mb-5">
+                <QrCode className="h-28 w-28 text-primary-700 opacity-30" />
+              </div>
+              <p className="text-neutral-500 text-sm mb-4">
+                Cliquez ci-dessous pour afficher votre QR code complet
+              </p>
+            </div>
+
+            <div className="space-y-2 mt-2">
+              <Link to={ROUTES.BADGE} className="block">
+                <Button variant="primary" size="lg" className="w-full">
+                  <QrCode className="h-4 w-4 mr-1.5" />
+                  Voir et télécharger mon E-Badge
+                </Button>
+              </Link>
+              <Link to={ROUTES.BADGE_DIGITAL} className="block">
+                <Button variant="secondary" size="md" className="w-full">
+                  <Download className="h-4 w-4 mr-1.5" />
+                  Badge numérique téléchargeable
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          <div className="bg-neutral-50 px-6 py-4 border-t border-neutral-100 space-y-1.5">
+            <div className="flex items-center gap-2 text-xs text-neutral-600">
+              <div className="h-1.5 w-1.5 rounded-full bg-success-500 flex-shrink-0" />
+              <span>Email : <strong className="text-neutral-900">{user?.email}</strong></span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-neutral-600">
+              <div className="h-1.5 w-1.5 rounded-full bg-success-500 flex-shrink-0" />
+              <span>Niveau : <strong className="text-neutral-900">Pass Gratuit</strong></span>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="relative overflow-hidden rounded-2xl p-6 text-center bg-gradient-to-br from-accent-600 to-accent-500 border border-accent-500/40"
+        >
+          <div className="flex items-center justify-center gap-2 text-white font-semibold mb-1.5 tracking-tight">
+            <Star className="h-4 w-4" />
+            Passez au niveau Standard ou VIP
+          </div>
+          <p className="text-white/90 text-xs mb-4 leading-relaxed">
+            Accédez au networking, aux rendez-vous B2B, aux conférences et bien plus.
+          </p>
+          <Link to={ROUTES.VISITOR_UPGRADE}>
+            <Button variant="secondary" size="md" className="bg-white text-accent-700 hover:bg-white/95 border-0">
+              Découvrir les offres Premium
+            </Button>
+          </Link>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

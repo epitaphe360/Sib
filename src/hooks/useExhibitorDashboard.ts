@@ -22,6 +22,7 @@ export function useExhibitorDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [processingAppointment, setProcessingAppointment] = useState<string | null>(null);
   const [showMiniSiteSetup, setShowMiniSiteSetup] = useState(false);
+  const [showMiniSiteScrapper, setShowMiniSiteScrapper] = useState(false);
   const [isPublished, setIsPublished] = useState<boolean | null>(null);
   const [isTogglingPublish, setIsTogglingPublish] = useState(false);
   const [confirmRejectId, setConfirmRejectId] = useState<string | null>(null);
@@ -71,7 +72,7 @@ export function useExhibitorDashboard() {
 
         if (flagSaysCreated || hasMiniSiteInDB) {
           if (hasMiniSiteInDB && !flagSaysCreated) {
-          // @ts-expect-error – table not in generated Supabase types
+            // @ts-expect-error – table not in generated Supabase types
             await supabase!.from('users').update({ minisite_created: true }).eq('id', user.id);
           }
           return;
@@ -187,30 +188,14 @@ export function useExhibitorDashboard() {
   const myAppointments = useMemo(() => {
     if (!user?.id || !appointments) {return [];}
     return appointments.filter((a) =>
-      // Ne jamais inclure les RDV que l'utilisateur a lui-même envoyés (il est le visitor)
-      a.visitorId !== user.id &&
-      (
-        // Cas 1: champ brut exhibitor_id (= exhibitors.id) matche exhibitorDbId
-        (exhibitorDbId && (a as any).exhibitor_id === exhibitorDbId) ||
-        // Cas 2: exhibitorId transformé (= users.id) matche exhibitorDbId
-        (exhibitorDbId && a.exhibitorId === exhibitorDbId) ||
-        // Cas 3: exhibitorUserId transformé (= users.id) matche user.id
-        (a as any).exhibitorUserId === user.id ||
-        // Cas 4: exhibitorId transformé (= users.id) matche user.id
-        a.exhibitorId === user.id ||
-        (a as any).exhibitor?.user_id === user.id ||
-        (a as any).exhibitor?.id === user.id
-      )
+      // exhibitorId = exhibitors.id (résolu via exhibitorDbId)
+      (exhibitorDbId && a.exhibitorId === exhibitorDbId) ||
+      // fallback: exhibitor_id == users.id (si FK directe)
+      (a as any).exhibitorUserId === user.id ||
+      (a as any).exhibitor?.user_id === user.id ||
+      (a as any).exhibitor?.id === user.id
     );
   }, [appointments, user?.id, exhibitorDbId]);
-
-  // RDV envoyés par l'utilisateur (lui = visitor/demandeur) — en attente de réponse
-  const sentAppointments = useMemo(() => {
-    if (!user?.id || !appointments) {return [];}
-    return appointments.filter(
-      (a) => a.visitorId === user.id && (a.status === 'pending' || a.status === 'confirmed')
-    );
-  }, [appointments, user?.id]);
 
   const appointmentStatusData = useMemo(
     () => [
@@ -238,39 +223,28 @@ export function useExhibitorDashboard() {
   }, [activityBreakdownData, appointmentStatusData]);
 
   const receivedAppointments = myAppointments;
+  const pendingAppointments = receivedAppointments.filter((a) => a.status === 'pending');
+  const confirmedAppointments = receivedAppointments.filter((a) => a.status === 'confirmed');
+  const now = new Date();
+  const upcomingAppointments = receivedAppointments.filter(
+    (a) => (a.status === 'pending' || (!a.startTime || new Date(a.startTime) > now)) && a.status !== 'cancelled'
+  );
+  const pastAppointments = receivedAppointments.filter(
+    (a) => a.status !== 'pending' && a.startTime && new Date(a.startTime) < now
+  );
+  const cancelledAppointments = receivedAppointments.filter((a) => a.status === 'cancelled');
 
-  // Memoized derived lists — no redundant state/effect needed
-  const pendingAppointments = useMemo(
-    () => receivedAppointments.filter((a) => a.status === 'pending'),
-    [receivedAppointments]
-  );
-  const confirmedAppointments = useMemo(
-    () => receivedAppointments.filter((a) => a.status === 'confirmed'),
-    [receivedAppointments]
-  );
-  const upcomingAppointments = useMemo(() => {
-    // Inclure pending ET confirmed (avec ou sans startTime)
-    // Un RDV confirmed sans startTime est toujours "à venir" tant que le salon n'a pas eu lieu
-    return receivedAppointments.filter(
-      (a) => a.status === 'pending' || a.status === 'confirmed'
-    );
-  }, [receivedAppointments]);
-  const pastAppointments = useMemo(() => {
-    const now = new Date();
-    return receivedAppointments.filter(
-      (a) => a.status === 'completed' ||
-             (a.status !== 'pending' && a.status !== 'cancelled' && a.status !== 'rejected' && a.startTime != null && new Date(a.startTime) < now)
-    );
-  }, [receivedAppointments]);
-  const cancelledAppointments = useMemo(
-    () => receivedAppointments.filter((a) => a.status === 'cancelled' || a.status === 'rejected'),
-    [receivedAppointments]
-  );
+  // ─── Filtered appointment states ───────────────────────────────────────────
+  const [filteredUpcoming, setFilteredUpcoming] = useState(upcomingAppointments);
+  const [filteredPast, setFilteredPast] = useState(pastAppointments);
+  const [filteredCancelled, setFilteredCancelled] = useState(cancelledAppointments);
 
-  // ─── Aliases kept for backwards compat with consumers ─────────────────────
-  const filteredUpcoming = upcomingAppointments;
-  const filteredPast = pastAppointments;
-  const filteredCancelled = cancelledAppointments;
+  useEffect(() => {
+    setFilteredUpcoming(upcomingAppointments);
+    setFilteredPast(pastAppointments);
+    setFilteredCancelled(cancelledAppointments);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [upcomingAppointments.length, pastAppointments.length, cancelledAppointments.length]);
 
   // ─── IA predictions ────────────────────────────────────────────────────────
   const predictions = useBasicPredictions({
@@ -279,7 +253,7 @@ export function useExhibitorDashboard() {
     connections: dashboardStats?.connections?.value || 0,
   });
 
-  const exhibitorLevel = getExhibitorLevelByArea(user?.profile?.standArea ?? 9);
+  const exhibitorLevel = getExhibitorLevelByArea(user?.profile?.standArea || 9);
 
   // ─── Handlers ─────────────────────────────────────────────────────────────
   const togglePublished = async () => {
@@ -338,8 +312,7 @@ export function useExhibitorDashboard() {
     setConfirmRejectId(null);
     setProcessingAppointment(appointmentId);
     try {
-      await updateAppointmentStatus(appointmentId, 'rejected');
-      await fetchAppointments();
+      await cancelAppointment(appointmentId);
     } catch (err) {
       console.error('Erreur lors du refus:', err);
       setError(t('exhibitor.error_reject_failed'));
@@ -463,13 +436,14 @@ export function useExhibitorDashboard() {
     isLoading,
     processingAppointment,
     showMiniSiteSetup, setShowMiniSiteSetup,
+    showMiniSiteScrapper, setShowMiniSiteScrapper,
     isPublished,
     isTogglingPublish,
     confirmRejectId, setConfirmRejectId,
     historyTab, setHistoryTab,
-    filteredUpcoming,
-    filteredPast,
-    filteredCancelled,
+    filteredUpcoming, setFilteredUpcoming,
+    filteredPast, setFilteredPast,
+    filteredCancelled, setFilteredCancelled,
     // external
     user,
     dashboard,
@@ -491,10 +465,8 @@ export function useExhibitorDashboard() {
     upcomingAppointments,
     pastAppointments,
     cancelledAppointments,
-    sentAppointments,
     predictions,
     exhibitorLevel,
-    exhibitorDbId,
     // handlers
     togglePublished,
     handleAccept,

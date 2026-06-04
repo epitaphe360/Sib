@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StorageService } from '../../../services/storage/storageService';
 import { X, Plus, AlertCircle, Loader2, FileImage, CheckCircle2 } from 'lucide-react';
 
@@ -113,7 +113,7 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
   const removeImage = async (index: number) => {
     if (disabled) {return;}
 
-    if (globalThis.confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
       try {
         const imageToRemove = images[index];
 

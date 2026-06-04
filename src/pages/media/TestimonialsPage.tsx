@@ -6,7 +6,6 @@ import { mediaService } from '../../services/mediaService';
 import { MediaContent } from '../../types/media';
 import { MediaCard } from '../../components/media/MediaCard';
 import { ROUTES } from '../../lib/routes';
-import { PageHero } from '../../components/ui/PageHero';
 
 export const TestimonialsPage: React.FC = () => {
   const { t } = useTranslation();
@@ -37,13 +36,40 @@ export const TestimonialsPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <PageHero
-        badge={<><MessageSquare className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">Témoignages</span></>}
-        title={<>{t('pages.testimonials.title')}</>}
-        subtitle={t('pages.testimonials.description')}
-        py="py-16 md:py-20"
-      />
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-teal-50">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-green-600 to-teal-600 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link to={ROUTES.HOME} className="inline-flex items-center text-white/80 hover:text-white mb-6">
+            {t('common.back_home') || 'Retour à l\'accueil'}
+          </Link>
+
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <MessageSquare className="w-8 h-8" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold mb-2">{t('media.testimonial.title')}</h1>
+              <p className="text-xl text-white/90">{t('media.testimonial.subtitle')}</p>
+            </div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 mt-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white/80 text-sm">{t('media.testimonial.title')}</p>
+                <p className="text-4xl font-bold">{testimonials.length}</p>
+                <p className="text-white/80 text-sm mt-2">{t('media.testimonial.satisfaction')}</p>
+              </div>
+              <div className="flex space-x-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={`star-${i}`} className="w-6 h-6 fill-yellow-300 text-yellow-300" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Search */}

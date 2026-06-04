@@ -1,7 +1,7 @@
-﻿export const translations = {
+export const translations = {
   fr: {
     // En-tête
-    title: "Devenir Sponsor SIB 2026",
+    title: "Devenir Partenaire SIB 2026",
     subtitle: "Rejoignez notre écosystème et contribuez au succès de l'événement.",
 
     // Progression
@@ -41,7 +41,7 @@
     passwordPlaceholder: "Créez un mot de passe sécurisé",
     confirmPassword: "Confirmer le mot de passe",
     confirmPasswordPlaceholder: "Confirmez votre mot de passe",
-    descriptionPlaceholder: "Décrivez votre organisation, vos activités et pourquoi vous souhaitez devenir sponsor de SIB 2026.",
+    descriptionPlaceholder: "Décrivez votre organisation, vos activités et pourquoi vous souhaitez devenir partenaire de SIB 2026.",
 
     // Types de partenariat
     institutional: "Institutionnel",
@@ -72,7 +72,7 @@
     dataProtectionText: "Vos informations personnelles sont sécurisées et ne seront jamais partagées avec des tiers sans votre consentement. Vous pouvez exercer vos droits d'accès, de rectification et de suppression à tout moment.",
 
     // Boutons
-    submit: "Demander à devenir sponsor",
+    submit: "Demander à devenir partenaire",
     submitting: "Envoi en cours...",
     requiredFields: "Champs obligatoires",
     hasAccount: "Vous avez déjà un compte ?",

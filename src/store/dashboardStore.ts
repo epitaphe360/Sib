@@ -1,4 +1,4 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 import { Dashboard, DashboardStats, Activity } from '../types';
 import { supabase } from '../lib/supabase';
 
@@ -48,9 +48,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
 
       // Calculer les statistiques RÉELLES depuis les tables (pas depuis profile.stats)
       // Les profile.stats sont des données de démo, on les ignore
-      const isExhibitorOrPartner =
-        userProfile?.role === 'exhibitor' || (userProfile as any)?.type === 'exhibitor' ||
-        userProfile?.role === 'partner'   || (userProfile as any)?.type === 'partner';
+      const isExhibitorOrPartner = userProfile?.role === 'exhibitor' || userProfile?.role === 'partner';
 
       const stats: DashboardStats = {
         profileViews: 0,
@@ -75,6 +73,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             stats.profileViews = profileViewsCount || 0;
           }
         } catch (err) {
+          console.log('Table profile_views non disponible');
         }
       }
 
@@ -89,6 +88,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
           stats.connections = connectionsCount || 0;
         }
       } catch (err) {
+        console.log('Erreur lors du chargement des connexions');
       }
 
       // Compter les rendez-vous POUR CET UTILISATEUR UNIQUEMENT
@@ -128,6 +128,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
           stats.appointments = appointmentsCount || 0;
         }
       } catch (err) {
+        console.log('Erreur lors du chargement des rendez-vous');
       }
 
       // Compter les messages non lus POUR CET UTILISATEUR
@@ -152,6 +153,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
           }
         }
       } catch (err) {
+        console.log('Erreur lors du chargement des messages');
       }
 
       // Compter les téléchargements de catalogue (seulement pour exhibitors/partners)
@@ -166,6 +168,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             stats.catalogDownloads = downloadsCount || 0;
           }
         } catch (err) {
+          console.log('Table downloads non disponible');
         }
       }
 
@@ -200,13 +203,14 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             }
           }
         } catch (err) {
+          console.log('Table minisite_views non disponible');
         }
       }
 
-      // Compter les vues pour les sponsors
+      // Compter les vues pour les partenaires
       if (userProfile?.role === 'partner' || userProfile?.type === 'partner') {
         try {
-          // D'abord trouver l'ID du sponsor associé à cet utilisateur
+          // D'abord trouver l'ID du partenaire associé à cet utilisateur
           const { data: partner } = await supabase
             .from('partners')
             .select('id, views')
@@ -214,11 +218,12 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             .maybeSingle();
 
           if (partner) {
-            // Pour les sponsors, on utilise soit une table de vues, soit la colonne views
+            // Pour les partenaires, on utilise soit une table de vues, soit la colonne views
             // Si la colonne views existe, on l'utilise
             stats.miniSiteViews = partner.views || 0;
           }
         } catch (err) {
+          console.log('Erreur chargement vues partenaire');
         }
       }
 
@@ -231,6 +236,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         .limit(10);
 
       if (activitiesError) {
+        console.warn('Erreur lors de la récupération des activités:', activitiesError);
       }
 
       // Récupérer les infos des acteurs si nécessaire

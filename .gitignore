@@ -62,8 +62,6 @@ yarn.lock
 /test-results/
 /test-results.json
 /test-results.xml
-package-lock.json
--e 
 # Environment files
 *.env
 *.env.*

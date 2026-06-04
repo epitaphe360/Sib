@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { CheckCircle, Eye, ArrowRight, Award, Handshake } from 'lucide-react';
@@ -15,7 +15,7 @@ import { LogoShowcaseSection } from './LogoShowcaseSection';
 
 export const FeaturedPartners: React.FC = () => {
   const navigate = useNavigate();
-  const { t, currentLanguage } = useTranslation();
+  const { t } = useTranslation();
   const [partners, setPartners] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -47,7 +47,7 @@ export const FeaturedPartners: React.FC = () => {
 
         setPartners(sorted.slice(0, 3));
       } catch (error) {
-        console.error('Erreur lors du chargement des sponsors:', error);
+        console.error('Erreur lors du chargement des partenaires:', error);
       } finally {
         setIsLoading(false);
       }
@@ -58,12 +58,12 @@ export const FeaturedPartners: React.FC = () => {
 
   const getTierLabel = (tier: string) => {
     const labels: Record<string, string> = {
-      'organizer': t('pages.partners.tier_organizer'),
-      'co_organizer': t('pages.partners.tier_co_organizer'),
-      'official_sponsor': t('pages.partners.tier_official_sponsor'),
-      'delegated_organizer': t('pages.partners.tier_delegated_organizer'),
-      'partner': t('pages.partners.tier_partner'),
-      'press_partner': t('pages.partners.tier_press_partner')
+      'organizer': 'Organisateurs',
+      'co_organizer': 'Co-organisateurs',
+      'official_sponsor': 'Sponsor Officiel',
+      'delegated_organizer': 'Organisateur Délégué',
+      'partner': 'Nos Partenaires',
+      'press_partner': 'Nos Partenaires Presse'
     };
     return labels[tier] || tier;
   };
@@ -104,121 +104,110 @@ export const FeaturedPartners: React.FC = () => {
   if (partners.length === 0) {return null;}
 
   return (
-    <section className="py-28 bg-white relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(231,209,146,1) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Premium Header */}
+    <section className="relative py-20 lg:py-24 bg-white dark:bg-neutral-950 overflow-hidden">
+      <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-14 max-w-2xl mx-auto"
         >
-          <span className="luxury-badge mb-5 inline-flex items-center gap-2">
-            <Award className="h-3 w-3" />
-            {t('home.featured_partners_badge', 'Sponsors Officiels')}
-          </span>
-          <h2 className="text-4xl sm:text-5xl font-light text-[#1A1A1A] mb-4 mt-3"
-            style={{ fontFamily: '"Cormorant Garamond", serif' }}>
-            {t('home.featured_partners_title', 'Sponsors à la Une')}
+          <div className="sib-kicker mb-4 justify-center">
+            {t('home.featured_partners_badge', 'Partenaires Officiels')}
+          </div>
+          <h2 className="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white tracking-tight mb-4">
+            {t('home.featured_partners_title', 'Partenaires à la Une')}
           </h2>
-          <p className="text-base text-[#666] max-w-2xl mx-auto leading-relaxed font-light">
+          <p className="text-base lg:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
             {t('home.featured_partners_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
           </p>
-          <div className="luxury-divider mt-6">
-            <span />
-          </div>
         </motion.div>
       </div>
 
-      {/* Bande défilante des logos sponsors */}
+      {/* Bande défilante des logos partenaires */}
       <div className="mb-12">
         <LogoShowcaseSection type="partners" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {partners.map((partner, index) => {
-            const displayName = (currentLanguage === 'en' && partner.name_en) ? partner.name_en : partner.name;
-            const displaySector = (currentLanguage === 'en' && partner.sector_en) ? partner.sector_en : partner.sector;
-            const displayDescription = (currentLanguage === 'en' && partner.description_en) ? partner.description_en : partner.description;
-            return (
+          {partners.map((partner, index) => (
             <motion.div
               key={partner.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.08 }}
+              viewport={{ once: true, margin: '-50px' }}
             >
-              <Card hover className="h-full shadow-none hover:shadow-luxury transition-all duration-400 bg-white relative" style={{ border: '0.5px solid rgba(231,209,146,0.25)' }}>
-                <div className="flex flex-col h-full p-8">
-                  {/* Badge vérifié en haut à droite */}
+              <Card hover className="h-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                {/* Accent bar top */}
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-accent-500/0 via-accent-500 to-accent-500/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                <div className="flex flex-col h-full p-7">
                   {partner.verified && (
-                    <Badge variant="success" size="sm" className="absolute top-4 right-4 flex items-center">
-                      <CheckCircle className="h-3 w-3 mr-1" />
+                    <Badge variant="success" size="sm" dot className="absolute top-4 right-4">
                       {t('home.verified')}
                     </Badge>
                   )}
 
-                  {/* Logo centré */}
-                  <div className="flex justify-center mb-6">
-                    <LogoWithFallback
-                      src={partner.logo}
-                      alt={displayName}
-                      className="h-24 w-24 rounded-sm object-contain border bg-white p-2"
-                      style={{ borderColor: 'rgba(231,209,146,0.3)' }}
-                    />
+                  {/* Logo */}
+                  <div className="flex justify-center mb-5">
+                    <div className="h-28 w-28 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center p-4 transition-transform duration-500 hover:scale-105">
+                      <LogoWithFallback
+                        src={partner.logo}
+                        alt={partner.name}
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
                   </div>
 
-                  {/* Nom et secteur centrés */}
-                  <div className="text-center mb-4">
-                    <h3 className="font-bold text-gray-900 text-xl mb-2 leading-tight px-2">
-                      {displayName}
+                  {/* Nom et secteur */}
+                  <div className="text-center mb-3">
+                    <h3 className="font-semibold text-neutral-900 dark:text-white text-lg mb-1.5 leading-tight">
+                      {partner.name}
                     </h3>
-                    <p className="text-sm font-medium" style={{ color: '#C9A84C' }}>{displaySector || translateSector(partner.sector, t)}</p>
+                    <p className="text-xs text-primary-600 dark:text-primary-400 font-medium uppercase tracking-wider">
+                      {translateSector(partner.sector, t)}
+                    </p>
                   </div>
 
                   {/* Tier */}
                   <div className="flex justify-center mb-4">
-                    <Badge variant={getTierColor(partner.partner_tier)} className="uppercase tracking-wider font-bold">
-                      <Award className="h-3 w-3 mr-1" />
+                    <Badge variant={getTierColor(partner.partner_tier)} size="sm">
                       {getTierLabel(partner.partner_tier)}
                     </Badge>
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-600 text-sm line-clamp-4 mb-6 flex-grow text-center leading-relaxed">
-                    {displayDescription}
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3 mb-5 flex-grow text-center leading-relaxed">
+                    {partner.description}
                   </p>
 
                   {/* Stats */}
-                  <div className="flex items-center justify-center space-x-6 mb-6 text-sm text-gray-500 border-t border-gray-100 pt-4">
-                    <div className="flex items-center">
-                      <Eye className="h-4 w-4 mr-1 text-gray-400" />
+                  <div className="flex items-center justify-center gap-5 mb-5 text-xs text-neutral-500 dark:text-neutral-400 border-t border-neutral-100 dark:border-neutral-800 pt-4">
+                    <div className="flex items-center gap-1.5">
+                      <Eye className="h-3.5 w-3.5" />
                       <span>{partner.views || 0} {t('home.views', 'vues')}</span>
                     </div>
-                    <div className="flex items-center">
-                      <Handshake className="h-4 w-4 mr-1 text-gray-400" />
+                    <div className="flex items-center gap-1.5">
+                      <Handshake className="h-3.5 w-3.5" />
                       <span>{partner.contributions?.length || 0} {t('home.benefits', 'avantages')}</span>
                     </div>
                   </div>
 
                   {/* Actions */}
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2">
                     <Button
-                      variant="outline"
+                      variant="secondary"
                       size="sm"
-                      className="w-full"
                       onClick={() => navigate(`${ROUTES.PARTNERS}/${partner.id}`)}
                     >
-                      {t('home.see_profile', 'Voir le Profil')}
+                      {t('home.see_profile', 'Profil')}
                     </Button>
                     <Button
                       variant="primary"
                       size="sm"
-                      className="w-full"
                       onClick={() => navigate(`${ROUTES.CONTACT}?subject=Partenariat with ${partner.name}`)}
                     >
                       {t('home.contact_partner', 'Contacter')}
@@ -227,16 +216,15 @@ export const FeaturedPartners: React.FC = () => {
                 </div>
               </Card>
             </motion.div>
-          );
-          })}
+          ))}
         </div>
 
         <div className="text-center">
           <Link to={ROUTES.PARTNERS}>
-            <button className="luxury-btn group inline-flex items-center gap-2">
+            <Button variant="secondary" size="lg" className="group">
               {t('home.discover_all')}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
+              <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
           </Link>
         </div>
       </div>

@@ -5,12 +5,12 @@
 export const SUPPORT_CONFIG = {
   // WhatsApp - Principal canal de communication
   whatsapp: {
-    number: '+212688500500', // Numéro WhatsApp de support
+    number: '+33766504580', // Numéro WhatsApp de support
     message: 'Bonjour, je souhaiterais entrer en contact avec votre équipe commerciale',
   },
 
   // Email
-  email: 'Sib2026@urbacom.net',
+  email: 'contact@sib.ma',
 
   // Téléphone
   phone: '+212688500500',
@@ -34,18 +34,18 @@ export const SUPPORT_CONFIG = {
   teams: {
     commercial: {
       name: 'Équipe Commerciale',
-      whatsapp: '+212688500500',
-      email: 'Sib2026@urbacom.net',
+      whatsapp: '+33766504580',
+      email: 'commercial@sib.ma',
     },
     support: {
       name: 'Support Technique',
-      whatsapp: '+212688500500',
-      email: 'Sib2026@urbacom.net',
+      whatsapp: '+33766504580',
+      email: 'support@sib.ma',
     },
     exhibitors: {
       name: 'Exposants',
-      whatsapp: '+212688500500',
-      email: 'Sib2026@urbacom.net',
+      whatsapp: '+33766504580',
+      email: 'exposants@sibs.com',
     },
   },
 };

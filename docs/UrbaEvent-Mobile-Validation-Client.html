@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>UrbaEvent — Validation application mobile</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.35;
+      color: #1a1a17;
+      max-width: 180mm;
+      margin: 0 auto;
+      padding: 8mm 0;
+    }
+    header {
+      border-bottom: 3px solid #1B365D;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 15pt;
+      color: #1B365D;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .subtitle { font-size: 9pt; color: #5c5c55; margin-top: 4px; }
+    .alert {
+      background: #f4f6f9;
+      border-left: 4px solid #1B365D;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      font-size: 9pt;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 8.5pt;
+    }
+    th, td {
+      border: 1px solid #d8d8d0;
+      padding: 5px 6px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #1B365D;
+      color: #fff;
+      font-weight: 700;
+    }
+    th:first-child { width: 14%; }
+    td strong { color: #1B365D; }
+    .rec { background: #eef4fa; font-weight: 700; }
+    .phase {
+      font-size: 8.5pt;
+      margin: 8px 0;
+      padding: 6px 8px;
+      background: #fafaf7;
+      border: 1px solid #e8e8e0;
+      border-radius: 4px;
+    }
+    .checks, .questions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 16px;
+      font-size: 8.5pt;
+      margin: 8px 0;
+    }
+    .checks label, .questions p { display: block; }
+    .box { margin-top: 10px; border: 1px solid #1B365D; padding: 10px; border-radius: 4px; }
+    .box-row { display: flex; gap: 24px; margin-top: 8px; font-size: 9pt; }
+    .box-row span { flex: 1; border-bottom: 1px solid #999; padding-bottom: 2px; }
+    footer {
+      margin-top: 10px;
+      font-size: 7.5pt;
+      color: #888;
+      text-align: center;
+    }
+    @media print {
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Application mobile UrbaEvent — Choix de périmètre</h1>
+    <p class="subtitle">Salon International du Bâtiment 2026 · Document de validation client · URBACOM</p>
+  </header>
+
+  <div class="alert">
+    <strong>Situation actuelle :</strong> l’application convient surtout aux <strong>visiteurs</strong> (badge, programme, annuaire).
+    Un <strong>exposant</strong> connecté ne retrouve pas son espace professionnel (réseautage, rendez-vous, messages, scan de contacts) — il voit la même application qu’un visiteur.
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Option A<br/>Visiteurs</th>
+        <th class="rec">Option B<br/>Visiteurs + Exposants</th>
+        <th>Option C<br/>Tout-en-un</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Pour qui ?</strong></td>
+        <td>Visiteurs uniquement</td>
+        <td class="rec">Visiteurs + exposants sur le stand</td>
+        <td>Visiteurs, exposants, partenaires, orga, sécurité</td>
+      </tr>
+      <tr>
+        <td><strong>Visiteur</strong></td>
+        <td>Badge QR, inscription gratuit/VIP, programme, annuaire, infos salon, notifications</td>
+        <td class="rec">Identique Option A</td>
+        <td>+ réseautage visiteur, rendez-vous, app FR/AR</td>
+      </tr>
+      <tr>
+        <td><strong>Exposant</strong></td>
+        <td>Sur le <strong>site web</strong> uniquement</td>
+        <td class="rec"><strong>Mon stand</strong>, scan contacts, RDV, messages, réseautage (par phases)</td>
+        <td>Tout B + mini-site mobile, statistiques avancées</td>
+      </tr>
+      <tr>
+        <td><strong>Partenaire</strong></td>
+        <td>Site web</td>
+        <td class="rec">Site web</td>
+        <td>Application dédiée</td>
+      </tr>
+      <tr>
+        <td><strong>SIB 2026</strong></td>
+        <td>Rapide</td>
+        <td class="rec"><strong>Recommandé</strong></td>
+        <td>Trop ambitieux</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="phase">
+    <strong>Option B — découpage proposé :</strong>
+    V1 avant salon (visiteur + mon stand + scan contacts) →
+    V1.1 pendant salon (rendez-vous + messages) →
+    V1.2 réseautage complet.
+  </div>
+
+  <div class="checks">
+    <div>
+      <strong>Option retenue :</strong><br/>
+      ☐ Option A &nbsp; ☐ Option B &nbsp; ☐ Option C
+    </div>
+    <div>
+      <strong>Modules B prioritaires :</strong><br/>
+      ☐ Scan contacts &nbsp; ☐ RDV &nbsp; ☐ Messages &nbsp; ☐ Réseautage
+    </div>
+  </div>
+
+  <div class="questions">
+    <p>☐ Exposants sur smartphone au stand ?</p>
+    <p>☐ Scan contacts indispensable ?</p>
+    <p>☐ Réseautage mobile ou web suffit ?</p>
+    <p>☐ Partenaires : app ou web ?</p>
+    <p>☐ Cible : novembre 2026 ou après ?</p>
+    <p>☐ Français seul OK pour la V1 ?</p>
+  </div>
+
+  <div class="box">
+    <strong>Décision client</strong>
+    <div class="box-row">
+      <span>Option retenue :</span>
+      <span>Date :</span>
+      <span>Signataire :</span>
+    </div>
+  </div>
+
+  <footer>UrbaEvent · SIB 2026 · Parc d'Exposition Mohammed VI, El Jadida · 25–29 novembre 2026</footer>
+</body>
+</html>

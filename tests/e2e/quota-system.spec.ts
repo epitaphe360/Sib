@@ -74,7 +74,7 @@ async function mockAvailableSlot(page: Page) {
   end.setMinutes(30);
 
   await page.route('**/rest/v1/appointment_slots*', route => {
-    if (route.request().method() !== 'GET') return route.continue();
+    if (route.request().method() !== 'GET') {return route.continue();}
     route.fulfill({
       status: 200,
       contentType: 'application/json',

@@ -95,7 +95,7 @@ async function seedTemplates() {
   // Afficher les templates par catégorie
   console.log('📚 Templates par catégorie:\n');
   const categories = [...new Set(siteTemplates.map(t => t.category))];
-  
+
   for (const category of categories) {
     const templatesInCategory = siteTemplates.filter(t => t.category === category);
     console.log(`   ${category.toUpperCase()}: ${templatesInCategory.length} template(s)`);

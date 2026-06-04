@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { motion } from 'framer-motion';
@@ -17,7 +17,6 @@ import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { useTranslation } from '../../hooks/useTranslation';
 
 interface Partner {
   id: string;
@@ -37,7 +36,6 @@ interface Exhibitor {
 }
 
 export default function PublicationControlPage() {
-  const { t } = useTranslation();
   const [partners, setPartners] = useState<Partner[]>([]);
   const [exhibitors, setExhibitors] = useState<Exhibitor[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,11 +54,17 @@ export default function PublicationControlPage() {
         throw new Error('Supabase client not initialized');
       }
       // Load partners
+      console.log('🔍 [PublicationControl] Chargement des partenaires...');
       const { data: partnersData, error: partnersError } = await supabase
         .from('partners')
         .select('id, company_name, partnership_level, is_published, contact_info')
         .order('company_name');
 
+      console.log('📊 [PublicationControl] Partenaires reçus:', {
+        count: partnersData?.length || 0,
+        error: partnersError?.message,
+        data: partnersData
+      });
 
       if (partnersError) {
         console.error('❌ Erreur partners:', partnersError);
@@ -69,11 +73,17 @@ export default function PublicationControlPage() {
       setPartners(partnersData || []);
 
       // Load exhibitors
+      console.log('🔍 [PublicationControl] Chargement des exposants...');
       const { data: exhibitorsData, error: exhibitorsError } = await supabase
         .from('exhibitors')
         .select('id, company_name, category, sector, is_published, contact_info')
         .order('company_name');
 
+      console.log('📊 [PublicationControl] Exposants reçus:', {
+        count: exhibitorsData?.length || 0,
+        error: exhibitorsError?.message,
+        data: exhibitorsData
+      });
 
       if (exhibitorsError) {
         console.error('❌ Erreur exhibitors:', exhibitorsError);
@@ -82,7 +92,7 @@ export default function PublicationControlPage() {
       setExhibitors(exhibitorsData || []);
     } catch (error) {
       console.error('❌ [PublicationControl] Error loading data:', error);
-      toast.error(t('common.load_error'));
+      toast.error('Erreur lors du chargement des données');
     } finally {
       setLoading(false);
     }
@@ -106,7 +116,9 @@ export default function PublicationControlPage() {
         prev.map(p => (p.id === partnerId ? { ...p, is_published: !currentStatus } : p))
       );
 
-      toast.success(!currentStatus ? t('admin.pub_partner_published') : t('admin.pub_partner_hidden'));
+      toast.success(
+        !currentStatus ? 'Partenaire publié ✅' : 'Partenaire masqué 🔒'
+      );
     } catch (error) {
       console.error('Error toggling partner:', error);
       toast.error('Erreur lors de la modification');
@@ -133,7 +145,9 @@ export default function PublicationControlPage() {
         prev.map(e => (e.id === exhibitorId ? { ...e, is_published: !currentStatus } : e))
       );
 
-      toast.success(!currentStatus ? t('admin.pub_exhibitor_published') : t('admin.pub_exhibitor_hidden'));
+      toast.success(
+        !currentStatus ? 'Exposant publié ✅' : 'Exposant masqué 🔒'
+      );
     } catch (error) {
       console.error('Error toggling exhibitor:', error);
       toast.error('Erreur lors de la modification');
@@ -143,7 +157,7 @@ export default function PublicationControlPage() {
   }
 
   async function toggleAllPartners(publish: boolean) {
-    if (!confirm(`Êtes-vous sûr de vouloir ${publish ? 'PUBLIER' : 'MASQUER'} TOUS les sponsors ?`)) {
+    if (!confirm(`Êtes-vous sûr de vouloir ${publish ? 'PUBLIER' : 'MASQUER'} TOUS les partenaires ?`)) {
       return;
     }
 
@@ -160,11 +174,12 @@ export default function PublicationControlPage() {
       if (fetchError) {throw fetchError;}
 
       if (!allPartners || allPartners.length === 0) {
-        toast.info(t('admin.pub_no_partners'));
+        toast.info('Aucun partenaire à modifier');
         setProcessing(null);
         return;
       }
 
+      console.log(`🔄 Mise à jour de ${allPartners.length} partenaires...`);
 
       // Update using a valid condition that matches all records
       const { error } = await supabase
@@ -178,8 +193,8 @@ export default function PublicationControlPage() {
       await loadData();
       toast.success(
         publish
-          ? `✅ ${allPartners.length} ${t('admin.pub_partners_published')}`
-          : `🔒 ${allPartners.length} ${t('admin.pub_partners_hidden')}`
+          ? `✅ ${allPartners.length} partenaires sont maintenant publiés`
+          : `🔒 ${allPartners.length} partenaires sont maintenant masqués`
       );
     } catch (error) {
       console.error('Error toggling all partners:', error);
@@ -207,11 +222,12 @@ export default function PublicationControlPage() {
       if (fetchError) {throw fetchError;}
 
       if (!allExhibitors || allExhibitors.length === 0) {
-        toast.info(t('admin.pub_no_exhibitors'));
+        toast.info('Aucun exposant à modifier');
         setProcessing(null);
         return;
       }
 
+      console.log(`🔄 Mise à jour de ${allExhibitors.length} exposants...`);
 
       // Update using a valid condition that matches all records
       const { error } = await supabase
@@ -225,8 +241,8 @@ export default function PublicationControlPage() {
       await loadData();
       toast.success(
         publish
-          ? `✅ ${allExhibitors.length} ${t('admin.pub_exhibitors_published')}`
-          : `🔒 ${allExhibitors.length} ${t('admin.pub_exhibitors_hidden')}`
+          ? `✅ ${allExhibitors.length} exposants sont maintenant publiés`
+          : `🔒 ${allExhibitors.length} exposants sont maintenant masqués`
       );
     } catch (error) {
       console.error('Error toggling all exhibitors:', error);
@@ -263,7 +279,7 @@ export default function PublicationControlPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <RefreshCw className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">{t('common.loading')}</p>
+          <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
     );
@@ -275,16 +291,16 @@ export default function PublicationControlPage() {
         {/* Back Button */}
         <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
-          {t('common.back_to_dashboard')}
+          Retour au Tableau de Bord
         </Link>
 
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t('admin.pub_title')}
+            Contrôle de Publication
           </h1>
           <p className="text-gray-600">
-            {t('admin.pub_subtitle')}
+            Gérez la visibilité des partenaires et exposants sur le site public
           </p>
         </div>
 
@@ -299,7 +315,7 @@ export default function PublicationControlPage() {
             }`}
           >
             <Building2 className="h-5 w-5 mr-2" />
-            {t('admin.collab_partners')} ({partnersStats.total})
+            Partenaires ({partnersStats.total})
           </button>
           <button
             onClick={() => setActiveTab('exhibitors')}
@@ -310,7 +326,7 @@ export default function PublicationControlPage() {
             }`}
           >
             <Users className="h-5 w-5 mr-2" />
-            {t('admin.collab_exhibitors')} ({exhibitorsStats.total})
+            Exposants ({exhibitorsStats.total})
           </button>
         </div>
 
@@ -319,7 +335,7 @@ export default function PublicationControlPage() {
           <Card className="p-4 bg-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">{t('common.total')}</p>
+                <p className="text-sm text-gray-600">Total</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {activeTab === 'partners' ? partnersStats.total : exhibitorsStats.total}
                 </p>
@@ -331,7 +347,7 @@ export default function PublicationControlPage() {
           <Card className="p-4 bg-green-50 border-green-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-green-700">{t('admin.pub_published')}</p>
+                <p className="text-sm text-green-700">Publiés</p>
                 <p className="text-2xl font-bold text-green-900">
                   {activeTab === 'partners' ? partnersStats.published : exhibitorsStats.published}
                 </p>
@@ -343,7 +359,7 @@ export default function PublicationControlPage() {
           <Card className="p-4 bg-yellow-50 border-yellow-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-yellow-700">{t('admin.pub_hidden')}</p>
+                <p className="text-sm text-yellow-700">Masqués</p>
                 <p className="text-2xl font-bold text-yellow-900">
                   {activeTab === 'partners' ? partnersStats.hidden : exhibitorsStats.hidden}
                 </p>
@@ -370,10 +386,10 @@ export default function PublicationControlPage() {
                   </span>
                 </div>
                 <p className="text-sm text-gray-700 font-medium ml-12">
-                  ⚠ Activer ou désactiver <span className="font-bold text-purple-700">TOUS LES {partnersStats.total} PARTENAIRES</span> en un seul clic
+                  ⚡ Activer ou désactiver <span className="font-bold text-purple-700">TOUS LES {partnersStats.total} PARTENAIRES</span> en un seul clic
                 </p>
                 <p className="text-xs text-gray-500 ml-12 mt-1">
-                  ⚠️   Cette action affecte UNIQUEMENT les sponsors (pas les exposants)
+                  ⚠️ Cette action affecte UNIQUEMENT les partenaires (pas les exposants)
                 </p>
               </div>
               <div className="flex space-x-3">
@@ -416,10 +432,10 @@ export default function PublicationControlPage() {
                   </span>
                 </div>
                 <p className="text-sm text-gray-700 font-medium ml-12">
-                  ⚠ Activer ou désactiver <span className="font-bold text-emerald-700">TOUS LES {exhibitorsStats.total} EXPOSANTS</span> en un seul clic
+                  ⚡ Activer ou désactiver <span className="font-bold text-emerald-700">TOUS LES {exhibitorsStats.total} EXPOSANTS</span> en un seul clic
                 </p>
                 <p className="text-xs text-gray-500 ml-12 mt-1">
-                  ⚠️   Cette action affecte UNIQUEMENT les exposants (pas les sponsors)
+                  ⚠️ Cette action affecte UNIQUEMENT les exposants (pas les partenaires)
                 </p>
               </div>
               <div className="flex space-x-3">
@@ -451,7 +467,7 @@ export default function PublicationControlPage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder={t('admin.pub_search_ph')}
+              placeholder="Rechercher par nom ou email..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -478,7 +494,7 @@ export default function PublicationControlPage() {
                             {partner.company_name}
                           </h3>
                           <p className="text-sm text-gray-500">
-                            {partner.partnership_level} · {partner.contact_info?.email || 'N/A'}
+                            {partner.partnership_level} • {partner.contact_info?.email || 'N/A'}
                           </p>
                         </div>
                       </div>
@@ -488,12 +504,12 @@ export default function PublicationControlPage() {
                       {partner.is_published ? (
                         <span className="flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
                           <CheckCircle className="h-4 w-4 mr-1" />
-                            {t('admin.pub_published_status')}
-                          </span>
-                        ) : (
-                          <span className="flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
-                            <AlertCircle className="h-4 w-4 mr-1" />
-                            {t('admin.pub_hidden_status')}
+                          Publié
+                        </span>
+                      ) : (
+                        <span className="flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                          <AlertCircle className="h-4 w-4 mr-1" />
+                          Masqué
                         </span>
                       )}
 
@@ -521,7 +537,7 @@ export default function PublicationControlPage() {
             {filteredPartners.length === 0 && (
               <Card className="p-8 text-center">
                 <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600">{t('admin.pub_no_partner_found')}</p>
+                <p className="text-gray-600">Aucun partenaire trouvé</p>
               </Card>
             )}
           </div>
@@ -546,7 +562,7 @@ export default function PublicationControlPage() {
                             {exhibitor.company_name}
                           </h3>
                           <p className="text-sm text-gray-500">
-                            {exhibitor.category} · {exhibitor.sector} · {exhibitor.contact_info?.email || 'N/A'}
+                            {exhibitor.category} • {exhibitor.sector} • {exhibitor.contact_info?.email || 'N/A'}
                           </p>
                         </div>
                       </div>
@@ -556,12 +572,12 @@ export default function PublicationControlPage() {
                       {exhibitor.is_published ? (
                         <span className="flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
                           <CheckCircle className="h-4 w-4 mr-1" />
-                          {t('admin.pub_published_status')}
+                          Publié
                         </span>
                       ) : (
                         <span className="flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
                           <AlertCircle className="h-4 w-4 mr-1" />
-                          {t('admin.pub_hidden_status')}
+                          Masqué
                         </span>
                       )}
 
@@ -591,7 +607,7 @@ export default function PublicationControlPage() {
             {filteredExhibitors.length === 0 && (
               <Card className="p-8 text-center">
                 <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600">{t('admin.pub_no_exhibitor_found')}</p>
+                <p className="text-gray-600">Aucun exposant trouvé</p>
               </Card>
             )}
           </div>

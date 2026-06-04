@@ -45,7 +45,7 @@ export default function ExhibitorDetailPage() {
   const { isAuthenticated, user } = useAuthStore();
   const { t } = useTranslation();
 
-  // Chat interne : exposants, sponsors, visiteurs VIP uniquement
+  // Chat interne : exposants, partenaires, visiteurs VIP uniquement
   const canChat = isAuthenticated && (
     user?.type === 'exhibitor' ||
     user?.type === 'partner' ||
@@ -53,7 +53,7 @@ export default function ExhibitorDetailPage() {
     (user?.type === 'visitor' && user?.visitor_level === 'vip')
   );
   const { id } = useParams<{ id: string }>();
-  const { exhibitors, selectExhibitor, selectedExhibitor, fetchExhibitors, isLoading: storeLoading } = useExhibitorStore();
+  const { exhibitors, selectExhibitor, selectedExhibitor, fetchExhibitors } = useExhibitorStore();
   const { articles, fetchNews } = useNewsStore();
   // activeTab temporairement retiré (non utilisé)
 
@@ -90,7 +90,7 @@ export default function ExhibitorDetailPage() {
       return;
     }
     if (!canChat) {
-      toast.error('La messagerie est réservée aux exposants, sponsors et visiteurs VIP');
+      toast.error('La messagerie est réservée aux exposants, partenaires et visiteurs VIP');
       return;
     }
     if (selectedExhibitor?.userId) {
@@ -101,7 +101,7 @@ export default function ExhibitorDetailPage() {
   };
 
   // Afficher loading pendant le chargement
-  if (storeLoading && exhibitors.length === 0) {
+  if (exhibitors.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -179,12 +179,12 @@ export default function ExhibitorDetailPage() {
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#accueil" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.accueil', 'Accueil')}</a>
-              <a href="#apropos" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.a_propos', 'À propos')}</a>
-              <a href="#produits" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.produits', 'Produits')}</a>
-              <a href="#actualites" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.actualites', 'Actualités')}</a>
-              <a href="#galerie" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.galerie', 'Galerie')}</a>
-              <a href="#disponibilites" className="text-gray-700 hover:text-blue-600 transition-colors">{t('exhibitor_detail.disponibilites', 'Disponibilités')}</a>
+              <a href="#accueil" className="text-gray-700 hover:text-blue-600 transition-colors">Accueil</a>
+              <a href="#apropos" className="text-gray-700 hover:text-blue-600 transition-colors">À propos</a>
+              <a href="#produits" className="text-gray-700 hover:text-blue-600 transition-colors">Produits</a>
+              <a href="#actualites" className="text-gray-700 hover:text-blue-600 transition-colors">Actualités</a>
+              <a href="#galerie" className="text-gray-700 hover:text-blue-600 transition-colors">Galerie</a>
+              <a href="#disponibilites" className="text-gray-700 hover:text-blue-600 transition-colors">Disponibilités</a>
             </div>
 
             <div className="flex items-center space-x-3">
@@ -446,7 +446,7 @@ export default function ExhibitorDetailPage() {
                         size="sm"
                         className="hover:bg-blue-50 hover:border-blue-300 transition-all"
                         onClick={() => {
-                          toast.success('📥 Téléchargement de la fiche technique...');
+                          toast.success('?? Téléchargement de la fiche technique...');
                         }}
                       >
                         <Download className="h-4 w-4" />
@@ -607,7 +607,7 @@ export default function ExhibitorDetailPage() {
               Témoignages Clients
             </h2>
             <p className="text-lg text-gray-600">
-              Ce que disent nos sponsors de nos solutions
+              Ce que disent nos partenaires de nos solutions
             </p>
           </motion.div>
 
@@ -707,8 +707,8 @@ export default function ExhibitorDetailPage() {
                       <Mail className="h-5 w-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{t('exhibitor_detail.email', 'Email')}</p>
-                      <p className="text-gray-600">{exhibitor.contactInfo?.email || 'Non renseigné'}</p>
+                      <p className="font-medium text-gray-900">Email</p>
+                      <p className="text-gray-600">contact@portsolutions.com</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -716,8 +716,8 @@ export default function ExhibitorDetailPage() {
                       <Phone className="h-5 w-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{t('exhibitor_detail.telephone', 'Téléphone')}</p>
-                      <p className="text-gray-600">{exhibitor.contactInfo?.phone || 'Non renseigné'}</p>
+                      <p className="font-medium text-gray-900">Téléphone</p>
+                      <p className="text-gray-600"></p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -725,11 +725,8 @@ export default function ExhibitorDetailPage() {
                       <MapPin className="h-5 w-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{t('exhibitor_detail.adresse', 'Adresse')}</p>
-                      <p className="text-gray-600">
-                        {[exhibitor.contactInfo?.address, exhibitor.contactInfo?.city, exhibitor.contactInfo?.country]
-                          .filter(Boolean).join(', ') || 'Non renseignée'}
-                      </p>
+                      <p className="font-medium text-gray-900">Adresse</p>
+                      <p className="text-gray-600">123 Bâtiment Avenue, Amsterdam, Netherlands</p>
                     </div>
                   </div>
                 </div>
@@ -742,19 +739,19 @@ export default function ExhibitorDetailPage() {
                 <ul className="space-y-3">
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">{t('exhibitor_detail.reponse_sous_24h_ouvrees', 'Réponse sous 24h ouvrées')}</span>
+                    <span className="text-gray-600">Réponse sous 24h ouvrées</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">{t('exhibitor_detail.devis_gratuit_et_personnalise', 'Devis gratuit et personnalisé')}</span>
+                    <span className="text-gray-600">Devis gratuit et personnalisé</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">{t('exhibitor_detail.accompagnement_technique_complet', 'Accompagnement technique complet')}</span>
+                    <span className="text-gray-600">Accompagnement technique complet</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <span className="text-gray-600">{t('exhibitor_detail.support_multilingue', 'Support multilingue')}</span>
+                    <span className="text-gray-600">Support multilingue</span>
                   </li>
                 </ul>
               </div>
@@ -839,12 +836,12 @@ export default function ExhibitorDetailPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     >
-                      <option value="">{t('exhibitor_detail.selectionnez_un_sujet', 'Sélectionnez un sujet')}</option>
-                      <option value="quote">{t('exhibitor_detail.demande_de_devis', 'Demande de devis')}</option>
-                      <option value="information">{t('exhibitor_detail.demande_dinformations', 'Demande d\'informations')}</option>
-                      <option value="partnership">{t('exhibitor_detail.partenariat_commercial', 'Partenariat commercial')}</option>
-                      <option value="support">{t('exhibitor_detail.support_technique', 'Support technique')}</option>
-                      <option value="other">{t('exhibitor_detail.autre', 'Autre')}</option>
+                      <option value="">Sélectionnez un sujet</option>
+                      <option value="quote">Demande de devis</option>
+                      <option value="information">Demande d'informations</option>
+                      <option value="partnership">Partenariat commercial</option>
+                      <option value="support">Support technique</option>
+                      <option value="other">Autre</option>
                     </select>
                   </div>
 
@@ -867,7 +864,7 @@ export default function ExhibitorDetailPage() {
                     onClick={(e) => {
                       e.preventDefault();
 
-                      toast.success('✉️ Message envoyé avec succès ! Nous vous répondrons sous 24h.');
+                      toast.success(`?? Message envoyé avec succès ! Nous vous répondrons sous 24h.`);
                     }}
                   >
                     <Send className="h-4 w-4 mr-2" />
@@ -904,7 +901,7 @@ export default function ExhibitorDetailPage() {
                     format: 'Démonstration interactive'
                   };
 
-                  toast.success(`📅 Démonstration programmée pour ${demoData.company}`);
+                  toast.success(`?? Démonstration programmée pour ${demoData.company}`);
                 }}
               >
                 <Target className="h-5 w-5 mr-2" />
@@ -950,29 +947,29 @@ export default function ExhibitorDetailPage() {
 
             {/* Quick Links */}
             <div>
-              <h4 className="font-semibold text-white mb-4">{t('exhibitor_detail.liens_rapides', 'Liens rapides')}</h4>
+              <h4 className="font-semibold text-white mb-4">Liens rapides</h4>
               <ul className="space-y-2">
-                <li><a href="#apropos" className="text-gray-400 hover:text-white transition-colors">{t('exhibitor_detail.a_propos', 'À propos')}</a></li>
-                <li><a href="#produits" className="text-gray-400 hover:text-white transition-colors">{t('exhibitor_detail.produits', 'Produits')}</a></li>
-                <li><a href="#actualites" className="text-gray-400 hover:text-white transition-colors">{t('exhibitor_detail.actualites', 'Actualités')}</a></li>
+                <li><a href="#apropos" className="text-gray-400 hover:text-white transition-colors">À propos</a></li>
+                <li><a href="#produits" className="text-gray-400 hover:text-white transition-colors">Produits</a></li>
+                <li><a href="#actualites" className="text-gray-400 hover:text-white transition-colors">Actualités</a></li>
               </ul>
             </div>
 
             {/* SIB Info */}
             <div>
-              <h4 className="font-semibold text-white mb-4">{t('exhibitor_detail.sib_2026', 'SIB 2026')}</h4>
+              <h4 className="font-semibold text-white mb-4">SIB 2026</h4>
               <div className="space-y-2 text-sm text-gray-400">
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-4 w-4" />
-                  <span>25-29 Nov. 2026</span>
+                  <span>1-3 Avril 2026</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4" />
-                  <span>{t('exhibitor_detail.casablanca_maroc', 'Casablanca, Maroc')}</span>
+                  <span>Casablanca, Maroc</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Building2 className="h-4 w-4" />
-                  <span>Stand {(exhibitor as any).boothNumber || (exhibitor as any).booth_number || 'N/A'}</span>
+                  <span>Stand {exhibitor.id === '1' ? 'A-12' : exhibitor.id === '2' ? 'B-08' : 'C-15'}</span>
                 </div>
               </div>
             </div>
@@ -980,7 +977,7 @@ export default function ExhibitorDetailPage() {
 
           <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} {exhibitor.companyName}. Tous droits réservés.
+              © 2024 {exhibitor.companyName}. Tous droits réservés.
             </p>
             <p className="text-sm text-gray-500 mt-4 md:mt-0">
               Propulsé par SIB 2026

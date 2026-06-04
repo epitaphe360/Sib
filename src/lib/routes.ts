@@ -1,5 +1,13 @@
 ﻿export const ROUTES = {
   HOME: '/',
+  HOME_P1: '/accueil/1',
+  HOME_P2: '/accueil/2',
+  HOME_P3: '/accueil/3',
+  HOME_P4: '/accueil/4',
+  HOME_P5: '/accueil/5',
+  HOME_P6: '/accueil/6',
+  HOME_P7: '/accueil/7',
+  HOME_P8: '/accueil/8',
   EXHIBITORS: '/exhibitors',
   EXHIBITOR_DETAIL: '/exhibitors/:id',
   PARTNERS: '/partners',
@@ -7,7 +15,6 @@
   PAVILIONS: '/pavilions',
   METRICS: '/metrics',
   NETWORKING: '/networking',
-  B2B_NETWORKING_AI: '/networking/b2b-ai',
   EVENTS: '/events',
   LOGIN: '/login',
   DEMO_ACCOUNTS: '/demo',
@@ -48,13 +55,11 @@
   ADMIN_CREATE_EVENT: '/admin/create-event',
   ADMIN_EVENTS: '/admin/events',
   ADMIN_VIP_VISITORS: '/admin/vip-visitors',
-  ADMIN_SECURITY_ZONES: '/admin/security-zones',
   ADMIN_CREATE_NEWS: '/admin/create-news',
   ADMIN_NEWS: '/admin/news',
   MINISITE_PREVIEW: '/minisite/:exhibitorId',
   ADMIN_ACTIVITY: '/admin/activity',
   ADMIN_VALIDATION: '/admin/validation',
-  ADMIN_REGISTRATION_REQUESTS: '/admin/registration-requests',
   ADMIN_MODERATION: '/admin/moderation',
   NEWS: '/news',
   NEWS_DETAIL: '/news/:id',
@@ -66,8 +71,6 @@
   ADMIN_PAVILION_ADD_DEMO: '/admin/pavilion/:pavilionId/add-demo',
   ADMIN_CONTENT: '/admin/content',
   ADMIN_EMAIL_TEMPLATES: '/admin/email-templates',
-  ADMIN_CONFIG: '/admin/config',
-  ADMIN_BADGE_CONFIG: '/admin/badge-config',
   CONTACT: '/contact',
   CONTACT_SUCCESS: '/contact/success',
   PARTNERSHIP: '/partnership',
@@ -80,7 +83,7 @@
   VENUE: '/venue',
   ACCOMMODATION: '/hebergement',
 
-  // Pages sponsors
+  // Pages partenaires
   PARTNER_ACTIVITY: '/partner/activity',
   PARTNER_ANALYTICS: '/partner/analytics',
   PARTNER_EVENTS: '/partner/events',
@@ -94,13 +97,9 @@
   // Pages admin manquantes
   ADMIN_PARTNERS: '/admin/partners',
   ADMIN_MEDIA: '/admin/media',
-  ADMIN_SALONS: '/admin/salons',
-  ADMIN_PUSH_NOTIFICATIONS: '/admin/push-notifications',
-  ADMIN_VISA_LETTERS: '/admin/visa-letters',
   ADMIN_EXHIBITORS_LIST: '/admin/exhibitors-list',
   ADMIN_USERS_LIST: '/admin/users-list',
   ADMIN_PUBLICATION_CONTROL: '/admin/publication-control',
-  ADMIN_STAND_COLLABORATORS: '/admin/stand-collaborators',
 
   // Pages erreur
   UNAUTHORIZED: '/unauthorized',
@@ -167,7 +166,6 @@
   // Admin Media Management
   ADMIN_MEDIA_CREATE: '/admin/media/create',
   ADMIN_MEDIA_MANAGE: '/admin/media/manage',
-  ADMIN_MEDIA_LIBRARY: '/admin/media/library',
   ADMIN_MEDIA_EDIT: '/admin/media/edit/:id',
   ADMIN_LIVE_EVENTS: '/admin/live-events',
   ADMIN_LIVE_EVENT_CREATE: '/admin/live-events/create',
@@ -187,96 +185,19 @@
   HALL_MAP: '/map',
   CATALOG: '/catalog',
   ADMIN_PRESS_ACCREDITATIONS: '/admin/press-accreditations',
-  ADMIN_SESSION_CHECKIN: '/security/scanner',
-  ADMIN_SESSION_REGISTRATIONS: '/admin/session-registrations',
-  ADMIN_CREDENTIALS: '/admin/credentials',
   SPEAKERS: '/speakers',
   ADMIN_SPEAKERS: '/admin/speakers',
 
+  // Design — comparaison menus (pré-production)
+  DESIGN_HOME_MENU: '/design/menu-accueil',
+
   // UrbaEvent - Sélection multi-salons
   SALON_SELECTION: '/salons',
-  SALON_SIB: '/',
+  SALON_SIB: '/salon/sib',
   SALON_SIR: '/salon/sir',
   SALON_SIP: '/salon/sip',
   SALON_BTP: '/salon/btp',
   SALON_SIE: '/salon/sie',
-
-  // Pages statiques - Le Salon
-  PRESENTATION: '/presentation',
-  NOUVEAUTES: '/nouveautes',
-  SECTEURS: '/secteurs',
-  EDITIONS: '/editions',
-  TELECHARGEMENTS: '/telechargements',
-
-  // Pages statiques - Exposer
-  POURQUOI_EXPOSER: '/pourquoi-exposer',
-  ESPACES_SIB: '/espaces',
-
-  // Pages statiques - Visiter
-  POURQUOI_VISITER: '/pourquoi-visiter',
-  INFOS_PRATIQUES: '/infos-pratiques',
-
-  // MODULE 1 — Collaborateurs de stand
-  EXHIBITOR_TEAM: '/exhibitor/team',
-  PARTNER_TEAM: '/partner/team',
-  TEAM_BADGES_PRINT: '/print/badges-equipe',
-
-  // MODULE 2 — Lettres d'invitation
-  INVITATION_LETTER: '/invitation-letter',
-  EXHIBITOR_INVITATION_LETTER: '/exhibitor/invitation-letter',
-  PARTNER_INVITATION_LETTER: '/partner/invitation-letter',
-  ADMIN_INVITATIONS: '/admin/invitations',
-
-  // MODULE 3 — Location de matériel
-  RENTAL_CATALOG: '/rental',
-  RENTAL_CHECKOUT: '/rental/checkout',
-  RENTAL_PAYMENT_SUCCESS: '/rental/payment-success',
-  EXHIBITOR_RENTAL: '/exhibitor/rental',
-  PARTNER_RENTAL: '/partner/rental',
-  ADMIN_RENTAL: '/admin/rental',
-
-  // MODULE 4 — Location de chapiteaux
-  CHAPITEAU_CATALOG: '/chapiteau',
-  CHAPITEAU_CHECKOUT: '/chapiteau/checkout',
-  CHAPITEAU_PAYMENT_SUCCESS: '/chapiteau/payment-success',
-  EXHIBITOR_CHAPITEAU: '/exhibitor/chapiteau',
-  PARTNER_CHAPITEAU: '/partner/chapiteau',
-  ADMIN_CHAPITEAU: '/admin/chapiteau',
-
-  // MODULE 5 — Vente d'espaces publicitaires
-  EXHIBITOR_ADVERTISING: '/exhibitor/advertising',
-  PARTNER_ADVERTISING: '/partner/advertising',
-  ADVERTISING_CHECKOUT: '/advertising/checkout',
-  ADVERTISING_PAYMENT_SUCCESS: '/advertising/payment-success',
-  ADMIN_ADVERTISING: '/admin/advertising',
-
-  // MODULE 6 — Sponsor Média
-  REGISTER_MEDIA_PARTNER: '/register/media-partner',
-  MEDIA_PARTNER_DASHBOARD: '/media-partner/dashboard',
-
-  // Exposant — pages dédiées
-  EXHIBITOR_SCANS: '/exhibitor/scans',
-
-  // Sponsor — pages dédiées
-  PARTNER_SCANS: '/partner/scans',
-
-  // MODULE FACTURATION
-  ADMIN_INVOICES:    '/admin/facturation',
-  EXHIBITOR_INVOICES: '/exposant/mes-factures',
-  PARTNER_INVOICES:   '/partenaire/mes-factures',
-  VISITOR_INVOICES:   '/visitor/mes-factures',
-
-  // GESTION TARIFS
-  ADMIN_PRICING:     '/admin/tarifs',
-
-  // MODULE CODES PROMO
-  ADMIN_PROMO_CODES: '/admin/promo-codes',
-
-  // MODULE CATALOGUE EXPOSANTS
-  ADMIN_CATALOGUE:             '/admin/catalogue',
-  ADMIN_CATALOGUE_EDIT:        '/admin/catalogue/:entryId/edit',
-  ADMIN_CATALOGUE_FORM_CONFIG: '/admin/catalogue/form-config',
-  CATALOGUE_FILL:              '/catalogue/fill/:token',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

@@ -395,7 +395,7 @@ test.describe('💳 Simulation Paiement - Flux Complets', () => {
   test('PAY-SIM-01: Flux complet upgrade visiteur Free → VIP (virement)', async ({ page }) => {
     // Étape 1: Login visiteur VIP (représente un visiteur qui veut passer au niveau suivant)
     await loginWithRetry(page, ACCOUNTS.visitorVip.email);
-    
+
     // Étape 2: Navigation vers page upgrade
     await page.goto(`${BASE_URL}/visitor/upgrade`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(2000);

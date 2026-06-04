@@ -83,7 +83,7 @@ npm run mobile:open-android
 ```typescript
 // capacitor.config.ts
 {
-  appId: 'com.SIB.app2026',
+  appId: 'com.sib.app2026',
   appName: 'SIB 2026',
   webDir: 'dist',
   plugins: {

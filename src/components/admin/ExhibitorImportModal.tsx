@@ -13,6 +13,7 @@ interface ImportRow {
   contact_email?: string;
   contact_phone?: string;
   stand_number?: string;
+  hall_number?: string;
   country?: string;
   city?: string;
 }
@@ -38,6 +39,7 @@ const EXAMPLE_DATA = [
     contact_email: 'contact@example.com',
     contact_phone: '+212600000000',
     stand_number: 'A-01',
+    hall_number: 'A',
     country: 'Maroc',
     city: 'Casablanca',
   },
@@ -174,6 +176,7 @@ export function ExhibitorImportModal({ onClose, onSuccess }: Props) {
                 phone: row.contact_phone?.toString() || null,
               },
               stand_number: row.stand_number?.toString() || null,
+              hall_number: row.hall_number?.toString() || null,
               verified: false,
               featured: false,
               created_at: new Date().toISOString(),
@@ -263,7 +266,7 @@ export function ExhibitorImportModal({ onClose, onSuccess }: Props) {
           <div>
             <p className="text-sm font-medium text-gray-700 mb-2">Colonnes du fichier :</p>
             <div className="flex flex-wrap gap-2">
-              {['company_name *', 'sector', 'category', 'description', 'website', 'contact_email', 'contact_phone', 'stand_number', 'country', 'city'].map(col => (
+              {['company_name *', 'sector', 'category', 'description', 'website', 'contact_email', 'contact_phone', 'stand_number', 'hall_number', 'country', 'city'].map(col => (
                 <span key={col} className={`px-2 py-1 rounded text-xs font-mono ${col.includes('*') ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}`}>
                   {col}
                 </span>

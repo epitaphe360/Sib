@@ -93,7 +93,7 @@ export const CapsuleDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -113,7 +113,7 @@ export const CapsuleDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -132,7 +132,7 @@ export const CapsuleDetailPage: React.FC = () => {
             <div className="relative">
               <Badge
                 variant="default"
-                className="absolute top-4 left-4 z-10 bg-indigo-600"
+                className="absolute top-4 left-4 z-10 bg-blue-600"
               >
                 🎬 Inside SIB
               </Badge>
@@ -216,7 +216,7 @@ export const CapsuleDetailPage: React.FC = () => {
                   Intervenant
                 </h2>
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
                     <span className="text-2xl font-semibold text-white">
                       {capsule.speaker_name.charAt(0)}
                     </span>
@@ -274,16 +274,16 @@ export const CapsuleDetailPage: React.FC = () => {
             </div>
 
             {/* What is Inside SIB */}
-            <div className="bg-gradient-to-br from-indigo-600 to-cyan-600 rounded-lg shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-lg shadow-lg p-6 text-white">
               <div className="text-4xl mb-3">🎬</div>
               <h3 className="text-lg font-semibold mb-2">
                 Inside SIB
               </h3>
-              <p className="text-sm text-indigo-100 mb-4">
+              <p className="text-sm text-blue-100 mb-4">
                 Des capsules vidéo exclusives pour découvrir les coulisses du salon et les acteurs clés du secteur du bâtiment.
               </p>
               <Button variant="secondary" className="w-full" asChild>
-                <Link to="/media/inside-sib">
+                <Link to="/media/capsules">
                   Voir toutes les capsules
                 </Link>
               </Button>

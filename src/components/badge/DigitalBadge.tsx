@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import QRCode from 'qrcode';
 import {
@@ -29,33 +29,17 @@ export default function DigitalBadge() {
   const [secondsRemaining, setSecondsRemaining] = useState<number>(0);
   const [isRotating, setIsRotating] = useState(false);
   const [error, setError] = useState<string>('');
-  const isGeneratingRef = useRef(false);
 
   // Générer un nouveau QR code
-  const generateQR = useCallback(async () => {
+  const generateQR = async () => {
     if (!user) {return;}
-    if (isGeneratingRef.current) {return;}
-    isGeneratingRef.current = true;
 
     try {
       setIsRotating(true);
       setError('');
 
       const { qrData, payload: newPayload, expiresAt: newExpiry } =
-        await generateSecureQRCode(user.id, {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          type: user.type,
-          visitor_level: user.visitor_level,
-          partner_tier: (user as any).partner_tier,
-          badge_number: (user as any).badge_number,
-          profile: {
-            photo_url: (user as any).profile?.photo_url,
-            company: user.profile?.company,
-            organization: (user as any).profile?.organization,
-          },
-        });
+        await generateSecureQRCode(user.id);
 
       // Générer l'image QR code
       const dataURL = await QRCode.toDataURL(qrData, {
@@ -75,17 +59,16 @@ export default function DigitalBadge() {
       console.error('Error generating QR code:', err);
       setError(t('badge.error_generating'));
     } finally {
-      isGeneratingRef.current = false;
       setTimeout(() => setIsRotating(false), 500);
     }
-  }, [t, user]);
+  };
 
   // Générer le QR initial
   useEffect(() => {
     if (user) {
       generateQR();
     }
-  }, [generateQR, user]);
+  }, [user]);
 
   // Rotation automatique du QR code
   useEffect(() => {
@@ -94,7 +77,7 @@ export default function DigitalBadge() {
     }, QR_ROTATION_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [generateQR, user]);
+  }, [user]);
 
   // Countdown timer
   useEffect(() => {
@@ -114,7 +97,7 @@ export default function DigitalBadge() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [expiresAt, generateQR]);
+  }, [expiresAt]);
 
   if (!user || !payload) {
     return (

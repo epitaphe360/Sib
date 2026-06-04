@@ -1,8 +1,6 @@
-﻿import { supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 import { UserBadge } from '../types';
 import { getDisplayName } from '@/utils/userHelpers';
-
-type BadgeUserType = 'visitor' | 'exhibitor' | 'partner' | 'admin';
 
 // Type definitions for database records
 interface BadgeDBRecord {
@@ -56,11 +54,6 @@ export async function getUserBadge(userId: string): Promise<UserBadge | null> {
       throw error;
     }
 
-    // maybeSingle() can return null data without throwing when no row matches
-    if (!data) {
-      return null;
-    }
-
     return transformBadgeFromDB(data);
   } catch (error) {
     console.error('Error fetching user badge:', error);
@@ -73,7 +66,7 @@ export async function getUserBadge(userId: string): Promise<UserBadge | null> {
  */
 export async function upsertUserBadge(params: {
   userId: string;
-  userType: BadgeUserType;
+  userType: 'visitor' | 'exhibitor' | 'partner' | 'admin';
   userLevel?: string;
   fullName: string;
   companyName?: string;
@@ -98,12 +91,8 @@ export async function upsertUserBadge(params: {
     });
 
     if (error) {throw error;}
-    if (!data) {throw new Error('Badge RPC returned no data');}
 
-    const row = Array.isArray(data) ? data[0] : data;
-    if (!row) {throw new Error('Badge RPC returned empty payload');}
-
-    return transformBadgeFromDB(row as BadgeDBRecord);
+    return transformBadgeFromDB(data);
   } catch (error) {
     console.error('Error upserting user badge:', error);
     throw error;
@@ -115,40 +104,28 @@ export async function upsertUserBadge(params: {
  */
 export async function generateBadgeFromUser(userId: string): Promise<UserBadge> {
   try {
-    // Récupérer l'utilisateur sans jointures imbriquées (plus robuste selon schéma/RLS)
+    // Récupérer les informations de l'utilisateur
+    // Spécifier explicitement les foreign keys pour éviter l'erreur "more than one relationship found"
     const { data: user, error: userError } = await supabase
       .from('users')
-      .select('id, type, visitor_level, name, email, profile')
+      .select(`
+        id, type, visitor_level, name, email, profile,
+        exhibitors:exhibitors!exhibitors_user_id_fkey(company_name, stand_number),
+        partners:partners!partners_user_id_fkey(company_name)
+      `)
       .eq('id', userId)
       .single();
 
     if (userError) {throw userError;}
     if (!user) {throw new Error('User not found');}
 
-    const normalizedUserType = String(user.type || '').toLowerCase();
-    const allowedTypes: BadgeUserType[] = ['visitor', 'exhibitor', 'partner', 'admin'];
-    if (!allowedTypes.includes(normalizedUserType as BadgeUserType)) {
-      throw new Error(`Type utilisateur non supporte pour badge: ${normalizedUserType || 'inconnu'}`);
-    }
-
-    const {
-      data: { user: authUser },
-    } = await supabase.auth.getUser();
-
-    const resolvedEmail = user.email || authUser?.email;
-    if (!resolvedEmail) {
-      throw new Error('Email utilisateur manquant pour generer le badge');
-    }
-
-    const resolvedFullName = getDisplayName(user) || user.name || 'Utilisateur SIB';
-
     // Préparer les paramètres selon le type d'utilisateur
     const badgeParams = {
       userId: user.id,
-      userType: normalizedUserType as BadgeUserType,
+      userType: user.type,
       userLevel: user.visitor_level,
-      fullName: resolvedFullName,
-      email: resolvedEmail,
+      fullName: getDisplayName(user),
+      email: user.email,
       phone: user.profile?.phone,
       avatarUrl: user.profile?.avatar,
       companyName: undefined as string | undefined,
@@ -156,29 +133,15 @@ export async function generateBadgeFromUser(userId: string): Promise<UserBadge> 
       standNumber: undefined as string | undefined,
     };
 
-    // Ajuster selon le type (requêtes séparées pour éviter les erreurs de relation)
-    if (user.type === 'exhibitor') {
-      const { data: exhibitor, error: exhibitorError } = await supabase
-        .from('exhibitors')
-        .select('company_name, stand_number')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (exhibitorError && exhibitorError.code !== 'PGRST116') {throw exhibitorError;}
-
-      badgeParams.companyName = (exhibitor as any)?.company_name || user.profile?.company;
+    // Ajuster selon le type
+    if (user.type === 'exhibitor' && user.exhibitors && user.exhibitors.length > 0) {
+      const exhibitor = user.exhibitors[0];
+      badgeParams.companyName = exhibitor.company_name;
       badgeParams.position = user.profile?.position;
-      badgeParams.standNumber = (exhibitor as any)?.stand_number;
-    } else if (user.type === 'partner') {
-      const { data: partner, error: partnerError } = await supabase
-        .from('partners')
-        .select('company_name')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (partnerError && partnerError.code !== 'PGRST116') {throw partnerError;}
-
-      badgeParams.companyName = (partner as any)?.company_name || user.profile?.company;
+      badgeParams.standNumber = exhibitor.stand_number;
+    } else if (user.type === 'partner' && user.partners && user.partners.length > 0) {
+      const partner = user.partners[0];
+      badgeParams.companyName = partner.company_name;
       badgeParams.position = user.profile?.position;
     } else if (user.type === 'visitor') {
       badgeParams.companyName = user.profile?.company;
@@ -186,14 +149,9 @@ export async function generateBadgeFromUser(userId: string): Promise<UserBadge> 
     }
 
     return await upsertUserBadge(badgeParams);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error generating badge from user:', error);
-    const message =
-      error?.message ||
-      error?.details ||
-      error?.hint ||
-      (typeof error === 'string' ? error : 'Erreur inconnue de génération de badge');
-    throw new Error(message);
+    throw error;
   }
 }
 
@@ -351,14 +309,14 @@ export function getBadgeColor(accessLevel: string): string {
     case 'vip':
     case 'partner_gold':
       return '#FFD700'; // Or
-    case 'partner':
+    case 'partner_museum':
       return '#3F51B5'; // Indigo
     case 'partner_silver':
       return '#C0C0C0'; // Argent
-    case 'partner_official_sponsor':
-      return '#E0E0E0'; // Sponsor Officiel
-    case 'partner_organizer':
-      return '#6f42c1'; // Violet
+    case 'partner_platinum':
+      return '#E0E0E0'; // Platine
+    case 'partner':
+      return '#6f42c1'; // Violet (fallback)
     case 'visitor_free':
       return '#9E9E9E'; // Gris
     case 'standard':
@@ -383,16 +341,16 @@ export function getAccessLevelLabel(accessLevel: string): string {
       return 'Visiteur VIP';
     case 'visitor_free':
       return 'Visiteur';
+    case 'partner_museum':
+      return 'Partenaire Musée';
+    case 'partner_silver':
+      return 'Partenaire Silver';
+    case 'partner_gold':
+      return 'Partenaire Gold';
+    case 'partner_platinum':
+      return 'Partenaire Platinum';
     case 'partner':
       return 'Partenaire';
-    case 'partner_silver':
-      return 'Sponsor Silver';
-    case 'partner_gold':
-      return 'Sponsor Gold';
-    case 'partner_official_sponsor':
-      return 'Sponsor Officiel';
-    case 'partner_organizer':
-      return 'Organisateur';
     case 'standard':
     default:
       return 'Standard';

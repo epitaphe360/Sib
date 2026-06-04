@@ -25,7 +25,6 @@ interface ExhibitorState {
   selectExhibitor: (id: string) => void;
   updateAvailability: (exhibitorId: string, slots: TimeSlot[]) => void;
   updateExhibitorStatus: (exhibitorId: string, newStatus: 'approved' | 'rejected') => Promise<void>;
-  updateExhibitorInStore: (id: string, data: Partial<Exhibitor>) => void;
 }
 
 // Removed large inline mock dataset. The application now relies on Supabase for real data.
@@ -71,18 +70,14 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
         const description = exhibitor.description || '';
         const search = filters.search.toLowerCase();
 
-        // Normalise port-* vers bâtiment-* pour le filtrage
-        const normalizeCategory = (cat: string) =>
-          cat === 'port-industry' ? 'bâtiment-industry' : cat === 'port-operations' ? 'bâtiment-operations' : cat;
-        const matchesCategory = !filters.category || normalizeCategory(exhibitor.category) === filters.category;
+        const matchesCategory = !filters.category || exhibitor.category === filters.category;
         const matchesSector = !filters.sector || sector === filters.sector;
         const matchesSearch = !filters.search ||
           companyName.toLowerCase().includes(search) ||
           description.toLowerCase().includes(search);
 
-        return exhibitor.verified &&
-          (exhibitor.isPublished === true || exhibitor.miniSite?.published === true) &&
-          matchesCategory && matchesSector && matchesSearch;
+        const isPubliclyVisible = exhibitor.isPublished === true || exhibitor.miniSite?.published === true;
+        return exhibitor.verified && isPubliclyVisible && matchesCategory && matchesSector && matchesSearch;
       });
 
       set({
@@ -133,8 +128,8 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
 	      });
 
 	      // 2. Mettre à jour le statut de l'utilisateur (dans la table 'users')
-      // BUGFIX: passer exhibitorToUpdate.userId (users.id), pas exhibitorId (exhibitors.id)
-      await SupabaseService.updateUserStatus(exhibitorToUpdate.userId, userStatus);
+	      await SupabaseService.updateUserStatus(exhibitorId, userStatus);
+
 	      // 3. Envoyer l'email de validation/rejet (ne pas bloquer si échec)
 	      try {
 	        await SupabaseService.sendValidationEmail({
@@ -144,7 +139,9 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
 	          companyName: exhibitorToUpdate.companyName,
 	          status: newStatus,
 	        });
+	        console.log('✅ Email de validation envoyé');
 	      } catch (emailError) {
+	        console.warn('⚠️ Email de validation non envoyé:', emailError);
 	        // Ne pas bloquer la mise à jour si l'email échoue
 	      }
 
@@ -171,6 +168,7 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
     const { exhibitors } = get();
     const filters = { ...get().filters, ...newFilters };
 
+    console.log('🔍 Filtre appliqué:', filters, `sur ${exhibitors.length} exposants`);
 
     const filtered = exhibitors.filter(exhibitor => {
       const sector = exhibitor.sector || '';
@@ -178,10 +176,7 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
       const description = exhibitor.description || '';
       const search = filters.search.toLowerCase();
 
-      // Normalise port-* vers bâtiment-* pour le filtrage
-      const normalizeCategory = (cat: string) =>
-        cat === 'port-industry' ? 'bâtiment-industry' : cat === 'port-operations' ? 'bâtiment-operations' : cat;
-      const matchesCategory = !filters.category || normalizeCategory(exhibitor.category) === filters.category;
+      const matchesCategory = !filters.category || exhibitor.category === filters.category;
       // Comparaison exacte pour le secteur (au lieu de .includes())
       const matchesSector = !filters.sector || sector === filters.sector;
       const matchesSearch = !filters.search ||
@@ -194,6 +189,7 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
       return exhibitor.verified && isPubliclyVisible && matchesCategory && matchesSector && matchesSearch;
     });
 
+    console.log(`📊 ${filtered.length} exposants après filtrage`);
     set({ filters, filteredExhibitors: filtered });
   },
 
@@ -211,18 +207,5 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
         : exhibitor
     );
     set({ exhibitors: updatedExhibitors });
-  },
-
-  updateExhibitorInStore: (id, data) => {
-    set(state => {
-      const update = (ex: Exhibitor) => ex.id === id ? { ...ex, ...data } : ex;
-      return {
-        exhibitors: state.exhibitors.map(update),
-        filteredExhibitors: state.filteredExhibitors.map(update),
-        selectedExhibitor: state.selectedExhibitor?.id === id
-          ? { ...state.selectedExhibitor, ...data }
-          : state.selectedExhibitor,
-      };
-    });
-  },
+  }
 }));

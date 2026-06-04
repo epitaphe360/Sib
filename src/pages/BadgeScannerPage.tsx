@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -140,6 +140,7 @@ export default function BadgeScannerPage() {
         lastScanTime
       });
 
+      console.log('Stats chargées:', { totalScans, todayScans, uniqueVisitors });
     } catch (err) {
       console.error(t('badge.scanner.error_stats'), err);
     }
@@ -160,6 +161,7 @@ export default function BadgeScannerPage() {
       result.addEventListener('change', handler);
       permissionListenerRef.current = { result, handler };
     } catch (err) {
+      console.warn('Permission API not supported:', err);
       setCameraPermission('prompt');
     }
   };
@@ -228,11 +230,13 @@ export default function BadgeScannerPage() {
   const onScanSuccess = async (decodedText: string) => {
     // Protection contre les scans multiples
     if (isProcessingRef.current) {
+      console.log('Scan ignoré - traitement en cours');
       return;
     }
 
     // Bloquer immédiatement les nouveaux scans
     isProcessingRef.current = true;
+    console.log('QR Code scanné:', decodedText);
 
     // Arrêter le scanner IMMÉDIATEMENT
     try {
@@ -246,7 +250,7 @@ export default function BadgeScannerPage() {
     }
 
     try {
-      // ?? NOUVEAU: Passer directement le QR data brut
+      // 🔄 NOUVEAU: Passer directement le QR data brut
       // La fonction validate_scanned_badge détecte automatiquement le type:
       // - Badge statique: code simple (ex: "F29F85-81739C")
       // - Badge dynamique: JWT complet (ex: "eyJhbGciOi...")
@@ -258,8 +262,10 @@ export default function BadgeScannerPage() {
       try {
         const parsed = JSON.parse(decodedText);
         qrData = parsed.token || parsed.badge_code || parsed.qr_data || decodedText;
+        console.log('📋 QR JSON parsé, extracted:', qrData.substring(0, 30) + '...');
       } catch {
         // Pas du JSON, c'est un code brut (statique ou JWT direct)
+        console.log('📋 QR brut (non-JSON):', qrData.substring(0, 30) + '...');
       }
 
       // Valider le badge (supporte statique ET dynamique)
@@ -287,17 +293,19 @@ export default function BadgeScannerPage() {
   const onScanError = (errorMessage: string) => {
     // Ignorer les erreurs "No QR code found" (normales pendant le scan)
     if (!errorMessage.includes('No QR code found')) {
+      console.warn('Scan error:', errorMessage);
     }
   };
 
   /**
    * Valide et enregistre un scan de badge
-   * ?? SUPPORTE BADGES STATIQUES ET DYNAMIQUES (JWT 30s)
+   * 🔄 SUPPORTE BADGES STATIQUES ET DYNAMIQUES (JWT 30s)
    */
   const validateAndRecordScan = async (qrData: string) => {
     try {
       const { supabase } = await import('../lib/supabase');
 
+      console.log('🔍 Validation badge, longueur:', qrData.length, 'premiers chars:', qrData.substring(0, 20));
 
       // Appeler la fonction universelle validate_scanned_badge
       // Elle détecte automatiquement si c'est un badge statique ou un JWT dynamique
@@ -306,17 +314,18 @@ export default function BadgeScannerPage() {
       });
 
       if (error) {
-        console.error('? Erreur RPC:', error);
+        console.error('❌ Erreur RPC:', error);
         throw new Error(error.message);
       }
 
+      console.log('📦 Réponse validation:', data);
 
       if (!data || !data.success) {
         throw new Error(data?.error || data?.message || 'Badge non trouvé');
       }
 
       const userInfo = data.user || {};
-      const badgeType = data.badge_type === 'dynamic' ? '?? Dynamique (JWT 30s)' : '?? Statique';
+      const badgeType = data.badge_type === 'dynamic' ? '🔄 Dynamique (JWT 30s)' : '📌 Statique';
 
       // Créer l'objet badge scanné
       const scanned: ScannedBadge = {
@@ -344,12 +353,13 @@ export default function BadgeScannerPage() {
 
       // Notification sonore et visuelle avec type de badge
       playSuccessSound();
-      toast.success(`? Badge ${badgeType}`, {
+      toast.success(`✅ Badge ${badgeType}`, {
         description: `${scanned.fullName} - ${scanned.companyName || scanned.userType + ' ' + scanned.userLevel}`
       });
 
+      console.log('✅ Badge validé avec succès:', scanned);
 
-      // Enregistrer le lead si l'utilisateur est un exposant/sponsor
+      // Enregistrer le lead si l'utilisateur est un exposant/partenaire
       if (user && (user.type === 'exhibitor' || user.type === 'partner')) {
         await recordLead(user.id, scanned);
       }
@@ -377,7 +387,7 @@ export default function BadgeScannerPage() {
   };
 
   /**
-   * Enregistre un lead pour les exposants/sponsors
+   * Enregistre un lead pour les exposants/partenaires
    */
   const recordLead = async (scannerId: string, badge: ScannedBadge) => {
     try {
@@ -395,6 +405,7 @@ export default function BadgeScannerPage() {
         created_at: new Date().toISOString()
       });
 
+      console.log('Lead enregistré:', badge.fullName);
     } catch (err) {
       console.error(t('badge.scanner.error_lead'), err);
       // Ne pas bloquer le scan si l'enregistrement du lead échoue
@@ -405,7 +416,6 @@ export default function BadgeScannerPage() {
    * Sons de feedback
    */
   const playSuccessSound = () => {
-    // eslint-disable-next-line no-secrets/no-secrets
     const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTWO1vPReSwF');
     audio.volume = 0.3;
     audio.play().catch(console.warn);
@@ -534,7 +544,7 @@ export default function BadgeScannerPage() {
                 <div className="text-2xl font-bold">{stats.totalScans}</div>
                 <div className="text-sm text-gray-600">Total scans</div>
               </div>
-              <TrendingUp className="h-8 w-8 text-indigo-500" />
+              <TrendingUp className="h-8 w-8 text-blue-500" />
             </div>
           </Card>
 
@@ -576,7 +586,7 @@ export default function BadgeScannerPage() {
           <div>
             <Card className="p-6">
               <h2 className="text-xl font-bold mb-4 flex items-center">
-                <Camera className="h-5 w-5 mr-2 text-indigo-600" />
+                <Camera className="h-5 w-5 mr-2 text-blue-600" />
                 Scanner
               </h2>
 
@@ -676,7 +686,6 @@ export default function BadgeScannerPage() {
     </div>
   );
 }
-
 
 
 

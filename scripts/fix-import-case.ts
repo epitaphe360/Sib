@@ -31,11 +31,11 @@ const importFixes: ImportFix[] = [
  */
 function walkDir(dir: string, callback: (filePath: string) => void): void {
   const files = readdirSync(dir);
-  
+
   files.forEach(file => {
     const filePath = join(dir, file);
     const stat = statSync(filePath);
-    
+
     if (stat.isDirectory()) {
       walkDir(filePath, callback);
     } else if (['.ts', '.tsx', '.js', '.jsx'].includes(extname(filePath))) {
@@ -51,22 +51,22 @@ function fixImportsInFile(filePath: string): number {
   try {
     let content = readFileSync(filePath, 'utf-8');
     let changesCount = 0;
-    
+
     importFixes.forEach(({ wrong, correct }) => {
       const regex = new RegExp(`from ['"]${wrong}['"]`, 'g');
       const matches = content.match(regex);
-      
+
       if (matches) {
         content = content.replace(regex, `from '${correct}'`);
         changesCount += matches.length;
       }
     });
-    
+
     if (changesCount > 0) {
       writeFileSync(filePath, content, 'utf-8');
       console.log(`✅ ${filePath.replace(process.cwd(), '.')}: ${changesCount} correction(s)`);
     }
-    
+
     return changesCount;
   } catch (error) {
     console.error(`❌ Erreur dans ${filePath}:`, error);

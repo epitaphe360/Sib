@@ -4,26 +4,12 @@
  */
 import 'dotenv/config';
 import express from 'express';
-import compression from 'compression';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
-import rateLimit from 'express-rate-limit';
-
-// ── HTML escape to prevent XSS in email templates ───────────────────────────
-function escapeHtml(str) {
-  if (typeof str !== 'string') return '';
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;');
-}
 
 import { createClient } from '@supabase/supabase-js';
-import ws from 'ws';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,40 +18,8 @@ const app = express();
 // Use port 3000 in development, 5000 in production
 const PORT = process.env.PORT || (process.env.NODE_ENV === 'production' ? 5000 : 3000);
 
-// ── Trust Cloudflare proxy ──────────────────────────────────────────────────
-// Cloudflare IP ranges — allows rate limiting to work on real client IPs
-// and HTTPS detection via X-Forwarded-Proto to work correctly.
-app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal',
-  // Cloudflare IPv4 ranges (https://www.cloudflare.com/ips-v4)
-  '173.245.48.0/20', '103.21.244.0/22', '103.22.200.0/22',
-  '103.31.4.0/22', '141.101.64.0/18', '108.162.192.0/18',
-  '190.93.240.0/20', '188.114.96.0/20', '197.234.240.0/22',
-  '198.41.128.0/17', '162.158.0.0/15', '104.16.0.0/13',
-  '104.24.0.0/14', '172.64.0.0/13', '131.0.72.0/22',
-]);
-
-// ── Gzip/Brotli compression ─────────────────────────────────────────────────
-// Compresses all API responses. Cloudflare will also compress at edge.
-app.use(compression({ threshold: 1024 }));
-
 // JSON body parser for API endpoints
 app.use(express.json());
-
-// ── Rate limiting ────────────────────────────────────────────────────────────
-const emailRateLimit = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { success: false, error: 'Trop de requêtes, réessayez dans une heure' },
-});
-const adminRateLimit = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
-  max: 30,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { success: false, error: 'Trop de requêtes admin' },
-});
 
 // Force HTTPS redirect + redirect bare domain to www (Railway SSL is on www only)
 app.use((req, res, next) => {
@@ -73,7 +27,7 @@ app.use((req, res, next) => {
     const host = req.headers.host;
     const proto = req.headers['x-forwarded-proto'] || 'http';
     
-    // Redirect bare domain → www (SSL cert handling)
+    // Redirect bare domain → www (SSL cert is only on www.sib2026.ma)
     if (host === 'sib2026.ma') {
       return res.redirect(301, `https://www.sib2026.ma${req.url}`);
     }
@@ -89,16 +43,11 @@ app.use((req, res, next) => {
 const allowedOrigins = [
   'http://localhost:5173', // Development
   'http://localhost:3000', // Development
-  'http://localhost:9323', // Development Vite
   'https://sib2026.ma', // Production
   'https://www.sib2026.ma', // Production with www
   'https://app.sib2026.ma', // App subdomain
-  // Vercel frontend URLs
-  'https://sib.vercel.app',
-  'https://sib-2026.vercel.app',
-  'https://sib2026.vercel.app',
-  // Railway deployment URL (auto-assigned)
-  ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim()) : []),
+  // Add your Railway deployment URL here when available
+  // 'https://your-app.railway.app'
 ];
 
 app.use((req, res, next) => {
@@ -122,36 +71,29 @@ app.use((req, res, next) => {
   next();
 });
 
-// Security headers + Cloudflare cache hints
+// Security headers
 app.use((req, res, next) => {
   res.header('X-Content-Type-Options', 'nosniff');
   res.header('X-Frame-Options', 'DENY');
   res.header('X-XSS-Protection', '1; mode=block');
   res.header('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-  // Tell Cloudflare: API responses are private (not cached at edge by default)
-  // Individual routes can override with Cache-Control: public, s-maxage=...
-  if (req.path.startsWith('/api/')) {
-    res.header('Cache-Control', 'no-store, no-cache, must-revalidate');
-    res.header('CDN-Cache-Control', 'no-store');
-  }
   next();
 });
 
 // ============================================
 // EMAIL CONFIGURATION (SMTP)
 // ============================================
-const smtpPort = parseInt(process.env.SMTP_PORT || '465');
 const smtpConfig = {
   host: process.env.SMTP_HOST || 'mail.sib2026.ma',
-  port: smtpPort,
-  secure: smtpPort === 465, // true pour port 465 (SSL), false pour 587 (STARTTLS)
+  port: parseInt(process.env.SMTP_PORT || '465'),
+  secure: process.env.SMTP_SECURE === 'true', // true for 465, false for 587
   auth: {
     user: process.env.SMTP_USER || 'contact@sib2026.ma',
     pass: process.env.SMTP_PASS,
   },
   tls: {
-    rejectUnauthorized: false, // Accepter les certs auto-signés
+    rejectUnauthorized: false // Accept self-signed certificate from mail.sib2026.ma
   }
 };
 
@@ -168,7 +110,7 @@ if (process.env.SMTP_PASS) {
  * API: Send Email
  * POST /api/send-email
  */
-app.post('/api/send-email', emailRateLimit, async (req, res) => {
+app.post('/api/send-email', async (req, res) => {
   if (!transporter) {
     return res.status(503).json({
       success: false,
@@ -218,7 +160,7 @@ app.post('/api/send-email', emailRateLimit, async (req, res) => {
  * API: Contact Form
  * POST /api/contact
  */
-app.post('/api/contact', emailRateLimit, async (req, res) => {
+app.post('/api/contact', async (req, res) => {
   if (!transporter) {
     return res.status(503).json({
       success: false,
@@ -227,23 +169,15 @@ app.post('/api/contact', emailRateLimit, async (req, res) => {
   }
 
   try {
-    const { firstName: rawFirst, lastName: rawLast, email: rawEmail, company: rawCompany, subject: rawSubject, message: rawMessage } = req.body;
+    const { firstName, lastName, email, company, subject, message } = req.body;
 
     // Validation
-    if (!rawFirst || !rawLast || !rawEmail || !rawSubject || !rawMessage) {
+    if (!firstName || !lastName || !email || !subject || !message) {
       return res.status(400).json({
         success: false,
         error: 'Missing required fields'
       });
     }
-
-    // Sanitize all user-supplied values before injecting into HTML
-    const firstName = escapeHtml(rawFirst);
-    const lastName = escapeHtml(rawLast);
-    const email = escapeHtml(rawEmail);
-    const company = rawCompany ? escapeHtml(rawCompany) : '';
-    const subject = escapeHtml(rawSubject);
-    const message = escapeHtml(rawMessage);
 
     const subjectLabels = {
       exhibitor: 'Devenir exposant',
@@ -329,7 +263,7 @@ app.post('/api/contact', emailRateLimit, async (req, res) => {
  * API: Send Visitor Welcome Email
  * POST /api/send-visitor-welcome-email
  */
-app.post('/api/send-visitor-welcome-email', emailRateLimit, async (req, res) => {
+app.post('/api/send-visitor-welcome-email', async (req, res) => {
   if (!transporter) {
     return res.status(503).json({
       success: false,
@@ -338,24 +272,17 @@ app.post('/api/send-visitor-welcome-email', emailRateLimit, async (req, res) => 
   }
 
   try {
-    const { email: rawEmail, name: rawName, level, userId, includePaymentInstructions } = req.body;
+    const { email, name, level, userId, includePaymentInstructions } = req.body;
 
-    if (!rawEmail || !rawName) {
+    if (!email || !name) {
       return res.status(400).json({
         success: false,
         error: 'Missing required fields: email, name'
       });
     }
 
-    // Sanitize user-supplied values
-    const email = escapeHtml(rawEmail);
-    const name = escapeHtml(rawName);
-
     const isVIP = level === 'premium' || level === 'vip';
     const levelLabel = isVIP ? 'VIP / Premium' : 'Gratuit';
-
-    const appUrl = process.env.APP_URL || 'https://www.sibevent.com';
-    const contactEmail = process.env.CONTACT_EMAIL || 'Sib2026@urbacom.net';
 
     // Build HTML template
     const html = `
@@ -363,7 +290,7 @@ app.post('/api/send-visitor-welcome-email', emailRateLimit, async (req, res) => 
         <!-- Header -->
         <div style="background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #0ea5e9 100%); padding: 40px 30px; text-align: center; border-radius: 8px 8px 0 0;">
           <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">🎉 Bienvenue au SIB 2026</h1>
-          <p style="color: #bfdbfe; margin: 10px 0 0; font-size: 16px;">Salon International du Bâtiment</p>
+          <p style="color: #bfdbfe; margin: 10px 0 0; font-size: 16px;">Salon International des Infrastructures Portuaires</p>
         </div>
 
         <!-- Body -->
@@ -404,7 +331,7 @@ app.post('/api/send-visitor-welcome-email', emailRateLimit, async (req, res) => 
 
           <!-- CTA Button -->
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${appUrl}/visitor/dashboard" 
+            <a href="https://sib2026.ma/visitor/dashboard" 
                style="display: inline-block; background: linear-gradient(135deg, #2563eb, #0ea5e9); color: #ffffff; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px;">
               Accéder à mon tableau de bord
             </a>
@@ -418,10 +345,10 @@ app.post('/api/send-visitor-welcome-email', emailRateLimit, async (req, res) => 
         <!-- Footer -->
         <div style="background: #1e293b; padding: 20px 30px; text-align: center; border-radius: 0 0 8px 8px;">
           <p style="color: #94a3b8; margin: 0; font-size: 13px;">
-            © 2026 SIB - Salon International du Bâtiment
+            © 2026 SIB - Salon International des Infrastructures Portuaires
           </p>
           <p style="color: #64748b; margin: 5px 0 0; font-size: 12px;">
-            Contact : ${contactEmail} | ${appUrl.replace(/^https?:\/\//, '')}
+            Contact : contact@sib2026.ma | www.sib2026.ma
           </p>
         </div>
       </div>
@@ -434,7 +361,7 @@ app.post('/api/send-visitor-welcome-email', emailRateLimit, async (req, res) => 
         ? '🎫 SIB 2026 - Inscription VIP confirmée'
         : '🎉 SIB 2026 - Inscription visiteur confirmée',
       html,
-      text: `Bienvenue au SIB 2026, ${name} !\n\nVotre inscription en tant que Visiteur ${levelLabel} a été confirmée.\n\nDates : 25-29 Novembre 2026\nLieu : Parc d'Exposition Mohammed VI, El Jadida, Maroc\n\nAccédez à votre tableau de bord : ${appUrl}/visitor/dashboard\n\nCordialement,\nL'équipe SIB 2026`,
+      text: `Bienvenue au SIB 2026, ${name} !\n\nVotre inscription en tant que Visiteur ${levelLabel} a été confirmée.\n\nDates : 25-29 Novembre 2026\nLieu : Parc d'Exposition Mohammed VI, El Jadida, Maroc\n\nAccédez à votre tableau de bord : https://sib2026.ma/visitor/dashboard\n\nCordialement,\nL'équipe SIB 2026`,
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -472,97 +399,29 @@ app.get('/api/health', (req, res) => {
 
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
-// PgBouncer pooler URL (transaction mode, port 6543) — défini après upgrade Supabase Pro
-// Si absent, supabase-js utilise le REST API (pas de connexion directe DB de toute façon)
-const SUPABASE_DB_POOLER_URL = process.env.SUPABASE_DB_POOLER_URL || null;
 
 console.log('🔧 [INIT] SUPABASE_URL:', SUPABASE_URL ? 'OK' : 'MANQUANT');
 console.log('🔧 [INIT] SERVICE_ROLE_KEY:', SUPABASE_SERVICE_ROLE_KEY ? 'OK' : 'MANQUANT');
 
 const supabaseAdmin = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
   ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-      auth: { autoRefreshToken: false, persistSession: false },
-      realtime: { transport: ws },
+      auth: { autoRefreshToken: false, persistSession: false }
     })
   : null;
 
 console.log('🔧 [INIT] supabaseAdmin:', supabaseAdmin ? 'CRÉÉ ✅' : 'NULL ❌');
 
 /**
- * API: Delete User (admin only)
- * DELETE /api/admin/users/:id
- */
-app.delete('/api/admin/users/:id', adminRateLimit, async (req, res) => {
-  if (!supabaseAdmin) {
-    return res.status(503).json({ success: false, error: 'Service admin non configuré' });
-  }
-
-  try {
-    const { id } = req.params;
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ success: false, error: 'Non autorisé' });
-    }
-
-    // Vérifier le token JWT
-    const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
-    if (authError || !user) {
-      return res.status(401).json({ success: false, error: 'Token invalide' });
-    }
-
-    // Vérifier rôle admin
-    const { data: adminData } = await supabaseAdmin
-      .from('users')
-      .select('type')
-      .eq('id', user.id)
-      .single();
-    if (adminData?.type !== 'admin') {
-      return res.status(403).json({ success: false, error: 'Accès refusé' });
-    }
-
-    // Empêcher de se supprimer soi-même
-    if (id === user.id) {
-      return res.status(400).json({ success: false, error: 'Vous ne pouvez pas supprimer votre propre compte' });
-    }
-
-    // Supprimer de la table users (cascade supprimera les données liées)
-    const { error: deleteError } = await supabaseAdmin
-      .from('users')
-      .delete()
-      .eq('id', id);
-
-    if (deleteError) {
-      console.error('❌ Erreur delete users:', deleteError.message);
-      return res.status(500).json({ success: false, error: deleteError.message });
-    }
-
-    // Supprimer le compte auth
-    try {
-      await supabaseAdmin.auth.admin.deleteUser(id);
-      console.log('✅ Compte auth supprimé:', id);
-    } catch (authErr) {
-      console.warn('⚠️ Compte auth non supprimé (peut-être déjà absent):', authErr.message);
-    }
-
-    res.json({ success: true });
-  } catch (error) {
-    console.error('❌ Erreur deleteUser:', error.message);
-    res.status(500).json({ success: false, error: 'Erreur interne du serveur' });
-  }
-});
-
-/**
  * API: Delete Exhibitor (admin only)
  * DELETE /api/admin/exhibitors/:id
  */
-app.delete('/api/admin/exhibitors/:id', adminRateLimit, async (req, res) => {
+app.delete('/api/admin/exhibitors/:id', async (req, res) => {
   console.log('\n🗑️ ========== DELETE EXHIBITOR REQUEST ==========');
   console.log('📍 Params:', req.params);
   console.log('📍 Headers Authorization:', req.headers.authorization ? 'Bearer ***' + req.headers.authorization.slice(-10) : 'MANQUANT');
   console.log('📍 Supabase Admin configuré:', !!supabaseAdmin);
   console.log('📍 SUPABASE_URL:', process.env.SUPABASE_URL ? 'OK' : 'MANQUANT');
-  console.log('📍 SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'OK' : 'MANQUANT');
+  console.log('📍 SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'OK (' + process.env.SUPABASE_SERVICE_ROLE_KEY.substring(0, 10) + '...)' : 'MANQUANT');
 
   if (!supabaseAdmin) {
     console.error('❌ supabaseAdmin est null - variables env manquantes');
@@ -647,115 +506,82 @@ app.delete('/api/admin/exhibitors/:id', adminRateLimit, async (req, res) => {
     res.json({ success: true, deleted: [{ id: exhibitorTableId, company_name: companyName }] });
   } catch (error) {
     console.error('❌ Erreur inattendue:', error.message, error.stack);
-    res.status(500).json({ success: false, error: 'Erreur interne du serveur' });
-  }
-});
-
-// Global error handler — never expose stack traces to clients
-app.use((err, req, res, _next) => {
-  console.error('❌ Unhandled error:', err.stack);
-  res.status(500).json({ success: false, error: 'Erreur interne du serveur' });
-});
-
-/**
- * API: Vérifier si un email existe dans public.users (pour magic link)
- * GET /api/auth/check-email?email=xxx
- * Pas d'auth requise — retourne seulement exists: true/false
- */
-app.get('/api/auth/check-email', async (req, res) => {
-  if (!supabaseAdmin) {
-    return res.status(503).json({ success: false, error: 'Service non configuré' });
-  }
-  const { email } = req.query;
-  if (!email || typeof email !== 'string') {
-    return res.status(400).json({ success: false, error: 'Email requis' });
-  }
-  const normalizedEmail = email.trim().toLowerCase();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(normalizedEmail)) {
-    return res.status(400).json({ success: false, error: 'Email invalide' });
-  }
-  try {
-    const { data, error } = await supabaseAdmin
-      .from('users')
-      .select('id')
-      .eq('email', normalizedEmail)
-      .maybeSingle();
-    if (error) {
-      console.error('❌ check-email error:', error.message);
-      return res.status(500).json({ success: false, error: 'Erreur serveur' });
-    }
-    return res.json({ success: true, exists: !!data });
-  } catch (err) {
-    console.error('❌ check-email exception:', err.message);
-    return res.status(500).json({ success: false, error: 'Erreur serveur' });
+    res.status(500).json({ success: false, error: error.message, stack: error.stack });
   }
 });
 
 // ============================================
-// FRONTEND HANDLING
-// Railway = backend API only. Frontend is on Vercel.
-// Non-API requests get redirected to the Vercel frontend.
+// RUNTIME ENV INJECTION
+// Railway doesn't reliably inject all env vars at build time.
+// So we inject them at runtime into index.html via <script> tag.
+// The client reads window.__ENV__ as fallback for import.meta.env.
 // ============================================
-const FRONTEND_URL = process.env.FRONTEND_URL || 'https://sib-2026.vercel.app';
+const runtimeEnvVars = {};
+Object.entries(process.env).forEach(([key, value]) => {
+  if (key.startsWith('VITE_') && value) {
+    runtimeEnvVars[key] = value;
+  }
+});
+const envScript = `<script>window.__ENV__=${JSON.stringify(runtimeEnvVars)}</script>`;
+console.log(`🔧 Runtime env injection: ${Object.keys(runtimeEnvVars).length} VITE_ vars`);
+Object.keys(runtimeEnvVars).forEach(k => console.log(`   ✅ ${k}`));
 
-// Catch-all: redirect non-API requests to Vercel frontend
-app.get('{*path}', (req, res) => {
-  // If someone hits Railway directly (not an API route), redirect to Vercel
-  if (process.env.NODE_ENV === 'production') {
-    res.redirect(302, `${FRONTEND_URL}${req.originalUrl}`);
-  } else {
-    // In dev, still serve static files if dist/ exists
+// Read and cache index.html with injected env vars
+let cachedIndexHtml = null;
+function getIndexHtml() {
+  if (!cachedIndexHtml) {
     const indexPath = path.join(__dirname, 'dist', 'index.html');
     if (fs.existsSync(indexPath)) {
-      res.sendFile(indexPath);
-    } else {
-      res.status(200).json({ 
-        status: 'API server running',
-        message: 'Frontend is served by Vercel in production',
-        api: '/api/health'
-      });
+      const raw = fs.readFileSync(indexPath, 'utf8');
+      // Inject env script right after <head> tag
+      cachedIndexHtml = raw.replace('<head>', `<head>${envScript}`);
+      console.log('📄 index.html loaded and env vars injected');
     }
   }
+  return cachedIndexHtml;
+}
+
+// Serve static files from dist folder
+app.use(express.static(path.join(__dirname, 'dist'), {
+  maxAge: '1y',
+  etag: true,
+  setHeaders: (res, filePath) => {
+    // Never cache HTML files (especially index.html)
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+      res.setHeader('Surrogate-Control', 'no-store'); // For Railway CDN
+    } else if (filePath.endsWith('.js') || filePath.endsWith('.mjs')) {
+      res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+      // JS files can be cached but with validation
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  },
+  // Skip index.html from static serving — we handle it with env injection
+  index: false
+}));
+
+// Specific handler for missing assets to avoid SPA fallback returning HTML
+// This prevents the "MIME type" error by returning a 404 instead of index.html
+app.get('/assets/*', (req, res) => {
+  res.status(404).type('text/plain').send('Asset not found');
 });
 
-/**
- * API: Send Magic Link (bypass Supabase rate limits)
- * POST /api/auth/magic-link
- * Uses service_role key → aucun rate limit Supabase
- */
-app.post('/api/auth/magic-link', async (req, res) => {
-  if (!supabaseAdmin) {
-    return res.status(503).json({ success: false, error: 'Service admin non configuré' });
-  }
-
-  try {
-    const { email } = req.body;
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({ success: false, error: 'Email invalide' });
-    }
-
-    const normalizedEmail = email.toLowerCase().trim();
-    const appUrl = process.env.VITE_APP_URL || process.env.FRONTEND_URL || 'https://sib2026.vercel.app';
-
-    const { error } = await supabaseAdmin.auth.signInWithOtp({
-      email: normalizedEmail,
-      options: {
-        emailRedirectTo: `${appUrl}/auth/callback`,
-        shouldCreateUser: true,
-      },
+// SPA fallback - serve index.html with runtime env injection
+app.get('*', (req, res) => {
+  const html = getIndexHtml();
+  if (html) {
+    res.set({
+      'Content-Type': 'text/html; charset=UTF-8',
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      'Surrogate-Control': 'no-store'
     });
-
-    if (error) {
-      console.error('❌ signInWithOtp error:', error.message);
-      return res.status(500).json({ success: false, error: error.message });
-    }
-
-    console.log('✅ Magic link envoyé à:', normalizedEmail);
-    res.json({ success: true });
-  } catch (error) {
-    console.error('❌ Erreur magic-link:', error.message);
-    res.status(500).json({ success: false, error: error.message });
+    res.send(html);
+  } else {
+    res.status(404).send('Not Found - index.html missing from dist/');
   }
 });
 
@@ -766,7 +592,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 API Server running on port ${PORT}`);
-  console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'https://sib-2026.vercel.app'}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📁 Serving static files from ./dist`);
   console.log(`📧 Email API: ${transporter ? 'enabled' : 'disabled (set SMTP_PASS)'}`);
 });

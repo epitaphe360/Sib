@@ -126,7 +126,7 @@ export const VALIDATION_RULES = {
   },
   phone: {
     required: true,
-    pattern: /^[\d\s\-+()]{10,}$/,
+    pattern: /^[\d\s+()-]{10,}$/,
     error: 'Numéro de téléphone invalide',
   },
   website: {

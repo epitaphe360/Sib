@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.SUPABASE_URL || 'https://sbyizudifmqakzxjlndr.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseKey = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxam9xZ3BieGhzZmdjb3ZpcGd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzM2MjI0NywiZXhwIjoyMDcyOTM4MjQ3fQ.HzgGnbbTyF-c_jAawvXNDXfHpqtZR4mN6UIx-X3GdVo';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -47,7 +47,7 @@ async function checkTemplates() {
 
   console.log('\n✅ TOUT EST PRÊT!');
   console.log('\n📌 POUR TESTER:');
-   console.log('   1. Connectez-vous en tant qu\'exposant (technoport@sib.ma / SIB2026!)');  
+  console.log('   1. Connectez-vous en tant qu\'exposant (technoport@sib.ma / Siports2024!)');
   console.log('   2. Allez sur: http://localhost:9323/exhibitor/minisite/create');
   console.log('   3. Cliquez sur "Partir d\'un template"');
   console.log('   4. Vous verrez les 10 templates disponibles!\n');

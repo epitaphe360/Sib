@@ -16,7 +16,7 @@ import { Badge } from '../components/ui/Badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/Avatar';
 import { QRCodeGenerator } from '../components/qr/QRCodeGenerator';
 import { EnhancedChatInterface } from '../components/chat/EnhancedChatInterface';
-import RecommendationList from '../components/networking/RecommendationList';
+import { RecommendationList } from '../components/networking/RecommendationList';
 import { getNetworkingPermissions, getPermissionErrorMessage } from '../lib/networkingPermissions';
 
 type TabType = 'recommendations' | 'connections' | 'messages' | 'qr-access' | 'analytics';
@@ -64,7 +64,7 @@ const EnhancedNetworkingPage: React.FC = () => {
     switch (userType) {
       case 'admin': return <Crown className="h-4 w-4 text-purple-600" />;
       case 'partner': return <Star className="h-4 w-4 text-amber-600" />;
-      case 'exhibitor': return <Award className="h-4 w-4 text-indigo-600" />;
+      case 'exhibitor': return <Award className="h-4 w-4 text-blue-600" />;
       case 'visitor': return <Users className="h-4 w-4 text-green-600" />;
       default: return <Users className="h-4 w-4 text-gray-600" />;
     }
@@ -73,11 +73,11 @@ const EnhancedNetworkingPage: React.FC = () => {
   const getAccessLevelColor = (userType: string, userLevel?: string): string => {
     if (userType === 'admin') {return 'from-purple-500 to-indigo-600';}
     if (userType === 'partner') {return 'from-amber-500 to-orange-600';}
-    if (userType === 'exhibitor') {return 'from-indigo-500 to-cyan-600';}
+    if (userType === 'exhibitor') {return 'from-blue-500 to-cyan-600';}
     if (userType === 'visitor') {
       switch (userLevel) {
         case 'vip': return 'from-purple-500 to-pink-600';
-        case 'premium': return 'from-indigo-500 to-indigo-600';
+        case 'premium': return 'from-blue-500 to-indigo-600';
         case 'basic': return 'from-green-500 to-emerald-600';
         default: return 'from-gray-400 to-gray-600';
       }
@@ -99,14 +99,14 @@ const EnhancedNetworkingPage: React.FC = () => {
   // Permission Upgrade Modal
   if (showPermissionUpgrade && user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-md w-full"
         >
           <Card className="p-8 text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
               <Network className="h-8 w-8 text-white" />
             </div>
 
@@ -140,7 +140,7 @@ const EnhancedNetworkingPage: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700">
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                 <Crown className="h-4 w-4 mr-2" />
                 Mettre à Niveau Mon Forfait
               </Button>
@@ -170,14 +170,14 @@ const EnhancedNetworkingPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header with User Status */}
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="mb-6 lg:mb-0">
               <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center">
-                <Network className="h-8 w-8 mr-3 text-indigo-600" />
+                <Network className="h-8 w-8 mr-3 text-blue-600" />
                 Réseautage SIB 2026
               </h1>
               <p className="text-lg text-gray-600">
@@ -203,7 +203,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                         </div>
                         <p className="text-sm text-gray-600">
                           {user.type === 'visitor' ? `Pass ${user.profile.passType || 'gratuit'}` :
-                           user.type === 'partner' ? 'Sponsor' :
+                           user.type === 'partner' ? 'Partenaire' :
                            user.type === 'exhibitor' ? 'Exposant' : 'Administrateur'}
                         </p>
                       </div>
@@ -278,14 +278,14 @@ const EnhancedNetworkingPage: React.FC = () => {
                   onClick={() => setActiveTab(tab.id as TabType)}
                   className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
                     activeTab === tab.id
-                      ? 'border-indigo-500 text-indigo-600'
+                      ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
                   <tab.icon className="h-4 w-4" />
                   <span>{tab.label}</span>
                   {tab.count !== undefined && (
-                    <Badge variant="default" className="bg-indigo-100 text-indigo-800 text-xs">
+                    <Badge variant="default" className="bg-blue-100 text-blue-800 text-xs">
                       {tab.count}
                     </Badge>
                   )}
@@ -308,7 +308,7 @@ const EnhancedNetworkingPage: React.FC = () => {
               <div className="space-y-6">
                 {/* AI Insights */}
                 {permissions?.canAccessAIRecommendations && (
-                  <Card className="p-6 bg-gradient-to-r from-purple-50 to-indigo-50">
+                  <Card className="p-6 bg-gradient-to-r from-purple-50 to-blue-50">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                         <Sparkles className="h-5 w-5 mr-2 text-purple-600" />
@@ -329,7 +329,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                             <ul className="space-y-1">
                               {aiInsights.suggestions.map((suggestion) => (
                                 <li key={suggestion} className="text-sm text-gray-600 flex items-start">
-                                  <Target className="h-3 w-3 mr-2 mt-1 text-indigo-500" />
+                                  <Target className="h-3 w-3 mr-2 mt-1 text-blue-500" />
                                   {suggestion}
                                 </li>
                               ))}
@@ -375,7 +375,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                         placeholder="Rechercher..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                     <Button size="sm" variant="outline">
@@ -424,7 +424,7 @@ const EnhancedNetworkingPage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <Card className="p-4">
                     <div className="flex items-center">
-                      <Handshake className="h-8 w-8 text-indigo-600" />
+                      <Handshake className="h-8 w-8 text-blue-600" />
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-600">Connexions Totales</p>
                         <p className="text-2xl font-bold text-gray-900">{connections.length}</p>
@@ -483,5 +483,4 @@ const EnhancedNetworkingPage: React.FC = () => {
 };
 
 export default EnhancedNetworkingPage;
-
 

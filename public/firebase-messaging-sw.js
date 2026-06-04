@@ -22,12 +22,12 @@ try {
 let messaging = null;
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBCAeP_zZmin9J0gKqMD1IM_Gr-bgMvCvw',
-  authDomain: 'urba-event.firebaseapp.com',
-  projectId: 'urba-event',
-  storageBucket: 'urba-event.appspot.com',
-  messagingSenderId: '1078268384869',
-  appId: '1:1078268384869:web:31d29d23110669d500d88c',
+  apiKey: 'AIzaSyDvQxZ1234567890-abcdefghijklmnop', // Will be injected
+  authDomain: 'sib-2026.firebaseapp.com',
+  projectId: 'sib-2026',
+  storageBucket: 'sib-2026.appspot.com',
+  messagingSenderId: '123456789000',
+  appId: '1:123456789000:web:abcdef1234567890',
 };
 
 // Safely initialize if Firebase is available

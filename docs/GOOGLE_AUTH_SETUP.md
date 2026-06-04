@@ -12,7 +12,7 @@
 
 1. Allez sur [Firebase Console](https://console.firebase.google.com/)
 2. Cliquez sur "Ajouter un projet"
-3. Nommez votre projet : `SIB-2026`
+3. Nommez votre projet : `sib-2026`
 4. Activez Google Analytics (optionnel)
 5. Créez le projet
 
@@ -41,9 +41,9 @@ Créez un fichier `.env` à la racine du projet :
 ```env
 # Firebase Configuration
 VITE_FIREBASE_API_KEY=AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-VITE_FIREBASE_AUTH_DOMAIN=SIB-2026.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=SIB-2026
-VITE_FIREBASE_STORAGE_BUCKET=SIB-2026.appspot.com
+VITE_FIREBASE_AUTH_DOMAIN=sib-2026.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=sib-2026
+VITE_FIREBASE_STORAGE_BUCKET=sib-2026.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=123456789012
 VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
 ```
@@ -55,7 +55,7 @@ VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
 3. Ajoutez vos domaines :
    - `localhost` (pour le développement)
    - `votre-domaine.com` (pour la production)
-   - `SIB.com` (domaine principal)
+   - `sib.com` (domaine principal)
 
 ### **6. Configuration Google Cloud Console**
 
@@ -65,9 +65,9 @@ VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
 4. Configurez l'**OAuth consent screen** :
    - Type d'utilisateur : **Externe**
    - Nom de l'application : `SIB 2026`
-   - Email de support : `Sib2026@urbacom.net`
+   - Email de support : `contact@sib2026.ma`
    - Logo : Uploadez le logo SIB
-   - Domaines autorisés : `SIBevent.com`
+   - Domaines autorisés : `sib2026.ma`
 
 ### **7. Test de la Configuration**
 
@@ -178,7 +178,7 @@ npm run build
 ## 📞 Support
 
 - **Documentation Firebase :** https://firebase.google.com/docs/auth
-- **Support SIB :** Sib2026@urbacom.net
+- **Support SIB :** contact@sib2026.ma
 - **Issues GitHub :** Créez une issue sur le repository
 
 ## ✅ Checklist de Vérification

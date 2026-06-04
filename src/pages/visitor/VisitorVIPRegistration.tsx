@@ -2,20 +2,22 @@
  * Formulaire d'inscription Visiteur VIP PREMIUM
  * Workflow complet avec photo, mot de passe et paiement obligatoire
  */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { User, Mail, Phone, MapPin, Briefcase, Loader, Lock, Upload, Crown, Camera, CheckCircle, Tag, XCircle, Loader2 } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Briefcase, Loader, Lock, Upload, Crown, Camera } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { motion } from 'framer-motion';
-import { MoroccanPattern } from '../../components/ui/MoroccanDecor';
 import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
+import { fetchVipPassPricing } from '../../services/visitorLevelService';
+import { useVisitorPassPricing } from '../../hooks/useVisitorPassPricing';
+import { FormSuccessBanner } from '../../components/common/FormSuccessBanner';
 import { COUNTRIES } from '../../data/countries';
 import useAuthStore from '../../store/authStore';
 
@@ -56,79 +58,19 @@ const sectors = [
   'Autre'
 ];
 
-interface AppliedPromo {
-  id: string;
-  code: string;
-  discount_type: 'percentage' | 'fixed';
-  discount_value: number;
-  used_count: number;
+interface VisitorVIPRegistrationProps {
+  embedded?: boolean;
 }
 
-export default function VisitorVIPRegistration() {
+export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPRegistrationProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [promoInput, setPromoInput] = useState('');
-  const [appliedPromo, setAppliedPromo] = useState<AppliedPromo | null>(null);
-  const [isCheckingPromo, setIsCheckingPromo] = useState(false);
-  const [promoError, setPromoError] = useState('');
-  const [badgePrice, setBadgePrice] = useState(700);
-  const [priceCurrency, setPriceCurrency] = useState('MAD');
   const navigate = useNavigate();
   const { user: currentUser, setUser } = useAuthStore();
-
-  useEffect(() => {
-    (supabase as any)
-      .from('pricing_config')
-      .select('amount, currency')
-      .eq('category', 'visitor')
-      .eq('level', 'vip')
-      .eq('is_active', true)
-      .maybeSingle()
-      .then(({ data }: { data: { amount: number; currency: string } | null }) => {
-        if (data) {
-          setBadgePrice(data.amount);
-          setPriceCurrency(data.currency);
-        }
-      });
-  }, []);
-
-  let finalPrice = badgePrice;
-  if (appliedPromo) {
-    if (appliedPromo.discount_type === 'percentage') {
-      finalPrice = Math.max(0, Math.round(badgePrice * (1 - appliedPromo.discount_value / 100)));
-    } else {
-      finalPrice = Math.max(0, badgePrice - appliedPromo.discount_value);
-    }
-  }
-
-  const checkPromoCode = async () => {
-    const code = promoInput.trim().toUpperCase();
-    if (!code) return;
-    setIsCheckingPromo(true);
-    setPromoError('');
-    setAppliedPromo(null);
-    const { data, error } = await (supabase as any)
-      .from('promo_codes')
-      .select('id, code, discount_type, discount_value, max_uses, used_count, expires_at, is_active')
-      .eq('code', code)
-      .eq('is_active', true)
-      .maybeSingle();
-    if (error || !data) {
-      setPromoError('Code promo invalide ou introuvable.');
-    } else if (data.expires_at && new Date(data.expires_at) < new Date()) {
-      setPromoError('Ce code promo a expiré.');
-    } else if (data.max_uses !== null && data.used_count >= data.max_uses) {
-      setPromoError('Ce code promo a atteint son nombre maximum d\'utilisations.');
-    } else {
-      setAppliedPromo(data as AppliedPromo);
-      toast.success('Code promo appliqué !');
-    }
-    setIsCheckingPromo(false);
-  };
-
-  const removePromo = () => { setAppliedPromo(null); setPromoInput(''); setPromoError(''); };
+  const { formattedPrice } = useVisitorPassPricing();
 
   const {
     register,
@@ -179,19 +121,24 @@ export default function VisitorVIPRegistration() {
   };
 
   const onSubmit = async (data: VIPVisitorForm) => {
+    console.log('?? onSubmit APPELÉ avec données:', JSON.stringify(data, null, 2));
     setIsSubmitting(true);
 
     try {
       const fullName = `${data.firstName} ${data.lastName}`.trim();
+      console.log('?? Full name:', fullName);
 
       // 1. Upload photo to Supabase Storage (OPTIONNEL - ne bloque pas)
       let photoUrl = '';
       if (photoFile) {
+        console.log('?? Upload photo en cours...');
+        console.log('   ?? Fichier:', photoFile.name, 'Taille:', photoFile.size);
         try {
           const fileExt = photoFile.name.split('.').pop() || 'jpg';
           const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
           const filePath = `${fileName}`;
 
+          console.log('   ?? Upload vers visitor-photos/', filePath);
           const { error: uploadError, data: uploadData } = await supabase.storage
             .from('visitor-photos')
             .upload(filePath, photoFile, {
@@ -200,20 +147,27 @@ export default function VisitorVIPRegistration() {
             });
 
           if (uploadError) {
+            console.warn('?? Photo upload échoué (non bloquant):', uploadError);
+            console.warn('   Code:', uploadError.message);
             toast.warning('Photo non uploadée (non bloquant)');
           } else {
+            console.log('   ? Upload réussi:', uploadData);
             const { data: urlData } = supabase.storage
               .from('visitor-photos')
               .getPublicUrl(filePath);
             photoUrl = urlData.publicUrl;
+            console.log('? Photo uploadée:', photoUrl);
           }
         } catch (photoErr) {
+          console.warn('?? Erreur photo (non bloquant):', photoErr);
           toast.warning('Photo non uploadée (non bloquant)');
         }
       } else {
+        console.log('?? Pas de photo sélectionnée');
       }
 
       // 2. Vérification préalable : L'email existe-t-il déjà ?
+      console.log('?? [VIP INSCRIPTION] Vérification si email existe déjà...');
       const emailToCheck = data.email.toLowerCase().trim();
 
       const { data: existingUser, error: checkError } = await supabase
@@ -230,20 +184,22 @@ export default function VisitorVIPRegistration() {
       }
 
       if (existingUser) {
+        console.warn('?? [VIP INSCRIPTION] Email déjà existant:', existingUser);
         let accountType = 'visiteur';
         if (existingUser.type === 'exhibitor') {
           accountType = 'exposant';
         } else if (existingUser.type === 'partner') {
-          accountType = 'sponsor';
+          accountType = 'partenaire';
         } else if (existingUser.type === 'visitor') {
-          const level = existingUser.visitor_level === 'vip' ? 'VIP' : 'Gratuit';
+          const level = existingUser.visitor_level === 'premium' ? 'VIP' :
+                       existingUser.visitor_level === 'standard' ? 'Standard' : 'Gratuit';
           accountType = `visiteur ${level}`;
         }
 
-        toast.error(`Cet email est déjà enregistré en tant que ${accountType}. Connectez-vous pour accéder à votre compte.`);
+        toast.error(`?? Cet email est déjà enregistré en tant que ${accountType}. Connectez-vous pour accéder à votre compte.`);
 
         setTimeout(() => {
-          if (globalThis.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
+          if (window.confirm('Voulez-vous être redirigé vers la page de connexion ?')) {
             navigate(ROUTES.LOGIN);
           }
         }, 2000);
@@ -252,11 +208,16 @@ export default function VisitorVIPRegistration() {
         return;
       }
 
+      console.log('? [VIP INSCRIPTION] Email disponible');
 
       // 3. Auth: Check if logged in or need to sign up
       let userId = currentUser?.id;
 
       if (!userId) {
+        console.log('?? Création compte auth...');
+        console.log('   ?? Email:', data.email);
+        console.log('   ?? Password length:', data.password.length);
+        console.log('   ?? Name:', fullName);
 
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email: data.email,
@@ -265,7 +226,7 @@ export default function VisitorVIPRegistration() {
             data: {
               name: fullName,
               type: 'visitor',
-              visitor_level: 'vip'
+              visitor_level: 'premium'
             }
           }
         });
@@ -290,10 +251,13 @@ export default function VisitorVIPRegistration() {
           throw new Error('Échec création utilisateur');
         }
         userId = authData.user.id;
+        console.log('? Auth user créé:', userId);
       } else {
+        console.log('?? Utilisateur déjà connecté, on passe la création Auth:', userId);
       }
 
       // 4. Update or Create user profile
+      console.log('?? Mise à jour profil utilisateur...');
       const { error: userError } = await supabase
         .from('users')
         .upsert([{
@@ -301,7 +265,7 @@ export default function VisitorVIPRegistration() {
           email: data.email,
           name: fullName,
           type: 'visitor',
-          visitor_level: 'vip',
+          visitor_level: 'premium',
           status: 'pending_payment',
           profile: {
             ...(currentUser?.profile || {}),
@@ -321,6 +285,7 @@ export default function VisitorVIPRegistration() {
         console.error('? Erreur profil (UPSERT):', userError);
         throw userError;
       }
+      console.log('? Profil utilisateur synchronisé');
 
       // 5. CRITICAL: Update local auth store
       const localUser = {
@@ -328,7 +293,7 @@ export default function VisitorVIPRegistration() {
         email: data.email,
         name: fullName,
         type: 'visitor' as const,
-        visitor_level: 'vip' as const, // Cohérent avec DB : seul 'vip' existe (pas 'premium')
+        visitor_level: 'premium' as const, // ? FIX P0-1: Cohérent avec DB ligne 229
         status: 'pending_payment' as const,
         profile: {
           firstName: data.firstName,
@@ -361,44 +326,33 @@ export default function VisitorVIPRegistration() {
       // 6. Create payment request in database
       let paymentRequestId: string | null = null;
       try {
-        let discountAmount = 0;
-        if (appliedPromo) {
-          discountAmount = appliedPromo.discount_type === 'percentage'
-            ? Math.round(badgePrice * appliedPromo.discount_value / 100)
-            : Math.min(badgePrice, appliedPromo.discount_value);
-        }
-
+        const vipPricing = await fetchVipPassPricing();
         const { data: prData, error: paymentError } = await supabase
           .from('payment_requests')
           .insert([{
             user_id: userId,
-            amount: finalPrice,
-            original_amount: badgePrice,
-            promo_code_id: appliedPromo?.id || null,
-            promo_discount_amount: discountAmount,
+            amount: vipPricing.price,
+            currency: vipPricing.currency,
             status: 'pending',
             payment_method: 'bank_transfer',
-            requested_level: 'vip'
+            requested_level: 'premium'
           }])
           .select('id')
           .single();
 
         if (paymentError) {
+          console.warn('?? Erreur payment_request (non bloquant):', paymentError);
         } else {
           paymentRequestId = prData?.id || null;
-          // Incrémenter used_count du code promo
-          if (appliedPromo) {
-            await (supabase as any)
-              .from('promo_codes')
-              .update({ used_count: appliedPromo.used_count + 1 })
-              .eq('id', appliedPromo.id);
-          }
+          console.log('? Payment request créé:', paymentRequestId);
         }
       } catch (e) {
+        console.warn('?? Erreur payment_request (non bloquant):', e);
       }
 
       // 7. Send email via Node.js server (SMTP - non bloquant)
       try {
+        console.log('?? [VIP] Envoi email de bienvenue...');
         const emailController = new AbortController();
         const emailTimeout = setTimeout(() => emailController.abort(), 5000);
 
@@ -409,7 +363,7 @@ export default function VisitorVIPRegistration() {
           body: JSON.stringify({
             email: data.email,
             name: fullName,
-            level: 'vip',
+            level: 'premium',
             userId: userId,
             includePaymentInstructions: true
           })
@@ -417,13 +371,18 @@ export default function VisitorVIPRegistration() {
         clearTimeout(emailTimeout);
         const emailResult = await emailResponse.json();
         if (emailResult.success) {
+          console.log('? Email VIP envoyé:', emailResult.messageId);
         } else {
+          console.warn('?? Email non envoyé:', emailResult.error);
         }
       } catch (e) {
+        console.warn('?? Erreur email (non bloquant):', e);
       }
 
       // 8. Success - Redirect DIRECTLY to bank transfer page (skip VisitorPaymentPage)
+      console.log('?? [VIP] SUCCÈS COMPLET - Redirection vers coordonnées bancaires...');
       toast.success('Compte créé ! Redirection vers les instructions de paiement...');
+      setSubmitSuccess(true);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -431,6 +390,7 @@ export default function VisitorVIPRegistration() {
         ? `/visitor/bank-transfer?request_id=${paymentRequestId}`
         : ROUTES.VISITOR_PAYMENT;
 
+      console.log('?? Navigation vers', bankTransferUrl);
       navigate(bankTransferUrl, { replace: true });
 
     } catch (error: any) {
@@ -461,50 +421,64 @@ export default function VisitorVIPRegistration() {
     }
   };
 
-  return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 py-12 px-4 sm:px-6 lg:px-8">
-      <MoroccanPattern className="opacity-[0.05] text-white" scale={1.5} />
-      <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-[#52B847]/20 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+  const wrapperClass = embedded
+    ? 'p-4'
+    : 'min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 py-12 px-4 sm:px-6 lg:px-8';
+  const innerClass = embedded ? 'w-full' : 'max-w-3xl mx-auto';
 
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
+  return (
+    <div className={wrapperClass}>
+      <div className={innerClass}>
+        {submitSuccess && embedded && (
+          <FormSuccessBanner
+            title="Demande enregistrée"
+            message="Votre inscription VIP a été soumise. Consultez vos emails pour les instructions de paiement."
+          />
+        )}
+        {!embedded && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="bg-amber-400 p-3 rounded-lg shadow-lg shadow-amber-400/30">
+            <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-3 rounded-lg shadow-lg">
               <Crown className="h-8 w-8 text-gray-900" />
             </div>
             <div>
               <span className="text-2xl font-bold text-white">SIB VIP</span>
-              <span className="text-sm text-white/70 block leading-none">Premium Pass 2026</span>
+              <span className="text-sm text-yellow-200 block leading-none">Premium Pass 2026</span>
             </div>
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">
             Inscription Pass Premium VIP
           </h1>
-          <p className="text-white/80 text-lg">
+          <p className="text-yellow-100 text-lg">
             Accès complet au salon avec badge photo sécurisé
           </p>
-          <div className="mt-4 inline-flex items-center space-x-3 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-full">
-            <span className="text-amber-300 font-semibold">RDV B2B Illimités</span>
-            <span className="text-white/60">•</span>
-            <span className="text-amber-300 font-semibold">Gala exclusif</span>
-            <span className="text-white/60">•</span>
-            <span className="text-amber-300 font-semibold">Networking premium</span>
+          <div className="mt-4 inline-flex items-center space-x-3 bg-yellow-800 px-6 py-3 rounded-full">
+            <span className="text-yellow-100 font-semibold">?? RDV B2B Illimités</span>
+            <span className="text-yellow-200">•</span>
+            <span className="text-yellow-100 font-semibold">?? Gala exclusif</span>
+            <span className="text-yellow-200">•</span>
+            <span className="text-yellow-100 font-semibold">?? Networking premium</span>
           </div>
         </motion.div>
+        )}
 
-        {/* Form */}
+        {embedded && !submitSuccess && (
+          <h3 className="text-base font-bold text-primary-800 dark:text-white mb-3 px-1">
+            Pass VIP
+          </h3>
+        )}
+
+        {(!embedded || !submitSuccess) && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: embedded ? 0 : 0.2 }}
         >
-          <Card className="p-8 bg-white/95 backdrop-blur-xl border border-white/40 shadow-2xl shadow-indigo-950/30">
+          <Card className={embedded ? 'p-4' : 'p-8'}>
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error("? Validation errors:", errors);
               toast.error("Veuillez corriger les erreurs rouges dans le formulaire.");
@@ -730,104 +704,44 @@ export default function VisitorVIPRegistration() {
               </div>
 
               {/* VIP Benefits */}
-              <div className="bg-gradient-to-r from-indigo-50 to-amber-50 border border-sib-gold/40 rounded-lg p-6">
-                <h4 className="font-bold text-indigo-900 mb-3 flex items-center">
+              <div className="bg-gradient-to-r from-yellow-50 to-purple-50 border border-yellow-300 rounded-lg p-6">
+                <h4 className="font-bold text-yellow-900 mb-3 flex items-center">
                   <Crown className="h-5 w-5 mr-2" />
                   Inclus dans votre Pass Premium VIP
                 </h4>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-yellow-600 mr-2">?</span>
                     <span><strong>Rendez-vous B2B ILLIMITÉS</strong> - Planifiez autant de meetings que souhaité</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-yellow-600 mr-2">?</span>
                     <span><strong>Badge ultra-sécurisé avec photo</strong> - QR code JWT rotatif</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-yellow-600 mr-2">?</span>
                     <span><strong>Accès zones VIP</strong> - Salons premium, networking area</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-yellow-600 mr-2">?</span>
                     <span><strong>Gala de clôture exclusif</strong> - Événement réseau premium</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-yellow-600 mr-2">?</span>
                     <span><strong>Ateliers et conférences VIP</strong> - Contenus exclusifs</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 text-sib-gold mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-yellow-600 mr-2">?</span>
                     <span><strong>{t('common.complete_dashboard')}</strong> - {t('common.dashboard')} {t('common.appointments')} & {t('common.networking')}</span>
                   </li>
                 </ul>
               </div>
 
-              {/* Code Promo */}
-              <div className="border border-gray-200 rounded-xl overflow-hidden">
-                <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center gap-2">
-                  <Tag className="h-4 w-4 text-indigo-600" />
-                  <span className="text-sm font-semibold text-gray-700">Code promo (optionnel)</span>
-                </div>
-                <div className="p-4">
-                  {appliedPromo ? (
-                    <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-emerald-600" />
-                          <span className="font-mono font-bold text-emerald-800">{appliedPromo.code}</span>
-                          <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
-                            {appliedPromo.discount_type === 'percentage'
-                              ? `-${appliedPromo.discount_value}%`
-                              : `-${appliedPromo.discount_value} MAD`}
-                          </span>
-                        </div>
-                        <p className="text-xs text-emerald-600 mt-1">
-                          Prix réduit : <strong>{finalPrice} {priceCurrency}</strong> au lieu de {badgePrice} {priceCurrency}
-                        </p>
-                      </div>
-                      <button type="button" onClick={removePromo} className="p-1 rounded-lg hover:bg-emerald-100 transition-colors">
-                        <XCircle className="h-4 w-4 text-emerald-500" />
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={promoInput}
-                        onChange={e => { setPromoInput(e.target.value.toUpperCase()); setPromoError(''); }}
-                        onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); checkPromoCode(); } }}
-                        placeholder="Ex: SIB-VIP2026"
-                        className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm font-mono uppercase focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                      />
-                      <button
-                        type="button"
-                        onClick={checkPromoCode}
-                        disabled={isCheckingPromo || !promoInput.trim()}
-                        className="flex items-center gap-1.5 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors text-sm font-medium"
-                      >
-                        {isCheckingPromo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Tag className="h-4 w-4" />}
-                        Appliquer
-                      </button>
-                    </div>
-                  )}
-                  {promoError && (
-                    <p className="text-red-500 text-xs mt-2 flex items-center gap-1">
-                      <XCircle className="h-3.5 w-3.5" /> {promoError}
-                    </p>
-                  )}
-                </div>
-              </div>
-
               {/* Payment Info */}
-              <div className="bg-indigo-50/80 border border-indigo-200 rounded-lg p-4">
-                <p className="text-sm text-indigo-900">
-                  <strong>Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page de paiement sécurisé{' '}
-                  {appliedPromo ? (
-                    <><span className="line-through text-gray-400">{badgePrice} {priceCurrency}</span>{' '}<strong className="text-emerald-700">{finalPrice} {priceCurrency}</strong> (code promo appliqué)</>
-                  ) : (
-                    <strong>{badgePrice} {priceCurrency}</strong>
-                  )}. Votre accès VIP sera activé immédiatement après validation du paiement.
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-900">
+                  <strong>Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page d’instructions de virement bancaire
+                  {formattedPrice ? ` (${formattedPrice})` : ''}. Votre Pass VIP sera activé une fois le virement validé par notre équipe (délai habituel : 2 à 5 jours ouvrés).
                 </p>
               </div>
 
@@ -835,7 +749,7 @@ export default function VisitorVIPRegistration() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-sib-gold hover:bg-sib-gold/90 text-white py-4 text-lg font-bold shadow-lg shadow-sib-gold/30"
+                className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 py-4 text-lg font-bold shadow-lg"
               >
                 {isSubmitting ? (
                   <>
@@ -845,12 +759,13 @@ export default function VisitorVIPRegistration() {
                 ) : (
                   <>
                     <Crown className="h-5 w-5 mr-2" />
-                    Créer mon compte VIP et payer — {finalPrice} {priceCurrency}
+                    Créer mon compte VIP et payer
                   </>
                 )}
               </Button>
 
               {/* Free Pass Link */}
+              {!embedded && (
               <div className="text-center pt-4 border-t">
                 <p className="text-sm text-gray-600 mb-2">
                   Vous cherchez un accès gratuit au salon ?
@@ -859,19 +774,20 @@ export default function VisitorVIPRegistration() {
                   type="button"
                   variant="outline"
                   onClick={() => navigate(ROUTES.REGISTER_VISITOR)}
-                  className="border-indigo-500 text-indigo-700 hover:bg-indigo-50"
+                  className="border-primary-500 text-primary-600 hover:bg-primary-50"
                 >
-                  S'inscrire avec le Pass Gratuit
+                  Pass Gratuit
                 </Button>
               </div>
+              )}
             </form>
           </Card>
         </motion.div>
+        )}
       </div>
     </div>
   );
 }
-
 
 
 

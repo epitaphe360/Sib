@@ -144,32 +144,36 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
 
   const loadMiniSiteData = async () => {
     if (!exhibitorId) {
+      console.warn('[MiniSite] No exhibitorId provided');
       return;
     }
 
     setIsLoading(true);
     setError(null);
+    console.log(`[MiniSite] Loading data for exhibitor: ${exhibitorId}`);
 
     try {
       // Charger le mini-site
       const miniSite = await SupabaseService.getMiniSite(exhibitorId);
+      console.log('[MiniSite] Received site data:', miniSite);
 
       // IMPORTANT: On ne bloque plus si miniSite est null - on génère un fallback
       if (!miniSite) {
-        // Fallback with SIB brand colors (not generic blue)
+        console.warn(`[MiniSite] Site not found for ID: ${exhibitorId}, generating default structure`);
+        // Créer une structure mini-site par défaut au lieu de bloquer
         setMiniSiteData({
           id: `default-${exhibitorId}`,
           exhibitor_id: exhibitorId,
           theme: {
-            primaryColor: '#C9A84C',
-            secondaryColor: '#0F2034',
-            accentColor: '#1B365D',
-            fontFamily: 'Inter',
+            primaryColor: '#1e40af',
+            secondaryColor: '#3b82f6',
+            accentColor: '#60a5fa',
+            fontFamily: 'Inter'
           },
           sections: [],
           published: true,
           views: 0,
-          last_updated: new Date().toISOString(),
+          last_updated: new Date().toISOString()
         });
       } else {
         setMiniSiteData(miniSite);
@@ -177,37 +181,34 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
 
       // Charger les informations de l'exposant
       const exhibitor = await SupabaseService.getExhibitorForMiniSite(exhibitorId);
+      console.log('[MiniSite] Received exhibitor data:', exhibitor);
 
       if (exhibitor) {
         setExhibitorData(exhibitor);
       } else {
+        console.warn(`[MiniSite] Exhibitor profile not found for ID: ${exhibitorId}, using fallback`);
         // Créer des données exposant par défaut
         setExhibitorData({
           id: exhibitorId,
-          company_name: 'Exposant SIB 2026',
+          company_name: 'Exposant SIB',
           logo_url: undefined,
-          description: 'Découvrez notre stand lors du Salon International du Bâtiment 2026',
+          description: 'Découvrez notre stand lors du salon SIB 2026',
           website: undefined,
-          contact_info: {
-            phone: '',
-            email: '',
-            address: '',
-            social: {},
-          },
+          contact_info: {}
         });
       }
 
       // Charger les produits
       const exhibitorProducts = await SupabaseService.getExhibitorProducts(exhibitorId);
+      console.log('[MiniSite] Received products:', exhibitorProducts?.length);
       setProducts(exhibitorProducts);
 
-      // Incrémenter les vues en fire-and-forget (ne bloque pas le chargement)
-      // Fetch count first, then add 1 locally to avoid race condition
+      // Incrémenter le compteur de vues
+      await SupabaseService.incrementMiniSiteViews(exhibitorId);
+
+      // Charger le vrai count depuis minisite_views (source de vérité)
       const viewCount = await SupabaseService.getMiniSiteViewCount(exhibitorId);
       setRealViewCount(viewCount);
-      SupabaseService.incrementMiniSiteViews(exhibitorId).catch(() => {
-        // Silent — view count is non-critical
-      });
 
     } catch (err: any) {
       console.error('Erreur lors du chargement du mini-site:', err);
@@ -479,31 +480,31 @@ export default function MiniSitePreview({ exhibitorId: propExhibitorId, exhibito
   // Mode page complète (non embarqué) ──────────────────────────────
   return (
     <div className="bg-gray-50" style={{ fontFamily: theme.fontFamily }}>
-      {/* Barre de retour — sticky juste sous la navbar principale */}
+      {/* Header with back button - hidden when embedded */}
       {!embedded && (
-        <div
-          className="sticky top-16 sm:top-20 xl:top-[112px] bg-white border-b border-gray-200 shadow-md"
-          style={{ zIndex: 199 }}
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
+        <div className="bg-white shadow-sm sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
-              <Link
-                to={ROUTES.EXHIBITORS}
-                className="inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-900 transition-colors group"
+              <Button
+                variant="ghost"
+                onClick={() => navigate(ROUTES.EXHIBITORS)}
+                className="flex items-center gap-2"
               >
-                <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                ← Retour à la liste des exposants
-              </Link>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(window.location.href);
-                  toast.success('Lien copié dans le presse-papiers');
-                }}
-                className="inline-flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors"
-              >
-                <Share2 className="h-3.5 w-3.5" />
-                Partager
-              </button>
+                <ArrowLeft className="h-4 w-4" />
+                Retour aux exposants
+              </Button>
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    toast.success('Lien copié dans le presse-papiers');
+                  }}
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Partager
+                </Button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { fetchVipPassPricing } from './visitorLevelService';
 
 /**
  * Payment Service for sib 2026
@@ -8,11 +9,11 @@ import { supabase } from '../lib/supabase';
 // PayPal client ID (should be in env variables)
 export const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID || '';
 
-// Payment amounts
-export const PAYMENT_AMOUNTS = {
-  VIP_PASS: 300, // euros
-  VIP_PASS_CENTS: 30000,
-};
+/** Montant Pass VIP (EUR) — lu depuis visitor_levels (config admin). */
+export async function getVipPassAmount(): Promise<number> {
+  const pricing = await fetchVipPassPricing();
+  return pricing.price;
+}
 
 /**
  * Stripe is disabled for this project
@@ -36,10 +37,11 @@ export async function redirectToStripeCheckout(sessionId: string) {
  */
 export async function createPayPalOrder(userId: string) {
   try {
+    const amount = await getVipPassAmount();
     const { data, error } = await supabase.functions.invoke('create-paypal-order', {
       body: {
         userId,
-        amount: PAYMENT_AMOUNTS.VIP_PASS.toString(),
+        amount: amount.toString(),
         currency: 'EUR',
         description: 'Pass Premium VIP sib 2026',
       },
@@ -80,11 +82,13 @@ export async function capturePayPalOrder(orderId: string, userId: string) {
  */
 export async function createCMIPaymentRequest(userId: string, userEmail: string) {
   try {
+    const amountEur = await getVipPassAmount();
+    const { convertEURtoMAD } = await import('../utils/currencyUtils');
     const { data, error } = await supabase.functions.invoke('create-cmi-payment', {
       body: {
         userId,
         userEmail,
-        amount: PAYMENT_AMOUNTS.VIP_PASS,
+        amount: await convertEURtoMAD(amountEur),
         currency: 'MAD', // Moroccan Dirham
         description: 'Pass Premium VIP sib 2026',
         returnUrl: `${window.location.origin}/visitor/payment-success`,

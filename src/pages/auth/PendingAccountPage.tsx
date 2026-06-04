@@ -117,6 +117,7 @@ export default function PendingAccountPage() {
 
       if (uploadError) {
         // Si le bucket n'existe pas, on cree l'URL manuellement
+        console.warn('Upload error (bucket may not exist):', uploadError);
 
         // Mise a jour du statut sans URL reelle pour la demo
         const { error: updateError } = await supabase
@@ -593,24 +594,24 @@ export default function PendingAccountPage() {
 
               <div className="grid md:grid-cols-3 gap-4">
                 <a
-                  href="mailto:Sib2026@urbacom.net"
+                  href="mailto:exposants@sibs.com"
                   className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                 >
                   <Mail className="h-5 w-5 text-blue-600" />
                   <div>
                     <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-medium">Sib2026@urbacom.net</p>
+                    <p className="font-medium">exposants@sibs.com</p>
                   </div>
                 </a>
 
                 <a
-                  href="tel:+212688500500"
+                  href="tel:+33123456789"
                   className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                 >
                   <Phone className="h-5 w-5 text-green-600" />
                   <div>
                     <p className="text-sm text-gray-500">Telephone</p>
-                    <p className="font-medium">+212 6 88 50 05 00</p>
+                    <p className="font-medium">+33 1 23 45 67 89</p>
                   </div>
                 </a>
 

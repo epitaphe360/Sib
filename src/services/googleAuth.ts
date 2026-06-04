@@ -1,4 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -9,11 +8,6 @@ import {
   User as FirebaseUser
 } from 'firebase/auth';
 import { User } from '../types';
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL as string,
-  import.meta.env.VITE_SUPABASE_ANON_KEY as string
-);
 
 // Configuration Firebase (remplacez par vos vraies clés)
 const firebaseConfig = {
@@ -171,13 +165,16 @@ export class GoogleAuthService {
    */
   private static async checkExistingUser(email: string): Promise<User | null> {
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('email', email)
-        .maybeSingle();
-      if (error) {throw error;}
-      return data as User | null;
+      // Simulation d'appel API pour vérifier l'utilisateur existant
+      // En production, remplacez par un vrai appel API
+      const response = await fetch(`/api/users/check?email=${encodeURIComponent(email)}`);
+
+      if (response.ok) {
+        const userData = await response.json();
+        return userData.user || null;
+      }
+
+      return null;
     } catch (error) {
       console.error('Erreur vérification utilisateur:', error);
       return null;
@@ -200,15 +197,14 @@ export class GoogleAuthService {
       updatedAt: new Date()
     };
 
+    // Simulation de sauvegarde en base
+    // En production, remplacez par un vrai appel API
     try {
-      const { error } = await supabase
-        .from('users')
-        .update({
-          profile: updatedUser.profile,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', existingUser.id);
-      if (error) {throw error;}
+      await fetch(`/api/users/${existingUser.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedUser)
+      });
     } catch (error) {
       console.error('Erreur mise à jour utilisateur:', error);
     }
@@ -222,23 +218,19 @@ export class GoogleAuthService {
   private static async createUserFromGoogle(firebaseUser: FirebaseUser): Promise<User> {
     const newUser = await this.mapFirebaseUserToSIBsUser(firebaseUser);
 
+    // Simulation de création en base
+    // En production, remplacez par un vrai appel API
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .insert({
-          id: newUser.id,
-          email: newUser.email,
-          name: newUser.name,
-          type: newUser.type,
-          status: newUser.status,
-          profile: newUser.profile,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-        .select()
-        .single();
-      if (error) {throw error;}
-      return (data as User) ?? newUser;
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser)
+      });
+
+      if (response.ok) {
+        const createdUser = await response.json();
+        return createdUser.user;
+      }
     } catch (error) {
       console.error('Erreur création utilisateur:', error);
     }

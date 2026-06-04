@@ -19,7 +19,7 @@ interface RegistrationEmailRequest {
  * Escape HTML to prevent XSS attacks
  */
 function escapeHtml(text: string | undefined | null): string {
-  if (!text) return '';
+  if (!text) {return '';}
   return String(text)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -47,7 +47,7 @@ Deno.serve(async (req: Request) => {
     const { userType, email, firstName, lastName, companyName }: RegistrationEmailRequest = await req.json();
 
     const sgMail = new SendGrid(SENDGRID_API_KEY);
-    
+
     // Déterminer le type de compte en français
 
     // Déterminer le type de compte en français
@@ -59,7 +59,7 @@ Deno.serve(async (req: Request) => {
 
     // Préparer le sujet et le contenu de l'email
     const subject = `SIB 2026 - Demande d'inscription ${accountTypeLabel} reçue`;
-    
+
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -127,7 +127,7 @@ Deno.serve(async (req: Request) => {
               
               <div class="footer">
                 <p><strong>SIB 2026</strong><br>
-                Salon International du Bâtiment<br>
+                Salon International des Ports et de la Logistique<br>
                 El Jadida, Maroc</p>
                 <p style="font-size: 12px; color: #9ca3af;">Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
               </div>
@@ -150,8 +150,8 @@ Deno.serve(async (req: Request) => {
     console.log('📧 Email de confirmation envoyé via SendGrid à:', email);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: 'Email de confirmation envoyé',
         emailDetails: {
           to: email,
@@ -170,9 +170,9 @@ Deno.serve(async (req: Request) => {
   } catch (error) {
     console.error('Erreur dans send-registration-email:', error);
     return new Response(
-      JSON.stringify({ 
-        success: false, 
-        error: error.message || 'Une erreur est survenue lors de l\'envoi de l\'email' 
+      JSON.stringify({
+        success: false,
+        error: error.message || 'Une erreur est survenue lors de l\'envoi de l\'email'
       }),
       {
         headers: {

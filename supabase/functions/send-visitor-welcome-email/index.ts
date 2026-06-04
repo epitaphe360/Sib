@@ -15,9 +15,6 @@ const SMTP_CONFIG = {
   password: Deno.env.get('SMTP_PASSWORD') || 'S!P0RT@9083',
 }
 
-const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || ''
-const RESEND_FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || SMTP_CONFIG.username
-
 // Client Supabase pour accéder à la DB
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || ''
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
@@ -28,7 +25,6 @@ interface EmailRequest {
   name: string
   level: 'free' | 'vip'
   userId: string
-  qrContent?: string
 }
 
 interface EmailTemplate {
@@ -37,107 +33,13 @@ interface EmailTemplate {
   text_content: string
 }
 
-async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string): Promise<T> {
-  let timeoutId: number | undefined
-  try {
-    const timeoutPromise = new Promise<never>((_, reject) => {
-      timeoutId = setTimeout(() => reject(new Error(`${label} timeout after ${timeoutMs}ms`)), timeoutMs)
-    })
-    return await Promise.race([promise, timeoutPromise])
-  } finally {
-    if (timeoutId !== undefined) clearTimeout(timeoutId)
-  }
-}
-
-async function sendViaSmtp(to: string, subject: string, htmlContent: string): Promise<void> {
-  try {
-    const client = new SMTPClient({
-      connection: {
-        hostname: SMTP_CONFIG.hostname,
-        port: 465,
-        tls: true,
-        auth: {
-          username: SMTP_CONFIG.username,
-          password: SMTP_CONFIG.password,
-        },
-      },
-    })
-
-    await withTimeout(client.send({
-      from: `SIB 2026 <${SMTP_CONFIG.username}>`,
-      to,
-      subject,
-      content: 'auto',
-      html: htmlContent,
-    }), 5000, 'smtp:465 send')
-
-    await client.close()
-    return
-  } catch (smtpError) {
-    console.error('❌ Erreur SMTP port 465, tentative port 587...', smtpError instanceof Error ? smtpError.message : smtpError)
-  }
-
-  const client2 = new SMTPClient({
-    connection: {
-      hostname: SMTP_CONFIG.hostname,
-      port: 587,
-      tls: false,
-      auth: {
-        username: SMTP_CONFIG.username,
-        password: SMTP_CONFIG.password,
-      },
-    },
-  })
-
-  await withTimeout(client2.send({
-    from: `SIB 2026 <${SMTP_CONFIG.username}>`,
-    to,
-    subject,
-    content: 'auto',
-    html: htmlContent,
-  }), 5000, 'smtp:587 send')
-  await client2.close()
-}
-
-function normalizeSibBranding(content: string): string {
-  return content
-    .replace(/SIB?\s*2026/gi, 'SIB 2026')
-    .replace(/SIB?/gi, 'SIB')
-    .replace(/Salon International des Infrastructures Portuaires/gi, 'Salon International du Batiment')
-}
-
-async function sendViaResend(to: string, subject: string, htmlContent: string): Promise<void> {
-  if (!RESEND_API_KEY) {
-    throw new Error('RESEND_API_KEY non configurée')
-  }
-
-  const response = await withTimeout(fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: `SIB 2026 <${RESEND_FROM_EMAIL}>`,
-      to: [to],
-      subject,
-      html: htmlContent,
-    }),
-  }), 5000, 'resend send')
-
-  if (!response.ok) {
-    const text = await response.text()
-    throw new Error(`Resend error ${response.status}: ${text}`)
-  }
-}
-
 /**
  * Récupère le template depuis la base de données
  */
 async function getEmailTemplate(level: 'free' | 'vip'): Promise<EmailTemplate | null> {
   try {
     const template_key = level === 'free' ? 'visitor_welcome_free' : 'visitor_welcome_vip'
-    
+
     const { data, error } = await supabase
       .from('email_templates')
       .select('subject, html_content, text_content')
@@ -162,12 +64,12 @@ async function getEmailTemplate(level: 'free' | 'vip'): Promise<EmailTemplate | 
  */
 function replaceVariables(content: string, variables: Record<string, string>): string {
   let result = content
-  
+
   Object.entries(variables).forEach(([key, value]) => {
     const regex = new RegExp(`{{${key}}}`, 'g')
     result = result.replace(regex, value)
   })
-  
+
   return result
 }
 
@@ -178,7 +80,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, name, level, userId, qrContent }: EmailRequest = await req.json()
+    const { email, name, level, userId }: EmailRequest = await req.json()
 
     // Validation
     if (!email || !name || !level || !userId) {
@@ -196,9 +98,9 @@ serve(async (req) => {
     if (!template) {
       console.error('❌ Template non trouvé ou inactif')
       return new Response(
-        JSON.stringify({ 
-          error: 'Template not found', 
-          message: `Aucun template actif trouvé pour le niveau: ${level}` 
+        JSON.stringify({
+          error: 'Template not found',
+          message: `Aucun template actif trouvé pour le niveau: ${level}`
         }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
@@ -208,52 +110,87 @@ serve(async (req) => {
     const variables = {
       name,
       email,
-      level: level === 'free' ? 'Gratuit' : 'VIP Premium',
-      qr_content: qrContent || '',
-      qr_image_url: qrContent ? `https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(qrContent)}` : '',
+      level: level === 'free' ? 'Gratuit' : 'VIP Premium'
     }
 
     console.log('📝 Remplacement des variables:', variables)
 
     // Remplacer les variables dans le contenu
-    const subject = normalizeSibBranding(replaceVariables(template.subject, variables))
-    const templateHtmlContent = normalizeSibBranding(replaceVariables(template.html_content, variables))
-    const textContent = template.text_content
-      ? normalizeSibBranding(replaceVariables(template.text_content, variables))
-      : ''
+    const subject = replaceVariables(template.subject, variables)
+    const htmlContent = replaceVariables(template.html_content, variables)
+    const textContent = template.text_content ? replaceVariables(template.text_content, variables) : ''
 
-    // Garantit que le QR est présent dans l'email, meme sans placeholder dans le template.
-    const qrBlock = qrContent
-      ? `<div style="margin-top:24px;padding:16px;border:1px solid #e5e7eb;border-radius:8px;text-align:center;">
-          <h3 style="margin:0 0 12px 0;font-size:16px;color:#111827;">Votre code QR d'acces</h3>
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(qrContent)}" alt="Code QR SIB 2026" width="220" height="220" style="display:block;margin:0 auto 12px auto;" />
-          <p style="margin:0;color:#6b7280;font-size:12px;word-break:break-all;">${qrContent}</p>
-        </div>`
-      : '<div style="margin-top:24px;color:#b91c1c;font-size:12px;">QR non disponible: merci de contacter le support SIB.</div>'
+    // Envoyer via SMTP
+    console.log(`📧 Envoi email via SMTP à ${email} (niveau: ${level})...`)
 
-    const htmlContent = `${templateHtmlContent}${qrBlock}`
-
-    // Provider primaire: SMTP, fallback: Resend
-    let providerUsed = 'smtp'
     try {
-      console.log(`📧 Envoi email via SMTP à ${email} (niveau: ${level})...`)
-      await sendViaSmtp(email, subject, htmlContent)
-      console.log(`✅ Email envoyé via SMTP à ${email}`)
-    } catch (smtpFatalError) {
-      console.error('❌ SMTP indisponible, bascule vers Resend:', smtpFatalError instanceof Error ? smtpFatalError.message : smtpFatalError)
-      providerUsed = 'resend'
-      await sendViaResend(email, subject, htmlContent)
-      console.log(`✅ Email envoyé via Resend à ${email}`)
+      const client = new SMTPClient({
+        connection: {
+          hostname: SMTP_CONFIG.hostname,
+          port: 465,
+          tls: true,
+          auth: {
+            username: SMTP_CONFIG.username,
+            password: SMTP_CONFIG.password,
+          },
+        },
+      })
+
+      console.log('🔌 Connexion SMTP SSL/TLS sur port 465...')
+
+      await client.send({
+        from: `SIB 2026 <${SMTP_CONFIG.username}>`,
+        to: email,
+        subject: subject,
+        content: "auto",
+        html: htmlContent,
+      })
+
+      console.log(`✅ Email envoyé avec succès à ${email} (${level})`)
+
+      await client.close()
+    } catch (smtpError) {
+      console.error('❌ Erreur SMTP port 465, tentative port 587...', smtpError.message)
+
+      // Fallback: essayer port 587 avec STARTTLS
+      try {
+        const client2 = new SMTPClient({
+          connection: {
+            hostname: SMTP_CONFIG.hostname,
+            port: 587,
+            tls: false,
+            auth: {
+              username: SMTP_CONFIG.username,
+              password: SMTP_CONFIG.password,
+            },
+          },
+        })
+
+        console.log('🔌 Tentative SMTP STARTTLS sur port 587...')
+
+        await client2.send({
+          from: `SIB 2026 <${SMTP_CONFIG.username}>`,
+          to: email,
+          subject: subject,
+          content: "auto",
+          html: htmlContent,
+        })
+
+        console.log(`✅ Email envoyé via port 587 à ${email}`)
+        await client2.close()
+      } catch (smtpError2) {
+        console.error('❌ Erreur SMTP port 587 aussi:', smtpError2.message)
+        throw new Error(`Erreur envoi SMTP: ${smtpError.message} | Fallback 587: ${smtpError2.message}`)
+      }
     }
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: `Email envoyé avec succès à ${email} via ${providerUsed.toUpperCase()}`,
+        message: `Email envoyé avec succès à ${email} via SMTP`,
         to: email,
         subject: subject,
-        level: level,
-        provider: providerUsed,
+        level: level
       }),
       {
         status: 200,

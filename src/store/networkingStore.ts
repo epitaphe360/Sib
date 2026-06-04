@@ -5,11 +5,6 @@ import RecommendationService from '@/services/recommendationService';
 import useAuthStore from './authStore';
 import { SupabaseService } from '@/services/supabaseService';
 import {
-  calculateEngagementScore,
-  calculateNetworkingHealthScore,
-  calculateProfileCompleteness,
-} from '@/services/networkingScoring';
-import {
   getNetworkingPermissions,
   getEventAccessPermissions,
   checkDailyLimits,
@@ -47,33 +42,28 @@ const generateAIInsights = async (userId: string): Promise<AIInsights> => {
       SupabaseService.getPendingConnections(userId).catch(() => [])
     ]);
 
-    // Extraire les profils connectés directement depuis les objets connexion
-    // getUserConnections retourne {requester_id, addressee_id, requester, addressee}
-    const connectedUsers = (connections as any[]).map(c =>
-      c.requester_id === userId ? c.addressee : c.requester
-    ).filter(Boolean);
+    // Récupérer tous les utilisateurs pour analyser le réseau
+    const allUsers = await SupabaseService.getUsers().catch(() => []);
 
     // Analyser les secteurs des connexions
-    const sectors = connectedUsers
-      .flatMap((u: any) => u.profile?.sectors ?? (u.profile?.sector ? [u.profile.sector] : []))
-      .filter(Boolean);
-    const sectorCounts = sectors.reduce((acc: Record<string, number>, sector: string) => {
-      acc[sector] = (acc[sector] || 0) + 1;
+    const connectedUsers = allUsers.filter(u => connections.includes(u.id));
+    const sectors = connectedUsers.map(u => u.profile?.sector).filter(Boolean);
+    const sectorCounts = sectors.reduce((acc, sector) => {
+      acc[sector!] = (acc[sector!] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
     const topSectors = Object.entries(sectorCounts)
-      .sort(([, a], [, b]) => (b as number) - (a as number))
+      .sort(([, a], [, b]) => b - a)
       .slice(0, 3)
       .map(([sector]) => sector);
 
     // Générer les données pour le graphique radar
     const allSectors = ['Bâtiment', 'Logistique', 'Technologie', 'Finance', 'Formation', 'Institutionnel'];
-    const maxVal = Math.max(...Object.values(sectorCounts) as number[], 10);
     const sectorData: SectorData[] = allSectors.map(sector => ({
       subject: sector,
-      A: (sectorCounts[sector] as number) || 0,
-      fullMark: maxVal,
+      A: sectorCounts[sector] || 0,
+      fullMark: Math.max(...Object.values(sectorCounts), 10),
     }));
 
     // Générer un résumé intelligent
@@ -99,8 +89,11 @@ const generateAIInsights = async (userId: string): Promise<AIInsights> => {
       suggestions.push("🎯 Transformez vos favoris en connexions actives pour enrichir vos échanges");
     }
     if (topSectors.length > 0) {
-      const coveredSectors = new Set(topSectors);
-      const otherSectors = allSectors.filter(s => !coveredSectors.has(s)).slice(0, 2);
+      const otherSectors = allUsers
+        .filter(u => u.profile?.sector && !topSectors.includes(u.profile.sector))
+        .map(u => u.profile!.sector!)
+        .filter((v, i, a) => a.indexOf(v) === i)
+        .slice(0, 2);
       if (otherSectors.length > 0) {
         suggestions.push(`🌐 Explorez de nouveaux secteurs: ${otherSectors.join(', ')}`);
       }
@@ -176,12 +169,6 @@ interface NetworkingState {
   permissions: NetworkingPermissions | null;
   eventPermissions: EventAccessPermissions | null;
   dailyUsage: DailyUsage;
-  analytics: {
-    averageRecommendationScore: number;
-    networkingHealthScore: number;
-    engagementScore: number;
-    profileCompleteness: number;
-  };
 
   // Appointment Modal State
   showAppointmentModal: boolean;
@@ -211,10 +198,9 @@ interface NetworkingState {
   updatePermissions: () => void;
   checkActionPermission: (action: 'connect' | 'message' | 'meeting') => boolean;
   getRemainingQuota: () => { connections: number; messages: number; meetings: number };
-  refreshAnalytics: () => void;
 
   // AI and insights
-  loadAIInsights: () => Promise<void>;
+  loadAIInsights: () => void;
 
   // Modal Actions
   setShowAppointmentModal: (show: boolean) => void;
@@ -242,12 +228,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     meetings: 0,
     lastReset: new Date(),
   },
-  analytics: {
-    averageRecommendationScore: 0,
-    networkingHealthScore: 0,
-    engagementScore: 0,
-    profileCompleteness: 0,
-  },
 
   // Appointment Modal State
   showAppointmentModal: false,
@@ -260,14 +240,14 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     const { user } = useAuthStore.getState();
     if (!user) {
       set({ error: 'User not authenticated.', isLoading: false });
+      console.log('❌ No user authenticated');
       return;
     }
     set({ isLoading: true, error: null });
     try {
-      const allUsers = await SupabaseService.getUsers({ limit: 100 });
+      const allUsers = await SupabaseService.getUsers();
       const recommendations = await RecommendationService.generateRecommendations(user, allUsers);
       set({ recommendations, isLoading: false });
-      get().refreshAnalytics();
     } catch (e) {
       const error = e instanceof Error ? e.message : 'An unknown error occurred.';
       set({ error, isLoading: false });
@@ -276,6 +256,7 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
   },
 
   generateRecommendations: async (userId: string) => {
+    console.log('🎯 generateRecommendations called for userId:', userId);
     set({ isLoading: true, error: null });
     try {
       await get().fetchRecommendations();
@@ -290,7 +271,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       throw error;
     } finally {
       set({ isLoading: false });
-      get().refreshAnalytics();
     }
   },
 
@@ -335,7 +315,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       set(state => ({
         pendingConnections: [...state.pendingConnections, newPendingConnection],
       }));
-      get().refreshAnalytics();
 
       // Recharger l'usage quotidien depuis la DB
       await get().loadDailyUsage();
@@ -373,7 +352,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       set(state => ({
         favorites: [...state.favorites, userId],
       }));
-      get().refreshAnalytics();
     } catch (error) {
       console.error('Erreur lors de l\'ajout aux favoris:', error);
       toast.error('Erreur lors de l\'ajout aux favoris.');
@@ -393,7 +371,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       set(state => ({
         favorites: state.favorites.filter(id => id !== userId),
       }));
-      get().refreshAnalytics();
     } catch (error) {
       console.error('Erreur lors de la suppression du favori:', error);
       toast.error('Erreur lors de la suppression du favori.');
@@ -482,7 +459,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
         return conn.requester_id === user.id ? conn.addressee_id : conn.requester_id;
       }).filter(Boolean);
       set({ connections: connectionIds });
-      get().refreshAnalytics();
     } catch (error) {
       console.error('Erreur lors du chargement des connexions:', error);
     }
@@ -500,7 +476,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       } else {
         set({ favorites });
       }
-      get().refreshAnalytics();
     } catch (error) {
       console.error('Erreur lors du chargement des favoris:', error);
       toast.error('Impossible de charger vos favoris pour le moment.');
@@ -514,7 +489,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
     try {
       const pendingConnections = await SupabaseService.getPendingConnections(user.id);
       set({ pendingConnections });
-      get().refreshAnalytics();
     } catch (error) {
       console.error('Erreur lors du chargement des connexions en attente:', error);
     }
@@ -600,47 +574,6 @@ export const useNetworkingStore = create<NetworkingState>((set, get) => ({
       messages: limits.remainingMessages,
       meetings: limits.remainingMeetings,
     };
-  },
-
-  refreshAnalytics: () => {
-    const { user } = useAuthStore.getState();
-    const state = get();
-
-    if (!user) {
-      set({
-        analytics: {
-          averageRecommendationScore: 0,
-          networkingHealthScore: 0,
-          engagementScore: 0,
-          profileCompleteness: 0,
-        },
-      });
-      return;
-    }
-
-    const averageRecommendationScore = state.recommendations.length > 0
-      ? state.recommendations.reduce((acc, recommendation) => acc + recommendation.score, 0) / state.recommendations.length
-      : 0;
-
-    const profileCompleteness = calculateProfileCompleteness(user);
-
-    set({
-      analytics: {
-        averageRecommendationScore,
-        profileCompleteness,
-        networkingHealthScore: calculateNetworkingHealthScore({
-          profileCompleteness,
-          connectionsCount: state.connections.length,
-          recommendationsCount: state.recommendations.length,
-          averageRecommendationScore,
-        }),
-        engagementScore: calculateEngagementScore({
-          connectionsCount: state.connections.length,
-          favoritesCount: state.favorites.length,
-          pendingCount: state.pendingConnections.length,
-        }),
-      },
-    });
   },
 
   loadAIInsights: async () => {

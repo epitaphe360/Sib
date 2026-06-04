@@ -19,7 +19,7 @@ interface ValidationEmailRequest {
  * Escape HTML to prevent XSS attacks
  */
 function escapeHtml(text: string | undefined | null): string {
-  if (!text) return '';
+  if (!text) {return '';}
   return String(text)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -49,10 +49,10 @@ Deno.serve(async (req: Request) => {
     const sgMail = new SendGrid(SENDGRID_API_KEY);
 
     const isApproved = status === 'approved';
-    const subject = isApproved 
+    const subject = isApproved
       ? `✅ SIB 2026 - Votre compte Exposant a été validé !`
       : `❌ SIB 2026 - Mise à jour de votre demande d'inscription`;
-    
+
     const statusLabel = isApproved ? 'Approuvée' : 'Rejetée';
     const statusColor = isApproved ? '#10b981' : '#ef4444';
     const actionText = isApproved ? 'Connectez-vous à votre tableau de bord' : 'Contactez notre support';
@@ -101,7 +101,7 @@ Deno.serve(async (req: Request) => {
               
               <div class="footer">
                 <p><strong>SIB 2026</strong><br>
-                Salon International du Bâtiment</p>
+                Salon International des Ports et de la Logistique</p>
                 <p style="font-size: 12px; color: #9ca3af;">Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
               </div>
             </div>
@@ -123,8 +123,8 @@ Deno.serve(async (req: Request) => {
     console.log(`📧 Email de validation/rejet (${status}) envoyé via SendGrid à:`, email);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: `Email de validation/rejet (${status}) envoyé`,
         emailDetails: {
           to: email,
@@ -143,9 +143,9 @@ Deno.serve(async (req: Request) => {
   } catch (error) {
     console.error('Erreur dans send-validation-email:', error);
     return new Response(
-      JSON.stringify({ 
-        success: false, 
-        error: error.message || 'Une erreur est survenue lors de l\'envoi de l\'email' 
+      JSON.stringify({
+        success: false,
+        error: error.message || 'Une erreur est survenue lors de l\'envoi de l\'email'
       }),
       {
         headers: {

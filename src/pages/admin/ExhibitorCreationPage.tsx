@@ -5,12 +5,10 @@ import ExhibitorCreationSimulator from '../../components/admin/ExhibitorCreation
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { ROUTES } from '../../lib/routes';
-import { useTranslation } from '../../hooks/useTranslation';
 
 export default function ExhibitorCreationPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const [exhibitorData, setExhibitorData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const editId = searchParams.get('edit');
@@ -26,19 +24,19 @@ export default function ExhibitorCreationPage() {
     try {
       const { data, error } = await supabase!
         .from('exhibitors')
-        .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, is_published, stand_number, contact_info, created_at, updated_at')
+        .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, hall_number, contact_info, created_at, updated_at')
         .eq('id', id)
         .maybeSingle();
 
       if (error) {
         console.error('Erreur chargement exposant:', error);
-        toast.error(t('admin.exhibitor_load_error'));
+        toast.error('Impossible de charger l\'exposant');
         navigate(ROUTES.ADMIN_EXHIBITORS);
         return;
       }
 
       if (!data) {
-        toast.error(t('admin.exhibitor_not_found'));
+        toast.error('Exposant non trouvé');
         navigate(ROUTES.ADMIN_EXHIBITORS);
         return;
       }
@@ -55,13 +53,13 @@ export default function ExhibitorCreationPage() {
         website: data.website,
         verified: data.verified,
         featured: data.featured,
-        isPublished: data.is_published ?? false,
         standNumber: data.stand_number,
+        hallNumber: data.hall_number,
         contactInfo: data.contact_info || {},
       });
     } catch (error) {
       console.error('Erreur chargement exposant:', error);
-      toast.error(t('admin.exhibitor_load_error'));
+      toast.error('Impossible de charger l\'exposant');
       navigate(ROUTES.ADMIN_EXHIBITORS);
     } finally {
       setIsLoading(false);
@@ -73,7 +71,7 @@ export default function ExhibitorCreationPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">{t('common.loading')}</p>
+          <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
     );
@@ -84,7 +82,7 @@ export default function ExhibitorCreationPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <Link to={ROUTES.ADMIN_DASHBOARD} className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
           <ArrowLeft className="w-4 h-4 mr-2" />
-          {t('common.back_to_dashboard')}
+          Retour au Tableau de Bord
         </Link>
       </div>
       <ExhibitorCreationSimulator

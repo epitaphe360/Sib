@@ -1,19 +1,22 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
 import {
   Check, X, Crown, Zap, Star, Award,
-  Building2, Globe, Users, GraduationCap, Landmark,
-  Hammer, Cog, BookOpen, Palette, ArrowRight,
+  Anchor, Globe, Users, GraduationCap, Landmark,
+  Ship, Cog, BookOpen, Palette, ArrowRight,
   MapPin, CalendarDays, Clock, CreditCard,
   Lightbulb, MessageCircle, Ticket, Mail,
-  Phone, Sparkles, Shield, Eye
+  Phone, Building2
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { ROUTES } from '../lib/routes';
 import { motion } from 'framer-motion';
+import { HeroBadgeForms } from '../components/home/HeroBadgeForms';
+import { SALON_STATS } from '../config/salonInfo';
 import { MoroccanPattern } from '../components/ui/MoroccanDecor';
+import { useVisitorPassPricing } from '../hooks/useVisitorPassPricing';
 
 // Types
 interface SubscriptionFeature {
@@ -68,7 +71,7 @@ function getSubscriptionTiers(t: (key: string) => string): SubscriptionTier[] {
   {
     id: 'visitor-vip',
     name: t('sub.visitorVip.name'),
-    price: 700,
+    price: 0,
     currency: 'EUR',
     icon: <Crown className="w-8 h-8" />,
     description: t('sub.visitorVip.desc'),
@@ -95,21 +98,323 @@ function getSubscriptionTiers(t: (key: string) => string): SubscriptionTier[] {
     cta: t('sub.visitorVip.cta'),
     color: 'bg-purple-50',
   },
+
+  // EXHIBITOR SUBSCRIPTIONS
+  {
+    id: 'exhibitor-9m',
+    name: t('sub.exh9m.name'),
+    price: 0,
+    currency: 'Sur devis',
+    icon: <Star className="w-8 h-8" />,
+    description: t('sub.exh9m.desc'),
+    type: 'exhibitor',
+    level: '9m2',
+    features: [
+      { name: t('sub.exh9m.f1'), included: true },
+      { name: t('sub.exh9m.f2'), included: true },
+      { name: t('sub.exh9m.f3'), included: true },
+      { name: t('sub.exh9m.f4'), included: false },
+      { name: t('sub.exh9m.f5'), included: false },
+      { name: t('sub.exh9m.f6'), included: false },
+      { name: t('sub.exh9m.f7'), included: true },
+      { name: t('sub.exh9m.f8'), included: true },
+    ],
+    benefits: [
+      t('sub.exh9m.b1'),
+      t('sub.exh9m.b2'),
+      t('sub.exh9m.b3'),
+      t('sub.exh9m.b4'),
+      t('sub.exh9m.b5'),
+    ],
+    cta: t('sub.exh9m.cta'),
+    color: 'bg-blue-50',
+  },
+  {
+    id: 'exhibitor-18m',
+    name: t('sub.exh18m.name'),
+    price: 0,
+    currency: 'Sur devis',
+    icon: <Star className="w-8 h-8" />,
+    description: t('sub.exh18m.desc'),
+    type: 'exhibitor',
+    level: '18m2',
+    features: [
+      { name: t('sub.exh18m.f1'), included: true },
+      { name: t('sub.exh18m.f2'), included: true },
+      { name: t('sub.exh18m.f3'), included: true },
+      { name: t('sub.exh18m.f4'), included: true },
+      { name: t('sub.exh18m.f5'), included: true },
+      { name: t('sub.exh18m.f6'), included: true },
+      { name: t('sub.exh18m.f7'), included: true },
+      { name: t('sub.exh18m.f8'), included: true },
+    ],
+    benefits: [
+      t('sub.exh18m.b1'),
+      t('sub.exh18m.b2'),
+      t('sub.exh18m.b3'),
+      t('sub.exh18m.b4'),
+      t('sub.exh18m.b5'),
+      t('sub.exh18m.b6'),
+    ],
+    cta: t('sub.exh18m.cta'),
+    color: 'bg-green-50',
+  },
+  {
+    id: 'exhibitor-36m',
+    name: t('sub.exh36m.name'),
+    price: 0,
+    currency: 'Sur devis',
+    icon: <Award className="w-8 h-8" />,
+    description: t('sub.exh36m.desc'),
+    type: 'exhibitor',
+    level: '36m2',
+    features: [
+      { name: t('sub.exh36m.f1'), included: true },
+      { name: t('sub.exh36m.f2'), included: true },
+      { name: t('sub.exh36m.f3'), included: true },
+      { name: t('sub.exh36m.f4'), included: true },
+      { name: t('sub.exh36m.f5'), included: true },
+      { name: t('sub.exh36m.f6'), included: true },
+      { name: t('sub.exh36m.f7'), included: true },
+      { name: t('sub.exh36m.f8'), included: true },
+      { name: t('sub.exh36m.f9'), included: true },
+    ],
+    benefits: [
+      t('sub.exh36m.b1'),
+      t('sub.exh36m.b2'),
+      t('sub.exh36m.b3'),
+      t('sub.exh36m.b4'),
+      t('sub.exh36m.b5'),
+      t('sub.exh36m.b6'),
+      t('sub.exh36m.b7'),
+    ],
+    cta: t('sub.exh36m.cta'),
+    color: 'bg-amber-50',
+  },
+  {
+    id: 'exhibitor-54m',
+    name: t('sub.exh54m.name'),
+    price: 0,
+    currency: 'Sur devis',
+    icon: <Crown className="w-8 h-8" />,
+    description: t('sub.exh54m.desc'),
+    type: 'exhibitor',
+    level: '54m2',
+    features: [
+      { name: t('sub.exh54m.f1'), included: true },
+      { name: t('sub.exh54m.f2'), included: true },
+      { name: t('sub.exh54m.f3'), included: true },
+      { name: t('sub.exh54m.f4'), included: true },
+      { name: t('sub.exh54m.f5'), included: true },
+      { name: t('sub.exh54m.f6'), included: true },
+      { name: t('sub.exh54m.f7'), included: true },
+      { name: t('sub.exh54m.f8'), included: true },
+      { name: t('sub.exh54m.f9'), included: true },
+    ],
+    benefits: [
+      t('sub.exh54m.b1'),
+      t('sub.exh54m.b2'),
+      t('sub.exh54m.b3'),
+      t('sub.exh54m.b4'),
+      t('sub.exh54m.b5'),
+      t('sub.exh54m.b6'),
+      t('sub.exh54m.b7'),
+      t('sub.exh54m.b8'),
+    ],
+    cta: t('sub.exh54m.cta'),
+    color: 'bg-red-50',
+  },
+
+  // PARTNER SUBSCRIPTIONS
+  {
+    id: 'partner-museum',
+    name: t('sub.partMuseum.name'),
+    price: 20000,
+    currency: 'USD',
+    icon: <Star className="w-8 h-8" />,
+    description: t('sub.partMuseum.desc'),
+    type: 'partner',
+    level: 'museum',
+    features: [
+      { name: t('sub.partMuseum.f1'), included: true },
+      { name: t('sub.partMuseum.f2'), included: true },
+      { name: t('sub.partMuseum.f3'), included: true },
+      { name: t('sub.partMuseum.f4'), included: true },
+      { name: t('sub.partMuseum.f5'), included: true },
+      { name: t('sub.partMuseum.f6'), included: true },
+      { name: t('sub.partMuseum.f7'), included: false },
+      { name: t('sub.partMuseum.f8'), included: false },
+    ],
+    benefits: [
+      t('sub.partMuseum.b1'),
+      t('sub.partMuseum.b2'),
+      t('sub.partMuseum.b3'),
+      t('sub.partMuseum.b4'),
+      t('sub.partMuseum.b5'),
+      t('sub.partMuseum.b6'),
+      t('sub.partMuseum.b7'),
+    ],
+    cta: t('sub.partMuseum.cta'),
+    color: 'bg-cyan-50',
+  },
+  {
+    id: 'partner-silver',
+    name: t('sub.partSilver.name'),
+    price: 48000,
+    currency: 'USD',
+    icon: <Award className="w-8 h-8" />,
+    description: t('sub.partSilver.desc'),
+    type: 'partner',
+    level: 'silver',
+    features: [
+      { name: t('sub.partSilver.f1'), included: true },
+      { name: t('sub.partSilver.f2'), included: true },
+      { name: t('sub.partSilver.f3'), included: true },
+      { name: t('sub.partSilver.f4'), included: true },
+      { name: t('sub.partSilver.f5'), included: true },
+      { name: t('sub.partSilver.f6'), included: true },
+      { name: t('sub.partSilver.f7'), included: true },
+      { name: t('sub.partSilver.f8'), included: true },
+      { name: t('sub.partSilver.f9'), included: true },
+    ],
+    benefits: [
+      t('sub.partSilver.b1'),
+      t('sub.partSilver.b2'),
+      t('sub.partSilver.b3'),
+      t('sub.partSilver.b4'),
+      t('sub.partSilver.b5'),
+      t('sub.partSilver.b6'),
+      t('sub.partSilver.b7'),
+      t('sub.partSilver.b8'),
+    ],
+    cta: t('sub.partSilver.cta'),
+    color: 'bg-indigo-50',
+  },
+  {
+    id: 'partner-gold',
+    name: t('sub.partGold.name'),
+    price: 68000,
+    currency: 'USD',
+    icon: <Crown className="w-8 h-8" />,
+    description: t('sub.partGold.desc'),
+    type: 'partner',
+    level: 'gold',
+    features: [
+      { name: t('sub.partGold.f1'), included: true },
+      { name: t('sub.partGold.f2'), included: true },
+      { name: t('sub.partGold.f3'), included: true },
+      { name: t('sub.partGold.f4'), included: true },
+      { name: t('sub.partGold.f5'), included: true },
+      { name: t('sub.partGold.f6'), included: true },
+      { name: t('sub.partGold.f7'), included: true },
+      { name: t('sub.partGold.f8'), included: true },
+      { name: t('sub.partGold.f9'), included: true },
+      { name: t('sub.partGold.f10'), included: true },
+    ],
+    benefits: [
+      t('sub.partGold.b1'),
+      t('sub.partGold.b2'),
+      t('sub.partGold.b3'),
+      t('sub.partGold.b4'),
+      t('sub.partGold.b5'),
+      t('sub.partGold.b6'),
+      t('sub.partGold.b7'),
+      t('sub.partGold.b8'),
+      t('sub.partGold.b9'),
+    ],
+    cta: t('sub.partGold.cta'),
+    color: 'bg-rose-50',
+  },
+  {
+    id: 'partner-platinum',
+    name: t('sub.partPlatinum.name'),
+    price: 98000,
+    currency: 'USD',
+    icon: <Crown className="w-8 h-8" />,
+    description: t('sub.partPlatinum.desc'),
+    type: 'partner',
+    level: 'platinum',
+    features: [
+      { name: t('sub.partPlatinum.f1'), included: true },
+      { name: t('sub.partPlatinum.f2'), included: true },
+      { name: t('sub.partPlatinum.f3'), included: true },
+      { name: t('sub.partPlatinum.f4'), included: true },
+      { name: t('sub.partPlatinum.f5'), included: true },
+      { name: t('sub.partPlatinum.f6'), included: true },
+      { name: t('sub.partPlatinum.f7'), included: true },
+      { name: t('sub.partPlatinum.f8'), included: true },
+      { name: t('sub.partPlatinum.f9'), included: true },
+      { name: t('sub.partPlatinum.f10'), included: true },
+      { name: t('sub.partPlatinum.f11'), included: true },
+    ],
+    benefits: [
+      t('sub.partPlatinum.b1'),
+      t('sub.partPlatinum.b2'),
+      t('sub.partPlatinum.b3'),
+      t('sub.partPlatinum.b4'),
+      t('sub.partPlatinum.b5'),
+      t('sub.partPlatinum.b6'),
+      t('sub.partPlatinum.b7'),
+      t('sub.partPlatinum.b8'),
+      t('sub.partPlatinum.b9'),
+      t('sub.partPlatinum.b10'),
+    ],
+    cta: t('sub.partPlatinum.cta'),
+    color: 'bg-amber-50',
+  },
   ];
 }
 
 export default function SubscriptionPage() {
+  const [selectedType, setSelectedType] = useState<'visitor' | 'partner' | 'exhibitor'>('visitor');
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const subscriptionTiers = getSubscriptionTiers(t);
+  const { price: vipPrice } = useVisitorPassPricing();
+  const subscriptionTiers = useMemo(() => {
+    const tiers = getSubscriptionTiers(t);
+    if (vipPrice == null) return tiers;
+    return tiers.map((tier) =>
+      tier.id === 'visitor-vip' ? { ...tier, price: vipPrice } : tier
+    );
+  }, [t, vipPrice]);
 
   const visitorTiers = subscriptionTiers.filter(tier => tier.type === 'visitor');
+  const partnerTiers = subscriptionTiers.filter(tier => tier.type === 'partner');
+  const exhibitorTiers = subscriptionTiers.filter(tier => tier.type === 'exhibitor');
+
+  const displayedTiers = selectedType === 'visitor' ? visitorTiers : selectedType === 'partner' ? partnerTiers : exhibitorTiers;
 
   const handleSubscribe = (tierId: string) => {
+    // Redirection selon le type d'offre (pas besoin d'être authentifié pour s'inscrire)
     if (tierId === 'visitor-free') {
+      // Inscription gratuite - rediriger vers formulaire visiteur standard pour créer un compte complet
       navigate(ROUTES.REGISTER_VISITOR);
     } else if (tierId === 'visitor-vip') {
+      // Inscription VIP - rediriger vers formulaire VIP complet avec photo et paiement
       navigate(ROUTES.VISITOR_VIP_REGISTRATION);
+    } else if (tierId.includes('exhibitor')) {
+      // Offre exposant - toujours rediriger vers formulaire inscription avec le tier choisi
+      // Un commercial contactera l'exposant après inscription
+      const tier = subscriptionTiers.find(tier => tier.id === tierId);
+      navigate(ROUTES.REGISTER_EXHIBITOR, {
+        state: {
+          selectedTier: tierId,
+          tierName: tier?.name || '',
+          tierLevel: tier?.level || '',
+          tierPrice: tier?.price || 0
+        }
+      });
+    } else if (tierId.includes('partner')) {
+      // Offre partenaire - rediriger vers inscription partenaire avec le tier choisi
+      const tier = subscriptionTiers.find(tier => tier.id === tierId);
+      navigate(ROUTES.REGISTER_PARTNER, {
+        state: {
+          selectedTier: tierId,
+          tierName: tier?.name || '',
+          tierLevel: tier?.level || '',
+          tierPrice: tier?.price || 0
+        }
+      });
     }
   };
 
@@ -128,7 +433,7 @@ export default function SubscriptionPage() {
       color: 'from-indigo-500 to-indigo-700'
     },
     {
-      icon: Hammer,
+      icon: Ship,
       title: t('sub.pav3.title'),
       description: t('sub.pav3.desc'),
       color: 'from-green-500 to-green-700'
@@ -149,10 +454,10 @@ export default function SubscriptionPage() {
 
   // Stats WordPress
   const wpStats = [
-    { number: '600+', label: t('sub.stat1.label') },
-    { number: '200 000+', label: t('sub.stat2.label') },
-    { number: '50', label: t('sub.stat3.label') },
-    { number: '20', label: t('sub.stat4.label') }
+    { number: SALON_STATS.exhibitors, label: t('sub.stat1.label') },
+    { number: SALON_STATS.visitors, label: t('sub.stat2.label') },
+    { number: SALON_STATS.countries, label: t('sub.stat3.label') },
+    { number: SALON_STATS.conferences, label: t('sub.stat4.label') },
   ];
 
   // Pourquoi visiter - bullet points WordPress
@@ -165,136 +470,91 @@ export default function SubscriptionPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-
-      {/* ═══════════════════════════════════════════════════════════════
-          SECTION 1 : HERO IMMERSIF
-          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[90vh] flex items-center text-white overflow-hidden">
-        {/* Background image salon */}
-        <div className="absolute inset-0">
-          <img
-            src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920"
-            alt="Salon du bâtiment"
-            className="w-full h-full object-cover"
+    <div className="min-h-screen bg-white dark:bg-neutral-950">
+      {/* Hero */}
+      <section className="relative bg-primary-900 text-white overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-accent-500/15 blur-[120px]" />
+          <div className="absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-primary-500/20 blur-[120px]" />
+          <div
+            className="absolute inset-0 opacity-[0.04]"
+            style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+              backgroundSize: '28px 28px',
+            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-blue-800/85 to-indigo-900/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-blue-950/60 via-transparent to-blue-900/30" />
         </div>
 
-        {/* Pattern Zellige subtil */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 11px)' }} />
-
-        {/* Éléments décoratifs géométriques */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-20 -right-20 w-96 h-96 border border-sib-gold/20 rounded-full" />
-          <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] border border-white/10 rounded-full" />
-          <div className="absolute top-1/4 right-1/4 w-3 h-3 bg-sib-gold/40 rounded-full animate-pulse" />
-          <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 relative z-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="max-w-container mx-auto px-6 lg:px-8 py-20 lg:py-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
             >
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="inline-flex items-center gap-2 bg-sib-gold/20 backdrop-blur-md px-5 py-2.5 rounded-full mb-8 border border-sib-gold/30"
-              >
-                <Sparkles className="w-4 h-4 text-sib-gold" />
-                <span className="text-sm font-bold text-sib-gold uppercase tracking-widest">
-                  20ème Édition — {t('sub.hero.badge')}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 mb-6">
+                <Anchor className="h-3.5 w-3.5 text-accent-500" />
+                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90">
+                  {t('sub.hero.badge')}
                 </span>
-              </motion.div>
+              </div>
 
-              {/* Titre principal */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.1]">
-                <span className="block">Salon</span>
-                <span className="block">International</span>
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-sib-gold via-yellow-300 to-amber-400">
-                  du Bâtiment
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.05] tracking-tight">
+                {t('sub.hero.title1')}{' '}
+                <span className="sib-text-gradient bg-gradient-to-r from-accent-500 to-accent-300">
+                  {t('sub.hero.titleHighlight1')}
+                </span>{' '}
+                {t('sub.hero.title2')}{' '}
+                <span className="sib-text-gradient bg-gradient-to-r from-accent-500 to-accent-300">
+                  {t('sub.hero.titleHighlight2')}
                 </span>
               </h1>
 
-              <p className="text-lg md:text-xl text-blue-100/90 mb-4 leading-relaxed max-w-lg">
-                Du 25 au 29 Novembre 2026 à El Jadida – Maroc
-              </p>
-              <p className="text-base text-blue-200/70 mb-10 leading-relaxed max-w-lg">
+              <p className="text-base lg:text-lg text-white/75 mb-8 leading-relaxed">
                 {t('sub.hero.desc')}
               </p>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  size="lg"
-                  onClick={() => handleSubscribe('visitor-free')}
-                  className="bg-gradient-to-r from-sib-gold to-amber-400 text-blue-950 hover:from-yellow-400 hover:to-amber-300 font-bold text-lg px-10 py-4 shadow-2xl shadow-sib-gold/25 transition-all hover:scale-105"
-                >
-                  <Ticket className="mr-2 h-5 w-5" />
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button variant="accent" size="lg" onClick={() => handleSubscribe('visitor-free')}>
+                  <Ticket className="mr-1 h-4 w-4" />
                   {t('sub.hero.badgeBtn')}
                 </Button>
                 <Button
+                  variant="secondary"
                   size="lg"
-                  variant="outline"
                   onClick={() => handleSubscribe('visitor-vip')}
-                  className="border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 font-semibold backdrop-blur-sm px-8 py-4 transition-all"
+                  className="bg-white/10 border-white/20 text-white hover:bg-white/15"
                 >
-                  <Crown className="mr-2 h-5 w-5 text-sib-gold" />
+                  <Crown className="mr-1 h-4 w-4" />
                   {t('sub.hero.vipBtn')}
                 </Button>
               </div>
-
-              {/* Trust indicators */}
-              <div className="flex items-center gap-6 mt-10 text-blue-200/70 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  <span>Inscription ouverte</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4" />
-                  <span>Badge gratuit disponible</span>
-                </div>
-              </div>
             </motion.div>
 
-            {/* Stats Cards avec effet verre */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="grid grid-cols-2 gap-5"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="grid grid-cols-2 gap-4"
             >
               {wpStats.map((stat, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.5 + index * 0.12 }}
-                  className="group bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-7 text-center hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-300 cursor-default"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+                  className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center transition-all hover:bg-white/10"
                 >
-                  <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-sib-gold to-amber-300 mb-2">
+                  <div className="text-3xl lg:text-4xl font-bold text-accent-500 mb-1.5 tabular-nums tracking-tight">
                     {stat.number}
                   </div>
-                  <div className="text-sm text-blue-100/80 font-medium">{stat.label}</div>
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-white/70">
+                    {stat.label}
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
           </div>
-        </div>
-
-        {/* Wave transition */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0,40 C320,80 440,0 720,40 C1000,80 1120,0 1440,40 L1440,80 L0,80 Z" fill="white" fillOpacity="0.06"/>
-            <path d="M0,50 C360,90 480,10 720,50 C960,90 1080,10 1440,50 L1440,80 L0,80 Z" fill="white" fillOpacity="0.08"/>
-            <path d="M0,60 C400,80 560,40 720,60 C880,80 1040,40 1440,60 L1440,80 L0,80 Z" fill="white"/>
-          </svg>
         </div>
       </section>
 
@@ -517,10 +777,52 @@ export default function SubscriptionPage() {
           </p>
         </motion.div>
 
-        {/* Pricing Cards - Visiteurs uniquement */}
+        {/* Type Selector */}
+        <div className="flex justify-center gap-4 mb-12 flex-wrap">
+          <button
+            onClick={() => setSelectedType('visitor')}
+            className={`px-8 py-3 rounded-lg font-semibold transition-all ${
+              selectedType === 'visitor'
+                ? 'bg-purple-600 text-white shadow-lg'
+                : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-purple-300'
+            }`}
+          >
+            👤 {t('sub.plans.visitors')}
+          </button>
+          <button
+            onClick={() => setSelectedType('exhibitor')}
+            className={`px-8 py-3 rounded-lg font-semibold transition-all ${
+              selectedType === 'exhibitor'
+                ? 'bg-blue-600 text-white shadow-lg'
+                : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-300'
+            }`}
+          >
+            🏢 {t('sub.plans.exhibitors')}
+          </button>
+          <button
+            onClick={() => setSelectedType('partner')}
+            className={`px-8 py-3 rounded-lg font-semibold transition-all ${
+              selectedType === 'partner'
+                ? 'bg-indigo-600 text-white shadow-lg'
+                : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-indigo-300'
+            }`}
+          >
+            🤝 {t('sub.plans.partners')}
+          </button>
+        </div>
+
+        {/* Formulaires visiteur ou cartes tarifaires */}
+        {selectedType === 'visitor' ? (
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8">
+              Demandez votre badge
+            </h2>
+            <HeroBadgeForms />
+          </div>
+        ) : (
         <div className="flex justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 max-w-4xl gap-8 w-full">
-            {visitorTiers.map((tier) => (
+          <div className={`grid grid-cols-1 md:grid-cols-2 ${displayedTiers.length > 2 ? 'lg:grid-cols-4 max-w-7xl' : 'lg:grid-cols-2 max-w-4xl'} gap-8 w-full`}>
+            {displayedTiers.map((tier) => (
               <Card
                 key={tier.id}
                 data-testid={`subscription-card-${tier.id}`}
@@ -590,8 +892,10 @@ export default function SubscriptionPage() {
             ))}
           </div>
         </div>
+        )}
 
-        {/* Forfait sur mesure (WordPress) */}
+        {/* Forfait sur mesure (WordPress) — exposants/partenaires uniquement */}
+        {selectedType !== 'visitor' && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -609,6 +913,7 @@ export default function SubscriptionPage() {
             </Button>
           </Link>
         </motion.div>
+        )}
         </div>
       </section>
 

@@ -16,10 +16,10 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function checkPartnersTable() {
   console.log('Checking partners table structure with guessed columns from createMissingTables.ts...');
-  
+
   const columns = [
-    'id', 'company_name', 'partner_type', 'sector', 'description', 
-    'logo_url', 'website', 'verified', 'featured', 
+    'id', 'company_name', 'partner_type', 'sector', 'description',
+    'logo_url', 'website', 'verified', 'featured',
     'partnership_level', 'benefits', 'created_at'
   ];
 

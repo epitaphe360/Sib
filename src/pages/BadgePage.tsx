@@ -1,19 +1,19 @@
-﻿import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+﻿import React, { useEffect, useState, useRef } from 'react';
+import { QRCodeCanvas } from 'qrcode.react';
 import { toast } from 'sonner';
-import { Download, Printer, RefreshCw, AlertTriangle, ArrowLeft, Scan } from 'lucide-react';
-import PrintableBadgeA4 from '../components/badge/PrintableBadgeA4';
+import { Download, Printer, RefreshCw, AlertTriangle, CheckCircle, XCircle, Scan, Calendar, User, Briefcase, Building } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import { useTranslation } from '../hooks/useTranslation';
 import {
   getUserBadge,
   generateBadgeFromUser,
-  renewBadge,
+  getBadgeColor,
+  getAccessLevelLabel,
+  generateQRData,
 } from '../services/badgeService';
 import { UserBadge } from '../types';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
-import { getPostLoginRedirectUrl } from '../hooks/useAuthRedirect';
 
 export default function BadgePage() {
   const { user } = useAuthStore();
@@ -22,6 +22,7 @@ export default function BadgePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const badgeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (user?.id) {
@@ -36,15 +37,6 @@ export default function BadgePage() {
       setLoading(true);
       setError(null);
       const userBadge = await getUserBadge(user.id);
-      // Auto-renouvellement si le badge est expiré ou expire dans moins de 30 jours
-      if (userBadge) {
-        const thirtyDaysFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-        if (userBadge.validUntil < thirtyDaysFromNow) {
-          const renewed = await renewBadge(userBadge.id, 365);
-          setBadge(renewed);
-          return;
-        }
-      }
       setBadge(userBadge);
     } catch (err: any) {
       console.error('Error loading badge:', err);
@@ -65,24 +57,22 @@ export default function BadgePage() {
       toast.success(t('badge.badge_generated_success'));
     } catch (err: any) {
       console.error('Error generating badge:', err);
-      const errorMessage = err?.message || t('badge.error_generating');
-      setError(errorMessage);
-      toast.error(errorMessage);
+      setError(err.message || t('badge.error_generating'));
+      toast.error(t('badge.error_generating'));
     } finally {
       setGenerating(false);
     }
   }
 
   async function handleDownloadBadge() {
-    const el = document.getElementById('printable-badge-a4');
-    if (!el || !badge) {return;}
+    if (!badgeRef.current || !badge) {return;}
 
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(el, {
+      const canvas = await html2canvas(badgeRef.current, {
         scale: 2,
         backgroundColor: '#ffffff',
-        useCORS: true,
+        useCORS: true, // Important for images
       });
 
       canvas.toBlob((blob) => {
@@ -128,7 +118,8 @@ export default function BadgePage() {
     );
   }
 
-
+  const badgeColor = badge ? getBadgeColor(badge.accessLevel) : '#28a745';
+  const qrData = badge ? generateQRData(badge) : '';
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8">
@@ -157,13 +148,6 @@ export default function BadgePage() {
       </style>
 
       <div className="no-print mb-8 text-center">
-        <Link
-          to={getPostLoginRedirectUrl(user?.type)}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-4"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t('common.back_to_dashboard')}
-        </Link>
         <h1 className="text-3xl font-bold mb-2">🎫 {t('badge.my_access_badge')}</h1>
         <p className="text-gray-600">
           {badge
@@ -233,9 +217,101 @@ export default function BadgePage() {
             </Button>
           </div>
 
-          {/* Badge Display A4 */}
+          {/* Badge Display */}
           <div className="flex justify-center mb-8">
-            <PrintableBadgeA4 badge={badge} />
+            <div
+              ref={badgeRef}
+              className="badge-container bg-white w-full max-w-[400px] rounded-2xl shadow-2xl overflow-hidden relative"
+              style={{
+                border: `4px solid ${badgeColor}`,
+              }}
+            >
+              {/* Header */}
+              <div className="text-center p-6 border-b-2" style={{ borderColor: badgeColor }}>
+                <img src="/logo-sib2026.png" alt="SIB Logo" className="h-16 mx-auto mb-3" />
+                <div className="text-2xl font-bold" style={{ color: badgeColor }}>
+                  SIB 2026
+                </div>
+                <div className="text-xs text-gray-500 mt-1 uppercase tracking-wider">
+                  Salon International du Bâtiment et de leurs Écosystème
+                </div>
+              </div>
+
+              {/* User Info */}
+              <div className="text-center p-6 bg-gradient-to-b from-white to-gray-50">
+                {badge.avatarUrl ? (
+                  <img
+                    src={badge.avatarUrl}
+                    alt="Avatar"
+                    className="w-28 h-28 rounded-full object-cover mx-auto mb-4 border-4 shadow-md"
+                    style={{ borderColor: badgeColor }}
+                  />
+                ) : (
+                  <div
+                    className="w-28 h-28 rounded-full mx-auto mb-4 border-4 flex items-center justify-center bg-gray-100 text-gray-400"
+                    style={{ borderColor: badgeColor }}
+                  >
+                    <User className="w-12 h-12" />
+                  </div>
+                )}
+
+                <div className="text-2xl font-bold text-gray-900 mb-2 leading-tight">
+                  {badge.fullName}
+                </div>
+
+                {badge.position && (
+                  <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">
+                    <Briefcase className="w-3 h-3" />
+                    <span className="text-sm font-medium">{badge.position}</span>
+                  </div>
+                )}
+
+                {badge.companyName && (
+                  <div className="flex items-center justify-center gap-1 text-gray-800 font-semibold">
+                    <Building className="w-3 h-3" />
+                    <span className="text-sm">{badge.companyName}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Badge Level */}
+              <div className="px-6 pb-4 text-center">
+                <span
+                  className="inline-block px-6 py-2 rounded-full text-white font-bold text-lg shadow-sm uppercase tracking-wide"
+                  style={{ background: badgeColor }}
+                >
+                  {getAccessLevelLabel(badge.accessLevel)}
+                </span>
+              </div>
+
+              {/* Stand Number (if applicable) */}
+              {badge.standNumber && (
+                <div className="text-center mb-4 text-gray-700 bg-gray-100 py-2 mx-6 rounded-lg">
+                  <span className="font-bold">{t('badge.stand_number')}:</span> {badge.standNumber}
+                </div>
+              )}
+
+              {/* QR Code */}
+              <div className="text-center p-6 bg-white">
+                <div className="inline-block p-4 bg-white rounded-xl border border-gray-200 shadow-inner">
+                  <QRCodeCanvas value={qrData} size={160} level="H" includeMargin={false} />
+                </div>
+                <div className="text-xs text-gray-400 mt-2 font-mono">
+                  ID: {badge.badgeCode}
+                </div>
+              </div>
+
+              {/* Footer / Validity */}
+              <div className="text-center p-3 bg-gray-900 text-white text-xs">
+                <div className="flex items-center justify-center gap-1 opacity-80 mb-1">
+                  <Calendar className="w-3 h-3" />
+                  <span>{t('badge.valid_from')}</span>
+                </div>
+                <div className="font-bold text-sm tracking-widest">
+                  1 - 3 AVRIL 2026
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Instructions & Stats Grid */}
@@ -253,7 +329,7 @@ export default function BadgePage() {
                 <li><span className="font-semibold">{t('badge.instruction_4')}</span> {t('badge.instruction_4_desc')}</li>
               </ol>
 
-              {(String(badge.accessLevel) === 'admin' || String(badge.accessLevel) === 'vip' || String(badge.accessLevel) === 'premium') && (
+              {(badge.accessLevel === 'vip' || badge.accessLevel === 'premium') && (
                 <div className="mt-4 bg-yellow-50 p-3 rounded-lg border border-yellow-200 text-yellow-800 text-sm">
                   <strong className="block mb-1 flex items-center gap-1">
                     <span className="text-lg">👑</span> {t('badge.vip_advantages')}
