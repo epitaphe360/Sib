@@ -9,6 +9,8 @@ import { ROUTES } from '../../../lib/routes';
 import { useTranslation } from '../../../hooks/useTranslation';
 
 import { SIB2026 } from './tokens';
+import { SIB2026_ASSETS } from './assets';
+import { Sib2026Picture } from './Sib2026Picture';
 
 
 
@@ -70,12 +72,11 @@ export const Sib2026ReserveBanner: React.FC = () => {
 
       <div className="relative min-h-[200px] lg:min-h-full overflow-hidden">
 
-        <img
-          src="/sib-ma/parc_exposition_eljadida_f4a9052968.png"
+        <Sib2026Picture
+          asset={SIB2026_ASSETS.reservePhoto}
           alt="Parc d'Exposition Mohammed VI"
           className="absolute inset-0 h-full w-full object-cover object-center"
           loading="lazy"
-          decoding="async"
         />
 
       </div>
