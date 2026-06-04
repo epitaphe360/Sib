@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
-import { HOME_PAGE_VARIANTS, getDefaultHomePageVariant } from '../../config/homeVariants';
+import { ALL_HOME_PAGES, getDefaultHomePageVariant } from '../../config/homePagesRegistry';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function HomeMenuDesignPage() {
@@ -32,7 +32,7 @@ export default function HomeMenuDesignPage() {
         </header>
 
         <div className="space-y-4">
-          {HOME_PAGE_VARIANTS.map((v) => (
+          {ALL_HOME_PAGES.map((v) => (
             <Link
               key={v.id}
               to={v.route}
