@@ -4,7 +4,7 @@
 */
 
 const express = require('express');
-const { createClient } = require('@supabase/supabase-js');
+const { createSupabaseServerClient } = require('./supabaseNodeClient.cjs');
 const cors = require('cors');
 const crypto = require('crypto');
 
@@ -46,7 +46,7 @@ if (NODE_ENV === 'production' && !process.env.ALLOWED_ORIGINS) {
   process.exit(1);
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+const supabase = createSupabaseServerClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const app = express();
 app.use(cors({
   origin: ALLOWED_ORIGINS,

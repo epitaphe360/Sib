@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 
-import { createClient } from '@supabase/supabase-js';
+import { createSupabaseServerClient } from './server/supabaseNodeClient.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -404,9 +404,7 @@ console.log('🔧 [INIT] SUPABASE_URL:', SUPABASE_URL ? 'OK' : 'MANQUANT');
 console.log('🔧 [INIT] SERVICE_ROLE_KEY:', SUPABASE_SERVICE_ROLE_KEY ? 'OK' : 'MANQUANT');
 
 const supabaseAdmin = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
-  ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-      auth: { autoRefreshToken: false, persistSession: false }
-    })
+  ? createSupabaseServerClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
   : null;
 
 console.log('🔧 [INIT] supabaseAdmin:', supabaseAdmin ? 'CRÉÉ ✅' : 'NULL ❌');

@@ -3,7 +3,7 @@ import cors from 'cors';
 import pg from 'pg';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { createClient } from '@supabase/supabase-js';
+import { createSupabaseServerClient } from './supabaseNodeClient.js';
 
 const { Pool } = pg;
 
@@ -73,7 +73,7 @@ if (AUTH_MODE === 'supabase') {
     console.warn('⚠️  WARNING: Using anon key for server-side auth. Use SUPABASE_SERVICE_ROLE_KEY instead!');
   }
   
-  supabase = createClient(supabaseUrl, supabaseKey);
+  supabase = createSupabaseServerClient(supabaseUrl, supabaseKey);
   console.log('✅ Supabase client configured for production authentication');
 } else {
   console.log('✅ Local PostgreSQL authentication enabled for development');

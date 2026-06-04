@@ -9,7 +9,7 @@ try { require('dotenv').config({ path: path.resolve(__dirname, '../.env.local') 
 try { require('dotenv').config({ path: path.resolve(__dirname, '../.env') }); } catch (_) {}
 
 const express = require('express');
-const { createClient } = require('@supabase/supabase-js');
+const { createSupabaseServerClient } = require('./supabaseNodeClient.cjs');
 const cors = require('cors');
 
 // Align default port with frontend fallback (see useExhibitorStore)
@@ -27,7 +27,7 @@ if (!HAS_SUPABASE_CREDS) {
   console.warn('[exhibitors-server] SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY not set. Server will start but return 503 until configured.');
 }
 
-const supabase = HAS_SUPABASE_CREDS ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY) : null;
+const supabase = HAS_SUPABASE_CREDS ? createSupabaseServerClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY) : null;
 const app = express();
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
