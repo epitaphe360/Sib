@@ -8,7 +8,6 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { useSupabaseArticles } from '../../hooks/useSupabaseContent';
-import { useWordPressArticles } from '../../hooks/useWordPressContent';
 import { Button } from '../ui/Button';
 import { SmartImage } from '../ui/SmartImage';
 import { IMAGES } from '../../lib/images';
@@ -62,11 +61,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ title, excerpt, featuredImage, date
 };
 
 export const LatestNewsSection: React.FC = () => {
-  const { data: supabaseArticles, loading: supabaseLoading } = useSupabaseArticles(3);
-  const { data: wpArticles, loading: wpLoading } = useWordPressArticles(3);
-
-  const articles = supabaseArticles?.length > 0 ? supabaseArticles : wpArticles;
-  const loading = supabaseLoading || wpLoading;
+  const { data: articles, loading } = useSupabaseArticles(3);
 
   if (loading) {
     return (
@@ -122,10 +117,15 @@ export const LatestNewsSection: React.FC = () => {
               <Link to={`/news/${article.slug || article.id}`} className="block h-full">
                 <NewsCard
                   title={article.title}
-                  excerpt={article.excerpt}
-                  featuredImage={article.featuredImage || article.featured_image}
-                  date={article.date}
-                  category={article.categories?.[0] || 'Actualité'}
+                  excerpt={article.excerpt || article.summary || ''}
+                  featuredImage={article.featuredImage || article.featured_image || article.image_url}
+                  date={
+                    article.date ||
+                    (article.published_at
+                      ? new Date(article.published_at).toLocaleDateString('fr-FR')
+                      : '')
+                  }
+                  category={article.categories?.[0] || article.category || 'Actualité'}
                 />
               </Link>
             </motion.div>

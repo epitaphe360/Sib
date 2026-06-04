@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
 import {
@@ -13,7 +13,10 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { ROUTES } from '../lib/routes';
 import { motion } from 'framer-motion';
+import { HeroBadgeForms } from '../components/home/HeroBadgeForms';
+import { SALON_STATS } from '../config/salonInfo';
 import { MoroccanPattern } from '../components/ui/MoroccanDecor';
+import { useVisitorPassPricing } from '../hooks/useVisitorPassPricing';
 
 // Types
 interface SubscriptionFeature {
@@ -68,7 +71,7 @@ function getSubscriptionTiers(t: (key: string) => string): SubscriptionTier[] {
   {
     id: 'visitor-vip',
     name: t('sub.visitorVip.name'),
-    price: 700,
+    price: 0,
     currency: 'EUR',
     icon: <Crown className="w-8 h-8" />,
     description: t('sub.visitorVip.desc'),
@@ -366,7 +369,14 @@ export default function SubscriptionPage() {
   const [selectedType, setSelectedType] = useState<'visitor' | 'partner' | 'exhibitor'>('visitor');
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const subscriptionTiers = getSubscriptionTiers(t);
+  const { price: vipPrice } = useVisitorPassPricing();
+  const subscriptionTiers = useMemo(() => {
+    const tiers = getSubscriptionTiers(t);
+    if (vipPrice == null) return tiers;
+    return tiers.map((tier) =>
+      tier.id === 'visitor-vip' ? { ...tier, price: vipPrice } : tier
+    );
+  }, [t, vipPrice]);
 
   const visitorTiers = subscriptionTiers.filter(tier => tier.type === 'visitor');
   const partnerTiers = subscriptionTiers.filter(tier => tier.type === 'partner');
@@ -444,10 +454,10 @@ export default function SubscriptionPage() {
 
   // Stats WordPress
   const wpStats = [
-    { number: '300+', label: t('sub.stat1.label') },
-    { number: '6,000+', label: t('sub.stat2.label') },
-    { number: '40', label: t('sub.stat3.label') },
-    { number: '40+', label: t('sub.stat4.label') }
+    { number: SALON_STATS.exhibitors, label: t('sub.stat1.label') },
+    { number: SALON_STATS.visitors, label: t('sub.stat2.label') },
+    { number: SALON_STATS.countries, label: t('sub.stat3.label') },
+    { number: SALON_STATS.conferences, label: t('sub.stat4.label') },
   ];
 
   // Pourquoi visiter - bullet points WordPress
@@ -801,7 +811,15 @@ export default function SubscriptionPage() {
           </button>
         </div>
 
-        {/* Pricing Cards */}
+        {/* Formulaires visiteur ou cartes tarifaires */}
+        {selectedType === 'visitor' ? (
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8">
+              Demandez votre badge
+            </h2>
+            <HeroBadgeForms />
+          </div>
+        ) : (
         <div className="flex justify-center">
           <div className={`grid grid-cols-1 md:grid-cols-2 ${displayedTiers.length > 2 ? 'lg:grid-cols-4 max-w-7xl' : 'lg:grid-cols-2 max-w-4xl'} gap-8 w-full`}>
             {displayedTiers.map((tier) => (
@@ -874,8 +892,10 @@ export default function SubscriptionPage() {
             ))}
           </div>
         </div>
+        )}
 
-        {/* Forfait sur mesure (WordPress) */}
+        {/* Forfait sur mesure (WordPress) — exposants/partenaires uniquement */}
+        {selectedType !== 'visitor' && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -893,6 +913,7 @@ export default function SubscriptionPage() {
             </Button>
           </Link>
         </motion.div>
+        )}
         </div>
       </section>
 

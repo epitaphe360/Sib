@@ -137,19 +137,7 @@ export const SubscriptionSelector: React.FC<SubscriptionSelectorProps> = ({
                       <Check className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
                       <div className="flex-1">
                         <p className="text-sm text-gray-700">
-                          {config.quotas.teamMembers} badges exposant
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-2">
-                      <Check className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <p className="text-sm text-gray-700">
-                          {config.quotas.demoSessions === -1
-                            ? 'Démos illimitées'
-                            : `${config.quotas.demoSessions} sessions démo`
-                          }
+                          Badges exposant illimités
                         </p>
                       </div>
                     </div>

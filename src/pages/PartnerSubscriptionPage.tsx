@@ -189,8 +189,8 @@ export default function PartnerSubscriptionPage() {
 
   // Stats
   const wpStats = [
-    { number: '6 000+', label: 'Visiteurs qualifiés' },
-    { number: '300+', label: 'Exposants' },
+    { number: '+300', label: 'Exposants' },
+    { number: '+6 000', label: 'Visiteurs qualifiés' },
     { number: '30', label: 'Conférences et panels' },
     { number: '3', label: 'Jours de rencontres B2B' }
   ];

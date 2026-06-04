@@ -12,6 +12,8 @@ import {
   AdminMetricsGrid,
   AdminChartsSection,
   AdminQuickActions,
+  BannerManagementPanel,
+  VisitorPricingPanel,
   SystemHealthPanel,
   ActivityFeed,
 } from './admin';
@@ -112,6 +114,10 @@ export default function AdminDashboard() {
         />
 
         <AdminQuickActions adminMetrics={adminMetrics as any} t={t} />
+
+        <BannerManagementPanel />
+
+        <VisitorPricingPanel />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

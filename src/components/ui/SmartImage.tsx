@@ -72,8 +72,7 @@ export const SmartImage: React.FC<SmartImageProps> = ({
   const finalSrcSet = source ? srcSet(source) : undefined;
   const finalAlt = alt ?? source?.alt ?? '';
 
-  // Preview basse qualité pour effet blur-up
-  const blurSrc = source ? img(source, 40, undefined, 20) : undefined;
+  const blurSrc = source?.local ? undefined : source ? img(source, 40, undefined, 20) : undefined;
 
   const overlayClasses: Record<string, string> = {
     top:    'bg-gradient-to-b from-neutral-900/70 via-transparent to-transparent',

@@ -11,3 +11,5 @@ export { AdminAlertsSection } from './AdminAlertsSection';
 export { AdminMetricsGrid } from './AdminMetricsGrid';
 export { AdminChartsSection } from './AdminChartsSection';
 export { AdminQuickActions } from './AdminQuickActions';
+export { BannerManagementPanel } from './BannerManagementPanel';
+export { VisitorPricingPanel } from './VisitorPricingPanel';

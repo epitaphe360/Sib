@@ -1,5 +1,13 @@
 ﻿export const ROUTES = {
   HOME: '/',
+  HOME_P1: '/accueil/1',
+  HOME_P2: '/accueil/2',
+  HOME_P3: '/accueil/3',
+  HOME_P4: '/accueil/4',
+  HOME_P5: '/accueil/5',
+  HOME_P6: '/accueil/6',
+  HOME_P7: '/accueil/7',
+  HOME_P8: '/accueil/8',
   EXHIBITORS: '/exhibitors',
   EXHIBITOR_DETAIL: '/exhibitors/:id',
   PARTNERS: '/partners',
@@ -179,6 +187,9 @@
   ADMIN_PRESS_ACCREDITATIONS: '/admin/press-accreditations',
   SPEAKERS: '/speakers',
   ADMIN_SPEAKERS: '/admin/speakers',
+
+  // Design — comparaison menus (pré-production)
+  DESIGN_HOME_MENU: '/design/menu-accueil',
 
   // UrbaEvent - Sélection multi-salons
   SALON_SELECTION: '/salons',

@@ -15,6 +15,7 @@ import { Button } from '../../components/ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
+import { FormSuccessBanner } from '../../components/common/FormSuccessBanner';
 import { COUNTRIES } from '../../data/countries';
 
 // Schema défini au niveau module pour éviter les problèmes de hooks
@@ -42,7 +43,11 @@ const createFreeVisitorSchema = (t: (key: string) => string) => z.object({
 
 type FreeVisitorForm = z.infer<ReturnType<typeof createFreeVisitorSchema>>;
 
-export default function VisitorFreeRegistration() {
+interface VisitorFreeRegistrationProps {
+  embedded?: boolean;
+}
+
+export default function VisitorFreeRegistration({ embedded = false }: VisitorFreeRegistrationProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -274,10 +279,22 @@ export default function VisitorFreeRegistration() {
     }
   };
 
+  const wrapperClass = embedded
+    ? 'p-4'
+    : 'min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700 py-12 px-4 sm:px-6 lg:px-8';
+  const innerClass = embedded ? 'w-full' : 'max-w-2xl mx-auto';
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
+    <div className={wrapperClass}>
+      <div className={innerClass}>
+        {showSuccess && embedded && (
+          <FormSuccessBanner
+            title={t('visitor.message.success_title')}
+            message={t('visitor.message.success_desc')}
+          />
+        )}
         {/* Header */}
+        {!embedded && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -306,14 +323,21 @@ export default function VisitorFreeRegistration() {
             <span className="text-green-200 text-sm">? {t('visitor.registration.free.badge_free')}</span>
           </div>
         </motion.div>
+        )}
 
-        {/* Form */}
+        {embedded && !showSuccess && (
+          <h3 className="text-base font-bold text-primary-800 dark:text-white mb-3 px-1">
+            Pass Gratuit
+          </h3>
+        )}
+
+        {(!embedded || !showSuccess) && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: embedded ? 0 : 0.2 }}
         >
-          <Card className="p-8">
+          <Card className={embedded ? 'p-4' : 'p-8'}>
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error('? [FREE VISITOR] Erreurs validation:', errors);
               toast.error(t('visitor.validation.check_errors', 'Veuillez corriger les erreurs surlignées en rouge'));
@@ -595,6 +619,7 @@ export default function VisitorFreeRegistration() {
               </button>
 
               {/* VIP Link */}
+              {!embedded && (
               <div className="text-center pt-4 border-t">
                 <p className="text-sm text-gray-600 mb-2">
                   {t('visitor.upsell.vip.title')}
@@ -603,16 +628,19 @@ export default function VisitorFreeRegistration() {
                   type="button"
                   variant="outline"
                   onClick={() => navigate(ROUTES.VISITOR_VIP_REGISTRATION)}
-                  className="border-yellow-500 text-yellow-600 hover:bg-yellow-50"
+                  className="border-primary-500 text-primary-600 hover:bg-primary-50"
                 >
                    {t('visitor.upsell.vip.button')}
                 </Button>
               </div>
+              )}
             </form>
           </Card>
         </motion.div>
+        )}
 
-        {/* Success Modal */}
+        {/* Success Modal — page complète uniquement */}
+        {!embedded && (
         <AnimatePresence>
           {showSuccess && (
             <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[9999] p-4 backdrop-blur-sm">
@@ -679,6 +707,7 @@ export default function VisitorFreeRegistration() {
             </div>
           )}
         </AnimatePresence>
+        )}
       </div>
     </div>
   );

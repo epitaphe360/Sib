@@ -9,10 +9,12 @@ import { Crown, Ticket, CheckCircle, ArrowRight, Anchor } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { ROUTES } from '../../lib/routes';
+import { useVisitorPassPricing } from '../../hooks/useVisitorPassPricing';
 
 export default function VisitorRegistrationChoice() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { price, formattedPrice, loading: pricingLoading } = useVisitorPassPricing();
 
   const freeFeatures = [
     'Accès au salon SIB 2026',
@@ -33,7 +35,6 @@ export default function VisitorRegistrationChoice() {
     'Gala de clôture exclusif',
     'Tableau de bord complet',
     'Support prioritaire',
-    '700,00 EUR'
   ];
 
   return (
@@ -158,11 +159,13 @@ export default function VisitorRegistrationChoice() {
                 <div className="mb-6">
                   <div className="flex items-baseline">
                     <span className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-600 to-yellow-700 bg-clip-text text-transparent">
-                      700
+                      {pricingLoading ? '…' : (price ?? '—')}
                     </span>
                     <span className="text-2xl text-gray-600 ml-2">EUR</span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">Paiement sécurisé unique</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {formattedPrice ? `Paiement sécurisé unique — ${formattedPrice}` : 'Paiement sécurisé unique'}
+                  </p>
                 </div>
 
                 {/* Features */}
@@ -270,7 +273,9 @@ export default function VisitorRegistrationChoice() {
                   <tr className="bg-gray-50 font-semibold">
                     <td className="px-6 py-4 text-sm text-gray-900">Prix</td>
                     <td className="px-6 py-4 text-center text-green-700">0 EUR</td>
-                    <td className="px-6 py-4 text-center text-yellow-700">700 EUR</td>
+                    <td className="px-6 py-4 text-center text-yellow-700">
+                      {pricingLoading ? '…' : (formattedPrice ?? 'Tarif VIP')}
+                    </td>
                   </tr>
                 </tbody>
               </table>

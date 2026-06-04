@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { MinistryLogoImage } from './MinistryLogoImage';
 
 interface OrganizerItem {
   role: string;
@@ -99,15 +100,7 @@ export const OrganizersSection: React.FC = () => {
           className="flex flex-col sm:flex-row items-center justify-center gap-6 p-7 sm:p-9 rounded-2xl mb-8 bg-white dark:bg-neutral-900 border border-accent-500/20 shadow-sm hover:shadow-md transition-shadow"
         >
           <div className="flex-shrink-0 flex items-center justify-center h-24 w-24 rounded-2xl bg-accent-50 dark:bg-accent-500/10 border border-accent-500/20">
-            <img
-              src="/logo-ministere.png"
-              alt="Ministère de l'Équipement et de l'Eau — Royaume du Maroc"
-              className="h-20 w-auto object-contain"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = '/logo-ministere.svg';
-              }}
-            />
+            <MinistryLogoImage className="h-20 w-auto object-contain" />
           </div>
           <div className="text-center sm:text-left">
             <p className="text-[11px] font-semibold tracking-[0.2em] uppercase mb-1.5 text-accent-600 dark:text-accent-500">

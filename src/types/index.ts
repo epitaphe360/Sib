@@ -60,7 +60,8 @@ export interface UserProfile {
   passType?: 'free' | 'premium' | 'vip';
   status?: 'active' | 'pending' | 'suspended' | 'rejected';
   // Exhibitor specific fields
-  standNumber?: string; // Numéro de stand pour les exposants
+  standNumber?: string;
+  hallNumber?: string;
   standArea?: number; // Surface du stand en m² (9, 18, 36, 54+)
   // Partner specific fields
   partner_tier?: 'organizer' | 'co_organizer' | 'official_sponsor' | 'delegated_organizer' | 'partner' | 'press_partner'; // Type de partenaire SIB
@@ -87,8 +88,9 @@ export interface Exhibitor {
   employeeCount?: string;
   revenue?: string;
   markets: string[];
-  standNumber?: string; // Numéro de stand pour la carte interactive
-  standArea?: number; // Surface en m2
+  standNumber?: string;
+  hallNumber?: string;
+  standArea?: number;
 }
 
 export interface Partner {

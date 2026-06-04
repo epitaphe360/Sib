@@ -21,8 +21,8 @@
     --color-primary-700: #112744;
     --color-primary-900: #07182C;
 
-    --color-accent-500: #C9A961;
-    --color-accent-600: #A88B42;
+    --color-accent-500: #2E5984;
+    --color-accent-600: #1B365D;
 
     /* Surfaces & texte */
     --color-bg:          #FAFAF7;
@@ -61,7 +61,7 @@
     --secondary-foreground: 48 7% 10%;
     --muted: 45 8% 95%;
     --muted-foreground: 48 4% 36%;
-    --accent: 40 45% 58%;
+    --accent: 213 48% 35%;
     --accent-foreground: 48 7% 10%;
     --destructive: 0 72% 42%;
     --destructive-foreground: 0 0% 100%;
@@ -98,7 +98,7 @@
     --secondary-foreground: 45 15% 90%;
     --muted: 213 12% 18%;
     --muted-foreground: 45 8% 66%;
-    --accent: 40 45% 58%;
+    --accent: 213 48% 35%;
     --accent-foreground: 213 54% 10%;
     --destructive: 0 62% 52%;
     --destructive-foreground: 0 0% 100%;
@@ -317,6 +317,62 @@
     content: '';
     @apply inline-block w-6 h-px bg-primary-600 dark:bg-primary-400;
   }
+
+  /* Accueil — le base layer force color: var(--color-text) sombre sur les zones hero */
+  .home-dark {
+    color: #ffffff;
+    --color-text: #ffffff;
+    --color-text-muted: rgba(255, 255, 255, 0.85);
+  }
+
+  .home-dark :where(h1, h2, h3, h4, h5, h6) {
+    color: #ffffff !important;
+  }
+
+  .home-dark :where(p, span, li) {
+    color: inherit;
+  }
+
+  .home-light :where(h1, h2, h3, h4, h5, h6):not(.text-white) {
+    color: #1a1a17 !important;
+  }
+
+  html.dark .home-light :where(h1, h2, h3, h4, h5, h6):not(.text-white) {
+    color: #f5f5f4 !important;
+  }
+
+  .home-form-embed :where(label) {
+    @apply text-neutral-800 dark:text-neutral-200 !important;
+  }
+
+  .home-form-embed :where(input, select, textarea) {
+    @apply text-neutral-900 dark:text-neutral-100 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600;
+  }
+
+  .home-form-embed :where(h1, h2, h3, h4) {
+    color: #1b365d !important;
+  }
+
+  html.dark .home-form-embed :where(h1, h2, h3, h4) {
+    color: #f5f5f4 !important;
+  }
+}
+
+/* ============================================================
+ * P7 — World Class (hero éditorial, mouvement discret)
+ * ============================================================ */
+@keyframes home-p7-ken-burns {
+  0% { transform: scale(1.04); }
+  100% { transform: scale(1.1); }
+}
+
+.home-p7-ken-burns {
+  animation: home-p7-ken-burns 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.home-p7-hero-accent {
+  box-shadow: 0 0 24px rgba(94, 143, 190, 0.45);
 }
 
 /* ============================================================

@@ -15,6 +15,9 @@ import { Button } from '../../components/ui/Button';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { ROUTES } from '../../lib/routes';
+import { fetchVipPassPricing } from '../../services/visitorLevelService';
+import { useVisitorPassPricing } from '../../hooks/useVisitorPassPricing';
+import { FormSuccessBanner } from '../../components/common/FormSuccessBanner';
 import { COUNTRIES } from '../../data/countries';
 import useAuthStore from '../../store/authStore';
 
@@ -55,13 +58,19 @@ const sectors = [
   'Autre'
 ];
 
-export default function VisitorVIPRegistration() {
+interface VisitorVIPRegistrationProps {
+  embedded?: boolean;
+}
+
+export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPRegistrationProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const { user: currentUser, setUser } = useAuthStore();
+  const { formattedPrice } = useVisitorPassPricing();
 
   const {
     register,
@@ -317,11 +326,13 @@ export default function VisitorVIPRegistration() {
       // 6. Create payment request in database
       let paymentRequestId: string | null = null;
       try {
+        const vipPricing = await fetchVipPassPricing();
         const { data: prData, error: paymentError } = await supabase
           .from('payment_requests')
           .insert([{
             user_id: userId,
-            amount: 700,
+            amount: vipPricing.price,
+            currency: vipPricing.currency,
             status: 'pending',
             payment_method: 'bank_transfer',
             requested_level: 'premium'
@@ -371,6 +382,7 @@ export default function VisitorVIPRegistration() {
       // 8. Success - Redirect DIRECTLY to bank transfer page (skip VisitorPaymentPage)
       console.log('?? [VIP] SUCCÈS COMPLET - Redirection vers coordonnées bancaires...');
       toast.success('Compte créé ! Redirection vers les instructions de paiement...');
+      setSubmitSuccess(true);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -409,10 +421,21 @@ export default function VisitorVIPRegistration() {
     }
   };
 
+  const wrapperClass = embedded
+    ? 'p-4'
+    : 'min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 py-12 px-4 sm:px-6 lg:px-8';
+  const innerClass = embedded ? 'w-full' : 'max-w-3xl mx-auto';
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-yellow-800 to-yellow-600 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
+    <div className={wrapperClass}>
+      <div className={innerClass}>
+        {submitSuccess && embedded && (
+          <FormSuccessBanner
+            title="Demande enregistrée"
+            message="Votre inscription VIP a été soumise. Consultez vos emails pour les instructions de paiement."
+          />
+        )}
+        {!embedded && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -441,14 +464,21 @@ export default function VisitorVIPRegistration() {
             <span className="text-yellow-100 font-semibold">?? Networking premium</span>
           </div>
         </motion.div>
+        )}
 
-        {/* Form */}
+        {embedded && !submitSuccess && (
+          <h3 className="text-base font-bold text-primary-800 dark:text-white mb-3 px-1">
+            Pass VIP
+          </h3>
+        )}
+
+        {(!embedded || !submitSuccess) && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: embedded ? 0 : 0.2 }}
         >
-          <Card className="p-8">
+          <Card className={embedded ? 'p-4' : 'p-8'}>
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error("? Validation errors:", errors);
               toast.error("Veuillez corriger les erreurs rouges dans le formulaire.");
@@ -710,7 +740,8 @@ export default function VisitorVIPRegistration() {
               {/* Payment Info */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-900">
-                  <strong>?? Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page de paiement sécurisé (700 EUR). Votre accès VIP sera activé immédiatement après validation du paiement.
+                  <strong>Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page d’instructions de virement bancaire
+                  {formattedPrice ? ` (${formattedPrice})` : ''}. Votre Pass VIP sera activé une fois le virement validé par notre équipe (délai habituel : 2 à 5 jours ouvrés).
                 </p>
               </div>
 
@@ -734,6 +765,7 @@ export default function VisitorVIPRegistration() {
               </Button>
 
               {/* Free Pass Link */}
+              {!embedded && (
               <div className="text-center pt-4 border-t">
                 <p className="text-sm text-gray-600 mb-2">
                   Vous cherchez un accès gratuit au salon ?
@@ -742,14 +774,16 @@ export default function VisitorVIPRegistration() {
                   type="button"
                   variant="outline"
                   onClick={() => navigate(ROUTES.REGISTER_VISITOR)}
-                  className="border-green-500 text-green-600 hover:bg-green-50"
+                  className="border-primary-500 text-primary-600 hover:bg-primary-50"
                 >
-                  ?? S'inscrire avec le Pass Gratuit
+                  Pass Gratuit
                 </Button>
               </div>
+              )}
             </form>
           </Card>
         </motion.div>
+        )}
       </div>
     </div>
   );

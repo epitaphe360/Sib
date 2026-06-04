@@ -35,8 +35,8 @@ export function useSupabaseContent<T = any>({
 
     try {
       if (!supabase) {
-        throw new Error('Supabase client not initialized');
-      }
+        setData([]);
+      } else {
       let query = supabase.from(table).select(select);
 
       // Apply filters
@@ -59,9 +59,13 @@ export function useSupabaseContent<T = any>({
       if (queryError) {throw queryError;}
 
       setData(result || []);
+      }
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Unknown error'));
-      console.error('[useSupabaseContent] Error:', err);
+      setData([]);
+      if (import.meta.env.DEV) {
+        console.warn('[useSupabaseContent]', table, err);
+      }
     } finally {
       setLoading(false);
     }
@@ -85,7 +89,7 @@ export function useSupabaseContent<T = any>({
 export function useSupabaseArticles(limit = 3) {
   return useSupabaseContent({
     table: 'news_articles',
-    filters: { is_published: true },
+    filters: { published: true },
     orderBy: { column: 'published_at', ascending: false },
     limit
   });

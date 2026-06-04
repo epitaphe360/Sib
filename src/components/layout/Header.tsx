@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   Menu,
   X,
+  Search,
   User,
   Calendar,
   MessageCircle,
@@ -20,6 +21,8 @@ import { ThemeToggle } from '../ui/ThemeToggle';
 import { useTranslation } from '../../hooks/useTranslation';
 import { MoroccanPattern } from '../ui/MoroccanDecor';
 import { isAuthInitialized } from '../../lib/initAuth';
+import { HomeNavMenuBlockDesktop, HomeNavMenuBlockMobile } from './homeMenu/HomeNavMenuBlock';
+import { isPremiumHomePath, getPremiumHomeBase, SIB2026 } from '../home/sib2026/tokens';
 
 // OPTIMIZATION: Memoized Header component to prevent unnecessary re-renders
 export const Header: React.FC = memo(() => {
@@ -28,9 +31,21 @@ export const Header: React.FC = memo(() => {
   const [isEventMenuOpen, setIsEventMenuOpen] = useState(false);
   const [isParticipateMenuOpen, setIsParticipateMenuOpen] = useState(false);
   const [isMediaMenuOpen, setIsMediaMenuOpen] = useState(false);
+  const [isHomeMenuOpen, setIsHomeMenuOpen] = useState(false);
   const { user, isAuthenticated, isLoading, logout } = useAuthStore();
   const { t } = useTranslation();
   const location = useLocation();
+  const isSib2026Home = isPremiumHomePath(location.pathname);
+  const premiumHomeBase = getPremiumHomeBase(location.pathname);
+
+  const sib2026NavItems = [
+    { name: t('mockup.nav.about'), href: '/about' },
+    { name: t('mockup.nav.exhibit'), href: ROUTES.EXHIBITOR_SUBSCRIPTION },
+    { name: t('mockup.nav.visit'), href: `${premiumHomeBase}#visiter` },
+    { name: t('mockup.nav.program'), href: ROUTES.EVENTS },
+    { name: t('mockup.nav.international'), href: ROUTES.PAVILIONS },
+    { name: t('mockup.nav.info'), href: ROUTES.ACCOMMODATION },
+  ];
 
   // ✅ CRITICAL: Ne pas afficher "Se connecter" pendant l'initialisation
   const authReady = isAuthInitialized() && !isLoading;
@@ -42,6 +57,7 @@ export const Header: React.FC = memo(() => {
     setIsEventMenuOpen(false);
     setIsParticipateMenuOpen(false);
     setIsMediaMenuOpen(false);
+    setIsHomeMenuOpen(false);
   }, [location.pathname]);
 
   // ✅ Fermer le menu mobile quand on clique en dehors (overlay)
@@ -74,6 +90,8 @@ export const Header: React.FC = memo(() => {
   const closeEventMenu = useCallback(() => setIsEventMenuOpen(false), []);
   const closeParticipateMenu = useCallback(() => setIsParticipateMenuOpen(false), []);
   const closeMediaMenu = useCallback(() => setIsMediaMenuOpen(false), []);
+  const openHomeMenu = useCallback(() => setIsHomeMenuOpen(true), []);
+  const closeHomeMenu = useCallback(() => setIsHomeMenuOpen(false), []);
 
   const handleLogout = useCallback(() => {
     logout();
@@ -83,7 +101,6 @@ export const Header: React.FC = memo(() => {
   const isFreeVisitor = user?.type === 'visitor' && (user?.visitor_level === 'free' || !user?.visitor_level);
 
   const navigation = [
-    { name: t('nav.home'), href: ROUTES.HOME },
     { name: t('nav.partners'), href: ROUTES.PARTNERS },
     { name: t('nav.exhibitors'), href: ROUTES.EXHIBITORS },
     // Cacher le réseautage pour les visiteurs free
@@ -115,7 +132,14 @@ export const Header: React.FC = memo(() => {
     { name: t('media.library'), href: ROUTES.MEDIA_LIBRARY, description: t('media.library_desc'), icon: Play },
   ] : [];
   return (
-    <header className="fixed top-0 left-0 right-0 z-[200] transition-all duration-300 bg-white/85 backdrop-blur-xl backdrop-saturate-150 border-b border-neutral-200/80 dark:bg-neutral-900/85 dark:border-neutral-800/80" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-[200] transition-all duration-300 ${
+        isSib2026Home
+          ? 'bg-transparent border-b border-transparent'
+          : 'bg-white/85 backdrop-blur-xl backdrop-saturate-150 border-b border-neutral-200/80 dark:bg-neutral-900/85 dark:border-neutral-800/80'
+      }`}
+      style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+    >
       <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-center h-16 sm:h-18 xl:h-20">
 
@@ -125,13 +149,30 @@ export const Header: React.FC = memo(() => {
               <img
                 src="/logo-sib2026.png"
                 alt="SIB - Salon International du Bâtiment"
-                className="h-9 sm:h-11 xl:h-12 w-auto object-contain"
+                className={`h-9 sm:h-11 xl:h-12 w-auto object-contain ${isSib2026Home ? 'brightness-0 invert' : ''}`}
               />
             </div>
           </Link>
 
-          {/* Desktop Navigation Luxe */}
+          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-0 xl:gap-1 flex-1 justify-center">
+            {isSib2026Home ? (
+              sib2026NavItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="px-2 xl:px-3 py-2 text-[11px] xl:text-xs font-semibold uppercase tracking-[0.08em] text-white/90 hover:text-white transition-colors whitespace-nowrap"
+                >
+                  {item.name}
+                </Link>
+              ))
+            ) : (
+              <>
+            <HomeNavMenuBlockDesktop
+              isOpen={isHomeMenuOpen}
+              onOpen={openHomeMenu}
+              onClose={closeHomeMenu}
+            />
 
             {navigation.map((item) => (
               <Link
@@ -250,10 +291,32 @@ export const Header: React.FC = memo(() => {
               <span>{t('nav.contact')}</span>
               <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
             </Link>
+              </>
+            )}
           </nav>
 
           {/* Actions & Profile Luxe */}
           <div className="flex-shrink-0 flex items-center space-x-1 xl:space-x-3">
+            {isSib2026Home ? (
+              <div className="hidden lg:flex items-center gap-3">
+                <Link
+                  to={ROUTES.EXHIBITORS}
+                  className="p-2 text-white/85 hover:text-white transition-colors"
+                  aria-label={t('mockup.nav.search')}
+                >
+                  <Search className="h-5 w-5" strokeWidth={1.75} />
+                </Link>
+                <LanguageSelector />
+                <Link
+                  to={ROUTES.EXHIBITOR_SUBSCRIPTION}
+                  className="px-5 py-2.5 text-[11px] font-bold uppercase tracking-wide text-white whitespace-nowrap"
+                  style={{ backgroundColor: SIB2026.orange }}
+                >
+                  {t('mockup.nav.reserve')}
+                </Link>
+              </div>
+            ) : (
+            <>
             <div className="hidden xl:flex items-center gap-3">
                <LanguageSelector />
                <ThemeToggle />
@@ -544,6 +607,8 @@ export const Header: React.FC = memo(() => {
                 </Link>
               </div>
             )}
+            </>
+            )}
 
             {/* Mobile menu button */}
             <button
@@ -591,6 +656,8 @@ export const Header: React.FC = memo(() => {
                   </button>
                 </div>
               )}
+
+              <HomeNavMenuBlockMobile onNavigate={closeMenu} />
 
               {/* Navigation principale */}
               {navigation.map((item) => (

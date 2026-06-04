@@ -54,6 +54,7 @@ interface NewExhibitorForm {
   packageType: 'base' | 'standard' | 'premium' | 'elite';
   standSize: string;
   standNumber: string;
+  hallNumber: string;
   standArea: number;
   contractValue: string;
   paymentStatus: 'pending' | 'partial' | 'completed';
@@ -106,6 +107,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
     packageType: exhibitorToEdit?.packageType || 'base',
     standSize: exhibitorToEdit?.standSize || '9m²',
     standNumber: exhibitorToEdit?.standNumber || '',
+    hallNumber: exhibitorToEdit?.hallNumber || '',
     standArea: exhibitorToEdit?.standArea || 9,
     contractValue: exhibitorToEdit?.contractValue || '',
     paymentStatus: exhibitorToEdit?.paymentStatus || 'pending',
@@ -203,6 +205,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
           website: formData.website,
           logo: formData.logo || undefined,
           standNumber: formData.standNumber,
+          hallNumber: formData.hallNumber,
           standArea: formData.standArea,
           establishedYear: formData.establishedYear ? parseInt(formData.establishedYear) : undefined,
           employeeCount: formData.employeeCount || undefined,
@@ -289,6 +292,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
         logo: formData.logo || undefined,
         website: formData.website,
         standNumber: formData.standNumber,
+        hallNumber: formData.hallNumber,
         standArea: formData.standArea,
         establishedYear: formData.establishedYear ? parseInt(formData.establishedYear) : undefined,
         employeeCount: formData.employeeCount || undefined,
@@ -913,7 +917,7 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                 ))}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Numéro de stand
@@ -926,6 +930,22 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                       onChange={(e) => setFormData({ ...formData, standNumber: e.target.value })}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Ex: A123"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Numéro de hall
+                  </label>
+                  <div className="relative">
+                    <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      type="text"
+                      value={formData.hallNumber}
+                      onChange={(e) => setFormData({ ...formData, hallNumber: e.target.value })}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Ex: A"
                     />
                   </div>
                 </div>
@@ -1262,6 +1282,8 @@ export default function ExhibitorCreationSimulator({ exhibitorToEdit, editMode =
                   <div className="space-y-2 text-sm">
                     <div><strong>Package :</strong> {packages.find(p => p.type === formData.packageType)?.name}</div>
                     <div><strong>Taille stand :</strong> {formData.standSize}</div>
+                    {formData.standNumber && <div><strong>Stand :</strong> {formData.standNumber}</div>}
+                    {formData.hallNumber && <div><strong>Hall :</strong> {formData.hallNumber}</div>}
                     <div><strong>Valeur :</strong> {formData.contractValue}</div>
                     <div><strong>Paiement :</strong> {formData.paymentStatus}</div>
                   </div>

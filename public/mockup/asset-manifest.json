@@ -1,0 +1,86 @@
+{
+  "builtAt": "2026-06-04T09:09:41.346Z",
+  "source": "https://www.sib.ma/",
+  "slots": {
+    "hero-hall": {
+      "webp": "/mockup/hero-hall.webp",
+      "jpg": "/mockup/hero-hall.jpg",
+      "sibMa": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg"
+    },
+    "hero-hall-2k": {
+      "webp": "/mockup/hero-hall-2k.webp",
+      "jpg": "/mockup/hero-hall-2k.jpg",
+      "sibMa": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg"
+    },
+    "mission-group": {
+      "webp": "/mockup/mission-group.webp",
+      "jpg": "/mockup/mission-group.jpg",
+      "sibMa": "/sib-ma/1_a559ea5363.png"
+    },
+    "reserve-bg": {
+      "webp": "/mockup/reserve-bg.webp",
+      "jpg": "/mockup/reserve-bg.jpg",
+      "sibMa": "/sib-ma/parc_exposition_eljadida_f4a9052968.png"
+    },
+    "international-map": {
+      "webp": "/mockup/international-map.webp",
+      "jpg": "/mockup/international-map.jpg",
+      "sibMa": "/sib-ma/main_5bd806f6fcced8760ced_e4e03ad1e4.png"
+    },
+    "salon-card-1": {
+      "webp": "/mockup/salon-card-1.webp",
+      "jpg": "/mockup/salon-card-1.jpg",
+      "sibMa": "/sib-ma/2_1e3351c897.png"
+    },
+    "salon-card-2": {
+      "webp": "/mockup/salon-card-2.webp",
+      "jpg": "/mockup/salon-card-2.jpg",
+      "sibMa": "/sib-ma/7_7474f5a087.png"
+    },
+    "salon-card-3": {
+      "webp": "/mockup/salon-card-3.webp",
+      "jpg": "/mockup/salon-card-3.jpg",
+      "sibMa": "/sib-ma/3_c9f5820a94.png"
+    },
+    "salon-card-4": {
+      "webp": "/mockup/salon-card-4.webp",
+      "jpg": "/mockup/salon-card-4.jpg",
+      "sibMa": "/sib-ma/4_9d2cb5a776.png"
+    },
+    "salon-card-5": {
+      "webp": "/mockup/salon-card-5.webp",
+      "jpg": "/mockup/salon-card-5.jpg",
+      "sibMa": "/sib-ma/1_a559ea5363.png"
+    },
+    "salon-card-6": {
+      "webp": "/mockup/salon-card-6.webp",
+      "jpg": "/mockup/salon-card-6.jpg",
+      "sibMa": "/sib-ma/5_833920f28a.png"
+    },
+    "timeline-1": {
+      "webp": "/mockup/timeline-1.webp",
+      "jpg": "/mockup/timeline-1.jpg",
+      "sibMa": "/sib-ma/MUS_3588_01206249cb_110540f778.jpg"
+    },
+    "timeline-2": {
+      "webp": "/mockup/timeline-2.webp",
+      "jpg": "/mockup/timeline-2.jpg",
+      "sibMa": "/sib-ma/ALW_3951_bde2fd255e_2bc047ae4c.jpg"
+    },
+    "timeline-3": {
+      "webp": "/mockup/timeline-3.webp",
+      "jpg": "/mockup/timeline-3.jpg",
+      "sibMa": "/sib-ma/ALW_6459_33285f4622_3856730bca.jpg"
+    },
+    "timeline-4": {
+      "webp": "/mockup/timeline-4.webp",
+      "jpg": "/mockup/timeline-4.jpg",
+      "sibMa": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg"
+    },
+    "timeline-5": {
+      "webp": "/mockup/timeline-5.webp",
+      "jpg": "/mockup/timeline-5.jpg",
+      "sibMa": "/sib-ma/parc_exposition_eljadida_f4a9052968.png"
+    }
+  }
+}

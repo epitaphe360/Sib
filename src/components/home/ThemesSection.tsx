@@ -65,10 +65,10 @@ const ThemeCard: React.FC<{ theme: typeof themes[number]; index: number }> = ({ 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.55, delay: index * 0.07 }}
-      className="group relative rounded-2xl p-7 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      className="home-theme-card home-card-lift group relative rounded-2xl p-7 bg-white dark:bg-neutral-900 border shadow-sm overflow-hidden"
     >
       {/* Accent strip */}
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-accent-500/0 via-accent-500 to-accent-500/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#F39200] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
       {/* Background number */}
       <span
@@ -79,7 +79,7 @@ const ThemeCard: React.FC<{ theme: typeof themes[number]; index: number }> = ({ 
       </span>
 
       {/* Icon */}
-      <div className="relative z-10 h-12 w-12 rounded-xl flex items-center justify-center mb-5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 group-hover:bg-primary-600 group-hover:text-white transition-all duration-300 group-hover:scale-110">
+      <div className="home-theme-icon relative z-10 h-12 w-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110">
         <Icon className="h-5 w-5" />
       </div>
 
@@ -87,7 +87,7 @@ const ThemeCard: React.FC<{ theme: typeof themes[number]; index: number }> = ({ 
         {theme.title}
       </h3>
 
-      <div className="relative z-10 h-0.5 w-10 rounded-full mb-4 bg-accent-500/50 group-hover:bg-accent-500 group-hover:w-16 transition-all duration-300" />
+      <div className="relative z-10 h-0.5 w-10 rounded-full mb-4 bg-[#F39200]/40 group-hover:bg-[#F39200] group-hover:w-16 transition-all duration-300" />
 
       <p className="relative z-10 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
         {theme.desc}
@@ -98,7 +98,7 @@ const ThemeCard: React.FC<{ theme: typeof themes[number]; index: number }> = ({ 
 
 export const ThemesSection: React.FC = () => {
   return (
-    <section className="relative py-20 lg:py-28 bg-white dark:bg-neutral-950 overflow-hidden">
+    <section className="home-light relative py-20 lg:py-28 bg-white dark:bg-neutral-950 overflow-hidden">
       <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
         {/* Header */}
         <motion.div
@@ -108,12 +108,12 @@ export const ThemesSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-14 max-w-3xl mx-auto"
         >
-          <div className="sib-kicker mb-4 justify-center">Univers du Salon</div>
-          <h2 className="text-3xl lg:text-5xl font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.05] mb-5">
-            Les filières du <span className="sib-text-gradient">bâtiment</span>
+          <div className="home-section-kicker mb-4 flex justify-center">Secteurs d&apos;exposition</div>
+          <h2 className="home-section-title text-3xl lg:text-5xl tracking-tight leading-[1.05] mb-5">
+            Tous les secteurs du <span className="sib-text-gradient">bâtiment</span>
           </h2>
           <p className="text-base lg:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
-            SIB 2026 réunit entreprises privées, organismes publics, fournisseurs de matériaux, architectes et ingénieurs autour de six filières officielles, avec Espace Démonstration, SIB Academy et rencontres B2B.
+            Six filières officielles couvrant l&apos;ensemble de la chaîne de valeur — comme sur les grands salons BATIMAT, CONSTRUMAT et BIG5 — avec pavillons thématiques, démonstrations et rencontres B2B.
           </p>
           <div className="flex items-center justify-center gap-3 mt-6">
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-accent-500" />

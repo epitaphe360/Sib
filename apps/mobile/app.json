@@ -1,0 +1,69 @@
+{
+  "expo": {
+    "name": "UrbaEvent",
+    "slug": "urbaevent",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "urbaevent",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "linking": {
+      "prefixes": ["urbaevent://", "https://sib2026.ma"],
+      "config": {
+        "screens": {
+          "(auth)": {
+            "screens": {
+              "reset-password": "reset-password",
+              "auth-callback": "auth-callback"
+            }
+          }
+        }
+      }
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1B365D"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.urbacom.urbaevent"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1B365D"
+      },
+      "package": "com.urbacom.urbaevent",
+      "permissions": ["CAMERA", "RECEIVE_BOOT_COMPLETED", "VIBRATE"]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#1B365D"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "UrbaEvent utilise la caméra pour scanner les badges QR."
+        }
+      ],
+      "expo-localization",
+      "expo-asset",
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_AFTER_eas_init"
+      }
+    },
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

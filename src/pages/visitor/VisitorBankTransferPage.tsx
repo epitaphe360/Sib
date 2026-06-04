@@ -22,8 +22,10 @@ import { Button } from '../../components/ui/Button';
 import {
   VISITOR_BANK_TRANSFER_INFO,
   generateVisitorPaymentReference,
-  formatVisitorAmount
+  formatVisitorAmount,
+  getVisitorBankTransferInstructions,
 } from '../../config/visitorBankTransferConfig';
+import { useVisitorPassPricing } from '../../hooks/useVisitorPassPricing';
 
 interface VisitorPaymentRequest {
   id: string;
@@ -44,6 +46,7 @@ export default function VisitorBankTransferPage() {
   const navigate = useNavigate();
   const requestId = searchParams.get('request_id');
   const { user } = useAuthStore();
+  const { price: configuredPrice, loading: pricingLoading } = useVisitorPassPricing();
 
   const [paymentRequest, setPaymentRequest] = useState<VisitorPaymentRequest | null>(null);
   const [loading, setLoading] = useState(true);
@@ -205,7 +208,7 @@ export default function VisitorBankTransferPage() {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  if (loading) {
+  if (loading || pricingLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
@@ -218,7 +221,8 @@ export default function VisitorBankTransferPage() {
 
   const bankInfo = VISITOR_BANK_TRANSFER_INFO;
   const vipInfo = bankInfo.vipPass;
-  const instructions = bankInfo.instructions.fr;
+  const transferAmount = paymentRequest?.amount ?? configuredPrice ?? 0;
+  const instructions = getVisitorBankTransferInstructions(transferAmount, 'fr');
 
   const statusConfig = {
     pending: {
@@ -300,7 +304,7 @@ export default function VisitorBankTransferPage() {
           <div className="text-center">
             <div className="text-sm text-gray-600 mb-2">Montant à virer</div>
             <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-purple-600 mb-2">
-              {formatVisitorAmount(vipInfo.amount)}
+              {formatVisitorAmount(transferAmount)}
             </div>
             <div className="text-sm text-gray-500">
               {vipInfo.displayName} - {vipInfo.description}

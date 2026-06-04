@@ -21,6 +21,14 @@ import {
   generateVisitorPaymentReference,
   formatVisitorAmount
 } from '../config/visitorBankTransferConfig';
+import {
+  capturePayPalOrder,
+  createCMIPaymentRequest,
+  createPaymentRecord,
+  getVipPassAmount,
+} from '../services/paymentService';
+import { convertEURtoMAD } from '../utils/currencyUtils';
+import { EmailService } from '../services/emailService';
 
 export default function VisitorPaymentPage() {
   const { user } = useAuthStore();
@@ -87,14 +95,15 @@ export default function VisitorPaymentPage() {
       console.log('📝 Creating new payment request...');
 
       // Créer une nouvelle demande de paiement
+      const vipPricing = await fetchVipPassPricing();
       const paymentReference = generateVisitorPaymentReference(user.id);
 
       const { data: newRequest, error } = await supabase
         .from('payment_requests')
         .insert({
           user_id: user.id,
-          amount: 700,
-          currency: 'EUR',
+          amount: vipPricing.price,
+          currency: vipPricing.currency,
           payment_method: 'bank_transfer',
           status: 'pending',
           requested_level: 'premium',
@@ -140,9 +149,10 @@ export default function VisitorPaymentPage() {
       const captureData = await capturePayPalOrder(data.orderID as string, user.id);
 
       // Create payment record
+      const vipAmount = await getVipPassAmount();
       await createPaymentRecord({
         userId: user.id,
-        amount: PAYMENT_AMOUNTS.VIP_PASS,
+        amount: vipAmount,
         currency: 'EUR',
         paymentMethod: 'paypal',
         transactionId: data.orderID as string,
@@ -169,9 +179,10 @@ export default function VisitorPaymentPage() {
 
     try {
       // Create payment record
+      const vipAmount = await getVipPassAmount();
       await createPaymentRecord({
         userId: user.id,
-        amount: convertEURtoMAD(PAYMENT_AMOUNTS.VIP_PASS),
+        amount: await convertEURtoMAD(vipAmount),
         currency: 'MAD',
         paymentMethod: 'cmi',
         status: 'pending',
@@ -309,11 +320,12 @@ export default function VisitorPaymentPage() {
     setIsProcessing(true);
     try {
       const transactionId = crypto.randomUUID();
+      const vipAmount = await getVipPassAmount();
       // Create payment record (may fail if table doesn't exist - non-blocking)
       try {
         await createPaymentRecord({
           userId: user.id,
-          amount: PAYMENT_AMOUNTS.VIP_PASS,
+          amount: vipAmount,
           currency: 'EUR',
           paymentMethod: 'bank_transfer',
           status: 'approved',
@@ -345,7 +357,7 @@ export default function VisitorPaymentPage() {
         await EmailService.sendPaymentReceipt(
           user.email,
           user.name,
-          PAYMENT_AMOUNTS.VIP_PASS,
+          await getVipPassAmount(),
           'EUR',
           transactionId
         );

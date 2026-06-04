@@ -117,7 +117,7 @@ export default function PaymentInstructionsPage() {
 
   const referenceCode = generatePaymentReference(user.id, requestId);
   const bankInfo = BANK_TRANSFER_INFO;
-  const amount = paymentRequest?.requested_level === 'premium' ? bankInfo.amounts.premium.amount : 0;
+  const amount = paymentRequest?.amount ?? 0;
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8">

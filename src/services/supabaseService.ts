@@ -111,6 +111,7 @@ interface ExhibitorDB {
   verified: boolean;
   featured: boolean;
   stand_number?: string;
+  hall_number?: string;
   stand_area?: number;
   contact_info: ContactInfo;
   products?: ProductDB[];
@@ -303,7 +304,7 @@ export class SupabaseService {
         try {
           const { data: exhibitorResult, error: exhibitorError } = await safeSupabase
             .from('exhibitors')
-            .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, contact_info, created_at, updated_at')
+            .select('id, user_id, company_name, category, sector, description, logo_url, website, verified, featured, stand_number, hall_number, contact_info, created_at, updated_at')
             .eq('user_id', userData.id)
             .maybeSingle();
 
@@ -1086,6 +1087,7 @@ export class SupabaseService {
       featured: exhibitorDB.featured,
       isPublished: exhibitorDB.is_published ?? false,
       standNumber: exhibitorDB.stand_number,
+      hallNumber: exhibitorDB.hall_number,
       standArea: exhibitorDB.stand_area,
       contactInfo: exhibitorDB.contact_info,
       products,
@@ -2514,6 +2516,7 @@ export class SupabaseService {
 	      if (data.logo !== undefined) {updateData.logo_url = data.logo;}
 	      if (data.contactInfo !== undefined) {updateData.contact_info = data.contactInfo;}
 	      if (data.standNumber !== undefined) {updateData.stand_number = data.standNumber;}
+	      if (data.hallNumber !== undefined) {updateData.hall_number = data.hallNumber;}
 	      // Note: stand_area et is_published ne sont pas des colonnes existantes dans la table exhibitors
 	      // if (data.standArea !== undefined) updateData.stand_area = data.standArea;
 	      // if (data.isPublished !== undefined) updateData.is_published = data.isPublished;
@@ -3776,6 +3779,7 @@ export class SupabaseService {
         verified: exhibitorData.verified || false,
         featured: exhibitorData.featured || false,
         stand_number: exhibitorData.standNumber,
+        hall_number: exhibitorData.hallNumber,
         stand_area: exhibitorData.standArea
       }])
       .select(`*, user:users!exhibitors_user_id_fkey(*), products:products!fk_products_exhibitor(*), mini_site:mini_sites!mini_sites_exhibitor_id_fkey(*)`)

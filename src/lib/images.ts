@@ -1,30 +1,17 @@
 /**
- * SIB 2026 — Bibliothèque d'images 4K
- *
- * Source: Unsplash (licence libre, usage commercial autorisé)
- * Toutes les URLs utilisent les paramètres de transformation Unsplash
- * pour servir des images optimisées (webp, dimensions adaptées).
- *
- * Paramètres utilisés :
- *  - auto=format       : meilleur format selon navigateur (webp/avif)
- *  - fit=crop          : crop intelligent (préserve le sujet)
- *  - q=80              : qualité 80% (bon compromis poids/qualité)
- *  - w=<width>         : largeur cible
- *
- * Utilisation :
- *   import { IMAGES, img } from '@/lib/images';
- *   <img src={img(IMAGES.hero.construction, 1920)} />
+ * SIB 2026 — Bibliothèque d'images
+ * Priorité : chemins locaux (sib.ma / mockup) puis repli Unsplash.
  */
+import { SIB_PHOTOS } from '../config/homeProductionImages';
 
 const UNSPLASH = 'https://images.unsplash.com';
 
 export type ImageSource = {
-  /** Unsplash photo ID */
   id: string;
-  /** Texte alternatif (accessibilité) */
   alt: string;
-  /** Crédit photographique */
   credit?: string;
+  /** Asset local (/sib-ma, /mockup) — prioritaire */
+  local?: string;
 };
 
 /**
@@ -40,6 +27,7 @@ export function img(
   height?: number,
   quality = 80,
 ): string {
+  if (src.local) return src.local;
   const params = new URLSearchParams({
     auto: 'format',
     fit: 'crop',
@@ -52,6 +40,10 @@ export function img(
 
 /** Génère un srcset responsive pour une image */
 export function srcSet(src: ImageSource, widths = [640, 960, 1280, 1920, 2560]): string {
+  if (src.local) {
+    const u = src.local;
+    return `${u} 640w, ${u} 1280w, ${u} 1920w`;
+  }
   return widths.map((w) => `${img(src, w)} ${w}w`).join(', ');
 }
 
@@ -62,40 +54,30 @@ export function srcSet(src: ImageSource, widths = [640, 960, 1280, 1920, 2560]):
 export const IMAGES = {
   /* Hero / bandeaux principaux */
   hero: {
-    /** Gratte-ciel en construction, vue moderne */
-    construction:     { id: 'photo-1541888946425-d81bb19240f5', alt: 'Chantier de construction moderne', credit: 'Unsplash' },
-    /** Architecture contemporaine, lignes épurées */
-    architecture:     { id: 'photo-1487958449943-2429e8be8625', alt: 'Architecture contemporaine', credit: 'Unsplash' },
-    /** Intérieur industriel, grand volume */
-    interior:         { id: 'photo-1497366216548-37526070297c', alt: 'Grand hall professionnel', credit: 'Unsplash' },
-    /** Casablanca / Maroc urbain */
-    morocco:          { id: 'photo-1570133435079-6d02a712e33a', alt: 'Architecture marocaine moderne', credit: 'Unsplash' },
-    /** Salon professionnel / convention */
-    convention:       { id: 'photo-1540575467063-178a50c2df87', alt: 'Salon professionnel', credit: 'Unsplash' },
-    /** BTP, ouvriers, chantier */
-    construction2:    { id: 'photo-1503387762-592deb58ef4e', alt: 'Équipe de chantier BTP', credit: 'Unsplash' },
-    /** Plan architectural, blueprints */
-    blueprints:       { id: 'photo-1503387837-b154d5074bd2', alt: 'Plans architecturaux', credit: 'Unsplash' },
-    /** Design intérieur / aménagement */
-    design:           { id: 'photo-1586023492125-27b2c045efd7', alt: 'Intérieur design contemporain', credit: 'Unsplash' },
+    construction:     { id: 'photo-1541888946425-d81bb19240f5', alt: 'Hall d\'exposition SIB', local: SIB_PHOTOS.croac },
+    architecture:     { id: 'photo-1487958449943-2429e8be8625', alt: 'Parc d\'Exposition Mohammed VI', local: SIB_PHOTOS.heroHall },
+    interior:         { id: 'photo-1497366216548-37526070297c', alt: 'Grand hall professionnel', local: SIB_PHOTOS.heroHall },
+    morocco:          { id: 'photo-1570133435079-6d02a712e33a', alt: 'Parc Mohammed VI, El Jadida', local: SIB_PHOTOS.parc },
+    convention:       { id: 'photo-1540575467063-178a50c2df87', alt: 'Salon International du Bâtiment', local: SIB_PHOTOS.visitors },
+    construction2:    { id: 'photo-1503387762-592deb58ef4e', alt: 'Stand exposant SIB', local: SIB_PHOTOS.stand },
+    blueprints:       { id: 'photo-1503387837-b154d5074bd2', alt: 'Innovation BTP', local: SIB_PHOTOS.demo },
+    design:           { id: 'photo-1586023492125-27b2c045efd7', alt: 'Inauguration SIB', local: SIB_PHOTOS.inauguration },
   },
 
-  /* Networking / business */
   business: {
-    handshake:        { id: 'photo-1556761175-5973dc0f32e7', alt: 'Poignée de main professionnelle', credit: 'Unsplash' },
-    meeting:          { id: 'photo-1600880292203-757bb62b4baf', alt: 'Réunion business', credit: 'Unsplash' },
-    networking:       { id: 'photo-1515187029135-18ee286d815b', alt: 'Networking professionnel', credit: 'Unsplash' },
-    conference:       { id: 'photo-1475721027785-f74eccf877e2', alt: 'Conférence professionnelle', credit: 'Unsplash' },
-    presentation:     { id: 'photo-1552664730-d307ca884978', alt: 'Présentation business', credit: 'Unsplash' },
-    team:             { id: 'photo-1522071820081-009f0129c71c', alt: 'Équipe professionnelle', credit: 'Unsplash' },
+    handshake:        { id: 'photo-1556761175-5973dc0f32e7', alt: 'Rencontres B2B SIB', local: SIB_PHOTOS.b2b },
+    meeting:          { id: 'photo-1600880292203-757bb62b4baf', alt: 'Conférences SIB', local: SIB_PHOTOS.conferences },
+    networking:       { id: 'photo-1515187029135-18ee286d815b', alt: 'Visiteurs SIB', local: SIB_PHOTOS.visitors },
+    conference:       { id: 'photo-1475721027785-f74eccf877e2', alt: 'Conférence SIB', local: SIB_PHOTOS.conferences },
+    presentation:     { id: 'photo-1552664730-d307ca884978', alt: 'Démonstration stand', local: SIB_PHOTOS.demo },
+    team:             { id: 'photo-1522071820081-009f0129c71c', alt: 'Inauguration officielle SIB', local: SIB_PHOTOS.inauguration },
   },
 
-  /* Exposants / stands */
   exhibitors: {
-    booth:            { id: 'photo-1505373877841-8d25f7d46678', alt: 'Stand d\'exposant', credit: 'Unsplash' },
-    tradeshow:        { id: 'photo-1531058020387-3be344556be6', alt: 'Salon professionnel', credit: 'Unsplash' },
-    expo:             { id: 'photo-1511795409834-ef04bbd61622', alt: 'Grand hall d\'exposition', credit: 'Unsplash' },
-    modernBooth:      { id: 'photo-1540575467063-178a50c2df87', alt: 'Stand moderne', credit: 'Unsplash' },
+    booth:            { id: 'photo-1505373877841-8d25f7d46678', alt: 'Stand exposant', local: SIB_PHOTOS.stand },
+    tradeshow:        { id: 'photo-1531058020387-3be344556be6', alt: 'Salon SIB', local: SIB_PHOTOS.visitors },
+    expo:             { id: 'photo-1511795409834-ef04bbd61622', alt: 'Hall d\'exposition', local: SIB_PHOTOS.heroHall },
+    modernBooth:      { id: 'photo-1540575467063-178a50c2df87', alt: 'Espace démonstration', local: SIB_PHOTOS.international },
   },
 
   /* Matériaux & BTP */
@@ -110,22 +92,21 @@ export const IMAGES = {
 
   /* Maroc / héritage local */
   morocco: {
-    zellige:          { id: 'photo-1548018560-c7196548e84d', alt: 'Motif zellige traditionnel', credit: 'Unsplash' },
-    riad:             { id: 'photo-1539020140153-e479b8c22e70', alt: 'Architecture marocaine', credit: 'Unsplash' },
-    casablanca:       { id: 'photo-1553178431-04e5a9fa2f8d', alt: 'Casablanca moderne', credit: 'Unsplash' },
-    mosque:           { id: 'photo-1548018560-c7196548e84d', alt: 'Architecture traditionnelle', credit: 'Unsplash' },
-    port:             { id: 'photo-1568674749775-96b32edbdba5', alt: 'Port maritime', credit: 'Unsplash' },
-    eljadida:         { id: 'photo-1539020140153-e479b8c22e70', alt: 'El Jadida', credit: 'Unsplash' },
+    zellige:          { id: 'photo-1548018560-c7196548e84d', alt: 'Parc Mohammed VI', local: SIB_PHOTOS.parc },
+    riad:             { id: 'photo-1539020140153-e479b8c22e70', alt: 'El Jadida', local: SIB_PHOTOS.parc },
+    casablanca:       { id: 'photo-1553178431-04e5a9fa2f8d', alt: 'Salon SIB Maroc', local: SIB_PHOTOS.croac },
+    mosque:           { id: 'photo-1548018560-c7196548e84d', alt: 'Architecture', local: SIB_PHOTOS.parc },
+    port:             { id: 'photo-1568674749775-96b32edbdba5', alt: 'Exposition', local: SIB_PHOTOS.heroHall },
+    eljadida:         { id: 'photo-1539020140153-e479b8c22e70', alt: 'Parc d\'Exposition Mohammed VI, El Jadida', local: SIB_PHOTOS.parc },
   },
 
-  /* Événements / conférences */
   events: {
-    stage:            { id: 'photo-1505373877841-8d25f7d46678', alt: 'Scène de conférence', credit: 'Unsplash' },
-    audience:         { id: 'photo-1540575467063-178a50c2df87', alt: 'Public d\'une conférence', credit: 'Unsplash' },
-    workshop:         { id: 'photo-1552664730-d307ca884978', alt: 'Atelier professionnel', credit: 'Unsplash' },
-    keynote:          { id: 'photo-1475721027785-f74eccf877e2', alt: 'Keynote', credit: 'Unsplash' },
-    conference:       { id: 'photo-1475721027785-f74eccf877e2', alt: 'Conférence', credit: 'Unsplash' },
-    expo:             { id: 'photo-1511795409834-ef04bbd61622', alt: 'Salon professionnel', credit: 'Unsplash' },
+    stage:            { id: 'photo-1505373877841-8d25f7d46678', alt: 'Conférences SIB', local: SIB_PHOTOS.conferences },
+    audience:         { id: 'photo-1540575467063-178a50c2df87', alt: 'Public SIB', local: SIB_PHOTOS.visitors },
+    workshop:         { id: 'photo-1552664730-d307ca884978', alt: 'Atelier SIB', local: SIB_PHOTOS.demo },
+    keynote:          { id: 'photo-1475721027785-f74eccf877e2', alt: 'Keynote SIB', local: SIB_PHOTOS.conferences },
+    conference:       { id: 'photo-1475721027785-f74eccf877e2', alt: 'Conférence SIB', local: SIB_PHOTOS.conferences },
+    expo:             { id: 'photo-1511795409834-ef04bbd61622', alt: 'Salon SIB', local: SIB_PHOTOS.heroHall },
   },
 
   /* Tech / innovation */

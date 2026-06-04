@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" role="img" aria-label="UrbaEvent  �cosyst�me urbain et BTP">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1B365D"/>
+      <stop offset="100%" style="stop-color:#2E5984"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="400" fill="url(#bg)"/>
+  <rect width="1200" height="400" fill="url(#grid)"/>
+  <text x="80" y="180" fill="#ffffff" font-family="system-ui, sans-serif" font-size="72" font-weight="700" letter-spacing="4">URBAEVENT</text>
+  <text x="80" y="240" fill="rgba(255,255,255,0.85)" font-family="system-ui, sans-serif" font-size="28">Plateforme digitale multi-salons � BTP � Urbanisme � Immobilier</text>
+  <text x="80" y="320" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="22">SIB � SIR � SIP � BTP � SIE  Cliquez pour d�couvrir</text>
+  <circle cx="1050" cy="200" r="80" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  <circle cx="1050" cy="200" r="50" fill="rgba(255,255,255,0.08)"/>
+</svg>

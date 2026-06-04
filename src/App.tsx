@@ -10,6 +10,15 @@ import { ScrollToTop } from './components/common/ScrollToTop';
 
 // Lazy load pages
 const HomePage = lazyRetry(() => import('./pages/HomePage'));
+const HomeVariant1 = lazyRetry(() => import('./pages/home/HomeVariant1'));
+const HomeVariant2 = lazyRetry(() => import('./pages/home/HomeVariant2'));
+const HomeVariant3 = lazyRetry(() => import('./pages/home/HomeVariant3'));
+const HomeVariant4 = lazyRetry(() => import('./pages/home/HomeVariant4'));
+const HomeVariant5 = lazyRetry(() => import('./pages/home/HomeVariant5'));
+const HomeVariant6 = lazyRetry(() => import('./pages/home/HomeVariant6'));
+const HomeVariant7 = lazyRetry(() => import('./pages/home/HomeVariant7'));
+const HomeVariant8 = lazyRetry(() => import('./pages/home/HomeVariant8'));
+const HomeMenuDesignPage = lazyRetry(() => import('./pages/design/HomeMenuDesignPage'));
 const ExhibitorsPage = lazyRetry(() => import('./pages/ExhibitorsPage'));
 const NetworkingPage = lazyRetry(() => import('./pages/NetworkingPage'));
 const InteractionHistoryPage = lazyRetry(() => import('./pages/networking/InteractionHistoryPage'));
@@ -175,17 +184,19 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { useAuthStore } from './store/authStore';
 import { UrbaEventNav } from './components/layout/UrbaEventNav';
+import { isPremiumHomePath } from './components/home/sib2026/tokens';
 
 const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];
 
 function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
+  const isPremiumHome = isPremiumHomePath(location.pathname);
   return (
     <div className="min-h-screen flex flex-col">
       <SkipToContent />
       {isUrbaRoute ? <UrbaEventNav /> : <Header />}
-      <main id="main-content" className={`flex-1 ${isUrbaRoute ? 'pt-[66px]' : 'pt-16 sm:pt-20 xl:pt-28'}`}>
+      <main id="main-content" className={`flex-1 ${isPremiumHome ? 'pt-0' : isUrbaRoute ? 'pt-[66px]' : 'pt-20 sm:pt-24 xl:pt-32'}`}>
         {children}
       </main>
     </div>
@@ -206,6 +217,8 @@ if (import.meta.env.DEV) {
 const App = () => {
   const [isChatBotOpen, setIsChatBotOpen] = React.useState(false);
   const { currentLanguage } = useLanguageStore();
+  const location = useLocation();
+  const isPremiumHome = isPremiumHomePath(location.pathname);
 
   // Tracking des visites de pages pour le trafic hebdomadaire (admin dashboard)
   usePageTracking();
@@ -276,6 +289,15 @@ const App = () => {
           }>
             <Routes>
             <Route path={ROUTES.HOME} element={<HomePage />} />
+            <Route path={ROUTES.HOME_P1} element={<HomeVariant1 />} />
+            <Route path={ROUTES.HOME_P2} element={<HomeVariant2 />} />
+            <Route path={ROUTES.HOME_P3} element={<HomeVariant3 />} />
+            <Route path={ROUTES.HOME_P4} element={<HomeVariant4 />} />
+            <Route path={ROUTES.HOME_P5} element={<HomeVariant5 />} />
+            <Route path={ROUTES.HOME_P6} element={<HomeVariant6 />} />
+            <Route path={ROUTES.HOME_P7} element={<HomeVariant7 />} />
+            <Route path={ROUTES.HOME_P8} element={<HomeVariant8 />} />
+            <Route path={ROUTES.DESIGN_HOME_MENU} element={<HomeMenuDesignPage />} />
             <Route path={ROUTES.SALON_SELECTION} element={<SalonSelectionPage />} />
             <Route path={ROUTES.SALON_SIR} element={<SalonPage salonId="sir" />} />
             <Route path={ROUTES.SALON_SIP} element={<SalonPage salonId="sip" />} />
@@ -472,7 +494,7 @@ const App = () => {
           </Routes>
         </Suspense>
       </AppShell>
-      <Footer />
+      {!isPremiumHome && <Footer />}
 
       <Suspense fallback={null}>
         {/* ChatBot */}

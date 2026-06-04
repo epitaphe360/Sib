@@ -259,11 +259,8 @@ export default function ExhibitorDetailPage() {
                   </div>
                 </div>
 
-                <h1 className="text-4xl lg:text-6xl font-bold text-white tracking-tight leading-[1.05] flex flex-wrap items-center gap-3">
+                <h1 className="text-4xl lg:text-6xl font-bold text-white tracking-tight leading-[1.05]">
                   {exhibitor.companyName}
-                  {exhibitor.verified && (
-                    <CheckCircle className="h-8 w-8 text-accent-500" />
-                  )}
                 </h1>
 
                 <div className="flex flex-wrap items-center gap-5 text-white/70">

@@ -31,13 +31,6 @@ export const NetworkingSection: React.FC = () => {
     { icon: Globe,         titleKey: 'home.feature_global',       descKey: 'home.feature_global_desc' },
   ];
 
-  const stats = [
-    { number: '6 000+', labelKey: 'home.stats_professionals' },
-    { number: '40',     labelKey: 'home.stats_countries' },
-    { number: '300+',   labelKey: 'home.stats_exhibitors' },
-    { number: '95%',    labelKey: 'home.stats_satisfaction' },
-  ];
-
   return (
     <section className="relative py-20 lg:py-28 bg-neutral-50 dark:bg-neutral-950 overflow-hidden">
       <div className="max-w-container mx-auto px-6 lg:px-8">
@@ -51,41 +44,21 @@ export const NetworkingSection: React.FC = () => {
             className="relative order-2 lg:order-1"
           >
             <SmartImage
-              source={IMAGES.business.meeting}
+              source={IMAGES.hero.architecture}
               aspect="5/6"
               rounded="2xl"
               className="shadow-xl"
               overlay="bottom"
             >
               <div className="text-white">
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent-500 mb-2">
-                  Matching IA Avancé
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary-300 mb-2">
+                  Networking B2B & B2C
                 </p>
                 <p className="text-2xl font-semibold leading-tight max-w-xs">
-                  Rencontrez les bonnes personnes
+                  Rencontrez les acteurs du BTP
                 </p>
               </div>
             </SmartImage>
-
-            {/* Carte stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="absolute -right-4 md:-right-10 top-10 bg-white dark:bg-neutral-900 rounded-xl shadow-xl border border-neutral-200 dark:border-neutral-800 p-5 grid grid-cols-2 gap-4 max-w-[260px]"
-            >
-              {stats.slice(0, 4).map((stat) => (
-                <div key={stat.labelKey} className="text-center">
-                  <div className="text-xl font-bold text-primary-600 dark:text-primary-400 tabular-nums leading-none mb-1">
-                    {stat.number}
-                  </div>
-                  <div className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">
-                    {t(stat.labelKey)}
-                  </div>
-                </div>
-              ))}
-            </motion.div>
 
             {/* Carte flottante chat */}
             <motion.div

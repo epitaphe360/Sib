@@ -50,8 +50,8 @@ export const EXHIBITOR_QUOTAS: Record<ExhibitorLevel, ExhibitorQuotaConfig> = {
 
     quotas: {
       appointments: 15,  // CDC: 15 rendez-vous B2B pour stand basic
-      teamMembers: 2,
-      demoSessions: 3,
+      teamMembers: -1,
+      demoSessions: 0,
       mediaUploads: 5,
       productShowcase: 3,
       leadScans: 50,
@@ -65,8 +65,7 @@ export const EXHIBITOR_QUOTAS: Record<ExhibitorLevel, ExhibitorQuotaConfig> = {
     features: [
       'Stand 9m² (3x3m)',
       '15 rendez-vous B2B inclus',
-      '2 badges exposant',
-      '3 sessions démo',
+      'Badges exposant illimités',
       '5 fichiers média',
       '50 scans badges/jour',
       '2 prises électriques',
@@ -94,8 +93,8 @@ export const EXHIBITOR_QUOTAS: Record<ExhibitorLevel, ExhibitorQuotaConfig> = {
 
     quotas: {
       appointments: 25,  // CDC: 25 créneaux B2B (supérieur au basic 9m²)
-      teamMembers: 4,
-      demoSessions: 8,
+      teamMembers: -1,
+      demoSessions: 0,
       mediaUploads: 15,
       productShowcase: 8,
       leadScans: 150,
@@ -109,8 +108,7 @@ export const EXHIBITOR_QUOTAS: Record<ExhibitorLevel, ExhibitorQuotaConfig> = {
     features: [
       'Stand 18m² (6x3m ou 4.5x4m)',
       '25 rendez-vous B2B max',
-      '4 badges exposant',
-      '8 sessions démo',
+      'Badges exposant illimités',
       '15 fichiers média',
       '150 scans badges/jour',
       '4h salle réunion privée',
@@ -135,8 +133,8 @@ export const EXHIBITOR_QUOTAS: Record<ExhibitorLevel, ExhibitorQuotaConfig> = {
 
     quotas: {
       appointments: 30,  // CDC: 30 créneaux B2B
-      teamMembers: 8,
-      demoSessions: 20,
+      teamMembers: -1,
+      demoSessions: 0,
       mediaUploads: 999,  // CDC: Médias illimités (999 = pratiquement illimité)
       productShowcase: 20,
       leadScans: 300,
@@ -150,8 +148,7 @@ export const EXHIBITOR_QUOTAS: Record<ExhibitorLevel, ExhibitorQuotaConfig> = {
     features: [
       'Stand 36m² (6x6m ou config sur mesure)',
       '30 rendez-vous B2B max',
-      '8 badges exposant',
-      '20 sessions démo',
+      'Badges exposant illimités',
       'Médias illimités (photos, vidéos, brochures)',
       '300 scans badges/jour',
       '12h salle réunion premium',
@@ -183,8 +180,8 @@ export const EXHIBITOR_QUOTAS: Record<ExhibitorLevel, ExhibitorQuotaConfig> = {
 
     quotas: {
       appointments: -1, // CDC: illimité
-      teamMembers: 15,
-      demoSessions: -1, // illimité
+      teamMembers: -1,
+      demoSessions: 0,
       mediaUploads: -1, // CDC: illimité (stockage médias illimité)
       productShowcase: -1, // CDC: Store produits complet (illimité)
       leadScans: -1, // illimité
@@ -198,8 +195,7 @@ export const EXHIBITOR_QUOTAS: Record<ExhibitorLevel, ExhibitorQuotaConfig> = {
     features: [
       'Stand 54m²+ (config architecturale sur mesure)',
       'Rendez-vous B2B illimités',
-      '15 badges exposant',
-      'Sessions démo illimitées',
+      'Badges exposant illimités',
       'Stockage médias illimité',
       'Store produits complet (produits illimités)',
       'Scans badges illimités',

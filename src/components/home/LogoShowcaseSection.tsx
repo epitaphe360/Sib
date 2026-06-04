@@ -108,7 +108,7 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
           setPartners(partnersData.filter(p => p.logo && p.logo.trim() !== ''));
         }
         if (type === 'exhibitors' || type === 'both') {
-          if (exhibitors.length === 0) {fetchExhibitors();}
+          await fetchExhibitors(true);
         }
       } catch (error) {
         console.error('Erreur lors du chargement des données:', error);
@@ -135,6 +135,7 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
 
   const showPartners   = (type === 'partners'  || type === 'both') && partners.length > 0;
   const showExhibitors = (type === 'exhibitors' || type === 'both') && exhibitorsWithLogos.length > 0;
+  const hasAnyLogos = showPartners || showExhibitors;
 
   const partnerLogos = partners.map(p => ({
     to: `${ROUTES.PARTNERS}/${p.id}`,
@@ -150,6 +151,21 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
 
   const partnerSpeed   = Math.max(30, partners.length * 4);
   const exhibitorSpeed = Math.max(32, exhibitorsWithLogos.length * 4);
+
+  if (!hasAnyLogos) {
+    return (
+      <section className="py-12 bg-neutral-50 dark:bg-neutral-900 border-y border-neutral-200 dark:border-neutral-800">
+        <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 px-6 max-w-lg mx-auto">
+          {t(
+            type === 'partners' ? 'home.logo_showcase_empty_partners' : 'home.logo_showcase_empty',
+            type === 'partners'
+              ? 'Les logos partenaires s\'affichent ici dès publication.'
+              : 'Les logos partenaires et exposants s\'affichent ici dès qu\'ils sont publiés.',
+          )}
+        </p>
+      </section>
+    );
+  }
 
   return (
     <>
@@ -195,7 +211,7 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
           </div>
         )}
 
-        {type === 'both' && (
+        {(type === 'both' || type === 'partners') && showPartners && (
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -208,12 +224,14 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
                 <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
-            <Link to={ROUTES.EXHIBITORS}>
-              <Button variant="secondary" size="md" className="group">
-                {t('home.discover_all_exhibitors')}
-                <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
+            {type === 'both' && (
+              <Link to={ROUTES.EXHIBITORS}>
+                <Button variant="secondary" size="md" className="group">
+                  {t('home.discover_all_exhibitors')}
+                  <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+            )}
           </motion.div>
         )}
       </section>

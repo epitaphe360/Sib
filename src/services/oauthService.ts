@@ -1,6 +1,7 @@
 // src/services/oauthService.ts
 import { supabase } from '../lib/supabase';
 import { User } from '../types';
+import { ROUTES } from '../lib/routes';
 
 interface OAuthError extends Error {
   message: string;
@@ -25,6 +26,32 @@ interface OAuthUser {
  * Handles both Google and LinkedIn OAuth authentication
  */
 export class OAuthService {
+  /**
+   * Connexion sans mot de passe — envoi d'un lien magique par email (Supabase OTP)
+   */
+  static async sendMagicLink(email: string): Promise<void> {
+    if (!email?.trim()) {
+      throw new Error('Adresse email requise');
+    }
+
+    const redirectTo = `${window.location.origin}${ROUTES.OAUTH_CALLBACK}`;
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email.trim(),
+      options: {
+        emailRedirectTo: redirectTo,
+        shouldCreateUser: false,
+      },
+    });
+
+    if (error) {
+      if (error.message.includes('Signups not allowed')) {
+        throw new Error('Aucun compte associé à cet email. Créez un compte ou contactez le support.');
+      }
+      throw new Error(error.message || 'Impossible d\'envoyer le lien magique');
+    }
+  }
+
   /**
    * Sign in with Google using Supabase OAuth
    */

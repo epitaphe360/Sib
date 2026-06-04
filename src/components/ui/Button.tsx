@@ -36,7 +36,7 @@ const buttonVariants = cva(
         destructive:
           "bg-danger-500 text-white shadow-sm hover:bg-danger-600 hover:shadow-md hover:-translate-y-[1px]",
         accent:
-          "bg-accent-500 text-neutral-900 shadow-sm hover:bg-accent-600 hover:text-white hover:shadow-md hover:-translate-y-[1px]",
+          "bg-primary-600 text-white shadow-sm hover:bg-primary-700 hover:shadow-md hover:-translate-y-[1px]",
       },
       size: {
         default: "h-10 px-5",

@@ -24,8 +24,8 @@ export interface SalonConfig {
 export const DEFAULT_SALON_CONFIG: SalonConfig = {
   name: 'SIB 2026',
   dates: {
-    start: '25 Novembre 2026',
-    end: '29 Novembre 2026'
+    start: '25',
+    end: '29 Novembre'
   },
   location: {
     venue: 'Parc d\'Exposition Mohammed VI',
@@ -38,6 +38,17 @@ export const DEFAULT_SALON_CONFIG: SalonConfig = {
   },
   expectedVisitors: 6000
 };
+
+/** Chiffres clés officiels — source unique pour éviter les répétitions incohérentes */
+export const SALON_STATS = {
+  exhibitors: '600+',
+  visitors: '200 000+',
+  countries: '+30',
+  conferences: '40 ans',
+} as const;
+
+/** Note sur le premier jour du salon */
+export const SALON_START_DAY_NOTE = 'Le 25 novembre est un mercredi';
 
 /**
  * Dates du salon en format Date pour les validations
@@ -88,7 +99,13 @@ export const getMaxSlotDate = (): string => '2026-11-29';
  * Formate les dates du salon pour l'affichage
  */
 export const formatSalonDates = (config: SalonConfig): string => {
-  return `${config.dates.start} - ${config.dates.end}`;
+  return `Du ${config.dates.start} au ${config.dates.end} 2026`;
+};
+
+export const formatSalonDatesShort = (): string => '25-29 Nov. 2026';
+
+export const formatSalonDatesWithNote = (config: SalonConfig): string => {
+  return `${formatSalonDates(config)} (${SALON_START_DAY_NOTE})`;
 };
 
 /**

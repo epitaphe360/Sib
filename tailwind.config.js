@@ -7,7 +7,7 @@ export default {
       colors: {
         /* ===========================================================
          * SIB 2026 — Design System unifié
-         * Palette: primaire bleu identitaire + neutres chauds + or sable
+         * Palette: primaire bleu identitaire + neutres chauds
          * =========================================================== */
 
         /* Primaire — bleu identitaire (navigation, CTA, liens actifs) */
@@ -40,15 +40,15 @@ export default {
           900: '#1A1A17',
         },
 
-        /* Accent — or sable, usage parcimonieux (VIP, premium) */
+        /* Accent — bleu secondaire (CTA, highlights) */
         accent: {
-          50:  '#FBF6E8',
-          100: '#F4E8C2',
-          200: '#EAD695',
-          500: '#C9A961',
-          600: '#A88B42',
-          700: '#7A6430',
-          DEFAULT: '#C9A961',
+          50:  '#F0F5FB',
+          100: '#DCE8F3',
+          200: '#BAD2E8',
+          500: '#2E5984',
+          600: '#1B365D',
+          700: '#112744',
+          DEFAULT: '#2E5984',
         },
 
         /* Couleurs fonctionnelles — statuts uniquement */
@@ -75,12 +75,12 @@ export default {
           accent:    '#5E8FBE',
           light:     '#DCE8F3',
           dark:      '#07182C',
-          gold:      '#C9A961',
+          gold:      '#2E5984',
           orange:    '#B45309',
           navy:      '#07182C',
           teal:      '#2E5984',
-          coral:     '#C9A961',
-          sand:      '#F4E8C2',
+          coral:     '#5E8FBE',
+          sand:      '#DCE8F3',
           maritime:  '#1B365D',
           gray: {
             50:  '#FAFAF7',
@@ -101,7 +101,7 @@ export default {
           accent:    '#5E8FBE',
           light:     '#DCE8F3',
           dark:      '#07182C',
-          gold:      '#C9A961',
+          gold:      '#2E5984',
           orange:    '#B45309',
         },
         urba: {
@@ -112,7 +112,7 @@ export default {
           secondary:      '#5C5C55',
           success:        '#15803D',
           alert:          '#B91C1C',
-          gold:           '#C9A961',
+          gold:           '#2E5984',
           white:          '#FFFFFF',
           'blue-dark':    '#112744',
           'blue-light':   '#5E8FBE',

@@ -1,0 +1,228 @@
+{
+  "hero": {
+    "caption": "CROAC - SIB 2022",
+    "position": 1,
+    "hash": "ALW_4646_e80870e56f_86f40519c5",
+    "ext": ".jpg",
+    "local": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg",
+    "source": "galeries[0] — 1er visuel Best Of sib.ma (ordre Strapi position)"
+  },
+  "heroBanner": {
+    "url": "https://sib.ma/backend/uploads/parc_exposition_eljadida_f4a9052968.png",
+    "hash": "parc_exposition_eljadida_f4a9052968",
+    "width": 1633,
+    "height": 1199,
+    "ext": ".png",
+    "local": "/sib-ma/parc_exposition_eljadida_f4a9052968.png",
+    "caption": "parc_exposition_eljadida.png",
+    "source": "sib.banner_default — Parc Mohammed VI (bannière site)"
+  },
+  "mission": {
+    "caption": "Inauguration officielle - SIB 2024",
+    "position": 9,
+    "hash": "1_a559ea5363",
+    "ext": ".png",
+    "local": "/sib-ma/1_a559ea5363.png",
+    "source": "galerie Best Of — inauguration (comme section présentation sib.ma)"
+  },
+  "reserve": {
+    "url": "https://sib.ma/backend/uploads/parc_exposition_eljadida_f4a9052968.png",
+    "hash": "parc_exposition_eljadida_f4a9052968",
+    "width": 1633,
+    "height": 1199,
+    "ext": ".png",
+    "local": "/sib-ma/parc_exposition_eljadida_f4a9052968.png",
+    "caption": "parc_exposition_eljadida.png",
+    "source": "sib.banner_default — même visuel bloc lieu sur sib.ma"
+  },
+  "sectionBg": {
+    "local": "/sib-ma/static/section_02.jpg",
+    "caption": "assets/images/bg/section_02.jpg (fond titres sib.ma)",
+    "source": "www.sib.ma/assets statique"
+  },
+  "activiteSecteurs": {
+    "url": "https://sib.ma/backend/uploads/main_5bd806f6fcced8760ced_e4e03ad1e4.png",
+    "hash": "main_5bd806f6fcced8760ced_e4e03ad1e4",
+    "width": 2460,
+    "height": 896,
+    "ext": ".png",
+    "local": "/sib-ma/main_5bd806f6fcced8760ced_e4e03ad1e4.png",
+    "caption": "main.5bd806f6fcced8760ced.png"
+  },
+  "salonCards": {
+    "exposer": {
+      "caption": "Stand L.A.P \"Sponsor Officiel\" - SIB 2024",
+      "position": 10,
+      "hash": "2_1e3351c897",
+      "ext": ".png",
+      "local": "/sib-ma/2_1e3351c897.png",
+      "source": "galerie Best Of — Stand L.A.P \"Sponsor Officiel\" - SIB 2024"
+    },
+    "visiter": {
+      "caption": "Visiteurs - SIB 2024",
+      "position": 15,
+      "hash": "7_7474f5a087",
+      "ext": ".png",
+      "local": "/sib-ma/7_7474f5a087.png",
+      "source": "galerie Best Of — Visiteurs - SIB 2024"
+    },
+    "sib_talks": {
+      "caption": "Conférences SIB 2024",
+      "position": 11,
+      "hash": "3_c9f5820a94",
+      "ext": ".png",
+      "local": "/sib-ma/3_c9f5820a94.png",
+      "source": "galerie Best Of — Conférences SIB 2024"
+    },
+    "b2b": {
+      "caption": "B2B FMC - SIB 2024",
+      "position": 12,
+      "hash": "4_9d2cb5a776",
+      "ext": ".png",
+      "local": "/sib-ma/4_9d2cb5a776.png",
+      "source": "galerie Best Of — B2B FMC - SIB 2024"
+    },
+    "diner": {
+      "caption": "Inauguration officielle - SIB 2024",
+      "position": 9,
+      "hash": "1_a559ea5363",
+      "ext": ".png",
+      "local": "/sib-ma/1_a559ea5363.png",
+      "source": "galerie Best Of — Inauguration officielle - SIB 2024"
+    },
+    "international": {
+      "caption": "Espace Démonstration | Stand CROAC - SIB 2024",
+      "position": 13,
+      "hash": "5_833920f28a",
+      "ext": ".png",
+      "local": "/sib-ma/5_833920f28a.png",
+      "source": "galerie Best Of — Espace Démonstration | Stand CROAC - SIB 2024"
+    }
+  },
+  "timeline": {
+    "1986": {
+      "caption": "Stand du Ministère - SIB 2022",
+      "position": 2,
+      "hash": "MUS_3588_01206249cb_110540f778",
+      "ext": ".jpg",
+      "local": "/sib-ma/MUS_3588_01206249cb_110540f778.jpg",
+      "source": "timeline 1986 — Stand du Ministère - SIB 2022"
+    },
+    "2000": {
+      "caption": "Stand TTH COMPANY \"Sponsor Officiel\" - SIB 2022",
+      "position": 4,
+      "hash": "ALW_3951_bde2fd255e_2bc047ae4c",
+      "ext": ".jpg",
+      "local": "/sib-ma/ALW_3951_bde2fd255e_2bc047ae4c.jpg",
+      "source": "timeline 2000 — Stand TTH COMPANY \"Sponsor Officiel\" - SIB 2022"
+    },
+    "2012": {
+      "caption": "SIB STADIUM - SIB 2022",
+      "position": 5,
+      "hash": "ALW_6459_33285f4622_3856730bca",
+      "ext": ".jpg",
+      "local": "/sib-ma/ALW_6459_33285f4622_3856730bca.jpg",
+      "source": "timeline 2012 — SIB STADIUM - SIB 2022"
+    },
+    "2022": {
+      "caption": "CROAC - SIB 2022",
+      "position": 1,
+      "hash": "ALW_4646_e80870e56f_86f40519c5",
+      "ext": ".jpg",
+      "local": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg",
+      "source": "timeline 2022 — CROAC - SIB 2022"
+    },
+    "2026": {
+      "url": "https://sib.ma/backend/uploads/parc_exposition_eljadida_f4a9052968.png",
+      "hash": "parc_exposition_eljadida_f4a9052968",
+      "width": 1633,
+      "height": 1199,
+      "ext": ".png",
+      "local": "/sib-ma/parc_exposition_eljadida_f4a9052968.png",
+      "caption": "parc_exposition_eljadida.png",
+      "source": "timeline 2026 — parc_exposition_eljadida.png"
+    }
+  },
+  "bestOfOrder": [
+    {
+      "position": 1,
+      "caption": "CROAC - SIB 2022",
+      "local": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg"
+    },
+    {
+      "position": 2,
+      "caption": "Stand du Ministère - SIB 2022",
+      "local": "/sib-ma/MUS_3588_01206249cb_110540f778.jpg"
+    },
+    {
+      "position": 3,
+      "caption": "Inauguration Mme FATIMA ZAHRA EL MANSOURI - SIB 2022",
+      "local": "/sib-ma/ALW_3369_067b43b2aa_16e46cc9e8.jpg"
+    },
+    {
+      "position": 4,
+      "caption": "Stand TTH COMPANY \"Sponsor Officiel\" - SIB 2022",
+      "local": "/sib-ma/ALW_3951_bde2fd255e_2bc047ae4c.jpg"
+    },
+    {
+      "position": 5,
+      "caption": "SIB STADIUM - SIB 2022",
+      "local": "/sib-ma/ALW_6459_33285f4622_3856730bca.jpg"
+    },
+    {
+      "position": 6,
+      "caption": "Tournoi National URBACOM des Echecs - SIB 2022",
+      "local": "/sib-ma/ALW_5795_5d5a2084bf_6e12b4efa1.jpg"
+    },
+    {
+      "position": 7,
+      "caption": "SIB WOMAN - SIB 2022",
+      "local": "/sib-ma/MUS_2047_bfb27a7b0a_0dc45cd345.jpg"
+    },
+    {
+      "position": 8,
+      "caption": "B2B FMC - SIB 2022",
+      "local": "/sib-ma/MUS_2474_845b49c603_862cc1ef12.jpg"
+    },
+    {
+      "position": 9,
+      "caption": "Inauguration officielle - SIB 2024",
+      "local": "/sib-ma/1_a559ea5363.png"
+    },
+    {
+      "position": 10,
+      "caption": "Stand L.A.P \"Sponsor Officiel\" - SIB 2024",
+      "local": "/sib-ma/2_1e3351c897.png"
+    },
+    {
+      "position": 11,
+      "caption": "Conférences SIB 2024",
+      "local": "/sib-ma/3_c9f5820a94.png"
+    },
+    {
+      "position": 12,
+      "caption": "B2B FMC - SIB 2024",
+      "local": "/sib-ma/4_9d2cb5a776.png"
+    },
+    {
+      "position": 13,
+      "caption": "Espace Démonstration | Stand CROAC - SIB 2024",
+      "local": "/sib-ma/5_833920f28a.png"
+    },
+    {
+      "position": 14,
+      "caption": "Espace SIB TV - SIB 2024",
+      "local": "/sib-ma/6_e150a00dd5.png"
+    },
+    {
+      "position": 15,
+      "caption": "Visiteurs - SIB 2024",
+      "local": "/sib-ma/7_7474f5a087.png"
+    },
+    {
+      "position": 16,
+      "caption": "Visiteurs - SIB 2024",
+      "local": "/sib-ma/8_7f9bb440b0.png"
+    }
+  ]
+}

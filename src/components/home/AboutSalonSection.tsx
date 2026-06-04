@@ -43,8 +43,8 @@ export const AboutSalonSection: React.FC = () => {
             transition={{ duration: 0.7 }}
             viewport={{ once: true, margin: '-100px' }}
           >
-            <div className="sib-kicker mb-4">{t('about.badge') || 'À propos'}</div>
-            <h2 className="text-3xl lg:text-5xl font-bold text-neutral-900 dark:text-white leading-tight tracking-tight mb-6">
+            <div className="home-section-kicker mb-4">{t('about.badge') || 'À propos'}</div>
+            <h2 className="home-section-title text-3xl lg:text-5xl leading-tight tracking-tight mb-6">
               {t('home.about_subtitle') || (
                 <>
                   Le hub incontournable<br />

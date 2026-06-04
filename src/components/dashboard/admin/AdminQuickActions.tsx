@@ -52,6 +52,7 @@ export function AdminQuickActions({ adminMetrics: m, t }: AdminQuickActionsProps
                   { to: ROUTES.ADMIN_CREATE_PARTNER, icon: <Plus className="h-3.5 w-3.5" />, label: t('admin.create_partner'), cls: 'text-purple-700 hover:bg-purple-50' },
                   { to: ROUTES.ADMIN_PARTNERS_MANAGE, icon: <Handshake className="h-3.5 w-3.5" />, label: t('admin.manage_partners_action'), cls: 'text-pink-700 hover:bg-pink-50' },
                   { to: ROUTES.ADMIN_VIP_VISITORS, icon: <Crown className="h-3.5 w-3.5" />, label: t('admin.vip_visitors_management'), cls: 'text-amber-700 hover:bg-amber-50' },
+                  { to: `${ROUTES.ADMIN_DASHBOARD}#visitor-pricing`, icon: <Crown className="h-3.5 w-3.5" />, label: t('admin.visitor_pricing.short_link'), cls: 'text-yellow-700 hover:bg-yellow-50' },
                   { to: ROUTES.ADMIN_USERS, icon: <Users className="h-3.5 w-3.5" />, label: t('admin.users_label'), cls: 'text-blue-700 hover:bg-blue-50' },
                 ].map(item => (
                   <Link key={item.to} to={item.to}>
