@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Home } from 'lucide-react';
 import { getDefaultHomePageVariant, getHomeRouteForVariant } from '../../../config/homeVariants';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { useHomeMenuItems } from './useHomeMenuItems';
@@ -82,7 +82,7 @@ export const HomeNavMenuBlockDesktop: React.FC<HomeNavMenuBlockProps> = ({
 
       {isOpen && (
         <div
-          className={`absolute top-full z-[500] ${premium ? 'left-1/2 -translate-x-1/2 pt-2' : 'left-0 pt-1'}`}
+          className={`absolute top-full z-[500] ${premium ? 'left-0 pt-2' : 'left-0 pt-1'}`}
           onMouseEnter={onOpen}
           onMouseLeave={onClose}
         >
