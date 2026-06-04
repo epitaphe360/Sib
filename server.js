@@ -8,8 +8,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
+import { createRequire } from 'module';
 
-import { createSupabaseServerClient } from './server/supabaseNodeClient.js';
+const require = createRequire(import.meta.url);
+const { createSupabaseServerClient } = require('./server/supabaseNodeClient.cjs');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
