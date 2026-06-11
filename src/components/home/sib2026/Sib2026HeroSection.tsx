@@ -5,21 +5,21 @@ import { ROUTES } from '../../../lib/routes';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { SALON_START_DAY_NOTE } from '../../../config/salonInfo';
 import { SIB2026 } from './tokens';
-import { SIB2026_ASSETS } from './assets';
-import { Sib2026Picture } from './Sib2026Picture';
 import { Sib2026HeroBadgeForm } from './Sib2026HeroBadgeForm';
+import { useSiteImage } from '../../../hooks/useSiteImage';
 
 export const Sib2026HeroSection: React.FC = () => {
   const { t } = useTranslation();
+  const { src: heroSrc } = useSiteImage('sib2026_hero');
 
   return (
     <section className="relative min-h-[600px] sm:min-h-[680px] lg:min-h-[820px] flex items-center overflow-hidden home-hero-media">
-      <Sib2026Picture
-        asset={SIB2026_ASSETS.hero}
-        largeAsset={SIB2026_ASSETS.hero2k}
+      <img
+        src={heroSrc}
         alt="SIB 2026 — hall d'exposition"
         className="absolute inset-0 h-full w-full object-cover object-[center_35%] home-hero-photo"
         loading="eager"
+        decoding="async"
         sizes="100vw"
       />
       <div className="absolute inset-0 sib2026-hero-gradient" aria-hidden />

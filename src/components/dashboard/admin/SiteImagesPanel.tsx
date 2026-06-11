@@ -15,21 +15,23 @@ import {
   type SiteImageKey,
 } from '../../../config/siteImagesConfig';
 
-type Category = 'home' | 'sib40' | 'builders';
+type Category = 'home' | 'sib40' | 'builders' | 'sib2026';
 
 const CATEGORY_LABELS: Record<Category, string> = {
-  home:     'Pages Accueil',
+  sib2026:  'Accueil SIB 2026',
+  home:     'Accueil (autres)',
   sib40:    'Page 40 ans',
   builders: 'Femmes & Hommes',
 };
 const CATEGORY_DESCS: Record<Category, string> = {
-  home:     'Photos héros, parc, stands, conférences, B2B, inauguration, international',
+  sib2026:  'Photos des pages d\'accueil principales (P1–P8) : hero, mission, timeline, cartes salon, bannière réservation',
+  home:     'Photos héros, parc, stands, conférences, B2B, inauguration, international (variants)',
   sib40:    'Hero, portraits et timeline de la page /accueil/40ans',
   builders: 'Portraits des profils sur /salon/femmes-et-hommes',
 };
 
 export function SiteImagesPanel() {
-  const [activeTab, setActiveTab] = useState<Category>('home');
+  const [activeTab, setActiveTab] = useState<Category>('sib2026');
   const [rows, setRows]           = useState<SiteImageRow[]>([]);
   const [loading, setLoading]     = useState(true);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
@@ -96,7 +98,7 @@ export function SiteImagesPanel() {
           </div>
           <div>
             <h3 className="text-lg font-bold text-white">Gestion des Photos du Site</h3>
-            <p className="text-sm text-white/80">Modifiez toutes les images — pages accueil, 40 ans, Femmes & Hommes</p>
+            <p className="text-sm text-white/80">Modifiez toutes les images — pages accueil SIB 2026, 40 ans, Femmes & Hommes</p>
           </div>
         </div>
 

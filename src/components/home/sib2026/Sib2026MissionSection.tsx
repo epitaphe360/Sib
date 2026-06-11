@@ -4,13 +4,36 @@ import { ArrowRight } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { ROUTES } from '../../../lib/routes';
 import { SIB2026 } from './tokens';
-import { SIB2026_ASSETS } from './assets';
-import { Sib2026Picture } from './Sib2026Picture';
+import { useSiteImage } from '../../../hooks/useSiteImage';
+import type { SiteImageKey } from '../../../config/siteImagesConfig';
+
+const MISSION_KEYS: SiteImageKey[] = [
+  'sib2026_timeline_1',
+  'sib2026_timeline_2',
+  'sib2026_timeline_3',
+  'sib2026_timeline_4',
+];
+
+const MissionSlot: React.FC<{ imageKey: SiteImageKey; alt: string }> = ({ imageKey, alt }) => {
+  const { src } = useSiteImage(imageKey);
+  return (
+    <div className="relative flex-1 min-w-0 border-l border-white/10 first:border-l-0 overflow-hidden">
+      <img
+        src={src}
+        alt={alt}
+        className="absolute inset-0 h-full w-full object-cover object-center"
+        loading="lazy"
+        decoding="async"
+        sizes="(max-width: 1024px) 25vw, 15vw"
+      />
+    </div>
+  );
+};
 
 /** Mission — visuels architecture/hall (sans portraits de personnes) */
 export const Sib2026MissionSection: React.FC = () => {
   const { t } = useTranslation();
-  const architectureAssets = SIB2026_ASSETS.timeline.slice(0, 4);
+  const altText = t('mockup.mission.title').replace(/\n/g, ' ');
 
   return (
     <section style={{ backgroundColor: SIB2026.navy }} className="overflow-hidden">
@@ -37,15 +60,8 @@ export const Sib2026MissionSection: React.FC = () => {
         </div>
 
         <div className="lg:flex-1 flex flex-row min-h-[360px] sm:min-h-[420px] lg:min-h-[480px]">
-          {architectureAssets.map((asset, i) => (
-            <div key={i} className="relative flex-1 min-w-0 border-l border-white/10 first:border-l-0 overflow-hidden">
-              <Sib2026Picture
-                asset={asset}
-                alt={t('mockup.mission.title').replace(/\n/g, ' ')}
-                className="absolute inset-0 h-full w-full object-cover object-center"
-                sizes="(max-width: 1024px) 25vw, 15vw"
-              />
-            </div>
+          {MISSION_KEYS.map(key => (
+            <MissionSlot key={key} imageKey={key} alt={altText} />
           ))}
         </div>
       </div>

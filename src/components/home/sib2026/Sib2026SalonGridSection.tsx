@@ -4,7 +4,17 @@ import { ArrowRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { SIB2026 } from './tokens';
-import { getSalonCardBg } from './assets';
+import { useSiteImage } from '../../../hooks/useSiteImage';
+import type { SiteImageKey } from '../../../config/siteImagesConfig';
+
+const CARD_KEY_MAP: Record<string, SiteImageKey> = {
+  exposer:       'sib2026_salon_exposer',
+  visiter:       'sib2026_salon_visiter',
+  sib_talks:     'sib2026_salon_sib_talks',
+  b2b:           'sib2026_salon_b2b',
+  diner:         'sib2026_salon_diner',
+  international: 'sib2026_salon_international',
+};
 
 export interface SalonGridItem {
   key: string;
@@ -16,7 +26,8 @@ export interface SalonGridItem {
 
 const SalonGridCard: React.FC<{ item: SalonGridItem; onNavigate?: () => void }> = ({ item, onNavigate }) => {
   const Icon = item.icon;
-  const bg = getSalonCardBg(item.key, true);
+  const imageKey: SiteImageKey = CARD_KEY_MAP[item.key] ?? 'sib2026_salon_exposer';
+  const { src: bgSrc } = useSiteImage(imageKey);
   return (
     <Link
       to={item.href}
@@ -27,7 +38,7 @@ const SalonGridCard: React.FC<{ item: SalonGridItem; onNavigate?: () => void }> 
       <div
         className="absolute inset-0 scale-110 bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.12]"
         style={{
-          backgroundImage: `image-set(url('${bg.webp}') type('image/webp'), url('${bg.jpg}') type('image/jpeg'))`,
+          backgroundImage: `url('${bgSrc}')`,
           filter: 'saturate(0.75) brightness(0.52)',
         }}
         aria-hidden
@@ -71,21 +82,27 @@ export const Sib2026SalonGridSection: React.FC<Sib2026SalonGridSectionProps> = (
   const { t } = useTranslation();
   const titleLines = t('mockup.salon_pense.title_lines').split('|');
 
+  let titleDivClass: string;
+  if (dropdown) {
+    titleDivClass = 'flex w-[190px] shrink-0 items-center px-6 py-8';
+  } else if (compact) {
+    titleDivClass = 'px-6 py-4 border-b border-white/10';
+  } else {
+    titleDivClass = 'flex shrink-0 items-center px-8 lg:px-10 xl:px-12 py-14 lg:py-16 lg:w-[210px] xl:w-[240px]';
+  }
+
+  let titleSizeClass: string;
+  if (dropdown) {
+    titleSizeClass = 'text-sm';
+  } else if (compact) {
+    titleSizeClass = 'text-lg';
+  } else {
+    titleSizeClass = 'text-[22px] lg:text-2xl';
+  }
+
   const titleBlock = (
-    <div
-      className={
-        dropdown
-          ? 'flex w-[190px] shrink-0 items-center px-6 py-8'
-          : compact
-            ? 'px-6 py-4 border-b border-white/10'
-            : 'flex shrink-0 items-center px-8 lg:px-10 xl:px-12 py-14 lg:py-16 lg:w-[210px] xl:w-[240px]'
-      }
-    >
-      <h2
-        className={`sib2026-display font-extrabold uppercase leading-[1.08] text-white ${
-          dropdown ? 'text-sm' : compact ? 'text-lg' : 'text-[22px] lg:text-2xl'
-        }`}
-      >
+    <div className={titleDivClass}>
+      <h2 className={`sib2026-display font-extrabold uppercase leading-[1.08] text-white ${titleSizeClass}`}>
         {titleLines.map((line) => (
           <span key={line} className="block">
             {line}
@@ -95,7 +112,7 @@ export const Sib2026SalonGridSection: React.FC<Sib2026SalonGridSectionProps> = (
     </div>
   );
 
-  const gridCols = dropdown || compact ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2';
+  const gridCols = 'grid-cols-1 sm:grid-cols-2';
 
   const grid = (
     <div className={`grid ${gridCols} gap-[1px]`} style={{ backgroundColor: SIB2026.cardBorder }}>
