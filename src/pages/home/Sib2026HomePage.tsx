@@ -7,9 +7,7 @@ import { Sib2026SalonGridSection } from '../../components/home/sib2026/Sib2026Sa
 import { Sib2026InternationalSection } from '../../components/home/sib2026/Sib2026InternationalSection';
 import { Sib2026ReserveBanner } from '../../components/home/sib2026/Sib2026ReserveBanner';
 import { Sib2026Footer } from '../../components/home/sib2026/Sib2026Footer';
-import { SponsorSpotlight } from '../../components/home/SponsorSpotlight';
 import { UrbaEventBanner } from '../../components/home/UrbaEventBanner';
-import { LogoShowcaseSection } from '../../components/home/LogoShowcaseSection';
 import { MasterScrollReveal } from '../../components/home/master/MasterScrollReveal';
 import { useHomeMenuItems } from '../../components/layout/homeMenu/useHomeMenuItems';
 import { HomePageShell } from '../../components/home/HomePageShell';
@@ -25,9 +23,6 @@ export default function Sib2026HomePage() {
       <MasterScrollReveal y={20}>
         <Sib2026StatsBar />
       </MasterScrollReveal>
-      <MasterScrollReveal y={24} delay={0.03}>
-        <SponsorSpotlight />
-      </MasterScrollReveal>
       <MasterScrollReveal y={40} delay={0.05}>
         <Sib2026MissionSection />
       </MasterScrollReveal>
@@ -41,9 +36,6 @@ export default function Sib2026HomePage() {
       </MasterScrollReveal>
       <MasterScrollReveal y={24} delay={0.03}>
         <UrbaEventBanner />
-      </MasterScrollReveal>
-      <MasterScrollReveal y={24} delay={0.03}>
-        <LogoShowcaseSection />
       </MasterScrollReveal>
       <MasterScrollReveal y={40} delay={0.05}>
         <Sib2026InternationalSection />

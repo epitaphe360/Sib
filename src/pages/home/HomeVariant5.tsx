@@ -6,7 +6,6 @@ import { HomeHighlightsSection } from '../../components/home/HomeHighlightsSecti
 import { UrbaEventBanner } from '../../components/home/UrbaEventBanner';
 import { HomeBadgeSection } from '../../components/home/HomeBadgeSection';
 import { HomeHeroMinimal } from '../../components/home/variants/HomeHeroMinimal';
-import { HomeLogoMarqueeSection } from '../../components/home/HomeLogoMarqueeSection';
 import { HomePageShell } from '../../components/home/HomePageShell';
 import { HomeFigmaCoreSections } from '../../components/home/HomeFigmaCoreSections';
 
@@ -22,7 +21,6 @@ export default function HomeVariant5() {
       <ThemesSection />
       <HomeVisitorExhibitSection />
       <HomeHighlightsSection />
-      <HomeLogoMarqueeSection />
       <UrbaEventBanner />
       <HomeBadgeSection className="border-t border-neutral-200 dark:border-neutral-800 mt-8" />
     </HomePageShell>

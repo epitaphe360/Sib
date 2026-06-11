@@ -22,7 +22,7 @@ export default function Sib40HomePage() {
     <div className="dm-home sib40-page min-h-screen overflow-x-hidden">
       <Sib40HeroSection />
       <Sib40StatsBar />
-      <HomeComplianceSections showLogos={false} />
+      <HomeComplianceSections />
       <MasterScrollReveal>
         <Sib40MissionSection />
       </MasterScrollReveal>

@@ -1,8 +1,6 @@
 /** P7 — World Class + urgence FOMO — Design Master */
 import { ThemesSection } from '../../components/home/ThemesSection';
-import { SponsorSpotlight } from '../../components/home/SponsorSpotlight';
 import { HomeVisitorExhibitSection } from '../../components/home/HomeVisitorExhibitSection';
-import { HomeLogoMarqueeSection } from '../../components/home/HomeLogoMarqueeSection';
 import { UrbaEventBanner } from '../../components/home/UrbaEventBanner';
 import { HomeBadgeSection } from '../../components/home/HomeBadgeSection';
 import { LatestNewsSection } from '../../components/home/LatestNewsSection';
@@ -26,8 +24,6 @@ export default function HomeVariant7() {
         <ThemesSection />
       </MasterScrollReveal>
       <HomeVisitorExhibitSection />
-      <SponsorSpotlight />
-      <HomeLogoMarqueeSection />
       <UrbaEventBanner />
       <HomeBadgeSection />
       <LatestNewsSection />

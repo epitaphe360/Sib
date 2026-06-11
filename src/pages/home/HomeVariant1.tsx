@@ -3,13 +3,11 @@ import { ThemesSection } from '../../components/home/ThemesSection';
 import { AboutSalonSection } from '../../components/home/AboutSalonSection';
 import { HomeVisitorExhibitSection } from '../../components/home/HomeVisitorExhibitSection';
 import { HomeHighlightsSection } from '../../components/home/HomeHighlightsSection';
-import { SponsorSpotlight } from '../../components/home/SponsorSpotlight';
 import { UrbaEventBanner } from '../../components/home/UrbaEventBanner';
 import { HomeBadgeSection } from '../../components/home/HomeBadgeSection';
 import { LatestNewsSection } from '../../components/home/LatestNewsSection';
 import { NetworkingSection } from '../../components/home/NetworkingSection';
 import { ServicesSection } from '../../components/home/ServicesSection';
-import { HomeLogoMarqueeSection } from '../../components/home/HomeLogoMarqueeSection';
 import { HomePageShell } from '../../components/home/HomePageShell';
 import { HomeFigmaCoreSections } from '../../components/home/HomeFigmaCoreSections';
 import { P1LeadMagnetSection } from '../../components/home/variants/P1LeadMagnetSection';
@@ -30,8 +28,6 @@ export default function HomeVariant1() {
       <HomeVisitorExhibitSection />
       <AboutSalonSection />
       <HomeHighlightsSection />
-      <SponsorSpotlight />
-      <HomeLogoMarqueeSection />
       <UrbaEventBanner />
       <P1LeadMagnetSection />
       <P1TestimonialsSection />

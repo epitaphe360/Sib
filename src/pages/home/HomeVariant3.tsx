@@ -3,13 +3,13 @@ import { ThemesSection } from '../../components/home/ThemesSection';
 import { HomeVisitorExhibitSection } from '../../components/home/HomeVisitorExhibitSection';
 import { HomeHighlightsSection } from '../../components/home/HomeHighlightsSection';
 import { HomeBadgeSection } from '../../components/home/HomeBadgeSection';
-import { HomeComplianceSections } from '../../components/home/HomeComplianceSections';
 import { HomePageShell } from '../../components/home/HomePageShell';
 import { HomeFigmaCoreSections } from '../../components/home/HomeFigmaCoreSections';
 import { MasterHeroSection } from '../../components/home/master/MasterHeroSection';
 import { MasterStatsBento } from '../../components/home/master/MasterStatsBento';
 import { MasterScrollReveal } from '../../components/home/master/MasterScrollReveal';
 import { MasterGlassCard } from '../../components/home/master/MasterGlassCard';
+import { UrbaEventBanner } from '../../components/home/UrbaEventBanner';
 
 export default function HomeVariant3() {
   return (
@@ -36,7 +36,6 @@ export default function HomeVariant3() {
           </MasterGlassCard>
         </MasterScrollReveal>
       </div>
-      <HomeLogoMarqueeSection />
       <div className="max-w-container mx-auto px-6 lg:px-8 pb-12">
         <MasterScrollReveal delay={0.04}>
           <MasterGlassCard light className="overflow-hidden mb-10">
