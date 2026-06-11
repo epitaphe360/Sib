@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { upsertSiteText } from '../../services/siteImagesService';
 import { ROUTES } from '../../lib/routes';
 import {
   Settings,
@@ -166,12 +168,26 @@ export default function ContentManagement() {
   };
 
   const handleSave = async () => {
-    if (!selectedSectionId) {return;}
+    if (!selectedSectionId) return;
 
     setIsLoading(true);
     setError(null);
     try {
-      // Update local state - in a full implementation, this would save to a backend
+      // Persistance Supabase pour la section 'home'
+      if (selectedSectionId === 'home') {
+        const { mainTitle, descriptionText, keyStats } = currentContentData;
+        await Promise.all([
+          mainTitle     !== undefined && upsertSiteText('home_hero_headline', { value_fr: mainTitle }),
+          descriptionText !== undefined && upsertSiteText('home_hero_kicker',  { value_fr: descriptionText }),
+          Array.isArray(keyStats) && keyStats.length >= 1 && upsertSiteText('home_stats_exhibitors',  { value_fr: keyStats[0] ?? null }),
+          Array.isArray(keyStats) && keyStats.length >= 2 && upsertSiteText('home_stats_visitors',    { value_fr: keyStats[1] ?? null }),
+          Array.isArray(keyStats) && keyStats.length >= 3 && upsertSiteText('home_stats_countries',   { value_fr: keyStats[2] ?? null }),
+          Array.isArray(keyStats) && keyStats.length >= 4 && upsertSiteText('home_stats_conferences', { value_fr: keyStats[3] ?? null }),
+        ].filter(Boolean));
+        toast.success('Contenu de la page d\'accueil enregistré');
+      }
+
+      // Mise à jour locale
       const updatedSections = contentSections.map(section =>
         section.id === selectedSectionId
           ? { ...section, content_data: currentContentData, last_modified: new Date().toISOString() }
@@ -179,11 +195,10 @@ export default function ContentManagement() {
       );
       setContentSections(updatedSections);
       setIsEditing(false);
-      // Note: For persistent storage, implement backend API endpoint or use SupabaseService with proper authentication
-      console.log('Content saved locally. Implement backend persistence for production.');
     } catch (err) {
       console.error('Error saving content:', err);
-      setError('Failed to save content. Please try again.');
+      setError('Erreur lors de la sauvegarde. Vérifiez votre connexion Supabase.');
+      toast.error('Échec de la sauvegarde');
     } finally {
       setIsLoading(false);
     }

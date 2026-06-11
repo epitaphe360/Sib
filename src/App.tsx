@@ -1,29 +1,20 @@
-﻿import React, { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { lazyRetry } from './utils/lazyRetry';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { usePageTracking } from './hooks/usePageTracking';
 import { Header } from './components/layout/Header';
+import { HautPatronageBar } from './components/layout/HautPatronageBar';
 import { Footer } from './components/layout/Footer';
 import { SkipToContent } from './components/common/SkipToContent';
 import { ScrollToTop } from './components/common/ScrollToTop';
 
 // Lazy load pages
-const HomePage = lazyRetry(() => import('./pages/HomePage'));
-const HomeVariant1 = lazyRetry(() => import('./pages/home/HomeVariant1'));
-const HomeVariant2 = lazyRetry(() => import('./pages/home/HomeVariant2'));
-const HomeVariant3 = lazyRetry(() => import('./pages/home/HomeVariant3'));
-const HomeVariant4 = lazyRetry(() => import('./pages/home/HomeVariant4'));
-const HomeVariant5 = lazyRetry(() => import('./pages/home/HomeVariant5'));
-const HomeVariant6 = lazyRetry(() => import('./pages/home/HomeVariant6'));
-const HomeVariant7 = lazyRetry(() => import('./pages/home/HomeVariant7'));
-const HomeVariant8 = lazyRetry(() => import(
-'./pages/home/HomeVariant8'
-));
-const Sib2026OptimizedPage = lazyRetry(() => import(
-'./pages/home/Sib2026OptimizedPage'
-));
-import HomePageRouter from './pages/home/HomePageRouter';
+const CuratedHomeRouter = lazyRetry(() => import('./pages/home/CuratedHomeRouter'));
+const HomeVariantsPage = lazyRetry(() => import('./pages/HomeVariantsPage'));
+const HomeDemoRouter = lazyRetry(() => import('./pages/HomeDemoRouter'));
+const HomeDemoComparatorPage = lazyRetry(() => import('./pages/HomeDemoComparatorPage'));
+const HomeVariantsSelectorPage = lazyRetry(() => import('./pages/HomeVariantsSelectorPage'));
 const HomeMenuDesignPage = lazyRetry(() => import('./pages/design/HomeMenuDesignPage'));
 const ExhibitorsPage = lazyRetry(() => import('./pages/ExhibitorsPage'));
 const NetworkingPage = lazyRetry(() => import('./pages/NetworkingPage'));
@@ -113,6 +104,18 @@ const AdminPartnersPage = lazyRetry(() => import('./pages/admin/PartnersPage'));
 const MarketingDashboard = lazyRetry(() => import('./pages/MarketingDashboard'));
 const PublicationControlPage = lazyRetry(() => import('./pages/admin/PublicationControlPage'));
 
+// Admin pages non encore routées — ajoutées
+const AdminConfigPage = lazyRetry(() => import('./pages/admin/AdminConfigPage'));
+const AdminBadgeConfigPage = lazyRetry(() => import('./pages/admin/AdminBadgeConfigPage'));
+const SecurityZonesPage = lazyRetry(() => import('./pages/admin/SecurityZonesPage'));
+const SalonsManagementPage = lazyRetry(() => import('./pages/admin/SalonsManagementPage'));
+const PromoCodesPage = lazyRetry(() => import('./pages/admin/PromoCodesPage'));
+const AdminPricingPage = lazyRetry(() => import('./pages/admin/AdminPricingPage'));
+const AdminChapiteauPage = lazyRetry(() => import('./pages/admin/AdminChapiteauPage'));
+const AdminRentalPage = lazyRetry(() => import('./pages/admin/AdminRentalPage'));
+const AdminInvitationsPage = lazyRetry(() => import('./pages/admin/AdminInvitationsPage'));
+const AdminAdvertisingPage = lazyRetry(() => import('./pages/admin/AdminAdvertisingPage'));
+
 // New pages for footer links
 const ContactPage = lazyRetry(() => import('./pages/ContactPage'));
 const ContactSuccessPage = lazyRetry(() => import('./pages/ContactSuccessPage'));
@@ -149,6 +152,7 @@ const ForbiddenPage = lazyRetry(() => import('./pages/ForbiddenPage'));
 const VisaLetterPage = lazyRetry(() => import('./pages/visitor/VisaLetterPage'));
 const PressAccreditationPage = lazyRetry(() => import('./pages/press/PressAccreditationPage'));
 const SpeakersPage = lazyRetry(() => import('./pages/public/SpeakersPage'));
+const FemmesHommesPage = lazyRetry(() => import('./pages/public/FemmesHommesPage'));
 const AdminPressAccreditationsPage = lazyRetry(() => import('./pages/admin/PressAccreditationsPage'));
 const AdminSpeakersPage = lazyRetry(() => import('./pages/admin/SpeakersManagementPage'));
 const HallMapPage = lazyRetry(() => import('./pages/HallMapPage'));
@@ -167,6 +171,7 @@ const MediaDetailPage = lazyRetry(() => import('./pages/media/MediaDetailPage'))
 
 // Admin Media pages
 const MediaManagementPage = lazyRetry(() => import('./pages/admin/media/MediaManagementPage'));
+const AdminMediaLibraryPage = lazyRetry(() => import('./pages/admin/media/MediaLibraryPage'));
 const CreateMediaPage = lazyRetry(() => import('./pages/admin/media/CreateMediaPage'));
 const EditMediaPage = lazyRetry(() => import('./pages/admin/media/EditMediaPage'));
 
@@ -201,8 +206,9 @@ function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
       <SkipToContent />
+      {!isUrbaRoute && <HautPatronageBar />}
       {isUrbaRoute ? <UrbaEventNav /> : <Header />}
-      <main id="main-content" className={`flex-1 ${isPremiumHome ? 'pt-0' : isUrbaRoute ? 'pt-[66px]' : 'pt-20 sm:pt-24 xl:pt-32'}`}>
+      <main id="main-content" className={`flex-1 ${isPremiumHome ? 'pt-8' : isUrbaRoute ? 'pt-[66px]' : 'pt-28 sm:pt-32 xl:pt-40'}`}>
         {children}
       </main>
     </div>
@@ -294,24 +300,29 @@ const App = () => {
             </div>
           }>
             <Routes>
-            <Route path={ROUTES.HOME} element={<HomePage />} />
-            <Route path={ROUTES.HOME_P1} element={<HomeVariant1 />} />
-            <Route path={ROUTES.HOME_P2} element={<HomeVariant2 />} />
-            <Route path={ROUTES.HOME_P3} element={<HomeVariant3 />} />
-            <Route path={ROUTES.HOME_P4} element={<HomeVariant4 />} />
-            <Route path={ROUTES.HOME_P5} element={<HomeVariant5 />} />
-            <Route path={ROUTES.HOME_P6} element={<HomeVariant6 />} />
-            <Route path={ROUTES.HOME_P7} element={<HomeVariant7 />} />
-            <Route path={ROUTES.HOME_P8} element={<HomeVariant8 />} />
-            <Route path={ROUTES.HOME_P9} element={<Sib2026OptimizedPage />} />
-            <Route path={ROUTES.HOME_P10} element={<HomePageRouter pageId={10} />} />
-            <Route path={ROUTES.HOME_P11} element={<HomePageRouter pageId={11} />} />
-            <Route path={ROUTES.HOME_P12} element={<HomePageRouter pageId={12} />} />
-            <Route path={ROUTES.HOME_P13} element={<HomePageRouter pageId={13} />} />
-            <Route path={ROUTES.HOME_P14} element={<HomePageRouter pageId={14} />} />
-            <Route path={ROUTES.HOME_P15} element={<HomePageRouter pageId={15} />} />
-            <Route path={ROUTES.HOME_P16} element={<HomePageRouter pageId={16} />} />
-            <Route path={ROUTES.HOME_P17} element={<HomePageRouter pageId={17} />} />
+            <Route path={ROUTES.HOME} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_P1} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_P2} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_P3} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_P4} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_P5} element={<Navigate to={ROUTES.HOME_P8} replace />} />
+            <Route path={ROUTES.HOME_P6} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_P7} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_P8} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_P9} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_P10} element={<Navigate to={ROUTES.HOME_P8} replace />} />
+            <Route path={ROUTES.HOME_P11} element={<Navigate to={ROUTES.HOME_P1} replace />} />
+            <Route path={ROUTES.HOME_P12} element={<Navigate to={ROUTES.HOME_P7} replace />} />
+            <Route path={ROUTES.HOME_P13} element={<Navigate to={ROUTES.HOME_P9} replace />} />
+            <Route path={ROUTES.HOME_P14} element={<Navigate to={ROUTES.HOME_P2} replace />} />
+            <Route path={ROUTES.HOME_P15} element={<Navigate to={ROUTES.HOME_P3} replace />} />
+            <Route path={ROUTES.HOME_P16} element={<Navigate to={ROUTES.HOME_P6} replace />} />
+            <Route path={ROUTES.HOME_P17} element={<Navigate to={ROUTES.HOME_P4} replace />} />
+            <Route path={ROUTES.HOME_WORLD} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_40ANS} element={<CuratedHomeRouter />} />
+            <Route path={ROUTES.HOME_VARIANTS} element={<HomeVariantsSelectorPage />} />
+            <Route path="/home/variants" element={<HomeVariantsPage />} />
+            <Route path="/home/*" element={<HomeDemoRouter />} />
             <Route path={ROUTES.DESIGN_HOME_MENU} element={<HomeMenuDesignPage />} />
             <Route path={ROUTES.SALON_SELECTION} element={<SalonSelectionPage />} />
             <Route path={ROUTES.SALON_SIR} element={<SalonPage salonId="sir" />} />
@@ -439,6 +450,18 @@ const App = () => {
             <Route path={ROUTES.ADMIN_MEDIA} element={<ProtectedRoute requiredRole="admin"><MediaManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_USERS_LIST} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
 
+            {/* Routes admin manquantes */}
+            <Route path={ROUTES.ADMIN_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminConfigPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_BADGE_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminBadgeConfigPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SECURITY_ZONES} element={<ProtectedRoute requiredRole={['admin', 'security']}><SecurityZonesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SALONS} element={<ProtectedRoute requiredRole="admin"><SalonsManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_PROMO_CODES} element={<ProtectedRoute requiredRole="admin"><PromoCodesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_PRICING} element={<ProtectedRoute requiredRole="admin"><AdminPricingPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_CHAPITEAU} element={<ProtectedRoute requiredRole="admin"><AdminChapiteauPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_RENTAL} element={<ProtectedRoute requiredRole="admin"><AdminRentalPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_INVITATIONS} element={<ProtectedRoute requiredRole="admin"><AdminInvitationsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_ADVERTISING} element={<ProtectedRoute requiredRole="admin"><AdminAdvertisingPage /></ProtectedRoute>} />
+
             {/* New routes for footer links */}
             <Route path={ROUTES.CONTACT} element={<ContactPage />} />
             <Route path={ROUTES.CONTACT_SUCCESS} element={<ContactSuccessPage />} />
@@ -474,6 +497,7 @@ const App = () => {
             <Route path={ROUTES.PARTNER_MEDIA_LIBRARY} element={<ProtectedRoute requiredRole="partner"><PartnerMediaLibraryPage /></ProtectedRoute>} />
 
             {/* Admin Media routes - protected */}
+            <Route path={ROUTES.ADMIN_MEDIA_LIBRARY} element={<ProtectedRoute requiredRole="admin"><AdminMediaLibraryPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_MEDIA_MANAGE} element={<ProtectedRoute requiredRole="admin"><MediaManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_MEDIA_CREATE} element={<ProtectedRoute requiredRole="admin"><CreateMediaPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_MEDIA_EDIT} element={<ProtectedRoute requiredRole="admin"><EditMediaPage /></ProtectedRoute>} />
@@ -483,6 +507,7 @@ const App = () => {
 
             {/* Speakers & Press routes */}
             <Route path={ROUTES.SPEAKERS} element={<SpeakersPage />} />
+            <Route path={ROUTES.FEMMES_HOMMES} element={<FemmesHommesPage />} />
             <Route path={ROUTES.PRESS_ACCREDITATION} element={<PressAccreditationPage />} />
             <Route path={ROUTES.HALL_MAP} element={<HallMapPage />} />
             <Route path={ROUTES.CATALOG} element={<CatalogPage />} />

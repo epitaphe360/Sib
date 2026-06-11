@@ -11,9 +11,12 @@ import {
   AdminAlertsSection,
   AdminMetricsGrid,
   AdminChartsSection,
-  AdminQuickActions,
+  AdminActionsPanel,
+  AdminNavVisibility,
   BannerManagementPanel,
   VisitorPricingPanel,
+  SiteImagesPanel,
+  SiteTextContentPanel,
   SystemHealthPanel,
   ActivityFeed,
 } from './admin';
@@ -113,7 +116,19 @@ export default function AdminDashboard() {
           isLoading={isLoading}
         />
 
-        <AdminQuickActions adminMetrics={adminMetrics as any} t={t} />
+        <AdminActionsPanel
+          adminMetrics={adminMetrics as any}
+          showRegistrationRequests={ctx.showRegistrationRequests}
+          onToggleRegistrationRequests={() => ctx.setShowRegistrationRequests((v) => !v)}
+          t={t}
+        />
+
+        <AdminNavVisibility />
+
+        {/* ── CMS : Photos & Textes ── */}
+        <SiteImagesPanel />
+
+        <SiteTextContentPanel />
 
         <BannerManagementPanel />
 
