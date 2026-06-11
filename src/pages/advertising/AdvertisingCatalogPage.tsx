@@ -169,7 +169,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-[#C9A84C]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#F39200]" />
       </div>
     );
   }
@@ -187,7 +187,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center"
                 style={{ background: 'linear-gradient(135deg, #0B1C3D, #1e3a5f)' }}>
-                <Megaphone className="w-4 h-4 text-[#C9A84C]" />
+                <Megaphone className="w-4 h-4 text-[#F39200]" />
               </div>
               <div>
                 <h1 className="text-base font-bold text-gray-900">Espaces Publicitaires</h1>
@@ -202,7 +202,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
             <ShoppingCart className="w-4 h-4" />
             Panier
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#C9A84C] text-white text-xs font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#F39200] text-white text-xs font-bold rounded-full flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -216,14 +216,14 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
           style={{ background: 'linear-gradient(135deg, #0B1C3D 0%, #1e3a5f 60%, #0B1C3D 100%)' }}>
           <div className="absolute inset-0 opacity-[0.04]"
             style={{
-              backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%23C9A84C' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3C/g%3E%3C/svg%3E\")",
+              backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%232E5984' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3C/g%3E%3C/svg%3E\")",
             }} />
           <div className="relative z-10 px-8 py-10 text-white">
             <div className="text-5xl mb-3">📢</div>
             <h2 className="text-2xl md:text-3xl font-bold mb-2">
               Maximisez votre visibilité à SIB 2026
             </h2>
-            <p className="text-[#C9A84C]/80 max-w-xl mb-4">
+            <p className="text-[#F39200]/80 max-w-xl mb-4">
               Bannières digitales, email marketing, notifications push, espaces physiques…
               Touchez des milliers de visiteurs et décideurs B2B présents au salon.
             </p>
@@ -233,7 +233,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
                 { icon: <CheckCircle className="w-4 h-4" />, label: 'Formats digitaux & physiques' },
                 { icon: <CreditCard className="w-4 h-4" />, label: 'Paiement PayPal / CMI' },
               ].map(f => (
-                <div key={f.label} className="flex items-center gap-1.5 text-[#C9A84C]">
+                <div key={f.label} className="flex items-center gap-1.5 text-[#F39200]">
                   {f.icon}
                   <span>{f.label}</span>
                 </div>
@@ -263,7 +263,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full gap-2">
                       <span className="text-5xl">{emoji}</span>
-                      <span className="text-[#C9A84C]/80 text-xs font-semibold uppercase tracking-wide">
+                      <span className="text-[#F39200]/80 text-xs font-semibold uppercase tracking-wide">
                         {catLabel}
                       </span>
                     </div>
@@ -289,7 +289,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
                   <p className="text-xs text-gray-500 line-clamp-2 mb-3">{item.description}</p>
 
                   <div className="flex items-center gap-1.5 mb-4">
-                    <Tag className="w-3 h-3 text-[#C9A84C]" />
+                    <Tag className="w-3 h-3 text-[#F39200]" />
                     <span className="text-xs text-gray-500">
                       {item.duration_days === 1 ? '1 jour' : `${item.duration_days} jours`}
                     </span>
@@ -297,7 +297,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
 
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <span className="text-xl font-bold text-[#C9A84C]">
+                      <span className="text-xl font-bold text-[#F39200]">
                         {item.price.toLocaleString('fr-MA')}
                       </span>
                       <span className="text-xs text-gray-400 ml-1">MAD</span>
@@ -345,7 +345,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
         {myBookings.length > 0 && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
             <h2 className="font-bold text-[#0B1C3D] text-lg mb-4 flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-[#C9A84C]" />
+              <CheckCircle className="w-5 h-5 text-[#F39200]" />
               Mes réservations
             </h2>
             <div className="space-y-3">
@@ -361,7 +361,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-bold text-[#C9A84C]">
+                    <span className="text-sm font-bold text-[#F39200]">
                       {b.total_amount?.toLocaleString('fr-MA')} MAD
                     </span>
                     <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${bookingStatusClass(b.status)}`}>
@@ -416,7 +416,7 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-gray-900 text-sm truncate">{ci.name}</div>
                         <div className="text-xs text-gray-500">{ci.price.toLocaleString('fr-MA')} MAD × {ci.quantity}</div>
-                        <div className="text-sm font-bold text-[#C9A84C]">
+                        <div className="text-sm font-bold text-[#F39200]">
                           {(ci.price * ci.quantity).toLocaleString('fr-MA')} MAD
                         </div>
                       </div>
@@ -442,13 +442,13 @@ export default function AdvertisingCatalogPage({ userType }: AdvertisingCatalogP
               <div className="p-6 border-t bg-gray-50">
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-bold text-gray-900">Total</span>
-                  <span className="text-2xl font-bold text-[#C9A84C]">
+                  <span className="text-2xl font-bold text-[#F39200]">
                     {cartTotal.toLocaleString('fr-MA')} MAD
                   </span>
                 </div>
                 <button onClick={handleCheckout}
                   className="w-full py-3 rounded-xl text-white font-bold text-sm shadow-lg hover:opacity-90 transition"
-                  style={{ background: 'linear-gradient(135deg, #C9A84C, #b8963e)' }}>
+                  style={{ background: 'linear-gradient(135deg, #F39200, #E07A00)' }}>
                   Procéder au paiement →
                 </button>
               </div>

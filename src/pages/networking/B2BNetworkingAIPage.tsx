@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Brain,
@@ -135,7 +135,7 @@ function MatchCard({ match, onRequestMeeting }: { match: B2BMatch; onRequestMeet
           </Link>
           <Button
             onClick={() => onRequestMeeting(match)}
-            className="flex-1 bg-[#C9A84C] hover:bg-[#A88830] text-white text-xs"
+            className="flex-1 bg-[#F39200] hover:bg-[#A88830] text-white text-xs"
           >
             <Calendar className="h-3 w-3 mr-1" />RDV
           </Button>

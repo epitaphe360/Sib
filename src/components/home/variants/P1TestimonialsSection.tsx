@@ -1,96 +1,79 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Star, User } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
+import { DM } from '../../../design/designMasterTokens';
 
-interface Testimonial {
-  name: string;
-  role: string;
-  company: string;
-  content: string;
-  rating: number;
-}
+const TESTIMONIAL_IDS = ['t1', 't2', 't3'] as const;
 
-const testimonials: Testimonial[] = [
-  {
-    name: 'Ahmed Bennani',
-    role: 'Directeur Général',
-    company: 'Groupe Construction Maroc',
-    content: 'Le SIB a été une opportunité exceptionnelle pour rencontrer les acteurs clés du secteur et découvrir les dernières innovations en matière de construction durable.',
-    rating: 5,
-  },
-  {
-    name: 'Fatima El Idrissi',
-    role: 'Responsable Achats',
-    company: 'Immobilier Prestige',
-    content: 'Grâce au networking B2B du SIB, nous avons établi des partenariats stratégiques qui ont transformé nos projets. Un événement indispensable.',
-    rating: 5,
-  },
-  {
-    name: 'Mohamed Karim',
-    role: 'Entrepreneur',
-    company: 'StartUp Tech BTP',
-    content: 'L\'espace innovation du SIB m\'a permis de présenter ma startup à des investisseurs et des clients potentiels. Résultats exceptionnels !',
-    rating: 5,
-  },
-];
-
-/**
- * P1 — Testimonials Section
- * Section de témoignages pour renforcer la confiance et la conversion
- */
+/** P1 — Témoignages visiteurs */
 export const P1TestimonialsSection: React.FC = () => {
   const { t } = useTranslation();
 
+  const testimonials = useMemo(
+    () =>
+      TESTIMONIAL_IDS.map((id) => ({
+        id,
+        name: t(`home.p1_testimonials.${id}_name`),
+        role: t(`home.p1_testimonials.${id}_role`),
+        company: t(`home.p1_testimonials.${id}_company`),
+        content: t(`home.p1_testimonials.${id}_content`),
+      })),
+    [t],
+  );
+
   return (
-    <section className="py-20 lg:py-28 bg-neutral-50 dark:bg-neutral-900/50">
+    <section className="py-20 lg:py-28 bg-white">
       <div className="max-w-container mx-auto px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          viewport={{ once: true, margin: '-80px' }}
+          className="text-center mb-14"
         >
-          <h2 className="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-            Ce que disent nos visiteurs
-          </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-            Découvrez les témoignages de professionnels qui ont transformé leur activité grâce au SIB
+          <p
+            className="text-[10px] font-bold uppercase tracking-[0.22em] mb-4"
+            style={{ color: DM.orange }}
+          >
+            {t('home.p1_testimonials.kicker')}
           </p>
+          <h2 className="text-3xl lg:text-4xl font-black tracking-tight mb-4" style={{ color: DM.navy }}>
+            {t('home.p1_testimonials.title')}
+          </h2>
+          <p className="text-[#001A3D]/65 max-w-2xl mx-auto">{t('home.p1_testimonials.desc')}</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {testimonials.map((testimonial, index) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
+              key={testimonial.id}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-white dark:bg-neutral-800 rounded-xl p-8 shadow-sm hover:shadow-lg transition-shadow"
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ ...DM.springSoft, delay: index * 0.08 }}
+              whileHover={{ scale: DM.hoverScale }}
+              className="rounded-[32px] p-8 border border-[#001A3D]/08 shadow-[0_8px_32px_rgba(0,26,61,0.06)] bg-[#ECECE8]/50"
             >
-              {/* Rating */}
               <div className="flex gap-1 mb-4">
-                {Array.from({ length: testimonial.rating }).map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-amber-400 text-amber-400" />
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-[#F39200] text-[#F39200]" />
                 ))}
               </div>
 
-              {/* Testimonial Text */}
-              <p className="text-neutral-700 dark:text-neutral-300 mb-6 leading-relaxed italic">
-                "{testimonial.content}"
-              </p>
+              <p className="text-[#001A3D]/80 mb-6 leading-relaxed italic">&ldquo;{testimonial.content}&rdquo;</p>
 
-              {/* Author */}
-              <div className="flex items-center gap-3 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-                <div className="h-12 w-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-                  <User className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+              <div className="flex items-center gap-3 pt-6 border-t border-[#001A3D]/10">
+                <div
+                  className="h-11 w-11 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: `${DM.navy}10` }}
+                >
+                  <User className="h-5 w-5" style={{ color: DM.navy }} />
                 </div>
                 <div>
-                  <p className="font-semibold text-neutral-900 dark:text-white">
+                  <p className="font-bold text-sm" style={{ color: DM.navy }}>
                     {testimonial.name}
                   </p>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                  <p className="text-xs text-[#001A3D]/50">
                     {testimonial.role} · {testimonial.company}
                   </p>
                 </div>

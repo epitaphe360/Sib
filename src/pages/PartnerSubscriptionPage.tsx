@@ -578,7 +578,7 @@ export default function PartnerSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Dates</h3>
-                    <p className="text-gray-600">1-3 Avril 2026</p>
+                    <p className="text-gray-600">25-29 Novembre 2026</p>
                   </div>
                 </div>
 
@@ -588,7 +588,7 @@ export default function PartnerSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Horaires</h3>
-                    <p className="text-gray-600">9h30 à 18h</p>
+                    <p className="text-gray-600">9h00 à 19h00</p>
                   </div>
                 </div>
 

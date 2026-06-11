@@ -1,16 +1,15 @@
-/**
- * SIB 2026 — LatestNewsSection
- * Dernieres actualites — cartes epurees, photos 4K, typographie soignee.
+﻿/**
+ * Dernières actualités — Design Master
  */
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Calendar, ArrowRight } from 'lucide-react';
+import { Calendar, ArrowRight, Newspaper } from 'lucide-react';
 import { useSupabaseArticles } from '../../hooks/useSupabaseContent';
-import { Button } from '../ui/Button';
-import { SmartImage } from '../ui/SmartImage';
-import { IMAGES } from '../../lib/images';
+import { useWordPressArticles } from '../../hooks/useWordPressContent';
+import { useTranslation } from '../../hooks/useTranslation';
+import { DM } from '../../design/designMasterTokens';
+import { SIB_PHOTOS_CDN } from '../../config/sibMaRemoteUrls';
 
 interface NewsCardProps {
   title: string;
@@ -21,125 +20,135 @@ interface NewsCardProps {
 }
 
 const NewsCard: React.FC<NewsCardProps> = ({ title, excerpt, featuredImage, date, category }) => {
+  const { t } = useTranslation();
+  const defaultImage = SIB_PHOTOS_CDN.conferences;
+
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-      {/* Image */}
-      <div className="relative overflow-hidden">
-        <SmartImage
-          source={featuredImage || IMAGES.business.meeting}
-          aspect="16/9"
-          rounded="none"
-          zoom
-          imgClassName="transition-transform duration-500 group-hover:scale-105"
+    <motion.div
+      whileHover={{ scale: DM.hoverScale }}
+      transition={DM.spring}
+      className="group h-full dm-glass-light rounded-[32px] overflow-hidden border border-[#001A3D]/08 shadow-[0_8px_32px_rgba(0,26,61,0.08)]"
+    >
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={featuredImage || defaultImage}
+          alt={title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          onError={(e) => {
+            e.currentTarget.src = defaultImage;
+          }}
         />
-        <span className="absolute top-4 left-4 inline-flex items-center px-2.5 py-1 rounded-full bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm text-[11px] font-semibold uppercase tracking-wider text-primary-700 dark:text-primary-300 border border-white/50 shadow-sm">
-          {category || 'Actualité'}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(to top, ${DM.navy}CC, transparent 60%)`,
+          }}
+        />
+        <span
+          className="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-white"
+          style={{ backgroundColor: DM.orange }}
+        >
+          {category || t('home.latest_news.default_category')}
         </span>
       </div>
 
-      {/* Content */}
-      <div className="flex flex-1 flex-col p-6">
-        <h3 className="text-lg font-semibold text-neutral-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2 mb-3 leading-snug tracking-tight">
+      <div className="p-6">
+        <h3
+          className="font-black text-lg mb-3 line-clamp-2 tracking-tight group-hover:opacity-80 transition-opacity"
+          style={{ color: DM.navy }}
+        >
           {title}
         </h3>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3 mb-5 flex-grow leading-relaxed">
-          {excerpt}
-        </p>
-
-        <div className="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-800 text-xs text-neutral-500 dark:text-neutral-400">
-          <div className="flex items-center gap-1.5">
-            <Calendar className="h-3.5 w-3.5" />
-            <span>{date}</span>
-          </div>
-          <span className="inline-flex items-center gap-1 text-primary-600 dark:text-primary-400 font-medium transition-transform group-hover:translate-x-1">
-            Lire <ArrowRight className="h-3.5 w-3.5" />
-          </span>
+        <p className="text-[#001A3D]/60 text-sm mb-4 line-clamp-3 leading-relaxed">{excerpt}</p>
+        <div className="flex items-center gap-2 text-xs text-[#001A3D]/45 pt-4 border-t border-[#001A3D]/08">
+          <Calendar className="w-4 h-4" />
+          <span>{date}</span>
         </div>
       </div>
-    </article>
+    </motion.div>
   );
 };
 
 export const LatestNewsSection: React.FC = () => {
-  const { data: articles, loading } = useSupabaseArticles(3);
+  const { t } = useTranslation();
+  const { data: supabaseArticles, loading: supabaseLoading } = useSupabaseArticles(3);
+  const { data: wpArticles, loading: wpLoading } = useWordPressArticles(3);
+
+  const articles = supabaseArticles?.length > 0 ? supabaseArticles : wpArticles;
+  const loading = supabaseLoading || wpLoading;
 
   if (loading) {
     return (
-      <section className="py-20 bg-white dark:bg-neutral-950">
-        <div className="max-w-container mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 overflow-hidden">
-                <div className="aspect-[16/9] bg-neutral-100 dark:bg-neutral-800" />
-                <div className="p-6 space-y-3">
-                  <div className="h-4 bg-neutral-100 dark:bg-neutral-800 rounded" />
-                  <div className="h-4 bg-neutral-100 dark:bg-neutral-800 rounded w-5/6" />
-                  <div className="h-3 bg-neutral-100 dark:bg-neutral-800 rounded w-1/2 mt-6" />
-                </div>
-              </div>
-            ))}
-          </div>
+      <section className="py-20 lg:py-28" style={{ backgroundColor: '#ECECE8' }}>
+        <div className="max-w-container mx-auto px-6 lg:px-8 text-center">
+          <div
+            className="animate-spin rounded-full h-10 w-10 border-2 border-t-transparent mx-auto"
+            style={{ borderColor: `${DM.orange}44`, borderTopColor: DM.orange }}
+          />
+          <p className="mt-4 text-[#001A3D]/55 text-sm">{t('home.latest_news.loading')}</p>
         </div>
       </section>
     );
   }
 
-  if (!articles || articles.length === 0) {return null;}
+  if (!articles || articles.length === 0) {
+    return null;
+  }
 
   return (
-    <section className="relative py-20 lg:py-24 bg-white dark:bg-neutral-950 overflow-hidden">
+    <section className="py-20 lg:py-28 relative overflow-hidden" style={{ backgroundColor: '#ECECE8' }}>
       <div className="max-w-container mx-auto px-6 lg:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-14 max-w-2xl mx-auto"
+          viewport={{ once: true, margin: '-80px' }}
+          className="text-center mb-14"
         >
-          <div className="sib-kicker mb-4 justify-center">Actualités SIB</div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white tracking-tight mb-4">
-            Dernières <span className="sib-text-gradient">actualités</span>
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.22em] mb-5"
+            style={{ backgroundColor: `${DM.navy}10`, color: DM.navy }}
+          >
+            <Newspaper className="h-3.5 w-3.5" style={{ color: DM.orange }} />
+            {t('home.latest_news.kicker')}
+          </div>
+          <h2 className="text-3xl lg:text-4xl font-black tracking-tight mb-4" style={{ color: DM.navy }}>
+            {t('home.latest_news.title')}
           </h2>
-          <p className="text-base lg:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
-            Restez informé des dernières nouvelles du Salon International du Bâtiment.
-          </p>
+          <p className="text-[#001A3D]/65 max-w-2xl mx-auto">{t('home.latest_news.desc')}</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {articles.map((article: any, index: number) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
+          {articles.map((article: { id?: string; slug?: string; title: string; excerpt: string; featuredImage?: string; featured_image?: string; date: string; categories?: string[] }, index: number) => (
             <motion.div
               key={article.id || index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ ...DM.springSoft, delay: index * 0.08 }}
             >
               <Link to={`/news/${article.slug || article.id}`} className="block h-full">
                 <NewsCard
                   title={article.title}
-                  excerpt={article.excerpt || article.summary || ''}
-                  featuredImage={article.featuredImage || article.featured_image || article.image_url}
-                  date={
-                    article.date ||
-                    (article.published_at
-                      ? new Date(article.published_at).toLocaleDateString('fr-FR')
-                      : '')
-                  }
-                  category={article.categories?.[0] || article.category || 'Actualité'}
+                  excerpt={article.excerpt}
+                  featuredImage={article.featuredImage || article.featured_image || null}
+                  date={article.date}
+                  category={article.categories?.[0] || t('home.latest_news.default_category')}
                 />
               </Link>
             </motion.div>
           ))}
         </div>
 
-        <div className="text-center">
-          <Link to="/news">
-            <Button variant="primary" size="lg" className="group">
-              Voir toutes les actualités
-              <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center">
+          <Link
+            to="/news"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: DM.navy }}
+          >
+            {t('home.latest_news.cta')}
+            <ArrowRight className="h-4 w-4" />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

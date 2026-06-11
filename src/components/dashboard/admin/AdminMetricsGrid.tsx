@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { motion, animate, useInView } from 'framer-motion';
 import { Users, Building2, Award, UserCheck, TrendingUp, ArrowUpRight } from 'lucide-react';
 
@@ -61,7 +61,7 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
       suffix: '',
       description: 'exposants confirmés pour le salon',
       icon: Building2,
-      color: '#C9A84C',
+      color: '#F39200',
     },
     {
       value: '98',

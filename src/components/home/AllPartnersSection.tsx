@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Handshake, ArrowRight } from 'lucide-react';
@@ -37,6 +37,7 @@ export function AllPartnersSection() {
       setIsLoading(true);
       try {
         const data = await SupabaseService.getPartners();
+        // Convertir PartnerUI vers Partner avec les bonnes propriétés
         const mappedPartners: Partner[] = data.map(p => ({
           id: p.id,
           name: p.name,
@@ -51,11 +52,11 @@ export function AllPartnersSection() {
           featured: p.featured,
           contributions: p.contributions,
           establishedYear: undefined,
-          employees: undefined,
+          employees: undefined
         }));
         setPartners(mappedPartners);
       } catch (error) {
-        console.error('Erreur lors du chargement des partenaires:', error);
+        console.error('Erreur lors du chargement des sponsors:', error);
         setPartners([]);
       } finally {
         setIsLoading(false);
@@ -75,31 +76,35 @@ export function AllPartnersSection() {
       'premium': 'warning',
       'media': 'success',
       'institutional': 'default',
-      'technical': 'info',
+      'technical': 'info'
     };
     return colorMap[category] || 'default';
   };
 
   const displayedPartners = partners.slice(0, displayCount);
-  const handleLoadMore = () => setDisplayCount(prev => prev + 8);
+
+  const handleLoadMore = () => {
+    setDisplayCount(prev => prev + 8);
+  };
 
   return (
-    <section className="relative py-20 lg:py-24 bg-neutral-50 dark:bg-neutral-950 overflow-hidden">
-      <div className="max-w-container mx-auto px-6 lg:px-8">
+    <section className="py-12 md:py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* En-tête de section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14 max-w-2xl mx-auto"
+          className="text-center mb-12"
         >
-          <div className="sib-kicker mb-4 justify-center">
-            {t('nav.partners')}
+          <div className="inline-flex items-center justify-center p-2 bg-amber-100 rounded-full mb-4">
+            <Handshake className="h-8 w-8 text-amber-600" />
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white tracking-tight mb-4">
-            {t('home.all_partners_title', 'Tous nos partenaires')}
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {t('nav.partners')}
           </h2>
-          <p className="text-base lg:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             {t('home.discover_all_partners_subtitle')}
           </p>
         </motion.div>
@@ -108,7 +113,7 @@ export function AllPartnersSection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="bg-neutral-100 dark:bg-neutral-800 h-72 rounded-2xl" />
+                <div className="bg-gray-200 h-64 rounded-lg"></div>
               </div>
             ))}
           </div>
@@ -141,32 +146,40 @@ export function AllPartnersSection() {
               ))}
             </motion.div>
 
+            {/* Boutons d'action */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-12 flex flex-col sm:flex-row gap-3 justify-center items-center"
+              className="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               {displayCount < partners.length && (
-                <Button onClick={handleLoadMore} variant="secondary" size="lg">
+                <Button
+                  onClick={handleLoadMore}
+                  variant="outline"
+                  size="lg"
+                  className="min-w-[200px]"
+                >
                   {t('common.load_more')}
                 </Button>
               )}
               <Link to={ROUTES.PARTNERS}>
-                <Button variant="primary" size="lg" className="group">
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="min-w-[200px] group"
+                >
                   {t('common.view_all')}
-                  <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </motion.div>
           </>
         ) : (
-          <div className="text-center py-16">
-            <div className="h-16 w-16 mx-auto mb-4 rounded-2xl bg-white dark:bg-neutral-900 flex items-center justify-center border border-neutral-200 dark:border-neutral-800">
-              <Handshake className="h-8 w-8 text-neutral-400" />
-            </div>
-            <p className="text-neutral-500 dark:text-neutral-400 text-base">
+          <div className="text-center py-12">
+            <Handshake className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500 text-lg">
               {t('home.no_partners_available')}
             </p>
           </div>
@@ -175,3 +188,4 @@ export function AllPartnersSection() {
     </section>
   );
 }
+

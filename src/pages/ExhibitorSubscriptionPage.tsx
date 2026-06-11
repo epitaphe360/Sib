@@ -271,7 +271,7 @@ export default function ExhibitorSubscriptionPage() {
                 <Link to={ROUTES.CONTACT}>
                   <Button
                     size="lg"
-                    className="bg-sib-gold text-sib-primary hover:bg-yellow-400 font-bold text-lg px-8"
+                    className="bg-sib-orange text-white hover:bg-[#2E5984] font-bold text-lg px-8"
                   >
                     <Mail className="mr-2 h-5 w-5" />
                     Nous contacter
@@ -419,7 +419,7 @@ export default function ExhibitorSubscriptionPage() {
                   <CalendarDays className="h-5 w-5 text-amber-600" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">1-3 Avril 2026</p>
+                  <p className="font-semibold text-gray-900">25-29 Novembre 2026</p>
                   <p className="text-sm text-gray-500">Parc d'Exposition Mohammed VI – El Jadida</p>
                 </div>
               </motion.div>
@@ -691,7 +691,7 @@ export default function ExhibitorSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Dates</h3>
-                    <p className="text-gray-600">1-3 Avril 2026</p>
+                    <p className="text-gray-600">25-29 Novembre 2026</p>
                   </div>
                 </div>
 
@@ -701,7 +701,7 @@ export default function ExhibitorSubscriptionPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Horaires</h3>
-                    <p className="text-gray-600">9h30 à 18h</p>
+                    <p className="text-gray-600">9h00 à 19h00</p>
                   </div>
                 </div>
 

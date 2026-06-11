@@ -290,7 +290,7 @@ export default function AdminChapiteauPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-[#C9A84C]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#F39200]" />
       </div>
     );
   }
@@ -307,7 +307,7 @@ export default function AdminChapiteauPage() {
             <div className="flex items-center gap-2">
               <div className="w-9 h-9 rounded-lg flex items-center justify-center"
                 style={{ background: 'linear-gradient(135deg, #0B1C3D, #1e3a5f)' }}>
-                <Tent className="w-5 h-5 text-[#C9A84C]" />
+                <Tent className="w-5 h-5 text-[#F39200]" />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-gray-900">Location de Chapiteaux</h1>
@@ -370,7 +370,7 @@ export default function AdminChapiteauPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input value={searchItems} onChange={e => setSearchItems(e.target.value)}
                   placeholder="Rechercher un chapiteau…"
-                  className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
+                  className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none" />
               </div>
               <button onClick={fetchItems}
                 className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
@@ -389,7 +389,7 @@ export default function AdminChapiteauPage() {
                         className="w-full h-full object-cover opacity-80" />
                     ) : (
                       <div className="flex items-center justify-center h-full">
-                        <Tent className="w-16 h-16 text-[#C9A84C]/40" />
+                        <Tent className="w-16 h-16 text-[#F39200]/40" />
                       </div>
                     )}
                     <div className="absolute top-2 right-2 flex gap-1">
@@ -401,7 +401,7 @@ export default function AdminChapiteauPage() {
                       </button>
                     </div>
                     {item.includes_installation && (
-                      <div className="absolute bottom-2 left-2 bg-[#C9A84C] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                      <div className="absolute bottom-2 left-2 bg-[#F39200] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
                         Installation incluse
                       </div>
                     )}
@@ -423,7 +423,7 @@ export default function AdminChapiteauPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-lg font-bold text-[#C9A84C]">
+                        <div className="text-lg font-bold text-[#F39200]">
                           {item.price_per_day.toLocaleString('fr-MA')}
                         </div>
                         <div className="text-xs text-gray-400">MAD/jour</div>
@@ -459,7 +459,7 @@ export default function AdminChapiteauPage() {
               <div className="text-center py-16 text-gray-400">
                 <Tent className="w-12 h-12 mx-auto mb-3 opacity-30" />
                 <p>Aucun chapiteau trouvé</p>
-                <button onClick={openNew} className="mt-3 text-sm text-[#C9A84C] hover:underline">
+                <button onClick={openNew} className="mt-3 text-sm text-[#F39200] hover:underline">
                   Ajouter le premier chapiteau
                 </button>
               </div>
@@ -475,12 +475,12 @@ export default function AdminChapiteauPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input value={searchOrders} onChange={e => setSearchOrders(e.target.value)}
                   placeholder="Rechercher email, facture, article…"
-                  className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
+                  className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none" />
               </div>
               <div className="flex items-center gap-2">
                 <Filter className="w-4 h-4 text-gray-400" />
                 <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                  className="text-sm border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none">
+                  className="text-sm border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none">
                   <option value="all">Tous les statuts</option>
                   {Object.entries(ORDER_STATUS).map(([v, s]) => (
                     <option key={v} value={v}>{s.label}</option>
@@ -552,7 +552,7 @@ export default function AdminChapiteauPage() {
                                       value={order.status}
                                       disabled={updatingId === order.id}
                                       onChange={e => updateOrderStatus(order.id, 'status', e.target.value)}
-                                      className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#C9A84C]/30 outline-none">
+                                      className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#F39200]/30 outline-none">
                                       {Object.entries(ORDER_STATUS).map(([v, s]) => (
                                         <option key={v} value={v}>{s.label}</option>
                                       ))}
@@ -565,14 +565,14 @@ export default function AdminChapiteauPage() {
                                       value={order.payment_status}
                                       disabled={updatingId === order.id}
                                       onChange={e => updateOrderStatus(order.id, 'payment_status', e.target.value)}
-                                      className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#C9A84C]/30 outline-none">
+                                      className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#F39200]/30 outline-none">
                                       {Object.entries(PAYMENT_STATUS).map(([v, s]) => (
                                         <option key={v} value={v}>{s.label}</option>
                                       ))}
                                     </select>
                                   </div>
                                   {updatingId === order.id && (
-                                    <Loader2 className="w-4 h-4 animate-spin text-[#C9A84C]" />
+                                    <Loader2 className="w-4 h-4 animate-spin text-[#F39200]" />
                                   )}
                                   {order.notes && (
                                     <div className="flex-1">
@@ -658,13 +658,13 @@ export default function AdminChapiteauPage() {
                     <label htmlFor="chap-name" className="block text-sm font-semibold text-gray-700 mb-1">Nom *</label>
                     <input id="chap-name" value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
                       placeholder="ex: Chapiteau 5×5m"
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none" />
                   </div>
                   <div>
                     <label htmlFor="chap-size" className="block text-sm font-semibold text-gray-700 mb-1">Taille *</label>
                     <input id="chap-size" value={formData.size_label} onChange={e => setFormData(p => ({ ...p, size_label: e.target.value }))}
                       placeholder="ex: 5×5m"
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none" />
                   </div>
                 </div>
 
@@ -674,19 +674,19 @@ export default function AdminChapiteauPage() {
                     <label htmlFor="chap-surface" className="block text-sm font-semibold text-gray-700 mb-1">Surface (m²)</label>
                     <input id="chap-surface" type="number" min="0" value={formData.surface_m2}
                       onChange={e => setFormData(p => ({ ...p, surface_m2: e.target.value }))}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none" />
                   </div>
                   <div>
                     <label htmlFor="chap-price" className="block text-sm font-semibold text-gray-700 mb-1">Prix/jour (MAD)</label>
                     <input id="chap-price" type="number" min="0" value={formData.price_per_day}
                       onChange={e => setFormData(p => ({ ...p, price_per_day: Number(e.target.value) }))}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none" />
                   </div>
                   <div>
                     <label htmlFor="chap-currency" className="block text-sm font-semibold text-gray-700 mb-1">Devise</label>
                     <select id="chap-currency" value={formData.currency}
                       onChange={e => setFormData(p => ({ ...p, currency: e.target.value }))}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none">
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none">
                       <option>MAD</option><option>EUR</option><option>USD</option>
                     </select>
                   </div>
@@ -698,13 +698,13 @@ export default function AdminChapiteauPage() {
                     <label htmlFor="chap-stock-total" className="block text-sm font-semibold text-gray-700 mb-1">Stock total</label>
                     <input id="chap-stock-total" type="number" min="1" value={formData.stock_total}
                       onChange={e => setFormData(p => ({ ...p, stock_total: Number(e.target.value) }))}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none" />
                   </div>
                   <div>
                     <label htmlFor="chap-stock-avail" className="block text-sm font-semibold text-gray-700 mb-1">Stock disponible</label>
                     <input id="chap-stock-avail" type="number" min="0" value={formData.stock_available}
                       onChange={e => setFormData(p => ({ ...p, stock_available: Number(e.target.value) }))}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none" />
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none" />
                   </div>
                 </div>
 
@@ -713,7 +713,7 @@ export default function AdminChapiteauPage() {
                   <label htmlFor="chap-desc" className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
                   <textarea id="chap-desc" rows={3} value={formData.description}
                     onChange={e => setFormData(p => ({ ...p, description: e.target.value }))}
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C9A84C]/30 focus:border-[#C9A84C] outline-none resize-none" />
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F39200]/30 focus:border-[#F39200] outline-none resize-none" />
                 </div>
 
                 {/* Options */}
@@ -721,13 +721,13 @@ export default function AdminChapiteauPage() {
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" checked={formData.includes_installation}
                       onChange={e => setFormData(p => ({ ...p, includes_installation: e.target.checked }))}
-                      className="w-4 h-4 accent-[#C9A84C]" />
+                      className="w-4 h-4 accent-[#F39200]" />
                     <span className="text-sm text-gray-700">Installation incluse</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" checked={formData.is_active}
                       onChange={e => setFormData(p => ({ ...p, is_active: e.target.checked }))}
-                      className="w-4 h-4 accent-[#C9A84C]" />
+                      className="w-4 h-4 accent-[#F39200]" />
                     <span className="text-sm text-gray-700">Article actif</span>
                   </label>
                 </div>

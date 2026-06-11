@@ -127,7 +127,7 @@ export function generateVisitorPaymentReference(userId: string): string {
 /**
  * Formater un montant avec devise
  */
-export function formatVisitorAmount(amount: number, currency: 'EUR' | 'USD' | 'MAD' = 'EUR'): string {
+export function formatVisitorAmount(amount: number, currency: 'EUR' | 'USD' | 'MAD' = 'MAD'): string {
   const symbols: Record<string, string> = {
     EUR: '€',
     USD: '$',

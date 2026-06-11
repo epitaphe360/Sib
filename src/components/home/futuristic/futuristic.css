@@ -1,0 +1,396 @@
+/* ============================================================
+ * SIB 2026 — Futuristic 3D Home Page Styles
+ * Palette : couleurs officielles du logo SIB (sans rouge)
+ *   Navy foncé  #001A3D / #07182C
+ *   Bleu SIB    #1B365D / #2E5984
+ *   Bleu clair  #5E8FBE
+ *   Orange SIB  #F39200
+ * Stack: Three.js/R3F + GSAP + Framer Motion + Tailwind
+ * ============================================================ */
+
+/* ------------ Root variables (palette logo SIB) ------------ */
+.futuristic-page {
+  --sib-orange:      #F39200;
+  --sib-orange-lt:   #2E5984;
+  --sib-blue-lt:     #5E8FBE;
+  --sib-blue:        #2E5984;
+  --sib-navy:        #1B365D;
+  --sib-dark:        #001A3D;
+  --sib-darkest:     #000912;
+  --glass-bg:        rgba(0, 26, 61, 0.50);
+  --glass-border:    rgba(243, 146, 0, 0.20);
+  --glass-blur:      blur(18px);
+}
+
+/* ------------ SIB brand gradient text ------------ */
+.holo-text {
+  background: linear-gradient(
+    135deg,
+    #F39200 0%,
+    #2E5984 30%,
+    #5E8FBE 60%,
+    #F39200 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% 300%;
+  animation: holo-shift 6s ease infinite;
+}
+
+.holo-text-orange {
+  background: linear-gradient(135deg, #F39200 0%, #FF8C00 50%, #2E5984 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes holo-shift {
+  0%   { background-position: 0% 50% }
+  50%  { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+/* ------------ Glass panels ------------ */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.glass-panel-sm {
+  background: rgba(0, 26, 61, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 212, 255, 0.14);
+  border-radius: 10px;
+}
+
+/* ------------ SIB brand border ------------ */
+.holo-border {
+  position: relative;
+}
+
+.holo-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, #F39200, #2E5984, #5E8FBE, #F39200);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  background-size: 300% 300%;
+  animation: holo-shift 4s ease infinite;
+}
+
+/* ------------ Scan line overlay ------------ */
+.scan-lines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(94, 143, 190, 0.012) 2px,
+    rgba(94, 143, 190, 0.012) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ------------ Glowing dot ------------ */
+.glow-dot {
+  position: relative;
+}
+.glow-dot::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(243, 146, 0, 0.55) 0%, transparent 70%);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.4); }
+}
+
+/* ------------ CTA buttons (palette logo SIB) ------------ */
+.btn-futuristic-primary {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #F39200 0%, #E07A00 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.875rem 2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-futuristic-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(243, 146, 0, 0.5), 0 0 0 1px rgba(255, 179, 71, 0.35);
+}
+.btn-futuristic-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent);
+  transition: opacity 0.3s;
+}
+.btn-futuristic-primary:hover::after { opacity: 0; }
+
+.btn-futuristic-outline {
+  background: transparent;
+  color: #5E8FBE;
+  border: 1px solid rgba(94, 143, 190, 0.45);
+  border-radius: 8px;
+  padding: 0.875rem 2rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+  backdrop-filter: blur(8px);
+}
+.btn-futuristic-outline:hover {
+  background: rgba(94, 143, 190, 0.10);
+  border-color: rgba(94, 143, 190, 0.75);
+  box-shadow: 0 0 24px rgba(94, 143, 190, 0.22);
+  transform: translateY(-2px);
+}
+
+/* ------------ Stats counters ------------ */
+.stat-card-futuristic {
+  position: relative;
+  overflow: hidden;
+}
+.stat-card-futuristic::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00D4FF, transparent);
+  animation: scan-h 3s ease-in-out infinite;
+}
+@keyframes scan-h {
+  0%   { transform: scaleX(0); transform-origin: left; }
+  50%  { transform: scaleX(1); }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+/* ------------ Section reveals ------------ */
+.reveal-clip {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  transition: clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-clip.in-view {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* ------------ Floating elements ------------ */
+.float-anim {
+  animation: float-y 7s ease-in-out infinite;
+}
+.float-anim-2 {
+  animation: float-y 9s ease-in-out infinite reverse;
+}
+.float-anim-3 {
+  animation: float-y 5s ease-in-out infinite 2s;
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-14px); }
+}
+
+/* ------------ Countdown timer ------------ */
+.countdown-unit {
+  position: relative;
+  text-align: center;
+  min-width: 64px;
+}
+.countdown-unit::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 1px;
+  background: var(--holo-cyan);
+  opacity: 0.4;
+}
+
+/* ------------ Grid background (SIB bleu) ------------ */
+.holo-grid-bg {
+  background-image:
+    linear-gradient(rgba(94, 143, 190, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 143, 190, 0.07) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ------------ Feature cards ------------ */
+.feature-card-futuristic {
+  position: relative;
+  background: rgba(0, 26, 61, 0.6);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.feature-card-futuristic:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 102, 255, 0.2), 0 0 0 1px rgba(0, 212, 255, 0.15);
+}
+.feature-card-futuristic::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.5), transparent);
+  transform: scaleX(0);
+  transition: transform 0.4s;
+}
+.feature-card-futuristic:hover::before {
+  transform: scaleX(1);
+}
+
+/* ------------ Scroll indicator ------------ */
+.scroll-indicator {
+  width: 24px;
+  height: 38px;
+  border: 2px solid rgba(243, 146, 0, 0.45);
+  border-radius: 12px;
+  position: relative;
+}
+.scroll-indicator::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 8px;
+  background: #F39200;
+  border-radius: 2px;
+  animation: scroll-dot 2s ease-in-out infinite;
+}
+@keyframes scroll-dot {
+  0%   { top: 6px; opacity: 1; }
+  80%  { top: 20px; opacity: 0; }
+  100% { top: 6px; opacity: 0; }
+}
+
+/* ------------ Noise texture overlay ------------ */
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+/* ------------ Section titles ------------ */
+.section-label-futuristic {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #F39200;
+  opacity: 0.9;
+}
+.section-label-futuristic::before,
+.section-label-futuristic::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: #F39200;
+  opacity: 0.5;
+}
+
+/* ------------ R3F canvas wrapper ------------ */
+.r3f-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.r3f-canvas-wrap canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ============================================================
+ * Dark overrides — force les sections Sib2026 à adopter
+ * le thème sombre de la page Futuriste (backgrounds hardcodés
+ * dans le style attr ne peuvent être overridés par Tailwind).
+ * ============================================================ */
+.futuristic-page section[style*="backgroundColor"],
+.futuristic-page section[style*="background-color"] {
+  background-color: #000D24 !important;
+  color: #e2e8f0;
+}
+
+/* Textes foncés → blanc/gris clair */
+.futuristic-page section[style*="backgroundColor"] h2,
+.futuristic-page section[style*="backgroundColor"] h3,
+.futuristic-page section[style*="backgroundColor"] p,
+.futuristic-page section[style*="background-color"] h2,
+.futuristic-page section[style*="background-color"] h3,
+.futuristic-page section[style*="background-color"] p {
+  color: inherit;
+}
+.futuristic-page section[style*="backgroundColor"] .text-\[\#001A3D\],
+.futuristic-page section[style*="backgroundColor"] .text-neutral-900,
+.futuristic-page section[style*="backgroundColor"] .text-\[\#0b1c3f\],
+.futuristic-page section[style*="background-color"] .text-\[\#001A3D\],
+.futuristic-page section[style*="background-color"] .text-neutral-900 {
+  color: #f1f5f9 !important;
+}
+.futuristic-page section[style*="backgroundColor"] .text-neutral-600,
+.futuristic-page section[style*="backgroundColor"] .text-gray-500,
+.futuristic-page section[style*="backgroundColor"] .text-\[\#001A3D\]\/65,
+.futuristic-page section[style*="background-color"] .text-neutral-600,
+.futuristic-page section[style*="background-color"] .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+/* Bordures discrètes adaptées au dark */
+.futuristic-page section[style*="backgroundColor"] .border-neutral-300,
+.futuristic-page section[style*="background-color"] .border-neutral-300 {
+  border-color: rgba(94, 143, 190, 0.25) !important;
+}
+
+/* Flags + logos : fond blanc → fond semi-transparent dark */
+.futuristic-page section[style*="backgroundColor"] .bg-white,
+.futuristic-page section[style*="background-color"] .bg-white {
+  background-color: rgba(255,255,255,0.06) !important;
+}
+
+/* Badge section kicker pill */
+.futuristic-page section[style*="backgroundColor"] [style*="backgroundColor: #001A3D"],
+.futuristic-page section[style*="backgroundColor"] [style*="background-color: #001A3D"] {
+  background-color: rgba(243,146,0,0.12) !important;
+  color: #F39200 !important;
+}

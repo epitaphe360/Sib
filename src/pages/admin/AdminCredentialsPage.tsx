@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -46,7 +46,7 @@ function CopyButton({ text }: Readonly<{ text: string }>) {
   return (
     <button
       onClick={handleCopy}
-      className="ml-2 text-[#C9A84C] hover:text-[#e8c55a] transition-colors"
+      className="ml-2 text-[#F39200] hover:text-[#e8c55a] transition-colors"
       title="Copier"
     >
       {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
@@ -226,10 +226,10 @@ export default function AdminCredentialsPage() {
     return (
       <div className="min-h-screen bg-[#07101e] flex items-center justify-center p-8">
         <div className="text-center">
-          <Shield className="h-12 w-12 text-[#C9A84C] mx-auto mb-4" />
+          <Shield className="h-12 w-12 text-[#F39200] mx-auto mb-4" />
           <h2 className="text-white font-bold text-xl mb-2">Accès restreint</h2>
           <p className="text-white/50 mb-6">Réservé aux administrateurs.</p>
-          <Link to={ROUTES.ADMIN_DASHBOARD} className="text-[#C9A84C] hover:underline text-sm">
+          <Link to={ROUTES.ADMIN_DASHBOARD} className="text-[#F39200] hover:underline text-sm">
             ← Retour au dashboard
           </Link>
         </div>
@@ -245,15 +245,15 @@ export default function AdminCredentialsPage() {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <Link
             to={ROUTES.ADMIN_DASHBOARD}
-            className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-[#C9A84C] transition-colors mb-5"
+            className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-[#F39200] transition-colors mb-5"
           >
             <ArrowLeft className="h-4 w-4" />
             Retour au dashboard
           </Link>
 
           <div className="flex items-start gap-4">
-            <div className="p-3 rounded-xl bg-[#C9A84C]/10 border border-[#C9A84C]/25 flex-shrink-0">
-              <KeyRound className="h-7 w-7 text-[#C9A84C]" />
+            <div className="p-3 rounded-xl bg-[#F39200]/10 border border-[#F39200]/25 flex-shrink-0">
+              <KeyRound className="h-7 w-7 text-[#F39200]" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white tracking-wide">Gestion des accès</h1>
@@ -276,7 +276,7 @@ export default function AdminCredentialsPage() {
               placeholder="Rechercher par nom, email, société…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-[#C9A84C]/50 transition-colors"
+              className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-[#F39200]/50 transition-colors"
             />
           </div>
 
@@ -289,7 +289,7 @@ export default function AdminCredentialsPage() {
                   onClick={() => setFilterType(value)}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                     filterType === value
-                      ? 'bg-[#C9A84C] text-[#0F2034]'
+                      ? 'bg-[#F39200] text-[#0F2034]'
                       : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80 border border-white/10'
                   }`}
                 >
@@ -318,8 +318,8 @@ export default function AdminCredentialsPage() {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden mb-4"
             >
-              <div className="rounded-xl border border-[#C9A84C]/30 bg-[#C9A84C]/10 p-3.5 flex items-center justify-between gap-3">
-                <span className="text-[#C9A84C] text-sm font-semibold">
+              <div className="rounded-xl border border-[#F39200]/30 bg-[#F39200]/10 p-3.5 flex items-center justify-between gap-3">
+                <span className="text-[#F39200] text-sm font-semibold">
                   {selected.size} utilisateur(s) sélectionné(s)
                 </span>
                 <div className="flex gap-2">
@@ -332,7 +332,7 @@ export default function AdminCredentialsPage() {
                   <button
                     onClick={handleBulkSend}
                     disabled={isBulkSending}
-                    className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-[#C9A84C] text-[#0F2034] font-bold text-xs hover:bg-[#e8c55a] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-[#F39200] text-[#0F2034] font-bold text-xs hover:bg-[#e8c55a] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   >
                     {isBulkSending ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -358,7 +358,7 @@ export default function AdminCredentialsPage() {
                 type="checkbox"
                 checked={allVisibleSelected}
                 onChange={toggleSelectAll}
-                className="rounded accent-[#C9A84C] cursor-pointer"
+                className="rounded accent-[#F39200] cursor-pointer"
               />
             </div>
             <div>Utilisateur</div>
@@ -373,7 +373,7 @@ export default function AdminCredentialsPage() {
             if (isLoading) {
               return (
                 <div className="flex items-center justify-center py-16">
-                  <Loader2 className="h-8 w-8 text-[#C9A84C] animate-spin" />
+                  <Loader2 className="h-8 w-8 text-[#F39200] animate-spin" />
                 </div>
               );
             }
@@ -393,7 +393,7 @@ export default function AdminCredentialsPage() {
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   className={`grid grid-cols-[40px_1fr_180px_100px_140px_130px] gap-2 px-4 py-3.5 items-center hover:bg-white/[0.03] transition-colors ${
-                    selected.has(row.id) ? 'bg-[#C9A84C]/5' : ''
+                    selected.has(row.id) ? 'bg-[#F39200]/5' : ''
                   }`}
                 >
                   {/* Checkbox */}
@@ -402,7 +402,7 @@ export default function AdminCredentialsPage() {
                       type="checkbox"
                       checked={selected.has(row.id)}
                       onChange={() => toggleSelect(row.id)}
-                      className="rounded accent-[#C9A84C] cursor-pointer"
+                      className="rounded accent-[#F39200] cursor-pointer"
                     />
                   </div>
 
@@ -415,7 +415,7 @@ export default function AdminCredentialsPage() {
                     {/* Mot de passe généré */}
                     {row.lastPassword && (
                       <div className="flex items-center gap-1 mt-1">
-                        <span className="text-xs text-[#C9A84C]/80 font-mono">
+                        <span className="text-xs text-[#F39200]/80 font-mono">
                           {showPasswords.has(row.id)
                             ? row.lastPassword
                             : '•'.repeat(row.lastPassword.length)}
@@ -483,7 +483,7 @@ export default function AdminCredentialsPage() {
                     <button
                       onClick={() => handleSendOne(row.id)}
                       disabled={row.status === 'sending'}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1B365D] border border-[#C9A84C]/20 text-[#C9A84C] text-xs font-semibold hover:bg-[#C9A84C]/10 hover:border-[#C9A84C]/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1B365D] border border-[#F39200]/20 text-[#F39200] text-xs font-semibold hover:bg-[#F39200]/10 hover:border-[#F39200]/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                     >
                       {row.status === 'sending' ? (
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -509,7 +509,7 @@ export default function AdminCredentialsPage() {
             className="w-full flex items-center justify-between p-4 text-left hover:bg-white/[0.03] transition-colors"
           >
             <div className="flex items-center gap-2 text-white/60 font-semibold text-sm">
-              <Mail className="h-4 w-4 text-[#C9A84C]" />
+              <Mail className="h-4 w-4 text-[#F39200]" />
               Journal d'envoi ({auditLog.length})
             </div>
             {expandedLog ? (

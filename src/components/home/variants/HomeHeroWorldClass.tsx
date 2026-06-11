@@ -11,7 +11,6 @@ import {
   formatSalonDatesShort,
   SALON_STATS,
 } from '../../../config/salonInfo';
-import { MinistryEgidBar } from '../MinistryEgidBar';
 import { HomeEventBar } from '../HomeEventBar';
 
 const SALON_DATE = new Date('2026-11-25T09:00:00');
@@ -58,7 +57,6 @@ export const HomeHeroWorldClass: React.FC = () => {
 
   return (
     <>
-      <MinistryEgidBar />
       <HomeEventBar />
 
       <section className="home-dark home-p7-hero relative min-h-[min(92vh,920px)] flex items-end overflow-hidden">

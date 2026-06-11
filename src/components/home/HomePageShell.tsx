@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layers } from 'lucide-react';
 import type { HomePageVariantId } from '../../config/homeVariants';
 import { HOME_PAGE_VARIANTS } from '../../config/homeVariants';
+import { useResolvedHomePageVariantId } from '../../contexts/HomePageVariantContext';
 import { ROUTES } from '../../lib/routes';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useHomeMenuItems } from '../layout/homeMenu/useHomeMenuItems';
@@ -32,8 +33,9 @@ export const HomePageShell: React.FC<HomePageShellProps> = ({
 }) => {
   const { t } = useTranslation();
   const menuItems = useHomeMenuItems();
-  const current = HOME_PAGE_VARIANTS.find((v) => v.id === variantId)!;
-  const showClosing = !fullLayout && variantId !== 8;
+  const resolvedVariantId = useResolvedHomePageVariantId(variantId);
+  const current = HOME_PAGE_VARIANTS.find((v) => v.id === resolvedVariantId)!;
+  const showClosing = !fullLayout && resolvedVariantId !== 8 && resolvedVariantId !== 9;
 
   return (
     <div className={`home-premium min-h-screen ${className}`.trim()}>
@@ -42,7 +44,7 @@ export const HomePageShell: React.FC<HomePageShellProps> = ({
           <div className="max-w-container mx-auto px-6 lg:px-8 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
             <span className="inline-flex items-center gap-2 font-semibold text-amber-950 dark:text-amber-100">
               <Layers className="h-3 w-3" />
-              {t('home.prototype.label', { n: variantId, name: current.label })}
+              {t('home.prototype.label', { n: resolvedVariantId, name: current.label })}
             </span>
             <Link
               to={ROUTES.DESIGN_HOME_MENU}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Video, Mic, Upload } from 'lucide-react';
 import { toast } from 'sonner';
@@ -146,7 +146,7 @@ export default function UploadModal({ initialType = 'webinar', onUpload, onClose
                 {t('marketing.articles.category')}
               </label>
               {selectedType === 'testimonial' ? (
-                <div className="w-full px-3 py-2 border border-[#C9A84C]/40 bg-[#C9A84C]/8 rounded-lg text-sm font-medium text-[#1B365D]">
+                <div className="w-full px-3 py-2 border border-[#F39200]/40 bg-[#F39200]/8 rounded-lg text-sm font-medium text-[#1B365D]">
                   Témoignage
                 </div>
               ) : (

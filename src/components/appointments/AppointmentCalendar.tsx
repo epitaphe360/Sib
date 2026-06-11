@@ -626,7 +626,7 @@ export default function AppointmentCalendar() {
                     Créneaux disponibles - {formatDate(selectedDate)}
                   </h3>
                   <Badge variant="info" className="bg-blue-100 text-blue-800">
-                    Événement : 1-3 avril 2026
+                    Événement : 25-29 novembre 2026
                   </Badge>
                 </div>
               </div>

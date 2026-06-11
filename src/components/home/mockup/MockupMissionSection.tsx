@@ -31,7 +31,7 @@ export const MockupMissionSection: React.FC = () => {
             </Link>
           </div>
           <div className="grid grid-cols-4 gap-2 sm:gap-3">
-            {MOCKUP_ASSETS.portraits.map((src, i) => (
+            {MOCKUP_ASSETS.salonCards.slice(0, 4).map((src, i) => (
               <div key={src} className="aspect-[3/4] overflow-hidden bg-[#001530]">
                 <img src={src} alt="" className="h-full w-full object-cover object-top" />
               </div>

@@ -39,7 +39,7 @@ export default function SalonPublicPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0F2034] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C9A84C]" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F39200]" />
       </div>
     );
   }
@@ -48,7 +48,7 @@ export default function SalonPublicPage() {
     return (
       <div className="min-h-screen bg-[#0F2034] flex items-center justify-center text-white">
         <div className="text-center">
-          <Building2 className="h-16 w-16 mx-auto mb-4 text-[#C9A84C]" />
+          <Building2 className="h-16 w-16 mx-auto mb-4 text-[#F39200]" />
           <h1 className="text-2xl font-bold mb-2">{t('salon.not_found')}</h1>
           <p className="text-white/60 mb-6">{t('salon.not_found_msg', { slug: slug || '' })}</p>
           <Link to={ROUTES.HOME}>
@@ -94,7 +94,7 @@ export default function SalonPublicPage() {
           )}
 
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-4"
-            style={{ background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.35)', color: '#C9A84C' }}>
+            style={{ background: 'rgba(243,146,0,0.15)', border: '1px solid rgba(243,146,0,0.35)', color: '#F39200' }}>
             <CheckCircle className="h-3.5 w-3.5" />
             {salon.is_active ? t('salon.active') : t('salon.past_edition')}
           </div>
@@ -108,11 +108,11 @@ export default function SalonPublicPage() {
           <div className="flex flex-wrap justify-center gap-6 text-white/80 text-sm mb-8">
             {salon.location && (
               <span className="flex items-center gap-1.5">
-                <MapPin className="h-4 w-4 text-[#C9A84C]" /> {salon.location}
+                <MapPin className="h-4 w-4 text-[#F39200]" /> {salon.location}
               </span>
             )}
             <span className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4 text-[#C9A84C]" /> {dateLabel}
+              <Calendar className="h-4 w-4 text-[#F39200]" /> {dateLabel}
             </span>
           </div>
 
@@ -123,7 +123,7 @@ export default function SalonPublicPage() {
               </Button>
             </Link>
             <Link to={ROUTES.EXHIBITORS}>
-              <Button variant="outline" className="text-white border-white/30 hover:border-[#C9A84C]">
+              <Button variant="outline" className="text-white border-white/30 hover:border-[#F39200]">
                 {t('salon.view_exhibitors')}
               </Button>
             </Link>
@@ -159,8 +159,8 @@ export default function SalonPublicPage() {
             style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg" style={{ background: 'rgba(201,168,76,0.12)' }}>
-                <Icon className="h-5 w-5" style={{ color: '#C9A84C' }} />
+              <div className="p-2 rounded-lg" style={{ background: 'rgba(243,146,0,0.12)' }}>
+                <Icon className="h-5 w-5" style={{ color: '#F39200' }} />
               </div>
               <span className="text-sm font-semibold text-white/60">{label}</span>
             </div>
@@ -180,12 +180,12 @@ export default function SalonPublicPage() {
           ].map(({ label, desc, href, Icon }) => (
             <Link key={label} to={href}>
               <motion.div
-                whileHover={{ y: -4, boxShadow: '0 0 24px rgba(201,168,76,0.18)' }}
+                whileHover={{ y: -4, boxShadow: '0 0 24px rgba(243,146,0,0.18)' }}
                 whileTap={{ scale: 0.97 }}
                 className="rounded-xl p-5 cursor-pointer h-full transition-colors"
                 style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
               >
-                <Icon className="h-6 w-6 mb-3" style={{ color: '#C9A84C' }} />
+                <Icon className="h-6 w-6 mb-3" style={{ color: '#F39200' }} />
                 <h3 className="text-white font-semibold mb-1">{label}</h3>
                 <p className="text-white/45 text-sm">{desc}</p>
                 <ChevronRight className="h-4 w-4 text-white/30 mt-3" />

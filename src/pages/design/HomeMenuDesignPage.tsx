@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react';
 import { ROUTES } from '../../lib/routes';
-import { ALL_HOME_PAGES, getDefaultHomePageVariant } from '../../config/homePagesRegistry';
+import { HOME_PAGES_MENU, getDefaultHomePageVariant } from '../../config/homePagesRegistry';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function HomeMenuDesignPage() {
@@ -25,14 +25,16 @@ export default function HomeMenuDesignPage() {
           <h1 className="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white tracking-tight mb-4">
             {t('design.home_page.title')}
           </h1>
-          <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">{t('design.home_page.desc')}</p>
+          <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            9 mises en page réellement différentes. P10–P17 étaient des doublons — supprimés du menu.
+          </p>
           <p className="mt-4 text-sm text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 px-4 py-2 rounded-lg inline-block">
             {t('design.home_page.default')}: P{active} — <code>VITE_HOME_PAGE_VARIANT={active}</code>
           </p>
         </header>
 
         <div className="space-y-4">
-          {ALL_HOME_PAGES.map((v) => (
+          {HOME_PAGES_MENU.map((v) => (
             <Link
               key={v.id}
               to={v.route}
@@ -40,7 +42,7 @@ export default function HomeMenuDesignPage() {
             >
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400 mb-1">
-                  Proposition {v.id} · {v.inspiration}
+                  P{v.id}{v.id === 8 ? ' · Recommandée' : v.id === 9 ? ' · Optimisée' : ''}
                 </p>
                 <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-1">{v.label}</h2>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">{t(v.descKey)}</p>

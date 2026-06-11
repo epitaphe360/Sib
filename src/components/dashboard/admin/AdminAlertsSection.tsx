@@ -79,11 +79,11 @@ export function AdminAlertsSection({ adminMetrics: m, showRegistrationRequests, 
           {/* Header navy */}
           <div className="bg-[#0F2034] px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Bell className="h-5 w-5 text-[#C9A84C]" />
+              <Bell className="h-5 w-5 text-[#F39200]" />
               <span className="text-white font-semibold text-sm">{t('admin.required_actions')}</span>
             </div>
             {totalActions > 0 && (
-              <span className="bg-[#C9A84C] text-[#0F2034] text-xs font-bold px-2.5 py-1 rounded-full">
+              <span className="bg-[#F39200] text-[#0F2034] text-xs font-bold px-2.5 py-1 rounded-full">
                 {totalActions} {t('admin.items_need_attention', { count: totalActions }).split(' ')[0] || 'en attente'}
               </span>
             )}
@@ -98,20 +98,20 @@ export function AdminAlertsSection({ adminMetrics: m, showRegistrationRequests, 
                     whileHover={{ y: -2 }}
                     className={`h-full p-4 rounded-xl border transition-all cursor-pointer select-none
                       ${card.isButton && showRegistrationRequests
-                        ? 'border-[#C9A84C] bg-[#C9A84C]/5'
+                        ? 'border-[#F39200] bg-[#F39200]/5'
                         : card.urgent
-                        ? 'border-[#C9A84C]/60 bg-[#C9A84C]/5 hover:border-[#C9A84C] hover:bg-[#C9A84C]/8'
+                        ? 'border-[#F39200]/60 bg-[#F39200]/5 hover:border-[#F39200] hover:bg-[#F39200]/8'
                         : 'border-sib-gray-200 bg-sib-gray-50 hover:border-[#1B365D]/30 hover:bg-[#1B365D]/3'
                       }`}
                   >
                     <div className="flex items-start justify-between mb-3">
-                      <div className={`p-2 rounded-lg ${card.urgent ? 'bg-[#C9A84C]/20' : 'bg-[#1B365D]/8'}`}>
+                      <div className={`p-2 rounded-lg ${card.urgent ? 'bg-[#F39200]/20' : 'bg-[#1B365D]/8'}`}>
                         <card.Icon className={`h-4 w-4 ${card.urgent ? 'text-[#A88830]' : 'text-[#1B365D]'}`} />
                       </div>
                       {card.count != null && (
                         <span className={`text-xs font-bold px-1.5 py-0.5 rounded
                           ${card.urgent && card.count > 0
-                            ? 'bg-[#C9A84C] text-[#0F2034]'
+                            ? 'bg-[#F39200] text-[#0F2034]'
                             : 'bg-sib-gray-200 text-sib-gray-600'
                           }`}>
                           {card.count}

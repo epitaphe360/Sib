@@ -116,7 +116,7 @@ const DEFAULT_CONFIG: BadgeConfig = {
   badge_validity_text_fr: "CECI EST VOTRE BADGE D'ACCÈS VALABLE POUR LES 5 JOURS DU SALON",
   badge_validity_text_en: 'THIS DOCUMENT IS YOUR ENTRY BADGE VALID FOR THE 5 DAYS OF THE EXHIBITION',
   primary_color: '#1e3a5f',
-  secondary_color: '#C9A84C',
+  secondary_color: '#F39200',
   header_bg: '#1e3a5f',
   text_dark: '#111827',
   accent_color: '#3ECF8E',
@@ -176,7 +176,7 @@ const SESSION_COLORS: Record<string, string> = {
   lunch:      '#16a34a',
   break:      '#9ca3af',
   visit:      '#c2410c',
-  ceremony:   '#C9A84C',
+  ceremony:   '#F39200',
 };
 
 const SESSION_LABELS: Record<string, string> = {

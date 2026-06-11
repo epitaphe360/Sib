@@ -1,0 +1,41 @@
+.sib40-page {
+  font-family: 'Montserrat', 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #1a1a1a;
+  background-color: #ffffff;
+}
+
+.sib40-orange {
+  background-color: #f37021;
+}
+
+.sib40-text-orange {
+  color: #f37021;
+}
+
+.sib40-dark-blue {
+  background-color: #0b1c3f;
+}
+
+.sib40-gradient-overlay {
+  background: linear-gradient(to right, rgba(11, 28, 63, 0.9) 30%, rgba(11, 28, 63, 0.4) 100%);
+}
+
+.sib40-timeline-dot::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #0b1c3f;
+  border-radius: 50%;
+  top: -5px;
+  left: 0;
+}
+
+.sib40-timeline-line {
+  height: 2px;
+  background-color: #e5e7eb;
+  width: 100%;
+  position: absolute;
+  top: 0;
+}

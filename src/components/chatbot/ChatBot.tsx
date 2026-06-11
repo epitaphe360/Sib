@@ -171,7 +171,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       if (message.includes('salon') || message.includes('SIB') || message.includes('information')) {
         return {
           id: Date.now().toString(),
-          content: "?? SIB 2026 - Le plus grand salon bâtiment international ! ?? 1-3 Avril 2026 à Casablanca, Maroc. 300+ exposants, 6,000+ visiteurs de 40 pays, 40+ conférences !",
+          content: "SIB 2026 — Salon International du Bâtiment. 25-29 Novembre 2026 à El Jadida, Maroc. +600 exposants, +200 000 visiteurs, +30 pays.",
           isBot: true,
           timestamp,
           type: 'quick_reply',
@@ -595,7 +595,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     } else {
       // Action personnalisée
       const actionMessages = {
-        'info_salon': `?? SIB 2026 - Salon International du Bâtiment\n?? 1-3 Avril 2026\n?? Casablanca, Maroc\n?? 300+ exposants\n?? 6,000+ visiteurs\n?? 40 pays`,
+        'info_salon': `SIB 2026 - Salon International du Bâtiment\n25-29 Novembre 2026\nEl Jadida, Maroc\n+600 exposants\n+200 000 visiteurs\n+30 pays`,
         'support': `?? SUPPORT SIB\n?? Email: support@sib2026.ma\n?? Tél: +212 1 23 45 67 89\n?? Lun-Ven: 9h-18h\n?? Chat en direct disponible`,
         'contact_commercial': `?? ÉQUIPE COMMERCIALE\n?? commercial@sib2026.ma\n?? +212 1 23 45 67 90\n?? Partenariats & Sponsoring\n?? Devis personnalisés`
       };

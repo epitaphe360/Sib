@@ -17,42 +17,61 @@ interface UrgencyMetric {
  * P7 — Urgency Section
  * Section créant un sentiment d'urgence et de FOMO (Fear Of Missing Out)
  */
+/** Calcule le % de stands déjà réservés — monte de 38% à 92% sur 365j avant l'événement */
+function computeSeatsReserved(eventDate: Date): string {
+  const now = new Date();
+  const totalMs = 365 * 24 * 60 * 60 * 1000;
+  const elapsed = eventDate.getTime() - totalMs - now.getTime();
+  const progress = Math.min(1, Math.max(0, -elapsed / totalMs));
+  const pct = Math.round(38 + progress * 54);
+  return `${pct}%`;
+}
+
 export const P7UrgencySection: React.FC = () => {
   const { t } = useTranslation();
+  const EVENT_DATE = new Date('2026-11-25');
   const [daysLeft, setDaysLeft] = useState(0);
+  const [seatsReserved, setSeatsReserved] = useState('');
 
   useEffect(() => {
-    const eventDate = new Date('2026-11-25').getTime();
-    const updateDays = () => {
+    const update = () => {
       const now = new Date().getTime();
-      const distance = eventDate - now;
-      const days = Math.ceil(distance / (1000 * 60 * 60 * 24));
-      setDaysLeft(Math.max(0, days));
+      const distance = EVENT_DATE.getTime() - now;
+      setDaysLeft(Math.max(0, Math.ceil(distance / (1000 * 60 * 60 * 24))));
+      setSeatsReserved(computeSeatsReserved(EVENT_DATE));
     };
-    updateDays();
-    const interval = setInterval(updateDays, 1000 * 60 * 60); // Update every hour
+    update();
+    const interval = setInterval(update, 1000 * 60 * 60);
     return () => clearInterval(interval);
   }, []);
 
   const urgencyMetrics: UrgencyMetric[] = [
     {
-      label: 'Jours restants',
+      label: t('home.p7_urgency.metric_days'),
       value: daysLeft,
       icon: <AlertCircle className="h-6 w-6" />,
       color: 'bg-danger-50 dark:bg-danger-500/10 text-danger-600 dark:text-danger-400',
     },
     {
-      label: 'Places disponibles',
-      value: '45%',
+      label: t('home.p7_urgency.metric_seats'),
+      value: seatsReserved,
       icon: <TrendingUp className="h-6 w-6" />,
       color: 'bg-warning-50 dark:bg-warning-500/10 text-warning-600 dark:text-warning-400',
     },
     {
-      label: 'Exposants confirmés',
-      value: '600+',
+      label: t('home.p7_urgency.metric_exhibitors'),
+      value: '+600',
       icon: <Zap className="h-6 w-6" />,
       color: 'bg-success-50 dark:bg-success-500/10 text-success-600 dark:text-success-400',
     },
+  ];
+
+  const benefitKeys = [
+    'home.p7_urgency.benefit_1',
+    'home.p7_urgency.benefit_2',
+    'home.p7_urgency.benefit_3',
+    'home.p7_urgency.benefit_4',
+    'home.p7_urgency.benefit_5',
   ];
 
   return (
@@ -76,15 +95,15 @@ export const P7UrgencySection: React.FC = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-danger-100 dark:bg-danger-500/20 text-danger-700 dark:text-danger-300 mb-6">
             <AlertCircle className="h-4 w-4" />
-            <span className="text-sm font-semibold">DERNIÈRE CHANCE</span>
+            <span className="text-sm font-semibold">{t('home.p7_urgency.badge')}</span>
           </div>
 
           <h2 className="text-4xl lg:text-5xl font-bold text-neutral-900 dark:text-white mb-4 leading-tight">
-            Ne manquez pas l'événement majeur du bâtiment
+            {t('home.p7_urgency.title')}
           </h2>
 
           <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto">
-            Les places se font rares. Inscrivez-vous maintenant pour garantir votre accès au SIB 2026 et à toutes les opportunités de networking et d'innovation.
+            {t('home.p7_urgency.desc')}
           </p>
         </motion.div>
 
@@ -121,18 +140,12 @@ export const P7UrgencySection: React.FC = () => {
             {/* Left: Benefits */}
             <div>
               <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
-                Pourquoi s'inscrire maintenant ?
+                {t('home.p7_urgency.why_title')}
               </h3>
               <ul className="space-y-4">
-                {[
-                  'Accès prioritaire aux meilleures zones du salon',
-                  'Tarif préférentiel avant augmentation',
-                  'Invitation au dîner du bâtiment (places limitées)',
-                  'Matchmaking B2B personnalisé',
-                  'Accès à l\'espace innovation et startups',
-                ].map((benefit, index) => (
+                {benefitKeys.map((benefitKey, index) => (
                   <motion.li
-                    key={index}
+                    key={benefitKey}
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -140,7 +153,7 @@ export const P7UrgencySection: React.FC = () => {
                     className="flex items-start gap-3"
                   >
                     <Zap className="h-5 w-5 text-success-500 shrink-0 mt-0.5" />
-                    <span className="text-neutral-700 dark:text-neutral-300">{benefit}</span>
+                    <span className="text-neutral-700 dark:text-neutral-300">{t(benefitKey)}</span>
                   </motion.li>
                 ))}
               </ul>
@@ -151,16 +164,16 @@ export const P7UrgencySection: React.FC = () => {
               <Link to={ROUTES.VISITOR_SUBSCRIPTION} className="block">
                 <Button variant="primary" size="lg" className="w-full group">
                   <Zap className="h-5 w-5 mr-2" />
-                  S'inscrire maintenant (Visiteur)
+                  {t('home.p7_urgency.cta_visitor')}
                 </Button>
               </Link>
               <Link to={ROUTES.EXHIBITOR_SUBSCRIPTION} className="block">
                 <Button variant="secondary" size="lg" className="w-full">
-                  Devenir exposant
+                  {t('home.p7_urgency.cta_exhibitor')}
                 </Button>
               </Link>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center pt-4">
-                ⏰ Offre valable jusqu'au 31 octobre 2026
+                {t('home.p7_urgency.deadline')}
               </p>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+﻿import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, AlertTriangle, XCircle, Activity, Wifi } from 'lucide-react';
 
@@ -29,18 +29,18 @@ export const SystemHealthPanel: React.FC<SystemHealthPanelProps> = memo(({ healt
       {/* Header */}
       <div
         className="px-6 py-4 flex items-center justify-between"
-        style={{ background: 'rgba(201,168,76,0.05)', borderBottom: '1px solid rgba(30,58,95,0.08)' }}
+        style={{ background: 'rgba(243,146,0,0.05)', borderBottom: '1px solid rgba(30,58,95,0.08)' }}
       >
         <div className="flex items-center gap-3">
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
-            <Wifi className="h-5 w-5" style={{ color: '#C9A84C' }} />
+            <Wifi className="h-5 w-5" style={{ color: '#F39200' }} />
           </motion.div>
           <span className="text-[#1e3a5f] font-bold text-sm tracking-wide">État du Système</span>
         </div>
-        <span className="text-xs" style={{ color: 'rgba(201,168,76,0.6)' }}>Santé globale</span>
+        <span className="text-xs" style={{ color: 'rgba(243,146,0,0.6)' }}>Santé globale</span>
       </div>
 
       <div className="p-4 space-y-3">
@@ -54,7 +54,7 @@ export const SystemHealthPanel: React.FC<SystemHealthPanelProps> = memo(({ healt
               transition={{ delay: i * 0.08 }}
               className="p-3 rounded-xl transition-all"
               style={{ border: '1px solid rgba(30,58,95,0.06)' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.25)'; (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.03)'; }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(243,146,0,0.25)'; (e.currentTarget as HTMLElement).style.background = 'rgba(243,146,0,0.03)'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(30,58,95,0.06)'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
             >
               <div className="flex items-center justify-between mb-2">

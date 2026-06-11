@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import type { HomePageComponentKey, HomePageVariantId } from '../../config/homePagesRegistry';
 import { getHomePageEntry } from '../../config/homePagesRegistry';
+import { HomePageVariantProvider } from '../../contexts/HomePageVariantContext';
 
 const LOADERS: Record<HomePageComponentKey, React.LazyExoticComponent<React.FC>> = {
   variant1: lazy(() => import('./HomeVariant1')),
@@ -38,8 +39,10 @@ export default function HomePageRouter({ pageId }: HomePageRouterProps) {
   }
   const Page = LOADERS[entry.component];
   return (
-    <Suspense fallback={<PageFallback />}>
-      <Page />
-    </Suspense>
+    <HomePageVariantProvider pageId={pageId}>
+      <Suspense fallback={<PageFallback />}>
+        <Page />
+      </Suspense>
+    </HomePageVariantProvider>
   );
 }

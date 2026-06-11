@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { Package, ArrowRight, Zap, Clock, ChevronLeft, ChevronRight } from "lucide-react";
@@ -68,7 +68,7 @@ function HeroBanner({ to }: { to: string }) {
             transition={{ duration: 3.5, repeat: Infinity, ease: "linear", repeatDelay: 2 }}
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(105deg, transparent 40%, rgba(201,168,76,0.07) 50%, transparent 60%)",
+              background: "linear-gradient(105deg, transparent 40%, rgba(243,146,0,0.07) 50%, transparent 60%)",
               zIndex: 0,
             }}
           />
@@ -77,7 +77,7 @@ function HeroBanner({ to }: { to: string }) {
           <div
             className="absolute inset-0 opacity-[0.045] pointer-events-none"
             style={{
-              backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%23C9A84C' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath stroke='%23C9A84C' stroke-width='0.6' d='M30 12L48 30L30 48L12 30Z'/%3E%3Ccircle cx='30' cy='30' r='2' fill='%23C9A84C'/%3E%3Ccircle cx='0' cy='0' r='1.5' fill='%23C9A84C'/%3E%3Ccircle cx='60' cy='60' r='1.5' fill='%23C9A84C'/%3E%3C/g%3E%3C/svg%3E\")",
+              backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%232E5984' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath stroke='%232E5984' stroke-width='0.6' d='M30 12L48 30L30 48L12 30Z'/%3E%3Ccircle cx='30' cy='30' r='2' fill='%232E5984'/%3E%3Ccircle cx='0' cy='0' r='1.5' fill='%232E5984'/%3E%3Ccircle cx='60' cy='60' r='1.5' fill='%232E5984'/%3E%3C/g%3E%3C/svg%3E\")",
             }}
           />
 
@@ -86,7 +86,7 @@ function HeroBanner({ to }: { to: string }) {
             animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.15, 1] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none"
-            style={{ background: "radial-gradient(circle, rgba(201,168,76,0.14) 0%, transparent 65%)" }}
+            style={{ background: "radial-gradient(circle, rgba(243,146,0,0.14) 0%, transparent 65%)" }}
           />
 
           <div className="relative z-10 px-8 py-10 md:px-14 md:py-12 flex flex-col lg:flex-row items-center justify-between gap-8">
@@ -96,9 +96,9 @@ function HeroBanner({ to }: { to: string }) {
               animate={{ rotate: [0, -8, 8, 0], scale: [1, 1.08, 1] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               className="flex-shrink-0 p-5 rounded-2xl"
-              style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.35)" }}
+              style={{ background: "rgba(243,146,0,0.12)", border: "1px solid rgba(243,146,0,0.35)" }}
             >
-              <Package className="h-12 w-12" style={{ color: "#C9A84C" }} />
+              <Package className="h-12 w-12" style={{ color: "#F39200" }} />
             </motion.div>
 
             {/* Texte central */}
@@ -115,7 +115,7 @@ function HeroBanner({ to }: { to: string }) {
                       exit={{ y: -20, opacity: 0 }}
                       transition={{ duration: 0.35 }}
                       className="text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"
-                      style={{ background: "rgba(201,168,76,0.18)", color: "#C9A84C", border: "1px solid rgba(201,168,76,0.35)" }}
+                      style={{ background: "rgba(243,146,0,0.18)", color: "#F39200", border: "1px solid rgba(243,146,0,0.35)" }}
                     >
                       <Clock className="h-3 w-3" />
                       {stock.label} — {stock.left} restants
@@ -134,7 +134,7 @@ function HeroBanner({ to }: { to: string }) {
 
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">
                 Équipez votre stand —{" "}
-                <span style={{ color: "#C9A84C" }}>Location de matériel</span>
+                <span style={{ color: "#F39200" }}>Location de matériel</span>
               </h2>
 
               {/* Catégorie animée */}
@@ -148,7 +148,7 @@ function HeroBanner({ to }: { to: string }) {
                     exit={{ opacity: 0, x: -16 }}
                     transition={{ duration: 0.38 }}
                     className="text-sm font-semibold"
-                    style={{ color: "#E7D192" }}
+                    style={{ color: "#2E5984" }}
                   >
                     {cat.emoji} {cat.label} — {cat.sub}
                   </motion.span>
@@ -157,7 +157,7 @@ function HeroBanner({ to }: { to: string }) {
 
               <p className="text-slate-400 text-sm mt-2">
                 Réservez avant épuisement du stock.{" "}
-                <span className="text-[#C9A84C] font-semibold">Places limitées, première réservation prioritaire.</span>
+                <span className="text-[#F39200] font-semibold">Places limitées, première réservation prioritaire.</span>
               </p>
             </div>
 
@@ -170,7 +170,7 @@ function HeroBanner({ to }: { to: string }) {
                   onHoverStart={() => setHover(true)}
                   onHoverEnd={() => setHover(false)}
                   className="relative flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-base overflow-hidden"
-                  style={{ background: "linear-gradient(135deg, #C9A84C, #E7D192)", color: "#0b1929" }}
+                  style={{ background: "linear-gradient(135deg, #F39200, #2E5984)", color: "#0b1929" }}
                 >
                   <motion.span
                     animate={{ x: hover ? 4 : 0 }}
@@ -216,7 +216,7 @@ function CompactBanner({ to }: { to: string }) {
     >
       {/* Barre dorée shimmer en haut */}
       <div className="relative h-1 overflow-hidden">
-        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, #C9A84C, #E7D192, #C9A84C)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, #F39200, #2E5984, #F39200)" }} />
         <motion.div
           animate={{ x: ["-100%", "200%"] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
@@ -231,9 +231,9 @@ function CompactBanner({ to }: { to: string }) {
             animate={{ rotate: [0, -6, 6, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="p-2.5 rounded-xl flex-shrink-0"
-            style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)" }}
+            style={{ background: "rgba(243,146,0,0.15)", border: "1px solid rgba(243,146,0,0.3)" }}
           >
-            <Package className="h-6 w-6" style={{ color: "#C9A84C" }} />
+            <Package className="h-6 w-6" style={{ color: "#F39200" }} />
           </motion.div>
           <div>
             <div className="flex items-center gap-2 mb-0.5">
@@ -248,7 +248,7 @@ function CompactBanner({ to }: { to: string }) {
                   exit={{ y: -14, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                   className="text-xs flex items-center gap-1.5"
-                  style={{ color: "#C9A84C" }}
+                  style={{ color: "#F39200" }}
                 >
                   <Clock className="h-3 w-3 flex-shrink-0" />
                   {stock.label} — <span className="font-bold">{stock.left} restants</span>
@@ -265,7 +265,7 @@ function CompactBanner({ to }: { to: string }) {
             onHoverStart={() => setHover(true)}
             onHoverEnd={() => setHover(false)}
             className="relative flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #C9A84C, #E7D192)", color: "#0b1929" }}
+            style={{ background: "linear-gradient(135deg, #F39200, #2E5984)", color: "#0b1929" }}
           >
             <Zap className="h-4 w-4" />
             Réserver maintenant
@@ -295,13 +295,13 @@ function SidebarBanner({ to }: { to: string }) {
       className="rounded-2xl overflow-hidden"
       style={{
         background: "linear-gradient(160deg, #0b1929 0%, #1e3a5f 100%)",
-        border: "1px solid rgba(201,168,76,0.25)",
+        border: "1px solid rgba(243,146,0,0.25)",
         boxShadow: "0 4px 16px rgba(15,32,52,0.18)",
       }}
     >
       {/* Barre shimmer */}
       <div className="relative h-0.5 overflow-hidden">
-        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, #C9A84C, #E7D192)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, #F39200, #2E5984)" }} />
         <motion.div
           animate={{ x: ["-100%", "200%"] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
@@ -316,7 +316,7 @@ function SidebarBanner({ to }: { to: string }) {
             animate={{ rotate: [0, -8, 8, 0] }}
             transition={{ duration: 5, repeat: Infinity }}
           >
-            <Package className="h-5 w-5" style={{ color: "#C9A84C" }} />
+            <Package className="h-5 w-5" style={{ color: "#F39200" }} />
           </motion.div>
           <span className="text-white font-bold text-sm">Location matériel</span>
           <motion.span
@@ -336,7 +336,7 @@ function SidebarBanner({ to }: { to: string }) {
               exit={{ y: -16, opacity: 0 }}
               transition={{ duration: 0.35 }}
               className="text-xs"
-              style={{ color: "#E7D192" }}
+              style={{ color: "#2E5984" }}
             >
               {cat.emoji} {cat.label} — {cat.sub}
             </motion.p>
@@ -353,7 +353,7 @@ function SidebarBanner({ to }: { to: string }) {
               exit={{ y: -14, opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="flex items-center gap-1.5 text-xs"
-              style={{ color: "#C9A84C" }}
+              style={{ color: "#F39200" }}
             >
               <Clock className="h-3 w-3 flex-shrink-0" />
               <span className="font-bold">{stock.label}</span> — {stock.left} restants
@@ -366,7 +366,7 @@ function SidebarBanner({ to }: { to: string }) {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.95 }}
             className="relative w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-xs overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #C9A84C, #E7D192)", color: "#0b1929" }}
+            style={{ background: "linear-gradient(135deg, #F39200, #2E5984)", color: "#0b1929" }}
           >
             Voir le catalogue <ArrowRight className="h-3.5 w-3.5" />
             <motion.div

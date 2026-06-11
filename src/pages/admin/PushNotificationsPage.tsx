@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Bell, Send, Users, Star, Building2, UserCheck, Globe, Clock, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -26,7 +26,7 @@ interface SentNotification {
 const AUDIENCE_OPTIONS = [
   { value: 'all' as Audience,        label: 'Tous les utilisateurs',  color: '#3B82F6', description: 'Visiteurs + Exposants + VIP + Agents',   IconComp: Globe      },
   { value: 'visitors' as Audience,   label: 'Visiteurs uniquement',   color: '#10B981', description: 'Visiteurs standard inscrits',             IconComp: Users      },
-  { value: 'vip' as Audience,        label: 'Pass VIP seulement',     color: '#C9A84C', description: 'Visiteurs ayant un Pass VIP actif',       IconComp: Star       },
+  { value: 'vip' as Audience,        label: 'Pass VIP seulement',     color: '#F39200', description: 'Visiteurs ayant un Pass VIP actif',       IconComp: Star       },
   { value: 'exhibitors' as Audience, label: 'Exposants',              color: '#8B5CF6', description: 'Tous les exposants confirmés',            IconComp: Building2  },
   { value: 'agents' as Audience,     label: 'Agents / Staff',         color: '#EF4444', description: 'Équipe terrain et contrôle accès',        IconComp: UserCheck  },
 ];
@@ -151,8 +151,8 @@ export default function PushNotificationsPage() {
 
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)' }}>
-              <Bell className="h-5 w-5" style={{ color: '#C9A84C' }} />
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(243,146,0,0.15)', border: '1px solid rgba(243,146,0,0.3)' }}>
+              <Bell className="h-5 w-5" style={{ color: '#F39200' }} />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">{t('admin.push_title')}</h1>
@@ -247,7 +247,7 @@ export default function PushNotificationsPage() {
                 onClick={handleSend}
                 disabled={isSending || !title.trim() || !message.trim()}
                 className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm"
-                style={{ background: '#C9A84C', color: '#000' }}
+                style={{ background: '#F39200', color: '#000' }}
               >
                 {isSending ? (
                   <><span className="animate-spin border-2 border-black/30 border-t-black rounded-full w-4 h-4" /> {t('admin.push_sending')}</>
@@ -270,7 +270,7 @@ export default function PushNotificationsPage() {
               <h3 className="text-sm font-semibold mb-3 uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>{t('admin.push_preview')}</h3>
               <div className="rounded-2xl p-4" style={{ background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <div className="flex items-start gap-2">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#C9A84C' }}>
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#F39200' }}>
                     <Bell className="h-4 w-4 text-black" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -316,7 +316,7 @@ export default function PushNotificationsPage() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
-            <Clock className="h-4 w-4" style={{ color: '#C9A84C' }} />
+            <Clock className="h-4 w-4" style={{ color: '#F39200' }} />
             {t('admin.push_history')}
           </h2>
 

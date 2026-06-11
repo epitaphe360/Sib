@@ -78,7 +78,7 @@ export default function ChapiteauPublicPage() {
         {/* Pattern */}
         <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%23C9A84C' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath stroke='%23C9A84C' stroke-width='0.6' d='M30 12L48 30L30 48L12 30Z'/%3E%3Ccircle cx='30' cy='30' r='2' fill='%23C9A84C'/%3E%3C/g%3E%3C/svg%3E\")",
+            backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%232E5984' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath stroke='%232E5984' stroke-width='0.6' d='M30 12L48 30L30 48L12 30Z'/%3E%3Ccircle cx='30' cy='30' r='2' fill='%232E5984'/%3E%3C/g%3E%3C/svg%3E\")",
           }} />
         {/* Shimmer */}
         <motion.div
@@ -86,7 +86,7 @@ export default function ChapiteauPublicPage() {
           transition={{ duration: 4, repeat: Infinity, ease: 'linear', repeatDelay: 3 }}
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(105deg, transparent 40%, rgba(201,168,76,0.06) 50%, transparent 60%)',
+            background: 'linear-gradient(105deg, transparent 40%, rgba(243,146,0,0.06) 50%, transparent 60%)',
           }}
         />
 
@@ -95,15 +95,15 @@ export default function ChapiteauPublicPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}>
-            <div className="inline-flex items-center gap-2 bg-[#C9A84C]/15 border border-[#C9A84C]/30 rounded-full px-4 py-1.5 mb-6">
-              <Zap className="w-3.5 h-3.5 text-[#C9A84C]" />
-              <span className="text-[#C9A84C] text-xs font-semibold tracking-wider uppercase">
+            <div className="inline-flex items-center gap-2 bg-[#F39200]/15 border border-[#F39200]/30 rounded-full px-4 py-1.5 mb-6">
+              <Zap className="w-3.5 h-3.5 text-[#F39200]" />
+              <span className="text-[#F39200] text-xs font-semibold tracking-wider uppercase">
                 SIB 2026 — Module Location
               </span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
               Location de{' '}
-              <span className="text-[#C9A84C]">Chapiteaux</span><br />
+              <span className="text-[#F39200]">Chapiteaux</span><br />
               Professionnels
             </h1>
             <p className="text-white/60 text-lg max-w-2xl mb-8 leading-relaxed">
@@ -116,7 +116,7 @@ export default function ChapiteauPublicPage() {
                 { icon: <CheckCircle className="w-4 h-4" />, label: 'Installation incluse' },
                 { icon: <Users className="w-4 h-4" />, label: 'Réservé aux exposants & partenaires' },
               ].map(f => (
-                <div key={f.label} className="flex items-center gap-2 text-[#C9A84C]">
+                <div key={f.label} className="flex items-center gap-2 text-[#F39200]">
                   {f.icon} <span>{f.label}</span>
                 </div>
               ))}
@@ -124,7 +124,7 @@ export default function ChapiteauPublicPage() {
             <div className="flex flex-wrap gap-3">
               <Link to={ROUTES.EXHIBITOR_CHAPITEAU}
                 className="flex items-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm text-[#0B1C3D] transition hover:scale-105"
-                style={{ background: 'linear-gradient(135deg, #C9A84C, #b8963e)' }}>
+                style={{ background: 'linear-gradient(135deg, #F39200, #E07A00)' }}>
                 <Tent className="w-4 h-4" /> Réserver — Exposant
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -192,12 +192,12 @@ export default function ChapiteauPublicPage() {
                         className="w-full h-full object-cover opacity-80" />
                     ) : (
                       <div className="flex flex-col items-center justify-center h-full gap-2">
-                        <Tent className="w-14 h-14 text-[#C9A84C]/50" />
-                        <span className="text-[#C9A84C] font-bold text-xl">{item.size_label}</span>
+                        <Tent className="w-14 h-14 text-[#F39200]/50" />
+                        <span className="text-[#F39200] font-bold text-xl">{item.size_label}</span>
                       </div>
                     )}
                     {item.includes_installation && (
-                      <div className="absolute bottom-2 left-2 bg-[#C9A84C] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                      <div className="absolute bottom-2 left-2 bg-[#F39200] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
                         Installation incluse ✓
                       </div>
                     )}
@@ -227,7 +227,7 @@ export default function ChapiteauPublicPage() {
                     <p className="text-sm text-gray-500 line-clamp-2 mb-4">{item.description}</p>
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-2xl font-black text-[#C9A84C]">
+                        <span className="text-2xl font-black text-[#F39200]">
                           {item.price_per_day.toLocaleString('fr-MA')}
                         </span>
                         <span className="text-xs text-gray-400 ml-1">MAD/jour</span>
@@ -249,7 +249,7 @@ export default function ChapiteauPublicPage() {
             <div className="inline-flex flex-col sm:flex-row gap-3 items-center">
               <Link to={ROUTES.EXHIBITOR_CHAPITEAU}
                 className="flex items-center gap-2 px-8 py-3.5 rounded-2xl font-bold text-sm text-[#0B1C3D] transition hover:scale-105"
-                style={{ background: 'linear-gradient(135deg, #C9A84C, #b8963e)' }}>
+                style={{ background: 'linear-gradient(135deg, #F39200, #E07A00)' }}>
                 <Tent className="w-4 h-4" /> Réserver maintenant — Exposant
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -276,7 +276,7 @@ export default function ChapiteauPublicPage() {
                   className="w-full flex items-center justify-between p-5 text-left">
                   <span className="font-semibold text-gray-900 text-sm pr-4">{faq.q}</span>
                   {openFaq === i
-                    ? <ChevronUp className="w-5 h-5 text-[#C9A84C] flex-shrink-0" />
+                    ? <ChevronUp className="w-5 h-5 text-[#F39200] flex-shrink-0" />
                     : <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
                   }
                 </button>
@@ -306,24 +306,24 @@ export default function ChapiteauPublicPage() {
           <h2 className="text-2xl md:text-3xl font-black text-white mb-3">
             Besoin d'un devis personnalisé ?
           </h2>
-          <p className="text-[#C9A84C]/70 text-base mb-8 max-w-xl mx-auto">
+          <p className="text-[#F39200]/70 text-base mb-8 max-w-xl mx-auto">
             Pour les configurations sur mesure, les grandes surfaces ou les demandes spéciales,
             contactez directement notre équipe technique.
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm mb-8">
             <a href="mailto:chapiteau@sib.ma"
-              className="flex items-center gap-2 text-[#C9A84C] hover:text-white transition">
+              className="flex items-center gap-2 text-[#F39200] hover:text-white transition">
               <Mail className="w-4 h-4" /> chapiteau@sib.ma
             </a>
             <a href="tel:+212500000000"
-              className="flex items-center gap-2 text-[#C9A84C] hover:text-white transition">
+              className="flex items-center gap-2 text-[#F39200] hover:text-white transition">
               <Phone className="w-4 h-4" /> +212 5 XX XX XX XX
             </a>
           </div>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to={ROUTES.EXHIBITOR_CHAPITEAU}
               className="flex items-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm text-[#0B1C3D] transition hover:scale-105"
-              style={{ background: 'linear-gradient(135deg, #C9A84C, #b8963e)' }}>
+              style={{ background: 'linear-gradient(135deg, #F39200, #E07A00)' }}>
               <Tent className="w-4 h-4" /> Catalogue Exposant <ArrowRight className="w-4 h-4" />
             </Link>
             <Link to={ROUTES.PARTNER_CHAPITEAU}

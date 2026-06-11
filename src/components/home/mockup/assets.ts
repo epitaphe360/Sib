@@ -1,21 +1,23 @@
-/** Assets extraits de la maquette HD */
+import { resolveHomeImage } from '../../../config/sibMaRemoteUrls';
+
+/** Assets maquette — résolus vers le CDN sib.ma */
 export const MOCKUP_ASSETS = {
-  heroPhoto: '/mockup/hero-photo.jpg',
+  heroPhoto: resolveHomeImage('/mockup/hero-photo.jpg'),
   portraits: [
-    '/mockup/portrait-1.jpg',
-    '/mockup/portrait-2.jpg',
-    '/mockup/portrait-3.jpg',
-    '/mockup/portrait-4.jpg',
+    resolveHomeImage('/mockup/portrait-1.jpg'),
+    resolveHomeImage('/mockup/portrait-2.jpg'),
+    resolveHomeImage('/mockup/portrait-3.jpg'),
+    resolveHomeImage('/mockup/portrait-4.jpg'),
   ] as const,
   salonCards: [
-    '/mockup/salon-card-1.jpg',
-    '/mockup/salon-card-2.jpg',
-    '/mockup/salon-card-3.jpg',
-    '/mockup/salon-card-4.jpg',
-    '/mockup/salon-card-5.jpg',
-    '/mockup/salon-card-6.jpg',
+    resolveHomeImage('/mockup/salon-card-1.jpg'),
+    resolveHomeImage('/mockup/salon-card-2.jpg'),
+    resolveHomeImage('/mockup/salon-card-3.jpg'),
+    resolveHomeImage('/mockup/salon-card-4.jpg'),
+    resolveHomeImage('/mockup/salon-card-5.jpg'),
+    resolveHomeImage('/mockup/salon-card-6.jpg'),
   ] as const,
-  reserve: '/mockup/reserve-bg.jpg',
+  reserve: resolveHomeImage('/mockup/reserve-bg.jpg'),
 } as const;
 
 export const MOCKUP_CARD_KEYS = ['exposer', 'visiter', 'sib_talks', 'b2b', 'diner', 'international'] as const;

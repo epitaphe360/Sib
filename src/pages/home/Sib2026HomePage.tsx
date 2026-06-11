@@ -7,29 +7,50 @@ import { Sib2026SalonGridSection } from '../../components/home/sib2026/Sib2026Sa
 import { Sib2026InternationalSection } from '../../components/home/sib2026/Sib2026InternationalSection';
 import { Sib2026ReserveBanner } from '../../components/home/sib2026/Sib2026ReserveBanner';
 import { Sib2026Footer } from '../../components/home/sib2026/Sib2026Footer';
-import { HomeBadgeSection } from '../../components/home/HomeBadgeSection';
+import { SponsorSpotlight } from '../../components/home/SponsorSpotlight';
+import { UrbaEventBanner } from '../../components/home/UrbaEventBanner';
+import { LogoShowcaseSection } from '../../components/home/LogoShowcaseSection';
+import { MasterScrollReveal } from '../../components/home/master/MasterScrollReveal';
 import { useHomeMenuItems } from '../../components/layout/homeMenu/useHomeMenuItems';
 import { HomePageShell } from '../../components/home/HomePageShell';
 import '../../components/home/sib2026/sib2026.css';
 
-/** Page d'accueil SIB 2026 — composants React fidèles à la maquette Figma */
+/** P8 — Page officielle SIB 2026 (conformité retours client) */
 export default function Sib2026HomePage() {
   const menuItems = useHomeMenuItems();
 
   return (
     <HomePageShell variantId={8} className="sib2026-page bg-white" fullLayout>
       <Sib2026HeroSection />
-      <Sib2026StatsBar />
-      <Sib2026MissionSection />
-      <Sib2026TimelineSection />
-      <div id="visiter">
-        <Sib2026SalonGridSection items={menuItems} />
-      </div>
-      <div id="badges" className="scroll-mt-28">
-        <HomeBadgeSection />
-      </div>
-      <Sib2026InternationalSection />
-      <Sib2026ReserveBanner />
+      <MasterScrollReveal y={20}>
+        <Sib2026StatsBar />
+      </MasterScrollReveal>
+      <MasterScrollReveal y={24} delay={0.03}>
+        <SponsorSpotlight />
+      </MasterScrollReveal>
+      <MasterScrollReveal y={40} delay={0.05}>
+        <Sib2026MissionSection />
+      </MasterScrollReveal>
+      <MasterScrollReveal y={40} delay={0.05}>
+        <Sib2026TimelineSection />
+      </MasterScrollReveal>
+      <MasterScrollReveal y={30} delay={0.04}>
+        <div id="visiter">
+          <Sib2026SalonGridSection items={menuItems} />
+        </div>
+      </MasterScrollReveal>
+      <MasterScrollReveal y={24} delay={0.03}>
+        <UrbaEventBanner />
+      </MasterScrollReveal>
+      <MasterScrollReveal y={24} delay={0.03}>
+        <LogoShowcaseSection />
+      </MasterScrollReveal>
+      <MasterScrollReveal y={40} delay={0.05}>
+        <Sib2026InternationalSection />
+      </MasterScrollReveal>
+      <MasterScrollReveal y={20}>
+        <Sib2026ReserveBanner />
+      </MasterScrollReveal>
       <Sib2026Footer />
     </HomePageShell>
   );

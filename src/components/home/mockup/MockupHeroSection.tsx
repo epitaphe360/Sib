@@ -28,7 +28,7 @@ export const MockupHeroSection: React.FC = () => {
         <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.22em] mb-4" style={{ color: MOCKUP.orange }}>
           {t('mockup.hero.kicker')}
         </p>
-        <h1 className="mockup-display text-base sm:text-lg lg:text-[22px] font-extrabold uppercase leading-[1.25] text-white mb-7 max-w-md">
+        <h1 className="mockup-display text-base sm:text-lg lg:text-[22px] font-extrabold uppercase leading-[1.25] text-white mb-7 max-w-md whitespace-pre-line">
           {t('mockup.hero.headline')}
         </h1>
         <div className="space-y-2 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-white mb-8">

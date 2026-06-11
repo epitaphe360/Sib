@@ -1,0 +1,20 @@
+/** Design Master — tokens partagés (Bento, glass, motion) */
+export const DM = {
+  navy: '#001A3D',
+  navyDeep: '#001530',
+  orange: '#F39200',
+  orangeHover: '#E08500',
+  white: '#FFFFFF',
+  glassBg: 'rgba(255,255,255,0.06)',
+  glassBorder: 'rgba(255,255,255,0.10)',
+  glassBgLight: 'rgba(255,255,255,0.72)',
+  glassBorderLight: 'rgba(0,26,61,0.08)',
+  radius: '32px',
+  radiusClass: 'rounded-[32px]',
+  gap: '2.5rem',
+  gapClass: 'gap-10',
+  maxWidth: 1280,
+  spring: { type: 'spring' as const, stiffness: 400, damping: 30 },
+  springSoft: { type: 'spring' as const, stiffness: 260, damping: 28 },
+  hoverScale: 1.02,
+} as const;

@@ -14,11 +14,17 @@ export const SIB2026 = {
 
 export const SIB2026_HOME_ROUTE = '/accueil/8';
 
-const PREMIUM_HOME_RE = /^\/accueil\/(\d{1,2})$/;
+const PREMIUM_HOME_RE = /^\/accueil\/(\d{1,2}|world|40ans)$/;
+const HOME_HERO_RE = /^\/home(\/|$)/;
 
-/** Toutes les pages d'accueil client (P1–P17) + redirection / */
+/** Toutes les pages d'accueil client (P1–P17, /home/*) + redirection / */
 export function isPremiumHomePath(pathname: string): boolean {
-  return pathname === '/' || pathname === SIB2026_HOME_ROUTE || PREMIUM_HOME_RE.test(pathname);
+  return (
+    pathname === '/' ||
+    pathname === SIB2026_HOME_ROUTE ||
+    PREMIUM_HOME_RE.test(pathname) ||
+    HOME_HERO_RE.test(pathname)
+  );
 }
 
 /** @deprecated Alias — même périmètre que isPremiumHomePath */

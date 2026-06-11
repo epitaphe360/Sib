@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { CatalogueFicheCard, CatalogueEntry } from './CatalogueFicheCard';
 
 interface CataloguePagePrintProps {
@@ -70,7 +70,7 @@ export const CataloguePagePrint: React.FC<CataloguePagePrintProps> = ({
               style={{
                 fontSize: 11,
                 letterSpacing: 4,
-                color: '#C9A84C',
+                color: '#F39200',
                 textTransform: 'uppercase',
                 marginBottom: 12,
               }}
@@ -84,7 +84,7 @@ export const CataloguePagePrint: React.FC<CataloguePagePrintProps> = ({
               style={{
                 width: 80,
                 height: 3,
-                background: '#C9A84C',
+                background: '#F39200',
                 margin: '16px auto',
               }}
             />

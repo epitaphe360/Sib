@@ -553,7 +553,7 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
 
     if (slotDate < salonStart || slotDate > salonEnd) {
       console.log('❌ Slot is outside salon dates!');
-      throw new Error('Ce créneau est en dehors des dates du salon (1-3 Avril 2026)');
+      throw new Error('Ce créneau est en dehors des dates du salon (25-29 Novembre 2026)');
     }
     console.log('✅ Slot date is valid');
 

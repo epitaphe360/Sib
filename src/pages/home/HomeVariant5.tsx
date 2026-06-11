@@ -24,9 +24,7 @@ export default function HomeVariant5() {
       <HomeHighlightsSection />
       <HomeLogoMarqueeSection />
       <UrbaEventBanner />
-      <div id="badges" className="scroll-mt-28 border-t border-neutral-200 dark:border-neutral-800 mt-8">
-        <HomeBadgeSection />
-      </div>
+      <HomeBadgeSection className="border-t border-neutral-200 dark:border-neutral-800 mt-8" />
     </HomePageShell>
   );
 }

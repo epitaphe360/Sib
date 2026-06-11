@@ -107,7 +107,7 @@ function ProgressRing({ pct }: { pct: number }) {
     <div className="relative w-28 h-28 mx-auto">
       <svg className="w-28 h-28 -rotate-90" viewBox="0 0 96 96">
         <circle cx="48" cy="48" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
-        <circle cx="48" cy="48" r={r} fill="none" stroke="#C9A84C" strokeWidth="8"
+        <circle cx="48" cy="48" r={r} fill="none" stroke="#F39200" strokeWidth="8"
           strokeLinecap="round"
           strokeDasharray={circ}
           strokeDashoffset={circ * (1 - pct / 100)}
@@ -116,7 +116,7 @@ function ProgressRing({ pct }: { pct: number }) {
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-3xl font-black text-white leading-none">{pct}</span>
-        <span className="text-[10px] text-[#C9A84C] font-bold tracking-wider mt-0.5">%</span>
+        <span className="text-[10px] text-[#F39200] font-bold tracking-wider mt-0.5">%</span>
       </div>
     </div>
   );
@@ -124,13 +124,13 @@ function ProgressRing({ pct }: { pct: number }) {
 
 // ─── Field sub-components ─────────────────────────────────────────────────────
 
-const I  = "w-full px-4 py-3 border-2 border-slate-100 rounded-2xl text-sm bg-white text-slate-800 placeholder:text-slate-300 focus:outline-none focus:border-[#C9A84C] hover:border-slate-200 transition-all";
+const I  = "w-full px-4 py-3 border-2 border-slate-100 rounded-2xl text-sm bg-white text-slate-800 placeholder:text-slate-300 focus:outline-none focus:border-[#F39200] hover:border-slate-200 transition-all";
 const L  = "block text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em] mb-1.5";
 
 function Inp({ label, req, ...p }: React.InputHTMLAttributes<HTMLInputElement> & { label: string; req?: boolean }) {
   return (
     <div>
-      <label className={L}>{label}{req && <span className="text-[#C9A84C] ml-0.5">*</span>}</label>
+      <label className={L}>{label}{req && <span className="text-[#F39200] ml-0.5">*</span>}</label>
       <input {...p} className={I} />
     </div>
   );
@@ -138,7 +138,7 @@ function Inp({ label, req, ...p }: React.InputHTMLAttributes<HTMLInputElement> &
 function Sel({ label, req, children, ...p }: React.SelectHTMLAttributes<HTMLSelectElement> & { label: string; req?: boolean }) {
   return (
     <div>
-      <label className={L}>{label}{req && <span className="text-[#C9A84C] ml-0.5">*</span>}</label>
+      <label className={L}>{label}{req && <span className="text-[#F39200] ml-0.5">*</span>}</label>
       <select {...p} className={I + " cursor-pointer"}>{children}</select>
     </div>
   );
@@ -146,7 +146,7 @@ function Sel({ label, req, children, ...p }: React.SelectHTMLAttributes<HTMLSele
 function Txt({ label, req, ...p }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label: string; req?: boolean }) {
   return (
     <div>
-      <label className={L}>{label}{req && <span className="text-[#C9A84C] ml-0.5">*</span>}</label>
+      <label className={L}>{label}{req && <span className="text-[#F39200] ml-0.5">*</span>}</label>
       <textarea {...p} className={I + " resize-none"} />
     </div>
   );
@@ -252,7 +252,7 @@ export default function CatalogueFormPage() {
   if (loading) return (
     <div className="min-h-screen bg-[#0B1C3D] flex items-center justify-center">
       <div className="text-center">
-        <div className="w-14 h-14 border-4 border-white/10 border-t-[#C9A84C] rounded-full animate-spin mx-auto mb-4" />
+        <div className="w-14 h-14 border-4 border-white/10 border-t-[#F39200] rounded-full animate-spin mx-auto mb-4" />
         <p className="text-white/40 text-sm">Chargement…</p>
       </div>
     </div>
@@ -282,7 +282,7 @@ export default function CatalogueFormPage() {
         <div className="w-20 h-20 bg-green-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
           <CheckCircle className="h-10 w-10 text-green-500" />
         </div>
-        <div className="inline-block bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-wider uppercase">SIB 2026</div>
+        <div className="inline-block bg-[#F39200]/10 text-[#F39200] text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-wider uppercase">SIB 2026</div>
         <h1 className="text-2xl font-black text-slate-900 mb-2">Fiche envoyée !</h1>
         <p className="text-slate-500 text-sm mb-6 leading-relaxed">
           La fiche catalogue de <strong className="text-[#0B1C3D]">{form.company_name}</strong> a bien été transmise à l'équipe SIB 2026.
@@ -291,7 +291,7 @@ export default function CatalogueFormPage() {
           <strong>Prochaine étape :</strong> Notre équipe validera votre fiche et vous contactera par email pour confirmation.
         </div>
         <p className="mt-5 text-xs text-slate-300">
-          Questions ? <a href="mailto:Sib2026@urbacom.net" className="text-[#C9A84C] hover:underline">Sib2026@urbacom.net</a>
+          Questions ? <a href="mailto:Sib2026@urbacom.net" className="text-[#F39200] hover:underline">Sib2026@urbacom.net</a>
         </p>
       </div>
     </div>
@@ -308,16 +308,16 @@ export default function CatalogueFormPage() {
           {/* Logo */}
           <div className="mb-8">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 bg-[#C9A84C] rounded-xl flex items-center justify-center shadow-lg shadow-[#C9A84C]/20">
+              <div className="w-9 h-9 bg-[#F39200] rounded-xl flex items-center justify-center shadow-lg shadow-[#F39200]/20">
                 <Building2 className="w-4.5 h-4.5 text-[#0B1C3D]" />
               </div>
               <div>
-                <div className="text-[#C9A84C] text-[11px] font-black tracking-[0.2em] uppercase">SIB 2026</div>
+                <div className="text-[#F39200] text-[11px] font-black tracking-[0.2em] uppercase">SIB 2026</div>
                 <div className="text-white/30 text-[9px] tracking-wider uppercase">Salon Int. du Bâtiment</div>
               </div>
             </div>
             <h1 className="text-white text-xl font-black leading-snug">
-              Fiche<br /><span className="text-[#C9A84C]">Catalogue</span> Officiel
+              Fiche<br /><span className="text-[#F39200]">Catalogue</span> Officiel
             </h1>
           </div>
 
@@ -347,7 +347,7 @@ export default function CatalogueFormPage() {
                   <div className={[
                     "w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-all",
                     done    ? "bg-green-500 shadow-md shadow-green-500/30" :
-                    current ? "bg-[#C9A84C] shadow-md shadow-[#C9A84C]/30" :
+                    current ? "bg-[#F39200] shadow-md shadow-[#F39200]/30" :
                               "bg-white/10",
                   ].join(" ")}>
                     {done ? <CheckCircle className="w-4 h-4 text-white" /> : <s.icon className="w-4 h-4 text-white" />}
@@ -356,7 +356,7 @@ export default function CatalogueFormPage() {
                     <div className="text-xs font-bold text-white leading-tight">{s.id}. {s.title}</div>
                     <div className="text-[10px] text-white/35 truncate">{s.desc}</div>
                   </div>
-                  {current && <ChevronRight className="w-3 h-3 text-[#C9A84C] flex-shrink-0" />}
+                  {current && <ChevronRight className="w-3 h-3 text-[#F39200] flex-shrink-0" />}
                 </button>
               );
             })}
@@ -379,12 +379,12 @@ export default function CatalogueFormPage() {
         <div className="lg:hidden bg-[#0B1C3D] px-4 pt-3 pb-4">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-[#C9A84C] rounded-lg flex items-center justify-center">
+              <div className="w-6 h-6 bg-[#F39200] rounded-lg flex items-center justify-center">
                 <Building2 className="w-3 h-3 text-[#0B1C3D]" />
               </div>
               <span className="text-white text-sm font-bold">SIB 2026 · Fiche Catalogue</span>
             </div>
-            <span className="text-[#C9A84C] text-sm font-black">{pct}%</span>
+            <span className="text-[#F39200] text-sm font-black">{pct}%</span>
           </div>
           <div className="flex items-center gap-1 mb-2">
             {STEPS.map((s, i) => (
@@ -392,7 +392,7 @@ export default function CatalogueFormPage() {
                 <div className={[
                   "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
                   step > s.id  ? "bg-green-500 text-white" :
-                  step === s.id ? "bg-[#C9A84C] text-[#0B1C3D]" :
+                  step === s.id ? "bg-[#F39200] text-[#0B1C3D]" :
                                   "bg-white/10 text-white/30",
                 ].join(" ")}>{step > s.id ? "✓" : s.id}</div>
                 {i < 4 && <div className={`flex-1 h-0.5 mx-0.5 rounded-full ${step > s.id ? "bg-green-500" : "bg-white/10"}`} />}
@@ -400,7 +400,7 @@ export default function CatalogueFormPage() {
             ))}
           </div>
           <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-[#C9A84C] rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
+            <div className="h-full bg-[#F39200] rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
           </div>
         </div>
 
@@ -410,7 +410,7 @@ export default function CatalogueFormPage() {
 
             {/* Step header */}
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 bg-[#C9A84C] rounded-2xl flex items-center justify-center shadow-lg shadow-[#C9A84C]/30 flex-shrink-0">
+              <div className="w-11 h-11 bg-[#F39200] rounded-2xl flex items-center justify-center shadow-lg shadow-[#F39200]/30 flex-shrink-0">
                 <CurIcon className="w-5 h-5 text-[#0B1C3D]" />
               </div>
               <div className="flex-1 min-w-0">
@@ -438,7 +438,7 @@ export default function CatalogueFormPage() {
                     {fc("logo_url").visible && (
                     <div>
                       <label className={L}>{fc("logo_url").label}</label>
-                      <div className="border-2 border-dashed border-slate-200 rounded-2xl overflow-hidden hover:border-[#C9A84C]/40 transition-colors bg-slate-50/50">
+                      <div className="border-2 border-dashed border-slate-200 rounded-2xl overflow-hidden hover:border-[#F39200]/40 transition-colors bg-slate-50/50">
                         <ImageUploader
                           currentImage={form.logo_url}
                           onUpload={(url) => { set("logo_url", url); save({ ...form, logo_url: url }); }}
@@ -611,7 +611,7 @@ export default function CatalogueFormPage() {
                     {entry && (
                       <div className="mt-6 pt-6 border-t-2 border-dashed border-slate-100">
                         <div className="flex items-center gap-2 mb-4">
-                          <CheckCircle className="w-4 h-4 text-[#C9A84C]" />
+                          <CheckCircle className="w-4 h-4 text-[#F39200]" />
                           <span className="text-sm font-black text-[#0B1C3D]">Aperçu de votre fiche catalogue</span>
                         </div>
                         <CatalogueFicheCard entry={{ ...entry, ...form } as CatalogueEntry} printMode={false} />
@@ -631,7 +631,7 @@ export default function CatalogueFormPage() {
 
                 {step < 5 ? (
                   <button onClick={next} disabled={!canNext()}
-                    className="flex items-center gap-2 px-7 py-2.5 text-sm font-black bg-[#C9A84C] text-[#0B1C3D] rounded-2xl disabled:opacity-40 hover:bg-[#b8973b] active:scale-95 transition-all shadow-lg shadow-[#C9A84C]/25">
+                    className="flex items-center gap-2 px-7 py-2.5 text-sm font-black bg-[#F39200] text-[#0B1C3D] rounded-2xl disabled:opacity-40 hover:bg-[#b8973b] active:scale-95 transition-all shadow-lg shadow-[#F39200]/25">
                     Suivant <ChevronRight className="w-4 h-4" />
                   </button>
                 ) : (
@@ -647,7 +647,7 @@ export default function CatalogueFormPage() {
             {/* Footer */}
             <p className="text-center text-[11px] text-slate-400 mt-6">
               SIB 2026 · Salon International du Bâtiment ·{" "}
-              <a href="mailto:Sib2026@urbacom.net" className="text-[#C9A84C] hover:underline">Sib2026@urbacom.net</a>
+              <a href="mailto:Sib2026@urbacom.net" className="text-[#F39200] hover:underline">Sib2026@urbacom.net</a>
             </p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+﻿import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -292,7 +292,7 @@ export default function AdminAdvertisingPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-[#C9A84C]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#F39200]" />
       </div>
     );
   }
@@ -309,7 +309,7 @@ export default function AdminAdvertisingPage() {
             </Link>
             <div className="w-9 h-9 rounded-xl flex items-center justify-center"
               style={{ background: 'linear-gradient(135deg, #0B1C3D, #1e3a5f)' }}>
-              <Megaphone className="w-5 h-5 text-[#C9A84C]" />
+              <Megaphone className="w-5 h-5 text-[#F39200]" />
             </div>
             <div>
               <h1 className="font-bold text-gray-900 text-base">Espaces Publicitaires</h1>
@@ -331,7 +331,7 @@ export default function AdminAdvertisingPage() {
             { icon: CheckCircle2,   label: 'Actifs',         value: stats.activeSpaces,  color: '#10b981' },
             { icon: ShoppingBag,    label: 'Réservations',   value: stats.totalBookings, color: '#3b82f6' },
             { icon: AlertTriangle,  label: 'En attente',     value: stats.pendingBookings, color: '#f59e0b' },
-            { icon: TrendingUp,     label: 'CA encaissé',    value: `${stats.revenue.toLocaleString('fr-MA')} MAD`, color: '#C9A84C' },
+            { icon: TrendingUp,     label: 'CA encaissé',    value: `${stats.revenue.toLocaleString('fr-MA')} MAD`, color: '#F39200' },
           ].map(({ icon: Icon, label, value, color }) => (
             <div key={label} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
               <div className="flex items-center gap-2 mb-2">
@@ -367,7 +367,7 @@ export default function AdminAdvertisingPage() {
               </h2>
               <button onClick={startCreate}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-white text-sm font-semibold shadow hover:opacity-90 transition"
-                style={{ background: 'linear-gradient(135deg, #C9A84C, #b8963e)' }}>
+                style={{ background: 'linear-gradient(135deg, #F39200, #E07A00)' }}>
                 <Plus className="w-4 h-4" /> Ajouter un espace
               </button>
             </div>
@@ -377,7 +377,7 @@ export default function AdminAdvertisingPage() {
               {(isCreating || editingId !== null) && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                  className="bg-white rounded-2xl border border-[#C9A84C]/30 shadow-md p-6">
+                  className="bg-white rounded-2xl border border-[#F39200]/30 shadow-md p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-gray-900">
                       {isCreating ? 'Nouvel espace publicitaire' : 'Modifier l\'espace'}
@@ -391,7 +391,7 @@ export default function AdminAdvertisingPage() {
                     <div className="sm:col-span-2">
                       <label htmlFor="adform-name" className="block text-xs font-semibold text-gray-600 mb-1">Nom *</label>
                       <input id="adform-name" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30"
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30"
                         placeholder="Ex: Bannière Homepage" />
                     </div>
                     {/* Description */}
@@ -399,14 +399,14 @@ export default function AdminAdvertisingPage() {
                       <label htmlFor="adform-desc" className="block text-xs font-semibold text-gray-600 mb-1">Description</label>
                       <textarea id="adform-desc" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
                         rows={3}
-                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30 resize-none"
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30 resize-none"
                         placeholder="Description détaillée visible par les exposants/partenaires" />
                     </div>
                     {/* Catégorie */}
                     <div>
                       <label htmlFor="adform-category" className="block text-xs font-semibold text-gray-600 mb-1">Catégorie</label>
                       <select id="adform-category" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
-                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30">
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30">
                         {CATEGORIES.map(c => (
                           <option key={c} value={c}>{CATEGORY_EMOJIS[c]} {CATEGORY_LABELS[c]}</option>
                         ))}
@@ -416,7 +416,7 @@ export default function AdminAdvertisingPage() {
                     <div>
                       <label htmlFor="adform-audience" className="block text-xs font-semibold text-gray-600 mb-1">Audience cible</label>
                       <input id="adform-audience" value={form.audience} onChange={e => setForm(p => ({ ...p, audience: e.target.value }))}
-                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30"
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30"
                         placeholder="Ex: ~3 500 visiteurs inscrits" />
                     </div>
                     {/* Prix */}
@@ -424,28 +424,28 @@ export default function AdminAdvertisingPage() {
                       <label htmlFor="adform-price" className="block text-xs font-semibold text-gray-600 mb-1">Prix (MAD HT)</label>
                       <input id="adform-price" type="number" min={0} value={form.price}
                         onChange={e => setForm(p => ({ ...p, price: +e.target.value }))}
-                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30" />
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30" />
                     </div>
                     {/* Durée */}
                     <div>
                       <label htmlFor="adform-duration" className="block text-xs font-semibold text-gray-600 mb-1">Durée (jours)</label>
                       <input id="adform-duration" type="number" min={1} value={form.duration_days}
                         onChange={e => setForm(p => ({ ...p, duration_days: +e.target.value }))}
-                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30" />
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30" />
                     </div>
                     {/* Stock total */}
                     <div>
                       <label htmlFor="adform-stock-total" className="block text-xs font-semibold text-gray-600 mb-1">Stock total</label>
                       <input id="adform-stock-total" type="number" min={0} value={form.stock_total}
                         onChange={e => setForm(p => ({ ...p, stock_total: +e.target.value }))}
-                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30" />
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30" />
                     </div>
                     {/* Stock dispo */}
                     <div>
                       <label htmlFor="adform-stock-avail" className="block text-xs font-semibold text-gray-600 mb-1">Stock disponible</label>
                       <input id="adform-stock-avail" type="number" min={0} value={form.stock_available}
                         onChange={e => setForm(p => ({ ...p, stock_available: +e.target.value }))}
-                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30" />
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30" />
                     </div>
                     {/* Image */}
                     <div className="sm:col-span-2">
@@ -471,7 +471,7 @@ export default function AdminAdvertisingPage() {
                     <div className="flex items-center gap-2">
                       <input type="checkbox" id="is_active" checked={form.is_active}
                         onChange={e => setForm(p => ({ ...p, is_active: e.target.checked }))}
-                        className="w-4 h-4 accent-[#C9A84C]" />
+                        className="w-4 h-4 accent-[#F39200]" />
                       <label htmlFor="is_active" className="text-sm text-gray-700">Actif (visible pour les acheteurs)</label>
                     </div>
                   </div>
@@ -506,7 +506,7 @@ export default function AdminAdvertisingPage() {
                     ) : (
                       <div className="flex flex-col items-center justify-center h-full">
                         <span className="text-3xl">{CATEGORY_EMOJIS[space.category] ?? '📢'}</span>
-                        <span className="text-xs text-[#C9A84C]/70 mt-1 font-semibold">
+                        <span className="text-xs text-[#F39200]/70 mt-1 font-semibold">
                           {CATEGORY_LABELS[space.category] ?? space.category}
                         </span>
                       </div>
@@ -520,7 +520,7 @@ export default function AdminAdvertisingPage() {
                   <div className="p-4">
                     <div className="flex items-start justify-between mb-1">
                       <h3 className="font-bold text-gray-900 text-sm">{space.name}</h3>
-                      <span className="text-xs font-bold text-[#C9A84C] shrink-0 ml-2">
+                      <span className="text-xs font-bold text-[#F39200] shrink-0 ml-2">
                         {space.price.toLocaleString('fr-MA')} MAD
                       </span>
                     </div>
@@ -577,11 +577,11 @@ export default function AdminAdvertisingPage() {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                   <input value={bookingFilter} onChange={e => setBookingFilter(e.target.value)}
-                    className="pl-8 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30 w-52"
+                    className="pl-8 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30 w-52"
                     placeholder="Chercher…" />
                 </div>
                 <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30">
+                  className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#F39200]/30">
                   <option value="">Tous les statuts</option>
                   {Object.entries(BOOKING_STATUS).map(([k, v]) => (
                     <option key={k} value={k}>{v.label}</option>
@@ -626,7 +626,7 @@ export default function AdminAdvertisingPage() {
                             </div>
                           </td>
                           <td className="px-4 py-3">
-                            <span className="font-bold text-[#C9A84C] text-xs">
+                            <span className="font-bold text-[#F39200] text-xs">
                               {booking.total_amount.toLocaleString('fr-MA')} MAD
                             </span>
                           </td>
@@ -734,7 +734,7 @@ export default function AdminAdvertisingPage() {
                   <p className="font-medium">Aucune réservation</p>
                   {(bookingFilter || statusFilter) && (
                     <button onClick={() => { setBookingFilter(''); setStatusFilter(''); }}
-                      className="mt-2 text-sm text-[#C9A84C] hover:underline">
+                      className="mt-2 text-sm text-[#F39200] hover:underline">
                       Effacer les filtres
                     </button>
                   )}

@@ -4,13 +4,11 @@ import { ArrowRight } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { ROUTES } from '../../../lib/routes';
 import { formatSalonDatesShort } from '../../../config/salonInfo';
-import { MinistryEgidBar } from '../MinistryEgidBar';
 
 export const HomeHeroMinimal: React.FC = () => {
   const { t } = useTranslation();
   return (
     <>
-    <MinistryEgidBar />
     <section className="home-p5-hero-bg relative pt-10 lg:pt-14 pb-20 lg:pb-24 border-b border-neutral-200/80 dark:border-neutral-800 min-h-[420px] lg:min-h-[480px] flex items-end">
       <div className="max-w-container mx-auto px-6 lg:px-8">
         <p className="home-section-kicker mb-8">

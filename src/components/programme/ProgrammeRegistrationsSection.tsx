@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ProgrammeRegistrationsSection
  * Section partagée — affiche les sessions du programme scientifique auxquelles
  * l'utilisateur connecté est inscrit. Utilisée dans les dashboards Exposant,
@@ -56,13 +56,13 @@ const accentStyles: Record<AccentColor, {
     rowIcon: 'text-emerald-600', rowIconBg: 'bg-emerald-50 border-emerald-100',
   },
   amber: {
-    headerBg: 'bg-white', headerBorder: 'border-[#C9A84C]/20',
-    iconBg: 'bg-[#1B365D]', titleAccent: 'text-[#C9A84C]',
-    badgeBg: 'bg-[#C9A84C]/15', badgeText: 'text-[#8a6d1e]',
+    headerBg: 'bg-white', headerBorder: 'border-[#F39200]/20',
+    iconBg: 'bg-[#1B365D]', titleAccent: 'text-[#F39200]',
+    badgeBg: 'bg-[#F39200]/15', badgeText: 'text-[#8a6d1e]',
     emptyBtn: 'bg-[#1B365D] hover:bg-[#0F2034]',
-    footerLink: 'text-[#C9A84C] hover:text-[#8a6d1e]',
-    rowHover: 'hover:border-[#C9A84C]/20 hover:bg-[#C9A84C]/5',
-    rowIcon: 'text-[#C9A84C]', rowIconBg: 'bg-[#C9A84C]/10 border-[#C9A84C]/20',
+    footerLink: 'text-[#F39200] hover:text-[#8a6d1e]',
+    rowHover: 'hover:border-[#F39200]/20 hover:bg-[#F39200]/5',
+    rowIcon: 'text-[#F39200]', rowIconBg: 'bg-[#F39200]/10 border-[#F39200]/20',
   },
   indigo: {
     headerBg: 'bg-white', headerBorder: 'border-indigo-100',

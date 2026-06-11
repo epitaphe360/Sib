@@ -7,7 +7,7 @@ import { getPremiumHomeBase, isPremiumHomePath } from '../../home/sib2026/tokens
 import type { ResolvedHomeMenuItem } from './types';
 
 export function useHomeMenuItems(): ResolvedHomeMenuItem[] {
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
   const { pathname } = useLocation();
   const homeBase = isPremiumHomePath(pathname)
     ? getPremiumHomeBase(pathname)
@@ -30,6 +30,6 @@ export function useHomeMenuItems(): ResolvedHomeMenuItem[] {
               : item.href,
         imageSrc: item.imageSrc,
       })),
-    [t, homeBase, pathname]
+    [t, homeBase, pathname, currentLanguage],
   );
 }

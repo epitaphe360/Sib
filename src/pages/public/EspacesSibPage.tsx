@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Wrench, GraduationCap, Briefcase, Tv, Handshake, ArrowRight } from 'lucide-react';
 import { usePageContent } from '../../hooks/usePageContent';
 import { ScrollReveal, HeroReveal, StaggerReveal, StaggerItem } from '../../components/ui/motion';
@@ -70,7 +70,7 @@ export default function EspacesSibPage() {
 
         <div className="relative z-10 container mx-auto px-4 text-center">
           <HeroReveal>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/35 text-[#C9A84C] text-sm font-semibold mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F39200]/15 border border-[#F39200]/35 text-[#F39200] text-sm font-semibold mb-6">
               {getCms('hero_badge', '5 espaces dédiés')}
             </span>
           </HeroReveal>
@@ -93,9 +93,9 @@ export default function EspacesSibPage() {
             const Icon = espace.icon;
             return (
               <StaggerItem key={i}>
-                <article className="h-full rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-7 hover:border-[#C9A84C]/45 transition-colors">
-                  <div className="w-14 h-14 rounded-xl border border-[#C9A84C]/35 bg-[#C9A84C]/12 flex items-center justify-center mb-5">
-                    <Icon className="w-7 h-7 text-[#C9A84C]" />
+                <article className="h-full rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-7 hover:border-[#F39200]/45 transition-colors">
+                  <div className="w-14 h-14 rounded-xl border border-[#F39200]/35 bg-[#F39200]/12 flex items-center justify-center mb-5">
+                    <Icon className="w-7 h-7 text-[#F39200]" />
                   </div>
                   <h2 className="text-2xl font-semibold text-white mb-3 font-display leading-snug">{espace.title}</h2>
                   <p className="text-white/65 leading-relaxed text-sm">{espace.description}</p>
@@ -117,7 +117,7 @@ export default function EspacesSibPage() {
             </p>
             <a
               href={getCms('cta_url', '/contact')}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-[#C9A84C] text-[#0A0F1E] font-semibold hover:bg-[#E7D192] transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-[#F39200] text-[#0A0F1E] font-semibold hover:bg-[#2E5984] transition-colors"
             >
               {getCms('cta_button', 'Contactez-nous')}
               <ArrowRight className="w-5 h-5" />

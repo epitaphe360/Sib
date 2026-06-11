@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export interface CatalogueEntry {
   id: string;
@@ -97,7 +97,7 @@ export const CatalogueFicheCard: React.FC<CatalogueFicheCardProps> = ({
             {entry.company_name || '—'}
           </div>
           {(entry.stand_number || entry.hall) && (
-            <div style={{ fontWeight: 600, fontSize: '10pt', color: '#C9A84C' }}>
+            <div style={{ fontWeight: 600, fontSize: '10pt', color: '#F39200' }}>
               {entry.stand_number && `Stand n° ${entry.stand_number}`}
               {entry.hall && ` Hall ${entry.hall}`}
             </div>
@@ -149,12 +149,12 @@ export const CatalogueFicheCard: React.FC<CatalogueFicheCardProps> = ({
           {entry.email && (
             <div style={{ marginBottom: 2 }}>
               <strong>E-mail :</strong>{' '}
-              <span style={{ color: '#C9A84C' }}>{entry.email}</span>
+              <span style={{ color: '#F39200' }}>{entry.email}</span>
             </div>
           )}
           {entry.website && (
             <div style={{ marginBottom: 8 }}>
-              <span style={{ color: '#C9A84C' }}>{entry.website}</span>
+              <span style={{ color: '#F39200' }}>{entry.website}</span>
             </div>
           )}
           {/* Réseaux sociaux */}

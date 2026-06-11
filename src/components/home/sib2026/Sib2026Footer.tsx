@@ -15,7 +15,7 @@ export const Sib2026Footer: React.FC = () => {
     {
       title: t('mockup.footer.quick'),
       links: [
-        { label: t('mockup.nav.about'), href: '/about' },
+        { label: t('mockup.nav.about'), href: ROUTES.PRESENTATION },
         { label: t('mockup.nav.exhibit'), href: ROUTES.EXHIBITOR_SUBSCRIPTION },
         { label: t('mockup.nav.visit'), href: `${homeBase}#visiter` },
         { label: t('mockup.nav.program'), href: ROUTES.EVENTS },
@@ -33,11 +33,18 @@ export const Sib2026Footer: React.FC = () => {
     {
       title: t('mockup.footer.download'),
       links: [
-        { label: t('mockup.footer.brochure'), href: '#' },
-        { label: t('mockup.footer.plan'), href: '#' },
+        { label: t('mockup.footer.brochure'), href: ROUTES.TELECHARGEMENTS },
+        { label: t('mockup.footer.plan'), href: ROUTES.HALL_MAP },
         { label: t('mockup.footer.press'), href: ROUTES.NEWS },
       ],
     },
+  ];
+
+  const socials = [
+    { Icon: Linkedin,  href: 'https://www.linkedin.com/company/sib-event', label: 'LinkedIn' },
+    { Icon: Facebook,  href: 'https://www.facebook.com/sibevent',          label: 'Facebook' },
+    { Icon: Instagram, href: 'https://www.instagram.com/sibevent',         label: 'Instagram' },
+    { Icon: Youtube,   href: 'https://www.youtube.com/@sibevent',          label: 'YouTube' },
   ];
 
   return (
@@ -86,11 +93,13 @@ export const Sib2026Footer: React.FC = () => {
             </ul>
             <p className="text-[10px] font-bold uppercase tracking-[0.14em] mb-3">{t('mockup.footer.follow')}</p>
             <div className="flex gap-2">
-              {[Linkedin, Facebook, Instagram, Youtube].map((Icon, i) => (
+              {socials.map(({ Icon, href, label }) => (
                 <a
-                  key={i}
-                  href="#"
-                  aria-label="Social"
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
                   className="h-9 w-9 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white/50 transition-colors"
                 >
                   <Icon className="h-3.5 w-3.5" />

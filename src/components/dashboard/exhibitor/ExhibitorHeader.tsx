@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { Building2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '../../ui/Badge';
@@ -36,13 +36,13 @@ export function ExhibitorHeader({
         className="bg-[#0F2034] rounded-2xl shadow-sib-xl mx-4 mt-4 mb-6 relative overflow-hidden"
       >
         {/* Ligne gold */}
-        <div className="h-1 w-full bg-gradient-to-r from-[#C9A84C] via-[#E8C96A] to-[#C9A84C]" />
+        <div className="h-1 w-full bg-gradient-to-r from-[#F39200] via-[#E8C96A] to-[#F39200]" />
 
         <div className="relative max-w-7xl mx-auto px-6 py-5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center space-x-4 w-full md:w-auto">
-              <div className="bg-[#C9A84C]/15 border border-[#C9A84C]/30 p-3 rounded-xl">
-                <Building2 className="h-7 w-7 text-[#C9A84C]" />
+              <div className="bg-[#F39200]/15 border border-[#F39200]/30 p-3 rounded-xl">
+                <Building2 className="h-7 w-7 text-[#F39200]" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-white mb-1">{t('exhibitor.my_booth')}</h1>
@@ -82,7 +82,7 @@ export function ExhibitorHeader({
                 <div className="text-2xl font-bold text-white">
                   {new Date().toLocaleDateString('fr-FR')}
                 </div>
-                <div className="text-sm text-[#C9A84C]">
+                <div className="text-sm text-[#F39200]">
                   {DEFAULT_SALON_CONFIG.name} - {DEFAULT_SALON_CONFIG.location.city}
                 </div>
               </div>

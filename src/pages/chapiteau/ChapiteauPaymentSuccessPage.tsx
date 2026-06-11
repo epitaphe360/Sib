@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle2, Download, Home, Tent, Calendar, Receipt, ArrowRight } from 'lucide-react';
@@ -46,13 +46,13 @@ export default function ChapiteauPaymentSuccessPage() {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
             className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
-            style={{ background: isPaid ? '#10b981' : '#C9A84C' }}>
+            style={{ background: isPaid ? '#10b981' : '#F39200' }}>
             <CheckCircle2 className="w-10 h-10 text-white" />
           </motion.div>
           <h1 className="text-2xl font-bold text-white mb-1">
             {isPaid ? 'Réservation confirmée !' : 'Demande enregistrée !'}
           </h1>
-          <p className="text-[#C9A84C]/80 text-sm">
+          <p className="text-[#F39200]/80 text-sm">
             {isPaid
               ? 'Votre paiement a été accepté et votre réservation est confirmée.'
               : 'Notre équipe vous contactera sous 24h pour finaliser le paiement.'}
@@ -81,7 +81,7 @@ export default function ChapiteauPaymentSuccessPage() {
             </div>
             <div className="flex justify-between text-sm border-t pt-2 mt-2">
               <span className="font-bold text-gray-900">Total TTC</span>
-              <span className="font-bold text-[#C9A84C]">
+              <span className="font-bold text-[#F39200]">
                 {totalTTC.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD
               </span>
             </div>
@@ -104,7 +104,7 @@ export default function ChapiteauPaymentSuccessPage() {
             {cartItems.map((ci, idx) => (
               <div key={idx} className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
                 <div className="w-8 h-8 bg-[#0B1C3D]/5 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Tent className="w-4 h-4 text-[#C9A84C]" />
+                  <Tent className="w-4 h-4 text-[#F39200]" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-semibold text-gray-900 truncate">{ci.name}</div>

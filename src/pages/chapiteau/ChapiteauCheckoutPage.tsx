@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+﻿import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -78,7 +78,7 @@ function buildInvoiceEmailHtml(params: {
 <tr><td align="center">
 <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)">
 <tr><td style="background:linear-gradient(135deg,#0B1C3D,#1e3a5f);padding:28px 32px">
-  <h1 style="margin:0;color:#C9A84C;font-size:22px">SIB 2026 — Location de Chapiteaux</h1>
+  <h1 style="margin:0;color:#F39200;font-size:22px">SIB 2026 — Location de Chapiteaux</h1>
   <p style="margin:6px 0 0;color:#fff;font-size:14px">Facture N° ${invoiceNumber}</p>
 </td></tr>
 <tr><td style="padding:32px">
@@ -109,7 +109,7 @@ function buildInvoiceEmailHtml(params: {
       <td style="padding:6px 0;text-align:right;color:#374151;font-size:14px">${tvaAmount.toLocaleString('fr-MA',{minimumFractionDigits:2})} MAD</td></tr>
     <tr style="border-top:2px solid #e5e7eb">
       <td style="padding:10px 0;font-size:16px;font-weight:700;color:#0B1C3D">Total TTC</td>
-      <td style="padding:10px 0;text-align:right;font-size:16px;font-weight:700;color:#C9A84C">${totalTTC.toLocaleString('fr-MA',{minimumFractionDigits:2})} MAD</td>
+      <td style="padding:10px 0;text-align:right;font-size:16px;font-weight:700;color:#F39200">${totalTTC.toLocaleString('fr-MA',{minimumFractionDigits:2})} MAD</td>
     </tr>
   </table>
   <div style="background:#f9fafb;border-radius:8px;padding:12px 16px;font-size:13px;color:#374151">
@@ -270,7 +270,7 @@ export default function ChapiteauCheckoutPage() {
         <h1 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center"
             style={{ background: 'linear-gradient(135deg, #0B1C3D, #1e3a5f)' }}>
-            <Tent className="w-5 h-5 text-[#C9A84C]" />
+            <Tent className="w-5 h-5 text-[#F39200]" />
           </div>
           Paiement — Location de chapiteaux
         </h1>
@@ -281,7 +281,7 @@ export default function ChapiteauCheckoutPage() {
             {/* Payment method selection */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-[#C9A84C]" /> Méthode de paiement
+                <CreditCard className="w-5 h-5 text-[#F39200]" /> Méthode de paiement
               </h2>
               <div className="grid grid-cols-2 gap-3">
                 {[
@@ -291,7 +291,7 @@ export default function ChapiteauCheckoutPage() {
                   <button key={m.id} onClick={() => setPaymentMethod(m.id)}
                     className={`p-4 rounded-xl border-2 text-left transition ${
                       paymentMethod === m.id
-                        ? 'border-[#C9A84C] bg-[#C9A84C]/5'
+                        ? 'border-[#F39200] bg-[#F39200]/5'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}>
                     <div className="text-2xl mb-1">{m.icon}</div>
@@ -362,13 +362,13 @@ export default function ChapiteauCheckoutPage() {
           <div className="space-y-4">
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
               <h3 className="font-bold text-gray-900 text-sm mb-4 flex items-center gap-2">
-                <ShoppingCart className="w-4 h-4 text-[#C9A84C]" /> Récapitulatif
+                <ShoppingCart className="w-4 h-4 text-[#F39200]" /> Récapitulatif
               </h3>
               <div className="space-y-3 mb-4">
                 {cartItems.map(ci => (
                   <div key={ci.id} className="flex items-start gap-2">
                     <div className="w-8 h-8 bg-[#0B1C3D]/5 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Tent className="w-4 h-4 text-[#C9A84C]" />
+                      <Tent className="w-4 h-4 text-[#F39200]" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-semibold text-gray-900 truncate">{ci.name}</div>
@@ -391,7 +391,7 @@ export default function ChapiteauCheckoutPage() {
                 </div>
                 <div className="flex justify-between font-bold text-gray-900 border-t pt-2">
                   <span>Total TTC</span>
-                  <span className="text-[#C9A84C]">{totalTTC.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD</span>
+                  <span className="text-[#F39200]">{totalTTC.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD</span>
                 </div>
               </div>
             </div>

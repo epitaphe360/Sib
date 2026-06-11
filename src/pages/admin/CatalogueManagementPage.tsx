@@ -355,7 +355,7 @@ export default function CatalogueManagementPage() {
         <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
           <div className="flex items-center gap-3">
             <div className="bg-[#0B1C3D] p-3 rounded-xl">
-              <BookOpen className="h-6 w-6 text-[#C9A84C]" />
+              <BookOpen className="h-6 w-6 text-[#F39200]" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Catalogue Exposants &amp; Partenaires</h1>
@@ -365,7 +365,7 @@ export default function CatalogueManagementPage() {
           <div className="flex gap-2 flex-wrap">
             <button
               onClick={() => navigate(ROUTES.ADMIN_CATALOGUE_FORM_CONFIG)}
-              className="flex items-center gap-2 bg-[#0B1C3D] text-[#C9A84C] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#1a3060] transition"
+              className="flex items-center gap-2 bg-[#0B1C3D] text-[#F39200] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#1a3060] transition"
             >
               <Settings2 className="h-4 w-4" /> Configurer le formulaire
             </button>
@@ -451,7 +451,7 @@ export default function CatalogueManagementPage() {
                   placeholder="Rechercher…"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm w-56 focus:ring-2 focus:ring-[#C9A84C] focus:outline-none"
+                  className="pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm w-56 focus:ring-2 focus:ring-[#F39200] focus:outline-none"
                 />
               </div>
 
@@ -505,7 +505,7 @@ export default function CatalogueManagementPage() {
 
             {isLoading ? (
               <div className="flex justify-center py-16">
-                <Loader2 className="h-8 w-8 animate-spin text-[#C9A84C]" />
+                <Loader2 className="h-8 w-8 animate-spin text-[#F39200]" />
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-2xl border border-dashed">

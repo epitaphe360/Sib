@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+﻿import { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Building2, ArrowRight } from 'lucide-react';
@@ -20,16 +20,20 @@ export function AllExhibitorsSection() {
 
   const displayedExhibitors = filteredExhibitors.slice(0, displayCount);
 
-  const handleLoadMore = () => setDisplayCount(prev => prev + 8);
+  const handleLoadMore = () => {
+    setDisplayCount(prev => prev + 8);
+  };
 
   const getCategoryLabel = useCallback((category: string) => {
     const labels = {
       'institutional': t('pages.exhibitors.category_institutional'),
       'bâtiment-industry': t('pages.exhibitors.category_port_industry'),
+      'port-industry': t('pages.exhibitors.category_port_industry'),
       'bâtiment-operations': t('pages.exhibitors.category_operations'),
-      'academic': t('pages.exhibitors.category_academic'),
+      'port-operations': t('pages.exhibitors.category_operations'),
+      'academic': t('pages.exhibitors.category_academic')
     };
-    return labels[category as keyof typeof labels] || category;
+    return labels[category as keyof typeof labels] || 'Industrie du Bâtiment';
   }, [t]);
 
   const getCategoryColor = useCallback((category: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {
@@ -37,7 +41,7 @@ export function AllExhibitorsSection() {
       'institutional': 'success',
       'bâtiment-industry': 'error',
       'bâtiment-operations': 'info',
-      'academic': 'warning',
+      'academic': 'warning'
     };
     return colors[category] || 'default';
   }, []);
@@ -51,22 +55,23 @@ export function AllExhibitorsSection() {
   }, [navigate]);
 
   return (
-    <section className="relative py-20 lg:py-24 bg-white dark:bg-neutral-950 overflow-hidden">
-      <div className="max-w-container mx-auto px-6 lg:px-8">
+    <section className="py-12 md:py-20 bg-gradient-to-b from-white to-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* En-tête de section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14 max-w-2xl mx-auto"
+          className="text-center mb-12"
         >
-          <div className="sib-kicker mb-4 justify-center">
-            {t('nav.exhibitors')}
+          <div className="inline-flex items-center justify-center p-2 bg-blue-100 rounded-full mb-4">
+            <Building2 className="h-8 w-8 text-blue-600" />
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white tracking-tight mb-4">
-            {t('home.all_exhibitors_title', 'Tous nos exposants')}
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {t('nav.exhibitors')}
           </h2>
-          <p className="text-base lg:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             {t('home.discover_all_exhibitors_subtitle')}
           </p>
         </motion.div>
@@ -75,7 +80,7 @@ export function AllExhibitorsSection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="bg-neutral-100 dark:bg-neutral-800 h-72 rounded-2xl" />
+                <div className="bg-gray-200 h-64 rounded-lg"></div>
               </div>
             ))}
           </div>
@@ -109,32 +114,40 @@ export function AllExhibitorsSection() {
               ))}
             </motion.div>
 
+            {/* Boutons d'action */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-12 flex flex-col sm:flex-row gap-3 justify-center items-center"
+              className="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               {displayCount < filteredExhibitors.length && (
-                <Button onClick={handleLoadMore} variant="secondary" size="lg">
+                <Button
+                  onClick={handleLoadMore}
+                  variant="outline"
+                  size="lg"
+                  className="min-w-[200px]"
+                >
                   {t('common.load_more')}
                 </Button>
               )}
               <Link to={ROUTES.EXHIBITORS}>
-                <Button variant="primary" size="lg" className="group">
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="min-w-[200px] group"
+                >
                   {t('common.view_all')}
-                  <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </motion.div>
           </>
         ) : (
-          <div className="text-center py-16">
-            <div className="h-16 w-16 mx-auto mb-4 rounded-2xl bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center">
-              <Building2 className="h-8 w-8 text-neutral-400" />
-            </div>
-            <p className="text-neutral-500 dark:text-neutral-400 text-base">
+          <div className="text-center py-12">
+            <Building2 className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500 text-lg">
               {t('home.no_partners_available')}
             </p>
           </div>
@@ -143,3 +156,4 @@ export function AllExhibitorsSection() {
     </section>
   );
 }
+

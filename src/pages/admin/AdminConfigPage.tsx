@@ -58,7 +58,7 @@ const CONFIG_SECTIONS: ConfigSection[] = [
     id: 'general',
     label: 'Général',
     icon: Settings,
-    color: '#C9A84C',
+    color: '#F39200',
     description: 'Informations générales de l\'application et contacts',
     howToGet: [
       { step: 1, title: 'APP_URL', detail: 'C\'est l\'adresse de votre site en production. Ex : https://www.sib2026.ma — vous la choisissez lors de la configuration de votre domaine.' },
@@ -317,7 +317,7 @@ function ConfigInput({
           {field.required && <span className="text-red-400 text-xs">*</span>}
           {field.docUrl && (
             <a href={field.docUrl} target="_blank" rel="noopener noreferrer"
-              className="text-[#C9A84C]/60 hover:text-[#C9A84C] transition-colors">
+              className="text-[#F39200]/60 hover:text-[#F39200] transition-colors">
               <ExternalLink className="h-3 w-3" />
             </a>
           )}
@@ -340,7 +340,7 @@ function ConfigInput({
           value={value || ''}
           onChange={e => onChange(field.key, e.target.value)}
           placeholder={field.placeholder}
-          className="w-full px-3 py-2.5 pr-16 text-sm bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/25 focus:outline-none focus:border-[#C9A84C]/50 focus:bg-white/8 transition-all"
+          className="w-full px-3 py-2.5 pr-16 text-sm bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/25 focus:outline-none focus:border-[#F39200]/50 focus:bg-white/8 transition-all"
         />
         <div className="absolute right-2 flex items-center gap-1">
           {isPassword && (
@@ -449,7 +449,7 @@ function ConfigSectionCard({
               onClick={() => onSave(section.id)}
               disabled={saving === section.id}
               className="flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-xl text-[#0F2034]"
-              style={{ background: '#C9A84C' }}
+              style={{ background: '#F39200' }}
             >
               {saving === section.id
                 ? <><Loader2 className="h-4 w-4 animate-spin" /> {t('common.saving')}</>
@@ -638,8 +638,8 @@ export default function AdminConfigPage() {
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl" style={{ background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)' }}>
-                  <Key className="h-6 w-6" style={{ color: '#C9A84C' }} />
+                <div className="p-2.5 rounded-xl" style={{ background: 'rgba(243,146,0,0.15)', border: '1px solid rgba(243,146,0,0.3)' }}>
+                  <Key className="h-6 w-6" style={{ color: '#F39200' }} />
                 </div>
                 <h1 className="text-3xl font-bold text-white" style={{ fontFamily: 'var(--font-heading, serif)' }}>
                   {t('admin.config_title')}
@@ -686,7 +686,7 @@ export default function AdminConfigPage() {
           <div className="mt-6 p-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-white/70">{t('admin.config_global_completion')}</span>
-              <span className="text-sm font-bold" style={{ color: completionPct === 100 ? '#3ECF8E' : completionPct >= 60 ? '#C9A84C' : '#EF4444' }}>
+              <span className="text-sm font-bold" style={{ color: completionPct === 100 ? '#3ECF8E' : completionPct >= 60 ? '#F39200' : '#EF4444' }}>
                 {completionPct}%
               </span>
             </div>
@@ -700,7 +700,7 @@ export default function AdminConfigPage() {
                   background: completionPct === 100
                     ? 'linear-gradient(to right, #3ECF8E, #22c55e)'
                     : completionPct >= 60
-                    ? 'linear-gradient(to right, #C9A84C, #f59e0b)'
+                    ? 'linear-gradient(to right, #F39200, #f59e0b)'
                     : 'linear-gradient(to right, #EF4444, #f97316)',
                 }}
               />
@@ -712,10 +712,10 @@ export default function AdminConfigPage() {
 
           {/* Avertissement champs sensibles */}
           <div className="mt-4 flex items-start gap-3 p-4 rounded-xl"
-            style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)' }}>
-            <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: '#C9A84C' }} />
+            style={{ background: 'rgba(243,146,0,0.08)', border: '1px solid rgba(243,146,0,0.2)' }}>
+            <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: '#F39200' }} />
             <div className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
-              <strong className="text-[#C9A84C]">Important :</strong> Les clés secrètes (Service Role, SMTP Password, Stripe Secret) sont enregistrées
+              <strong className="text-[#F39200]">Important :</strong> Les clés secrètes (Service Role, SMTP Password, Stripe Secret) sont enregistrées
               dans la table <code className="bg-white/10 px-1 py-0.5 rounded text-white/70">app_settings</code> de Supabase (chiffrée par RLS).
               Pour une sécurité maximale en production, utilisez également les variables d'environnement Railway.
             </div>
@@ -728,11 +728,11 @@ export default function AdminConfigPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
           className="mb-6 p-5 rounded-2xl"
-          style={{ background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.25)' }}
+          style={{ background: 'rgba(243,146,0,0.06)', border: '1px solid rgba(243,146,0,0.25)' }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 rounded-lg" style={{ background: 'rgba(201,168,76,0.15)' }}>
-              <Shield className="h-5 w-5" style={{ color: '#C9A84C' }} />
+            <div className="p-2 rounded-lg" style={{ background: 'rgba(243,146,0,0.15)' }}>
+              <Shield className="h-5 w-5" style={{ color: '#F39200' }} />
             </div>
             <div>
               <h3 className="text-base font-bold text-white">{t('admin.config_reg_control_title')}</h3>
@@ -780,7 +780,7 @@ export default function AdminConfigPage() {
                     title={isOpen ? 'Cliquer pour fermer' : 'Cliquer pour ouvrir'}
                   >
                     {isSaving
-                      ? <Loader2 className="h-9 w-9 animate-spin" style={{ color: '#C9A84C' }} />
+                      ? <Loader2 className="h-9 w-9 animate-spin" style={{ color: '#F39200' }} />
                       : isOpen
                         ? <ToggleRight className="h-9 w-9" style={{ color: '#3ECF8E' }} />
                         : <ToggleLeft className="h-9 w-9" style={{ color: '#EF4444' }} />
@@ -800,7 +800,7 @@ export default function AdminConfigPage() {
         {/* Sections */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="h-10 w-10 animate-spin text-[#C9A84C] mb-4" />
+            <Loader2 className="h-10 w-10 animate-spin text-[#F39200] mb-4" />
             <p className="text-white/40">{t('common.loading')}</p>
           </div>
         ) : (

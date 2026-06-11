@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Users, FileText, Package, BadgeCheck, Mic2, Activity, TrendingUp, Image, UserCog, Star, HeadphonesIcon } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
@@ -125,7 +125,7 @@ export function PartnerServicesTab() {
               className={`flex flex-col gap-4 p-5 rounded-2xl border-2 transition-all hover:shadow-lg group ${
                 svc.highlight
                   ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200 hover:border-indigo-400'
-                  : 'bg-white border-gray-100 hover:border-[#C9A84C]/60'
+                  : 'bg-white border-gray-100 hover:border-[#F39200]/60'
               }`}
             >
               <div className={`${svc.color} p-3 rounded-xl w-fit`}>

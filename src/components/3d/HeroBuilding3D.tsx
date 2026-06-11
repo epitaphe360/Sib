@@ -36,7 +36,7 @@ export function HeroBuilding3D() {
     }));
 
     const drawWireframeBuilding = (cx: number, cy: number, rot: number) => {
-      const GOLD = '#E7D192';
+      const GOLD = '#2E5984';
       const floors = 14;
       const floorH = 18;
       const baseW = 80;
@@ -123,7 +123,7 @@ export function HeroBuilding3D() {
         if (p.y > H) {p.y = 0;}
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = '#E7D192';
+        ctx.fillStyle = '#2E5984';
         ctx.globalAlpha = p.opacity;
         ctx.fill();
       }

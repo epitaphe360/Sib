@@ -117,7 +117,7 @@ interface BadgeConfig {
 
 const DEFAULT_DAYS: BadgeDayProgram[] = [
   {
-    id: 'd1', date: '2026-11-25', label: 'Mardi 25 Novembre 2026', open: false,
+    id: 'd1', date: '2026-11-25', label: 'Mercredi 25 Novembre 2026', open: false,
     sessions: [
       { time: '10:00 – 12:30', title: 'Ouverture officielle & Allocutions institutionnelles', type: 'opening' },
       { time: '12:30 – 14:00', title: 'Déjeuner de réseautage', type: 'lunch' },
@@ -175,7 +175,7 @@ const DEFAULT_CONFIG: BadgeConfig = {
   badge_validity_text_fr: 'CECI EST VOTRE BADGE D\'ACCÈS VALABLE POUR LES 5 JOURS DU SALON',
   badge_validity_text_en: 'THIS DOCUMENT IS YOUR ENTRY BADGE VALID FOR THE 5 DAYS OF THE EXHIBITION',
   primary_color: '#1e3a5f',
-  secondary_color: '#C9A84C',
+  secondary_color: '#F39200',
   header_bg: '#1e3a5f',
   text_dark: '#111827',
   accent_color: '#3ECF8E',
@@ -235,7 +235,7 @@ const SESSION_TYPE_OPTIONS: { value: BadgeSession['type']; label: string; color:
   { value: 'lunch',      label: 'Déjeuner',       color: '#16a34a' },
   { value: 'break',      label: 'Pause',          color: '#9ca3af' },
   { value: 'visit',      label: 'Visite',         color: '#c2410c' },
-  { value: 'ceremony',   label: 'Cérémonie',      color: '#C9A84C' },
+  { value: 'ceremony',   label: 'Cérémonie',      color: '#F39200' },
 ];
 
 const DB_KEY = 'badge_config_v1';

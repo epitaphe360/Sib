@@ -60,9 +60,9 @@ export const SponsorSpotlight: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-10"
         >
-          <div className="sib-kicker mb-3 justify-center">Sponsor Officiel</div>
+          <div className="sib-kicker mb-3 justify-center">{t('home.sponsor_kicker')}</div>
           <h2 className="text-2xl lg:text-3xl font-bold text-neutral-900 dark:text-white tracking-tight">
-            {t('home.sponsor_title', 'Notre partenaire officiel')}
+            {t('home.sponsor_title')}
           </h2>
         </motion.div>
 

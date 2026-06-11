@@ -112,10 +112,14 @@ export const HomeNavMenuBlockMobile: React.FC<{ onNavigate: () => void; premium?
           : 'border-b border-neutral-200 dark:border-neutral-800 pb-3 mb-2'
       }
     >
-      {premium ? (
-        <HomePagesNavPanel onNavigate={onNavigate} compact />
-      ) : (
-        <HomeMenuSalonGridPanel items={items} onNavigate={onNavigate} compact />
+      <HomePagesNavPanel onNavigate={onNavigate} compact />
+      {!premium && (
+        <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-800">
+          <p className="px-4 pb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+            {t('nav.home_menu.subtitle_pages')}
+          </p>
+          <HomeMenuSalonGridPanel items={items} onNavigate={onNavigate} compact />
+        </div>
       )}
     </div>
   );

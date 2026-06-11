@@ -29,6 +29,6 @@ export const useTranslation = () => {
     t,
     currentLanguage,
     currentLang,
-    isRTL: false
+    isRTL: currentLanguage === 'ar'
   };
 };

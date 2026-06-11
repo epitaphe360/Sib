@@ -1,4 +1,4 @@
-import { Zap, User, Network, Brain, FileText, BadgeCheck, BarChart2, Headphones, ArrowRight, QrCode } from 'lucide-react';
+﻿import { Zap, User, Network, Brain, FileText, BadgeCheck, BarChart2, Headphones, ArrowRight, QrCode } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ROUTES } from '../../../lib/routes';
@@ -66,7 +66,7 @@ export function PartnerQuickActions({ onOpenBadge, onOpenQR }: Readonly<PartnerQ
     <div className="mb-8">
       <div className="flex items-center gap-3 mb-5">
         <div className="p-2.5 bg-[#1B365D] rounded-xl shadow-md">
-          <Zap className="h-5 w-5 text-[#C9A84C]" />
+          <Zap className="h-5 w-5 text-[#F39200]" />
         </div>
         <div>
           <h2 className="text-xl font-bold text-gray-900">Actions rapides</h2>
@@ -84,12 +84,12 @@ export function PartnerQuickActions({ onOpenBadge, onOpenQR }: Readonly<PartnerQ
               transition={{ delay: i * 0.05 }}
               className={`group relative flex flex-col gap-2 p-4 rounded-2xl border-2 transition-all duration-200 cursor-pointer h-full ${
                 action.highlight
-                  ? 'bg-gradient-to-br from-[#1B365D]/5 to-[#C9A84C]/10 border-[#C9A84C]/30 hover:border-[#C9A84C] hover:shadow-lg'
+                  ? 'bg-gradient-to-br from-[#1B365D]/5 to-[#F39200]/10 border-[#F39200]/30 hover:border-[#F39200] hover:shadow-lg'
                   : 'bg-white border-gray-100 hover:border-[#1B365D]/30 hover:shadow-md'
               }`}
             >
-              <div className={`p-2 rounded-xl w-fit ${action.highlight ? 'bg-[#C9A84C]/20' : 'bg-gray-100 group-hover:bg-[#1B365D]/10'} transition-colors`}>
-                <action.Icon className={`h-5 w-5 ${action.highlight ? 'text-[#C9A84C]' : 'text-[#1B365D]'}`} />
+              <div className={`p-2 rounded-xl w-fit ${action.highlight ? 'bg-[#F39200]/20' : 'bg-gray-100 group-hover:bg-[#1B365D]/10'} transition-colors`}>
+                <action.Icon className={`h-5 w-5 ${action.highlight ? 'text-[#F39200]' : 'text-[#1B365D]'}`} />
               </div>
               <div className="flex-1">
                 <p className="text-sm font-bold text-gray-900 leading-tight">{action.title}</p>

@@ -26,7 +26,7 @@ export const PremiumSib2026DesktopNav: React.FC<PremiumSib2026NavProps> = ({
   const { t } = useTranslation();
 
   const navLinks = [
-    { name: t('mockup.nav.about'), href: '/about' },
+    { name: t('mockup.nav.about'), href: ROUTES.PRESENTATION },
     { name: t('mockup.nav.exhibit'), href: ROUTES.EXHIBITOR_SUBSCRIPTION },
     { name: t('mockup.nav.visit'), href: `${homeBase}#visiter` },
     { name: t('mockup.nav.program'), href: ROUTES.EVENTS },
@@ -48,7 +48,7 @@ export const PremiumSib2026DesktopNav: React.FC<PremiumSib2026NavProps> = ({
           type="button"
           aria-expanded={isMenuOpen}
           aria-haspopup="true"
-          aria-label="Accueil — choisir une page d'accueil (P1 à P9)"
+          aria-label="Accueil — choisir une page d'accueil (P1 à P17)"
           onClick={() => (isMenuOpen ? onClose() : onOpen())}
           className={`${linkClass} inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent`}
           style={

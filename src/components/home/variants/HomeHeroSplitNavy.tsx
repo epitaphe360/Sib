@@ -7,13 +7,11 @@ import { useTranslation } from '../../../hooks/useTranslation';
 import { ROUTES } from '../../../lib/routes';
 import { IMAGES, img, srcSet } from '../../../lib/images';
 import { formatSalonDatesShort, DEFAULT_SALON_CONFIG } from '../../../config/salonInfo';
-import { MinistryEgidBar } from '../MinistryEgidBar';
 
 export const HomeHeroSplitNavy: React.FC = () => {
   const { t } = useTranslation();
   return (
     <>
-    <MinistryEgidBar />
     <section className="min-h-[520px] grid grid-cols-1 lg:grid-cols-2">
       <div className="home-dark bg-primary-900 text-white flex flex-col justify-center px-8 lg:px-16 py-16 order-2 lg:order-1">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>

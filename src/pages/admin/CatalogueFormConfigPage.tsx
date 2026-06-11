@@ -95,7 +95,7 @@ export default function CatalogueFormConfigPage() {
   // ── Loading ─────────────────────────────────────────────────────────────
   if (loading) return (
     <div className="flex items-center justify-center h-64">
-      <Loader2 className="w-8 h-8 animate-spin text-[#C9A84C]" />
+      <Loader2 className="w-8 h-8 animate-spin text-[#F39200]" />
     </div>
   );
 
@@ -109,7 +109,7 @@ export default function CatalogueFormConfigPage() {
       <div className="flex items-start justify-between mb-6 gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Settings2 className="w-5 h-5 text-[#C9A84C]" />
+            <Settings2 className="w-5 h-5 text-[#F39200]" />
             <h1 className="text-2xl font-black text-[#0B1C3D]">Configuration du formulaire</h1>
           </div>
           <p className="text-slate-500 text-sm">
@@ -132,7 +132,7 @@ export default function CatalogueFormConfigPage() {
             </button>
           )}
           <button onClick={save} disabled={saving || !dirty}
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#C9A84C] text-[#0B1C3D] font-bold text-sm rounded-2xl disabled:opacity-40 hover:bg-[#b8973b] transition shadow-md shadow-[#C9A84C]/20">
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#F39200] text-[#0B1C3D] font-bold text-sm rounded-2xl disabled:opacity-40 hover:bg-[#b8973b] transition shadow-md shadow-[#F39200]/20">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Sauvegarder
           </button>
@@ -195,7 +195,7 @@ export default function CatalogueFormConfigPage() {
                       type="text"
                       value={f.label}
                       onChange={(e) => update(f.field_key, { label: e.target.value })}
-                      className="border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#C9A84C] transition bg-white w-full"
+                      className="border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#F39200] transition bg-white w-full"
                     />
 
                     {/* Placeholder edit */}
@@ -204,7 +204,7 @@ export default function CatalogueFormConfigPage() {
                       value={f.placeholder}
                       onChange={(e) => update(f.field_key, { placeholder: e.target.value })}
                       disabled={f.field_type === "upload" || f.field_type === "select"}
-                      className="border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#C9A84C] transition bg-white w-full disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#F39200] transition bg-white w-full disabled:opacity-40 disabled:cursor-not-allowed"
                     />
 
                     {/* Toggles */}
@@ -245,7 +245,7 @@ export default function CatalogueFormConfigPage() {
             <RotateCcw className="w-3.5 h-3.5" /> Annuler
           </button>
           <button onClick={save} disabled={saving}
-            className="flex items-center gap-2 px-6 py-3 bg-[#C9A84C] text-[#0B1C3D] font-black text-sm rounded-2xl shadow-xl shadow-[#C9A84C]/30 hover:bg-[#b8973b] transition">
+            className="flex items-center gap-2 px-6 py-3 bg-[#F39200] text-[#0B1C3D] font-black text-sm rounded-2xl shadow-xl shadow-[#F39200]/30 hover:bg-[#b8973b] transition">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Sauvegarder les modifications
           </button>

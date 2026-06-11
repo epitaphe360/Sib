@@ -267,7 +267,7 @@ export function AdminActionsPanel({
                   <Tile Icon={Package} label="Location Chapiteau" sub="Tentes & Commandes" color="#0ea5e9" />
                 </Link>
                 <Link to={ROUTES.ADMIN_ADVERTISING}>
-                  <Tile Icon={Megaphone} label="Espaces Pub" sub="Réservations & Catalogue" color="#C9A84C" />
+                  <Tile Icon={Megaphone} label="Espaces Pub" sub="Réservations & Catalogue" color="#F39200" />
                 </Link>
                 <Link to={ROUTES.ADMIN_STAND_COLLABORATORS}>
                   <Tile Icon={UserPlus} label="Collaborateurs Stand" sub="Gestion équipes" color="#0ea5e9" />
@@ -323,23 +323,23 @@ export function AdminActionsPanel({
             {/* ── CONFIGURATION SYSTÈME ────────────────────────────── */}
             <div>
               <SectionTitle
-                icon={<Settings2 className="h-4 w-4" style={{ color: '#C9A84C' }} />}
+                icon={<Settings2 className="h-4 w-4" style={{ color: '#F39200' }} />}
                 label="Configuration Système"
                 sub="Clés API, services externes et paramètres"
-                color="#C9A84C"
+                color="#F39200"
               />
               <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Link to={ROUTES.ADMIN_CONFIG}>
-                  <Tile Icon={Settings2} label="Configuration APIs" sub="Supabase · SMTP · PayPal · Firebase · OpenAI" color="#C9A84C" />
+                  <Tile Icon={Settings2} label="Configuration APIs" sub="Supabase · SMTP · PayPal · Firebase · OpenAI" color="#F39200" />
                 </Link>
                 <Link to={ROUTES.ADMIN_EMAIL_TEMPLATES}>
-                  <Tile Icon={FileText} label="Modèles d'emails" sub="Templates HTML envoi" color="#C9A84C" />
+                  <Tile Icon={FileText} label="Modèles d'emails" sub="Templates HTML envoi" color="#F39200" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PUSH_NOTIFICATIONS}>
-                  <Tile Icon={Bell} label="Notifications Push" sub="Alertes & messages" color="#C9A84C" />
+                  <Tile Icon={Bell} label="Notifications Push" sub="Alertes & messages" color="#F39200" />
                 </Link>
                 <Link to={ROUTES.ADMIN_CREDENTIALS}>
-                  <Tile Icon={KeyRound} label="Credentials Utilisateurs" sub="Envoyer mots de passe" color="#C9A84C" />
+                  <Tile Icon={KeyRound} label="Credentials Utilisateurs" sub="Envoyer mots de passe" color="#F39200" />
                 </Link>
               </motion.div>
             </div>

@@ -132,7 +132,7 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-[#C9A84C]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#F39200]" />
       </div>
     );
   }
@@ -150,7 +150,7 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center"
                 style={{ background: 'linear-gradient(135deg, #0B1C3D, #1e3a5f)' }}>
-                <Tent className="w-4 h-4 text-[#C9A84C]" />
+                <Tent className="w-4 h-4 text-[#F39200]" />
               </div>
               <div>
                 <h1 className="text-base font-bold text-gray-900">Location de Chapiteaux</h1>
@@ -164,7 +164,7 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
             <ShoppingCart className="w-4 h-4" />
             Panier
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#C9A84C] text-white text-xs font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#F39200] text-white text-xs font-bold rounded-full flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -178,14 +178,14 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
           style={{ background: 'linear-gradient(135deg, #0B1C3D 0%, #1e3a5f 60%, #0B1C3D 100%)' }}>
           <div className="absolute inset-0 opacity-[0.04]"
             style={{
-              backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%23C9A84C' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3C/g%3E%3C/svg%3E\")",
+              backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%232E5984' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3C/g%3E%3C/svg%3E\")",
             }} />
           <div className="relative z-10 px-8 py-10 text-white">
             <div className="text-5xl mb-3">⛺</div>
             <h2 className="text-2xl md:text-3xl font-bold mb-2">
               Chapiteaux professionnels pour votre espace
             </h2>
-            <p className="text-[#C9A84C]/80 max-w-xl mb-4">
+            <p className="text-[#F39200]/80 max-w-xl mb-4">
               Du chapiteau 3×3m au géant 20×40m — installation et dépose assurées par notre équipe.
               Réservez votre espace dès maintenant pour SIB 2026.
             </p>
@@ -195,7 +195,7 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
                 { icon: <CheckCircle className="w-4 h-4" />, label: 'Installation incluse' },
                 { icon: <CreditCard className="w-4 h-4" />, label: 'Paiement PayPal / CMI' },
               ].map(f => (
-                <div key={f.label} className="flex items-center gap-1.5 text-[#C9A84C]">
+                <div key={f.label} className="flex items-center gap-1.5 text-[#F39200]">
                   {f.icon}
                   <span>{f.label}</span>
                 </div>
@@ -221,12 +221,12 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
                       className="w-full h-full object-cover opacity-80" />
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full gap-2">
-                      <Tent className="w-16 h-16 text-[#C9A84C]/50" />
-                      <span className="text-[#C9A84C]/70 font-bold text-lg">{item.size_label}</span>
+                      <Tent className="w-16 h-16 text-[#F39200]/50" />
+                      <span className="text-[#F39200]/70 font-bold text-lg">{item.size_label}</span>
                     </div>
                   )}
                   {item.includes_installation && (
-                    <div className="absolute bottom-2 left-2 bg-[#C9A84C] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                    <div className="absolute bottom-2 left-2 bg-[#F39200] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
                       Installation incluse ✓
                     </div>
                   )}
@@ -255,7 +255,7 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
 
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <span className="text-xl font-bold text-[#C9A84C]">
+                      <span className="text-xl font-bold text-[#F39200]">
                         {item.price_per_day.toLocaleString('fr-MA')}
                       </span>
                       <span className="text-xs text-gray-400 ml-1">MAD/jour</span>
@@ -316,7 +316,7 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
                     )}
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-[#C9A84C]">{order.total_amount.toLocaleString('fr-MA')} MAD</div>
+                    <div className="font-bold text-[#F39200]">{order.total_amount.toLocaleString('fr-MA')} MAD</div>
                     <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
                       order.payment_status === 'paid'
                         ? 'bg-green-100 text-green-700'
@@ -339,7 +339,7 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
           className="fixed right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl z-50 flex flex-col">
           <div className="flex items-center justify-between p-5 border-b border-gray-100">
             <h2 className="font-bold text-gray-900 text-lg flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5 text-[#C9A84C]" /> Panier
+              <ShoppingCart className="w-5 h-5 text-[#F39200]" /> Panier
             </h2>
             <button onClick={() => setShowCart(false)} className="p-2 hover:bg-gray-100 rounded-lg">
               ✕
@@ -349,12 +349,12 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
             {cartItems.map(ci => (
               <div key={ci.id} className="flex items-start gap-3 bg-gray-50 rounded-xl p-3">
                 <div className="w-12 h-12 bg-[#0B1C3D]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Tent className="w-6 h-6 text-[#C9A84C]" />
+                  <Tent className="w-6 h-6 text-[#F39200]" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-gray-900 text-sm truncate">{ci.name}</div>
                   <div className="text-xs text-gray-400">{ci.size_label} · {ci.quantity} unité(s)</div>
-                  <div className="text-xs font-bold text-[#C9A84C] mt-0.5">
+                  <div className="text-xs font-bold text-[#F39200] mt-0.5">
                     {(ci.price_per_day * ci.quantity * RENTAL_DAYS).toLocaleString('fr-MA')} MAD
                   </div>
                 </div>
@@ -383,7 +383,7 @@ export default function ChapiteauCatalogPage({ userType }: Readonly<ChapiteauCat
             </div>
             <div className="flex justify-between text-lg font-bold text-gray-900 border-t pt-3">
               <span>Total HT</span>
-              <span className="text-[#C9A84C]">{cartTotal.toLocaleString('fr-MA')} MAD</span>
+              <span className="text-[#F39200]">{cartTotal.toLocaleString('fr-MA')} MAD</span>
             </div>
             <button onClick={handleCheckout}
               className="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2"

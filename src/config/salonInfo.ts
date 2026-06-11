@@ -41,8 +41,8 @@ export const DEFAULT_SALON_CONFIG: SalonConfig = {
 
 /** Chiffres clés officiels — source unique pour éviter les répétitions incohérentes */
 export const SALON_STATS = {
-  exhibitors: '600+',
-  visitors: '200 000+',
+  exhibitors: '+600',
+  visitors: '+200 000',
   countries: '+30',
   conferences: '40 ans',
 } as const;

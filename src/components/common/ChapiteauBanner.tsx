@@ -57,7 +57,7 @@ function HeroBanner({ to }: { to: string }) {
             transition={{ duration: 3.5, repeat: Infinity, ease: "linear", repeatDelay: 2 }}
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(105deg, transparent 40%, rgba(201,168,76,0.07) 50%, transparent 60%)",
+              background: "linear-gradient(105deg, transparent 40%, rgba(243,146,0,0.07) 50%, transparent 60%)",
               zIndex: 0,
             }}
           />
@@ -66,24 +66,24 @@ function HeroBanner({ to }: { to: string }) {
           <div
             className="absolute inset-0 opacity-[0.04] pointer-events-none"
             style={{
-              backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%23C9A84C' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath stroke='%23C9A84C' stroke-width='0.6' d='M30 12L48 30L30 48L12 30Z'/%3E%3Ccircle cx='30' cy='30' r='2' fill='%23C9A84C'/%3E%3C/g%3E%3C/svg%3E\")",
+              backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath stroke='%232E5984' stroke-width='1' d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath stroke='%232E5984' stroke-width='0.6' d='M30 12L48 30L30 48L12 30Z'/%3E%3Ccircle cx='30' cy='30' r='2' fill='%232E5984'/%3E%3C/g%3E%3C/svg%3E\")",
             }}
           />
 
           <div className="relative z-10 p-8 md:p-14 grid md:grid-cols-2 gap-10 items-center">
             {/* Left */}
             <div>
-              <div className="inline-flex items-center gap-2 bg-[#C9A84C]/15 border border-[#C9A84C]/30 rounded-full px-4 py-1.5 mb-5">
-                <Zap className="w-3.5 h-3.5 text-[#C9A84C]" />
-                <span className="text-[#C9A84C] text-xs font-semibold tracking-wide uppercase">
+              <div className="inline-flex items-center gap-2 bg-[#F39200]/15 border border-[#F39200]/30 rounded-full px-4 py-1.5 mb-5">
+                <Zap className="w-3.5 h-3.5 text-[#F39200]" />
+                <span className="text-[#F39200] text-xs font-semibold tracking-wide uppercase">
                   SIB 2026 — Nouveau module
                 </span>
               </div>
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3 leading-tight">
                 Location de{" "}
-                <span style={{ color: "#C9A84C" }}>Chapiteaux</span>
+                <span style={{ color: "#F39200" }}>Chapiteaux</span>
               </h2>
-              <p className="text-[#C9A84C]/60 text-base mb-6 leading-relaxed">
+              <p className="text-[#F39200]/60 text-base mb-6 leading-relaxed">
                 Du petit stand individuel au chapiteau géant — structures professionnelles
                 avec installation assurée par notre équipe terrain.
               </p>
@@ -92,7 +92,7 @@ function HeroBanner({ to }: { to: string }) {
               <ul className="space-y-2 mb-8">
                 {FEATURES.map(f => (
                   <li key={f} className="flex items-center gap-2 text-sm text-white/80">
-                    <CheckCircle className="w-4 h-4 text-[#C9A84C] flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-[#F39200] flex-shrink-0" />
                     {f}
                   </li>
                 ))}
@@ -104,9 +104,9 @@ function HeroBanner({ to }: { to: string }) {
                 onMouseLeave={() => setHover(false)}
                 className="inline-flex items-center gap-3 px-7 py-3.5 rounded-2xl font-bold text-sm transition-all"
                 style={{
-                  background: "linear-gradient(135deg, #C9A84C, #b8963e)",
+                  background: "linear-gradient(135deg, #F39200, #E07A00)",
                   color: "#0b1929",
-                  boxShadow: hover ? "0 8px 32px rgba(201,168,76,0.4)" : "0 4px 16px rgba(201,168,76,0.2)",
+                  boxShadow: hover ? "0 8px 32px rgba(243,146,0,0.4)" : "0 4px 16px rgba(243,146,0,0.2)",
                   transform: hover ? "translateY(-2px)" : "none",
                 }}>
                 <Tent className="w-4 h-4" />
@@ -129,15 +129,15 @@ function HeroBanner({ to }: { to: string }) {
                   className="rounded-2xl p-8 text-center"
                   style={{
                     background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(201,168,76,0.2)",
+                    border: "1px solid rgba(243,146,0,0.2)",
                     backdropFilter: "blur(8px)",
                     minWidth: 220,
                   }}>
                   <div className="text-6xl mb-3">{size.emoji}</div>
-                  <div className="text-3xl font-black text-[#C9A84C] mb-1">{size.label}</div>
+                  <div className="text-3xl font-black text-[#F39200] mb-1">{size.label}</div>
                   <div className="text-sm text-white/60 mb-4">{size.sub}</div>
-                  <div className="bg-[#C9A84C]/10 rounded-xl px-4 py-2">
-                    <div className="text-[#C9A84C] font-bold">{size.price} MAD/jour</div>
+                  <div className="bg-[#F39200]/10 rounded-xl px-4 py-2">
+                    <div className="text-[#F39200] font-bold">{size.price} MAD/jour</div>
                     <div className="text-white/40 text-xs">Installation incluse</div>
                   </div>
                 </motion.div>
@@ -162,17 +162,17 @@ function CompactBanner({ to }: { to: string }) {
       <div className="p-5 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ background: "rgba(201,168,76,0.15)" }}>
-            <Tent className="w-5 h-5 text-[#C9A84C]" />
+            style={{ background: "rgba(243,146,0,0.15)" }}>
+            <Tent className="w-5 h-5 text-[#F39200]" />
           </div>
           <div>
             <div className="text-white font-bold text-sm">Location de Chapiteaux</div>
-            <div className="text-[#C9A84C]/70 text-xs">Dès 1 200 MAD/jour • Installation incluse</div>
+            <div className="text-[#F39200]/70 text-xs">Dès 1 200 MAD/jour • Installation incluse</div>
           </div>
         </div>
         <Link to={to}
           className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition shrink-0"
-          style={{ background: "rgba(201,168,76,0.9)", color: "#0B1C3D" }}>
+          style={{ background: "rgba(243,146,0,0.9)", color: "#0B1C3D" }}>
           Réserver <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
@@ -191,7 +191,7 @@ function SidebarBanner({ to }: { to: string }) {
       style={{ background: "linear-gradient(160deg, #0B1C3D, #1e3a5f)" }}>
       <div className="p-5">
         <div className="text-3xl mb-2">⛺</div>
-        <div className="text-[#C9A84C] font-black text-base mb-1">Chapiteaux SIB 2026</div>
+        <div className="text-[#F39200] font-black text-base mb-1">Chapiteaux SIB 2026</div>
         <div className="text-white/60 text-xs mb-4">
           Structures professionnelles avec installation incluse
         </div>
@@ -202,12 +202,12 @@ function SidebarBanner({ to }: { to: string }) {
             className="bg-white/5 rounded-xl p-3 mb-4 text-center">
             <div className="text-2xl">{size.emoji}</div>
             <div className="text-white font-bold text-sm">{size.label}</div>
-            <div className="text-[#C9A84C] text-xs">{size.price} MAD/jour</div>
+            <div className="text-[#F39200] text-xs">{size.price} MAD/jour</div>
           </motion.div>
         </AnimatePresence>
         <Link to={to}
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold text-[#0B1C3D] transition"
-          style={{ background: "linear-gradient(135deg, #C9A84C, #b8963e)" }}>
+          style={{ background: "linear-gradient(135deg, #F39200, #E07A00)" }}>
           <Tent className="w-3.5 h-3.5" /> Voir les chapiteaux
         </Link>
       </div>

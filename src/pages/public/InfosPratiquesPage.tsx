@@ -9,7 +9,7 @@ import {
 } from '../../components/ui/motion';
 
 const defaultHoraires = [
-  { jour: 'Mardi 25 Novembre', heures: '9h00 – 19h00' },
+  { jour: 'Mercredi 25 Novembre', heures: '9h00 – 19h00' },
   { jour: 'Mercredi 26 Novembre', heures: '9h00 – 19h00' },
   { jour: 'Jeudi 27 Novembre', heures: '9h00 – 19h00' },
   { jour: 'Vendredi 28 Novembre', heures: '9h00 – 19h00' },

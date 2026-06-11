@@ -8,7 +8,6 @@ import { ROUTES } from '../../../lib/routes';
 import { IMAGES, img, srcSet } from '../../../lib/images';
 import { DEFAULT_SALON_CONFIG, formatSalonDatesShort } from '../../../config/salonInfo';
 import { HomeEventBar } from '../HomeEventBar';
-import { MinistryEgidBar } from '../MinistryEgidBar';
 import { HeroPhotoOverlay } from '../HeroPhotoOverlay';
 import { SALON_STATS } from '../../../config/salonInfo';
 
@@ -23,7 +22,6 @@ export const HomeHeroBig5: React.FC = () => {
 
   return (
     <>
-      <MinistryEgidBar />
       <HomeEventBar />
       <section className="home-dark relative min-h-[70vh] flex items-end text-white overflow-hidden">
         <div className="absolute inset-0 home-hero-media overflow-hidden">

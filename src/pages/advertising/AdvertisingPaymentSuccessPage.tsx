@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -63,13 +63,13 @@ export default function AdvertisingPaymentSuccessPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="w-16 h-16 rounded-full bg-[#C9A84C] flex items-center justify-center mx-auto mb-4">
+            className="w-16 h-16 rounded-full bg-[#F39200] flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-8 h-8 text-white" />
           </motion.div>
           <h1 className="text-2xl font-bold mb-2">
             {paymentMethod === 'paypal' ? 'Paiement confirmé !' : 'Réservation enregistrée !'}
           </h1>
-          <p className="text-[#C9A84C]/90 text-sm">
+          <p className="text-[#F39200]/90 text-sm">
             {paymentMethod === 'paypal'
               ? 'Votre espace publicitaire est réservé. Notre équipe le validera sous 24h.'
               : 'Notre équipe vous contactera sous 24h pour finaliser le paiement CMI.'}
@@ -86,7 +86,7 @@ export default function AdvertisingPaymentSuccessPage() {
             </div>
             <div className="bg-gray-50 rounded-2xl p-4">
               <div className="text-xs text-gray-400 mb-1">Total TTC</div>
-              <div className="font-bold text-[#C9A84C] text-sm">
+              <div className="font-bold text-[#F39200] text-sm">
                 {totalTTC.toLocaleString('fr-MA', { minimumFractionDigits: 2 })} MAD
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function AdvertisingPaymentSuccessPage() {
           {/* Espaces réservés */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Megaphone className="w-4 h-4 text-[#C9A84C]" />
+              <Megaphone className="w-4 h-4 text-[#F39200]" />
               <span className="font-semibold text-gray-900 text-sm">Espaces réservés</span>
             </div>
             <div className="space-y-2">
@@ -123,7 +123,7 @@ export default function AdvertisingPaymentSuccessPage() {
                       {ci.quantity > 1 ? ` · ${ci.quantity} emplacements` : ''}
                     </div>
                   </div>
-                  <div className="text-sm font-bold text-[#C9A84C] shrink-0">
+                  <div className="text-sm font-bold text-[#F39200] shrink-0">
                     {(ci.price * ci.quantity).toLocaleString('fr-MA')} MAD
                   </div>
                 </div>
@@ -149,7 +149,7 @@ export default function AdvertisingPaymentSuccessPage() {
             </button>
             <button onClick={() => navigate(ROUTES.HOME)}
               className="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition"
-              style={{ background: 'linear-gradient(135deg, #C9A84C, #b8963e)' }}>
+              style={{ background: 'linear-gradient(135deg, #F39200, #E07A00)' }}>
               <Home className="w-4 h-4" /> Retour à l'accueil
             </button>
           </div>

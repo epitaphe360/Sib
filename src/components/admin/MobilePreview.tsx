@@ -96,12 +96,12 @@ export default function MobilePreview({
               {/* Status badge */}
               <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full mb-2"
                 style={{
-                  background: 'rgba(201,168,76,0.15)',
-                  border: '1px solid rgba(201,168,76,0.4)',
+                  background: 'rgba(243,146,0,0.15)',
+                  border: '1px solid rgba(243,146,0,0.4)',
                 }}
               >
                 <div className={`w-1.5 h-1.5 rounded-full ${is_active ? 'bg-green-400' : 'bg-gray-400'}`} />
-                <span className="text-[8px] font-medium" style={{ color: '#C9A84C' }}>
+                <span className="text-[8px] font-medium" style={{ color: '#F39200' }}>
                   {is_active ? 'Salon actif' : 'Inactif'}
                 </span>
               </div>
@@ -150,7 +150,7 @@ export default function MobilePreview({
                 <div key={label} className="rounded-lg p-2 text-center"
                   style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
                 >
-                  <Icon className="h-3 w-3 mx-auto mb-0.5" style={{ color: '#C9A84C' }} />
+                  <Icon className="h-3 w-3 mx-auto mb-0.5" style={{ color: '#F39200' }} />
                   <p className="text-[7px] text-gray-400">{label}</p>
                   <p className="text-[8px] font-semibold text-gray-700 truncate">{value}</p>
                 </div>
@@ -163,8 +163,8 @@ export default function MobilePreview({
             {['Exposants', 'Programme', 'Sponsors'].map(section => (
               <div key={section} className="flex items-center justify-between p-2.5 rounded-lg bg-gray-50 border border-gray-100">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'rgba(201,168,76,0.1)' }}>
-                    <div className="w-2.5 h-2.5 rounded-sm" style={{ background: '#C9A84C' }} />
+                  <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'rgba(243,146,0,0.1)' }}>
+                    <div className="w-2.5 h-2.5 rounded-sm" style={{ background: '#F39200' }} />
                   </div>
                   <span className="text-[10px] font-medium text-gray-700">{section}</span>
                 </div>

@@ -49,12 +49,12 @@ export function VisitorQuickActions({ userLevel, remaining }: VisitorQuickAction
       <motion.div variants={itemVariants}>
         <Card className={`p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-full ${
           userLevel === 'vip'
-            ? 'bg-gradient-to-br from-[#1B365D]/5 to-[#C9A84C]/10 border-2 border-[#C9A84C]/40'
+            ? 'bg-gradient-to-br from-[#1B365D]/5 to-[#F39200]/10 border-2 border-[#F39200]/40'
             : 'bg-white'
         }`}>
           <div className="flex items-start space-x-3 mb-4">
-            <div className={`p-2 rounded-lg ${userLevel === 'vip' ? 'bg-[#C9A84C]/20' : 'bg-purple-100'}`}>
-              <Brain className={`h-5 w-5 ${userLevel === 'vip' ? 'text-[#C9A84C]' : 'text-purple-600'}`} />
+            <div className={`p-2 rounded-lg ${userLevel === 'vip' ? 'bg-[#F39200]/20' : 'bg-purple-100'}`}>
+              <Brain className={`h-5 w-5 ${userLevel === 'vip' ? 'text-[#F39200]' : 'text-purple-600'}`} />
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900">{t('visitor.ai_matching_title', 'Matching IA')}</h3>
@@ -65,7 +65,7 @@ export function VisitorQuickActions({ userLevel, remaining }: VisitorQuickAction
             <Link to={ROUTES.ADVANCED_MATCHING}>
               <Button className={`w-full font-bold shadow-md transition-all ${
                 userLevel === 'vip'
-                  ? 'bg-[#C9A84C] hover:bg-[#A88830] text-white'
+                  ? 'bg-[#F39200] hover:bg-[#A88830] text-white'
                   : 'bg-purple-600 hover:bg-purple-700 text-white'
               }`}>
                 <Brain className="h-4 w-4 mr-2" />{t('visitor.access_ai_matching', 'Matching IA Avancé')}

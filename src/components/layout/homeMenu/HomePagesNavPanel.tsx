@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, LayoutGrid } from 'lucide-react';
 import {
-  HOME_PAGES_CLASSIC,
-  HOME_PAGES_NEW,
+  HOME_PAGES_CURATED,
   getHomePageVariantFromPath,
-  type HomePageEntry,
+  type CuratedHomePageEntry,
 } from '../../../config/homePagesRegistry';
+import { ROUTES } from '../../../lib/routes';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { SIB2026 } from '../../home/sib2026/tokens';
 
@@ -20,7 +20,7 @@ function PageRow({
   active,
   onNavigate,
 }: {
-  entry: HomePageEntry;
+  entry: CuratedHomePageEntry;
   active: boolean;
   onNavigate?: () => void;
 }) {
@@ -42,13 +42,15 @@ function PageRow({
           <Icon className="h-4 w-4" strokeWidth={2} aria-hidden />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="mb-0.5 flex items-center gap-2">
-            <span
-              className="text-[10px] font-bold uppercase tracking-wider"
-              style={{ color: SIB2026.orange }}
-            >
-              P{entry.id}
-            </span>
+          <span className="mb-0.5 flex items-center gap-2 flex-wrap">
+            {entry.tagKey && (
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: SIB2026.orange }}>
+                {t(entry.tagKey)}
+              </span>
+            )}
+            {entry.badgeKey && (
+              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-300/90">{t(entry.badgeKey)}</span>
+            )}
             {active && (
               <Check className="h-3.5 w-3.5 shrink-0" style={{ color: SIB2026.orange }} aria-hidden />
             )}
@@ -61,9 +63,7 @@ function PageRow({
   );
 }
 
-/**
- * Sous-menu ACCUEIL — 9 pages série actuelle + 8 nouvelles (17 au total).
- */
+/** Sous-menu ACCUEIL — 10 propositions distinctes */
 export const HomePagesNavPanel: React.FC<HomePagesNavPanelProps> = ({ onNavigate, compact = false }) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -72,6 +72,9 @@ export const HomePagesNavPanel: React.FC<HomePagesNavPanelProps> = ({ onNavigate
   const listClass = compact
     ? 'divide-y divide-white/8'
     : 'max-h-[min(70vh,520px)] overflow-y-auto divide-y divide-white/8';
+
+  const isActive = (entry: CuratedHomePageEntry) =>
+    pathname === entry.route || (entry.variantId != null && currentId === entry.variantId);
 
   return (
     <div
@@ -82,30 +85,14 @@ export const HomePagesNavPanel: React.FC<HomePagesNavPanelProps> = ({ onNavigate
     >
       <div className="border-b border-white/10 px-4 py-2.5">
         <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
-          {t('nav.home_pages.menu_title')}
+          {t('nav.accueil.menu_title')}
         </p>
-        <p className="mt-1 text-[9px] text-white/40">{t('nav.home_pages.menu_count')}</p>
+        <p className="mt-1 text-[9px] text-white/40">{t('nav.accueil.menu_subtitle')}</p>
       </div>
 
-      <div className="border-b border-white/10 px-4 py-2 bg-white/[0.03]">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em]" style={{ color: SIB2026.orange }}>
-          {t('nav.home_pages.section_classic')}
-        </p>
-      </div>
       <ul className={listClass}>
-        {HOME_PAGES_CLASSIC.map((entry) => (
-          <PageRow key={entry.id} entry={entry} active={currentId === entry.id} onNavigate={onNavigate} />
-        ))}
-      </ul>
-
-      <div className="border-b border-t border-white/10 px-4 py-2 bg-white/[0.03]">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em]" style={{ color: SIB2026.orange }}>
-          {t('nav.home_pages.section_new')}
-        </p>
-      </div>
-      <ul className={listClass}>
-        {HOME_PAGES_NEW.map((entry) => (
-          <PageRow key={entry.id} entry={entry} active={currentId === entry.id} onNavigate={onNavigate} />
+        {HOME_PAGES_CURATED.map((entry) => (
+          <PageRow key={entry.slug} entry={entry} active={isActive(entry)} onNavigate={onNavigate} />
         ))}
       </ul>
     </div>

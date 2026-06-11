@@ -60,14 +60,14 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = memo(({ activities, for
       {/* Header */}
       <div
         className="px-6 py-4 flex items-center justify-between"
-        style={{ background: 'rgba(201,168,76,0.05)', borderBottom: '1px solid rgba(30,58,95,0.08)' }}
+        style={{ background: 'rgba(243,146,0,0.05)', borderBottom: '1px solid rgba(30,58,95,0.08)' }}
       >
         <div className="flex items-center gap-3">
           <motion.div
             animate={{ rotate: [0, 360] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
           >
-            <Activity className="h-5 w-5" style={{ color: '#C9A84C' }} />
+            <Activity className="h-5 w-5" style={{ color: '#F39200' }} />
           </motion.div>
           <span className="text-[#1e3a5f] font-bold text-sm tracking-wide">Activité Récente</span>
         </div>
