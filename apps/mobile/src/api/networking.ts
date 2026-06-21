@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { sanitizeIlikeTerm } from '../lib/sanitizeIlike';
 
 export interface ConnectionRequest {
   id: string;
@@ -6,46 +7,85 @@ export interface ConnectionRequest {
   toUserId: string;
   status: string;
   fromName?: string;
+  toName?: string;
+  partnerName?: string;
   createdAt: string;
+}
+
+async function attachUserNames(
+  rows: Array<{
+    id: string;
+    requester_id: string;
+    addressee_id: string;
+    status: string;
+    created_at: string;
+  }>
+): Promise<ConnectionRequest[]> {
+  if (!rows.length) return [];
+
+  const ids = [...new Set(rows.flatMap((r) => [r.requester_id, r.addressee_id]))];
+  const { data: users, error: namesErr } = await supabase.rpc('get_networking_user_names', { p_ids: ids });
+  let names = new Map<string, string>(
+    (users ?? []).map((u: { id: string; name: string }) => [u.id, u.name])
+  );
+  if (namesErr) {
+    const fallback = await supabase.from('users').select('id, name').in('id', ids);
+    names = new Map((fallback.data ?? []).map((u) => [u.id, u.name as string]));
+  }
+
+  return rows.map((row) => ({
+    id: row.id,
+    fromUserId: row.requester_id,
+    toUserId: row.addressee_id,
+    status: row.status,
+    fromName: names.get(row.requester_id),
+    toName: names.get(row.addressee_id),
+    createdAt: row.created_at,
+  }));
 }
 
 export async function fetchConnections(userId: string): Promise<ConnectionRequest[]> {
   const { data, error } = await supabase
     .from('connections')
-    .select('id, from_user_id, to_user_id, status, created_at')
-    .or(`from_user_id.eq.${userId},to_user_id.eq.${userId}`)
-    .order('created_at', { ascending: false });
+    .select('id, requester_id, addressee_id, status, created_at')
+    .or(`requester_id.eq.${userId},addressee_id.eq.${userId}`)
+    .order('created_at', { ascending: false })
+    .limit(50);
 
   if (error) {
     if (error.code === '42P01') return [];
     throw error;
   }
 
-  return (data ?? []).map((row) => ({
-    id: row.id,
-    fromUserId: row.from_user_id,
-    toUserId: row.to_user_id,
-    status: row.status,
-    createdAt: row.created_at,
-  }));
+  return attachUserNames(data ?? []);
 }
 
 export async function searchUsers(query: string, excludeUserId: string) {
-  const { data, error } = await supabase
+  const term = sanitizeIlikeTerm(query);
+  if (term.length < 2) return [];
+
+  const { data, error } = await supabase.rpc('search_networking_users', {
+    p_query: term,
+    p_exclude: excludeUserId,
+  });
+
+  if (!error) return data ?? [];
+
+  const { data: fallback, error: fbErr } = await supabase
     .from('users')
     .select('id, name, email, type, visitor_level')
     .neq('id', excludeUserId)
-    .or(`name.ilike.%${query}%,email.ilike.%${query}%`)
+    .or(`name.ilike.%${term}%,email.ilike.%${term}%`)
     .limit(20);
 
-  if (error) throw error;
-  return data ?? [];
+  if (fbErr) throw fbErr;
+  return fallback ?? [];
 }
 
 export async function requestConnection(fromUserId: string, toUserId: string): Promise<void> {
   const { error } = await supabase.from('connections').insert({
-    from_user_id: fromUserId,
-    to_user_id: toUserId,
+    requester_id: fromUserId,
+    addressee_id: toUserId,
     status: 'pending',
   });
   if (error) throw error;
@@ -73,7 +113,7 @@ export async function fetchTodayUsage(userId: string): Promise<{
     supabase
       .from('connections')
       .select('id', { count: 'exact', head: true })
-      .eq('from_user_id', userId)
+      .eq('requester_id', userId)
       .gte('created_at', since),
     supabase
       .from('messages')

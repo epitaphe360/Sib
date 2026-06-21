@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   Pressable,
   RefreshControl,
@@ -8,17 +7,20 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View,
 } from 'react-native';
 import { HeroBanner } from '../../../src/components/HeroBanner';
 import { ExhibitorRow } from '../../../src/components/ExhibitorRow';
+import { AnimatedListItem } from '../../../src/components/AnimatedListItem';
 import { EmptyState, Screen } from '../../../src/components/ui';
+import { SkeletonList } from '../../../src/components/Skeleton';
 import { fetchExhibitors } from '../../../src/services/exhibitors';
 import type { Exhibitor } from '../../../src/types';
-import { colors, spacing } from '../../../src/theme';
+import { useI18n } from '../../../src/i18n/I18nProvider';
+import { colors, fonts, radius, spacing } from '../../../src/theme';
 import { router } from 'expo-router';
 
 export default function ExhibitorsScreen() {
+  const { t } = useI18n();
   const [exhibitors, setExhibitors] = useState<Exhibitor[]>([]);
   const [sectors, setSectors] = useState<string[]>([]);
   const [search, setSearch] = useState('');
@@ -50,10 +52,10 @@ export default function ExhibitorsScreen() {
 
   return (
     <Screen style={styles.flex}>
-      <HeroBanner imageKey="expo" title="Annuaire exposants" subtitle="Stand · Hall · Secteur" compact />
+      <HeroBanner imageKey="expo" title={t('tabs.exhibitors')} subtitle={t('explore.searchPlaceholder')} compact />
       <TextInput
         style={styles.search}
-        placeholder="Rechercher un exposant..."
+        placeholder={t('explore.searchPlaceholder')}
         placeholderTextColor={colors.textMuted}
         value={search}
         onChangeText={setSearch}
@@ -66,7 +68,7 @@ export default function ExhibitorsScreen() {
             style={[styles.chip, !sector && styles.chipActive]}
             onPress={() => setSector('')}
           >
-            <Text style={[styles.chipText, !sector && styles.chipTextActive]}>Tous</Text>
+            <Text style={[styles.chipText, !sector && styles.chipTextActive]}>{t('map.allHalls')}</Text>
           </Pressable>
           {sectors.slice(0, 12).map((s) => (
             <Pressable
@@ -81,22 +83,24 @@ export default function ExhibitorsScreen() {
           ))}
         </ScrollView>
       )}
-      {fromCache ? <Text style={styles.cacheHint}>Mode hors ligne — données en cache</Text> : null}
+      {fromCache ? <Text style={styles.cacheHint}>{t('common.offline')}</Text> : null}
       {loading ? (
-        <ActivityIndicator color={colors.primary} style={{ marginTop: spacing.xl }} />
+        <SkeletonList rows={5} />
       ) : error ? (
         <EmptyState message={error} />
       ) : (
         <FlatList
           data={exhibitors}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ExhibitorRow exhibitor={item} onPress={() => router.push(`/exhibitor/${item.id}`)} />
+          renderItem={({ item, index }) => (
+            <AnimatedListItem index={index}>
+              <ExhibitorRow exhibitor={item} onPress={() => router.push(`/exhibitor/${item.id}`)} />
+            </AnimatedListItem>
           )}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load(search, sector); }} tintColor={colors.primary} />
+            <RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load(search, sector); }} tintColor={colors.gold} />
           }
-          ListEmptyComponent={<EmptyState message="Aucun exposant trouvé" />}
+          ListEmptyComponent={<EmptyState message={t('explore.emptyExhibitorsMessage')} />}
           showsVerticalScrollIndicator={false}
         />
       )}
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 10,
+    borderRadius: radius.md,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 16,
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 12, color: colors.text, fontWeight: '600', maxWidth: 120 },
+  chipText: { fontSize: 12, fontFamily: fonts.bodySemiBold, color: colors.text, maxWidth: 120 },
   chipTextActive: { color: '#fff' },
   cacheHint: { fontSize: 12, color: colors.textMuted, marginBottom: spacing.sm, fontStyle: 'italic' },
 });

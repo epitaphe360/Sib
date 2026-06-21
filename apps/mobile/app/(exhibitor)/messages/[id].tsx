@@ -4,14 +4,17 @@ import { Alert, FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, View
 import { fetchConversations, sendMessage } from '../../../src/api/chat';
 import { Input, PrimaryButton, Screen } from '../../../src/components/ui';
 import { useAuth } from '../../../src/context/AuthContext';
+import { useI18n } from '../../../src/i18n/I18nProvider';
 import { colors, spacing } from '../../../src/theme';
 
 export default function ExhibitorChatScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user } = useAuth();
+  const { t } = useI18n();
   const [messages, setMessages] = useState<Array<{ id: string; senderId: string; content: string }>>([]);
   const [text, setText] = useState('');
   const [otherId, setOtherId] = useState('');
+  const [sending, setSending] = useState(false);
 
   const load = useCallback(async () => {
     if (!user || !id) return;
@@ -26,13 +29,20 @@ export default function ExhibitorChatScreen() {
   useEffect(() => { load(); }, [load]);
 
   const onSend = async () => {
-    if (!user || !id || !text.trim() || !otherId) return;
+    if (!user || !id || !otherId) return;
+    if (!text.trim()) {
+      Alert.alert(t('messages.title'), t('messages.emptyDraft'));
+      return;
+    }
+    setSending(true);
     try {
       await sendMessage(id, user.id, otherId, text.trim());
       setText('');
       await load();
     } catch (e) {
-      Alert.alert('Erreur', e instanceof Error ? e.message : 'Envoi impossible');
+      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('messages.sendError'));
+    } finally {
+      setSending(false);
     }
   };
 
@@ -50,8 +60,8 @@ export default function ExhibitorChatScreen() {
           )}
         />
         <View style={styles.composer}>
-          <Input label="" value={text} onChangeText={setText} placeholder="Message..." />
-          <PrimaryButton label="Envoyer" onPress={onSend} />
+          <Input label="" value={text} onChangeText={setText} placeholder={t('messages.placeholder')} />
+          <PrimaryButton label={t('messages.send')} onPress={onSend} loading={sending} />
         </View>
       </KeyboardAvoidingView>
     </Screen>

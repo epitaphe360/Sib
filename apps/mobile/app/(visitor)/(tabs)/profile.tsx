@@ -1,13 +1,28 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Card, PrimaryButton, Screen, ScreenTitle } from '../../../src/components/ui';
+import {
+  Avatar,
+  Card,
+  IllustratedEmpty,
+  MenuRow,
+  PrimaryButton,
+  Screen,
+  StatusBadge,
+} from '../../../src/components/ui';
 import { useAuth } from '../../../src/context/AuthContext';
+import { useSignOut } from '../../../src/hooks/useSignOut';
+import { useNetworkingPermissions } from '../../../src/hooks/useNetworkingPermissions';
+import { useI18n } from '../../../src/i18n/I18nProvider';
+import { ensureUserBadge } from '../../../src/services/badge';
 import { getLatestPaymentRequest } from '../../../src/services/payment';
-import { colors, spacing } from '../../../src/theme';
+import { colors, fonts, radius, spacing } from '../../../src/theme';
 
 export default function ProfileScreen() {
-  const { user, isLoading, isConfigured, signOut } = useAuth();
+  const { user, isLoading, isConfigured } = useAuth();
+  const { confirmSignOut } = useSignOut();
+  const { permissions } = useNetworkingPermissions();
+  const { t } = useI18n();
   const [paymentRequestId, setPaymentRequestId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -18,18 +33,16 @@ export default function ProfileScreen() {
     }
   }, [user?.id, user?.status]);
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (e) {
-      Alert.alert('Erreur', e instanceof Error ? e.message : 'Déconnexion impossible');
+  useEffect(() => {
+    if (user?.type === 'visitor') {
+      ensureUserBadge(user.id).catch(() => undefined);
     }
-  };
+  }, [user?.id, user?.type]);
 
   if (isLoading) {
     return (
       <Screen>
-        <ScreenTitle title="Profil" subtitle="Chargement..." />
+        <Text style={styles.loading}>{t('common.loading')}</Text>
       </Screen>
     );
   }
@@ -37,101 +50,122 @@ export default function ProfileScreen() {
   if (!user) {
     return (
       <Screen>
-        <ScreenTitle
-          title="Profil"
-          subtitle="Connectez-vous pour accéder à votre espace visiteur"
+        <IllustratedEmpty
+          icon="person-outline"
+          title={t('profile.title')}
+          message={t('profile.guestHint')}
+          actionLabel={t('login.submit')}
+          onAction={() => router.push('/(auth)/login')}
         />
+        <PrimaryButton label={t('auth.register.freeTitle')} onPress={() => router.push('/(auth)/register')} />
+        <View style={styles.gap} />
+        <PrimaryButton label={t('vip.upgrade')} onPress={() => router.push('/(auth)/register-vip')} variant="gold" />
         {!isConfigured && (
-          <Text style={styles.warn}>
-            Configurez EXPO_PUBLIC_SUPABASE_URL et EXPO_PUBLIC_SUPABASE_ANON_KEY dans .env
-          </Text>
+          <Text style={styles.warn}>{t('profile.envWarn')}</Text>
         )}
-        <PrimaryButton label="Se connecter" onPress={() => router.push('/(auth)/login')} />
-        <View style={styles.gap} />
-        <PrimaryButton label="Créer un compte gratuit" onPress={() => router.push('/(auth)/register')} />
-        <View style={styles.gap} />
-        <PrimaryButton label="Pass Premium VIP" onPress={() => router.push('/(auth)/register-vip')} />
       </Screen>
     );
   }
 
+  const isVip = user.visitorLevel === 'vip' || user.visitorLevel === 'premium';
+  const isFreeVisitor = user.type === 'visitor' && !isVip;
+
   return (
     <Screen style={styles.flex}>
-      <ScrollView>
-        <ScreenTitle title="Mon profil" subtitle={user.email} />
-        <Card>
-          <Row label="Nom" value={user.name} />
-          <Row label="Type" value={user.type} />
-          <Row label="Pass" value={user.visitorLevel ?? '—'} />
-          <Row label="Statut" value={user.status ?? 'active'} />
-        </Card>
-        {user.status === 'pending_payment' && (
-          <>
-            <Text style={styles.pendingHint}>
-              Votre Pass VIP est en attente de validation du virement bancaire.
-            </Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+          <Avatar name={user.name} size={72} />
+          <Text style={styles.name}>{user.name}</Text>
+          <Text style={styles.email}>{user.email}</Text>
+          <View style={styles.badges}>
+            <StatusBadge status={user.status === 'pending_payment' ? 'pending' : 'confirmed'} />
+            {isFreeVisitor && (
+              <View style={styles.freePill}>
+                <Text style={styles.freeText}>{t('profile.visitorFree')}</Text>
+              </View>
+            )}
+            {isVip && (
+              <View style={styles.vipPill}>
+                <Text style={styles.vipText}>{t('home.status.vip')}</Text>
+              </View>
+            )}
+          </View>
+        </View>
+
+        {isFreeVisitor && (
+          <Card elevated style={styles.badgeCard}>
+            <Text style={styles.badgeCardTitle}>{t('profile.freeBadgeCard')}</Text>
+            <Text style={styles.badgeCardHint}>{t('badge.subtitle')}</Text>
             <PrimaryButton
-              label="Instructions de paiement"
+              label={t('profile.freeBadgeCta')}
+              onPress={() => router.push('/(visitor)/(tabs)/badge')}
+            />
+          </Card>
+        )}
+
+        {user.status === 'pending_payment' && (
+          <Card elevated>
+            <Text style={styles.pendingHint}>{t('profile.pendingPayment')}</Text>
+            <PrimaryButton
+              label={t('payment.title')}
+              variant="gold"
               onPress={() => {
-                if (paymentRequestId) {
-                  router.push(`/payment/${paymentRequestId}`);
-                } else {
-                  Alert.alert('Paiement', 'Demande de paiement introuvable. Contactez le support.');
-                }
+                if (paymentRequestId) router.push(`/payment/${paymentRequestId}`);
+                else Alert.alert(t('payment.title'), t('profile.paymentMissing'));
               }}
             />
-            <View style={styles.gap} />
+          </Card>
+        )}
+
+        <Text style={styles.section}>{t('profile.sectionActivity')}</Text>
+        <MenuRow icon="time-outline" label={t('tabs.appointments')} onPress={() => router.push('/(visitor)/appointments' as never)} />
+        {permissions.canAccessNetworking && (
+          <>
+            <MenuRow icon="chatbubbles-outline" label={t('tabs.messages')} onPress={() => router.push('/(visitor)/messages' as never)} />
+            <MenuRow icon="people-outline" label={t('tabs.networking')} onPress={() => router.push('/(visitor)/networking' as never)} />
+            <MenuRow icon="flash-outline" label={t('speed.title')} onPress={() => router.push('/(visitor)/speed-networking' as never)} />
           </>
         )}
-        <PrimaryButton label="Pass Premium VIP" onPress={() => router.push('/(auth)/register-vip')} />
-        <View style={styles.gap} />
-        <PrimaryButton label="Mes rendez-vous" onPress={() => router.push('/(visitor)/appointments')} />
-        <View style={styles.gap} />
-        <PrimaryButton label="Messages" onPress={() => router.push('/(visitor)/messages')} />
-        <View style={styles.gap} />
-        <PrimaryButton label="Réseautage" onPress={() => router.push('/(visitor)/networking')} />
-        <View style={styles.gap} />
-        <PrimaryButton label="Paramètres" onPress={() => router.push('/(visitor)/settings')} />
-        <View style={styles.gap} />
-        <PrimaryButton label="Mon badge QR" onPress={() => router.push('/(visitor)/(tabs)/badge')} />
-        <View style={styles.gap} />
-        <PrimaryButton label="Se déconnecter" onPress={handleSignOut} />
+        <MenuRow icon="qr-code-outline" label={t('badge.title')} onPress={() => router.push('/(visitor)/(tabs)/badge')} accent={colors.primary} />
+        <MenuRow icon="document-text-outline" label={t('visa.title')} onPress={() => router.push('/(visitor)/visa-letter' as never)} />
+        <MenuRow icon="receipt-outline" label={t('invoices.title')} onPress={() => router.push('/(visitor)/invoices' as never)} />
+        <MenuRow icon="play-circle-outline" label={t('media.title')} onPress={() => router.push('/(visitor)/media' as never)} />
+
+        <Text style={styles.section}>{t('profile.sectionAccount')}</Text>
+        {!isVip && (
+          <MenuRow icon="star-outline" label={t('vip.upgrade')} onPress={() => router.push('/(auth)/register-vip')} accent={colors.gold} />
+        )}
+        <MenuRow icon="settings-outline" label={t('settings.title')} onPress={() => router.push('/(visitor)/settings')} />
+        <MenuRow icon="log-out-outline" label={t('profile.signOut')} onPress={confirmSignOut} accent={colors.danger} />
       </ScrollView>
     </Screen>
-  );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={styles.row}>
-      <Text style={styles.rowLabel}>{label}</Text>
-      <Text style={styles.rowValue}>{value}</Text>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   gap: { height: spacing.sm },
-  warn: {
-    color: colors.danger,
+  loading: { fontFamily: fonts.body, color: colors.textMuted, textAlign: 'center', marginTop: spacing.xl },
+  header: { alignItems: 'center', marginBottom: spacing.lg, paddingTop: spacing.md },
+  name: { fontSize: 22, fontFamily: fonts.display, color: colors.text, marginTop: spacing.md },
+  email: { fontSize: 14, fontFamily: fonts.body, color: colors.textMuted, marginTop: 4 },
+  badges: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.sm },
+  freePill: { backgroundColor: colors.primary, paddingHorizontal: 12, paddingVertical: 4, borderRadius: radius.full },
+  freeText: { fontFamily: fonts.bodyBold, fontSize: 12, color: '#fff' },
+  vipPill: { backgroundColor: colors.gold, paddingHorizontal: 12, paddingVertical: 4, borderRadius: radius.full },
+  vipText: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.primaryDark },
+  badgeCard: { marginBottom: spacing.md },
+  badgeCardTitle: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.text, marginBottom: spacing.xs },
+  badgeCardHint: { fontFamily: fonts.body, fontSize: 14, color: colors.textMuted, marginBottom: spacing.md, lineHeight: 20 },
+  section: {
     fontSize: 13,
-    marginBottom: spacing.md,
-    lineHeight: 20,
+    fontFamily: fonts.bodyBold,
+    color: colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: spacing.sm,
+    marginTop: spacing.md,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  rowLabel: { color: colors.textMuted, fontSize: 14 },
-  rowValue: { color: colors.text, fontSize: 14, fontWeight: '600', textTransform: 'capitalize' },
-  pendingHint: {
-    color: colors.vip,
-    fontSize: 13,
-    marginBottom: spacing.md,
-    lineHeight: 20,
-  },
+  pendingHint: { fontFamily: fonts.body, color: colors.warning, fontSize: 14, marginBottom: spacing.md, lineHeight: 20 },
+  warn: { color: colors.danger, fontSize: 13, marginTop: spacing.md, textAlign: 'center' },
 });

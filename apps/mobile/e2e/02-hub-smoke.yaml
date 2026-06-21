@@ -1,0 +1,10 @@
+# Smoke: onboarding ou hub visiteur
+appId: com.urbacom.urbaevent
+---
+- launchApp
+- runFlow:
+    when:
+      visible: "Passer|Skip|تخطي"
+    commands:
+      - tapOn: "Passer|Skip|تخطي"
+- assertVisible: "UrbaEvent|Salon|Accueil|Home"

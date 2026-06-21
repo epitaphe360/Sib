@@ -32,10 +32,13 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   }
 });
 
+// Les mots de passe sont lus depuis les variables d'environnement.
+// Définissez DEMO_VISITOR_PW, DEMO_EXHIBITOR_PW, DEMO_PARTNER_PW, DEMO_ADMIN_PW
+// dans votre .env racine avant d'exécuter ce script.
 const TEST_USERS = [
   {
     email: 'visiteur@sib.com',
-    password: 'Visit123!',
+    password: process.env.DEMO_VISITOR_PW ?? 'Visit123!',
     type: 'visitor',
     name: 'Jean Visiteur',
     profile: {
@@ -48,7 +51,7 @@ const TEST_USERS = [
   },
   {
     email: 'exposant@sib.com',
-    password: 'Expo123!',
+    password: process.env.DEMO_EXHIBITOR_PW ?? 'Expo123!',
     type: 'exhibitor',
     name: 'Marie Exposant',
     profile: {
@@ -61,7 +64,7 @@ const TEST_USERS = [
   },
   {
     email: 'partenaire@sib.com',
-    password: 'Partner123!',
+    password: process.env.DEMO_PARTNER_PW ?? 'Partner123!',
     type: 'partner',
     name: 'Pierre Partenaire',
     profile: {
@@ -74,7 +77,7 @@ const TEST_USERS = [
   },
   {
     email: 'admin.sib@sib.com',
-    password: 'Admin123!',
+    password: process.env.DEMO_ADMIN_PW ?? 'Admin123!',
     type: 'admin',
     name: 'Admin SIB',
     profile: {
@@ -83,6 +86,32 @@ const TEST_USERS = [
       company: 'SIB',
       position: 'Administrateur',
       country: 'France'
+    }
+  },
+  {
+    email: 'securite@sib.com',
+    password: process.env.DEMO_SECURITY_PW ?? 'Secu123!',
+    type: 'security',
+    name: 'Agent Sécurité',
+    profile: {
+      firstName: 'Agent',
+      lastName: 'Sécurité',
+      company: 'SIB 2026',
+      position: 'Responsable Accès',
+      country: 'Maroc'
+    }
+  },
+  {
+    email: 'service-clientele@sib.com',
+    password: process.env.DEMO_SERVICE_CLIENT_PW ?? 'Service2026!',
+    type: 'service_client',
+    name: 'Service Clientèle',
+    profile: {
+      firstName: 'Service',
+      lastName: 'Clientèle',
+      company: 'SIB 2026',
+      position: 'Agent Service Clientèle',
+      country: 'Maroc'
     }
   }
 ];
@@ -111,7 +140,16 @@ async function createUser(userData) {
         const existingUser = existingUsers?.users.find(u => u.email === userData.email);
 
         if (existingUser) {
-          // Mettre à jour le profil
+          const { error: pwdError } = await supabase.auth.admin.updateUserById(existingUser.id, {
+            password: userData.password,
+            email_confirm: true,
+          });
+          if (pwdError) {
+            console.error(`❌ Erreur mise à jour mot de passe:`, pwdError.message);
+          } else {
+            console.log(`✅ Mot de passe mis à jour pour ${userData.email}`);
+          }
+
           const { error: updateError } = await supabase
             .from('users')
             .upsert({

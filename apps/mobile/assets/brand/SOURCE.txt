@@ -1,0 +1,4 @@
+UrbaEvent logo master
+Source: fallback-svg
+Package ref: com.urbavent (Play Store)
+Generated: 2026-06-18T13:27:41.264Z

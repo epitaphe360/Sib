@@ -18,7 +18,7 @@ const SMTP_CONFIG = {
   hostname: Deno.env.get('SMTP_HOST') || 'mail.sib2026.ma',
   port: parseInt(Deno.env.get('SMTP_PORT') || '587'),
   username: Deno.env.get('SMTP_USERNAME') || 'contact@sib2026.ma',
-  password: Deno.env.get('SMTP_PASSWORD') || 'S!P0RT@9083',
+  password: Deno.env.get('SMTP_PASSWORD') ?? '',
 };
 
 const DEFAULT_SENDER_EMAIL = 'contact@sib2026.ma';

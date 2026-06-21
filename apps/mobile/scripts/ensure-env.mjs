@@ -1,11 +1,10 @@
 /**
- * Complète apps/mobile/.env (Supabase + JWT pour badge QR).
+ * Complète apps/mobile/.env (Supabase — sans JWT côté client).
  * Usage: node scripts/ensure-env.mjs
  */
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { randomBytes } from 'crypto';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const mobileDir = join(__dir, '..');
@@ -29,16 +28,10 @@ const current = parseEnv(mobileEnv);
 
 const url = current.EXPO_PUBLIC_SUPABASE_URL ?? root.VITE_SUPABASE_URL;
 const anon = current.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? root.VITE_SUPABASE_ANON_KEY;
-let jwt =
-  current.EXPO_PUBLIC_JWT_SECRET ??
-  current.EXPO_PUBLIC_VITE_JWT_SECRET ??
-  root.VITE_JWT_SECRET ??
-  root.JWT_SECRET;
-
-if (!jwt || jwt.length < 32 || jwt.includes('your_') || jwt.includes('SAME_AS')) {
-  jwt = 'sib-2026-secure-secret-key-change-in-production';
-  console.warn('⚠ JWT: valeur par défaut edge Supabase — définir JWT_SECRET identique dans Supabase + .env');
-}
+const siteUrl = current.EXPO_PUBLIC_SITE_URL ?? root.VITE_SITE_URL ?? 'https://www.urbaevent.com';
+const paymentEnabled = current.EXPO_PUBLIC_PAYMENT_ENABLED ?? 'true';
+const quickLogin = current.EXPO_PUBLIC_ENABLE_QUICK_LOGIN ?? 'false';
+const easProjectId = current.EXPO_PUBLIC_EAS_PROJECT_ID ?? '';
 
 if (!url || !anon) {
   console.error('❌ URL/anon manquants. Renseignez apps/mobile/.env ou racine .env');
@@ -47,11 +40,15 @@ if (!url || !anon) {
 
 const lines = [
   '# Généré par scripts/ensure-env.mjs — ne pas committer',
+  '# JWT badge : Edge Function issue-badge-token uniquement (pas de secret client)',
   `EXPO_PUBLIC_SUPABASE_URL=${url}`,
   `EXPO_PUBLIC_SUPABASE_ANON_KEY=${anon}`,
-  `EXPO_PUBLIC_JWT_SECRET=${jwt}`,
+  `EXPO_PUBLIC_SITE_URL=${siteUrl}`,
+  `EXPO_PUBLIC_PAYMENT_ENABLED=${paymentEnabled}`,
+  `EXPO_PUBLIC_ENABLE_QUICK_LOGIN=${quickLogin}`,
+  ...(easProjectId ? [`EXPO_PUBLIC_EAS_PROJECT_ID=${easProjectId}`] : []),
   '',
 ];
 
 writeFileSync(mobileEnv, lines.join('\n'), 'utf8');
-console.log('✓ .env mobile mis à jour (URL, anon, JWT)');
+console.log('✓ .env mobile mis à jour (sans JWT client)');

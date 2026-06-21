@@ -8,7 +8,6 @@ Projet lié : **SIB** (`sbyizudifmqakzxjlndr`)
 - [x] Auth redirect `urbaevent://auth-callback` (lien magique — aligné web `signInWithOtp`)
 - [x] Table `exhibitor_leads` + RLS (migration `20260602000001`)
 - [x] Realtime : `appointments`, `messages`, `payment_requests`, `registration_requests`
-- [x] Mobile : `pending_partner_media` (partenaire)
 - [x] `eas.json` + `.env.example` : `EXPO_PUBLIC_JWT_SECRET`
 
 ## Migrations locales encore à pousser

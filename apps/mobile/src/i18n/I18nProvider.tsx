@@ -1,45 +1,92 @@
-import fr from './locales/fr.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { BootScreen } from '../components/BootScreen';
 import ar from './locales/ar.json';
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { I18nManager } from 'react-native';
+import en from './locales/en.json';
+import fr from './locales/fr.json';
 
-type Locale = 'fr' | 'ar';
+const LOCALE_STORAGE_KEY = 'sib_locale';
+const LOCALE_BOOT_TIMEOUT_MS = 1500;
+
+type Locale = 'fr' | 'ar' | 'en';
 type Dict = Record<string, string>;
 
-const dictionaries: Record<Locale, Dict> = { fr, ar };
+const dictionaries: Record<Locale, Dict> = { fr, ar, en };
+
+function isLocale(value: string | null): value is Locale {
+  return value === 'fr' || value === 'ar' || value === 'en';
+}
 
 interface I18nContextValue {
   locale: Locale;
   setLocale: (l: Locale) => void;
   t: (key: string) => string;
   isRTL: boolean;
+  ready: boolean;
 }
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
+function RtlRoot({ isRTL, children }: { isRTL: boolean; children: React.ReactNode }) {
+  return (
+    <View style={[styles.root, isRTL ? styles.rtl : styles.ltr]}>
+      {children}
+    </View>
+  );
+}
+
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('fr');
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      if (!cancelled) setReady(true);
+    }, LOCALE_BOOT_TIMEOUT_MS);
+
+    AsyncStorage.getItem(LOCALE_STORAGE_KEY)
+      .then((stored) => {
+        if (!cancelled && isLocale(stored)) setLocaleState(stored);
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (!cancelled) setReady(true);
+      });
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, []);
 
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);
-    const rtl = l === 'ar';
-    if (I18nManager.isRTL !== rtl) {
-      I18nManager.allowRTL(rtl);
-      I18nManager.forceRTL(rtl);
-    }
+    AsyncStorage.setItem(LOCALE_STORAGE_KEY, l).catch(() => undefined);
   }, []);
 
   const t = useCallback(
-    (key: string) => dictionaries[locale][key] ?? dictionaries.fr[key] ?? key,
+    (key: string) => dictionaries[locale][key] ?? dictionaries.fr[key] ?? dictionaries.en[key] ?? key,
     [locale]
   );
 
+  const isRTL = locale === 'ar';
+
   const value = useMemo(
-    () => ({ locale, setLocale, t, isRTL: locale === 'ar' }),
-    [locale, setLocale, t]
+    () => ({ locale, setLocale, t, isRTL, ready }),
+    [locale, setLocale, t, isRTL, ready]
   );
 
-  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+  if (!ready) {
+    return <BootScreen />;
+  }
+
+  return (
+    <I18nContext.Provider value={value}>
+      <RtlRoot isRTL={isRTL}>{children}</RtlRoot>
+    </I18nContext.Provider>
+  );
 }
 
 export function useI18n() {
@@ -47,3 +94,9 @@ export function useI18n() {
   if (!ctx) throw new Error('useI18n requires I18nProvider');
   return ctx;
 }
+
+const styles = StyleSheet.create({
+  root: { flex: 1 },
+  ltr: { direction: 'ltr' },
+  rtl: { direction: 'rtl' },
+});

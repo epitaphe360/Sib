@@ -1,21 +1,27 @@
 import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { fetchAdminLiveMetrics } from '../../../src/api/analytics';
 import { Card, PrimaryButton, Screen, ScreenTitle } from '../../../src/components/ui';
 import { useAuth } from '../../../src/context/AuthContext';
+import { useI18n } from '../../../src/i18n/I18nProvider';
 import { colors, spacing } from '../../../src/theme';
 
 export default function StaffLiveScreen() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const [metrics, setMetrics] = useState({ totalUsers: 0, pendingPayments: 0, pendingValidations: 0 });
   const [refreshing, setRefreshing] = useState(false);
 
   const load = useCallback(async () => {
     if (user?.type === 'admin') {
-      setMetrics(await fetchAdminLiveMetrics());
+      try {
+        setMetrics(await fetchAdminLiveMetrics());
+      } catch (e) {
+        Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
+      }
     }
-  }, [user]);
+  }, [user, t]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -25,30 +31,38 @@ export default function StaffLiveScreen() {
     <Screen style={styles.flex}>
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={async () => { setRefreshing(true); await load(); setRefreshing(false); }} />}>
         <ScreenTitle
-          title={isSecurity ? 'Contrôle accès' : 'Suivi organisateur'}
-          subtitle={isSecurity ? 'Validation badges en entrée' : 'Métriques salon en direct'}
+          title={isSecurity ? t('staff.securityTitle') : t('staff.orgTitle')}
+          subtitle={isSecurity ? t('staff.securitySubtitle') : t('staff.orgSubtitle')}
         />
         {isSecurity ? (
           <>
-            <Text style={styles.text}>Utilisez le scanner pour valider les badges à l'entrée.</Text>
-            <PrimaryButton label="Ouvrir le scanner" onPress={() => router.push('/(staff)/scanner')} />
+            <Text style={styles.text}>{t('staff.securityHint')}</Text>
+            <PrimaryButton label={t('staff.openScanner')} onPress={() => router.push('/(staff)/(tabs)/scanner' as never)} />
+            <View style={styles.gap} />
+            <PrimaryButton label={t('staff.printStation')} onPress={() => router.push('/(staff)/print-station' as never)} />
+            <View style={styles.gap} />
+            <PrimaryButton label={t('staff.zoneCapacity')} onPress={() => router.push('/(staff)/zone-capacity' as never)} variant="outline" />
           </>
         ) : (
           <>
             <View style={styles.statsRow}>
-              <Stat label="Utilisateurs" value={String(metrics.totalUsers)} />
-              <Stat label="Paiements" value={String(metrics.pendingPayments)} />
+              <Stat label={t('staff.users')} value={String(metrics.totalUsers)} />
+              <Stat label={t('staff.payments')} value={String(metrics.pendingPayments)} />
             </View>
             <Card>
-              <Text style={styles.text}>Validez les paiements VIP et surveillez les inscriptions en attente.</Text>
+              <Text style={styles.text}>{t('staff.orgHint')}</Text>
             </Card>
-            <PrimaryButton label="Validation paiements" onPress={() => router.push('/(staff)/payments')} />
+            <PrimaryButton label={t('staff.validatePayments')} onPress={() => router.push('/(staff)/payments')} />
             <View style={styles.gap} />
-            <PrimaryButton label="Tarif Pass VIP" onPress={() => router.push('/(staff)/pricing')} />
+            <PrimaryButton label={t('staff.printStation')} onPress={() => router.push('/(staff)/print-station' as never)} />
             <View style={styles.gap} />
-            <PrimaryButton label="Alertes inscriptions" onPress={() => router.push('/(staff)/alerts')} />
+            <PrimaryButton label={t('staff.zoneCapacity')} onPress={() => router.push('/(staff)/zone-capacity' as never)} />
             <View style={styles.gap} />
-            <PrimaryButton label="Gestion utilisateurs" onPress={() => router.push('/(staff)/users')} />
+            <PrimaryButton label={t('staff.pricing')} onPress={() => router.push('/(staff)/pricing')} />
+            <View style={styles.gap} />
+            <PrimaryButton label={t('staff.alertsBtn')} onPress={() => router.push('/(staff)/alerts')} />
+            <View style={styles.gap} />
+            <PrimaryButton label={t('staff.usersBtn')} onPress={() => router.push('/(staff)/users')} />
           </>
         )}
       </ScrollView>

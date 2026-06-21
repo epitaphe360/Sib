@@ -13,6 +13,7 @@ import { Card, Input, PrimaryButton, Screen, ScreenTitle } from '../../src/compo
 import { useAuth } from '../../src/context/AuthContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
 import { VIP_PASS } from '../../src/data/bankTransfer';
+import { SALON_INFO } from '../../src/data/salons';
 import { fetchVipPassPricing } from '../../src/services/visitorLevel';
 import { colors, spacing } from '../../src/theme';
 
@@ -81,8 +82,8 @@ export default function RegisterVipScreen() {
             title="Pass Premium VIP"
             subtitle={
               vipPrice != null
-                ? `Accès complet SIB 2026 — ${vipPrice} ${VIP_PASS.currency}`
-                : 'Accès complet SIB 2026'
+                ? `Accès complet ${SALON_INFO.name} — ${vipPrice} ${VIP_PASS.currency}`
+                : `Accès complet ${SALON_INFO.name}`
             }
           />
           <Card>
@@ -105,7 +106,7 @@ export default function RegisterVipScreen() {
           <Input label="Fonction" value={position} onChangeText={setPosition} />
           <Input label="Pays (code)" value={country} onChangeText={setCountry} autoCapitalize="characters" />
           <Input label="Secteur *" value={sector} onChangeText={setSector} />
-          <PrimaryButton label="Demander le Pass VIP" onPress={handleRegister} loading={loading} />
+          <PrimaryButton label={t('vip.submit')} onPress={handleRegister} loading={loading} />
         </ScrollView>
       </KeyboardAvoidingView>
     </Screen>

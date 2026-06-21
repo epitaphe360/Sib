@@ -11,7 +11,7 @@ interface BadgeRequest {
   userId: string
   email: string
   name: string
-  level: 'free' | 'vip'
+  level: 'free' | 'vip' | 'premium'
   includePhoto?: boolean
   photoUrl?: string
 }
@@ -19,10 +19,12 @@ interface BadgeRequest {
 /**
  * Génère un JWT simple (sans bibliothèque externe)
  * Format: header.payload.signature
+ * Ne modifie pas exp/iat si déjà définis dans le payload.
  */
 async function generateJWT(payload: any, secret: string): Promise<string> {
-  payload.iat = Math.floor(Date.now() / 1000);
-  payload.exp = Math.floor(Date.now() / 1000) + (30 * 60); // 30 minutes
+  const now = Math.floor(Date.now() / 1000);
+  if (!payload.iat) payload.iat = now;
+  if (!payload.exp) payload.exp = now + (30 * 60); // 30 minutes par défaut
   const encoder = new TextEncoder()
 
   // Header
@@ -128,10 +130,39 @@ serve(async (req) => {
   }
 
   try {
+    // ── Auth: vérifier le JWT du caller ──────────────────────────────────────
+    const authHeader = req.headers.get('Authorization') ?? '';
+    if (!authHeader.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Authorization required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+    const callerToken = authHeader.replace('Bearer ', '');
+
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
+
+    // Vérifier l'identité du caller
+    const { data: { user: callerUser }, error: authError } = await supabaseClient.auth.getUser(callerToken);
+    if (authError || !callerUser) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid or expired token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Vérifier le rôle du caller dans la table users
+    const { data: callerProfile } = await supabaseClient
+      .from('users')
+      .select('type')
+      .eq('id', callerUser.id)
+      .single();
+
+    const callerType = callerProfile?.type ?? '';
+    const isPrivileged = ['admin', 'service_client', 'security'].includes(callerType);
 
     const { userId, email, name, level, includePhoto = false, photoUrl = '' }: BadgeRequest = await req.json()
 
@@ -140,6 +171,14 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Vérifier que le caller génère son propre badge OU qu'il est admin/service_client
+    if (callerUser.id !== userId && !isPrivileged) {
+      return new Response(
+        JSON.stringify({ error: 'Forbidden: cannot generate badge for another user' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
@@ -157,7 +196,17 @@ serve(async (req) => {
       )
     }
 
-    // Générer JWT payload
+    // Le secret JWT DOIT être défini dans les secrets Supabase Edge Functions
+    // ET correspondre à EXPO_PUBLIC_JWT_SECRET dans l'app mobile
+    const jwtSecret = Deno.env.get('JWT_SECRET')
+    if (!jwtSecret) {
+      throw new Error('JWT_SECRET manquant — configurez ce secret dans le dashboard Supabase : Settings > Edge Functions > Secrets')
+    }
+
+    // 'premium' et 'vip' sont équivalents pour les zones d'accès
+    const isUpgraded = level !== 'free'
+
+    // Générer JWT payload — exp 1 an (badge statique digital_badges, pas le QR rotatif 60s)
     const now = Math.floor(Date.now() / 1000)
     const jwtPayload = {
       sub: userId,
@@ -167,14 +216,12 @@ serve(async (req) => {
       level: level,
       nonce: generateNonce(),
       iat: now,
-      exp: now + (365 * 24 * 60 * 60), // 1 an
-      zones: level === 'free'
-        ? ['public', 'exhibition_hall']
-        : ['public', 'exhibition_hall', 'vip_lounge', 'networking_area']
+      exp: now + (365 * 24 * 60 * 60), // 1 an — non écrasé par generateJWT si déjà défini
+      zones: isUpgraded
+        ? ['public', 'exhibition_hall', 'vip_lounge', 'networking_area']
+        : ['public', 'exhibition_hall'],
     }
 
-    // Générer JWT
-    const jwtSecret = Deno.env.get('JWT_SECRET') || 'sib-2026-secure-secret-key-change-in-production'
     const token = await generateJWT(jwtPayload, jwtSecret)
 
     // Créer QR code data (le QR sera généré côté client)
@@ -189,7 +236,7 @@ serve(async (req) => {
     const qrContent = JSON.stringify(qrData)
 
     // Déterminer le type de badge
-    const badgeType = level === 'free' ? 'visitor_free' : 'visitor_premium'
+    const badgeType = isUpgraded ? 'visitor_premium' : 'visitor_free'
 
     // Vérifier si un badge existe déjà
     const { data: existingBadge } = await supabaseClient

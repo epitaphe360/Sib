@@ -1,0 +1,5 @@
+# Smoke: badge screen (salon actif requis)
+appId: com.urbacom.urbaevent
+---
+- launchApp
+- assertVisible: "Connexion|Sign in"

@@ -1,5 +1,6 @@
 import type { User } from '@supabase/supabase-js';
-import { AUTH_CALLBACK_URL } from '../lib/authLink';
+import { getAuthCallbackUrl } from '../lib/authLink';
+import { supabaseErrorMessage } from '../lib/supabaseError';
 import {
   clearPendingSignup,
   loadPendingSignup,
@@ -21,7 +22,7 @@ async function tryGenerateBadge(userId: string, email: string, name: string, lev
   }
 }
 
-async function createUsersRowFromPending(userId: string, pending: PendingSignup) {
+async function createUsersRowFromPending(userId: string, pending: Omit<PendingSignup, 'createdAt'>) {
   const fullName = `${pending.firstName} ${pending.lastName}`.trim();
   const email = pending.email.toLowerCase().trim();
   const isVip = pending.intent === 'vip';
@@ -94,6 +95,7 @@ export async function finalizeProfileAfterMagicLink(
 
   const pending = await loadPendingSignup();
   const email = (authUser.email ?? pending?.email ?? '').toLowerCase().trim();
+  const meta = (authUser.user_metadata ?? {}) as Record<string, unknown>;
 
   if (pending && pending.email.toLowerCase() === email) {
     const extra = await createUsersRowFromPending(authUser.id, pending);
@@ -103,27 +105,69 @@ export async function finalizeProfileAfterMagicLink(
     return { appUser, paymentRequestId: extra.paymentRequestId };
   }
 
+  // Inscription ouverte sur un autre appareil : reconstituer depuis les métadonnées auth
+  if (email && (meta.signup_intent || meta.type === 'visitor')) {
+    const fullName = String(meta.name ?? meta.full_name ?? '').trim();
+    const parts = fullName.split(/\s+/).filter(Boolean);
+    const recovered = {
+      intent: (meta.signup_intent === 'vip' ? 'vip' : 'free') as 'free' | 'vip',
+      email,
+      firstName: String(meta.firstName ?? parts[0] ?? 'Visiteur'),
+      lastName: String(meta.lastName ?? parts.slice(1).join(' ') ?? ''),
+      country: String(meta.country ?? 'MA'),
+      sector: String(meta.businessSector ?? meta.sector ?? 'Autre'),
+      phone: meta.phone ? String(meta.phone) : undefined,
+      company: meta.company ? String(meta.company) : undefined,
+      position: meta.position ? String(meta.position) : undefined,
+    };
+    const extra = await createUsersRowFromPending(authUser.id, recovered);
+    await clearPendingSignup();
+    const appUser = await fetchAppUser(authUser.id);
+    if (!appUser) throw new Error('Profil créé mais introuvable');
+    return { appUser, paymentRequestId: extra.paymentRequestId };
+  }
+
   throw new Error(
-    'Profil introuvable. Terminez votre inscription depuis l’application ou contactez le support.'
+    'Profil introuvable. Relancez l’inscription badge depuis l’application, puis ouvrez le lien reçu par email.'
   );
+}
+
+function mapMagicLinkError(error: unknown, fallback: string): never {
+  const raw = supabaseErrorMessage(error, fallback);
+  const lower = raw.toLowerCase();
+  if (lower.includes('redirect') || lower.includes('url')) {
+    throw new Error('Lien magique : redirection non autorisée. Réessayez ou contactez le support UrbaEvent.');
+  }
+  if (lower.includes('rate') || lower.includes('limit')) {
+    throw new Error('Trop de tentatives. Attendez quelques minutes avant de renvoyer un lien.');
+  }
+  if (lower.includes('signups not allowed') || lower.includes('not allowed for otp')) {
+    throw new Error('Inscription par email temporairement indisponible. Contactez le support.');
+  }
+  throw new Error(raw);
 }
 
 /** Connexion visiteur existant — pas de création de compte auth */
 export async function sendMagicLinkLogin(email: string): Promise<void> {
   await clearPendingSignup();
   const normalized = email.toLowerCase().trim();
+  const redirectTo = getAuthCallbackUrl();
   const { error } = await supabase.auth.signInWithOtp({
     email: normalized,
     options: {
-      emailRedirectTo: AUTH_CALLBACK_URL,
+      emailRedirectTo: redirectTo,
       shouldCreateUser: false,
     },
   });
   if (error) {
-    if (error.message.includes('Signups not allowed') || error.message.includes('not found')) {
+    if (
+      error.message.includes('Signups not allowed') ||
+      error.message.includes('not found') ||
+      error.message.includes('User not found')
+    ) {
       throw new Error('Aucun compte pour cet email. Inscrivez-vous d’abord (Pass gratuit ou VIP).');
     }
-    throw error;
+    mapMagicLinkError(error, 'Impossible d’envoyer le lien de connexion.');
   }
 }
 
@@ -133,22 +177,32 @@ export async function sendMagicLinkSignup(pending: Omit<PendingSignup, 'createdA
   await savePendingSignup(pending);
   const fullName = `${pending.firstName} ${pending.lastName}`.trim();
 
+  const redirectTo = getAuthCallbackUrl();
   const { error } = await supabase.auth.signInWithOtp({
     email: normalized,
     options: {
-      emailRedirectTo: AUTH_CALLBACK_URL,
+      emailRedirectTo: redirectTo,
       shouldCreateUser: true,
       data: {
         name: fullName,
+        firstName: pending.firstName,
+        lastName: pending.lastName,
         type: 'visitor',
         visitor_level: pending.intent === 'vip' ? 'premium' : 'free',
         signup_intent: pending.intent,
+        country: pending.country,
+        businessSector: pending.sector,
+        company: pending.company ?? '',
+        position: pending.position ?? '',
       },
     },
   });
 
   if (error) {
     await clearPendingSignup();
-    throw error;
+    if (error.message.includes('already registered') || error.message.includes('already exists')) {
+      throw new Error('Cet email est déjà inscrit. Utilisez « Connexion » pour recevoir un lien magique.');
+    }
+    mapMagicLinkError(error, 'Impossible d’envoyer le lien d’inscription badge.');
   }
 }

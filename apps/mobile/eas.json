@@ -9,7 +9,11 @@
       "distribution": "internal",
       "ios": { "simulator": true },
       "env": {
-        "EXPO_PUBLIC_JWT_SECRET": "SAME_AS_VITE_JWT_SECRET"
+        "EXPO_PUBLIC_SUPABASE_URL": "https://sbyizudifmqakzxjlndr.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieWl6dWRpZm1xYWt6eGpsbmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MTg3MDEsImV4cCI6MjA5MTQ5NDcwMX0.yyD0fROU_oSkfgkiRbWXwyoZm3YthCCQSj7pM7HHSVg",
+        "EXPO_PUBLIC_SITE_URL": "https://www.urbaevent.com",
+        "EXPO_PUBLIC_ENABLE_QUICK_LOGIN": "true",
+        "EXPO_PUBLIC_PAYMENT_ENABLED": "true"
       }
     },
     "preview": {
@@ -18,7 +22,9 @@
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://sbyizudifmqakzxjlndr.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieWl6dWRpZm1xYWt6eGpsbmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MTg3MDEsImV4cCI6MjA5MTQ5NDcwMX0.yyD0fROU_oSkfgkiRbWXwyoZm3YthCCQSj7pM7HHSVg",
-        "EXPO_PUBLIC_JWT_SECRET": "SAME_AS_VITE_JWT_SECRET"
+        "EXPO_PUBLIC_SITE_URL": "https://www.urbaevent.com",
+        "EXPO_PUBLIC_ENABLE_QUICK_LOGIN": "true",
+        "EXPO_PUBLIC_PAYMENT_ENABLED": "true"
       }
     },
     "production": {
@@ -26,7 +32,9 @@
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://sbyizudifmqakzxjlndr.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieWl6dWRpZm1xYWt6eGpsbmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MTg3MDEsImV4cCI6MjA5MTQ5NDcwMX0.yyD0fROU_oSkfgkiRbWXwyoZm3YthCCQSj7pM7HHSVg",
-        "EXPO_PUBLIC_JWT_SECRET": "SAME_AS_VITE_JWT_SECRET"
+        "EXPO_PUBLIC_SITE_URL": "https://www.urbaevent.com",
+        "EXPO_PUBLIC_ENABLE_QUICK_LOGIN": "false",
+        "EXPO_PUBLIC_PAYMENT_ENABLED": "true"
       }
     }
   },

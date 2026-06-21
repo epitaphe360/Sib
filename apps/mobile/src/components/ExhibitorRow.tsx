@@ -1,6 +1,7 @@
 import React from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors, spacing } from '../theme';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from './PressableScale';
+import { colors, fonts, radius, shadows, spacing } from '../theme';
 import type { Exhibitor } from '../types';
 
 export function ExhibitorRow({
@@ -11,7 +12,7 @@ export function ExhibitorRow({
   onPress?: () => void;
 }) {
   return (
-    <Pressable style={styles.row} onPress={onPress}>
+    <PressableScale style={styles.row} onPress={onPress}>
       {exhibitor.logoUrl ? (
         <Image source={{ uri: exhibitor.logoUrl }} style={styles.logo} resizeMode="contain" />
       ) : (
@@ -31,7 +32,7 @@ export function ExhibitorRow({
           ) : null}
         </View>
       </View>
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -40,17 +41,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.surface,
-    borderRadius: 12,
+    borderRadius: radius.lg,
     padding: spacing.md,
     marginBottom: spacing.sm,
     borderWidth: 1,
     borderColor: colors.border,
     gap: spacing.md,
+    ...shadows.sm,
   },
   logo: {
     width: 52,
     height: 52,
-    borderRadius: 8,
+    borderRadius: radius.sm,
   },
   logoPlaceholder: {
     backgroundColor: colors.background,
@@ -59,12 +61,12 @@ const styles = StyleSheet.create({
   },
   logoLetter: {
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: fonts.bodyBold,
     color: colors.primary,
   },
   info: { flex: 1 },
-  name: { fontSize: 16, fontWeight: '600', color: colors.text },
-  sector: { fontSize: 13, color: colors.primaryLight, marginTop: 2 },
+  name: { fontSize: 16, fontFamily: fonts.bodySemiBold, color: colors.text },
+  sector: { fontSize: 13, fontFamily: fonts.body, color: colors.primaryLight, marginTop: 2 },
   metaRow: { flexDirection: 'row', gap: 12, marginTop: 6 },
-  meta: { fontSize: 12, color: colors.textMuted },
+  meta: { fontSize: 12, fontFamily: fonts.body, color: colors.textMuted },
 });

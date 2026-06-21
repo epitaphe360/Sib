@@ -1,12 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchTodayUsage } from '../api/networking';
 import { useAuth } from '../context/AuthContext';
+import { partnerTierForNetworking } from '../lib/partnerTier';
 import {
   checkDailyLimits,
   getNetworkingPermissions,
   normalizeVisitorPass,
   type NetworkingPermissions,
 } from '../lib/networkingPermissions';
+import type { AppUser } from '../types';
+
+function effectiveLevel(user: AppUser): string | undefined {
+  if (user.type === 'visitor') {
+    if (user.status === 'pending_payment') return 'free';
+    return normalizeVisitorPass(user.visitorLevel);
+  }
+  if (user.type === 'partner') {
+    return partnerTierForNetworking(user.partnerTier);
+  }
+  return user.visitorLevel;
+}
 
 export function useNetworkingPermissions() {
   const { user } = useAuth();
@@ -28,14 +41,16 @@ export function useNetworkingPermissions() {
     };
   }
 
-  const level = user.type === 'visitor' ? normalizeVisitorPass(user.visitorLevel) : user.visitorLevel;
-  const permissions: NetworkingPermissions = getNetworkingPermissions(user.type, level ?? user.visitorLevel);
-  const limits = checkDailyLimits(user.type, level ?? user.visitorLevel, usage);
+  const level = effectiveLevel(user);
+  const permissions: NetworkingPermissions = getNetworkingPermissions(user.type, level);
+  const limits = checkDailyLimits(user.type, level, usage);
 
   return {
     permissions,
     limits,
-    visitorPass: user.type === 'visitor' ? normalizeVisitorPass(user.visitorLevel) : undefined,
+    visitorPass: user.type === 'visitor' ? normalizeVisitorPass(
+      user.status === 'pending_payment' ? 'free' : user.visitorLevel
+    ) : undefined,
     refresh: load,
   };
 }

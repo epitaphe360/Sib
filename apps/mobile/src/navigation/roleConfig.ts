@@ -1,15 +1,20 @@
 import type { UserType } from '../types';
 
-export type RoleRouteGroup = 'visitor' | 'exhibitor' | 'partner' | 'staff';
+export type RoleRouteGroup = 'visitor' | 'exhibitor' | 'staff' | 'service_client';
 
 export function getRoleGroup(type?: UserType | string | null): RoleRouteGroup {
   switch (type) {
     case 'exhibitor':
       return 'exhibitor';
     case 'partner':
-      return 'partner';
+      // Pas d'espace partenaire sur mobile — même parcours que visiteur
+      return 'visitor';
     case 'admin':
     case 'security':
+      return 'staff';
+    case 'service_client':
+      return 'service_client';
+    case 'marketing':
       return 'staff';
     default:
       return 'visitor';
@@ -21,10 +26,10 @@ export function getHomePath(type?: UserType | string | null): string {
   switch (group) {
     case 'exhibitor':
       return '/(exhibitor)/(tabs)';
-    case 'partner':
-      return '/(partner)/(tabs)';
     case 'staff':
-      return type === 'security' ? '/(staff)/scanner' : '/(staff)/(tabs)';
+      return type === 'security' ? '/(staff)/(tabs)/scanner' : '/(staff)/(tabs)';
+    case 'service_client':
+      return '/(service-client)/(tabs)';
     default:
       return '/(visitor)/(tabs)';
   }
@@ -46,4 +51,5 @@ export const ROLE_LABELS: Record<UserType, string> = {
   partner: 'Partenaire',
   admin: 'Organisation',
   security: 'Sécurité',
+  service_client: 'Service Clientèle',
 };

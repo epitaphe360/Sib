@@ -1,11 +1,21 @@
 import * as ExpoLinking from 'expo-linking';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+} from 'react-native';
 import { Input, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { useI18n } from '../../src/i18n/I18nProvider';
 import { supabase } from '../../src/lib/supabase';
 import { updatePassword } from '../../src/services/auth';
+import { colors, spacing } from '../../src/theme';
+
+const LINK_WAIT_MS = 8_000;
 
 function parseTokens(url: string) {
   const hash = url.includes('#') ? url.split('#')[1] : '';
@@ -22,22 +32,42 @@ export default function ResetPasswordScreen() {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [ready, setReady] = useState(false);
+  const [linkError, setLinkError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const readyRef = useRef(false);
 
   useEffect(() => {
+    let cancelled = false;
+    readyRef.current = false;
+
     const init = async (url: string | null) => {
       if (!url) return;
       const { accessToken, refreshToken } = parseTokens(url);
       if (accessToken && refreshToken) {
         await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
-        setReady(true);
+        if (!cancelled) {
+          readyRef.current = true;
+          setReady(true);
+          setLinkError(null);
+        }
       }
     };
 
     ExpoLinking.getInitialURL().then(init);
     const sub = ExpoLinking.addEventListener('url', ({ url }) => init(url));
-    return () => sub.remove();
-  }, []);
+
+    const timer = setTimeout(() => {
+      if (!cancelled && !readyRef.current) {
+        setLinkError(t('auth.reset.linkMissing'));
+      }
+    }, LINK_WAIT_MS);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+      sub.remove();
+    };
+  }, [t]);
 
   const submit = async () => {
     if (password.length < 12) {
@@ -66,6 +96,16 @@ export default function ResetPasswordScreen() {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <ScreenTitle title={t('auth.reset.title')} subtitle={ready ? t('auth.reset.subtitle') : t('auth.reset.waitLink')} />
+          {linkError ? (
+            <>
+              <Text style={styles.linkError}>{linkError}</Text>
+              <PrimaryButton
+                label={t('login.forgot')}
+                variant="outline"
+                onPress={() => router.replace('/(auth)/forgot-password')}
+              />
+            </>
+          ) : null}
           <Input label={t('auth.reset.password')} value={password} onChangeText={setPassword} secureTextEntry />
           <Input label={t('auth.reset.confirm')} value={confirm} onChangeText={setConfirm} secureTextEntry />
           <PrimaryButton label={t('auth.reset.submit')} onPress={submit} loading={loading} disabled={!ready} />
@@ -77,4 +117,5 @@ export default function ResetPasswordScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  linkError: { color: colors.danger, textAlign: 'center', marginBottom: spacing.md },
 });

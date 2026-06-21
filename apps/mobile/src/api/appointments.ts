@@ -101,7 +101,7 @@ export async function fetchAvailableTimeSlots(exhibitorUserId?: string): Promise
 }
 
 export async function fetchAppointmentsForUser(userId: string, userType: string): Promise<MobileAppointment[]> {
-  let query = supabase.from('appointments').select('*').order('created_at', { ascending: false });
+  let query = supabase.from('appointments').select('*').order('created_at', { ascending: false }).limit(50);
 
   if (userType === 'visitor') {
     query = query.eq('visitor_id', userId);

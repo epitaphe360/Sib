@@ -17,7 +17,7 @@ Checklist avant ouverture salon (SIB 2026).
 | Visiteur anonyme | Accès `(visitor)/(tabs)` sans login |
 | Login visiteur free | Redirect `(visitor)/(tabs)` |
 | Login exposant | Redirect `(exhibitor)/(tabs)` |
-| Login partenaire | Redirect `(partner)/(tabs)` |
+| Login partenaire | Redirect `(visitor)/(tabs)` (portail web pour l'espace dédié) |
 | Login sécurité | Redirect `(staff)/scanner` |
 | Login admin | Redirect `(staff)/(tabs)` |
 | Mot de passe oublié | Email Supabase + deep link `urbaevent://reset-password` |

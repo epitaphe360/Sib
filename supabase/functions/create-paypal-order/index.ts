@@ -100,10 +100,21 @@ Deno.serve(async (req: Request) => {
 
     const order = await orderRes.json();
 
-    console.log(`✅ Commande PayPal créée: ${order.id} pour userId: ${userId}`);
+    // Extraire l'URL d'approbation PayPal (lien rel="approve" dans la liste des liens)
+    const approvalLink = (order.links ?? []).find(
+      (l: { rel: string; href: string }) => l.rel === 'approve'
+    );
+    const approvalUrl = approvalLink?.href ?? null;
+
+    console.log(`✅ Commande PayPal créée: ${order.id} pour userId: ${userId}, approvalUrl: ${approvalUrl ? 'OK' : 'MANQUANT'}`);
 
     return new Response(
-      JSON.stringify({ success: true, orderId: order.id, status: order.status }),
+      JSON.stringify({
+        success: true,
+        orderId: order.id,
+        status: order.status,
+        approvalUrl,
+      }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     );
   } catch (error: any) {

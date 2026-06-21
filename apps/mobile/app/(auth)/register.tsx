@@ -11,6 +11,7 @@ import {
 import { Input, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { useAuth } from '../../src/context/AuthContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
+import { supabaseErrorMessage } from '../../src/lib/supabaseError';
 import { colors, spacing } from '../../src/theme';
 
 const SECTORS = [
@@ -51,7 +52,7 @@ export default function RegisterScreen() {
         { text: 'OK', onPress: () => router.replace('/(auth)/login') },
       ]);
     } catch (e) {
-      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('auth.magic.sendError'));
+      Alert.alert(t('common.error'), supabaseErrorMessage(e, t('auth.magic.sendError')));
     } finally {
       setLoading(false);
     }
@@ -63,19 +64,23 @@ export default function RegisterScreen() {
         <ScrollView keyboardShouldPersistTaps="handled">
           <ScreenTitle title={t('auth.register.freeTitle')} subtitle={t('auth.magic.registerSubtitle')} />
           <Text style={styles.note}>{t('auth.magic.noPassword')}</Text>
-          <Input label={t('auth.register.firstName')} value={firstName} onChangeText={setFirstName} />
-          <Input label={t('auth.register.lastName')} value={lastName} onChangeText={setLastName} />
+          <Input label={t('auth.register.firstName')} value={firstName} onChangeText={setFirstName} returnKeyType="next" />
+          <Input label={t('auth.register.lastName')} value={lastName} onChangeText={setLastName} returnKeyType="next" />
           <Input
             label={t('auth.email')}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
+            returnKeyType="next"
           />
-          <Input label={t('auth.register.country')} value={country} onChangeText={setCountry} autoCapitalize="characters" />
-          <Input label={t('auth.register.sector')} value={sector} onChangeText={setSector} />
+          <Input label={t('auth.register.country')} value={country} onChangeText={setCountry} autoCapitalize="characters" returnKeyType="next" />
+          <Input label={t('auth.register.sector')} value={sector} onChangeText={setSector} returnKeyType="send" onSubmitEditing={handleRegister} />
           <Text style={styles.sectorsHint}>Ex. : {SECTORS.join(', ')}</Text>
           <PrimaryButton label={t('auth.magic.sendBadge')} onPress={handleRegister} loading={loading} />
+          <Text style={styles.rgpdLink} onPress={() => router.push('/(auth)/rgpd' as never)}>
+            🔒 {t('rgpd.readPolicy')}
+          </Text>
           <Text style={styles.vipLink} onPress={() => router.push('/(auth)/register-vip')}>
             {t('auth.register.vipLink')}
           </Text>
@@ -99,6 +104,13 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginTop: -8,
     marginBottom: spacing.md,
+  },
+  rgpdLink: {
+    textAlign: 'center',
+    marginTop: spacing.sm,
+    marginBottom: spacing.sm,
+    color: colors.textMuted,
+    fontSize: 12,
   },
   vipLink: {
     textAlign: 'center',

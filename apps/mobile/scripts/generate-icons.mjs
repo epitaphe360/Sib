@@ -1,57 +1,79 @@
 /**
- * Génère les icônes Expo (icon, splash, adaptive-icon, notification-icon).
+ * Génère les icônes Expo à partir du logo master UrbaEvent (Play Store ref).
+ * Prérequis: node scripts/fetch-playstore-logo.mjs
  * Usage: npm run generate-icons
  */
-import { mkdir, writeFile } from 'node:fs/promises';
+import { access, mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const assetsDir = path.resolve(__dirname, '../assets');
+const brandDir = path.join(assetsDir, 'brand');
+const masterPath = path.join(brandDir, 'urbaevent-logo-master.png');
 
 const PRIMARY = '#1B365D';
 const LIGHT = '#2E5984';
 
-async function createBrandSvg(size, withText = true) {
-  const fontSize = Math.round(size * 0.12);
-  const subSize = Math.round(size * 0.04);
-  const text = withText
-    ? `<text x="50%" y="52%" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="${fontSize}" font-weight="700">UE</text>
-       <text x="50%" y="68%" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-family="system-ui,sans-serif" font-size="${subSize}">UrbaEvent</text>`
-    : `<text x="50%" y="55%" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="${fontSize}" font-weight="700">UE</text>`;
-
-  return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-    <defs>
-      <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="${PRIMARY}"/>
-        <stop offset="100%" stop-color="${LIGHT}"/>
-      </linearGradient>
-    </defs>
-    <rect width="${size}" height="${size}" rx="${Math.round(size * 0.18)}" fill="url(#g)"/>
-    ${text}
-  </svg>`);
+async function fileExists(p) {
+  try {
+    await access(p);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-async function writePng(name, width, height, svg) {
+async function ensureMaster() {
+  if (await fileExists(masterPath)) return readFile(masterPath);
+  const { spawn } = await import('node:child_process');
+  await new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [path.join(__dirname, 'fetch-playstore-logo.mjs')], {
+      stdio: 'inherit',
+      cwd: path.resolve(__dirname, '..'),
+    });
+    child.on('close', (code) => (code === 0 ? resolve() : reject(new Error('fetch-playstore-logo failed'))));
+  });
+  return readFile(masterPath);
+}
+
+async function writePng(name, width, height, pipeline) {
   const out = path.join(assetsDir, name);
-  await sharp(svg).resize(width, height).png().toFile(out);
+  await pipeline.resize(width, height).png().toFile(out);
   console.log(`✓ ${name} (${width}x${height})`);
 }
 
-await mkdir(assetsDir, { recursive: true });
-
-const iconSvg = await createBrandSvg(1024, true);
-const adaptiveSvg = await createBrandSvg(1024, false);
-const splashSvg = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1284" height="2778" viewBox="0 0 1284 2778">
-  <rect width="1284" height="2778" fill="${PRIMARY}"/>
-  <text x="50%" y="48%" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="120" font-weight="700">UrbaEvent</text>
-  <text x="50%" y="52%" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="system-ui,sans-serif" font-size="48">SIB 2026</text>
+async function splashSvg() {
+  return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1284" height="2778" viewBox="0 0 1284 2778">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${PRIMARY}"/>
+      <stop offset="100%" stop-color="${LIGHT}"/>
+    </linearGradient>
+  </defs>
+  <rect width="1284" height="2778" fill="url(#g)"/>
+  <text x="50%" y="54%" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="72" font-weight="700" letter-spacing="4">URBAEVENT</text>
+  <text x="50%" y="58%" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="system-ui,sans-serif" font-size="36">Plateforme digitale multi-salons</text>
 </svg>`);
+}
 
-await writePng('icon.png', 1024, 1024, iconSvg);
-await writePng('adaptive-icon.png', 1024, 1024, adaptiveSvg);
-await writePng('notification-icon.png', 96, 96, adaptiveSvg);
-await writePng('splash.png', 1284, 2778, splashSvg);
+await mkdir(assetsDir, { recursive: true });
+const master = await ensureMaster();
 
-console.log('Assets générés dans assets/');
+const logo1024 = sharp(master).resize(820, 820, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } });
+
+await writePng('icon.png', 1024, 1024, sharp({
+  create: { width: 1024, height: 1024, channels: 4, background: { r: 27, g: 54, b: 93, alpha: 1 } },
+}).composite([{ input: await logo1024.png().toBuffer(), gravity: 'centre' }]));
+
+await writePng('adaptive-icon.png', 1024, 1024, sharp({
+  create: { width: 1024, height: 1024, channels: 4, background: { r: 27, g: 54, b: 93, alpha: 1 } },
+}).composite([{ input: await sharp(master).resize(660, 660, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer(), gravity: 'centre' }]));
+
+await writePng('notification-icon.png', 96, 96, sharp(master).resize(96, 96, { fit: 'contain', background: { r: 27, g: 54, b: 93, alpha: 1 } }));
+
+const splashLogo = await sharp(master).resize(480, 480, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
+await writePng('splash.png', 1284, 2778, sharp(await splashSvg()).composite([{ input: splashLogo, gravity: 'centre' }]));
+
+console.log('Assets générés depuis assets/brand/urbaevent-logo-master.png');

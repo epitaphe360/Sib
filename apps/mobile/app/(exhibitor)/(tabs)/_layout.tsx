@@ -1,29 +1,27 @@
-import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { colors } from '../../../src/theme';
-
-function tabIcon(name: keyof typeof Ionicons.glyphMap) {
-  return ({ color, size }: { color: string; size: number }) => (
-    <Ionicons name={name} size={size} color={color} />
-  );
-}
+import { useAppTheme } from '../../../src/context/ThemeContext';
+import { useI18n } from '../../../src/i18n/I18nProvider';
+import { authTabHeaderOptions } from '../../../src/navigation/authTabOptions';
+import { createTabIcon, unifiedTabBarOptions } from '../../../src/navigation/tabBarConfig';
 
 export default function ExhibitorTabLayout() {
+  const { t } = useI18n();
+  const { colors } = useAppTheme();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textMuted,
-        tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
-        headerStyle: { backgroundColor: colors.primary },
-        headerTintColor: '#fff',
+        ...authTabHeaderOptions(colors),
+        ...unifiedTabBarOptions(colors),
       }}
     >
-      <Tabs.Screen name="index" options={{ title: 'Stand', tabBarIcon: tabIcon('storefront-outline') }} />
-      <Tabs.Screen name="appointments" options={{ title: 'RDV', tabBarIcon: tabIcon('calendar-outline') }} />
-      <Tabs.Screen name="messages" options={{ title: 'Messages', tabBarIcon: tabIcon('chatbubbles-outline') }} />
-      <Tabs.Screen name="scan" options={{ title: 'Scan', tabBarIcon: tabIcon('scan-outline') }} />
-      <Tabs.Screen name="profile" options={{ title: 'Profil', tabBarIcon: tabIcon('person-outline') }} />
+      <Tabs.Screen name="index" options={{ title: t('tabs.stand'), tabBarIcon: createTabIcon('storefront-outline') }} />
+      <Tabs.Screen name="scan" options={{ title: t('tabs.scan'), tabBarIcon: createTabIcon('scan-outline') }} />
+      <Tabs.Screen name="contacts" options={{ title: t('tabs.contacts'), tabBarIcon: createTabIcon('people-outline') }} />
+      <Tabs.Screen name="profile" options={{ title: t('tabs.profile'), tabBarIcon: createTabIcon('person-outline') }} />
+      <Tabs.Screen name="badge" options={{ href: null, title: t('tabs.badge') }} />
+      <Tabs.Screen name="messages" options={{ href: null, title: t('tabs.messages') }} />
+      <Tabs.Screen name="appointments" options={{ href: null, title: t('appointments.exhibitorTitle') }} />
     </Tabs>
   );
 }

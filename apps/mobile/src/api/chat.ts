@@ -33,7 +33,8 @@ export async function fetchConversations(userId: string): Promise<MobileConversa
       )
     `)
     .contains('participants', [userId])
-    .order('updated_at', { ascending: false });
+    .order('updated_at', { ascending: false })
+    .limit(40);
 
   if (error) throw error;
 
@@ -67,51 +68,24 @@ export async function fetchConversations(userId: string): Promise<MobileConversa
 }
 
 export async function sendMessage(
-  conversationId: string,
-  senderId: string,
+  _conversationId: string,
+  _senderId: string,
   receiverId: string,
   content: string
 ): Promise<void> {
-  const { error } = await supabase.from('messages').insert({
-    conversation_id: conversationId,
-    sender_id: senderId,
-    receiver_id: receiverId,
-    content,
-    message_type: 'text',
+  const { error } = await supabase.rpc('send_direct_message', {
+    p_receiver_id: receiverId,
+    p_content: content,
+    p_message_type: 'text',
   });
   if (error) throw error;
-
-  await supabase
-    .from('conversations')
-    .update({ updated_at: new Date().toISOString(), last_message_at: new Date().toISOString() })
-    .eq('id', conversationId);
 }
 
-export async function startConversation(userId: string, otherUserId: string): Promise<string> {
-  const { data: existing } = await supabase
-    .from('conversations')
-    .select('id, participants')
-    .contains('participants', [userId]);
-
-  const found = (existing ?? []).find(
-    (c) =>
-      Array.isArray(c.participants) &&
-      c.participants.includes(userId) &&
-      c.participants.includes(otherUserId)
-  );
-  if (found) return found.id;
-
-  const { data, error } = await supabase
-    .from('conversations')
-    .insert({
-      participants: [userId, otherUserId],
-      type: 'direct',
-      created_by: userId,
-      is_active: true,
-    })
-    .select('id')
-    .single();
-
+export async function startConversation(_userId: string, otherUserId: string): Promise<string> {
+  const { data, error } = await supabase.rpc('get_or_create_conversation', {
+    p_other_user_id: otherUserId,
+  });
   if (error) throw error;
-  return data.id;
+  if (!data) throw new Error('Impossible de démarrer la conversation');
+  return data as string;
 }

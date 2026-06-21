@@ -1,3 +1,5 @@
+export const ACCOUNT_NOT_FOUND = 'ACCOUNT_NOT_FOUND';
+
 export function getErrorMessage(error: unknown, fallback = 'Une erreur est survenue'): string {
   if (error instanceof Error) return error.message;
   if (typeof error === 'string') return error;

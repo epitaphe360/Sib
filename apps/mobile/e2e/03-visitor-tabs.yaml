@@ -1,0 +1,10 @@
+# Smoke: navigation onglets visiteur (nécessite session)
+appId: com.urbacom.urbaevent
+---
+- launchApp
+- tapOn:
+    text: "Se connecter|Sign in|دخول"
+    optional: true
+- tapOn:
+    text: "Mot de passe \\(pro\\)|Password"
+    optional: true

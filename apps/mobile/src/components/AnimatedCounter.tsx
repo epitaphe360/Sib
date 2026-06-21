@@ -25,12 +25,16 @@ export function AnimatedCounter({ label, value }: { label: string; value: string
     const id = anim.addListener(({ value: v }) => {
       setDisplay(formatNum(Math.round(v), value));
     });
-    Animated.timing(anim, {
+    const animation = Animated.timing(anim, {
       toValue: target,
       duration: 1400,
       useNativeDriver: false,
-    }).start();
-    return () => anim.removeListener(id);
+    });
+    animation.start();
+    return () => {
+      animation.stop();
+      anim.removeListener(id);
+    };
   }, [anim, target, value]);
 
   return (

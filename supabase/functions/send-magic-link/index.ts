@@ -16,9 +16,49 @@ function resolveFromEmail(): string {
   return 'onboarding@resend.dev';
 }
 
+// Simple in-memory rate limiter: max 3 requêtes par IP par minute
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 });
+    return true;
+  }
+  if (entry.count >= 3) return false;
+  entry.count++;
+  return true;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
+  }
+
+  // Rate limiting par IP
+  const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  if (!checkRateLimit(clientIp)) {
+    return new Response(JSON.stringify({ error: 'Trop de tentatives. Attendez 1 minute.' }), {
+      status: 429,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Retry-After': '60' },
+    });
+  }
+
+  // Auth: seuls les rôles autorisés peuvent déclencher un magic link
+  const authHeader = req.headers.get('Authorization') ?? '';
+  let isServiceRole = false;
+  if (authHeader.startsWith('Bearer ')) {
+    const token = authHeader.replace('Bearer ', '');
+    const supabaseCheck = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    );
+    const { data: { user: caller } } = await supabaseCheck.auth.getUser(token);
+    if (caller) {
+      const { data: callerProfile } = await supabaseCheck.from('users').select('type').eq('id', caller.id).single();
+      isServiceRole = ['admin', 'service_client'].includes(callerProfile?.type ?? '');
+    }
   }
 
   try {
@@ -28,6 +68,28 @@ serve(async (req) => {
       shouldCreateUser?: boolean;
       linkType?: 'magiclink' | 'signup';
     };
+
+    // Pour les magic links de connexion (non-signup), valider que l'email existe déjà
+    // sauf si l'appelant est un rôle privilégié
+    if (!isServiceRole && !shouldCreateUser && linkType !== 'signup') {
+      const supabaseCheck = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+        { auth: { autoRefreshToken: false, persistSession: false } }
+      );
+      const { data: existing } = await supabaseCheck
+        .from('users')
+        .select('id')
+        .eq('email', email?.toLowerCase().trim() ?? '')
+        .maybeSingle();
+      if (!existing) {
+        // Ne pas révéler si l'email existe ou non — répondre OK pour éviter l'énumération
+        return new Response(JSON.stringify({ ok: true }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
 
     if (!email?.trim() || !redirectTo?.trim()) {
       return new Response(JSON.stringify({ error: 'email et redirectTo requis' }), {

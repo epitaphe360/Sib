@@ -8,11 +8,10 @@ Application **React Native / Expo** unique, routée par `users.type` après conn
 |------|-------------|-----------------|
 | **Visiteur** | `(visitor)/(tabs)` | Badge JWT rotatif, RDV, messages, réseautage lite |
 | **Exposant** | `(exhibitor)/(tabs)` | Mon stand, scan contacts (caméra), RDV accept/reject, mini-site lite |
-| **Partenaire** | `(partner)/(tabs)` | Dashboard KPI, leads/RDV, médias |
 | **Sécurité** | `(staff)/scanner` | Scanner zones + historique session |
 | **Organisation** | `(staff)/(tabs)` | Stats live, validation paiements VIP, tarif Pass VIP |
 
-L'inscription mobile est réservée aux **visiteurs** (gratuit / VIP). **Validation par lien magique** (pas de mot de passe) — voir [docs/AUTH-MAGIC-LINK.md](docs/AUTH-MAGIC-LINK.md). Exposants, partenaires et staff : onglet **Mot de passe (pro)** ou compte web.
+L'inscription mobile est réservée aux **visiteurs** (gratuit / VIP). **Validation par lien magique** (pas de mot de passe) — voir [docs/AUTH-MAGIC-LINK.md](docs/AUTH-MAGIC-LINK.md). Exposants et staff : onglet **Mot de passe (pro)** ou compte web. Les **partenaires** utilisent le portail web ; sur mobile ils accèdent au parcours visiteur.
 
 ## Architecture
 
@@ -23,7 +22,6 @@ apps/mobile/
 │   ├── (auth)/                # login, register, register-vip
 │   ├── (visitor)/             # tabs + stack (RDV, messages, networking, settings)
 │   ├── (exhibitor)/           # tabs + scan, minisite, messages/[id]
-│   ├── (partner)/             # tabs KPI, leads, médias
 │   ├── (staff)/               # tabs live/scanner/payments + stack scanner, payments, pricing
 │   ├── payment/[id].tsx
 │   └── exhibitor/[id].tsx

@@ -6,10 +6,11 @@ const CACHE_KEY = '@urbaevent/exhibitors';
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 const SELECT_FIELDS =
-  'id, company_name, sector, description, website, logo_url, verified, featured, stand_number, hall_number, contact_info';
+  'id, user_id, company_name, sector, description, website, logo_url, verified, featured, stand_number, hall_number, contact_info';
 
 interface ExhibitorRow {
   id: string;
+  user_id?: string;
   company_name: string;
   sector?: string;
   description?: string;
@@ -24,6 +25,7 @@ interface ExhibitorRow {
 function mapRow(row: ExhibitorRow): Exhibitor {
   return {
     id: row.id,
+    userId: row.user_id,
     companyName: row.company_name,
     sector: row.sector ?? '',
     description: row.description ?? undefined,
@@ -61,14 +63,16 @@ export interface ExhibitorsResult {
   items: Exhibitor[];
   fromCache: boolean;
   sectors: string[];
+  halls: string[];
 }
 
-export async function fetchExhibitors(search = '', sector = ''): Promise<ExhibitorsResult> {
+export async function fetchExhibitors(search = '', sector = '', hall = '', salonId = ''): Promise<ExhibitorsResult> {
   try {
     let query = supabase
       .from('exhibitors')
-      .select(SELECT_FIELDS)
+      .select(`${SELECT_FIELDS}, salon_id, is_published`)
       .eq('verified', true)
+      .eq('is_published', true)
       .order('company_name');
 
     if (search.trim()) {
@@ -77,16 +81,40 @@ export async function fetchExhibitors(search = '', sector = ''): Promise<Exhibit
     if (sector.trim()) {
       query = query.eq('sector', sector.trim());
     }
+    if (hall.trim()) {
+      query = query.eq('hall_number', hall.trim());
+    }
+    if (salonId.trim()) {
+      query = query.or(`salon_id.eq.${salonId.trim()},salon_id.is.null`);
+    }
 
     const { data, error } = await query.limit(200);
+    if (error?.code === '42703' && error.message.includes('is_published')) {
+      let fallback = supabase
+        .from('exhibitors')
+        .select(`${SELECT_FIELDS}, salon_id`)
+        .eq('verified', true)
+        .order('company_name');
+      if (search.trim()) fallback = fallback.ilike('company_name', `%${search.trim()}%`);
+      if (sector.trim()) fallback = fallback.eq('sector', sector.trim());
+      if (hall.trim()) fallback = fallback.eq('hall_number', hall.trim());
+      if (salonId.trim()) fallback = fallback.or(`salon_id.eq.${salonId.trim()},salon_id.is.null`);
+      const retry = await fallback.limit(200);
+      if (retry.error) throw retry.error;
+      const items = (retry.data ?? []).map((row) => mapRow(row as ExhibitorRow));
+      const sectors = [...new Set(items.map((e) => e.sector).filter(Boolean))].sort();
+      const halls = [...new Set(items.map((e) => e.hallNumber).filter(Boolean))].sort() as string[];
+      return { items, fromCache: false, sectors, halls };
+    }
     if (error) throw error;
 
     const items = (data ?? []).map((row) => mapRow(row as ExhibitorRow));
     const sectors = [...new Set(items.map((e) => e.sector).filter(Boolean))].sort();
-    if (!search.trim() && !sector.trim()) {
+    const halls = [...new Set(items.map((e) => e.hallNumber).filter(Boolean))].sort() as string[];
+    if (!search.trim() && !sector.trim() && !hall.trim()) {
       await writeCache(items);
     }
-    return { items, fromCache: false, sectors };
+    return { items, fromCache: false, sectors, halls };
   } catch {
     const cached = await readCache();
     if (cached) {
@@ -97,8 +125,12 @@ export async function fetchExhibitors(search = '', sector = ''): Promise<Exhibit
       if (sector.trim()) {
         filtered = filtered.filter((e) => e.sector === sector.trim());
       }
+      if (hall.trim()) {
+        filtered = filtered.filter((e) => e.hallNumber === hall.trim());
+      }
       const sectors = [...new Set(filtered.map((e) => e.sector).filter(Boolean))].sort();
-      return { items: filtered, fromCache: true, sectors };
+      const halls = [...new Set(filtered.map((e) => e.hallNumber).filter(Boolean))].sort() as string[];
+      return { items: filtered, fromCache: true, sectors, halls };
     }
     throw new Error('Impossible de charger les exposants (hors ligne)');
   }

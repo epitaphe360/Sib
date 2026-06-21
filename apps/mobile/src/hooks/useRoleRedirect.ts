@@ -1,16 +1,16 @@
 import { router } from 'expo-router';
 import { useEffect } from 'react';
-import { getHomePath } from '../navigation/roleConfig';
+import { navigateAfterAuth } from '../lib/navigateAfterAuth';
 import { useAuth } from '../context/AuthContext';
 
 /** Redirige l'utilisateur connecté vers son espace ; sinon visiteur public. */
-export function useRoleRedirect(fallback: string = '/(visitor)') {
+export function useRoleRedirect(fallback: string = '/(visitor)/(tabs)') {
   const { user, isLoading } = useAuth();
 
   useEffect(() => {
     if (isLoading) return;
     if (user) {
-      router.replace(getHomePath(user.type) as never);
+      navigateAfterAuth(user.type);
     } else {
       router.replace(fallback as never);
     }

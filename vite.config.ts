@@ -91,7 +91,7 @@ export default defineConfig(({ mode }) => ({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
-    dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'use-sync-external-store', 'use-sync-external-store/shim/with-selector', 'zustand'],
+    dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'use-sync-external-store', 'use-sync-external-store/shim/with-selector', 'zustand', 'three', 'recharts'],
   },
   build: {
     rollupOptions: {
@@ -164,6 +164,7 @@ export default defineConfig(({ mode }) => ({
       '@radix-ui/react-select',
       '@radix-ui/react-slot',
       '@radix-ui/react-tabs',
+      'recharts',
     ],
     // Force Vite à pré-bundler firebase (SDK très lourd)
     force: false,

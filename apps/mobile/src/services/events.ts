@@ -4,23 +4,25 @@ import type { SalonEvent } from '../types';
 
 const CACHE_KEY = '@urbaevent/events';
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
-interface EventRow {
+export interface EventRow {
   id: string;
   title: string;
   description?: string;
   event_type?: string;
-  event_date?: string;
-  start_time?: string;
-  end_time?: string;
+  start_date?: string;
+  end_date?: string;
   location?: string;
   capacity?: number;
   registered?: number;
-  featured?: boolean;
+  is_featured?: boolean;
+  speaker_name?: string;
+  speaker_title?: string;
+  salon_id?: string;
 }
 
-function mapEvent(row: EventRow): SalonEvent {
-  const start = row.start_time || row.event_date || new Date().toISOString();
-  const end = row.end_time || start;
+export function mapEvent(row: EventRow): SalonEvent {
+  const start = row.start_date ?? new Date().toISOString();
+  const end = row.end_date ?? start;
   return {
     id: row.id,
     title: row.title,
@@ -31,7 +33,10 @@ function mapEvent(row: EventRow): SalonEvent {
     location: row.location,
     capacity: row.capacity,
     registered: row.registered ?? 0,
-    featured: row.featured ?? false,
+    featured: row.is_featured ?? false,
+    speakerName: row.speaker_name,
+    speakerTitle: row.speaker_title,
+    salonId: row.salon_id,
   };
 }
 
@@ -55,13 +60,19 @@ async function writeCache(events: SalonEvent[]): Promise<void> {
   await AsyncStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: events }));
 }
 
-export async function fetchEvents(): Promise<SalonEvent[]> {
+export async function fetchEvents(salonId?: string): Promise<SalonEvent[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from('events')
-      .select('id, title, description, event_type, event_date, start_time, end_time, location, capacity, registered, featured')
-      .order('event_date', { ascending: true })
+      .select('id, title, description, event_type, start_date, end_date, location, capacity, registered, is_featured, speaker_name, speaker_title, salon_id')
+      .order('start_date', { ascending: true })
       .limit(100);
+
+    if (salonId) {
+      query = query.or(`salon_id.eq.${salonId},salon_id.is.null`);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
     const events = (data ?? []).map((row) => mapEvent(row as EventRow));

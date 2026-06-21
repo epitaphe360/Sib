@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Procès-verbal de réception finale — SIB 2026 UrbaEvent</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    :root {
+      --primary: #1B3A6B;
+      --accent: #C9A84C;
+      --light: #F5F7FA;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --white: #ffffff;
+      --success: #059669;
+      --warning: #d97706;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #e8ecf1;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .no-print {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 9999;
+      display: flex;
+      gap: 10px;
+    }
+    .no-print button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+    .no-print button.gold { background: var(--accent); color: #1a1a2e; }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      background: #fff;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .page:last-child { page-break-after: avoid; margin-bottom: 40px; }
+
+    @media print {
+      body { background: #fff; margin: 0; }
+      .no-print { display: none !important; }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+    }
+
+    /* Cover */
+    .cover {
+      background: linear-gradient(150deg, var(--primary) 0%, #0d2347 60%, #162040 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 297mm;
+    }
+    .cover-top {
+      padding: 48px 56px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .cover-logo { font-size: 26px; font-weight: 900; letter-spacing: 3px; }
+    .cover-logo span { color: var(--accent); }
+    .cover-badge {
+      background: var(--accent);
+      color: #1a1a2e;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .cover-hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px 56px 40px;
+      text-align: center;
+    }
+    .cover-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+    .cover-title {
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.12;
+      margin-bottom: 12px;
+    }
+    .cover-subtitle {
+      font-size: 17px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.78);
+      margin-bottom: 32px;
+    }
+    .cover-divider {
+      width: 72px;
+      height: 3px;
+      background: var(--accent);
+      margin: 0 auto 32px;
+    }
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+      text-align: left;
+      max-width: 520px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 24px 28px;
+    }
+    .cover-meta dt {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 2px;
+    }
+    .cover-meta dd {
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .cover-footer {
+      background: rgba(0,0,0,0.28);
+      padding: 16px 56px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* Section header */
+    .section-header {
+      background: linear-gradient(90deg, var(--primary) 0%, #1e4d8c 100%);
+      padding: 28px 52px;
+      color: white;
+    }
+    .section-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .section-title { font-size: 24px; font-weight: 800; }
+    .section-desc { font-size: 13px; color: rgba(255,255,255,0.72); margin-top: 6px; }
+
+    .content { padding: 32px 52px 40px; }
+    .content h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 20px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--accent);
+    }
+    .content h3:first-child { margin-top: 0; }
+    .content p { margin-bottom: 10px; color: var(--text); }
+    .content ul { margin: 8px 0 12px 18px; }
+    .content li { margin-bottom: 4px; font-size: 12px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin: 10px 0 16px;
+    }
+    thead th {
+      background: var(--primary);
+      color: white;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    tbody tr:nth-child(even) { background: var(--light); }
+    tbody td {
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .check { color: var(--success); font-weight: 700; }
+    .warn { color: var(--warning); font-weight: 600; }
+    .dash { color: #cbd5e1; }
+
+    .page-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 52px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      background: #fff;
+    }
+
+    .toc-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dotted var(--border);
+      font-size: 12px;
+    }
+    .toc-item span:last-child { color: var(--muted); }
+
+    .role-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .role-card.gold { border-left-color: var(--accent); }
+    .role-card.green { border-left-color: var(--success); }
+    .role-card h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .role-card p, .role-card ul { font-size: 11px; color: var(--muted); margin: 0; }
+    .role-card ul { margin-top: 6px; padding-left: 16px; }
+
+    .signature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 24px;
+    }
+    .sig-box {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      min-height: 140px;
+    }
+    .sig-box h4 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .sig-line {
+      border-bottom: 1px solid var(--text);
+      margin: 24px 0 8px;
+      min-height: 28px;
+    }
+    .sig-label { font-size: 10px; color: var(--muted); }
+
+    .checkbox-row {
+      display: flex;
+      gap: 24px;
+      margin: 16px 0;
+      font-size: 12px;
+    }
+    .checkbox-row label { display: flex; align-items: center; gap: 8px; }
+
+    .tag {
+      display: inline-block;
+      background: #eff6ff;
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      margin: 1px;
+    }
+    .tag-gold { background: #fef9ee; color: #92400e; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .letter-block {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 10px 10px 0;
+      padding: 20px 22px;
+      margin: 16px 0;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+    .letter-block p { margin-bottom: 10px; }
+    .deadline-box {
+      background: #fef9ee;
+      border: 2px solid var(--accent);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 16px 0;
+      font-size: 12px;
+    }
+    .deadline-box strong { color: #92400e; }
+    .legal-box {
+      background: #f0fdf4;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 11px;
+      margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="no-print">
+  <button onclick="window.print()">Imprimer / Enregistrer en PDF</button>
+  <button class="gold" onclick="window.location.href='PROCES-VERBAL-RECEPTION-FINALE-SIB-2026.md'">Version Markdown</button>
+</div>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="cover-top">
+    <div class="cover-logo">SIB <span>2026</span></div>
+    <div class="cover-badge">Document officiel</div>
+  </div>
+  <div class="cover-hero">
+    <div class="cover-eyebrow">Réception finale de projet</div>
+    <h1 class="cover-title">Procès-verbal de<br/>réception finale</h1>
+    <p class="cover-subtitle">Plateforme numérique SIB 2026 — UrbaEvent<br/>Application web &amp; mobile Android</p>
+    <div class="cover-divider"></div>
+    <dl class="cover-meta">
+      <div><dt>Projet</dt><dd>Salon International du Bâtiment 2026</dd></div>
+      <div><dt>Client</dt><dd>Urbacom Communication &amp; Événementiel SARL — Casablanca</dd></div>
+      <div><dt>Prestataire</dt><dd>Elite Tech Holding SARL — Rabat</dd></div>
+      <div><dt>Version document</dt><dd>1.0 — Réception finale</dd></div>
+      <div><dt>BC développement</dt><dd>N° 20260041 — 30/04/2026 — 96 000 MAD TTC</dd></div>
+      <div><dt>BC infrastructure</dt><dd>N° 20260048 — 12 882,48 MAD TTC déboursés / 14 257,39 TTC</dd></div>
+      <div><dt>Contrat / Devis</dt><dd>n° URBACOM-2026-001 (signé 05/05/2026)</dd></div>
+      <div><dt>Date de notification</dt><dd>15 juin 2026</dd></div>
+      <div><dt>Date limite validation</dt><dd>22 juin 2026 (7 jours)</dd></div>
+      <div><dt>Application mobile</dt><dd>APK SIB-2026-1.0.13-release</dd></div>
+      <div><dt>Référence technique</dt><dd>Monorepo Sib-1 (React / RN / Supabase)</dd></div>
+      <div><dt>Backend production</dt><dd>Supabase Cloud</dd></div>
+    </dl>
+  </div>
+  <div class="cover-footer">
+    <span>Confidentiel — Usage client</span>
+    <span>UrbaEvent · UrbaCom · SIB 2026</span>
+  </div>
+</div>
+
+<!-- PAGE 2 — SOMMAIRE + OBJET -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">Sommaire</div>
+    <div class="section-title">Table des matières</div>
+  </div>
+  <div class="content">
+    <div class="toc-item"><span>1. Objet du document</span><span>p. 2</span></div>
+    <div class="toc-item"><span>2. Périmètre livré &amp; architecture</span><span>p. 2–3</span></div>
+    <div class="toc-item"><span>3. Plateforme web — fonctionnalités</span><span>p. 3–5</span></div>
+    <div class="toc-item"><span>4. Application mobile UrbaEvent</span><span>p. 5–7</span></div>
+    <div class="toc-item"><span>5. Matrice des tableaux de bord par rôle</span><span>p. 7</span></div>
+    <div class="toc-item"><span>6. Infrastructure backend Supabase</span><span>p. 8</span></div>
+    <div class="toc-item"><span>7. Comptes de démonstration</span><span>p. 8</span></div>
+    <div class="toc-item"><span>8. Livrables techniques</span><span>p. 8</span></div>
+    <div class="toc-item"><span>9. Points d'attention &amp; réserves</span><span>p. 9</span></div>
+    <div class="toc-item"><span>10. Tests de validation</span><span>p. 9</span></div>
+    <div class="toc-item"><span>11. Réception, délai &amp; recette tacite</span><span>p. 8–9</span></div>
+    <div class="toc-item"><span>Annexes A &amp; B</span><span>p. 9</span></div>
+
+    <h3>1. Objet du document</h3>
+    <p>Le présent procès-verbal constitue le document officiel de <strong>réception finale</strong> de la plateforme numérique développée pour le Salon International du Bâtiment 2026. Il recense l'ensemble des fonctionnalités livrées sur :</p>
+    <ul>
+      <li><strong>La plateforme web</strong> — site public, espaces connectés, administration</li>
+      <li><strong>L'application mobile Android</strong> UrbaEvent (Expo React Native, APK 1.0.13)</li>
+      <li><strong>L'infrastructure backend Supabase</strong> — base de données, authentification, sécurité RLS, Edge Functions</li>
+    </ul>
+    <p>Ce document sert de référence contractuelle pour la validation de la livraison par le client.</p>
+
+    <h3>2. Périmètre livré — Architecture globale</h3>
+    <table>
+      <thead><tr><th>Composant</th><th>Technologie</th><th>Rôle</th></tr></thead>
+      <tbody>
+        <tr><td>Site web</td><td>React + TypeScript + Vite</td><td>Portail public, tableaux de bord, administration</td></tr>
+        <tr><td>Application mobile</td><td>Expo React Native 52</td><td>Compagnon salon multi-rôles (Android APK)</td></tr>
+        <tr><td>Backend</td><td>Supabase (PostgreSQL, Auth, Storage, Realtime)</td><td>Données, sécurité, API, notifications</td></tr>
+        <tr><td>Authentification</td><td>Supabase Auth</td><td>Magic link, email / mot de passe — web &amp; mobile</td></tr>
+        <tr><td>Badges</td><td>QR JWT rotatif + badge A4 bifold</td><td>Contrôle d'accès et identification</td></tr>
+        <tr><td>Internationalisation</td><td>FR (défaut), EN, AR (RTL mobile)</td><td>Public international</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Multi-salons UrbaEvent :</strong> SIB 2026, SIR, SIP, BTP, SIE — sélection salon, hub par slug, plan hall, inscription événements.</p>
+  </div>
+  <div class="page-footer"><span>SIB 2026 — Procès-verbal de réception finale</span><span>Page 2</span></div>
+</div>
+
+<!-- PAGE 3 — WEB PUBLIC + VISITEUR -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">Section 3</div>
+    <div class="section-title">Plateforme web — Fonctionnalités</div>
+    <div class="section-desc">Espace public, authentification et tableaux de bord personnalisés</div>
+  </div>
+  <div class="content">
+    <h3>3.1 Espace public (sans connexion)</h3>
+    <table>
+      <thead><tr><th>Module</th><th>Fonctionnalités livrées</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Accueil &amp; vitrine</strong></td><td>Pages UrbaEvent, hero, carrousels salons, exposants vedettes, partenaires</td></tr>
+        <tr><td><strong>Annuaires</strong></td><td>Exposants, partenaires, pavillons, catalogue produits</td></tr>
+        <tr><td><strong>Programme</strong></td><td>Événements, conférences, speakers, calendrier</td></tr>
+        <tr><td><strong>Médias</strong></td><td>Webinaires, podcasts, capsules Inside SIB, live studio, médiathèque</td></tr>
+        <tr><td><strong>Informations</strong></td><td>Plan hall, venue, hébergement, contact, support, RGPD</td></tr>
+        <tr><td><strong>Presse</strong></td><td>Accréditation presse</td></tr>
+        <tr><td><strong>Inscription</strong></td><td>Visiteur gratuit, VIP, exposant, partenaire</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.2 Authentification web</h3>
+    <p>Inscription visiteur (gratuit / VIP), exposant, partenaire · Connexion email/mot de passe · Lien magique OTP · Reset mot de passe · Comptes en attente validation/paiement.</p>
+
+    <h3>3.3 Tableau de bord visiteur — Personnalisation par niveau</h3>
+    <table>
+      <thead><tr><th>Niveau</th><th>Dashboard</th><th>Fonctionnalités</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag">FREE</span></td><td>Vue simplifiée</td><td>Badge QR, programme, exposants ; networking limité</td></tr>
+        <tr><td><span class="tag tag-gold">PREMIUM / VIP</span></td><td>Dashboard complet</td><td>Networking B2B, messagerie, matching IA, quotas RDV étendus, analytics, avantages VIP</td></tr>
+        <tr><td><span class="tag">pending_payment</span></td><td>Accès partiel</td><td>Redirection flux paiement Pass VIP</td></tr>
+      </tbody>
+    </table>
+    <p>Modules connectés : badge numérique, networking IA, RDV/calendrier, messagerie, upgrade/paiement, lettre visa, mini-sites exposants, paramètres profil.</p>
+  </div>
+  <div class="page-footer"><span>SIB 2026 — Procès-verbal de réception finale</span><span>Page 3</span></div>
+</div>
+
+<!-- PAGE 4 — WEB EXPOSANT PARTENAIRE ADMIN -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">Section 3 (suite)</div>
+    <div class="section-title">Tableaux de bord web — Exposant, Partenaire, Admin</div>
+  </div>
+  <div class="content">
+    <div class="role-card">
+      <h4>3.4 Exposant — /exhibitor/dashboard</h4>
+      <p>KPI stand (RDV, messages, connexions, vues mini-site, scans) · Quotas formule · Stand &amp; profil · Mini-site (création, éditeur, aperçu) · RDV entrants · Networking IA · Badge/QR · Analytics · Produits.</p>
+    </div>
+    <div class="role-card gold">
+      <h4>3.5 Partenaire — /partner/dashboard (5 onglets)</h4>
+      <p><strong>Tiers :</strong> Museum/Bronze → Silver → Gold/Platinum (quotas, lounge VIP, backstage).</p>
+      <ul>
+        <li>Vue d'ensemble · Profil · Networking · Analytics · Services SIB</li>
+        <li>Pages : activité, leads, médias, événements, satisfaction, support, upload médias</li>
+      </ul>
+    </div>
+    <div class="role-card green">
+      <h4>3.6 Administration — /admin/dashboard</h4>
+      <p>Pilotage temps réel · Gestion participants (exposants, partenaires, VIP, users, presse) · CMS (images, textes, bannières, actualités, événements) · Médias &amp; live · Paiements VIP · Config badges A4 · Multi-salons · Location/chapiteaux/pub · Sécurité · Config APIs · Analytics /metrics.</p>
+    </div>
+    <h3>3.7 à 3.9 — Rôles opérationnels web</h3>
+    <table>
+      <thead><tr><th>Rôle</th><th>Fonctionnalités</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sécurité</strong></td><td>Scanner QR zones, station impression, zones de contrôle, ScannerApp dédié</td></tr>
+        <tr><td><strong>Marketing</strong></td><td>Dashboard médiathèque, articles, upload, stats médias (via compte admin)</td></tr>
+        <tr><td><strong>Service client</strong></td><td>Station impression badges · Fonctions complètes sur app mobile</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="page-footer"><span>SIB 2026 — Procès-verbal de réception finale</span><span>Page 4</span></div>
+</div>
+
+<!-- PAGE 5 — MOBILE -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">Section 4</div>
+    <div class="section-title">Application mobile UrbaEvent</div>
+    <div class="section-desc">APK 1.0.13 — com.urbacom.urbaevent — ~118 Mo</div>
+  </div>
+  <div class="content">
+    <h3>4.2 Fonctionnalités transverses</h3>
+    <table>
+      <thead><tr><th>Module</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>Onboarding</td><td>3 slides premier lancement</td></tr>
+        <tr><td>Auth</td><td>Magic link visiteurs, mot de passe pro, inscription gratuit/VIP</td></tr>
+        <tr><td>i18n</td><td>Français, anglais, arabe (RTL)</td></tr>
+        <tr><td>Badge QR JWT</td><td>QR rotatif 60s, PDF A4 bifold, impression, partage, email</td></tr>
+        <tr><td>Scanner</td><td>Accès zones (staff/sécurité), leads (exposant)</td></tr>
+        <tr><td>Push</td><td>RDV, messages, connexions, paiements, leads</td></tr>
+        <tr><td>Salons</td><td>5 salons, hub, inscription, plan hall</td></tr>
+        <tr><td>Paiements VIP</td><td>Virement actif ; PayPal/CMI intégrés (activation admin)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.3 Visiteur mobile — Personnalisation forfait</h3>
+    <table>
+      <thead><tr><th>Forfait</th><th>Networking</th><th>Messages</th><th>RDV/jour</th><th>VIP</th></tr></thead>
+      <tbody>
+        <tr><td>Gratuit</td><td>Limité</td><td>Non</td><td>5 max</td><td>Non</td></tr>
+        <tr><td>Premium / VIP</td><td>Complet + IA</td><td>Oui</td><td>Étendu</td><td>Oui</td></tr>
+      </tbody>
+    </table>
+    <p>Écrans : Accueil, Badge, Explorer, RDV, Messages, Networking, Carte/plan, Actualités, Certificat, Visa, Factures, Paramètres.</p>
+
+    <h3>4.4 Exposant mobile</h3>
+    <p>Stand (KPI) · Contacts/leads · Scan QR · Badge A4 · Messages · Profil stand · RDV · Mini-site · Analytics (vues profil réelles) · Équipe.</p>
+  </div>
+  <div class="page-footer"><span>SIB 2026 — Procès-verbal de réception finale</span><span>Page 5</span></div>
+</div>
+
+<!-- PAGE 6 — MOBILE ROLES -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">Section 4 (suite)</div>
+    <div class="section-title">Tableaux de bord mobile — Staff &amp; opérations</div>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <div class="role-card">
+        <h4>4.5 Partenaire</h4>
+        <p>Accueil KPI · Leads · Messages · Médias upload · Badge tier · Analytics · Équipe. Personnalisation Museum → Platinum.</p>
+      </div>
+      <div class="role-card green">
+        <h4>4.6 Administration (staff)</h4>
+        <p>Live temps réel · Scanner multi-zones · Paiements VIP · Users · Alertes · Tarifs · Impression · Capacité zones.</p>
+      </div>
+      <div class="role-card">
+        <h4>4.7 Sécurité</h4>
+        <p>Scanner accès (public, hall, VIP, networking, backstage) · Historique offline · Impression · Capacité. Onglets Live/Paiements masqués.</p>
+      </div>
+      <div class="role-card gold">
+        <h4>4.8 Service clientèle</h4>
+        <p>Stats jour · Recherche participant · Inscription sur place · Remplacement badge · Impression A4 · Capacité zones.</p>
+      </div>
+    </div>
+
+    <h3>5. Matrice des tableaux de bord par rôle</h3>
+    <table style="font-size:10px;">
+      <thead>
+        <tr><th>Fonctionnalité</th><th>Visiteur</th><th>Exposant</th><th>Partenaire</th><th>Admin</th><th>Sécurité</th><th>Service</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Dashboard personnalisé</td><td class="check">✓ 3 niveaux</td><td class="check">✓</td><td class="check">✓ 5 onglets</td><td class="check">✓</td><td>Scan</td><td class="check">✓ Desk</td></tr>
+        <tr><td>Badge QR</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td>Consult.</td><td class="dash">—</td><td class="check">✓</td></tr>
+        <tr><td>Scanner accès</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td><td class="dash">—</td></tr>
+        <tr><td>Scanner leads</td><td class="dash">—</td><td class="check">✓</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>RDV B2B</td><td class="check">✓</td><td class="check">✓ Gestion</td><td class="check">✓ Leads</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Networking / IA</td><td>VIP</td><td class="check">✓</td><td class="check">✓</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Analytics</td><td>Partiel</td><td class="check">✓ Complet</td><td class="check">✓</td><td class="check">✓ Live</td><td class="dash">—</td><td>Stats</td></tr>
+        <tr><td>CMS / contenu</td><td>Lecture</td><td class="dash">—</td><td>Médias</td><td class="check">✓ Complet</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>i18n FR/EN/AR</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="page-footer"><span>SIB 2026 — Procès-verbal de réception finale</span><span>Page 6</span></div>
+</div>
+
+<!-- PAGE 7 — BACKEND + LIVRABLES -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">Sections 6 à 8</div>
+    <div class="section-title">Backend, comptes démo &amp; livrables</div>
+  </div>
+  <div class="content">
+    <h3>6. Infrastructure Supabase</h3>
+    <p><strong>Tables :</strong> users, user_badges, exhibitors, partners, mini_sites, appointments, time_slots, connections, messages, payment_requests, access_logs, salons, events, news_articles, media_contents, minisite_views, profile_views, exhibitor_leads, badge_replacements, visa_invitation_requests, notifications_devices, stand_collaborators…</p>
+    <p><strong>Sécurité RLS :</strong> Politiques par rôle · Fonctions anti-récursion · RPC networking &amp; RDV · RPC badge scan.</p>
+    <p><strong>Edge Functions :</strong> generate-visitor-badge · create/capture-paypal-order · create/payment-cmi-verify.</p>
+
+    <h3>7. Comptes de démonstration</h3>
+    <table>
+      <thead><tr><th>Email</th><th>Mot de passe</th><th>Rôle</th></tr></thead>
+      <tbody>
+        <tr><td>visiteur@sib.com</td><td>Visit123!</td><td>Visiteur</td></tr>
+        <tr><td>exposant@sib.com</td><td>Expo123!</td><td>Exposant</td></tr>
+        <tr><td>partenaire@sib.com</td><td>Partner123!</td><td>Partenaire</td></tr>
+        <tr><td>admin.sib@sib.com</td><td>Admin123!</td><td>Administrateur</td></tr>
+        <tr><td>securite@sib.com</td><td>Secu123!</td><td>Sécurité</td></tr>
+        <tr><td>service-clientele@sib.com</td><td>Service2026!</td><td>Service clientèle</td></tr>
+      </tbody>
+    </table>
+
+    <h3>8. Livrables techniques</h3>
+    <table>
+      <thead><tr><th>Livrable</th><th>Emplacement</th></tr></thead>
+      <tbody>
+        <tr><td>Code source web</td><td>Sib-1/src/</td></tr>
+        <tr><td>Code source mobile</td><td>Sib-1/apps/mobile/</td></tr>
+        <tr><td>Migrations Supabase</td><td>Sib-1/supabase/migrations/</td></tr>
+        <tr><td>APK Android 1.0.13</td><td>apps/mobile/dist/SIB-2026-1.0.13-release.apk</td></tr>
+        <tr><td>Documentation</td><td>Sib-1/docs/</td></tr>
+        <tr><td>Config badge admin</td><td>/admin/badge-config (web)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>9. Points d'attention</h3>
+    <table>
+      <thead><tr><th>Point</th><th>Statut</th><th>Détail</th></tr></thead>
+      <tbody>
+        <tr><td>Paiement PayPal/CMI mobile</td><td class="warn">Prêt, désactivé</td><td>Virement + validation admin opérationnels</td></tr>
+        <tr><td>Connexion Google mobile</td><td>Retirée</td><td>Magic link + mot de passe uniquement</td></tr>
+        <tr><td>Pages web non routées</td><td class="warn">Partiel</td><td>Certaines pages en code, non exposées App.tsx</td></tr>
+        <tr><td>Apple Developer / Google Play</td><td class="warn">Non déboursé</td><td>914,76 + 231 DH non engagés — APK livré en direct</td></tr>
+        <tr><td>Infra cloud (BC 20260048)</td><td class="warn">3 mois</td><td>Supabase, Vercel, Railway : 10 735,40 DH HT déboursés</td></tr>
+      </tbody>
+    </table>
+
+    <h3>10. Tests de validation</h3>
+    <p>Connexion 6 comptes démo ✓ · RLS profils ✓ · 8 actualités ✓ · 79 créneaux RDV ✓ · Networking RPC ✓ · 5 salons + plan hall ✓ · Build APK 1.0.13 ✓</p>
+  </div>
+  <div class="page-footer"><span>SIB 2026 — Procès-verbal de réception finale</span><span>Page 7</span></div>
+</div>
+
+<!-- PAGE 8 — NOTIFICATION LIVRAISON + DELAI -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">Section 11</div>
+    <div class="section-title">Notification de livraison &amp; recette</div>
+    <div class="section-desc">BC N° 20260041 &amp; 20260048 — Délai de validation : 7 jours</div>
+  </div>
+  <div class="content">
+    <h3>11.0 Notification officielle de livraison</h3>
+    <div class="letter-block">
+      <p><strong>Madame, Monsieur,</strong></p>
+      <p>Nous vous informons que <strong>l'application commandée via le Bon de Commande n° 20260041</strong> (URBACOM Communication &amp; Événementiel, en date du 30/04/2026), complété par le <strong>BC n° 20260048</strong> (infrastructure, 05/05/2026), dans le cadre du <strong>Contrat n° URBACOM-2026-001</strong>, est <strong>entièrement développée</strong> et <strong>conforme au cahier des charges</strong> convenu. L'ensemble des prestations couvre la plateforme web SIB 2026, l'application mobile UrbaEvent (APK 1.0.13) et l'infrastructure backend Supabase associée, tel que détaillé aux sections 3 à 10 du présent document.</p>
+      <p><strong>Les fichiers, codes sources et accès</strong> sont prêts à vous être transférés à l'adresse / par le canal suivant :</p>
+    </div>
+
+    <table>
+      <thead><tr><th>Élément</th><th>Mode de transfert</th><th>Coordonnées / emplacement</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Code source complet</strong></td><td>Dépôt Git / archive ZIP</td><td><em>À compléter : URL dépôt ou lien de téléchargement</em></td></tr>
+        <tr><td><strong>APK Android 1.0.13</strong></td><td>Fichier livrable</td><td>apps/mobile/dist/SIB-2026-1.0.13-release.apk</td></tr>
+        <tr><td><strong>Documentation projet</strong></td><td>Dépôt / partage</td><td>Dossier Sib-1/docs/</td></tr>
+        <tr><td><strong>Accès Supabase (production)</strong></td><td>Invitation projet</td><td>urbacom@urbacom.net</td></tr>
+        <tr><td><strong>Comptes de démonstration</strong></td><td>Document sécurisé</td><td>Section 7 du présent procès-verbal</td></tr>
+        <tr><td><strong>Contact livraison client</strong></td><td>E-mail / téléphone</td><td>urbacom@urbacom.net · +212 5 22 20 75 83</td></tr>
+      </tbody>
+    </table>
+
+    <h3>11.1 Délai de validation et recette tacite</h3>
+    <div class="deadline-box">
+      <p>Conformément aux usages contractuels de réception des prestations informatiques, vous disposez d'un <strong>délai de sept (7) jours calendaires</strong> à compter de la date de notification de livraison (<strong>15 juin 2026</strong>) pour :</p>
+      <ol style="margin:10px 0 10px 20px; font-size:12px;">
+        <li><strong>Valider</strong> la livraison sans réserve, en retournant le présent procès-verbal signé ; ou</li>
+        <li><strong>Émettre des réserves techniques</strong> exclusivement par écrit (courriel ou courrier recommandé), en précisant de manière détaillée et motivée les écarts constatés par rapport au cahier des charges.</li>
+      </ol>
+      <p><strong>Date limite de réponse : 22 juin 2026 à 23 h 59 (heure du Maroc).</strong></p>
+    </div>
+
+    <div class="legal-box">
+      <p><strong>Recette tacite :</strong> À défaut de retour écrit de votre part dans ce délai de sept (7) jours — que ce soit une validation expresse, des réserves techniques ou un refus motivé — <strong>la livraison sera réputée acceptée sans réserve</strong> (<em>recette tacite</em>), et le transfert définitif des livrables sera considéré comme acquis.</p>
+      <p style="margin-top:8px;">Les réserves éventuelles devront porter sur des <strong>anomalies techniques avérées</strong> et non sur des demandes d'évolution ou de fonctionnalités hors périmètre des <strong>Bons de Commande n° 20260041 et 20260048</strong>, du contrat n° URBACOM-2026-001 et du cahier des charges.</p>
+    </div>
+
+    <h3>11.2 Déclaration du prestataire</h3>
+    <p>Le prestataire <strong>Elite Tech Holding SARL</strong> déclare avoir livré la plateforme web SIB 2026, l'application mobile UrbaEvent (APK 1.0.13) et l'infrastructure Supabase associée, conformément au périmètre fonctionnel décrit aux sections 3 à 6 du présent document, aux <strong>Bons de Commande n° 20260041 et 20260048</strong> et au <strong>Contrat n° URBACOM-2026-001</strong>.</p>
+
+    <h3>Détail du Bon de Commande n° 20260041</h3>
+    <table>
+      <thead><tr><th>Prestation</th><th>Montant</th></tr></thead>
+      <tbody>
+        <tr><td colspan="2"><strong>Développement Plateforme (Phase 1 &amp; 2)</strong></td></tr>
+        <tr><td>Volet 1 — Site Vitrine &amp; Communication</td><td rowspan="5" style="vertical-align:middle;text-align:center;"><strong>80 000 DH HT<br/>96 000 MAD TTC</strong></td></tr>
+        <tr><td>Volet 2 — Portail Professionnel Exposants</td></tr>
+        <tr><td>Volet 3 — Portail Visiteurs &amp; Système QR</td></tr>
+        <tr><td>Volet 4 — Intégration mobile</td></tr>
+        <tr><td>Volet 5 — Déploiement et onboarding</td></tr>
+      </tbody>
+    </table>
+    <table style="margin-top:10px;">
+      <thead><tr><th>Échéance</th><th>%</th><th>Montant TTC</th></tr></thead>
+      <tbody>
+        <tr><td>Acompte à la signature du contrat</td><td>30 %</td><td>28 800,00 MAD</td></tr>
+        <tr><td>Lancement Beta — Livraison MVP Phase 1</td><td>40 %</td><td>38 400,00 MAD</td></tr>
+        <tr><td>Livraison finale — Réception complète</td><td>30 %</td><td>28 800,00 MAD</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Détail du Bon de Commande n° 20260048</h3>
+    <table>
+      <thead><tr><th>Prestation</th><th>Période</th><th>Montant HT</th><th>Déboursé</th></tr></thead>
+      <tbody>
+        <tr><td>Supabase Cloud — Plan Pro + Compute Large + Egress</td><td>3 mois</td><td>6 300,20 DH</td><td>Oui</td></tr>
+        <tr><td>Vercel Pro — Frontend &amp; Edge Network</td><td>3 mois</td><td>2 217,60 DH</td><td>Oui</td></tr>
+        <tr><td>Railway Pro — Backend &amp; Validation</td><td>3 mois</td><td>2 217,60 DH</td><td>Oui</td></tr>
+        <tr><td>Apple Developer — Store iOS</td><td>—</td><td>914,76 DH</td><td><strong>Non</strong></td></tr>
+        <tr><td>Google Play Store — Publication Android</td><td>—</td><td>231,00 DH</td><td><strong>Non</strong></td></tr>
+        <tr><td colspan="2"><strong>Sous-total déboursé HT</strong></td><td><strong>10 735,40 DH</strong></td><td></td></tr>
+        <tr><td colspan="2"><strong>Total TTC déboursé</strong></td><td colspan="2"><strong>12 882,48 MAD</strong></td></tr>
+        <tr><td colspan="2"><strong>Reste non déboursé TTC</strong></td><td colspan="2"><strong>1 374,91 MAD</strong></td></tr>
+        <tr><td colspan="2"><strong>Total BC TTC</strong></td><td colspan="2"><strong>14 257,39 MAD</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:11px;margin-top:8px;color:#64748b;"><em>Les frais Apple Developer et Google Play figurant au BC n° 20260048 n'ont pas été engagés à la date de livraison. Publication stores à la charge du client.</em></p>
+  </div>
+  <div class="page-footer"><span>SIB 2026 — Procès-verbal de réception finale</span><span>Page 8</span></div>
+</div>
+
+<!-- PAGE 9 — SIGNATURES -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">Section 11 (suite)</div>
+    <div class="section-title">Validation client &amp; signatures</div>
+  </div>
+  <div class="content">
+    <h3>11.3 Réception par le client</h3>
+    <div class="checkbox-row">
+      <label><input type="checkbox" /> Acceptée sans réserve</label>
+      <label><input type="checkbox" /> Acceptée avec réserves</label>
+      <label><input type="checkbox" /> Refusée</label>
+    </div>
+    <p><strong>Date de réponse client :</strong></p>
+    <div class="sig-line"></div>
+    <p><strong>Réserves techniques éventuelles</strong> <em>(obligatoirement détaillées si réserves)</em> :</p>
+    <div class="sig-line"></div>
+    <div class="sig-line"></div>
+    <div class="sig-line"></div>
+
+    <h3>11.4 Signatures</h3>
+    <div class="signature-grid">
+      <div class="sig-box">
+        <h4>Prestataire — Elite Tech Holding SARL</h4>
+        <div class="sig-line"></div><div class="sig-label">Nom et prénom</div>
+        <div class="sig-line"></div><div class="sig-label">Fonction</div>
+        <div class="sig-line"></div><div class="sig-label">Date · Signature</div>
+      </div>
+      <div class="sig-box">
+        <h4>Client — Urbacom (M. Reda ELHADDAJ)</h4>
+        <div class="sig-line"></div><div class="sig-label">Nom et prénom</div>
+        <div class="sig-line"></div><div class="sig-label">Fonction</div>
+        <div class="sig-line"></div><div class="sig-label">Date · Signature</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:28px;">Annexe A — Correspondance rôles web / mobile</h3>
+    <table>
+      <thead><tr><th>Rôle</th><th>Type DB</th><th>Web</th><th>Mobile</th></tr></thead>
+      <tbody>
+        <tr><td>Visiteur</td><td>visitor</td><td>/visitor/dashboard</td><td>(visitor)</td></tr>
+        <tr><td>Exposant</td><td>exhibitor</td><td>/exhibitor/dashboard</td><td>(exhibitor)</td></tr>
+        <tr><td>Partenaire</td><td>partner</td><td>/partner/dashboard</td><td>(partner)</td></tr>
+        <tr><td>Administrateur</td><td>admin</td><td>/admin/dashboard</td><td>(staff)</td></tr>
+        <tr><td>Sécurité</td><td>security</td><td>/security/scanner</td><td>(staff) scanner</td></tr>
+        <tr><td>Service clientèle</td><td>service_client</td><td>Print station</td><td>(service-client)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Annexe B — Version APK livrée</h3>
+    <p><strong>1.0.13</strong> (15/06/2026) — Démarrage rapide, RDV fixe, vues profil réelles, suppression Google, audit RLS complet, corrections mini-site &amp; badge QR.</p>
+
+    <div class="note-box" style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;font-size:11px;margin:12px 0;">
+      <strong>Export PDF :</strong> Utilisez le bouton « Imprimer / Enregistrer en PDF » en haut à droite, ou Ctrl+P → Destination « Enregistrer au format PDF ». Format A4 recommandé, marges par défaut.
+    </div>
+  </div>
+  <div class="page-footer"><span>SIB 2026 — Procès-verbal de réception finale · BC N° 20260041 &amp; 20260048 · Document officiel v1.0</span><span>Page 9</span></div>
+</div>
+
+</body>
+</html>

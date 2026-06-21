@@ -38,14 +38,14 @@ const ACCOUNTS = {
   visitorFree: { email: 'visitor-free@test.sib2026.ma', password: 'Demo2026!', expectPath: '/(visitor)/(tabs)' },
   visitorVip: { email: 'visitor-vip@test.sib2026.ma', password: 'Demo2026!', expectPath: '/(visitor)/(tabs)' },
   exhibitor: { email: 'exhibitor-9m@test.sib2026.ma', password: 'Demo2026!', expectPath: '/(exhibitor)/(tabs)' },
-  partner: { email: 'partner-museum@test.sib2026.ma', password: 'Demo2026!', expectPath: '/(partner)/(tabs)' },
+  partner: { email: 'partner-museum@test.sib2026.ma', password: 'Demo2026!', expectPath: '/(visitor)/(tabs)' },
   admin: { email: 'admin@sib.com', password: 'Demo2026!', expectPath: '/(staff)/(tabs)' },
   security: { email: 'service-clientele@sib.com', password: 'Service2026!', expectPath: '/(staff)/scanner' },
 };
 
 function getRoleGroup(type) {
   if (type === 'exhibitor') return 'exhibitor';
-  if (type === 'partner') return 'partner';
+  if (type === 'partner') return 'visitor';
   if (type === 'admin' || type === 'security') return 'staff';
   return 'visitor';
 }
@@ -53,7 +53,6 @@ function getRoleGroup(type) {
 function getHomePath(type) {
   const group = getRoleGroup(type);
   if (group === 'exhibitor') return '/(exhibitor)/(tabs)';
-  if (group === 'partner') return '/(partner)/(tabs)';
   if (group === 'staff') return type === 'security' ? '/(staff)/scanner' : '/(staff)/(tabs)';
   return '/(visitor)/(tabs)';
 }
@@ -166,13 +165,12 @@ async function main() {
     Boolean(ANON_KEY && ANON_KEY !== 'your_supabase_anon_key'),
     ANON_KEY ? `${ANON_KEY.slice(0, 12)}…` : 'manquant'
   );
-  const jwtOk =
-    JWT_SECRET.length >= 32 && JWT_SECRET !== 'your_jwt_secret_same_as_web';
+  const easRaw = readFileSync(join(root, 'eas.json'), 'utf8');
   record(
     'Prérequis',
-    'EXPO_PUBLIC_JWT_SECRET (prod-ready)',
-    jwtOk,
-    jwtOk ? `${JWT_SECRET.length} car.` : 'secret absent ou placeholder'
+    'Pas de JWT secret client (eas.json)',
+    !easRaw.includes('EXPO_PUBLIC_JWT_SECRET'),
+    'JWT badge via Edge Function issue-badge-token'
   );
 
   let appJson = {};
@@ -298,12 +296,14 @@ async function main() {
     record('Badge JWT', 'Suite badge/scanner', false, e.message);
   }
 
-  // Insert lead (nécessite session exposant)
+  // Insert lead (nécessite session exposant + visiteur réel en base)
   try {
+    const visitor = await signInAs(ACCOUNTS.visitorFree.email, ACCOUNTS.visitorFree.password);
+    const visitorUserId = visitor.profile.id;
     const ex = await signInAs(ACCOUNTS.exhibitor.email, ACCOUNTS.exhibitor.password);
     const { error: leadErr } = await ex.client.from('exhibitor_leads').insert({
       exhibitor_user_id: ex.profile.id,
-      visitor_user_id: '00000000-0000-0000-0000-000000000099',
+      visitor_user_id: visitorUserId,
       scanned_at: new Date().toISOString(),
     });
     record('Badge JWT', 'Insert exhibitor_leads (auth exposant)', !leadErr, leadErr?.message ?? 'OK');
@@ -312,7 +312,7 @@ async function main() {
         .from('exhibitor_leads')
         .delete()
         .eq('exhibitor_user_id', ex.profile.id)
-        .eq('visitor_user_id', '00000000-0000-0000-0000-000000000099');
+        .eq('visitor_user_id', visitorUserId);
     }
   } catch (e) {
     record('Badge JWT', 'Insert exhibitor_leads (auth exposant)', false, e.message);

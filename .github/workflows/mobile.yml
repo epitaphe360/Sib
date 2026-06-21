@@ -4,13 +4,16 @@ on:
   push:
     paths:
       - 'apps/mobile/**'
+      - 'tests/unit/mobile/**'
+      - 'vitest.mobile.config.ts'
       - '.github/workflows/mobile.yml'
   pull_request:
     paths:
       - 'apps/mobile/**'
+      - 'tests/unit/mobile/**'
 
 jobs:
-  typecheck:
+  quality:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -23,4 +26,8 @@ jobs:
           cache: npm
           cache-dependency-path: apps/mobile/package-lock.json
       - run: npm ci
+        working-directory: apps/mobile
       - run: npm run typecheck
+        working-directory: apps/mobile
+      - run: npm run test:quality:offline
+        working-directory: apps/mobile

@@ -18,7 +18,7 @@ Pour que les emails fonctionnent, vous devez ajouter ces variables d'environneme
 SMTP_HOST=mail.sib2026.ma
 SMTP_PORT=587
 SMTP_USERNAME=contact@sib2026.ma
-SMTP_PASSWORD=S!P0RT@9083
+SMTP_PASSWORD=<votre_mot_de_passe_smtp>   # Configurer dans Supabase Dashboard → Edge Functions → Secrets
 ```
 
 ### Variables optionnelles :

@@ -1,11 +1,31 @@
-# Assets Expo
+# Assets Expo — UrbaEvent
 
-Génération automatique (couleurs UrbaEvent `#1B365D`) :
+## Logo de marque (référence Play Store `com.urbavent`)
 
 ```bash
-npm run generate-icons
+npm run fetch-brand-logo   # Télécharge ou génère assets/brand/urbaevent-logo-master.png
+npm run generate-icons     # Produit icon/splash/adaptive/notification depuis le master
 ```
 
-Fichiers produits : `icon.png`, `adaptive-icon.png`, `splash.png`, `notification-icon.png`.
+- **Master** : `assets/brand/urbaevent-logo-master.png` (1024×1024)
+- **Source** : documentée dans `assets/brand/SOURCE.txt`
+- Remplacez le master par l'asset officiel Aeon360 / Play Console si disponible, puis relancez `generate-icons`.
 
-Pour des visuels définitifs, remplacez ces fichiers puis relancez un build EAS.
+## Fichiers Expo générés
+
+| Fichier | Usage |
+|---------|-------|
+| `icon.png` | Icône launcher |
+| `adaptive-icon.png` | Android adaptive icon |
+| `splash.png` | Écran de démarrage natif |
+| `notification-icon.png` | Notifications push |
+
+## Composant in-app
+
+`src/components/brand/BrandLogo.tsx` utilise le master local. Optionnel : URL distante via `app_promo_image_url` dans la config admin badge.
+
+## Vérification
+
+```bash
+node scripts/verify-brand-logos.mjs
+```

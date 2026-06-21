@@ -1,23 +1,33 @@
 import { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { fetchExhibitorMetrics, type RoleMetrics } from '../../src/api/analytics';
 import { Card, Screen, ScreenTitle } from '../../src/components/ui';
+import { SkeletonList } from '../../src/components/Skeleton';
 import { useAuth } from '../../src/context/AuthContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
-import { colors, spacing } from '../../src/theme';
+import { colors, fonts, spacing } from '../../src/theme';
 
 export default function ExhibitorAnalyticsScreen() {
   const { user } = useAuth();
   const { t } = useI18n();
   const [metrics, setMetrics] = useState<RoleMetrics>({ appointments: 0, messages: 0, connections: 0, profileViews: 0, scans: 0 });
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const load = useCallback(async () => {
     if (!user) return;
-    setMetrics(await fetchExhibitorMetrics(user.id));
-  }, [user]);
+    try {
+      setMetrics(await fetchExhibitorMetrics(user.id));
+    } catch (e) {
+      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
+    } finally {
+      setLoading(false);
+    }
+  }, [user, t]);
 
   useEffect(() => { load(); }, [load]);
+
+  if (loading) return <Screen><ScreenTitle title={t('exhibitor.analytics.title')} /><SkeletonList rows={3} /></Screen>;
 
   return (
     <Screen style={styles.flex}>
@@ -59,7 +69,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  metricValue: { fontSize: 26, fontWeight: '800', color: colors.primary },
-  metricLabel: { fontSize: 12, color: colors.textMuted, marginTop: 4, textAlign: 'center' },
+  metricValue: { fontSize: 26, fontFamily: fonts.display, color: colors.primary },
+  metricLabel: { fontSize: 12, fontFamily: fonts.body, color: colors.textMuted, marginTop: 4, textAlign: 'center' },
   hint: { color: colors.textMuted, lineHeight: 20, fontSize: 14 },
 });

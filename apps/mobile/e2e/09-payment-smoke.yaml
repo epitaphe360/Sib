@@ -1,0 +1,5 @@
+# Smoke: paiement VIP gateway (écran auth requis)
+appId: com.urbacom.urbaevent
+---
+- launchApp
+- assertVisible: "Connexion|Sign in"

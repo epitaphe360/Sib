@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { clearPendingSignup } from '../lib/pendingSignup';
 import type { AppUser } from '../types';
 import { fetchVipPassPricing } from './visitorLevel';
 
@@ -9,6 +10,7 @@ function mapUser(row: Record<string, unknown>): AppUser {
     name: row.name as string,
     type: row.type as AppUser['type'],
     visitorLevel: row.visitor_level as AppUser['visitorLevel'],
+    partnerTier: (row.partner_tier as string) ?? undefined,
     status: row.status as string,
     profile: (row.profile as Record<string, unknown>) ?? {},
   };
@@ -17,21 +19,51 @@ function mapUser(row: Record<string, unknown>): AppUser {
 export async function fetchAppUser(userId: string): Promise<AppUser | null> {
   const { data, error } = await supabase
     .from('users')
-    .select('id, email, name, type, visitor_level, status, profile')
+    .select('id, email, name, type, visitor_level, partner_tier, status, profile')
     .eq('id', userId)
     .maybeSingle();
 
+  if (!error && data) return mapUser(data);
+
+  // Fallback RPC si RLS récursif (42P17) ou profil bloqué
+  const code = (error as { code?: string } | null)?.code;
+  if (code === '42P17' || code === '42501' || !data) {
+    const { data: rpcData, error: rpcError } = await supabase.rpc('get_my_profile');
+    if (!rpcError && rpcData && typeof rpcData === 'object') {
+      const row = rpcData as Record<string, unknown>;
+      if (row.id === userId || !userId) return mapUser(row);
+    }
+  }
+
   if (error) throw error;
-  return data ? mapUser(data) : null;
+  return null;
+}
+
+function mapAuthError(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes('invalid login credentials') || m.includes('invalid credentials')) {
+    return 'Identifiants incorrects — vérifiez email et mot de passe';
+  }
+  if (m.includes('email not confirmed')) {
+    return 'Email non confirmé — vérifiez votre boîte mail';
+  }
+  return message;
 }
 
 export async function signIn(email: string, password: string): Promise<AppUser> {
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) throw error;
+  // Changement de compte : vider la session locale avant la nouvelle connexion
+  await supabase.auth.signOut({ scope: 'local' }).catch(() => undefined);
+  await clearPendingSignup();
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.toLowerCase().trim(),
+    password,
+  });
+  if (error) throw new Error(mapAuthError(error.message));
   if (!data.user) throw new Error('Connexion impossible');
 
   const appUser = await fetchAppUser(data.user.id);
-  if (!appUser) throw new Error('Profil utilisateur introuvable');
+  if (!appUser) throw new Error('Profil utilisateur introuvable — vérifiez que le compte existe en base.');
   if (appUser.status && !['active', 'pending_payment'].includes(appUser.status)) {
     throw new Error('Compte non actif');
   }
@@ -172,7 +204,8 @@ export async function signUpVisitorVip(params: {
 }
 
 export async function signOut(): Promise<void> {
-  const { error } = await supabase.auth.signOut();
+  await clearPendingSignup().catch(() => undefined);
+  const { error } = await supabase.auth.signOut({ scope: 'local' });
   if (error) throw error;
 }
 

@@ -1,7 +1,10 @@
+import { PLATFORM } from '../config/platform';
 import { supabase } from '../lib/supabase';
 import { enqueueScanLog, getPendingScanLogs, clearPendingScanLogs } from '../lib/offlineQueue';
+import { CACHE_KEYS, loadCache, saveCache } from '../lib/dataCache';
 import { isNetworkError } from '../lib/errors';
-import { checkZoneAccess, validateQRCode } from './qr';
+import { normalizePartnerTierDb } from '../lib/partnerTier';
+import { checkZoneAccess } from './qr';
 
 export interface ScanResult {
   valid: boolean;
@@ -17,9 +20,34 @@ export interface ScanHistoryEntry extends ScanResult {
 }
 
 const sessionHistory: ScanHistoryEntry[] = [];
+const exhibitorSessionHistory: ScanHistoryEntry[] = [];
+let historyHydrated = false;
+
+async function hydrateScanHistory(): Promise<void> {
+  if (historyHydrated) return;
+  const cached = await loadCache<ScanHistoryEntry[]>(CACHE_KEYS.scanHistory);
+  if (cached?.length) {
+    sessionHistory.push(...cached.slice(0, 50));
+  }
+  historyHydrated = true;
+}
+
+async function persistScanHistory(): Promise<void> {
+  await saveCache(CACHE_KEYS.scanHistory, sessionHistory.slice(0, 50), 24 * 60 * 60 * 1000);
+}
 
 export function getScanHistory(): ScanHistoryEntry[] {
+  hydrateScanHistory().catch(() => undefined);
   return [...sessionHistory];
+}
+
+export function getExhibitorScanHistory(): ScanHistoryEntry[] {
+  return [...exhibitorSessionHistory];
+}
+
+function pushExhibitorSession(entry: ScanHistoryEntry) {
+  exhibitorSessionHistory.unshift(entry);
+  if (exhibitorSessionHistory.length > 50) exhibitorSessionHistory.pop();
 }
 
 interface ValidatedBadge {
@@ -27,7 +55,49 @@ interface ValidatedBadge {
   userName?: string;
   userType?: string;
   userLevel?: string;
+  partnerTier?: string;
+  status?: string;
   badgeCode?: string;
+}
+
+function badgeFromJwtPayload(payload: {
+  userId: string;
+  name: string;
+  userType: string;
+  level: string;
+}): ValidatedBadge {
+  const isPartner = payload.userType === 'partner';
+  return {
+    userId: payload.userId,
+    userName: payload.name,
+    userType: payload.userType,
+    userLevel: isPartner ? undefined : payload.level,
+    partnerTier: isPartner ? normalizePartnerTierDb(payload.level) : undefined,
+    badgeCode: payload.userId,
+  };
+}
+
+function badgeFromRpcUser(u: {
+  id?: string;
+  full_name?: string;
+  user_type?: string;
+  user_level?: string;
+  partner_tier?: string;
+  status?: string;
+}, badgeCode?: string): ValidatedBadge {
+  const userType = u.user_type ?? 'visitor';
+  const isPartner = userType === 'partner';
+  return {
+    userId: u.id,
+    userName: u.full_name,
+    userType,
+    userLevel: isPartner ? undefined : u.user_level,
+    partnerTier: isPartner
+      ? normalizePartnerTierDb(u.partner_tier ?? u.user_level)
+      : undefined,
+    status: u.status,
+    badgeCode: badgeCode ?? u.id,
+  };
 }
 
 async function validateBadgeRpc(qrData: string): Promise<{ ok: boolean; badge?: ValidatedBadge; reason?: string }> {
@@ -43,6 +113,8 @@ async function validateBadgeRpc(qrData: string): Promise<{ ok: boolean; badge?: 
       full_name?: string;
       user_type?: string;
       user_level?: string;
+      partner_tier?: string;
+      status?: string;
     };
   } | null;
   if (!row?.success) {
@@ -51,19 +123,14 @@ async function validateBadgeRpc(qrData: string): Promise<{ ok: boolean; badge?: 
   const u = row.user ?? {};
   return {
     ok: true,
-    badge: {
-      userId: u.id,
-      userName: u.full_name,
-      userType: u.user_type,
-      userLevel: u.user_level,
-      badgeCode: row.badge_code ?? u.id,
-    },
+    badge: badgeFromRpcUser(u, row.badge_code ?? u.id),
   };
 }
 
 function pushSession(entry: ScanHistoryEntry) {
   sessionHistory.unshift(entry);
   if (sessionHistory.length > 50) sessionHistory.pop();
+  persistScanHistory().catch(() => undefined);
 }
 
 async function persistAccessLog(params: {
@@ -85,7 +152,7 @@ async function persistAccessLog(params: {
     status: params.valid ? 'granted' : 'denied',
     reason: params.reason ?? null,
     scanned_by: scannerId,
-    scanner_device: 'UrbaEvent Mobile',
+    scanner_device: PLATFORM.scannerDevice,
     accessed_at: new Date().toISOString(),
   });
 }
@@ -137,23 +204,33 @@ export async function flushOfflineScanQueue(): Promise<number> {
 }
 
 async function resolveBadge(qrData: string): Promise<{ ok: boolean; badge?: ValidatedBadge; reason?: string }> {
-  const rpc = await validateBadgeRpc(qrData);
-  if (rpc.ok && rpc.badge) return rpc;
-
-  const jwt = await validateQRCode(qrData);
-  if (jwt.valid && jwt.payload) {
-    return {
-      ok: true,
-      badge: {
-        userId: jwt.payload.userId,
-        userName: jwt.payload.name,
-        userType: jwt.payload.userType,
-        userLevel: jwt.payload.level,
-        badgeCode: jwt.payload.userId,
-      },
-    };
+  try {
+    const rpc = await validateBadgeRpc(qrData);
+    if (rpc.ok && rpc.badge) return rpc;
+    return { ok: false, reason: rpc.reason ?? 'Badge invalide' };
+  } catch (e) {
+    if (isNetworkError(e)) {
+      return { ok: false, reason: 'Réseau indisponible — scanner déconnecté' };
+    }
+    return { ok: false, reason: e instanceof Error ? e.message : 'Badge invalide' };
   }
-  return { ok: false, reason: rpc.reason ?? jwt.reason ?? 'Badge invalide' };
+}
+
+async function checkBadgeZoneAccess(
+  _qrData: string,
+  badge: ValidatedBadge,
+  zone: string
+): Promise<{ allowed: boolean; reason?: string }> {
+  const allowed = checkZoneAccess(
+    badge.userType ?? 'visitor',
+    badge.userLevel,
+    badge.partnerTier,
+    zone,
+    badge.status
+  );
+  return allowed
+    ? { allowed: true }
+    : { allowed: false, reason: `Accès refusé — zone ${zone}` };
 }
 
 export async function scanQrPayload(qrData: string, zone: string): Promise<ScanResult> {
@@ -165,15 +242,10 @@ export async function scanQrPayload(qrData: string, zone: string): Promise<ScanR
     let reason = resolved.reason;
 
     if (resolved.ok && resolved.badge) {
-      const allowed = checkZoneAccess(
-        resolved.badge.userType ?? 'visitor',
-        resolved.badge.userLevel,
-        resolved.badge.userLevel,
-        zone
-      );
-      if (!allowed) {
+      const zoneCheck = await checkBadgeZoneAccess(qrData, resolved.badge, zone);
+      if (!zoneCheck.allowed) {
         valid = false;
-        reason = `Accès refusé — zone ${zone}`;
+        reason = zoneCheck.reason;
       }
     }
 
@@ -226,26 +298,71 @@ export async function scanLeadFromQr(qrData: string, exhibitorUserId: string): P
   const resolved = await resolveBadge(qrData);
 
   if (!resolved.ok || !resolved.badge) {
-    return { valid: false, reason: resolved.reason ?? 'Badge invalide', scannedAt };
+    const fail = { valid: false, reason: resolved.reason ?? 'Badge invalide', scannedAt };
+    pushExhibitorSession({ id: `${Date.now()}`, zone: 'stand', ...fail });
+    return fail;
   }
 
   if (resolved.badge.userType !== 'visitor') {
-    return { valid: false, reason: 'Scannez le badge d\'un visiteur', scannedAt };
+    const fail = { valid: false, reason: 'Scannez le badge d\'un visiteur', scannedAt };
+    pushExhibitorSession({ id: `${Date.now()}`, zone: 'stand', ...fail });
+    return fail;
+  }
+
+  const visitorUserId = resolved.badge.userId;
+  if (!visitorUserId) {
+    const fail = { valid: false, reason: 'Badge visiteur invalide', scannedAt };
+    pushExhibitorSession({ id: `${Date.now()}`, zone: 'stand', ...fail });
+    return fail;
+  }
+
+  const { data: existing } = await supabase
+    .from('exhibitor_leads')
+    .select('id')
+    .eq('exhibitor_user_id', exhibitorUserId)
+    .eq('visitor_user_id', visitorUserId)
+    .maybeSingle();
+
+  if (existing?.id) {
+    const dup = {
+      valid: true,
+      userName: resolved.badge.userName,
+      badgeCode: visitorUserId,
+      reason: 'Déjà scanné',
+      scannedAt,
+    };
+    pushExhibitorSession({ id: `${Date.now()}`, zone: 'stand', ...dup });
+    return dup;
   }
 
   const { error } = await supabase.from('exhibitor_leads').insert({
     exhibitor_user_id: exhibitorUserId,
-    visitor_user_id: resolved.badge.userId,
+    visitor_user_id: visitorUserId,
     scanned_at: scannedAt,
   });
-  if (error) throw error;
+  if (error) {
+    if (error.code === '23505') {
+      const dup = {
+        valid: true,
+        userName: resolved.badge.userName,
+        badgeCode: visitorUserId,
+        reason: 'Déjà scanné',
+        scannedAt,
+      };
+      pushExhibitorSession({ id: `${Date.now()}`, zone: 'stand', ...dup });
+      return dup;
+    }
+    throw error;
+  }
 
-  return {
+  const ok = {
     valid: true,
     userName: resolved.badge.userName,
     badgeCode: resolved.badge.userId,
     scannedAt,
   };
+  pushExhibitorSession({ id: `${Date.now()}`, zone: 'stand', ...ok });
+  return ok;
 }
 
 export async function scanLeadForExhibitor(badgeCode: string, exhibitorUserId: string): Promise<ScanResult> {

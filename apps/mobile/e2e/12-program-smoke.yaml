@@ -1,0 +1,5 @@
+# Smoke: programme / explore
+appId: com.urbacom.urbaevent
+---
+- launchApp
+- assertVisible: "Connexion|Sign in"

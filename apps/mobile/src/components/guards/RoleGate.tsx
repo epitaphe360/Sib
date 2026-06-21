@@ -3,13 +3,14 @@ import { useEffect } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../i18n/I18nProvider';
-import { getHomePath, getRoleGroup } from '../../navigation/roleConfig';
+import { getRoleGroup } from '../../navigation/roleConfig';
+import { navigateAfterAuth } from '../../lib/navigateAfterAuth';
 import { colors } from '../../theme';
 
 interface RoleGateProps {
   children: React.ReactNode;
-  allowed: 'visitor' | 'exhibitor' | 'partner' | 'staff';
-  /** Si true, connexion obligatoire (exposant, partenaire, staff) */
+  allowed: 'visitor' | 'exhibitor' | 'staff' | 'service_client';
+  /** Si true, connexion obligatoire (exposant, staff, service_client) */
   requireAuth?: boolean;
 }
 
@@ -24,7 +25,7 @@ export function RoleGate({ children, allowed, requireAuth = true }: RoleGateProp
       return;
     }
     if (user && getRoleGroup(user.type) !== allowed) {
-      router.replace(getHomePath(user.type) as never);
+      navigateAfterAuth(user.type);
     }
   }, [user, isLoading, allowed, requireAuth]);
 

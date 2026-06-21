@@ -24,26 +24,42 @@ export async function fetchMatchSuggestions(userId: string, limit = 12): Promise
 
   const { data: connections } = await supabase
     .from('connections')
-    .select('from_user_id, to_user_id')
-    .or(`from_user_id.eq.${userId},to_user_id.eq.${userId}`);
+    .select('requester_id, addressee_id')
+    .or(`requester_id.eq.${userId},addressee_id.eq.${userId}`);
 
   const connected = new Set<string>();
   (connections ?? []).forEach((c) => {
-    connected.add(c.from_user_id);
-    connected.add(c.to_user_id);
+    connected.add(c.requester_id);
+    connected.add(c.addressee_id);
   });
   connected.add(userId);
 
-  const { data: candidates, error } = await supabase
-    .from('users')
-    .select('id, name, email, type, visitor_level, profile')
-    .neq('id', userId)
-    .in('type', ['visitor', 'exhibitor', 'partner'])
-    .limit(80);
+  const { data: candidates, error } = await supabase.rpc('list_networking_candidates', {
+    p_exclude: userId,
+    p_limit: 80,
+  });
 
-  if (error) return [];
+  const rows = (error
+    ? (
+      await supabase
+        .from('users')
+        .select('id, name, email, type, visitor_level, profile')
+        .neq('id', userId)
+        .in('type', ['visitor', 'exhibitor', 'partner'])
+        .limit(80)
+    ).data
+    : candidates) as Array<{
+    id: string;
+    name: string | null;
+    email: string;
+    type: string;
+    visitor_level?: string | null;
+    profile?: Record<string, unknown> | null;
+  }> | null;
 
-  const scored = (candidates ?? [])
+  if (error && !rows) return [];
+
+  const scored = (rows ?? [])
     .filter((c) => !connected.has(c.id))
     .map((c) => {
       const p = (c.profile ?? {}) as Record<string, unknown>;
@@ -63,8 +79,20 @@ export async function fetchMatchSuggestions(userId: string, limit = 12): Promise
         score += 15;
         reason = `Exposant — ${reason}`;
       }
+
       if (c.visitor_level === 'premium' || c.visitor_level === 'vip') {
         score += 10;
+        reason = `${reason} · VIP`;
+      }
+
+      const mutualCount = (connections ?? []).filter(
+        (conn) =>
+          (conn.requester_id === c.id || conn.addressee_id === c.id) &&
+          connected.has(conn.requester_id === c.id ? conn.addressee_id : conn.requester_id),
+      ).length;
+      if (mutualCount > 0) {
+        score += mutualCount * 8;
+        reason = `${reason} · ${mutualCount} connexion(s) en commun`;
       }
 
       return {

@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { sanitizeIlikeTerm } from '../lib/sanitizeIlike';
 
 export interface PaymentRequestRow {
   id: string;
@@ -7,6 +8,7 @@ export interface PaymentRequestRow {
   currency: string;
   status: string;
   createdAt: string;
+  paymentMethod?: string;
   userName?: string;
   userEmail?: string;
 }
@@ -14,7 +16,7 @@ export interface PaymentRequestRow {
 export async function fetchPendingPaymentRequests(): Promise<PaymentRequestRow[]> {
   const { data, error } = await supabase
     .from('payment_requests')
-    .select('id, user_id, amount, currency, status, created_at')
+    .select('id, user_id, amount, currency, status, created_at, payment_method')
     .eq('status', 'pending')
     .order('created_at', { ascending: false })
     .limit(50);
@@ -33,6 +35,7 @@ export async function fetchPendingPaymentRequests(): Promise<PaymentRequestRow[]
     currency: row.currency ?? 'EUR',
     status: row.status,
     createdAt: row.created_at,
+    paymentMethod: row.payment_method ?? undefined,
     userName: userMap.get(row.user_id)?.name,
     userEmail: userMap.get(row.user_id)?.email,
   }));
@@ -46,9 +49,15 @@ export async function validatePaymentRequest(requestId: string, approve: boolean
     .eq('id', requestId)
     .single();
 
-  if (fetchErr) throw fetchErr;
+  if (fetchErr) {
+    if (fetchErr.code === '42P01') throw new Error('Table paiements non disponible — contactez l\'administrateur');
+    if (fetchErr.code === '42501' || fetchErr.code === 'PGRST301') {
+      throw new Error('Droits insuffisants pour valider ce paiement');
+    }
+    throw fetchErr;
+  }
 
-  const { error } = await supabase
+  const { error: updateErr } = await supabase
     .from('payment_requests')
     .update({
       status,
@@ -57,26 +66,51 @@ export async function validatePaymentRequest(requestId: string, approve: boolean
     })
     .eq('id', requestId);
 
-  if (error) throw error;
+  if (updateErr) {
+    if (updateErr.code === '42501' || updateErr.code === 'PGRST301') {
+      throw new Error('Droits insuffisants pour mettre à jour ce paiement — appliquez la migration SQL');
+    }
+    throw updateErr;
+  }
 
   if (approve && request?.user_id) {
-    await supabase
+    const { error: userErr } = await supabase
       .from('users')
       .update({
         visitor_level: request.requested_level ?? 'premium',
         status: 'active',
       })
       .eq('id', request.user_id);
+    if (userErr) {
+      const { error: rpcErr } = await supabase.rpc('admin_update_user_status', {
+        target_user_id: request.user_id,
+        new_status: 'active',
+      });
+      if (rpcErr && rpcErr.code !== 'PGRST202') {
+        throw new Error('Paiement validé mais impossible d\'activer le compte — vérifiez les droits admin');
+      }
+    }
   }
 }
 
 export async function updateVipPrice(priceEur: number): Promise<void> {
+  const { error: rpcError } = await supabase.rpc('admin_update_vip_price', { new_price: priceEur });
+  if (!rpcError) return;
+
+  if (rpcError.code !== 'PGRST202' && !rpcError.message.includes('admin_update_vip_price')) {
+    throw rpcError;
+  }
+
   for (const level of ['premium', 'vip'] as const) {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('visitor_levels')
       .update({ price_annual: priceEur, price_monthly: priceEur, updated_at: new Date().toISOString() })
-      .eq('level', level);
+      .eq('level', level)
+      .select('level');
     if (error) throw error;
+    if (!data?.length) {
+      throw new Error('Mise à jour tarif refusée — droits administrateur insuffisants');
+    }
   }
 }
 
@@ -116,7 +150,7 @@ export async function fetchUsersForAdmin(search?: string, limit = 40): Promise<A
     .limit(limit);
 
   if (search?.trim()) {
-    const q = `%${search.trim()}%`;
+    const q = `%${sanitizeIlikeTerm(search)}%`;
     query = query.or(`name.ilike.${q},email.ilike.${q}`);
   }
 
@@ -134,16 +168,67 @@ export async function fetchUsersForAdmin(search?: string, limit = 40): Promise<A
   }));
 }
 
-export async function updateUserStatusAdmin(userId: string, status: string): Promise<void> {
+const PROTECTED_USER_TYPES = new Set(['admin']);
+
+export async function updateUserStatusAdmin(userId: string, status: string, userType?: string): Promise<void> {
+  if (userType && PROTECTED_USER_TYPES.has(userType)) {
+    throw new Error('Impossible de suspendre un administrateur');
+  }
+
+  const { error: rpcError } = await supabase.rpc('admin_update_user_status', {
+    target_user_id: userId,
+    new_status: status,
+  });
+  if (!rpcError) return;
+
+  if (rpcError.code !== 'PGRST202' && !rpcError.message.includes('admin_update_user_status')) {
+    if (rpcError.message.includes('administrateur')) {
+      throw new Error('Impossible de suspendre un administrateur');
+    }
+    throw rpcError;
+  }
+
+  if (userType === 'admin') {
+    throw new Error('Impossible de suspendre un administrateur');
+  }
+
+  const { data: target, error: fetchErr } = await supabase
+    .from('users')
+    .select('type')
+    .eq('id', userId)
+    .maybeSingle();
+  if (fetchErr) throw fetchErr;
+  if (target?.type === 'admin') {
+    throw new Error('Impossible de suspendre un administrateur');
+  }
+
   const { error } = await supabase.from('users').update({ status }).eq('id', userId);
+  if (error) {
+    if (error.code === '42501' || error.code === 'PGRST301') {
+      throw new Error('Droits insuffisants — appliquez la migration SQL dans votre espace Supabase');
+    }
+    throw error;
+  }
+}
+
+export async function reviewRegistrationRequest(requestId: string, approve: boolean): Promise<void> {
+  const status = approve ? 'approved' : 'rejected';
+  const { error } = await supabase
+    .from('registration_requests')
+    .update({
+      status,
+      reviewed_at: new Date().toISOString(),
+    })
+    .eq('id', requestId);
+
   if (error) throw error;
 }
 
 export async function fetchPendingRegistrationAlerts(): Promise<RegistrationAlertRow[]> {
   const { data, error } = await supabase
     .from('registration_requests')
-    .select('id, email, name, type, status, created_at')
-    .in('status', ['pending', 'pending_review'])
+    .select('id, email, first_name, last_name, user_type, status, created_at')
+    .eq('status', 'pending')
     .order('created_at', { ascending: false })
     .limit(30);
 
@@ -155,8 +240,10 @@ export async function fetchPendingRegistrationAlerts(): Promise<RegistrationAler
   return (data ?? []).map((row) => ({
     id: row.id,
     email: row.email,
-    name: row.name ?? undefined,
-    type: row.type ?? undefined,
+    name: row.first_name && row.last_name
+      ? `${row.first_name} ${row.last_name}`
+      : row.first_name ?? row.last_name ?? undefined,
+    type: row.user_type ?? undefined,
     status: row.status,
     createdAt: row.created_at,
   }));
