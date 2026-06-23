@@ -1,0 +1,10 @@
+{
+  "importMap": "../_shared/import_map.json",
+  "tasks": {
+    "test": "deno test --allow-all",
+    "serve": "deno run --allow-all --watch index.ts"
+  },
+  "compilerOptions": {
+    "lib": ["deno.window"]
+  }
+}

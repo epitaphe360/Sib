@@ -534,6 +534,8 @@
   "team.printTitle": "Team badge printing",
   "team.printSubtitle": "Collaborator A4 badges",
   "team.printAll": "Print all badges",
+  "team.noStandLinkedTitle": "Stand not linked",
+  "team.noStandLinkedMessage": "This exhibitor account is not linked to a stand. Contact SIB organization to enable team management.",
   "exhibitor.scan.title": "Scan contacts",
   "exhibitor.scan.subtitle": "Scan visitor badge at your stand",
   "exhibitor.scan.save": "Save contact",

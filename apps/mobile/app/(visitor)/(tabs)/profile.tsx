@@ -35,7 +35,9 @@ export default function ProfileScreen() {
 
   useEffect(() => {
     if (user?.type === 'visitor') {
-      ensureUserBadge(user.id).catch(() => undefined);
+      ensureUserBadge(user.id).catch((e) => {
+        console.warn('[profile] ensureUserBadge failed', e);
+      });
     }
   }, [user?.id, user?.type]);
 

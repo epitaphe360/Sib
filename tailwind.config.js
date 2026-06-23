@@ -70,18 +70,22 @@ export default {
          * système pour éviter toute régression pendant la migration.
          * =========================================================== */
         sib: {
-          primary:   '#1B365D',
-          secondary: '#2E5984',
-          accent:    '#5E8FBE',
-          light:     '#DCE8F3',
-          dark:      '#07182C',
-          gold:      '#2E5984',
-          orange:    '#F39200',
-          navy:      '#07182C',
+          primary:   '#001b38',
+          secondary: '#00162f',
+          accent:    '#f47920',
+          light:     '#f7f7f5',
+          dark:      '#00162f',
+          gold:      '#f47920',
+          orange:    '#f47920',
+          navy:      '#001b38',
+          'navy-deep': '#00162f',
+          'navy-footer': '#00172f',
+          paper:     '#f7f7f5',
+          ink:       '#09223b',
           teal:      '#2E5984',
-          coral:     '#5E8FBE',
-          sand:      '#DCE8F3',
-          maritime:  '#1B365D',
+          coral:     '#f47920',
+          sand:      '#f1f3f4',
+          maritime:  '#001b38',
           gray: {
             50:  '#FAFAF7',
             100: '#F4F4EE',
@@ -121,9 +125,9 @@ export default {
       },
 
       fontFamily: {
-        sans:    ['"Open Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        heading: ['"Big Shoulders Display"', '"Open Sans"', 'sans-serif'],
-        display: ['"Big Shoulders Display"', '"Open Sans"', 'sans-serif'],
+        sans:    ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        heading: ['"Barlow Condensed"', 'Inter', 'sans-serif'],
+        display: ['"Barlow Condensed"', 'Inter', 'sans-serif'],
       },
 
       fontSize: {
@@ -178,6 +182,7 @@ export default {
 
       maxWidth: {
         'container': '1280px',
+        'content': '1180px',
         'prose-md':  '65ch',
       },
 

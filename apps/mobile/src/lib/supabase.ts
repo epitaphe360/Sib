@@ -18,11 +18,45 @@ const supabaseAnonKey =
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
-// Tokens stockés dans SecureStore (chiffré) sur mobile, localStorage sur web.
+const STORAGE_TIMEOUT_MS = 4000;
+
+/** SecureStore peut bloquer au démarrage sur certains Android — fallback AsyncStorage. */
+async function withStorageFallback<T>(
+  secureOp: () => Promise<T>,
+  fallbackOp: () => Promise<T>,
+): Promise<T> {
+  try {
+    return await Promise.race([
+      secureOp(),
+      new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('SecureStore timeout')), STORAGE_TIMEOUT_MS);
+      }),
+    ]);
+  } catch {
+    return fallbackOp();
+  }
+}
+
 const SecureStoreAdapter = {
-  getItem: (key: string) => SecureStore.getItemAsync(key),
-  setItem: (key: string, value: string) => SecureStore.setItemAsync(key, value),
-  removeItem: (key: string) => SecureStore.deleteItemAsync(key),
+  getItem: (key: string) =>
+    withStorageFallback(
+      () => SecureStore.getItemAsync(key),
+      () => AsyncStorage.getItem(key),
+    ),
+  setItem: async (key: string, value: string) => {
+    try {
+      await SecureStore.setItemAsync(key, value);
+    } catch {
+      await AsyncStorage.setItem(key, value);
+    }
+  },
+  removeItem: async (key: string) => {
+    try {
+      await SecureStore.deleteItemAsync(key);
+    } catch {
+      await AsyncStorage.removeItem(key);
+    }
+  },
 };
 
 export const supabase = createClient(supabaseUrl || 'https://placeholder.supabase.co', supabaseAnonKey || 'placeholder', {

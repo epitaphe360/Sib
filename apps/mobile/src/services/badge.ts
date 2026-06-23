@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { supabaseErrorMessage } from '../lib/supabaseError';
+import { fetchCollaboratorContext } from '../lib/collaboratorContext';
 import { badgeAccessColor, badgeLevelLabel } from '../lib/badgeDisplay';
 import type { UserBadge } from '../types';
 
@@ -61,7 +62,7 @@ export async function ensureUserBadge(userId: string): Promise<UserBadge> {
 
   const { data: userRow, error: userError } = await supabase
     .from('users')
-    .select('id, type, visitor_level, name, email')
+    .select('id, type, visitor_level, name, email, profile')
     .eq('id', userId)
     .single();
 
@@ -71,6 +72,8 @@ export async function ensureUserBadge(userId: string): Promise<UserBadge> {
 
   let companyName: string | null = null;
   let standNumber: string | null = null;
+  let position: string | null = null;
+  const profile = (userRow.profile ?? {}) as Record<string, unknown>;
 
   if (userRow.type === 'exhibitor') {
     const { data: exhibitor } = await supabase
@@ -78,8 +81,19 @@ export async function ensureUserBadge(userId: string): Promise<UserBadge> {
       .select('company_name, stand_number')
       .eq('user_id', userId)
       .maybeSingle();
-    companyName = (exhibitor?.company_name as string) ?? null;
-    standNumber = (exhibitor?.stand_number as string) ?? null;
+    if (exhibitor) {
+      companyName = (exhibitor.company_name as string) ?? null;
+      standNumber = (exhibitor.stand_number as string) ?? null;
+    } else {
+      const collaborator = await fetchCollaboratorContext(userId);
+      if (collaborator) {
+        companyName = collaborator.companyName || null;
+        standNumber = collaborator.standNumber ?? null;
+        position = collaborator.position ?? null;
+      } else {
+        companyName = (profile.company as string) ?? null;
+      }
+    }
   }
 
   const { data, error } = await supabase.rpc('upsert_user_badge', {
@@ -88,7 +102,7 @@ export async function ensureUserBadge(userId: string): Promise<UserBadge> {
     p_user_level: userRow.visitor_level ?? null,
     p_full_name: userRow.name,
     p_company_name: companyName,
-    p_position: null,
+    p_position: position ?? (profile.position as string) ?? null,
     p_email: userRow.email,
     p_phone: null,
     p_avatar_url: null,

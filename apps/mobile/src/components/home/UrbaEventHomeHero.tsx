@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   wrap: {
     marginBottom: spacing.md,
     overflow: 'hidden',
-    backgroundColor: colors.platform.heroDark,
+    backgroundColor: '#1B365D',
   },
   gradientBase: {
     ...StyleSheet.absoluteFillObject,

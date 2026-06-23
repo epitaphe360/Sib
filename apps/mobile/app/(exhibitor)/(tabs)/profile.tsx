@@ -1,7 +1,9 @@
+import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text } from 'react-native';
-import { ensureExhibitorStand, updateExhibitorStandLite } from '../../../src/api/minisite';
+import { fetchExhibitorStand, updateExhibitorStandLite } from '../../../src/api/minisite';
 import { supabaseErrorMessage } from '../../../src/lib/supabaseError';
+import { isCollaboratorUser } from '../../../src/lib/collaboratorRole';
 import { Card, Input, PrimaryButton, Screen, ScreenTitle } from '../../../src/components/ui';
 import { useAuth } from '../../../src/context/AuthContext';
 import { useSignOut } from '../../../src/hooks/useSignOut';
@@ -19,13 +21,17 @@ export default function ExhibitorProfileScreen() {
   const [standId, setStandId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    if (user && isCollaboratorUser(user)) {
+      router.replace('/(visitor)/(tabs)/badge' as never);
+    }
+  }, [user]);
+
   const load = useCallback(async () => {
-    if (!user) return;
+    if (!user || isCollaboratorUser(user)) return;
     try {
-      const stand = await ensureExhibitorStand(user.id, {
-        companyName: user.name,
-        email: user.email,
-      });
+      const stand = await fetchExhibitorStand(user.id);
+      if (!stand) return;
       setStandId(stand.id);
       setDescription(stand.description ?? '');
       setContactEmail(stand.contactEmail ?? user.email ?? '');

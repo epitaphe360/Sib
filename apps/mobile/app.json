@@ -2,7 +2,7 @@
   "expo": {
     "name": "UrbaEvent",
     "slug": "urbaevent",
-    "version": "1.0.16",
+    "version": "1.0.24",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "urbaevent",
@@ -18,7 +18,7 @@
       "bundleIdentifier": "com.urbacom.urbaevent"
     },
     "android": {
-      "versionCode": 16,
+      "versionCode": 24,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1B365D"

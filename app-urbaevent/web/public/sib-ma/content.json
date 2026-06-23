@@ -1,0 +1,423 @@
+{
+  "source": "https://www.sib.ma/",
+  "syncedAt": "2026-06-04T09:09:40.740Z",
+  "titre": "SIB 2026",
+  "titrePresentation": "Le Salon International du Bâtiment",
+  "date": "25 - 29 Novembre 2026",
+  "longueDate": "Du 25 au 29 Novembre 2026",
+  "emplacement": "Parc d'Exposition Mohammed VI - EL JADIDA",
+  "majesteSlogan": "Sous le Haut patronage de Sa Majesté le Roi Mohammed VI que Dieu L'assiste",
+  "descriptionSalon": "Le Salon International du Bâtiment – SIB revient pour sa 20ᵉ édition , célébrant ainsi ses 40 années d’existence . Ce salon incontournable se déroulera du 25 au 29 novembre 2026 au Parc d’Exposition Mohammed VI d’El Jadida , en face du Mazagan Beach Resort. Fondé en 1986 , le SIB s’est imposé comme le rendez-vous biennal de référence pour les acteurs clés du secteur du Bâtiment, de la Construction, de l’Urbanisme, de la Décoration et de l’Immobilier, tant à l’échelle nationale qu’internationale. Il réunit entreprises privées, organismes publics, fournisseurs de matériaux, importateurs de matériel et grosse machinerie, architectes et ingénieurs, favorisant ainsi des rencontres enrichissantes, des échanges d’expertise et la promotion des dernières innovations et technologies. Organisé par le Ministère de l’Aménagement du Territoire National, de l’Urbanisme, de l’Habitat et de la Politique de la Ville et l’ Agence Marocaine de Développement des Investissements et des Exportations – AMDIE , et co-organisé par la Fédération des Industries des Matériaux de Construction – FMC et la Fédération Nationale du Bâtiment et des Travaux Publics – FNBTP , URBACOM , 1ʳᵉ agence conseil en communication et événementiel, en assure la gestion déléguée depuis 2006 sans discontinuité. Le SIB 2026 proposera plusieurs espaces thématiques pour répondre aux besoins variés des participants : SIB Recrutement, SIB Academy, SIB Formation, SIB Women, SIB TV, Espace B2B et Espace Démonstration . Ces espaces enrichiront l’expérience des visiteurs en offrant des opportunités de formation, de réseautage et de découverte des dernières tendances du marché. Rendez-vous du 25 au 29 novembre 2026 au Parc d’Exposition Mohammed VI.",
+  "descriptionEmplacement": "À proximité d’El Jadida, le Parc d’Exposition Mohammed VI accueille, depuis 2015, le Salon du cheval. Cet espace de 30 hectares , édifié par la Sorec , selon les normes internationales en la matière, fait office de référence nationale. De par son accessibilité, son adaptabilité, mais aussi son esthétique, il dispose de tous les atouts lui permettant d’abriter de nombreux évènements d’envergure. En plus des halls d’expositions et des 20 salles de réunions , le parc dispose de 2500 places de parking. Il dispose également d’un parking VIP de 52 places et d’un autre pouvant accueillir une cinquantaine d’autocars. Il n’existe pas de telles capacités d’accueil ailleurs au Maroc.",
+  "chiffresDescription": "Le salon a accueilli 500 exposants , dont 150 internationaux représentant 50 pays , répartis sur une superficie de 30 000 m² . Les visiteurs, toujours au rendez-vous, ont atteint un nombre record de +200 000 , attirés par les 15 secteurs d’activités représentés, les innovations technologiques, et le riche programme scientifique.",
+  "pourquoiExposer": "En tant qu’exposant de SIB 2026 , vous bénéficierez d’une visibilité maximale auprès d’une audience ciblée et engagée. Le salon rassemble des professionnels du Bâtiment, des décideurs politiques, des experts et des acteurs clés de l’industrie, offrant ainsi une plateforme idéale pour présenter vos produits, vos services et vos innovations.",
+  "pourquoiVisiter": "Le salon offre une réponse complète aux besoins des particuliers et des professionnels dans un espace et un temps maitrisé. Cela reste la meilleure manière de s'informer de faire son choix et de concrétiser dans les meilleures conditions tout investissement du secteur du BTP.",
+  "titreDerniereEdition": "SIB 2024",
+  "stats": {
+    "exposants": "+ 500",
+    "pays": "50",
+    "visiteurs": "+ 200 000",
+    "surface": "30 000"
+  },
+  "statsLabels": {
+    "exposants": "Exposants",
+    "pays": "Pays",
+    "visiteurs": "Visiteurs",
+    "surface": "Surface d'exposition"
+  },
+  "banner": {
+    "url": "https://sib.ma/backend/uploads/parc_exposition_eljadida_f4a9052968.png",
+    "hash": "parc_exposition_eljadida_f4a9052968",
+    "width": 1633,
+    "height": 1199,
+    "ext": ".png",
+    "local": "/sib-ma/parc_exposition_eljadida_f4a9052968.png",
+    "caption": "parc_exposition_eljadida.png"
+  },
+  "brochure": {
+    "url": "https://sib.ma/backend/uploads/Guide_d_Exposants_SIB_2024_edc1695bad.pdf",
+    "name": "Guide d'Exposants SIB 2024.pdf"
+  },
+  "timeline": [
+    {
+      "year": 1986,
+      "edition": "1 ère",
+      "slogan": "Le bâtiment au service du développement et des échanges",
+      "exposants": "90",
+      "visiteurs": "20 000",
+      "emplacement": null
+    },
+    {
+      "year": 2000,
+      "edition": "8 ème",
+      "slogan": "La performance au service du social",
+      "exposants": "200",
+      "visiteurs": "45 000",
+      "emplacement": null
+    },
+    {
+      "year": 2012,
+      "edition": "14 ème",
+      "slogan": "Vivre la ville",
+      "exposants": "611 (dont 330 étrangers)",
+      "visiteurs": "132 000",
+      "emplacement": "Foire Internationale de Casablanca - Maroc"
+    },
+    {
+      "year": 2022,
+      "edition": "18 ème",
+      "slogan": "Innovation et résilience au service d'un cadre de vie meilleur",
+      "exposants": "+500",
+      "visiteurs": "+160 000",
+      "emplacement": "Parc d'exposition Mohammed VI, El Jadida - Maroc"
+    },
+    {
+      "year": 2026,
+      "edition": "20ᵉ édition",
+      "slogan": "40 années d'existence — SIB 2026"
+    }
+  ],
+  "galeries": [
+    {
+      "caption": "CROAC - SIB 2022",
+      "position": 1,
+      "hash": "ALW_4646_e80870e56f_86f40519c5",
+      "ext": ".jpg",
+      "local": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg"
+    },
+    {
+      "caption": "Stand du Ministère - SIB 2022",
+      "position": 2,
+      "hash": "MUS_3588_01206249cb_110540f778",
+      "ext": ".jpg",
+      "local": "/sib-ma/MUS_3588_01206249cb_110540f778.jpg"
+    },
+    {
+      "caption": "Inauguration Mme FATIMA ZAHRA EL MANSOURI - SIB 2022",
+      "position": 3,
+      "hash": "ALW_3369_067b43b2aa_16e46cc9e8",
+      "ext": ".jpg",
+      "local": "/sib-ma/ALW_3369_067b43b2aa_16e46cc9e8.jpg"
+    },
+    {
+      "caption": "Stand TTH COMPANY \"Sponsor Officiel\" - SIB 2022",
+      "position": 4,
+      "hash": "ALW_3951_bde2fd255e_2bc047ae4c",
+      "ext": ".jpg",
+      "local": "/sib-ma/ALW_3951_bde2fd255e_2bc047ae4c.jpg"
+    },
+    {
+      "caption": "SIB STADIUM - SIB 2022",
+      "position": 5,
+      "hash": "ALW_6459_33285f4622_3856730bca",
+      "ext": ".jpg",
+      "local": "/sib-ma/ALW_6459_33285f4622_3856730bca.jpg"
+    },
+    {
+      "caption": "Tournoi National URBACOM des Echecs - SIB 2022",
+      "position": 6,
+      "hash": "ALW_5795_5d5a2084bf_6e12b4efa1",
+      "ext": ".jpg",
+      "local": "/sib-ma/ALW_5795_5d5a2084bf_6e12b4efa1.jpg"
+    },
+    {
+      "caption": "SIB WOMAN - SIB 2022",
+      "position": 7,
+      "hash": "MUS_2047_bfb27a7b0a_0dc45cd345",
+      "ext": ".jpg",
+      "local": "/sib-ma/MUS_2047_bfb27a7b0a_0dc45cd345.jpg"
+    },
+    {
+      "caption": "B2B FMC - SIB 2022",
+      "position": 8,
+      "hash": "MUS_2474_845b49c603_862cc1ef12",
+      "ext": ".jpg",
+      "local": "/sib-ma/MUS_2474_845b49c603_862cc1ef12.jpg"
+    },
+    {
+      "caption": "Inauguration officielle - SIB 2024",
+      "position": 9,
+      "hash": "1_a559ea5363",
+      "ext": ".png",
+      "local": "/sib-ma/1_a559ea5363.png"
+    },
+    {
+      "caption": "Stand L.A.P \"Sponsor Officiel\" - SIB 2024",
+      "position": 10,
+      "hash": "2_1e3351c897",
+      "ext": ".png",
+      "local": "/sib-ma/2_1e3351c897.png"
+    },
+    {
+      "caption": "Conférences SIB 2024",
+      "position": 11,
+      "hash": "3_c9f5820a94",
+      "ext": ".png",
+      "local": "/sib-ma/3_c9f5820a94.png"
+    },
+    {
+      "caption": "B2B FMC - SIB 2024",
+      "position": 12,
+      "hash": "4_9d2cb5a776",
+      "ext": ".png",
+      "local": "/sib-ma/4_9d2cb5a776.png"
+    },
+    {
+      "caption": "Espace Démonstration | Stand CROAC - SIB 2024",
+      "position": 13,
+      "hash": "5_833920f28a",
+      "ext": ".png",
+      "local": "/sib-ma/5_833920f28a.png"
+    },
+    {
+      "caption": "Espace SIB TV - SIB 2024",
+      "position": 14,
+      "hash": "6_e150a00dd5",
+      "ext": ".png",
+      "local": "/sib-ma/6_e150a00dd5.png"
+    },
+    {
+      "caption": "Visiteurs - SIB 2024",
+      "position": 15,
+      "hash": "7_7474f5a087",
+      "ext": ".png",
+      "local": "/sib-ma/7_7474f5a087.png"
+    },
+    {
+      "caption": "Visiteurs - SIB 2024",
+      "position": 16,
+      "hash": "8_7f9bb440b0",
+      "ext": ".png",
+      "local": "/sib-ma/8_7f9bb440b0.png"
+    }
+  ],
+  "imageSlots": {
+    "hero": {
+      "caption": "CROAC - SIB 2022",
+      "position": 1,
+      "hash": "ALW_4646_e80870e56f_86f40519c5",
+      "ext": ".jpg",
+      "local": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg",
+      "source": "galeries[0] — 1er visuel Best Of sib.ma (ordre Strapi position)"
+    },
+    "heroBanner": {
+      "url": "https://sib.ma/backend/uploads/parc_exposition_eljadida_f4a9052968.png",
+      "hash": "parc_exposition_eljadida_f4a9052968",
+      "width": 1633,
+      "height": 1199,
+      "ext": ".png",
+      "local": "/sib-ma/parc_exposition_eljadida_f4a9052968.png",
+      "caption": "parc_exposition_eljadida.png",
+      "source": "sib.banner_default — Parc Mohammed VI (bannière site)"
+    },
+    "mission": {
+      "caption": "Inauguration officielle - SIB 2024",
+      "position": 9,
+      "hash": "1_a559ea5363",
+      "ext": ".png",
+      "local": "/sib-ma/1_a559ea5363.png",
+      "source": "galerie Best Of — inauguration (comme section présentation sib.ma)"
+    },
+    "reserve": {
+      "url": "https://sib.ma/backend/uploads/parc_exposition_eljadida_f4a9052968.png",
+      "hash": "parc_exposition_eljadida_f4a9052968",
+      "width": 1633,
+      "height": 1199,
+      "ext": ".png",
+      "local": "/sib-ma/parc_exposition_eljadida_f4a9052968.png",
+      "caption": "parc_exposition_eljadida.png",
+      "source": "sib.banner_default — même visuel bloc lieu sur sib.ma"
+    },
+    "sectionBg": {
+      "local": "/sib-ma/static/section_02.jpg",
+      "caption": "assets/images/bg/section_02.jpg (fond titres sib.ma)",
+      "source": "www.sib.ma/assets statique"
+    },
+    "activiteSecteurs": {
+      "url": "https://sib.ma/backend/uploads/main_5bd806f6fcced8760ced_e4e03ad1e4.png",
+      "hash": "main_5bd806f6fcced8760ced_e4e03ad1e4",
+      "width": 2460,
+      "height": 896,
+      "ext": ".png",
+      "local": "/sib-ma/main_5bd806f6fcced8760ced_e4e03ad1e4.png",
+      "caption": "main.5bd806f6fcced8760ced.png"
+    },
+    "salonCards": {
+      "exposer": {
+        "caption": "Stand L.A.P \"Sponsor Officiel\" - SIB 2024",
+        "position": 10,
+        "hash": "2_1e3351c897",
+        "ext": ".png",
+        "local": "/sib-ma/2_1e3351c897.png",
+        "source": "galerie Best Of — Stand L.A.P \"Sponsor Officiel\" - SIB 2024"
+      },
+      "visiter": {
+        "caption": "Visiteurs - SIB 2024",
+        "position": 15,
+        "hash": "7_7474f5a087",
+        "ext": ".png",
+        "local": "/sib-ma/7_7474f5a087.png",
+        "source": "galerie Best Of — Visiteurs - SIB 2024"
+      },
+      "sib_talks": {
+        "caption": "Conférences SIB 2024",
+        "position": 11,
+        "hash": "3_c9f5820a94",
+        "ext": ".png",
+        "local": "/sib-ma/3_c9f5820a94.png",
+        "source": "galerie Best Of — Conférences SIB 2024"
+      },
+      "b2b": {
+        "caption": "B2B FMC - SIB 2024",
+        "position": 12,
+        "hash": "4_9d2cb5a776",
+        "ext": ".png",
+        "local": "/sib-ma/4_9d2cb5a776.png",
+        "source": "galerie Best Of — B2B FMC - SIB 2024"
+      },
+      "diner": {
+        "caption": "Inauguration officielle - SIB 2024",
+        "position": 9,
+        "hash": "1_a559ea5363",
+        "ext": ".png",
+        "local": "/sib-ma/1_a559ea5363.png",
+        "source": "galerie Best Of — Inauguration officielle - SIB 2024"
+      },
+      "international": {
+        "caption": "Espace Démonstration | Stand CROAC - SIB 2024",
+        "position": 13,
+        "hash": "5_833920f28a",
+        "ext": ".png",
+        "local": "/sib-ma/5_833920f28a.png",
+        "source": "galerie Best Of — Espace Démonstration | Stand CROAC - SIB 2024"
+      }
+    },
+    "timeline": {
+      "1986": {
+        "caption": "Stand du Ministère - SIB 2022",
+        "position": 2,
+        "hash": "MUS_3588_01206249cb_110540f778",
+        "ext": ".jpg",
+        "local": "/sib-ma/MUS_3588_01206249cb_110540f778.jpg",
+        "source": "timeline 1986 — Stand du Ministère - SIB 2022"
+      },
+      "2000": {
+        "caption": "Stand TTH COMPANY \"Sponsor Officiel\" - SIB 2022",
+        "position": 4,
+        "hash": "ALW_3951_bde2fd255e_2bc047ae4c",
+        "ext": ".jpg",
+        "local": "/sib-ma/ALW_3951_bde2fd255e_2bc047ae4c.jpg",
+        "source": "timeline 2000 — Stand TTH COMPANY \"Sponsor Officiel\" - SIB 2022"
+      },
+      "2012": {
+        "caption": "SIB STADIUM - SIB 2022",
+        "position": 5,
+        "hash": "ALW_6459_33285f4622_3856730bca",
+        "ext": ".jpg",
+        "local": "/sib-ma/ALW_6459_33285f4622_3856730bca.jpg",
+        "source": "timeline 2012 — SIB STADIUM - SIB 2022"
+      },
+      "2022": {
+        "caption": "CROAC - SIB 2022",
+        "position": 1,
+        "hash": "ALW_4646_e80870e56f_86f40519c5",
+        "ext": ".jpg",
+        "local": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg",
+        "source": "timeline 2022 — CROAC - SIB 2022"
+      },
+      "2026": {
+        "url": "https://sib.ma/backend/uploads/parc_exposition_eljadida_f4a9052968.png",
+        "hash": "parc_exposition_eljadida_f4a9052968",
+        "width": 1633,
+        "height": 1199,
+        "ext": ".png",
+        "local": "/sib-ma/parc_exposition_eljadida_f4a9052968.png",
+        "caption": "parc_exposition_eljadida.png",
+        "source": "timeline 2026 — parc_exposition_eljadida.png"
+      }
+    },
+    "bestOfOrder": [
+      {
+        "position": 1,
+        "caption": "CROAC - SIB 2022",
+        "local": "/sib-ma/ALW_4646_e80870e56f_86f40519c5.jpg"
+      },
+      {
+        "position": 2,
+        "caption": "Stand du Ministère - SIB 2022",
+        "local": "/sib-ma/MUS_3588_01206249cb_110540f778.jpg"
+      },
+      {
+        "position": 3,
+        "caption": "Inauguration Mme FATIMA ZAHRA EL MANSOURI - SIB 2022",
+        "local": "/sib-ma/ALW_3369_067b43b2aa_16e46cc9e8.jpg"
+      },
+      {
+        "position": 4,
+        "caption": "Stand TTH COMPANY \"Sponsor Officiel\" - SIB 2022",
+        "local": "/sib-ma/ALW_3951_bde2fd255e_2bc047ae4c.jpg"
+      },
+      {
+        "position": 5,
+        "caption": "SIB STADIUM - SIB 2022",
+        "local": "/sib-ma/ALW_6459_33285f4622_3856730bca.jpg"
+      },
+      {
+        "position": 6,
+        "caption": "Tournoi National URBACOM des Echecs - SIB 2022",
+        "local": "/sib-ma/ALW_5795_5d5a2084bf_6e12b4efa1.jpg"
+      },
+      {
+        "position": 7,
+        "caption": "SIB WOMAN - SIB 2022",
+        "local": "/sib-ma/MUS_2047_bfb27a7b0a_0dc45cd345.jpg"
+      },
+      {
+        "position": 8,
+        "caption": "B2B FMC - SIB 2022",
+        "local": "/sib-ma/MUS_2474_845b49c603_862cc1ef12.jpg"
+      },
+      {
+        "position": 9,
+        "caption": "Inauguration officielle - SIB 2024",
+        "local": "/sib-ma/1_a559ea5363.png"
+      },
+      {
+        "position": 10,
+        "caption": "Stand L.A.P \"Sponsor Officiel\" - SIB 2024",
+        "local": "/sib-ma/2_1e3351c897.png"
+      },
+      {
+        "position": 11,
+        "caption": "Conférences SIB 2024",
+        "local": "/sib-ma/3_c9f5820a94.png"
+      },
+      {
+        "position": 12,
+        "caption": "B2B FMC - SIB 2024",
+        "local": "/sib-ma/4_9d2cb5a776.png"
+      },
+      {
+        "position": 13,
+        "caption": "Espace Démonstration | Stand CROAC - SIB 2024",
+        "local": "/sib-ma/5_833920f28a.png"
+      },
+      {
+        "position": 14,
+        "caption": "Espace SIB TV - SIB 2024",
+        "local": "/sib-ma/6_e150a00dd5.png"
+      },
+      {
+        "position": 15,
+        "caption": "Visiteurs - SIB 2024",
+        "local": "/sib-ma/7_7474f5a087.png"
+      },
+      {
+        "position": 16,
+        "caption": "Visiteurs - SIB 2024",
+        "local": "/sib-ma/8_7f9bb440b0.png"
+      }
+    ]
+  },
+  "siteUrl": "https://www.sib.ma/"
+}

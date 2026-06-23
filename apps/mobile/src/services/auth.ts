@@ -111,18 +111,17 @@ export async function signUpVisitorFree(params: {
   ]);
   if (userError) throw userError;
 
-  try {
-    await supabase.functions.invoke('generate-visitor-badge', {
-      body: {
-        userId: authData.user.id,
-        email,
-        name: fullName,
-        level: 'free',
-        includePhoto: false,
-      },
-    });
-  } catch {
-    // Edge function optionnelle
+  const { data: badgeData, error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
+    body: {
+      userId: authData.user.id,
+      email,
+      name: fullName,
+      level: 'free',
+      includePhoto: false,
+    },
+  });
+  if (badgeError || badgeData?.error) {
+    throw new Error('Profil créé mais badge non généré — ouvrez l\'onglet Badge pour réessayer');
   }
 
   const appUser = await fetchAppUser(authData.user.id);

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Affiche SIB 2026 — Inscription Visiteur</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #e8e0d4;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .poster {
+      width: 595mm;
+      max-width: 100%;
+      background: #0B1C3D;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.5);
+    }
+
+    /* ─── Bordure dorée externe ─── */
+    .poster::before {
+      content: '';
+      position: absolute;
+      inset: 18px;
+      border: 3px solid #C9A84C;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .poster::after {
+      content: '';
+      position: absolute;
+      inset: 26px;
+      border: 1px solid rgba(201,168,76,0.4);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* ─── Motif arabesque de fond ─── */
+    .arabesque-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image:
+        radial-gradient(circle at 20% 20%, #C9A84C 1px, transparent 1px),
+        radial-gradient(circle at 80% 80%, #C9A84C 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, #C9A84C 0.5px, transparent 0.5px);
+      background-size: 60px 60px, 60px 60px, 30px 30px;
+    }
+
+    /* ─── Dégradé lumineux central ─── */
+    .glow {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ─── Contenu ─── */
+    .inner {
+      position: relative;
+      z-index: 20;
+      padding: 70px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ─── Logo / Header ─── */
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .logo-emblem {
+      width: 90px;
+      height: 90px;
+      border: 2px solid #C9A84C;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(201,168,76,0.1);
+      flex-shrink: 0;
+    }
+    .logo-emblem svg { width: 52px; height: 52px; }
+
+    .logo-text-group { text-align: left; }
+    .logo-sib {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 900;
+      color: #C9A84C;
+      letter-spacing: 8px;
+      line-height: 1;
+    }
+    .logo-year {
+      font-size: 18px;
+      color: rgba(201,168,76,0.7);
+      letter-spacing: 12px;
+      font-weight: 300;
+      margin-top: 4px;
+    }
+
+    /* ─── Ligne séparatrice ornementale ─── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      margin: 40px 0;
+    }
+    .ornament-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #C9A84C, transparent);
+    }
+    .ornament-diamond {
+      width: 10px;
+      height: 10px;
+      background: #C9A84C;
+      transform: rotate(45deg);
+    }
+    .ornament-circle {
+      width: 6px;
+      height: 6px;
+      border: 1.5px solid #C9A84C;
+      border-radius: 50%;
+    }
+
+    /* ─── Titre principal ─── */
+    .tag {
+      font-size: 13px;
+      letter-spacing: 5px;
+      color: #C9A84C;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .main-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 88px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .main-title span { color: #C9A84C; }
+
+    .subtitle {
+      font-size: 22px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .arabic-title {
+      font-size: 38px;
+      color: rgba(201,168,76,0.85);
+      font-weight: 600;
+      letter-spacing: 2px;
+      direction: rtl;
+      margin-top: 8px;
+    }
+
+    /* ─── Zone QR + instructions ─── */
+    .qr-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      margin: 52px 0;
+      width: 100%;
+    }
+
+    .qr-frame {
+      position: relative;
+      padding: 28px;
+      background: #ffffff;
+      border-radius: 6px;
+      box-shadow:
+        0 0 0 4px #0B1C3D,
+        0 0 0 7px #C9A84C,
+        0 30px 80px rgba(0,0,0,0.6);
+    }
+    .qr-frame canvas { display: block; }
+
+    /* Coins dorés */
+    .qr-frame .corner {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-color: #C9A84C;
+      border-style: solid;
+    }
+    .qr-frame .corner.tl { top: -6px; left: -6px; border-width: 4px 0 0 4px; }
+    .qr-frame .corner.tr { top: -6px; right: -6px; border-width: 4px 4px 0 0; }
+    .qr-frame .corner.bl { bottom: -6px; left: -6px; border-width: 0 0 4px 4px; }
+    .qr-frame .corner.br { bottom: -6px; right: -6px; border-width: 0 4px 4px 0; }
+
+    .qr-label {
+      position: absolute;
+      bottom: -52px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 13px;
+      color: rgba(201,168,76,0.7);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ─── Instruction chips ─── */
+    .steps {
+      display: flex;
+      gap: 32px;
+      margin: 48px 0 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: 160px;
+    }
+    .step-num {
+      width: 52px;
+      height: 52px;
+      border: 2px solid #C9A84C;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: #C9A84C;
+      font-family: 'Playfair Display', serif;
+      background: rgba(201,168,76,0.08);
+    }
+    .step-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* ─── Bannière infos event ─── */
+    .event-banner {
+      display: flex;
+      gap: 0;
+      background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 52px;
+      width: 100%;
+    }
+    .event-item {
+      flex: 1;
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      border-right: 1px solid rgba(201,168,76,0.2);
+    }
+    .event-item:last-child { border-right: none; }
+    .event-icon { color: #C9A84C; font-size: 24px; }
+    .event-val {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+    .event-lbl {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      margin-top: 52px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(201,168,76,0.2);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+      line-height: 1.8;
+      text-align: left;
+    }
+    .footer-url {
+      font-size: 14px;
+      color: rgba(201,168,76,0.6);
+      letter-spacing: 1px;
+    }
+    .footer-stars {
+      display: flex;
+      gap: 6px;
+    }
+    .star {
+      color: #C9A84C;
+      font-size: 16px;
+      opacity: 0.6;
+    }
+
+    /* ─── Print ─── */
+    @media print {
+      body { background: none; padding: 0; }
+      .poster {
+        width: 100%;
+        max-width: none;
+        box-shadow: none;
+        page-break-inside: avoid;
+      }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Bouton impression (masqué à l'impression) -->
+<div class="no-print" style="position:fixed;top:20px;right:20px;z-index:999;">
+  <button onclick="window.print()" style="background:#C9A84C;color:#0B1C3D;border:none;padding:14px 28px;font-size:15px;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:2px;">
+    🖨 IMPRIMER
+  </button>
+</div>
+
+<div class="poster">
+  <div class="arabesque-bg"></div>
+  <div class="glow"></div>
+
+  <div class="inner">
+
+    <!-- Logo -->
+    <div class="logo-row">
+      <div class="logo-emblem">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="26,4 32,18 48,18 36,28 40,44 26,34 12,44 16,28 4,18 20,18" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+          <circle cx="26" cy="26" r="8" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+          <circle cx="26" cy="26" r="2" fill="#C9A84C"/>
+        </svg>
+      </div>
+      <div class="logo-text-group">
+        <div class="logo-sib">SIB</div>
+        <div class="logo-year">2 0 2 6</div>
+      </div>
+    </div>
+
+    <!-- Ornement -->
+    <div class="ornament">
+      <div class="ornament-line"></div>
+      <div class="ornament-circle"></div>
+      <div class="ornament-diamond"></div>
+      <div class="ornament-circle"></div>
+      <div class="ornament-line"></div>
+    </div>
+
+    <!-- Titre -->
+    <div class="tag">Salon International du Bâtiment · Maroc</div>
+    <div class="main-title">
+      INSCRIVEZ<br/>
+      <span>VOUS</span>
+    </div>
+    <div class="subtitle">Accès Visiteur Gratuit</div>
+    <div class="arabic-title">سجّل الآن — دخول مجاني</div>
+
+    <!-- Ornement -->
+    <div class="ornament" style="margin: 44px 0 0;">
+      <div class="ornament-line"></div>
+      <div class="ornament-circle"></div>
+      <div class="ornament-diamond"></div>
+      <div class="ornament-circle"></div>
+      <div class="ornament-line"></div>
+    </div>
+
+    <!-- QR Code -->
+    <div class="qr-section">
+      <div style="font-size:18px;color:rgba(255,255,255,0.6);letter-spacing:3px;text-transform:uppercase;">
+        Scannez pour vous inscrire
+      </div>
+      <div class="qr-frame" style="position:relative;">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+        <canvas id="qrcode"></canvas>
+        <div class="qr-label">scanner avec votre téléphone</div>
+      </div>
+      <div style="height:32px;"></div>
+    </div>
+
+    <!-- Étapes -->
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Ouvrez l'appareil<br/>photo de votre<br/>téléphone</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Pointez vers<br/>le QR code<br/>ci-dessus</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Remplissez le<br/>formulaire en<br/>ligne</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">Recevez votre<br/>badge d'accès<br/>par email</div>
+      </div>
+    </div>
+
+    <!-- Infos event -->
+    <div class="event-banner">
+      <div class="event-item">
+        <div class="event-icon">📅</div>
+        <div class="event-val">2026</div>
+        <div class="event-lbl">Édition</div>
+      </div>
+      <div class="event-item">
+        <div class="event-icon">📍</div>
+        <div class="event-val">Casablanca</div>
+        <div class="event-lbl">Lieu</div>
+      </div>
+      <div class="event-item">
+        <div class="event-icon">🏛</div>
+        <div class="event-val">Office des Foires</div>
+        <div class="event-lbl">Complexe</div>
+      </div>
+      <div class="event-item">
+        <div class="event-icon">🎟</div>
+        <div class="event-val">Gratuit</div>
+        <div class="event-lbl">Entrée</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-left">
+        Salon International du Bâtiment<br/>
+        <span style="color:rgba(255,255,255,0.15);">sib2026.ma · contact@sib2026.ma</span>
+      </div>
+      <div class="footer-url">sib2026.vercel.app</div>
+      <div class="footer-stars">
+        <span class="star">✦</span>
+        <span class="star">✦</span>
+        <span class="star">✦</span>
+      </div>
+    </div>
+
+  </div><!-- /inner -->
+</div><!-- /poster -->
+
+<script>
+  QRCode.toCanvas(document.getElementById('qrcode'), 'https://sib2026.vercel.app/register/visitor', {
+    width: 380,
+    margin: 2,
+    color: {
+      dark: '#0B1C3D',
+      light: '#FFFFFF'
+    },
+    errorCorrectionLevel: 'H'
+  }, function(err) {
+    if (err) console.error(err);
+  });
+</script>
+</body>
+</html>

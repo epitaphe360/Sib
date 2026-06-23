@@ -4,6 +4,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { useBadgeConfig } from '../hooks/useBadgeConfig';
 import { useSalon } from '../context/SalonContext';
 import { useSalonTheme } from '../hooks/useSalonTheme';
+import { useI18n } from '../i18n/I18nProvider';
 import { APP_IMAGES } from '../data/images';
 import { colors, fonts, radius, shadows, spacing } from '../theme';
 import type { UserBadge } from '../types';
@@ -13,6 +14,7 @@ export function QRBadgeView({ badge, qrValue, fullScreen }: { badge: UserBadge; 
   const { activeSalon } = useSalon();
   const { config } = useBadgeConfig();
   const theme = useSalonTheme();
+  const { t } = useI18n();
   const isVip =
     badge.accessLevel?.toLowerCase().includes('premium') ||
     badge.accessLevel?.toLowerCase().includes('vip');
@@ -20,21 +22,26 @@ export function QRBadgeView({ badge, qrValue, fullScreen }: { badge: UserBadge; 
   const eventTitle = theme?.fullName ?? activeSalon?.name ?? config.event_name;
   const eventMeta = `${activeSalon?.dates ?? config.event_dates_display} · ${theme?.location ?? config.event_location}`;
 
-  const qrSize = fullScreen ? 220 : 190;
+  const qrSize = fullScreen ? 200 : 190;
+  const validLabel = t('badge.validUntil').replace(
+    '{{date}}',
+    badge.validUntil.toLocaleDateString('fr-FR')
+  );
 
   return (
     <View style={[styles.wrap, fullScreen && styles.wrapFull]}>
       <View style={[styles.pass, shadows.lg]}>
-        {/* Header banner with background image */}
         <ImageBackground source={APP_IMAGES.hall} style={styles.header} imageStyle={styles.headerImg}>
           <View style={styles.headerOverlay} />
-          {/* Gold top stripe */}
           <View style={styles.goldStripeTop} />
-          {/* Content */}
           <View style={styles.headerContent}>
-            <View>
-              <Text style={styles.brand}>{eventTitle.toUpperCase()}</Text>
-              <Text style={styles.event}>{eventMeta}</Text>
+            <View style={styles.headerTextCol}>
+              <Text style={styles.brand} numberOfLines={1}>
+                {eventTitle.toUpperCase()}
+              </Text>
+              <Text style={styles.event} numberOfLines={2}>
+                {eventMeta}
+              </Text>
             </View>
             <View style={[styles.passTypePill, isVip && styles.passTypePillVip]}>
               <Text style={[styles.passTypeText, isVip && styles.passTypeTextVip]}>
@@ -42,13 +49,10 @@ export function QRBadgeView({ badge, qrValue, fullScreen }: { badge: UserBadge; 
               </Text>
             </View>
           </View>
-          {/* Gold bottom stripe */}
           <View style={styles.goldStripeBottom} />
         </ImageBackground>
 
-        {/* QR body */}
-        <View style={styles.body}>
-          {/* QR card floating above */}
+        <View style={[styles.body, fullScreen && styles.bodyFull]}>
           <View style={[styles.qrCard, isVip && styles.qrCardVip]}>
             <QRCode
               value={qrValue}
@@ -58,12 +62,18 @@ export function QRBadgeView({ badge, qrValue, fullScreen }: { badge: UserBadge; 
             />
           </View>
 
-          <Text style={styles.name}>{badge.fullName}</Text>
-          {badge.companyName ? <Text style={styles.company}>{badge.companyName}</Text> : null}
+          <Text style={styles.name} numberOfLines={2}>
+            {badge.fullName}
+          </Text>
+          {badge.companyName ? (
+            <Text style={styles.company} numberOfLines={2}>
+              {badge.companyName}
+            </Text>
+          ) : null}
 
           <Text style={styles.code}>{badge.badgeCode}</Text>
-          <Text style={styles.valid}>
-            Valide jusqu'au {badge.validUntil.toLocaleDateString('fr-FR')}
+          <Text style={styles.valid} numberOfLines={2}>
+            {validLabel}
           </Text>
         </View>
       </View>
@@ -78,11 +88,10 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: colors.surface,
     borderRadius: radius.xl,
-    overflow: 'hidden',
     borderWidth: 1.5,
     borderColor: 'rgba(212,175,55,0.4)',
   },
-  header: { height: 108, justifyContent: 'flex-end' },
+  header: { height: 118, justifyContent: 'flex-end' },
   headerImg: { opacity: 0.7 },
   headerOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: colors.overlayHeavy },
   goldStripeTop: {
@@ -104,11 +113,16 @@ const styles = StyleSheet.create({
   },
   headerContent: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.sm,
     zIndex: 1,
+    gap: spacing.sm,
+  },
+  headerTextCol: {
+    flex: 1,
+    minWidth: 0,
   },
   brand: {
     color: colors.gold,
@@ -130,6 +144,8 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.25)',
+    flexShrink: 0,
+    marginTop: 2,
   },
   passTypePillVip: {
     backgroundColor: 'rgba(212,175,55,0.25)',
@@ -146,7 +162,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
     paddingBottom: spacing.xl,
-    paddingTop: spacing.sm,
+    paddingTop: spacing.md,
+  },
+  bodyFull: {
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.xl + spacing.sm,
   },
   qrCard: {
     backgroundColor: '#fff',
@@ -154,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 2,
     borderColor: colors.border,
-    marginTop: -28,
+    marginTop: 0,
     ...shadows.md,
   },
   qrCardVip: { borderColor: colors.gold, borderWidth: 3 },
@@ -185,5 +205,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: fonts.body,
     color: colors.textMuted,
+    textAlign: 'center',
+    paddingHorizontal: spacing.sm,
   },
 });

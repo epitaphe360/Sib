@@ -34,7 +34,7 @@ export default function LoginScreen() {
       await signOut().catch(() => undefined);
       const appUser = await signIn(email, password);
       await refreshUser();
-      navigateAfterAuth(appUser.type);
+      navigateAfterAuth(appUser);
     } catch (e) {
       Alert.alert(
         'Connexion rapide',
@@ -95,7 +95,7 @@ export default function LoginScreen() {
       await refreshUser();
       setFailedAttempts(0);
       setLockUntil(null);
-      navigateAfterAuth(appUser.type);
+      navigateAfterAuth(appUser);
     } catch (e) {
       const next = failedAttempts + 1;
       setFailedAttempts(next);

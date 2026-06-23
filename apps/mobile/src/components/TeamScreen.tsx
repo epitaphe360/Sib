@@ -12,6 +12,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { supabaseErrorMessage } from '../lib/supabaseError';
 import {
   createCollaborator,
   deactivateCollaborator,
@@ -82,7 +83,7 @@ export function TeamScreen() {
       setShowForm(false);
       await load();
     } catch (e) {
-      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('team.createError'));
+      Alert.alert(t('common.error'), supabaseErrorMessage(e, t('team.createError')));
     } finally {
       setSubmitting(false);
     }
@@ -105,7 +106,14 @@ export function TeamScreen() {
   return (
     <Screen style={styles.flex}>
       <ScreenTitle title={t('team.title')} subtitle={context?.companyName ?? t('team.subtitle')} />
-      <PrimaryButton label={t('team.add')} onPress={() => setShowForm(true)} variant="gold" />
+      <PrimaryButton label={t('team.add')} onPress={() => setShowForm(true)} variant="gold" disabled={!context} />
+      {!loading && !context ? (
+        <IllustratedEmpty
+          icon="business-outline"
+          title={t('team.noStandLinkedTitle')}
+          message={t('team.noStandLinkedMessage')}
+        />
+      ) : null}
       {items.length > 0 ? (
         <PrimaryButton
           label={t('team.printAll')}

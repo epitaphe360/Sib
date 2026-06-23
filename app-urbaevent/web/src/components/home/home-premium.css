@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap');
+
+.home-premium {
+  font-family: 'Montserrat', 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.home-premium .home-dark {
+  color: #ffffff;
+  --color-text: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.88);
+}
+
+.home-premium .home-hero-media {
+  overflow: hidden;
+}
+
+.home-premium .home-hero-photo {
+  object-position: center 35%;
+  filter: saturate(1.08) contrast(1.04);
+  animation: home-hero-kenburns 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes home-hero-kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.04);
+  }
+}
+
+.home-premium .home-stats-value {
+  color: #f39200;
+  font-variant-numeric: tabular-nums;
+}
+
+.home-premium .home-section-kicker {
+  letter-spacing: 0.22em;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  color: #f39200;
+}
+
+.home-premium .home-section-title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #001a3d;
+}
+
+html.dark .home-premium .home-section-title {
+  color: #f5f5f4;
+}
+
+.home-premium .home-card-lift {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.home-premium .home-card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px -18px rgba(0, 26, 61, 0.38);
+}
+
+.home-premium .home-theme-card {
+  border-color: rgba(0, 26, 61, 0.08);
+}
+
+.home-premium .home-theme-card:hover {
+  border-color: rgba(243, 146, 0, 0.35);
+}
+
+.home-premium .home-theme-card .home-theme-icon {
+  background: rgba(0, 26, 61, 0.06);
+  color: #001a3d;
+  transition: all 0.3s ease;
+}
+
+.home-premium .home-theme-card:hover .home-theme-icon {
+  background: #f39200;
+  color: #fff;
+}
+
+.home-premium .home-btn-orange {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #f39200;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  padding: 0.85rem 1.75rem;
+  transition: background-color 0.2s;
+}
+
+.home-premium .home-btn-orange:hover {
+  background: #e08500;
+}
+
+.home-premium .home-p5-hero-bg {
+  background-image:
+    linear-gradient(105deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.9) 45%, rgba(255, 255, 255, 0.72) 100%),
+    url('https://sib.ma/backend/uploads/parc_exposition_eljadida_f4a9052968.png');
+  background-size: cover;
+  background-position: center right;
+}
+
+.home-premium .home-glass-panel {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px) saturate(1.25);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 40px -12px rgba(0, 26, 61, 0.14);
+}
+
+html.dark .home-premium .home-glass-panel {
+  background: rgba(23, 23, 23, 0.78);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.home-premium .home-p7-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(0, 26, 61, 0.94) 0%,
+    rgba(0, 26, 61, 0.78) 38%,
+    rgba(0, 26, 61, 0.35) 68%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.home-premium .sib-kicker::before {
+  background: #f39200;
+}
+
+.home-premium .sib-text-gradient {
+  background: linear-gradient(135deg, #001a3d 0%, #5e8fbe 50%, #f39200 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

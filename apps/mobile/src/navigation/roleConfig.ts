@@ -1,4 +1,5 @@
-import type { UserType } from '../types';
+import { isCollaboratorUser } from '../lib/collaboratorRole';
+import type { AppUser, UserType } from '../types';
 
 export type RoleRouteGroup = 'visitor' | 'exhibitor' | 'staff' | 'service_client';
 
@@ -33,6 +34,20 @@ export function getHomePath(type?: UserType | string | null): string {
     default:
       return '/(visitor)/(tabs)';
   }
+}
+
+/** Route d'accueil selon le profil complet (collaborateur → badge visiteur). */
+export function getHomePathForUser(user: AppUser): string {
+  if (isCollaboratorUser(user)) {
+    return '/(visitor)/(tabs)/badge';
+  }
+  return getHomePath(user.type);
+}
+
+/** Groupe de navigation effectif (collaborateur exposant → parcours visiteur). */
+export function getRouteGroupForUser(user: AppUser): RoleRouteGroup {
+  if (isCollaboratorUser(user)) return 'visitor';
+  return getRoleGroup(user.type);
 }
 
 export function isRoleAllowed(

@@ -1,0 +1,143 @@
+{
+  "epitaphe": {
+    "common": {
+      "contact": "Contact",
+      "requestAudit": "Demander un audit",
+      "learnMore": "En savoir plus",
+      "viewCase": "Voir l'étude de cas",
+      "getInTouch": "Nous contacter",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "phone": "Téléphone"
+    },
+    "navigation": {
+      "events": "Événements Stratégiques",
+      "brandArchitecture": "Architecture de Marque",
+      "fabrique": "La Fabrique",
+      "references": "Références",
+      "agency": "L'Agence",
+      "blog": "Blog"
+    },
+    "sectors": {
+      "pharma": "Pharmaceutique",
+      "banking": "Banque & Finance",
+      "industry": "Industrie",
+      "transport": "Transport & Logistique",
+      "administration": "Administration Publique",
+      "other": "Autre"
+    },
+    "needTypes": {
+      "events": "Événementiel Stratégique",
+      "brand_architecture": "Architecture de Marque",
+      "production": "Production & Fabrication",
+      "global_360": "Solution Globale 360°"
+    },
+    "forms": {
+      "strategicBrief": {
+        "title": "Brief Stratégique",
+        "description": "Qualifiez votre besoin en quelques étapes simples",
+        "step1Title": "Secteur d'activité",
+        "step1Desc": "Quel est votre secteur d'activité ?",
+        "step2Title": "Type de besoin",
+        "step2Desc": "Quel type de service vous intéresse ?",
+        "step3Title": "Détails du projet",
+        "step3Desc": "Décrivez votre projet et votre budget",
+        "step4Title": "Vos coordonnées",
+        "step4Desc": "Comment pouvons-nous vous contacter ?",
+        "step5Title": "Confirmation",
+        "step5Desc": "Merci pour votre intérêt",
+        "projectDescription": "Description du projet",
+        "budgetRange": "Budget indicatif",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "jobTitle": "Poste",
+        "company": "Entreprise",
+        "email": "Email",
+        "phone": "Téléphone",
+        "acceptTerms": "J'accepte les conditions d'utilisation",
+        "submit": "Soumettre",
+        "success": "Merci ! Votre brief a été reçu avec succès.",
+        "error": "Une erreur s'est produite lors de la soumission."
+      },
+      "contact": {
+        "title": "Formulaire de Contact",
+        "description": "Envoyez-nous votre message",
+        "subject": "Sujet",
+        "message": "Message",
+        "submit": "Envoyer",
+        "success": "Votre message a été envoyé avec succès.",
+        "error": "Une erreur s'est produite lors de l'envoi."
+      }
+    },
+    "services": {
+      "events": {
+        "title": "Événements Stratégiques",
+        "description": "L'événement est le catalyseur de votre stratégie",
+        "conventions": "Conventions & Séminaires",
+        "launches": "Lancements de Produits",
+        "teamBuilding": "Team Building Stratégiques",
+        "roadshows": "Roadshows Nationaux",
+        "hybrid": "Événements Hybrides",
+        "scenography": "Scénographie Immersive"
+      },
+      "brandArchitecture": {
+        "title": "Architecture de Marque",
+        "description": "Transformer votre marque en force stratégique",
+        "internalComm": "Communication Interne",
+        "employerBrand": "Marque Employeur",
+        "onboarding": "Onboarding",
+        "qhse": "Communication QHSE",
+        "financial": "Communication Financière"
+      },
+      "fabrique": {
+        "title": "La Fabrique",
+        "description": "Zéro sous-traitance, 100% maîtrise",
+        "printing": "Atelier d'Impression",
+        "carpentry": "Menuiserie & Fabrication",
+        "signage": "Signalétique & Wayfinding",
+        "spaces": "Aménagement d'Espaces"
+      }
+    },
+    "references": {
+      "title": "Nos Références",
+      "description": "60+ clients multinationales nous font confiance",
+      "filterBySector": "Filtrer par secteur",
+      "allSectors": "Tous les secteurs",
+      "caseStudy": "Étude de cas",
+      "viewMore": "Voir plus de références"
+    },
+    "tools": {
+      "qhseScore": {
+        "title": "Vigilance-Score",
+        "description": "Évaluez votre communication sécurité",
+        "question1": "Avez-vous un plan de communication sécurité formalisé ?",
+        "question2": "Vos collaborateurs connaissent-ils les risques majeurs ?",
+        "question3": "Disposez-vous de supports de sensibilisation réguliers ?",
+        "question4": "Mesurez-vous l'efficacité de votre communication ?",
+        "question5": "Avez-vous une démarche d'amélioration continue ?",
+        "result": "Votre score de vigilance",
+        "recommendation": "Recommandation",
+        "schedule": "Planifier un audit"
+      },
+      "fabriqueCalculator": {
+        "title": "Calculateur d'Optimisation Fabrique",
+        "description": "Estimez vos économies avec l'atelier intégré",
+        "suppliers": "Nombre de fournisseurs actuels",
+        "volume": "Volume de production mensuel",
+        "cost": "Coût moyen par unité",
+        "leadTime": "Délai de production (jours)",
+        "savings": "Économies estimées",
+        "timeReduction": "Réduction de délai",
+        "efficiency": "Gain d'efficacité"
+      }
+    },
+    "cta": {
+      "securePerformance": "Sécuriser ma performance opérationnelle",
+      "givePhysicalDimension": "Donner une dimension physique à ma stratégie",
+      "attractRetain": "Attirer et retenir les talents qui me ressemblent",
+      "calculateSavings": "Calculer mon économie avec l'atelier intégré",
+      "designOnboarding": "Concevoir mon livret d'accueil",
+      "enhanceGovernance": "Valoriser la gouvernance de mon entreprise"
+    }
+  }
+}

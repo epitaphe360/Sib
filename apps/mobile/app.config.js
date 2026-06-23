@@ -11,7 +11,7 @@ export default () => {
 
   return {
     ...appJson.expo,
-    userInterfaceStyle: 'automatic',
+    userInterfaceStyle: 'light',
     extra: {
       ...appJson.expo.extra,
       eas: {

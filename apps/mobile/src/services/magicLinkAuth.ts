@@ -8,17 +8,21 @@ import {
   type PendingSignup,
 } from '../lib/pendingSignup';
 import { supabase } from '../lib/supabase';
+import { logger } from '../lib/logger';
 import { fetchAppUser } from './auth';
 import type { AppUser } from '../types';
 import { fetchVipPassPricing } from './visitorLevel';
 
 async function tryGenerateBadge(userId: string, email: string, name: string, level: string) {
-  try {
-    await supabase.functions.invoke('generate-visitor-badge', {
-      body: { userId, email, name, level, includePhoto: false },
-    });
-  } catch {
-    // optionnel
+  const { data, error } = await supabase.functions.invoke('generate-visitor-badge', {
+    body: { userId, email, name, level, includePhoto: false },
+  });
+  if (error) {
+    logger.warn('magicLinkAuth', 'generate-visitor-badge failed', error);
+    throw new Error('Profil créé mais badge non généré — ouvrez l\'onglet Badge pour réessayer');
+  }
+  if (data?.error) {
+    throw new Error(String(data.error));
   }
 }
 
@@ -144,7 +148,28 @@ function mapMagicLinkError(error: unknown, fallback: string): never {
   if (lower.includes('signups not allowed') || lower.includes('not allowed for otp')) {
     throw new Error('Inscription par email temporairement indisponible. Contactez le support.');
   }
+  if (lower.includes('magic link email') || lower.includes('sending magic link')) {
+    throw new Error(
+      'Envoi de l’email impossible pour le moment. Vérifiez votre adresse ou réessayez dans quelques minutes.'
+    );
+  }
   throw new Error(raw);
+}
+
+/** Contourne SMTP Auth cassé — envoi via Edge Function Resend */
+async function sendMagicLinkViaEdge(params: {
+  email: string;
+  redirectTo: string;
+  shouldCreateUser: boolean;
+  linkType: 'signup' | 'magiclink';
+}): Promise<boolean> {
+  const { data, error } = await supabase.functions.invoke('send-magic-link', {
+    body: params,
+  });
+  if (error) return false;
+  if (data?.error) return false;
+  if (data?.skipped) return false;
+  return Boolean(data?.ok);
 }
 
 /** Connexion visiteur existant — pas de création de compte auth */
@@ -152,6 +177,14 @@ export async function sendMagicLinkLogin(email: string): Promise<void> {
   await clearPendingSignup();
   const normalized = email.toLowerCase().trim();
   const redirectTo = getAuthCallbackUrl();
+  const sentViaEdge = await sendMagicLinkViaEdge({
+    email: normalized,
+    redirectTo,
+    shouldCreateUser: false,
+    linkType: 'magiclink',
+  });
+  if (sentViaEdge) return;
+
   const { error } = await supabase.auth.signInWithOtp({
     email: normalized,
     options: {
@@ -178,6 +211,14 @@ export async function sendMagicLinkSignup(pending: Omit<PendingSignup, 'createdA
   const fullName = `${pending.firstName} ${pending.lastName}`.trim();
 
   const redirectTo = getAuthCallbackUrl();
+  const sentViaEdge = await sendMagicLinkViaEdge({
+    email: normalized,
+    redirectTo,
+    shouldCreateUser: true,
+    linkType: 'signup',
+  });
+  if (sentViaEdge) return;
+
   const { error } = await supabase.auth.signInWithOtp({
     email: normalized,
     options: {

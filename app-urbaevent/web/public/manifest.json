@@ -1,0 +1,63 @@
+{
+  "name": "SIB 2026",
+  "short_name": "SIB 2026",
+  "description": "Plateforme officielle du Salon International du Bâtiment SIB 2026",
+  "theme_color": "#1e40af",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/home-mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["business", "productivity", "events"],
+  "shortcuts": [
+    {
+      "name": "Tableau de bord",
+      "url": "/tableau-de-bord",
+      "description": "Accéder au tableau de bord"
+    },
+    {
+      "name": "Événements",
+      "url": "/evenements",
+      "description": "Voir les événements"
+    },
+    {
+      "name": "Rendez-vous",
+      "url": "/rendez-vous",
+      "description": "Gérer mes rendez-vous"
+    }
+  ]
+}

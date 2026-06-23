@@ -41,7 +41,7 @@ export default function AuthCallbackScreen() {
             dismissAuthStackIfNeeded();
             router.replace(`/payment/${paymentRequestId}` as never);
           } else {
-            navigateAfterAuth(appUser.type);
+            navigateAfterAuth(appUser);
           }
         }
       } catch (e) {

@@ -1,0 +1,7 @@
+# Smoke: inscription visiteur
+appId: com.urbacom.urbaevent
+---
+- launchApp
+- tapOn:
+    text: "Créer un compte|Register|inscri"
+    optional: true

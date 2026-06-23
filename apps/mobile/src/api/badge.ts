@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { fetchCollaboratorContext } from '../lib/collaboratorContext';
 import type { UserBadge } from '../types';
 
 export { ensureUserBadge, getUserBadge, badgeLevelLabel } from '../services/badge';
@@ -58,6 +59,12 @@ export async function ensureUserBadgeWithProfile(userId: string): Promise<UserBa
     if (ex) {
       companyName = ex.company_name ?? companyName;
       standNumber = ex.stand_number ?? ex.hall_number ?? null;
+    } else {
+      const collaborator = await fetchCollaboratorContext(userId);
+      if (collaborator) {
+        companyName = collaborator.companyName || companyName;
+        standNumber = collaborator.standNumber ?? null;
+      }
     }
   }
 

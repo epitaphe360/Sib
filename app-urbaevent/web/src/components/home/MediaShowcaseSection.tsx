@@ -1,0 +1,239 @@
+﻿/**
+ * Section Galerie Média sur la HomePage
+ * Affiche photos/vidéos depuis Supabase (ou WordPress en fallback)
+ */
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Image as ImageIcon, X, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useSupabaseMedia } from '../../hooks/useSupabaseContent';
+import { useWordPressMedia } from '../../hooks/useWordPressContent';
+import { useTranslation } from '../../hooks/useTranslation';
+
+interface MediaItem {
+  id: string | number;
+  title: string;
+  url: string;
+  thumbnail?: string;
+  alt?: string;
+}
+
+interface LightboxProps {
+  image: string;
+  title: string;
+  onClose: () => void;
+}
+
+const Lightbox: React.FC<LightboxProps> = ({ image, title, onClose }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-6 right-6 text-white hover:text-yellow-400 transition-colors"
+      >
+        <X className="w-8 h-8" />
+      </button>
+
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0.8 }}
+        onClick={(e) => e.stopPropagation()}
+        className="max-w-6xl w-full"
+      >
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-auto max-h-[80vh] object-contain rounded-lg shadow-2xl"
+        />
+        {title && (
+          <p className="text-white text-center mt-4 text-lg">{title}</p>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+};
+
+export const MediaShowcaseSection: React.FC = () => {
+  const [selectedImage, setSelectedImage] = useState<MediaItem | null>(null);
+  const { t } = useTranslation();
+
+  // Essayer Supabase d'abord, puis WordPress
+  const { data: supabaseMedia, loading: supabaseLoading } = useSupabaseMedia(8, 'image');
+  const { data: wpMedia, loading: wpLoading } = useWordPressMedia(8);
+
+  const mediaItems = supabaseMedia?.length > 0 ? supabaseMedia : wpMedia;
+  const loading = supabaseLoading || wpLoading;
+
+  // Médias par défaut si aucune source disponible
+  const defaultMedia: MediaItem[] = [
+    {
+      id: 1,
+      title: 'Chantier de construction',
+      url: 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=800',
+      alt: 'Chantier de construction'
+    },
+    {
+      id: 2,
+      title: 'Architecture moderne',
+      url: 'https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg?w=800',
+      alt: 'Architecture moderne'
+    },
+    {
+      id: 3,
+      title: 'Gros œuvre BTP',
+      url: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?w=800',
+      alt: 'Gros œuvre BTP'
+    },
+    {
+      id: 4,
+      title: 'Matériaux de construction',
+      url: 'https://images.pexels.com/photos/1370704/pexels-photo-1370704.jpeg?w=800',
+      alt: 'Matériaux de construction'
+    },
+    {
+      id: 5,
+      title: 'Design & Architecture',
+      url: 'https://images.pexels.com/photos/2760243/pexels-photo-2760243.jpeg?w=800',
+      alt: 'Design et Architecture'
+    },
+    {
+      id: 6,
+      title: 'Structure métallique',
+      url: 'https://images.pexels.com/photos/277667/pexels-photo-277667.jpeg?w=800',
+      alt: 'Structure métallique'
+    },
+    {
+      id: 7,
+      title: 'Innovation BTP',
+      url: 'https://images.pexels.com/photos/1117452/pexels-photo-1117452.jpeg?w=800',
+      alt: 'Innovation BTP'
+    },
+    {
+      id: 8,
+      title: 'Salon professionnel',
+      url: 'https://images.pexels.com/photos/1640147/pexels-photo-1640147.jpeg?w=800',
+      alt: 'Salon professionnel du bâtiment'
+    }
+  ];
+
+  const displayMedia = mediaItems || defaultMedia;
+
+  return (
+    <>
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-indigo-600 to-blue-900 relative overflow-hidden">
+        {/* Pattern lumineux */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+            backgroundSize: '32px 32px'
+          }} />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          {/* En-tête */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg mb-6">
+              <ImageIcon className="w-6 h-6 text-yellow-400" />
+              <span className="text-sm font-bold text-white uppercase tracking-wider">
+                {t('media.gallery_badge')}
+              </span>
+            </div>
+
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              {t('media.gallery_title')}
+            </h2>
+
+            <p className="text-blue-100 text-lg max-w-2xl mx-auto">
+              {t('media.gallery_desc')}
+            </p>
+          </motion.div>
+
+          {/* Grid de médias */}
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="aspect-square bg-white/10 rounded-xl animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+              {displayMedia.map((item: any, index: number) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  whileHover={{ scale: 1.05 }}
+                  className="relative aspect-square overflow-hidden rounded-xl group cursor-pointer shadow-lg"
+                  onClick={() => setSelectedImage(item)}
+                >
+                  <img
+                    src={item.thumbnail || item.url || 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=400'}
+                    alt={item.alt || item.title || 'Image du salon'}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?w=400';
+                    }}
+                  />
+
+                  {/* Overlay au survol */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-indigo-600 via-indigo-600/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                    <p className="text-white text-sm font-semibold truncate">
+                      {item.title}
+                    </p>
+                  </div>
+
+                  {/* Icône agrandir */}
+                  <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ImageIcon className="w-4 h-4 text-white" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          {/* Bouton Voir toute la galerie */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <Link
+              to="/media"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-amber-600 text-white px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+            >
+              <span>{t('media.view_gallery')}</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {selectedImage && (
+          <Lightbox
+            image={selectedImage.url}
+            title={selectedImage.title}
+            onClose={() => setSelectedImage(null)}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+};

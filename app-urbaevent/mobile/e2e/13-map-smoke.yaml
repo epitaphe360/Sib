@@ -1,0 +1,5 @@
+# Smoke: map / plan salon
+appId: com.urbacom.urbaevent
+---
+- launchApp
+- assertVisible: "Connexion|Sign in"

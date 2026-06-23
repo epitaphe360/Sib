@@ -1,0 +1,5 @@
+# Smoke: scan connect networking
+appId: com.urbacom.urbaevent
+---
+- launchApp
+- assertVisible: "Connexion|Sign in"

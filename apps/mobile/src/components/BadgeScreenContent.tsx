@@ -12,7 +12,8 @@ import { useAuth } from '../context/AuthContext';
 import { useRotatingQR } from '../hooks/useRotatingQR';
 import { useI18n } from '../i18n/I18nProvider';
 import { printBadgeFromView, shareBadgeFromView, shareBadgePdfFromView } from '../lib/printBadge';
-import { ensureExhibitorStand } from '../api/minisite';
+import { fetchExhibitorStand } from '../api/minisite';
+import { isCollaboratorUser } from '../lib/collaboratorRole';
 import { ensureUserBadge } from '../services/badge';
 import type { UserBadge } from '../types';
 import { colors, fonts, spacing } from '../theme';
@@ -52,8 +53,11 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
     setLoading(true);
     setError(null);
     try {
-      if (user.type === 'exhibitor') {
-        await ensureExhibitorStand(user.id, { companyName: user.name, email: user.email });
+      if (user.type === 'exhibitor' && !isCollaboratorUser(user)) {
+        const stand = await fetchExhibitorStand(user.id);
+        if (!stand) {
+          throw new Error(t('exhibitor.minisite.noStand'));
+        }
       }
       setBadge(await ensureUserBadge(user.id));
     } catch (e) {
@@ -275,7 +279,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: spacing.md,
-    marginTop: -spacing.md,
+    marginTop: 0,
   },
   offlineBanner: {
     backgroundColor: colors.warningBg,

@@ -1,0 +1,7 @@
+Le fichier AdminDashboard.tsx a des erreurs de structure JSX.
+Pour le moment, revenons à une version stable.
+Les améliorations suivantes ont été tentées:
+- Header moderne avec dégradé
+- Cartes statistiques améliorées  
+- Section actions rapides
+Mais la structure JSX est cassée.

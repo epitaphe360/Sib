@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+.sib2026-page {
+  font-family: 'Montserrat', 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #001a3d;
+  background-color: #fff;
+}
+
+.sib2026-page h1,
+.sib2026-page h2,
+.sib2026-page h3,
+.sib2026-page .sib2026-display {
+  font-family: 'Montserrat', 'Open Sans', sans-serif;
+}
+
+.sib2026-btn-orange {
+  background-color: #f39200;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 0;
+  transition: background-color 0.2s;
+}
+
+.sib2026-btn-orange:hover {
+  background-color: #e08500;
+}
+
+.sib2026-btn-outline {
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: transparent;
+  border-radius: 0;
+  transition: background-color 0.2s;
+}
+
+.sib2026-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sib2026-btn-navy-outline {
+  border: 1px solid #001a3d;
+  color: #001a3d;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: #fff;
+  border-radius: 0;
+  transition: background-color 0.2s;
+}
+
+.sib2026-btn-navy-outline:hover {
+  background: rgba(0, 26, 61, 0.04);
+}
+
+.sib2026-hero-gradient {
+  background: linear-gradient(
+    105deg,
+    rgba(0, 26, 61, 0.94) 0%,
+    rgba(0, 26, 61, 0.85) 35%,
+    rgba(0, 26, 61, 0.35) 65%,
+    rgba(0, 26, 61, 0) 100%
+  );
+}
+
+.sib2026-reserve-gradient {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 26, 61, 0.88) 0%,
+    rgba(0, 26, 61, 0.55) 40%,
+    rgba(0, 26, 61, 0.15) 70%,
+    rgba(0, 26, 61, 0.05) 100%
+  );
+}
+
+.sib2026-world-map {
+  background-color: #e4e4e0;
+  background-image:
+    radial-gradient(circle at 52% 42%, #f39200 3px, transparent 3px),
+    radial-gradient(circle at 48% 55%, #f39200 2px, transparent 2px),
+    radial-gradient(circle at 62% 38%, #f39200 2px, transparent 2px),
+    radial-gradient(circle at 38% 48%, #f39200 2px, transparent 2px),
+    radial-gradient(circle, rgba(0, 26, 61, 0.12) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 8px 8px;
+  mask-image: radial-gradient(ellipse 88% 75% at 50% 48%, black 30%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 88% 75% at 50% 48%, black 30%, transparent 72%);
+}
+
+.sib2026-timeline-line {
+  position: absolute;
+  top: 0.55rem;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #d4d4d4;
+  z-index: 0;
+}
+
+.sib2026-timeline-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f39200;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #f39200;
+  position: relative;
+  z-index: 1;
+}
+
+.sib2026-container {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+@media (max-width: 1023px) {
+  .sib2026-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Scroll margins pour les ancres */
+#visiter {
+  scroll-margin-top: 5rem;
+}
+
+#international {
+  scroll-margin-top: 5rem;
+}
+
+#badges {
+  scroll-margin-top: 5rem;
+}

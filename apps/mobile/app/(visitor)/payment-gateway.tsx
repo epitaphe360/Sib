@@ -116,7 +116,7 @@ export default function PaymentGatewayScreen() {
           Alert.alert(
             t('payment.gateway.successTitle'),
             t('payment.gateway.successBody'),
-            [{ text: t('common.ok') ?? 'OK', onPress: () => navigateAfterAuth(user!.type) }]
+            [{ text: t('common.ok') ?? 'OK', onPress: () => navigateAfterAuth(user!) }]
           );
         } else {
           Alert.alert(t('payment.gateway.pendingTitle'), t('payment.gateway.pendingBody'));

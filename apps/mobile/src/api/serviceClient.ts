@@ -185,13 +185,14 @@ export async function onSiteRegistration(params: {
   }]);
 
   // Générer le badge via edge function
-  const { data: badgeData } = await supabase.functions.invoke('generate-visitor-badge', {
+  const { data: badgeData, error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
     body: { userId, email, name, level: 'free', includePhoto: false },
-  }).catch(() => ({ data: null }));
+  });
+  if (badgeError || badgeData?.error || !badgeData?.badgeCode) {
+    throw new Error(badgeError?.message ?? badgeData?.error ?? 'Impossible de générer le badge sur place');
+  }
 
-  const badgeCode = badgeData?.badgeCode ?? `SIB-${userId.slice(0, 8).toUpperCase()}`;
-
-  return { userId, badgeCode };
+  return { userId, badgeCode: badgeData.badgeCode as string };
 }
 
 /** Remplace un badge perdu/endommagé */
@@ -226,7 +227,7 @@ export async function replaceBadge(params: {
 
   if (!userRow) throw new Error('Utilisateur introuvable');
 
-  const { data: badgeData } = await supabase.functions.invoke('generate-visitor-badge', {
+  const { data: badgeData, error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
     body: {
       userId: params.userId,
       email: userRow.email,
@@ -235,10 +236,12 @@ export async function replaceBadge(params: {
       includePhoto: false,
       replace: true,
     },
-  }).catch(() => ({ data: null }));
+  });
+  if (badgeError || badgeData?.error || !badgeData?.badgeCode) {
+    throw new Error(badgeError?.message ?? badgeData?.error ?? 'Impossible de générer le nouveau badge');
+  }
 
-  const newBadgeCode = badgeData?.badgeCode ?? `SIB-${params.userId.slice(0, 8).toUpperCase()}-R`;
-  return { newBadgeCode };
+  return { newBadgeCode: badgeData.badgeCode as string };
 }
 
 /** Statistiques desk service client */

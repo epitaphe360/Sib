@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../i18n/I18nProvider';
-import { getRoleGroup } from '../../navigation/roleConfig';
+import { getRouteGroupForUser } from '../../navigation/roleConfig';
 import { navigateAfterAuth } from '../../lib/navigateAfterAuth';
 import { colors } from '../../theme';
 
@@ -17,6 +17,8 @@ interface RoleGateProps {
 export function RoleGate({ children, allowed, requireAuth = true }: RoleGateProps) {
   const { user, isLoading } = useAuth();
   const { t } = useI18n();
+  const userGroup = user ? getRouteGroupForUser(user) : null;
+  const wrongGroup = Boolean(user && userGroup !== allowed);
 
   useEffect(() => {
     if (isLoading) return;
@@ -24,10 +26,10 @@ export function RoleGate({ children, allowed, requireAuth = true }: RoleGateProp
       router.replace('/(auth)/login');
       return;
     }
-    if (user && getRoleGroup(user.type) !== allowed) {
-      navigateAfterAuth(user.type);
+    if (wrongGroup && user) {
+      navigateAfterAuth(user);
     }
-  }, [user, isLoading, allowed, requireAuth]);
+  }, [user, isLoading, allowed, requireAuth, wrongGroup]);
 
   if (isLoading) {
     return (
@@ -46,7 +48,7 @@ export function RoleGate({ children, allowed, requireAuth = true }: RoleGateProp
     );
   }
 
-  if (user && getRoleGroup(user.type) !== allowed) {
+  if (wrongGroup) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color={colors.primary} />

@@ -6,7 +6,6 @@ $mobile = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $buildRoot = "C:\sib-mobile-build"
 $appJson = Get-Content (Join-Path $mobile "app.json") -Raw | ConvertFrom-Json
 $version = $appJson.expo.version
-$apkName = "UrbaEvent-$version-release.apk"
 
 $env:ANDROID_HOME = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } else { Join-Path $env:LOCALAPPDATA "Android\Sdk" }
 $env:NODE_ENV = "production"
@@ -34,6 +33,9 @@ if (-not $env:EXPO_PUBLIC_SUPABASE_URL -or -not $env:EXPO_PUBLIC_SUPABASE_ANON_K
 # Production store — quick-login désactivé (activer preview: $env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN='true')
 $env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN = if ($env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN) { $env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN } else { "false" }
 $env:EXPO_PUBLIC_PAYMENT_ENABLED = if ($env:EXPO_PUBLIC_PAYMENT_ENABLED) { $env:EXPO_PUBLIC_PAYMENT_ENABLED } else { "true" }
+$apkSuffix = if ($env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN -eq "true") { "-release-demo" } else { "-release" }
+$apkName = "UrbaEvent-$version$apkSuffix.apk"
+Write-Host "[build] Quick-login demo: $($env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN)" -ForegroundColor Cyan
 
 Write-Host "[build] Sync to $buildRoot (outside OneDrive)..." -ForegroundColor Cyan
 if (Test-Path $buildRoot) { Remove-Item -Recurse -Force $buildRoot }

@@ -22,6 +22,10 @@ initSentry();
 
 const SPLASH_MAX_MS = 2500;
 
+function hideSplashSafely() {
+  SplashScreen.hideAsync().catch(() => undefined);
+}
+
 function RootStack() {
   const { t } = useI18n();
 
@@ -75,16 +79,12 @@ export default function RootLayout() {
     prefetchBadgeConfig().catch(() => undefined);
   }, []);
 
+  // Ne jamais bloquer sur le splash natif (#1B365D) — masquer dès le 1er frame React.
   useEffect(() => {
-    if (fontsReady) {
-      SplashScreen.hideAsync().catch(() => undefined);
-      return;
-    }
-    const timer = setTimeout(() => {
-      SplashScreen.hideAsync().catch(() => undefined);
-    }, SPLASH_MAX_MS);
+    hideSplashSafely();
+    const timer = setTimeout(hideSplashSafely, SPLASH_MAX_MS);
     return () => clearTimeout(timer);
-  }, [fontsReady]);
+  }, []);
 
   if (!fontsReady) {
     return (

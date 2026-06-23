@@ -1,0 +1,32 @@
+/**
+ * SIB 2026 — Dark Mode
+ * Reconstruction propre, sans `!important`.
+ * S'appuie sur les tokens CSS définis dans index.css.
+ */
+
+/* Scrollbar dark */
+html.dark ::-webkit-scrollbar-thumb {
+  background: #3B424C;
+  border: 2px solid #0F1419;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #5C5C55;
+}
+
+/* Placeholder dark */
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #787872;
+}
+
+/* Select natif — flèche dark */
+html.dark select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23A8A89E' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* Selection dark */
+html.dark ::selection {
+  background-color: #5E8FBE;
+  color: #07182C;
+}

@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "UrbaEvent",
+    "slug": "urbaevent",
+    "version": "1.0.18",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "urbaevent",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1B365D"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.urbacom.urbaevent"
+    },
+    "android": {
+      "versionCode": 18,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1B365D"
+      },
+      "package": "com.urbacom.urbaevent",
+      "permissions": [
+        "CAMERA",
+        "VIBRATE"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#1B365D"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "UrbaEvent utilise la caméra pour scanner les badges QR."
+        }
+      ],
+      "expo-localization",
+      "expo-asset",
+      "expo-font",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_AFTER_eas_init"
+      }
+    },
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

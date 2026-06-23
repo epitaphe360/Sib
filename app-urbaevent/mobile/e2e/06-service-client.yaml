@@ -1,0 +1,5 @@
+# Smoke: service client accueil
+appId: com.urbacom.urbaevent
+---
+- launchApp
+- assertVisible: "Connexion|Sign in"

@@ -12,6 +12,7 @@ import { ActiveSalonBanner } from './ActiveSalonBanner';
 import { HomeSection } from './HomeSection';
 import { SalonSelectionGrid } from './SalonSelectionGrid';
 import { UrbacomSocialSection } from './UrbacomSocialSection';
+import { HubBadgeSection } from './HubBadgeSection';
 import { UrbaEventHomeHero } from './UrbaEventHomeHero';
 
 export function UrbaEventHomeContent() {
@@ -25,6 +26,8 @@ export function UrbaEventHomeContent() {
       {!online ? <NetworkBanner message={t('common.offline')} /> : null}
 
       <UrbaEventHomeHero />
+
+      <HubBadgeSection />
 
       <ActiveSalonBanner />
 

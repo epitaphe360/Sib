@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+.mockup-page {
+  font-family: 'Montserrat', 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mockup-page h1,
+.mockup-page h2,
+.mockup-page h3,
+.mockup-page .mockup-display {
+  font-family: 'Montserrat', 'Open Sans', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.mockup-btn-orange {
+  background-color: #f39200;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: background-color 0.2s;
+}
+
+.mockup-btn-orange:hover {
+  background-color: #e08500;
+}
+
+.mockup-btn-outline {
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: transparent;
+  transition: background-color 0.2s;
+}
+
+.mockup-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+}

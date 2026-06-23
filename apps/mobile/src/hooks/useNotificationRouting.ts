@@ -2,16 +2,16 @@ import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { getRoleGroup } from '../navigation/roleConfig';
-import type { UserType } from '../types';
+import { getRouteGroupForUser } from '../navigation/roleConfig';
+import type { AppUser } from '../types';
 
 function routeFromNotification(
   data: Record<string, unknown> | undefined,
-  userType: UserType | string | undefined
+  user: AppUser | null | undefined,
 ) {
   if (!data?.screen) return;
   const screen = String(data.screen);
-  const group = getRoleGroup(userType);
+  const group = user ? getRouteGroupForUser(user) : 'visitor';
 
   switch (screen) {
     case 'appointments':
@@ -73,14 +73,14 @@ export function useNotificationRouting() {
   useEffect(() => {
     const sub = Notifications.addNotificationResponseReceivedListener((response) => {
       const data = response.notification.request.content.data as Record<string, unknown> | undefined;
-      routeFromNotification(data, user?.type);
+      routeFromNotification(data, user);
     });
     return () => sub.remove();
-  }, [user?.type]);
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
-    const group = getRoleGroup(user.type);
+    const group = getRouteGroupForUser(user);
     if (group === 'staff' && user.type === 'security') {
       Notifications.setBadgeCountAsync(0).catch(() => undefined);
     }
