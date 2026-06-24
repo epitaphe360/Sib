@@ -4,6 +4,7 @@
  */
 import { supabase, isSupabaseReady } from '../lib/supabase';
 import { getSiteImageDefault, SITE_IMAGE_DEFINITIONS, type SiteImageKey } from '../config/siteImagesConfig';
+import { HOME_V4_CMS_KEYS, type HomeV4CmsKey } from '../config/homeV4CmsConfig';
 
 export interface SiteImageRow {
   key: string;
@@ -121,6 +122,14 @@ export async function resetSiteImage(key: SiteImageKey): Promise<void> {
       { onConflict: 'key' }
     );
   if (error) throw new Error(error.message);
+}
+
+/** Images résolues pour l’accueil v4 (iframe). */
+export async function resolveHomeV4ImagesMap(): Promise<Record<HomeV4CmsKey, string>> {
+  const entries = await Promise.all(
+    HOME_V4_CMS_KEYS.map(async (key) => [key, await resolveSiteImage(key)] as const),
+  );
+  return Object.fromEntries(entries) as Record<HomeV4CmsKey, string>;
 }
 
 // ─── Text Content ────────────────────────────────────────────────────────────

@@ -369,8 +369,10 @@ const App = () => {
             <Route path={ROUTES.SALON_SIE} element={<SalonPage salonId="sie" />} />
             <Route path={ROUTES.EXHIBITORS} element={<ExhibitorsPage />} />
             <Route path={ROUTES.EXHIBITOR_DETAIL} element={<ExhibitorDetailPage />} />
-            <Route path={ROUTES.PARTNERS} element={<PartnersPage />} />
-            <Route path={ROUTES.PARTNER_DETAIL} element={<PartnerDetailPage />} />
+            <Route path={ROUTES.PARTNERS} element={<Navigate to={ROUTES.EXHIBITORS} replace />} />
+            <Route path={ROUTES.PARTNER_DETAIL} element={<Navigate to={ROUTES.EXHIBITORS} replace />} />
+            <Route path={ROUTES.PARTNERSHIP} element={<Navigate to={ROUTES.POURQUOI_EXPOSER} replace />} />
+            <Route path={ROUTES.REGISTER_PARTNER} element={<Navigate to={ROUTES.REGISTER_EXHIBITOR} replace />} />
             <Route path={ROUTES.PAVILIONS} element={<PavillonsPage />} />
             <Route path={ROUTES.METRICS} element={<ProtectedRoute><MetricsPage /></ProtectedRoute>} />
             <Route path={ROUTES.NETWORKING} element={<NetworkingPage />} />
@@ -503,7 +505,6 @@ const App = () => {
             {/* New routes for footer links */}
             <Route path={ROUTES.CONTACT} element={<ContactPage />} />
             <Route path={ROUTES.CONTACT_SUCCESS} element={<ContactSuccessPage />} />
-            <Route path={ROUTES.PARTNERSHIP} element={<PartnershipPage />} />
             <Route path={ROUTES.SUPPORT} element={<SupportPage />} />
             <Route path={ROUTES.API} element={<APIPage />} />
             <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />

@@ -10,11 +10,17 @@ import {
 } from '../../components/ui/motion';
 
 const defaultHoraires = [
-  { jour: 'Mercredi 25 Novembre', heures: '9h00 � 19h00' },
-  { jour: 'Jeudi 26 Novembre', heures: '9h00 � 19h00' },
-  { jour: 'Vendredi 27 Novembre', heures: '9h00 � 19h00' },
-  { jour: 'Samedi 28 Novembre', heures: '9h00 � 19h00' },
-  { jour: 'Dimanche 29 Novembre', heures: '9h00 � 19h00' },
+  { jour: 'Mercredi 25 Novembre', heures: '9h00 – 19h00' },
+  { jour: 'Jeudi 26 Novembre', heures: '9h00 – 19h00' },
+  { jour: 'Vendredi 27 Novembre', heures: '9h00 – 19h00' },
+  { jour: 'Samedi 28 Novembre', heures: '9h00 – 19h00' },
+  { jour: 'Dimanche 29 Novembre', heures: '9h00 – 19h00' },
+];
+
+const defaultTarifsBullets = [
+  "D'un badge électronique téléchargeable sur le site ou à l'accueil du salon",
+  "D'une invitation dûment remplie",
+  "D'une carte de visite professionnelle",
 ];
 
 export default function InfosPratiquesPage() {
@@ -27,11 +33,14 @@ export default function InfosPratiquesPage() {
 
   const horaires = (() => {
     const raw = cms.horaires_json;
-    if (!raw) {return defaultHoraires;}
+    if (!raw) { return defaultHoraires; }
     try {
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed)
-        ? parsed.map((h: any) => ({ jour: String(h?.jour ?? ''), heures: String(h?.heures ?? '') })).filter((h: any) => h.jour)
+        ? parsed.map((h: { jour?: string; heures?: string }) => ({
+            jour: String(h?.jour ?? ''),
+            heures: String(h?.heures ?? ''),
+          })).filter((h) => h.jour)
         : defaultHoraires;
     } catch {
       return defaultHoraires;
@@ -40,28 +49,18 @@ export default function InfosPratiquesPage() {
 
   const tarifsBullets = (() => {
     const raw = cms.tarifs_bullets_json;
-    if (!raw) {
-      return [
-        "D'un badge �lectronique t�l�chargeable sur le site ou � l'accueil du salon",
-        "D'une invitation d�ment remplie",
-        "D'une carte de visite professionnelle",
-      ];
-    }
+    if (!raw) { return defaultTarifsBullets; }
     try {
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed.map((b: unknown) => String(b)) : [];
+      return Array.isArray(parsed) ? parsed.map((b: unknown) => String(b)) : defaultTarifsBullets;
     } catch {
-      return [
-        "D'un badge �lectronique t�l�chargeable sur le site ou � l'accueil du salon",
-        "D'une invitation d�ment remplie",
-        "D'une carte de visite professionnelle",
-      ];
+      return defaultTarifsBullets;
     }
   })();
 
   const venirSections = (() => {
     const raw = cms.venir_json;
-    if (!raw) {return null;}
+    if (!raw) { return null; }
     try {
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : null;
@@ -75,7 +74,7 @@ export default function InfosPratiquesPage() {
       <SibPublicHero
         align="center"
         title={cms.hero_title || 'Infos Pratiques'}
-        subtitle={cms.hero_subtitle || "Tout ce qu'il faut savoir pour pr�parer votre visite au SIB 2026."}
+        subtitle={cms.hero_subtitle || "Tout ce qu'il faut savoir pour préparer votre visite au SIB 2026."}
       />
 
       <div className="sib-v4-container py-16">
@@ -87,10 +86,10 @@ export default function InfosPratiquesPage() {
               <div>
                 <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('lieu_title', "Parc d'Exposition Mohammed VI")}</h2>
                 <p className="text-gray-600 mt-2">
-                  {cms.lieu_adresse || "Adresse : Route Nationale 1 vers Azemmour, R�gion Casablanca - Settat, 24000 � EL JADIDA"}
+                  {cms.lieu_adresse || "Adresse : Route Nationale 1 vers Azemmour, Région Casablanca-Settat, 24000 – El Jadida"}
                 </p>
                 <p className="text-gray-500 text-sm mt-2">
-                  {getCms('lieu_context', "Implant� au c�ur du P�le urbain Mazagan (PUMA), le Parc d'Exposition Mohammed VI se voit efficacement desservi et strat�giquement connect� aux autres villes du royaume.")}
+                  {getCms('lieu_context', "Implanté au cœur du Pôle urbain Mazagan (PUMA), le Parc d'Exposition Mohammed VI est efficacement desservi et stratégiquement connecté aux autres villes du royaume.")}
                 </p>
               </div>
             </div>
@@ -124,18 +123,18 @@ export default function InfosPratiquesPage() {
               <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('tarifs_title', 'Tarifs')}</h2>
             </div>
             <p className="text-gray-700 mb-4">
-              {cms.tarifs_intro || "L'entr�e est"} <strong>gratuite</strong>{!cms.tarifs_intro && " tout au long des 5 jours d'exposition. Toutefois, l'acc�s au salon sera conditionn� par la pr�sentation :"}
+              {cms.tarifs_intro || "L'entrée est"} <strong>gratuite</strong>{!cms.tarifs_intro && " tout au long des 5 jours d'exposition. Toutefois, l'accès au salon sera conditionné par la présentation :"}
             </p>
             <ul className="space-y-2 text-gray-600 ml-4">
-              {tarifsBullets.map((bullet, idx) => (
-                <li key={idx} className="flex items-start gap-2">
+              {tarifsBullets.map((bullet) => (
+                <li key={bullet} className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-sib-gold mt-2 flex-shrink-0" />
                   {bullet}
                 </li>
               ))}
             </ul>
             <Link
-              to={ROUTES.BADGE}
+              to={ROUTES.VISITOR_FREE_REGISTRATION}
               className="inline-block mt-6 px-6 py-3 bg-sib-navy text-white rounded-lg font-semibold hover:bg-sib-navy/90 transition-colors"
             >
               {getCms('tarifs_cta', 'Obtenir mon badge gratuit')}
@@ -154,10 +153,10 @@ export default function InfosPratiquesPage() {
                   <h3 className="text-lg font-bold text-gray-900">{venirSections?.[0]?.title ?? 'Par Navettes SIB'}</h3>
                 </div>
                 <p className="text-gray-600 mb-4">
-                  {venirSections?.[0]?.desc ?? "Des navettes seront mises gratuitement � disposition des visiteurs du Parc d'Exposition � destination ou en provenance de Casablanca."}
+                  {venirSections?.[0]?.desc ?? "Des navettes seront mises gratuitement à disposition des visiteurs du Parc d'Exposition à destination ou en provenance de Casablanca."}
                 </p>
                 <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm">
-                  <p className="text-gray-500 italic">{venirSections?.[0]?.note ?? 'Les points de pick-up seront confirm�s ult�rieurement.'}</p>
+                  <p className="text-gray-500 italic">{venirSections?.[0]?.note ?? 'Les points de pick-up seront confirmés ultérieurement.'}</p>
                 </div>
               </div>
 
@@ -167,10 +166,10 @@ export default function InfosPratiquesPage() {
                   <h3 className="text-lg font-bold text-gray-900">{venirSections?.[1]?.title ?? 'Par voiture'}</h3>
                 </div>
                 <p className="text-gray-600 mb-2">
-                  {venirSections?.[1]?.desc ?? "Acc�s rapide par l'autoroute Casablanca�El Jadida (sortie Azemmour) ou depuis la route nationale Azemmour�El Jadida. Trajet depuis Casablanca : 50 minutes."}
+                  {venirSections?.[1]?.desc ?? "Accès rapide par l'autoroute Casablanca–El Jadida (sortie Azemmour) ou depuis la route nationale Azemmour–El Jadida. Trajet depuis Casablanca : 50 minutes."}
                 </p>
                 <p className="text-gray-500 text-sm italic">
-                  {venirSections?.[1]?.note ?? "� Afin d'accompagner la transition �cologique, nous invitons nos visiteurs � privil�gier le covoiturage. �"}
+                  {venirSections?.[1]?.note ?? "Afin d'accompagner la transition écologique, nous invitons nos visiteurs à privilégier le covoiturage."}
                 </p>
                 <p className="text-gray-600 mt-2 text-sm">Parking : <strong>2 500 places</strong> + parking VIP 52 places + parking autocars 50 places.</p>
               </div>
@@ -181,11 +180,11 @@ export default function InfosPratiquesPage() {
                   <h3 className="text-lg font-bold text-gray-900">{venirSections?.[2]?.title ?? 'Par train'}</h3>
                 </div>
                 <p className="text-gray-600 mb-2">
-                  {venirSections?.[2]?.desc ?? "Acc�s facile depuis la gare d'Azemmour � Parc d'Expositions Mohammed VI (PEM6)."}
+                  {venirSections?.[2]?.desc ?? "Accès facile depuis la gare d'Azemmour – Parc d'Expositions Mohammed VI (PEM6)."}
                 </p>
                 <div className="bg-sib-gold/10 rounded-lg p-3 text-sm">
                   <p className="text-gray-700">
-                    {venirSections?.[2]?.note ?? "L'ONCF, partenaire Transport et Logistique du SIB, propose une r�duction de 30% � bord de tous les trains en provenance ou en direction de la gare PEM6 durant la p�riode du salon."}
+                    {venirSections?.[2]?.note ?? "L'ONCF, partenaire transport du SIB, propose une réduction de 30 % à bord de tous les trains en provenance ou en direction de la gare PEM6 durant la période du salon."}
                   </p>
                 </div>
               </div>
@@ -196,7 +195,7 @@ export default function InfosPratiquesPage() {
                   <h3 className="text-lg font-bold text-gray-900">{venirSections?.[3]?.title ?? 'Par avion'}</h3>
                 </div>
                 <p className="text-gray-600">
-                  {venirSections?.[3]?.desc ?? "Le parc se situe � seulement 1h de route depuis l'a�roport Mohammed V."}
+                  {venirSections?.[3]?.desc ?? "Le parc se situe à seulement 1 h de route depuis l'aéroport Mohammed V."}
                 </p>
               </div>
             </div>
@@ -207,17 +206,17 @@ export default function InfosPratiquesPage() {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
             <div className="flex items-center gap-3 mb-4">
               <Hotel className="w-7 h-7 text-sib-gold" />
-              <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('hebergement_title', 'H�bergement')}</h2>
+              <h2 className="text-2xl font-bold text-sib-navy font-display">{getCms('hebergement_title', 'Hébergement')}</h2>
             </div>
             <p className="text-gray-600 mb-4">
-              Les exposants et visiteurs disposent d'une multitude de choix pour s�journer � proximit� du parc.
-              La ville d'El Jadida propose un choix vari� d'h�tels dont les prix peuvent s'adapter � toutes les bourses.
+              Les exposants et visiteurs disposent d'une multitude de choix pour séjourner à proximité du parc.
+              La ville d'El Jadida propose un choix varié d'hôtels dont les prix peuvent s'adapter à toutes les bourses.
             </p>
             <Link
               to={ROUTES.ACCOMMODATION}
               className="inline-flex items-center gap-2 px-6 py-3 bg-sib-gold text-sib-navy rounded-lg font-semibold hover:bg-sib-gold/90 transition-colors"
             >
-              {getCms('hebergement_cta', 'Voir les h�bergements')}
+              {getCms('hebergement_cta', 'Voir les hébergements')}
             </Link>
           </div>
           </ScrollReveal>

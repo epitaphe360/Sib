@@ -22,6 +22,7 @@ const defaultOrganisateurs = [
   { name: 'FMC', role: 'Co-organisateur', desc: "Fédération des Industries des Matériaux de Construction" },
   { name: 'FNBTP', role: 'Co-organisateur', desc: 'Fédération Nationale du Bâtiment et des Travaux Publics' },
   { name: 'URBACOM', role: 'Organisateur délégué', desc: "1ʳᵉ agence conseil en communication et événementiel, gestion déléguée depuis 2006" },
+  { name: 'LAP', role: 'Sponsor officiel (exposant)', desc: "La qualité de l'appareillage — exposant et sponsor officiel du SIB 2026" },
 ];
 
 export default function PresentationPage() {
@@ -69,9 +70,9 @@ export default function PresentationPage() {
   ];
 
   const defaultAboutParagraphs = [
-    "Le Salon International du Bâtiment ? SIB revient pour sa 20è édition, célébrant ainsi ses 40 années d'existence. Ce salon incontournable se déroulera du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI d'El Jadida.",
+    "Le Salon International du Bâtiment – SIB revient pour sa 20e édition, célébrant ainsi ses 40 années d'existence. Ce salon incontournable se déroulera du 25 au 29 novembre 2026 au Parc d'Exposition Mohammed VI d'El Jadida.",
     "Fondé en 1986, le SIB s'est imposé comme le rendez-vous biennal de référence du secteur du bâtiment au Maroc et en Afrique. Il réunit 600 exposants et 1 500 marques internationales autour d'un même objectif : construire l'avenir. Avec 200 000 visiteurs professionnels, 50 pays représentés, 300 rencontres B2B planifiées via URBA EVENT et 35 000 m² d'exposition, le SIB s'impose comme le hub africain de la construction et de l'innovation.",
-    "Organisé par le Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville et l'Agence Marocaine de Développement des Investissements et des Exportations ? AMDIE, et co-organisé par la Fédération des Industries des Matériaux de Construction ? FMC et la Fédération Nationale du Bâtiment et des Travaux Publics ? FNBTP, URBACOM en assure la gestion déléguée depuis 2006, garantissant la continuité, la qualité et la modernisation du salon à travers les années.",
+    "Organisé par le Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville et l'Agence Marocaine de Développement des Investissements et des Exportations – AMDIE, et co-organisé par la Fédération des Industries des Matériaux de Construction – FMC et la Fédération Nationale du Bâtiment et des Travaux Publics – FNBTP, URBACOM en assure la gestion déléguée depuis 2006, garantissant la continuité, la qualité et la modernisation du salon à travers les années.",
     "Au-delà de sa portée nationale, le SIB s'impose aujourd'hui comme le grand rendez-vous africain du bâtiment et des matériaux de construction, un espace où convergent les expertises du continent. Le salon propose 2 espaces de démonstration, 30 applications techniques, 20 conférences animées par des experts marocains et internationaux, ainsi que des espaces thématiques : SIB Academy, SIB Recrutement, SIB TV, Espace B2B et Espace Démonstration.",
   ];
 
@@ -242,7 +243,7 @@ export default function PresentationPage() {
                 "L'accès au salon est entièrement gratuit. Un badge électronique est requis et peut être obtenu en ligne ou sur place."
               )}
             </p>
-            <Link to={ROUTES.BADGE} className="sib-v4-btn-orange mt-6 shadow-lg">
+            <Link to={ROUTES.VISITOR_FREE_REGISTRATION} className="sib-v4-btn-orange mt-6 shadow-lg">
               {getCms('free_entry_cta', 'Obtenez votre badge')}
             </Link>
           </ScrollReveal>

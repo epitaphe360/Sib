@@ -18,13 +18,13 @@ import {
 type Category = 'home' | 'sib40' | 'builders' | 'sib2026';
 
 const CATEGORY_LABELS: Record<Category, string> = {
-  sib2026:  'Accueil SIB 2026',
+  sib2026:  'Accueil SIB 2026 (v4)',
   home:     'Accueil (autres)',
   sib40:    'Page 40 ans',
   builders: 'Femmes & Hommes',
 };
 const CATEGORY_DESCS: Record<Category, string> = {
-  sib2026:  'Photos des pages d\'accueil principales (P1–P8) : hero, mission, timeline, cartes salon, bannière réservation',
+  sib2026:  'Maquette home v4 (iframe) : hero, timeline 40 ans, globe, univers, SIB Talks et 3 liens rapides en bas de page',
   home:     'Photos héros, parc, stands, conférences, B2B, inauguration, international (variants)',
   sib40:    'Hero, portraits et timeline de la page /accueil/40ans',
   builders: 'Portraits des profils sur /salon/femmes-et-hommes',
@@ -98,7 +98,7 @@ export function SiteImagesPanel() {
           </div>
           <div>
             <h3 className="text-lg font-bold text-white">Gestion des Photos du Site</h3>
-            <p className="text-sm text-white/80">Modifiez toutes les images — pages accueil SIB 2026, 40 ans, Femmes & Hommes</p>
+            <p className="text-sm text-white/80">Modifiez les visuels de l’accueil v4, des pages 40 ans et Femmes & Hommes</p>
           </div>
         </div>
 
@@ -214,7 +214,12 @@ export function SiteImagesPanel() {
                       )}
                     </div>
                     <p className="text-[11px] text-neutral-400">
-                      JPG, PNG ou WebP · 8 Mo max · Ratio recommandé : {def.previewAspect === 'aspect-square' ? '1:1' : '16:9'}
+                      JPG, PNG ou WebP · 8 Mo max · Ratio recommandé : {
+                        def.previewAspect === 'aspect-square' ? '1:1'
+                          : def.previewAspect === 'aspect-[5/1]' ? '5:1 (bande timeline)'
+                          : def.previewAspect === 'aspect-[6/1]' ? '6:1 (bande univers)'
+                          : '16:9'
+                      }
                     </p>
                   </div>
                 );

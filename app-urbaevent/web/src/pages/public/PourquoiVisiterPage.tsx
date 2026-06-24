@@ -106,11 +106,11 @@ export default function PourquoiVisiterPage() {
     { icon: TrendingUp, title: cms.arg_5_title || 'Faire son choix & concrétiser', desc: cms.arg_5_desc || "La meilleure manière de s'informer, de faire son choix et de concrétiser dans les meilleures conditions tout investissement du secteur du BTP." },
     { icon: Globe, title: cms.arg_6_title || '600 exposants, 50 pays', desc: cms.arg_6_desc || 'Découvrez 1 500 marques venues de 50 pays avec 600 exposants, répartis sur 35 000 m².' },
   ];
-  // Couleurs SIB par carte
-  const argColors = ['bg-[#00AEEF]', 'bg-[#52B847]', 'bg-[#00AEEF]', 'bg-[#52B847]', 'bg-[#E63329]', 'bg-[#00AEEF]'];
-  const transportColors = ['bg-[#52B847]', 'bg-[#00AEEF]', 'bg-[#00AEEF]', 'bg-[#E63329]'];
-  const infoColors = ['bg-[#00AEEF]', 'bg-[#52B847]', 'bg-[#E63329]', 'bg-[#52B847]'];
-  const infoTextColors = ['text-[#00AEEF]', 'text-[#52B847]', 'text-[#E63329]', 'text-[#52B847]'];
+  // Couleurs alignées charte SIB v4
+  const argColors = ['bg-sib-navy', 'bg-sib-orange', 'bg-sib-navy', 'bg-sib-orange', 'bg-sib-navy', 'bg-sib-orange'];
+  const transportColors = ['bg-sib-orange', 'bg-sib-navy', 'bg-sib-navy', 'bg-sib-orange'];
+  const infoColors = ['bg-sib-navy', 'bg-sib-orange', 'bg-sib-navy', 'bg-sib-orange'];
+  const infoTextColors = ['text-sib-navy', 'text-sib-orange', 'text-sib-navy', 'text-sib-orange'];
 
   return (
     <PublicPageLayout>
@@ -118,12 +118,12 @@ export default function PourquoiVisiterPage() {
       <SibPublicHero
         align="center"
         eyebrow="Entrée gratuite — SIB 2026"
-        title={cms.hero_title || <>Pourquoi Visiter <span className="text-[#52B847]">le SIB</span> ?</>}
+        title={cms.hero_title || <>Pourquoi Visiter <span className="text-sib-orange">le SIB</span> ?</>}
         subtitle={cms.hero_subtitle || '5 jours pour découvrir, apprendre et connecter avec les acteurs majeurs du bâtiment au Maroc et en Afrique.'}
       >
         <Link
-          to={ROUTES.BADGE}
-          className="inline-flex items-center gap-2 px-8 py-4 bg-[#52B847] text-white rounded-xl font-bold text-base hover:bg-[#3D9B35] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+          to={ROUTES.VISITOR_FREE_REGISTRATION}
+          className="sib-v4-btn-orange inline-flex items-center gap-2"
         >
           {getCms('hero_cta', 'Obtenez votre badge gratuit')}
           <ArrowRight className="h-5 w-5" />
@@ -136,7 +136,7 @@ export default function PourquoiVisiterPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-              {getCms('reasons_title', <><span style={{ color: '#00AEEF' }}>6 bonnes raisons</span> de visiter</>)}
+              {getCms('reasons_title', <><span className="text-sib-orange">6 bonnes raisons</span> de visiter</>)}
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">Le salon incontournable du bâtiment en Afrique du Nord</p>
           </motion.div>
@@ -230,16 +230,16 @@ export default function PourquoiVisiterPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-16 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
+      <section className="py-16 bg-sib-navy text-white">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h3 className="text-3xl font-bold mb-4">{getCms('cta_title', 'Prêt à visiter ?')}</h3>
+            <h3 className="text-3xl font-bold mb-4 font-display">{getCms('cta_title', 'Prêt à visiter ?')}</h3>
             <p className="text-white/75 max-w-xl mx-auto mb-8">
               {getCms('cta_text', "L'entrée est gratuite. Inscrivez-vous dès maintenant pour obtenir votre badge électronique.")}
             </p>
             <Link
-              to={ROUTES.BADGE}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#52B847] text-white rounded-xl font-bold text-base hover:bg-[#3D9B35] transition-all duration-300 shadow-lg hover:scale-105"
+              to={ROUTES.VISITOR_FREE_REGISTRATION}
+              className="sib-v4-btn-orange inline-flex items-center gap-2"
             >
               {getCms('cta_button', "S'inscrire gratuitement")}
               <ArrowRight className="h-5 w-5" />

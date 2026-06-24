@@ -6,34 +6,38 @@ import { motion } from 'framer-motion';
 import { useTranslation } from '../../hooks/useTranslation';
 import LogoWithFallback from '../ui/LogoWithFallback';
 
-/**
- * Mise en avant du sponsor officiel unique (LAP).
- */
+/** Mise en avant du sponsor officiel (exposant) — LAP. */
 export const SponsorSpotlight: React.FC = () => {
   const { t } = useTranslation();
-  const [sponsor, setSponsor] = useState<any | null>(null);
+  const [sponsor, setSponsor] = useState<{ id: string; companyName: string; logo?: string; description?: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       setIsLoading(true);
       try {
-        const data = await SupabaseService.getPartners();
-        const lap = data.find(
-          (p) =>
-            (p.company_name || p.name || '').toLowerCase().includes('lap') ||
-            p.partner_tier === 'official_sponsor' ||
-            p.partner_type === 'official_sponsor'
+        const data = await SupabaseService.getExhibitors();
+        const lap = data.find((e) =>
+          (e.companyName || '').toLowerCase().includes('lap') ||
+          (e.companyName || '').toLowerCase().includes('appareillage')
         );
-        const fallback = data.find((p) => p.partner_tier === 'official_sponsor') || data[0];
-        setSponsor(lap || fallback || null);
+        const featured = data.find((e) => e.featured);
+        const pick = lap || featured || data[0];
+        if (pick) {
+          setSponsor({
+            id: pick.id,
+            companyName: pick.companyName,
+            logo: pick.logo,
+            description: pick.description,
+          });
+        }
       } catch (error) {
-        console.error('Erreur chargement sponsor:', error);
+        console.error('Erreur chargement sponsor exposant:', error);
       } finally {
         setIsLoading(false);
       }
     };
-    load();
+    void load();
   }, []);
 
   if (isLoading) {
@@ -45,10 +49,6 @@ export const SponsorSpotlight: React.FC = () => {
   }
 
   if (!sponsor) return null;
-
-  const sponsorName =
-    sponsor.organization_name || sponsor.organizationName || sponsor.company_name || sponsor.name || 'LAP';
-  const sponsorId = sponsor.id;
 
   return (
     <section className="relative py-16 lg:py-20 bg-white dark:bg-neutral-950 overflow-hidden">
@@ -64,10 +64,11 @@ export const SponsorSpotlight: React.FC = () => {
           <h2 className="text-2xl lg:text-3xl font-bold text-neutral-900 dark:text-white tracking-tight">
             {t('home.sponsor_title')}
           </h2>
+          <p className="text-sm text-neutral-500 mt-2">Sponsor officiel — fiche exposant</p>
         </motion.div>
 
         <Link
-          to={`${ROUTES.PARTNERS}/${sponsorId}`}
+          to={`${ROUTES.EXHIBITORS}/${sponsor.id}`}
           className="block max-w-xl mx-auto group"
         >
           <motion.div
@@ -79,11 +80,11 @@ export const SponsorSpotlight: React.FC = () => {
             <div className="h-32 w-48 flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
               <LogoWithFallback
                 src={sponsor.logo}
-                alt={sponsorName}
+                alt={sponsor.companyName}
                 className="h-full w-full object-contain"
               />
             </div>
-            <p className="text-lg font-semibold text-neutral-900 dark:text-white">{sponsorName}</p>
+            <p className="text-lg font-semibold text-neutral-900 dark:text-white">{sponsor.companyName}</p>
             {sponsor.description && (
               <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2 text-center line-clamp-2 max-w-md">
                 {sponsor.description}

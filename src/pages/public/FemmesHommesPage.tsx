@@ -322,7 +322,7 @@ export default function FemmesHommesPage() {
               Portraits de Bâtisseurs
             </h2>
             <p className="text-gray-500 text-sm mt-3 max-w-xl">
-              Cliquez sur un portrait pour découvrir le témoignage de chaque professionnel.
+              Portraits représentatifs des métiers du bâtiment. Cliquez sur un portrait pour lire le témoignage.
             </p>
           </motion.div>
 

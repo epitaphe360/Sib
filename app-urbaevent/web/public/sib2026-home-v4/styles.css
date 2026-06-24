@@ -33,15 +33,27 @@
 .quick-links a:nth-child(3){background-image:linear-gradient(90deg,rgba(0,27,56,.82),rgba(0,27,56,.12)),url('assets/official/hall-visiteurs.png')!important;background-size:100% 100%,cover!important;background-position:center!important}
 
 /* Lightweight delivery and guaranteed inline icon rendering. */
+:root{
+  --v4-hero:url('assets/sib-hero.webp');
+  --v4-history:url('assets/history-strip.webp');
+  --v4-globe:url('assets/ecosystem-globe.webp');
+  --v4-legacy:url('assets/legacy-people.webp');
+  --v4-universes:url('assets/universes-strip.webp');
+  --v4-talks:url('assets/talks-stage.webp');
+  --v4-ql-plan:url('assets/plan-interactif-v2.webp');
+  --v4-ql-exposer:url('assets/official/expo-stands.jpg');
+  --v4-ql-visiter:url('assets/official/hall-visiteurs.webp');
+}
+.hero{background-image:var(--v4-hero)}
+.history-photo{background-image:var(--v4-history)}
+.orb{background-image:var(--v4-globe)}
+.legacy-people{background-image:var(--v4-legacy)}
+.universe-grid article>div{background-image:var(--v4-universes)!important}
+.stage{background-image:linear-gradient(90deg,rgba(0,17,38,.18),rgba(0,17,38,.04)),var(--v4-talks)}
+.quick-links a:nth-child(1){background-image:linear-gradient(90deg,rgba(0,27,56,.88),rgba(0,27,56,.12)),var(--v4-ql-plan)!important;background-size:100% 100%,cover!important;background-position:center!important}
+.quick-links a:nth-child(2){background-image:linear-gradient(90deg,rgba(0,27,56,.88),rgba(0,27,56,.2)),var(--v4-ql-exposer)!important;background-size:100% 100%,cover!important;background-position:center!important}
+.quick-links a:nth-child(3){background-image:linear-gradient(90deg,rgba(0,27,56,.82),rgba(0,27,56,.12)),var(--v4-ql-visiter)!important;background-size:100% 100%,cover!important;background-position:center!important}
 .svg-sprite{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
-.hero{background-image:url('assets/sib-hero.webp')}
-.history-photo{background-image:url('assets/history-strip.webp')}
-.orb{background-image:url('assets/ecosystem-globe.webp')}
-.legacy-people{background-image:url('assets/legacy-people.webp')}
-.universe-grid article>div{background-image:url('assets/universes-strip.webp')!important}
-.stage{background-image:linear-gradient(90deg,rgba(0,17,38,.18),rgba(0,17,38,.04)),url('assets/talks-stage.webp')}
-.quick-links a:nth-child(1){background-image:linear-gradient(90deg,rgba(0,27,56,.88),rgba(0,27,56,.12)),url('assets/plan-interactif-v2.webp')!important;background-size:100% 100%,cover!important;background-position:center!important}
-.quick-links a:nth-child(3){background-image:linear-gradient(90deg,rgba(0,27,56,.82),rgba(0,27,56,.12)),url('assets/official/hall-visiteurs.webp')!important}
 
 /* Mode iframe React — menu site principal au-dessus */
 body.app-embedded .site-header{display:none!important}

@@ -53,18 +53,15 @@ export default function ExhibitorsPage() {
 
   const sectors = useMemo(() => [
     { value: '', label: t('exhibitors.all_sectors') },
-    { value: 'Exploitation Bâtiment', label: 'Exploitation Bâtiment' },
-    { value: 'Régulation Bâtiment', label: 'Régulation Bâtiment' },
-    { value: 'Hub Logistique', label: 'Hub Logistique' },
-    { value: 'Industrie & Export', label: 'Industrie & Export' },
-    { value: 'Technologies du Bâtiment', label: 'Technologies du Bâtiment' },
-    { value: 'Culture & Heritage Bâtiment', label: 'Culture & Heritage Bâtiment' },
-    { value: 'Logistique Bâtiment', label: 'Logistique Bâtiment' },
-    { value: 'Services du Bâtiment Premium', label: 'Services du Bâtiment Premium' },
-    { value: 'Conseil Bâtiment', label: 'Conseil Bâtiment' },
-    { value: 'Patrimoine Bâtiment', label: 'Patrimoine Bâtiment' },
-    { value: 'Gestion Bâtiment', label: 'Gestion Bâtiment' },
-    { value: 'Logistique Mondiale', label: 'Logistique Mondiale' },
+    { value: 'Gros œuvre', label: 'Gros œuvre' },
+    { value: 'Second œuvre', label: 'Second œuvre' },
+    { value: 'Matériaux de construction', label: 'Matériaux de construction' },
+    { value: 'Menuiserie & fermetures', label: 'Menuiserie & fermetures' },
+    { value: 'Équipements techniques', label: 'Équipements techniques' },
+    { value: 'Construction durable', label: 'Construction durable' },
+    { value: 'Smart building & BIM', label: 'Smart building & BIM' },
+    { value: 'Architecture & design', label: 'Architecture & design' },
+    { value: 'Industrie & export', label: 'Industrie & export' },
   ], [t]);
 
   const directoryEntries = useMemo(

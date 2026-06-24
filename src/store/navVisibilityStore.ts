@@ -51,10 +51,10 @@ const DEFAULT_ITEMS: NavItemConfig[] = [
     ],
   },
   {
-    key: 'sponsors', label: 'Sponsors', visible: true, description: 'Menu deroulant sponsors',
+    key: 'sponsors', label: 'Sponsors', visible: false, description: 'Menu deroulant sponsors (desactive — voir Exposer)',
     children: [
-      { key: 'sponsors.devenir',  label: 'Devenir sponsor',   visible: true },
-      { key: 'sponsors.annuaire', label: 'Annuaire sponsors', visible: true },
+      { key: 'sponsors.devenir',  label: 'Devenir sponsor',   visible: false },
+      { key: 'sponsors.annuaire', label: 'Annuaire sponsors', visible: false },
     ],
   },
   {
@@ -114,9 +114,8 @@ export const useNavVisibilityStore = create<NavVisibilityState>()(
     }),
     {
       name: 'sib-nav-visibility',
-      version: 2,
+      version: 3,
       migrate: (_oldState: unknown, _oldVersion: number) => {
-        // Version 2: reset to defaults pour forcer les children
         return { items: DEFAULT_ITEMS };
       },
     }

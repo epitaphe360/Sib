@@ -201,7 +201,7 @@ export const allTranslations = {
     'design.home_menu.palette_title': 'Palette autorisée',
     'design.home_menu.palette_desc': 'primary-900 à primary-50, neutres — pas de rouge ni danger-* sur ces composants.',
     'nav.exhibitors': 'Exposants',
-    'nav.partners': 'Partenaires',
+    'nav.partners': 'Exposants',
     'nav.networking': 'Réseautage',
     'nav.event': 'Événement',
     'nav.participate': 'Participer',

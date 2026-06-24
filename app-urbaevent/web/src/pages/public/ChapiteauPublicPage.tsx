@@ -45,7 +45,7 @@ const FAQ = [
   },
   {
     q: "Comment se passe la réservation ?",
-    a: "Accédez au catalogue depuis votre espace exposant ou partenaire, sélectionnez les chapiteaux souhaités et procédez au paiement en ligne (PayPal ou CMI). Votre réservation est confirmée instantanément.",
+    a: "Accédez au catalogue depuis votre espace exposant, sélectionnez les chapiteaux souhaités et procédez au paiement en ligne (PayPal ou CMI). Votre réservation est confirmée instantanément.",
   },
   {
     q: "Peut-on annuler ou modifier une réservation ?",
@@ -107,14 +107,14 @@ export default function ChapiteauPublicPage() {
               Professionnels
             </h1>
             <p className="text-white/60 text-lg max-w-2xl mb-8 leading-relaxed">
-              Structures aluminium professionnelles pour votre espace au Salon International des Bâtisseurs.
+              Structures aluminium professionnelles pour votre espace au Salon International du Bâtiment.
               Du stand individuel 3×3m au chapiteau géant 20×40m — installation et dépose incluses.
             </p>
             <div className="flex flex-wrap gap-4 text-sm mb-10">
               {[
                 { icon: <Calendar className="w-4 h-4" />, label: '25 – 29 novembre 2026' },
                 { icon: <CheckCircle className="w-4 h-4" />, label: 'Installation incluse' },
-                { icon: <Users className="w-4 h-4" />, label: 'Réservé aux exposants & partenaires' },
+                { icon: <Users className="w-4 h-4" />, label: 'Réservé aux exposants' },
               ].map(f => (
                 <div key={f.label} className="flex items-center gap-2 text-[#F39200]">
                   {f.icon} <span>{f.label}</span>
@@ -130,7 +130,7 @@ export default function ChapiteauPublicPage() {
               </Link>
               <Link to={ROUTES.PARTNER_CHAPITEAU}
                 className="flex items-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm text-white border border-white/20 hover:bg-white/10 transition">
-                <Tent className="w-4 h-4" /> Réserver — Partenaire
+                <Tent className="w-4 h-4" /> Réserver — Exposant
               </Link>
             </div>
           </motion.div>
@@ -255,7 +255,7 @@ export default function ChapiteauPublicPage() {
               </Link>
               <Link to={ROUTES.PARTNER_CHAPITEAU}
                 className="flex items-center gap-2 px-8 py-3.5 rounded-2xl font-bold text-sm border-2 border-[#0B1C3D] text-[#0B1C3D] hover:bg-[#0B1C3D] hover:text-white transition">
-                <Tent className="w-4 h-4" /> Réserver — Partenaire
+                <Tent className="w-4 h-4" /> Réserver — Exposant
               </Link>
             </div>
           </div>
@@ -328,7 +328,7 @@ export default function ChapiteauPublicPage() {
             </Link>
             <Link to={ROUTES.PARTNER_CHAPITEAU}
               className="flex items-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm text-white border border-white/30 hover:bg-white/10 transition">
-              <Tent className="w-4 h-4" /> Catalogue Partenaire
+              <Tent className="w-4 h-4" /> Catalogue Exposant
             </Link>
           </div>
         </div>

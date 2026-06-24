@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIB 2026 — Bâtir l’avenir, ensemble</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --paper:#f8f1e7;
+      --cream:#fffaf2;
+      --ink:#211b17;
+      --muted:#7c6b5b;
+      --terracotta:#c96b2c;
+      --orange:#f47920;
+      --blue:#00589d;
+      --deep:#00254a;
+      --line:#e5d4bf;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,Arial,sans-serif}
+    a{text-decoration:none;color:inherit}
+    img{display:block;max-width:100%}
+    .wrap{width:min(1240px,calc(100% - 64px));margin:auto}
+
+    .site-header{
+      position:absolute;z-index:10;top:0;left:0;width:100%;
+      display:grid;grid-template-columns:260px 1fr 90px;align-items:start;
+      padding:38px 42px 0;color:#211b17;
+    }
+    .brand img{width:220px;height:auto}
+    .nav{display:flex;justify-content:center;gap:78px;padding-top:14px;font:600 13px/1 Inter;letter-spacing:.04em;text-transform:uppercase}
+    .nav a:hover{color:var(--terracotta)}
+    .top-arrow{margin-left:auto;width:96px;height:96px;background:linear-gradient(135deg,var(--blue),#003d78);color:#fff;display:grid;place-items:center;font-size:44px}
+
+    .hero{
+      position:relative;min-height:870px;overflow:hidden;background:var(--paper);
+      display:grid;grid-template-columns:48% 52%;
+    }
+    .hero:before{
+      content:"";position:absolute;inset:0;
+      background:
+        linear-gradient(135deg,transparent 0 68%,rgba(198,142,89,.22) 68.05% 68.2%,transparent 68.25%),
+        linear-gradient(45deg,transparent 0 72%,rgba(198,142,89,.18) 72.05% 72.2%,transparent 72.25%);
+      pointer-events:none;
+    }
+    .hero-copy{position:relative;z-index:1;padding:300px 0 0 42px}
+    .hero h1{font:500 110px/.9 "Cormorant Garamond",serif;letter-spacing:-.04em;margin:0 0 26px;color:#2a221d}
+    .hero h2{font:400 52px/1.06 "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.01em;margin:0 0 36px}
+    .date-line{display:flex;align-items:center;gap:24px;width:max-content;border-top:1px solid #bfa890;padding-top:22px;color:var(--terracotta);font:800 18px/1 Inter;letter-spacing:.08em}
+    .date-line span{display:block;width:42px;height:1px;background:var(--terracotta)}
+    .hero-visual{position:relative;min-height:870px;background:
+      linear-gradient(90deg,rgba(248,241,231,.82) 0%,rgba(248,241,231,.28) 18%,rgba(248,241,231,0) 44%),
+      url("assets/reference-home/hero-architecture.jpg") center/cover no-repeat;
+    }
+    .hero-visual:after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(255,250,242,.05),rgba(112,67,32,.14));
+      mix-blend-mode:multiply;
+    }
+    .motif{
+      position:absolute;left:36px;bottom:34px;width:250px;height:180px;opacity:.5;
+      background:
+        linear-gradient(45deg,transparent 47%,#d6bfa8 48% 52%,transparent 53%),
+        linear-gradient(-45deg,transparent 47%,#d6bfa8 48% 52%,transparent 53%);
+      background-size:70px 70px;
+    }
+
+    .univers{background:#fff;padding:52px 0 70px}
+    .section-title{font:500 45px/.92 "Barlow Condensed";text-transform:uppercase;margin:0}
+    .univers-grid{display:grid;grid-template-columns:190px repeat(6,1fr);gap:18px;align-items:start}
+    .universe-card{min-width:0}
+    .universe-card figure{height:225px;margin:0 0 18px;overflow:hidden;background:#e9ded2}
+    .universe-card:nth-child(2) figure{background:url("assets/reference-home/universe-1.jpg") center/cover no-repeat}
+    .universe-card:nth-child(3) figure{background:url("assets/reference-home/universe-2.jpg") center/cover no-repeat}
+    .universe-card:nth-child(4) figure{background:url("assets/reference-home/universe-3.jpg") center/cover no-repeat}
+    .universe-card:nth-child(5) figure{background:url("assets/reference-home/universe-4.jpg") center/cover no-repeat}
+    .universe-card:nth-child(6) figure{background:url("assets/reference-home/universe-5.jpg") center/cover no-repeat}
+    .universe-card:nth-child(7) figure{background:url("assets/reference-home/universe-6.jpg") center/cover no-repeat}
+    .universe-card h3{font:800 14px/1.15 "Barlow Condensed";text-transform:uppercase;margin:0;letter-spacing:.02em}
+
+    .rendezvous{display:grid;grid-template-columns:50% 50%;background:#fff}
+    .rendezvous-photo{min-height:420px;background:url("assets/reference-home/rendezvous.jpg") center/cover no-repeat}
+    .rendezvous-copy{background:linear-gradient(135deg,#d56f30,#ba5925);color:#fff;padding:58px 72px 48px}
+    .rendezvous-copy h2{font:500 56px/.98 "Barlow Condensed";text-transform:uppercase;margin:0 0 54px;max-width:500px}
+    .numbers{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,.35)}
+    .numbers article{padding:28px 28px 0 0;border-right:1px solid rgba(255,255,255,.35)}
+    .numbers article:last-child{border-right:0}
+    .numbers svg{width:34px;height:34px;fill:none;stroke:#fff;stroke-width:1.5;margin-bottom:18px}
+    .numbers strong{display:block;font:500 28px/1 "Cormorant Garamond";margin-bottom:4px}
+    .numbers span{font:700 11px/1.25 Inter;text-transform:uppercase}
+
+    .history{background:#fff;padding:60px 0 72px}
+    .history-grid{display:grid;grid-template-columns:260px repeat(4,1fr);gap:22px;align-items:end}
+    .history-intro h2{font:500 43px/.95 "Cormorant Garamond";text-transform:uppercase;margin:0 0 26px}
+    .history-intro p{font:500 13px/1.65 Inter;color:var(--muted);margin:0 0 28px}
+    .arrow-btn{width:72px;height:46px;border:0;background:var(--terracotta);color:#fff;font-size:28px;display:grid;place-items:center}
+    .history-card h3{font:500 28px/1 "Cormorant Garamond";margin:0 0 10px}
+    .history-card figure{height:220px;margin:0;overflow:hidden;background:center/cover no-repeat}
+    .history-card:nth-child(2) figure{background-image:url("assets/reference-home/history-1986.jpg")}
+    .history-card:nth-child(3) figure{background-image:url("assets/reference-home/history-2006.jpg")}
+    .history-card:nth-child(4) figure{background-image:url("assets/reference-home/history-2016.jpg")}
+    .history-card:nth-child(5) figure{background-image:url("assets/reference-home/history-2026.jpg")}
+
+    .talk-plan{display:grid;grid-template-columns:50% 50%;background:var(--paper)}
+    .talks{min-height:355px;padding:56px 42px;color:#fff;background:
+      linear-gradient(90deg,rgba(0,63,125,.97),rgba(0,88,157,.62),rgba(0,88,157,.22)),
+      url("assets/reference-home/sib-talks.jpg") right center/cover no-repeat;
+    }
+    .talks h2{font:500 44px/1 "Cormorant Garamond";text-transform:uppercase;margin:0 0 18px}
+    .talks p{font:700 13px/1.55 Inter;text-transform:uppercase;max-width:210px;margin:0 0 60px}
+    .talks .white-btn{width:56px;height:56px;background:#fff;color:#21415d;display:grid;place-items:center;font-size:28px}
+    .plan{padding:50px 62px;background:#f6ecdf}
+    .plan h2{font:500 34px/1 "Barlow Condensed";text-transform:uppercase;margin:0 0 26px}
+    .plan-box{border:1px solid #cdb9a3;background:#fff;padding:18px}
+    .plan-box img{width:100%;height:165px;object-fit:contain}
+    .plan-footer{display:flex;align-items:center;justify-content:space-between;margin-top:18px;font:600 12px/1 Inter;text-transform:uppercase;color:#6a594b}
+    .blue-btn{width:58px;height:42px;border:0;background:var(--blue);color:#fff;font-size:24px}
+
+    .partners{position:relative;background:#fffaf2;padding:64px 0 72px;overflow:hidden}
+    .partners:before{
+      content:"";position:absolute;inset:0;
+      background:
+        linear-gradient(45deg,transparent 0 78%,rgba(198,142,89,.15) 78.05% 78.2%,transparent 78.25%),
+        radial-gradient(circle at 12% 18%,rgba(201,107,44,.07),transparent 26%);
+      pointer-events:none;
+    }
+    .partners-layout{position:relative;display:grid;grid-template-columns:300px 1fr;gap:54px;align-items:start}
+    .partners-kicker{font:700 12px/1.4 Inter;letter-spacing:.22em;color:var(--terracotta);text-transform:uppercase;margin:0 0 18px}
+    .partners h2{font:500 48px/.92 "Cormorant Garamond";text-transform:uppercase;margin:0 0 22px}
+    .partners p{font:500 14px/1.7 Inter;color:var(--muted);max-width:270px;margin:0}
+    .logo-board{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .logo-group{border-left:3px solid var(--orange);background:rgba(255,255,255,.72);box-shadow:0 24px 50px rgba(70,45,22,.08);padding:22px}
+    .logo-group h3{font:800 21px/1 "Barlow Condensed";letter-spacing:.08em;text-transform:uppercase;margin:0 0 20px;color:#11263b}
+    .logo-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .logo-row.one{grid-template-columns:1fr}
+    .logo-tile{height:128px;background:#fff;border:1px solid #eadfD4;display:grid;place-items:center;padding:20px;overflow:hidden}
+    .logo-tile img{width:100%;height:100%;object-fit:contain}
+    .logo-group.sponsor .logo-tile img{width:72%;height:72%}
+    .logo-group.urbacom .logo-tile img{width:58%;height:58%;transform:translateY(-3px)}
+
+    .final-cta{display:grid;grid-template-columns:50% 50%;min-height:330px;background:var(--paper)}
+    .final-photo{background:url("assets/reference-home/final-architecture.jpg") center/cover no-repeat}
+    .final-copy{position:relative;padding:62px 82px;background:#fbf6ef;overflow:hidden}
+    .final-copy:after{content:"";position:absolute;right:38px;bottom:-20px;width:220px;height:220px;opacity:.35;background:
+      linear-gradient(45deg,transparent 47%,#d6bfa8 48% 52%,transparent 53%),
+      linear-gradient(-45deg,transparent 47%,#d6bfa8 48% 52%,transparent 53%);background-size:62px 62px}
+    .final-copy h2{font:500 60px/.9 "Cormorant Garamond";margin:0 0 14px}
+    .final-copy h3{font:500 25px/1.1 "Barlow Condensed";text-transform:uppercase;margin:0 0 26px}
+
+    @media(max-width:1000px){
+      .site-header{grid-template-columns:180px 1fr 70px;padding:24px}
+      .brand img{width:150px}.nav{gap:26px;font-size:11px}.top-arrow{width:70px;height:70px}
+      .hero{grid-template-columns:1fr}.hero-copy{padding:210px 32px 50px}.hero-visual{min-height:420px}.hero h1{font-size:78px}.hero h2{font-size:38px}
+      .univers-grid,.history-grid{grid-template-columns:repeat(2,1fr)}.univers-grid .section-title{grid-column:1/-1}
+      .rendezvous,.talk-plan,.final-cta,.partners-layout{grid-template-columns:1fr}
+      .logo-board{grid-template-columns:1fr}
+    }
+
+    @media(max-width:640px){
+      .wrap{width:min(100% - 32px,1240px)}
+      .site-header{position:relative;background:var(--paper);grid-template-columns:1fr auto;padding:18px}.nav{display:none}
+      .hero-copy{padding:40px 24px}.hero h1{font-size:60px}.hero h2{font-size:32px}
+      .univers-grid,.history-grid{grid-template-columns:1fr}
+      .rendezvous-copy,.plan,.final-copy{padding:38px 24px}
+      .numbers{grid-template-columns:1fr 1fr}.logo-row{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="SIB 2026">
+      <img src="assets/official/logo-sib-2026.png" alt="SIB — Salon International du Bâtiment">
+    </a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="/presentation">Le salon</a>
+      <a href="/pourquoi-visiter">Visiter</a>
+      <a href="/pourquoi-exposer">Exposer</a>
+      <a href="/events">Programme</a>
+      <a href="/press/accreditation">Presse</a>
+    </nav>
+    <a class="top-arrow" href="/register/exhibitor" aria-label="Réserver un stand">→</a>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <h1 id="hero-title">SIB 2026</h1>
+        <h2>Bâtir l’avenir,<br>ensemble</h2>
+        <div class="date-line">25 <span></span> 29 Novembre 2026</div>
+      </div>
+      <div class="hero-visual" role="img" aria-label="Architecture contemporaine inspirée du Maroc"></div>
+      <div class="motif" aria-hidden="true"></div>
+    </section>
+
+    <section class="univers" aria-labelledby="univers-title">
+      <div class="wrap univers-grid">
+        <h2 class="section-title" id="univers-title">Les univers<br>du SIB</h2>
+        <article class="universe-card"><figure></figure><h3>Gros œuvre<br>& structure</h3></article>
+        <article class="universe-card"><figure></figure><h3>Enveloppe<br>& finitions</h3></article>
+        <article class="universe-card"><figure></figure><h3>Techniques<br>du bâtiment</h3></article>
+        <article class="universe-card"><figure></figure><h3>Matériaux<br>& innovation</h3></article>
+        <article class="universe-card"><figure></figure><h3>Aménagement<br>& design</h3></article>
+        <article class="universe-card"><figure></figure><h3>Villes & territoires<br>durables</h3></article>
+      </div>
+    </section>
+
+    <section class="rendezvous">
+      <div class="rendezvous-photo" role="img" aria-label="Professionnels du bâtiment au salon"></div>
+      <div class="rendezvous-copy">
+        <h2>Le rendez-vous incontournable de la construction en Afrique</h2>
+        <div class="numbers">
+          <article>
+            <svg viewBox="0 0 24 24"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 20v-2a4 4 0 0 0-3-3.87"/></svg>
+            <strong>650+</strong><span>Exposants</span>
+          </article>
+          <article>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 4.5 6 4.5 9S15 18 12 21c-3-3-4.5-6-4.5-9S9 6 12 3Z"/></svg>
+            <strong>40+</strong><span>Pays</span>
+          </article>
+          <article>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>
+            <strong>90 000+</strong><span>Visiteurs</span>
+          </article>
+          <article>
+            <svg viewBox="0 0 24 24"><path d="M4 21V5h7v16M11 21V9h9v12M2 21h20M7 9h1M7 13h1M7 17h1M15 13h1M16 17h1"/></svg>
+            <strong>100+</strong><span>Conférences<br>& animations</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="history" aria-labelledby="history-title">
+      <div class="wrap history-grid">
+        <div class="history-intro">
+          <h2 id="history-title">40 ans<br>d’histoire<br>et d’impact</h2>
+          <p>Quatre décennies au service du bâtiment, de l’innovation et du développement durable au Maroc et en Afrique.</p>
+          <a class="arrow-btn" href="/editions" aria-label="Voir l'histoire du SIB">→</a>
+        </div>
+        <article class="history-card"><h3>1986</h3><figure></figure></article>
+        <article class="history-card"><h3>2006</h3><figure></figure></article>
+        <article class="history-card"><h3>2016</h3><figure></figure></article>
+        <article class="history-card"><h3>2026</h3><figure></figure></article>
+      </div>
+    </section>
+
+    <section class="talk-plan">
+      <article class="talks">
+        <h2>SIB Talks</h2>
+        <p>S’inspirer, échanger, construire demain.</p>
+        <a class="white-btn" href="/events" aria-label="Découvrir SIB Talks">→</a>
+      </article>
+      <article class="plan">
+        <h2>Plan du salon</h2>
+        <div class="plan-box">
+          <img src="assets/reference-home/plan-salon.jpg" alt="Plan interactif du salon SIB 2026">
+        </div>
+        <div class="plan-footer">
+          <span>Interactif & personnalisé</span>
+          <a class="blue-btn" href="/map" aria-label="Voir le plan">→</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="partners" aria-labelledby="partners-title">
+      <div class="wrap partners-layout">
+        <div>
+          <p class="partners-kicker">Institutions & partenaires</p>
+          <h2 id="partners-title">Organisateurs<br>et sponsor officiel</h2>
+          <p>Les acteurs institutionnels et professionnels réunis autour du Salon International du Bâtiment.</p>
+        </div>
+        <div class="logo-board">
+          <article class="logo-group">
+            <h3>Organisateurs</h3>
+            <div class="logo-row">
+              <figure class="logo-tile"><img src="assets/official/partners/ministere-amenagement.png" alt="Ministère de l’Aménagement du Territoire National"></figure>
+              <figure class="logo-tile"><img src="assets/official/partners/amdie.png" alt="AMDIE"></figure>
+            </div>
+          </article>
+          <article class="logo-group">
+            <h3>Co-organisateurs</h3>
+            <div class="logo-row">
+              <figure class="logo-tile"><img src="assets/official/partners/fmc.png" alt="Fédération des Industries des Matériaux de Construction"></figure>
+              <figure class="logo-tile"><img src="assets/official/partners/fnbtp.png" alt="Fédération Nationale du Bâtiment et des Travaux Publics"></figure>
+            </div>
+          </article>
+          <article class="logo-group sponsor">
+            <h3>Sponsor officiel</h3>
+            <div class="logo-row one">
+              <figure class="logo-tile"><img src="assets/official/partners/lap.png" alt="LAP — La qualité de l’appareillage"></figure>
+            </div>
+          </article>
+          <article class="logo-group urbacom">
+            <h3>Organisateur délégué</h3>
+            <div class="logo-row one">
+              <figure class="logo-tile"><img src="assets/official/partners/urbacom.png" alt="URBACOM Communication & Événementiel"></figure>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="final-photo" role="img" aria-label="Architecture du salon"></div>
+      <div class="final-copy">
+        <h2>SIB 2026</h2>
+        <h3>Bâtir l’avenir, ensemble</h3>
+        <div class="date-line">25 <span></span> 29 Novembre 2026</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

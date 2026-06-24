@@ -23,27 +23,12 @@ export const FeaturedPartners: React.FC = () => {
     const loadPartners = async () => {
       setIsLoading(true);
       try {
-        const data = await SupabaseService.getPartners();
-        // Filter for featured partners, or fallback to all
-        const pool = data.filter(p => p.featured).length > 0 ? data.filter(p => p.featured) : data;
+        const data = await SupabaseService.getExhibitors();
+        const pool = data.filter((e) => e.featured).length > 0 ? data.filter((e) => e.featured) : data;
 
-        // Ordre de priorité des tiers
-        const tierPriority: Record<string, number> = {
-          'organizer': 1,
-          'co_organizer': 2,
-          'official_sponsor': 3,
-          'delegated_organizer': 4,
-          'partner': 5,
-          'press_partner': 6,
-        };
-
-        const sorted = [...pool].sort((a, b) => {
-          const pa = tierPriority[a.partner_tier || a.partner_type || a.partnerType || ''] ?? 99;
-          const pb = tierPriority[b.partner_tier || b.partner_type || b.partnerType || ''] ?? 99;
-          if (pa !== pb) {return pa - pb;}
-          // À égalité de tier, ordre alphabétique
-          return (a.organization_name || a.organizationName || a.company_name || '').localeCompare(b.organization_name || b.organizationName || b.company_name || '');
-        });
+        const sorted = [...pool].sort((a, b) =>
+          (a.companyName || '').localeCompare(b.companyName || '')
+        );
 
         setPartners(sorted.slice(0, 3));
       } catch (error) {
@@ -118,14 +103,14 @@ export const FeaturedPartners: React.FC = () => {
         >
           <span className="luxury-badge mb-5 inline-flex items-center gap-2">
             <Award className="h-3 w-3" />
-            {t('home.featured_partners_badge', 'Sponsors Officiels')}
+            {t('home.featured_partners_badge', 'Exposants à la une')}
           </span>
           <h2 className="text-4xl sm:text-5xl font-light text-[#1A1A1A] mb-4 mt-3"
             style={{ fontFamily: '"Cormorant Garamond", serif' }}>
-            {t('home.featured_partners_title', 'Sponsors à la Une')}
+            {t('home.featured_partners_title', 'Exposants du SIB 2026')}
           </h2>
           <p className="text-base text-[#666] max-w-2xl mx-auto leading-relaxed font-light">
-            {t('home.featured_partners_desc', 'Les organisations leaders qui soutiennent SIB 2026')}
+            {t('home.featured_partners_desc', 'Découvrez les exposants mis en avant, dont le sponsor officiel LAP.')}
           </p>
           <div className="luxury-divider mt-6">
             <span />
@@ -135,15 +120,15 @@ export const FeaturedPartners: React.FC = () => {
 
       {/* Bande défilante des logos sponsors */}
       <div className="mb-12">
-        <LogoShowcaseSection type="partners" />
+        <LogoShowcaseSection type="exhibitors" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {partners.map((partner, index) => {
-            const displayName = (currentLanguage === 'en' && partner.name_en) ? partner.name_en : partner.name;
-            const displaySector = (currentLanguage === 'en' && partner.sector_en) ? partner.sector_en : partner.sector;
-            const displayDescription = (currentLanguage === 'en' && partner.description_en) ? partner.description_en : partner.description;
+            const displayName = partner.companyName || partner.name || 'Exposant';
+            const displaySector = partner.sector || '';
+            const displayDescription = partner.description || '';
             return (
             <motion.div
               key={partner.id}
@@ -182,9 +167,9 @@ export const FeaturedPartners: React.FC = () => {
 
                   {/* Tier */}
                   <div className="flex justify-center mb-4">
-                    <Badge variant={getTierColor(partner.partner_tier)} className="uppercase tracking-wider font-bold">
+                    <Badge variant="info" className="uppercase tracking-wider font-bold">
                       <Award className="h-3 w-3 mr-1" />
-                      {getTierLabel(partner.partner_tier)}
+                      Exposant
                     </Badge>
                   </div>
 
@@ -211,7 +196,7 @@ export const FeaturedPartners: React.FC = () => {
                       variant="outline"
                       size="sm"
                       className="w-full"
-                      onClick={() => navigate(`${ROUTES.PARTNERS}/${partner.id}`)}
+                      onClick={() => navigate(`${ROUTES.EXHIBITORS}/${partner.id}`)}
                     >
                       {t('home.see_profile', 'Voir le Profil')}
                     </Button>
@@ -219,7 +204,7 @@ export const FeaturedPartners: React.FC = () => {
                       variant="primary"
                       size="sm"
                       className="w-full"
-                      onClick={() => navigate(`${ROUTES.CONTACT}?subject=Partenariat with ${partner.name}`)}
+                      onClick={() => navigate(`${ROUTES.CONTACT}?subject=Contact exposant ${displayName}`)}
                     >
                       {t('home.contact_partner', 'Contacter')}
                     </Button>
@@ -232,7 +217,7 @@ export const FeaturedPartners: React.FC = () => {
         </div>
 
         <div className="text-center">
-          <Link to={ROUTES.PARTNERS}>
+          <Link to={ROUTES.EXHIBITORS}>
             <button className="luxury-btn group inline-flex items-center gap-2">
               {t('home.discover_all')}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

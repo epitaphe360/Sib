@@ -8,9 +8,9 @@ import {
   AlertCircle,
   Loader,
   Shield,
-  Building2,
   Store,
-  BarChart2,
+  Users,
+  Star,
   Link2,
   CheckCircle,
 } from 'lucide-react';
@@ -488,14 +488,6 @@ export default function LoginPage() {
                     variant: 'primary',
                   },
                   {
-                    k: 'partner',
-                    email: 'partenaire@sibs.com',
-                    pwd: 'Sib2026!Partner',
-                    label: t('login.demo_partners'),
-                    Icon: Building2,
-                    variant: 'accent',
-                  },
-                  {
                     k: 'exhibitor',
                     email: 'exposant@sibs.com',
                     pwd: 'Sib2026!Expo',
@@ -504,12 +496,20 @@ export default function LoginPage() {
                     variant: 'primary',
                   },
                   {
-                    k: 'marketing',
-                    email: 'marketing@sibs.com',
-                    pwd: 'Sib2026!Marketing',
-                    label: 'Marketing',
-                    Icon: BarChart2,
+                    k: 'visitor',
+                    email: 'visitor-free@test.sib2026.ma',
+                    pwd: 'Demo2026!',
+                    label: 'Visiteur',
+                    Icon: Users,
                     variant: 'secondary',
+                  },
+                  {
+                    k: 'visitor-vip',
+                    email: 'visitor-vip@test.sib2026.ma',
+                    pwd: 'Demo2026!',
+                    label: 'Visiteur VIP',
+                    Icon: Star,
+                    variant: 'accent',
                   },
                 ].map(({ k, email: demoEmail, pwd, label, Icon, variant }) => (
                   <Button
