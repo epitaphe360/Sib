@@ -18,7 +18,7 @@ export function ActiveSalonBanner() {
       <Text style={styles.label}>{t('salon.connectedTo')}</Text>
       <Text style={[styles.name, { color: theme.color }]}>{activeSalon.name}</Text>
       <Pressable
-        onPress={() => router.push('/(visitor)/(tabs)/explore' as never)}
+        onPress={() => router.replace('/(visitor)/(tabs)' as never)}
         style={[styles.enterBtn, { backgroundColor: theme.color }]}
         accessibilityRole="button"
         accessibilityLabel={t('salon.continueCta')}

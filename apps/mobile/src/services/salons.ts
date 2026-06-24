@@ -29,20 +29,39 @@ function mapRow(row: Record<string, unknown>): Salon {
     dates,
     active: Boolean(row.is_active ?? row.is_default),
     location: (row.location as string) ?? undefined,
+    edition: (row.edition as string) ?? undefined,
+    expectedVisitors:
+      typeof row.expected_visitors === 'string'
+        ? row.expected_visitors
+        : typeof row.visitors_label === 'string'
+          ? row.visitors_label
+          : undefined,
   };
+}
+
+async function fetchSalonsFromDb(): Promise<Salon[] | null> {
+  const extendedSelect =
+    'id, name, slug, description, location, date_debut, date_fin, is_active, is_default, sort_order, edition, expected_visitors, visitors_label, code';
+  const baseSelect =
+    'id, name, slug, description, location, date_debut, date_fin, is_active, is_default, sort_order, code';
+
+  const extended = await supabase.from('salons').select(extendedSelect).order('sort_order', { ascending: true });
+  if (!extended.error) {
+    if (!extended.data?.length) return null;
+    return extended.data.map((row) => mapRow(row as Record<string, unknown>));
+  }
+  if (extended.error.code !== '42703') throw extended.error;
+
+  const base = await supabase.from('salons').select(baseSelect).order('sort_order', { ascending: true });
+  if (base.error) throw base.error;
+  if (!base.data?.length) return null;
+  return base.data.map((row) => mapRow(row as Record<string, unknown>));
 }
 
 export async function fetchSalons(): Promise<Salon[]> {
   try {
-    const { data, error } = await supabase
-      .from('salons')
-      // Tous les salons, actifs ET prochainement (pas de filtre is_active)
-      .select('id, name, slug, description, location, date_debut, date_fin, is_active, is_default, sort_order')
-      .order('sort_order', { ascending: true });
-
-    if (error) throw error;
-    if (data?.length) {
-      const dbItems = data.map((row) => mapRow(row as Record<string, unknown>));
+    const dbItems = await fetchSalonsFromDb();
+    if (dbItems?.length) {
       // Les salons statiques garantissent la présence de SIR/SIP/BTP/SIE même si la DB n'a qu'eux en préparation
       const merged: Salon[] = STATIC_SALONS.map(
         (s) =>

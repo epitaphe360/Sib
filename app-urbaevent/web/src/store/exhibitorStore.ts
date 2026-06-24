@@ -2,6 +2,12 @@ import { create } from 'zustand';
 import { Exhibitor, TimeSlot } from '../types';
 import { SupabaseService } from '../services/supabaseService';
 
+export function isExhibitorCatalogVisible(exhibitor: Exhibitor): boolean {
+  if (!exhibitor.verified) return false;
+  if (exhibitor.isPublished === false) return false;
+  return true;
+}
+
 interface ExhibitorState {
   exhibitors: Exhibitor[];
   filteredExhibitors: Exhibitor[];
@@ -46,17 +52,22 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
   isLoading: false,
   isUpdating: null,
   error: null,
+  catalogMode: 'public',
 
-  fetchExhibitors: async (reset = true) => {
+  fetchExhibitors: async (reset = true, options?: { publicCatalog?: boolean; limit?: number }) => {
     set({ isLoading: true, error: null });
     try {
       const state = get();
+      const publicCatalog = options?.publicCatalog ?? true;
+      const catalogMode = publicCatalog ? 'public' : 'all';
+      const pageSize = options?.limit ?? state.pageSize;
       const nextPage = reset ? 0 : state.currentPage;
-      const offset = nextPage * state.pageSize;
+      const offset = nextPage * pageSize;
 
       const { items, total } = await SupabaseService.getExhibitorsPaginated({
-        limit: state.pageSize,
+        limit: pageSize,
         offset,
+        publicCatalog,
       });
 
       const exhibitors = reset
@@ -76,16 +87,17 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
           companyName.toLowerCase().includes(search) ||
           description.toLowerCase().includes(search);
 
-        const isPubliclyVisible = exhibitor.isPublished === true || exhibitor.miniSite?.published === true;
-        return exhibitor.verified && isPubliclyVisible && matchesCategory && matchesSector && matchesSearch;
+        if (catalogMode === 'public' && !isExhibitorCatalogVisible(exhibitor)) return false;
+        return matchesCategory && matchesSector && matchesSearch;
       });
 
       set({
         exhibitors,
         filteredExhibitors,
         totalExhibitors: total,
+        catalogMode,
         currentPage: reset ? 1 : nextPage + 1,
-        hasMore: exhibitors.length < total,
+        hasMore: offset + items.length < total,
         isLoading: false
       });
     } catch (error: unknown) {
@@ -165,7 +177,7 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
   },
 
   setFilters: (newFilters) => {
-    const { exhibitors } = get();
+    const { exhibitors, catalogMode } = get();
     const filters = { ...get().filters, ...newFilters };
 
     console.log('🔍 Filtre appliqué:', filters, `sur ${exhibitors.length} exposants`);
@@ -183,10 +195,8 @@ export const useExhibitorStore = create<ExhibitorState>((set, get) => ({
         companyName.toLowerCase().includes(search) ||
         description.toLowerCase().includes(search);
 
-      // Seuls les exposants vérifiés ET publiés sont visibles publiquement
-      // La publication peut provenir soit de exhibitors.is_published soit de mini_sites.published.
-      const isPubliclyVisible = exhibitor.isPublished === true || exhibitor.miniSite?.published === true;
-      return exhibitor.verified && isPubliclyVisible && matchesCategory && matchesSector && matchesSearch;
+      if (catalogMode === 'public' && !isExhibitorCatalogVisible(exhibitor)) return false;
+      return matchesCategory && matchesSector && matchesSearch;
     });
 
     console.log(`📊 ${filtered.length} exposants après filtrage`);

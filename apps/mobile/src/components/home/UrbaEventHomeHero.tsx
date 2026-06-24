@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
 import { URBA_PLATFORM_STATS } from '../../data/urbaCatalog';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../i18n/I18nProvider';
@@ -54,9 +53,7 @@ export function UrbaEventHomeHero() {
         </View>
       </View>
 
-      <Svg viewBox="0 0 400 40" style={styles.wave} preserveAspectRatio="none">
-        <Path d="M0,20 C100,40 300,0 400,20 L400,40 L0,40 Z" fill={colors.platform.bg} />
-      </Svg>
+      <View style={styles.wave} />
     </View>
   );
 }
@@ -203,6 +200,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 32,
-    width: '100%',
+    backgroundColor: colors.platform.bg,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
   },
 });

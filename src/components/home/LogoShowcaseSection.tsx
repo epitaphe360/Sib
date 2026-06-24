@@ -9,7 +9,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { Button } from '../ui/Button';
 
 /* ─── Smooth infinite scroll CSS ─── */
-const scrollCSS = `
+export const logoShowcaseScrollCSS = `
 @keyframes scroll-left {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
@@ -69,7 +69,7 @@ interface LogoShowcaseSectionProps {
 }
 
 /* ─── Seamless logo rail ─── */
-const LogoBand: React.FC<{
+export const LogoBand: React.FC<{
   logos: { to: string; src: string; alt: string }[];
   reverse?: boolean;
   speed?: number;
@@ -171,7 +171,7 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
 
   return (
     <>
-      <style>{scrollCSS}</style>
+      <style>{logoShowcaseScrollCSS}</style>
 
       <section className="relative bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden">
         {/* decorative top/bottom borders */}

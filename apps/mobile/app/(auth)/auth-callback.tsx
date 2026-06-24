@@ -1,81 +1,133 @@
 import * as ExpoLinking from 'expo-linking';
-import { router } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../src/context/AuthContext';
-import { completeAuthSessionFromUrl } from '../../src/lib/completeAuthSession';
+import { useSalon } from '../../src/context/SalonContext';
+import { normalizeAuthDeepLink } from '../../src/lib/authDeepLink';
+import { peekPendingAuthDeepLink, consumePendingAuthDeepLink } from '../../src/lib/pendingAuthDeepLink';
+import { applyPendingSalonAfterAuth } from '../../src/lib/applyPendingSalonAfterAuth';
+import {
+  buildAuthCallbackUrlFromParams,
+  completeAuthSessionFromUrl,
+} from '../../src/lib/completeAuthSession';
 import { dismissAuthStackIfNeeded, navigateAfterAuth } from '../../src/lib/navigateAfterAuth';
 import { colors, spacing } from '../../src/theme';
 import { useI18n } from '../../src/i18n/I18nProvider';
 
-const CALLBACK_TIMEOUT_MS = 15_000;
+const CALLBACK_TIMEOUT_MS = 30_000;
+const POLL_MS = 400;
+const POLL_ATTEMPTS = 25;
 
 export default function AuthCallbackScreen() {
   const { t } = useI18n();
   const { refreshUser } = useAuth();
+  const { salons, setActiveSalon } = useSalon();
+  const params = useLocalSearchParams<{
+    token_hash?: string;
+    type?: string;
+    code?: string;
+    access_token?: string;
+    refresh_token?: string;
+  }>();
+  const incomingUrl = ExpoLinking.useURL();
   const [error, setError] = useState<string | null>(null);
   const handledRef = useRef(false);
 
-  useEffect(() => {
-    let cancelled = false;
+  const resolveAuthUrl = useCallback((): string | null => {
+    return (
+      buildAuthCallbackUrlFromParams(params) ??
+      peekPendingAuthDeepLink() ??
+      normalizeAuthDeepLink(incomingUrl)
+    );
+  }, [incomingUrl, params]);
 
-    const finish = (message: string) => {
-      if (!cancelled && !handledRef.current) {
-        handledRef.current = true;
-        setError(message);
-      }
-    };
-
-    const handle = async (url: string | null) => {
-      if (!url || (!url.includes('access_token') && !url.includes('code='))) return;
+  const handle = useCallback(
+    async (url: string) => {
       if (handledRef.current) return;
       handledRef.current = true;
       try {
-        const { appUser, paymentRequestId } = await completeAuthSessionFromUrl(url);
-        // On met à jour le contexte Auth avec l'utilisateur fraîchement créé/récupéré.
-        // Note: on appelle refreshUser APRÈS finalizeProfileAfterMagicLink pour s'assurer
-        // que la ligne users existe déjà en base avant que onAuthStateChange tente de la charger.
+        const normalized = normalizeAuthDeepLink(url) ?? url;
+        const { appUser, paymentRequestId } = await completeAuthSessionFromUrl(normalized);
+        consumePendingAuthDeepLink();
         await refreshUser();
-        if (!cancelled) {
-          if (paymentRequestId) {
-            dismissAuthStackIfNeeded();
-            router.replace(`/payment/${paymentRequestId}` as never);
-          } else {
-            navigateAfterAuth(appUser);
-          }
+        if (paymentRequestId) {
+          dismissAuthStackIfNeeded();
+          router.replace(`/payment/${paymentRequestId}` as never);
+        } else {
+          const enteredSalon = await applyPendingSalonAfterAuth({
+            salons,
+            setActiveSalon,
+            userId: appUser.id,
+          });
+          if (!enteredSalon) navigateAfterAuth(appUser.type);
         }
       } catch (e) {
-        if (!cancelled) {
-          setError(e instanceof Error ? e.message : t('auth.magic.callbackError'));
-          handledRef.current = false; // Permet de réessayer si l'URL change
-        }
+        setError(e instanceof Error ? e.message : t('auth.magic.callbackError'));
+        handledRef.current = false;
       }
+    },
+    [refreshUser, salons, setActiveSalon, t],
+  );
+
+  const tryStart = useCallback(
+    (url: string | null) => {
+      const normalized = url ? normalizeAuthDeepLink(url) : resolveAuthUrl();
+      if (!normalized) return false;
+      void handle(normalized);
+      return true;
+    },
+    [handle, resolveAuthUrl],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
+    let timeout: ReturnType<typeof setTimeout> | null = null;
+
+    const finish = (message: string) => {
+      if (!cancelled && !handledRef.current) setError(message);
     };
 
-    const timeout = setTimeout(() => {
+    if (tryStart(resolveAuthUrl())) {
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    let attempts = 0;
+    pollTimer = setInterval(() => {
+      if (cancelled || handledRef.current) return;
+      attempts += 1;
+      void ExpoLinking.getInitialURL().then((url) => {
+        if (tryStart(url ?? incomingUrl)) {
+          if (pollTimer) clearInterval(pollTimer);
+          if (timeout) clearTimeout(timeout);
+        } else if (attempts >= POLL_ATTEMPTS) {
+          if (pollTimer) clearInterval(pollTimer);
+        }
+      });
+    }, POLL_MS);
+
+    timeout = setTimeout(() => {
+      if (pollTimer) clearInterval(pollTimer);
       finish(t('auth.magic.callbackTimeout'));
     }, CALLBACK_TIMEOUT_MS);
 
-    ExpoLinking.getInitialURL()
-      .then((url) => {
-        if (url?.includes('access_token') || url?.includes('code=')) {
-          clearTimeout(timeout);
-          handle(url);
-        }
-      })
-      .catch(() => finish(t('auth.magic.callbackError')));
-
     const sub = ExpoLinking.addEventListener('url', ({ url }) => {
-      clearTimeout(timeout);
-      handle(url);
+      if (tryStart(url)) {
+        if (pollTimer) clearInterval(pollTimer);
+        if (timeout) clearTimeout(timeout);
+      }
     });
 
     return () => {
       cancelled = true;
-      clearTimeout(timeout);
+      if (pollTimer) clearInterval(pollTimer);
+      if (timeout) clearTimeout(timeout);
       sub.remove();
     };
-  }, [refreshUser, t]);
+  }, [incomingUrl, resolveAuthUrl, tryStart, t]);
 
   return (
     <View style={styles.wrap}>

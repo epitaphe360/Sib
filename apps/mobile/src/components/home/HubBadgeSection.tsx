@@ -5,20 +5,22 @@ import QRCode from 'react-native-qrcode-svg';
 import { buildStaticParticipantQR } from '../../api/badgeLookup';
 import { PLATFORM } from '../../config/platform';
 import { useAuth } from '../../context/AuthContext';
+import { useSalon } from '../../context/SalonContext';
 import { useAppTheme } from '../../context/ThemeContext';
 import { useRotatingQR } from '../../hooks/useRotatingQR';
 import { useI18n } from '../../i18n/I18nProvider';
 import { ensureUserBadge } from '../../services/badge';
 import type { UserBadge } from '../../types';
 import { fonts, radius, shadows, spacing } from '../../theme';
-import { AppIcon } from '../AppIcon';
+import { BadgeGuestCard } from '../BadgeGuestCard';
 import { FadeSlideIn } from '../FadeSlideIn';
 import { PrimaryButton, SecondaryButton } from '../ui';
 import { HomeSection } from './HomeSection';
 
-/** E-Badge UrbaEvent — unique et valable pour tous les salons, créé depuis le hub. */
+/** E-Badge salon — demandé depuis l'espace salon actif. */
 export function HubBadgeSection() {
   const { user, isLoading: authLoading } = useAuth();
+  const { activeSalon } = useSalon();
   const { t } = useI18n();
   const { colors, isDark } = useAppTheme();
   const [badge, setBadge] = useState<UserBadge | null>(null);
@@ -49,54 +51,32 @@ export function HubBadgeSection() {
   }, [user, loadOrCreate]);
 
   const openBadge = () => router.push('/(visitor)/(tabs)/badge' as never);
-  const openRegister = () => router.push('/(auth)/register' as never);
-  const openLogin = () => router.push('/(auth)/login' as never);
+  const salonName = activeSalon?.name ?? '';
+  const badgeSubtitle = salonName
+    ? t('salon.interior.badgeSubtitle', { salonName })
+    : t('salon.interior.badgeSubtitleGeneric');
+  const badgeSalonHint = salonName
+    ? t('salon.interior.badgeSalonHint', { salonName })
+    : t('salon.interior.badgeSalonHintGeneric');
 
   return (
     <FadeSlideIn delay={60}>
       <HomeSection
-        title={t('home.urba.badgeTitle')}
-        subtitle={t('home.urba.badgeSubtitle')}
-        actionLabel={user && badge ? t('home.urba.badgeViewFull') : undefined}
+        title={t('salon.interior.badgeTitle')}
+        subtitle={badgeSubtitle}
+        actionLabel={user && badge ? t('badge.guest.viewFull') : undefined}
         onAction={user && badge ? openBadge : undefined}
       >
         <View style={styles.body}>
           {authLoading ? (
             <ActivityIndicator color={colors.primary} />
           ) : !user ? (
-            <View
-              style={[
-                styles.card,
-                { backgroundColor: colors.surface, borderColor: colors.cardBorder },
-                !isDark && shadows.sm,
-              ]}
-            >
-              <View style={styles.guestHeader}>
-                <View style={[styles.iconWrap, { backgroundColor: colors.accentMuted }]}>
-                  <AppIcon name="qr-code-outline" size={28} color={colors.primary} />
-                </View>
-                <View style={styles.guestText}>
-                  <Text style={[styles.cardTitle, { color: colors.text }]}>
-                    {t('home.urba.badgeGuestTitle')}
-                  </Text>
-                  <Text style={[styles.cardHint, { color: colors.textMuted }]}>
-                    {t('home.urba.badgeGuestHint')}
-                  </Text>
-                </View>
-              </View>
-              <PrimaryButton label={t('home.urba.registerFree')} onPress={openRegister} variant="gold" />
-              <Pressable onPress={openLogin} style={styles.loginRow} accessibilityRole="link">
-                <Text style={[styles.loginHint, { color: colors.textMuted }]}>
-                  {t('home.urba.alreadyAccount')}
-                </Text>
-                <Text style={[styles.loginLink, { color: colors.primary }]}>{t('home.urba.loginCta')}</Text>
-              </Pressable>
-            </View>
+            <BadgeGuestCard compact />
           ) : loading ? (
             <View style={styles.center}>
               <ActivityIndicator color={colors.primary} size="large" />
               <Text style={[styles.loadingText, { color: colors.textMuted }]}>
-                {t('home.urba.badgeCreating')}
+                {t('badge.guest.creating')}
               </Text>
             </View>
           ) : error ? (
@@ -108,7 +88,7 @@ export function HubBadgeSection() {
             <Pressable
               onPress={openBadge}
               accessibilityRole="button"
-              accessibilityLabel={t('home.urba.badgeViewFull')}
+              accessibilityLabel={t('badge.guest.viewFull')}
               style={[
                 styles.card,
                 { backgroundColor: colors.surface, borderColor: colors.cardBorder },
@@ -126,12 +106,12 @@ export function HubBadgeSection() {
                   </Text>
                   <Text style={[styles.badgeCode, { color: colors.primary }]}>{badge.badgeCode}</Text>
                   <Text style={[styles.globalHint, { color: colors.textMuted }]}>
-                    {t('home.urba.badgeGlobalHint')}
+                    {badgeSalonHint}
                   </Text>
                 </View>
               </View>
               <SecondaryButton
-                label={t('home.urba.badgeViewFull')}
+                label={t('badge.guest.viewFull')}
                 icon="qr-code-outline"
                 onPress={openBadge}
               />

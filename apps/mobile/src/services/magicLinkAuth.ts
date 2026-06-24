@@ -166,8 +166,14 @@ async function sendMagicLinkViaEdge(params: {
   const { data, error } = await supabase.functions.invoke('send-magic-link', {
     body: params,
   });
-  if (error) return false;
-  if (data?.error) return false;
+  if (error) {
+    logger.warn('magicLinkAuth', 'send-magic-link invoke failed', error);
+    return false;
+  }
+  if (data?.error) {
+    logger.warn('magicLinkAuth', 'send-magic-link error', data.error);
+    throw new Error(String(data.error));
+  }
   if (data?.skipped) return false;
   return Boolean(data?.ok);
 }
@@ -244,6 +250,6 @@ export async function sendMagicLinkSignup(pending: Omit<PendingSignup, 'createdA
     if (error.message.includes('already registered') || error.message.includes('already exists')) {
       throw new Error('Cet email est déjà inscrit. Utilisez « Connexion » pour recevoir un lien magique.');
     }
-    mapMagicLinkError(error, 'Impossible d’envoyer le lien d’inscription badge.');
+    mapMagicLinkError(error, 'Impossible d’envoyer le lien d’inscription. Vérifiez votre connexion ou contactez Sib2026@urbacom.net.');
   }
 }

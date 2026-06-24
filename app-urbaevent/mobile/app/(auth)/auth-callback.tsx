@@ -1,20 +1,55 @@
 import * as ExpoLinking from 'expo-linking';
-import { router } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../src/context/AuthContext';
-import { completeAuthSessionFromUrl } from '../../src/lib/completeAuthSession';
+import { useSalon } from '../../src/context/SalonContext';
+import { applyPendingSalonAfterAuth } from '../../src/lib/applyPendingSalonAfterAuth';
+import {
+  buildAuthCallbackUrlFromParams,
+  completeAuthSessionFromUrl,
+  isAuthCallbackPayload,
+} from '../../src/lib/completeAuthSession';
 import { dismissAuthStackIfNeeded, navigateAfterAuth } from '../../src/lib/navigateAfterAuth';
 import { colors, spacing } from '../../src/theme';
 import { useI18n } from '../../src/i18n/I18nProvider';
 
-const CALLBACK_TIMEOUT_MS = 15_000;
+const CALLBACK_TIMEOUT_MS = 20_000;
 
 export default function AuthCallbackScreen() {
   const { t } = useI18n();
   const { refreshUser } = useAuth();
+  const { salons, setActiveSalon } = useSalon();
+  const params = useLocalSearchParams<{ token_hash?: string; type?: string; code?: string }>();
+  const incomingUrl = ExpoLinking.useURL();
   const [error, setError] = useState<string | null>(null);
   const handledRef = useRef(false);
+
+  const handle = useCallback(
+    async (url: string) => {
+      if (handledRef.current) return;
+      handledRef.current = true;
+      try {
+        const { appUser, paymentRequestId } = await completeAuthSessionFromUrl(url);
+        await refreshUser();
+        if (paymentRequestId) {
+          dismissAuthStackIfNeeded();
+          router.replace(`/payment/${paymentRequestId}` as never);
+        } else {
+          const enteredSalon = await applyPendingSalonAfterAuth({
+            salons,
+            setActiveSalon,
+            userId: appUser.id,
+          });
+          if (!enteredSalon) navigateAfterAuth(appUser.type);
+        }
+      } catch (e) {
+        setError(e instanceof Error ? e.message : t('auth.magic.callbackError'));
+        handledRef.current = false;
+      }
+    },
+    [refreshUser, salons, setActiveSalon, t],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -26,48 +61,43 @@ export default function AuthCallbackScreen() {
       }
     };
 
-    const handle = async (url: string | null) => {
-      if (!url || (!url.includes('access_token') && !url.includes('code='))) return;
-      if (handledRef.current) return;
-      handledRef.current = true;
-      try {
-        const { appUser, paymentRequestId } = await completeAuthSessionFromUrl(url);
-        // On met à jour le contexte Auth avec l'utilisateur fraîchement créé/récupéré.
-        // Note: on appelle refreshUser APRÈS finalizeProfileAfterMagicLink pour s'assurer
-        // que la ligne users existe déjà en base avant que onAuthStateChange tente de la charger.
-        await refreshUser();
-        if (!cancelled) {
-          if (paymentRequestId) {
-            dismissAuthStackIfNeeded();
-            router.replace(`/payment/${paymentRequestId}` as never);
-          } else {
-            navigateAfterAuth(appUser.type);
-          }
-        }
-      } catch (e) {
-        if (!cancelled) {
-          setError(e instanceof Error ? e.message : t('auth.magic.callbackError'));
-          handledRef.current = false; // Permet de réessayer si l'URL change
-        }
-      }
+    const tryHandle = (url: string | null) => {
+      if (!isAuthCallbackPayload(url, params)) return false;
+      const fromParams = buildAuthCallbackUrlFromParams(params);
+      void handle(fromParams ?? url!);
+      return true;
     };
 
     const timeout = setTimeout(() => {
       finish(t('auth.magic.callbackTimeout'));
     }, CALLBACK_TIMEOUT_MS);
 
+    const fromParams = buildAuthCallbackUrlFromParams(params);
+    if (fromParams) {
+      clearTimeout(timeout);
+      void handle(fromParams);
+      return () => {
+        cancelled = true;
+        clearTimeout(timeout);
+      };
+    }
+
+    if (tryHandle(incomingUrl)) {
+      clearTimeout(timeout);
+      return () => {
+        cancelled = true;
+        clearTimeout(timeout);
+      };
+    }
+
     ExpoLinking.getInitialURL()
       .then((url) => {
-        if (url?.includes('access_token') || url?.includes('code=')) {
-          clearTimeout(timeout);
-          handle(url);
-        }
+        if (tryHandle(url)) clearTimeout(timeout);
       })
       .catch(() => finish(t('auth.magic.callbackError')));
 
     const sub = ExpoLinking.addEventListener('url', ({ url }) => {
-      clearTimeout(timeout);
-      handle(url);
+      if (tryHandle(url)) clearTimeout(timeout);
     });
 
     return () => {
@@ -75,7 +105,7 @@ export default function AuthCallbackScreen() {
       clearTimeout(timeout);
       sub.remove();
     };
-  }, [refreshUser, t]);
+  }, [handle, incomingUrl, params, t]);
 
   return (
     <View style={styles.wrap}>

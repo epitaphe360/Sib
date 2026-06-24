@@ -43,10 +43,12 @@ additional_redirect_urls = [
   "https://sib2026.ma/reset-password",
   "urbaevent://reset-password",
   "urbaevent://auth-callback",
+  "urbaevent://auth-callback/**",
   "exp://127.0.0.1:8081/--/reset-password",
   "exp://localhost:8081/--/reset-password",
   "exp://127.0.0.1:8081/--/auth-callback",
-  "exp://localhost:8081/--/auth-callback"
+  "exp://localhost:8081/--/auth-callback",
+  "https://sbyizudifmqakzxjlndr.supabase.co/functions/v1/mobile-auth-bridge"
 ]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true

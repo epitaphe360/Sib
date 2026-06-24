@@ -1,4 +1,7 @@
 import React from 'react';
+import { resolveHomeImage } from '../../config/sibMaRemoteUrls';
+
+const DEFAULT_HERO_IMAGE = resolveHomeImage('/sib-ma/static/hero.jpg');
 
 interface SibPublicHeroProps {
   title: React.ReactNode;
@@ -20,7 +23,7 @@ export function SibPublicHero({
   eyebrow = 'SIB 2026',
   children,
   align = 'left',
-  image = '/sib-ma/static/hero.jpg',
+  image = DEFAULT_HERO_IMAGE,
   className = '',
 }: SibPublicHeroProps) {
   const alignClass = align === 'center' ? 'text-center mx-auto' : 'text-left';

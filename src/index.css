@@ -413,15 +413,29 @@
   }
 }
 
-/* Accueil v4 — menu React overlay sur la photo hero */
-html.sib-home-v4-embedded header.fixed .text-slate-500,
-html.sib-home-v4-embedded header.header-transparent .text-slate-500,
-html.sib-home-v4-embedded header.fixed.bg-transparent .text-slate-500 {
+/* Accueil v4 — liens nav principaux blancs sur le hero (pas le contenu des sous-menus) */
+html.sib-home-v4-embedded header.fixed nav > a.text-slate-500,
+html.sib-home-v4-embedded header.fixed nav > div > button.text-slate-500,
+html.sib-home-v4-embedded header.header-transparent nav > a.text-slate-500,
+html.sib-home-v4-embedded header.header-transparent nav > div > button.text-slate-500,
+html.sib-home-v4-embedded header.fixed.bg-transparent nav > a.text-slate-500,
+html.sib-home-v4-embedded header.fixed.bg-transparent nav > div > button.text-slate-500 {
   color: rgba(255, 255, 255, 0.96) !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
 }
 
-html.sib-home-v4-embedded header.fixed.bg-transparent button.text-slate-500,
 html.sib-home-v4-embedded header.fixed.bg-transparent .lg\\:hidden {
   color: rgba(255, 255, 255, 0.96) !important;
+}
+
+/* Sous-menus : texte sombre lisible sur fond blanc */
+html.sib-home-v4-embedded header nav .header-nav-dropdown,
+html.sib-home-v4-embedded header nav .header-nav-dropdown .text-slate-900 {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+html.sib-home-v4-embedded header nav .header-nav-dropdown .text-slate-600 {
+  color: #475569 !important;
+  text-shadow: none !important;
 }

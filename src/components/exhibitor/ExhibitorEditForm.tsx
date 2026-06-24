@@ -149,7 +149,7 @@ export default function ExhibitorEditForm() {
   // Charger les données de l'exposant
   useEffect(() => {
     if (exhibitors.length === 0) {
-      fetchExhibitors();
+      fetchExhibitors(true, { publicCatalog: false });
     }
   }, [exhibitors.length, fetchExhibitors]);
 

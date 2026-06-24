@@ -1,17 +1,14 @@
 import { router } from 'expo-router';
 import { InteractionManager } from 'react-native';
-import { getHomePath, getHomePathForUser } from '../navigation/roleConfig';
-import type { AppUser, UserType } from '../types';
+import type { UserType } from '../types';
+import { getHomePath } from '../navigation/roleConfig';
 
 /**
  * Redirige vers l'écran d'accueil du rôle après connexion.
- * Réinitialise la pile pour éviter les erreurs lors d'un changement de compte (Admin → Visiteur, etc.).
+ * Comportement 1.0.21 — routing par type utilisateur uniquement.
  */
-export function navigateAfterAuth(userOrType?: AppUser | UserType | string | null): void {
-  const path =
-    userOrType && typeof userOrType === 'object' && 'type' in userOrType
-      ? getHomePathForUser(userOrType)
-      : getHomePath(userOrType as UserType | string | null | undefined);
+export function navigateAfterAuth(userType?: UserType | string | null): void {
+  const path = getHomePath(userType);
   dismissAuthStackIfNeeded();
 
   InteractionManager.runAfterInteractions(() => {

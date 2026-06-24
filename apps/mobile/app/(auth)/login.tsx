@@ -13,7 +13,9 @@ import {
 import { Input, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { BrandLogo } from '../../src/components/brand/BrandLogo';
 import { useAuth } from '../../src/context/AuthContext';
+import { useSalon } from '../../src/context/SalonContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
+import { applyPendingSalonAfterAuth } from '../../src/lib/applyPendingSalonAfterAuth';
 import { navigateAfterAuth } from '../../src/lib/navigateAfterAuth';
 import { supabaseErrorMessage } from '../../src/lib/supabaseError';
 import { DEMO_QUICK_LOGIN_ACCOUNTS, isQuickLoginEnabled } from '../../src/lib/demoQuickLogin';
@@ -23,6 +25,7 @@ type LoginMode = 'magic' | 'password';
 
 export default function LoginScreen() {
   const { signIn, sendMagicLinkLogin, refreshUser, signOut } = useAuth();
+  const { salons, setActiveSalon } = useSalon();
   const { t } = useI18n();
   const switchingRef = useRef(false);
 
@@ -34,7 +37,12 @@ export default function LoginScreen() {
       await signOut().catch(() => undefined);
       const appUser = await signIn(email, password);
       await refreshUser();
-      navigateAfterAuth(appUser);
+      const enteredSalon = await applyPendingSalonAfterAuth({
+        salons,
+        setActiveSalon,
+        userId: appUser.id,
+      });
+      if (!enteredSalon) navigateAfterAuth(appUser.type);
     } catch (e) {
       Alert.alert(
         'Connexion rapide',
@@ -95,7 +103,7 @@ export default function LoginScreen() {
       await refreshUser();
       setFailedAttempts(0);
       setLockUntil(null);
-      navigateAfterAuth(appUser);
+      navigateAfterAuth(appUser.type);
     } catch (e) {
       const next = failedAttempts + 1;
       setFailedAttempts(next);

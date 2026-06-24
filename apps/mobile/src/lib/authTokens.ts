@@ -3,6 +3,7 @@ export function parseAuthTokensFromUrl(url: string): {
   refreshToken: string | null;
   type: string | null;
   code: string | null;
+  tokenHash: string | null;
 } {
   const hashStart = url.indexOf('#');
   const queryStart = url.indexOf('?');
@@ -15,5 +16,6 @@ export function parseAuthTokensFromUrl(url: string): {
     refreshToken: params.get('refresh_token'),
     type: params.get('type'),
     code: params.get('code'),
+    tokenHash: params.get('token_hash'),
   };
 }

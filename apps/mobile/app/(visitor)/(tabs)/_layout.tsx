@@ -45,6 +45,7 @@ export default function TabLayout() {
         options={{
           title: t('tabs.badge'),
           tabBarIcon: createTabIcon('qr-code-outline'),
+          href: salonTabs ? undefined : null,
         }}
       />
       <Tabs.Screen

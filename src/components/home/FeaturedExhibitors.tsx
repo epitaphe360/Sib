@@ -22,7 +22,7 @@ export const FeaturedExhibitors: React.FC = () => {
 
   // Pour les "à la Une" : prendre les featured+vérifiés même sans miniSite publié
   // Fallback : vérifiés avec miniSite publié (si aucun featured)
-  const verifiedPublished = exhibitors.filter(e => e.verified && e.miniSite?.published === true);
+  const verifiedPublished = exhibitors.filter(e => e.verified && e.isPublished !== false);
   const featuredPool = exhibitors.filter(e => e.featured && e.verified);
   const featuredExhibitors = featuredPool.length > 0
     ? featuredPool.slice(0, 3)

@@ -21,7 +21,7 @@ function isLocale(value: string | null): value is Locale {
 interface I18nContextValue {
   locale: Locale;
   setLocale: (l: Locale) => void;
-  t: (key: string) => string;
+  t: (key: string, vars?: Record<string, string | number>) => string;
   isRTL: boolean;
   ready: boolean;
 }
@@ -67,7 +67,16 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const t = useCallback(
-    (key: string) => dictionaries[locale][key] ?? dictionaries.fr[key] ?? dictionaries.en[key] ?? key,
+    (key: string, vars?: Record<string, string | number>) => {
+      let text =
+        dictionaries[locale][key] ?? dictionaries.fr[key] ?? dictionaries.en[key] ?? key;
+      if (vars) {
+        for (const [name, value] of Object.entries(vars)) {
+          text = text.replace(new RegExp(`\\{\\{${name}\\}\\}`, 'g'), String(value));
+        }
+      }
+      return text;
+    },
     [locale]
   );
 

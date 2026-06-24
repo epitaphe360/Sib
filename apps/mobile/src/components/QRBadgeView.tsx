@@ -4,6 +4,8 @@ import QRCode from 'react-native-qrcode-svg';
 import { useBadgeConfig } from '../hooks/useBadgeConfig';
 import { useSalon } from '../context/SalonContext';
 import { useSalonTheme } from '../hooks/useSalonTheme';
+import { getSalonEventWindow } from '../lib/salonEventWindow';
+import { localeCode } from '../lib/locale';
 import { useI18n } from '../i18n/I18nProvider';
 import { APP_IMAGES } from '../data/images';
 import { colors, fonts, radius, shadows, spacing } from '../theme';
@@ -14,7 +16,7 @@ export function QRBadgeView({ badge, qrValue, fullScreen }: { badge: UserBadge; 
   const { activeSalon } = useSalon();
   const { config } = useBadgeConfig();
   const theme = useSalonTheme();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const isVip =
     badge.accessLevel?.toLowerCase().includes('premium') ||
     badge.accessLevel?.toLowerCase().includes('vip');
@@ -23,10 +25,13 @@ export function QRBadgeView({ badge, qrValue, fullScreen }: { badge: UserBadge; 
   const eventMeta = `${activeSalon?.dates ?? config.event_dates_display} · ${theme?.location ?? config.event_location}`;
 
   const qrSize = fullScreen ? 200 : 190;
-  const validLabel = t('badge.validUntil').replace(
-    '{{date}}',
-    badge.validUntil.toLocaleDateString('fr-FR')
-  );
+  const eventWindow = activeSalon ? getSalonEventWindow(activeSalon) : null;
+  const dateLocale = localeCode(locale);
+  const validLabel = eventWindow
+    ? t('badge.validEventPeriod', { period: eventWindow.label })
+    : t('badge.validUntil', {
+        date: badge.validUntil.toLocaleDateString(dateLocale),
+      });
 
   return (
     <View style={[styles.wrap, fullScreen && styles.wrapFull]}>

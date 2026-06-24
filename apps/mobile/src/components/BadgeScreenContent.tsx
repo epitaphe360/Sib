@@ -1,5 +1,4 @@
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
-import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { requestBadgeByEmail } from '../api/badgeEmail';
@@ -7,6 +6,7 @@ import { buildStaticParticipantQR } from '../api/badgeLookup';
 import { downloadAndShareBadgePdf } from '../api/badgePdf';
 import { A4_SHEET_WIDTH, BadgeA4Bifold } from './BadgeA4Bifold';
 import { QRBadgeView } from './QRBadgeView';
+import { BadgeGuestCard } from './BadgeGuestCard';
 import { IllustratedEmpty, PrimaryButton, SecondaryButton } from './ui';
 import { useAuth } from '../context/AuthContext';
 import { useRotatingQR } from '../hooks/useRotatingQR';
@@ -104,16 +104,13 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
 
   if (!user && requireAuth) {
     return (
-      <>
-        <IllustratedEmpty
-          icon="qr-code-outline"
-          title={t('badge.title')}
-          message={t('badge.login')}
-          actionLabel={t('auth.register.freeTitle')}
-          onAction={() => router.push('/(auth)/register')}
-        />
-        <PrimaryButton label={t('login.submit')} onPress={() => router.push('/(auth)/login')} />
-      </>
+      <ScrollView contentContainerStyle={styles.guestScroll} showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+          <Text style={styles.pageTitle}>{t('badge.title')}</Text>
+          <Text style={styles.pageSub}>{t('badge.subtitle')}</Text>
+        </View>
+        <BadgeGuestCard />
+      </ScrollView>
     );
   }
 
@@ -225,8 +222,6 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
                 { label: t('badge.downloadPdf'), icon: 'download-outline' as const, onPress: async () => { if (!badge) return; try { await downloadAndShareBadgePdf(badge); } catch (e) { Alert.alert(t('common.error'), e instanceof Error ? e.message : ''); } } },
                 ...(!isExhibitor
                   ? [
-                      { label: t('certificate.title'), icon: 'ribbon-outline' as const, onPress: () => router.push('/(visitor)/certificate' as never) },
-                      { label: 'Live Studio', icon: 'videocam-outline' as const, onPress: () => router.push('/(visitor)/live-studio' as never) },
                       { label: kioskMode ? t('badge.kioskOff') : t('badge.kioskOn'), icon: 'phone-portrait-outline' as const, onPress: () => setKioskMode((v) => !v) },
                     ]
                   : []),
@@ -254,6 +249,7 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
 }
 
 const styles = StyleSheet.create({
+  guestScroll: { flexGrow: 1, paddingBottom: spacing.xl, backgroundColor: colors.background },
   scrollView: { flex: 1, backgroundColor: colors.background },
   scroll: { flexGrow: 1, paddingBottom: spacing.xl },
   header: {

@@ -28,6 +28,10 @@ export interface MiniSiteProduct {
   id: string;
   name: string;
   description: string;
+  nameEn?: string;
+  nameAr?: string;
+  descriptionEn?: string;
+  descriptionAr?: string;
   category?: string;
   images: string[];
   price?: string | number;
@@ -41,6 +45,8 @@ export interface MiniSiteExhibitor {
   companyName: string;
   logoUrl?: string;
   description?: string;
+  descriptionEn?: string;
+  descriptionAr?: string;
   website?: string;
   standNumber?: string;
   hallNumber?: string;

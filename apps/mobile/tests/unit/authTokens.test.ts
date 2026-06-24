@@ -12,6 +12,7 @@ describe('Mobile — authTokens', () => {
       refreshToken: 'rt',
       type: 'magiclink',
       code: null,
+      tokenHash: null,
     });
   });
 
@@ -22,6 +23,18 @@ describe('Mobile — authTokens', () => {
       refreshToken: null,
       type: null,
       code: 'abc123',
+      tokenHash: null,
+    });
+  });
+
+  it('parse token_hash depuis query (Android deep link)', () => {
+    const url = 'urbaevent://auth-callback?token_hash=abc123&type=invite';
+    expect(parseAuthTokensFromUrl(url)).toEqual({
+      accessToken: null,
+      refreshToken: null,
+      type: 'invite',
+      code: null,
+      tokenHash: 'abc123',
     });
   });
 
@@ -31,6 +44,7 @@ describe('Mobile — authTokens', () => {
       refreshToken: null,
       type: null,
       code: null,
+      tokenHash: null,
     });
   });
 
@@ -40,6 +54,7 @@ describe('Mobile — authTokens', () => {
       refreshToken: null,
       type: null,
       code: null,
+      tokenHash: null,
     });
   });
 
@@ -49,6 +64,7 @@ describe('Mobile — authTokens', () => {
       refreshToken: null,
       type: null,
       code: null,
+      tokenHash: null,
     });
   });
 
@@ -58,6 +74,7 @@ describe('Mobile — authTokens', () => {
       refreshToken: null,
       type: null,
       code: null,
+      tokenHash: null,
     });
   });
 });

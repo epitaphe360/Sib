@@ -40,9 +40,9 @@ export const URBA_SALON_THEMES: Record<string, UrbaSalonTheme> = {
     tagline: 'Construction & Architecture',
     description:
       'Le rendez-vous incontournable des professionnels de la construction, de l\'architecture et de l\'habitat durable au Maroc.',
-    edition: '4ème édition',
+    edition: '20ème édition',
     location: 'El Jadida, Maroc',
-    visitors: '6 000+',
+    visitors: '200 000+',
     features: ['Catalogue exposants', 'Plan interactif', 'Conférences', 'Networking B2B'],
     icon: 'business-outline',
     image: SALON_IMAGES.sib,

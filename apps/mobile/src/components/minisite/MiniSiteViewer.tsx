@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { useI18n } from '../../i18n/I18nProvider';
+import { pickLocalizedStringList, pickLocalizedText } from '../../lib/localizedContent';
 import type { MiniSitePublicData, MiniSiteProduct, MiniSiteSection } from '../../types/minisite';
 import { colors, fonts, radius, shadows, spacing } from '../../theme';
 
@@ -21,7 +22,26 @@ function sectionByType(sections: MiniSiteSection[], type: MiniSiteSection['type'
   return sections.find((s) => s.type === type && s.visible !== false);
 }
 
-function featureLabels(content?: Record<string, unknown>): string[] {
+function productText(product: MiniSiteProduct, field: 'name' | 'description', locale: 'fr' | 'en' | 'ar'): string {
+  return (
+    pickLocalizedText(
+      {
+        name: product.name,
+        name_en: product.nameEn,
+        name_ar: product.nameAr,
+        description: product.description,
+        description_en: product.descriptionEn,
+        description_ar: product.descriptionAr,
+      },
+      field,
+      locale,
+    ) ?? (field === 'name' ? product.name : product.description)
+  );
+}
+
+function featureLabels(content?: Record<string, unknown>, locale: 'fr' | 'en' | 'ar' = 'fr'): string[] {
+  const localized = pickLocalizedStringList(content, 'features', locale);
+  if (localized.length) return localized;
   const raw = content?.features ?? content?.values ?? [];
   if (!Array.isArray(raw)) return [];
   return raw
@@ -42,21 +62,33 @@ function SafeImage({ uri, style, letter }: { uri?: string; style: object; letter
 }
 
 export function MiniSiteViewer({ data }: Props) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { miniSite, exhibitor, products } = data;
   const theme = miniSite.theme;
   const hero = sectionByType(miniSite.sections, 'hero');
   const about = sectionByType(miniSite.sections, 'about');
+  const productsSection = sectionByType(miniSite.sections, 'products');
   const gallery = sectionByType(miniSite.sections, 'gallery');
   const contact = sectionByType(miniSite.sections, 'contact');
-  const features = featureLabels(about?.content);
+  const exhibitorDescription =
+    pickLocalizedText(
+      {
+        description: exhibitor.description,
+        description_en: exhibitor.descriptionEn,
+        description_ar: exhibitor.descriptionAr,
+      },
+      'description',
+      locale,
+    ) ?? exhibitor.description;
+  const features = featureLabels(about?.content, locale);
   const [selectedProduct, setSelectedProduct] = useState<MiniSiteProduct | null>(null);
 
-  const heroTitle = asStr(hero?.content?.title) ?? exhibitor.companyName;
+  const heroTitle =
+    pickLocalizedText(hero?.content, 'title', locale) ?? exhibitor.companyName;
   const heroSubtitle =
-    asStr(hero?.content?.subtitle) ??
-    asStr(hero?.content?.description) ??
-    exhibitor.description ??
+    exhibitorDescription ??
+    pickLocalizedText(hero?.content, 'subtitle', locale) ??
+    pickLocalizedText(hero?.content, 'description', locale) ??
     t('minisite.defaultSubtitle');
   const logoUrl = miniSite.logoUrl ?? exhibitor.logoUrl;
   const bgImage = asStr(hero?.content?.backgroundImage);
@@ -88,6 +120,17 @@ export function MiniSiteViewer({ data }: Props) {
           </View>
           <Text style={styles.heroTitle}>{heroTitle}</Text>
           <Text style={styles.heroSubtitle}>{heroSubtitle}</Text>
+          {asStr(hero?.content?.ctaText) ? (
+            <Pressable
+              style={[styles.heroCta, { backgroundColor: theme.accentColor }]}
+              onPress={() => {
+                const link = asStr(hero?.content?.ctaLink);
+                if (link && link.startsWith('http')) Linking.openURL(link);
+              }}
+            >
+              <Text style={styles.heroCtaText}>{asStr(hero?.content?.ctaText)}</Text>
+            </Pressable>
+          ) : null}
           {(exhibitor.standNumber || exhibitor.hallNumber) && (
             <Text style={styles.heroMeta}>
               {[exhibitor.standNumber && `${t('exhibitor.standNumber')} ${exhibitor.standNumber}`, exhibitor.hallNumber && `${t('exhibitor.hallNumber')} ${exhibitor.hallNumber}`]
@@ -102,10 +145,13 @@ export function MiniSiteViewer({ data }: Props) {
       <View style={styles.section}>
         <Text style={[styles.sectionKicker, { color: theme.accentColor }]}>{t('minisite.about')}</Text>
         <Text style={styles.sectionTitle}>
-          {asStr(about?.content?.title) ?? t('minisite.expertise')}
+          {pickLocalizedText(about?.content, 'title', locale) ?? t('minisite.expertise')}
         </Text>
         <Text style={styles.sectionBody}>
-          {asStr(about?.content?.description) ?? asStr(about?.content?.text) ?? exhibitor.description ?? t('minisite.aboutFallback')}
+          {exhibitorDescription ??
+            pickLocalizedText(about?.content, 'description', locale) ??
+            pickLocalizedText(about?.content, 'text', locale) ??
+            t('minisite.aboutFallback')}
         </Text>
 
         {features.length > 0 && (
@@ -138,7 +184,9 @@ export function MiniSiteViewer({ data }: Props) {
       {/* Products */}
       <View style={[styles.section, styles.sectionAlt]}>
         <Text style={[styles.sectionKicker, { color: theme.accentColor }]}>{t('minisite.products')}</Text>
-        <Text style={styles.sectionTitle}>{t('minisite.productsTitle')}</Text>
+        <Text style={styles.sectionTitle}>
+          {pickLocalizedText(productsSection?.content, 'title', locale) ?? t('minisite.productsTitle')}
+        </Text>
         {products.length === 0 ? (
           <Text style={styles.empty}>{t('minisite.noProducts')}</Text>
         ) : (
@@ -155,8 +203,10 @@ export function MiniSiteViewer({ data }: Props) {
               />
               <View style={styles.productBody}>
                 {product.category ? <Text style={styles.productCategory}>{product.category}</Text> : null}
-                <Text style={styles.productName}>{product.name}</Text>
-                <Text style={styles.productDesc} numberOfLines={3}>{product.description}</Text>
+                <Text style={styles.productName}>{productText(product, 'name', locale)}</Text>
+                <Text style={styles.productDesc} numberOfLines={3}>
+                  {productText(product, 'description', locale)}
+                </Text>
                 <Text style={[styles.productPrice, { color: theme.primaryColor }]}>
                   {product.price ? String(product.price) : t('minisite.onQuote')}
                 </Text>
@@ -170,7 +220,7 @@ export function MiniSiteViewer({ data }: Props) {
       {gallery && Array.isArray(gallery.content?.images) && (gallery.content.images as unknown[]).length > 0 && (
         <View style={styles.section}>
           <Text style={[styles.sectionKicker, { color: theme.accentColor }]}>{t('minisite.gallery')}</Text>
-          <Text style={styles.sectionTitle}>{asStr(gallery.content?.title) ?? t('minisite.gallery')}</Text>
+          <Text style={styles.sectionTitle}>{pickLocalizedText(gallery.content, 'title', locale) ?? t('minisite.gallery')}</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.galleryRow}>
             {(gallery.content.images as { url?: string; caption?: string }[] | string[]).map((img, i) => {
               const url = typeof img === 'string' ? img : img.url;
@@ -184,7 +234,7 @@ export function MiniSiteViewer({ data }: Props) {
       {/* Contact */}
       <View style={[styles.section, styles.sectionAlt]}>
         <Text style={[styles.sectionKicker, { color: theme.accentColor }]}>{t('minisite.contact')}</Text>
-        <Text style={styles.sectionTitle}>{asStr(contact?.content?.title) ?? t('minisite.contact')}</Text>
+        <Text style={styles.sectionTitle}>{pickLocalizedText(contact?.content, 'title', locale) ?? t('minisite.contact')}</Text>
 
         {contactInfo.email ? (
           <ContactRow label={t('minisite.email')} value={contactInfo.email} onPress={() => Linking.openURL(`mailto:${contactInfo.email}`)} />
@@ -218,7 +268,7 @@ export function MiniSiteViewer({ data }: Props) {
         </Text>
       </View>
 
-      <ProductModal product={selectedProduct} theme={theme} onClose={() => setSelectedProduct(null)} />
+      <ProductModal product={selectedProduct} theme={theme} locale={locale} onClose={() => setSelectedProduct(null)} />
     </ScrollView>
   );
 }
@@ -237,10 +287,12 @@ function ContactRow({ label, value, onPress }: { label: string; value: string; o
 function ProductModal({
   product,
   theme,
+  locale,
   onClose,
 }: {
   product: MiniSiteProduct | null;
   theme: { primaryColor: string };
+  locale: 'fr' | 'en' | 'ar';
   onClose: () => void;
 }) {
   const { t } = useI18n();
@@ -249,9 +301,9 @@ function ProductModal({
     <Modal visible animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
       <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalContent}>
         <SafeImage uri={product.images[0]} style={styles.modalImage} letter={product.name.charAt(0)} />
-        <Text style={styles.modalTitle}>{product.name}</Text>
+        <Text style={styles.modalTitle}>{productText(product, 'name', locale)}</Text>
         {product.category ? <Text style={styles.modalCategory}>{product.category}</Text> : null}
-        <Text style={styles.modalDesc}>{product.description}</Text>
+        <Text style={styles.modalDesc}>{productText(product, 'description', locale)}</Text>
         {product.specifications ? (
           <>
             <Text style={styles.modalSection}>{t('minisite.specs')}</Text>
@@ -296,6 +348,8 @@ const styles = StyleSheet.create({
   badgeText: { color: '#fff', fontSize: 11, fontFamily: fonts.bodySemiBold, letterSpacing: 0.5 },
   heroTitle: { color: '#fff', fontSize: 26, fontFamily: fonts.display, textAlign: 'center', marginBottom: 8 },
   heroSubtitle: { color: 'rgba(255,255,255,0.92)', fontSize: 15, fontFamily: fonts.body, textAlign: 'center', lineHeight: 22 },
+  heroCta: { marginTop: spacing.md, paddingHorizontal: spacing.lg, paddingVertical: 10, borderRadius: radius.full },
+  heroCtaText: { color: '#fff', fontFamily: fonts.bodySemiBold, fontSize: 14 },
   heroMeta: { color: 'rgba(255,255,255,0.8)', fontSize: 12, fontFamily: fonts.bodyMedium, marginTop: 10 },
   section: { padding: spacing.lg, backgroundColor: colors.surface },
   sectionAlt: { backgroundColor: colors.background },

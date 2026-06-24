@@ -2,12 +2,12 @@
   "expo": {
     "name": "UrbaEvent",
     "slug": "urbaevent",
-    "version": "1.0.24",
+    "version": "1.0.33",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "urbaevent",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -18,7 +18,8 @@
       "bundleIdentifier": "com.urbacom.urbaevent"
     },
     "android": {
-      "versionCode": 24,
+      "versionCode": 28,
+      "backgroundColor": "#F8F7F4",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1B365D"
@@ -27,6 +28,23 @@
       "permissions": [
         "CAMERA",
         "VIBRATE"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": false,
+          "data": [
+            {
+              "scheme": "urbaevent",
+              "host": "auth-callback"
+            },
+            {
+              "scheme": "urbaevent",
+              "host": "reset-password"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
       ]
     },
     "plugins": [

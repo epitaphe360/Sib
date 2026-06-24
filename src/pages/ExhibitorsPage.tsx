@@ -6,6 +6,8 @@ import { CONFIG } from '../lib/config';
 import { useTranslation } from '../hooks/useTranslation';
 import ExhibitorDirectoryCard from '../components/exhibitor/ExhibitorDirectoryCard';
 import ExhibitorDirectoryTable from '../components/exhibitor/ExhibitorDirectoryTable';
+import ExhibitorsLogoMarquee from '../components/exhibitor/ExhibitorsLogoMarquee';
+import { ROUTES } from '../lib/routes';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IMAGES, img } from '../lib/images';
 
@@ -26,8 +28,20 @@ export default function ExhibitorsPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    fetchExhibitors(true);
+    fetchExhibitors(true, { publicCatalog: true, limit: 200 });
   }, [fetchExhibitors]);
+
+  const marqueeLogos = useMemo(
+    () =>
+      filteredExhibitors
+        .filter((exhibitor) => exhibitor.logo?.trim())
+        .map((exhibitor) => ({
+          to: `${ROUTES.EXHIBITORS}/${exhibitor.id}`,
+          src: exhibitor.logo!,
+          alt: exhibitor.companyName,
+        })),
+    [filteredExhibitors],
+  );
 
   const categories = useMemo(() => [
     { value: '', label: t('pages.exhibitors.all_categories') },
@@ -111,6 +125,15 @@ export default function ExhibitorsPage() {
           </motion.p>
         </div>
       </section>
+
+      {marqueeLogos.length > 0 && (
+        <section className="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-4 overflow-hidden">
+          <p className="text-center text-[11px] font-bold uppercase tracking-[0.25em] text-primary-600 dark:text-primary-300 mb-3">
+            {t('nav.exhibitors')}
+          </p>
+          <ExhibitorsLogoMarquee logos={marqueeLogos} fadeBg="#fafafa" />
+        </section>
+      )}
 
       {/* Recherche + filtres — zone claire, texte sombre */}
       <section className="home-light bg-neutral-100 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-6 lg:py-8">

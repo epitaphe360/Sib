@@ -38,8 +38,16 @@ $apkName = "UrbaEvent-$version$apkSuffix.apk"
 Write-Host "[build] Quick-login demo: $($env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN)" -ForegroundColor Cyan
 
 Write-Host "[build] Sync to $buildRoot (outside OneDrive)..." -ForegroundColor Cyan
-if (Test-Path $buildRoot) { Remove-Item -Recurse -Force $buildRoot }
-New-Item -ItemType Directory -Force -Path $buildRoot | Out-Null
+if (Test-Path $buildRoot) {
+  try {
+    Remove-Item -Recurse -Force $buildRoot -ErrorAction Stop
+  } catch {
+    Write-Host "[build] Reuse dossier existant (gradle lock), sync in-place..." -ForegroundColor Yellow
+  }
+}
+if (-not (Test-Path $buildRoot)) {
+  New-Item -ItemType Directory -Force -Path $buildRoot | Out-Null
+}
 robocopy $mobile $buildRoot /E /XD node_modules android .expo dist /NFL /NDL /NJH /NJS /nc /ns /np | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "robocopy failed with code $LASTEXITCODE" }
 
@@ -59,7 +67,9 @@ Write-Host "[build] optimize-assets..." -ForegroundColor Cyan
 node scripts/optimize-assets.mjs
 if ($LASTEXITCODE -ne 0) { throw "optimize-assets failed with code $LASTEXITCODE" }
 
-if (Test-Path "android") { Remove-Item -Recurse -Force android }
+if (Test-Path "android") {
+  try { Remove-Item -Recurse -Force android -ErrorAction Stop } catch { Write-Host "[build] android/ verrouille, prebuild ecrase..." -ForegroundColor Yellow }
+}
 Write-Host "[build] expo prebuild..." -ForegroundColor Cyan
 npx expo prebuild --platform android --no-install
 

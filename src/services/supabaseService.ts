@@ -474,6 +474,7 @@ export class SupabaseService {
   static async getExhibitorsPaginated(options?: {
     limit?: number;
     offset?: number;
+    publicCatalog?: boolean;
   }): Promise<ExhibitorsPageResult> {
     if (!this.checkSupabaseConnection()) {
       console.warn('⚠️ Supabase non configuré - aucun exposant disponible');
@@ -483,12 +484,9 @@ export class SupabaseService {
     const safeSupabase = supabase!;
     const limit = options?.limit ?? 24;
     const offset = options?.offset ?? 0;
+    const publicCatalog = options?.publicCatalog ?? true;
 
-    try {
-      const { data: exhibitorsData, error: exhibitorsError, count } = await safeSupabase
-        .from('exhibitors')
-        .select(
-          `
+    const selectFields = `
           id,
           user_id,
           company_name,
@@ -500,13 +498,38 @@ export class SupabaseService {
           verified,
           featured,
           stand_number,
+          hall_number,
+          is_published,
           contact_info,
           mini_site:mini_sites!mini_sites_exhibitor_id_fkey(published)
-        `,
-          { count: 'exact' }
-        )
+        `;
+
+    const runQuery = async (withPublishedFilter: boolean) => {
+      let query = safeSupabase
+        .from('exhibitors')
+        .select(selectFields, { count: 'exact' });
+
+      if (publicCatalog) {
+        query = query.eq('verified', true);
+        if (withPublishedFilter) {
+          query = query.eq('is_published', true);
+        }
+      }
+
+      return query
         .order('company_name', { ascending: true })
         .range(offset, offset + limit - 1);
+    };
+
+    try {
+      let { data: exhibitorsData, error: exhibitorsError, count } = await runQuery(true);
+
+      if (
+        exhibitorsError?.code === '42703' &&
+        exhibitorsError.message.includes('is_published')
+      ) {
+        ({ data: exhibitorsData, error: exhibitorsError, count } = await runQuery(false));
+      }
 
       if (exhibitorsError) {
         console.error('❌ Erreur chargement exposants (paginé):', exhibitorsError.message);
@@ -1085,7 +1108,7 @@ export class SupabaseService {
       website: exhibitorDB.website,
       verified: exhibitorDB.verified,
       featured: exhibitorDB.featured,
-      isPublished: exhibitorDB.is_published ?? false,
+      isPublished: exhibitorDB.is_published ?? true,
       standNumber: exhibitorDB.stand_number,
       hallNumber: exhibitorDB.hall_number,
       standArea: exhibitorDB.stand_area,

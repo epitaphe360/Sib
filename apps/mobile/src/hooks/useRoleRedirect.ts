@@ -10,7 +10,7 @@ export function useRoleRedirect(fallback: string = '/(visitor)/(tabs)') {
   useEffect(() => {
     if (isLoading) return;
     if (user) {
-      navigateAfterAuth(user);
+      navigateAfterAuth(user.type);
     } else {
       router.replace(fallback as never);
     }

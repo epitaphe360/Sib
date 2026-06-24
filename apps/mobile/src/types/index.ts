@@ -51,6 +51,8 @@ export interface Salon {
   dates: string;
   active?: boolean;
   location?: string;
+  edition?: string;
+  expectedVisitors?: string;
 }
 
 export interface SalonEvent {

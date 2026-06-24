@@ -197,12 +197,12 @@ export const Header: React.FC = memo(() => {
                 <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#2E5984] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </button>
               {isSalonMenuOpen && (
-                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                <div className="header-nav-dropdown absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
                   {salonMenuItems.map((item) => (
                     <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
                       <div>
                         <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
+                        <div className="text-xs text-slate-600">{item.description}</div>
                       </div>
                     </Link>
                   ))}
@@ -219,12 +219,12 @@ export const Header: React.FC = memo(() => {
                 <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#2E5984] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </button>
               {isExposerMenuOpen && (
-                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                <div className="header-nav-dropdown absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
                   {exposerMenuItems.map((item) => (
                     <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
                       <div>
                         <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
+                        <div className="text-xs text-slate-600">{item.description}</div>
                       </div>
                     </Link>
                   ))}
@@ -241,12 +241,12 @@ export const Header: React.FC = memo(() => {
                 <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#2E5984] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </button>
               {isVisiterMenuOpen && (
-                <div className="absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                <div className="header-nav-dropdown absolute left-0 mt-0 w-72 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
                   {visiterMenuItems.map((item) => (
                     <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors">
                       <div>
                         <div className="font-semibold text-slate-900">{item.name}</div>
-                        <div className="text-xs text-slate-500">{item.description}</div>
+                        <div className="text-xs text-slate-600">{item.description}</div>
                       </div>
                     </Link>
                   ))}
@@ -291,15 +291,15 @@ export const Header: React.FC = memo(() => {
                 <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#2E5984] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </button>
               {isMediaMenuOpen && (
-                <div className="absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
+                <div className="header-nav-dropdown absolute left-0 mt-0 w-64 bg-white rounded-lg shadow-2xl border border-slate-200 py-2 z-[250]">
                   {mediaMenuItems.map((item) => {
                     const Icon = item.icon;
                     return (
                       <Link key={item.name} to={item.href} className="flex items-start px-4 py-3 hover:bg-slate-50 transition-colors group">
-                        <Icon className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-slate-300 group-hover:text-[#F39200] transition-colors" />
+                        <Icon className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-slate-400 group-hover:text-[#F39200] transition-colors" />
                         <div>
                           <div className="font-semibold text-slate-900">{item.name}</div>
-                          <div className="text-xs text-slate-500">{item.description}</div>
+                          <div className="text-xs text-slate-600">{item.description}</div>
                         </div>
                       </Link>
                     );

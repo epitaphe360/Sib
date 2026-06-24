@@ -65,6 +65,35 @@ body.app-embedded .hero-content{padding-top:100px}
 .quick-links p{font-size:7.5px;line-height:1.35;max-width:190px;opacity:.86;margin-bottom:16px}
 .quick-links span{left:34px;bottom:16px}
 .quick-links a:nth-child(1) span{display:none}
+.partners-section{position:relative;background:linear-gradient(180deg,#f8f1e7 0%,#fbf7f0 54%,#f3e8db 100%);padding:58px 0 54px;border-top:1px solid #eadcc9;color:var(--ink);overflow:hidden}
+.partners-section:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 0 22%,rgba(196,145,92,.16) 22.1% 22.25%,transparent 22.35% 100%),linear-gradient(45deg,transparent 0 72%,rgba(244,121,32,.1) 72.1% 72.25%,transparent 72.35% 100%);pointer-events:none}
+.partners-section:after{content:"";position:absolute;right:-120px;bottom:-150px;width:420px;height:420px;border:1px solid rgba(196,145,92,.22);transform:rotate(45deg);pointer-events:none}
+.partners-shell{position:relative;display:grid;grid-template-columns:300px 1fr;gap:56px;align-items:start}
+.partners-heading{align-self:center}
+.partners-heading p{font-size:8.5px;letter-spacing:.16em;color:#9a6a42;margin-bottom:13px}
+.partners-heading h2{font:800 38px/.88 'Barlow Condensed';color:var(--ink);margin:0;letter-spacing:-.02em}
+.partners-heading h2 span{color:var(--orange)}
+.partners-heading small{display:block;margin-top:18px;max-width:260px;font:500 11px/1.72 Inter;color:#695643}
+.partners-card{position:relative;background:transparent;border:0;box-shadow:none;padding:0;overflow:visible}
+.partners-card:before,.partners-card:after{display:none}
+.partners-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 22px}
+.partner-group{position:relative;background:rgba(255,255,255,.62);border:1px solid rgba(146,105,72,.18);padding:20px;min-height:0;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 18px 42px rgba(60,42,24,.08);backdrop-filter:blur(3px)}
+.partner-group:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--orange),rgba(244,121,32,.18))}
+.partner-group h3{font:800 16px/1 'Barlow Condensed';letter-spacing:.07em;text-transform:uppercase;color:var(--ink);margin:0 0 17px;padding:0;border:0}
+.partner-group-wide{min-height:0}
+.partner-logos{display:grid;gap:16px;align-items:stretch}
+.partner-logos.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.partner-logos.one{grid-template-columns:1fr}
+.partner-logos figure{height:112px;margin:0;background:#fff;border:1px solid rgba(9,34,59,.07);display:flex;align-items:center;justify-content:center;padding:12px 16px;box-shadow:0 12px 24px rgba(9,34,59,.07);overflow:hidden;min-width:0}
+.partner-group-wide .partner-logos figure{height:128px}
+.partner-group:nth-child(3),.partner-group:nth-child(4){background:linear-gradient(135deg,#fff 0%,#fff8ef 100%)}
+.partner-group:nth-child(3) .partner-logos figure,.partner-group:nth-child(4) .partner-logos figure{height:116px}
+.partner-logos figure a{display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-width:0;min-height:0}
+.partner-logos img{display:block;max-width:100%;max-height:72px;width:auto;height:auto;object-fit:contain;object-position:center}
+.partner-group-wide .partner-logos img{max-height:80px}
+.partner-group-sponsor .partner-logos img{max-height:52px;transform:scale(2.35);transform-origin:center center}
+.partner-group-delegate .partner-logos img{max-height:68px}
+.partners-cta{margin-top:20px;min-height:34px;font-size:8px;display:inline-flex}
 footer{padding:30px max(34px,calc((100vw - 1180px)/2)) 32px;grid-template-columns:minmax(160px,1.3fr) repeat(4,minmax(90px,1fr)) minmax(180px,1.15fr);gap:38px;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,#00172f 0%,#001326 100%)}
 .footer-brand .brand-real{width:102px;height:58px;margin-top:-6px;margin-bottom:4px}
 .footer-brand p{max-width:170px;line-height:1.65;color:#d8e2ea}
@@ -72,5 +101,5 @@ footer h4{margin-bottom:10px;color:#edf4f8;letter-spacing:.05em}
 footer>div>a{margin-bottom:6px;color:#c7d5df}
 footer input{height:32px;background:#071f38;border-color:#29465d}
 footer button{height:32px}
-@media(max-width:1050px){.talks{grid-template-columns:44% 56%;padding:28px 0}.quick-links a{min-height:120px;padding:26px 26px 44px}.quick-links span{left:26px;bottom:14px}footer{grid-template-columns:repeat(3,1fr);gap:28px;padding-top:30px}}
-@media(max-width:720px){.talks{padding:30px 20px}.talk-icons{padding:14px 0}.quick-links a{min-height:112px;padding:22px 22px 42px}.quick-links span{left:22px;bottom:13px}footer{grid-template-columns:1fr 1fr;gap:22px;padding:28px 22px}.footer-brand{grid-column:1/-1}}
+@media(max-width:1050px){.talks{grid-template-columns:44% 56%;padding:28px 0}.quick-links a{min-height:120px;padding:26px 26px 44px}.quick-links span{left:26px;bottom:14px}.partners-shell{grid-template-columns:1fr;gap:28px}.partners-heading small{max-width:430px}.partner-logos figure{height:106px}.partner-group-wide .partner-logos figure{height:118px}footer{grid-template-columns:repeat(3,1fr);gap:28px;padding-top:30px}}
+@media(max-width:720px){.talks{padding:30px 20px}.talk-icons{padding:14px 0}.quick-links a{min-height:112px;padding:22px 22px 42px}.quick-links span{left:22px;bottom:13px}.partners-section{padding:38px 0}.partners-heading h2{font-size:28px}.partners-grid{grid-template-columns:1fr}.partner-logos.two{grid-template-columns:1fr}.partner-group{padding:17px}.partner-logos figure,.partner-group-wide .partner-logos figure{height:112px}footer{grid-template-columns:1fr 1fr;gap:22px;padding:28px 22px}.footer-brand{grid-column:1/-1}}

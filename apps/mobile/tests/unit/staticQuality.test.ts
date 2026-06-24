@@ -26,11 +26,11 @@ function walkTsFiles(dir: string, acc: string[] = []): string[] {
 
 describe('Mobile — qualité statique', () => {
   describe('versions et identité', () => {
-    it('app.json et package.json alignés sur 1.0.22', () => {
+    it('app.json et package.json alignés sur 1.0.31', () => {
       const appJson = JSON.parse(read('app.json'));
       const pkg = JSON.parse(read('package.json'));
-      expect(appJson.expo.version).toBe('1.0.23');
-      expect(pkg.version).toBe('1.0.23');
+      expect(appJson.expo.version).toBe('1.0.31');
+      expect(pkg.version).toBe('1.0.31');
       expect(appJson.expo.name).toBe('UrbaEvent');
       expect(appJson.expo.android.package).toBe('com.urbacom.urbaevent');
     });
@@ -46,6 +46,7 @@ describe('Mobile — qualité statique', () => {
       'assets/adaptive-icon.png',
       'assets/notification-icon.png',
       'assets/images/salon-floor-plan.png',
+      'assets/images/sib-partners-banner.png',
     ];
     for (const f of required) {
       it(`fichier présent: ${f}`, () => {
@@ -74,32 +75,60 @@ describe('Mobile — qualité statique', () => {
       expect(ctx).toContain('@urbaevent/active_salon_id');
     });
 
-    it('SalonGate protège les écrans salon (pas le badge global)', () => {
+    it('SalonGate protège les écrans salon dont le badge', () => {
       const gated = [
         'app/(visitor)/(tabs)/explore.tsx',
         'app/(visitor)/map.tsx',
         'app/(visitor)/scan-connect.tsx',
         'app/(visitor)/(tabs)/network-hub.tsx',
+        'app/(visitor)/(tabs)/badge.tsx',
       ];
       for (const f of gated) {
         const content = read(f);
         expect(content, `${f} doit utiliser SalonGate`).toContain('SalonGate');
       }
       const badge = read('app/(visitor)/(tabs)/badge.tsx');
-      expect(badge).not.toContain('SalonGate');
       expect(badge).toContain('BadgeScreenContent');
     });
 
-    it('onglet Badge toujours visible ; Explorer nécessite salon actif', () => {
+    it('onglet Badge et Explorer nécessitent salon actif', () => {
       const layout = read('app/(visitor)/(tabs)/_layout.tsx');
       expect(layout).toContain('salonTabs');
-      expect(layout).toContain('href: salonTabs ? undefined : null');
-      expect(layout).not.toMatch(/name="badge"[\s\S]*href:\s*salonTabs/);
+      expect(layout).toMatch(/name="badge"[\s\S]*href:\s*salonTabs/);
+      expect(layout).toMatch(/name="explore"[\s\S]*href:\s*salonTabs/);
     });
 
-    it('Hub badge global sur accueil UrbaEvent', () => {
-      expect(read('src/components/home/HubBadgeSection.tsx')).toContain('ensureUserBadge');
-      expect(read('src/components/home/UrbaEventHomeContent.tsx')).toContain('HubBadgeSection');
+    it('accueil hub sans badge ni accès rapide ; intérieur salon avec badge et raccourcis', () => {
+      const home = read('src/components/home/UrbaEventHomeContent.tsx');
+      expect(home).not.toContain('HubBadgeSection');
+      expect(home).not.toContain('QuickActionGrid');
+      expect(home).not.toContain('home.urba.authTitle');
+      expect(home).toContain('SalonSelectionGrid');
+
+      const interior = read('src/components/home/SalonInteriorContent.tsx');
+      expect(interior).toContain('HubBadgeSection');
+      expect(interior).toContain('QuickActionGrid');
+      expect(interior).toContain("mode=\"full\"");
+
+      const index = read('app/(visitor)/(tabs)/index.tsx');
+      expect(index).toContain('SalonInteriorContent');
+      expect(index).toContain('UrbaEventHomeContent');
+      expect(index).toContain('activeSalon');
+    });
+
+    it('demande badge depuis la page salon', () => {
+      const salonHub = read('app/(visitor)/salon/[slug].tsx');
+      expect(salonHub).toContain('requestSalonBadge');
+      expect(salonHub).toContain('SalonMiniHomeSection');
+      expect(salonHub).toContain('savePendingSalonEntry');
+    });
+
+    it('mini page salon avec sponsors et organisateurs', () => {
+      expect(read('src/data/salonPartners.ts')).toContain('SIB_PARTNERS_BANNER');
+      expect(read('src/data/salonPartners.ts')).toContain('partnersBanner');
+      expect(read('src/components/home/SalonMiniHomeSection.tsx')).toContain('salon.partners.title');
+      expect(read('src/components/home/SalonInteriorContent.tsx')).toContain('SalonMiniHomeSection');
+      expect(existsSync(join(MOBILE_ROOT, 'assets/images/sib-partners-banner.png'))).toBe(true);
     });
 
     it('plan interactif 3D avec stands', () => {

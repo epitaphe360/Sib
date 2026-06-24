@@ -105,7 +105,7 @@ export function resolveBadgeAssetUrl(url?: string): string | undefined {
 
 export const DEFAULT_BADGE_CONFIG: BadgeConfig = {
   event_name: SALON_INFO.name,
-  event_edition: '1ère édition',
+  event_edition: '20ème édition',
   event_dates_display: SALON_INFO.dates,
   event_location: SALON_INFO.city,
   event_location_detail: SALON_INFO.venue,

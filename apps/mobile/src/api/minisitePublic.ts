@@ -101,6 +101,8 @@ function mapExhibitorRow(row: ExhibitorRow): MiniSiteExhibitor {
     companyName: asString(row.company_name) ?? 'Exposant',
     logoUrl: asString(row.logo_url),
     description: asString(row.description),
+    descriptionEn: asString(row.description_en),
+    descriptionAr: asString(row.description_ar),
     website: asString(row.website),
     standNumber: asString(row.stand_number),
     hallNumber: asString(row.hall_number),
@@ -121,6 +123,10 @@ function mapProductRow(row: ProductRow): MiniSiteProduct {
     id: asString(row.id) ?? '',
     name: asString(row.name) ?? 'Produit',
     description: asString(row.description) ?? '',
+    nameEn: asString(row.name_en),
+    nameAr: asString(row.name_ar),
+    descriptionEn: asString(row.description_en),
+    descriptionAr: asString(row.description_ar),
     category: asString(row.category),
     images,
     price: row.price as string | number | undefined,
@@ -162,19 +168,40 @@ async function fetchMiniSiteRow(exhibitorId: string): Promise<MiniSiteRow | null
 }
 
 async function fetchExhibitorRow(exhibitorId: string): Promise<ExhibitorRow | null> {
-  const { data: byId } = await supabase
+  const fields =
+    'id, company_name, logo_url, description, description_en, description_ar, website, contact_info, stand_number, hall_number, sector';
+
+  const { data: byId, error: byIdError } = await supabase
     .from('exhibitors')
-    .select('id, company_name, logo_url, description, website, contact_info, stand_number, hall_number, sector')
+    .select(fields)
     .eq('id', exhibitorId)
     .maybeSingle();
-  if (byId) return byId as ExhibitorRow;
 
-  const { data: byUser } = await supabase
+  if (byId) return byId as ExhibitorRow;
+  if (byIdError?.code === '42703') {
+    const { data: fallback } = await supabase
+      .from('exhibitors')
+      .select('id, company_name, logo_url, description, website, contact_info, stand_number, hall_number, sector')
+      .eq('id', exhibitorId)
+      .maybeSingle();
+    if (fallback) return fallback as ExhibitorRow;
+  }
+
+  const { data: byUser, error: byUserError } = await supabase
     .from('exhibitors')
-    .select('id, company_name, logo_url, description, website, contact_info, stand_number, hall_number, sector')
+    .select(fields)
     .eq('user_id', exhibitorId)
     .maybeSingle();
-  return (byUser as ExhibitorRow | null) ?? null;
+  if (byUser) return byUser as ExhibitorRow;
+  if (byUserError?.code === '42703') {
+    const { data: fallback } = await supabase
+      .from('exhibitors')
+      .select('id, company_name, logo_url, description, website, contact_info, stand_number, hall_number, sector')
+      .eq('user_id', exhibitorId)
+      .maybeSingle();
+    return (fallback as ExhibitorRow | null) ?? null;
+  }
+  return null;
 }
 
 async function fetchProductsForExhibitor(exhibitorId: string): Promise<MiniSiteProduct[]> {

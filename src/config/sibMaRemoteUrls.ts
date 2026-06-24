@@ -56,10 +56,19 @@ const MOCKUP_TO_CDN: Record<string, string> = {
   '/mockup/timeline-5.webp': sibMaUpload('parc_exposition_eljadida_f4a9052968.png'),
 };
 
+/** Fichiers /sib-ma/static/* locaux invalides → CDN officiel sib.ma */
+const SIB_MA_STATIC: Record<string, string> = {
+  '/sib-ma/static/hero.jpg': sibMaUpload('parc_exposition_eljadida_f4a9052968.png'),
+  '/sib-ma/static/home.jpg': sibMaUpload('ALW_4646_e80870e56f_86f40519c5.jpg'),
+  '/sib-ma/static/banner.jpg': sibMaUpload('ALW_4646_e80870e56f_86f40519c5.jpg'),
+  '/sib-ma/static/section_01.jpg': sibMaUpload('7_7474f5a087.png'),
+};
+
 /** Résout un chemin /mockup/* ou /sib-ma/* vers l’URL CDN officielle. */
 export function resolveHomeImage(path: string): string {
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   if (path in MOCKUP_TO_CDN) return MOCKUP_TO_CDN[path];
+  if (path in SIB_MA_STATIC) return SIB_MA_STATIC[path];
   if (path.startsWith('/sib-ma/')) return sibMaUpload(path);
   return path;
 }

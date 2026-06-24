@@ -17,7 +17,8 @@ function ExhibitorStack() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="scan" options={{ ...hOpts, title: t('scanner.title') }} />
-      <Stack.Screen name="minisite" options={{ ...hOpts, title: t('exhibitor.profile.title') }} />
+      <Stack.Screen name="minisite" options={{ ...hOpts, title: t('exhibitor.minisite') }} />
+      <Stack.Screen name="minisite-products" options={{ ...hOpts, title: t('exhibitor.minisite.productsTitle') }} />
       <Stack.Screen name="messages/new" options={{ ...hOpts, title: t('messages.newThread') }} />
       <Stack.Screen name="messages/[id]" options={{ ...hOpts, title: t('messages.title') }} />
       <Stack.Screen name="analytics" options={{ ...hOpts, title: t('exhibitor.analytics.title') }} />

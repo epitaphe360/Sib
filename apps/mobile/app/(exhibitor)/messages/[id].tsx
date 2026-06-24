@@ -53,11 +53,14 @@ export default function ExhibitorChatScreen() {
           data={messages}
           keyExtractor={(m) => m.id}
           contentContainerStyle={styles.list}
-          renderItem={({ item }) => (
-            <View style={[styles.bubble, item.senderId === user?.id ? styles.mine : styles.theirs]}>
-              <Text style={styles.content}>{item.content}</Text>
-            </View>
-          )}
+          renderItem={({ item }) => {
+            const mine = item.senderId === user?.id;
+            return (
+              <View style={[styles.bubble, mine ? styles.mine : styles.theirs]}>
+                <Text style={[styles.content, mine && styles.contentMine]}>{item.content}</Text>
+              </View>
+            );
+          }}
         />
         <View style={styles.composer}>
           <Input label="" value={text} onChangeText={setText} placeholder={t('messages.placeholder')} />
@@ -74,6 +77,7 @@ const styles = StyleSheet.create({
   bubble: { maxWidth: '80%', padding: 10, borderRadius: 12, marginBottom: 8 },
   mine: { alignSelf: 'flex-end', backgroundColor: colors.primary },
   theirs: { alignSelf: 'flex-start', backgroundColor: colors.border },
-  content: { color: colors.text },
+  content: { color: colors.text, fontSize: 15 },
+  contentMine: { color: '#fff' },
   composer: { padding: spacing.md, borderTopWidth: 1, borderTopColor: colors.border },
 });

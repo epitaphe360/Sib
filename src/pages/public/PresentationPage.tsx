@@ -10,6 +10,11 @@ import {
   AnimatedCounter, fadeUp, fadeLeft, fadeRight, scaleUp,
 } from '../../components/ui/motion';
 import { useTranslation } from '../../hooks/useTranslation';
+import { resolveHomeImage } from '../../config/sibMaRemoteUrls';
+import { IMAGES, img } from '../../lib/images';
+
+const PRESENTATION_VENUE_IMAGE = resolveHomeImage('/sib-ma/static/hero.jpg');
+const PRESENTATION_VENUE_FALLBACK = img(IMAGES.morocco.eljadida, 1200, 800);
 
 const defaultOrganisateurs = [
   { name: 'Ministère MUAT', role: 'Organisateur', desc: "Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville" },
@@ -144,9 +149,15 @@ export default function PresentationPage() {
               ) : (
                 <>
                   <img
-                    src="/sib-ma/static/hero.jpg"
+                    src={getCms('about_image', PRESENTATION_VENUE_IMAGE)}
                     alt="Parc d'Exposition Mohammed VI - El Jadida"
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (target.src !== PRESENTATION_VENUE_FALLBACK) {
+                        target.src = PRESENTATION_VENUE_FALLBACK;
+                      }
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-sib-navy/80 via-sib-navy/20 to-transparent" />
 

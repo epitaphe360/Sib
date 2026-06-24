@@ -14,17 +14,15 @@ import { useAppFonts } from '../src/hooks/useAppFonts';
 import { prefetchBadgeConfig } from '../src/hooks/useBadgeConfig';
 import { initSentry } from '../src/lib/sentry';
 import { AppQueryProvider } from '../src/providers/QueryProvider';
+import { AuthDeepLinkCapture } from '../src/components/AuthDeepLinkCapture';
 import { ThemeProvider } from '../src/context/ThemeContext';
 import { colors } from '../src/theme';
 
 SplashScreen.preventAutoHideAsync().catch(() => undefined);
 initSentry();
 
-const SPLASH_MAX_MS = 2500;
-
-function hideSplashSafely() {
-  SplashScreen.hideAsync().catch(() => undefined);
-}
+/** Dernier recours — ne jamais laisser le splash natif (#1B365D) bloqué. */
+const SPLASH_ABSOLUTE_MAX_MS = 12000;
 
 function RootStack() {
   const { t } = useI18n();
@@ -79,10 +77,11 @@ export default function RootLayout() {
     prefetchBadgeConfig().catch(() => undefined);
   }, []);
 
-  // Ne jamais bloquer sur le splash natif (#1B365D) — masquer dès le 1er frame React.
   useEffect(() => {
-    hideSplashSafely();
-    const timer = setTimeout(hideSplashSafely, SPLASH_MAX_MS);
+    SplashScreen.hideAsync().catch(() => undefined);
+    const timer = setTimeout(() => {
+      SplashScreen.hideAsync().catch(() => undefined);
+    }, SPLASH_ABSOLUTE_MAX_MS);
     return () => clearTimeout(timer);
   }, []);
 
@@ -101,6 +100,7 @@ export default function RootLayout() {
           <ThemeProvider>
             <I18nProvider>
               <AuthProvider>
+                <AuthDeepLinkCapture />
                 <StatusBar style="auto" />
                 <RootStack />
               </AuthProvider>

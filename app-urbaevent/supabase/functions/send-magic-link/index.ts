@@ -1,5 +1,6 @@
 /**
  * Envoie un lien magique via Resend API (contourne SMTP Auth cassé si mail.sib2026.ma invalide).
+ * Inscription : type "invite" (sans mot de passe) — pas "signup" qui exige un password.
  */
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.1';
@@ -10,13 +11,45 @@ const corsHeaders = {
 };
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || '';
+
+/** Deep link natif ouvert par la page pont Storage. */
+const MOBILE_AUTH_REDIRECT = 'urbaevent://auth-callback';
+
+function authOpenUrl(): string {
+  const base = Deno.env.get('SUPABASE_URL') ?? '';
+  return `${base}/functions/v1/auth-open`;
+}
+
+type LinkProperties = {
+  hashed_token?: string;
+  verification_type?: string;
+  action_link?: string;
+};
+
+/** Lien HTTPS cliquable → redirection 302 vers l'app (pas de page HTML). */
+function buildEmailClickableLink(
+  data: { properties?: LinkProperties } | null,
+  fallbackType: string,
+): string | undefined {
+  const props = data?.properties ?? {};
+  if (props.hashed_token) {
+    const otpType = props.verification_type ?? fallbackType;
+    const open = new URL(authOpenUrl());
+    open.searchParams.set('token_hash', props.hashed_token);
+    open.searchParams.set('type', otpType);
+    return open.toString();
+  }
+  const actionLink =
+    props.action_link ?? (data as { action_link?: string } | null)?.action_link;
+  return actionLink?.startsWith('http') ? actionLink : undefined;
+}
+
 function resolveFromEmail(): string {
   const raw = Deno.env.get('RESEND_FROM_EMAIL') || '';
-  if (raw.includes('@resend.dev')) return raw;
+  if (raw.includes('@')) return raw;
   return 'onboarding@resend.dev';
 }
 
-// Simple in-memory rate limiter: max 3 requêtes par IP par minute
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
@@ -30,12 +63,38 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
+/** Inscription → invite ; connexion → magiclink (pas signup = password obligatoire). */
+function resolveLinkType(
+  shouldCreateUser: boolean | undefined,
+  linkType: 'magiclink' | 'signup' | undefined,
+): 'invite' | 'magiclink' {
+  const isRegistration = shouldCreateUser === true || linkType === 'signup';
+  return isRegistration ? 'invite' : 'magiclink';
+}
+
+/** Toujours urbaevent:// — les Edge Functions Supabase ne servent pas le HTML correctement (text/plain). */
+function normalizeRedirectTo(_redirectTo: string): string {
+  return MOBILE_AUTH_REDIRECT;
+}
+
+async function authUserExists(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  email: string,
+): Promise<boolean> {
+  const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+  if (error) {
+    console.error('listUsers:', error);
+    return false;
+  }
+  const normalized = email.toLowerCase();
+  return (data.users ?? []).some((u) => (u.email ?? '').toLowerCase() === normalized);
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  // Rate limiting par IP
   const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   if (!checkRateLimit(clientIp)) {
     return new Response(JSON.stringify({ error: 'Trop de tentatives. Attendez 1 minute.' }), {
@@ -44,20 +103,19 @@ serve(async (req) => {
     });
   }
 
-  // Auth: seuls les rôles autorisés peuvent déclencher un magic link
   const authHeader = req.headers.get('Authorization') ?? '';
-  let isServiceRole = false;
+  let isPrivileged = false;
   if (authHeader.startsWith('Bearer ')) {
     const token = authHeader.replace('Bearer ', '');
     const supabaseCheck = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      { auth: { autoRefreshToken: false, persistSession: false } }
+      { auth: { autoRefreshToken: false, persistSession: false } },
     );
     const { data: { user: caller } } = await supabaseCheck.auth.getUser(token);
     if (caller) {
       const { data: callerProfile } = await supabaseCheck.from('users').select('type').eq('id', caller.id).single();
-      isServiceRole = ['admin', 'service_client'].includes(callerProfile?.type ?? '');
+      isPrivileged = ['admin', 'service_client'].includes(callerProfile?.type ?? '');
     }
   }
 
@@ -68,27 +126,6 @@ serve(async (req) => {
       shouldCreateUser?: boolean;
       linkType?: 'magiclink' | 'signup';
     };
-
-    // Pour les magic links de connexion (non-signup), valider que l'email existe déjà
-    // sauf si l'appelant est un rôle privilégié
-    if (!isServiceRole && !shouldCreateUser && linkType !== 'signup') {
-      const supabaseCheck = createClient(
-        Deno.env.get('SUPABASE_URL') ?? '',
-        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-        { auth: { autoRefreshToken: false, persistSession: false } }
-      );
-      const { data: existing } = await supabaseCheck
-        .from('users')
-        .select('id')
-        .eq('email', email?.toLowerCase().trim() ?? '')
-        .maybeSingle();
-      if (!existing) {
-        return new Response(JSON.stringify({ ok: false, skipped: true, reason: 'profile_missing' }), {
-          status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-    }
 
     if (!email?.trim() || !redirectTo?.trim()) {
       return new Response(JSON.stringify({ error: 'email et redirectTo requis' }), {
@@ -107,32 +144,62 @@ serve(async (req) => {
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      { auth: { autoRefreshToken: false, persistSession: false } }
+      { auth: { autoRefreshToken: false, persistSession: false } },
     );
 
     const normalized = email.toLowerCase().trim();
+    const isRegistration = shouldCreateUser === true || linkType === 'signup';
+    const type = resolveLinkType(shouldCreateUser, linkType);
+    const safeRedirectTo = normalizeRedirectTo(redirectTo);
 
-    const type = linkType ?? (shouldCreateUser ? 'signup' : 'magiclink');
+    if (!isPrivileged && !isRegistration) {
+      const exists = await authUserExists(supabaseAdmin, normalized);
+      if (!exists) {
+        return new Response(JSON.stringify({ ok: false, skipped: true, reason: 'profile_missing' }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
+    let actionLink: string | undefined;
 
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type,
       email: normalized,
-      options: {
-        redirectTo,
-      },
+      options: { redirectTo: safeRedirectTo },
     });
 
     if (linkError) {
       console.error('generateLink:', linkError);
-      return new Response(JSON.stringify({ error: linkError.message }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+      const msg = linkError.message ?? '';
+      const alreadyRegistered =
+        msg.toLowerCase().includes('already been registered') ||
+        msg.toLowerCase().includes('already exists') ||
+        msg.toLowerCase().includes('user already');
 
-    const actionLink =
-      linkData?.properties?.action_link ??
-      (linkData as { action_link?: string })?.action_link;
+      if (alreadyRegistered && isRegistration) {
+        const { data: retryData, error: retryError } = await supabaseAdmin.auth.admin.generateLink({
+          type: 'magiclink',
+          email: normalized,
+          options: { redirectTo: safeRedirectTo },
+        });
+        if (retryError) {
+          return new Response(JSON.stringify({ error: retryError.message }), {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+        actionLink = buildEmailClickableLink(retryData, 'magiclink');
+      } else {
+        return new Response(JSON.stringify({ error: linkError.message }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    } else {
+      actionLink = buildEmailClickableLink(linkData, type);
+    }
 
     if (!actionLink) {
       return new Response(JSON.stringify({ error: 'Lien magique non généré' }), {
@@ -141,11 +208,18 @@ serve(async (req) => {
       });
     }
 
+    const subject = isRegistration
+      ? 'Activez votre compte UrbaEvent — SIB 2026'
+      : 'Votre lien de connexion UrbaEvent';
+    const intro = isRegistration
+      ? 'Cliquez pour activer votre compte et accéder à votre badge :'
+      : 'Cliquez pour vous connecter à l\'application mobile :';
+
     const html = `<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;padding:24px">
       <h2 style="color:#1B365D">UrbaEvent — SIB 2026</h2>
-      <p>Cliquez sur le bouton pour vous connecter à l'application mobile :</p>
+      <p>${intro}</p>
       <p><a href="${actionLink}" style="display:inline-block;background:#1B365D;color:#fff;padding:12px 24px;text-decoration:none;border-radius:8px">Ouvrir UrbaEvent</a></p>
-      <p style="color:#666;font-size:12px">Si le bouton ne fonctionne pas, copiez ce lien :<br>${actionLink}</p>
+      <p style="color:#666;font-size:12px;margin-top:20px">Si le bouton ne s'ouvre pas dans Gmail, appuyez sur ⋮ puis «&nbsp;Ouvrir dans Chrome&nbsp;», ou copiez ce lien :<br><a href="${actionLink}" style="color:#1B365D;word-break:break-all">${actionLink}</a></p>
     </body></html>`;
 
     const resendRes = await fetch('https://api.resend.com/emails', {
@@ -157,7 +231,7 @@ serve(async (req) => {
       body: JSON.stringify({
         from: `UrbaEvent SIB <${resolveFromEmail()}>`,
         to: [normalized],
-        subject: 'Votre lien de connexion UrbaEvent',
+        subject,
         html,
       }),
     });
@@ -165,13 +239,29 @@ serve(async (req) => {
     if (!resendRes.ok) {
       const errText = await resendRes.text();
       console.error('Resend:', errText);
-      return new Response(JSON.stringify({ error: `Resend: ${errText}` }), {
+      let userMessage = `Resend: ${errText}`;
+      try {
+        const parsed = JSON.parse(errText) as { message?: string; statusCode?: number };
+        const msg = parsed.message ?? '';
+        if (parsed.statusCode === 403) {
+          if (msg.includes('domain is not verified')) {
+            userMessage =
+              'Domaine email non vérifié sur Resend. Vérifiez sib2026.ma sur resend.com/domains puis configurez RESEND_FROM_EMAIL=noreply@sib2026.ma.';
+          } else if (msg.includes('only send testing emails')) {
+            userMessage =
+              'Compte Resend en mode test : seul l’email du compte Resend peut recevoir des messages. Vérifiez le domaine sib2026.ma sur resend.com/domains pour envoyer à tous les visiteurs.';
+          }
+        }
+      } catch {
+        /* keep raw */
+      }
+      return new Response(JSON.stringify({ error: userMessage }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
+    return new Response(JSON.stringify({ ok: true, linkType: type }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

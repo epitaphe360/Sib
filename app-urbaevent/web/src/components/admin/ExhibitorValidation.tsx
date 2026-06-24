@@ -33,7 +33,7 @@ export default function ExhibitorValidation() {
   const [selectedApplication, setSelectedApplication] = useState<ExhibitorApplication | null>(null);
 
   useEffect(() => {
-    fetchExhibitors();
+    fetchExhibitors(true, { publicCatalog: false });
   }, [fetchExhibitors]);
 
   // Map the exhibitor data from the store to the shape the component expects

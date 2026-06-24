@@ -1,10 +1,10 @@
 import { supabase } from '../lib/supabase';
 import { supabaseErrorMessage } from '../lib/supabaseError';
 import { fetchCollaboratorContext } from '../lib/collaboratorContext';
-import { badgeAccessColor, badgeLevelLabel } from '../lib/badgeDisplay';
+import { applyEventWindowToBadge, getActiveSalonEventWindow } from '../lib/salonEventWindow';
 import type { UserBadge } from '../types';
 
-export { badgeAccessColor, badgeLevelLabel };
+export { badgeAccessColor, badgeLevelLabel } from '../lib/badgeDisplay';
 
 interface BadgeRow {
   id: string;
@@ -56,9 +56,74 @@ export async function getUserBadge(userId: string): Promise<UserBadge | null> {
   return data ? mapBadge(data as BadgeRow) : null;
 }
 
+function badgeMatchesWindow(badge: UserBadge, window: { validFrom: Date; validUntil: Date }): boolean {
+  return (
+    Math.abs(badge.validFrom.getTime() - window.validFrom.getTime()) < 60_000 &&
+    Math.abs(badge.validUntil.getTime() - window.validUntil.getTime()) < 60_000
+  );
+}
+
+async function upsertBadgeForUser(
+  userId: string,
+  userRow: { type: string; visitor_level?: string | null; name: string; email: string; profile?: Record<string, unknown> | null },
+  companyName: string | null,
+  standNumber: string | null,
+  position: string | null,
+  profile: Record<string, unknown>
+): Promise<UserBadge> {
+  const window = userRow.type === 'visitor' ? await getActiveSalonEventWindow() : null;
+
+  const rpcBody: Record<string, unknown> = {
+    p_user_id: userId,
+    p_user_type: userRow.type,
+    p_user_level: userRow.visitor_level ?? null,
+    p_full_name: userRow.name,
+    p_company_name: companyName,
+    p_position: position ?? (profile.position as string) ?? null,
+    p_email: userRow.email,
+    p_phone: null,
+    p_avatar_url: null,
+    p_stand_number: standNumber,
+  };
+
+  if (window) {
+    rpcBody.p_valid_from = window.validFrom.toISOString();
+    rpcBody.p_valid_until = window.validUntil.toISOString();
+  }
+
+  const { data, error } = await supabase.rpc('upsert_user_badge', rpcBody);
+
+  if (error && window) {
+    const retryBody = { ...rpcBody };
+    delete retryBody.p_valid_from;
+    delete retryBody.p_valid_until;
+    const retry = await supabase.rpc('upsert_user_badge', retryBody);
+    if (retry.error) throw new Error(supabaseErrorMessage(retry.error, 'Impossible de créer le badge'));
+    return applyEventWindowToBadge(mapBadge(retry.data as BadgeRow), window);
+  }
+
+  if (error) throw new Error(supabaseErrorMessage(error, 'Impossible de créer le badge'));
+  const badge = mapBadge(data as BadgeRow);
+  return applyEventWindowToBadge(badge, window);
+}
+
 export async function ensureUserBadge(userId: string): Promise<UserBadge> {
+  const window = await getActiveSalonEventWindow();
   const existing = await getUserBadge(userId);
-  if (existing) return existing;
+  if (existing) {
+    if (window && existing.userType === 'visitor' && !badgeMatchesWindow(existing, window)) {
+        const { data: userRow } = await supabase
+          .from('users')
+          .select('id, type, visitor_level, name, email, profile')
+          .eq('id', userId)
+          .single();
+        if (userRow) {
+          const profile = (userRow.profile ?? {}) as Record<string, unknown>;
+          return upsertBadgeForUser(userId, userRow, existing.companyName ?? null, null, null, profile);
+        }
+      }
+    return applyEventWindowToBadge(existing, window);
+  }
 
   const { data: userRow, error: userError } = await supabase
     .from('users')
@@ -96,21 +161,7 @@ export async function ensureUserBadge(userId: string): Promise<UserBadge> {
     }
   }
 
-  const { data, error } = await supabase.rpc('upsert_user_badge', {
-    p_user_id: userId,
-    p_user_type: userRow.type,
-    p_user_level: userRow.visitor_level ?? null,
-    p_full_name: userRow.name,
-    p_company_name: companyName,
-    p_position: position ?? (profile.position as string) ?? null,
-    p_email: userRow.email,
-    p_phone: null,
-    p_avatar_url: null,
-    p_stand_number: standNumber,
-  });
-
-  if (error) throw new Error(supabaseErrorMessage(error, 'Impossible de créer le badge'));
-  return mapBadge(data as BadgeRow);
+  return upsertBadgeForUser(userId, userRow, companyName, standNumber, position, profile);
 }
 
 export function generateQRPayload(badge: UserBadge): string {

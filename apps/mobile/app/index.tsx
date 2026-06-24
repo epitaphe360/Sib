@@ -1,12 +1,13 @@
 import { Redirect } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../src/context/AuthContext';
 import { BootScreen } from '../src/components/BootScreen';
 import { isOnboardingComplete } from '../src/lib/onboarding';
-import { getHomePathForUser } from '../src/navigation/roleConfig';
+import { getHomePath } from '../src/navigation/roleConfig';
 
-const ONBOARDING_BOOT_MS = 1500;
-const AUTH_WAIT_MS = 9000;
+const ONBOARDING_BOOT_MS = 800;
+const AUTH_WAIT_MS = 5000;
 
 export default function Index() {
   const { user, isLoading } = useAuth();
@@ -35,6 +36,12 @@ export default function Index() {
 
   const waiting = (isLoading && !authTimedOut) || onboardingDone === null;
 
+  useEffect(() => {
+    if (!waiting) {
+      SplashScreen.hideAsync().catch(() => undefined);
+    }
+  }, [waiting]);
+
   if (waiting) {
     return <BootScreen />;
   }
@@ -44,7 +51,7 @@ export default function Index() {
   }
 
   if (user) {
-    return <Redirect href={getHomePathForUser(user) as never} />;
+    return <Redirect href={getHomePath(user.type) as never} />;
   }
 
   return <Redirect href="/(visitor)/(tabs)" />;

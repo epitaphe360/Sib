@@ -21,12 +21,6 @@ export default function ExhibitorProfileScreen() {
   const [standId, setStandId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    if (user && isCollaboratorUser(user)) {
-      router.replace('/(visitor)/(tabs)/badge' as never);
-    }
-  }, [user]);
-
   const load = useCallback(async () => {
     if (!user || isCollaboratorUser(user)) return;
     try {
