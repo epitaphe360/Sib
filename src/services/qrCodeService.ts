@@ -254,6 +254,53 @@ function generateNonce(): string {
     .join('');
 }
 
+/** Décode le payload JWT (partie centrale) sans vérifier la signature — affichage UI uniquement. */
+function decodeJwtPayload(token: string): QRCodePayload | null {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
+    const parsed = JSON.parse(atob(padded)) as Partial<QRCodePayload>;
+    if (!parsed.userId || !parsed.email) return null;
+    return {
+      userId: parsed.userId,
+      email: parsed.email,
+      name: parsed.name ?? parsed.email,
+      userType: (parsed.userType ?? 'visitor') as QRCodePayload['userType'],
+      level: parsed.level ?? 'free',
+      iat: parsed.iat ?? Date.now(),
+      exp: parsed.exp ?? Date.now() + QR_CODE_VALIDITY_MS,
+      nonce: parsed.nonce ?? '',
+      zones: parsed.zones ?? ['public'],
+      events: parsed.events ?? ['public_conferences'],
+      badgeNumber: parsed.badgeNumber,
+      photo: parsed.photo,
+      company: parsed.company,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** QR signé côté serveur (Edge Function) — pas de secret JWT exposé au navigateur. */
+async function generateSecureQRCodeFromServer(): Promise<{
+  qrData: string;
+  payload: QRCodePayload;
+  expiresAt: Date;
+} | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.functions.invoke('issue-badge-token', { body: {} });
+  if (error || !data?.qrData || !data?.expiresAt) return null;
+  const payload = decodeJwtPayload(String(data.qrData));
+  if (!payload) return null;
+  return {
+    qrData: String(data.qrData),
+    payload,
+    expiresAt: new Date(String(data.expiresAt)),
+  };
+}
+
 /**
  * Simple JWT encoder (pour le browser, utiliser une lib comme jose en prod)
  */
@@ -349,6 +396,13 @@ export async function generateSecureQRCode(userId: string, userFallback?: QRUser
   expiresAt: Date;
 }> {
   try {
+    const fromServer = await generateSecureQRCodeFromServer();
+    if (fromServer) return fromServer;
+
+    if (!supabase) {
+      throw new Error('Service badge indisponible. Réessayez dans un instant.');
+    }
+
     // Récupérer les données utilisateur (optimized: 70% bandwidth reduction)
     const { data: user, error } = await supabase
       .from('users')

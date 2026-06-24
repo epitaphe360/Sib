@@ -8,6 +8,7 @@ import { HautPatronageBar } from './components/layout/HautPatronageBar';
 import { Footer } from './components/layout/Footer';
 import { SkipToContent } from './components/common/SkipToContent';
 import { ScrollToTop } from './components/common/ScrollToTop';
+import DigitalBadge from './components/badge/DigitalBadge';
 
 // Lazy load pages
 const Sib2026HomeV4Page = lazyRetry(() => import('./pages/home/Sib2026HomeV4Page'));
@@ -76,9 +77,8 @@ const PartnerUpgradePage = lazyRetry(() => import('./pages/PartnerUpgradePage'))
 const BadgeScannerPage = lazyRetry(() => import('./pages/BadgeScannerPage'));
 const PartnerBankTransferPage = lazyRetry(() => import('./pages/partner/PartnerBankTransferPage'));
 const PartnerPaymentSelectionPage = lazyRetry(() => import('./pages/partner/PartnerPaymentSelectionPage'));
-const DigitalBadge = lazyRetry(() => import('./components/badge/DigitalBadge'));
-const QRScanner = lazyRetry(() => import('./components/security/QRScanner'));
 const BadgePrintStationPage = lazyRetry(() => import('./pages/BadgePrintStationPage'));
+const QRScanner = lazyRetry(() => import('./components/security/QRScanner'));
 
 // Visitor registration pages
 const VisitorFreeRegistration = lazyRetry(() => import('./pages/visitor/VisitorFreeRegistration'));

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import QRCode from 'qrcode';
 import {
@@ -7,113 +7,165 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  Sparkles
+  Sparkles,
 } from 'lucide-react';
 import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
 import useAuthStore from '../../store/authStore';
 import { useTranslation } from '../../hooks/useTranslation';
 import {
   generateSecureQRCode,
   ACCESS_LEVELS,
-  QRCodePayload
+  QRCodePayload,
 } from '../../services/qrCodeService';
 
-const QR_ROTATION_INTERVAL = 30 * 1000; // 30 secondes
+const QR_ROTATION_INTERVAL = 30 * 1000;
 
 export default function DigitalBadge() {
   const { t } = useTranslation();
   const { user } = useAuthStore();
-  const [qrCodeDataURL, setQrCodeDataURL] = useState<string>('');
+  const [qrCodeDataURL, setQrCodeDataURL] = useState('');
   const [payload, setPayload] = useState<QRCodePayload | null>(null);
   const [expiresAt, setExpiresAt] = useState<Date | null>(null);
-  const [secondsRemaining, setSecondsRemaining] = useState<number>(0);
+  const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [isRotating, setIsRotating] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+  const mountedRef = useRef(true);
 
-  // Générer un nouveau QR code
-  const generateQR = async () => {
-    if (!user) {return;}
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  const generateQR = useCallback(async () => {
+    if (!user) return;
 
     try {
       setIsRotating(true);
       setError('');
 
-      const { qrData, payload: newPayload, expiresAt: newExpiry } =
-        await generateSecureQRCode(user.id);
+      const userFallback = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        type: user.type,
+        visitor_level: user.visitor_level,
+        profile: user.profile
+          ? {
+              photo_url: user.profile.avatar,
+              company: user.profile.company,
+              organization: user.profile.company,
+            }
+          : undefined,
+      };
 
-      // Générer l'image QR code
+      const { qrData, payload: newPayload, expiresAt: newExpiry } =
+        await generateSecureQRCode(user.id, userFallback);
+
       const dataURL = await QRCode.toDataURL(qrData, {
         width: 300,
         margin: 2,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        },
-        errorCorrectionLevel: 'H'
+        color: { dark: '#000000', light: '#FFFFFF' },
+        errorCorrectionLevel: 'H',
       });
+
+      if (!mountedRef.current) return;
 
       setQrCodeDataURL(dataURL);
       setPayload(newPayload);
       setExpiresAt(newExpiry);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error generating QR code:', err);
-      setError(t('badge.error_generating'));
+      if (!mountedRef.current) return;
+      const message =
+        err instanceof Error ? err.message : t('badge.error_generating');
+      setError(message || t('badge.error_generating'));
     } finally {
-      setTimeout(() => setIsRotating(false), 500);
+      if (mountedRef.current) {
+        setIsLoading(false);
+        setTimeout(() => setIsRotating(false), 500);
+      }
     }
-  };
+  }, [user, t]);
 
-  // Générer le QR initial
   useEffect(() => {
     if (user) {
-      generateQR();
+      setIsLoading(true);
+      void generateQR();
+    } else {
+      setIsLoading(false);
     }
-  }, [user]);
+  }, [user, generateQR]);
 
-  // Rotation automatique du QR code
   useEffect(() => {
+    if (!user || !payload) return;
     const interval = setInterval(() => {
-      generateQR();
+      void generateQR();
     }, QR_ROTATION_INTERVAL);
-
     return () => clearInterval(interval);
-  }, [user]);
+  }, [user, payload, generateQR]);
 
-  // Countdown timer
   useEffect(() => {
+    if (!expiresAt) return;
     const interval = setInterval(() => {
-      if (expiresAt) {
-        const remaining = Math.max(
-          0,
-          Math.floor((expiresAt.getTime() - Date.now()) / 1000)
-        );
-        setSecondsRemaining(remaining);
-
-        // Régénérer automatiquement si expiré
-        if (remaining === 0) {
-          generateQR();
-        }
+      const remaining = Math.max(
+        0,
+        Math.floor((expiresAt.getTime() - Date.now()) / 1000),
+      );
+      setSecondsRemaining(remaining);
+      if (remaining === 0) {
+        void generateQR();
       }
     }, 1000);
-
     return () => clearInterval(interval);
-  }, [expiresAt]);
+  }, [expiresAt, generateQR]);
 
-  if (!user || !payload) {
+  if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <Card className="p-8 text-center max-w-md">
+          <Shield className="w-12 h-12 text-sib-navy mx-auto mb-4" />
+          <p className="text-gray-600">{t('auth.login_required')}</p>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isLoading && !payload) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">{t('badge.loading_badge')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4" />
+          <p className="text-white/80">{t('badge.loading_badge')}</p>
         </div>
       </div>
     );
   }
 
-  // Obtenir les informations de niveau d'accès
-  let accessKey = `${payload.userType}_${payload.level}` as keyof typeof ACCESS_LEVELS;
+  if (error && !payload) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 p-4">
+        <Card className="p-8 max-w-md w-full text-center">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-lg font-bold text-gray-900 mb-2">{t('badge.access_badge')}</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <Button onClick={() => void generateQR()} disabled={isRotating}>
+            <RefreshCw className={`w-4 h-4 mr-2 ${isRotating ? 'animate-spin' : ''}`} />
+            {t('badge.regenerate_qr')}
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
-  // Correction pour les types qui n'ont pas de préfixe composé dans ACCESS_LEVELS
+  if (!payload) {
+    return null;
+  }
+
+  let accessKey = `${payload.userType}_${payload.level}` as keyof typeof ACCESS_LEVELS;
   if (['admin', 'security', 'exhibitor'].includes(payload.userType)) {
     accessKey = payload.userType as keyof typeof ACCESS_LEVELS;
   }
@@ -122,7 +174,7 @@ export default function DigitalBadge() {
     color: '#CCCCCC',
     displayName: t('badge.unknown_level'),
     zones: [],
-    events: []
+    events: [],
   };
   const isExpiring = secondsRemaining <= 10;
   const progressPercent = (secondsRemaining / 60) * 100;
@@ -134,22 +186,19 @@ export default function DigitalBadge() {
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-md"
       >
-        {/* Badge Card */}
         <Card
           className="relative overflow-hidden"
           style={{
             background: `linear-gradient(135deg, ${accessLevel.color}15, ${accessLevel.color}05)`,
             borderColor: accessLevel.color,
-            borderWidth: 2
+            borderWidth: 2,
           }}
         >
-          {/* Decorative Background Pattern */}
           <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full translate-y-1/2 -translate-x-1/2"></div>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full translate-y-1/2 -translate-x-1/2" />
           </div>
 
-          {/* Header */}
           <div className="relative p-6 border-b border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-2">
@@ -160,14 +209,13 @@ export default function DigitalBadge() {
                 className="px-3 py-1 rounded-full text-xs font-bold"
                 style={{
                   backgroundColor: `${accessLevel.color}20`,
-                  color: accessLevel.color
+                  color: accessLevel.color,
                 }}
               >
                 {accessLevel.displayName}
               </div>
             </div>
 
-            {/* User Info */}
             <div className="flex items-center space-x-4">
               {payload.photo ? (
                 <img
@@ -201,7 +249,6 @@ export default function DigitalBadge() {
             </div>
           </div>
 
-          {/* QR Code Section */}
           <div className="relative p-6">
             <AnimatePresence mode="wait">
               <motion.div
@@ -210,13 +257,12 @@ export default function DigitalBadge() {
                 animate={{ opacity: 1, rotate: 0, scale: 1 }}
                 exit={{ opacity: 0, rotate: 5, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className="bg-white p-4 rounded-2xl shadow-2xl mx-auto"
+                className="bg-white p-4 rounded-2xl shadow-2xl mx-auto relative"
                 style={{
                   width: 'fit-content',
-                  boxShadow: `0 20px 60px ${accessLevel.color}40`
+                  boxShadow: `0 20px 60px ${accessLevel.color}40`,
                 }}
               >
-                {/* QR Code */}
                 {qrCodeDataURL && (
                   <img
                     src={qrCodeDataURL}
@@ -224,8 +270,6 @@ export default function DigitalBadge() {
                     className="w-64 h-64 mx-auto"
                   />
                 )}
-
-                {/* Rotating indicator */}
                 {isRotating && (
                   <motion.div
                     className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-2xl"
@@ -233,15 +277,16 @@ export default function DigitalBadge() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
-                    <RefreshCw className="h-12 w-12 animate-spin" style={{ color: accessLevel.color }} />
+                    <RefreshCw
+                      className="h-12 w-12 animate-spin"
+                      style={{ color: accessLevel.color }}
+                    />
                   </motion.div>
                 )}
               </motion.div>
             </AnimatePresence>
 
-            {/* Timer and Status */}
             <div className="mt-6 space-y-3">
-              {/* Progress Bar */}
               <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
                 <motion.div
                   className="absolute inset-y-0 left-0 rounded-full"
@@ -252,25 +297,24 @@ export default function DigitalBadge() {
                 />
               </div>
 
-              {/* Timer Display */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Clock
                     className={`h-4 w-4 ${isExpiring ? 'text-red-500 animate-pulse' : 'text-gray-500'}`}
                   />
-                  <span className={`text-sm font-mono ${isExpiring ? 'text-red-500 font-bold' : 'text-gray-600'}`}>
+                  <span
+                    className={`text-sm font-mono ${isExpiring ? 'text-red-500 font-bold' : 'text-gray-600'}`}
+                  >
                     {Math.floor(secondsRemaining / 60)}:
                     {(secondsRemaining % 60).toString().padStart(2, '0')}
                   </span>
                 </div>
-
                 <div className="flex items-center space-x-1 text-xs text-gray-500">
                   <RefreshCw className="h-3 w-3" />
                   <span>{t('badge.automatic_rotation')}</span>
                 </div>
               </div>
 
-              {/* Security Indicator */}
               <div className="flex items-center justify-center space-x-2 text-xs text-green-600">
                 <CheckCircle className="h-4 w-4" />
                 <span className="font-medium">{t('badge.secure_qr_jwt')}</span>
@@ -278,7 +322,6 @@ export default function DigitalBadge() {
             </div>
           </div>
 
-          {/* Access Zones */}
           <div className="relative p-6 border-t border-gray-200 bg-gray-50">
             <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
               <Sparkles className="h-4 w-4 mr-2" style={{ color: accessLevel.color }} />
@@ -291,13 +334,14 @@ export default function DigitalBadge() {
                   className="px-3 py-1 rounded-full text-xs font-medium bg-white border"
                   style={{ borderColor: accessLevel.color, color: accessLevel.color }}
                 >
-                  {zone === 'all' ? `🌟 ${t('badge.total_access')}` : zone.replace(/_/g, ' ').toUpperCase()}
+                  {zone === 'all' || zone === '*'
+                    ? `🌟 ${t('badge.total_access')}`
+                    : zone.replace(/_/g, ' ').toUpperCase()}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Error Display */}
           {error && (
             <div className="p-4 bg-red-50 border-t border-red-200">
               <div className="flex items-center space-x-2 text-red-600">
@@ -307,15 +351,15 @@ export default function DigitalBadge() {
             </div>
           )}
 
-          {/* Manual Refresh Button */}
           <div className="p-4 border-t border-gray-200">
             <button
-              onClick={generateQR}
+              type="button"
+              onClick={() => void generateQR()}
               disabled={isRotating}
               className="w-full py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center space-x-2"
               style={{
                 backgroundColor: isRotating ? '#E5E7EB' : accessLevel.color,
-                color: isRotating ? '#9CA3AF' : '#FFFFFF'
+                color: isRotating ? '#9CA3AF' : '#FFFFFF',
               }}
             >
               <RefreshCw className={`h-4 w-4 ${isRotating ? 'animate-spin' : ''}`} />
@@ -324,15 +368,12 @@ export default function DigitalBadge() {
           </div>
         </Card>
 
-        {/* Info Card */}
         <Card className="mt-4 p-4 bg-blue-50 border-blue-200">
           <div className="flex items-start space-x-3">
             <Shield className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-blue-900">
               <p className="font-semibold mb-1">{t('badge.max_security')}</p>
-              <p className="text-blue-700">
-                {t('badge.security_info')}
-              </p>
+              <p className="text-blue-700">{t('badge.security_info')}</p>
             </div>
           </div>
         </Card>
