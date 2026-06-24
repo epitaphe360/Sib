@@ -352,7 +352,7 @@ export const BadgeA4Bifold = forwardRef<ScrollViewType, Props>(function BadgeA4B
   { badge, previewScale = true },
   ref,
 ) {
-  const { config } = useBadgeConfig();
+  const { config, loading } = useBadgeConfig();
   const qrValue = buildStaticParticipantQR(badge);
   const primary = config.primary_color;
   const secondary = config.secondary_color;
@@ -360,6 +360,14 @@ export const BadgeA4Bifold = forwardRef<ScrollViewType, Props>(function BadgeA4B
   const screenW = Dimensions.get('window').width - spacing.md * 2;
   const sheetW = previewScale ? screenW : A4_SHEET_WIDTH;
   const sheetH = sheetW * A4_RATIO;
+
+  if (loading && previewScale) {
+    return (
+      <View style={[styles.sheet, { width: sheetW, height: Math.max(sheetH * 0.5, 200), alignItems: 'center', justifyContent: 'center' }]}>
+        <Text style={styles.configHint}>Chargement de la configuration badge…</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView ref={ref} collapsable={false} contentContainerStyle={styles.scrollOuter}>
@@ -400,6 +408,7 @@ const styles = StyleSheet.create({
     height: '50%',
     overflow: 'hidden',
     backgroundColor: '#fff',
+    flexDirection: 'column',
   },
   foldV: {
     position: 'absolute',
@@ -436,7 +445,7 @@ const styles = StyleSheet.create({
   validityBar: { backgroundColor: '#111', paddingHorizontal: 8, paddingVertical: 5 },
   validityFr: { color: '#fff', fontFamily: fonts.bodyBold, fontSize: 6, textAlign: 'center', lineHeight: 9 },
   validityEn: { color: 'rgba(255,255,255,0.65)', fontFamily: fonts.body, fontSize: 5.5, textAlign: 'center', marginTop: 2 },
-  faceCol: { flex: 1, display: 'flex', flexDirection: 'column' },
+  faceCol: { flex: 1, flexDirection: 'column' },
   italicHint: {
     fontStyle: 'italic',
     fontSize: 7,

@@ -16,7 +16,7 @@ import React, { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 import { UserBadge } from '../../types';
 import { getBadgeColor, getAccessLevelLabel } from '../../services/badgeService';
-import { supabase } from '../../lib/supabase';
+import { fetchBadgeConfigRaw } from '../../lib/badgeConfigLoader';
 
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -602,19 +602,11 @@ export default function PrintableBadgeA4({
   useEffect(() => {
     if (configProp) { setConfig(configProp); return; }
     if (!loadConfig) { return; }
-    supabase
-      .from('app_settings')
-      .select('value')
-      .eq('key', 'badge_config_v1')
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data?.value) {
-          try {
-            const parsed = JSON.parse(data.value as string) as BadgeConfig;
-            setConfig({ ...DEFAULT_CONFIG, ...parsed });
-          } catch { /* keep defaults */ }
-        }
-      });
+    void fetchBadgeConfigRaw().then((parsed) => {
+      if (Object.keys(parsed).length > 0) {
+        setConfig({ ...DEFAULT_CONFIG, ...(parsed as Partial<BadgeConfig>) });
+      }
+    });
   }, [configProp, loadConfig]);
 
   useEffect(() => {

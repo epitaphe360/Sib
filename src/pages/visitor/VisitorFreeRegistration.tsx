@@ -4,12 +4,12 @@
  */
 import { useState, useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { User, Mail, Phone, MapPin, Briefcase, Loader, CheckCircle, Anchor, Lock, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Briefcase, Loader, CheckCircle, Lock, Eye, EyeOff } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -56,15 +56,16 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
   const navigate = useNavigate();
 
   const sectors = [
-    { value: 'Autorité urbaine', label: t('visitor.sector.authority') },
-    { value: 'Transport & mobilité', label: t('visitor.sector.transport') },
-    { value: 'Logistique', label: t('visitor.sector.logistics') },
-    { value: 'Consulting', label: t('visitor.sector.consulting') },
-    { value: 'Technologie', label: t('visitor.sector.technology') },
-    { value: 'Étudiant', label: t('visitor.sector.student') },
-    { value: 'Média/Presse', label: t('visitor.sector.media') },
-    { value: 'Institutionnel', label: t('visitor.sector.institutional') },
-    { value: 'Autre', label: t('visitor.sector.other') }
+    { value: 'BTP & Construction', label: t('visitor.sector.construction', 'BTP & Construction') },
+    { value: 'Architecture & Design', label: t('visitor.sector.architecture', 'Architecture & Design') },
+    { value: 'Matériaux & Équipements', label: t('visitor.sector.materials', 'Matériaux & Équipements') },
+    { value: 'Immobilier & Promotion', label: t('visitor.sector.real_estate', 'Immobilier & Promotion') },
+    { value: 'Consulting & Ingénierie', label: t('visitor.sector.consulting', 'Consulting & Ingénierie') },
+    { value: 'Technologie & PropTech', label: t('visitor.sector.technology', 'Technologie & PropTech') },
+    { value: 'Institutionnel', label: t('visitor.sector.institutional', 'Institutionnel') },
+    { value: 'Étudiant', label: t('visitor.sector.student', 'Étudiant') },
+    { value: 'Média/Presse', label: t('visitor.sector.media', 'Média/Presse') },
+    { value: 'Autre', label: t('visitor.sector.other', 'Autre') },
   ];
 
   const freeVisitorSchema = useMemo(() => createFreeVisitorSchema(t), [t]);
@@ -279,13 +280,75 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
     }
   };
 
-  const wrapperClass = embedded
-    ? 'p-4'
-    : 'min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700 py-12 px-4 sm:px-6 lg:px-8';
-  const innerClass = embedded ? 'w-full' : 'max-w-2xl mx-auto';
+  const wrapperClass = embedded ? 'p-4' : 'min-h-screen bg-sib-paper text-sib-ink';
+  const innerClass = embedded ? 'w-full' : 'sib-v4-container max-w-2xl mx-auto pb-16 -mt-10 relative z-10 px-4 sm:px-0';
+
+  const inputClass =
+    'w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg bg-white text-sib-ink focus:outline-none focus:ring-2 focus:ring-sib-orange/40 focus:border-sib-orange transition-colors';
+  const inputErrorClass =
+    'w-full pl-10 pr-4 py-3 border border-danger-500 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-danger-500/30';
 
   return (
     <div className={wrapperClass}>
+      {/* Hero v4 — page complète uniquement */}
+      {!embedded && (
+        <section className="relative overflow-hidden bg-sib-navy text-white">
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-35"
+            style={{ backgroundImage: "url('/sib2026-home-v4/assets/sib-hero.webp')" }}
+            aria-hidden
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,27,56,.94) 0%, rgba(0,22,47,.78) 45%, rgba(0,15,34,.55) 100%)',
+            }}
+            aria-hidden
+          />
+          <div className="sib-v4-container relative z-10 py-14 md:py-20 text-center">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <Link to={ROUTES.HOME} className="inline-block mb-6" aria-label="SIB 2026 — Accueil">
+                <img
+                  src="/logo-sib2026.png"
+                  alt="SIB 2026 — Salon International du Bâtiment"
+                  className="h-14 sm:h-16 md:h-[4.5rem] w-auto mx-auto object-contain drop-shadow-md"
+                />
+              </Link>
+              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-sib-orange mb-3 font-display">
+                {t('visitor.registration.free.eyebrow', 'Pré-enregistrement visiteur')}
+              </p>
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-3 leading-[0.95] tracking-tight">
+                {t('visitor.registration.free.title')}
+              </h1>
+              <p className="text-base md:text-lg text-white/75 max-w-xl mx-auto mb-8 leading-relaxed">
+                {t('visitor.registration.free.subtitle')}
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                {[
+                  t('visitor.registration.free.badge_access'),
+                  t('visitor.registration.free.badge_qr'),
+                  t('visitor.registration.free.badge_free'),
+                ].map((label) => (
+                  <span
+                    key={label}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-white/90"
+                  >
+                    <CheckCircle className="h-4 w-4 text-sib-orange shrink-0" aria-hidden />
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+          <div className="absolute bottom-0 inset-x-0 leading-none pointer-events-none">
+            <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-10 md:h-12">
+              <path d="M0,48 C360,8 720,40 1080,16 C1260,4 1380,12 1440,8 L1440,48 Z" fill="#f7f7f5" />
+            </svg>
+          </div>
+        </section>
+      )}
+
       <div className={innerClass}>
         {showSuccess && embedded && (
           <FormSuccessBanner
@@ -293,49 +356,8 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
             message={t('visitor.message.success_desc')}
           />
         )}
-        {/* Header */}
-        {!embedded && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="bg-white p-3 rounded-lg">
-              <Anchor className="h-8 w-8 text-green-600" />
-            </div>
-            <div>
-              <span className="text-2xl font-bold text-white">SIB</span>
-              <span className="text-sm text-green-200 block leading-none">2026</span>
-            </div>
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            {t('visitor.registration.free.title')}
-          </h1>
-          <p className="text-green-100">
-            {t('visitor.registration.free.subtitle')}
-          </p>
-          <div className="mt-4 inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-green-800 px-4 py-2 rounded-full">
-            <span className="inline-flex items-center gap-1 text-green-200 text-sm">
-              <CheckCircle className="h-4 w-4 shrink-0" aria-hidden />
-              {t('visitor.registration.free.badge_access')}
-            </span>
-            <span className="text-green-200" aria-hidden>•</span>
-            <span className="inline-flex items-center gap-1 text-green-200 text-sm">
-              <CheckCircle className="h-4 w-4 shrink-0" aria-hidden />
-              {t('visitor.registration.free.badge_qr')}
-            </span>
-            <span className="text-green-200" aria-hidden>•</span>
-            <span className="inline-flex items-center gap-1 text-green-200 text-sm">
-              <CheckCircle className="h-4 w-4 shrink-0" aria-hidden />
-              {t('visitor.registration.free.badge_free')}
-            </span>
-          </div>
-        </motion.div>
-        )}
-
         {embedded && !showSuccess && (
-          <h3 className="text-base font-bold text-primary-800 dark:text-white mb-3 px-1">
+          <h3 className="text-base font-bold text-sib-navy dark:text-white mb-3 px-1 font-display">
             Pass Gratuit
           </h3>
         )}
@@ -344,9 +366,9 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: embedded ? 0 : 0.2 }}
+          transition={{ delay: embedded ? 0 : 0.15 }}
         >
-          <Card className={embedded ? 'p-4' : 'p-8'}>
+          <Card className={`${embedded ? 'p-4' : 'p-6 sm:p-8'} border border-neutral-200/80 shadow-xl bg-white rounded-2xl`}>
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error('? [FREE VISITOR] Erreurs validation:', errors);
               toast.error(t('visitor.validation.check_errors', 'Veuillez corriger les erreurs surlignées en rouge'));
@@ -358,7 +380,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
               {/* Nom et Prénom */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-sib-navy mb-2">
                     {t('visitor.form.firstname')} *
                   </label>
                   <div className="relative">
@@ -367,7 +389,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                       id="firstName"
                       type="text"
                       {...register('firstName')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className={inputClass}
                       placeholder={t('visitor.form.firstname')}
                     />
                   </div>
@@ -377,7 +399,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                 </div>
 
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-sib-navy mb-2">
                     {t('visitor.form.lastname')} *
                   </label>
                   <div className="relative">
@@ -386,7 +408,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                       id="lastName"
                       type="text"
                       {...register('lastName')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className={inputClass}
                       placeholder={t('visitor.form.lastname')}
                     />
                   </div>
@@ -398,7 +420,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
 
               {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-sib-navy mb-2">
                   {t('visitor.form.email')} *
                 </label>
                 <div className="relative">
@@ -409,11 +431,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                     id="email"
                     type="email"
                     {...register('email')}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.email
-                        ? 'border-red-500 focus:ring-red-500'
-                        : 'border-gray-300 focus:ring-green-500'
-                    }`}
+                    className={errors.email ? inputErrorClass : inputClass}
                     placeholder="votre@email.com"
                   />
                 </div>
@@ -430,7 +448,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
               {/* Téléphone et Pays */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="phone" className="block text-sm font-medium text-sib-navy mb-2">
                     {t('visitor.form.phone')}
                   </label>
                   <div className="relative">
@@ -439,7 +457,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                       id="phone"
                       type="tel"
                       {...register('phone')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className={inputClass}
                       placeholder="+33 1 23 45 67 89"
                     />
                   </div>
@@ -449,7 +467,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                 </div>
 
                 <div>
-                  <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="country" className="block text-sm font-medium text-sib-navy mb-2">
                     {t('visitor.form.country')} *
                   </label>
                   <div className="relative">
@@ -457,7 +475,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                     <select
                       id="country"
                       {...register('country')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none bg-white"
+                      className={`${inputClass} appearance-none`}
                     >
                       <option value="">Sélectionnez</option>
                       {COUNTRIES.map((country) => (
@@ -475,13 +493,13 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
 
               {/* Secteur */}
               <div>
-                <label htmlFor="sector" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="sector" className="block text-sm font-medium text-sib-navy mb-2">
                   {t('visitor.form.sector')} *
                 </label>
                 <select
                   id="sector"
                   {...register('sector')}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className={`w-full px-4 py-3 border border-neutral-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-sib-orange/40 focus:border-sib-orange`}
                 >
                   <option value="">Sélectionnez</option>
                   {sectors.map((sector) => (
@@ -496,7 +514,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
               {/* Champs optionnels */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="position" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="position" className="block text-sm font-medium text-sib-navy mb-2">
                     {t('visitor.form.position')} (optionnel)
                   </label>
                   <div className="relative">
@@ -505,21 +523,21 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                       id="position"
                       type="text"
                       {...register('position')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className={inputClass}
                       placeholder="Ex: Ingénieur"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="company-field" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="company-field" className="block text-sm font-medium text-sib-navy mb-2">
                     {t('visitor.form.company')} (optionnel)
                   </label>
                   <input
                     id="company-field"
                     type="text"
                     {...register('company')}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className={`w-full px-4 py-3 border border-neutral-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-sib-orange/40 focus:border-sib-orange`}
                     placeholder={t('visitor.form.company')}
                   />
                 </div>
@@ -528,7 +546,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
               {/* Password Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-sib-navy mb-2">
                     {t('visitor.form.password')} *
                   </label>
                   <div className="relative">
@@ -536,7 +554,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                     <input
                       type={showPassword ? "text" : "password"}
                       {...register('password')}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full pl-10 pr-12 py-3 border border-neutral-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-sib-orange/40 focus:border-sib-orange"
                       placeholder="••••••••"
                     />
                     <button
@@ -553,7 +571,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-sib-navy mb-2">
                     {t('visitor.form.confirm_password')} *
                   </label>
                   <div className="relative">
@@ -561,7 +579,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       {...register('confirmPassword')}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full pl-10 pr-12 py-3 border border-neutral-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-sib-orange/40 focus:border-sib-orange"
                       placeholder="••••••••"
                     />
                     <button
@@ -579,9 +597,9 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
               </div>
 
               {/* Info */}
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h4 className="font-semibold text-green-900 mb-2">{t('visitor.free.features.title')}</h4>
-                <ul className="text-sm text-green-700 space-y-1">
+              <div className="bg-sib-orange/5 border border-sib-orange/20 rounded-xl p-4">
+                <h4 className="font-semibold text-sib-navy mb-2 font-display">{t('visitor.free.features.title')}</h4>
+                <ul className="text-sm text-neutral-700 space-y-1.5">
                   <li>{t('visitor.free.features.list.1')}</li>
                   <li>{t('visitor.free.features.list.2')}</li>
                   <li>{t('visitor.free.features.list.3')}</li>
@@ -605,7 +623,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 text-lg font-semibold rounded-lg shadow-lg transition-all duration-200 flex items-center justify-center"
+                className="sib-v4-btn-orange w-full py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:brightness-100"
                 onClick={(e) => {
                   console.log('??? [FREE VISITOR] CLICK BOUTON', {
                     isSubmitting,
@@ -637,7 +655,7 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                   type="button"
                   variant="outline"
                   onClick={() => navigate(ROUTES.VISITOR_VIP_REGISTRATION)}
-                  className="border-primary-500 text-primary-600 hover:bg-primary-50"
+                  className="border-sib-orange text-sib-navy hover:bg-sib-orange/5"
                 >
                    {t('visitor.upsell.vip.button')}
                 </Button>
@@ -658,60 +676,52 @@ export default function VisitorFreeRegistration({ embedded = false }: VisitorFre
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.5 }}
                 transition={{ type: "spring", duration: 0.5 }}
-                className="bg-gradient-to-br from-white to-green-50 rounded-2xl shadow-2xl p-10 w-full max-w-lg text-center border-4 border-green-500 relative overflow-hidden"
+                className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-lg text-center border-2 border-sib-orange relative overflow-hidden"
               >
-                {/* Confetti Effect Background */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none">
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 animate-pulse" />
-                </div>
-
-                {/* Content */}
                 <div className="relative z-10">
-                  <div className="mx-auto w-28 h-28 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mb-6 shadow-xl">
-                    <CheckCircle className="h-20 w-20 text-white animate-bounce" />
+                  <div className="mx-auto w-28 h-28 bg-sib-navy rounded-full flex items-center justify-center mb-6 shadow-xl">
+                    <CheckCircle className="h-20 w-20 text-sib-orange animate-bounce" />
                   </div>
 
-                  <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">
-                    ?? {t('visitor.message.success_title')}
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-sib-navy mb-4 tracking-tight font-display">
+                    {t('visitor.message.success_title')}
                   </h2>
 
-                  <p className="text-lg text-gray-700 mb-6">
+                  <p className="text-lg text-neutral-700 mb-6">
                     {t('visitor.message.success_desc')}
                   </p>
 
-                  <div className="bg-white border-2 border-green-500 p-5 rounded-xl mb-6 text-left shadow-lg">
-                    <p className="font-bold text-green-800 mb-3 text-center flex items-center justify-center gap-2">
-                      <CheckCircle className="h-5 w-5 shrink-0" aria-hidden />
+                  <div className="bg-sib-paper border border-neutral-200 p-5 rounded-xl mb-6 text-left shadow-sm">
+                    <p className="font-bold text-sib-navy mb-3 text-center flex items-center justify-center gap-2">
+                      <CheckCircle className="h-5 w-5 shrink-0 text-sib-orange" aria-hidden />
                       Compte créé avec succès !
                     </p>
-                    <div className="text-gray-700 text-sm space-y-2">
+                    <div className="text-neutral-700 text-sm space-y-2">
                       <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-sib-orange mr-2 mt-0.5 flex-shrink-0" />
                         <span>Compte enregistré : <strong>{watch('email')}</strong></span>
                       </div>
                       <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-sib-orange mr-2 mt-0.5 flex-shrink-0" />
                         <span>Vous êtes maintenant connecté</span>
                       </div>
                       <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-sib-orange mr-2 mt-0.5 flex-shrink-0" />
                         <span>Accès immédiat à votre espace visiteur</span>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-gray-600 mb-3 text-sm font-medium">
+                  <p className="text-neutral-600 mb-3 text-sm font-medium">
                     {t('visitor.message.redirect')}
                   </p>
 
-                  <motion.div
-                    className="relative h-3 bg-gray-200 rounded-full overflow-hidden"
-                  >
+                  <motion.div className="relative h-3 bg-neutral-200 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: '100%' }}
-                      transition={{ duration: 3, ease: "linear" }}
-                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-full"
+                      transition={{ duration: 3, ease: 'linear' }}
+                      className="absolute top-0 left-0 h-full bg-sib-orange rounded-full"
                     />
                   </motion.div>
                 </div>

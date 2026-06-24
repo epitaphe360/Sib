@@ -226,7 +226,7 @@ const CatalogueManagementPage = lazyRetry(() => import('./pages/admin/CatalogueM
 const CatalogueEntryEditPage = lazyRetry(() => import('./pages/admin/CatalogueEntryEditPage'));
 const CatalogueFormConfigPage = lazyRetry(() => import('./pages/admin/CatalogueFormConfigPage'));
 
-import { useLanguageStore } from './store/languageStore';
+import { useLanguageStore, syncLanguageFromStore } from './store/languageStore';
 import { ROUTES } from './lib/routes';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { initializeAuth } from './lib/initAuth';
@@ -290,6 +290,11 @@ const App = () => {
     initializeAuth().catch(err => {
       console.error('Erreur initialisation auth:', err);
     });
+  }, []);
+
+  // Synchroniser la langue persistée (store Zustand ↔ i18next ↔ DOM)
+  React.useEffect(() => {
+    void syncLanguageFromStore();
   }, []);
 
   // SECURITY: Session timeout - track user activity

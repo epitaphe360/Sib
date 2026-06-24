@@ -195,7 +195,7 @@ function draftFromStandAndSite(stand: ExhibitorStand, site: Record<string, unkno
     siteId: site?.id ? String(site.id) : null,
     exhibitorId: stand.id,
     companyName: stand.companyName,
-    published: Boolean(site?.published ?? site?.is_published),
+    published: Boolean(site?.published),
     description: stand.description ?? '',
     website: stand.website ?? asStr(prevContact.website),
     logoUrl: stand.logoUrl ?? '',
@@ -233,7 +233,7 @@ export async function fetchMiniSiteEditor(userId: string): Promise<MiniSiteEdito
 
   const { data, error } = await supabase
     .from('mini_sites')
-    .select('id, sections, published, is_published, theme, custom_colors')
+    .select('id, sections, published, theme, custom_colors')
     .eq('exhibitor_id', stand.id)
     .maybeSingle();
 
@@ -334,7 +334,6 @@ export async function saveMiniSiteEditor(draft: MiniSiteEditorDraft): Promise<{ 
       website: draft.website.trim() || null,
       logo_url: draft.logoUrl.trim() || null,
       contact_info,
-      updated_at: new Date().toISOString(),
     })
     .eq('id', draft.exhibitorId);
 
@@ -358,7 +357,6 @@ export async function saveMiniSiteEditor(draft: MiniSiteEditorDraft): Promise<{ 
       sections,
       custom_colors,
       published: draft.published,
-      updated_at: new Date().toISOString(),
     })
     .eq('id', siteId);
 

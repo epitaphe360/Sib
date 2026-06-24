@@ -12,13 +12,13 @@ export const useTranslation = () => {
 
     // Si params est un objet, faire l'interpolation manuelle
     if (params && typeof params === 'object') {
-      return Object.entries(params).reduce((text, [key, value]) => {
-        return text.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
+      return Object.entries(params).reduce((text, [paramKey, value]) => {
+        return text.replace(new RegExp(`{{${paramKey}}}`, 'g'), String(value));
       }, translated);
     }
 
     return translated;
-  }, [translateText]);
+  }, [translateText, currentLanguage]);
 
   // Trouver l'objet langue complet
   const currentLang = useMemo(() => {

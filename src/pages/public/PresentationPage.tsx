@@ -230,7 +230,7 @@ export default function PresentationPage() {
       </div>
 
       {/* Entrée gratuite */}
-      <div className="bg-sib-navy py-14">
+      <div className="bg-sib-navy text-white py-14">
         <div className="sib-v4-container text-center">
           <ScrollReveal variant={scaleUp}>
             <Award className="w-12 h-12 text-sib-orange mx-auto mb-4" />

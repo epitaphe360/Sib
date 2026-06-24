@@ -8,6 +8,7 @@ import {
   type MiniSiteEditorDraft,
 } from '../../src/api/minisiteEditor';
 import { fetchMiniSiteProducts } from '../../src/api/minisiteProducts';
+import { ImageUrlInput } from '../../src/components/ImageUrlInput';
 import { Input, PrimaryButton, Screen } from '../../src/components/ui';
 import { WorkspaceHeader, WorkspaceSectionTitle } from '../../src/components/workspace/WorkspaceUI';
 import { useAuth } from '../../src/context/AuthContext';
@@ -106,12 +107,12 @@ export default function ExhibitorMiniSiteScreen() {
           <WorkspaceSectionTitle>{t('exhibitor.minisite.sectionGeneral')}</WorkspaceSectionTitle>
           <Input label={t('exhibitor.profile.description')} value={draft.description} onChangeText={(description) => set({ description })} multiline numberOfLines={4} />
           <Input label={t('minisite.website')} value={draft.website} onChangeText={(website) => set({ website })} keyboardType="url" autoCapitalize="none" />
-          <Input label={t('exhibitor.minisite.logoUrl')} value={draft.logoUrl} onChangeText={(logoUrl) => set({ logoUrl })} keyboardType="url" autoCapitalize="none" />
+          <ImageUrlInput label={t('exhibitor.minisite.logoUrl')} value={draft.logoUrl} onChangeText={(logoUrl) => set({ logoUrl })} uploadFolder="minisite/logos" />
 
           <WorkspaceSectionTitle>{t('exhibitor.minisite.sectionHero')}</WorkspaceSectionTitle>
           <Input label={t('exhibitor.minisite.heroTitle')} value={draft.heroTitle} onChangeText={(heroTitle) => set({ heroTitle })} />
           <Input label={t('exhibitor.minisite.heroSubtitle')} value={draft.heroSubtitle} onChangeText={(heroSubtitle) => set({ heroSubtitle })} multiline numberOfLines={3} />
-          <Input label={t('exhibitor.minisite.heroBackground')} value={draft.heroBackgroundImage} onChangeText={(heroBackgroundImage) => set({ heroBackgroundImage })} keyboardType="url" autoCapitalize="none" />
+          <ImageUrlInput label={t('exhibitor.minisite.heroBackground')} value={draft.heroBackgroundImage} onChangeText={(heroBackgroundImage) => set({ heroBackgroundImage })} uploadFolder="minisite/hero" />
           <Input label={t('exhibitor.minisite.heroCtaText')} value={draft.heroCtaText} onChangeText={(heroCtaText) => set({ heroCtaText })} />
           <Input label={t('exhibitor.minisite.heroCtaLink')} value={draft.heroCtaLink} onChangeText={(heroCtaLink) => set({ heroCtaLink })} autoCapitalize="none" />
 
@@ -131,7 +132,16 @@ export default function ExhibitorMiniSiteScreen() {
 
           <WorkspaceSectionTitle>{t('exhibitor.minisite.sectionGallery')}</WorkspaceSectionTitle>
           <Input label={t('exhibitor.minisite.galleryTitle')} value={draft.galleryTitle} onChangeText={(galleryTitle) => set({ galleryTitle })} />
-          <Input label={t('exhibitor.minisite.galleryImages')} value={draft.galleryImages} onChangeText={(galleryImages) => set({ galleryImages })} multiline numberOfLines={4} placeholder={t('exhibitor.minisite.galleryPlaceholder')} />
+          <ImageUrlInput
+            label={t('exhibitor.minisite.galleryImages')}
+            value={draft.galleryImages}
+            onChangeText={(galleryImages) => set({ galleryImages })}
+            uploadFolder="minisite/gallery"
+            multiline
+            numberOfLines={4}
+            appendMode
+            showPreview={false}
+          />
 
           <WorkspaceSectionTitle>{t('exhibitor.minisite.sectionProducts')}</WorkspaceSectionTitle>
           <Input label={t('exhibitor.minisite.productsSectionTitle')} value={draft.productsSectionTitle} onChangeText={(productsSectionTitle) => set({ productsSectionTitle })} />

@@ -16,7 +16,7 @@ function mapUser(row: Record<string, unknown>): AppUser {
   };
 }
 
-export async function fetchAppUser(userId: string): Promise<AppUser | null> {
+export async function fetchAppUser(userId: string, emailHint?: string | null): Promise<AppUser | null> {
   const { data, error } = await supabase
     .from('users')
     .select('id, email, name, type, visitor_level, partner_tier, status, profile')
@@ -33,6 +33,15 @@ export async function fetchAppUser(userId: string): Promise<AppUser | null> {
       const row = rpcData as Record<string, unknown>;
       if (row.id === userId || !userId) return mapUser(row);
     }
+  }
+
+  if (emailHint) {
+    const { data: byEmail, error: emailError } = await supabase
+      .from('users')
+      .select('id, email, name, type, visitor_level, partner_tier, status, profile')
+      .eq('email', emailHint.toLowerCase().trim())
+      .maybeSingle();
+    if (!emailError && byEmail) return mapUser(byEmail);
   }
 
   if (error) throw error;

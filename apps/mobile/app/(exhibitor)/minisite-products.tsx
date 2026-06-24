@@ -1,8 +1,15 @@
 import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Image, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { fetchExhibitorStand } from '../../src/api/minisite';
-import { deleteMiniSiteProduct, fetchMiniSiteProducts, saveMiniSiteProduct, type ProductDraft } from '../../src/api/minisiteProducts';
+import {
+  deleteMiniSiteProduct,
+  fetchMiniSiteProducts,
+  PRODUCT_CATEGORIES,
+  saveMiniSiteProduct,
+  type ProductDraft,
+} from '../../src/api/minisiteProducts';
+import { ImageUrlInput } from '../../src/components/ImageUrlInput';
 import { Input, PrimaryButton, Screen } from '../../src/components/ui';
 import { WorkspaceHeader, WorkspaceSectionTitle } from '../../src/components/workspace/WorkspaceUI';
 import { useAuth } from '../../src/context/AuthContext';
@@ -31,6 +38,7 @@ export default function MiniSiteProductsScreen() {
   const [draft, setDraft] = useState<ProductDraft>(EMPTY);
   const [editingId, setEditingId] = useState<string>();
   const [saving, setSaving] = useState(false);
+  const [showCategoryPicker, setShowCategoryPicker] = useState(false);
 
   const load = useCallback(async () => {
     if (!user || isCollaboratorUser(user)) return;
@@ -60,6 +68,10 @@ export default function MiniSiteProductsScreen() {
   const save = async () => {
     if (!exhibitorId || !draft.name.trim() || !draft.description.trim()) {
       Alert.alert(t('common.error'), t('exhibitor.minisite.productRequired'));
+      return;
+    }
+    if (!draft.category.trim()) {
+      Alert.alert(t('common.error'), t('exhibitor.minisite.productSelectCategory'));
       return;
     }
     setSaving(true);
@@ -137,8 +149,27 @@ export default function MiniSiteProductsScreen() {
           </WorkspaceSectionTitle>
           <Input label={t('exhibitor.minisite.productName')} value={draft.name} onChangeText={(name) => setDraft({ ...draft, name })} />
           <Input label={t('exhibitor.minisite.productDescription')} value={draft.description} onChangeText={(description) => setDraft({ ...draft, description })} multiline numberOfLines={4} />
-          <Input label={t('exhibitor.minisite.productCategory')} value={draft.category} onChangeText={(category) => setDraft({ ...draft, category })} />
-          <Input label={t('exhibitor.minisite.productImage')} value={draft.imageUrl} onChangeText={(imageUrl) => setDraft({ ...draft, imageUrl })} keyboardType="url" autoCapitalize="none" />
+
+          <View style={styles.fieldWrap}>
+            <Text style={[styles.fieldLabel, { color: colors.textMuted }]}>{t('exhibitor.minisite.productCategory')}</Text>
+            <Pressable
+              onPress={() => setShowCategoryPicker(true)}
+              style={[styles.select, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
+            >
+              <Text style={[styles.selectText, { color: draft.category ? colors.text : colors.textMuted }]}>
+                {draft.category || t('exhibitor.minisite.productSelectCategory')}
+              </Text>
+              <Text style={[styles.selectChevron, { color: colors.textMuted }]}>›</Text>
+            </Pressable>
+          </View>
+
+          <ImageUrlInput
+            label={t('exhibitor.minisite.productImage')}
+            value={draft.imageUrl}
+            onChangeText={(imageUrl) => setDraft({ ...draft, imageUrl })}
+            uploadFolder="products"
+          />
+
           <Input label={t('exhibitor.minisite.productPrice')} value={draft.price} onChangeText={(price) => setDraft({ ...draft, price })} keyboardType="decimal-pad" />
           <Input label={t('minisite.specs')} value={draft.specifications} onChangeText={(specifications) => setDraft({ ...draft, specifications })} multiline numberOfLines={3} />
           <View style={[styles.featured, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
@@ -168,6 +199,33 @@ export default function MiniSiteProductsScreen() {
           </View>
         </View>
       </ScrollView>
+
+      <Modal visible={showCategoryPicker} transparent animationType="slide" onRequestClose={() => setShowCategoryPicker(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalSheet, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>{t('exhibitor.minisite.productCategory')}</Text>
+            <ScrollView style={styles.modalList}>
+              {PRODUCT_CATEGORIES.map((category) => (
+                <Pressable
+                  key={category}
+                  onPress={() => {
+                    setDraft((prev) => ({ ...prev, category }));
+                    setShowCategoryPicker(false);
+                  }}
+                  style={[
+                    styles.categoryItem,
+                    { borderColor: colors.cardBorder },
+                    draft.category === category && { borderColor: colors.gold, backgroundColor: colors.gold + '15' },
+                  ]}
+                >
+                  <Text style={[styles.categoryText, { color: colors.text }]}>{category}</Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+            <PrimaryButton label={t('common.cancel')} variant="outline" onPress={() => setShowCategoryPicker(false)} />
+          </View>
+        </View>
+      </Modal>
     </Screen>
   );
 }
@@ -189,6 +247,25 @@ const styles = StyleSheet.create({
   productCopy: { flex: 1, minWidth: 0 },
   productName: { fontFamily: fonts.bodySemiBold, fontSize: 13 },
   productMeta: { fontFamily: fonts.body, fontSize: 11, marginTop: 2 },
+  fieldWrap: { marginBottom: spacing.sm },
+  fieldLabel: { fontFamily: fonts.bodyBold, fontSize: 13, marginBottom: 6 },
+  select: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 12,
+  },
+  selectText: { fontFamily: fonts.body, fontSize: 15, flex: 1 },
+  selectChevron: { fontSize: 18, marginLeft: spacing.sm },
   featured: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radius.md, padding: 12 },
   actions: { gap: spacing.sm, marginTop: spacing.md, marginBottom: spacing.lg },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.55)', justifyContent: 'flex-end' },
+  modalSheet: { borderTopLeftRadius: radius.xl, borderTopRightRadius: radius.xl, padding: spacing.lg, maxHeight: '70%' },
+  modalTitle: { fontFamily: fonts.bodyBold, fontSize: 18, marginBottom: spacing.md, textAlign: 'center' },
+  modalList: { marginBottom: spacing.md },
+  categoryItem: { padding: spacing.sm, borderWidth: 1, borderRadius: radius.md, marginBottom: spacing.xs },
+  categoryText: { fontFamily: fonts.body, fontSize: 14 },
 });

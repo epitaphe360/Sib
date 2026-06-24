@@ -9,7 +9,7 @@ import {
   TextInput,
 } from 'react-native';
 import { HeroBanner } from '../../../src/components/HeroBanner';
-import { ExhibitorRow } from '../../../src/components/ExhibitorRow';
+import { ExhibitorRow, sortExhibitorsForDisplay } from '../../../src/components/ExhibitorRow';
 import { AnimatedListItem } from '../../../src/components/AnimatedListItem';
 import { EmptyState, Screen } from '../../../src/components/ui';
 import { SkeletonList } from '../../../src/components/Skeleton';
@@ -34,7 +34,7 @@ export default function ExhibitorsScreen() {
     try {
       setError(null);
       const { items, fromCache: cached, sectors: s } = await fetchExhibitors(term, sec);
-      setExhibitors(items);
+      setExhibitors(sortExhibitorsForDisplay(items));
       setFromCache(cached);
       if (s.length) setSectors(s);
     } catch (e) {

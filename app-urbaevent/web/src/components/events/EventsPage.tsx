@@ -296,15 +296,15 @@ export default memo(function EventsPage() {
   }, [t]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#f7f7f5]">
 
       <PageHero
-        badge={<><Calendar className="w-4 h-4 text-yellow-300" /><span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">{info.eventDates}</span></>}
+        badge={<><Calendar className="w-4 h-4 text-sib-orange" /><span className="text-sm font-semibold uppercase tracking-wider">{info.eventDates}</span></>}
         title={t('pages.events.scientific_programme')}
-        subtitle={info.eventTheme}
+        subtitle={`« ${info.eventTheme} »`}
         actions={
-          <div className="flex items-center justify-center gap-2 text-sm text-white/70">
-            <MapPin className="w-4 h-4 text-yellow-300" />
+          <div className="flex items-center justify-center gap-2 text-sm">
+            <MapPin className="w-4 h-4 text-sib-orange shrink-0" />
             <span>{info.eventLocation}</span>
           </div>
         }
@@ -322,10 +322,10 @@ export default memo(function EventsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08 }}
-                className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 text-center hover:border-indigo-300 hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 text-center hover:border-sib-orange/40 hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
-                <div className="w-9 h-9 mx-auto rounded-lg flex items-center justify-center mb-2 bg-indigo-50 border border-indigo-100">
-                  <Icon className="w-4 h-4 text-indigo-600" />
+                <div className="w-9 h-9 mx-auto rounded-lg flex items-center justify-center mb-2 bg-sib-navy/5 border border-sib-navy/10">
+                  <Icon className="w-4 h-4 text-sib-orange" />
                 </div>
                 <h3 className="text-xs font-bold text-slate-800 leading-tight">{axe.title}</h3>
                 <p className="text-[10px] text-slate-500 mt-0.5">{axe.description}</p>
@@ -344,17 +344,17 @@ export default memo(function EventsPage() {
               onClick={() => setActiveDay(i)}
               className={`flex-shrink-0 rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-left transition-all border ${
                 activeDay === i
-                  ? 'bg-indigo-600 border-indigo-700 text-white shadow-lg shadow-indigo-200'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-700'
+                  ? 'bg-sib-navy border-sib-navy text-white shadow-lg shadow-sib-navy/20'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-sib-orange/40 hover:text-sib-navy'
               }`}
             >
-              <div className={`text-[10px] font-bold uppercase tracking-widest mb-0.5 ${activeDay === i ? 'text-indigo-200' : 'text-slate-400'}`}>
+              <div className={`text-[10px] font-bold uppercase tracking-widest mb-0.5 ${activeDay === i ? 'text-sib-orange' : 'text-slate-400'}`}>
                 {day.dayLabel}
               </div>
               <div className={`text-sm font-bold ${activeDay === i ? 'text-white' : 'text-slate-700'}`}>
                 {day.date.split(' ').slice(0, 2).join(' ')}
               </div>
-              <div className={`text-[10px] mt-0.5 hidden sm:block ${activeDay === i ? 'text-indigo-200' : 'text-slate-400'}`}>
+              <div className={`text-[10px] mt-0.5 hidden sm:block ${activeDay === i ? 'text-white/70' : 'text-slate-400'}`}>
                 {day.theme}
               </div>
             </button>

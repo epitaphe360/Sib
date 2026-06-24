@@ -907,8 +907,11 @@ function BadgePreviewContent({ config, previewAll, previewFace, badge = PREVIEW_
   if (previewAll) {
     return (
       <>
-        <div style={{ overflowY: 'auto', maxHeight: 900 }}>
-          <div style={{ zoom: 0.78 }}>
+        <div className="overflow-x-auto overflow-y-auto max-h-[900px] flex justify-center">
+          <div
+            className="origin-top"
+            style={{ transform: 'scale(0.72)', width: '210mm', height: '297mm' }}
+          >
             <PrintableBadgeA4 badge={badge} config={config as Parameters<typeof PrintableBadgeA4>[0]['config']} loadConfig={false} />
           </div>
         </div>
@@ -1119,8 +1122,9 @@ async function loadBadgeConfig(
   setLoading(true);
   try {
     const { data } = await supabase.from('app_settings').select('value').eq('key', DB_KEY).maybeSingle();
-    if (data?.value) {
-      const parsed = JSON.parse(data.value) as Partial<BadgeConfig>;
+    if (data?.value != null) {
+      const raw = data.value;
+      const parsed = (typeof raw === 'string' ? JSON.parse(raw) : raw) as Partial<BadgeConfig>;
       setConfig(prev => ({
         ...prev, ...parsed,
         program_days: (parsed.program_days ?? DEFAULT_DAYS).map(d => ({ ...d, open: false })),
@@ -1142,7 +1146,11 @@ async function saveBadgeConfig(
   setSaving(true);
   try {
     const toSave = { ...config, program_days: config.program_days.map(d => ({ ...d, open: undefined })) };
-    await supabase.from('app_settings').upsert({ key: DB_KEY, value: JSON.stringify(toSave) }, { onConflict: 'key' });
+    const { error } = await supabase.from('app_settings').upsert(
+      { key: DB_KEY, value: toSave, updated_at: new Date().toISOString() },
+      { onConflict: 'key' },
+    );
+    if (error) throw error;
     toast.success(successMsg);
   } catch {
     toast.error(errorMsg);

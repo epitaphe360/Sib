@@ -1,5 +1,5 @@
 import type { User } from '@supabase/supabase-js';
-import { getAuthCallbackUrl } from '../lib/authLink';
+import { getAuthBridgeUrl } from '../lib/authLink';
 import { supabaseErrorMessage } from '../lib/supabaseError';
 import {
   clearPendingSignup,
@@ -12,6 +12,7 @@ import { logger } from '../lib/logger';
 import { fetchAppUser } from './auth';
 import type { AppUser } from '../types';
 import { fetchVipPassPricing } from './visitorLevel';
+import { resolveVipPaymentRedirectId } from './payment';
 
 async function tryGenerateBadge(userId: string, email: string, name: string, level: string) {
   const { data, error } = await supabase.functions.invoke('generate-visitor-badge', {
@@ -54,7 +55,13 @@ async function createUsersRowFromPending(userId: string, pending: Omit<PendingSi
   if (userError) {
     if (userError.code === '23505') {
       const existing = await fetchAppUser(userId);
-      if (existing) return { paymentRequestId: undefined };
+      if (existing) {
+        const paymentRequestId =
+          isVip && existing.status === 'pending_payment'
+            ? await resolveVipPaymentRedirectId(userId)
+            : undefined;
+        return { paymentRequestId };
+      }
     }
     throw userError;
   }
@@ -88,16 +95,40 @@ async function createUsersRowFromPending(userId: string, pending: Omit<PendingSi
 export async function finalizeProfileAfterMagicLink(
   authUser: User
 ): Promise<{ appUser: AppUser; paymentRequestId?: string }> {
-  const existing = await fetchAppUser(authUser.id);
+  const pending = await loadPendingSignup();
+  const existing = await fetchAppUser(authUser.id, authUser.email);
   if (existing) {
+    let paymentRequestId: string | undefined;
+    const email = (authUser.email ?? pending?.email ?? '').toLowerCase().trim();
+    const pendingVip =
+      pending?.intent === 'vip' && pending.email.toLowerCase().trim() === email;
+
+    if (existing.status === 'pending_payment') {
+      paymentRequestId = await resolveVipPaymentRedirectId(existing.id);
+    } else if (pendingVip) {
+      await supabase
+        .from('users')
+        .update({ status: 'pending_payment', visitor_level: 'premium' })
+        .eq('id', existing.id);
+      paymentRequestId = await resolveVipPaymentRedirectId(existing.id);
+    }
+
     await clearPendingSignup();
     if (existing.status && !['active', 'pending_payment'].includes(existing.status)) {
       throw new Error('Compte non actif');
     }
-    return { appUser: existing };
+    if (existing.id !== authUser.id) {
+      throw new Error(
+        'Compte visiteur désynchronisé (auth ≠ profil). Contactez Sib2026@urbacom.net pour réactivation.',
+      );
+    }
+    const appUser =
+      pendingVip && paymentRequestId
+        ? (await fetchAppUser(existing.id)) ?? existing
+        : existing;
+    return { appUser, paymentRequestId };
   }
 
-  const pending = await loadPendingSignup();
   const email = (authUser.email ?? pending?.email ?? '').toLowerCase().trim();
   const meta = (authUser.user_metadata ?? {}) as Record<string, unknown>;
 
@@ -182,7 +213,7 @@ async function sendMagicLinkViaEdge(params: {
 export async function sendMagicLinkLogin(email: string): Promise<void> {
   await clearPendingSignup();
   const normalized = email.toLowerCase().trim();
-  const redirectTo = getAuthCallbackUrl();
+  const redirectTo = getAuthBridgeUrl();
   const sentViaEdge = await sendMagicLinkViaEdge({
     email: normalized,
     redirectTo,
@@ -216,7 +247,7 @@ export async function sendMagicLinkSignup(pending: Omit<PendingSignup, 'createdA
   await savePendingSignup(pending);
   const fullName = `${pending.firstName} ${pending.lastName}`.trim();
 
-  const redirectTo = getAuthCallbackUrl();
+  const redirectTo = getAuthBridgeUrl();
   const sentViaEdge = await sendMagicLinkViaEdge({
     email: normalized,
     redirectTo,

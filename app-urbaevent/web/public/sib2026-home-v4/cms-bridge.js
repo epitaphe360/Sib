@@ -11,6 +11,8 @@
     home_v4_quicklink_visiter: '--v4-ql-visiter',
   };
 
+  var currentLang = 'fr';
+
   function applyImages(images) {
     if (!images || typeof images !== 'object') return;
     var root = document.documentElement;
@@ -23,9 +25,54 @@
     });
   }
 
+  function applyLanguage(lang) {
+    var dict = window.HOME_V4_I18N;
+    if (!dict) return;
+
+    var code = dict[lang] ? lang : 'fr';
+    var strings = dict[code] || dict.fr;
+    currentLang = code;
+
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      var val = strings[key];
+      if (val == null) return;
+      if (el.hasAttribute('data-i18n-html')) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-placeholder');
+      if (strings[key] != null) {
+        el.placeholder = strings[key];
+      }
+    });
+
+    document.documentElement.lang = code;
+    document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr';
+
+    var langBtn = document.querySelector('.lang');
+    if (langBtn) {
+      langBtn.textContent = code.toUpperCase() + '⌄';
+    }
+  }
+
   window.addEventListener('message', function (event) {
     if (event.origin !== window.location.origin) return;
-    if (!event.data || event.data.type !== 'sib-home-v4-images') return;
-    applyImages(event.data.images);
+    if (!event.data || !event.data.type) return;
+
+    if (event.data.type === 'sib-home-v4-images') {
+      applyImages(event.data.images);
+      return;
+    }
+
+    if (event.data.type === 'sib-home-v4-lang') {
+      applyLanguage(event.data.lang || 'fr');
+    }
   });
+
+  window.sibHomeV4ApplyLanguage = applyLanguage;
 })();

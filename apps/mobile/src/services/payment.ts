@@ -39,6 +39,18 @@ export async function createVipPaymentRequest(userId: string): Promise<PaymentRe
   };
 }
 
+export async function resolveVipPaymentRedirectId(userId: string): Promise<string | undefined> {
+  const latest = await getLatestPaymentRequest(userId);
+  if (latest?.status === 'pending') return latest.id;
+
+  try {
+    const created = await createVipPaymentRequest(userId);
+    return created.id;
+  } catch {
+    return latest?.id;
+  }
+}
+
 export async function getLatestPaymentRequest(userId: string): Promise<PaymentRequest | null> {
   const { data, error } = await supabase
     .from('payment_requests')

@@ -1,9 +1,11 @@
 import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { fetchNewsArticles, type NewsArticle } from '../../../src/api/news';
 import { NewsArticleCard } from '../../../src/components/news/NewsArticleCard';
-import { EmptyState, Screen, ScreenTitle } from '../../../src/components/ui';
+import { IllustratedEmpty, Screen } from '../../../src/components/ui';
+import { SkeletonList } from '../../../src/components/Skeleton';
+import { WorkspaceHeader } from '../../../src/components/workspace/WorkspaceUI';
 import { useI18n } from '../../../src/i18n/I18nProvider';
 import { colors, spacing } from '../../../src/theme';
 
@@ -37,8 +39,9 @@ export default function NewsScreen() {
 
   if (loading) {
     return (
-      <Screen style={styles.center}>
-        <ActivityIndicator size="large" color={colors.primary} />
+      <Screen>
+        <WorkspaceHeader eyebrow={t('news.title')} title={t('news.title')} tone="salon" icon="newspaper-outline" />
+        <View style={styles.body}><SkeletonList rows={4} /></View>
       </Screen>
     );
   }
@@ -49,21 +52,25 @@ export default function NewsScreen() {
         contentContainerStyle={styles.scroll}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
       >
-        <ScreenTitle title={t('news.title')} subtitle={t('news.subtitle')} />
+        <WorkspaceHeader eyebrow={t('news.title')} title={t('news.title')} subtitle={t('news.subtitle')} tone="salon" icon="newspaper-outline" />
 
-        {error ? <EmptyState message={error} /> : null}
+        <View style={styles.body}>
+          {error ? (
+            <IllustratedEmpty icon="alert-circle-outline" title={t('common.error')} message={error} />
+          ) : null}
 
-        {!error && articles.length === 0 ? (
-          <EmptyState message={t('news.empty')} />
-        ) : null}
+          {!error && articles.length === 0 ? (
+            <IllustratedEmpty icon="newspaper-outline" title={t('news.title')} message={t('news.empty')} />
+          ) : null}
 
-        {articles.map((article) => (
-          <NewsArticleCard
-            key={article.id}
-            article={article}
-            onPress={() => router.push(`/(visitor)/news/${article.id}` as never)}
-          />
-        ))}
+          {articles.map((article) => (
+            <NewsArticleCard
+              key={article.id}
+              article={article}
+              onPress={() => router.push(`/(visitor)/news/${article.id}` as never)}
+            />
+          ))}
+        </View>
       </ScrollView>
     </Screen>
   );
@@ -71,5 +78,5 @@ export default function NewsScreen() {
 
 const styles = StyleSheet.create({
   scroll: { paddingBottom: spacing.xl },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  body: { paddingHorizontal: spacing.md, marginTop: -spacing.sm, gap: spacing.sm },
 });

@@ -12,6 +12,7 @@ import {
   completeAuthSessionFromUrl,
 } from '../../src/lib/completeAuthSession';
 import { dismissAuthStackIfNeeded, navigateAfterAuth } from '../../src/lib/navigateAfterAuth';
+import { resolveVipPaymentRedirectId } from '../../src/services/payment';
 import { colors, spacing } from '../../src/theme';
 import { useI18n } from '../../src/i18n/I18nProvider';
 
@@ -51,9 +52,13 @@ export default function AuthCallbackScreen() {
         const { appUser, paymentRequestId } = await completeAuthSessionFromUrl(normalized);
         consumePendingAuthDeepLink();
         await refreshUser();
-        if (paymentRequestId) {
+        let paymentId = paymentRequestId;
+        if (!paymentId && appUser.status === 'pending_payment') {
+          paymentId = await resolveVipPaymentRedirectId(appUser.id);
+        }
+        if (paymentId) {
           dismissAuthStackIfNeeded();
-          router.replace(`/payment/${paymentRequestId}` as never);
+          router.replace(`/payment/${paymentId}` as never);
         } else {
           const enteredSalon = await applyPendingSalonAfterAuth({
             salons,
@@ -63,7 +68,15 @@ export default function AuthCallbackScreen() {
           if (!enteredSalon) navigateAfterAuth(appUser.type);
         }
       } catch (e) {
-        setError(e instanceof Error ? e.message : t('auth.magic.callbackError'));
+        const raw = e instanceof Error ? e.message : t('auth.magic.callbackError');
+        const lower = raw.toLowerCase();
+        if (lower.includes('invalid') || lower.includes('expired') || lower.includes('expir')) {
+          setError(
+            'Ce lien a déjà été utilisé ou a expiré. Demandez un nouveau lien (un seul clic), puis ouvrez-le dans Chrome si Gmail bloque l’app.',
+          );
+        } else {
+          setError(raw);
+        }
         handledRef.current = false;
       }
     },

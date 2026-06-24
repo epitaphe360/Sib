@@ -45,7 +45,7 @@ export function SalonMiniHomeSection({ salon }: Props) {
 
   return (
     <View style={styles.wrap}>
-      <HomeSection title={theme.fullName} subtitle={theme.tagline}>
+      <HomeSection title={t('salon.about')} subtitle={theme.tagline}>
         <View style={styles.aboutCard}>
           {edition ? (
             <View style={[styles.editionPill, { backgroundColor: theme.bgColor }]}>

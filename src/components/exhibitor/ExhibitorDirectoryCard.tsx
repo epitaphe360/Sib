@@ -1,8 +1,11 @@
 import React, { memo } from 'react';
+import { Link } from 'react-router-dom';
+import { Globe } from 'lucide-react';
 import { Card } from '../ui/Card';
 import LogoWithFallback from '../ui/LogoWithFallback';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../hooks/useTranslation';
+import { ROUTES } from '../../lib/routes';
 
 export interface ExhibitorDirectoryEntry {
   id: string;
@@ -73,6 +76,13 @@ const ExhibitorDirectoryCard: React.FC<ExhibitorDirectoryCardProps> = memo(({
                 </dd>
               </div>
             </dl>
+            <Link
+              to={ROUTES.MINISITE_PREVIEW.replace(':exhibitorId', exhibitor.id)}
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-sib-orange px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-white hover:brightness-110 transition-all"
+            >
+              <Globe className="h-4 w-4 shrink-0" />
+              {t('exhibitors.directory.view_minisite')}
+            </Link>
           </div>
         </div>
       </Card>

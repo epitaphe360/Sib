@@ -16,6 +16,8 @@ interface PageHeroProps {
 }
 
 const DEFAULT_GRADIENT = 'from-sib-navy via-sib-navy to-sib-navy-deep';
+const HERO_OVERLAY =
+  'linear-gradient(90deg, rgba(0,27,56,.92) 0%, rgba(0,22,47,.68) 42%, rgba(0,15,34,.25) 100%)';
 
 export function PageHero({
   badge,
@@ -32,7 +34,9 @@ export function PageHero({
   const hasPhoto = Boolean(backgroundImage);
 
   return (
-    <section className={`relative text-white overflow-hidden ${hasPhoto ? '' : `bg-gradient-to-br ${gradient}`}`}>
+    <section
+      className={`sib-public-hero sib-on-dark relative overflow-hidden text-white ${hasPhoto ? '' : `bg-gradient-to-br ${gradient}`}`}
+    >
       {hasPhoto && (
         <>
           <div
@@ -42,10 +46,7 @@ export function PageHero({
           />
           <div
             className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(90deg, rgba(0,27,56,.9) 0%, rgba(0,22,47,.55) 38%, rgba(0,15,34,.15) 100%)',
-            }}
+            style={{ background: HERO_OVERLAY }}
             aria-hidden
           />
         </>
@@ -56,14 +57,14 @@ export function PageHero({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
               {badge && (
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20 text-sib-orange">
                   {badge}
                 </div>
               )}
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-[0.95] tracking-tight">
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-[0.95] tracking-tight !text-white">
                 {title}
               </h1>
-              {subtitle && <p className="text-lg md:text-xl text-white/75 mb-8 leading-relaxed">{subtitle}</p>}
+              {subtitle && <p className="text-lg md:text-xl text-white/80 mb-8 leading-relaxed">{subtitle}</p>}
               {actions && <div>{actions}</div>}
               {children}
             </motion.div>
@@ -83,16 +84,18 @@ export function PageHero({
             className="text-center max-w-3xl mx-auto"
           >
             {badge && (
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20 text-sib-orange [&_svg]:text-sib-orange [&_span]:text-white/90">
                 {badge}
               </div>
             )}
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-[0.95] tracking-tight">
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-[0.95] tracking-tight !text-white">
               {title}
             </h1>
-            {subtitle && <p className="text-lg md:text-xl text-white/75 mb-8 leading-relaxed">{subtitle}</p>}
+            {subtitle && (
+              <p className="text-lg md:text-xl text-white/80 mb-8 leading-relaxed italic">{subtitle}</p>
+            )}
             {actions && (
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">{actions}</div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-white/80">{actions}</div>
             )}
             {children}
           </motion.div>

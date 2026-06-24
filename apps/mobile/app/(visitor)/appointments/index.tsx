@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { fetchAppointmentsForUser, type MobileAppointment } from '../../../src/api/appointments';
-import { EmptyState, PrimaryButton, Screen, ScreenTitle } from '../../../src/components/ui';
+import { AppIcon } from '../../../src/components/AppIcon';
+import { AppointmentStatusPill } from '../../../src/components/chat/AppointmentStatusPill';
+import { IllustratedEmpty, PrimaryButton, Screen, ScreenTitle } from '../../../src/components/ui';
+import { WorkspaceHeader } from '../../../src/components/workspace/WorkspaceUI';
 import { useAuth } from '../../../src/context/AuthContext';
 import { useI18n } from '../../../src/i18n/I18nProvider';
 import { navigateSafe, requireAuth } from '../../../src/lib/navigateSafe';
-import { colors, spacing } from '../../../src/theme';
+import { colors, fonts, radius, shadows, spacing } from '../../../src/theme';
 
 const STATUS_KEYS: Record<string, string> = {
   pending: 'appointments.status.pending',
@@ -37,35 +40,59 @@ export default function VisitorAppointmentsScreen({ embedded = false }: { embedd
     navigateSafe('/(visitor)/appointments/new');
   };
 
+  const header = embedded ? (
+    <ScreenTitle title={t('appointments.title')} subtitle={t('appointments.subtitle')} />
+  ) : (
+    <WorkspaceHeader
+      eyebrow={t('tabs.appointments')}
+      title={t('appointments.title')}
+      subtitle={t('appointments.subtitle')}
+      tone="salon"
+      icon="calendar-outline"
+      status={items.length ? `${items.length}` : undefined}
+    />
+  );
+
   const content = (
     <>
-      {embedded ? <ScreenTitle title={t('appointments.title')} subtitle={t('appointments.subtitle')} /> : null}
-      <PrimaryButton label={t('appointments.new.button')} onPress={openNew} />
-      {!user && !isLoading ? (
-        <EmptyState message={t('auth.emailRequired')} />
-      ) : (
-        <>
-          <View style={styles.gap} />
+      {header}
+      <View style={[styles.body, embedded && styles.bodyEmbedded]}>
+        <PrimaryButton label={t('appointments.new.button')} onPress={openNew} />
+        {!user && !isLoading ? (
+          <IllustratedEmpty icon="person-outline" title={t('appointments.title')} message={t('auth.emailRequired')} />
+        ) : (
           <FlatList
             style={embedded ? undefined : styles.flex}
             data={items}
             keyExtractor={(i) => i.id}
+            contentContainerStyle={[styles.list, items.length === 0 && styles.emptyList]}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={async () => { setRefreshing(true); await load(); setRefreshing(false); }} />
             }
-            ListEmptyComponent={<EmptyState message={t('appointments.empty')} />}
+            ListEmptyComponent={
+              <IllustratedEmpty icon="calendar-outline" title={t('appointments.title')} message={t('appointments.empty')} />
+            }
             renderItem={({ item }) => (
               <View style={styles.card}>
-                <Text style={styles.title}>{item.exhibitorName ?? t('appointments.exhibitor')}</Text>
-                <Text style={styles.status}>{t(STATUS_KEYS[item.status] ?? 'appointments.status.pending')}</Text>
-                {item.startTime ? <Text style={styles.meta}>{new Date(item.startTime).toLocaleString(dateLocale)}</Text> : null}
-                {item.location ? <Text style={styles.meta}>{item.location}</Text> : null}
+                <View style={styles.cardHeader}>
+                  <View style={styles.iconWrap}>
+                    <AppIcon name="storefront-outline" size={20} color={colors.primary} />
+                  </View>
+                  <View style={styles.cardCopy}>
+                    <Text style={styles.title}>{item.exhibitorName ?? t('appointments.exhibitor')}</Text>
+                    <AppointmentStatusPill label={t(STATUS_KEYS[item.status] ?? 'appointments.status.pending')} status={item.status} />
+                    {item.startTime ? (
+                      <Text style={styles.meta}>{new Date(item.startTime).toLocaleString(dateLocale)}</Text>
+                    ) : null}
+                    {item.location ? <Text style={styles.meta}>{item.location}</Text> : null}
+                  </View>
+                </View>
                 {item.message ? <Text style={styles.message}>{item.message}</Text> : null}
               </View>
             )}
           />
-        </>
-      )}
+        )}
+      </View>
     </>
   );
 
@@ -76,10 +103,30 @@ export default function VisitorAppointmentsScreen({ embedded = false }: { embedd
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   embedded: { paddingHorizontal: spacing.md },
-  gap: { height: spacing.sm },
-  card: { padding: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border },
-  title: { fontSize: 16, fontWeight: '700', color: colors.text },
-  status: { color: colors.primary, fontWeight: '600', marginTop: 4 },
-  meta: { color: colors.textMuted, fontSize: 13, marginTop: 4 },
-  message: { color: colors.text, fontSize: 14, marginTop: 8, fontStyle: 'italic' },
+  body: { flex: 1, paddingHorizontal: spacing.md, gap: spacing.sm, marginTop: -spacing.sm },
+  bodyEmbedded: { marginTop: 0, paddingHorizontal: 0 },
+  list: { paddingBottom: spacing.xl, gap: spacing.sm },
+  emptyList: { flexGrow: 1 },
+  card: {
+    padding: spacing.md,
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    marginBottom: spacing.sm,
+    ...shadows.sm,
+  },
+  cardHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
+  iconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: radius.md,
+    backgroundColor: colors.accentMuted,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardCopy: { flex: 1 },
+  title: { fontSize: 16, fontFamily: fonts.bodyBold, color: colors.text },
+  meta: { color: colors.textMuted, fontSize: 13, marginTop: 4, fontFamily: fonts.body },
+  message: { color: colors.text, fontSize: 14, marginTop: spacing.sm, fontFamily: fonts.body, fontStyle: 'italic', lineHeight: 20 },
 });

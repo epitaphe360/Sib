@@ -44,3 +44,4 @@ export const HOME_V4_DEFAULT_URLS: Record<HomeV4CmsKey, string> = {
 };
 
 export const HOME_V4_CMS_MESSAGE = 'sib-home-v4-images';
+export const HOME_V4_LANG_MESSAGE = 'sib-home-v4-lang';

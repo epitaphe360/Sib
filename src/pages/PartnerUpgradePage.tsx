@@ -63,7 +63,7 @@ export default function PartnerUpgradePage() {
               </span>
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight leading-[1.05]">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight leading-[1.05] text-white">
               Développez votre <span className="sib-text-gradient bg-gradient-to-r from-accent-500 to-accent-300">visibilité</span>
             </h1>
             <p className="text-base lg:text-lg text-white/75 leading-relaxed">

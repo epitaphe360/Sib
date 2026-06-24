@@ -499,7 +499,7 @@ export default function SubscriptionPage() {
                 </span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.05] tracking-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.05] tracking-tight text-white">
                 {t('sub.hero.title1')}{' '}
                 <span className="sib-text-gradient bg-gradient-to-r from-accent-500 to-accent-300">
                   {t('sub.hero.titleHighlight1')}

@@ -80,7 +80,7 @@ export default function ExhibitorsPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950">
       {/* Hero — fond bleu garanti (pas de z-index négatif) */}
-      <section className="relative isolate min-h-[220px] sm:min-h-[260px] overflow-hidden bg-primary-900">
+      <section className="relative isolate min-h-[220px] sm:min-h-[260px] overflow-hidden bg-primary-900 text-white">
         <img
           src={img(IMAGES.hero.architecture, 1920, undefined, 80)}
           alt=""
@@ -106,7 +106,6 @@ export default function ExhibitorsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight mb-4"
-            style={{ color: '#ffffff' }}
           >
             {t('pages.exhibitors.title')}
           </motion.h1>

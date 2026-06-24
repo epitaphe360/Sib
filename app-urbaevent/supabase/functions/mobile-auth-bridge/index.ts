@@ -1,6 +1,6 @@
 /**
  * Page pont HTTPS pour liens magiques mobile.
- * Supabase redirige ici avec #access_token=… puis on ouvre urbaevent://auth-callback
+ * Supabase redirige ici avec #access_token=… puis on ouvre urbaevent://auth-callback?… (query, pas hash — Android).
  */
 const HTML = `<!DOCTYPE html>
 <html lang="fr">
@@ -29,21 +29,55 @@ const HTML = `<!DOCTYPE html>
       var hash = window.location.hash || '';
       var params = new URLSearchParams(window.location.search);
       var code = params.get('code');
+      var tokenHash = params.get('token_hash');
+      var otpType = params.get('type');
       var error = params.get('error_description') || params.get('error');
       var card = document.getElementById('content');
+
+      function buildTarget() {
+        var target = 'urbaevent://auth-callback';
+        if (tokenHash) {
+          target += '?token_hash=' + encodeURIComponent(tokenHash);
+          if (otpType) target += '&type=' + encodeURIComponent(otpType);
+          return target;
+        }
+        if (code) {
+          return target + '?code=' + encodeURIComponent(code);
+        }
+        if (hash) {
+          var hp = new URLSearchParams(hash.replace(/^#/, ''));
+          var th = hp.get('token_hash');
+          if (th) {
+            target += '?token_hash=' + encodeURIComponent(th);
+            var ty = hp.get('type');
+            if (ty) target += '&type=' + encodeURIComponent(ty);
+            return target;
+          }
+          var at = hp.get('access_token');
+          var rt = hp.get('refresh_token');
+          if (at && rt) {
+            target += '?access_token=' + encodeURIComponent(at) + '&refresh_token=' + encodeURIComponent(rt);
+            var t2 = hp.get('type');
+            if (t2) target += '&type=' + encodeURIComponent(t2);
+            return target;
+          }
+        }
+        return null;
+      }
+
       if (error) {
         card.innerHTML = '<h1>Erreur</h1><p>' + error + '</p><p>Demandez un nouveau lien depuis l\\'application UrbaEvent.</p>';
         return;
       }
-      var target = 'urbaevent://auth-callback';
-      if (hash) target += hash;
-      else if (code) target += '?code=' + encodeURIComponent(code);
-      else {
+
+      var target = buildTarget();
+      if (!target) {
         card.innerHTML = '<h1>Lien invalide</h1><p>Ce lien est expiré ou incomplet. Demandez un nouveau lien depuis l\\'application UrbaEvent.</p>';
         return;
       }
+
       function showManualLink() {
-        card.innerHTML = '<h1>Ouvrir UrbaEvent</h1><p>Si l\\'application ne s\\'ouvre pas, appuyez ci-dessous.</p><a class="btn" href="' + target + '">Ouvrir UrbaEvent</a>';
+        card.innerHTML = '<h1>Ouvrir UrbaEvent</h1><p>Si l\\'application ne s\\'ouvre pas, appuyez ci-dessous.</p><a class="btn" href="' + target + '">Ouvrir UrbaEvent</a><p style="font-size:12px;color:#888;margin-top:12px">Astuce Gmail : ⋮ → Ouvrir dans Chrome</p>';
       }
       window.location.replace(target);
       setTimeout(showManualLink, 2000);

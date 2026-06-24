@@ -10,7 +10,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { ExhibitorRow } from '../../../src/components/ExhibitorRow';
+import { ExhibitorRow, sortExhibitorsForDisplay } from '../../../src/components/ExhibitorRow';
 import { SalonHeroBanner } from '../../../src/components/SalonHeroBanner';
 import { SalonGate } from '../../../src/components/guards/SalonGate';
 import { Chip, IllustratedEmpty, Screen, SegmentControl } from '../../../src/components/ui';
@@ -50,7 +50,7 @@ export default function ExploreScreen() {
       fetchExhibitors(debouncedSearch, '', hall, salonId).catch(() => ({ items: [] as Exhibitor[], fromCache: false, sectors: [], halls: [] })),
     ]);
     setEvents(ev);
-    setExhibitors(ex.items);
+    setExhibitors(sortExhibitorsForDisplay(ex.items));
     if (ex.halls.length) setHalls(ex.halls);
   }, [debouncedSearch, hall, salonId]);
 
@@ -65,7 +65,7 @@ export default function ExploreScreen() {
       <SalonHeroBanner
         imageKey="expo"
         title={t('explore.title')}
-        subtitle={activeSalon ? activeSalon.name : t('explore.subtitle')}
+        subtitle={activeSalon?.dates ?? t('explore.subtitle')}
         compact
       />
       <SegmentControl

@@ -1,6 +1,9 @@
 import React, { memo } from 'react';
+import { Link } from 'react-router-dom';
+import { Globe } from 'lucide-react';
 import LogoWithFallback from '../ui/LogoWithFallback';
 import { useTranslation } from '../../hooks/useTranslation';
+import { ROUTES } from '../../lib/routes';
 import type { ExhibitorDirectoryEntry } from './ExhibitorDirectoryCard';
 
 interface ExhibitorDirectoryTableProps {
@@ -25,6 +28,7 @@ export const ExhibitorDirectoryTable: React.FC<ExhibitorDirectoryTableProps> = m
             <th className="px-4 py-3 font-bold whitespace-nowrap">{t('exhibitors.directory.stand')}</th>
             <th className="px-4 py-3 font-bold whitespace-nowrap">{t('exhibitors.directory.hall')}</th>
             <th className="px-4 py-3 font-bold">{t('exhibitors.directory.sector')}</th>
+            <th className="px-4 py-3 font-bold whitespace-nowrap">{t('exhibitors.directory.actions')}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800 bg-white dark:bg-neutral-950">
@@ -48,6 +52,15 @@ export const ExhibitorDirectoryTable: React.FC<ExhibitorDirectoryTableProps> = m
               </td>
               <td className="px-4 py-3 text-primary-700 dark:text-primary-300 font-medium">
                 {cell(ex.sector, empty)}
+              </td>
+              <td className="px-4 py-3 whitespace-nowrap">
+                <Link
+                  to={ROUTES.MINISITE_PREVIEW.replace(':exhibitorId', ex.id)}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-sib-orange px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-white hover:brightness-110 transition-all"
+                >
+                  <Globe className="h-3.5 w-3.5" />
+                  {t('exhibitors.directory.view_minisite')}
+                </Link>
               </td>
             </tr>
           ))}

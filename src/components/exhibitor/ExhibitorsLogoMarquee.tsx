@@ -37,7 +37,7 @@ const MARQUEE_CSS = `
   width: max-content;
   align-items: center;
   gap: 1.25rem;
-  animation: sib-exhibitors-marquee-scroll var(--marquee-duration, 24s) linear infinite;
+  animation: sib-exhibitors-marquee-scroll var(--marquee-duration, 60s) linear infinite;
   will-change: transform;
 }
 .sib-exhibitors-marquee:hover .sib-exhibitors-marquee__track {
@@ -89,15 +89,21 @@ export interface ExhibitorsLogoMarqueeItem {
 interface ExhibitorsLogoMarqueeProps {
   logos: ExhibitorsLogoMarqueeItem[];
   fadeBg?: string;
+  /** Durée d'un cycle complet (plus élevé = défilement plus lent) */
+  durationSeconds?: number;
 }
 
-export default function ExhibitorsLogoMarquee({ logos, fadeBg = '#fafafa' }: ExhibitorsLogoMarqueeProps) {
+export default function ExhibitorsLogoMarquee({
+  logos,
+  fadeBg = '#fafafa',
+  durationSeconds,
+}: ExhibitorsLogoMarqueeProps) {
   if (logos.length === 0) return null;
 
-  const copies = Math.max(6, Math.ceil(24 / logos.length));
+  const copies = Math.max(4, Math.ceil(18 / logos.length));
   const sequence = Array.from({ length: copies }, () => logos).flat();
   const track = [...sequence, ...sequence];
-  const duration = Math.max(16, Math.min(40, logos.length * 5));
+  const duration = durationSeconds ?? Math.max(60, Math.min(120, logos.length * 16));
 
   return (
     <>

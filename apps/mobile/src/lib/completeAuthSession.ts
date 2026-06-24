@@ -4,6 +4,8 @@ import { supabase } from './supabase';
 import { finalizeProfileAfterMagicLink } from '../services/magicLinkAuth';
 import type { AppUser } from '../types';
 
+const OTP_TYPE_FALLBACKS: EmailOtpType[] = ['magiclink', 'email', 'invite', 'signup', 'recovery'];
+
 function mapOtpType(type: string | null): EmailOtpType {
   const normalized = (type ?? 'magiclink').toLowerCase();
   if (
@@ -19,19 +21,52 @@ function mapOtpType(type: string | null): EmailOtpType {
   return 'magiclink';
 }
 
+function otpTypesToTry(preferred: string | null): EmailOtpType[] {
+  const primary = mapOtpType(preferred);
+  const ordered = [primary, ...OTP_TYPE_FALLBACKS.filter((t) => t !== primary)];
+  return [...new Set(ordered)];
+}
+
+async function verifyOtpWithFallback(
+  tokenHash: string,
+  preferredType: string | null,
+): Promise<{ user: NonNullable<Awaited<ReturnType<typeof supabase.auth.verifyOtp>>['data']['user']> }> {
+  const types = otpTypesToTry(preferredType);
+  let lastError: Error | null = null;
+
+  for (const type of types) {
+    const { data, error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type,
+    });
+    if (!error && data.user) {
+      return { user: data.user };
+    }
+    if (error) {
+      lastError = error;
+      const msg = error.message.toLowerCase();
+      if (!msg.includes('invalid') && !msg.includes('expired') && !msg.includes('otp')) {
+        throw error;
+      }
+    }
+  }
+
+  const session = await supabase.auth.getSession();
+  if (session.data.session?.user) {
+    return { user: session.data.session.user };
+  }
+
+  throw lastError ?? new Error('Lien invalide ou expiré. Demandez un nouveau lien depuis l’application.');
+}
+
 export async function completeAuthSessionFromUrl(
   url: string
 ): Promise<{ appUser: AppUser; paymentRequestId?: string }> {
   const { accessToken, refreshToken, code, tokenHash, type } = parseAuthTokensFromUrl(url);
 
   if (tokenHash) {
-    const { data, error } = await supabase.auth.verifyOtp({
-      token_hash: tokenHash,
-      type: mapOtpType(type),
-    });
-    if (error) throw error;
-    if (!data.user) throw new Error('Session invalide');
-    return finalizeProfileAfterMagicLink(data.user);
+    const { user } = await verifyOtpWithFallback(tokenHash, type);
+    return finalizeProfileAfterMagicLink(user);
   }
 
   if (code && !accessToken) {

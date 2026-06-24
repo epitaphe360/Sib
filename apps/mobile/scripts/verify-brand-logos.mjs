@@ -12,6 +12,7 @@ const mobileRoot = path.resolve(__dirname, '..');
 const LOCAL_FILES = [
   'assets/brand/urbaevent-logo-master.png',
   'assets/brand/logo-sib2026.png',
+  'assets/images/logo-sib-salon.png',
   'assets/brand/logo-ministere.png',
   'assets/icon.png',
   'assets/splash.png',

@@ -21,13 +21,7 @@ const TILE_WIDTH = 88;
 const TILE_GAP = 12;
 const SCROLL_SPEED = 40;
 
-function sortExhibitors(items: Exhibitor[]): Exhibitor[] {
-  return [...items].sort((a, b) => {
-    const aScore = (a.featured ? 2 : 0) + (a.logoUrl ? 1 : 0);
-    const bScore = (b.featured ? 2 : 0) + (b.logoUrl ? 1 : 0);
-    return bScore - aScore || a.companyName.localeCompare(b.companyName);
-  });
-}
+import { sortExhibitorsForDisplay } from '../../components/ExhibitorRow';
 
 function LogoTile({ exhibitor }: { exhibitor: Exhibitor }) {
   return (
@@ -61,7 +55,7 @@ export function ExhibitorLogoMarquee() {
 
   useEffect(() => {
     fetchExhibitors()
-      .then(({ items }) => setExhibitors(sortExhibitors(items)))
+      .then(({ items }) => setExhibitors(sortExhibitorsForDisplay(items)))
       .catch(() => setExhibitors([]))
       .finally(() => setLoading(false));
   }, []);

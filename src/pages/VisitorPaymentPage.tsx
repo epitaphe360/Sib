@@ -27,6 +27,7 @@ import {
   createPaymentRecord,
   getVipPassAmount,
 } from '../services/paymentService';
+import { fetchVipPassPricing } from '../services/visitorLevelService';
 import { convertEURtoMAD } from '../utils/currencyUtils';
 import { EmailService } from '../services/emailService';
 
@@ -81,7 +82,7 @@ export default function VisitorPaymentPage() {
       const { data: existingRequest } = await supabase
         .from('payment_requests')
         .select('id')
-        .eq('user_id', user.id)
+        .eq('user_id', currentUser.id)
         .eq('status', 'pending')
         .maybeSingle();
 
@@ -96,26 +97,16 @@ export default function VisitorPaymentPage() {
 
       // Créer une nouvelle demande de paiement
       const vipPricing = await fetchVipPassPricing();
-      const paymentReference = generateVisitorPaymentReference(user.id);
+      const paymentReference = generateVisitorPaymentReference(currentUser.id);
 
-      const { data: newRequest, error } = await supabase
-        .from('payment_requests')
-        .insert({
-          user_id: user.id,
-          amount: vipPricing.price,
-          currency: vipPricing.currency,
-          payment_method: 'bank_transfer',
-          status: 'pending',
-          requested_level: 'premium',
-          transfer_reference: paymentReference
-        })
-        .select('id')
-        .single();
-
-      if (error) {
-        console.error('❌ Error creating payment request:', error);
-        throw error;
-      }
+      const newRequest = await createPaymentRecord({
+        userId: currentUser.id,
+        amount: vipPricing.price,
+        currency: 'EUR',
+        paymentMethod: 'bank_transfer',
+        status: 'pending',
+        transactionId: paymentReference,
+      });
 
       console.log('✅ Payment request created:', newRequest.id);
       toast.success(t('payment.requestCreated'));
@@ -127,7 +118,13 @@ export default function VisitorPaymentPage() {
 
     } catch (error) {
       console.error('❌ Error in createBankTransferRequest:', error);
-      toast.error(t('payment.requestError'));
+      const message =
+        error instanceof Error && error.message.includes('RLS')
+          ? 'Permissions insuffisantes pour créer la demande. Réessayez ou contactez le support.'
+          : error instanceof Error && error.message.includes('Tarif Pass VIP')
+            ? error.message
+            : t('payment.requestError');
+      toast.error(message);
 
       // En cas d'erreur, rediriger vers le dashboard avec un message
       setTimeout(() => {

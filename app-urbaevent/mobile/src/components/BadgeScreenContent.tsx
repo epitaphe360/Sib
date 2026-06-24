@@ -1,4 +1,5 @@
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
+import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -8,7 +9,7 @@ import { A4_SHEET_WIDTH, BadgeA4Bifold } from './BadgeA4Bifold';
 import { QRBadgeView } from './QRBadgeView';
 import { IllustratedEmpty, PrimaryButton, SecondaryButton } from './ui';
 import { useAuth } from '../context/AuthContext';
-import { prefetchBadgeConfig } from '../hooks/useBadgeConfig';
+import { prefetchBadgeConfig, reloadBadgeConfig } from '../hooks/useBadgeConfig';
 import { useRotatingQR } from '../hooks/useRotatingQR';
 import { useI18n } from '../i18n/I18nProvider';
 import { printBadgeFromView, shareBadgeFromView, shareBadgePdfFromView } from '../lib/printBadge';
@@ -67,6 +68,12 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
     prefetchBadgeConfig().catch(() => undefined);
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      reloadBadgeConfig().catch(() => undefined);
+    }, []),
+  );
+
   useEffect(() => {
     if (user) loadBadge();
   }, [user, loadBadge]);
@@ -88,7 +95,7 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
     async (action: (ref: typeof printRef) => Promise<void>) => {
       setPrinting(true);
       try {
-        await prefetchBadgeConfig();
+        await reloadBadgeConfig();
         await new Promise((r) => setTimeout(r, 400));
         await action(printRef);
       } catch (e) {

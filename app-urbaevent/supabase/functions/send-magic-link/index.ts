@@ -26,22 +26,39 @@ type LinkProperties = {
   action_link?: string;
 };
 
+function readHashedToken(data: Record<string, unknown> | null | undefined): string | undefined {
+  if (!data) return undefined;
+  const props = (data.properties ?? {}) as LinkProperties;
+  const fromProps = props.hashed_token;
+  if (typeof fromProps === 'string' && fromProps.trim()) return fromProps.trim();
+  const fromRoot = data.hashed_token;
+  if (typeof fromRoot === 'string' && fromRoot.trim()) return fromRoot.trim();
+  return undefined;
+}
+
+function readVerificationType(data: Record<string, unknown> | null | undefined, fallbackType: string): string {
+  const props = (data?.properties ?? {}) as LinkProperties;
+  const fromProps = props.verification_type;
+  if (typeof fromProps === 'string' && fromProps.trim()) return fromProps.trim();
+  const fromRoot = data?.verification_type;
+  if (typeof fromRoot === 'string' && fromRoot.trim()) return fromRoot.trim();
+  return fallbackType;
+}
+
 /** Lien HTTPS cliquable → redirection 302 vers l'app (pas de page HTML). */
 function buildEmailClickableLink(
-  data: { properties?: LinkProperties } | null,
+  data: Record<string, unknown> | null | undefined,
   fallbackType: string,
 ): string | undefined {
-  const props = data?.properties ?? {};
-  if (props.hashed_token) {
-    const otpType = props.verification_type ?? fallbackType;
+  const hashedToken = readHashedToken(data);
+  if (hashedToken) {
+    const otpType = readVerificationType(data, fallbackType);
     const open = new URL(authOpenUrl());
-    open.searchParams.set('token_hash', props.hashed_token);
+    open.searchParams.set('token_hash', hashedToken);
     open.searchParams.set('type', otpType);
     return open.toString();
   }
-  const actionLink =
-    props.action_link ?? (data as { action_link?: string } | null)?.action_link;
-  return actionLink?.startsWith('http') ? actionLink : undefined;
+  return undefined;
 }
 
 function resolveFromEmail(): string {

@@ -1,5 +1,6 @@
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { requestBadgeByEmail } from '../api/badgeEmail';
 import { buildStaticParticipantQR } from '../api/badgeLookup';
@@ -12,6 +13,7 @@ import { useAuth } from '../context/AuthContext';
 import { useRotatingQR } from '../hooks/useRotatingQR';
 import { useI18n } from '../i18n/I18nProvider';
 import { printBadgeFromView, shareBadgeFromView, shareBadgePdfFromView } from '../lib/printBadge';
+import { reloadBadgeConfig } from '../hooks/useBadgeConfig';
 import { fetchExhibitorStand } from '../api/minisite';
 import { isCollaboratorUser } from '../lib/collaboratorRole';
 import { ensureUserBadge } from '../services/badge';
@@ -30,12 +32,12 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
   const [badge, setBadge] = useState<UserBadge | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showA4, setShowA4] = useState(isExhibitor);
+  const [showA4, setShowA4] = useState(true);
   const [showMobileQr, setShowMobileQr] = useState(!isExhibitor);
   const [printing, setPrinting] = useState(false);
   const [emailSending, setEmailSending] = useState(false);
   const [kioskMode, setKioskMode] = useState(false);
-  const printRef = useRef<View>(null);
+  const printCaptureRef = useRef<View>(null);
   const { qrValue, expiresAt, error: qrError, refresh, usingCache } = useRotatingQR(user?.id, badge);
   const displayQr = qrValue || (badge ? buildStaticParticipantQR(badge) : '');
   const usingStaticQr = Boolean(badge && !qrValue);
@@ -71,6 +73,12 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
     if (user) loadBadge();
   }, [user, loadBadge]);
 
+  useFocusEffect(
+    useCallback(() => {
+      reloadBadgeConfig().catch(() => undefined);
+    }, []),
+  );
+
   const sendEmail = async () => {
     if (!user) return;
     setEmailSending(true);
@@ -85,17 +93,19 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
   };
 
   const runPrintAction = useCallback(
-    async (action: (ref: typeof printRef) => Promise<void>) => {
+    async (action: (viewRef: RefObject<View | null>) => Promise<void>) => {
       setPrinting(true);
       try {
-        await action(printRef);
+        await reloadBadgeConfig();
+        await new Promise((r) => setTimeout(r, 300));
+        await action(printCaptureRef);
       } catch (e) {
         Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
       } finally {
         setPrinting(false);
       }
     },
-    [t]
+    [t],
   );
 
   if (authLoading) {
@@ -139,7 +149,7 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
             <IllustratedEmpty icon="alert-circle-outline" title={t('common.error')} message={error} />
             <PrimaryButton label={t('common.retry')} onPress={loadBadge} />
           </>
-        ) : badge && displayQr ? (
+        ) : badge ? (
           <>
             {usingCache && (
               <View style={styles.offlineBanner}>
@@ -151,14 +161,14 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
               <Text style={styles.exhibitorHint}>{t('badge.exhibitorA4Hint')}</Text>
             )}
 
-            {isExhibitor && showA4 && (
-              <View style={styles.a4Wrap} ref={printRef} collapsable={false}>
+            {showA4 && (
+              <View style={styles.a4Wrap} collapsable={false}>
                 <Text style={styles.a4Label}>{t('badge.bifoldPreview')}</Text>
                 <BadgeA4Bifold badge={badge} />
               </View>
             )}
 
-            <View ref={printRef} collapsable={false} style={styles.hiddenPrintPreview} pointerEvents="none">
+            <View ref={printCaptureRef} collapsable={false} style={styles.hiddenPrintPreview} pointerEvents="none">
               <BadgeA4Bifold badge={badge} previewScale={false} />
             </View>
 
@@ -189,7 +199,7 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
               ) : null}
             </View>
 
-            {(!isExhibitor || showMobileQr) && (
+            {(!isExhibitor || showMobileQr) && displayQr ? (
               <>
                 <QRBadgeView badge={badge} qrValue={displayQr} fullScreen={!isExhibitor} />
 
@@ -213,7 +223,7 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
                   <PrimaryButton label={t('badge.regenerate')} onPress={refresh} />
                 )}
               </>
-            )}
+            ) : null}
 
             <View style={styles.secondaryGrid}>
               {[
@@ -230,12 +240,6 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
               ))}
             </View>
 
-            {!isExhibitor && showA4 && (
-              <View style={styles.a4Wrap}>
-                <Text style={styles.a4Label}>{t('badge.bifoldPreview')}</Text>
-                <BadgeA4Bifold badge={badge} />
-              </View>
-            )}
           </>
         ) : (
           <>
@@ -337,10 +341,11 @@ const styles = StyleSheet.create({
   },
   hiddenPrintPreview: {
     position: 'absolute',
+    left: -9999,
     top: 0,
-    left: 0,
     width: A4_SHEET_WIDTH,
-    opacity: 0.01,
+    height: Math.round(A4_SHEET_WIDTH * (297 / 210)),
+    opacity: 1,
   },
   exhibitorHint: {
     textAlign: 'center',

@@ -196,7 +196,7 @@ function VisitorFreeQRDashboard({ user }: { user: any }) {
   }
 
   return (
-    <div className="min-h-screen bg-primary-900">
+    <div className="min-h-screen bg-primary-900 text-white">
       {/* Header */}
       <div className="bg-white/5 backdrop-blur-md border-b border-white/10 px-6 py-4">
         <div className="max-w-2xl mx-auto flex items-center justify-between">

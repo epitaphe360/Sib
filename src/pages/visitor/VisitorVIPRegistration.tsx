@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -47,15 +47,14 @@ const vipVisitorSchema = z.object({
 type VIPVisitorForm = z.infer<typeof vipVisitorSchema>;
 
 const sectors = [
-  'Autorité urbaine',
-  'Transport & mobilité',
-  'Logistique',
-  'Consulting',
-  'Technologie',
-  'Finance',
-  'Média/Presse',
+  'BTP & Construction',
+  'Architecture & Design',
+  'Matériaux & Équipements',
+  'Immobilier & Promotion',
+  'Consulting & Ingénierie',
+  'Technologie & PropTech',
   'Institutionnel',
-  'Autre'
+  'Autre',
 ];
 
 interface VisitorVIPRegistrationProps {
@@ -421,13 +420,83 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
     }
   };
 
-  const wrapperClass = embedded
-    ? 'p-4'
-    : 'min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 py-12 px-4 sm:px-6 lg:px-8';
-  const innerClass = embedded ? 'w-full' : 'max-w-3xl mx-auto';
+  const wrapperClass = embedded ? 'p-4' : 'min-h-screen bg-sib-paper text-sib-ink';
+  const innerClass = embedded ? 'w-full' : 'sib-v4-container max-w-3xl mx-auto pb-16 -mt-10 relative z-10 px-4 sm:px-0';
+
+  const inputClass =
+    'w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg bg-white text-sib-ink focus:outline-none focus:ring-2 focus:ring-sib-orange/40 focus:border-sib-orange transition-colors';
+  const inputErrorClass =
+    'w-full pl-10 pr-4 py-3 border border-danger-500 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-danger-500/30';
+  const selectClass =
+    'w-full px-4 py-3 border border-neutral-200 rounded-lg bg-white text-sib-ink focus:outline-none focus:ring-2 focus:ring-sib-orange/40 focus:border-sib-orange';
+
+  const vipBadges = [
+    'RDV B2B illimités',
+    'Gala exclusif',
+    'Networking premium',
+  ];
 
   return (
     <div className={wrapperClass}>
+      {!embedded && (
+        <section className="relative overflow-hidden bg-sib-navy text-white">
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-35"
+            style={{ backgroundImage: "url('/sib2026-home-v4/assets/sib-hero.webp')" }}
+            aria-hidden
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,27,56,.94) 0%, rgba(0,22,47,.78) 45%, rgba(0,15,34,.55) 100%)',
+            }}
+            aria-hidden
+          />
+          <div className="sib-v4-container relative z-10 py-14 md:py-20 text-center">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <Link to={ROUTES.HOME} className="inline-block mb-6" aria-label="SIB 2026 — Accueil">
+                <img
+                  src="/logo-sib2026.png"
+                  alt="SIB 2026 — Salon International du Bâtiment"
+                  className="h-14 sm:h-16 md:h-[4.5rem] w-auto mx-auto object-contain drop-shadow-md"
+                />
+              </Link>
+              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-sib-orange mb-3 font-display">
+                Pass Premium VIP
+              </p>
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-3 leading-[0.95] tracking-tight">
+                Inscription Pass Premium VIP
+              </h1>
+              <p className="text-base md:text-lg text-white/75 max-w-xl mx-auto mb-4 leading-relaxed">
+                Accès complet au salon avec badge photo sécurisé
+              </p>
+              {formattedPrice && (
+                <p className="text-2xl md:text-3xl font-bold text-sib-orange font-display mb-8 tabular-nums">
+                  {formattedPrice}
+                </p>
+              )}
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                {vipBadges.map((label) => (
+                  <span
+                    key={label}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-white/90"
+                  >
+                    <CheckCircle className="h-4 w-4 text-sib-orange shrink-0" aria-hidden />
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+          <div className="absolute bottom-0 inset-x-0 leading-none pointer-events-none">
+            <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-10 md:h-12">
+              <path d="M0,48 C360,8 720,40 1080,16 C1260,4 1380,12 1440,8 L1440,48 Z" fill="#f7f7f5" />
+            </svg>
+          </div>
+        </section>
+      )}
+
       <div className={innerClass}>
         {submitSuccess && embedded && (
           <FormSuccessBanner
@@ -435,48 +504,9 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
             message="Votre inscription VIP a été soumise. Consultez vos emails pour les instructions de paiement."
           />
         )}
-        {!embedded && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-3 rounded-lg shadow-lg">
-              <Crown className="h-8 w-8 text-gray-900" />
-            </div>
-            <div>
-              <span className="text-2xl font-bold text-white">SIB VIP</span>
-              <span className="text-sm text-yellow-200 block leading-none">Premium Pass 2026</span>
-            </div>
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Inscription Pass Premium VIP
-          </h1>
-          <p className="text-yellow-100 text-lg">
-            Accès complet au salon avec badge photo sécurisé
-          </p>
-          <div className="mt-4 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-yellow-800 px-6 py-3 rounded-full">
-            <span className="inline-flex items-center gap-1 text-yellow-100 font-semibold text-sm">
-              <CheckCircle className="h-4 w-4 shrink-0" aria-hidden />
-              RDV B2B Illimités
-            </span>
-            <span className="text-yellow-200" aria-hidden>•</span>
-            <span className="inline-flex items-center gap-1 text-yellow-100 font-semibold text-sm">
-              <CheckCircle className="h-4 w-4 shrink-0" aria-hidden />
-              Gala exclusif
-            </span>
-            <span className="text-yellow-200" aria-hidden>•</span>
-            <span className="inline-flex items-center gap-1 text-yellow-100 font-semibold text-sm">
-              <CheckCircle className="h-4 w-4 shrink-0" aria-hidden />
-              Networking premium
-            </span>
-          </div>
-        </motion.div>
-        )}
 
         {embedded && !submitSuccess && (
-          <h3 className="text-base font-bold text-primary-800 dark:text-white mb-3 px-1">
+          <h3 className="text-base font-bold text-sib-navy dark:text-white mb-3 px-1 font-display">
             Pass VIP
           </h3>
         )}
@@ -485,9 +515,9 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: embedded ? 0 : 0.2 }}
+          transition={{ delay: embedded ? 0 : 0.15 }}
         >
-          <Card className={embedded ? 'p-4' : 'p-8'}>
+          <Card className={`${embedded ? 'p-4' : 'p-6 sm:p-8'} border border-neutral-200/80 shadow-xl bg-white rounded-2xl`}>
             <form onSubmit={handleSubmit(onSubmit, (errors) => {
               console.error("? Validation errors:", errors);
               toast.error("Veuillez corriger les erreurs rouges dans le formulaire.");
@@ -503,7 +533,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
               {/* Personal Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-sib-navy mb-2">
                     Prénom *
                   </label>
                   <div className="relative">
@@ -512,7 +542,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                       id="firstName"
                       type="text"
                       {...register('firstName')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className={inputClass}
                       placeholder="Votre prénom"
                     />
                   </div>
@@ -522,7 +552,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                 </div>
 
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-sib-navy mb-2">
                     Nom *
                   </label>
                   <div className="relative">
@@ -531,7 +561,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                       id="lastName"
                       type="text"
                       {...register('lastName')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className={inputClass}
                       placeholder="Votre nom"
                     />
                   </div>
@@ -543,7 +573,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
 
               {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-sib-navy mb-2">
                   Email *
                 </label>
                 <div className="relative">
@@ -554,11 +584,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                     id="email"
                     type="email"
                     {...register('email')}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.email
-                        ? 'border-red-500 focus:ring-red-500'
-                        : 'border-gray-300 focus:ring-yellow-500'
-                    }`}
+                    className={errors.email ? inputErrorClass : inputClass}
                     placeholder="votre@email.com"
                   />
                 </div>
@@ -572,7 +598,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
               {/* Password */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-sib-navy mb-2">
                     Mot de passe *
                   </label>
                   <div className="relative">
@@ -581,7 +607,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                       id="password"
                       type="password"
                       {...register('password')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className={inputClass}
                       placeholder="Minimum 8 caractères"
                     />
                   </div>
@@ -591,7 +617,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                 </div>
 
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-sib-navy mb-2">
                     Confirmer mot de passe *
                   </label>
                   <div className="relative">
@@ -600,7 +626,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                       id="confirmPassword"
                       type="password"
                       {...register('confirmPassword')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className={inputClass}
                       placeholder="Confirmer le mot de passe"
                     />
                   </div>
@@ -613,7 +639,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
               {/* Phone and Country */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="phone" className="block text-sm font-medium text-sib-navy mb-2">
                     Téléphone *
                   </label>
                   <div className="relative">
@@ -622,7 +648,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                       id="phone"
                       type="tel"
                       {...register('phone')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className={inputClass}
                       placeholder="+33 1 23 45 67 89"
                     />
                   </div>
@@ -631,7 +657,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                   )}
                 </div>
                 <div>
-                  <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="country" className="block text-sm font-medium text-sib-navy mb-2">
                     Pays *
                   </label>
                   <div className="relative">
@@ -639,7 +665,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                     <select
                       id="country"
                       {...register('country')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 appearance-none bg-white"
+                      className={`${inputClass} appearance-none`}
                     >
                       <option value="">Sélectionnez</option>
                       {COUNTRIES.map((country) => (
@@ -658,13 +684,13 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
               {/* Professional Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="sector" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="sector" className="block text-sm font-medium text-sib-navy mb-2">
                     Secteur d'activité *
                   </label>
                   <select
                     id="sector"
                     {...register('sector')}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className={selectClass}
                   >
                     <option value="">Sélectionnez</option>
                     {sectors.map((sector) => (
@@ -677,7 +703,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                 </div>
 
                 <div>
-                  <label htmlFor="position" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="position" className="block text-sm font-medium text-sib-navy mb-2">
                     Fonction *
                   </label>
                   <div className="relative">
@@ -686,7 +712,7 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                       id="position"
                       type="text"
                       {...register('position')}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className={inputClass}
                       placeholder="Ex: Directeur Commercial"
                     />
                   </div>
@@ -697,14 +723,14 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
               </div>
 
               <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="company" className="block text-sm font-medium text-sib-navy mb-2">
                   Entreprise *
                 </label>
                 <input
                   id="company"
                   type="text"
                   {...register('company')}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className={selectClass}
                   placeholder="Nom de votre entreprise"
                 />
                 {errors.company && (
@@ -713,52 +739,51 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
               </div>
 
               {/* VIP Benefits */}
-              <div className="bg-gradient-to-r from-yellow-50 to-purple-50 border border-yellow-300 rounded-lg p-6">
-                <h4 className="font-bold text-yellow-900 mb-3 flex items-center">
-                  <Crown className="h-5 w-5 mr-2" />
+              <div className="bg-sib-orange/5 border border-sib-orange/20 rounded-xl p-6">
+                <h4 className="font-bold text-sib-navy mb-3 flex items-center font-display">
+                  <Crown className="h-5 w-5 mr-2 text-sib-orange" />
                   Inclus dans votre Pass Premium VIP
                 </h4>
-                <ul className="text-sm text-gray-700 space-y-2">
+                <ul className="text-sm text-neutral-700 space-y-2">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" aria-hidden />
+                    <CheckCircle className="h-4 w-4 text-sib-orange mt-0.5 shrink-0" aria-hidden />
                     <span><strong>Rendez-vous B2B ILLIMITÉS</strong> - Planifiez autant de meetings que souhaité</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" aria-hidden />
+                    <CheckCircle className="h-4 w-4 text-sib-orange mt-0.5 shrink-0" aria-hidden />
                     <span><strong>Badge ultra-sécurisé avec photo</strong> - QR code JWT rotatif</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" aria-hidden />
+                    <CheckCircle className="h-4 w-4 text-sib-orange mt-0.5 shrink-0" aria-hidden />
                     <span><strong>Accès zones VIP</strong> - Salons premium, networking area</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" aria-hidden />
+                    <CheckCircle className="h-4 w-4 text-sib-orange mt-0.5 shrink-0" aria-hidden />
                     <span><strong>Gala de clôture exclusif</strong> - Événement réseau premium</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" aria-hidden />
+                    <CheckCircle className="h-4 w-4 text-sib-orange mt-0.5 shrink-0" aria-hidden />
                     <span><strong>Ateliers et conférences VIP</strong> - Contenus exclusifs</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" aria-hidden />
+                    <CheckCircle className="h-4 w-4 text-sib-orange mt-0.5 shrink-0" aria-hidden />
                     <span><strong>{t('common.complete_dashboard')}</strong> - {t('common.dashboard')} {t('common.appointments')} & {t('common.networking')}</span>
                   </li>
                 </ul>
               </div>
 
               {/* Payment Info */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-900">
-                  <strong>Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page d’instructions de virement bancaire
-                  {formattedPrice ? ` (${formattedPrice})` : ''}. Votre Pass VIP sera activé une fois le virement validé par notre équipe (délai habituel : 2 à 5 jours ouvrés).
+              <div className="bg-sib-navy/5 border border-sib-navy/15 rounded-xl p-4">
+                <p className="text-sm text-sib-navy">
+                  <strong>Paiement requis</strong> : Après création du compte, vous serez redirigé vers la page d’instructions de virement bancaire. Votre Pass VIP sera activé une fois le virement validé par notre équipe (délai habituel : 2 à 5 jours ouvrés).
                 </p>
               </div>
 
               {/* Submit */}
-              <Button
+              <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 py-4 text-lg font-bold shadow-lg"
+                className="sib-v4-btn-orange w-full py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:brightness-100 flex items-center justify-center"
               >
                 {isSubmitting ? (
                   <>
@@ -771,19 +796,19 @@ export default function VisitorVIPRegistration({ embedded = false }: VisitorVIPR
                     Créer mon compte VIP et payer
                   </>
                 )}
-              </Button>
+              </button>
 
               {/* Free Pass Link */}
               {!embedded && (
-              <div className="text-center pt-4 border-t">
-                <p className="text-sm text-gray-600 mb-2">
+              <div className="text-center pt-4 border-t border-neutral-200">
+                <p className="text-sm text-neutral-600 mb-2">
                   Vous cherchez un accès gratuit au salon ?
                 </p>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => navigate(ROUTES.REGISTER_VISITOR)}
-                  className="border-primary-500 text-primary-600 hover:bg-primary-50"
+                  className="border-sib-orange text-sib-navy hover:bg-sib-orange/5"
                 >
                   Pass Gratuit
                 </Button>

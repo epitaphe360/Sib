@@ -138,7 +138,7 @@ export default function SupportPage() {
         </div>
 
         {/* Contact CTA */}
-        <div className="relative overflow-hidden rounded-2xl p-10 lg:p-14 bg-gradient-to-br from-primary-900 to-primary-700 border border-primary-800">
+        <div className="relative overflow-hidden rounded-2xl p-10 lg:p-14 bg-gradient-to-br from-primary-900 to-primary-700 border border-primary-800 text-white">
           <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-accent-500/20 blur-3xl pointer-events-none" />
           <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-primary-500/20 blur-3xl pointer-events-none" />
 

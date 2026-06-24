@@ -2,7 +2,7 @@
   "expo": {
     "name": "UrbaEvent",
     "slug": "urbaevent",
-    "version": "1.0.33",
+    "version": "1.0.40",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "urbaevent",
@@ -18,7 +18,7 @@
       "bundleIdentifier": "com.urbacom.urbaevent"
     },
     "android": {
-      "versionCode": 28,
+      "versionCode": 35,
       "backgroundColor": "#F8F7F4",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -60,6 +60,12 @@
         "expo-camera",
         {
           "cameraPermission": "UrbaEvent utilise la caméra pour scanner les badges QR."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "UrbaEvent accède à vos photos pour ajouter des images au catalogue produits."
         }
       ],
       "expo-localization",

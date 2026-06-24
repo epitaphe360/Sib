@@ -92,7 +92,7 @@ export default function VisitorUpgradePage() {
               <Crown className="h-6 w-6 text-accent-500" />
             </div>
             <div className="sib-kicker mb-4 justify-center !text-accent-500">Pass VIP</div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-5 tracking-tight leading-[1.05]">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-5 tracking-tight leading-[1.05] text-white">
               {t('upgrade.hero.title')}
             </h1>
             <p className="text-base lg:text-lg text-white/75 max-w-2xl mx-auto mb-8 leading-relaxed">
@@ -273,7 +273,7 @@ export default function VisitorUpgradePage() {
               <Zap className="h-6 w-6 text-accent-500" />
             </div>
             <div className="sib-kicker mb-3 justify-center !text-accent-500">ROI</div>
-            <h2 className="text-2xl lg:text-3xl font-bold mb-4 tracking-tight">{t('upgrade.roi.title')}</h2>
+            <h2 className="text-2xl lg:text-3xl font-bold mb-4 tracking-tight text-white">{t('upgrade.roi.title')}</h2>
             <p
               className="text-white/80 mb-8 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: t('upgrade.roi.description') }}

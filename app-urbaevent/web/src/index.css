@@ -220,6 +220,62 @@
   .sib-public-hero {
     @apply relative w-full overflow-visible text-white;
     background-color: var(--sib-navy-deep, #00162f);
+    --color-text: #ffffff;
+    --color-text-muted: rgba(255, 255, 255, 0.85);
+  }
+
+  .sib-public-hero :where(h1, h2, h3, h4, h5, h6) {
+    color: #ffffff;
+  }
+
+  .sib-public-hero :where(p, li) {
+    color: inherit;
+  }
+
+  /* Surfaces sombres — le @layer base force color: var(--color-text) sur les titres */
+  .sib-on-dark {
+    color: #ffffff;
+    --color-text: #ffffff;
+    --color-text-muted: rgba(255, 255, 255, 0.85);
+  }
+
+  :is(.text-white, .sib-public-hero, .sib-on-dark, .home-dark)
+    :where(h1, h2, h3, h4, h5, h6):not(
+      :where(
+        [class*='text-sib-navy'],
+        [class*='text-neutral-9'],
+        [class*='text-gray-9'],
+        [class*='text-neutral-8'],
+        [class*='text-gray-8']
+      )
+    ) {
+    color: inherit;
+  }
+
+  :is(.text-white, .sib-public-hero, .sib-on-dark, .home-dark)
+    :where(p, li, span):not(
+      :where(
+        [class*='text-sib-navy'],
+        [class*='text-neutral-'],
+        [class*='text-gray-'],
+        [class*='text-primary-'],
+        [class*='text-accent-'],
+        [class*='text-danger-'],
+        [class*='text-success-'],
+        [class*='text-white']
+      )
+    ) {
+    color: inherit;
+  }
+
+  :is(.text-white, .sib-public-hero, .sib-on-dark, .home-dark)
+    .sib-kicker:not([class*='text-accent']):not([class*='text-sib-orange']):not([class*='!text-']) {
+    @apply text-accent-500;
+  }
+
+  :is(.text-white, .sib-public-hero, .sib-on-dark, .home-dark)
+    .sib-kicker:not([class*='text-accent']):not([class*='text-sib-orange']):not([class*='!text-'])::before {
+    @apply bg-accent-500;
   }
 
   /* Section spacing */

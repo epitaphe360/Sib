@@ -3,6 +3,13 @@ import type { ImageSourcePropType } from 'react-native';
 /** Logo master local — aligné référence Play Store com.urbavent */
 export const BRAND_LOGO_LOCAL = require('../../assets/brand/urbaevent-logo-master.png') as ImageSourcePropType;
 
+/** Logo officiel salon SIB (accueil salon — distinct du logo UrbaEvent plateforme) */
+export const SALON_LOGO_LOCAL = {
+  sib: require('../../assets/images/logo-sib-salon.png') as ImageSourcePropType,
+} as const;
+
+export type SalonLogoKey = keyof typeof SALON_LOGO_LOCAL;
+
 /** Logos badge par défaut (bundlés — pas de dépendance HTTP sib2026.ma) */
 export const BADGE_LOGO_LOCAL = {
   'logo-sib2026': require('../../assets/brand/logo-sib2026.png') as ImageSourcePropType,

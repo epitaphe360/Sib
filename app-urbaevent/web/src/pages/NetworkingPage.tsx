@@ -36,30 +36,8 @@ export default function NetworkingPage() {
   const { t } = useTranslation();
   const { user, isAuthenticated } = useAuthStore();
 
-  // Bloquer l'accès UNIQUEMENT pour les visiteurs de niveau "free"
-  // Les exposants, partenaires et autres utilisateurs ont accès complet
-  React.useEffect(() => {
-    console.log('🔍 NetworkingPage - user check:', {
-      isAuthenticated,
-      userType: user?.type,
-      visitorLevel: user?.visitor_level
-    });
-
-    // Bloquer UNIQUEMENT les visiteurs free (pas les exposants ni les partenaires)
-    if (isAuthenticated && user?.type === 'visitor' && user?.visitor_level === 'free') {
-      console.log('❌ Access blocked: free visitor');
-      toast.error(t('networking.restricted'), {
-        duration: 6000
-      });
-      navigate(ROUTES.HOME);
-      return;
-    }
-
-    // Autoriser tous les autres types d'utilisateurs (exhibitor, partner, admin, etc.)
-    if (isAuthenticated && user) {
-      console.log('✅ Access granted:', user.type);
-    }
-  }, [isAuthenticated, user?.type, user?.visitor_level, navigate]);
+  const isFreeVisitor =
+    isAuthenticated && user?.type === 'visitor' && (user?.visitor_level === 'free' || !user?.visitor_level);
 
   const {
     recommendations,
@@ -520,7 +498,7 @@ export default function NetworkingPage() {
   return (
     <div className="bg-neutral-50 dark:bg-neutral-950 min-h-screen">
       {/* Hero */}
-      <div className="relative flex items-center justify-center overflow-hidden py-16 lg:py-20 bg-primary-900">
+      <div className="relative flex items-center justify-center overflow-hidden py-16 lg:py-20 bg-primary-900 text-white">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-accent-500/15 blur-[120px]" />
           <div className="absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-primary-500/20 blur-[120px]" />
@@ -550,6 +528,22 @@ export default function NetworkingPage() {
           </motion.div>
         </div>
       </div>
+
+      {isFreeVisitor && (
+        <div className="bg-sib-orange/10 border-b border-sib-orange/25">
+          <div className="max-w-container mx-auto px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+            <p className="text-sm text-sib-navy dark:text-white">
+              {t('networking.restricted')} — {t('networking.hub_restricted')}
+            </p>
+            <Link to={ROUTES.VISITOR_UPGRADE}>
+              <Button variant="accent" size="sm" className="whitespace-nowrap">
+                {t('networking.upgrade_cta', 'Passer au Premium VIP')}
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Sticky tab bar */}
       <div className="sticky top-0 z-50 bg-white/85 dark:bg-neutral-900/85 backdrop-blur-xl border-b border-neutral-200 dark:border-neutral-800 shadow-sm">

@@ -41,7 +41,7 @@ export default function MarketingDashboard() {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       {/* Header */}
-      <div className="relative bg-primary-900 pt-16 pb-24 overflow-hidden">
+      <div className="relative bg-primary-900 text-white pt-16 pb-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-accent-500/15 blur-[120px]" />
           <div className="absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-primary-500/20 blur-[120px]" />

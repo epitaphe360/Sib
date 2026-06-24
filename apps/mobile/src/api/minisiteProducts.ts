@@ -14,6 +14,25 @@ export interface ProductDraft {
   featured: boolean;
 }
 
+export const PRODUCT_CATEGORIES = [
+  'Matériaux de construction',
+  'Carrelage & Revêtements de Sol',
+  'Peinture & Revêtements',
+  'Enduits & Mortiers',
+  'Menuiserie & Fenêtres',
+  'Électricité & Éclairage',
+  'Plomberie & Sanitaires',
+  'Toiture & Étanchéité',
+  'Isolation & Acoustique',
+  'Équipements & Outillage',
+  'Serrurerie & Métallerie',
+  'Béton & Préfabriqué',
+  'Aménagement Intérieur',
+  'Logiciels & Numérique',
+  'Services & Conseil',
+  'Autre',
+] as const;
+
 function mapProduct(row: ProductRow): MiniSiteProduct {
   return {
     id: String(row.id),
@@ -44,7 +63,6 @@ export async function saveMiniSiteProduct(exhibitorId: string, draft: ProductDra
     price: Number.isFinite(price) ? price : null,
     specifications: draft.specifications.trim() || null,
     featured: draft.featured,
-    updated_at: new Date().toISOString(),
   };
   const query = productId
     ? supabase.from('products').update(payload).eq('id', productId).eq('exhibitor_id', exhibitorId)

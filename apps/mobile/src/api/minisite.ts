@@ -134,7 +134,6 @@ export async function updateExhibitorStandLite(
 
   const updatePayload: Record<string, unknown> = {
     contact_info,
-    updated_at: new Date().toISOString(),
   };
   if (patch.description !== undefined) updatePayload.description = patch.description;
 
@@ -183,7 +182,7 @@ async function syncMiniSiteDescription(exhibitorId: string, description: string)
 
   await supabase
     .from('mini_sites')
-    .update({ sections, updated_at: new Date().toISOString() })
+    .update({ sections })
     .eq('id', site.id);
 }
 
@@ -218,7 +217,6 @@ export async function fetchMiniSite(userId: string): Promise<MiniSiteSummary | n
 
 export async function toggleMiniSitePublish(siteId: string, published: boolean): Promise<void> {
   const payload: Record<string, unknown> = {
-    updated_at: new Date().toISOString(),
     published,
   };
 

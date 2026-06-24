@@ -26,7 +26,8 @@ export function SalonInteriorContent() {
       {!online ? <NetworkBanner message={t('common.offline')} /> : null}
 
       <SalonHeroBanner
-        title={activeSalon.name}
+        salon={activeSalon}
+        showBrandLogo
         subtitle={activeSalon.dates ?? activeSalon.location ?? undefined}
         compact
       />

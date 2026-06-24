@@ -88,36 +88,38 @@ export default function StaffScannerScreen() {
 
   if (useCamera) {
     return (
-      <View style={styles.fullRoot} pointerEvents="box-none">
-        <QRScannerView onScan={(data) => scan(data)} active={!scanning} fullScreen />
-        <ScanResultFlash
-          status={flash?.status ?? 'denied'}
-          message={flash?.message ?? ''}
-          visible={!!flash}
-          onDismiss={() => setFlash(null)}
-        />
-        {history.length > 0 ? (
-          <View style={[styles.historyOverlay, { top: insets.top + spacing.sm }]}>
-            <Text style={styles.historyOverlayTitle}>{t('scanner.history')}</Text>
-            {history.slice(0, 3).map((h) => (
-              <View key={h.id} style={styles.historyOverlayRow}>
-                <AppIcon
-                  name={h.valid ? 'checkmark-circle-outline' : 'close-circle-outline'}
-                  size={12}
-                  color={h.valid ? '#4ade80' : '#f87171'}
-                />
-                <Text style={styles.historyOverlayLine} numberOfLines={1}>
-                  {h.userName ?? h.reason ?? '—'}
-                </Text>
-              </View>
-            ))}
+      <View style={styles.fullRoot}>
+        <View style={styles.cameraArea}>
+          <QRScannerView onScan={(data) => scan(data)} active={!scanning} fullScreen />
+          <ScanResultFlash
+            status={flash?.status ?? 'denied'}
+            message={flash?.message ?? ''}
+            visible={!!flash}
+            onDismiss={() => setFlash(null)}
+          />
+          {history.length > 0 ? (
+            <View style={[styles.historyOverlay, { top: insets.top + spacing.sm + 44 }]}>
+              <Text style={styles.historyOverlayTitle}>{t('scanner.history')}</Text>
+              {history.slice(0, 3).map((h) => (
+                <View key={h.id} style={styles.historyOverlayRow}>
+                  <AppIcon
+                    name={h.valid ? 'checkmark-circle-outline' : 'close-circle-outline'}
+                    size={12}
+                    color={h.valid ? '#4ade80' : '#f87171'}
+                  />
+                  <Text style={styles.historyOverlayLine} numberOfLines={1}>
+                    {h.userName ?? h.reason ?? '—'}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+          <View style={styles.topBar} pointerEvents="box-none">
+            <SignOutOverlayButton />
           </View>
-        ) : null}
-        <View style={styles.topBar} pointerEvents="box-none">
-          <SignOutOverlayButton />
         </View>
-        <View style={[styles.overlayPanel, { paddingBottom: insets.bottom + spacing.md }]}>
-          {/* Gate selector */}
+
+        <View style={[styles.controlPanel, { paddingBottom: insets.bottom + spacing.sm }]}>
           <Pressable style={styles.gateSelector} onPress={() => setShowGatePicker(true)}>
             <Text style={styles.gateSelectorLabel}>
               {t('scanner.gate')} : {selectedGate?.name ?? t('scanner.selectGate')}
@@ -133,7 +135,6 @@ export default function StaffScannerScreen() {
           <PrimaryButton label={t('scanner.manual')} variant="outline" onPress={() => setUseCamera(false)} />
         </View>
 
-        {/* Modal sélection gate */}
         <Modal visible={showGatePicker} transparent animationType="slide" onRequestClose={() => setShowGatePicker(false)}>
           <View style={styles.modalOverlay}>
             <View style={styles.modalSheet}>
@@ -213,6 +214,7 @@ export default function StaffScannerScreen() {
 const styles = StyleSheet.create({
   manualRoot: { flex: 1 },
   fullRoot: { flex: 1, backgroundColor: '#000' },
+  cameraArea: { flex: 1, position: 'relative' },
   topBar: {
     position: 'absolute',
     top: 0,
@@ -221,12 +223,8 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     elevation: 24,
   },
-  overlayPanel: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(27, 54, 93, 0.95)',
+  controlPanel: {
+    backgroundColor: 'rgba(27, 54, 93, 0.98)',
     borderTopLeftRadius: radius.xl,
     borderTopRightRadius: radius.xl,
     padding: spacing.md,

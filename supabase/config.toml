@@ -48,7 +48,8 @@ additional_redirect_urls = [
   "exp://localhost:8081/--/reset-password",
   "exp://127.0.0.1:8081/--/auth-callback",
   "exp://localhost:8081/--/auth-callback",
-  "https://sbyizudifmqakzxjlndr.supabase.co/functions/v1/mobile-auth-bridge"
+  "https://sbyizudifmqakzxjlndr.supabase.co/functions/v1/mobile-auth-bridge",
+  "https://sbyizudifmqakzxjlndr.supabase.co/functions/v1/auth-open"
 ]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
@@ -72,3 +73,12 @@ policy = "oneshot"
 enabled = false
 port = 54327
 backend = "postgres"
+
+[functions.auth-open]
+verify_jwt = false
+
+[functions.mobile-auth-bridge]
+verify_jwt = false
+
+[functions.send-magic-link]
+verify_jwt = false

@@ -44,7 +44,7 @@ export function SibPublicHero({
           </p>
         )}
         <h1
-          className={`font-display text-4xl md:text-5xl xl:text-[3.25rem] font-extrabold leading-[0.95] tracking-tight mb-4 text-white ${
+          className={`font-display text-4xl md:text-5xl xl:text-[3.25rem] font-extrabold leading-[0.95] tracking-tight mb-4 !text-white ${
             align === 'center' ? 'max-w-4xl mx-auto' : 'max-w-3xl'
           }`}
         >

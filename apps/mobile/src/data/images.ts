@@ -24,7 +24,7 @@ const local = {
   construction,
   architecture: section,
   banner,
-  logoSib: require('../../assets/images/logo-sib.png'),
+  logoSib: require('../../assets/images/logo-sib-salon.png'),
   inauguration,
   plan,
   b2b,

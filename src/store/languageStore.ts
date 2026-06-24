@@ -48,6 +48,31 @@ const LEGACY_LANGUAGE_STORAGE_KEY = 'sibs-language-storage';
 
 migratePersistedStorage(LANGUAGE_STORAGE_KEY, LEGACY_LANGUAGE_STORAGE_KEY);
 
+/** Applique la langue persistée au DOM et à i18next (au démarrage). */
+export function applyLanguageSideEffects(languageCode: string): void {
+  const language = supportedLanguages.find((lang) => lang.code === languageCode);
+  if (!language) return;
+
+  document.documentElement.dir = languageCode === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.lang = languageCode;
+
+  const titleKey = 'hero.title';
+  const translatedTitle =
+    translations[languageCode]?.[titleKey] || translations.fr[titleKey] || 'SIB';
+  document.title = `${translatedTitle} - SIB 2026`;
+}
+
+/** Synchronise i18next + DOM avec le store (après rehydratation persist). */
+export async function syncLanguageFromStore(): Promise<void> {
+  const { currentLanguage } = useLanguageStore.getState();
+  applyLanguageSideEffects(currentLanguage);
+  try {
+    await i18n.changeLanguage(currentLanguage);
+  } catch {
+    /* non bloquant */
+  }
+}
+
 // Utiliser le dictionnaire de traductions enrichi
 const translations = allTranslations;
 
@@ -84,13 +109,7 @@ export const useLanguageStore = create<LanguageState>()(
           }
 
           // Mettre à jour la direction du texte pour l'arabe
-          document.documentElement.dir = languageCode === 'ar' ? 'rtl' : 'ltr';
-          document.documentElement.lang = languageCode;
-
-          // Mettre à jour le titre de la page
-          const titleKey = 'hero.title';
-          const translatedTitle = translations[languageCode]?.[titleKey] || translations.fr[titleKey] || 'SIB';
-          document.title = `${translatedTitle} - SIB 2026`;
+          applyLanguageSideEffects(languageCode);
 
           // IMPORTANT: Mettre à jour l'état en dernier pour déclencher le re-render
           set({ currentLanguage: languageCode, isLoading: false });
@@ -143,7 +162,12 @@ export const useLanguageStore = create<LanguageState>()(
     }),
     {
       name: LANGUAGE_STORAGE_KEY,
-      partialize: (state) => ({ currentLanguage: state.currentLanguage })
+      partialize: (state) => ({ currentLanguage: state.currentLanguage }),
+      onRehydrateStorage: () => (state) => {
+        if (state?.currentLanguage) {
+          void syncLanguageFromStore();
+        }
+      },
     }
   )
 );

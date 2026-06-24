@@ -164,7 +164,7 @@ export const DEFAULT_BADGE_CONFIG: BadgeConfig = {
 };
 
 function parseConfigValue(raw: unknown): Partial<BadgeConfig> {
-  if (!raw) return {};
+  if (raw == null) return {};
   if (typeof raw === 'string') {
     try {
       return JSON.parse(raw) as Partial<BadgeConfig>;
@@ -172,7 +172,14 @@ function parseConfigValue(raw: unknown): Partial<BadgeConfig> {
       return {};
     }
   }
-  return raw as Partial<BadgeConfig>;
+  if (typeof raw === 'object') {
+    return raw as Partial<BadgeConfig>;
+  }
+  return {};
+}
+
+function hasConfigFields(parsed: Partial<BadgeConfig>): boolean {
+  return Object.keys(parsed).length > 0;
 }
 
 function mergeBadgeConfig(parsed: Partial<BadgeConfig>): BadgeConfig {
@@ -189,8 +196,11 @@ export async function fetchBadgeConfig(): Promise<BadgeConfig> {
   // 1. RPC publique — contourne RLS admin-only sur app_settings
   try {
     const { data, error } = await supabase.rpc('get_badge_config');
-    if (!error && data && typeof data === 'object' && Object.keys(data as object).length > 0) {
-      return mergeBadgeConfig(parseConfigValue(data));
+    if (!error && data != null) {
+      const parsed = parseConfigValue(data);
+      if (hasConfigFields(parsed)) {
+        return mergeBadgeConfig(parsed);
+      }
     }
   } catch {
     // RPC pas encore déployée
@@ -204,8 +214,11 @@ export async function fetchBadgeConfig(): Promise<BadgeConfig> {
       .eq('key', 'badge_config_v1')
       .maybeSingle();
 
-    if (!error && data?.value) {
-      return mergeBadgeConfig(parseConfigValue(data.value));
+    if (!error && data?.value != null) {
+      const parsed = parseConfigValue(data.value);
+      if (hasConfigFields(parsed)) {
+        return mergeBadgeConfig(parsed);
+      }
     }
 
     if (error?.code === '42P01' || error?.code === '42501' || error?.code === 'PGRST301') {
