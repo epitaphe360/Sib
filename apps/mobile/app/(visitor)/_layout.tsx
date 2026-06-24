@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
 import { SignOutHeaderButton } from '../../src/components/SignOutHeaderButton';
+import { PendingPaymentRedirect } from '../../src/components/PendingPaymentRedirect';
 import { RoleGate } from '../../src/components/guards/RoleGate';
 import { SalonProvider } from '../../src/context/SalonContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
@@ -45,6 +46,7 @@ export default function VisitorLayout() {
   return (
     <RoleGate allowed="visitor" requireAuth={false}>
       <SalonProvider>
+        <PendingPaymentRedirect />
         <VisitorStack />
       </SalonProvider>
     </RoleGate>

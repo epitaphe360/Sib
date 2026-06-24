@@ -5,6 +5,10 @@ import { finalizeProfileAfterMagicLink } from '../services/magicLinkAuth';
 import type { AppUser } from '../types';
 
 const OTP_TYPE_FALLBACKS: EmailOtpType[] = ['magiclink', 'email', 'invite', 'signup', 'recovery'];
+const SESSION_RECOVERY_ATTEMPTS = 6;
+const SESSION_RECOVERY_DELAY_MS = 250;
+
+const inFlightByUrl = new Map<string, Promise<{ appUser: AppUser; paymentRequestId?: string }>>();
 
 function mapOtpType(type: string | null): EmailOtpType {
   const normalized = (type ?? 'magiclink').toLowerCase();
@@ -23,8 +27,31 @@ function mapOtpType(type: string | null): EmailOtpType {
 
 function otpTypesToTry(preferred: string | null): EmailOtpType[] {
   const primary = mapOtpType(preferred);
+  if (primary === 'invite') {
+    return ['invite', 'email'];
+  }
   const ordered = [primary, ...OTP_TYPE_FALLBACKS.filter((t) => t !== primary)];
   return [...new Set(ordered)];
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function readSessionUser() {
+  const { data: { session } } = await supabase.auth.getSession();
+  return session?.user ?? null;
+}
+
+async function readSessionUserWithRetry() {
+  for (let attempt = 0; attempt < SESSION_RECOVERY_ATTEMPTS; attempt += 1) {
+    const user = await readSessionUser();
+    if (user) return user;
+    if (attempt < SESSION_RECOVERY_ATTEMPTS - 1) {
+      await sleep(SESSION_RECOVERY_DELAY_MS);
+    }
+  }
+  return null;
 }
 
 async function verifyOtpWithFallback(
@@ -51,16 +78,30 @@ async function verifyOtpWithFallback(
     }
   }
 
-  const session = await supabase.auth.getSession();
-  if (session.data.session?.user) {
-    return { user: session.data.session.user };
+  const user = await readSessionUserWithRetry();
+  if (user) {
+    return { user };
   }
 
   throw lastError ?? new Error('Lien invalide ou expiré. Demandez un nouveau lien depuis l’application.');
 }
 
-export async function completeAuthSessionFromUrl(
-  url: string
+/** Session déjà créée mais verifyOtp échoue (lien consommé par un 1er passage). */
+export async function recoverMagicLinkSession(): Promise<{
+  appUser: AppUser;
+  paymentRequestId?: string;
+} | null> {
+  const user = await readSessionUserWithRetry();
+  if (!user) return null;
+  try {
+    return await finalizeProfileAfterMagicLink(user);
+  } catch {
+    return null;
+  }
+}
+
+async function completeAuthSessionFromUrlInner(
+  url: string,
 ): Promise<{ appUser: AppUser; paymentRequestId?: string }> {
   const { accessToken, refreshToken, code, tokenHash, type } = parseAuthTokensFromUrl(url);
 
@@ -77,6 +118,8 @@ export async function completeAuthSessionFromUrl(
   }
 
   if (!accessToken || !refreshToken) {
+    const recovered = await recoverMagicLinkSession();
+    if (recovered) return recovered;
     throw new Error('Lien invalide ou expiré. Demandez un nouveau lien depuis l’application.');
   }
 
@@ -88,6 +131,20 @@ export async function completeAuthSessionFromUrl(
   if (!data.user) throw new Error('Session invalide');
 
   return finalizeProfileAfterMagicLink(data.user);
+}
+
+export async function completeAuthSessionFromUrl(
+  url: string,
+): Promise<{ appUser: AppUser; paymentRequestId?: string }> {
+  const key = url.trim();
+  const existing = inFlightByUrl.get(key);
+  if (existing) return existing;
+
+  const promise = completeAuthSessionFromUrlInner(key).finally(() => {
+    inFlightByUrl.delete(key);
+  });
+  inFlightByUrl.set(key, promise);
+  return promise;
 }
 
 /** Reconstruit une URL auth-callback depuis les paramètres expo-router (Android). */

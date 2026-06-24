@@ -5,20 +5,53 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../src/context/AuthContext';
 import { useSalon } from '../../src/context/SalonContext';
 import { normalizeAuthDeepLink } from '../../src/lib/authDeepLink';
+import {
+  markAuthCallbackDone,
+  releaseAuthCallback,
+  tryBeginAuthCallback,
+} from '../../src/lib/authCallbackState';
 import { peekPendingAuthDeepLink, consumePendingAuthDeepLink } from '../../src/lib/pendingAuthDeepLink';
 import { applyPendingSalonAfterAuth } from '../../src/lib/applyPendingSalonAfterAuth';
 import {
   buildAuthCallbackUrlFromParams,
   completeAuthSessionFromUrl,
+  recoverMagicLinkSession,
 } from '../../src/lib/completeAuthSession';
 import { dismissAuthStackIfNeeded, navigateAfterAuth } from '../../src/lib/navigateAfterAuth';
 import { resolveVipPaymentRedirectId } from '../../src/services/payment';
+import type { AppUser } from '../../src/types';
 import { colors, spacing } from '../../src/theme';
 import { useI18n } from '../../src/i18n/I18nProvider';
 
 const CALLBACK_TIMEOUT_MS = 30_000;
 const POLL_MS = 400;
 const POLL_ATTEMPTS = 25;
+
+async function redirectAfterMagicLinkAuth(
+  appUser: AppUser,
+  paymentRequestId: string | undefined,
+  refreshUser: () => Promise<void>,
+  salons: Parameters<typeof applyPendingSalonAfterAuth>[0]['salons'],
+  setActiveSalon: Parameters<typeof applyPendingSalonAfterAuth>[0]['setActiveSalon'],
+): Promise<void> {
+  consumePendingAuthDeepLink();
+  await refreshUser();
+  let paymentId = paymentRequestId;
+  if (!paymentId && appUser.status === 'pending_payment') {
+    paymentId = await resolveVipPaymentRedirectId(appUser.id);
+  }
+  if (paymentId) {
+    dismissAuthStackIfNeeded();
+    router.replace(`/payment/${paymentId}` as never);
+    return;
+  }
+  const enteredSalon = await applyPendingSalonAfterAuth({
+    salons,
+    setActiveSalon,
+    userId: appUser.id,
+  });
+  if (!enteredSalon) navigateAfterAuth(appUser.type);
+}
 
 export default function AuthCallbackScreen() {
   const { t } = useI18n();
@@ -46,28 +79,34 @@ export default function AuthCallbackScreen() {
   const handle = useCallback(
     async (url: string) => {
       if (handledRef.current) return;
+      if (!tryBeginAuthCallback()) return;
       handledRef.current = true;
       try {
         const normalized = normalizeAuthDeepLink(url) ?? url;
         const { appUser, paymentRequestId } = await completeAuthSessionFromUrl(normalized);
-        consumePendingAuthDeepLink();
-        await refreshUser();
-        let paymentId = paymentRequestId;
-        if (!paymentId && appUser.status === 'pending_payment') {
-          paymentId = await resolveVipPaymentRedirectId(appUser.id);
-        }
-        if (paymentId) {
-          dismissAuthStackIfNeeded();
-          router.replace(`/payment/${paymentId}` as never);
-        } else {
-          const enteredSalon = await applyPendingSalonAfterAuth({
+        markAuthCallbackDone();
+        await redirectAfterMagicLinkAuth(
+          appUser,
+          paymentRequestId,
+          refreshUser,
+          salons,
+          setActiveSalon,
+        );
+      } catch (e) {
+        const recovered = await recoverMagicLinkSession();
+        if (recovered) {
+          markAuthCallbackDone();
+          await redirectAfterMagicLinkAuth(
+            recovered.appUser,
+            recovered.paymentRequestId,
+            refreshUser,
             salons,
             setActiveSalon,
-            userId: appUser.id,
-          });
-          if (!enteredSalon) navigateAfterAuth(appUser.type);
+          );
+          return;
         }
-      } catch (e) {
+
+        releaseAuthCallback();
         const raw = e instanceof Error ? e.message : t('auth.magic.callbackError');
         const lower = raw.toLowerCase();
         if (lower.includes('invalid') || lower.includes('expired') || lower.includes('expir')) {
@@ -77,7 +116,6 @@ export default function AuthCallbackScreen() {
         } else {
           setError(raw);
         }
-        handledRef.current = false;
       }
     },
     [refreshUser, salons, setActiveSalon, t],
