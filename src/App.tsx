@@ -243,6 +243,12 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
   const isStandaloneHome = location.pathname === ROUTES.HOME;
+  const isServiceClientRoute = location.pathname.startsWith(ROUTES.SERVICE_CLIENT_PORTAL);
+
+  if (isServiceClientRoute) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <SkipToContent />
@@ -446,7 +452,7 @@ const App = () => {
             <Route path={ROUTES.BADGE_DIGITAL} element={<ProtectedRoute><DigitalBadge /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_SCANNER} element={<ProtectedRoute><BadgeScannerPage /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_PRINT_STATION} element={<ProtectedRoute requiredRole={['admin', 'security']}><BadgePrintStationPage /></ProtectedRoute>} />
-            <Route path={ROUTES.SERVICE_CLIENT_PORTAL} element={<ProtectedRoute requiredRole={['admin', 'security']}><ServiceClientPortalPage /></ProtectedRoute>} />
+            <Route path={ROUTES.SERVICE_CLIENT_PORTAL} element={<ServiceClientPortalPage />} />
             {/* FIXED: Permettre aux admins d'accéder au scanner QR (pas seulement 'security') */}
             <Route path={ROUTES.SECURITY_SCANNER} element={<ProtectedRoute requiredRole={['admin', 'exhibitor', 'partner', 'security']}><QRScanner /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_UPGRADE} element={<ProtectedRoute requiredRole="partner"><PartnerUpgradePage /></ProtectedRoute>} />
