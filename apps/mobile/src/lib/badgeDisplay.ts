@@ -14,7 +14,7 @@ export function badgeLevelLabel(level?: string): string {
     case 'admin':
       return 'Administrateur';
     case 'security':
-      return 'Sécurité';
+      return 'Contrôleur';
     case 'standard':
       return 'STANDARD';
     default:

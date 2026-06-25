@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { sanitizeIlikeTerm } from '../lib/sanitizeIlike';
+import { resolveSalonForScan } from '../lib/scanSalon';
 
 export interface ConnectionRequest {
   id: string;
@@ -9,6 +10,8 @@ export interface ConnectionRequest {
   fromName?: string;
   toName?: string;
   partnerName?: string;
+  salonId?: string;
+  salonName?: string;
   createdAt: string;
 }
 
@@ -19,6 +22,8 @@ async function attachUserNames(
     addressee_id: string;
     status: string;
     created_at: string;
+    salon_id?: string | null;
+    salon_name?: string | null;
   }>
 ): Promise<ConnectionRequest[]> {
   if (!rows.length) return [];
@@ -40,6 +45,8 @@ async function attachUserNames(
     status: row.status,
     fromName: names.get(row.requester_id),
     toName: names.get(row.addressee_id),
+    salonId: row.salon_id ?? undefined,
+    salonName: row.salon_name ?? undefined,
     createdAt: row.created_at,
   }));
 }
@@ -47,7 +54,7 @@ async function attachUserNames(
 export async function fetchConnections(userId: string): Promise<ConnectionRequest[]> {
   const { data, error } = await supabase
     .from('connections')
-    .select('id, requester_id, addressee_id, status, created_at')
+    .select('id, requester_id, addressee_id, status, created_at, salon_id, salon_name')
     .or(`requester_id.eq.${userId},addressee_id.eq.${userId}`)
     .order('created_at', { ascending: false })
     .limit(50);
@@ -83,10 +90,13 @@ export async function searchUsers(query: string, excludeUserId: string) {
 }
 
 export async function requestConnection(fromUserId: string, toUserId: string): Promise<void> {
+  const { salonId, salonName } = await resolveSalonForScan();
   const { error } = await supabase.from('connections').insert({
     requester_id: fromUserId,
     addressee_id: toUserId,
     status: 'pending',
+    salon_id: salonId,
+    salon_name: salonName,
   });
   if (error) throw error;
 }

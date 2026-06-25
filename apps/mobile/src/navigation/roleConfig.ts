@@ -65,6 +65,6 @@ export const ROLE_LABELS: Record<UserType, string> = {
   exhibitor: 'Exposant',
   partner: 'Partenaire',
   admin: 'Organisation',
-  security: 'Sécurité',
+  security: 'Contrôleur',
   service_client: 'Service Clientèle',
 };

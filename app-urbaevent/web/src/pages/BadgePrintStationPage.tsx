@@ -61,7 +61,11 @@ import PrintableBadge from '../components/badge/PrintableBadge';
 type Tab = 'scanner' | 'search' | 'history' | 'stats';
 type BadgeFormat = 'card' | 'badge';
 
-export default function BadgePrintStationPage() {
+interface BadgePrintStationPageProps {
+  embedded?: boolean;
+}
+
+export default function BadgePrintStationPage({ embedded = false }: BadgePrintStationPageProps) {
   const { user, logout } = useAuthStore();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -465,8 +469,9 @@ export default function BadgePrintStationPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className={embedded ? 'bg-gradient-to-br from-gray-50 to-blue-50' : 'min-h-screen bg-gradient-to-br from-gray-50 to-blue-50'}>
       {/* Header */}
+      {!embedded && (
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -538,6 +543,7 @@ export default function BadgePrintStationPage() {
           </div>
         </div>
       </div>
+      )}
 
       {/* Tabs */}
       <div className="max-w-7xl mx-auto px-4 mt-4">

@@ -122,6 +122,11 @@ export default function VisitorNetworkingScreen({ embedded = false }: { embedded
         variant="gold"
         onPress={() => router.push('/(visitor)/scan-connect' as never)}
       />
+      <PrimaryButton
+        label={t('scanHistory.title')}
+        variant="outline"
+        onPress={() => router.push('/(visitor)/scan-history' as never)}
+      />
       {!permissions.canSendMessages && user?.type === 'visitor' ? (
         <Text style={styles.freeHint}>{t('networking.freeHint')}</Text>
       ) : null}

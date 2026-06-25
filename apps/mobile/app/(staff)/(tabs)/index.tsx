@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { fetchAdminLiveMetrics } from '../../../src/api/analytics';
+import { fetchAdminScanStats, formatScanStatNumber, type AdminScanStats } from '../../../src/api/scanStats';
 import { AppIcon, type AppIconName } from '../../../src/components/AppIcon';
 import { Card, MenuRow, Screen } from '../../../src/components/ui';
 import { useAuth } from '../../../src/context/AuthContext';
@@ -12,12 +13,18 @@ export default function StaffLiveScreen() {
   const { user } = useAuth();
   const { t } = useI18n();
   const [metrics, setMetrics] = useState({ totalUsers: 0, pendingPayments: 0, pendingValidations: 0 });
+  const [scanStats, setScanStats] = useState<AdminScanStats | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
   const load = useCallback(async () => {
     if (user?.type === 'admin') {
       try {
-        setMetrics(await fetchAdminLiveMetrics());
+        const [live, scans] = await Promise.all([
+          fetchAdminLiveMetrics(),
+          fetchAdminScanStats('sib'),
+        ]);
+        setMetrics(live);
+        setScanStats(scans);
       } catch (e) {
         Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
       }
@@ -61,6 +68,19 @@ export default function StaffLiveScreen() {
                 <StatCard icon="card-outline" label={t('staff.payments')} value={metrics.pendingPayments} accent="#F39200" />
                 <StatCard icon="time-outline" label={t('staff.validations')} value={metrics.pendingValidations} accent="#10B981" />
               </View>
+              {scanStats ? (
+                <Pressable onPress={() => router.push('/(staff)/scan-stats' as never)}>
+                  <Card elevated style={styles.scanPreview}>
+                    <Text style={styles.scanPreviewTitle}>{t('adminScanStats.menu')} — SIB</Text>
+                    <View style={styles.scanPreviewRow}>
+                      <ScanPill label={t('adminScanStats.category.entry')} value={scanStats.uniqueEntrants} />
+                      <ScanPill label={t('adminScanStats.category.networking')} value={scanStats.networkingScans} />
+                      <ScanPill label={t('adminScanStats.category.stand')} value={scanStats.standScans} />
+                      <ScanPill label={t('adminScanStats.category.controller')} value={scanStats.controllerScans} />
+                    </View>
+                  </Card>
+                </Pressable>
+              ) : null}
               <Card elevated style={styles.hintCard}>
                 <Text style={styles.hint}>{t('staff.orgHint')}</Text>
               </Card>
@@ -77,12 +97,25 @@ export default function StaffLiveScreen() {
                 <MenuRow icon="notifications-outline" label={t('staff.alertsBtn')} onPress={() => router.push('/(staff)/alerts')} />
                 <View style={styles.divider} />
                 <MenuRow icon="people-outline" label={t('staff.usersBtn')} onPress={() => router.push('/(staff)/users')} />
+                <View style={styles.divider} />
+                <MenuRow icon="bar-chart-outline" label={t('adminScanStats.menu')} onPress={() => router.push('/(staff)/scan-stats' as never)} accent={colors.primary} />
+                <View style={styles.divider} />
+                <MenuRow icon="time-outline" label={t('scanHistory.controllerTitle')} onPress={() => router.push('/(staff)/scan-history' as never)} />
               </Card>
             </>
           )}
         </View>
       </ScrollView>
     </Screen>
+  );
+}
+
+function ScanPill({ label, value }: { label: string; value: number }) {
+  return (
+    <View style={styles.scanPill}>
+      <Text style={styles.scanPillValue}>{formatScanStatNumber(value)}</Text>
+      <Text style={styles.scanPillLabel} numberOfLines={2}>{label}</Text>
+    </View>
   );
 }
 
@@ -158,4 +191,17 @@ const styles = StyleSheet.create({
   },
   menuCard: { paddingVertical: spacing.xs, overflow: 'hidden' },
   divider: { height: 1, backgroundColor: colors.borderLight, marginLeft: 56 },
+  scanPreview: { padding: spacing.md, gap: spacing.sm },
+  scanPreviewTitle: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.primaryDark },
+  scanPreviewRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+  scanPill: {
+    flex: 1,
+    minWidth: '45%',
+    backgroundColor: colors.background,
+    borderRadius: radius.md,
+    padding: spacing.sm,
+    alignItems: 'center',
+  },
+  scanPillValue: { fontFamily: fonts.display, fontSize: 20, color: colors.primaryDark },
+  scanPillLabel: { fontFamily: fonts.body, fontSize: 10, color: colors.textMuted, textAlign: 'center', marginTop: 2 },
 });

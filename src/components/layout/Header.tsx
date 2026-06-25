@@ -181,14 +181,6 @@ export const Header: React.FC = memo(() => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-0 xl:gap-0.5 flex-1 justify-center">
 
-            <Link
-              to={ROUTES.HOME}
-              className="relative px-1 xl:px-2.5 py-2 text-[10px] xl:text-xs font-medium uppercase tracking-[0.1em] text-slate-500 hover:text-[#F39200] transition-all duration-300 flex items-center gap-1 group whitespace-nowrap"
-            >
-              <span>{t('nav.home')}</span>
-              <span className="absolute bottom-0 left-2 right-2 h-[0.5px] bg-[#2E5984] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-            </Link>
-
             {/* Le Salon ▼ */}
             {navIsVisible('salon') && (
             <div className="relative" onMouseEnter={() => setIsSalonMenuOpen(true)} onMouseLeave={() => setIsSalonMenuOpen(false)}>
@@ -686,14 +678,6 @@ export const Header: React.FC = memo(() => {
                   </button>
                 </div>
               )}
-
-              <Link
-                to={ROUTES.HOME}
-                onClick={closeMenu}
-                className="block border-b border-gray-200 pb-3 mb-1 px-3 py-3 min-h-[44px] text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                {t('nav.home')}
-              </Link>
 
               {/* ══ Le Salon ══ */}
               {navIsVisible('salon') && (

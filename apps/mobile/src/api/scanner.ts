@@ -1,5 +1,6 @@
 import { PLATFORM } from '../config/platform';
 import { supabase } from '../lib/supabase';
+import { resolveSalonForScan } from '../lib/scanSalon';
 import { enqueueScanLog, getPendingScanLogs, clearPendingScanLogs } from '../lib/offlineQueue';
 import { CACHE_KEYS, loadCache, saveCache } from '../lib/dataCache';
 import { isNetworkError } from '../lib/errors';
@@ -17,6 +18,9 @@ export interface ScanResult {
 export interface ScanHistoryEntry extends ScanResult {
   id: string;
   zone: string;
+  salonName?: string;
+  scannedBy?: string;
+  scannedByName?: string;
 }
 
 const sessionHistory: ScanHistoryEntry[] = [];
@@ -143,6 +147,8 @@ async function persistAccessLog(params: {
   const scannerId = session?.user?.id;
   if (!scannerId) return;
 
+  const { salonId, salonName } = await resolveSalonForScan();
+
   await supabase.from('access_logs').insert({
     user_id: params.badge?.userId ?? null,
     user_name: params.badge?.userName ?? null,
@@ -154,15 +160,30 @@ async function persistAccessLog(params: {
     scanned_by: scannerId,
     scanner_device: PLATFORM.scannerDevice,
     accessed_at: new Date().toISOString(),
+    salon_id: salonId,
+    salon_name: salonName,
+    event: salonName,
   });
 }
 
-export async function fetchAccessLogHistory(limit = 20): Promise<ScanHistoryEntry[]> {
-  const { data, error } = await supabase
+export async function fetchAccessLogHistory(
+  limit = 20,
+  options?: { scannedBy?: string; salonId?: string },
+): Promise<ScanHistoryEntry[]> {
+  let query = supabase
     .from('access_logs')
-    .select('id, zone, status, reason, user_name, accessed_at')
+    .select('id, zone, status, reason, user_name, accessed_at, salon_name, scanned_by')
     .order('accessed_at', { ascending: false })
     .limit(limit);
+
+  if (options?.scannedBy) {
+    query = query.eq('scanned_by', options.scannedBy);
+  }
+  if (options?.salonId) {
+    query = query.eq('salon_id', options.salonId);
+  }
+
+  const { data, error } = await query;
 
   if (error) return getScanHistory();
 
@@ -173,6 +194,8 @@ export async function fetchAccessLogHistory(limit = 20): Promise<ScanHistoryEntr
     reason: (row.reason as string) ?? undefined,
     userName: (row.user_name as string) ?? undefined,
     scannedAt: (row.accessed_at as string) ?? new Date().toISOString(),
+    salonName: (row.salon_name as string) ?? undefined,
+    scannedBy: (row.scanned_by as string) ?? undefined,
   }));
 }
 
@@ -335,10 +358,14 @@ export async function scanLeadFromQr(qrData: string, exhibitorUserId: string): P
     return dup;
   }
 
+  const { salonId, salonName } = await resolveSalonForScan();
+
   const { error } = await supabase.from('exhibitor_leads').insert({
     exhibitor_user_id: exhibitorUserId,
     visitor_user_id: visitorUserId,
     scanned_at: scannedAt,
+    salon_id: salonId,
+    salon_name: salonName,
   });
   if (error) {
     if (error.code === '23505') {

@@ -78,6 +78,7 @@ const BadgeScannerPage = lazyRetry(() => import('./pages/BadgeScannerPage'));
 const PartnerBankTransferPage = lazyRetry(() => import('./pages/partner/PartnerBankTransferPage'));
 const PartnerPaymentSelectionPage = lazyRetry(() => import('./pages/partner/PartnerPaymentSelectionPage'));
 const BadgePrintStationPage = lazyRetry(() => import('./pages/BadgePrintStationPage'));
+const ServiceClientPortalPage = lazyRetry(() => import('./pages/ServiceClientPortalPage'));
 const QRScanner = lazyRetry(() => import('./components/security/QRScanner'));
 
 // Visitor registration pages
@@ -445,6 +446,7 @@ const App = () => {
             <Route path={ROUTES.BADGE_DIGITAL} element={<ProtectedRoute><DigitalBadge /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_SCANNER} element={<ProtectedRoute><BadgeScannerPage /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_PRINT_STATION} element={<ProtectedRoute requiredRole={['admin', 'security']}><BadgePrintStationPage /></ProtectedRoute>} />
+            <Route path={ROUTES.SERVICE_CLIENT_PORTAL} element={<ProtectedRoute requiredRole={['admin', 'security']}><ServiceClientPortalPage /></ProtectedRoute>} />
             {/* FIXED: Permettre aux admins d'accéder au scanner QR (pas seulement 'security') */}
             <Route path={ROUTES.SECURITY_SCANNER} element={<ProtectedRoute requiredRole={['admin', 'exhibitor', 'partner', 'security']}><QRScanner /></ProtectedRoute>} />
             <Route path={ROUTES.PARTNER_UPGRADE} element={<ProtectedRoute requiredRole="partner"><PartnerUpgradePage /></ProtectedRoute>} />

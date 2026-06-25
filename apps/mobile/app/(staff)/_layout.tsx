@@ -24,6 +24,8 @@ function StaffStack() {
       <Stack.Screen name="print-station" options={{ ...hOpts, title: t('printStation.title') }} />
       <Stack.Screen name="badge" options={{ ...hOpts, title: t('badge.title') }} />
       <Stack.Screen name="zone-capacity" options={{ ...hOpts, title: t('staff.zoneCapacity') }} />
+      <Stack.Screen name="scan-history" options={{ ...hOpts, title: t('scanHistory.controllerTitle') }} />
+      <Stack.Screen name="scan-stats" options={{ ...hOpts, title: t('adminScanStats.title') }} />
     </Stack>
   );
 }

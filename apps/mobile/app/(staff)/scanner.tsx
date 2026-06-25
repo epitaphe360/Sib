@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SignOutOverlayButton } from '../../src/components/SignOutOverlayButton';
 import { useSignOut } from '../../src/hooks/useSignOut';
+import { useAuth } from '../../src/context/AuthContext';
 import {
   fetchAccessLogHistory,
   flushOfflineScanQueue,
@@ -28,6 +30,7 @@ const ZONES = [
 
 export default function StaffScannerScreen() {
   const { t } = useI18n();
+  const { user } = useAuth();
   const { confirmSignOut } = useSignOut();
   const insets = useSafeAreaInsets();
   const [zone, setZone] = useState(ZONES[0].id);
@@ -53,9 +56,11 @@ export default function StaffScannerScreen() {
   };
 
   const reloadHistory = useCallback(async () => {
-    const db = await fetchAccessLogHistory(15);
+    const db = await fetchAccessLogHistory(15, {
+      scannedBy: user?.type === 'security' ? user.id : undefined,
+    });
     setHistory(db.length ? db : getScanHistory());
-  }, []);
+  }, [user?.id, user?.type]);
 
   useEffect(() => {
     flushOfflineScanQueue().then(() => reloadHistory()).catch((e) => console.warn('[Scanner] flushOfflineScanQueue', e));
@@ -108,6 +113,8 @@ export default function StaffScannerScreen() {
                     color={h.valid ? '#4ade80' : '#f87171'}
                   />
                   <Text style={styles.historyOverlayLine} numberOfLines={1}>
+                    {new Date(h.scannedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                    {' · '}
                     {h.userName ?? h.reason ?? '—'}
                   </Text>
                 </View>
@@ -186,6 +193,12 @@ export default function StaffScannerScreen() {
         <View style={{ height: spacing.sm }} />
         <PrimaryButton label={t('scanner.useCamera')} variant="gold" onPress={() => setUseCamera(true)} />
         <View style={{ height: spacing.sm }} />
+        <PrimaryButton
+          label={t('scanHistory.controllerTitle')}
+          variant="outline"
+          onPress={() => router.push('/(staff)/scan-history' as never)}
+        />
+        <View style={{ height: spacing.sm }} />
         <PrimaryButton label={t('profile.signOut')} variant="outline" onPress={confirmSignOut} />
 
         <Text style={styles.section}>{t('scanner.history')}</Text>
@@ -201,7 +214,12 @@ export default function StaffScannerScreen() {
               />
               <View style={styles.histContent}>
                 <Text style={styles.histName}>{h.userName ?? h.reason ?? '—'}</Text>
-                <Text style={styles.histMeta}>{h.zone}</Text>
+                <Text style={styles.histMeta}>
+                  {new Date(h.scannedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                  {' · '}
+                  {h.zone}
+                  {h.salonName ? ` · ${h.salonName}` : ''}
+                </Text>
               </View>
             </View>
           ))

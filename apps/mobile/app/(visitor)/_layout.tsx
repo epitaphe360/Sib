@@ -24,6 +24,7 @@ function VisitorStack() {
       <Stack.Screen name="messages/[id]" options={{ ...hOpts, title: t('messages.title') }} />
       <Stack.Screen name="networking" options={{ ...hOpts, title: t('networking.title') }} />
       <Stack.Screen name="scan-connect" options={{ ...hOpts, title: t('networking.scanTitle') }} />
+      <Stack.Screen name="scan-history" options={{ ...hOpts, title: t('scanHistory.title') }} />
       <Stack.Screen name="settings" options={{ ...hOpts, title: t('settings.title') }} />
       <Stack.Screen name="map" options={{ ...hOpts, title: t('map.title') }} />
       <Stack.Screen name="news/index" options={{ ...hOpts, title: t('news.title') }} />

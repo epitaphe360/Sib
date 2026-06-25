@@ -157,6 +157,7 @@ export const ROUTES = {
   BADGE_DIGITAL: '/badge/digital',
   BADGE_SCANNER: '/badge/scanner',
   BADGE_PRINT_STATION: '/badge/print-station',
+  SERVICE_CLIENT_PORTAL: '/service-client',
   SECURITY_SCANNER: '/security/scanner',
 
   // Partner upgrade routes

@@ -4,7 +4,6 @@ import { SupabaseService } from '../services/supabaseService';
 import { supabase } from '../lib/supabase';
 import OAuthService from '../services/oauthService';
 import { User, UserProfile } from '../types';
-import { resetAllStores } from './resetStores';
 import { secureStorage } from '../lib/secureStorage';
 import { loginRateLimiter, passwordResetRateLimiter } from '../utils/rateLimiter';
 import logger from '../utils/logger';
@@ -426,7 +425,7 @@ const useAuthStore = create<AuthState>()(
     }
 
     // CRITIQUE: Nettoyer TOUS les stores avant de déconnecter
-    // Empêche les fuites de données sur ordinateurs partagés
+    const { resetAllStores } = await import('./resetStores');
     resetAllStores();
 
     // CRITICAL: Nettoyage complet du localStorage et sessionStorage

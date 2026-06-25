@@ -11,7 +11,7 @@ describe('Mobile — badge display', () => {
     expect(badgeLevelLabel('exhibitor')).toBe('Exposant');
     expect(badgeLevelLabel('partner')).toBe('Partenaire');
     expect(badgeLevelLabel('admin')).toBe('Administrateur');
-    expect(badgeLevelLabel('security')).toBe('Sécurité');
+    expect(badgeLevelLabel('security')).toBe('Contrôleur');
     expect(badgeLevelLabel('standard')).toBe('STANDARD');
     expect(badgeLevelLabel('custom_level')).toBe('CUSTOM_LEVEL');
     expect(badgeLevelLabel(undefined)).toBe('STANDARD');

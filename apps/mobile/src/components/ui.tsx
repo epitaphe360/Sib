@@ -240,7 +240,7 @@ export function RoleBadge({ role, level }: { role: string; level?: string }) {
     exhibitor: { label: 'Exposant', bg: colors.successBg, fg: colors.success },
     partner: { label: 'Partenaire', bg: '#EDE9FE', fg: '#7C3AED' },
     admin: { label: 'Organisation', bg: colors.dangerBg, fg: colors.danger },
-    security: { label: 'Sécurité', bg: colors.warningBg, fg: colors.warning },
+    security: { label: 'Contrôleur', bg: colors.warningBg, fg: colors.warning },
     service_client: { label: 'Service Clientèle', bg: colors.infoBg, fg: colors.info },
   };
   const s = map[role] ?? { label: role, bg: colors.border, fg: colors.textMuted };

@@ -65,7 +65,7 @@ function buildBadgeHtml(badge: UserBadge): string {
     exhibitor: 'Exposant',
     partner: 'Partenaire',
     admin: 'Organisation',
-    security: 'Sécurité',
+    security: 'Contrôleur',
     service_client: 'Service Clientèle',
   };
   const typeLabel = typeLabels[badge.userType] ?? 'Participant';

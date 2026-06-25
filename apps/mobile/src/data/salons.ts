@@ -44,6 +44,9 @@ export const SALONS: Salon[] = [
   },
 ];
 
+/** Salon par défaut quand SIB est ouvert (attribution auto des scans). */
+export const DEFAULT_SALON_ID = 'sib';
+
 export const SALON_INFO = {
   name: 'SIB 2026',
   opensAt: '2026-11-25T09:00:00+01:00',

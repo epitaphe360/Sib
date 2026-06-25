@@ -9,4 +9,5 @@ export * from './minisitePublic';
 export * from './news';
 export * from './analytics';
 export * from './admin';
+export * from './scanStats';
 export * from './scanner';

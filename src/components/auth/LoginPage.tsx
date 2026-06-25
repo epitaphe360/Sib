@@ -53,7 +53,7 @@ export default function LoginPage() {
     }
 
     if (user?.type === 'security' || user?.email === 'service-clientele@sibs.com') {
-      navigate(ROUTES.BADGE_PRINT_STATION);
+      navigate(ROUTES.SERVICE_CLIENT_PORTAL);
     } else if (user?.email === 'marketing@sibs.com') {
       navigate(ROUTES.MARKETING_DASHBOARD);
     } else if (user?.type === 'admin') {
