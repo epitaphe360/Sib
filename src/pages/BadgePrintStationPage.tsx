@@ -57,9 +57,44 @@ import {
 } from '../services/badgePrintService';
 import { generateBadgeFromUser, getBadgeColor, getAccessLevelLabel } from '../services/badgeService';
 import PrintableBadge from '../components/badge/PrintableBadge';
+import PrintableBadgeA4 from '../components/badge/PrintableBadgeA4';
+
+const BADGE_A4_PRINT_STYLES = `
+  .badge-a4-print-only { display: none; }
+  @media print {
+    html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+    .no-print { display: none !important; }
+    .badge-a4-print-only {
+      display: block !important;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: white;
+    }
+    .badge-print-shell { padding: 0 !important; margin: 0 !important; background: white !important; }
+    .print-page {
+      width: 210mm !important;
+      height: 297mm !important;
+      overflow: hidden !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+      page-break-after: avoid;
+      transform: none !important;
+      scale: none !important;
+      box-shadow: none !important;
+    }
+    #printable-badge-a4 {
+      display: block !important;
+      margin: 0 auto !important;
+      width: 210mm !important;
+      height: 297mm !important;
+    }
+    #printable-badge-a4 > div { width: 100% !important; height: 100% !important; }
+  }
+`;
 
 type Tab = 'scanner' | 'search' | 'history' | 'stats';
-type BadgeFormat = 'card' | 'badge';
+type BadgeFormat = 'a4' | 'card' | 'badge';
 
 interface BadgePrintStationPageProps {
   embedded?: boolean;
@@ -87,12 +122,13 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
   const [isSearching, setIsSearching] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
-  const [badgeFormat, setBadgeFormat] = useState<BadgeFormat>('badge');
+  const [badgeFormat, setBadgeFormat] = useState<BadgeFormat>('a4');
   const [printHistory, setPrintHistory] = useState<PrintRecord[]>([]);
   const [stats, setStats] = useState(getPrintStats());
   const [stationId] = useState(() => `STATION-${Math.random().toString(36).slice(2, 6).toUpperCase()}`);
 
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const badgePrintRef = useRef<HTMLDivElement>(null);
 
   // --- Refresh stats/history ---
   const refreshData = useCallback(() => {
@@ -208,6 +244,52 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
     if (!lookupResult?.badge) {return;}
 
     setIsPrinting(true);
+
+    const recordSuccess = () => {
+      recordPrint({
+        badgeId: lookupResult.badge!.id,
+        badgeCode: lookupResult.badge!.badgeCode,
+        fullName: lookupResult.badge!.fullName,
+        userType: lookupResult.badge!.userType,
+        printedAt: new Date(),
+        printedBy: 'Service Clientèle',
+        stationId,
+        status: 'success',
+        copies: 1,
+      });
+      refreshData();
+      toast.success(t('badge.print.sent'));
+      setIsPrinting(false);
+    };
+
+    const recordError = () => {
+      recordPrint({
+        badgeId: lookupResult.badge!.id,
+        badgeCode: lookupResult.badge!.badgeCode,
+        fullName: lookupResult.badge!.fullName,
+        userType: lookupResult.badge!.userType,
+        printedAt: new Date(),
+        printedBy: 'Service Clientèle',
+        stationId,
+        status: 'error',
+        copies: 0,
+      });
+      refreshData();
+      setIsPrinting(false);
+    };
+
+    if (badgeFormat === 'a4') {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        globalThis.print();
+        recordSuccess();
+      } catch (err) {
+        console.error(t('badge.print.error_printing'), err);
+        toast.error('Erreur lors de l\'impression A4');
+        recordError();
+      }
+      return;
+    }
 
     try {
       const badge = lookupResult.badge;
@@ -470,6 +552,7 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
 
   return (
     <div className={embedded ? 'bg-gradient-to-br from-gray-50 to-blue-50' : 'min-h-screen bg-gradient-to-br from-gray-50 to-blue-50'}>
+      <style>{BADGE_A4_PRINT_STYLES}</style>
       {/* Header */}
       {!embedded && (
       <div className="bg-white border-b border-gray-200 shadow-sm">
@@ -506,6 +589,19 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
             {/* Format selector */}
             <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
               <button
+                type="button"
+                onClick={() => setBadgeFormat('a4')}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  badgeFormat === 'a4'
+                    ? 'bg-white text-blue-700 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Printer className="w-4 h-4 inline mr-1" />
+                Badge A4
+              </button>
+              <button
+                type="button"
                 onClick={() => setBadgeFormat('badge')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   badgeFormat === 'badge'
@@ -517,6 +613,7 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
                 Badge A6
               </button>
               <button
+                type="button"
                 onClick={() => setBadgeFormat('card')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   badgeFormat === 'card'
@@ -545,8 +642,28 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
       </div>
       )}
 
+      {embedded && (
+        <div className="no-print max-w-7xl mx-auto px-4 pt-4 flex flex-wrap items-center gap-2">
+          <span className="text-sm text-gray-600 font-medium">Format :</span>
+          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-1">
+            {(['a4', 'badge', 'card'] as const).map((fmt) => (
+              <button
+                key={fmt}
+                type="button"
+                onClick={() => setBadgeFormat(fmt)}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  badgeFormat === fmt ? 'bg-blue-600 text-white' : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {fmt === 'a4' ? 'Badge A4' : fmt === 'badge' ? 'Badge A6' : 'Carte'}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Tabs */}
-      <div className="max-w-7xl mx-auto px-4 mt-4">
+      <div className="no-print max-w-7xl mx-auto px-4 mt-4">
         <div className="flex gap-2 overflow-x-auto pb-2">
           {tabs.map((tab) => (
             <button
@@ -569,7 +686,7 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
       </div>
 
       {/* Main content */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="no-print max-w-7xl mx-auto px-4 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left panel — Scanner / Search */}
           <div>
@@ -895,7 +1012,7 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
               <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                 <h2 className="font-semibold text-gray-900 flex items-center gap-2">
                   <Badge className="w-5 h-5 text-blue-600" />
-                  Aperçu du Badge
+                  Aperçu du Badge {badgeFormat === 'a4' ? 'A4' : badgeFormat === 'card' ? 'Carte' : 'A6'}
                 </h2>
                 {lookupResult?.badge && (
                   <div className="flex gap-2">
@@ -911,13 +1028,21 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
                 {lookupResult?.found && lookupResult.badge ? (
                   <div className="space-y-4">
                     {/* Badge visuel en aperçu */}
-                    <div className="flex justify-center">
-                      <div className="transform scale-90 origin-top">
-                        <PrintableBadge
-                          badge={lookupResult.badge}
-                          format={badgeFormat}
-                        />
-                      </div>
+                    <div className="flex justify-center overflow-x-auto">
+                      {badgeFormat === 'a4' ? (
+                        <div className="badge-print-shell flex justify-center py-2">
+                          <div className="print-page bg-white shadow-xl rounded-lg overflow-hidden shrink-0 origin-top scale-[0.28] sm:scale-[0.34] md:scale-[0.4] lg:scale-[0.46]">
+                            <PrintableBadgeA4 badge={lookupResult.badge} loadConfig />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="transform scale-90 origin-top">
+                          <PrintableBadge
+                            badge={lookupResult.badge}
+                            format={badgeFormat}
+                          />
+                        </div>
+                      )}
                     </div>
 
                     {/* Informations détaillées */}
@@ -1069,6 +1194,16 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
           </div>
         </div>
       </div>
+
+      {lookupResult?.badge && badgeFormat === 'a4' ? (
+        <div className="badge-a4-print-only" aria-hidden="true">
+          <div ref={badgePrintRef} className="badge-print-shell flex justify-center items-start min-h-screen pt-0">
+            <div className="print-page bg-white">
+              <PrintableBadgeA4 badge={lookupResult.badge} loadConfig />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

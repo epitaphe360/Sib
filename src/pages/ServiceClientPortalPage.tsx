@@ -153,7 +153,7 @@ function ServiceClientPortal() {
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
-      <header className="sticky top-0 z-50 bg-sib-navy text-white px-4 py-3 shadow-md">
+      <header className="no-print sticky top-0 z-50 bg-sib-navy text-white px-4 py-3 shadow-md">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-lg font-bold font-display">Service Clientèle SIB 2026</h1>
