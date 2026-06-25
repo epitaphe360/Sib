@@ -15,14 +15,20 @@ import {
 import useAuthStore from '../store/authStore';
 import { useTranslation } from '../hooks/useTranslation';
 import { Button } from '../components/ui/Button';
-import VisitorFreeRegistration from './visitor/VisitorFreeRegistration';
+import OnSiteVisitorRegistration from './service-client/OnSiteVisitorRegistration';
 import BadgePrintStationPage from './BadgePrintStationPage';
 
 type Tab = 'registration' | 'print';
 
 function isServiceClientUser(user: { type?: string; email?: string } | null): boolean {
   if (!user) return false;
-  return user.type === 'admin' || user.type === 'security' || user.email === 'service-clientele@sibs.com';
+  const email = user.email?.toLowerCase() ?? '';
+  return (
+    user.type === 'admin'
+    || user.type === 'security'
+    || email === 'service-clientele@sib.com'
+    || email === 'service-clientele@sibs.com'
+  );
 }
 
 function ServiceClientLogin() {
@@ -125,8 +131,11 @@ function ServiceClientLogin() {
           </Button>
         </form>
 
-        <p className="text-center text-white/50 text-xs mt-6">
-          Espace réservé au personnel du stand service clientèle
+        <p className="text-center text-white/50 text-xs mt-4">
+          Accès personnel du stand uniquement (mot de passe pro).
+        </p>
+        <p className="text-center text-white/40 text-xs mt-1">
+          Les visiteurs n&apos;ont pas de mot de passe — ils utilisent un lien magique sur l&apos;app mobile.
         </p>
       </div>
     </div>
@@ -190,7 +199,7 @@ function ServiceClientPortal() {
       <main className="flex-1">
         {tab === 'registration' ? (
           <div className="max-w-4xl mx-auto py-6 px-4">
-            <VisitorFreeRegistration embedded />
+            <OnSiteVisitorRegistration />
           </div>
         ) : (
           <BadgePrintStationPage embedded />
