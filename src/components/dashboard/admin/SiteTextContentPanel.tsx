@@ -8,19 +8,9 @@ import {
   upsertSiteText,
   type SiteTextRow,
 } from '../../../services/siteImagesService';
+import { HOME_V4_TEXT_DEFINITIONS } from '../../../config/homeV4TextCmsConfig';
 
-const TEXT_DEFINITIONS = [
-  { key: 'home_hero_kicker',      label: 'Accroche (petit texte au-dessus du titre)', placeholder: 'Ex : 40ᵉ ÉDITION • 2026' },
-  { key: 'home_hero_headline',    label: 'Titre principal hero',                       placeholder: 'Ex : Le Salon International du Bâtiment' },
-  { key: 'home_hero_date',        label: 'Date du salon',                              placeholder: 'Ex : 5 – 9 Novembre 2026' },
-  { key: 'home_hero_location',    label: 'Lieu',                                       placeholder: "Ex : Parc d'Exposition El Jadida" },
-  { key: 'home_hero_cta_stand',   label: 'Bouton exposant',                            placeholder: 'Ex : Réserver votre stand' },
-  { key: 'home_hero_cta_visit',   label: 'Bouton visiteur',                            placeholder: 'Ex : Inscription visiteur gratuite' },
-  { key: 'home_stats_exhibitors', label: 'Statistique — Exposants',                    placeholder: 'Ex : 600+' },
-  { key: 'home_stats_visitors',   label: 'Statistique — Visiteurs',                    placeholder: 'Ex : 40 000+' },
-  { key: 'home_stats_countries',  label: 'Statistique — Pays représentés',             placeholder: 'Ex : 30+' },
-  { key: 'home_stats_conferences',label: 'Statistique — Conférences',                  placeholder: 'Ex : 80+' },
-];
+const TEXT_DEFINITIONS = HOME_V4_TEXT_DEFINITIONS;
 
 type Lang = 'fr' | 'en' | 'ar';
 const LANGS: { id: Lang; label: string }[] = [
@@ -48,8 +38,9 @@ export function SiteTextContentPanel() {
       const data = await fetchSiteTextContent();
       setRows(data);
       const initial: Record<string, string> = {};
-      for (const row of data) {
-        initial[row.key] = getLangValue(row, activeLang) ?? '';
+      for (const def of TEXT_DEFINITIONS) {
+        const row = data.find((r) => r.key === def.key);
+        initial[def.key] = row ? (getLangValue(row, activeLang) ?? '') : '';
       }
       setDraft(initial);
     } catch { setRows([]); }
@@ -61,8 +52,9 @@ export function SiteTextContentPanel() {
   const handleLangChange = (lang: Lang) => {
     setActiveLang(lang);
     const next: Record<string, string> = {};
-    for (const row of rows) {
-      next[row.key] = getLangValue(row, lang) ?? '';
+    for (const def of TEXT_DEFINITIONS) {
+      const row = rows.find((r) => r.key === def.key);
+      next[def.key] = row ? (getLangValue(row, lang) ?? '') : '';
     }
     setDraft(next);
   };
@@ -116,7 +108,7 @@ export function SiteTextContentPanel() {
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-bold text-white">Gestion des Textes du Site</h3>
-            <p className="text-sm text-white/80">Modifiez les titres, descriptions et statistiques de la page d'accueil</p>
+            <p className="text-sm text-white/80">Home v4 — hero, sections, chiffres, footer ({TEXT_DEFINITIONS.length} champs, FR/EN/AR)</p>
           </div>
           <Button
             variant="outline"
@@ -156,60 +148,72 @@ export function SiteTextContentPanel() {
               Chargement des contenus…
             </div>
           ) : (
-            <div className="space-y-4">
-              {TEXT_DEFINITIONS.map(def => {
-                const isSavingThis = saving === def.key;
-                const row = rows.find(r => r.key === def.key);
-                const savedVal = row ? getLangValue(row, activeLang) : null;
-                const hasCustom = Boolean(savedVal);
+            <div className="space-y-6">
+              {Array.from(new Set(TEXT_DEFINITIONS.map((d) => d.category))).map((category) => (
+                <div key={category}>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-3">
+                    {category}
+                  </h4>
+                  <div className="space-y-4">
+                    {TEXT_DEFINITIONS.filter((d) => d.category === category).map((def) => {
+                      const isSavingThis = saving === def.key;
+                      const row = rows.find((r) => r.key === def.key);
+                      const savedVal = row ? getLangValue(row, activeLang) : null;
+                      const hasCustom = Boolean(savedVal);
+                      const isMultiline = def.label.includes('HTML') || def.key.includes('desc') || def.key.includes('intro');
 
-                return (
-                  <div key={def.key} className="flex flex-col gap-2 p-4 rounded-xl border border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-950/50">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-semibold text-neutral-900 dark:text-white">
-                        {def.label}
-                      </label>
-                      <div className="flex items-center gap-2">
-                        {hasCustom && (
-                          <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 dark:bg-emerald-500/10 dark:text-emerald-400 px-2 py-0.5 rounded-full">
-                            <CheckCircle2 className="h-3 w-3" /> Personnalisé
-                          </span>
-                        )}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled={isSavingThis}
-                          onClick={() => handleSave(def.key)}
-                        >
-                          {isSavingThis
-                            ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" />
-                            : <Save className="h-3.5 w-3.5 mr-1" />
-                          }
-                          Enregistrer
-                        </Button>
-                      </div>
-                    </div>
-                    <input
-                      type="text"
-                      value={draft[def.key] ?? ''}
-                      onChange={e => setDraft(prev => ({ ...prev, [def.key]: e.target.value }))}
-                      placeholder={def.placeholder}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500"
-                    />
-                    {hasCustom && (
-                      <button
-                        onClick={() => {
-                          setDraft(prev => ({ ...prev, [def.key]: '' }));
-                          handleSave(def.key);
-                        }}
-                        className="self-start flex items-center gap-1 text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
-                      >
-                        <RefreshCw className="h-3 w-3" /> Utiliser la traduction par défaut
-                      </button>
-                    )}
+                      return (
+                        <div key={def.key} className="flex flex-col gap-2 p-4 rounded-xl border border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-950/50">
+                          <div className="flex items-center justify-between gap-2">
+                            <label className="text-sm font-semibold text-neutral-900 dark:text-white">
+                              {def.label}
+                            </label>
+                            <div className="flex items-center gap-2 shrink-0">
+                              {hasCustom && (
+                                <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 dark:bg-emerald-500/10 dark:text-emerald-400 px-2 py-0.5 rounded-full">
+                                  <CheckCircle2 className="h-3 w-3" /> Personnalisé
+                                </span>
+                              )}
+                              <Button variant="outline" size="sm" disabled={isSavingThis} onClick={() => handleSave(def.key)}>
+                                {isSavingThis ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> : <Save className="h-3.5 w-3.5 mr-1" />}
+                                Enregistrer
+                              </Button>
+                            </div>
+                          </div>
+                          {isMultiline ? (
+                            <textarea
+                              value={draft[def.key] ?? ''}
+                              onChange={(e) => setDraft((prev) => ({ ...prev, [def.key]: e.target.value }))}
+                              placeholder={def.placeholder}
+                              rows={3}
+                              className="w-full px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 font-mono"
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              value={draft[def.key] ?? ''}
+                              onChange={(e) => setDraft((prev) => ({ ...prev, [def.key]: e.target.value }))}
+                              placeholder={def.placeholder}
+                              className="w-full px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500"
+                            />
+                          )}
+                          {hasCustom && (
+                            <button
+                              onClick={() => {
+                                setDraft((prev) => ({ ...prev, [def.key]: '' }));
+                                handleSave(def.key);
+                              }}
+                              className="self-start flex items-center gap-1 text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                            >
+                              <RefreshCw className="h-3 w-3" /> Utiliser la traduction par défaut
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           )}
         </div>

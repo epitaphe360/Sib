@@ -43,5 +43,14 @@ export const HOME_V4_DEFAULT_URLS: Record<HomeV4CmsKey, string> = {
   home_v4_quicklink_visiter: `${V4_OFF}/hall-visiteurs.webp`,
 };
 
+export {
+  HOME_V4_TEXT_CMS_MAP,
+  HOME_V4_STAT_CMS_KEYS,
+  HOME_V4_TEXT_DEFINITIONS,
+  HOME_V4_TEXT_CMS_KEYS,
+} from './homeV4TextCmsConfig';
+
 export const HOME_V4_CMS_MESSAGE = 'sib-home-v4-images';
 export const HOME_V4_LANG_MESSAGE = 'sib-home-v4-lang';
+export const HOME_V4_TEXT_MESSAGE = 'sib-home-v4-text-overrides';
+export const HOME_V4_STATS_MESSAGE = 'sib-home-v4-stat-overrides';

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useTranslation } from '../hooks/useTranslation';
+import { usePageContent } from '../hooks/usePageContent';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { SupabaseService } from '../services/supabaseService';
@@ -10,6 +11,11 @@ import { SupabaseService } from '../services/supabaseService';
 export default function ContactPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const cms = usePageContent('contact');
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -100,10 +106,10 @@ export default function ContactPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {t('contact.title')}
+            {getCms('hero_title', t('contact.title'))}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('contact.description')}
+            {getCms('hero_description', t('contact.description'))}
           </p>
         </div>
 
@@ -256,10 +262,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{t('contact.address')}</h3>
-                    <p className="text-gray-600">
-                      URBACOM<br />
-                      63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185<br />
-                      Casablanca 20510
+                    <p className="text-gray-600 whitespace-pre-line">
+                      {getCms('address', 'URBACOM\n63, Imm B, Rés LE YACHT, Bd de la Corniche 7ème étage N°185\nCasablanca 20510')}
                     </p>
                   </div>
                 </div>
@@ -271,10 +275,10 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900">Email</h3>
                     <a
-                      href="mailto:Sib2026@urbacom.net"
+                      href={`mailto:${getCms('email', 'Sib2026@urbacom.net')}`}
                       className="text-blue-600 hover:text-blue-800"
                     >
-                      Sib2026@urbacom.net
+                      {getCms('email', 'Sib2026@urbacom.net')}
                     </a>
                   </div>
                 </div>
@@ -286,10 +290,10 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900">{t('contact.phone')}</h3>
                     <a
-                      href="tel:+212688500500"
+                      href={`tel:${getCms('phone', '+212688500500').replace(/\s/g, '')}`}
                       className="text-blue-600 hover:text-blue-800"
                     >
-                      +212 6 88 50 05 00
+                      {getCms('phone', '+212 6 88 50 05 00')}
                     </a>
                   </div>
                 </div>
@@ -303,15 +307,15 @@ export default function ContactPage() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">{t('contact.weekdays')}</span>
-                  <span className="font-medium">9h00 - 18h00</span>
+                  <span className="font-medium">{getCms('hours_weekdays', '9h00 - 18h00')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">{t('contact.saturday')}</span>
-                  <span className="font-medium">9h00 - 12h00</span>
+                  <span className="font-medium">{getCms('hours_saturday', '9h00 - 12h00')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">{t('contact.sunday')}</span>
-                  <span className="font-medium">{t('contact.closed')}</span>
+                  <span className="font-medium">{getCms('hours_sunday', t('contact.closed'))}</span>
                 </div>
               </div>
             </Card>
@@ -325,7 +329,7 @@ export default function ContactPage() {
               </p>
               <div className="flex space-x-4">
                 <a
-                  href="https://facebook.com/sibs2026"
+                  href={getCms('facebook_url', 'https://facebook.com/sibs2026')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors"
@@ -333,7 +337,7 @@ export default function ContactPage() {
                   Facebook
                 </a>
                 <a
-                  href="https://linkedin.com/company/sibs2026"
+                  href={getCms('linkedin_url', 'https://linkedin.com/company/sibs2026')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-blue-700 text-white p-3 rounded-lg hover:bg-blue-800 transition-colors"
@@ -341,7 +345,7 @@ export default function ContactPage() {
                   LinkedIn
                 </a>
                 <a
-                  href="https://twitter.com/sibs2026"
+                  href={getCms('twitter_url', 'https://twitter.com/sibs2026')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-blue-400 text-white p-3 rounded-lg hover:bg-blue-500 transition-colors"

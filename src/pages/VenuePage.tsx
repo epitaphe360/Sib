@@ -2,12 +2,18 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Sparkles } from 'lucide-react';
 import { useTranslation } from '../hooks/useTranslation';
+import { usePageContent } from '../hooks/usePageContent';
 import InteractiveVenueMap from '../components/venue/InteractiveVenueMap';
 import { SmartImage } from '../components/ui/SmartImage';
 import { IMAGES } from '../lib/images';
 
 const VenuePage: React.FC = () => {
   const { t } = useTranslation();
+  const cms = usePageContent('venue');
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950">
@@ -36,14 +42,14 @@ const VenuePage: React.FC = () => {
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 mb-6">
               <Sparkles className="h-3.5 w-3.5 text-accent-500" />
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90">
-                El Jadida · Maroc
+                {getCms('hero_kicker', 'El Jadida · Maroc')}
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.05] mb-5">
-              {t('venue.title')}
+              {getCms('hero_title', t('venue.title'))}
             </h1>
             <p className="text-base lg:text-lg text-white/75 leading-relaxed">
-              {t('venue.description')}
+              {getCms('hero_description', t('venue.description'))}
             </p>
           </motion.div>
         </div>

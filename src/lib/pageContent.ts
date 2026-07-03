@@ -31,8 +31,12 @@ export async function savePageContent(
   salonId?: string | null
 ): Promise<void> {
   const { data: { user } } = await supabase.auth.getUser();
-  const payload: Record<string, unknown> = { page_slug: pageSlug, content, updated_by: user?.id ?? null };
-  if (salonId) {payload.salon_id = salonId;}
+  const payload: Record<string, unknown> = {
+    page_slug: pageSlug,
+    content,
+    updated_by: user?.id ?? null,
+    salon_id: salonId ?? null,
+  };
   const conflictCol = salonId ? 'page_slug,salon_id' : 'page_slug';
   const { error } = await supabase
     .from('page_contents')

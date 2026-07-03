@@ -1,0 +1,22 @@
+# Réduire l’upload Vercel — web uniquement (vite build)
+apps/
+app-urbaevent/mobile/
+urbaevent/
+luxury-next/
+sib_zone_scanner/
+sib-app/
+server/
+supabase/
+tests/
+playwright-report/
+screenshoots/
+scripts/legacy/
+**/*.apk
+**/*.aab
+**/node_modules/
+**/dist/
+**/.git/
+**/.cursor/
+**/.claude/
+*.zip
+*.tgz

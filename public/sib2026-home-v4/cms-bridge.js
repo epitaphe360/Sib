@@ -12,6 +12,8 @@
   };
 
   var currentLang = 'fr';
+  var textOverrides = {};
+  var statOverrides = null;
 
   function applyImages(images) {
     if (!images || typeof images !== 'object') return;
@@ -25,12 +27,27 @@
     });
   }
 
+  function applyStatOverrides(stats) {
+    if (!Array.isArray(stats) || stats.length === 0) return;
+    statOverrides = stats;
+    var articles = document.querySelectorAll('.stats article strong');
+    for (var i = 0; i < Math.min(stats.length, articles.length); i++) {
+      if (stats[i]) articles[i].textContent = stats[i];
+    }
+  }
+
+  function applyTextOverrides(overrides) {
+    if (!overrides || typeof overrides !== 'object') return;
+    textOverrides = overrides;
+    applyLanguage(currentLang);
+  }
+
   function applyLanguage(lang) {
     var dict = window.HOME_V4_I18N;
     if (!dict) return;
 
     var code = dict[lang] ? lang : 'fr';
-    var strings = dict[code] || dict.fr;
+    var strings = Object.assign({}, dict[code] || dict.fr, textOverrides);
     currentLang = code;
 
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
@@ -58,6 +75,10 @@
     if (langBtn) {
       langBtn.textContent = code.toUpperCase() + '⌄';
     }
+
+    if (statOverrides) {
+      applyStatOverrides(statOverrides);
+    }
   }
 
   window.addEventListener('message', function (event) {
@@ -71,6 +92,16 @@
 
     if (event.data.type === 'sib-home-v4-lang') {
       applyLanguage(event.data.lang || 'fr');
+      return;
+    }
+
+    if (event.data.type === 'sib-home-v4-text-overrides') {
+      applyTextOverrides(event.data.texts);
+      return;
+    }
+
+    if (event.data.type === 'sib-home-v4-stat-overrides') {
+      applyStatOverrides(event.data.stats);
     }
   });
 

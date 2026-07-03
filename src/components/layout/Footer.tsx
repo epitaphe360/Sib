@@ -1,54 +1,76 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../../hooks/useTranslation';
+import { usePageContent } from '../../hooks/usePageContent';
+import { cmsValue } from '../../lib/cmsHelpers';
 import { ROUTES } from '../../lib/routes';
 import useAuthStore from '../../store/authStore';
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
 
-const SOCIAL_LINKS = [
-  { label: 'Facebook',    href: 'https://www.facebook.com/sibevent',         icon: Facebook },
-  { label: 'X (Twitter)', href: 'https://x.com/sibevent',                    icon: Twitter },
-  { label: 'LinkedIn',    href: 'https://www.linkedin.com/company/sib-event', icon: Linkedin },
-  { label: 'YouTube',     href: 'https://www.youtube.com/@sibevent',         icon: Youtube },
-] as const;
+const DEFAULT_SOCIAL = {
+  facebook_url: 'https://www.facebook.com/sibevent',
+  twitter_url: 'https://x.com/sibevent',
+  linkedin_url: 'https://www.linkedin.com/company/sib-event',
+  youtube_url: 'https://www.youtube.com/@sibevent',
+} as const;
 
 /**
  * SIB 2026 — Footer unifié
- * Un seul footer pour toutes les routes.
- * Fond neutral-900, typographie sobre, contact en colonne claire.
+ * Contenu éditable via admin → Pages vitrine → slug `site_footer`
  */
 export const Footer: React.FC = memo(() => {
   const currentYear = new Date().getFullYear();
   const { t } = useTranslation();
   const { user } = useAuthStore();
+  const cms = usePageContent('site_footer');
   const isFreeVisitor = user?.type === 'visitor' && (user?.visitor_level === 'free' || !user?.visitor_level);
+
+  const tagline = cmsValue(cms, 'tagline', t('footer.tagline') || 'La plateforme officielle du Salon International du Bâtiment — El Jadida, Maroc.');
+  const contactName = cmsValue(cms, 'contact_name', 'URBACOM');
+  const address = cmsValue(
+    cms,
+    'address',
+    '63, Imm B, Rés LE YACHT, Bd de la Corniche\n7ème étage N°185, Casablanca 20510',
+  );
+  const email = cmsValue(cms, 'email', 'Sib2026@urbacom.net');
+  const phone = cmsValue(cms, 'phone', '+212 6 88 50 05 00');
+  const copyrightSuffix = cmsValue(cms, 'copyright_suffix', t('footer.all_rights') || 'Tous droits réservés');
+
+  const socialLinks = useMemo(
+    () => [
+      { label: 'Facebook', href: cmsValue(cms, 'facebook_url', DEFAULT_SOCIAL.facebook_url), icon: Facebook },
+      { label: 'X (Twitter)', href: cmsValue(cms, 'twitter_url', DEFAULT_SOCIAL.twitter_url), icon: Twitter },
+      { label: 'LinkedIn', href: cmsValue(cms, 'linkedin_url', DEFAULT_SOCIAL.linkedin_url), icon: Linkedin },
+      { label: 'YouTube', href: cmsValue(cms, 'youtube_url', DEFAULT_SOCIAL.youtube_url), icon: Youtube },
+    ],
+    [cms],
+  );
 
   const navColumns = [
     {
       title: t('footer.navigation'),
       links: [
-        { label: t('footer.nav_home'),               href: ROUTES.HOME },
+        { label: t('footer.nav_home'), href: ROUTES.HOME },
         { label: t('footer.nav_exhibitors_catalog'), href: ROUTES.EXHIBITORS },
         ...(isFreeVisitor ? [] : [{ label: t('footer.nav_networking'), href: ROUTES.NETWORKING }]),
-        { label: t('footer.nav_conferences'),        href: ROUTES.EVENTS },
-        { label: t('footer.nav_news'),               href: ROUTES.NEWS },
+        { label: t('footer.nav_conferences'), href: ROUTES.EVENTS },
+        { label: t('footer.nav_news'), href: ROUTES.NEWS },
       ],
     },
     {
       title: t('footer.media_platform'),
       links: [
-        { label: t('media.webinars'),    href: ROUTES.WEBINARS },
-        { label: t('media.podcasts'),    href: ROUTES.PODCASTS },
-        { label: t('media.capsules'),    href: ROUTES.CAPSULES_INSIDE },
+        { label: t('media.webinars'), href: ROUTES.WEBINARS },
+        { label: t('media.podcasts'), href: ROUTES.PODCASTS },
+        { label: t('media.capsules'), href: ROUTES.CAPSULES_INSIDE },
         { label: t('media.live_studio'), href: ROUTES.LIVE_STUDIO },
-        { label: t('media.library'),     href: ROUTES.MEDIA_LIBRARY },
+        { label: t('media.library'), href: ROUTES.MEDIA_LIBRARY },
       ],
     },
   ];
 
   return (
     <footer className="relative bg-neutral-900 text-neutral-200 overflow-hidden">
-      {/* Motif zellige filigrane très subtil */}
       <div
         aria-hidden="true"
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -59,9 +81,7 @@ export const Footer: React.FC = memo(() => {
       />
 
       <div className="relative z-10 max-w-container mx-auto px-6 lg:px-8 pt-20 pb-10">
-        {/* Grid principale */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-14 border-b border-neutral-800">
-          {/* Brand */}
           <div className="md:col-span-4">
             <Link to={ROUTES.HOME} className="inline-flex items-center mb-6 group">
               <img
@@ -70,11 +90,9 @@ export const Footer: React.FC = memo(() => {
                 className="h-14 w-auto object-contain brightness-0 invert transition-transform duration-300 group-hover:scale-[1.02]"
               />
             </Link>
-            <p className="text-sm leading-relaxed text-neutral-400 mb-6 max-w-sm">
-              {t('footer.tagline') || 'La plateforme officielle du Salon International du Bâtiment — El Jadida, Maroc.'}
-            </p>
+            <p className="text-sm leading-relaxed text-neutral-400 mb-6 max-w-sm">{tagline}</p>
             <div className="flex gap-2">
-              {SOCIAL_LINKS.map((social) => (
+              {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
@@ -89,7 +107,6 @@ export const Footer: React.FC = memo(() => {
             </div>
           </div>
 
-          {/* Colonnes navigation */}
           {navColumns.map((col) => (
             <div key={col.title} className="md:col-span-2">
               <h3 className="text-[11px] font-semibold text-accent-500 uppercase tracking-[0.2em] mb-5">
@@ -98,10 +115,7 @@ export const Footer: React.FC = memo(() => {
               <ul className="space-y-3">
                 {col.links.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      to={link.href}
-                      className="text-sm text-neutral-400 hover:text-white transition-colors"
-                    >
+                    <Link to={link.href} className="text-sm text-neutral-400 hover:text-white transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -110,7 +124,6 @@ export const Footer: React.FC = memo(() => {
             </div>
           ))}
 
-          {/* Contact */}
           <div className="md:col-span-4">
             <h3 className="text-[11px] font-semibold text-accent-500 uppercase tracking-[0.2em] mb-5">
               {t('footer.strategic_contact') || 'Contact'}
@@ -120,38 +133,33 @@ export const Footer: React.FC = memo(() => {
                 <div className="h-9 w-9 shrink-0 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center">
                   <MapPin className="h-4 w-4 text-accent-500" />
                 </div>
-                <div className="text-neutral-400 leading-relaxed">
-                  <div className="font-medium text-neutral-200">URBACOM</div>
-                  63, Imm B, Rés LE YACHT, Bd de la Corniche<br />
-                  7ème étage N°185, Casablanca 20510
+                <div className="text-neutral-400 leading-relaxed whitespace-pre-line">
+                  <div className="font-medium text-neutral-200">{contactName}</div>
+                  {address}
                 </div>
               </div>
-              <a
-                href="mailto:Sib2026@urbacom.net"
-                className="flex items-center gap-3 text-neutral-400 hover:text-white transition-colors"
-              >
+              <a href={`mailto:${email}`} className="flex items-center gap-3 text-neutral-400 hover:text-white transition-colors">
                 <div className="h-9 w-9 shrink-0 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center">
                   <Mail className="h-4 w-4 text-accent-500" />
                 </div>
-                <span>Sib2026@urbacom.net</span>
+                <span>{email}</span>
               </a>
               <a
-                href="tel:+212688500500"
+                href={`tel:${phone.replace(/\s/g, '')}`}
                 className="flex items-center gap-3 text-neutral-400 hover:text-white transition-colors"
               >
                 <div className="h-9 w-9 shrink-0 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center">
                   <Phone className="h-4 w-4 text-accent-500" />
                 </div>
-                <span>+212 6 88 50 05 00</span>
+                <span>{phone}</span>
               </a>
             </div>
           </div>
         </div>
 
-        {/* Bas de page */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-5">
           <p className="text-xs text-neutral-500">
-            © {currentYear} SIB — Salon International du Bâtiment. {t('footer.all_rights') || 'Tous droits réservés'}.
+            © {currentYear} SIB — Salon International du Bâtiment. {copyrightSuffix}.
           </p>
           <div className="flex items-center gap-6">
             <Link to={ROUTES.PRIVACY} className="text-xs text-neutral-500 hover:text-white transition-colors">

@@ -17,3 +17,7 @@ export { BannerManagementPanel } from './BannerManagementPanel';
 export { VisitorPricingPanel } from './VisitorPricingPanel';
 export { SiteImagesPanel } from './SiteImagesPanel';
 export { SiteTextContentPanel } from './SiteTextContentPanel';
+export { WebContentCoveragePanel } from './WebContentCoveragePanel';
+export { PageContentAdminPanel } from './PageContentAdminPanel';
+export { MobileAppContentPanel } from './MobileAppContentPanel';
+export { CmsAdminShortcutsPanel } from './CmsAdminShortcutsPanel';

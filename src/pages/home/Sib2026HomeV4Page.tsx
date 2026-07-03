@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { HOME_V4_CMS_MESSAGE, HOME_V4_LANG_MESSAGE } from '../../config/homeV4CmsConfig';
-import { resolveHomeV4ImagesMap } from '../../services/siteImagesService';
+import {
+  HOME_V4_CMS_MESSAGE,
+  HOME_V4_LANG_MESSAGE,
+  HOME_V4_STATS_MESSAGE,
+  HOME_V4_TEXT_MESSAGE,
+} from '../../config/homeV4CmsConfig';
+import { resolveHomeV4CmsPayload, resolveHomeV4ImagesMap } from '../../services/siteImagesService';
 import { useLanguageStore } from '../../store/languageStore';
 
 const HOME_SRC = '/sib2026-home-v4/home-sib2026.html?embedded=1';
@@ -22,33 +27,41 @@ export default function Sib2026HomeV4Page() {
     [],
   );
 
+  const pushCmsPayload = useCallback(async () => {
+    const lang = useLanguageStore.getState().currentLanguage as 'fr' | 'en' | 'ar';
+    try {
+      const [images, cms] = await Promise.all([
+        resolveHomeV4ImagesMap(),
+        resolveHomeV4CmsPayload(lang),
+      ]);
+      postToIframe({ type: HOME_V4_CMS_MESSAGE, images });
+      if (Object.keys(cms.texts).length > 0) {
+        postToIframe({ type: HOME_V4_TEXT_MESSAGE, texts: cms.texts });
+      }
+      if (cms.stats.some(Boolean)) {
+        postToIframe({ type: HOME_V4_STATS_MESSAGE, stats: cms.stats });
+      }
+    } catch {
+      /* garde les assets statiques par défaut */
+    }
+  }, [postToIframe]);
+
   useEffect(() => {
     postToIframe({ type: HOME_V4_LANG_MESSAGE, lang: currentLanguage });
-  }, [currentLanguage, postToIframe]);
+    void pushCmsPayload();
+  }, [currentLanguage, postToIframe, pushCmsPayload]);
 
   useEffect(() => {
     let cancelled = false;
 
-    const pushImages = (images: Record<string, string>) => {
-      postToIframe({ type: HOME_V4_CMS_MESSAGE, images });
-    };
-
-    const loadImages = async () => {
-      try {
-        const images = await resolveHomeV4ImagesMap();
-        if (!cancelled) pushImages(images);
-      } catch {
-        /* garde les assets statiques par défaut */
-      }
-    };
-
     const onIframeLoad = () => {
+      if (cancelled) return;
       const lang = useLanguageStore.getState().currentLanguage;
       postToIframe({ type: HOME_V4_LANG_MESSAGE, lang });
-      void loadImages();
+      void pushCmsPayload();
     };
 
-    void loadImages();
+    void pushCmsPayload();
     const iframe = iframeRef.current;
     iframe?.addEventListener('load', onIframeLoad);
 
@@ -56,8 +69,7 @@ export default function Sib2026HomeV4Page() {
       cancelled = true;
       iframe?.removeEventListener('load', onIframeLoad);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- images chargées une fois ; langue gérée à part
-  }, [postToIframe]);
+  }, [postToIframe, pushCmsPayload]);
 
   return (
     <iframe

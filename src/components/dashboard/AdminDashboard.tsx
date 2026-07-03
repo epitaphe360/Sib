@@ -17,6 +17,10 @@ import {
   VisitorPricingPanel,
   SiteImagesPanel,
   SiteTextContentPanel,
+  WebContentCoveragePanel,
+  PageContentAdminPanel,
+  MobileAppContentPanel,
+  CmsAdminShortcutsPanel,
   SystemHealthPanel,
   ActivityFeed,
 } from './admin';
@@ -125,10 +129,18 @@ export default function AdminDashboard() {
 
         <AdminNavVisibility />
 
-        {/* ── CMS : Photos & Textes ── */}
+        {/* ── CMS : Couverture, Web & APK ── */}
+        <WebContentCoveragePanel />
+
         <SiteImagesPanel />
 
         <SiteTextContentPanel />
+
+        <PageContentAdminPanel />
+
+        <MobileAppContentPanel />
+
+        <CmsAdminShortcutsPanel />
 
         <BannerManagementPanel />
 

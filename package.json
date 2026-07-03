@@ -80,7 +80,7 @@
     "setup:test-accounts": "node scripts/create-test-accounts.mjs",
     "setup:test-users": "node scripts/create-test-users.js",
     "list:test-accounts": "powershell scripts/list-test-accounts.ps1",
-    "apply-sql": "node scripts/apply_sql.cjs",
+    "seed:salon-cms": "node scripts/seed-salon-cms-content.mjs",
     "verify-db": "node scripts/verify_db.cjs",
     "run:combined-sql": "node scripts/run_combined_sql.cjs",
     "test:concurrency": "node --experimental-top-level-await scripts/concurrent_book_test.mjs",
