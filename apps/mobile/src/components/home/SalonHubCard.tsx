@@ -2,6 +2,7 @@ import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { AppIcon } from '../AppIcon';
 import { PressableScale } from '../PressableScale';
 import { getUrbaSalonTheme } from '../../data/urbaCatalog';
+import { useAppContent } from '../../hooks/useAppContent';
 import { useAppTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../i18n/I18nProvider';
 import type { Salon } from '../../types';
@@ -16,7 +17,8 @@ type Props = {
 export function SalonHubCard({ salon, onEnter }: Props) {
   const { t } = useI18n();
   const { colors, isDark } = useAppTheme();
-  const theme = getUrbaSalonTheme(salon);
+  const { content } = useAppContent();
+  const theme = getUrbaSalonTheme(salon, content.salonStats);
   const isActive = Boolean(salon.active);
   const location = salon.location ?? theme.location;
 

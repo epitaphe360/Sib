@@ -1,6 +1,14 @@
 import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {
   fetchConnections,
   requestConnection,
@@ -9,19 +17,23 @@ import {
   type ConnectionRequest,
 } from '../../src/api/networking';
 import { fetchMatchSuggestions, type MatchSuggestion } from '../../src/api/matchmaking';
-import { SalonGate } from '../../src/components/guards/SalonGate';
+import { NetworkingConnectionRow } from '../../src/components/NetworkingConnectionRow';
 import { EmptyState, Input, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { SkeletonList } from '../../src/components/Skeleton';
 import { useAuth } from '../../src/context/AuthContext';
 import { useNetworkingPermissions } from '../../src/hooks/useNetworkingPermissions';
 import { useI18n } from '../../src/i18n/I18nProvider';
-import { avatarColor, avatarInitials } from '../../src/lib/avatarColor';
 import { getPermissionErrorMessage } from '../../src/lib/networkingPermissions';
 import { requireAuth } from '../../src/lib/navigateSafe';
 import { withRetry } from '../../src/lib/withRetry';
 import { colors, fonts, radius, spacing } from '../../src/theme';
 
-export default function VisitorNetworkingScreen({ embedded = false }: { embedded?: boolean }) {
+type Props = {
+  embedded?: boolean;
+  refreshKey?: number;
+};
+
+export default function VisitorNetworkingScreen({ embedded = false, refreshKey = 0 }: Props) {
   const { user } = useAuth();
   const { t } = useI18n();
   const { permissions, limits } = useNetworkingPermissions();
@@ -39,7 +51,7 @@ export default function VisitorNetworkingScreen({ embedded = false }: { embedded
     try {
       const [conns, sugg] = await withRetry(
         () => Promise.all([fetchConnections(user.id), fetchMatchSuggestions(user.id)]),
-        { context: 'Networking', maxAttempts: 2 }
+        { context: 'Networking', maxAttempts: 2 },
       );
       if (abortRef.current) return;
       setConnections(conns);
@@ -47,7 +59,10 @@ export default function VisitorNetworkingScreen({ embedded = false }: { embedded
     } catch (e) {
       Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
     } finally {
-      if (!abortRef.current) setLoading(false);
+      if (!abortRef.current) {
+        setLoading(false);
+        setRefreshing(false);
+      }
     }
   }, [user, t]);
 
@@ -55,6 +70,18 @@ export default function VisitorNetworkingScreen({ embedded = false }: { embedded
     load();
     return () => { abortRef.current = true; };
   }, [load]);
+
+  useEffect(() => {
+    if (refreshKey > 0) {
+      setRefreshing(true);
+      void load();
+    }
+  }, [refreshKey, load]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    void load();
+  };
 
   if (loading) {
     const skeleton = <SkeletonList rows={4} />;
@@ -114,39 +141,49 @@ export default function VisitorNetworkingScreen({ embedded = false }: { embedded
     }
   };
 
+  const renderConnection = (item: ConnectionRequest) => (
+    <NetworkingConnectionRow
+      key={item.id}
+      item={item}
+      currentUserId={user!.id}
+      t={t}
+      onAccept={item.toUserId === user?.id && item.status === 'pending' ? () => respond(item.id, true) : undefined}
+      onReject={item.toUserId === user?.id && item.status === 'pending' ? () => respond(item.id, false) : undefined}
+    />
+  );
+
   const body = (
     <>
       {!embedded && <ScreenTitle title={t('networking.title')} subtitle="B2B" />}
-      <PrimaryButton
-        label={t('networking.scanCta')}
-        variant="gold"
-        onPress={() => router.push('/(visitor)/scan-connect' as never)}
-      />
-      <PrimaryButton
-        label={t('scanHistory.title')}
-        variant="outline"
-        onPress={() => router.push('/(visitor)/scan-history' as never)}
-      />
+      {!embedded && (
+        <>
+          <PrimaryButton
+            label={t('networking.scanCta')}
+            variant="gold"
+            onPress={() => router.push('/(visitor)/scan-connect' as never)}
+          />
+          <PrimaryButton
+            label={t('scanHistory.title')}
+            variant="outline"
+            onPress={() => router.push('/(visitor)/scan-history' as never)}
+          />
+        </>
+      )}
       {!permissions.canSendMessages && user?.type === 'visitor' ? (
         <Text style={styles.freeHint}>{t('networking.freeHint')}</Text>
       ) : null}
       {canSearch && suggestions.length > 0 && (
         <>
           <Text style={styles.section}>{t('networking.suggestions')}</Text>
-          <FlatList
-            data={suggestions}
-            keyExtractor={(s) => s.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.suggestList}
-            renderItem={({ item }) => (
-              <Pressable style={styles.suggestCard} onPress={() => connect(item.id)}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.suggestList}>
+            {suggestions.map((item) => (
+              <Pressable key={item.id} style={styles.suggestCard} onPress={() => connect(item.id)}>
                 <Text style={styles.name}>{item.name}</Text>
                 <Text style={styles.meta}>{item.reason}</Text>
                 <Text style={styles.score}>{t('networking.matchScore')} {item.score}</Text>
               </Pressable>
-            )}
-          />
+            ))}
+          </ScrollView>
         </>
       )}
       {canSearch ? (
@@ -154,86 +191,66 @@ export default function VisitorNetworkingScreen({ embedded = false }: { embedded
           <Input label={t('networking.search')} value={query} onChangeText={setQuery} />
           <PrimaryButton label={t('networking.searchBtn')} onPress={search} />
           {results.length > 0 && (
-            <FlatList
-              data={results}
-              keyExtractor={(u) => u.id}
-              style={styles.results}
-              renderItem={({ item }) => (
-                <Pressable style={styles.row} onPress={() => connect(item.id)}>
+            <View style={styles.results}>
+              {results.map((item) => (
+                <Pressable key={item.id} style={styles.row} onPress={() => connect(item.id)}>
                   <Text style={styles.name}>{item.name}</Text>
                   <Text style={styles.meta}>{item.type} · {item.email}</Text>
                 </Pressable>
-              )}
-            />
+              ))}
+            </View>
           )}
         </>
-      ) : (
+      ) : embedded ? null : (
         <PrimaryButton label={t('vip.upgrade')} variant="outline" onPress={() => router.push('/(auth)/register-vip' as never)} />
       )}
-      <Text style={styles.section}>{t('networking.connections')}</Text>
-      <FlatList
-        data={connections}
-        keyExtractor={(c) => c.id}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={async () => { setRefreshing(true); await load(); setRefreshing(false); }} />
-        }
-        ListEmptyComponent={<EmptyState message={t('networking.empty')} />}
-          renderItem={({ item }) => {
-          const incoming = item.toUserId === user?.id && item.status === 'pending';
-          const outgoing = item.fromUserId === user?.id;
-          const displayName = outgoing
-            ? item.toName ?? t('networking.unknown')
-            : item.fromName ?? t('networking.unknown');
-          const statusLabel =
-            item.status === 'accepted'
-              ? t('networking.statusAccepted')
-              : item.status === 'rejected'
-                ? t('networking.statusRejected')
-                : incoming
-                  ? t('networking.statusIncoming')
-                  : t('networking.statusPending');
-          const bgColor = avatarColor(item.id);
-          const initials = avatarInitials(displayName);
-          return (
-            <View style={styles.row}>
-              <View style={styles.rowInner}>
-                <View style={[styles.avatar, { backgroundColor: bgColor }]}>
-                  <Text style={styles.avatarText}>{initials}</Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.name}>{displayName}</Text>
-                  <Text style={styles.meta}>{statusLabel}</Text>
-                </View>
-              </View>
-              {incoming && (
-                <View style={styles.actions}>
-                  <Pressable style={styles.accept} onPress={() => respond(item.id, true)}>
-                    <Text style={styles.btn}>{t('networking.accept')}</Text>
-                  </Pressable>
-                  <Pressable style={styles.reject} onPress={() => respond(item.id, false)}>
-                    <Text style={styles.btn}>{t('networking.reject')}</Text>
-                  </Pressable>
-                </View>
-              )}
-            </View>
-          );
-        }}
-      />
+      <View style={styles.sectionRow}>
+        <Text style={styles.sectionInline}>{t('networking.connections')}</Text>
+        {embedded ? (
+          <Pressable onPress={onRefresh} disabled={refreshing}>
+            <Text style={styles.refreshLink}>{refreshing ? t('common.loading') : t('common.retry')}</Text>
+          </Pressable>
+        ) : null}
+      </View>
+      {connections.length === 0 ? (
+        <EmptyState message={t('networking.empty')} />
+      ) : (
+        connections.map(renderConnection)
+      )}
     </>
   );
 
-  if (embedded) return <View style={[styles.flex, styles.embedded]}>{body}</View>;
+  if (embedded) {
+    return <View style={[styles.flex, styles.embedded]}>{body}</View>;
+  }
+
   return (
-    <SalonGate>
-      <Screen style={styles.flex}>{body}</Screen>
-    </SalonGate>
+    <Screen style={styles.flex}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {body}
+      </ScrollView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  embedded: { paddingHorizontal: spacing.md },
+  scroll: { paddingBottom: spacing.xl },
+  embedded: { paddingHorizontal: spacing.md, flex: 1 },
   section: { fontFamily: fonts.bodyBold, marginTop: spacing.lg, marginBottom: spacing.sm, color: colors.text },
+  sectionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: spacing.lg,
+    marginBottom: spacing.sm,
+  },
+  sectionInline: { fontFamily: fonts.bodyBold, color: colors.text },
+  refreshLink: { fontFamily: fonts.bodySemiBold, fontSize: 13, color: colors.primary },
   freeHint: {
     fontFamily: fonts.body,
     fontSize: 13,
@@ -241,17 +258,10 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
     lineHeight: 18,
   },
-  results: { maxHeight: 180, marginBottom: spacing.md },
+  results: { marginBottom: spacing.md },
   row: { padding: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border },
-  rowInner: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  avatar: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
-  avatarText: { color: '#fff', fontFamily: fonts.bodyBold, fontSize: 14 },
   name: { fontFamily: fonts.bodySemiBold, color: colors.text },
   meta: { fontSize: 12, fontFamily: fonts.body, color: colors.textMuted, marginTop: 2 },
-  actions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.sm },
-  accept: { flex: 1, backgroundColor: colors.success, padding: 8, borderRadius: radius.sm, alignItems: 'center' },
-  reject: { flex: 1, backgroundColor: colors.danger, padding: 8, borderRadius: radius.sm, alignItems: 'center' },
-  btn: { color: '#fff', fontFamily: fonts.bodySemiBold, fontSize: 13 },
   suggestList: { maxHeight: 120, marginBottom: spacing.md },
   suggestCard: {
     width: 200,

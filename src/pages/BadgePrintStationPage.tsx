@@ -48,6 +48,7 @@ import { Button } from '../components/ui/Button';
 import {
   lookupBadgeByQRData,
   lookupBadgeByEmail,
+  lookupBadgesByEmail,
   lookupBadgeByName,
   recordPrint,
   getPrintHistory,
@@ -98,9 +99,20 @@ type BadgeFormat = 'a4' | 'card' | 'badge';
 
 interface BadgePrintStationPageProps {
   embedded?: boolean;
+  /** Email du visiteur à charger (ex. après inscription sur place) */
+  initialLookupEmail?: string;
+  /** Incrémenté à chaque nouvelle demande d'impression pour relancer le chargement */
+  lookupKey?: number;
+  /** Lance l'impression dès que le badge est chargé */
+  autoPrint?: boolean;
 }
 
-export default function BadgePrintStationPage({ embedded = false }: BadgePrintStationPageProps) {
+export default function BadgePrintStationPage({
+  embedded = false,
+  initialLookupEmail,
+  lookupKey,
+  autoPrint = false,
+}: BadgePrintStationPageProps) {
   const { user, logout } = useAuthStore();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -117,6 +129,8 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
   const [isScanning, setIsScanning] = useState(false);
   const [lookupResult, setLookupResult] = useState<BadgeLookupResult | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchFirstName, setSearchFirstName] = useState('');
+  const [searchLastName, setSearchLastName] = useState('');
   const [searchType, setSearchType] = useState<'email' | 'name'>('email');
   const [searchResults, setSearchResults] = useState<BadgeLookupResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -129,6 +143,8 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
 
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const badgePrintRef = useRef<HTMLDivElement>(null);
+  const autoPrintPendingRef = useRef(false);
+  const handlePrintRef = useRef<() => Promise<void>>(async () => {});
 
   // --- Refresh stats/history ---
   const refreshData = useCallback(() => {
@@ -139,6 +155,32 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
   useEffect(() => {
     refreshData();
   }, []);
+
+  useEffect(() => {
+    if (!initialLookupEmail || lookupKey === undefined) return;
+
+    autoPrintPendingRef.current = autoPrint;
+    setIsSearching(true);
+    setLookupResult(null);
+    setSearchQuery(initialLookupEmail);
+    setSearchType('email');
+
+    void lookupBadgeByEmail(initialLookupEmail)
+      .then((result) => {
+        if (result.found && result.badge) {
+          setLookupResult(result);
+          setActiveTab('search');
+        } else {
+          autoPrintPendingRef.current = false;
+          toast.error('Badge introuvable pour impression');
+        }
+      })
+      .catch(() => {
+        autoPrintPendingRef.current = false;
+        toast.error('Erreur lors du chargement du badge');
+      })
+      .finally(() => setIsSearching(false));
+  }, [initialLookupEmail, lookupKey, autoPrint]);
 
   // --- QR Scanner ---
   const startScanning = async () => {
@@ -200,14 +242,19 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
 
     try {
       if (searchType === 'email') {
-        const result = await lookupBadgeByEmail(searchQuery);
-        if (result.found) {
-          setLookupResult(result);
-          setSearchResults([result]);
-          toast.success(`Badge trouvé : ${result.badge?.fullName}`);
+        const results = await lookupBadgesByEmail(searchQuery, {
+          firstName: searchFirstName.trim() || undefined,
+          lastName: searchLastName.trim() || undefined,
+        });
+        const found = results.filter((r) => r.found);
+        setSearchResults(results);
+        if (found.length === 1) {
+          setLookupResult(found[0]);
+          toast.success(`Badge trouvé : ${found[0].badge?.fullName}`);
+        } else if (found.length > 1) {
+          toast.info(`${found.length} visiteurs trouvés — sélectionnez la bonne personne`);
         } else {
-          setSearchResults([result]);
-          toast.error(result.error || 'Aucun résultat');
+          toast.error(results[0]?.error || 'Aucun résultat');
         }
       } else {
         const results = await lookupBadgeByName(searchQuery);
@@ -528,6 +575,17 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
     }
   };
 
+  handlePrintRef.current = handlePrint;
+
+  useEffect(() => {
+    if (!autoPrintPendingRef.current || !lookupResult?.badge) return;
+    autoPrintPendingRef.current = false;
+    const timer = setTimeout(() => {
+      void handlePrintRef.current();
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [lookupResult]);
+
   // --- Reset ---
   const handleReset = () => {
     setLookupResult(null);
@@ -789,6 +847,24 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
                       </div>
 
                       {/* Search input */}
+                      {searchType === 'email' ? (
+                        <div className="grid sm:grid-cols-2 gap-2">
+                          <input
+                            type="text"
+                            value={searchFirstName}
+                            onChange={(e) => setSearchFirstName(e.target.value)}
+                            placeholder="Prénom"
+                            className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                          />
+                          <input
+                            type="text"
+                            value={searchLastName}
+                            onChange={(e) => setSearchLastName(e.target.value)}
+                            placeholder="Nom"
+                            className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                          />
+                        </div>
+                      ) : null}
                       <div className="flex gap-2">
                         <input
                           type={searchType === 'email' ? 'email' : 'text'}
@@ -797,7 +873,7 @@ export default function BadgePrintStationPage({ embedded = false }: BadgePrintSt
                           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                           placeholder={
                             searchType === 'email'
-                              ? 'exemple@email.com'
+                              ? 'Email (ex. contact@entreprise.com)'
                               : 'Nom du participant...'
                           }
                           className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"

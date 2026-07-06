@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { participantNamesMatch } from '../lib/participantNameMatch';
 
 export async function lookupParticipant(query: string): Promise<{
   found: boolean;
@@ -23,7 +24,7 @@ export async function lookupParticipant(query: string): Promise<{
 
   const { data: badgeRow } = await supabase
     .from('user_badges')
-    .select('badge_code')
+    .select('badge_code, status, full_name')
     .eq('user_id', data.id)
     .eq('status', 'active')
     .maybeSingle();
@@ -63,6 +64,26 @@ export async function onSiteRegistration(params: {
   if (authError) {
     const msg = authError.message?.toLowerCase() ?? '';
     if (msg.includes('already registered') || msg.includes('user already registered') || msg.includes('already exists')) {
+      const { data: badges } = await supabase
+        .from('user_badges')
+        .select('user_id, badge_code, full_name')
+        .eq('email', email);
+
+      const nameMatch = (badges ?? []).find((b) =>
+        participantNamesMatch(String(b.full_name ?? ''), {
+          firstName: params.firstName,
+          lastName: params.lastName,
+        }),
+      );
+
+      if (nameMatch?.user_id) {
+        return {
+          userId: nameMatch.user_id,
+          badgeCode: nameMatch.badge_code ?? `SIB-${String(nameMatch.user_id).slice(0, 8).toUpperCase()}`,
+          magicLinkSent: false,
+        };
+      }
+
       const existing = await lookupParticipant(email);
       if (existing.found && existing.userId) {
         return {

@@ -1,6 +1,8 @@
 import { supabase } from '../lib/supabase';
 import { sanitizeIlikeTerm } from '../lib/sanitizeIlike';
 import { resolveSalonForScan } from '../lib/scanSalon';
+import { fetchNetworkingContactProfiles } from './contactProfiles';
+import { resolveSalonLabel } from './visitorScans';
 
 export interface ConnectionRequest {
   id: string;
@@ -12,6 +14,11 @@ export interface ConnectionRequest {
   partnerName?: string;
   salonId?: string;
   salonName?: string;
+  salonLabel: string;
+  fromEmail?: string;
+  toEmail?: string;
+  fromCompany?: string;
+  toCompany?: string;
   createdAt: string;
 }
 
@@ -29,26 +36,30 @@ async function attachUserNames(
   if (!rows.length) return [];
 
   const ids = [...new Set(rows.flatMap((r) => [r.requester_id, r.addressee_id]))];
-  const { data: users, error: namesErr } = await supabase.rpc('get_networking_user_names', { p_ids: ids });
-  let names = new Map<string, string>(
-    (users ?? []).map((u: { id: string; name: string }) => [u.id, u.name])
-  );
-  if (namesErr) {
-    const fallback = await supabase.from('users').select('id, name').in('id', ids);
-    names = new Map((fallback.data ?? []).map((u) => [u.id, u.name as string]));
-  }
+  const profiles = await fetchNetworkingContactProfiles(ids);
 
-  return rows.map((row) => ({
-    id: row.id,
-    fromUserId: row.requester_id,
-    toUserId: row.addressee_id,
-    status: row.status,
-    fromName: names.get(row.requester_id),
-    toName: names.get(row.addressee_id),
-    salonId: row.salon_id ?? undefined,
-    salonName: row.salon_name ?? undefined,
-    createdAt: row.created_at,
-  }));
+  return rows.map((row) => {
+    const from = profiles.get(row.requester_id);
+    const to = profiles.get(row.addressee_id);
+    const salonId = row.salon_id ?? undefined;
+    const salonName = row.salon_name ?? undefined;
+    return {
+      id: row.id,
+      fromUserId: row.requester_id,
+      toUserId: row.addressee_id,
+      status: row.status,
+      fromName: from?.name,
+      toName: to?.name,
+      fromEmail: from?.email,
+      toEmail: to?.email,
+      fromCompany: from?.company,
+      toCompany: to?.company,
+      salonId,
+      salonName,
+      salonLabel: resolveSalonLabel(salonId, salonName),
+      createdAt: row.created_at,
+    };
+  });
 }
 
 export async function fetchConnections(userId: string): Promise<ConnectionRequest[]> {

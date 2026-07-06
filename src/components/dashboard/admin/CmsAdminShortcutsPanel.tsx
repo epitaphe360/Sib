@@ -14,12 +14,16 @@ const LINKS = [
   { href: ROUTES.METRICS, label: 'Métriques détaillées', icon: ExternalLink, desc: 'Statistiques admin' },
 ];
 
-export function CmsAdminShortcutsPanel() {
+export function CmsAdminShortcutsPanel({ embedded = false }: { embedded?: boolean } = {}) {
   return (
     <motion.section
-      initial={{ opacity: 0, y: 16 }}
+      initial={embedded ? false : { opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm"
+      className={
+        embedded
+          ? 'rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 shadow-sm'
+          : 'mb-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm'
+      }
     >
       <h2 className="text-lg font-bold text-neutral-900 dark:text-white mb-1">
         Autres contenus éditables (admin)

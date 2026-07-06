@@ -5,6 +5,7 @@
  */
 
 import { supabase } from '../lib/supabase';
+import { participantNamesMatch } from '../lib/participantNameMatch';
 import { UserBadge } from '../types';
 import { getBadgeColor, getAccessLevelLabel } from './badgeService';
 
@@ -230,44 +231,123 @@ export async function lookupBadgeByUserId(userId: string): Promise<BadgeLookupRe
   }
 }
 
+export interface ParticipantNameFilter {
+  firstName?: string;
+  lastName?: string;
+}
+
 /**
- * Recherche badge par email (recherche manuelle)
+ * Recherche tous les badges partageant un email (ex. email entreprise commun).
  */
-export async function lookupBadgeByEmail(email: string): Promise<BadgeLookupResult> {
+export async function lookupBadgesByEmail(
+  email: string,
+  nameFilter?: ParticipantNameFilter,
+): Promise<BadgeLookupResult[]> {
   try {
     const db = getClient();
-    const { data, error } = await db
+    const normalized = email.trim().toLowerCase();
+    const hasNameFilter = Boolean(nameFilter?.firstName?.trim() || nameFilter?.lastName?.trim());
+
+    const { data: badgesData, error } = await db
       .from('user_badges')
       .select('*')
-      .eq('email', email.trim().toLowerCase())
-      .maybeSingle();
+      .eq('email', normalized);
 
-    if (error && error.code !== 'PGRST116') {throw error;}
+    if (error) {throw error;}
 
-    const badge = data as AnyRecord | null;
+    let badges = (badgesData || []) as AnyRecord[];
 
-    if (!badge) {
-      // Essayer via la table users
-      const { data: userData } = await db
-        .from('users')
-        .select('id')
-        .eq('email', email.trim().toLowerCase())
-        .maybeSingle();
-
-      const foundUser = userData as AnyRecord | null;
-
-      if (foundUser) {
-        return { found: false, badge: null, user: { id: foundUser.id, name: '', email, type: '' }, error: 'Badge non encore généré. Veuillez d\'abord générer le badge.' };
-      }
-
-      return { found: false, badge: null, user: null, error: 'Aucun compte trouvé avec cet email' };
+    if (hasNameFilter) {
+      badges = badges.filter((b) =>
+        participantNamesMatch(String(b.full_name ?? ''), {
+          firstName: nameFilter?.firstName,
+          lastName: nameFilter?.lastName,
+        }),
+      );
     }
 
-    return await lookupBadgeByCode(badge.badge_code);
+    if (badges.length > 0) {
+      const results: BadgeLookupResult[] = [];
+      for (const badge of badges) {
+        results.push(await lookupBadgeByCode(badge.badge_code));
+      }
+      return results;
+    }
+
+    // Fallback : table users (email de connexion)
+    let usersQuery = db.from('users').select('id, name, email, type, visitor_level, profile').eq('email', normalized);
+    const { data: usersData } = await usersQuery;
+
+    let users = (usersData || []) as AnyRecord[];
+    if (hasNameFilter) {
+      users = users.filter((u) =>
+        participantNamesMatch(String(u.name ?? ''), {
+          firstName: nameFilter?.firstName,
+          lastName: nameFilter?.lastName,
+        }),
+      );
+    }
+
+    if (users.length === 0) {
+      return [{ found: false, badge: null, user: null, error: 'Aucun compte trouvé avec cet email et ce nom' }];
+    }
+
+    const results: BadgeLookupResult[] = [];
+    for (const user of users) {
+      const { data: badgeRow } = await db
+        .from('user_badges')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (badgeRow) {
+        results.push(await lookupBadgeByCode((badgeRow as AnyRecord).badge_code));
+      } else {
+        results.push({
+          found: false,
+          badge: null,
+          user: {
+            id: user.id,
+            name: user.name ?? '',
+            email: user.email ?? normalized,
+            type: user.type ?? 'visitor',
+            visitorLevel: user.visitor_level,
+            profile: user.profile,
+          },
+          error: 'Badge non encore généré. Veuillez d\'abord générer le badge.',
+        });
+      }
+    }
+    return results;
   } catch (error) {
     console.error('Erreur lookup par email:', error);
-    return { found: false, badge: null, user: null, error: String(error) };
+    return [{ found: false, badge: null, user: null, error: String(error) }];
   }
+}
+
+/**
+ * Recherche badge par email (+ prénom/nom si email entreprise partagé).
+ */
+export async function lookupBadgeByEmail(
+  email: string,
+  nameFilter?: ParticipantNameFilter,
+): Promise<BadgeLookupResult> {
+  const results = await lookupBadgesByEmail(email, nameFilter);
+  const found = results.filter((r) => r.found);
+
+  if (found.length === 1) return found[0];
+  if (found.length > 1) {
+    return {
+      found: false,
+      badge: null,
+      user: null,
+      error: `${found.length} visiteurs trouvés avec cet email — précisez le prénom et le nom.`,
+    };
+  }
+
+  const first = results[0];
+  if (first) return first;
+  return { found: false, badge: null, user: null, error: 'Aucun compte trouvé avec cet email' };
 }
 
 /**

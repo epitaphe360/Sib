@@ -1,12 +1,14 @@
+import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { fetchInvoicesForUser, type Invoice } from '../../src/api/invoices';
-import { EmptyState, Screen, ScreenTitle } from '../../src/components/ui';
+import { EmptyState, IllustratedEmpty, Screen, ScreenTitle } from '../../src/components/ui';
 import { SkeletonList } from '../../src/components/Skeleton';
 import { AnimatedListItem } from '../../src/components/AnimatedListItem';
 import { useAuth } from '../../src/context/AuthContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
 import { localeCode } from '../../src/lib/locale';
+import { normalizeVisitorPass } from '../../src/lib/networkingPermissions';
 import { colors, fonts, radius, spacing } from '../../src/theme';
 
 export default function VisitorInvoicesScreen() {
@@ -15,16 +17,34 @@ export default function VisitorInvoicesScreen() {
   const [items, setItems] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const isFreeVisitor =
+    user?.type === 'visitor' && normalizeVisitorPass(user.visitorLevel) === 'free';
+
   const load = useCallback(async () => {
-    if (!user) return;
+    if (!user || isFreeVisitor) return;
     try {
       setItems(await fetchInvoicesForUser(user.id));
     } catch { /* silently ignore */ } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, isFreeVisitor]);
 
   useEffect(() => { load(); }, [load]);
+
+  if (isFreeVisitor) {
+    return (
+      <Screen>
+        <ScreenTitle title={t('invoices.title')} />
+        <IllustratedEmpty
+          icon="receipt-outline"
+          title={t('invoices.title')}
+          message={t('invoices.blocked')}
+          actionLabel={t('vip.upgrade')}
+          onAction={() => router.push('/(auth)/register-vip' as never)}
+        />
+      </Screen>
+    );
+  }
 
   if (loading) return <Screen><ScreenTitle title={t('invoices.title')} /><SkeletonList rows={4} /></Screen>;
 

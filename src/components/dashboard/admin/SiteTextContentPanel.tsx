@@ -19,7 +19,7 @@ const LANGS: { id: Lang; label: string }[] = [
   { id: 'ar', label: 'العربية' },
 ];
 
-export function SiteTextContentPanel() {
+export function SiteTextContentPanel({ embedded = false }: { embedded?: boolean } = {}) {
   const [rows, setRows]     = useState<SiteTextRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeLang, setActiveLang] = useState<Lang>('fr');
@@ -98,7 +98,7 @@ export function SiteTextContentPanel() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.75 }}
-      className="mb-8"
+      className={embedded ? '' : 'mb-8'}
     >
       <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden">
         {/* Header */}

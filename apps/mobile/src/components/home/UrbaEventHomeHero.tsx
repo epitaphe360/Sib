@@ -1,20 +1,27 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { URBA_PLATFORM_STATS } from '../../data/urbaCatalog';
+import { resolveAppImageSource } from '../../api/appContent';
+import { APP_IMAGES } from '../../data/images';
 import { useAuth } from '../../context/AuthContext';
+import { useAppContent, useHeroSubtitle, usePlatformStats } from '../../hooks/useAppContent';
 import { useI18n } from '../../i18n/I18nProvider';
 import { colors, fonts, spacing } from '../../theme';
 import { BrandLogo } from '../brand/BrandLogo';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { SignOutOverlayButton } from '../SignOutOverlayButton';
 
-export function UrbaEventHomeHero() {
-  const { t } = useI18n();
+export function UrbaEventHomeHero({ compact = false }: { compact?: boolean }) {
+  const { t, locale } = useI18n();
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
+  const { content } = useAppContent();
+  const heroSubtitle = useHeroSubtitle(content, locale);
+  const platformStats = usePlatformStats(content);
+  const heroBg = resolveAppImageSource('hero_bg', APP_IMAGES.hero, content.images, content.updatedAt);
 
   return (
-    <View style={styles.wrap}>
+    <View style={[styles.wrap, compact && styles.wrapCompact]}>
+      <ImageBackground source={heroBg} style={StyleSheet.absoluteFillObject} imageStyle={styles.heroBgImage} />
       <View style={styles.gradientBase} />
       <View style={styles.blobTopLeft} />
       <View style={styles.blobBottomRight} />
@@ -25,32 +32,46 @@ export function UrbaEventHomeHero() {
           <LanguageSwitcher compact variant="hero" />
         </View>
 
-        <View style={styles.badge}>
-          <View style={styles.liveDot} />
-          <Text style={styles.badgeText}>URBACOM</Text>
-          <Text style={styles.badgeSep}>·</Text>
-          <Text style={styles.badgeSub}>{t('home.urba.officialPlatform')}</Text>
-        </View>
-
-        <View style={styles.logoCard}>
-          <BrandLogo size="lg" showLabel />
-          <Text style={styles.logoTagline}>{t('home.urba.followSubtitle')}</Text>
-        </View>
-
-        <Text style={styles.title}>
-          {'Urba'}
-          <Text style={styles.titleAccent}>Event</Text>
-        </Text>
-        <Text style={styles.subtitle}>{t('home.urba.heroSubtitle')}</Text>
-
-        <View style={styles.statsRow}>
-          {URBA_PLATFORM_STATS.map((stat) => (
-            <View key={stat.labelKey} style={styles.statCard}>
-              <Text style={styles.statValue}>{stat.value}</Text>
-              <Text style={styles.statLabel}>{t(stat.labelKey)}</Text>
+        {!compact ? (
+          <>
+            <View style={styles.badge}>
+              <View style={styles.liveDot} />
+              <Text style={styles.badgeText}>{content.hero.badgeOrg}</Text>
+              <Text style={styles.badgeSep}>·</Text>
+              <Text style={styles.badgeSub}>{t('home.urba.officialPlatform')}</Text>
             </View>
-          ))}
-        </View>
+
+            <View style={styles.logoCard}>
+              <BrandLogo size="lg" showLabel />
+              <Text style={styles.logoTagline}>{t('home.urba.followSubtitle')}</Text>
+            </View>
+
+            <Text style={styles.title}>
+              {content.hero.titlePart1}
+              <Text style={styles.titleAccent}>{content.hero.titlePart2}</Text>
+            </Text>
+            <Text style={styles.subtitle}>{heroSubtitle}</Text>
+
+            <View style={styles.statsRow}>
+              {platformStats.map((stat) => (
+                <View key={stat.labelKey} style={styles.statCard}>
+                  <Text style={styles.statValue}>{stat.value}</Text>
+                  <Text style={styles.statLabel}>{t(stat.labelKey)}</Text>
+                </View>
+              ))}
+            </View>
+          </>
+        ) : (
+          <>
+            <Text style={styles.titleCompact}>
+              {'Urba'}
+              <Text style={styles.titleAccent}>Event</Text>
+            </Text>
+            <Text style={styles.greetingCompact}>
+              {t('home.urba.visitorHubGreeting').replace('{{name}}', user?.name?.split(' ')[0] ?? '')}
+            </Text>
+          </>
+        )}
       </View>
 
       <View style={styles.wave} />
@@ -64,10 +85,16 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#1B365D',
   },
+  wrapCompact: {
+    marginBottom: spacing.sm,
+  },
   gradientBase: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.platform.heroMid,
     opacity: 0.92,
+  },
+  heroBgImage: {
+    opacity: 0.28,
   },
   blobTopLeft: {
     position: 'absolute',
@@ -159,6 +186,20 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   titleAccent: { color: colors.platform.accentBlue },
+  titleCompact: {
+    textAlign: 'center',
+    fontFamily: fonts.bodyBold,
+    fontSize: 26,
+    color: '#fff',
+    marginBottom: spacing.xs,
+  },
+  greetingCompact: {
+    textAlign: 'center',
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: 'rgba(191,219,254,0.95)',
+    marginBottom: spacing.sm,
+  },
   subtitle: {
     textAlign: 'center',
     fontFamily: fonts.body,

@@ -14,7 +14,9 @@ export default function TabLayout() {
   const { colors } = useAppTheme();
   const { permissions } = useNetworkingPermissions();
   const salonTabs = Boolean(activeSalon);
-  const showNetwork = salonTabs && Boolean(user) && permissions.canAccessNetworking;
+  const showNetwork = Boolean(user) && permissions.canAccessNetworking;
+  const showScan = Boolean(user) && permissions.canAccessNetworking;
+  const showSalons = Boolean(user);
 
   return (
     <Tabs
@@ -31,7 +33,23 @@ export default function TabLayout() {
           tabBarIcon: createTabIcon('home-outline'),
         }}
       />
-      <Tabs.Screen name="salons" options={{ href: null }} />
+      <Tabs.Screen
+        name="salons"
+        options={{
+          title: t('tabs.salons'),
+          headerShown: false,
+          tabBarIcon: createTabIcon('grid-outline'),
+          href: showSalons ? undefined : null,
+        }}
+      />
+      <Tabs.Screen
+        name="scan"
+        options={{
+          title: t('tabs.scan'),
+          tabBarIcon: createTabIcon('scan-outline'),
+          href: showScan ? undefined : null,
+        }}
+      />
       <Tabs.Screen
         name="explore"
         options={{

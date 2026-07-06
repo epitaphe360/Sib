@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../i18n/I18nProvider';
 import { fetchSalons } from '../../services/salons';
@@ -8,7 +8,9 @@ import type { Salon } from '../../types';
 import { fonts, spacing } from '../../theme';
 import { SalonSelectionCard } from './SalonSelectionCard';
 
-export function SalonSelectionGrid() {
+const COMPACT_CARD_WIDTH = 268;
+
+export function SalonSelectionGrid({ compact = false }: { compact?: boolean }) {
   const { t } = useI18n();
   const { user } = useAuth();
   const [salons, setSalons] = useState<Salon[]>([]);
@@ -23,17 +25,34 @@ export function SalonSelectionGrid() {
   };
 
   return (
-    <View style={styles.wrap}>
-      <Text style={styles.title}>{t('home.urba.chooseSalon')}</Text>
-      <Text style={styles.subtitle}>
-        {t('home.urba.chooseSalonHint')}
-      </Text>
+    <View style={[styles.wrap, compact && styles.wrapCompact]}>
+      <Text style={[styles.title, compact && styles.titleCompact]}>{t('home.urba.chooseSalon')}</Text>
+      {!compact ? (
+        <Text style={styles.subtitle}>
+          {user ? t('home.urba.chooseSalonConnected') : t('home.urba.chooseSalonHint')}
+        </Text>
+      ) : null}
 
-      <View style={styles.grid}>
-        {salons.map((salon) => (
-          <SalonSelectionCard key={salon.id} salon={salon} onPress={() => handleSalon(salon)} />
-        ))}
-      </View>
+      {compact ? (
+        <FlatList
+          horizontal
+          data={salons}
+          keyExtractor={(s) => s.id}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalList}
+          renderItem={({ item }) => (
+            <View style={styles.compactCardWrap}>
+              <SalonSelectionCard salon={item} compact onPress={() => handleSalon(item)} />
+            </View>
+          )}
+        />
+      ) : (
+        <View style={styles.grid}>
+          {salons.map((salon) => (
+            <SalonSelectionCard key={salon.id} salon={salon} onPress={() => handleSalon(salon)} />
+          ))}
+        </View>
+      )}
     </View>
   );
 }
@@ -43,11 +62,18 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
     paddingHorizontal: spacing.md,
   },
+  wrapCompact: {
+    marginBottom: spacing.md,
+  },
   title: {
     fontFamily: fonts.bodyBold,
     fontSize: 22,
     color: '#1B365D',
     marginBottom: 4,
+  },
+  titleCompact: {
+    fontSize: 17,
+    marginBottom: spacing.sm,
   },
   subtitle: {
     fontFamily: fonts.body,
@@ -58,5 +84,12 @@ const styles = StyleSheet.create({
   },
   grid: {
     gap: spacing.sm,
+  },
+  horizontalList: {
+    gap: spacing.sm,
+    paddingRight: spacing.md,
+  },
+  compactCardWrap: {
+    width: COMPACT_CARD_WIDTH,
   },
 });

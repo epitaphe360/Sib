@@ -13,14 +13,7 @@ import {
   AdminChartsSection,
   AdminActionsPanel,
   AdminNavVisibility,
-  BannerManagementPanel,
-  VisitorPricingPanel,
-  SiteImagesPanel,
-  SiteTextContentPanel,
-  WebContentCoveragePanel,
-  PageContentAdminPanel,
-  MobileAppContentPanel,
-  CmsAdminShortcutsPanel,
+  CmsAdminHub,
   SystemHealthPanel,
   ActivityFeed,
 } from './admin';
@@ -129,22 +122,7 @@ export default function AdminDashboard() {
 
         <AdminNavVisibility />
 
-        {/* ── CMS : Couverture, Web & APK ── */}
-        <WebContentCoveragePanel />
-
-        <SiteImagesPanel />
-
-        <SiteTextContentPanel />
-
-        <PageContentAdminPanel />
-
-        <MobileAppContentPanel />
-
-        <CmsAdminShortcutsPanel />
-
-        <BannerManagementPanel />
-
-        <VisitorPricingPanel />
+        <CmsAdminHub />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -2,7 +2,7 @@
  * Inscription visiteur sur place — sans mot de passe (lien magique sur l'app mobile).
  */
 import { useState } from 'react';
-import { CheckCircle, Loader, Mail, UserPlus } from 'lucide-react';
+import { CheckCircle, Loader, Mail, Printer, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
 import useAuthStore from '../../store/authStore';
 import { Button } from '../../components/ui/Button';
@@ -21,7 +21,11 @@ const SECTORS = [
   'Autre',
 ];
 
-export default function OnSiteVisitorRegistration() {
+interface OnSiteVisitorRegistrationProps {
+  onPrintNow?: (email: string) => void;
+}
+
+export default function OnSiteVisitorRegistration({ onPrintNow }: OnSiteVisitorRegistrationProps) {
   const { user } = useAuthStore();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -30,7 +34,12 @@ export default function OnSiteVisitorRegistration() {
   const [country, setCountry] = useState('MA');
   const [sector, setSector] = useState('');
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState<{ badgeCode: string; magicLinkSent: boolean; name: string } | null>(null);
+  const [success, setSuccess] = useState<{
+    badgeCode: string;
+    email: string;
+    magicLinkSent: boolean;
+    name: string;
+  } | null>(null);
 
   const reset = () => {
     setFirstName('');
@@ -66,6 +75,7 @@ export default function OnSiteVisitorRegistration() {
       });
       setSuccess({
         badgeCode: result.badgeCode,
+        email: email.trim().toLowerCase(),
         magicLinkSent: result.magicLinkSent,
         name: `${firstName.trim()} ${lastName.trim()}`,
       });
@@ -100,7 +110,16 @@ export default function OnSiteVisitorRegistration() {
             Imprimez le badge maintenant. Le visiteur pourra demander un lien magique depuis l&apos;app avec son email.
           </p>
         )}
-        <Button onClick={reset} className="w-full bg-sib-orange hover:bg-sib-orange/90">
+        {onPrintNow ? (
+          <Button
+            onClick={() => onPrintNow(success.email)}
+            className="w-full mb-3 bg-sib-navy hover:bg-sib-navy/90"
+          >
+            <Printer className="w-4 h-4 mr-2" />
+            Imprimer le badge maintenant
+          </Button>
+        ) : null}
+        <Button onClick={reset} variant="outline" className="w-full">
           Nouvelle inscription
         </Button>
       </Card>

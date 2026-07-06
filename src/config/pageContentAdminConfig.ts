@@ -22,6 +22,31 @@ export const VITRINE_PAGE_SLUGS = [
   { slug: 'salon_sie', label: 'Salon SIE (/salon/sie)', route: '/salon/sie' },
 ] as const;
 
+/** Regroupement des slugs pour l’admin (navigation par section). */
+export const PAGE_CONTENT_GROUPS = [
+  {
+    id: 'sib_vitrine',
+    label: 'Vitrine SIB',
+    description: 'Pages marketing du salon SIB 2026',
+    slugs: [
+      'presentation', 'pourquoi-visiter', 'pourquoi-exposer', 'infos-pratiques',
+      'espaces-sib', 'editions', 'nouveautes', 'secteurs-activites', 'telechargements',
+    ],
+  },
+  {
+    id: 'sib_global',
+    label: 'Contact & global',
+    description: 'Footer, contact, presse, venue, Femmes & Hommes',
+    slugs: ['contact', 'presse', 'venue', 'femmes-hommes', 'site_footer', 'programme_scientifique'],
+  },
+  {
+    id: 'urbacom',
+    label: 'UrbaEvent / Salons',
+    description: 'Hub /salons et pages salon SIR, SIP, BTP, SIE',
+    slugs: ['salons_hub', 'salon_sir', 'salon_sip', 'salon_btp', 'salon_sie'],
+  },
+] as const;
+
 /** Clés CMS fréquentes (aide à l’édition JSON). */
 export const PAGE_CONTENT_FIELD_HINTS: Record<string, string[]> = {
   presentation: [

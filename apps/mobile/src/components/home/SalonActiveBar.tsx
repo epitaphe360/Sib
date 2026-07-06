@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSalon } from '../../context/SalonContext';
 import { useAppTheme } from '../../context/ThemeContext';
 import { getUrbaSalonTheme } from '../../data/urbaCatalog';
+import { useAppContent } from '../../hooks/useAppContent';
 import { useI18n } from '../../i18n/I18nProvider';
 import { fonts, radius, spacing } from '../../theme';
 import { AppIcon } from '../AppIcon';
@@ -12,10 +13,11 @@ export function SalonActiveBar() {
   const { activeSalon, clearActiveSalon } = useSalon();
   const { t } = useI18n();
   const { colors } = useAppTheme();
+  const { content } = useAppContent();
 
   if (!activeSalon) return null;
 
-  const theme = getUrbaSalonTheme(activeSalon);
+  const theme = getUrbaSalonTheme(activeSalon, content.salonStats);
 
   return (
     <View style={[styles.wrap, { backgroundColor: colors.surface, borderColor: theme.color }]}>

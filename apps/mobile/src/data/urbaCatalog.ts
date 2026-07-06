@@ -123,10 +123,25 @@ export function resolveSalonThemeKey(salon: Pick<Salon, 'id' | 'slug' | 'code'>)
   return slug && !UUID_RE.test(slug) ? slug : code || 'sib';
 }
 
-export function getUrbaSalonTheme(salon: Pick<Salon, 'id' | 'slug' | 'code' | 'name'>): UrbaSalonTheme {
+export function getUrbaSalonTheme(
+  salon: Pick<Salon, 'id' | 'slug' | 'code' | 'name'>,
+  salonStats?: Record<string, { visitors?: string; edition?: string; description?: string }>,
+): UrbaSalonTheme {
   const key = resolveSalonThemeKey(salon);
   const theme = URBA_SALON_THEMES[key];
-  if (theme) return theme;
+  const remote = salonStats?.[key];
+
+  const mergeRemote = (base: UrbaSalonTheme): UrbaSalonTheme => {
+    if (!remote) return base;
+    return {
+      ...base,
+      edition: remote.edition?.trim() || base.edition,
+      visitors: remote.visitors?.trim() || base.visitors,
+      description: remote.description?.trim() || base.description,
+    };
+  };
+
+  if (theme) return mergeRemote(theme);
 
   return {
     color: '#4598D1',

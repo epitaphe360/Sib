@@ -12,6 +12,7 @@ import { OfflineBanner } from '../src/components/OfflineBanner';
 import { I18nProvider, useI18n } from '../src/i18n/I18nProvider';
 import { useAppFonts } from '../src/hooks/useAppFonts';
 import { prefetchBadgeConfig } from '../src/hooks/useBadgeConfig';
+import { prefetchAppContent } from '../src/hooks/useAppContent';
 import { initSentry } from '../src/lib/sentry';
 import { AppQueryProvider } from '../src/providers/QueryProvider';
 import { AuthDeepLinkCapture } from '../src/components/AuthDeepLinkCapture';
@@ -75,6 +76,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     prefetchBadgeConfig().catch(() => undefined);
+    prefetchAppContent().catch(() => undefined);
   }, []);
 
   useEffect(() => {

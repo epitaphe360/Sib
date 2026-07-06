@@ -74,3 +74,5 @@ urbaevent/**/*.env-*
 urbaevent/*.sql
 .vercel
 .env*.local
+
+.vercel

@@ -3,15 +3,17 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSalon } from '../../context/SalonContext';
 import { useI18n } from '../../i18n/I18nProvider';
 import { getUrbaSalonTheme } from '../../data/urbaCatalog';
+import { useAppContent } from '../../hooks/useAppContent';
 import { fonts, radius, spacing } from '../../theme';
 
 export function ActiveSalonBanner() {
   const { activeSalon, clearActiveSalon } = useSalon();
   const { t } = useI18n();
+  const { content } = useAppContent();
 
   if (!activeSalon) return null;
 
-  const theme = getUrbaSalonTheme(activeSalon);
+  const theme = getUrbaSalonTheme(activeSalon, content.salonStats);
 
   return (
     <View style={[styles.wrap, { borderColor: theme.color }]}>

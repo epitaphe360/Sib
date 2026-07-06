@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native
 import { AppIcon } from '../AppIcon';
 import { getSalonMiniHome, type SalonPartner } from '../../data/salonPartners';
 import { getUrbaSalonTheme } from '../../data/urbaCatalog';
+import { useAppContent } from '../../hooks/useAppContent';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../i18n/I18nProvider';
 import type { Salon } from '../../types';
@@ -34,8 +35,9 @@ function PartnerTile({ partner, accent }: { partner: SalonPartner; accent: strin
 export function SalonMiniHomeSection({ salon }: Props) {
   const { t } = useI18n();
   const { user } = useAuth();
+  const { content } = useAppContent();
   const { width } = useWindowDimensions();
-  const theme = getUrbaSalonTheme(salon);
+  const theme = getUrbaSalonTheme(salon, content.salonStats);
   const miniHome = getSalonMiniHome(salon);
   const aboutText = miniHome.aboutKey ? t(miniHome.aboutKey) : theme.description;
   const edition = salon.edition?.trim() || theme.edition;

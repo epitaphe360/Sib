@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { lookupParticipant, type VisitorLookup } from '../../../src/api/serviceClient';
+import { lookupParticipant, lookupParticipants, type VisitorLookup } from '../../../src/api/serviceClient';
 import { A4_SHEET_WIDTH, BadgeA4Bifold } from '../../../src/components/BadgeA4Bifold';
 import { QRScannerView } from '../../../src/components/QRScannerView';
 import { SignOutOverlayButton } from '../../../src/components/SignOutOverlayButton';
@@ -16,6 +16,9 @@ export default function LookupScreen() {
   const [mode, setMode] = useState<'search' | 'scan'>('search');
   const isScanMode = mode === 'scan';
   const [query, setQuery] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [results, setResults] = useState<VisitorLookup[]>([]);
   const [result, setResult] = useState<VisitorLookup | null>(null);
   const [loading, setLoading] = useState(false);
   const [printing, setPrinting] = useState(false);
@@ -25,13 +28,32 @@ export default function LookupScreen() {
     if (!query.trim()) return;
     setLoading(true);
     try {
-      const r = await lookupParticipant(query.trim());
-      setResult(r);
+      if (query.includes('@')) {
+        const list = await lookupParticipants({
+          email: query.trim().toLowerCase(),
+          firstName: firstName.trim() || undefined,
+          lastName: lastName.trim() || undefined,
+        });
+        const found = list.filter((r) => r.found);
+        setResults(found);
+        setResult(found.length === 1 ? found[0] : found.length === 0 ? list[0] ?? null : null);
+        if (found.length > 1) {
+          Alert.alert('Plusieurs résultats', `${found.length} visiteurs avec cet email — touchez la bonne personne.`);
+        }
+      } else {
+        const r = await lookupParticipant(query.trim());
+        setResults(r.found ? [r] : []);
+        setResult(r);
+      }
     } catch (e) {
       Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
     } finally {
       setLoading(false);
     }
+  };
+
+  const selectResult = (r: VisitorLookup) => {
+    setResult(r);
   };
 
   const onScan = async (data: string) => {
@@ -113,7 +135,35 @@ export default function LookupScreen() {
           returnKeyType="search"
           onSubmitEditing={search}
         />
+        <Input
+          label="Prénom (si email entreprise partagé)"
+          value={firstName}
+          onChangeText={setFirstName}
+          autoCapitalize="words"
+          returnKeyType="next"
+        />
+        <Input
+          label="Nom (si email entreprise partagé)"
+          value={lastName}
+          onChangeText={setLastName}
+          autoCapitalize="words"
+          returnKeyType="search"
+          onSubmitEditing={search}
+        />
         <PrimaryButton label={t('common.search')} onPress={search} loading={loading} disabled={!query.trim()} />
+
+        {results.length > 1 && (
+          <View style={styles.multiResults}>
+            <Text style={styles.multiTitle}>Sélectionnez le visiteur :</Text>
+            {results.map((r) => (
+              <SecondaryButton
+                key={r.userId ?? r.email}
+                label={`${r.name ?? '?'} — ${r.email ?? ''}`}
+                onPress={() => selectResult(r)}
+              />
+            ))}
+          </View>
+        )}
 
         {result && (
           <View style={styles.resultBlock}>
@@ -193,6 +243,8 @@ const styles = StyleSheet.create({
   scanOverlay: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(27,54,93,0.92)', padding: 20, borderTopLeftRadius: 20, borderTopRightRadius: 20 },
   scanHint: { color: '#fff', fontFamily: fonts.bodyBold, fontSize: 14, textAlign: 'center', marginBottom: 12 },
   modeRow: { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
+  multiResults: { marginTop: spacing.sm, gap: spacing.xs },
+  multiTitle: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.primary, marginBottom: spacing.xs },
   resultBlock: { marginTop: spacing.md },
   resultCard: { padding: spacing.md, backgroundColor: colors.surface, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border },
   resultHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.xs },

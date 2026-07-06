@@ -146,6 +146,12 @@ function ServiceClientPortal() {
   const { user, logout } = useAuthStore();
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>('print');
+  const [printRequest, setPrintRequest] = useState<{ email: string; key: number } | null>(null);
+
+  const handlePrintAfterRegistration = (email: string) => {
+    setPrintRequest({ email, key: Date.now() });
+    setTab('print');
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -199,10 +205,15 @@ function ServiceClientPortal() {
       <main className="flex-1">
         {tab === 'registration' ? (
           <div className="max-w-4xl mx-auto py-6 px-4">
-            <OnSiteVisitorRegistration />
+            <OnSiteVisitorRegistration onPrintNow={handlePrintAfterRegistration} />
           </div>
         ) : (
-          <BadgePrintStationPage embedded />
+          <BadgePrintStationPage
+            embedded
+            initialLookupEmail={printRequest?.email}
+            lookupKey={printRequest?.key}
+            autoPrint={Boolean(printRequest)}
+          />
         )}
       </main>
     </div>

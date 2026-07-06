@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { URBA_PLATFORM_STATS } from '../../data/urbaCatalog';
+import { useAppContent, usePlatformStats } from '../../hooks/useAppContent';
 import { useAppTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../i18n/I18nProvider';
 import { fonts, radius, spacing } from '../../theme';
@@ -7,6 +7,8 @@ import { fonts, radius, spacing } from '../../theme';
 export function HomePlatformStats() {
   const { t } = useI18n();
   const { colors, isDark } = useAppTheme();
+  const { content } = useAppContent();
+  const platformStats = usePlatformStats(content);
 
   return (
     <View
@@ -19,12 +21,12 @@ export function HomePlatformStats() {
         },
       ]}
     >
-      {URBA_PLATFORM_STATS.map((stat, index) => (
+      {platformStats.map((stat, index) => (
         <View
           key={stat.labelKey}
           style={[
             styles.cell,
-            index < URBA_PLATFORM_STATS.length - 1 && {
+            index < platformStats.length - 1 && {
               borderRightWidth: StyleSheet.hairlineWidth,
               borderRightColor: colors.border,
             },

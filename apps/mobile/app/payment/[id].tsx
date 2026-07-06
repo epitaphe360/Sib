@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 import { Card, EmptyState, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { useAuth } from '../../src/context/AuthContext';
-import { BANK_TRANSFER, generatePaymentReference, VIP_PASS } from '../../src/data/bankTransfer';
+import { resolveBankTransfer, resolveVipPass } from '../../src/api/appContent';
+import { generatePaymentReference } from '../../src/data/bankTransfer';
+import { useAppContent } from '../../src/hooks/useAppContent';
 import { getPaymentRequest } from '../../src/services/payment';
 import { useI18n } from '../../src/i18n/I18nProvider';
 import { navigateSafe } from '../../src/lib/navigateSafe';
@@ -21,6 +23,9 @@ export default function PaymentScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user, refreshUser } = useAuth();
   const { t } = useI18n();
+  const { content } = useAppContent();
+  const bank = resolveBankTransfer(content);
+  const vipPass = resolveVipPass(content);
   const [loading, setLoading] = useState(true);
   const [amount, setAmount] = useState(0);
   const [status, setStatus] = useState('pending');
@@ -76,7 +81,7 @@ export default function PaymentScreen() {
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <ScreenTitle
           title={t('payment.title')}
-          subtitle={`${amount} ${VIP_PASS.currency} — ${
+          subtitle={`${amount} ${vipPass.currency} — ${
             status === 'approved'
               ? t('payment.approved')
               : status === 'rejected'
@@ -106,7 +111,7 @@ export default function PaymentScreen() {
         <Card>
           <Text style={styles.sectionLabel}>Étapes</Text>
           {[
-            `Effectuez un virement de ${amount} ${VIP_PASS.currency}`,
+            `Effectuez un virement de ${amount} ${vipPass.currency}`,
             'Indiquez la référence ci-dessous dans le libellé',
             'Conservez votre justificatif de virement',
             'Activation sous 2 à 5 jours ouvrés après validation',
@@ -119,10 +124,10 @@ export default function PaymentScreen() {
 
         <Card>
           <Text style={styles.sectionLabel}>Coordonnées bancaires</Text>
-          <CopyRow label="Banque" value={BANK_TRANSFER.bankName} onCopy={copy} />
-          <CopyRow label="Titulaire" value={BANK_TRANSFER.accountHolder} onCopy={copy} />
-          <CopyRow label="IBAN" value={BANK_TRANSFER.iban} onCopy={copy} />
-          <CopyRow label="BIC" value={BANK_TRANSFER.bic} onCopy={copy} />
+          <CopyRow label="Banque" value={bank.bankName} onCopy={copy} />
+          <CopyRow label="Titulaire" value={bank.accountHolder} onCopy={copy} />
+          <CopyRow label="IBAN" value={bank.iban} onCopy={copy} />
+          <CopyRow label="BIC" value={bank.bic} onCopy={copy} />
           <CopyRow label="Référence *" value={reference} onCopy={copy} highlight />
         </Card>
 

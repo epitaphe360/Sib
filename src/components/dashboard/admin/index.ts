@@ -20,4 +20,5 @@ export { SiteTextContentPanel } from './SiteTextContentPanel';
 export { WebContentCoveragePanel } from './WebContentCoveragePanel';
 export { PageContentAdminPanel } from './PageContentAdminPanel';
 export { MobileAppContentPanel } from './MobileAppContentPanel';
+export { CmsAdminHub } from './CmsAdminHub';
 export { CmsAdminShortcutsPanel } from './CmsAdminShortcutsPanel';

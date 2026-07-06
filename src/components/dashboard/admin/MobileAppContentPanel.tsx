@@ -21,7 +21,7 @@ const SALON_IMAGE_SLOTS = [
   { key: 'hero_bg', label: 'Fond hero accueil' },
 ];
 
-export function MobileAppContentPanel() {
+export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean } = {}) {
   const [content, setContent] = useState<MobileAppContent>(DEFAULT_MOBILE_APP_CONTENT);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -92,11 +92,14 @@ export function MobileAppContentPanel() {
     setUploadingSlot(slot);
     try {
       const url = await uploadMobileAppImage(slot, file);
-      setContent((prev) => ({
-        ...prev,
-        images: { ...prev.images, [slot]: url },
-      }));
-      toast.success(`Image ${slot} uploadée`);
+      const nextContent = {
+        ...content,
+        images: { ...content.images, [slot]: url },
+      };
+      setContent(nextContent);
+      await saveMobileAppContent(mergeMobileAppContent(nextContent));
+      toast.success(`Photo ${slot} publiée — tirer vers le bas dans l’APK pour actualiser`);
+      await load();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Upload échoué');
     } finally {
@@ -106,9 +109,13 @@ export function MobileAppContentPanel() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 16 }}
+      initial={embedded ? false : { opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm"
+      className={
+        embedded
+          ? 'rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 shadow-sm'
+          : 'mb-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm'
+      }
     >
       <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
         <div>
@@ -117,7 +124,7 @@ export function MobileAppContentPanel() {
             <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Contenu APK UrbaEvent</h2>
           </div>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl">
-            Textes, chiffres et photos de l’application mobile. L’APK récupère ces données au démarrage (cache local + mise à jour intelligente).
+            Textes, chiffres et photos de l’application mobile. L’APK récupère ces données au démarrage ; après upload d’une photo, tirez vers le bas sur l’accueil de l’app pour actualiser.
           </p>
         </div>
         <div className="flex gap-2">
