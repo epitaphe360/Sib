@@ -92,6 +92,9 @@ export async function fetchVisitorScanHistory(userId: string, limit = 100): Prom
       .limit(limit),
   ]);
 
+  if (connsRes.error) throw new Error(connsRes.error.message);
+  if (leadsRes.error) throw new Error(leadsRes.error.message);
+
   const userIds = new Set<string>();
   for (const c of connsRes.data ?? []) {
     userIds.add(c.requester_id as string);

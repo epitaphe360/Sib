@@ -1,4 +1,5 @@
 import { sanitizeIlikeTerm } from '../lib/sanitizeIlike';
+import { participantNamesMatch } from '../lib/participantNameMatch';
 import { supabase } from '../lib/supabase';
 import type { UserBadge } from '../types';
 
@@ -15,63 +16,87 @@ export interface VisitorLookup {
   error?: string;
 }
 
-/** Recherche un participant par email ou code badge */
-export async function lookupParticipant(query: string): Promise<VisitorLookup> {
-  const term = query.trim().toLowerCase();
-  if (!term) return { found: false, hasBadge: false, error: 'Saisie vide' };
+export interface ParticipantSearchParams {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  /** Recherche libre : code badge, email, ou nom */
+  query?: string;
+}
 
-  try {
-    const safeTerm = sanitizeIlikeTerm(term);
-    // Chercher par code badge d'abord
-    const { data: badgeRow } = await supabase
+function mapBadgeRow(badgeRow: Record<string, unknown>, u: Record<string, unknown> | null): VisitorLookup {
+  return {
+    found: true,
+    userId: (u?.id ?? badgeRow.user_id) as string,
+    name: (u?.name ?? badgeRow.full_name) as string,
+    email: (u?.email ?? badgeRow.email) as string,
+    type: u?.type as string,
+    visitorLevel: u?.visitor_level as string,
+    status: u?.status as string,
+    hasBadge: true,
+    badge: {
+      id: badgeRow.id as string,
+      userId: badgeRow.user_id as string,
+      badgeCode: badgeRow.badge_code as string,
+      userType: badgeRow.user_type as string,
+      userLevel: badgeRow.user_level as string | undefined,
+      fullName: badgeRow.full_name as string,
+      companyName: badgeRow.company_name as string | undefined,
+      email: badgeRow.email as string,
+      accessLevel: badgeRow.access_level as string,
+      validFrom: new Date(badgeRow.valid_from as string),
+      validUntil: new Date(badgeRow.valid_until as string),
+      status: badgeRow.status as string,
+    },
+  };
+}
+
+/** Recherche plusieurs participants (email entreprise partagé). */
+export async function lookupParticipants(params: ParticipantSearchParams): Promise<VisitorLookup[]> {
+  const email = params.email?.trim().toLowerCase();
+  const hasName = Boolean(params.firstName?.trim() || params.lastName?.trim());
+
+  if (email) {
+    const { data: badgeRows, error } = await supabase
       .from('user_badges')
       .select('*, user:users!user_id(id, name, email, type, visitor_level, status)')
-      .ilike('badge_code', `%${safeTerm}%`)
-      .maybeSingle();
+      .eq('email', email);
 
-    if (badgeRow) {
-      const u = badgeRow.user as Record<string, unknown> | null;
-      return {
-        found: true,
-        userId: u?.id as string,
-        name: u?.name as string,
-        email: u?.email as string,
-        type: u?.type as string,
-        visitorLevel: u?.visitor_level as string,
-        status: u?.status as string,
-        hasBadge: true,
-        badge: {
-          id: badgeRow.id,
-          userId: badgeRow.user_id,
-          badgeCode: badgeRow.badge_code,
-          userType: badgeRow.user_type,
-          userLevel: badgeRow.user_level,
-          fullName: badgeRow.full_name,
-          companyName: badgeRow.company_name,
-          email: badgeRow.email,
-          accessLevel: badgeRow.access_level,
-          validFrom: new Date(badgeRow.valid_from),
-          validUntil: new Date(badgeRow.valid_until),
-          status: badgeRow.status,
-        },
-      };
+    if (error) throw error;
+
+    let rows = badgeRows ?? [];
+    if (hasName) {
+      rows = rows.filter((row) =>
+        participantNamesMatch(String(row.full_name ?? ''), {
+          firstName: params.firstName,
+          lastName: params.lastName,
+        }),
+      );
     }
 
-    // Chercher par email
-    const { data: userRow } = await supabase
+    if (rows.length > 0) {
+      return rows.map((row) => mapBadgeRow(row as Record<string, unknown>, row.user as Record<string, unknown> | null));
+    }
+
+    const { data: userRows } = await supabase
       .from('users')
       .select('id, name, email, type, visitor_level, status')
-      .ilike('email', term)
-      .maybeSingle();
+      .eq('email', email);
 
-    if (userRow) {
-      const { data: badge } = await supabase
-        .from('user_badges')
-        .select('*')
-        .eq('user_id', userRow.id)
-        .maybeSingle();
+    let users = userRows ?? [];
+    if (hasName) {
+      users = users.filter((u) =>
+        participantNamesMatch(String(u.name ?? ''), {
+          firstName: params.firstName,
+          lastName: params.lastName,
+        }),
+      );
+    }
 
-      return {
+    const results: VisitorLookup[] = [];
+    for (const userRow of users) {
+      const { data: badge } = await supabase.from('user_badges').select('*').eq('user_id', userRow.id).maybeSingle();
+      results.push({
         found: true,
         userId: userRow.id,
         name: userRow.name,
@@ -80,24 +105,61 @@ export async function lookupParticipant(query: string): Promise<VisitorLookup> {
         visitorLevel: userRow.visitor_level,
         status: userRow.status,
         hasBadge: !!badge,
-        badge: badge ? {
-          id: badge.id,
-          userId: badge.user_id,
-          badgeCode: badge.badge_code,
-          userType: badge.user_type,
-          userLevel: badge.user_level,
-          fullName: badge.full_name,
-          companyName: badge.company_name,
-          email: badge.email,
-          accessLevel: badge.access_level,
-          validFrom: new Date(badge.valid_from),
-          validUntil: new Date(badge.valid_until),
-          status: badge.status,
-        } : undefined,
+        badge: badge ? mapBadgeRow(badge as Record<string, unknown>, userRow as Record<string, unknown>).badge : undefined,
+      });
+    }
+    return results;
+  }
+
+  const single = await lookupParticipant(params.query ?? '');
+  return single.found ? [single] : [single];
+}
+
+/** Recherche un participant par email+nom, code badge ou nom */
+export async function lookupParticipant(queryOrParams: string | ParticipantSearchParams): Promise<VisitorLookup> {
+  if (typeof queryOrParams !== 'string') {
+    const list = await lookupParticipants(queryOrParams);
+    const found = list.filter((r) => r.found);
+    if (found.length === 1) return found[0];
+    if (found.length > 1) {
+      return {
+        found: false,
+        hasBadge: false,
+        error: `${found.length} visiteurs trouvés — précisez le prénom et le nom.`,
       };
     }
+    return list[0] ?? { found: false, hasBadge: false, error: 'Participant introuvable' };
+  }
 
-    // Chercher par nom partiel
+  const term = queryOrParams.trim().toLowerCase();
+  if (!term) return { found: false, hasBadge: false, error: 'Saisie vide' };
+
+  try {
+    const safeTerm = sanitizeIlikeTerm(term);
+    const { data: badgeRow } = await supabase
+      .from('user_badges')
+      .select('*, user:users!user_id(id, name, email, type, visitor_level, status)')
+      .ilike('badge_code', `%${safeTerm}%`)
+      .maybeSingle();
+
+    if (badgeRow) {
+      return mapBadgeRow(badgeRow as Record<string, unknown>, badgeRow.user as Record<string, unknown> | null);
+    }
+
+    if (term.includes('@')) {
+      const list = await lookupParticipants({ email: term });
+      const found = list.filter((r) => r.found);
+      if (found.length === 1) return found[0];
+      if (found.length > 1) {
+        return {
+          found: false,
+          hasBadge: false,
+          error: `${found.length} visiteurs avec cet email — ajoutez le prénom et le nom.`,
+        };
+      }
+      return list[0] ?? { found: false, hasBadge: false, error: 'Participant introuvable' };
+    }
+
     const { data: nameRows } = await supabase
       .from('users')
       .select('id, name, email, type, visitor_level, status')
@@ -106,6 +168,7 @@ export async function lookupParticipant(query: string): Promise<VisitorLookup> {
 
     if (nameRows?.length) {
       const first = nameRows[0];
+      const { data: badge } = await supabase.from('user_badges').select('*').eq('user_id', first.id).maybeSingle();
       return {
         found: true,
         userId: first.id,
@@ -114,7 +177,8 @@ export async function lookupParticipant(query: string): Promise<VisitorLookup> {
         type: first.type,
         visitorLevel: first.visitor_level,
         status: first.status,
-        hasBadge: false,
+        hasBadge: !!badge,
+        badge: badge ? mapBadgeRow(badge as Record<string, unknown>, first as Record<string, unknown>).badge : undefined,
       };
     }
 
@@ -150,9 +214,13 @@ export async function onSiteRegistration(params: {
     const msg = authError.message?.toLowerCase() ?? '';
     // Si déjà inscrit, chercher l'utilisateur
     if (msg.includes('already registered') || msg.includes('user already registered') || msg.includes('already exists')) {
-      const existing = await lookupParticipant(email);
-      if (existing.found && existing.userId) {
-        return { userId: existing.userId, badgeCode: existing.badge?.badgeCode ?? `SIB-${existing.userId.slice(0, 8).toUpperCase()}` };
+      const existing = await lookupParticipants({ email, firstName: params.firstName, lastName: params.lastName });
+      const match = existing.find((r) => r.found);
+      if (match?.userId) {
+        return {
+          userId: match.userId,
+          badgeCode: match.badge?.badgeCode ?? `SIB-${match.userId.slice(0, 8).toUpperCase()}`,
+        };
       }
       throw new Error(`Email déjà utilisé : ${email}`);
     }
@@ -185,13 +253,14 @@ export async function onSiteRegistration(params: {
   }]);
 
   // Générer le badge via edge function
-  const { data: badgeData } = await supabase.functions.invoke('generate-visitor-badge', {
+  const { data: badgeData, error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
     body: { userId, email, name, level: 'free', includePhoto: false },
-  }).catch(() => ({ data: null }));
+  });
+  if (badgeError || badgeData?.error || !badgeData?.badgeCode) {
+    throw new Error(badgeError?.message ?? badgeData?.error ?? 'Impossible de générer le badge sur place');
+  }
 
-  const badgeCode = badgeData?.badgeCode ?? `SIB-${userId.slice(0, 8).toUpperCase()}`;
-
-  return { userId, badgeCode };
+  return { userId, badgeCode: badgeData.badgeCode as string };
 }
 
 /** Remplace un badge perdu/endommagé */
@@ -226,7 +295,7 @@ export async function replaceBadge(params: {
 
   if (!userRow) throw new Error('Utilisateur introuvable');
 
-  const { data: badgeData } = await supabase.functions.invoke('generate-visitor-badge', {
+  const { data: badgeData, error: badgeError } = await supabase.functions.invoke('generate-visitor-badge', {
     body: {
       userId: params.userId,
       email: userRow.email,
@@ -235,10 +304,12 @@ export async function replaceBadge(params: {
       includePhoto: false,
       replace: true,
     },
-  }).catch(() => ({ data: null }));
+  });
+  if (badgeError || badgeData?.error || !badgeData?.badgeCode) {
+    throw new Error(badgeError?.message ?? badgeData?.error ?? 'Impossible de générer le nouveau badge');
+  }
 
-  const newBadgeCode = badgeData?.badgeCode ?? `SIB-${params.userId.slice(0, 8).toUpperCase()}-R`;
-  return { newBadgeCode };
+  return { newBadgeCode: badgeData.badgeCode as string };
 }
 
 /** Statistiques desk service client */

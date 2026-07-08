@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Calendar, MapPin, Users, Building2, Home,
@@ -39,10 +39,11 @@ export default function SalonPage({ salonId }: SalonPageProps) {
   const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
 
-  if (!salon) {
-    navigate(ROUTES.SALON_SELECTION);
-    return null;
-  }
+  useEffect(() => {
+    if (!salon) navigate(ROUTES.SALON_SELECTION);
+  }, [salon, navigate]);
+
+  if (!salon) return null;
 
   const icon = SALON_ICONS[salonId];
 

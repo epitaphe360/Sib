@@ -7,133 +7,23 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { ROUTES } from '../lib/routes';
+import { useSalonsHubContent } from '../hooks/useSalonPageContent';
+import type { SalonCardContent } from '../data/salonPagesDefaults';
 
-/* ─────────────────────────────────────────────────────────────
-   DONNÉES SALONS
-───────────────────────────────────────────────────────────── */
-interface Salon {
-  id: string;
-  code: string;
-  name: string;
-  tagline: string;
-  description: string;
-  dates: string;
-  location: string;
-  visitors: string;
-  color: string;
-  bgColor: string;
-  gradient: string;
-  icon: React.ReactNode;
-  route: string;
-  edition: string;
-  isActive: boolean;
-  features: string[];
-}
+const SALON_ICONS: Record<string, React.ReactNode> = {
+  sib: <Building2 className="w-7 h-7" />,
+  sir: <Home className="w-7 h-7" />,
+  sip: <TrendingUp className="w-7 h-7" />,
+  btp: <Hammer className="w-7 h-7" />,
+  sie: <Leaf className="w-7 h-7" />,
+};
 
-const SALONS: Salon[] = [
-  {
-    id: 'sib',
-    code: 'SIB',
-    name: 'Salon International du Bâtiment',
-    tagline: 'Construction & Architecture',
-    description:
-      'Le rendez-vous incontournable des professionnels de la construction, de l\'architecture et de l\'habitat durable au Maroc.',
-    dates: '25 – 29 Nov 2026',
-    location: 'El Jadida, Maroc',
-    visitors: '200 000+',
-    color: '#4598D1',
-    bgColor: '#EBF5FB',
-    gradient: 'linear-gradient(135deg,#4598D1,#2E7DB8)',
-    icon: <Building2 className="w-7 h-7" />,
-    route: ROUTES.HOME,
-    edition: '20ème édition',
-    isActive: true,
-    features: ['Catalogue exposants', 'Plan interactif', 'Conférences', 'Networking B2B'],
-  },
-  {
-    id: 'sir',
-    code: 'SIR',
-    name: 'Salon International de l\'Immobilier',
-    tagline: 'Résidentiel & Commercial',
-    description:
-      'La plateforme de référence dédiée à l\'immobilier résidentiel, commercial et aux investissements fonciers.',
-    dates: 'Juin 2026',
-    location: 'Casablanca, Maroc',
-    visitors: '8 000+',
-    color: '#EB9A44',
-    bgColor: '#FDF3E7',
-    gradient: 'linear-gradient(135deg,#EB9A44,#C97B2A)',
-    icon: <Home className="w-7 h-7" />,
-    route: ROUTES.SALON_SIR,
-    edition: '2ème édition',
-    isActive: false,
-    features: ['Catalogue projets', 'Simulation prêt', 'Visite virtuelle 3D', 'Rencontres promoteurs'],
-  },
-  {
-    id: 'sip',
-    code: 'SIP',
-    name: 'Salon International de la Promotion',
-    tagline: 'Promotion & Développement Urbain',
-    description:
-      'L\'espace dédié aux promoteurs immobiliers, aux lotisseurs et aux acteurs du développement urbain.',
-    dates: 'Mars 2027',
-    location: 'Rabat, Maroc',
-    visitors: '5 000+',
-    color: '#9C27B0',
-    bgColor: '#F3E5F5',
-    gradient: 'linear-gradient(135deg,#9C27B0,#7B1FA2)',
-    icon: <TrendingUp className="w-7 h-7" />,
-    route: ROUTES.SALON_SIP,
-    edition: '1ère édition',
-    isActive: false,
-    features: ['Appels d\'offres', 'Matching investisseurs', 'Foncier & Lotissements', 'Smart City'],
-  },
-  {
-    id: 'btp',
-    code: 'BTP',
-    name: 'Salon International du BTP',
-    tagline: 'Travaux Publics & Infrastructures',
-    description:
-      'Le carrefour des acteurs du bâtiment et des travaux publics : équipements, matériaux, ingénierie et infrastructures.',
-    dates: 'Septembre 2026',
-    location: 'Tanger, Maroc',
-    visitors: '7 000+',
-    color: '#D32F2F',
-    bgColor: '#FFEBEE',
-    gradient: 'linear-gradient(135deg,#D32F2F,#B71C1C)',
-    icon: <Hammer className="w-7 h-7" />,
-    route: ROUTES.SALON_BTP,
-    edition: '3ème édition',
-    isActive: false,
-    features: ['Matériaux & Équipements', 'Génie civil', 'Sous-traitance', 'Normes & Certifications'],
-  },
-  {
-    id: 'sie',
-    code: 'SIE',
-    name: 'Salon International de l\'Environnement',
-    tagline: 'Green Tech & Développement Durable',
-    description:
-      'Le forum des solutions vertes, des énergies renouvelables et du développement durable en milieu urbain.',
-    dates: 'Octobre 2027',
-    location: 'Marrakech, Maroc',
-    visitors: '4 000+',
-    color: '#2E7D32',
-    bgColor: '#E8F5E9',
-    gradient: 'linear-gradient(135deg,#388E3C,#1B5E20)',
-    icon: <Leaf className="w-7 h-7" />,
-    route: ROUTES.SALON_SIE,
-    edition: '1ère édition',
-    isActive: false,
-    features: ['Énergies renouvelables', 'Bâtiment passif', 'Mobilité verte', 'Label HQE'],
-  },
-];
-
-const PLATFORM_STATS = [
-  { label: 'Salons', value: '5', icon: Globe },
-  { label: 'Exposants', value: '500+', icon: Building2 },
-  { label: 'Visiteurs/an', value: '25 000+', icon: Users },
-  { label: 'Pays', value: '40+', icon: MapPin },
-];
+const STAT_ICONS: Record<string, typeof Globe> = {
+  Salons: Globe,
+  Exposants: Building2,
+  'Visiteurs/an': Users,
+  Pays: MapPin,
+};
 
 const ACCREDITATION_LEVELS = [
   {
@@ -170,15 +60,13 @@ const ACCREDITATION_LEVELS = [
   },
 ];
 
-/* ─────────────────────────────────────────────────────────────
-   COMPOSANT
-───────────────────────────────────────────────────────────── */
 export default function SalonSelectionPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const hub = useSalonsHubContent();
 
-  const handleSalonClick = (salon: Salon) => {
+  const handleSalonClick = (salon: SalonCardContent) => {
     if (!isAuthenticated) {
       navigate(ROUTES.LOGIN, {
         state: { redirectTo: salon.route, salonCode: salon.code },
@@ -190,17 +78,11 @@ export default function SalonSelectionPage() {
 
   return (
     <div className="min-h-screen bg-[#F9F9FF]">
-
-      {/* ════════════════════════════════════════
-          HERO
-      ════════════════════════════════════════ */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#0D2137] via-[#1B4F72] to-[#2E7DB8] text-white">
-        {/* Animated background blobs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#4598D1]/20 rounded-full blur-3xl animate-blob" />
           <div className="absolute top-1/2 -right-24 w-80 h-80 bg-[#EB9A44]/15 rounded-full blur-3xl animate-blob animation-delay-2000" />
           <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#FFD700]/10 rounded-full blur-3xl animate-blob animation-delay-4000" />
-          {/* Grid overlay */}
           <div
             className="absolute inset-0 opacity-[0.04]"
             style={{
@@ -211,44 +93,47 @@ export default function SalonSelectionPage() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          {/* Urbacom badge */}
           <div className="flex justify-center mb-6 sm:mb-8">
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-2.5">
               <div className="w-2 h-2 rounded-full bg-[#4CAF50] animate-pulse" />
-              <span className="text-sm font-bold tracking-widest text-white/90 uppercase">Urbacom</span>
+              <span className="text-sm font-bold tracking-widest text-white/90 uppercase">{hub.heroBadge}</span>
               <span className="text-white/40">·</span>
-              <span className="text-xs text-white/60 font-medium">Plateforme digitale officielle</span>
+              <span className="text-xs text-white/60 font-medium">{hub.heroBadgeSub}</span>
             </div>
           </div>
 
-          {/* Title */}
           <div className="text-center mb-10 sm:mb-14">
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black leading-[1.05] mb-4 sm:mb-6">
-              Urba<span className="text-[#4598D1]">Event</span>
+              {hub.heroTitle.includes('Event') ? (
+                <>
+                  Urba<span className="text-[#4598D1]">Event</span>
+                </>
+              ) : (
+                hub.heroTitle
+              )}
             </h1>
             <p className="text-base sm:text-xl text-blue-200 max-w-2xl mx-auto leading-relaxed px-2">
-              La plateforme digitale des{' '}
-              <span className="text-white font-semibold">5 grands salons professionnels</span>{' '}
-              du bâtiment, de l'immobilier et de l'environnement au Maroc.
+              {hub.heroSubtitle}
             </p>
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
-            {PLATFORM_STATS.map((s) => (
-              <div
-                key={s.label}
-                className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/15 transition-colors duration-200"
-              >
-                <s.icon className="w-5 h-5 text-[#FFD700] mx-auto mb-2 opacity-90" />
-                <div className="text-2xl sm:text-3xl font-black text-white">{s.value}</div>
-                <div className="text-xs sm:text-sm text-blue-300 font-medium mt-0.5">{s.label}</div>
-              </div>
-            ))}
+            {hub.platformStats.map((s) => {
+              const StatIcon = STAT_ICONS[s.label] ?? Globe;
+              return (
+                <div
+                  key={s.label}
+                  className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/15 transition-colors duration-200"
+                >
+                  <StatIcon className="w-5 h-5 text-[#FFD700] mx-auto mb-2 opacity-90" />
+                  <div className="text-2xl sm:text-3xl font-black text-white">{s.value}</div>
+                  <div className="text-xs sm:text-sm text-blue-300 font-medium mt-0.5">{s.label}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Wave bottom */}
         <div className="absolute bottom-0 left-0 right-0 leading-none">
           <svg viewBox="0 0 1440 60" className="w-full" preserveAspectRatio="none" style={{ display: 'block' }}>
             <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#F9F9FF" />
@@ -256,9 +141,6 @@ export default function SalonSelectionPage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          AUTH BANNER (non connecté)
-      ════════════════════════════════════════ */}
       {!isAuthenticated && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12">
           <div className="flex flex-col sm:flex-row items-center gap-4 bg-white border border-[#4598D1]/25 rounded-2xl p-4 sm:p-5 shadow-sm">
@@ -291,26 +173,21 @@ export default function SalonSelectionPage() {
         </div>
       )}
 
-      {/* ════════════════════════════════════════
-          SALON CARDS
-      ════════════════════════════════════════ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="mb-8 sm:mb-10">
           <h2 className="text-2xl sm:text-3xl font-black text-[#333333]">
-            Choisissez votre Salon
+            {hub.chooseTitle}
           </h2>
           <p className="text-[#647483] mt-1.5 text-sm sm:text-base">
-            {isAuthenticated
-              ? 'Sélectionnez un salon pour accéder à son espace dédié.'
-              : 'Connectez-vous pour débloquer l\'accès complet à chaque salon.'}
+            {isAuthenticated ? hub.chooseSubtitleConnected : hub.chooseSubtitleGuest}
           </p>
         </div>
 
-        {/* Grid: 1 col mobile → 2 cols tablet → 3 cols desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          {SALONS.map((salon) => {
+          {hub.salons.map((salon) => {
             const locked = !isAuthenticated;
             const isHovered = hoveredId === salon.id;
+            const icon = SALON_ICONS[salon.id] ?? <Building2 className="w-7 h-7" />;
 
             return (
               <div
@@ -327,10 +204,8 @@ export default function SalonSelectionPage() {
                   borderColor: isHovered ? `${salon.color}40` : 'rgb(243,244,246)',
                 }}
               >
-                {/* Top gradient bar */}
                 <div className="h-1.5 w-full" style={{ background: salon.gradient }} />
 
-                {/* Active badge */}
                 {salon.isActive && (
                   <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-[#E8F5E9] border border-[#4CAF50]/30 px-2.5 py-1 rounded-full">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#4CAF50] animate-pulse" />
@@ -338,7 +213,6 @@ export default function SalonSelectionPage() {
                   </div>
                 )}
 
-                {/* Lock overlay on hover (non-connected) */}
                 {locked && (
                   <div className="absolute inset-0 z-10 bg-white/75 backdrop-blur-[2px] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-2xl">
                     <div className="w-12 h-12 rounded-full bg-[#333333] flex items-center justify-center mb-2 shadow-lg">
@@ -350,13 +224,12 @@ export default function SalonSelectionPage() {
                 )}
 
                 <div className="p-5 sm:p-6">
-                  {/* Icon + code */}
                   <div className="flex items-start justify-between mb-4">
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
                       style={{ background: salon.gradient, color: 'white' }}
                     >
-                      {salon.icon}
+                      {icon}
                     </div>
                     <div className="text-right">
                       <span
@@ -369,7 +242,6 @@ export default function SalonSelectionPage() {
                     </div>
                   </div>
 
-                  {/* Name */}
                   <h3 className="text-base sm:text-lg font-black text-[#333333] leading-tight mb-0.5">
                     {salon.name}
                   </h3>
@@ -380,7 +252,6 @@ export default function SalonSelectionPage() {
                     {salon.description}
                   </p>
 
-                  {/* Info pills */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="inline-flex items-center gap-1 text-xs text-[#647483] bg-gray-50 border border-gray-100 px-2.5 py-1 rounded-full">
                       <Calendar className="w-3 h-3" />
@@ -396,7 +267,6 @@ export default function SalonSelectionPage() {
                     </span>
                   </div>
 
-                  {/* Feature list */}
                   <ul className="space-y-1 mb-5">
                     {salon.features.map((f) => (
                       <li key={f} className="flex items-center gap-2 text-xs text-[#647483]">
@@ -406,7 +276,6 @@ export default function SalonSelectionPage() {
                     ))}
                   </ul>
 
-                  {/* CTA button */}
                   <button
                     className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all duration-200"
                     style={
@@ -434,9 +303,6 @@ export default function SalonSelectionPage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          NIVEAUX D'ACCRÉDITATION
-      ════════════════════════════════════════ */}
       <section className="bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="text-center mb-10">
@@ -487,33 +353,21 @@ export default function SalonSelectionPage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          À PROPOS URBACOM
-      ════════════════════════════════════════ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          {/* Text */}
           <div>
             <span className="inline-block text-xs font-black uppercase tracking-[0.2em] text-[#EB9A44] mb-3">
-              À propos
+              {hub.aboutKicker}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-[#333333] mb-4 leading-snug">
-              Urbacom, l'organisateur des grands salons professionnels du Maroc
+              {hub.aboutTitle}
             </h2>
             <p className="text-[#647483] leading-relaxed mb-6 text-sm sm:text-base">
-              Depuis plus de 10 ans, Urbacom connecte les décideurs, les professionnels et les
-              investisseurs des secteurs du bâtiment, de l'immobilier et de l'environnement.
-              Avec 5 salons couvrant l'ensemble de l'écosystème urbain, UrbaEvent est la
-              plateforme digitale officielle au service de ces rencontres.
+              {hub.aboutText}
             </p>
 
             <div className="grid grid-cols-2 gap-3">
-              {[
-                { v: '10+', l: 'Ans d\'expérience' },
-                { v: '200+', l: 'Partenaires' },
-                { v: '85%', l: 'Exposants fidèles' },
-                { v: '40+', l: 'Pays représentés' },
-              ].map((s) => (
+              {hub.aboutStats.map((s) => (
                 <div
                   key={s.l}
                   className="bg-white border border-gray-100 rounded-xl p-4 hover:border-[#4598D1]/30 transition-colors"
@@ -525,7 +379,6 @@ export default function SalonSelectionPage() {
             </div>
           </div>
 
-          {/* Feature cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               {
@@ -571,9 +424,6 @@ export default function SalonSelectionPage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          CTA FINAL
-      ════════════════════════════════════════ */}
       <section className="bg-gradient-to-r from-[#4598D1] via-[#2E7DB8] to-[#1B4F72] py-14 sm:py-20">
         <div className="max-w-3xl mx-auto px-4 text-center text-white">
           <div className="inline-flex items-center gap-2 bg-white/15 border border-white/20 rounded-full px-4 py-1.5 mb-5">
@@ -581,12 +431,10 @@ export default function SalonSelectionPage() {
             <span className="text-xs font-bold uppercase tracking-wider">Inscription gratuite</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-black mb-4">
-            Rejoignez l'écosystème UrbaEvent
+            {hub.ctaTitle}
           </h2>
           <p className="text-blue-200 mb-8 text-sm sm:text-base max-w-xl mx-auto">
-            Créez votre compte gratuit et recevez instantanément votre{' '}
-            <span className="text-white font-bold">QR Code universel #UVE</span> — votre badge
-            d'entrée et carte de visite pour tous les salons Urbacom.
+            {hub.ctaSubtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link

@@ -5,6 +5,7 @@ export interface PaymentRequest {
   id: string;
   userId: string;
   amount: number;
+  currency: string;
   status: string;
   paymentMethod: string;
   createdAt: string;
@@ -24,7 +25,7 @@ export async function createVipPaymentRequest(userId: string): Promise<PaymentRe
         requested_level: 'premium',
       },
     ])
-    .select('id, user_id, amount, status, payment_method, created_at')
+    .select('id, user_id, amount, currency, status, payment_method, created_at')
     .single();
 
   if (error) throw error;
@@ -33,6 +34,7 @@ export async function createVipPaymentRequest(userId: string): Promise<PaymentRe
     id: data.id,
     userId: data.user_id,
     amount: data.amount,
+    currency: data.currency ?? vipPricing.currency,
     status: data.status,
     paymentMethod: data.payment_method,
     createdAt: data.created_at,
@@ -54,9 +56,9 @@ export async function resolveVipPaymentRedirectId(userId: string): Promise<strin
 export async function getLatestPaymentRequest(userId: string): Promise<PaymentRequest | null> {
   const { data, error } = await supabase
     .from('payment_requests')
-    .select('id, user_id, amount, status, payment_method, created_at')
+    .select('id, user_id, amount, currency, status, payment_method, created_at')
     .eq('user_id', userId)
-    .eq('payment_method', 'bank_transfer')
+    .eq('status', 'pending')
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -68,6 +70,7 @@ export async function getLatestPaymentRequest(userId: string): Promise<PaymentRe
     id: data.id,
     userId: data.user_id,
     amount: data.amount,
+    currency: data.currency ?? 'EUR',
     status: data.status,
     paymentMethod: data.payment_method,
     createdAt: data.created_at,
@@ -77,7 +80,7 @@ export async function getLatestPaymentRequest(userId: string): Promise<PaymentRe
 export async function getPaymentRequest(requestId: string): Promise<PaymentRequest | null> {
   const { data, error } = await supabase
     .from('payment_requests')
-    .select('id, user_id, amount, status, payment_method, created_at')
+    .select('id, user_id, amount, currency, status, payment_method, created_at')
     .eq('id', requestId)
     .maybeSingle();
 
@@ -88,6 +91,7 @@ export async function getPaymentRequest(requestId: string): Promise<PaymentReque
     id: data.id,
     userId: data.user_id,
     amount: data.amount,
+    currency: data.currency ?? 'EUR',
     status: data.status,
     paymentMethod: data.payment_method,
     createdAt: data.created_at,

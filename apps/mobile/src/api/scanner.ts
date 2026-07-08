@@ -1,7 +1,7 @@
 import { PLATFORM } from '../config/platform';
 import { supabase } from '../lib/supabase';
 import { resolveSalonForScan } from '../lib/scanSalon';
-import { enqueueScanLog, getPendingScanLogs, clearPendingScanLogs } from '../lib/offlineQueue';
+import { enqueueScanLog, getPendingScanLogs, removePendingScanLogs } from '../lib/offlineQueue';
 import { CACHE_KEYS, loadCache, saveCache } from '../lib/dataCache';
 import { isNetworkError } from '../lib/errors';
 import { normalizePartnerTierDb } from '../lib/partnerTier';
@@ -204,6 +204,7 @@ export async function flushOfflineScanQueue(): Promise<number> {
   if (!pending.length) return 0;
 
   let synced = 0;
+  const syncedIds: string[] = [];
   for (const item of pending) {
     try {
       await persistAccessLog({
@@ -217,12 +218,13 @@ export async function flushOfflineScanQueue(): Promise<number> {
           userLevel: item.userLevel,
         },
       });
+      syncedIds.push(item.id);
       synced++;
     } catch {
       break;
     }
   }
-  if (synced === pending.length) await clearPendingScanLogs();
+  if (syncedIds.length) await removePendingScanLogs(syncedIds);
   return synced;
 }
 

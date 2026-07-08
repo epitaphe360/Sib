@@ -288,7 +288,10 @@ vi.mock('recharts', () => ({
 }));
 
 // ── Mock composants dashboard admin ───────────────────────────────────────────
-vi.mock('../../src/components/dashboard/admin', async () => ({
+vi.mock('../../src/components/dashboard/admin', async () => {
+  // Stub générique pour tous les panneaux non testés directement.
+  const stub = (testid: string) => () => React.createElement('div', { 'data-testid': testid });
+  return {
   AdminHeader: ({ user }: { user: Record<string, unknown> }) =>
     React.createElement('div', { 'data-testid': 'admin-header' }, `Admin: ${user?.name || ''}`),
   AdminActionsPanel: ({ adminMetrics }: { adminMetrics: Record<string, unknown> }) =>
@@ -297,11 +300,25 @@ vi.mock('../../src/components/dashboard/admin', async () => ({
     React.createElement('div', { 'data-testid': 'admin-metrics-grid' }, `Users: ${adminMetrics.totalUsers}`),
   AdminChartsSection: () =>
     React.createElement('div', { 'data-testid': 'admin-charts-section' }),
-  SystemHealthPanel: () =>
-    React.createElement('div', { 'data-testid': 'system-health-panel' }),
   ActivityFeed: () =>
     React.createElement('div', { 'data-testid': 'activity-feed' }),
-}));
+  // Panneaux additionnels (stubs) — présents dans l'index, non assertés ici.
+  AdminAlertsSection: stub('admin-alerts-section'),
+  SystemHealthPanel: stub('system-health-panel'),
+  MetricsCard: stub('metrics-card'),
+  AdminQuickActions: stub('admin-quick-actions'),
+  AdminNavVisibility: stub('admin-nav-visibility'),
+  BannerManagementPanel: stub('banner-management-panel'),
+  VisitorPricingPanel: stub('visitor-pricing-panel'),
+  SiteImagesPanel: stub('site-images-panel'),
+  SiteTextContentPanel: stub('site-text-content-panel'),
+  WebContentCoveragePanel: stub('web-content-coverage-panel'),
+  PageContentAdminPanel: stub('page-content-admin-panel'),
+  MobileAppContentPanel: stub('mobile-app-content-panel'),
+  CmsAdminHub: stub('cms-admin-hub'),
+  CmsAdminShortcutsPanel: stub('cms-admin-shortcuts-panel'),
+  };
+});
 
 // ── Mock composants dashboard exposant ────────────────────────────────────────
 vi.mock('../../src/components/dashboard/exhibitor', async () => ({

@@ -68,7 +68,7 @@ export function summarizeLatencies(latencies) {
     p50: Number(percentile(latencies, 50).toFixed(2)),
     p95: Number(percentile(latencies, 95).toFixed(2)),
     p99: Number(percentile(latencies, 99).toFixed(2)),
-    max: Number((Math.max(...latencies, 0)).toFixed(2)),
+    max: Number(latencies.reduce((m, v) => v > m ? v : m, 0).toFixed(2)),
   };
 }
 

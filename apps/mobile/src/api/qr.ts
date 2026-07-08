@@ -68,23 +68,12 @@ function payloadFromRpcUser(u: {
   };
 }
 
-/** Valide un QR via RPC serveur (pas de secret JWT côté client). */
+/** Valide un QR via RPC serveur — JWT et JSON statique passent par validate_scanned_badge. */
 export async function validateQRCode(
   qrData: string,
   options?: { requiredZone?: string }
 ): Promise<{ valid: boolean; reason?: string; payload?: QRCodePayload }> {
   try {
-    if (qrData.split('.').length !== 3) {
-      try {
-        const legacy = JSON.parse(qrData);
-        if (legacy.code) {
-          const { data } = await supabase.rpc('scan_badge', { p_badge_code: legacy.code });
-          return data ? { valid: true } : { valid: false, reason: 'Badge invalide' };
-        }
-      } catch { /* not JSON */ }
-      return { valid: false, reason: 'Format QR non reconnu' };
-    }
-
     const { data, error } = await supabase.rpc('validate_scanned_badge', { p_qr_data: qrData });
     if (error) return { valid: false, reason: error.message };
 

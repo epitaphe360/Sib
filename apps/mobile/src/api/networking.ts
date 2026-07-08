@@ -101,6 +101,24 @@ export async function searchUsers(query: string, excludeUserId: string) {
 }
 
 export async function requestConnection(fromUserId: string, toUserId: string): Promise<void> {
+  if (fromUserId === toUserId) {
+    throw new Error('Impossible de se connecter à soi-même');
+  }
+
+  const { data: existing, error: lookupError } = await supabase
+    .from('connections')
+    .select('id, status')
+    .or(
+      `and(requester_id.eq.${fromUserId},addressee_id.eq.${toUserId}),and(requester_id.eq.${toUserId},addressee_id.eq.${fromUserId})`,
+    )
+    .limit(1)
+    .maybeSingle();
+
+  if (lookupError) throw lookupError;
+  if (existing && existing.status !== 'rejected') {
+    return;
+  }
+
   const { salonId, salonName } = await resolveSalonForScan();
   const { error } = await supabase.from('connections').insert({
     requester_id: fromUserId,

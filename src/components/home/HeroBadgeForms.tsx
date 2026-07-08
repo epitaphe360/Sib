@@ -35,7 +35,7 @@ export const HeroBadgeForms: React.FC<HeroBadgeFormsProps> = () => {
 
   useEffect(() => {
     fetchVipPassPricing()
-      .then((p) => setVipPrice(formatVisitorAmount(p.price, 'MAD')))
+      .then((p) => setVipPrice(formatVisitorAmount(p.price, p.currency)))
       .catch(() => setVipPrice(null));
   }, []);
 

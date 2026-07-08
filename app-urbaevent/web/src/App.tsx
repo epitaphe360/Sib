@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { lazyRetry } from './utils/lazyRetry';
-import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, Navigate, useParams } from 'react-router-dom';
 import { usePageTracking } from './hooks/usePageTracking';
 import { Header } from './components/layout/Header';
 import { HautPatronageBar } from './components/layout/HautPatronageBar';
@@ -11,6 +11,12 @@ import { ScrollToTop } from './components/common/ScrollToTop';
 import DigitalBadge from './components/badge/DigitalBadge';
 
 // Lazy load pages
+/** /partners/:id → annuaire exposants (alias historique) */
+function PartnerDetailRedirect() {
+  const { id } = useParams();
+  return <Navigate to={`/exhibitors/${id ?? ''}`} replace />;
+}
+
 const Sib2026HomeV4Page = lazyRetry(() => import('./pages/home/Sib2026HomeV4Page'));
 const ExhibitorsPage = lazyRetry(() => import('./pages/ExhibitorsPage'));
 const NetworkingPage = lazyRetry(() => import('./pages/NetworkingPage'));
@@ -34,8 +40,6 @@ const ExhibitorDetailPage = lazyRetry(() => import('./pages/ExhibitorDetailPage'
 const ProfileEdit = lazyRetry(() => import('./pages/exhibitor/ProfileEdit'));
 const ActivityPage = lazyRetry(() => import('./pages/admin/ActivityPage'));
 const ResetPasswordPage = lazyRetry(() => import('./pages/ResetPasswordPage'));
-const PartnersPage = lazyRetry(() => import('./pages/PartnersPage'));
-const PartnerDetailPage = lazyRetry(() => import('./pages/PartnerDetailPage'));
 const PavillonsPage = lazyRetry(() => import('./components/pavilions/PavillonsPage'));
 const MetricsPage = lazyRetry(() => import('./components/metrics/MetricsPage'));
 const DetailedProfilePage = lazyRetry(() => import('./components/profile/DetailedProfilePage'));
@@ -58,7 +62,6 @@ const EventCreationPage = lazyRetry(() => import('./pages/admin/EventCreationPag
 const EventManagementPage = lazyRetry(() => import('./pages/admin/EventManagementPage'));
 const UserManagementPage = lazyRetry(() => import('./pages/UserManagementPage'));
 const ExhibitorSignUpPage = lazyRetry(() => import('./pages/auth/ExhibitorSignUpPage'));
-const PartnerSignUpPage = lazyRetry(() => import('./pages/auth/PartnerSignUpPage'));
 const SignUpSuccessPage = lazyRetry(() => import('./pages/auth/SignUpSuccessPage'));
 const SignupConfirmationPage = lazyRetry(() => import('./pages/auth/SignupConfirmationPage'));
 const PendingAccountPage = lazyRetry(() => import('./pages/auth/PendingAccountPage'));
@@ -243,6 +246,12 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
   const isStandaloneHome = location.pathname === ROUTES.HOME;
+  const isServiceClientRoute = location.pathname.startsWith(ROUTES.SERVICE_CLIENT_PORTAL);
+
+  if (isServiceClientRoute) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <SkipToContent />
@@ -376,7 +385,7 @@ const App = () => {
             <Route path={ROUTES.EXHIBITORS} element={<ExhibitorsPage />} />
             <Route path={ROUTES.EXHIBITOR_DETAIL} element={<ExhibitorDetailPage />} />
             <Route path={ROUTES.PARTNERS} element={<Navigate to={ROUTES.EXHIBITORS} replace />} />
-            <Route path={ROUTES.PARTNER_DETAIL} element={<Navigate to={ROUTES.EXHIBITORS} replace />} />
+            <Route path={ROUTES.PARTNER_DETAIL} element={<PartnerDetailRedirect />} />
             <Route path={ROUTES.PARTNERSHIP} element={<Navigate to={ROUTES.POURQUOI_EXPOSER} replace />} />
             <Route path={ROUTES.REGISTER_PARTNER} element={<Navigate to={ROUTES.REGISTER_EXHIBITOR} replace />} />
             <Route path={ROUTES.PAVILIONS} element={<PavillonsPage />} />
@@ -392,7 +401,6 @@ const App = () => {
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
             <Route path={ROUTES.REGISTER_VISITOR} element={<VisitorFreeRegistration />} />
             <Route path={ROUTES.REGISTER_EXHIBITOR} element={<ExhibitorSignUpPage />} />
-            <Route path={ROUTES.REGISTER_PARTNER} element={<PartnerSignUpPage />} />
             <Route path={ROUTES.VISITOR_FREE_REGISTRATION} element={<VisitorFreeRegistration />} />
             <Route path={ROUTES.VISITOR_VIP_REGISTRATION} element={<VisitorVIPRegistration />} />
             <Route path={ROUTES.SIGNUP_SUCCESS} element={<SignUpSuccessPage />} />
@@ -446,12 +454,12 @@ const App = () => {
             <Route path={ROUTES.BADGE_DIGITAL} element={<ProtectedRoute><DigitalBadge /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_SCANNER} element={<ProtectedRoute><BadgeScannerPage /></ProtectedRoute>} />
             <Route path={ROUTES.BADGE_PRINT_STATION} element={<ProtectedRoute requiredRole={['admin', 'security']}><BadgePrintStationPage /></ProtectedRoute>} />
-            <Route path={ROUTES.SERVICE_CLIENT_PORTAL} element={<ProtectedRoute requiredRole={['admin', 'security']}><ServiceClientPortalPage /></ProtectedRoute>} />
+            <Route path={ROUTES.SERVICE_CLIENT_PORTAL} element={<ServiceClientPortalPage />} />
             {/* FIXED: Permettre aux admins d'accéder au scanner QR (pas seulement 'security') */}
             <Route path={ROUTES.SECURITY_SCANNER} element={<ProtectedRoute requiredRole={['admin', 'exhibitor', 'partner', 'security']}><QRScanner /></ProtectedRoute>} />
-            <Route path={ROUTES.PARTNER_UPGRADE} element={<ProtectedRoute requiredRole="partner"><PartnerUpgradePage /></ProtectedRoute>} />
-            <Route path={ROUTES.PARTNER_PAYMENT_SELECTION} element={<ProtectedRoute requiredRole="partner"><PartnerPaymentSelectionPage /></ProtectedRoute>} />
-            <Route path={ROUTES.PARTNER_BANK_TRANSFER} element={<ProtectedRoute requiredRole="partner"><PartnerBankTransferPage /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_UPGRADE} element={<ProtectedRoute requiredRole="partner" allowPendingPayment><PartnerUpgradePage /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_PAYMENT_SELECTION} element={<ProtectedRoute requiredRole="partner" allowPendingPayment><PartnerPaymentSelectionPage /></ProtectedRoute>} />
+            <Route path={ROUTES.PARTNER_BANK_TRANSFER} element={<ProtectedRoute requiredRole="partner" allowPendingPayment><PartnerBankTransferPage /></ProtectedRoute>} />
             <Route path={ROUTES.MESSAGES} element={<ProtectedRoute><ChatInterface /></ProtectedRoute>} />
             <Route path={ROUTES.CHAT} element={<ProtectedRoute><ChatInterface /></ProtectedRoute>} />
             <Route path={ROUTES.APPOINTMENTS} element={<ProtectedRoute><AppointmentCalendar /></ProtectedRoute>} />

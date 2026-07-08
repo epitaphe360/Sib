@@ -46,7 +46,7 @@ export default function VisitorBankTransferPage() {
   const navigate = useNavigate();
   const requestId = searchParams.get('request_id');
   const { user } = useAuthStore();
-  const { price: configuredPrice, loading: pricingLoading } = useVisitorPassPricing();
+  const { price: configuredPrice, pricing, loading: pricingLoading } = useVisitorPassPricing();
 
   const [paymentRequest, setPaymentRequest] = useState<VisitorPaymentRequest | null>(null);
   const [loading, setLoading] = useState(true);
@@ -222,7 +222,8 @@ export default function VisitorBankTransferPage() {
   const bankInfo = VISITOR_BANK_TRANSFER_INFO;
   const vipInfo = bankInfo.vipPass;
   const transferAmount = paymentRequest?.amount ?? configuredPrice ?? 0;
-  const instructions = getVisitorBankTransferInstructions(transferAmount, 'fr');
+  const transferCurrency = pricing?.currency ?? 'EUR';
+  const instructions = getVisitorBankTransferInstructions(transferAmount, 'fr', transferCurrency);
 
   const statusConfig = {
     pending: {
@@ -304,7 +305,7 @@ export default function VisitorBankTransferPage() {
           <div className="text-center">
             <div className="text-sm text-gray-600 mb-2">Montant à virer</div>
             <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-purple-600 mb-2">
-              {formatVisitorAmount(transferAmount)}
+              {formatVisitorAmount(transferAmount, transferCurrency)}
             </div>
             <div className="text-sm text-gray-500">
               {vipInfo.displayName} - {vipInfo.description}

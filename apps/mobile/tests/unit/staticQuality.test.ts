@@ -26,11 +26,10 @@ function walkTsFiles(dir: string, acc: string[] = []): string[] {
 
 describe('Mobile — qualité statique', () => {
   describe('versions et identité', () => {
-    it('app.json et package.json alignés sur 1.0.31', () => {
+    it('app.json et package.json alignés', () => {
       const appJson = JSON.parse(read('app.json'));
       const pkg = JSON.parse(read('package.json'));
-      expect(appJson.expo.version).toBe('1.0.31');
-      expect(pkg.version).toBe('1.0.31');
+      expect(appJson.expo.version).toBe(pkg.version);
       expect(appJson.expo.name).toBe('UrbaEvent');
       expect(appJson.expo.android.package).toBe('com.urbacom.urbaevent');
     });
@@ -75,12 +74,34 @@ describe('Mobile — qualité statique', () => {
       expect(ctx).toContain('@urbaevent/active_salon_id');
     });
 
+    it('Mes scans accessible sans salon actif', () => {
+      const scanHistory = read('app/(visitor)/scan-history.tsx');
+      expect(scanHistory).not.toContain('SalonGate');
+      const layout = read('app/(visitor)/(tabs)/_layout.tsx');
+      expect(layout).toMatch(/showNetwork\s*=\s*Boolean\(user\)\s*&&\s*permissions\.canAccessNetworking/);
+    });
+
+    it('onglet Scanner visiteur dans la tab bar', () => {
+      const layout = read('app/(visitor)/(tabs)/_layout.tsx');
+      expect(layout).toContain('name="scan"');
+      expect(layout).toContain('scan-outline');
+      expect(existsSync(join(MOBILE_ROOT, 'app/(visitor)/(tabs)/scan.tsx'))).toBe(true);
+    });
+
+    it('onglet Salons visiteur connecté', () => {
+      const layout = read('app/(visitor)/(tabs)/_layout.tsx');
+      expect(layout).toMatch(/name="salons"[\s\S]*showSalons/);
+      expect(read('app/(visitor)/(tabs)/salons.tsx')).toContain('SalonSelectionGrid');
+    });
+
+    it('accueil UrbaEvent avec espace visiteur connecté', () => {
+      expect(read('src/components/home/UrbaEventHomeContent.tsx')).toContain('VisitorHubAccess');
+    });
+
     it('SalonGate protège les écrans salon dont le badge', () => {
       const gated = [
         'app/(visitor)/(tabs)/explore.tsx',
         'app/(visitor)/map.tsx',
-        'app/(visitor)/scan-connect.tsx',
-        'app/(visitor)/(tabs)/network-hub.tsx',
         'app/(visitor)/(tabs)/badge.tsx',
       ];
       for (const f of gated) {
@@ -98,11 +119,11 @@ describe('Mobile — qualité statique', () => {
       expect(layout).toMatch(/name="explore"[\s\S]*href:\s*salonTabs/);
     });
 
-    it('accueil hub sans badge ni accès rapide ; intérieur salon avec badge et raccourcis', () => {
+    it('accueil hub avec espace visiteur ; intérieur salon avec badge et raccourcis', () => {
       const home = read('src/components/home/UrbaEventHomeContent.tsx');
       expect(home).not.toContain('HubBadgeSection');
       expect(home).not.toContain('QuickActionGrid');
-      expect(home).not.toContain('home.urba.authTitle');
+      expect(home).toContain('VisitorHubAccess');
       expect(home).toContain('SalonSelectionGrid');
 
       const interior = read('src/components/home/SalonInteriorContent.tsx');
@@ -114,6 +135,13 @@ describe('Mobile — qualité statique', () => {
       expect(index).toContain('SalonInteriorContent');
       expect(index).toContain('UrbaEventHomeContent');
       expect(index).toContain('activeSalon');
+    });
+
+    it('profils contacts via RPC (pas de SELECT users direct)', () => {
+      expect(read('src/api/contactProfiles.ts')).toContain('get_networking_contact_profiles');
+      expect(read('src/api/visitorScans.ts')).toContain('fetchNetworkingContactProfiles');
+      expect(read('src/api/visitorScans.ts')).not.toMatch(/from\('users'\)/);
+      expect(read('src/api/networking.ts')).toContain('fetchNetworkingContactProfiles');
     });
 
     it('demande badge depuis la page salon', () => {

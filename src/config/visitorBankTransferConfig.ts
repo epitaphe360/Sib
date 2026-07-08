@@ -35,9 +35,10 @@ export const VISITOR_BANK_TRANSFER_INFO = {
  */
 export function getVisitorBankTransferInstructions(
   amount: number,
-  language: 'fr' | 'en' | 'ar' = 'fr'
+  language: 'fr' | 'en' | 'ar' = 'fr',
+  currency: 'EUR' | 'USD' | 'MAD' = 'EUR',
 ) {
-  const formatted = formatVisitorAmount(amount);
+  const formatted = formatVisitorAmount(amount, currency);
 
   const byLang = {
     fr: {
@@ -127,7 +128,7 @@ export function generateVisitorPaymentReference(userId: string): string {
 /**
  * Formater un montant avec devise
  */
-export function formatVisitorAmount(amount: number, currency: 'EUR' | 'USD' | 'MAD' = 'MAD'): string {
+export function formatVisitorAmount(amount: number, currency: 'EUR' | 'USD' | 'MAD' = 'EUR'): string {
   const symbols: Record<string, string> = {
     EUR: '€',
     USD: '$',

@@ -12,7 +12,6 @@ import { fileURLToPath } from 'node:url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const mobileRoot = join(__dir, '..');
-const monorepoRoot = join(mobileRoot, '../..');
 const offline = process.argv.includes('--offline');
 
 const steps = [
@@ -26,16 +25,16 @@ const steps = [
   {
     id: 'unit',
     label: 'Tests unitaires Vitest (mobile)',
-    cwd: monorepoRoot,
+    cwd: mobileRoot,
     cmd: 'npx',
-    args: ['vitest', 'run', 'tests/unit/mobile', '--reporter=verbose'],
+    args: ['vitest', 'run', 'tests/unit', '--config', 'vitest.config.ts', '--reporter=verbose'],
   },
   {
     id: 'coverage',
     label: 'Couverture logique 100 %',
-    cwd: monorepoRoot,
+    cwd: mobileRoot,
     cmd: 'npx',
-    args: ['vitest', 'run', 'tests/unit/mobile', '--config', 'vitest.mobile.config.ts', '--coverage'],
+    args: ['vitest', 'run', 'tests/unit', '--config', 'vitest.config.ts', '--coverage'],
   },
   {
     id: 'brand',

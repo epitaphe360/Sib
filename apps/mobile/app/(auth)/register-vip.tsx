@@ -12,7 +12,6 @@ import {
 import { Card, Input, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { useAuth } from '../../src/context/AuthContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
-import { VIP_PASS } from '../../src/data/bankTransfer';
 import { SALON_INFO } from '../../src/data/salons';
 import { fetchVipPassPricing } from '../../src/services/visitorLevel';
 import { colors, spacing } from '../../src/theme';
@@ -39,10 +38,14 @@ export default function RegisterVipScreen() {
   const [sector, setSector] = useState(SECTORS[0]);
   const [loading, setLoading] = useState(false);
   const [vipPrice, setVipPrice] = useState<number | null>(null);
+  const [vipCurrency, setVipCurrency] = useState('EUR');
 
   useEffect(() => {
     fetchVipPassPricing()
-      .then((p) => setVipPrice(p.price))
+      .then((p) => {
+        setVipPrice(p.price);
+        setVipCurrency(p.currency);
+      })
       .catch(() => setVipPrice(null));
   }, []);
 
@@ -65,7 +68,7 @@ export default function RegisterVipScreen() {
         position,
       });
       Alert.alert(t('auth.magic.sentTitle'), t('auth.magic.vipRegisterBody'), [
-        { text: 'OK', onPress: () => router.replace('/(auth)/login') },
+        { text: t('common.ok'), onPress: () => router.replace('/(auth)/login') },
       ]);
     } catch (e) {
       Alert.alert(t('common.error'), e instanceof Error ? e.message : t('auth.magic.sendError'));
@@ -82,7 +85,7 @@ export default function RegisterVipScreen() {
             title="Pass Premium VIP"
             subtitle={
               vipPrice != null
-                ? `Accès complet ${SALON_INFO.name} — ${vipPrice} ${VIP_PASS.currency}`
+                ? `Accès complet ${SALON_INFO.name} — ${vipPrice} ${vipCurrency}`
                 : `Accès complet ${SALON_INFO.name}`
             }
           />

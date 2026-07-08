@@ -14,6 +14,7 @@ type CachedPayload = { content: MobileAppContent; cachedAt: number };
 
 let memoryCache: CachedPayload | null = null;
 let inflight: Promise<MobileAppContent> | null = null;
+let loadGeneration = 0;
 
 type ContentListener = (content: MobileAppContent) => void;
 const listeners = new Set<ContentListener>();
@@ -66,6 +67,8 @@ async function loadAppContent(force = false): Promise<MobileAppContent> {
     return inflight;
   }
 
+  const generation = ++loadGeneration;
+
   inflight = (async () => {
     const disk = await readDiskCache();
     if (disk && !memoryCache) {
@@ -77,8 +80,10 @@ async function loadAppContent(force = false): Promise<MobileAppContent> {
 
     try {
       const remote = await fetchAppContentRemote();
+      if (generation !== loadGeneration) return baseline;
       if (force || isRemoteNewer(remote, baseline) || remote.version !== baseline.version) {
         await writeDiskCache(remote);
+        if (generation !== loadGeneration) return baseline;
         emit(remote);
         return remote;
       }
@@ -89,7 +94,9 @@ async function loadAppContent(force = false): Promise<MobileAppContent> {
     } catch {
       return baseline;
     } finally {
-      inflight = null;
+      if (generation === loadGeneration) {
+        inflight = null;
+      }
     }
   })();
 
@@ -103,7 +110,6 @@ export function prefetchAppContent(force = false): Promise<MobileAppContent> {
 
 export async function reloadAppContent(): Promise<MobileAppContent> {
   memoryCache = null;
-  inflight = null;
   return loadAppContent(true);
 }
 

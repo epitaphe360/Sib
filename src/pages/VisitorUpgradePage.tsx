@@ -18,11 +18,14 @@ import {
 import { Button } from '../components/ui/Button';
 import useAuthStore from '../store/authStore';
 import { ROUTES } from '../lib/routes';
+import { useVisitorPassPricing } from '../hooks/useVisitorPassPricing';
+import { formatVisitorAmount } from '../config/visitorBankTransferConfig';
 
 export default function VisitorUpgradePage() {
   const { user } = useAuthStore();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { pricing, formattedPrice } = useVisitorPassPricing();
   const isFree = user?.type === 'visitor' && (user.visitor_level === 'free' || !user.visitor_level);
 
   const freeFeatures = [
@@ -167,8 +170,18 @@ export default function VisitorUpgradePage() {
                   {t('upgrade.vipCard.title')}
                 </h3>
                 <div className="flex items-baseline justify-center gap-3">
-                  <div className="text-xl font-semibold text-neutral-400 line-through tabular-nums">950€</div>
-                  <div className="text-4xl lg:text-5xl font-bold text-accent-600 dark:text-accent-500 tabular-nums">300€</div>
+                  {pricing ? (
+                    <>
+                      <div className="text-xl font-semibold text-neutral-400 line-through tabular-nums">
+                        {formatVisitorAmount(Math.round(pricing.price * 1.35), pricing.currency)}
+                      </div>
+                      <div className="text-4xl lg:text-5xl font-bold text-accent-600 dark:text-accent-500 tabular-nums">
+                        {formattedPrice}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-4xl lg:text-5xl font-bold text-accent-600 dark:text-accent-500 tabular-nums">—</div>
+                  )}
                 </div>
                 <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-2 font-medium">
                   {t('upgrade.vipCard.subtitle')}

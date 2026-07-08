@@ -28,6 +28,7 @@ export default function PaymentScreen() {
   const vipPass = resolveVipPass(content);
   const [loading, setLoading] = useState(true);
   const [amount, setAmount] = useState(0);
+  const [currency, setCurrency] = useState(vipPass.currency);
   const [status, setStatus] = useState('pending');
   const [reference, setReference] = useState('');
 
@@ -40,6 +41,7 @@ export default function PaymentScreen() {
       const request = await getPaymentRequest(id);
       if (request) {
         setAmount(request.amount);
+        setCurrency(request.currency);
         setStatus(request.status);
       }
       setReference(generatePaymentReference(user.id));
@@ -48,7 +50,7 @@ export default function PaymentScreen() {
     } finally {
       setLoading(false);
     }
-  }, [id, user]);
+  }, [id, user, t]);
 
   useEffect(() => {
     load();
@@ -56,7 +58,7 @@ export default function PaymentScreen() {
 
   const copy = async (label: string, value: string) => {
     await Clipboard.setStringAsync(value);
-    Alert.alert('Copié', `${label} copié dans le presse-papiers`);
+    Alert.alert(t('payment.copiedTitle'), t('payment.copiedBody').replace('{{label}}', label));
   };
 
   if (!user) {
@@ -81,7 +83,7 @@ export default function PaymentScreen() {
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <ScreenTitle
           title={t('payment.title')}
-          subtitle={`${amount} ${vipPass.currency} — ${
+          subtitle={`${amount} ${currency} — ${
             status === 'approved'
               ? t('payment.approved')
               : status === 'rejected'
@@ -93,7 +95,7 @@ export default function PaymentScreen() {
         <PrimaryButton
           label={t('payment.gateway.title')}
           variant="gold"
-          onPress={() => navigateSafe(`/(visitor)/payment-gateway?id=${id}`)}
+          onPress={() => router.push({ pathname: '/(visitor)/payment-gateway', params: { id } })}
         />
         <View style={styles.gap} />
         <PrimaryButton
@@ -109,12 +111,12 @@ export default function PaymentScreen() {
         <View style={styles.gap} />
 
         <Card>
-          <Text style={styles.sectionLabel}>Étapes</Text>
+          <Text style={styles.sectionLabel}>{t('payment.stepsTitle')}</Text>
           {[
-            `Effectuez un virement de ${amount} ${vipPass.currency}`,
-            'Indiquez la référence ci-dessous dans le libellé',
-            'Conservez votre justificatif de virement',
-            'Activation sous 2 à 5 jours ouvrés après validation',
+            t('payment.stepTransfer').replace('{{amount}}', String(amount)).replace('{{currency}}', currency),
+            t('payment.stepReference'),
+            t('payment.stepReceipt'),
+            t('payment.stepActivation'),
           ].map((step, i) => (
             <Text key={step} style={styles.step}>
               {i + 1}. {step}
@@ -123,12 +125,12 @@ export default function PaymentScreen() {
         </Card>
 
         <Card>
-          <Text style={styles.sectionLabel}>Coordonnées bancaires</Text>
-          <CopyRow label="Banque" value={bank.bankName} onCopy={copy} />
-          <CopyRow label="Titulaire" value={bank.accountHolder} onCopy={copy} />
-          <CopyRow label="IBAN" value={bank.iban} onCopy={copy} />
-          <CopyRow label="BIC" value={bank.bic} onCopy={copy} />
-          <CopyRow label="Référence *" value={reference} onCopy={copy} highlight />
+          <Text style={styles.sectionLabel}>{t('payment.bankDetailsTitle')}</Text>
+          <CopyRow label={t('payment.bankName')} value={bank.bankName} onCopy={copy} t={t} />
+          <CopyRow label={t('payment.accountHolder')} value={bank.accountHolder} onCopy={copy} t={t} />
+          <CopyRow label={t('payment.iban')} value={bank.iban} onCopy={copy} t={t} />
+          <CopyRow label={t('payment.bic')} value={bank.bic} onCopy={copy} t={t} />
+          <CopyRow label={t('payment.referenceLabel')} value={reference} onCopy={copy} t={t} highlight />
         </Card>
 
         <PrimaryButton label={t('common.home')} onPress={() => router.replace('/')} />
@@ -144,11 +146,13 @@ function CopyRow({
   value,
   onCopy,
   highlight,
+  t,
 }: {
   label: string;
   value: string;
   onCopy: (label: string, value: string) => void;
   highlight?: boolean;
+  t: (key: string) => string;
 }) {
   return (
     <Pressable style={styles.copyRow} onPress={() => onCopy(label, value)}>
@@ -156,7 +160,7 @@ function CopyRow({
         <Text style={styles.copyLabel}>{label}</Text>
         <Text style={[styles.copyValue, highlight && styles.copyHighlight]}>{value}</Text>
       </View>
-      <Text style={styles.copyAction}>Copier</Text>
+      <Text style={styles.copyAction}>{t('payment.copy')}</Text>
     </Pressable>
   );
 }

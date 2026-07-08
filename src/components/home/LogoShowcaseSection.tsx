@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../lib/routes';
 import { ArrowRight } from 'lucide-react';
-import { SupabaseService } from '../../services/supabaseService';
 import { useExhibitorStore } from '../../store/exhibitorStore';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -65,6 +64,7 @@ export const logoShowcaseScrollCSS = `
 `;
 
 interface LogoShowcaseSectionProps {
+  /** @deprecated Alias conservé — affiche toujours les exposants */
   type?: 'partners' | 'exhibitors' | 'both';
 }
 
@@ -77,12 +77,10 @@ export const LogoBand: React.FC<{
 }> = ({ logos, reverse = false, speed = 35, fadeBg = '#f8fafc' }) => {
   if (logos.length === 0) {return null;}
 
-  // triple for seamless wrapping
   const items = [...logos, ...logos, ...logos];
 
   return (
     <div className="logo-band relative overflow-hidden">
-      {/* edge fades */}
       <div
         className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-28 lg:w-36 z-20"
         style={{ background: `linear-gradient(to right, ${fadeBg}, transparent)` }}
@@ -111,31 +109,31 @@ export const LogoBand: React.FC<{
   );
 };
 
-export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type = 'both' }) => {
+export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type = 'exhibitors' }) => {
   const { t } = useTranslation();
   const { exhibitors, fetchExhibitors } = useExhibitorStore();
-  const [partners, setPartners] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const showHeader = type === 'both';
 
   useEffect(() => {
-    const loadData = async () => {
+    let cancelled = false;
+    const load = async () => {
       setIsLoading(true);
       try {
-        if (type === 'partners' || type === 'both') {
-          const partnersData = await SupabaseService.getPartners();
-          setPartners(partnersData.filter(p => p.logo && p.logo.trim() !== ''));
-        }
-        if (type === 'exhibitors' || type === 'both') {
-          if (exhibitors.length === 0) {fetchExhibitors();}
+        if (exhibitors.length === 0) {
+          await fetchExhibitors(true, { publicCatalog: true, limit: 200 });
         }
       } catch (error) {
-        console.error('Erreur lors du chargement des données:', error);
+        console.error('Erreur lors du chargement des exposants:', error);
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
-    loadData();
-  }, [exhibitors.length, fetchExhibitors, type]);
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [exhibitors.length, fetchExhibitors]);
 
   const exhibitorsWithLogos = exhibitors.filter(e => e.logo && e.logo.trim() !== '');
 
@@ -151,14 +149,9 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
     );
   }
 
-  const showPartners   = (type === 'partners'  || type === 'both') && partners.length > 0;
-  const showExhibitors = (type === 'exhibitors' || type === 'both') && exhibitorsWithLogos.length > 0;
-
-  const partnerLogos = partners.map(p => ({
-    to: `${ROUTES.PARTNERS}/${p.id}`,
-    src: p.logo,
-    alt: p.name || 'Partner',
-  }));
+  if (exhibitorsWithLogos.length === 0) {
+    return null;
+  }
 
   const exhibitorLogos = exhibitorsWithLogos.map(e => ({
     to: `${ROUTES.EXHIBITORS}/${e.id}`,
@@ -166,7 +159,6 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
     alt: e.companyName || 'Exhibitor',
   }));
 
-  const partnerSpeed   = Math.max(25, partners.length * 3.5);
   const exhibitorSpeed = Math.max(28, exhibitorsWithLogos.length * 3.5);
 
   return (
@@ -174,12 +166,10 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
       <style>{logoShowcaseScrollCSS}</style>
 
       <section className="relative bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden">
-        {/* decorative top/bottom borders */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-300/40 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-300/40 to-transparent" />
 
-        {/* ── Header ── */}
-        {type === 'both' && (
+        {showHeader && (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -196,46 +186,24 @@ export const LogoShowcaseSection: React.FC<LogoShowcaseSectionProps> = ({ type =
           </motion.div>
         )}
 
-        {/* ── Partners ── */}
-        {showPartners && (
-          <div className={`${type !== 'both' ? 'py-10' : 'pt-10 pb-4'}`}>
-            {type === 'both' && (
-              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-blue-500/70 text-center mb-4">
-                {t('nav.partners')}
-              </p>
-            )}
-            <LogoBand logos={partnerLogos} speed={partnerSpeed} fadeBg="#f8fafc" />
-          </div>
-        )}
+        <div className={`${showHeader ? 'pt-6 pb-10' : 'py-10'}`}>
+          {showHeader && (
+            <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-blue-500/70 text-center mb-4">
+              {t('nav.exhibitors')}
+            </p>
+          )}
+          <LogoBand logos={exhibitorLogos} speed={exhibitorSpeed} reverse fadeBg="#f8fafc" />
+        </div>
 
-        {/* ── Exhibitors ── */}
-        {showExhibitors && (
-          <div className={`${type !== 'both' ? 'py-10' : 'pt-6 pb-10'}`}>
-            {type === 'both' && (
-              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-blue-500/70 text-center mb-4">
-                {t('nav.exhibitors')}
-              </p>
-            )}
-            <LogoBand logos={exhibitorLogos} speed={exhibitorSpeed} reverse fadeBg="#f8fafc" />
-          </div>
-        )}
-
-        {/* ── CTA ── */}
-        {type === 'both' && (
+        {showHeader && (
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="flex justify-center items-center gap-4 pb-10 pt-2 px-4"
           >
-            <Link to={ROUTES.PARTNERS}>
-              <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium shadow-md transition-all text-sm">
-                {t('home.discover_all')}
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
             <Link to={ROUTES.EXHIBITORS}>
-              <Button variant="outline" className="flex items-center gap-2 border border-slate-300 hover:border-blue-500 hover:text-blue-600 px-5 py-2.5 rounded-lg font-medium transition-all text-sm">
+              <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium shadow-md transition-all text-sm">
                 {t('home.discover_all_exhibitors')}
                 <ArrowRight className="w-4 h-4" />
               </Button>

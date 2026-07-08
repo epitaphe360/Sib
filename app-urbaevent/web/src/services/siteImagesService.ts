@@ -5,6 +5,10 @@
 import { supabase, isSupabaseReady } from '../lib/supabase';
 import { getSiteImageDefault, SITE_IMAGE_DEFINITIONS, type SiteImageKey } from '../config/siteImagesConfig';
 import { HOME_V4_CMS_KEYS, type HomeV4CmsKey } from '../config/homeV4CmsConfig';
+import {
+  HOME_V4_STAT_CMS_KEYS,
+  HOME_V4_TEXT_CMS_MAP,
+} from '../config/homeV4TextCmsConfig';
 
 export interface SiteImageRow {
   key: string;
@@ -154,4 +158,35 @@ export async function upsertSiteText(
     .from('cms_text_content')
     .upsert({ key, ...fields, updated_at: new Date().toISOString() }, { onConflict: 'key' });
   if (error) throw new Error(error.message);
+}
+
+type HomeV4Lang = 'fr' | 'en' | 'ar';
+
+function langField(lang: HomeV4Lang): 'value_fr' | 'value_en' | 'value_ar' {
+  if (lang === 'en') return 'value_en';
+  if (lang === 'ar') return 'value_ar';
+  return 'value_fr';
+}
+
+/** Textes & chiffres CMS pour l’iframe home v4 (postMessage). */
+export async function resolveHomeV4CmsPayload(lang: HomeV4Lang): Promise<{
+  texts: Record<string, string>;
+  stats: string[];
+}> {
+  const rows = await fetchSiteTextContent();
+  const field = langField(lang);
+  const texts: Record<string, string> = {};
+
+  for (const [cmsKey, i18nKey] of Object.entries(HOME_V4_TEXT_CMS_MAP)) {
+    const row = rows.find((r) => r.key === cmsKey);
+    const value = row?.[field]?.trim();
+    if (value) texts[i18nKey] = value;
+  }
+
+  const stats = HOME_V4_STAT_CMS_KEYS.map((key) => {
+    const row = rows.find((r) => r.key === key);
+    return row?.value_fr?.trim() || row?.value_en?.trim() || row?.value_ar?.trim() || '';
+  });
+
+  return { texts, stats };
 }

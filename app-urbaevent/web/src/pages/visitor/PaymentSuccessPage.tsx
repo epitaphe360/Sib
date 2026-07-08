@@ -6,7 +6,7 @@ import { CheckCircle, Crown, Download, ArrowRight, Loader } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import useAuthStore from '../../store/authStore';
-import { checkPaymentStatus, upgradeUserToVIP } from '../../services/paymentService';
+import { checkPaymentStatus } from '../../services/paymentService';
 import { ROUTES } from '../../lib/routes';
 import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
@@ -85,27 +85,6 @@ export default function PaymentSuccessPage() {
         }
       } catch (paymentCheckError) {
         console.warn('Payment status check failed:', paymentCheckError);
-      }
-
-      // Try to find and process pending payment (fallback)
-      try {
-        const { data: payments } = await supabase
-          .from('payment_requests')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('status', 'pending')
-          .order('created_at', { ascending: false })
-          .range(0, 0);
-
-        if (payments && payments.length > 0) {
-          await upgradeUserToVIP(user.id, payments[0].id);
-          setIsUpgraded(true);
-          await refreshUserData();
-          toast.success(t('payment.success.validated'));
-          return;
-        }
-      } catch (paymentError) {
-        console.warn('Payment records check failed:', paymentError);
       }
 
       setError(t('payment.error.verificationFailed'));

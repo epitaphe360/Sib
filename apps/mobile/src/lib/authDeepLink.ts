@@ -9,6 +9,10 @@ function qpString(value: string | string[] | undefined): string | undefined {
 export function normalizeAuthDeepLink(raw: string | null): string | null {
   if (!raw) return null;
 
+  if (/reset-password/i.test(raw)) {
+    return null;
+  }
+
   if (raw.includes('token_hash=') || raw.includes('access_token=') || raw.includes('code=')) {
     return raw;
   }

@@ -277,11 +277,6 @@ export default function ChatInterface() {
                           Voir les Exposants
                         </Button>
                       </Link>
-                      <Link to={ROUTES.PARTNERS}>
-                        <Button variant="outline" size="sm" className="w-full">
-                          Voir les Partenaires
-                        </Button>
-                      </Link>
                     </div>
                   </div>
                 ) : (

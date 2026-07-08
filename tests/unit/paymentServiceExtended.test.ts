@@ -31,6 +31,24 @@ vi.mock('../../src/lib/supabase', () => ({
   },
 }));
 
+// Montant VIP : source unique dynamique (visitor_levels). On fige les valeurs pour le test.
+const VIP_PRICE_EUR = 700;
+const VIP_PRICE_MAD = 7000;
+
+vi.mock('../../src/services/visitorLevelService', () => ({
+  fetchVipPassPricing: vi.fn().mockResolvedValue({
+    level: 'premium',
+    name: 'Pass Premium VIP',
+    price: 700,
+    currency: 'EUR',
+  }),
+}));
+
+vi.mock('../../src/utils/currencyUtils', () => ({
+  convertEURtoMAD: vi.fn().mockResolvedValue(7000),
+  convertEURtoMADSync: vi.fn().mockReturnValue(7000),
+}));
+
 // Mock window.location.origin (jsdom)
 Object.defineProperty(globalThis, 'location', {
   writable: true,
@@ -38,8 +56,8 @@ Object.defineProperty(globalThis, 'location', {
 });
 
 import {
-  PAYMENT_AMOUNTS,
   PAYPAL_CLIENT_ID,
+  getVipPassAmount,
   capturePayPalOrder,
   createCMIPaymentRequest,
   checkPaymentStatus,
@@ -55,14 +73,10 @@ describe('paymentService — étendu', () => {
     Object.values(chainable).forEach(fn => fn.mockReturnValue(chainable));
   });
 
-  // ── Constantes ───────────────────────────────────────────────────────────────
-  describe('PAYMENT_AMOUNTS', () => {
-    it('VIP_PASS est défini en euros', () => {
-      expect(PAYMENT_AMOUNTS.VIP_PASS).toBeGreaterThan(0);
-    });
-
-    it('VIP_PASS_CENTS = VIP_PASS × 100', () => {
-      expect(PAYMENT_AMOUNTS.VIP_PASS_CENTS).toBe(PAYMENT_AMOUNTS.VIP_PASS * 100);
+  // ── Montant VIP (source unique dynamique) ─────────────────────────────────────
+  describe('getVipPassAmount', () => {
+    it('retourne le prix EUR issu de visitor_levels', async () => {
+      await expect(getVipPassAmount()).resolves.toBe(VIP_PRICE_EUR);
     });
   });
 
@@ -120,11 +134,11 @@ describe('paymentService — étendu', () => {
       expect(callArgs.cancelUrl).toContain('/visitor/subscription');
     });
 
-    it('envoie le montant VIP correct', async () => {
+    it('envoie le montant VIP converti en MAD', async () => {
       mockInvoke.mockResolvedValueOnce({ data: {}, error: null });
       await createCMIPaymentRequest('user-abc', 'user@example.com');
       const callArgs = mockInvoke.mock.calls[0][1].body;
-      expect(callArgs.amount).toBe(PAYMENT_AMOUNTS.VIP_PASS);
+      expect(callArgs.amount).toBe(VIP_PRICE_MAD);
     });
 
     it('lève une erreur si la fonction Edge échoue', async () => {

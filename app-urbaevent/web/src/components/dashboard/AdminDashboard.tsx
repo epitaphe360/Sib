@@ -13,10 +13,7 @@ import {
   AdminChartsSection,
   AdminActionsPanel,
   AdminNavVisibility,
-  BannerManagementPanel,
-  VisitorPricingPanel,
-  SiteImagesPanel,
-  SiteTextContentPanel,
+  CmsAdminHub,
   SystemHealthPanel,
   ActivityFeed,
 } from './admin';
@@ -125,14 +122,7 @@ export default function AdminDashboard() {
 
         <AdminNavVisibility />
 
-        {/* ── CMS : Photos & Textes ── */}
-        <SiteImagesPanel />
-
-        <SiteTextContentPanel />
-
-        <BannerManagementPanel />
-
-        <VisitorPricingPanel />
+        <CmsAdminHub />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -32,31 +32,36 @@ export function SiteTextContentPanel({ embedded = false }: { embedded?: boolean 
     return row.value_ar;
   };
 
-  const load = useCallback(async () => {
+  const loadRows = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await fetchSiteTextContent();
-      setRows(data);
-      const initial: Record<string, string> = {};
-      for (const def of TEXT_DEFINITIONS) {
-        const row = data.find((r) => r.key === def.key);
-        initial[def.key] = row ? (getLangValue(row, activeLang) ?? '') : '';
-      }
-      setDraft(initial);
+      setRows(await fetchSiteTextContent());
     } catch { setRows([]); }
     finally { setLoading(false); }
-  }, [activeLang]);
+  }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { void loadRows(); }, [loadRows]);
 
-  const handleLangChange = (lang: Lang) => {
-    setActiveLang(lang);
-    const next: Record<string, string> = {};
+  useEffect(() => {
+    const initial: Record<string, string> = {};
     for (const def of TEXT_DEFINITIONS) {
       const row = rows.find((r) => r.key === def.key);
-      next[def.key] = row ? (getLangValue(row, lang) ?? '') : '';
+      initial[def.key] = row ? (getLangValue(row, activeLang) ?? '') : '';
     }
-    setDraft(next);
+    setDraft(initial);
+  }, [rows, activeLang]);
+
+  const handleLangChange = (lang: Lang) => {
+    const hasUnsaved = TEXT_DEFINITIONS.some((def) => {
+      const row = rows.find((r) => r.key === def.key);
+      const saved = row ? (getLangValue(row, activeLang) ?? '') : '';
+      return draft[def.key] !== saved;
+    });
+    if (hasUnsaved) {
+      toast.warning('Enregistrez vos modifications avant de changer de langue');
+      return;
+    }
+    setActiveLang(lang);
   };
 
   const getLangField = (lang: Lang) => {
@@ -71,7 +76,7 @@ export function SiteTextContentPanel({ embedded = false }: { embedded?: boolean 
       const field = getLangField(activeLang);
       await upsertSiteText(key, { [field]: draft[key] || null } as any);
       toast.success('Texte enregistré');
-      await load();
+      await loadRows();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Erreur de sauvegarde');
     } finally { setSaving(null); }
@@ -87,7 +92,7 @@ export function SiteTextContentPanel({ embedded = false }: { embedded?: boolean 
         )
       );
       toast.success('Tous les textes enregistrés');
-      await load();
+      await loadRows();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Erreur de sauvegarde');
     } finally { setSaving(null); }

@@ -18,10 +18,15 @@ import { describe, it, expect, beforeAll } from 'vitest';
 
 describe('📅 Configuration Dates Événement', () => {
   it('Les dates doivent être 25-29 Novembre 2026', async () => {
-    const { DEFAULT_SALON_CONFIG } = await import('../src/config/salonInfo');
+    const { DEFAULT_SALON_CONFIG, SALON_DATE_RANGE, formatSalonDates } = await import('../src/config/salonInfo');
 
-    expect(DEFAULT_SALON_CONFIG.dates.start).toBe('25 Novembre 2026');
-    expect(DEFAULT_SALON_CONFIG.dates.end).toBe('29 Novembre 2026');
+    // Source de vérité : SALON_DATE_RANGE (25-29 novembre 2026, mois 0-indexé = 10).
+    expect(SALON_DATE_RANGE.startDay).toBe(25);
+    expect(SALON_DATE_RANGE.endDay).toBe(29);
+    expect(SALON_DATE_RANGE.month).toBe(10);
+    expect(SALON_DATE_RANGE.year).toBe(2026);
+    // Rendu lisible complet.
+    expect(formatSalonDates(DEFAULT_SALON_CONFIG)).toBe('Du 25 au 29 Novembre 2026');
   });
 
   it('Le nom de l\'événement doit être SIB 2026', async () => {
@@ -50,23 +55,23 @@ describe('📊 Quotas Visiteurs', () => {
     expect(getVisitorQuota('free')).toBe(0);
   });
 
-  it('Quota PREMIUM doit être 10 (CDC)', async () => {
-    const { VISITOR_QUOTAS } = await import('../src/config/quotas');
+  it('Quota PREMIUM doit être illimité', async () => {
+    const { VISITOR_QUOTAS, UNLIMITED_QUOTA } = await import('../src/config/quotas');
 
-    expect(VISITOR_QUOTAS.premium).toBe(1000);
+    expect(VISITOR_QUOTAS.premium).toBe(UNLIMITED_QUOTA);
   });
 
-  it('getVisitorQuota(premium) doit retourner 10 (CDC: 10 demandes max)', async () => {
-    const { getVisitorQuota } = await import('../src/config/quotas');
+  it('getVisitorQuota(premium) doit retourner illimité (RDV illimités)', async () => {
+    const { getVisitorQuota, UNLIMITED_QUOTA } = await import('../src/config/quotas');
 
-    expect(getVisitorQuota('premium')).toBe(1000);
+    expect(getVisitorQuota('premium')).toBe(UNLIMITED_QUOTA);
   });
 
   it('Le niveau BASIC ne doit plus exister', async () => {
-    const { VISITOR_QUOTAS } = await import('../src/config/quotas');
+    const { VISITOR_QUOTAS, UNLIMITED_QUOTA } = await import('../src/config/quotas');
 
     expect(VISITOR_QUOTAS.basic).toBeUndefined();
-    expect(VISITOR_QUOTAS.vip).toBe(1000); // VIP existe avec quota 1000
+    expect(VISITOR_QUOTAS.vip).toBe(UNLIMITED_QUOTA); // VIP existe avec quota illimité
   });
 
   it('Les niveaux principaux doivent exister (free, vip, premium)', async () => {
@@ -251,12 +256,15 @@ describe('❌ Messages d\'Erreur Permissions', () => {
 // ============================================
 
 describe('👤 Visitor Levels Configuration', () => {
-  it('Seulement 2 niveaux de visiteur doivent être définis', async () => {
+  it('Les niveaux visiteur définis : free + payant (vip/premium alias)', async () => {
     const { VISITOR_LEVELS } = await import('../src/config/quotas');
 
     const levels = Object.keys(VISITOR_LEVELS);
-    expect(levels).toHaveLength(2);
-    expect(levels).toEqual(['free', 'vip']);
+    expect(levels).toContain('free');
+    expect(levels).toContain('vip');
+    expect(levels).toContain('premium');
+    // vip et premium sont le même niveau payant (alias).
+    expect(VISITOR_LEVELS.premium).toEqual(VISITOR_LEVELS.vip);
   });
 
   it('FREE level doit avoir les bonnes propriétés', async () => {
@@ -277,7 +285,7 @@ describe('👤 Visitor Levels Configuration', () => {
 
     // Vérifier que le tableau contient des éléments avec les features CDC
     const accessText = VISITOR_LEVELS.vip.access.join(' ');
-    expect(accessText).toContain('demandes');
+    expect(accessText).toContain('Rendez-vous B2B illimités');
     expect(accessText).toContain('Networking');
     expect(accessText).toContain('gala');
   });
@@ -295,18 +303,18 @@ describe('🔢 Calcul Quotas Restants', () => {
     expect(remaining).toBe(0);
   });
 
-  it('PREMIUM avec 5 confirmés = reste 995 demandes (1000 max)', async () => {
-    const { calculateRemainingQuota } = await import('../src/config/quotas');
+  it('PREMIUM avec 5 confirmés = reste illimité (jamais épuisé)', async () => {
+    const { calculateRemainingQuota, UNLIMITED_QUOTA } = await import('../src/config/quotas');
 
     const remaining = calculateRemainingQuota('premium', 5);
-    expect(remaining).toBe(995); // 1000 max - 5 confirmés = 995 restants
+    expect(remaining).toBe(UNLIMITED_QUOTA - 5); // niveau illimité
   });
 
-  it('PREMIUM avec 1001+ confirmés = quota atteint', async () => {
+  it('PREMIUM reste disponible même après beaucoup de RDV (illimité)', async () => {
     const { calculateRemainingQuota } = await import('../src/config/quotas');
 
     const remaining = calculateRemainingQuota('premium', 1001);
-    expect(remaining).toBe(0); // Quota atteint
+    expect(remaining).toBeGreaterThan(0); // illimité → jamais atteint
   });
 
   it('Niveau undefined doit retourner 0', async () => {
@@ -330,16 +338,15 @@ describe('🔢 Calcul Quotas Restants', () => {
 
 describe('🔍 Audit & Traçabilité', () => {
   it('Configuration contient des timestamps valides', async () => {
-    const { DEFAULT_SALON_CONFIG } = await import('../src/config/salonInfo');
+    const { DEFAULT_SALON_CONFIG, formatSalonDates } = await import('../src/config/salonInfo');
 
     // Vérifier que les dates sont cohérentes
     expect(DEFAULT_SALON_CONFIG.dates.start).toBeTruthy();
     expect(DEFAULT_SALON_CONFIG.dates.end).toBeTruthy();
 
-    // Vérifier format de date
+    // Le rendu complet contient jour + mois + année.
     const dateRegex = /\d{1,2}\s+\w+\s+\d{4}/;
-    expect(DEFAULT_SALON_CONFIG.dates.start).toMatch(dateRegex);
-    expect(DEFAULT_SALON_CONFIG.dates.end).toMatch(dateRegex);
+    expect(formatSalonDates(DEFAULT_SALON_CONFIG)).toMatch(dateRegex);
   });
 
   it('Quotas doivent être traçables et cohérents', async () => {
@@ -405,12 +412,12 @@ describe('🧠 Logique Métier', () => {
   });
 
   it('Cohérence des règles de quota PREMIUM', async () => {
-    const { getVisitorQuota, VISITOR_QUOTAS } = await import('../src/config/quotas');
+    const { getVisitorQuota, VISITOR_QUOTAS, UNLIMITED_QUOTA } = await import('../src/config/quotas');
     const { getNetworkingPermissions } = await import('../src/lib/networkingPermissions');
 
-    // PREMIUM doit avoir quota de 1000 (Édition 1)
-    expect(VISITOR_QUOTAS.premium).toBe(1000);
-    expect(getVisitorQuota('premium')).toBe(1000);
+    // PREMIUM doit avoir un quota RDV illimité
+    expect(VISITOR_QUOTAS.premium).toBe(UNLIMITED_QUOTA);
+    expect(getVisitorQuota('premium')).toBe(UNLIMITED_QUOTA);
 
     // Et permissions étendues pour le networking
     const perms = getNetworkingPermissions('visitor', 'premium');
@@ -497,14 +504,14 @@ describe('🧠 Logique Métier', () => {
 
 describe('🎯 Stratégie de Fonctionnement', () => {
   it('Le modèle freemium est correctement implémenté', async () => {
-    const { VISITOR_QUOTAS, VISITOR_LEVELS } = await import('../src/config/quotas');
+    const { VISITOR_QUOTAS, VISITOR_LEVELS, UNLIMITED_QUOTA } = await import('../src/config/quotas');
 
     // FREE doit être gratuit (0 quota)
     expect(VISITOR_QUOTAS.free).toBe(0);
     expect(VISITOR_LEVELS.free.label).toContain('Free');
 
-    // VIP doit être payant avec 1000 RDV (Édition 1)
-    expect(VISITOR_QUOTAS.vip).toBe(1000);
+    // VIP doit être payant avec RDV illimités
+    expect(VISITOR_QUOTAS.vip).toBe(UNLIMITED_QUOTA);
     expect(VISITOR_LEVELS.vip.label).toContain('Premium');
   });
 
@@ -619,7 +626,7 @@ describe('🔒 Sécurité', () => {
   });
 
   it('Validation des niveaux d\'abonnement', async () => {
-    const { getVisitorQuota } = await import('../src/config/quotas');
+    const { getVisitorQuota, UNLIMITED_QUOTA } = await import('../src/config/quotas');
 
     // Niveaux invalides doivent retourner 0
     expect(getVisitorQuota('')).toBe(0);
@@ -628,8 +635,8 @@ describe('🔒 Sécurité', () => {
 
     // Niveaux valides uniquement
     expect(getVisitorQuota('free')).toBe(0);
-    expect(getVisitorQuota('vip')).toBe(1000);
-    expect(getVisitorQuota('premium')).toBe(1000);
+    expect(getVisitorQuota('vip')).toBe(UNLIMITED_QUOTA);
+    expect(getVisitorQuota('premium')).toBe(UNLIMITED_QUOTA);
   });
 
   it('Protection contre les injections dans les types', async () => {
@@ -657,10 +664,10 @@ describe('🔒 Sécurité', () => {
   });
 
   it('Les quotas ne peuvent pas être contournés', async () => {
-    const { getVisitorQuota } = await import('../src/config/quotas');
+    const { getVisitorQuota, UNLIMITED_QUOTA } = await import('../src/config/quotas');
 
-    // Tentatives de manipulation - CDC: premium = 10 demandes
-    expect(getVisitorQuota('premium')).toBe(1000); // CDC: 10 demandes max
+    // premium = RDV illimités ; les entrées invalides retombent à 0
+    expect(getVisitorQuota('premium')).toBe(UNLIMITED_QUOTA);
     expect(getVisitorQuota(null as any)).toBe(0); // null devient 0
     expect(getVisitorQuota({} as any)).toBe(0); // objet devient 0
   });
@@ -793,7 +800,7 @@ describe('📊 Analytique & Métriques', () => {
   });
 
   it('Les conversions FREE → PREMIUM sont mesurables', async () => {
-    const { VISITOR_QUOTAS } = await import('../src/config/quotas');
+    const { VISITOR_QUOTAS, UNLIMITED_QUOTA } = await import('../src/config/quotas');
     const { getNetworkingPermissions } = await import('../src/lib/networkingPermissions');
 
     // Points de friction identifiables
@@ -801,7 +808,7 @@ describe('📊 Analytique & Métriques', () => {
     const premiumQuota = VISITOR_QUOTAS.premium;
 
     expect(freeQuota).toBe(0); // Bloquant → incite à upgrade
-    expect(premiumQuota).toBe(1000); // Édition 1: 1000 demandes
+    expect(premiumQuota).toBe(UNLIMITED_QUOTA); // RDV illimités
 
     // Différence de valeur mesurable
     const freePerms = getNetworkingPermissions('visitor', 'free');
@@ -821,7 +828,7 @@ describe('📊 Analytique & Métriques', () => {
 
     // Les configurations sont centralisées et modifiables
     expect(VISITOR_LEVELS).toBeDefined();
-    expect(Object.keys(VISITOR_LEVELS)).toHaveLength(2);
+    expect(Object.keys(VISITOR_LEVELS).length).toBeGreaterThanOrEqual(2);
 
     // Chaque niveau a des propriétés testables
     Object.values(VISITOR_LEVELS).forEach(level => {
@@ -880,16 +887,16 @@ describe('🔗 Intégration & Cohérence Globale', () => {
   });
 
   it('Système complet sans contradictions', async () => {
-    const { VISITOR_QUOTAS, getVisitorQuota } = await import('../src/config/quotas');
+    const { VISITOR_QUOTAS, getVisitorQuota, UNLIMITED_QUOTA } = await import('../src/config/quotas');
     const { getNetworkingPermissions } = await import('../src/lib/networkingPermissions');
 
     // FREE: tout doit être limité/0
     expect(getVisitorQuota('free')).toBe(0);
     expect(getNetworkingPermissions('visitor', 'free').canAccessNetworking).toBe(false);
 
-    // PREMIUM/VIP: 1000 demandes RDV (Édition 1) + networking activé
-    expect(getVisitorQuota('premium')).toBe(1000);
-    expect(getVisitorQuota('vip')).toBe(1000);
+    // PREMIUM/VIP: RDV illimités + networking activé
+    expect(getVisitorQuota('premium')).toBe(UNLIMITED_QUOTA);
+    expect(getVisitorQuota('vip')).toBe(UNLIMITED_QUOTA);
     const premiumPerms = getNetworkingPermissions('visitor', 'premium');
     expect(premiumPerms.canAccessNetworking).toBe(true);
     expect(premiumPerms.maxMessagesPerDay).toBe(1000);

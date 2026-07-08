@@ -12,6 +12,7 @@ import {
 import { Input, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { useI18n } from '../../src/i18n/I18nProvider';
 import { supabase } from '../../src/lib/supabase';
+import { parseAuthTokensFromUrl } from '../../src/lib/authTokens';
 import { updatePassword } from '../../src/services/auth';
 import { colors, spacing } from '../../src/theme';
 
@@ -42,8 +43,35 @@ export default function ResetPasswordScreen() {
 
     const init = async (url: string | null) => {
       if (!url) return;
-      const { accessToken, refreshToken } = parseTokens(url);
-      if (accessToken && refreshToken) {
+
+      const { accessToken, refreshToken, tokenHash, type } = parseAuthTokensFromUrl(url);
+
+      if (tokenHash && type === 'recovery') {
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: 'recovery',
+        });
+        if (error) {
+          if (!cancelled) setLinkError(error.message);
+          return;
+        }
+        if (!cancelled) {
+          readyRef.current = true;
+          setReady(true);
+          setLinkError(null);
+        }
+        return;
+      }
+
+      const { accessToken: legacyAccess, refreshToken: legacyRefresh } = parseTokens(url);
+      if (legacyAccess && legacyRefresh) {
+        await supabase.auth.setSession({ access_token: legacyAccess, refresh_token: legacyRefresh });
+        if (!cancelled) {
+          readyRef.current = true;
+          setReady(true);
+          setLinkError(null);
+        }
+      } else if (accessToken && refreshToken) {
         await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
         if (!cancelled) {
           readyRef.current = true;

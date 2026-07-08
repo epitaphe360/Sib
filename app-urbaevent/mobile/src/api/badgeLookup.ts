@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { participantNamesMatch } from '../lib/participantNameMatch';
 import type { UserBadge } from '../types';
 
 export interface BadgeLookupResult {
@@ -120,29 +121,88 @@ export async function lookupBadgeByQRData(qrRawData: string): Promise<BadgeLooku
   return { found: false, badge: null, error: 'Format QR non reconnu' };
 }
 
-export async function lookupBadgeByEmail(email: string): Promise<BadgeLookupResult> {
+export interface ParticipantNameFilter {
+  firstName?: string;
+  lastName?: string;
+}
+
+export async function lookupBadgesByEmail(
+  email: string,
+  nameFilter?: ParticipantNameFilter,
+): Promise<BadgeLookupResult[]> {
   const normalized = email.trim().toLowerCase();
-  const { data, error } = await supabase
+  const hasNameFilter = Boolean(nameFilter?.firstName?.trim() || nameFilter?.lastName?.trim());
+
+  const { data: badges, error } = await supabase
     .from('user_badges')
     .select(BADGE_COLS)
-    .eq('email', normalized)
-    .maybeSingle();
+    .eq('email', normalized);
 
   if (error) {
     const handled = handleBadgeError(error);
-    if (handled) {
-      const { data: userRow } = await supabase.from('users').select('id').eq('email', normalized).maybeSingle();
-      if (userRow?.id) return lookupByUserId(userRow.id as string);
-      return handled;
-    }
+    if (handled) return [handled];
     throw error;
   }
-  if (data) return lookupByCode((data as BadgeRow).badge_code);
 
-  const { data: userRow } = await supabase.from('users').select('id').eq('email', normalized).maybeSingle();
-  if (userRow?.id) return lookupByUserId(userRow.id as string);
+  let rows = (badges ?? []) as BadgeRow[];
+  if (hasNameFilter) {
+    rows = rows.filter((b) =>
+      participantNamesMatch(b.full_name, {
+        firstName: nameFilter?.firstName,
+        lastName: nameFilter?.lastName,
+      }),
+    );
+  }
 
-  return { found: false, badge: null, error: 'Aucun compte avec cet email' };
+  if (rows.length > 0) {
+    const results: BadgeLookupResult[] = [];
+    for (const row of rows) {
+      results.push(await lookupByCode(row.badge_code));
+    }
+    return results;
+  }
+
+  const { data: users } = await supabase
+    .from('users')
+    .select('id, name, email')
+    .eq('email', normalized);
+
+  let userRows = users ?? [];
+  if (hasNameFilter) {
+    userRows = userRows.filter((u) =>
+      participantNamesMatch(String(u.name ?? ''), {
+        firstName: nameFilter?.firstName,
+        lastName: nameFilter?.lastName,
+      }),
+    );
+  }
+
+  if (userRows.length === 0) {
+    return [{ found: false, badge: null, error: 'Aucun compte avec cet email et ce nom' }];
+  }
+
+  const results: BadgeLookupResult[] = [];
+  for (const u of userRows) {
+    results.push(await lookupByUserId(u.id as string));
+  }
+  return results;
+}
+
+export async function lookupBadgeByEmail(
+  email: string,
+  nameFilter?: ParticipantNameFilter,
+): Promise<BadgeLookupResult> {
+  const results = await lookupBadgesByEmail(email, nameFilter);
+  const found = results.filter((r) => r.found);
+  if (found.length === 1) return found[0];
+  if (found.length > 1) {
+    return {
+      found: false,
+      badge: null,
+      error: `${found.length} visiteurs avec cet email — précisez le prénom et le nom.`,
+    };
+  }
+  return results[0] ?? { found: false, badge: null, error: 'Aucun compte avec cet email' };
 }
 
 export function buildStaticParticipantQR(badge: UserBadge): string {

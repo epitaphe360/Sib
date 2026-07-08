@@ -291,7 +291,8 @@ describe('AdminInvoicesPage', () => {
     mockFetchInvoices.mockResolvedValue([]);
     renderWithRouter(AdminInvoicesPage);
     await waitFor(() => {
-      expect(screen.getByText(/Factures/i)).toBeTruthy();
+      // "Factures" apparaît à plusieurs endroits (titre, en-têtes) : au moins une occurrence.
+      expect(screen.queryAllByText(/Factures/i).length).toBeGreaterThanOrEqual(1);
     });
   });
 

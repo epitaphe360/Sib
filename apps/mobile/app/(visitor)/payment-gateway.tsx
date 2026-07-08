@@ -4,8 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Card, EmptyState, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { AppIcon, type AppIconName } from '../../src/components/AppIcon';
+import { resolveVipPass } from '../../src/api/appContent';
 import { useAuth } from '../../src/context/AuthContext';
 import { SALON_INFO } from '../../src/data/salons';
+import { convertEURtoMAD } from '../../src/lib/currency';
 import {
   activateVipPass,
   capturePaypalOrder,
@@ -16,6 +18,8 @@ import {
   type PaymentMethod,
 } from '../../src/api/paymentGateway';
 import { getPaymentRequest } from '../../src/services/payment';
+import { fetchVipPassPricing } from '../../src/services/visitorLevel';
+import { useAppContent } from '../../src/hooks/useAppContent';
 import { useI18n } from '../../src/i18n/I18nProvider';
 import { navigateAfterAuth } from '../../src/lib/navigateAfterAuth';
 import { navigateSafe, requireAuth } from '../../src/lib/navigateSafe';
@@ -39,21 +43,31 @@ export default function PaymentGatewayScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { user, refreshUser } = useAuth();
   const { t } = useI18n();
+  const { content } = useAppContent();
+  const vipDefaults = resolveVipPass(content);
   const [selected, setSelected] = useState<PaymentMethod | null>(null);
   const [loading, setLoading] = useState(false);
-  const [amount, setAmount] = useState(700);
-  const [currency, setCurrency] = useState('MAD');
+  const [amount, setAmount] = useState(vipDefaults.priceEur);
+  const [currency, setCurrency] = useState('EUR');
 
   const load = useCallback(async () => {
+    try {
+      const pricing = await fetchVipPassPricing();
+      setAmount(pricing.price);
+      setCurrency(pricing.currency);
+    } catch {
+      setAmount(vipDefaults.priceEur);
+      setCurrency(vipDefaults.currency);
+    }
     if (!id || !user) return;
     try {
       const req = await getPaymentRequest(id);
       if (req) {
         setAmount(req.amount);
-        // currency isn't on base PaymentRequest — keep MAD default
+        setCurrency(req.currency);
       }
-    } catch { /* silently fallback to defaults */ }
-  }, [id, user]);
+    } catch { /* keep pricing defaults */ }
+  }, [id, user, vipDefaults.currency, vipDefaults.priceEur]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -80,10 +94,11 @@ export default function PaymentGatewayScreen() {
           description: `Pass VIP ${SALON_INFO.name} — ${user.name}`,
         });
       } else {
+        const amountMad = currency === 'MAD' ? amount : await convertEURtoMAD(amount);
         order = await createCmiOrder({
           userId: user.id,
-          amount,
-          currency,
+          amount: amountMad,
+          currency: 'MAD',
           description: `Pass VIP ${SALON_INFO.name}`,
           email: user.email,
           name: user.name,
@@ -116,13 +131,13 @@ export default function PaymentGatewayScreen() {
           Alert.alert(
             t('payment.gateway.successTitle'),
             t('payment.gateway.successBody'),
-            [{ text: t('common.ok') ?? 'OK', onPress: () => navigateAfterAuth(user!.type) }]
+            [{ text: t('common.ok'), onPress: () => navigateAfterAuth(user!.type) }]
           );
         } else {
           Alert.alert(t('payment.gateway.pendingTitle'), t('payment.gateway.pendingBody'));
         }
       } else if (result.type === 'dismiss') {
-        Alert.alert(t('payment.gateway.cancelledTitle') ?? 'Paiement annulé', t('payment.gateway.cancelledBody') ?? 'La fenêtre de paiement a été fermée.');
+        Alert.alert(t('payment.gateway.cancelledTitle'), t('payment.gateway.cancelledBody'));
       }
     } catch (e) {
       Alert.alert(t('common.error'), e instanceof Error ? e.message : t('payment.gateway.error'));

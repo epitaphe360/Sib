@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { useTranslation } from '../../hooks/useTranslation';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  CreditCard,
   Building2,
   Shield,
   Zap,
   Clock,
   Check,
   ArrowRight,
-  Crown
+  Crown,
+  CreditCard
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Card } from '../../components/ui/Card';
@@ -22,33 +21,29 @@ import {
   formatPartnerAmount,
   calculateUpgradeAmount
 } from '../../config/partnerBankTransferConfig';
-import { createPartnerBankTransferRequest } from '../../services/partnerPaymentService';
+import {
+  createPartnerBankTransferRequest,
+  createCMIPartnerPayment
+} from '../../services/partnerPaymentService';
+import { ROUTES } from '../../lib/routes';
 
 type PaymentMethod = 'online' | 'bank_transfer';
 
 export default function PartnerPaymentSelectionPage() {
-  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
-  // Redirect if already active
-  React.useEffect(() => {
-    if (user?.status === 'active') {
-      toast.info('Votre compte est déjà actif');
-      navigate('/partner/dashboard');
-      return;
-    }
-
-    // Redirection automatique vers le virement bancaire
-    if (user && tier) {
-      handleBankTransfer();
-    }
-  }, [user, tier, navigate]);
-
   const tier = (searchParams.get('tier') || 'partner') as PartnerTier;
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(null);
   const [processing, setProcessing] = useState(false);
+
+  React.useEffect(() => {
+    if (user?.status === 'active') {
+      toast.info('Votre compte est déjà actif');
+      navigate(ROUTES.PARTNER_DASHBOARD);
+    }
+  }, [user?.status, navigate]);
 
   const currentTier = (user?.partner_tier || 'museum') as PartnerTier;
   const tierInfo = getPartnerTierAmount(tier);
@@ -57,21 +52,26 @@ export default function PartnerPaymentSelectionPage() {
     ? calculateUpgradeAmount(currentTier, tier)
     : tierInfo.amount;
 
-  if (processing) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <Crown className="h-16 w-16 mx-auto mb-4 text-purple-600" />
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Préparation de votre demande de virement bancaire...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleOnlinePayment = async () => {
+    if (!user?.email) {
+      toast.error('Utilisateur non connecté');
+      return;
+    }
 
-  const handleOnlinePayment = () => {
-    // Rediriger vers la page de paiement en ligne avec PayPal/CMI
-    navigate(`/partner/payment-online?tier=${tier}`);
+    setProcessing(true);
+    try {
+      const { paymentUrl } = await createCMIPartnerPayment(
+        user.id,
+        user.email,
+        tier,
+        currentTier
+      );
+      window.location.href = paymentUrl;
+    } catch (error: unknown) {
+      console.error('Error creating online payment:', error);
+      toast.error('Erreur lors de la création du paiement en ligne');
+      setProcessing(false);
+    }
   };
 
   const handleBankTransfer = async () => {
@@ -83,7 +83,6 @@ export default function PartnerPaymentSelectionPage() {
     setProcessing(true);
 
     try {
-      // Créer une demande de virement bancaire
       const { requestId } = await createPartnerBankTransferRequest(
         user.id,
         tier,
@@ -91,10 +90,8 @@ export default function PartnerPaymentSelectionPage() {
       );
 
       toast.success('Demande de virement créée avec succès !');
-
-      // Rediriger vers la page d'instructions de virement
-      navigate(`/partner/bank-transfer?request_id=${requestId}&tier=${tier}`);
-    } catch (error: any) {
+      navigate(`${ROUTES.PARTNER_BANK_TRANSFER}?request_id=${requestId}&tier=${tier}`);
+    } catch (error: unknown) {
       console.error('Error creating bank transfer request:', error);
       toast.error('Erreur lors de la création de la demande');
     } finally {
@@ -103,6 +100,21 @@ export default function PartnerPaymentSelectionPage() {
   };
 
   const paymentMethods = [
+    {
+      id: 'online' as PaymentMethod,
+      name: 'Paiement en ligne (CMI)',
+      description: 'Carte bancaire marocaine — activation rapide',
+      icon: CreditCard,
+      color: 'blue',
+      recommended: false,
+      features: [
+        'Paiement sécurisé CMI',
+        'Cartes bancaires marocaines',
+        'Confirmation automatique',
+        'Reçu par email'
+      ],
+      action: handleOnlinePayment
+    },
     {
       id: 'bank_transfer' as PaymentMethod,
       name: 'Virement bancaire',
@@ -122,10 +134,21 @@ export default function PartnerPaymentSelectionPage() {
     }
   ];
 
+  if (processing) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <Crown className="h-16 w-16 mx-auto mb-4 text-purple-600" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Préparation de votre paiement...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -140,11 +163,10 @@ export default function PartnerPaymentSelectionPage() {
           </p>
         </motion.div>
 
-        {/* Order Summary */}
         <Card className="p-6 mb-8 bg-gradient-to-r from-purple-50 to-blue-50">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">
-              {isUpgrade ? 'â¬†ï¸ Montant de l\'upgrade' : ' Montant total'}
+              {isUpgrade ? 'Montant de l\'upgrade' : 'Montant total'}
             </h3>
             <div className="text-right">
               <div className="text-3xl font-bold text-purple-600">
@@ -157,7 +179,7 @@ export default function PartnerPaymentSelectionPage() {
           </div>
 
           <div className="border-t border-gray-300 pt-4 mt-4">
-            <h4 className="font-semibold text-gray-900 mb-3">✨ Inclus dans votre abonnement:</h4>
+            <h4 className="font-semibold text-gray-900 mb-3">Inclus dans votre abonnement:</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {tierInfo.features.map((feature) => (
                 <div key={feature} className="flex items-center text-sm text-gray-700">
@@ -169,7 +191,6 @@ export default function PartnerPaymentSelectionPage() {
           </div>
         </Card>
 
-        {/* Payment Methods */}
         <div className="space-y-6 mb-8">
           <h3 className="text-xl font-semibold text-gray-900 text-center">
             Sélectionnez votre mode de paiement
@@ -268,16 +289,14 @@ export default function PartnerPaymentSelectionPage() {
           ))}
         </div>
 
-        {/* Security Badge */}
         <div className="mt-8 flex items-center justify-center text-sm text-gray-600">
           <Shield className="h-5 w-5 mr-2 text-green-600" />
           <span>Paiement 100% sécurisé - Vos données sont cryptées</span>
         </div>
 
-        {/* Cancel Button */}
         <div className="mt-6 text-center">
           <button
-            onClick={() => navigate('/partner/upgrade')}
+            onClick={() => navigate(ROUTES.PARTNER_UPGRADE)}
             className="text-gray-600 hover:text-gray-900 text-sm underline"
           >
             Retour aux options d'abonnement
@@ -287,6 +306,3 @@ export default function PartnerPaymentSelectionPage() {
     </div>
   );
 }
-
-
-

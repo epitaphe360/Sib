@@ -6,6 +6,7 @@ import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
+import { usePageContent } from '../../hooks/usePageContent';
 
 interface PressForm {
   firstName: string;
@@ -29,6 +30,11 @@ const MEDIA_TYPES = [
 ];
 
 export default function PressAccreditationPage() {
+  const cms = usePageContent('presse');
+  const getCms = (key: string, fallback: string) => {
+    const value = cms[key];
+    return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+  };
   const [form, setForm] = useState<PressForm>({
     firstName: '',
     lastName: '',
@@ -87,9 +93,11 @@ export default function PressAccreditationPage() {
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-md w-full">
           <Card className="p-8 text-center">
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Demande Reçue !</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              {getCms('success_title', 'Demande Reçue !')}
+            </h2>
             <p className="text-gray-600 mb-6">
-              Votre demande d'accréditation presse a été enregistrée avec succès. Notre équipe examinera votre dossier et vous contactera prochainement.
+              {getCms('success_message', "Votre demande d'accréditation presse a été enregistrée avec succès. Notre équipe examinera votre dossier et vous contactera prochainement.")}
             </p>
             <Button onClick={() => window.location.href = '/'} className="w-full">
               Retour à l'accueil
@@ -111,9 +119,11 @@ export default function PressAccreditationPage() {
           <span className="inline-block p-3 bg-blue-100 rounded-full mb-4">
             <Camera className="h-8 w-8 text-blue-600" />
           </span>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Accréditation Presse - SIB 2026</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            {getCms('hero_title', 'Accréditation Presse - SIB 2026')}
+          </h1>
           <p className="text-lg text-gray-600">
-            Journalistes, reporters et professionnels des médias : demandez votre badge presse pour couvrir l'événement majeur du BTP en Afrique.
+            {getCms('hero_subtitle', "Journalistes, reporters et professionnels des médias : demandez votre badge presse pour couvrir l'événement majeur du BTP en Afrique.")}
           </p>
         </div>
 
@@ -254,7 +264,8 @@ export default function PressAccreditationPage() {
             <div className="bg-blue-50 p-4 rounded-lg flex gap-3 text-sm text-blue-900 mt-6">
               <Camera className="h-5 w-5 flex-shrink-0 text-blue-600 mt-0.5" />
               <div>
-                <strong>Note importante :</strong> L'accréditation presse est strictement réservée aux professionnels des médias. Le comité d'organisation du SIB 2026 se réserve le droit d'accepter ou de refuser cette demande après vérification.
+                <strong>Note importante :</strong>{' '}
+                {getCms('note_important', "L'accréditation presse est strictement réservée aux professionnels des médias. Le comité d'organisation du SIB 2026 se réserve le droit d'accepter ou de refuser cette demande après vérification.")}
               </div>
             </div>
 

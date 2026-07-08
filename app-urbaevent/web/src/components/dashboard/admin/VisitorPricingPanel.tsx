@@ -12,7 +12,7 @@ import {
 import { Button } from '../../ui/Button';
 import { Input } from '../../ui/Input';
 
-export function VisitorPricingPanel() {
+export function VisitorPricingPanel({ embedded = false }: { embedded?: boolean } = {}) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -69,7 +69,7 @@ export function VisitorPricingPanel() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.68 }}
-      className="mb-8 scroll-mt-24"
+      className={embedded ? 'scroll-mt-24' : 'mb-8 scroll-mt-24'}
     >
       <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden">
         <div className="bg-gradient-to-r from-amber-700 to-amber-500 px-6 py-4 flex items-center gap-3">
@@ -96,7 +96,7 @@ export function VisitorPricingPanel() {
                     {t('admin.visitor_pricing.current')}
                   </p>
                   <p className="text-2xl font-bold text-amber-900 dark:text-amber-100 mt-1">
-                    {formatVisitorAmount(currentPrice, 'MAD')}
+                    {formatVisitorAmount(currentPrice, 'EUR')}
                   </p>
                   {updatedAt && (
                     <p className="text-xs text-amber-700/80 dark:text-amber-300/70 mt-1">
@@ -123,7 +123,7 @@ export function VisitorPricingPanel() {
                     className="flex-1"
                     required
                   />
-                  <span className="text-sm font-semibold text-neutral-600 dark:text-neutral-400">MAD</span>
+                  <span className="text-sm font-semibold text-neutral-600 dark:text-neutral-400">EUR</span>
                 </div>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
                   {t('admin.visitor_pricing.hint')}

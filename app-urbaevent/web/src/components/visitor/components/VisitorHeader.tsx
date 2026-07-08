@@ -5,7 +5,7 @@ import { Button } from '../../ui/Button';
 import { LevelBadge } from '../../common/QuotaWidget';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { ROUTES } from '../../../lib/routes';
-import { getVisitorQuota } from '../../../config/quotas';
+import { getVisitorQuota, isUnlimitedQuota } from '../../../config/quotas';
 import type { User } from '../../../types';
 
 interface VisitorHeaderProps {
@@ -76,11 +76,15 @@ export function VisitorHeader({
                 <div>
                   <div className="text-white/70 text-sm mb-1">{t('visitor.appointments_remaining')}</div>
                   <div className="text-2xl font-bold text-white">
-                    {remaining}/{getVisitorQuota(userLevel)}
-                    <span className="sr-only" data-testid="quota-info">Quota {getVisitorQuota(userLevel)} {t('visitor.b2b_appointments')}</span>
+                    {isUnlimitedQuota(userLevel) ? '∞' : `${remaining}/${getVisitorQuota(userLevel)}`}
+                    <span className="sr-only" data-testid="quota-info">
+                      {isUnlimitedQuota(userLevel)
+                        ? `${t('quota.unlimited')} ${t('visitor.b2b_appointments')}`
+                        : `Quota ${getVisitorQuota(userLevel)} ${t('visitor.b2b_appointments')}`}
+                    </span>
                   </div>
-                  {userLevel === 'vip' && getVisitorQuota(userLevel) === 10 && (
-                    <div className="text-xs text-[#F39200] mt-1">✓ 10 {t('visitor.b2b_appointments')} Premium</div>
+                  {(userLevel === 'vip' || userLevel === 'premium') && isUnlimitedQuota(userLevel) && (
+                    <div className="text-xs text-[#F39200] mt-1">✓ {t('quota.unlimited')} · {t('visitor.b2b_appointments')} Premium</div>
                   )}
                 </div>
                 <Calendar className="h-8 w-8 text-white/50" />

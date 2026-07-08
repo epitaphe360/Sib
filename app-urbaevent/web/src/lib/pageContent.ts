@@ -16,23 +16,29 @@ export async function getPageContent(pageSlug: string, salonId?: string | null):
     query = query.is('salon_id', null);
   }
 
-  const { data, error } = await query.single();
+  const { data, error } = await query.maybeSingle();
   if (error || !data) {return {};}
   return (data.content as Record<string, string>) ?? {};
 }
 
 /**
  * Sauvegarde le contenu d'une page vitrine.
- * Crée ou met à jour l'entrée selon le slug (upsert).
+ * Fusionne avec le contenu existant pour ne pas écraser d'autres clés (ex. programme_data).
  */
 export async function savePageContent(
   pageSlug: string,
   content: Record<string, string>,
   salonId?: string | null
 ): Promise<void> {
+  const existing = await getPageContent(pageSlug, salonId);
+  const merged = { ...existing, ...content };
   const { data: { user } } = await supabase.auth.getUser();
-  const payload: Record<string, unknown> = { page_slug: pageSlug, content, updated_by: user?.id ?? null };
-  if (salonId) {payload.salon_id = salonId;}
+  const payload: Record<string, unknown> = {
+    page_slug: pageSlug,
+    content: merged,
+    updated_by: user?.id ?? null,
+    salon_id: salonId ?? null,
+  };
   const conflictCol = salonId ? 'page_slug,salon_id' : 'page_slug';
   const { error } = await supabase
     .from('page_contents')

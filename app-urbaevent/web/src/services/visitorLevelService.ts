@@ -4,7 +4,7 @@ export interface VipPassPricing {
   level: string;
   name: string;
   price: number;
-  currency: 'MAD';
+  currency: 'EUR' | 'MAD' | 'USD';
 }
 
 let cachedPricing: { data: VipPassPricing; fetchedAt: number } | null = null;
@@ -47,7 +47,7 @@ export async function fetchVipPassPricing(forceRefresh = false): Promise<VipPass
         level: data.level,
         name: data.name ?? 'Pass Premium VIP',
         price,
-        currency: 'MAD',
+        currency: 'EUR',
       };
       cachedPricing = { data: result, fetchedAt: Date.now() };
       return result;
@@ -84,10 +84,10 @@ export async function fetchVisitorLevelsForAdmin(): Promise<VisitorLevelRow[]> {
   return (data ?? []) as VisitorLevelRow[];
 }
 
-/** Met à jour le tarif Pass VIP (niveaux premium + vip). */
-export async function updateVipPassPrice(priceMad: number): Promise<void> {
-  if (!Number.isFinite(priceMad) || priceMad <= 0) {
-    throw new Error('Le prix doit être un montant positif en MAD.');
+/** Met à jour le tarif Pass VIP (niveaux premium + vip) — montant en EUR. */
+export async function updateVipPassPrice(priceEur: number): Promise<void> {
+  if (!Number.isFinite(priceEur) || priceEur <= 0) {
+    throw new Error('Le prix doit être un montant positif en EUR.');
   }
 
   const levels = ['premium', 'vip'] as const;
@@ -95,8 +95,8 @@ export async function updateVipPassPrice(priceMad: number): Promise<void> {
     const { error } = await supabase
       .from('visitor_levels')
       .update({
-        price_annual: priceMad,
-        price_monthly: priceMad,
+        price_annual: priceEur,
+        price_monthly: priceEur,
         updated_at: new Date().toISOString(),
       })
       .eq('level', level);

@@ -14,7 +14,7 @@ import {
 import { Button } from '../../ui/Button';
 import { useTranslation } from '../../../hooks/useTranslation';
 
-export function BannerManagementPanel() {
+export function BannerManagementPanel({ embedded = false }: { embedded?: boolean } = {}) {
   const { t } = useTranslation();
   const [rows, setRows] = useState<SiteBannerRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -87,7 +87,7 @@ export function BannerManagementPanel() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.65 }}
-      className="mb-8"
+      className={embedded ? '' : 'mb-8'}
     >
       <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden">
         <div className="bg-gradient-to-r from-primary-800 to-primary-600 px-6 py-4 flex items-center gap-3">

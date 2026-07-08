@@ -16,7 +16,13 @@ export function UrbaEventHomeContent() {
   const { user } = useAuth();
   const { t } = useI18n();
   const connected = Boolean(user);
-  const { refreshing, onRefresh } = usePullToRefreshCms();
+  const { refreshing, onRefresh: refreshCms } = usePullToRefreshCms();
+  const [salonRefresh, setSalonRefresh] = useState(0);
+
+  const onRefresh = async () => {
+    await refreshCms();
+    setSalonRefresh((k) => k + 1);
+  };
 
   return (
     <ScrollView
@@ -35,7 +41,7 @@ export function UrbaEventHomeContent() {
 
       <UrbaEventHomeHero compact={connected} />
 
-      <SalonSelectionGrid compact={connected} />
+      <SalonSelectionGrid compact={connected} refreshToken={salonRefresh} />
 
       {!connected ? <UrbacomSocialSection /> : null}
 

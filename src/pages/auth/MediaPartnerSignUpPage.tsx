@@ -241,8 +241,8 @@ export default function MediaPartnerSignUpPage() {
               <input {...register('acceptTerms')} type="checkbox" id="terms"
                 className="mt-0.5 rounded text-red-600 focus:ring-red-500" />
               <label htmlFor="terms" className="text-sm text-gray-600">
-                J'accepte les <a href="#" className="text-red-600 hover:underline">conditions d'utilisation</a> et la{' '}
-                <a href="#" className="text-red-600 hover:underline">charte éthique</a> des accréditations médias SIB 2026
+                J'accepte les <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline">conditions d'utilisation</a> et la{' '}
+                <a href="/contact" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline">charte éthique</a> des accréditations médias SIB 2026
               </label>
             </div>
             {errors.acceptTerms && <p className="text-red-500 text-xs">{errors.acceptTerms.message}</p>}

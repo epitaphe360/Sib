@@ -71,6 +71,8 @@ async function lookupByUserId(userId: string): Promise<BadgeLookupResult> {
     .from('user_badges')
     .select(BADGE_COLS)
     .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
     .maybeSingle();
 
   if (error) {

@@ -22,6 +22,8 @@ import {
 import { ROUTES } from '../../lib/routes';
 import { SIB_PHOTOS_CDN, sibMaUpload } from '../../config/sibMaRemoteUrls';
 import { useSiteImage } from '../../hooks/useSiteImage';
+import { usePageContent } from '../../hooks/usePageContent';
+import { cmsJsonArray, cmsParagraphs, cmsValue } from '../../lib/cmsHelpers';
 import PublicPageLayout from '../../components/layout/PublicPageLayout';
 import { SibPublicHero } from '../../components/ui/SibPublicHero';
 
@@ -76,11 +78,27 @@ const METIERS = [
   { icon: Globe,     label: 'International',                count: '30+ pays' },
 ];
 
-const STATS = [
-  { value: '600+',     label: 'Professionnels exposants',    sub: 'issus de toutes les filières' },
-  { value: '200 000+', label: 'Visiteurs professionnels',    sub: 'sur 5 jours' },
-  { value: '40 ans',   label: 'D\'histoire partagée',        sub: 'depuis 1986' },
-  { value: '+30',      label: 'Pays représentés',            sub: 'présence internationale' },
+const DEFAULT_MISSION_PARAS = [
+  "Depuis 40 ans, le SIB est bien plus qu'un salon professionnel. C'est un lieu de reconnaissance, où architectes, ingénieurs, artisans, décorateurs et chefs de chantier font valoir leur savoir-faire devant 200 000 visiteurs venus du monde entier.",
+  "Ces professionnels sont l'âme du secteur. Chaque édition du SIB leur offre une tribune unique pour présenter leurs innovations, partager leurs expériences et tisser les partenariats qui construiront le Maroc de demain.",
+  "En 2026, pour notre 20ème édition et notre 40ème anniversaire, nous leur rendons hommage à travers une programmation dédiée : conférences, témoignages, remises de prix et espace « SIB Academy ».",
+];
+
+const DEFAULT_MISSION_BULLETS = [
+  'Fédère plus de 600 entreprises partenaires',
+  'Accueille plus de 200 000 visiteurs professionnels',
+  'Rayonne sur +30 pays à travers le monde',
+];
+
+type CmsProfile = { name: string; role: string; quote: string; sector: string };
+type CmsMetier = { label: string; count: string };
+type CmsStat = { value: string; label: string; sub: string };
+
+const STATS: CmsStat[] = [
+  { value: '600+', label: 'Professionnels exposants', sub: 'issus de toutes les filières' },
+  { value: '200 000+', label: 'Visiteurs professionnels', sub: 'sur 5 jours' },
+  { value: '40 ans', label: "D'histoire partagée", sub: 'depuis 1986' },
+  { value: '+30', label: 'Pays représentés', sub: 'présence internationale' },
 ];
 
 /* ─────────────────────────────────────────────────────────── */
@@ -158,6 +176,26 @@ function ProfileCard({
 
 export default function FemmesHommesPage() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const cms = usePageContent('femmes-hommes');
+  const get = (key: string, fallback: string) => cmsValue(cms, key, fallback);
+
+  const stats = cmsJsonArray<CmsStat>(cms, 'stats_json', STATS);
+  const profilesBase = cmsJsonArray<CmsProfile>(
+    cms,
+    'profiles_json',
+    PROFILES.map(({ name, role, quote, sector }) => ({ name, role, quote, sector })),
+  );
+  const metiersData = cmsJsonArray<CmsMetier>(
+    cms,
+    'metiers_json',
+    METIERS.map(({ label, count }) => ({ label, count })),
+  );
+  const metiers = metiersData.map((m, i) => ({
+    ...m,
+    icon: METIERS[i]?.icon ?? HardHat,
+  }));
+  const missionParas = cmsParagraphs(cms, 'mission_text', DEFAULT_MISSION_PARAS);
+  const missionBullets = cmsJsonArray<string>(cms, 'mission_bullets_json', DEFAULT_MISSION_BULLETS);
 
   // Images dynamiques depuis Supabase (fallback CDN)
   const { src: heroImg }    = useSiteImage('home_hero_hall');
@@ -168,7 +206,10 @@ export default function FemmesHommesPage() {
   const dynamicPortraits    = [portrait0, portrait1, portrait2, portrait3];
 
   // Injecter les photos dynamiques dans les profils
-  const profiles = PROFILES.map((p, i) => ({ ...p, photo: dynamicPortraits[i] ?? p.photo }));
+  const profiles = profilesBase.map((p, i) => ({
+    ...p,
+    photo: dynamicPortraits[i] ?? PROFILES[i]?.photo ?? PORTRAITS[i],
+  }));
   const testimonial = profiles[activeTestimonial];
 
   return (
@@ -176,28 +217,28 @@ export default function FemmesHommesPage() {
 
       <SibPublicHero
         image={heroImg}
-        eyebrow="Salon International du Bâtiment · SIB 2026"
+        eyebrow={get('hero_eyebrow', 'Salon International du Bâtiment · SIB 2026')}
         title={
           <>
-            Les Femmes et les Hommes{' '}
-            <span className="text-sib-orange">qui Construisent le Maroc</span>
+            {get('hero_title', 'Les Femmes et les Hommes')}{' '}
+            <span className="text-sib-orange">{get('hero_title_accent', 'qui Construisent le Maroc')}</span>
           </>
         }
-        subtitle="Le SIB valorise les métiers, les compétences et les expertises qui bâtissent aujourd'hui le Maroc de demain."
+        subtitle={get('hero_subtitle', "Le SIB valorise les métiers, les compétences et les expertises qui bâtissent aujourd'hui le Maroc de demain.")}
       >
         <div className="flex flex-wrap gap-4">
           <Link
             to={ROUTES.EXHIBITOR_SUBSCRIPTION}
             className="inline-flex items-center gap-2 px-8 py-4 text-xs font-bold uppercase tracking-widest text-sib-navy bg-sib-orange hover:brightness-90 transition-all"
           >
-            Exposer au SIB 2026
+            {get('cta_exhibitor', 'Exposer au SIB 2026')}
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             to={ROUTES.REGISTER_VISITOR}
             className="inline-flex items-center gap-2 px-8 py-4 text-xs font-bold uppercase tracking-widest text-white border border-white/40 hover:border-white/80 transition-all"
           >
-            Je suis visiteur
+            {get('cta_visitor', 'Je suis visiteur')}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -206,7 +247,7 @@ export default function FemmesHommesPage() {
       {/* ── STATS BAR ────────────────────────────────────────── */}
       <section style={{ backgroundColor: '#07182C' }} className="border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {STATS.map(({ value, label, sub }) => (
+          {stats.map(({ value, label, sub }) => (
             <motion.div
               key={label}
               initial={{ opacity: 0, y: 20 }}
@@ -234,37 +275,25 @@ export default function FemmesHommesPage() {
             >
               <p style={{ color: '#F39200' }} className="text-[10px] font-bold uppercase tracking-[0.22em] mb-4 flex items-center gap-3">
                 <span className="inline-block w-6 h-px bg-[#F39200]" />
-                Au cœur de notre mission
+                {get('mission_kicker', 'Au cœur de notre mission')}
               </p>
               <h2 className="font-extrabold uppercase leading-tight mb-6"
                 style={{ color: '#07182C', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)' }}>
-                Des Talents<br />au Service<br />du Bâtiment
+                {get('mission_title', 'Des Talents\nau Service\ndu Bâtiment').split('\n').map((line, i, arr) => (
+                  <React.Fragment key={line}>
+                    {line}
+                    {i < arr.length - 1 ? <br /> : null}
+                  </React.Fragment>
+                ))}
               </h2>
               <div className="space-y-4 text-sm text-gray-600 leading-relaxed">
-                <p>
-                  Depuis 40 ans, le SIB est bien plus qu'un salon professionnel. C'est un lieu de reconnaissance,
-                  où architectes, ingénieurs, artisans, décorateurs et chefs de chantier font valoir leur savoir-faire
-                  devant 200 000 visiteurs venus du monde entier.
-                </p>
-                <p>
-                  Ces professionnels sont l'âme du secteur. Chaque édition du SIB leur offre une tribune unique pour
-                  présenter leurs innovations, partager leurs expériences et tisser les partenariats qui construiront
-                  le Maroc de demain.
-                </p>
-                <p>
-                  En 2026, pour notre 20ème édition et notre 40ème anniversaire, nous leur rendons hommage
-                  à travers une programmation dédiée : conférences, témoignages, remises de prix et espace
-                  « SIB Academy ».
-                </p>
+                {missionParas.map((para) => (
+                  <p key={para.slice(0, 40)}>{para}</p>
+                ))}
               </div>
 
-              {/* Mission stats lines */}
               <div className="mt-8 space-y-3">
-                {[
-                  'Fédère plus de 600 entreprises partenaires',
-                  'Accueille plus de 200 000 visiteurs professionnels',
-                  'Rayonne sur +30 pays à travers le monde',
-                ].map((stat) => (
+                {missionBullets.map((stat) => (
                   <div key={stat} className="flex items-center gap-4">
                     <div className="w-6 h-px flex-shrink-0" style={{ backgroundColor: '#F39200' }} />
                     <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">{stat}</p>
@@ -354,7 +383,7 @@ export default function FemmesHommesPage() {
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {METIERS.map(({ icon: Icon, label, count }, i) => (
+            {metiers.map(({ icon: Icon, label, count }, i) => (
               <motion.div
                 key={label}
                 initial={{ opacity: 0, y: 24 }}
@@ -433,7 +462,7 @@ export default function FemmesHommesPage() {
           {/* Navigation */}
           <div className="flex items-center justify-center gap-6 mt-10">
             <button
-              onClick={() => setActiveTestimonial((p) => (p === 0 ? PROFILES.length - 1 : p - 1))}
+              onClick={() => setActiveTestimonial((p) => (p === 0 ? profiles.length - 1 : p - 1))}
               className="w-10 h-10 border border-gray-200 flex items-center justify-center hover:border-[#F39200] transition-colors"
               aria-label="Témoignage précédent"
             >
@@ -451,7 +480,7 @@ export default function FemmesHommesPage() {
               ))}
             </div>
             <button
-              onClick={() => setActiveTestimonial((p) => (p + 1) % PROFILES.length)}
+              onClick={() => setActiveTestimonial((p) => (p + 1) % profiles.length)}
               className="w-10 h-10 border border-gray-200 flex items-center justify-center hover:border-[#F39200] transition-colors"
               aria-label="Témoignage suivant"
             >
@@ -479,10 +508,15 @@ export default function FemmesHommesPage() {
             <Users className="h-10 w-10 mx-auto mb-6 text-white/60" />
             <h2 className="text-white font-extrabold uppercase leading-tight mb-4"
               style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}>
-              Rejoignez les Bâtisseurs<br />du Maroc
+              {get('cta_title', 'Rejoignez les Bâtisseurs\ndu Maroc').split('\n').map((line, i, arr) => (
+                <React.Fragment key={line}>
+                  {line}
+                  {i < arr.length - 1 ? <br /> : null}
+                </React.Fragment>
+              ))}
             </h2>
             <p className="text-white/70 text-base leading-relaxed mb-10 max-w-2xl mx-auto">
-              Du 25 au 29 novembre 2026 · Parc d'Exposition Mohammed VI · El Jadida
+              {get('cta_subtitle', "Du 25 au 29 novembre 2026 · Parc d'Exposition Mohammed VI · El Jadida")}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link

@@ -64,8 +64,8 @@ export function UrbaEventHomeHero({ compact = false }: { compact?: boolean }) {
         ) : (
           <>
             <Text style={styles.titleCompact}>
-              {'Urba'}
-              <Text style={styles.titleAccent}>Event</Text>
+              {content.hero.titlePart1}
+              <Text style={styles.titleAccent}>{content.hero.titlePart2}</Text>
             </Text>
             <Text style={styles.greetingCompact}>
               {t('home.urba.visitorHubGreeting').replace('{{name}}', user?.name?.split(' ')[0] ?? '')}

@@ -39,8 +39,7 @@ function MockJsPDF() { return mockDoc; }
 vi.mock('jspdf', () => ({ default: MockJsPDF }));
 vi.mock('jspdf-autotable', () => ({ default: vi.fn() }));
 
-import { calculateRemainingQuota, getVisitorQuota, VISITOR_QUOTAS } from '../../src/config/quotas';
-import { getVisitorLevelInfo } from '../../src/config/quotas';
+import { calculateRemainingQuota, getVisitorQuota, VISITOR_QUOTAS, UNLIMITED_QUOTA, getVisitorLevelInfo } from '../../src/config/quotas';
 import { generateVisitorPaymentReference } from '../../src/config/visitorBankTransferConfig';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -65,9 +64,14 @@ describe('Tests de performance', () => {
       expect(elapsed).toBeLessThan(THRESHOLD_MS.FAST);
     });
 
-    it('retourne 0 si quota épuisé', () => {
-      const result = calculateRemainingQuota('vip', 2000);
+    it('retourne 0 si quota épuisé (niveau limité free)', () => {
+      const result = calculateRemainingQuota('free', 2000);
       expect(result).toBe(0);
+    });
+
+    it('reste positif pour un niveau illimité même très sollicité', () => {
+      const result = calculateRemainingQuota('vip', 5000);
+      expect(result).toBeGreaterThan(0);
     });
 
     it('retourne quota complet si aucun RDV confirmé', () => {
@@ -94,8 +98,8 @@ describe('Tests de performance', () => {
       expect(elapsed).toBeLessThan(THRESHOLD_MS.FAST);
     });
 
-    it('retourne 1000 pour vip', () => {
-      expect(getVisitorQuota('vip')).toBe(1000);
+    it('retourne le quota illimité pour vip', () => {
+      expect(getVisitorQuota('vip')).toBe(UNLIMITED_QUOTA);
     });
 
     it('retourne 0 pour free', () => {
@@ -273,8 +277,8 @@ describe('Tests de performance', () => {
         results.push(calculateRemainingQuota('vip', i));
       }
       expect(results).toHaveLength(1_001);
-      expect(results[0]).toBe(1000);    // confirmedCount=0 → quota max
-      expect(results[1000]).toBe(0);    // confirmedCount=1000 → épuisé
+      expect(results[0]).toBe(VISITOR_QUOTAS.vip);           // confirmedCount=0 → quota max
+      expect(results[1000]).toBe(VISITOR_QUOTAS.vip - 1000); // niveau illimité → reste élevé
     });
   });
 });

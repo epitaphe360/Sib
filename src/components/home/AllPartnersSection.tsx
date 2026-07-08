@@ -164,7 +164,7 @@ export function AllPartnersSection() {
                   {t('common.load_more')}
                 </Button>
               )}
-              <Link to={ROUTES.PARTNERS}>
+              <Link to={ROUTES.EXHIBITORS}>
                 <Button
                   variant="default"
                   size="lg"

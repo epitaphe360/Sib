@@ -96,7 +96,7 @@ export function VisitorPricingPanel({ embedded = false }: { embedded?: boolean }
                     {t('admin.visitor_pricing.current')}
                   </p>
                   <p className="text-2xl font-bold text-amber-900 dark:text-amber-100 mt-1">
-                    {formatVisitorAmount(currentPrice, 'MAD')}
+                    {formatVisitorAmount(currentPrice, 'EUR')}
                   </p>
                   {updatedAt && (
                     <p className="text-xs text-amber-700/80 dark:text-amber-300/70 mt-1">
@@ -123,7 +123,7 @@ export function VisitorPricingPanel({ embedded = false }: { embedded?: boolean }
                     className="flex-1"
                     required
                   />
-                  <span className="text-sm font-semibold text-neutral-600 dark:text-neutral-400">MAD</span>
+                  <span className="text-sm font-semibold text-neutral-600 dark:text-neutral-400">EUR</span>
                 </div>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
                   {t('admin.visitor_pricing.hint')}

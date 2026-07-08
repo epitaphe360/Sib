@@ -11,6 +11,18 @@ interface ProtectedRouteProps {
   allowPendingPayment?: boolean;
 }
 
+function getPendingPaymentDestination(user: User): string {
+  switch (user.type) {
+    case 'partner':
+      return ROUTES.PARTNER_PAYMENT_SELECTION;
+    case 'exhibitor':
+      return ROUTES.EXHIBITOR_SUBSCRIPTION;
+    case 'visitor':
+    default:
+      return ROUTES.VISITOR_PAYMENT;
+  }
+}
+
 export default function ProtectedRoute({
   children,
   requiredRole,
@@ -56,8 +68,7 @@ export default function ProtectedRoute({
       if (allowPendingPayment) {
         // ALLOWED - render children directly, no verification needed
       } else {
-        // Redirect to visitor dashboard (treated as FREE until payment confirmed)
-        return <Navigate to={ROUTES.VISITOR_DASHBOARD} replace />;
+        return <Navigate to={getPendingPaymentDestination(user)} replace />;
       }
     } else if (status === 'pending') {
       return <Navigate to={ROUTES.PENDING_ACCOUNT} replace />;

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet } from 'react-native';
 import { SalonSelectionGrid } from '../../../src/components/home/SalonSelectionGrid';
 import { Screen, ScreenTitle } from '../../../src/components/ui';
@@ -8,7 +9,13 @@ import { colors } from '../../../src/theme';
 /** Liste complète des salons — onglet dédié pour visiteurs connectés. */
 export default function SalonsTabScreen() {
   const { t } = useI18n();
-  const { refreshing, onRefresh } = usePullToRefreshCms();
+  const { refreshing, onRefresh: refreshCms } = usePullToRefreshCms();
+  const [salonRefresh, setSalonRefresh] = useState(0);
+
+  const onRefresh = async () => {
+    await refreshCms();
+    setSalonRefresh((k) => k + 1);
+  };
 
   return (
     <Screen style={styles.screen}>
@@ -24,7 +31,7 @@ export default function SalonsTabScreen() {
         }
       >
         <ScreenTitle title={t('tabs.salons')} subtitle={t('home.urba.chooseSalonHint')} />
-        <SalonSelectionGrid />
+        <SalonSelectionGrid refreshToken={salonRefresh} />
       </ScrollView>
     </Screen>
   );

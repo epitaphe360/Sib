@@ -285,7 +285,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
         });
 
         setCurrentStep(1);
-        navigate(ROUTES.PARTNERS);
+        navigate(ROUTES.ADMIN_PARTNERS_MANAGE);
       }
 
       setIsSubmitting(false);

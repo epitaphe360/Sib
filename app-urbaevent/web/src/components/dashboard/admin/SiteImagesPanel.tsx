@@ -30,8 +30,11 @@ const CATEGORY_DESCS: Record<Category, string> = {
   builders: 'Portraits des profils sur /salon/femmes-et-hommes',
 };
 
-export function SiteImagesPanel() {
-  const [activeTab, setActiveTab] = useState<Category>('sib2026');
+export function SiteImagesPanel({
+  embedded = false,
+  defaultCategory = 'sib2026' as Category,
+}: { embedded?: boolean; defaultCategory?: Category } = {}) {
+  const [activeTab, setActiveTab] = useState<Category>(defaultCategory);
   const [rows, setRows]           = useState<SiteImageRow[]>([]);
   const [loading, setLoading]     = useState(true);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
@@ -88,7 +91,7 @@ export function SiteImagesPanel() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.7 }}
-      className="mb-8"
+      className={embedded ? '' : 'mb-8'}
     >
       <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden">
         {/* Header */}

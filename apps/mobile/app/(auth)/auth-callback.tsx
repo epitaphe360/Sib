@@ -17,6 +17,8 @@ import {
   completeAuthSessionFromUrl,
   recoverMagicLinkSession,
 } from '../../src/lib/completeAuthSession';
+import { parseAuthTokensFromUrl } from '../../src/lib/authTokens';
+import { supabase } from '../../src/lib/supabase';
 import { dismissAuthStackIfNeeded, navigateAfterAuth } from '../../src/lib/navigateAfterAuth';
 import { resolveVipPaymentRedirectId } from '../../src/services/payment';
 import type { AppUser } from '../../src/types';
@@ -26,6 +28,32 @@ import { useI18n } from '../../src/i18n/I18nProvider';
 const CALLBACK_TIMEOUT_MS = 30_000;
 const POLL_MS = 400;
 const POLL_ATTEMPTS = 25;
+
+async function completePasswordRecoveryFromUrl(url: string): Promise<boolean> {
+  const { accessToken, refreshToken, tokenHash, type } = parseAuthTokensFromUrl(url);
+  if (type !== 'recovery') return false;
+
+  if (tokenHash) {
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: 'recovery',
+    });
+    if (error) throw error;
+  } else if (accessToken && refreshToken) {
+    const { error } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+    if (error) throw error;
+  } else {
+    return false;
+  }
+
+  markAuthCallbackDone();
+  consumePendingAuthDeepLink();
+  router.replace('/(auth)/reset-password');
+  return true;
+}
 
 async function redirectAfterMagicLinkAuth(
   appUser: AppUser,
@@ -83,6 +111,9 @@ export default function AuthCallbackScreen() {
       handledRef.current = true;
       try {
         const normalized = normalizeAuthDeepLink(url) ?? url;
+        if (await completePasswordRecoveryFromUrl(normalized)) {
+          return;
+        }
         const { appUser, paymentRequestId } = await completeAuthSessionFromUrl(normalized);
         markAuthCallbackDone();
         await redirectAfterMagicLinkAuth(

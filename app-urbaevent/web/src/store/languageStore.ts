@@ -164,8 +164,12 @@ export const useLanguageStore = create<LanguageState>()(
       name: LANGUAGE_STORAGE_KEY,
       partialize: (state) => ({ currentLanguage: state.currentLanguage }),
       onRehydrateStorage: () => (state) => {
+        // On utilise directement l'état réhydraté : appeler syncLanguageFromStore()
+        // ici toucherait useLanguageStore avant son initialisation (TDZ) car ce
+        // callback peut se déclencher de façon synchrone pendant create(persist(...)).
         if (state?.currentLanguage) {
-          void syncLanguageFromStore();
+          applyLanguageSideEffects(state.currentLanguage);
+          void i18n.changeLanguage(state.currentLanguage).catch(() => { /* non bloquant */ });
         }
       },
     }

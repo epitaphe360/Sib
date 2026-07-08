@@ -30,3 +30,14 @@ export async function getPendingScanLogs(): Promise<PendingScanLog[]> {
 export async function clearPendingScanLogs(): Promise<void> {
   await AsyncStorage.removeItem(QUEUE_KEY);
 }
+
+export async function removePendingScanLogs(ids: string[]): Promise<void> {
+  if (!ids.length) return;
+  const pending = await getPendingScanLogs();
+  const remaining = pending.filter((item) => !ids.includes(item.id));
+  if (remaining.length) {
+    await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(remaining));
+  } else {
+    await clearPendingScanLogs();
+  }
+}

@@ -29,6 +29,15 @@ const { mockDoc, MockJsPDF } = vi.hoisted(() => {
 vi.mock('jspdf', () => ({ default: MockJsPDF }));
 vi.mock('jspdf-autotable', () => ({ default: vi.fn() }));
 
+// loadInvoiceConfig lit Supabase ; on renvoie les valeurs par défaut de façon déterministe.
+vi.mock('../../src/hooks/useInvoiceConfig', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../src/hooks/useInvoiceConfig')>();
+  return {
+    ...actual,
+    loadInvoiceConfig: vi.fn().mockResolvedValue(actual.INVOICE_CONFIG_DEFAULTS),
+  };
+});
+
 // ── Mock Supabase ─────────────────────────────────────────────────────────────
 const mockSingle = vi.hoisted(() => vi.fn());
 const mockSelect = vi.hoisted(() => vi.fn());
@@ -249,36 +258,36 @@ describe('invoiceService', () => {
 
   // ── downloadInvoicePDF ───────────────────────────────────────────────────────
   describe('downloadInvoicePDF', () => {
-    it('génère un PDF et appelle doc.save() avec le bon nom de fichier', () => {
+    it('génère un PDF et appelle doc.save() avec le bon nom de fichier', async () => {
       const invoice = makeInvoice();
-      downloadInvoicePDF(invoice);
+      await downloadInvoicePDF(invoice);
       expect(mockDoc.save).toHaveBeenCalledWith('facture-INV-2026-0001.pdf');
     });
 
-    it('fonctionne sans invoice_lines (tableau vide)', () => {
+    it('fonctionne sans invoice_lines (tableau vide)', async () => {
       const invoice = makeInvoice({ invoice_lines: [] });
-      expect(() => downloadInvoicePDF(invoice)).not.toThrow();
+      await expect(downloadInvoicePDF(invoice)).resolves.not.toThrow();
       expect(mockDoc.save).toHaveBeenCalled();
     });
 
-    it('affiche les notes si présentes', () => {
+    it('affiche les notes si présentes', async () => {
       const invoice = makeInvoice({ notes: 'Paiement reçu via PayPal' });
-      downloadInvoicePDF(invoice);
+      await downloadInvoicePDF(invoice);
       expect(mockDoc.text).toHaveBeenCalled();
     });
 
-    it('fonctionne avec une facture annulée', () => {
+    it('fonctionne avec une facture annulée', async () => {
       const invoice = makeInvoice({ status: 'cancelled' });
-      expect(() => downloadInvoicePDF(invoice)).not.toThrow();
+      await expect(downloadInvoicePDF(invoice)).resolves.not.toThrow();
     });
 
-    it('fonctionne avec une devise MAD', () => {
+    it('fonctionne avec une devise MAD', async () => {
       const invoice = makeInvoice({ currency: 'mad', amount_ttc: 7000 });
-      expect(() => downloadInvoicePDF(invoice)).not.toThrow();
+      await downloadInvoicePDF(invoice);
       expect(mockDoc.save).toHaveBeenCalledWith('facture-INV-2026-0001.pdf');
     });
 
-    it('affiche correctement les montants pour un exposant', () => {
+    it('affiche correctement les montants pour un exposant', async () => {
       const invoice = makeInvoice({
         user_type: 'exhibitor',
         user_name: 'Entreprise SARL',
@@ -297,7 +306,7 @@ describe('invoiceService', () => {
           sort_order: 0,
         }],
       });
-      expect(() => downloadInvoicePDF(invoice)).not.toThrow();
+      await expect(downloadInvoicePDF(invoice)).resolves.not.toThrow();
     });
   });
 

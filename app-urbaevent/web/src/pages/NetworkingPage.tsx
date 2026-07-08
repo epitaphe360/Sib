@@ -25,7 +25,7 @@ import { ROUTES } from '@/lib/routes';
 import UserProfileView from '@/components/profile/UserProfileView';
 import { useAppointmentStore } from '@/store/appointmentStore';
 import { SupabaseService } from '@/services/supabaseService';
-import { getVisitorQuota } from '@/config/quotas';
+import { getVisitorQuota, isUnlimitedQuota } from '@/config/quotas';
 import { LevelBadge } from '@/components/common/QuotaWidget';
 import { getDisplayName, getUserInitials } from '@/utils/userHelpers';
 import { isDateInSalonRange } from '@/config/salonInfo';
@@ -268,7 +268,7 @@ export default function NetworkingPage() {
     );
     console.log('📅 User appointments:', userAppointments.length);
 
-    if (quota !== 999999 && userAppointments.length >= quota) {
+    if (!isUnlimitedQuota(quotaKey) && userAppointments.length >= quota) {
       if (quota === 0) {
         toast.error(
           t('networking.error.quota_reached_free'),

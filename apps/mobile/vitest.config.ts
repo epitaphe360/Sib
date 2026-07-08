@@ -63,6 +63,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@mobile': resolve(__dirname, './src'),
+      // Stub léger : évite de charger react-native (syntaxe Flow) dans les tests node.
+      'expo-linking': resolve(__dirname, './tests/mocks/expo-linking.ts'),
     },
   },
 });

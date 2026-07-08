@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../i18n/I18nProvider';
@@ -10,14 +10,18 @@ import { SalonSelectionCard } from './SalonSelectionCard';
 
 const COMPACT_CARD_WIDTH = 268;
 
-export function SalonSelectionGrid({ compact = false }: { compact?: boolean }) {
+export function SalonSelectionGrid({ compact = false, refreshToken = 0 }: { compact?: boolean; refreshToken?: number }) {
   const { t } = useI18n();
   const { user } = useAuth();
   const [salons, setSalons] = useState<Salon[]>([]);
 
-  useEffect(() => {
-    fetchSalons().then(setSalons);
+  const reloadSalons = useCallback(() => {
+    fetchSalons().then(setSalons).catch(() => setSalons([]));
   }, []);
+
+  useEffect(() => {
+    reloadSalons();
+  }, [reloadSalons, refreshToken]);
 
   const handleSalon = (salon: Salon) => {
     if (!salon.active) return;

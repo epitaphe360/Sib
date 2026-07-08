@@ -229,10 +229,10 @@ export async function createPaymentRecord(params: {
  */
 export async function upgradeUserToVIP(userId: string, paymentRequestId: string) {
   try {
-    // Update user visitor_level to premium
+    // Update user visitor_level to premium (aligné avec requested_level)
     const { error: userError } = await supabase
       .from('users')
-      .update({ visitor_level: 'vip' })
+      .update({ visitor_level: 'premium', status: 'active' })
       .eq('id', userId);
 
     if (userError) {throw userError;}

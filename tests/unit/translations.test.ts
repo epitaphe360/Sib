@@ -72,7 +72,7 @@ describe('translations', () => {
     });
 
     it('should have hero keys', () => {
-      expect(allTranslations.ar['hero.title']).toBe('السلون الدولي للبناء');
+      expect(allTranslations.ar['hero.title']).toBe('الصالون الدولي للبناء');
     });
 
     it('should have common keys', () => {
@@ -85,7 +85,7 @@ describe('translations', () => {
     });
 
     it('should have admin keys', () => {
-      expect(allTranslations.ar['admin.dashboard']).toBe('لوحة التحكم');
+      expect(allTranslations.ar['admin.dashboard']).toBe('لوحة الإدارة');
     });
   });
 

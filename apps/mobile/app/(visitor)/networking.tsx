@@ -31,9 +31,10 @@ import { colors, fonts, radius, spacing } from '../../src/theme';
 type Props = {
   embedded?: boolean;
   refreshKey?: number;
+  onRefreshComplete?: () => void;
 };
 
-export default function VisitorNetworkingScreen({ embedded = false, refreshKey = 0 }: Props) {
+export default function VisitorNetworkingScreen({ embedded = false, refreshKey = 0, onRefreshComplete }: Props) {
   const { user } = useAuth();
   const { t } = useI18n();
   const { permissions, limits } = useNetworkingPermissions();
@@ -62,9 +63,10 @@ export default function VisitorNetworkingScreen({ embedded = false, refreshKey =
       if (!abortRef.current) {
         setLoading(false);
         setRefreshing(false);
+        onRefreshComplete?.();
       }
     }
-  }, [user, t]);
+  }, [user, t, onRefreshComplete]);
 
   useEffect(() => {
     load();
@@ -120,12 +122,12 @@ export default function VisitorNetworkingScreen({ embedded = false, refreshKey =
   const connect = async (toUserId: string) => {
     if (!requireAuth(user, t)) return;
     if (!limits.canMakeConnection) {
-      Alert.alert('Forfait', getPermissionErrorMessage(user!.type, user!.visitorLevel, 'connection'));
+      Alert.alert(t('networking.planLimit'), getPermissionErrorMessage(user!.type, user!.visitorLevel, 'connection'));
       return;
     }
     try {
       await requestConnection(user.id, toUserId);
-      Alert.alert('OK', 'Demande envoyée');
+      Alert.alert(t('common.ok'), t('networking.requestSent'));
       await load();
     } catch (e) {
       Alert.alert(t('common.error'), e instanceof Error ? e.message : 'Erreur');

@@ -124,12 +124,6 @@ export const AboutSalonSection: React.FC = () => {
                   {t('home.discover_exhibitors_btn')}
                 </button>
               </Link>
-              <Link to={ROUTES.PARTNERS}>
-                <button className="inline-flex items-center gap-2 px-7 py-3 text-xs font-light tracking-[0.12em] uppercase rounded-sm transition-all duration-300 border text-[#1A1A1A] hover:border-[#2E5984] hover:text-[#F39200]" style={{ borderColor: 'rgba(0,0,0,0.15)' }}>
-                  <Users className="h-4 w-4" />
-                  {t('home.see_partners_btn')}
-                </button>
-              </Link>
             </div>
           </motion.div>
 

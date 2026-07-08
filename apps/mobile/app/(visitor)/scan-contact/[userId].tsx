@@ -79,6 +79,7 @@ export default function ScanContactDetailScreen() {
   const { permissions } = useNetworkingPermissions();
   const { t } = useI18n();
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [profile, setProfile] = useState<Awaited<ReturnType<typeof fetchScannedContactProfile>>>(null);
   const [msgLoading, setMsgLoading] = useState(false);
 
@@ -92,12 +93,16 @@ export default function ScanContactDetailScreen() {
   const load = useCallback(async () => {
     if (!params.userId) return;
     setLoading(true);
+    setLoadError(null);
     try {
       setProfile(await fetchScannedContactProfile(params.userId));
+    } catch (e) {
+      setProfile(null);
+      setLoadError(e instanceof Error ? e.message : t('common.error'));
     } finally {
       setLoading(false);
     }
-  }, [params.userId]);
+  }, [params.userId, t]);
 
   useEffect(() => {
     void load();
@@ -113,7 +118,11 @@ export default function ScanContactDetailScreen() {
         {loading ? (
           <ActivityIndicator color={colors.gold} size="large" style={styles.loader} />
         ) : !profile ? (
-          <IllustratedEmpty icon="person-outline" title={t('scanHistory.contactNotFound')} message={t('common.error')} />
+          <IllustratedEmpty
+            icon="person-outline"
+            title={loadError ? t('common.error') : t('scanHistory.contactNotFound')}
+            message={loadError ?? t('scanHistory.contactNotFound')}
+          />
         ) : (
           <>
             <Card elevated>

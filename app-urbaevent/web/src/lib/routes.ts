@@ -24,8 +24,8 @@ export const ROUTES = {
   DESIGN_HOME_MENU: '/design/menu-accueil',
   EXHIBITORS: '/exhibitors',
   EXHIBITOR_DETAIL: '/exhibitors/:id',
-  PARTNERS: '/partners',
-  PARTNER_DETAIL: '/partners/:id',
+  PARTNERS: '/partners', // alias → /exhibitors (annuaire public)
+  PARTNER_DETAIL: '/partners/:id', // alias → /exhibitors/:id
   PAVILIONS: '/pavilions',
   METRICS: '/metrics',
   NETWORKING: '/networking',

@@ -100,17 +100,22 @@ export default function VisitorScanHistoryScreen() {
   const [items, setItems] = useState<VisitorScanEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
 
   const load = useCallback(async () => {
     if (!user) return;
+    setLoadError(null);
     try {
       setItems(await fetchVisitorScanHistory(user.id));
+    } catch (e) {
+      setItems([]);
+      setLoadError(e instanceof Error ? e.message : t('common.error'));
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [user]);
+  }, [user, t]);
 
   useEffect(() => {
     void load();
@@ -188,7 +193,11 @@ export default function VisitorScanHistoryScreen() {
         ListHeaderComponent={header}
         ListEmptyComponent={
           !loading ? (
-            <EmptyState title={t('scanHistory.empty')} message={t('scanHistory.emptyHint')} />
+            loadError ? (
+              <EmptyState title={t('common.error')} message={loadError} />
+            ) : (
+              <EmptyState title={t('scanHistory.empty')} message={t('scanHistory.emptyHint')} />
+            )
           ) : null
         }
         renderItem={({ item }) => <ScanRow item={item} t={t} />}

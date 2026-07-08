@@ -60,8 +60,9 @@ export default function VisitorPaymentPage() {
   }, []); // Empty deps - runs only on mount
 
   async function createBankTransferRequest() {
+    const currentUser = useAuthStore.getState().user;
     try {
-      if (!user) {
+      if (!currentUser) {
         console.warn('⚠️ User not loaded yet, waiting...');
         // Attendre que le user soit chargé
         setTimeout(() => {
@@ -76,7 +77,7 @@ export default function VisitorPaymentPage() {
         return;
       }
 
-      console.log('🔄 Creating bank transfer request for user:', user.id);
+      console.log('🔄 Creating bank transfer request for user:', currentUser.id);
 
       // Vérifier si une demande existe déjà
       const { data: existingRequest } = await supabase
@@ -102,7 +103,7 @@ export default function VisitorPaymentPage() {
       const newRequest = await createPaymentRecord({
         userId: currentUser.id,
         amount: vipPricing.price,
-        currency: 'EUR',
+        currency: vipPricing.currency,
         paymentMethod: 'bank_transfer',
         status: 'pending',
         transactionId: paymentReference,
@@ -146,11 +147,11 @@ export default function VisitorPaymentPage() {
       const captureData = await capturePayPalOrder(data.orderID as string, user.id);
 
       // Create payment record
-      const vipAmount = await getVipPassAmount();
+      const vipPricing = await fetchVipPassPricing();
       await createPaymentRecord({
         userId: user.id,
-        amount: vipAmount,
-        currency: 'EUR',
+        amount: vipPricing.price,
+        currency: vipPricing.currency,
         paymentMethod: 'paypal',
         transactionId: data.orderID as string,
         status: 'approved', // PayPal approves instantly
@@ -317,13 +318,13 @@ export default function VisitorPaymentPage() {
     setIsProcessing(true);
     try {
       const transactionId = crypto.randomUUID();
-      const vipAmount = await getVipPassAmount();
+      const vipPricing = await fetchVipPassPricing();
       // Create payment record (may fail if table doesn't exist - non-blocking)
       try {
         await createPaymentRecord({
           userId: user.id,
-          amount: vipAmount,
-          currency: 'EUR',
+          amount: vipPricing.price,
+          currency: vipPricing.currency,
           paymentMethod: 'bank_transfer',
           status: 'approved',
           transactionId

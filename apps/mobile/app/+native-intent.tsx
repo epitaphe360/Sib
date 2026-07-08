@@ -9,6 +9,11 @@ export function redirectSystemPath({
 }): string {
   try {
     const lower = path.toLowerCase();
+    if (lower.includes('reset-password')) {
+      const query = path.includes('?') ? path.slice(path.indexOf('?')) : '';
+      return `/(auth)/reset-password${query}`;
+    }
+
     if (!lower.includes('auth-callback') && !lower.includes('token_hash') && !lower.includes('access_token')) {
       return path;
     }

@@ -36,6 +36,6 @@ export function useVisitorPassPricing() {
     loading,
     error,
     price: pricing?.price ?? null,
-    formattedPrice: pricing ? formatVisitorAmount(pricing.price) : null,
+    formattedPrice: pricing ? formatVisitorAmount(pricing.price, pricing.currency) : null,
   };
 }

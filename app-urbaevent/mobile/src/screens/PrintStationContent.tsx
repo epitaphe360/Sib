@@ -18,6 +18,8 @@ export function PrintStationContent() {
   const { t, locale } = useI18n();
   const [mode, setMode] = useState<'scan' | 'search'>('search');
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [badge, setBadge] = useState<UserBadge | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [printing, setPrinting] = useState(false);
@@ -73,7 +75,10 @@ export function PrintStationContent() {
     if (!email.trim()) return;
     setScanning(true);
     try {
-      await applyResult(await lookupBadgeByEmail(email.trim()));
+      await applyResult(await lookupBadgeByEmail(email.trim(), {
+        firstName: firstName.trim() || undefined,
+        lastName: lastName.trim() || undefined,
+      }));
     } catch (e) {
       setError(e instanceof Error ? e.message : t('common.error'));
     } finally {
@@ -130,6 +135,20 @@ export function PrintStationContent() {
                   autoCapitalize="none"
                   keyboardType="email-address"
                   placeholder="participant@email.com"
+                  returnKeyType="next"
+                />
+                <Input
+                  label="Prénom (email entreprise partagé)"
+                  value={firstName}
+                  onChangeText={setFirstName}
+                  autoCapitalize="words"
+                  returnKeyType="next"
+                />
+                <Input
+                  label="Nom (email entreprise partagé)"
+                  value={lastName}
+                  onChangeText={setLastName}
+                  autoCapitalize="words"
                   returnKeyType="search"
                   onSubmitEditing={onSearch}
                 />

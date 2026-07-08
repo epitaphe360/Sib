@@ -47,8 +47,7 @@ export async function fetchNetworkingContactProfiles(
 
   const { data, error } = await supabase.rpc('get_networking_contact_profiles', { p_ids: ids });
   if (error) {
-    console.warn('[contactProfiles] RPC failed', error.message);
-    return new Map();
+    throw new Error(error.message);
   }
 
   return new Map((data as RpcRow[] ?? []).map((row) => [row.id, mapRow(row)]));

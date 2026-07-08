@@ -8,6 +8,9 @@ import { peekPendingAuthDeepLink, stashAuthDeepLink } from '../lib/pendingAuthDe
 export function AuthDeepLinkCapture() {
   useEffect(() => {
     const capture = (url: string | null) => {
+      if (url && /reset-password/i.test(url)) {
+        return;
+      }
       const normalized = normalizeAuthDeepLink(url);
       if (!normalized) return;
       stashAuthDeepLink(url);

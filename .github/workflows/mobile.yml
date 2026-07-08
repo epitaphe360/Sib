@@ -4,13 +4,10 @@ on:
   push:
     paths:
       - 'apps/mobile/**'
-      - 'tests/unit/mobile/**'
-      - 'vitest.mobile.config.ts'
       - '.github/workflows/mobile.yml'
   pull_request:
     paths:
       - 'apps/mobile/**'
-      - 'tests/unit/mobile/**'
 
 jobs:
   quality:

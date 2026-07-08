@@ -12,6 +12,7 @@ import { useNewsStore, type NewsArticle } from '../store/newsStore';
 import { motion } from 'framer-motion';
 import ArticleAudioPlayer from '../components/news/ArticleAudioPlayer';
 import { ROUTES } from '../lib/routes';
+import { sanitizeHtml } from '../utils/sanitizeHtml';
 
 // Fonction pour construire le texte complet de l'article pour l'audio
 const getFullArticleText = (article: NewsArticle): string => {
@@ -292,7 +293,7 @@ export default function ArticleDetailPage() {
               prose-ul:space-y-2 prose-li:text-gray-700
               prose-blockquote:border-l-4 prose-blockquote:border-blue-600 prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:bg-blue-50 prose-blockquote:rounded-r-lg
               prose-img:rounded-xl prose-img:shadow-lg prose-img:mx-auto"
-            dangerouslySetInnerHTML={{ __html: translatedArticle.content }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(translatedArticle.content) }}
           />
 
             {article.sourceUrl && (

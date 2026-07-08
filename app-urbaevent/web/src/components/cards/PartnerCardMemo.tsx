@@ -36,7 +36,7 @@ const PartnerCardComponent: React.FC<PartnerCardProps> = ({ partner, onClick }) 
 
   return (
     <Link
-      to={`/partners/${partner.id}`}
+      to={`/exhibitors/${partner.id}`}
       onClick={(e) => onClick && (e.preventDefault(), onClick(partner))}
       className="block bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group"
     >

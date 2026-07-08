@@ -154,13 +154,16 @@ export default function NetworkHubScreen() {
                 onRefresh={() => {
                   setNetworkRefreshing(true);
                   setNetworkRefreshKey((k) => k + 1);
-                  setTimeout(() => setNetworkRefreshing(false), 800);
                 }}
               />
             }
           >
 
-            <VisitorNetworkingScreen embedded refreshKey={networkRefreshKey} />
+            <VisitorNetworkingScreen
+              embedded
+              refreshKey={networkRefreshKey}
+              onRefreshComplete={() => setNetworkRefreshing(false)}
+            />
 
           </ScrollView>
 
