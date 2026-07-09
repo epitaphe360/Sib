@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import {
   ArrowLeft,
   LogIn,
-  People,
+  Users,
   RefreshCw,
   Shield,
   Store,
@@ -32,7 +32,7 @@ const PORTAL_CONFIG: Record<
 > = {
   controller: { icon: Shield, statKey: 'controllerScans', accent: '#6B21A8' },
   entry: { icon: LogIn, statKey: 'uniqueEntrants', accent: '#10B981' },
-  networking: { icon: People, statKey: 'networkingScans', accent: '#4598D1' },
+  networking: { icon: Users, statKey: 'networkingScans', accent: '#4598D1' },
   stand: { icon: Store, statKey: 'standScans', accent: '#F39200' },
 };
 
