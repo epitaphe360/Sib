@@ -1,18 +1,17 @@
 import { router } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { NetworkBanner } from '../NetworkBanner';
-import { QuickActionGrid } from '../QuickActionGrid';
-import { SalonHeroBanner } from '../SalonHeroBanner';
+import { PrimaryButton } from '../ui';
+import { SalonPromoHeader } from './SalonPromoHeader';
+import { SalonSummaryCard } from './SalonSummaryCard';
+import { SalonVisitorMenuGrid } from './SalonVisitorMenuGrid';
 import { useAuth } from '../../context/AuthContext';
 import { useSalon } from '../../context/SalonContext';
 import { useOnlineStatus } from '../../hooks/useOnlineStatus';
 import { useI18n } from '../../i18n/I18nProvider';
 import { colors, fonts, spacing } from '../../theme';
-import { HubBadgeSection } from './HubBadgeSection';
-import { HomeSection } from './HomeSection';
-import { SalonMiniHomeSection } from './SalonMiniHomeSection';
 
-/** Espace salon actif : badge, accès rapide et raccourcis (hors hub UrbaEvent). */
+/** Espace salon visiteur — menu type ancienne APK SIB (Présentation, Programme, Agenda…). */
 export function SalonInteriorContent() {
   const { user } = useAuth();
   const { activeSalon, clearActiveSalon } = useSalon();
@@ -21,28 +20,30 @@ export function SalonInteriorContent() {
 
   if (!activeSalon) return null;
 
+  const openBadge = () => {
+    if (!user) {
+      router.push('/(auth)/register' as never);
+      return;
+    }
+    router.push('/(visitor)/(tabs)/badge' as never);
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
       {!online ? <NetworkBanner message={t('common.offline')} /> : null}
 
-      <SalonHeroBanner
-        salon={activeSalon}
-        showBrandLogo
-        subtitle={activeSalon.dates ?? activeSalon.location ?? undefined}
-        compact
-      />
+      <SalonPromoHeader salon={activeSalon} />
+      <SalonSummaryCard salon={activeSalon} />
 
-      <SalonMiniHomeSection salon={activeSalon} />
+      <SalonVisitorMenuGrid />
 
-      <HubBadgeSection />
-
-      {user ? (
-        <View style={styles.quickSection}>
-          <HomeSection title={t('home.quickAccess')} subtitle={t('salon.interior.quickAccessHint')}>
-            <QuickActionGrid hideLogin={Boolean(user)} mode="full" />
-          </HomeSection>
-        </View>
-      ) : null}
+      <View style={styles.ctaWrap}>
+        <PrimaryButton
+          label={user ? t('salon.downloadBadge') : t('salon.downloadBadgeGuest')}
+          variant="primary"
+          onPress={openBadge}
+        />
+      </View>
 
       <Pressable
         onPress={async () => {
@@ -65,9 +66,9 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xl,
     backgroundColor: colors.platform.bg,
   },
-  quickSection: {
+  ctaWrap: {
     paddingHorizontal: spacing.md,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.md,
   },
   changeWrap: { paddingHorizontal: spacing.md, paddingBottom: spacing.lg },
   change: {

@@ -1,3 +1,10 @@
+import {
+  APK_DEFAULT_PAYMENT,
+  mergeApkSalonStats,
+  mergeApkSalonPartners,
+  type SalonCmsFields,
+  type SalonPartnersCms,
+} from '../config/mobileAppDefaultContent';
 import { supabase, isSupabaseReady } from '../lib/supabase';
 
 export type MobilePlatformStat = { value: string; labelKey: string };
@@ -24,7 +31,8 @@ export type MobileAppContent = {
     vipPriceEur?: number;
     currency?: string;
   };
-  salonStats?: Record<string, { visitors?: string; edition?: string; description?: string }>;
+  salonStats?: Record<string, Partial<SalonCmsFields>>;
+  salonPartners?: Record<string, Partial<SalonPartnersCms>>;
 };
 
 export const DEFAULT_MOBILE_APP_CONTENT: MobileAppContent = {
@@ -45,8 +53,9 @@ export const DEFAULT_MOBILE_APP_CONTENT: MobileAppContent = {
     { value: '40+', labelKey: 'home.urba.statCountries' },
   ],
   images: {},
-  payment: { vipPriceEur: 700, currency: 'EUR' },
-  salonStats: {},
+  payment: { ...APK_DEFAULT_PAYMENT },
+  salonStats: mergeApkSalonStats(),
+  salonPartners: mergeApkSalonPartners(),
 };
 
 export function mergeMobileAppContent(raw: unknown): MobileAppContent {
@@ -58,7 +67,8 @@ export function mergeMobileAppContent(raw: unknown): MobileAppContent {
     platformStats: r.platformStats?.length ? r.platformStats : DEFAULT_MOBILE_APP_CONTENT.platformStats,
     images: { ...DEFAULT_MOBILE_APP_CONTENT.images, ...(r.images ?? {}) },
     payment: { ...DEFAULT_MOBILE_APP_CONTENT.payment, ...(r.payment ?? {}) },
-    salonStats: { ...DEFAULT_MOBILE_APP_CONTENT.salonStats, ...(r.salonStats ?? {}) },
+    salonStats: mergeApkSalonStats(r.salonStats),
+    salonPartners: mergeApkSalonPartners(r.salonPartners),
   };
 }
 

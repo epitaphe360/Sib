@@ -105,6 +105,11 @@ body.app-embedded .hero-content{padding-top:100px}
 .partner-group-wide .partner-logos img{max-height:80px}
 .partner-group-sponsor .partner-logos img{max-height:52px;transform:scale(2.35);transform-origin:center center}
 .partner-group-delegate .partner-logos img{max-height:68px}
+.partner-text-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:12px}
+.partner-text-tile .partner-acronym{font:800 18px/1 'Barlow Condensed';color:var(--ink);letter-spacing:.06em}
+.partner-text-tile small{font-size:11px;line-height:1.35;color:#5c4a38;max-width:180px}
+.partners-banner-img{display:block;width:100%;max-height:280px;object-fit:contain;border-radius:8px}
+.partner-banner-only{padding:12px!important;min-height:0!important}
 .partners-cta{margin-top:20px;min-height:34px;font-size:8px;display:inline-flex}
 footer{padding:30px max(34px,calc((100vw - 1180px)/2)) 32px;grid-template-columns:minmax(160px,1.3fr) repeat(4,minmax(90px,1fr)) minmax(180px,1.15fr);gap:38px;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,#00172f 0%,#001326 100%)}
 .footer-brand .brand-real{width:102px;height:58px;margin-top:-6px;margin-bottom:4px}

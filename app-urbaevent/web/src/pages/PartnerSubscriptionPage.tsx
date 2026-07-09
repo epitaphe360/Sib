@@ -177,7 +177,7 @@ export default function PartnerSubscriptionPage() {
 
   const handleSubscribe = (tierId: string) => {
     const tier = partnerTiers.find(t => t.id === tierId);
-    navigate(ROUTES.REGISTER_PARTNER, {
+    navigate(ROUTES.REGISTER_EXHIBITOR, {
       state: {
         selectedTier: tierId,
         tierName: tier?.name || '',

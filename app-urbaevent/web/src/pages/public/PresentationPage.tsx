@@ -12,18 +12,10 @@ import {
 import { useTranslation } from '../../hooks/useTranslation';
 import { resolveHomeImage } from '../../config/sibMaRemoteUrls';
 import { IMAGES, img } from '../../lib/images';
+import { SalonPartnersWebSection } from '../../components/home/SalonPartnersWebSection';
 
 const PRESENTATION_VENUE_IMAGE = resolveHomeImage('/sib-ma/static/hero.jpg');
 const PRESENTATION_VENUE_FALLBACK = img(IMAGES.morocco.eljadida, 1200, 800);
-
-const defaultOrganisateurs = [
-  { name: 'Ministère MUAT', role: 'Organisateur', desc: "Ministère de l'Aménagement du Territoire National, de l'Urbanisme, de l'Habitat et de la Politique de la Ville" },
-  { name: 'AMDIE', role: 'Organisateur', desc: "Agence Marocaine de Développement des Investissements et des Exportations" },
-  { name: 'FMC', role: 'Co-organisateur', desc: "Fédération des Industries des Matériaux de Construction" },
-  { name: 'FNBTP', role: 'Co-organisateur', desc: 'Fédération Nationale du Bâtiment et des Travaux Publics' },
-  { name: 'URBACOM', role: 'Organisateur délégué', desc: "1ʳᵉ agence conseil en communication et événementiel, gestion déléguée depuis 2006" },
-  { name: 'LAP', role: 'Sponsor officiel (exposant)', desc: "La qualité de l'appareillage — exposant et sponsor officiel du SIB 2026" },
-];
 
 export default function PresentationPage() {
   const [showMore, setShowMore] = React.useState(false);
@@ -36,11 +28,6 @@ export default function PresentationPage() {
     return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
   };
 
-  const organisateurs = defaultOrganisateurs.map((org, idx) => ({
-    name: getCms(`org_${idx + 1}_name`, org.name),
-    role: getCms(`org_${idx + 1}_role`, org.role),
-    desc: getCms(`org_${idx + 1}_desc`, org.desc),
-  }));
 
   const stats = [
     {
@@ -250,33 +237,14 @@ export default function PresentationPage() {
         </div>
       </div>
 
-      {/* Organisateurs */}
+      {/* Organisateurs & sponsors (CMS partagé web + APK) */}
       <div className="sib-v4-container py-16 md:py-20">
         <ScrollReveal>
-          <h2 className="text-3xl font-bold text-sib-navy mb-10 text-center font-display">
-            {getCms('organizers_title', 'Organisateurs')}
-          </h2>
+          <SalonPartnersWebSection
+            variant="presentation"
+            title={getCms('organizers_title', 'Organisateurs & Sponsors')}
+          />
         </ScrollReveal>
-        <StaggerReveal className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {organisateurs.map((org) => (
-            <StaggerItem key={org.name}>
-              <HoverCard className="relative overflow-hidden bg-white rounded-2xl p-6 border border-gray-100 shadow-sm text-center h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                <div className="absolute inset-x-0 top-0 h-1 bg-sib-orange" />
-
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-sib-navy text-white font-bold">
-                  {org.name.slice(0, 2)}
-                </div>
-
-                <span className="inline-block px-3 py-1 rounded-full bg-sib-orange/10 text-sib-navy text-xs font-semibold mb-3 border border-sib-orange/20">
-                  {org.role}
-                </span>
-
-                <h4 className="font-bold text-gray-900 mb-2 tracking-tight">{org.name}</h4>
-                <p className="text-xs leading-relaxed text-gray-600">{org.desc}</p>
-              </HoverCard>
-            </StaggerItem>
-          ))}
-        </StaggerReveal>
       </div>
 
       {/* Brochure */}

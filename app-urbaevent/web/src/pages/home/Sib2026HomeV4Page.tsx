@@ -2,10 +2,13 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import {
   HOME_V4_CMS_MESSAGE,
   HOME_V4_LANG_MESSAGE,
+  HOME_V4_PARTNERS_MESSAGE,
   HOME_V4_STATS_MESSAGE,
   HOME_V4_TEXT_MESSAGE,
 } from '../../config/homeV4CmsConfig';
+import { getSalonPartnersPayload } from '../../hooks/useSalonPartnersCms';
 import { resolveHomeV4CmsPayload, resolveHomeV4ImagesMap } from '../../services/siteImagesService';
+import { fetchMobileAppContent } from '../../services/mobileAppContentService';
 import { useLanguageStore } from '../../store/languageStore';
 
 const HOME_SRC = '/sib2026-home-v4/home-sib2026.html?embedded=1';
@@ -30,9 +33,10 @@ export default function Sib2026HomeV4Page() {
   const pushCmsPayload = useCallback(async () => {
     const lang = useLanguageStore.getState().currentLanguage as 'fr' | 'en' | 'ar';
     try {
-      const [images, cms] = await Promise.all([
+      const [images, cms, mobileContent] = await Promise.all([
         resolveHomeV4ImagesMap(),
         resolveHomeV4CmsPayload(lang),
+        fetchMobileAppContent().catch(() => null),
       ]);
       postToIframe({ type: HOME_V4_CMS_MESSAGE, images });
       if (Object.keys(cms.texts).length > 0) {
@@ -40,6 +44,17 @@ export default function Sib2026HomeV4Page() {
       }
       if (cms.stats.some(Boolean)) {
         postToIframe({ type: HOME_V4_STATS_MESSAGE, stats: cms.stats });
+      }
+      if (mobileContent) {
+        const partnersPayload = getSalonPartnersPayload('sib', mobileContent);
+        postToIframe({
+          type: HOME_V4_PARTNERS_MESSAGE,
+          partners: {
+            displayMode: partnersPayload.displayMode,
+            bannerUrl: partnersPayload.bannerUrl,
+            groups: partnersPayload.partners.groups,
+          },
+        });
       }
     } catch {
       /* garde les assets statiques par défaut */

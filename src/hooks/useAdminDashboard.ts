@@ -14,7 +14,6 @@ export function useAdminDashboard() {
   const { user } = useAuthStore();
   const { metrics, isLoading, error, fetchMetrics } = useAdminDashboardStore();
   const { fetchFromOfficialSite } = useNewsStore();
-  const [showRegistrationRequests, setShowRegistrationRequests] = useState(false);
   const [isImportingArticles, setIsImportingArticles] = useState(false);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -127,7 +126,6 @@ export function useAdminDashboard() {
     user, t,
     isLoading, error, fetchMetrics,
     adminMetrics,
-    showRegistrationRequests, setShowRegistrationRequests,
     isImportingArticles, handleImportArticles,
     userGrowthData, trafficData, activityData, hasActivityData,
     userTypeDistribution, systemHealth,

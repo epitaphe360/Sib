@@ -4,6 +4,7 @@ import {
   DEFAULT_MOBILE_APP_CONTENT,
   type MobileAppContent,
 } from '../types/appContent';
+import { mergeSalonCmsFields, mergeSalonPartnersCms } from '../lib/salonCms';
 import { BANK_TRANSFER as DEFAULT_BANK, VIP_PASS as DEFAULT_VIP } from '../data/bankTransfer';
 
 function parseContent(raw: unknown): Partial<MobileAppContent> {
@@ -29,7 +30,8 @@ export function mergeAppContent(parsed: Partial<MobileAppContent>): MobileAppCon
       : DEFAULT_MOBILE_APP_CONTENT.platformStats,
     images: { ...DEFAULT_MOBILE_APP_CONTENT.images, ...(parsed.images ?? {}) },
     payment: { ...DEFAULT_MOBILE_APP_CONTENT.payment, ...(parsed.payment ?? {}) },
-    salonStats: { ...DEFAULT_MOBILE_APP_CONTENT.salonStats, ...(parsed.salonStats ?? {}) },
+    salonStats: mergeSalonCmsFields(parsed.salonStats),
+    salonPartners: mergeSalonPartnersCms(parsed.salonPartners),
   };
 }
 

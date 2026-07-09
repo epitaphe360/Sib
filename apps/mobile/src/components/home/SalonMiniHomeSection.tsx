@@ -1,9 +1,17 @@
 import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { resolveAppImageSource } from '../../api/appContent';
 import { AppIcon } from '../AppIcon';
-import { getSalonMiniHome, type SalonPartner } from '../../data/salonPartners';
+import { getSalonMiniHome } from '../../data/salonPartners';
 import { getUrbaSalonTheme } from '../../data/urbaCatalog';
 import { useAppContent } from '../../hooks/useAppContent';
 import { useAuth } from '../../context/AuthContext';
+import {
+  getSalonCmsFields,
+  getSalonPartnersCms,
+  partnersBannerImageSlot,
+  parseSalonFeatures,
+  resolveSalonCmsKey,
+} from '../../lib/salonCms';
 import { useI18n } from '../../i18n/I18nProvider';
 import type { Salon } from '../../types';
 import { colors, fonts, radius, shadows, spacing } from '../../theme';
@@ -13,11 +21,19 @@ type Props = {
   salon: Salon;
 };
 
-function PartnerTile({ partner, accent }: { partner: SalonPartner; accent: string }) {
+const SIB_PARTNERS_BANNER = require('../../../assets/images/sib-partners-banner.png');
+
+function PartnerTile({
+  partner,
+  accent,
+}: {
+  partner: { name: string; acronym: string; logoUrl?: string };
+  accent: string;
+}) {
   return (
     <View style={styles.partnerTile} accessibilityLabel={partner.name}>
-      {partner.logo ? (
-        <Image source={partner.logo} style={styles.partnerLogo} resizeMode="contain" />
+      {partner.logoUrl ? (
+        <Image source={{ uri: partner.logoUrl }} style={styles.partnerLogo} resizeMode="contain" />
       ) : (
         <View style={[styles.acronymBox, { borderColor: accent }]}>
           <Text style={[styles.acronymText, { color: accent }]} numberOfLines={2}>
@@ -37,17 +53,42 @@ export function SalonMiniHomeSection({ salon }: Props) {
   const { user } = useAuth();
   const { content } = useAppContent();
   const { width } = useWindowDimensions();
+  const cms = getSalonCmsFields(salon, content.salonStats);
   const theme = getUrbaSalonTheme(salon, content.salonStats);
+  const salonKey = resolveSalonCmsKey(salon);
+  const partnersCms = getSalonPartnersCms(salon, content.salonPartners);
   const miniHome = getSalonMiniHome(salon);
-  const aboutText = miniHome.aboutKey ? t(miniHome.aboutKey) : theme.description;
-  const edition = salon.edition?.trim() || theme.edition;
-  const visitors = salon.expectedVisitors?.trim() || theme.visitors;
+  const aboutText = cms.aboutText.trim() || (miniHome.aboutKey ? t(miniHome.aboutKey) : theme.description);
+  const edition = salon.edition?.trim() || cms.edition || theme.edition;
+  const visitors = salon.expectedVisitors?.trim() || cms.visitors || theme.visitors;
+  const tagline = cms.tagline.trim() || theme.tagline;
+  const location = cms.location.trim() || theme.location;
+  const features = parseSalonFeatures(cms.features);
   const bannerWidth = width - spacing.md * 2;
-  const bannerHeight = miniHome.partnersBanner ? Math.round(bannerWidth * 0.62) : 0;
+
+  const partnersBannerRemote = content.images[partnersBannerImageSlot(salonKey)]?.trim();
+  const partnersBannerLocal = miniHome.partnersBanner ?? (salonKey === 'sib' ? SIB_PARTNERS_BANNER : undefined);
+  const partnersDisplayMode = partnersCms.displayMode;
+  const usePartnerTiles =
+    partnersDisplayMode === 'list' ||
+    (partnersDisplayMode !== 'banner' && !partnersBannerRemote && !partnersBannerLocal && partnersCms.groups.length > 0);
+  const showPartnersBanner =
+    partnersDisplayMode !== 'list' && Boolean(partnersBannerRemote || partnersBannerLocal);
+  const partnersBannerSource = showPartnersBanner
+    ? partnersBannerRemote
+      ? resolveAppImageSource(
+          partnersBannerImageSlot(salonKey),
+          partnersBannerLocal ?? SIB_PARTNERS_BANNER,
+          content.images,
+          content.updatedAt,
+        )
+      : partnersBannerLocal
+    : undefined;
+  const bannerHeight = partnersBannerSource ? Math.round(bannerWidth * 0.62) : 0;
 
   return (
     <View style={styles.wrap}>
-      <HomeSection title={t('salon.about')} subtitle={theme.tagline}>
+      <HomeSection title={t('salon.about')} subtitle={tagline}>
         <View style={styles.aboutCard}>
           {edition ? (
             <View style={[styles.editionPill, { backgroundColor: theme.bgColor }]}>
@@ -56,10 +97,10 @@ export function SalonMiniHomeSection({ salon }: Props) {
           ) : null}
           <Text style={styles.aboutText}>{aboutText}</Text>
           <View style={styles.metaRow}>
-            {theme.location ? (
+            {location ? (
               <View style={styles.metaPill}>
                 <AppIcon name="location-outline" size={12} color={colors.textMuted} />
-                <Text style={styles.metaText}>{theme.location}</Text>
+                <Text style={styles.metaText}>{location}</Text>
               </View>
             ) : null}
             {salon.dates ? (
@@ -75,9 +116,9 @@ export function SalonMiniHomeSection({ salon }: Props) {
               </View>
             ) : null}
           </View>
-          {user && theme.features.length > 0 ? (
+          {user && features.length > 0 ? (
             <View style={styles.features}>
-              {theme.features.map((feature) => (
+              {features.map((feature) => (
                 <View key={feature} style={styles.featureRow}>
                   <View style={[styles.featureDot, { backgroundColor: theme.color }]} />
                   <Text style={styles.featureText}>{feature}</Text>
@@ -90,13 +131,31 @@ export function SalonMiniHomeSection({ salon }: Props) {
 
       <HomeSection title={t('salon.partners.title')} subtitle={t('salon.partners.subtitle')}>
         <View style={styles.partnersCard}>
-          {miniHome.partnersBanner ? (
+          {partnersBannerSource ? (
             <Image
-              source={miniHome.partnersBanner}
+              source={partnersBannerSource}
               style={{ width: bannerWidth, height: bannerHeight }}
               resizeMode="contain"
               accessibilityLabel={t('salon.partners.title')}
             />
+          ) : usePartnerTiles ? (
+            partnersCms.groups.map((group, index) => (
+              <View
+                key={group.label}
+                style={[styles.partnerGroup, index > 0 && styles.partnerGroupBorder]}
+              >
+                <Text style={styles.groupLabel}>{group.label}</Text>
+                <View style={styles.partnerRow}>
+                  {group.partners.map((partner) => (
+                    <PartnerTile
+                      key={`${group.label}-${partner.acronym}`}
+                      partner={partner}
+                      accent={theme.color}
+                    />
+                  ))}
+                </View>
+              </View>
+            ))
           ) : (
             miniHome.groups.map((group, index) => (
               <View
@@ -106,7 +165,11 @@ export function SalonMiniHomeSection({ salon }: Props) {
                 <Text style={styles.groupLabel}>{t(group.labelKey)}</Text>
                 <View style={styles.partnerRow}>
                   {group.partners.map((partner) => (
-                    <PartnerTile key={partner.id} partner={partner} accent={theme.color} />
+                    <PartnerTile
+                      key={partner.id}
+                      partner={{ name: partner.name, acronym: partner.acronym }}
+                      accent={theme.color}
+                    />
                   ))}
                 </View>
               </View>
@@ -199,6 +262,7 @@ const styles = StyleSheet.create({
   partnerGroup: {
     padding: spacing.md,
     gap: spacing.sm,
+    width: '100%',
   },
   partnerGroupBorder: {
     borderTopWidth: 1,

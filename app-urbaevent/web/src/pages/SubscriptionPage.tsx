@@ -405,9 +405,9 @@ export default function SubscriptionPage() {
         }
       });
     } else if (tierId.includes('partner')) {
-      // Offre partenaire - rediriger vers inscription partenaire avec le tier choisi
+      // Pas de flux partenaire distinct — inscription exposant
       const tier = subscriptionTiers.find(tier => tier.id === tierId);
-      navigate(ROUTES.REGISTER_PARTNER, {
+      navigate(ROUTES.REGISTER_EXHIBITOR, {
         state: {
           selectedTier: tierId,
           tierName: tier?.name || '',

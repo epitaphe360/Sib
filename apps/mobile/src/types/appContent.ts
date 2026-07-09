@@ -1,4 +1,8 @@
+import type { SalonCmsFields, SalonPartnersCms } from '../lib/salonCms';
+
 export type MobilePlatformStat = { value: string; labelKey: string };
+
+export type { SalonCmsFields, SalonPartnersCms };
 
 export type MobileAppContent = {
   version: number;
@@ -22,7 +26,8 @@ export type MobileAppContent = {
     vipPriceEur?: number;
     currency?: string;
   };
-  salonStats?: Record<string, { visitors?: string; edition?: string; description?: string }>;
+  salonStats?: Record<string, Partial<SalonCmsFields>>;
+  salonPartners?: Record<string, Partial<SalonPartnersCms>>;
 };
 
 export const DEFAULT_MOBILE_APP_CONTENT: MobileAppContent = {
@@ -45,4 +50,5 @@ export const DEFAULT_MOBILE_APP_CONTENT: MobileAppContent = {
   images: {},
   payment: { vipPriceEur: 700, currency: 'EUR', bankName: 'Attijariwafa bank', accountHolder: 'URBACOM' },
   salonStats: {},
+  salonPartners: {},
 };

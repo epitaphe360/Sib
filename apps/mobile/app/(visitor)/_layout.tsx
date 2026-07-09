@@ -35,6 +35,8 @@ function VisitorStack() {
       <Stack.Screen name="event/[id]" options={{ ...hOpts, title: t('event.register') }} />
       <Stack.Screen name="payment-gateway" options={{ ...hOpts, title: t('payment.gateway.title') }} />
       <Stack.Screen name="salon/[slug]" options={{ ...hOpts, title: t('salon.activeSalon') }} />
+      <Stack.Screen name="salon-presentation" options={{ ...hOpts, title: t('salon.menu.presentation') }} />
+      <Stack.Screen name="salon-info" options={{ ...hOpts, title: t('salon.menu.info') }} />
       <Stack.Screen name="visa-letter" options={{ ...hOpts, title: t('visa.title') }} />
       <Stack.Screen name="invoices" options={{ ...hOpts, title: t('invoices.title') }} />
       <Stack.Screen name="media/index" options={{ ...hOpts, title: t('media.title') }} />

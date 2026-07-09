@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Smartphone, Save, Loader2, RefreshCw, Upload, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '../../ui/Button';
+import { SalonPartnersEditor } from './SalonPartnersEditor';
 import {
   DEFAULT_MOBILE_APP_CONTENT,
   fetchMobileAppContent,
@@ -11,15 +12,47 @@ import {
   uploadMobileAppImage,
   type MobileAppContent,
 } from '../../../services/mobileAppContentService';
+import {
+  APK_DEFAULT_IMAGE_PREVIEWS,
+  APK_DEFAULT_SALON_PARTNERS,
+  APK_DEFAULT_SALON_STATS,
+  APK_SALON_STAT_KEYS,
+  SALON_CMS_FIELD_KEYS,
+  partnersBannerSlot,
+  type SalonCmsFields,
+  type SalonPartnersCms,
+} from '../../../config/mobileAppDefaultContent';
 
 const SALON_IMAGE_SLOTS = [
-  { key: 'sib', label: 'Salon SIB' },
+  { key: 'sib', label: 'Salon SIB (bannière)' },
   { key: 'sir', label: 'Salon SIR' },
   { key: 'sip', label: 'Salon SIP' },
   { key: 'btp', label: 'Salon BTP' },
   { key: 'sie', label: 'Salon SIE' },
   { key: 'hero_bg', label: 'Fond hero accueil' },
+  ...APK_SALON_STAT_KEYS.map((key) => ({
+    key: partnersBannerSlot(key),
+    label: `Bannière partenaires ${key.toUpperCase()}`,
+  })),
 ];
+
+const SALON_FIELD_LABELS: Record<(typeof SALON_CMS_FIELD_KEYS)[number], string> = {
+  tagline: 'Sous-titre (ex. Construction & Architecture)',
+  aboutText: 'Texte présentation (paragraphe complet)',
+  edition: 'Édition',
+  visitors: 'Visiteurs',
+  description: 'Description courte',
+  location: 'Lieu affiché',
+  features: 'Fonctionnalités (une par ligne)',
+  hours: 'Horaires',
+  venue: 'Lieu / venue',
+  city: 'Ville',
+  startDayNote: 'Note jour d’ouverture',
+  exhibitorsStat: 'Stat exposants',
+  countriesStat: 'Stat pays',
+  contactEmail: 'Email contact',
+  website: 'Site web',
+};
 
 export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean } = {}) {
   const [content, setContent] = useState<MobileAppContent>(DEFAULT_MOBILE_APP_CONTENT);
@@ -67,7 +100,7 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
     }));
   };
 
-  const updateSalonStat = (salonKey: string, field: 'edition' | 'visitors' | 'description', value: string) => {
+  const updateSalonStat = (salonKey: string, field: keyof SalonCmsFields, value: string) => {
     setContent((prev) => ({
       ...prev,
       salonStats: {
@@ -77,7 +110,46 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
     }));
   };
 
-  const SALON_STAT_KEYS = ['sib', 'sir', 'sip', 'btp', 'sie'] as const;
+  const updateSalonPartners = (salonKey: string, next: SalonPartnersCms) => {
+    setContent((prev) => ({
+      ...prev,
+      salonPartners: {
+        ...prev.salonPartners,
+        [salonKey]: next,
+      },
+    }));
+  };
+
+  const getSalonPartners = (salonKey: string): SalonPartnersCms => ({
+    displayMode: content.salonPartners?.[salonKey]?.displayMode ?? 'banner',
+    groups:
+      content.salonPartners?.[salonKey]?.groups?.length
+        ? content.salonPartners[salonKey]!.groups!
+        : (APK_DEFAULT_SALON_PARTNERS[salonKey]?.groups ?? []),
+  });
+
+  const setPartnersDisplayMode = (salonKey: string, displayMode: 'banner' | 'list') => {
+    const current = getSalonPartners(salonKey);
+    const groups =
+      displayMode === 'list' && !current.groups.length
+        ? (APK_DEFAULT_SALON_PARTNERS[salonKey]?.groups ?? [{ label: 'Sponsors', partners: [{ name: '', acronym: '' }] }])
+        : current.groups;
+    updateSalonPartners(salonKey, { ...current, displayMode, groups });
+  };
+
+  const SALON_STAT_KEYS = APK_SALON_STAT_KEYS;
+
+  const isSalonStatCustomized = (salonKey: string, field: keyof SalonCmsFields) => {
+    const displayed = content.salonStats?.[salonKey]?.[field]?.trim();
+    const base = APK_DEFAULT_SALON_STATS[salonKey]?.[field];
+    if (!displayed) return false;
+    return displayed !== base;
+  };
+
+  const getSalonFieldValue = (salonKey: string, field: keyof SalonCmsFields) =>
+    content.salonStats?.[salonKey]?.[field] ?? APK_DEFAULT_SALON_STATS[salonKey]?.[field] ?? '';
+
+  const getImagePreviewUrl = (slot: string) => content.images[slot]?.trim() || APK_DEFAULT_IMAGE_PREVIEWS[slot] || '';
 
   const handleSave = async () => {
     if (loadError) {
@@ -136,7 +208,8 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
             <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Contenu APK UrbaEvent</h2>
           </div>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl">
-            Textes, chiffres et photos de l’application mobile. L’APK récupère ces données au démarrage ; après upload d’une photo, tirez vers le bas sur l’accueil de l’app pour actualiser.
+            Tout le contenu visible dans l’APK (textes salon, présentation, partenaires, photos, paiement).
+            Enregistrez puis tirez vers le bas sur l’accueil APK pour actualiser.
           </p>
         </div>
         <div className="flex gap-2">
@@ -227,22 +300,83 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-3">Stats salons (cartes accueil)</h3>
-            <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-1">Contenu salons (Présentation, Informations…)</h3>
+            <p className="text-xs text-neutral-500 mb-4">Chaque salon SIB / SIR / SIP / BTP / SIE — textes affichés dans l’APK visiteur.</p>
+            <div className="space-y-6">
               {SALON_STAT_KEYS.map((key) => (
-                <div key={key} className="rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 grid gap-3 md:grid-cols-3">
-                  <p className="md:col-span-3 text-xs font-bold uppercase text-neutral-500">{key}</p>
-                  {(['edition', 'visitors', 'description'] as const).map((field) => (
-                    <label key={field} className="block">
-                      <span className="text-xs text-neutral-500 mb-1 block">{field}</span>
-                      <input
-                        type="text"
-                        value={content.salonStats?.[key]?.[field] ?? ''}
-                        onChange={(e) => updateSalonStat(key, field, e.target.value)}
-                        className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-950 px-3 py-2 text-sm"
+                <div key={key} className="rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 space-y-4">
+                  <p className="text-xs font-bold uppercase text-neutral-500">{key}</p>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    {SALON_CMS_FIELD_KEYS.map((field) => (
+                      <label key={field} className={`block ${field === 'aboutText' || field === 'features' ? 'md:col-span-2' : ''}`}>
+                        <span className="text-xs text-neutral-500 mb-1 flex items-center gap-2">
+                          {SALON_FIELD_LABELS[field]}
+                          {isSalonStatCustomized(key, field) ? (
+                            <span className="rounded-full bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:text-emerald-300">
+                              Personnalisé
+                            </span>
+                          ) : (
+                            <span className="rounded-full bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 text-[10px] font-medium text-neutral-500">
+                              Défaut APK
+                            </span>
+                          )}
+                        </span>
+                        {field === 'aboutText' || field === 'features' ? (
+                          <textarea
+                            rows={field === 'aboutText' ? 4 : 3}
+                            value={getSalonFieldValue(key, field)}
+                            onChange={(e) => updateSalonStat(key, field, e.target.value)}
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-950 px-3 py-2 text-sm min-h-[80px]"
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={getSalonFieldValue(key, field)}
+                            onChange={(e) => updateSalonStat(key, field, e.target.value)}
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-950 px-3 py-2 text-sm"
+                          />
+                        )}
+                      </label>
+                    ))}
+                  </div>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-4 mb-3">
+                      <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                        Sponsors & organisateurs
+                      </span>
+                      <label className="inline-flex items-center gap-2 text-xs text-neutral-600 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={`partners-mode-${key}`}
+                          checked={getSalonPartners(key).displayMode !== 'list'}
+                          onChange={() => setPartnersDisplayMode(key, 'banner')}
+                        />
+                        Bannière image
+                      </label>
+                      <label className="inline-flex items-center gap-2 text-xs text-neutral-600 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={`partners-mode-${key}`}
+                          checked={getSalonPartners(key).displayMode === 'list'}
+                          onChange={() => setPartnersDisplayMode(key, 'list')}
+                        />
+                        Liste de sponsors
+                      </label>
+                    </div>
+                    {getSalonPartners(key).displayMode === 'list' ? (
+                      <SalonPartnersEditor
+                        salonKey={key}
+                        value={getSalonPartners(key)}
+                        onChange={(next) => updateSalonPartners(key, next)}
+                        onUploadLogo={uploadMobileAppImage}
                       />
-                    </label>
-                  ))}
+                    ) : (
+                      <p className="text-xs text-neutral-500 rounded-lg border border-dashed border-neutral-300 dark:border-neutral-700 px-4 py-3">
+                        Mode bannière : uploadez « Bannière partenaires {key.toUpperCase()} » dans la section Photos APK ci-dessous.
+                        Pour ajouter des sponsors un par un, choisissez « Liste de sponsors ».
+                      </p>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -253,14 +387,28 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
               <ImageIcon className="h-4 w-4" /> Photos APK
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {SALON_IMAGE_SLOTS.map(({ key, label }) => (
+              {SALON_IMAGE_SLOTS.map(({ key, label }) => {
+                const customUrl = content.images[key]?.trim();
+                const previewUrl = getImagePreviewUrl(key);
+                return (
                 <div key={key} className="rounded-xl border border-neutral-200 dark:border-neutral-700 p-3">
-                  <p className="text-sm font-medium mb-2">{label}</p>
-                  {content.images[key] ? (
-                    <img src={content.images[key]} alt={label} className="w-full h-24 object-cover rounded-lg mb-2" />
+                  <p className="text-sm font-medium mb-1">{label}</p>
+                  <p className="text-[10px] mb-2">
+                    {customUrl ? (
+                      <span className="rounded-full bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 font-medium text-emerald-700 dark:text-emerald-300">
+                        Photo Supabase
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 font-medium text-neutral-500">
+                        Image embarquée APK
+                      </span>
+                    )}
+                  </p>
+                  {previewUrl ? (
+                    <img src={previewUrl} alt={label} className="w-full h-24 object-cover rounded-lg mb-2" />
                   ) : (
                     <div className="w-full h-24 rounded-lg bg-neutral-100 dark:bg-neutral-800 mb-2 flex items-center justify-center text-xs text-neutral-400">
-                      Image locale par défaut
+                      Aperçu indisponible
                     </div>
                   )}
                   <input
@@ -289,7 +437,7 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
                     Remplacer
                   </Button>
                 </div>
-              ))}
+              );})}
             </div>
           </div>
 

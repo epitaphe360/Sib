@@ -46,49 +46,50 @@ export default function MediaPartnerSignUpPage() {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, watch } = useForm<FormValues>({
+  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
     try {
-      // Créer compte auth
-      const userCredential = await signUp({
-        email: data.email,
-        password: data.password,
-        type: 'media_partner',
-        firstName: data.firstName,
-        lastName: data.lastName,
-        company: data.mediaName,
-      });
+      const result = await signUp(
+        { email: data.email, password: data.password },
+        {
+          role: 'visitor',
+          firstName: data.firstName,
+          lastName: data.lastName,
+          company: data.mediaName,
+          status: 'active',
+        },
+      );
 
-      if (!userCredential?.id) {throw new Error('Erreur création du compte');}
+      if (result.error) {
+        throw result.error;
+      }
 
-      // Insérer dans la table partners avec tier media_partner
-      const { error } = await (supabase as any).from('partners').insert({
-        user_id: userCredential.id,
-        organization_name: data.mediaName,
-        partner_tier: 'media_partner',
-        partner_type: 'media_partner',
+      const { error } = await supabase.from('press_accreditations').insert({
         first_name: data.firstName,
         last_name: data.lastName,
-        position: data.position,
         email: data.email,
         phone: data.phone,
-        country: data.country,
-        website: data.website || null,
+        media_name: data.mediaName,
         media_type: data.mediaType,
+        job_title: data.position,
+        country: data.country,
         coverage_plan: data.coverage_plan,
-        status: 'pending_review',
+        status: 'pending',
       });
 
-      if (error) {throw error;}
+      if (error) {
+        throw error;
+      }
 
       toast.success(t('media_signup.submitted_toast'));
       navigate(ROUTES.MEDIA_PARTNER_DASHBOARD);
-    } catch (err: any) {
-      toast.error(err?.message || t('media_signup.error_toast'));
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : t('media_signup.error_toast');
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

@@ -136,6 +136,11 @@ export default memo(function ExhibitorDashboard() {
 
         <ExhibitorStatsGrid dashboardStats={ctx.dashboardStats} onStatClick={ctx.handleStatClick} />
 
+        <ExhibitorQuickActions
+          onOpenQR={() => ctx.setShowQRModal(true)}
+          onOpenScrapper={() => ctx.setShowMiniSiteScrapper(true)}
+        />
+
         <ExhibitorCalendarSection
           userId={ctx.user?.id || ''}
           activeTab={ctx.activeTab}
@@ -151,11 +156,6 @@ export default memo(function ExhibitorDashboard() {
           confirmedAppointments={ctx.confirmedAppointments}
           miniSiteViews={ctx.dashboardStats?.miniSiteViews?.value || 0}
           predictions={ctx.predictions}
-        />
-
-        <ExhibitorQuickActions
-          onOpenScrapper={() => ctx.setShowMiniSiteScrapper(true)}
-          onOpenQR={() => ctx.setShowQRModal(true)}
         />
 
         <ExhibitorAppointmentSection

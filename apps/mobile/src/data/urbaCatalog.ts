@@ -1,5 +1,6 @@
 import type { ImageSourcePropType } from 'react-native';
 import type { AppIconName } from '../components/AppIcon';
+import type { SalonCmsFields } from '../lib/salonCms';
 import type { Salon } from '../types';
 import { SALON_IMAGES } from './images';
 
@@ -125,7 +126,7 @@ export function resolveSalonThemeKey(salon: Pick<Salon, 'id' | 'slug' | 'code'>)
 
 export function getUrbaSalonTheme(
   salon: Pick<Salon, 'id' | 'slug' | 'code' | 'name'>,
-  salonStats?: Record<string, { visitors?: string; edition?: string; description?: string }>,
+  salonStats?: Record<string, Partial<SalonCmsFields>>,
 ): UrbaSalonTheme {
   const key = resolveSalonThemeKey(salon);
   const theme = URBA_SALON_THEMES[key];
@@ -135,9 +136,14 @@ export function getUrbaSalonTheme(
     if (!remote) return base;
     return {
       ...base,
+      tagline: remote.tagline?.trim() || base.tagline,
       edition: remote.edition?.trim() || base.edition,
       visitors: remote.visitors?.trim() || base.visitors,
       description: remote.description?.trim() || base.description,
+      location: remote.location?.trim() || base.location,
+      features: remote.features?.trim()
+        ? remote.features.split('\n').map((f) => f.trim()).filter(Boolean)
+        : base.features,
     };
   };
 

@@ -9,6 +9,12 @@ import {
   type SiteTextRow,
 } from '../../../services/siteImagesService';
 import { HOME_V4_TEXT_DEFINITIONS } from '../../../config/homeV4TextCmsConfig';
+import {
+  getHomeV4DefaultText,
+  homeV4TextareaRows,
+  isHomeV4TextCustomized,
+  resolveHomeV4EditorText,
+} from '../../../config/homeV4DefaultTexts';
 
 const TEXT_DEFINITIONS = HOME_V4_TEXT_DEFINITIONS;
 
@@ -46,7 +52,8 @@ export function SiteTextContentPanel({ embedded = false }: { embedded?: boolean 
     const initial: Record<string, string> = {};
     for (const def of TEXT_DEFINITIONS) {
       const row = rows.find((r) => r.key === def.key);
-      initial[def.key] = row ? (getLangValue(row, activeLang) ?? '') : '';
+      const saved = row ? getLangValue(row, activeLang) : null;
+      initial[def.key] = resolveHomeV4EditorText(def.key, activeLang, saved);
     }
     setDraft(initial);
   }, [rows, activeLang]);
@@ -54,8 +61,9 @@ export function SiteTextContentPanel({ embedded = false }: { embedded?: boolean 
   const handleLangChange = (lang: Lang) => {
     const hasUnsaved = TEXT_DEFINITIONS.some((def) => {
       const row = rows.find((r) => r.key === def.key);
-      const saved = row ? (getLangValue(row, activeLang) ?? '') : '';
-      return draft[def.key] !== saved;
+      const saved = row ? getLangValue(row, activeLang) : null;
+      const baseline = resolveHomeV4EditorText(def.key, activeLang, saved);
+      return draft[def.key] !== baseline;
     });
     if (hasUnsaved) {
       toast.warning('Enregistrez vos modifications avant de changer de langue');
@@ -164,8 +172,9 @@ export function SiteTextContentPanel({ embedded = false }: { embedded?: boolean 
                       const isSavingThis = saving === def.key;
                       const row = rows.find((r) => r.key === def.key);
                       const savedVal = row ? getLangValue(row, activeLang) : null;
-                      const hasCustom = Boolean(savedVal);
-                      const isMultiline = def.label.includes('HTML') || def.key.includes('desc') || def.key.includes('intro');
+                      const isCustom = isHomeV4TextCustomized(savedVal);
+                      const isMultiline = def.label.includes('HTML') || def.key.includes('desc') || def.key.includes('intro') || def.key.includes('location') || def.key.includes('title') || def.key.includes('headline');
+                      const currentText = draft[def.key] ?? '';
 
                       return (
                         <div key={def.key} className="flex flex-col gap-2 p-4 rounded-xl border border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-950/50">
@@ -174,9 +183,13 @@ export function SiteTextContentPanel({ embedded = false }: { embedded?: boolean 
                               {def.label}
                             </label>
                             <div className="flex items-center gap-2 shrink-0">
-                              {hasCustom && (
+                              {isCustom ? (
                                 <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 dark:bg-emerald-500/10 dark:text-emerald-400 px-2 py-0.5 rounded-full">
-                                  <CheckCircle2 className="h-3 w-3" /> Personnalisé
+                                  <CheckCircle2 className="h-3 w-3" /> Personnalisé en base
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-xs font-medium text-sky-700 bg-sky-50 dark:bg-sky-500/10 dark:text-sky-400 px-2 py-0.5 rounded-full">
+                                  Texte par défaut du site
                                 </span>
                               )}
                               <Button variant="outline" size="sm" disabled={isSavingThis} onClick={() => handleSave(def.key)}>
@@ -187,32 +200,54 @@ export function SiteTextContentPanel({ embedded = false }: { embedded?: boolean 
                           </div>
                           {isMultiline ? (
                             <textarea
-                              value={draft[def.key] ?? ''}
+                              value={currentText}
                               onChange={(e) => setDraft((prev) => ({ ...prev, [def.key]: e.target.value }))}
-                              placeholder={def.placeholder}
-                              rows={3}
-                              className="w-full px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 font-mono"
+                              rows={homeV4TextareaRows(currentText)}
+                              className="w-full min-h-[5rem] px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 font-mono leading-relaxed resize-y"
                             />
                           ) : (
                             <input
                               type="text"
-                              value={draft[def.key] ?? ''}
+                              value={currentText}
                               onChange={(e) => setDraft((prev) => ({ ...prev, [def.key]: e.target.value }))}
-                              placeholder={def.placeholder}
-                              className="w-full px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500"
+                              className="w-full px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500"
                             />
                           )}
-                          {hasCustom && (
+                          <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-500">
+                            <span>{currentText.length} caractères</span>
                             <button
-                              onClick={() => {
-                                setDraft((prev) => ({ ...prev, [def.key]: '' }));
-                                handleSave(def.key);
-                              }}
-                              className="self-start flex items-center gap-1 text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                              type="button"
+                              onClick={() => setDraft((prev) => ({
+                                ...prev,
+                                [def.key]: getHomeV4DefaultText(def.key, activeLang),
+                              }))}
+                              className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 dark:text-primary-400"
                             >
-                              <RefreshCw className="h-3 w-3" /> Utiliser la traduction par défaut
+                              <RefreshCw className="h-3 w-3" /> Charger le texte par défaut du site
                             </button>
-                          )}
+                            {isCustom && (
+                              <button
+                                type="button"
+                                onClick={async () => {
+                                  setDraft((prev) => ({ ...prev, [def.key]: getHomeV4DefaultText(def.key, activeLang) }));
+                                  setSaving(def.key);
+                                  try {
+                                    const field = getLangField(activeLang);
+                                    await upsertSiteText(def.key, { [field]: null } as any);
+                                    toast.success('Texte réinitialisé au défaut du site');
+                                    await loadRows();
+                                  } catch (err) {
+                                    toast.error(err instanceof Error ? err.message : 'Erreur');
+                                  } finally {
+                                    setSaving(null);
+                                  }
+                                }}
+                                className="inline-flex items-center gap-1 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                              >
+                                <RefreshCw className="h-3 w-3" /> Supprimer la personnalisation en base
+                              </button>
+                            )}
+                          </div>
                         </div>
                       );
                     })}

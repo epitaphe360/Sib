@@ -68,7 +68,6 @@ const PendingAccountPage = lazyRetry(() => import('./pages/auth/PendingAccountPa
 const OAuthCallbackPage = lazyRetry(() => import('./pages/auth/OAuthCallbackPage'));
 const SubscriptionPage = lazyRetry(() => import('./pages/SubscriptionPage'));
 const ExhibitorSubscriptionPage = lazyRetry(() => import('./pages/ExhibitorSubscriptionPage'));
-const PartnerSubscriptionPage = lazyRetry(() => import('./pages/PartnerSubscriptionPage'));
 const VisitorUpgradePage = lazyRetry(() => import('./pages/VisitorUpgradePage'));
 const VisitorPaymentPage = lazyRetry(() => import('./pages/VisitorPaymentPage'));
 const VisitorBankTransferPage = lazyRetry(() => import('./pages/visitor/VisitorBankTransferPage'));
@@ -99,7 +98,6 @@ const ExhibitorCreationPage = lazyRetry(() => import('./pages/admin/ExhibitorCre
 const PartnerManagementPage = lazyRetry(() => import('./pages/admin/PartnerManagementPage'));
 const PartnerCreationPage = lazyRetry(() => import('./pages/admin/PartnerCreationPage'));
 const CreateUserPage = lazyRetry(() => import('./pages/admin/CreateUserPage'));
-const AdminPartnersPage = lazyRetry(() => import('./pages/admin/PartnersPage'));
 const MarketingDashboard = lazyRetry(() => import('./pages/MarketingDashboard'));
 const PublicationControlPage = lazyRetry(() => import('./pages/admin/PublicationControlPage'));
 
@@ -409,7 +407,7 @@ const App = () => {
             <Route path={ROUTES.OAUTH_CALLBACK} element={<OAuthCallbackPage />} />
             <Route path={ROUTES.VISITOR_SUBSCRIPTION} element={<SubscriptionPage />} />
             <Route path={ROUTES.EXHIBITOR_SUBSCRIPTION} element={<ExhibitorSubscriptionPage />} />
-            <Route path={ROUTES.PARTNER_SUBSCRIPTION} element={<PartnerSubscriptionPage />} />
+            <Route path={ROUTES.PARTNER_SUBSCRIPTION} element={<Navigate to={ROUTES.REGISTER_EXHIBITOR} replace />} />
             {/* Protected routes - require authentication */}
             <Route path={ROUTES.PROFILE} element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             <Route path={ROUTES.PROFILE_DETAILED} element={<ProtectedRoute><DetailedProfilePage /></ProtectedRoute>} />
@@ -417,7 +415,7 @@ const App = () => {
             <Route path={ROUTES.ADVANCED_MATCHING} element={<ProtectedRoute><AdvancedMatchingPage /></ProtectedRoute>} />
             <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_PROFILE} element={<ProtectedRoute requiredRole="exhibitor"><ProfilePage /></ProtectedRoute>} />
-            <Route path={`${ROUTES.EXHIBITOR_PROFILE}/edit`} element={<ProtectedRoute requiredRole="exhibitor"><ProfileEdit /></ProtectedRoute>} />
+            <Route path={`${ROUTES.EXHIBITOR_PROFILE}/edit`} element={<Navigate to={ROUTES.EXHIBITOR_PROFILE_EDIT} replace />} />
             <Route path={ROUTES.EXHIBITOR_PROFILE_EDIT} element={<ProtectedRoute requiredRole="exhibitor"><ProfileEdit /></ProtectedRoute>} />
             <Route path={ROUTES.EXHIBITOR_DASHBOARD} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.VISITOR_DASHBOARD} element={<ProtectedRoute requiredRole="visitor" allowPendingPayment={true}><VisitorDashboard /></ProtectedRoute>} />
@@ -490,7 +488,7 @@ const App = () => {
             <Route path={ROUTES.ADMIN_VIP_VISITORS} element={<ProtectedRoute requiredRole="admin"><VIPVisitorsPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_USERS} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_CREATE_USER} element={<ProtectedRoute requiredRole="admin"><CreateUserPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_PARTNERS} element={<ProtectedRoute requiredRole="admin"><AdminPartnersPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_PARTNERS} element={<Navigate to={ROUTES.ADMIN_PARTNERS_MANAGE} replace />} />
             <Route path={ROUTES.ADMIN_PAVILIONS} element={<ProtectedRoute requiredRole="admin"><PavillonsAdminPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_CREATE_PAVILION} element={<ProtectedRoute requiredRole="admin"><CreatePavilionPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_EMAIL_TEMPLATES} element={<ProtectedRoute requiredRole="admin"><EmailTemplatesManager /></ProtectedRoute>} />
@@ -498,12 +496,12 @@ const App = () => {
             <Route path={ROUTES.ADMIN_CONTENT} element={<ProtectedRoute requiredRole="admin"><ContentManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_NEWS} element={<ProtectedRoute requiredRole="admin"><NewsManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_EXHIBITORS} element={<ProtectedRoute requiredRole="admin"><ExhibitorManagementPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_EXHIBITORS_LIST} element={<ProtectedRoute requiredRole="admin"><ExhibitorManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_EXHIBITORS_LIST} element={<Navigate to={ROUTES.ADMIN_EXHIBITORS} replace />} />
             <Route path={ROUTES.ADMIN_PARTNERS_MANAGE} element={<ProtectedRoute requiredRole="admin"><PartnerManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.MARKETING_DASHBOARD} element={<ProtectedRoute requiredRole="admin"><MarketingDashboard /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PUBLICATION_CONTROL} element={<ProtectedRoute requiredRole="admin"><PublicationControlPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_MEDIA} element={<ProtectedRoute requiredRole="admin"><MediaManagementPage /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_USERS_LIST} element={<ProtectedRoute requiredRole="admin"><UserManagementPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_MEDIA} element={<Navigate to={ROUTES.ADMIN_MEDIA_MANAGE} replace />} />
+            <Route path={ROUTES.ADMIN_USERS_LIST} element={<Navigate to={ROUTES.ADMIN_USERS} replace />} />
 
             {/* Routes admin manquantes */}
             <Route path={ROUTES.ADMIN_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminConfigPage /></ProtectedRoute>} />
@@ -557,7 +555,7 @@ const App = () => {
             <Route path={ROUTES.ADMIN_MEDIA_EDIT} element={<ProtectedRoute requiredRole="admin"><EditMediaPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PARTNER_MEDIA_APPROVAL} element={<ProtectedRoute requiredRole="admin"><PartnerMediaApprovalPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_LIVE_EVENTS} element={<ProtectedRoute requiredRole="admin"><LiveEventManager /></ProtectedRoute>} />
-            <Route path={ROUTES.ADMIN_LIVE_EVENT_CREATE} element={<ProtectedRoute requiredRole="admin"><LiveEventManager /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_LIVE_EVENT_CREATE} element={<Navigate to={ROUTES.ADMIN_LIVE_EVENTS} replace />} />
 
             {/* Speakers & Press routes */}
             <Route path={ROUTES.SPEAKERS} element={<SpeakersPage />} />
@@ -590,7 +588,7 @@ const App = () => {
 
             {/* Média partenaire */}
             <Route path={ROUTES.REGISTER_MEDIA_PARTNER} element={<MediaPartnerSignUpPage />} />
-            <Route path={ROUTES.MEDIA_PARTNER_DASHBOARD} element={<ProtectedRoute requiredRole="partner"><MediaPartnerDashboard /></ProtectedRoute>} />
+            <Route path={ROUTES.MEDIA_PARTNER_DASHBOARD} element={<ProtectedRoute requiredRole="visitor"><MediaPartnerDashboard /></ProtectedRoute>} />
 
             {/* Équipe, invitations, scans, factures */}
             <Route path={ROUTES.EXHIBITOR_TEAM} element={<ProtectedRoute requiredRole="exhibitor"><ExhibitorTeamPage userType="exhibitor" /></ProtectedRoute>} />

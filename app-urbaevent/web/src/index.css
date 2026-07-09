@@ -495,3 +495,15 @@ html.sib-home-v4-embedded header nav .header-nav-dropdown .text-slate-600 {
   color: #475569 !important;
   text-shadow: none !important;
 }
+
+/* Boutons Connexion / Inscription lisibles sur le hero sombre */
+html.sib-home-v4-embedded header.header-on-dark-hero a[href="/login"] button {
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  color: #fff !important;
+  background: transparent !important;
+}
+
+html.sib-home-v4-embedded header.header-on-dark-hero a[href="/login"] button:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+}

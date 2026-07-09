@@ -2,12 +2,11 @@
 import { motion } from 'framer-motion';
 import {
   Mic2, Badge, Calendar, BookOpen, Camera, AlertTriangle,
-  CheckCircle, Clock, Newspaper, Download, LogOut
+  CheckCircle, Clock, Newspaper, LogOut
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useAuthStore from '../../store/authStore';
 import { DynamicBadge } from '../badge/DynamicBadge';
-import { DEFAULT_SALON_CONFIG } from '../../config/salonInfo';
 
 const PRESS_SECTIONS = [
   { id: 'programme', label: 'Programme', icon: Calendar, desc: 'Consultez le programme complet du salon SIB 2026' },
@@ -17,28 +16,37 @@ const PRESS_SECTIONS = [
 ];
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.FC<{className?: string}> }> = {
+  pending:        { label: 'En cours de validation', color: 'bg-amber-50 border-amber-200 text-amber-700', icon: Clock },
   pending_review: { label: 'En cours de validation', color: 'bg-amber-50 border-amber-200 text-amber-700', icon: Clock },
   approved:       { label: 'Accréditation approuvée', color: 'bg-green-50 border-green-200 text-green-700', icon: CheckCircle },
   rejected:       { label: 'Accréditation refusée', color: 'bg-red-50 border-red-200 text-red-700', icon: AlertTriangle },
 };
 
+type PressAccreditationRow = {
+  media_name: string;
+  status: string;
+  rejection_reason?: string | null;
+};
+
 export default function MediaPartnerDashboard() {
   const { user, logout } = useAuthStore();
-  const [partnerData, setPartnerData] = useState<any>(null);
+  const [pressData, setPressData] = useState<PressAccreditationRow | null>(null);
   const [showBadge, setShowBadge] = useState(false);
 
   useEffect(() => {
-    if (!user?.id) {return;}
-    (supabase as any)
-      .from('partners')
-      .select('*')
-      .eq('user_id', user.id)
+    if (!user?.email) {return;}
+    supabase
+      .from('press_accreditations')
+      .select('media_name, status, rejection_reason')
+      .eq('email', user.email)
+      .order('created_at', { ascending: false })
+      .limit(1)
       .maybeSingle()
-      .then(({ data }: any) => setPartnerData(data));
-  }, [user]);
+      .then(({ data }) => setPressData(data));
+  }, [user?.email]);
 
-  const status = partnerData?.status || 'pending_review';
-  const statusCfg = STATUS_CONFIG[status] || STATUS_CONFIG.pending_review;
+  const status = pressData?.status || 'pending';
+  const statusCfg = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
   const StatusIcon = statusCfg.icon;
 
   return (
@@ -51,7 +59,7 @@ export default function MediaPartnerDashboard() {
               <Mic2 className="h-6 w-6" />
             </div>
             <div>
-              <div className="font-bold text-lg">{partnerData?.organization_name || 'Sponsor Média'}</div>
+              <div className="font-bold text-lg">{pressData?.media_name || 'Accréditation presse'}</div>
               <div className="text-red-200 text-sm">{user?.email}</div>
             </div>
           </div>
@@ -72,14 +80,14 @@ export default function MediaPartnerDashboard() {
           <StatusIcon className="h-5 w-5 shrink-0" />
           <div>
             <div className="font-semibold">{statusCfg.label}</div>
-            {status === 'pending_review' && (
+            {(status === 'pending' || status === 'pending_review') && (
               <div className="text-sm opacity-80">Votre dossier est en cours d'examen. Réponse sous 48h ouvrées.</div>
             )}
             {status === 'approved' && (
               <div className="text-sm opacity-80">Accès complet à l'espace presse pendant toute la durée du salon.</div>
             )}
-            {status === 'rejected' && partnerData?.admin_note && (
-              <div className="text-sm opacity-80">Motif : {partnerData.admin_note}</div>
+            {status === 'rejected' && pressData?.rejection_reason && (
+              <div className="text-sm opacity-80">Motif : {pressData.rejection_reason}</div>
             )}
           </div>
         </div>
@@ -166,7 +174,7 @@ export default function MediaPartnerDashboard() {
           user={user}
           onClose={() => setShowBadge(false)}
           overrideRole="media_partner"
-          overrideCompany={partnerData?.organization_name}
+          overrideCompany={pressData?.media_name}
         />
       )}
     </div>

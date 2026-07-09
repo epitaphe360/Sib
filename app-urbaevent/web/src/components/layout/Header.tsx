@@ -143,10 +143,14 @@ export const Header: React.FC = memo(() => {
   const isHomePage = location.pathname === '/';
   const isHomeOverlay = isHomePage && !isMenuOpen;
   const isTransparent = isHomePage && !isScrolled && !isMenuOpen;
+  /** Hero / menu mobile sur l'accueil : fond sombre → bouton connexion en clair */
+  const isHeaderDarkBg = isHomePage && (!isScrolled || isMenuOpen);
 
   return (
     <header
       className={`fixed ${isHomePage ? 'top-0' : 'top-8'} left-0 right-0 z-[200] transition-all duration-500 ${
+        isHeaderDarkBg ? 'header-on-dark-hero' : ''
+      } ${
         isHomeOverlay
           ? 'bg-transparent border-b border-transparent shadow-none'
           : isHomePage && isMenuOpen
@@ -591,9 +595,17 @@ export const Header: React.FC = memo(() => {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center space-x-3">
-                <Link to={ROUTES.LOGIN}>
-                  <Button variant="outline" size="sm" className="border-sib-primary text-sib-primary hover:bg-sib-primary hover:text-white">
+              <div className="flex items-center space-x-2 xl:space-x-3">
+                <Link to={ROUTES.LOGIN} className="hidden sm:block">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={
+                      isHeaderDarkBg
+                        ? 'border-white/85 text-white hover:bg-white/15 hover:text-white hover:border-white'
+                        : 'border-sib-primary text-sib-primary hover:bg-sib-primary hover:text-white'
+                    }
+                  >
                     {t('nav.login')}
                   </Button>
                 </Link>
@@ -780,6 +792,21 @@ export const Header: React.FC = memo(() => {
                   onClick={closeMenu}
                 >
                   {t('nav.contact')}
+                </Link>
+              </div>
+              )}
+
+              {!isAuthenticated && authReady && (
+              <div className="border-t border-gray-200 pt-4 mt-2 px-3 flex flex-col gap-2 sm:hidden">
+                <Link to={ROUTES.LOGIN} onClick={closeMenu}>
+                  <Button variant="outline" size="sm" className="w-full border-sib-primary text-sib-primary">
+                    {t('nav.login')}
+                  </Button>
+                </Link>
+                <Link to={ROUTES.VISITOR_SUBSCRIPTION} onClick={closeMenu}>
+                  <Button size="sm" className="w-full bg-sib-primary hover:bg-sib-dark text-white">
+                    {t('nav.register')}
+                  </Button>
                 </Link>
               </div>
               )}

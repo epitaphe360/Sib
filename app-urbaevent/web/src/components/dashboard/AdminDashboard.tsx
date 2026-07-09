@@ -1,10 +1,9 @@
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Shield, AlertTriangle, BarChart3 } from 'lucide-react';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { ROUTES } from '../../lib/routes';
-import RegistrationRequests from '../admin/RegistrationRequests';
 import { useAdminDashboard } from '../../hooks/useAdminDashboard';
 import {
   AdminHeader,
@@ -13,7 +12,6 @@ import {
   AdminChartsSection,
   AdminActionsPanel,
   AdminNavVisibility,
-  CmsAdminHub,
   SystemHealthPanel,
   ActivityFeed,
 } from './admin';
@@ -89,18 +87,7 @@ export default function AdminDashboard() {
           t={t}
         />
 
-        <AdminAlertsSection
-          adminMetrics={adminMetrics as any}
-          showRegistrationRequests={ctx.showRegistrationRequests}
-          onToggleRegistrationRequests={() => ctx.setShowRegistrationRequests((v) => !v)}
-          t={t}
-        />
-
-        {ctx.showRegistrationRequests && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-            <RegistrationRequests />
-          </motion.div>
-        )}
+        <AdminAlertsSection adminMetrics={adminMetrics as any} t={t} />
 
         <AdminMetricsGrid adminMetrics={adminMetrics as any} t={t} />
 
@@ -113,16 +100,9 @@ export default function AdminDashboard() {
           isLoading={isLoading}
         />
 
-        <AdminActionsPanel
-          adminMetrics={adminMetrics as any}
-          showRegistrationRequests={ctx.showRegistrationRequests}
-          onToggleRegistrationRequests={() => ctx.setShowRegistrationRequests((v) => !v)}
-          t={t}
-        />
+        <AdminActionsPanel adminMetrics={adminMetrics as any} t={t} />
 
         <AdminNavVisibility />
-
-        <CmsAdminHub />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

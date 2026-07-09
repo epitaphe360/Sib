@@ -32,8 +32,6 @@ const tileVariants = {
 
 interface AdminActionsPanelProps {
   adminMetrics: Record<string, number | unknown>;
-  showRegistrationRequests: boolean;
-  onToggleRegistrationRequests: () => void;
   t: (key: string, params?: Record<string, string | number> | string) => string;
 }
 
@@ -106,8 +104,6 @@ function SectionTitle({ icon, label, sub, color = '#6366f1' }: { icon: React.Rea
 // ─── Composant principal ─────────────────────────────────────────────────
 export function AdminActionsPanel({
   adminMetrics: m,
-  showRegistrationRequests: _showRegistrationRequests,
-  onToggleRegistrationRequests: _onToggleRegistrationRequests,
   t,
 }: AdminActionsPanelProps) {
   const metrics = m as any;
@@ -214,10 +210,7 @@ export function AdminActionsPanel({
                   <Tile Icon={Newspaper} label="Actualités" sub="Publier des news" color="#10b981" />
                 </Link>
                 <Link to={ROUTES.ADMIN_CONTENT}>
-                  <Tile Icon={BookOpen} label="Gestion Contenu" sub="Pages & articles" color="#10b981" />
-                </Link>
-                <Link to={ROUTES.ADMIN_CATALOGUE}>
-                  <Tile Icon={BookOpen} label="Catalogue Exposants" sub="Fiches & invitations" color="#10b981" />
+                  <Tile Icon={BookOpen} label="Gestion Contenu" sub="Site web, mobile, bannières" color="#10b981" />
                 </Link>
                 <Link to={ROUTES.ADMIN_SPEAKERS}>
                   <Tile Icon={Mic2} label="Conférenciers" sub="Speakers & intervenants" color="#10b981" />
@@ -234,7 +227,7 @@ export function AdminActionsPanel({
               />
               <motion.div variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-20px' }} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Link to={ROUTES.ADMIN_MEDIA_MANAGE}>
-                  <Tile Icon={Video} label="Gestion Media" sub="Bibliothèque" color="#8b5cf6" />
+                  <Tile Icon={Video} label="Modération Médias" sub="Valider contenus web/APK" color="#8b5cf6" />
                 </Link>
                 <Link to={ROUTES.ADMIN_MEDIA_LIBRARY}>
                   <Tile Icon={ImageIcon} label="Bibliothèque Images & Vidéos" sub="Photos · Vidéos · Assets" color="#8b5cf6" />

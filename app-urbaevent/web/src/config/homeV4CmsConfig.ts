@@ -54,3 +54,4 @@ export const HOME_V4_CMS_MESSAGE = 'sib-home-v4-images';
 export const HOME_V4_LANG_MESSAGE = 'sib-home-v4-lang';
 export const HOME_V4_TEXT_MESSAGE = 'sib-home-v4-text-overrides';
 export const HOME_V4_STATS_MESSAGE = 'sib-home-v4-stat-overrides';
+export const HOME_V4_PARTNERS_MESSAGE = 'sib-home-v4-partners';

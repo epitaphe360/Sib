@@ -1,12 +1,9 @@
-﻿import { Link } from 'react-router-dom';
-import { Building2 } from 'lucide-react';
+﻿import { Building2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '../../ui/Badge';
-import { Button } from '../../ui/Button';
 import { LevelBadge } from '../../common/QuotaWidget';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { DEFAULT_SALON_CONFIG } from '../../../config/salonInfo';
-import { ROUTES } from '../../../lib/routes';
 import type { User } from '../../../types';
 
 interface ExhibitorHeaderProps {
@@ -90,20 +87,6 @@ export function ExhibitorHeader({
           </div>
         </div>
       </motion.div>
-
-      {/* Quick-access buttons */}
-      <div className="max-w-7xl mx-auto px-4 flex flex-wrap justify-end gap-3">
-        <Link to={ROUTES.BADGE}>
-          <Button variant="outline" size="lg" className="border-2 border-[#1B365D] text-[#1B365D] hover:bg-[#1B365D] hover:text-white">
-            {t('exhibitor.header.virtual_badge')}
-          </Button>
-        </Link>
-        <Link to={ROUTES.MINISITE_CREATION}>
-          <Button variant="default" size="lg" className="bg-[#1B365D] hover:bg-[#0F2034] text-white">
-            {t('exhibitor.header.create_edit_minisite')}
-          </Button>
-        </Link>
-      </div>
     </>
   );
 }

@@ -15,6 +15,100 @@
   var textOverrides = {};
   var statOverrides = null;
 
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function partnerLogoCount(groups) {
+    var total = 0;
+    (groups || []).forEach(function (group) {
+      (group.partners || []).forEach(function (partner) {
+        if (partner.logoUrl) total += 1;
+      });
+    });
+    return total;
+  }
+
+  function buildPartnerGroupHtml(group) {
+    var partners = (group.partners || []).filter(function (p) {
+      return p && String(p.name || '').trim();
+    });
+    if (!partners.length) return '';
+
+    var cols = partners.length >= 2 ? 'two' : 'one';
+    var isSponsor = String(group.label || '').toLowerCase().indexOf('sponsor') >= 0;
+    var isDelegate = String(group.label || '').toLowerCase().indexOf('délégué') >= 0 || String(group.label || '').toLowerCase().indexOf('delegue') >= 0;
+    var articleClass = 'partner-group';
+    if (partners.length >= 2) articleClass += ' partner-group-wide';
+    if (isSponsor) articleClass += ' partner-group-sponsor';
+    if (isDelegate) articleClass += ' partner-group-delegate';
+
+    var logos = partners
+      .map(function (partner) {
+        var name = escapeHtml(partner.name);
+        var acronym = escapeHtml(partner.acronym || partner.name.slice(0, 3));
+        if (partner.logoUrl) {
+          return (
+            '<figure><img src="' +
+            escapeHtml(partner.logoUrl) +
+            '" alt="' +
+            name +
+            '"></figure>'
+          );
+        }
+        return (
+          '<figure class="partner-text-tile"><span class="partner-acronym">' +
+          acronym +
+          '</span><small>' +
+          name +
+          '</small></figure>'
+        );
+      })
+      .join('');
+
+    return (
+      '<article class="' +
+      articleClass +
+      '"><h3>' +
+      escapeHtml(group.label || 'Partenaires') +
+      '</h3><div class="partner-logos ' +
+      cols +
+      '">' +
+      logos +
+      '</div></article>'
+    );
+  }
+
+  function applyPartners(payload) {
+    if (!payload || typeof payload !== 'object') return;
+    var grid = document.querySelector('.partners-grid');
+    if (!grid) return;
+
+    var displayMode = payload.displayMode === 'list' ? 'list' : 'banner';
+    var bannerUrl = payload.bannerUrl ? String(payload.bannerUrl) : '';
+    var groups = Array.isArray(payload.groups) ? payload.groups : [];
+    var hasLogos = partnerLogoCount(groups) > 0;
+
+    if (displayMode !== 'list' && bannerUrl && !hasLogos) {
+      grid.innerHTML =
+        '<article class="partner-group partner-group-wide partner-banner-only">' +
+        '<img src="' +
+        escapeHtml(bannerUrl) +
+        '" alt="Partenaires et sponsors SIB 2026" class="partners-banner-img">' +
+        '</article>';
+      return;
+    }
+
+    var html = groups.map(buildPartnerGroupHtml).join('');
+    if (html) {
+      grid.innerHTML = html;
+    }
+  }
+
   function applyImages(images) {
     if (!images || typeof images !== 'object') return;
     var root = document.documentElement;
@@ -102,6 +196,11 @@
 
     if (event.data.type === 'sib-home-v4-stat-overrides') {
       applyStatOverrides(event.data.stats);
+      return;
+    }
+
+    if (event.data.type === 'sib-home-v4-partners') {
+      applyPartners(event.data.partners);
     }
   });
 

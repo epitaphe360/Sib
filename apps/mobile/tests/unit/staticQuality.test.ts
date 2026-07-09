@@ -127,9 +127,10 @@ describe('Mobile — qualité statique', () => {
       expect(home).toContain('SalonSelectionGrid');
 
       const interior = read('src/components/home/SalonInteriorContent.tsx');
-      expect(interior).toContain('HubBadgeSection');
-      expect(interior).toContain('QuickActionGrid');
-      expect(interior).toContain("mode=\"full\"");
+      expect(interior).toContain('SalonVisitorMenuGrid');
+      expect(interior).toContain('SalonPromoHeader');
+      expect(interior).toContain('SalonSummaryCard');
+      expect(interior).toContain('salon.downloadBadge');
 
       const index = read('app/(visitor)/(tabs)/index.tsx');
       expect(index).toContain('SalonInteriorContent');
@@ -155,8 +156,17 @@ describe('Mobile — qualité statique', () => {
       expect(read('src/data/salonPartners.ts')).toContain('SIB_PARTNERS_BANNER');
       expect(read('src/data/salonPartners.ts')).toContain('partnersBanner');
       expect(read('src/components/home/SalonMiniHomeSection.tsx')).toContain('salon.partners.title');
-      expect(read('src/components/home/SalonInteriorContent.tsx')).toContain('SalonMiniHomeSection');
       expect(existsSync(join(MOBILE_ROOT, 'assets/images/sib-partners-banner.png'))).toBe(true);
+    });
+
+    it('menu visiteur salon aligné ancienne APK', () => {
+      const menu = read('src/components/home/SalonVisitorMenuGrid.tsx');
+      expect(menu).toContain('salon.menu.presentation');
+      expect(menu).toContain('salon.menu.program');
+      expect(menu).toContain('salon.menu.agenda');
+      expect(menu).toContain('salon.menu.directory');
+      expect(existsSync(join(MOBILE_ROOT, 'app/(visitor)/salon-presentation.tsx'))).toBe(true);
+      expect(existsSync(join(MOBILE_ROOT, 'app/(visitor)/salon-info.tsx'))).toBe(true);
     });
 
     it('plan interactif 3D avec stands', () => {
