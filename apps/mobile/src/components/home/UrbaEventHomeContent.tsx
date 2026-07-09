@@ -45,7 +45,7 @@ export function UrbaEventHomeContent() {
 
       {!connected ? <UrbacomSocialSection /> : null}
 
-      <VisitorHubAccess compact={connected} />
+      <VisitorHubAccess />
     </ScrollView>
   );
 }

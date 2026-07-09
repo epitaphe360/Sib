@@ -27,7 +27,7 @@ interface PricingRow {
 const CATEGORY_META = {
   visitor:  { label: 'Visiteurs VIP',    icon: Crown,     color: '#7c3aed', bg: '#f5f3ff' },
   exhibitor:{ label: 'Exposants',        icon: Building2, color: '#0ea5e9', bg: '#f0f9ff' },
-  partner:  { label: 'Partenaires',      icon: Handshake, color: '#10b981', bg: '#f0fdf4' },
+  partner:  { label: 'Sponsors',      icon: Handshake, color: '#10b981', bg: '#f0fdf4' },
 } as const;
 
 const CURRENCY_LABELS: Record<string, string> = {

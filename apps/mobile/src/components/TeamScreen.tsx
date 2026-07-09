@@ -123,6 +123,7 @@ export function TeamScreen() {
       ) : null}
 
       <FlatList
+        style={styles.flex}
         data={items}
         keyExtractor={(i) => i.id}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.gold} />}

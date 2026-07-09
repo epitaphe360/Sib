@@ -32,7 +32,7 @@ const SALON_IMAGE_SLOTS = [
   { key: 'hero_bg', label: 'Fond hero accueil' },
   ...APK_SALON_STAT_KEYS.map((key) => ({
     key: partnersBannerSlot(key),
-    label: `Bannière partenaires ${key.toUpperCase()}`,
+    label: `Bannière sponsors ${key.toUpperCase()}`,
   })),
 ];
 
@@ -208,7 +208,7 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
             <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Contenu APK UrbaEvent</h2>
           </div>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl">
-            Tout le contenu visible dans l’APK (textes salon, présentation, partenaires, photos, paiement).
+            Tout le contenu visible dans l’APK (textes salon, présentation, sponsors, photos, paiement).
             Enregistrez puis tirez vers le bas sur l’accueil APK pour actualiser.
           </p>
         </div>
@@ -372,7 +372,7 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
                       />
                     ) : (
                       <p className="text-xs text-neutral-500 rounded-lg border border-dashed border-neutral-300 dark:border-neutral-700 px-4 py-3">
-                        Mode bannière : uploadez « Bannière partenaires {key.toUpperCase()} » dans la section Photos APK ci-dessous.
+                        Mode bannière : uploadez « Bannière sponsors {key.toUpperCase()} » dans la section Photos APK ci-dessous.
                         Pour ajouter des sponsors un par un, choisissez « Liste de sponsors ».
                       </p>
                     )}

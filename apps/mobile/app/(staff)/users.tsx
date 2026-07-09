@@ -67,6 +67,7 @@ export default function StaffUsersScreen() {
       <PrimaryButton label={t('admin.users.searchBtn')} onPress={load} />
       {loading ? <SkeletonList rows={5} /> : (
         <FlatList
+          style={styles.flex}
           data={rows}
           keyExtractor={(r) => r.id}
           refreshControl={

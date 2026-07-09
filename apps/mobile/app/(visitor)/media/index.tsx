@@ -53,6 +53,7 @@ export default function MediaLibraryScreen() {
         ))}
       </View>
       <FlatList
+        style={styles.flex}
         data={items}
         keyExtractor={(i) => i.id}
         ListEmptyComponent={loading ? <SkeletonList rows={4} /> : <EmptyState message={t('media.empty')} />}

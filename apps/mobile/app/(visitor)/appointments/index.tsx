@@ -62,7 +62,7 @@ export default function VisitorAppointmentsScreen({ embedded = false }: { embedd
           <IllustratedEmpty icon="person-outline" title={t('appointments.title')} message={t('auth.emailRequired')} />
         ) : (
           <FlatList
-            style={embedded ? undefined : styles.flex}
+            style={styles.flex}
             data={items}
             keyExtractor={(i) => i.id}
             contentContainerStyle={[styles.list, items.length === 0 && styles.emptyList]}

@@ -58,6 +58,7 @@ export default function SpeedNetworkingScreen() {
       <ScreenTitle title={t('speed.title')} subtitle={t('speed.subtitle')} />
       {loadError ? <EmptyState message={loadError} /> : null}
       <FlatList
+        style={styles.flex}
         data={sessions}
         keyExtractor={(s) => s.id}
         ListEmptyComponent={<EmptyState message={t('speed.empty')} />}

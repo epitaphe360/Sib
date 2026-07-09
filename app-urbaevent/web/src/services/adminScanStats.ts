@@ -1,10 +1,16 @@
 import { supabase } from '../lib/supabase';
-import { fetchScannerNames } from './visitorScans';
 
-/** Portails de scan — listes séparées, sans mélange entre tables. */
 export type AdminScanCategory = 'controller' | 'entry' | 'networking' | 'stand';
 
 export const ADMIN_SCAN_PORTALS: AdminScanCategory[] = ['controller', 'entry', 'networking', 'stand'];
+
+export const ADMIN_SALON_FILTERS = [
+  { id: 'sib', code: 'SIB' },
+  { id: 'sir', code: 'SIR' },
+  { id: 'sip', code: 'SIP' },
+  { id: 'btp', code: 'BTP' },
+  { id: 'sie', code: 'SIE' },
+] as const;
 
 export interface AdminScanStats {
   entryScans: number;
@@ -26,7 +32,6 @@ export interface AdminScanListItem {
   valid?: boolean;
 }
 
-/** Statistiques globales des scans (admin) — 100 % serveur via RPC (adapté 200k+ visiteurs). */
 export async function fetchAdminScanStats(salonId?: string): Promise<AdminScanStats> {
   const { data: rpcData, error: rpcError } = await supabase.rpc('get_admin_scan_statistics', {
     p_salon_id: salonId ?? null,
@@ -57,12 +62,10 @@ export async function fetchAdminScanStats(salonId?: string): Promise<AdminScanSt
   };
 }
 
-/** Affichage lisible des grands nombres (ex. 200 000). */
 export function formatScanStatNumber(value: number): string {
   return value.toLocaleString('fr-FR');
 }
 
-/** Filtre salon : SIB inclut les lignes legacy sans salon_id. */
 function applySalonFilter<T extends { or: (filters: string) => T; eq: (col: string, val: string) => T }>(
   query: T,
   salonId?: string,
@@ -72,10 +75,15 @@ function applySalonFilter<T extends { or: (filters: string) => T; eq: (col: stri
   return query.eq('salon_id', salonId);
 }
 
-/** Liste détaillée par catégorie pour surveillance admin. */
+async function fetchScannerNames(ids: string[]): Promise<Map<string, string>> {
+  if (!ids.length) return new Map();
+  const { data } = await supabase.from('users').select('id, name').in('id', ids);
+  return new Map((data ?? []).map((u) => [u.id as string, (u.name as string) || '']));
+}
+
 export async function fetchAdminScanList(
   category: AdminScanCategory,
-  limit = 100,
+  limit = 150,
   salonId?: string,
 ): Promise<AdminScanListItem[]> {
   switch (category) {
@@ -113,7 +121,7 @@ async function fetchEntryList(limit: number, salonId?: string): Promise<AdminSca
     seen.add(uid);
     items.push({
       id: row.id as string,
-      category: 'entry' as const,
+      category: 'entry',
       scannedAt: row.accessed_at as string,
       primaryLabel: (row.user_name as string) || 'Visiteur',
       secondaryLabel: row.user_type as string | undefined,
@@ -142,7 +150,7 @@ async function fetchControllerList(limit: number, salonId?: string): Promise<Adm
 
   return (data ?? []).map((row) => ({
     id: row.id as string,
-    category: 'controller' as const,
+    category: 'controller',
     scannedAt: row.accessed_at as string,
     primaryLabel: (row.user_name as string) || (row.reason as string) || '—',
     secondaryLabel: row.scanned_by
@@ -182,7 +190,7 @@ async function fetchNetworkingList(limit: number, salonId?: string): Promise<Adm
     const b = names.get(row.addressee_id as string) ?? 'Contact B';
     return {
       id: row.id as string,
-      category: 'networking' as const,
+      category: 'networking',
       scannedAt: row.created_at as string,
       primaryLabel: `${a} ↔ ${b}`,
       secondaryLabel: row.status as string,
@@ -216,7 +224,7 @@ async function fetchStandList(limit: number, salonId?: string): Promise<AdminSca
 
   return (data ?? []).map((row) => ({
     id: row.id as string,
-    category: 'stand' as const,
+    category: 'stand',
     scannedAt: row.scanned_at as string,
     primaryLabel: names.get(row.visitor_user_id as string) ?? row.badge_code ?? 'Visiteur',
     secondaryLabel: names.get(row.exhibitor_user_id as string) ?? 'Exposant',

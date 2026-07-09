@@ -45,15 +45,15 @@ export default function PartnerManagementPage() {
       const data = await SupabaseService.getPartners();
       setPartners(data);
     } catch (error) {
-      console.error('Erreur lors du chargement des partenaires:', error);
-      toast.error('Impossible de récupérer la liste des partenaires.');
+      console.error('Erreur lors du chargement des sponsors:', error);
+      toast.error('Impossible de récupérer la liste des sponsors.');
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer le partenaire "${name}" ? Cette action est irréversible.`)) {
+    if (window.confirm(`Êtes-vous sûr de vouloir supprimer le sponsor "${name}" ? Cette action est irréversible.`)) {
       try {
         const { error } = await supabase
           .from('partners')
@@ -65,7 +65,7 @@ export default function PartnerManagementPage() {
         // Supprimer immédiatement du state local
         setPartners(partners.filter(p => p.id !== id));
 
-        toast.success('Partenaire supprimé avec succès');
+        toast.success('Sponsor supprimé avec succès');
         // Ensuite faire un refresh complet
         setTimeout(() => fetchPartners(), 500);
       } catch (error) {
@@ -171,7 +171,7 @@ export default function PartnerManagementPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher un partenaire..."
+                placeholder="Rechercher un sponsor..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
@@ -208,24 +208,24 @@ export default function PartnerManagementPage() {
         {isLoading ? (
           <Card className="p-12 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Chargement des partenaires...</p>
+            <p className="text-gray-600">Chargement des sponsors...</p>
           </Card>
         ) : filteredPartners.length === 0 ? (
           <Card className="p-12 text-center">
             <Handshake className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              {searchTerm || filterTier !== 'all' || filterStatus !== 'all' ? 'Aucun partenaire trouvé' : 'Aucun partenaire'}
+              {searchTerm || filterTier !== 'all' || filterStatus !== 'all' ? 'Aucun sponsor trouvé' : 'Aucun sponsor'}
             </h3>
             <p className="text-gray-600 mb-6">
               {searchTerm || filterTier !== 'all' || filterStatus !== 'all'
                 ? 'Essayez de modifier vos critères de recherche'
-                : 'Commencez par créer votre premier partenaire'}
+                : 'Commencez par créer votre premier sponsor'}
             </p>
             {!searchTerm && filterTier === 'all' && filterStatus === 'all' && (
               <Link to={ROUTES.ADMIN_CREATE_PARTNER}>
                 <Button className="bg-gradient-to-r from-indigo-600 to-purple-600">
                   <Plus className="h-5 w-5 mr-2" />
-                  Créer un partenaire
+                  Créer un sponsor
                 </Button>
               </Link>
             )}

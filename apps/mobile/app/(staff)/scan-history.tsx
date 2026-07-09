@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import { fetchAccessLogHistory, type ScanHistoryEntry } from '../../src/api/scanner';
 import { fetchScannerNames } from '../../src/api/visitorScans';
-import { Screen, ScreenTitle } from '../../src/components/ui';
+import { EmptyState, Screen, ScreenTitle } from '../../src/components/ui';
 import { useAuth } from '../../src/context/AuthContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
 import { colors, fonts, radius, spacing } from '../../src/theme';
@@ -21,9 +22,17 @@ export default function StaffScanHistoryScreen() {
   const { user } = useAuth();
   const { t } = useI18n();
   const isController = user?.type === 'security';
+  const isAdmin = user?.type === 'admin';
   const [items, setItems] = useState<ScanHistoryEntry[]>([]);
   const [scannerNames, setScannerNames] = useState<Map<string, string>>(new Map());
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isAdmin) {
+      router.replace('/(staff)/scan-stats' as never);
+    }
+  }, [isAdmin]);
 
   const load = useCallback(async () => {
     const rows = await fetchAccessLogHistory(100, {
@@ -34,22 +43,32 @@ export default function StaffScanHistoryScreen() {
       const ids = [...new Set(rows.map((r) => r.scannedBy).filter(Boolean))] as string[];
       setScannerNames(await fetchScannerNames(ids));
     }
+    setLoading(false);
     setRefreshing(false);
   }, [isController, user?.id]);
 
   useEffect(() => {
+    if (isAdmin) return;
     void load();
-  }, [load]);
+  }, [load, isAdmin]);
+
+  if (isAdmin) {
+    return null;
+  }
+
+  const header = (
+    <ScreenTitle
+      title={isController ? t('scanner.history') : t('scanHistory.controllerTitle')}
+      subtitle={isController ? t('scanHistory.myScans') : t('scanHistory.allControllers')}
+    />
+  );
 
   return (
-    <Screen>
-      <ScreenTitle
-        title={t('scanHistory.controllerTitle')}
-        subtitle={isController ? t('scanHistory.myScans') : t('scanHistory.allControllers')}
-      />
+    <Screen style={styles.flex}>
       <FlatList
         data={items}
         keyExtractor={(i) => i.id}
+        style={styles.flex}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -59,7 +78,13 @@ export default function StaffScanHistoryScreen() {
             }}
           />
         }
-        contentContainerStyle={{ paddingBottom: spacing.xl, gap: spacing.sm }}
+        contentContainerStyle={items.length ? styles.list : styles.listEmpty}
+        ListHeaderComponent={header}
+        ListEmptyComponent={
+          !loading ? (
+            <EmptyState title={t('scanner.historyEmpty')} message={t('scanHistory.emptyHint')} />
+          ) : null
+        }
         renderItem={({ item }) => (
           <View style={styles.row}>
             <View style={styles.rowTop}>
@@ -83,12 +108,16 @@ export default function StaffScanHistoryScreen() {
 }
 
 const styles = StyleSheet.create({
+  flex: { flex: 1 },
+  list: { paddingBottom: spacing.xl, gap: spacing.sm },
+  listEmpty: { flexGrow: 1, paddingBottom: spacing.xl },
   row: {
     backgroundColor: colors.surface,
     borderRadius: radius.md,
     padding: spacing.md,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.border,
+    marginBottom: spacing.sm,
   },
   rowTop: { flexDirection: 'row', justifyContent: 'space-between', gap: spacing.sm },
   status: { flex: 1, fontFamily: fonts.bodyBold, fontSize: 14 },

@@ -94,6 +94,39 @@ describe('Mobile — qualité statique', () => {
       expect(read('app/(visitor)/(tabs)/salons.tsx')).toContain('SalonSelectionGrid');
     });
 
+    it('accueil connecté sans doublon tab bar (VisitorHubAccess masqué)', () => {
+      const hub = read('src/components/home/VisitorHubAccess.tsx');
+      expect(hub).toMatch(/if\s*\(\s*user\s*\)[\s\S]*return null/);
+      expect(hub).not.toContain('QUICK_LINKS');
+    });
+
+    it('statistiques scans : filtre Tous par défaut et liste scrollable', () => {
+      const screen = read('app/(staff)/scan-stats.tsx');
+      expect(screen).toContain("useState<string | undefined>(undefined)");
+      expect(screen).toContain('ListHeaderComponent={listHeader}');
+      expect(screen).toContain('flexBasis: \'48%\'');
+    });
+
+    it('listes principales avec flex scrollable', () => {
+      const files = [
+        'app/(visitor)/(tabs)/explore.tsx',
+        'app/(visitor)/(tabs)/exhibitors.tsx',
+        'app/(visitor)/(tabs)/network-hub.tsx',
+        'app/(staff)/payments.tsx',
+      ];
+      for (const f of files) {
+        expect(read(f), f).toMatch(/style=\{styles\.flex\}/);
+      }
+      expect(read('app/(visitor)/(tabs)/network-hub.tsx')).not.toContain('ScrollView style={styles.scroll}');
+    });
+
+    it('scanner staff : historique sur page dédiée, pas d overlay caméra', () => {
+      const scanner = read('app/(staff)/scanner.tsx');
+      expect(scanner).not.toContain('historyOverlay');
+      expect(scanner).toContain("router.push('/(staff)/scan-history'");
+      expect(scanner).toContain("label={t('scanner.history')}");
+    });
+
     it('accueil UrbaEvent avec espace visiteur connecté', () => {
       expect(read('src/components/home/UrbaEventHomeContent.tsx')).toContain('VisitorHubAccess');
     });

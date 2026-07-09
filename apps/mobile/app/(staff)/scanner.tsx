@@ -1,41 +1,37 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SignOutOverlayButton } from '../../src/components/SignOutOverlayButton';
 import { useSignOut } from '../../src/hooks/useSignOut';
-import { useAuth } from '../../src/context/AuthContext';
 import {
-  fetchAccessLogHistory,
   flushOfflineScanQueue,
-  getScanHistory,
   scanQrPayload,
 } from '../../src/api/scanner';
 import { fetchGates, getSelectedGate, saveSelectedGate } from '../../src/api/gates';
 import { QRScannerView } from '../../src/components/QRScannerView';
 import { ScanResultFlash, type ScanFlashStatus } from '../../src/components/ScanResultFlash';
 import { Chip, Input, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
-import { AppIcon } from '../../src/components/AppIcon';
 import { useI18n } from '../../src/i18n/I18nProvider';
 import type { Gate } from '../../src/types';
 import { colors, fonts, radius, shadows, spacing } from '../../src/theme';
 
 const ZONES = [
-  { id: 'public', label: 'Public' },
-  { id: 'exhibition_hall', label: 'Hall expo' },
-  { id: 'vip_lounge', label: 'VIP' },
-  { id: 'networking_area', label: 'Networking' },
-  { id: 'backstage', label: 'Backstage' },
-];
+  { id: 'public', labelKey: 'scanner.zones.public' },
+  { id: 'exhibition_hall', labelKey: 'scanner.zones.exhibitionHall' },
+  { id: 'vip_lounge', labelKey: 'scanner.zones.vipLounge' },
+  { id: 'networking_area', labelKey: 'scanner.zones.networkingArea' },
+  { id: 'backstage', labelKey: 'scanner.zones.backstage' },
+] as const;
+
+type ZoneId = (typeof ZONES)[number]['id'];
 
 export default function StaffScannerScreen() {
   const { t } = useI18n();
-  const { user } = useAuth();
   const { confirmSignOut } = useSignOut();
   const insets = useSafeAreaInsets();
-  const [zone, setZone] = useState(ZONES[0].id);
+  const [zone, setZone] = useState<ZoneId>(ZONES[0].id);
   const [payload, setPayload] = useState('');
-  const [history, setHistory] = useState(getScanHistory());
   const [useCamera, setUseCamera] = useState(true);
   const [scanning, setScanning] = useState(false);
   const [flash, setFlash] = useState<{ status: ScanFlashStatus; message: string } | null>(null);
@@ -50,21 +46,16 @@ export default function StaffScannerScreen() {
 
   const pickGate = async (gate: Gate) => {
     setSelectedGate(gate);
-    setZone(gate.zone);
+    setZone(gate.zone as ZoneId);
     await saveSelectedGate(gate);
     setShowGatePicker(false);
   };
 
-  const reloadHistory = useCallback(async () => {
-    const db = await fetchAccessLogHistory(15, {
-      scannedBy: user?.type === 'security' ? user.id : undefined,
-    });
-    setHistory(db.length ? db : getScanHistory());
-  }, [user?.id, user?.type]);
-
   useEffect(() => {
-    flushOfflineScanQueue().then(() => reloadHistory()).catch((e) => console.warn('[Scanner] flushOfflineScanQueue', e));
-  }, [reloadHistory]);
+    flushOfflineScanQueue().catch((e) => console.warn('[Scanner] flushOfflineScanQueue', e));
+  }, []);
+
+  const openHistory = () => router.push('/(staff)/scan-history' as never);
 
   const scan = async (data?: string) => {
     const value = (data ?? payload).trim();
@@ -72,8 +63,6 @@ export default function StaffScannerScreen() {
     setScanning(true);
     try {
       const result = await scanQrPayload(value, zone);
-      setHistory(getScanHistory());
-      await reloadHistory();
       const status: ScanFlashStatus = result.valid
         ? 'granted'
         : result.reason?.toLowerCase().includes('expir') || result.reason?.toLowerCase().includes('warn')
@@ -89,7 +78,7 @@ export default function StaffScannerScreen() {
     }
   };
 
-  const zoneLabel = ZONES.find((z) => z.id === zone)?.label ?? zone;
+  const zoneLabel = ZONES.find((z) => z.id === zone) ? t(ZONES.find((z) => z.id === zone)!.labelKey) : zone;
 
   if (useCamera) {
     return (
@@ -102,25 +91,6 @@ export default function StaffScannerScreen() {
             visible={!!flash}
             onDismiss={() => setFlash(null)}
           />
-          {history.length > 0 ? (
-            <View style={[styles.historyOverlay, { top: insets.top + spacing.sm + 44 }]}>
-              <Text style={styles.historyOverlayTitle}>{t('scanner.history')}</Text>
-              {history.slice(0, 3).map((h) => (
-                <View key={h.id} style={styles.historyOverlayRow}>
-                  <AppIcon
-                    name={h.valid ? 'checkmark-circle-outline' : 'close-circle-outline'}
-                    size={12}
-                    color={h.valid ? '#4ade80' : '#f87171'}
-                  />
-                  <Text style={styles.historyOverlayLine} numberOfLines={1}>
-                    {new Date(h.scannedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                    {' · '}
-                    {h.userName ?? h.reason ?? '—'}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          ) : null}
           <View style={styles.topBar} pointerEvents="box-none">
             <SignOutOverlayButton />
           </View>
@@ -136,10 +106,11 @@ export default function StaffScannerScreen() {
           <Text style={styles.zoneTitle}>{t('scanner.zone')} : {zoneLabel}</Text>
           <View style={styles.zones}>
             {ZONES.map((z) => (
-              <Chip key={z.id} label={z.label} active={zone === z.id} onPress={() => setZone(z.id)} />
+              <Chip key={z.id} label={t(z.labelKey)} active={zone === z.id} onPress={() => setZone(z.id)} />
             ))}
           </View>
           <PrimaryButton label={t('scanner.manual')} variant="outline" onPress={() => setUseCamera(false)} />
+          <PrimaryButton label={t('scanner.history')} variant="gold" onPress={openHistory} />
         </View>
 
         <Modal visible={showGatePicker} transparent animationType="slide" onRequestClose={() => setShowGatePicker(false)}>
@@ -173,7 +144,7 @@ export default function StaffScannerScreen() {
 
         <View style={styles.zones}>
           {ZONES.map((z) => (
-            <Chip key={z.id} label={z.label} active={zone === z.id} onPress={() => setZone(z.id)} />
+            <Chip key={z.id} label={t(z.labelKey)} active={zone === z.id} onPress={() => setZone(z.id)} />
           ))}
         </View>
 
@@ -193,37 +164,9 @@ export default function StaffScannerScreen() {
         <View style={{ height: spacing.sm }} />
         <PrimaryButton label={t('scanner.useCamera')} variant="gold" onPress={() => setUseCamera(true)} />
         <View style={{ height: spacing.sm }} />
-        <PrimaryButton
-          label={t('scanHistory.controllerTitle')}
-          variant="outline"
-          onPress={() => router.push('/(staff)/scan-history' as never)}
-        />
+        <PrimaryButton label={t('scanner.history')} variant="outline" onPress={openHistory} />
         <View style={{ height: spacing.sm }} />
         <PrimaryButton label={t('profile.signOut')} variant="outline" onPress={confirmSignOut} />
-
-        <Text style={styles.section}>{t('scanner.history')}</Text>
-        {history.length === 0 ? (
-          <Text style={styles.emptyHistory}>{t('scanner.historyEmpty')}</Text>
-        ) : (
-          history.slice(0, 10).map((h) => (
-            <View key={h.id} style={styles.histRow}>
-              <AppIcon
-                name={h.valid ? 'checkmark-circle-outline' : 'close-circle-outline'}
-                size={20}
-                color={h.valid ? colors.success : colors.danger}
-              />
-              <View style={styles.histContent}>
-                <Text style={styles.histName}>{h.userName ?? h.reason ?? '—'}</Text>
-                <Text style={styles.histMeta}>
-                  {new Date(h.scannedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                  {' · '}
-                  {h.zone}
-                  {h.salonName ? ` · ${h.salonName}` : ''}
-                </Text>
-              </View>
-            </View>
-          ))
-        )}
       </ScrollView>
     </Screen>
   );
@@ -246,20 +189,9 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: radius.xl,
     borderTopRightRadius: radius.xl,
     padding: spacing.md,
+    gap: spacing.sm,
     ...shadows.lg,
   },
-  historyOverlay: {
-    position: 'absolute',
-    left: spacing.md,
-    right: spacing.md,
-    backgroundColor: 'rgba(0,0,0,0.55)',
-    borderRadius: radius.lg,
-    padding: spacing.sm,
-    zIndex: 50,
-  },
-  historyOverlayTitle: { color: colors.gold, fontFamily: fonts.bodyBold, fontSize: 12, marginBottom: 4 },
-  historyOverlayRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 2 },
-  historyOverlayLine: { color: '#fff', fontFamily: fonts.body, fontSize: 12, flex: 1 },
   gateSelector: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: radius.md, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, marginBottom: spacing.sm, borderWidth: 1, borderColor: colors.gold },
   gateSelectorLabel: { color: colors.gold, fontFamily: fonts.bodyBold, fontSize: 13 },
   gateSelectorChevron: { color: colors.gold, fontSize: 16 },
@@ -273,23 +205,4 @@ const styles = StyleSheet.create({
   gateItemLocation: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginTop: 2 },
   scroll: { paddingBottom: spacing.xl },
   zones: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: spacing.md },
-  section: {
-    marginTop: spacing.lg,
-    fontFamily: fonts.bodyBold,
-    fontSize: 16,
-    color: colors.text,
-    marginBottom: spacing.sm,
-  },
-  emptyHistory: { color: colors.textMuted, fontSize: 14, fontStyle: 'italic', fontFamily: fonts.body },
-  histRow: {
-    flexDirection: 'row',
-    gap: 10,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    alignItems: 'center',
-  },
-  histContent: { flex: 1 },
-  histName: { color: colors.text, fontSize: 14, fontFamily: fonts.bodyMedium },
-  histMeta: { color: colors.textMuted, fontSize: 12, marginTop: 2, fontFamily: fonts.body },
 });

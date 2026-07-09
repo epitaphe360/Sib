@@ -316,10 +316,10 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {editMode ? 'Modifier le Partenaire' : 'Créer un Nouveau Partenaire'}
+              {editMode ? 'Modifier le sponsor' : 'Créer un nouveau sponsor'}
             </h1>
             <p className="text-gray-600">
-              {editMode ? 'Mettre à jour les informations du partenaire officiel' : 'Enregistrer un nouveau partenaire officiel SIB 2026'}
+              {editMode ? 'Mettre à jour les informations du sponsor officiel' : 'Enregistrer un nouveau sponsor officiel SIB 2026'}
             </p>
           </motion.div>
         </div>
@@ -1007,7 +1007,7 @@ export default function PartnerCreationForm({ partnerToEdit, editMode = false }:
                   ) : (
                     <>
                       <CheckCircle className="h-4 w-4 mr-2" />
-                      {editMode ? 'Enregistrer les modifications' : 'Créer le Partenaire'}
+                      {editMode ? 'Enregistrer les modifications' : 'Créer le sponsor'}
                     </>
                   )}
                 </Button>

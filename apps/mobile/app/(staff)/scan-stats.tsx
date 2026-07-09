@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -25,10 +25,10 @@ import { useI18n } from '../../src/i18n/I18nProvider';
 import { colors, fonts, radius, spacing } from '../../src/theme';
 
 const CATEGORIES: { id: AdminScanCategory; icon: AppIconName; statKey: keyof AdminScanStats; accent: string }[] = [
+  { id: 'controller', icon: 'shield-outline', statKey: 'controllerScans', accent: '#6B21A8' },
   { id: 'entry', icon: 'log-in-outline', statKey: 'uniqueEntrants', accent: '#10B981' },
   { id: 'networking', icon: 'people-outline', statKey: 'networkingScans', accent: '#4598D1' },
   { id: 'stand', icon: 'storefront-outline', statKey: 'standScans', accent: '#F39200' },
-  { id: 'controller', icon: 'shield-outline', statKey: 'controllerScans', accent: '#6B21A8' },
 ];
 
 function formatScanTime(iso: string): string {
@@ -45,9 +45,9 @@ function AdminScanStatsContent() {
   const { user } = useAuth();
   const { t } = useI18n();
   const [stats, setStats] = useState<AdminScanStats | null>(null);
-  const [activeCategory, setActiveCategory] = useState<AdminScanCategory>('entry');
+  const [activeCategory, setActiveCategory] = useState<AdminScanCategory>('controller');
   const [items, setItems] = useState<AdminScanListItem[]>([]);
-  const [salonFilter, setSalonFilter] = useState<string | undefined>('sib');
+  const [salonFilter, setSalonFilter] = useState<string | undefined>(undefined);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingList, setLoadingList] = useState(true);
 
@@ -73,7 +73,12 @@ function AdminScanStatsContent() {
     void load();
   }, [load]);
 
-  const categoryLabel = (id: AdminScanCategory) => t(`adminScanStats.category.${id}`);
+  const categoryLabel = (id: AdminScanCategory) => t(`adminScanStats.portal.${id}`);
+
+  const salonFilterLabel = useMemo(() => {
+    if (!salonFilter) return t('adminScanStats.allSalons');
+    return SALONS.find((s) => s.id === salonFilter)?.code ?? salonFilter.toUpperCase();
+  }, [salonFilter, t]);
 
   const statValue = (cat: typeof CATEGORIES[number]) => {
     if (!stats) return '—';
@@ -91,22 +96,20 @@ function AdminScanStatsContent() {
     });
   };
 
-  if (user?.type !== 'admin') {
-    return (
-      <Screen>
-        <EmptyState title={t('adminScanStats.adminOnly')} message={t('adminScanStats.adminOnlyHint')} />
-      </Screen>
-    );
-  }
-
-  return (
-    <Screen>
+  const listHeader = (
+    <View style={styles.header}>
       <ScreenTitle title={t('adminScanStats.title')} subtitle={t('adminScanStats.subtitle')} />
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.salonRow}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.salonRow}
+      >
         <Pressable
           style={[styles.salonChip, !salonFilter && styles.salonChipActive]}
           onPress={() => setSalonFilter(undefined)}
+          accessibilityRole="button"
+          accessibilityState={{ selected: !salonFilter }}
         >
           <Text style={[styles.salonChipText, !salonFilter && styles.salonChipTextActive]}>
             {t('adminScanStats.allSalons')}
@@ -117,6 +120,8 @@ function AdminScanStatsContent() {
             key={s.id}
             style={[styles.salonChip, salonFilter === s.id && styles.salonChipActive]}
             onPress={() => setSalonFilter(s.id)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: salonFilter === s.id }}
           >
             <Text style={[styles.salonChipText, salonFilter === s.id && styles.salonChipTextActive]}>
               {s.code}
@@ -133,6 +138,8 @@ function AdminScanStatsContent() {
               key={cat.id}
               style={[styles.statCard, active && { borderColor: cat.accent, borderWidth: 2 }]}
               onPress={() => setActiveCategory(cat.id)}
+              accessibilityRole="button"
+              accessibilityState={{ selected: active }}
             >
               <View style={[styles.statIcon, { backgroundColor: `${cat.accent}18` }]}>
                 <AppIcon name={cat.icon} size={20} color={cat.accent} />
@@ -141,19 +148,36 @@ function AdminScanStatsContent() {
               <Text style={styles.statLabel} numberOfLines={2}>
                 {categoryLabel(cat.id)}
               </Text>
-              {statSub(cat) ? <Text style={styles.statSub}>{statSub(cat)}</Text> : null}
+              {statSub(cat) ? <Text style={styles.statSub} numberOfLines={2}>{statSub(cat)}</Text> : null}
             </Pressable>
           );
         })}
       </View>
 
       <Text style={styles.listTitle}>
-        {categoryLabel(activeCategory)} — {t('adminScanStats.listDetail')}
+        {t('adminScanStats.listHeading', {
+          category: categoryLabel(activeCategory),
+          filter: salonFilterLabel,
+        })}
       </Text>
+      <Text style={styles.listHint}>{t(`adminScanStats.portalHint.${activeCategory}`)}</Text>
+    </View>
+  );
 
+  if (user?.type !== 'admin') {
+    return (
+      <Screen>
+        <EmptyState title={t('adminScanStats.adminOnly')} message={t('adminScanStats.adminOnlyHint')} />
+      </Screen>
+    );
+  }
+
+  return (
+    <Screen style={styles.flex}>
       <FlatList
         data={items}
         keyExtractor={(i) => i.id}
+        style={styles.flex}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -164,6 +188,7 @@ function AdminScanStatsContent() {
           />
         }
         contentContainerStyle={items.length ? styles.list : styles.listEmpty}
+        ListHeaderComponent={listHeader}
         ListEmptyComponent={
           !loadingList ? (
             <EmptyState title={t('adminScanStats.empty')} message={t('adminScanStats.emptyHint')} />
@@ -202,14 +227,22 @@ export default function AdminScanStatsScreen() {
 }
 
 const styles = StyleSheet.create({
-  salonRow: { gap: spacing.sm, paddingBottom: spacing.md, paddingHorizontal: 2 },
+  flex: { flex: 1 },
+  header: { marginBottom: spacing.sm },
+  salonRow: {
+    gap: spacing.sm,
+    paddingBottom: spacing.md,
+    paddingRight: spacing.sm,
+  },
   salonChip: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: radius.full,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
+    minWidth: 52,
+    alignItems: 'center',
   },
   salonChipActive: { backgroundColor: colors.primaryDark, borderColor: colors.primaryDark },
   salonChipText: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.textMuted },
@@ -221,14 +254,14 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   statCard: {
-    width: '48%',
-    flexGrow: 1,
+    flexBasis: '48%',
+    flexGrow: 0,
+    maxWidth: '48%',
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
     padding: spacing.md,
     borderWidth: 1,
     borderColor: colors.borderLight,
-    minWidth: 140,
   },
   statIcon: {
     width: 36,
@@ -247,6 +280,12 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
+    marginBottom: spacing.xs,
+  },
+  listHint: {
+    fontFamily: fonts.body,
+    fontSize: 11,
+    color: colors.textMuted,
     marginBottom: spacing.sm,
   },
   list: { paddingBottom: spacing.xl, gap: spacing.sm },
@@ -257,6 +296,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.border,
+    marginBottom: spacing.sm,
   },
   rowTop: { flexDirection: 'row', justifyContent: 'space-between', gap: spacing.sm, alignItems: 'flex-start' },
   primary: { flex: 1, fontFamily: fonts.bodyBold, fontSize: 14, color: colors.text },

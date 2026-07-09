@@ -62,6 +62,7 @@ export default function StaffAlertsScreen() {
     <Screen style={styles.flex}>
       <ScreenTitle title={t('staff.alerts.title')} subtitle={t('staff.alerts.subtitle')} />
       <FlatList
+        style={styles.flex}
         data={items}
         keyExtractor={(i) => i.id}
         refreshControl={

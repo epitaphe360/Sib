@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
   // ─── Screen ───────────────────────────────────────────────────────────────
   screen: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.platform.bg,
     padding: spacing.md,
   },
   textRtl: { writingDirection: 'rtl', textAlign: 'right' },

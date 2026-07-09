@@ -4,7 +4,6 @@ import {
   FlatList,
   Pressable,
   RefreshControl,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -96,6 +95,7 @@ export default function ExploreScreen() {
             </View>
           ) : null}
           <FlatList
+            style={styles.flex}
             data={exhibitors}
             keyExtractor={(e) => e.id}
             refreshControl={
@@ -116,39 +116,39 @@ export default function ExploreScreen() {
           />
         </>
       ) : (
-        <ScrollView
+        <FlatList
+          style={styles.flex}
+          data={events}
+          keyExtractor={(ev) => ev.id}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={async () => { setRefreshing(true); await load(); setRefreshing(false); }} />
           }
-        >
-          {loading ? (
-            <SkeletonList rows={4} />
-          ) : events.length === 0 ? (
-            <IllustratedEmpty
-              icon="calendar-outline"
-              title={t('explore.emptyProgramTitle')}
-              message={t('explore.emptyProgramMessage')}
-            />
-          ) : (
-            events.map((ev) => (
-              <Pressable
-                key={ev.id}
-                style={styles.eventCard}
-                onPress={() => router.push(`/(visitor)/event/${ev.id}` as never)}
-              >
-                <View style={[styles.eventType, { backgroundColor: colors.goldMuted }]}>
-                  <Text style={styles.eventTypeText}>{ev.type}</Text>
-                </View>
-                <Text style={styles.eventTitle}>{ev.title}</Text>
-                <Text style={styles.eventMeta}>
-                  {ev.startDate.toLocaleDateString(localeCode(locale))} · {ev.location ?? activeSalon?.name ?? t('explore.subtitle')}
-                </Text>
-                {ev.description ? <Text style={styles.eventDesc} numberOfLines={2}>{ev.description}</Text> : null}
-                <Text style={styles.eventSeeMore}>{t('explore.seeDetails')}</Text>
-              </Pressable>
-            ))
+          ListEmptyComponent={
+            loading ? <SkeletonList rows={4} /> : (
+              <IllustratedEmpty
+                icon="calendar-outline"
+                title={t('explore.emptyProgramTitle')}
+                message={t('explore.emptyProgramMessage')}
+              />
+            )
+          }
+          renderItem={({ item: ev }) => (
+            <Pressable
+              style={styles.eventCard}
+              onPress={() => router.push(`/(visitor)/event/${ev.id}` as never)}
+            >
+              <View style={[styles.eventType, { backgroundColor: colors.goldMuted }]}>
+                <Text style={styles.eventTypeText}>{ev.type}</Text>
+              </View>
+              <Text style={styles.eventTitle}>{ev.title}</Text>
+              <Text style={styles.eventMeta}>
+                {ev.startDate.toLocaleDateString(localeCode(locale))} · {ev.location ?? activeSalon?.name ?? t('explore.subtitle')}
+              </Text>
+              {ev.description ? <Text style={styles.eventDesc} numberOfLines={2}>{ev.description}</Text> : null}
+              <Text style={styles.eventSeeMore}>{t('explore.seeDetails')}</Text>
+            </Pressable>
           )}
-        </ScrollView>
+        />
       )}
     </Screen>
     </SalonGate>

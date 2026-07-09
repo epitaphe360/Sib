@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   FlatList,
-  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -11,7 +10,7 @@ import {
 import { HeroBanner } from '../../../src/components/HeroBanner';
 import { ExhibitorRow, sortExhibitorsForDisplay } from '../../../src/components/ExhibitorRow';
 import { AnimatedListItem } from '../../../src/components/AnimatedListItem';
-import { EmptyState, Screen } from '../../../src/components/ui';
+import { Chip, EmptyState, Screen } from '../../../src/components/ui';
 import { SkeletonList } from '../../../src/components/Skeleton';
 import { fetchExhibitors } from '../../../src/services/exhibitors';
 import type { Exhibitor } from '../../../src/types';
@@ -38,20 +37,20 @@ export default function ExhibitorsScreen() {
       setFromCache(cached);
       if (s.length) setSectors(s);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Erreur de chargement');
+      setError(e instanceof Error ? e.message : t('common.error'));
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [search, sector]);
+  }, [search, sector, t]);
 
   useEffect(() => {
     const timer = setTimeout(() => load(search, sector), 300);
     return () => clearTimeout(timer);
   }, [search, sector, load]);
 
-  return (
-    <Screen style={styles.flex}>
+  const header = (
+    <>
       <HeroBanner imageKey="expo" title={t('tabs.exhibitors')} subtitle={t('explore.searchPlaceholder')} compact />
       <TextInput
         style={styles.search}
@@ -62,44 +61,49 @@ export default function ExhibitorsScreen() {
         autoCapitalize="none"
         autoCorrect={false}
       />
-      {sectors.length > 0 && (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chips}>
-          <Pressable
-            style={[styles.chip, !sector && styles.chipActive]}
-            onPress={() => setSector('')}
-          >
-            <Text style={[styles.chipText, !sector && styles.chipTextActive]}>{t('map.allHalls')}</Text>
-          </Pressable>
+      {sectors.length > 0 ? (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
+          <Chip label={t('explore.allSectors')} active={!sector} onPress={() => setSector('')} />
           {sectors.slice(0, 12).map((s) => (
-            <Pressable
-              key={s}
-              style={[styles.chip, sector === s && styles.chipActive]}
-              onPress={() => setSector(sector === s ? '' : s)}
-            >
-              <Text style={[styles.chipText, sector === s && styles.chipTextActive]} numberOfLines={1}>
-                {s}
-              </Text>
-            </Pressable>
+            <Chip key={s} label={s} active={sector === s} onPress={() => setSector(sector === s ? '' : s)} />
           ))}
         </ScrollView>
-      )}
+      ) : null}
       {fromCache ? <Text style={styles.cacheHint}>{t('common.offline')}</Text> : null}
+    </>
+  );
+
+  return (
+    <Screen style={styles.flex}>
       {loading ? (
-        <SkeletonList rows={5} />
+        <>
+          {header}
+          <SkeletonList rows={5} />
+        </>
       ) : error ? (
-        <EmptyState message={error} />
+        <>
+          {header}
+          <EmptyState message={error} />
+        </>
       ) : (
         <FlatList
+          style={styles.flex}
           data={exhibitors}
           keyExtractor={(item) => item.id}
+          ListHeaderComponent={header}
           renderItem={({ item, index }) => (
             <AnimatedListItem index={index}>
               <ExhibitorRow exhibitor={item} onPress={() => router.push(`/exhibitor/${item.id}`)} />
             </AnimatedListItem>
           )}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load(search, sector); }} tintColor={colors.gold} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => { setRefreshing(true); load(search, sector); }}
+              tintColor={colors.gold}
+            />
           }
+          contentContainerStyle={styles.list}
           ListEmptyComponent={<EmptyState message={t('explore.emptyExhibitorsMessage')} />}
           showsVerticalScrollIndicator={false}
         />
@@ -110,6 +114,7 @@ export default function ExhibitorsScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  list: { paddingBottom: spacing.xl },
   search: {
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -121,18 +126,6 @@ const styles = StyleSheet.create({
     color: colors.text,
     marginBottom: spacing.sm,
   },
-  chips: { marginBottom: spacing.sm, maxHeight: 40 },
-  chip: {
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginRight: 8,
-  },
-  chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 12, fontFamily: fonts.bodySemiBold, color: colors.text, maxWidth: 120 },
-  chipTextActive: { color: '#fff' },
+  chips: { gap: spacing.sm, paddingBottom: spacing.sm },
   cacheHint: { fontSize: 12, color: colors.textMuted, marginBottom: spacing.sm, fontStyle: 'italic' },
 });

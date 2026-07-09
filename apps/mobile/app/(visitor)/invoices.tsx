@@ -52,6 +52,7 @@ export default function VisitorInvoicesScreen() {
     <Screen style={styles.flex}>
       <ScreenTitle title={t('invoices.title')} subtitle={t('invoices.subtitle')} />
       <FlatList
+        style={styles.flex}
         data={items}
         keyExtractor={(i) => i.id}
         ListEmptyComponent={<EmptyState message={t('invoices.empty')} />}

@@ -87,7 +87,7 @@ export function NewMessageScreen({ group }: { group: MessageRouteGroup }) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  list: { marginTop: spacing.md },
+  list: { flex: 1, marginTop: spacing.md },
   row: { padding: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border },
   name: { fontWeight: '600', color: colors.text },
   meta: { fontSize: 12, color: colors.textMuted, marginTop: 4 },

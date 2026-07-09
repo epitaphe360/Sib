@@ -15,7 +15,7 @@ import {
   BadgeCheck,
   Settings2,
   Newspaper, BookOpen, Mic2, Building, Bell, Radio, ThumbsUp, Mail,
-  QrCode, ClipboardCheck, KeyRound, Tag, Megaphone,
+  QrCode, ClipboardCheck, KeyRound, Tag, Megaphone, Shield,
 } from 'lucide-react';
 import { ROUTES } from '../../../lib/routes';
 
@@ -236,7 +236,7 @@ export function AdminActionsPanel({
                   <Tile Icon={Radio} label="Événements Live" sub="Streaming & direct" color="#8b5cf6" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PARTNER_MEDIA_APPROVAL}>
-                  <Tile Icon={ThumbsUp} label="Approbation Médias" sub="Contenus partenaires" color="#8b5cf6" />
+                  <Tile Icon={ThumbsUp} label="Approbation Médias" sub="Contenus sponsors" color="#8b5cf6" />
                 </Link>
                 <Link to={ROUTES.METRICS}>
                   <Tile Icon={BarChart3} label="Statistiques" sub="Métriques plateforme" color="#8b5cf6" />
@@ -275,7 +275,7 @@ export function AdminActionsPanel({
                   <Tile Icon={FileText} label="Facturation" sub="Toutes les factures" color="#0ea5e9" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PRICING}>
-                  <Tile Icon={Tag} label="Gestion des Tarifs" sub="Exposant · Partenaire · VIP" color="#0ea5e9" />
+                  <Tile Icon={Tag} label="Gestion des Tarifs" sub="Exposant · Sponsor · VIP" color="#0ea5e9" />
                 </Link>
                 <Link to={ROUTES.ADMIN_PROMO_CODES}>
                   <Tile Icon={BadgeCheck} label="Codes Promo VIP" sub="Remises visiteurs premium" color="#0ea5e9" />
@@ -303,6 +303,9 @@ export function AdminActionsPanel({
                 </Link>
                 <Link to={ROUTES.ADMIN_SECURITY_ZONES}>
                   <Tile Icon={MapPin} label="Zones de Contrôle" sub="Ajouter / Modifier" color="#ef4444" />
+                </Link>
+                <Link to={ROUTES.ADMIN_SCAN_MONITORING}>
+                  <Tile Icon={Shield} label="Supervision Scans" sub="Par portail — à distance" color="#6B21A8" />
                 </Link>
                 <Link to={ROUTES.ADMIN_SESSION_CHECKIN}>
                   <Tile Icon={QrCode} label="Scanner Sessions" sub="Contrôle accès QR code" color="#ef4444" />

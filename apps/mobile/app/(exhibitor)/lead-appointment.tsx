@@ -60,6 +60,7 @@ export default function LeadAppointmentScreen() {
       />
       <Text style={styles.section}>{t('appointments.new.pickSlot')}</Text>
       <FlatList
+        style={styles.flex}
         data={slots}
         keyExtractor={(s) => s.id}
         ListEmptyComponent={<EmptyState message={t('appointments.new.noSlots')} />}

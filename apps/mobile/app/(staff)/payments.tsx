@@ -35,7 +35,7 @@ export default function StaffPaymentsScreen() {
       await load();
       Alert.alert(
         approve ? t('staff.alerts.approved') : t('staff.alerts.rejected'),
-        approve ? 'Le niveau VIP a été activé.' : 'La demande a été refusée.'
+        approve ? t('staff.payments.approvedDetail') : t('staff.payments.rejectedDetail'),
       );
     } catch (e) {
       Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
@@ -56,6 +56,7 @@ export default function StaffPaymentsScreen() {
   return (
     <Screen style={styles.flex}>
       <FlatList
+        style={styles.flex}
         data={items}
         keyExtractor={(i) => i.id}
         refreshControl={
@@ -68,11 +69,11 @@ export default function StaffPaymentsScreen() {
         ListHeaderComponent={
           <ScreenTitle
             title={t('tabs.payments')}
-            subtitle={`${items.length} demande${items.length !== 1 ? 's' : ''} en attente`}
+            subtitle={t('staff.payments.pendingCount', { count: items.length })}
           />
         }
         ListEmptyComponent={
-          <EmptyState message="Aucun paiement en attente de validation" />
+          <EmptyState message={t('staff.payments.empty')} />
         }
         renderItem={({ item, index }) => (
           <AnimatedListItem index={index}>
@@ -106,7 +107,7 @@ export default function StaffPaymentsScreen() {
                 </View>
                 <View style={[styles.metaChip, { backgroundColor: colors.warningBg }]}>
                   <AppIcon name="time-outline" size={12} color={colors.warning} />
-                  <Text style={[styles.metaText, { color: colors.warning }]}>En attente</Text>
+                  <Text style={[styles.metaText, { color: colors.warning }]}>{t('staff.payments.pending')}</Text>
                 </View>
               </View>
 
@@ -118,7 +119,7 @@ export default function StaffPaymentsScreen() {
                   disabled={actingId === item.id}
                 >
                   <AppIcon name="checkmark-circle-outline" size={16} color="#fff" />
-                  <Text style={styles.btnText}>Valider</Text>
+                  <Text style={styles.btnText}>{t('payments.validate')}</Text>
                 </PressableScale>
                 <PressableScale
                   style={styles.btnReject}
@@ -126,7 +127,7 @@ export default function StaffPaymentsScreen() {
                   disabled={actingId === item.id}
                 >
                   <AppIcon name="close-circle-outline" size={16} color="#fff" />
-                  <Text style={styles.btnText}>Refuser</Text>
+                  <Text style={styles.btnText}>{t('payments.reject')}</Text>
                 </PressableScale>
               </View>
             </View>

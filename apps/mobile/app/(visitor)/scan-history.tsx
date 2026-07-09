@@ -184,6 +184,7 @@ export default function VisitorScanHistoryScreen() {
   return (
     <Screen style={styles.flex}>
       <FlatList
+        style={styles.flex}
         data={items}
         keyExtractor={(i) => i.id}
         refreshControl={

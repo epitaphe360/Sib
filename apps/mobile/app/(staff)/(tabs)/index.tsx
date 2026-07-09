@@ -21,7 +21,7 @@ export default function StaffLiveScreen() {
       try {
         const [live, scans] = await Promise.all([
           fetchAdminLiveMetrics(),
-          fetchAdminScanStats('sib'),
+          fetchAdminScanStats(),
         ]);
         setMetrics(live);
         setScanStats(scans);
@@ -71,12 +71,12 @@ export default function StaffLiveScreen() {
               {scanStats ? (
                 <Pressable onPress={() => router.push('/(staff)/scan-stats' as never)}>
                   <Card elevated style={styles.scanPreview}>
-                    <Text style={styles.scanPreviewTitle}>{t('adminScanStats.menu')} — SIB</Text>
+                    <Text style={styles.scanPreviewTitle}>{t('adminScanStats.menu')}</Text>
                     <View style={styles.scanPreviewRow}>
-                      <ScanPill label={t('adminScanStats.category.entry')} value={scanStats.uniqueEntrants} />
-                      <ScanPill label={t('adminScanStats.category.networking')} value={scanStats.networkingScans} />
-                      <ScanPill label={t('adminScanStats.category.stand')} value={scanStats.standScans} />
-                      <ScanPill label={t('adminScanStats.category.controller')} value={scanStats.controllerScans} />
+                      <ScanPill label={t('adminScanStats.portal.controller')} value={scanStats.controllerScans} />
+                      <ScanPill label={t('adminScanStats.portal.entry')} value={scanStats.uniqueEntrants} />
+                      <ScanPill label={t('adminScanStats.portal.networking')} value={scanStats.networkingScans} />
+                      <ScanPill label={t('adminScanStats.portal.stand')} value={scanStats.standScans} />
                     </View>
                   </Card>
                 </Pressable>
@@ -99,8 +99,6 @@ export default function StaffLiveScreen() {
                 <MenuRow icon="people-outline" label={t('staff.usersBtn')} onPress={() => router.push('/(staff)/users')} />
                 <View style={styles.divider} />
                 <MenuRow icon="bar-chart-outline" label={t('adminScanStats.menu')} onPress={() => router.push('/(staff)/scan-stats' as never)} accent={colors.primary} />
-                <View style={styles.divider} />
-                <MenuRow icon="time-outline" label={t('scanHistory.controllerTitle')} onPress={() => router.push('/(staff)/scan-history' as never)} />
               </Card>
             </>
           )}

@@ -147,7 +147,7 @@ export function CmsAdminHub() {
                       <Tag className="h-4 w-4 text-violet-700 dark:text-violet-300" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-neutral-900 dark:text-white">Tarifs VIP, exposants & partenaires</p>
+                      <p className="text-sm font-semibold text-neutral-900 dark:text-white">Tarifs VIP, exposants & sponsors</p>
                       <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
                         Gestion centralisée sur la page Tarifs (évite les doublons).
                       </p>

@@ -75,6 +75,7 @@ export default function ProgramScreen() {
         <EmptyState message={error} />
       ) : (
         <FlatList
+          style={styles.flex}
           data={events}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -87,7 +88,7 @@ export default function ProgramScreen() {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load(); }} tintColor={colors.primary} />
           }
-          ListEmptyComponent={<EmptyState message="Le programme sera publié prochainement" />}
+          ListEmptyComponent={<EmptyState message={t('program.emptySoon')} />}
           showsVerticalScrollIndicator={false}
         />
       )}
@@ -101,14 +102,10 @@ const STATUS_COLOR: Record<EventRegistrationStatus, string> = {
   rejected: colors.danger,
   cancelled: colors.textMuted,
 };
-const STATUS_LABEL: Record<EventRegistrationStatus, string> = {
-  pending: 'En attente',
-  confirmed: 'Confirmé',
-  rejected: 'Refusé',
-  cancelled: 'Annulé',
-};
 
 function EventCard({ event, regStatus, onPress }: { event: SalonEvent; regStatus: EventRegistrationStatus | null; onPress: () => void }) {
+  const { t } = useI18n();
+  const statusLabel = (status: EventRegistrationStatus) => t(`program.status.${status}`);
   return (
     <Pressable style={styles.cardWrap} onPress={onPress}>
       <ImageBackground source={eventImage(event.type)} style={styles.eventImg} imageStyle={styles.eventImgRadius}>
@@ -116,16 +113,16 @@ function EventCard({ event, regStatus, onPress }: { event: SalonEvent; regStatus
         <Text style={styles.eventType}>{event.type}</Text>
         {regStatus ? (
           <View style={[styles.regBadge, { backgroundColor: STATUS_COLOR[regStatus] }]}>
-            <Text style={styles.regBadgeText}>{STATUS_LABEL[regStatus]}</Text>
+            <Text style={styles.regBadgeText}>{statusLabel(regStatus)}</Text>
           </View>
         ) : null}
       </ImageBackground>
       <Card>
         <View style={styles.eventHeader}>
-          {event.featured ? <Text style={styles.featured}>À la une</Text> : <View />}
+          {event.featured ? <Text style={styles.featured}>{t('program.featured')}</Text> : <View />}
           {event.capacity ? (
             <Text style={styles.capacity}>
-              {event.registered}/{event.capacity} places
+              {t('program.capacity', { registered: event.registered, capacity: event.capacity })}
             </Text>
           ) : null}
         </View>
@@ -137,7 +134,7 @@ function EventCard({ event, regStatus, onPress }: { event: SalonEvent; regStatus
         {event.description ? (
           <Text style={styles.eventDesc} numberOfLines={3}>{event.description}</Text>
         ) : null}
-        <Text style={styles.detailCta}>Voir détails & s'inscrire →</Text>
+        <Text style={styles.detailCta}>{t('program.detailCta')}</Text>
       </Card>
     </Pressable>
   );

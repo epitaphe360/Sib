@@ -224,6 +224,7 @@ const AdminVisaLettersPage = lazyRetry(() => import('./pages/admin/AdminVisaLett
 const AdminStandCollaboratorsPage = lazyRetry(() => import('./pages/admin/AdminStandCollaboratorsPage'));
 const AdminCredentialsPage = lazyRetry(() => import('./pages/admin/AdminCredentialsPage'));
 const SessionRegistrationsPage = lazyRetry(() => import('./pages/admin/SessionRegistrationsPage'));
+const AdminScanMonitoringPage = lazyRetry(() => import('./pages/admin/AdminScanMonitoringPage'));
 const CatalogueManagementPage = lazyRetry(() => import('./pages/admin/CatalogueManagementPage'));
 const CatalogueEntryEditPage = lazyRetry(() => import('./pages/admin/CatalogueEntryEditPage'));
 const CatalogueFormConfigPage = lazyRetry(() => import('./pages/admin/CatalogueFormConfigPage'));
@@ -507,6 +508,7 @@ const App = () => {
             <Route path={ROUTES.ADMIN_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminConfigPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_BADGE_CONFIG} element={<ProtectedRoute requiredRole="admin"><AdminBadgeConfigPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_SECURITY_ZONES} element={<ProtectedRoute requiredRole={['admin', 'security']}><SecurityZonesPage /></ProtectedRoute>} />
+            <Route path={ROUTES.ADMIN_SCAN_MONITORING} element={<ProtectedRoute requiredRole="admin"><AdminScanMonitoringPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_SALONS} element={<ProtectedRoute requiredRole="admin"><SalonsManagementPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PROMO_CODES} element={<ProtectedRoute requiredRole="admin"><PromoCodesPage /></ProtectedRoute>} />
             <Route path={ROUTES.ADMIN_PRICING} element={<ProtectedRoute requiredRole="admin"><AdminPricingPage /></ProtectedRoute>} />

@@ -223,7 +223,16 @@ export default function VisitorNetworkingScreen({ embedded = false, refreshKey =
   );
 
   if (embedded) {
-    return <View style={[styles.flex, styles.embedded]}>{body}</View>;
+    return (
+      <ScrollView
+        style={styles.flex}
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {body}
+      </ScrollView>
+    );
   }
 
   return (

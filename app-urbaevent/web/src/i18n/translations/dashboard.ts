@@ -71,7 +71,7 @@ export const dashboardTranslations = {
     'dashboard.admin.total_users': 'Utilisateurs totaux',
     'dashboard.admin.exhibitors': 'Exposants',
     'dashboard.admin.visitors': 'Visiteurs',
-    'dashboard.admin.partners': 'Partenaires',
+    'dashboard.admin.partners': 'Sponsors',
     'dashboard.admin.registrations': 'Inscriptions',
     'dashboard.admin.today': 'Aujourd\'hui',
     'dashboard.admin.this_week': 'Cette semaine',
