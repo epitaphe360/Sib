@@ -4,6 +4,7 @@ import { FileJson, Loader2, Save, RefreshCw, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '../../ui/Button';
 import { getPageContent, savePageContent } from '../../../lib/pageContent';
+import { getPageContentDefaults, mergePageContentWithDefaults } from '../../../data/pageContentDefaults';
 import {
   VITRINE_PAGE_SLUGS,
   PAGE_CONTENT_GROUPS,
@@ -30,9 +31,10 @@ export function PageContentAdminPanel({ embedded = false }: Props) {
     setLoading(true);
     try {
       const content = await getPageContent(slug);
-      setJsonDraft(JSON.stringify(content, null, 2));
+      const merged = mergePageContentWithDefaults(slug, content);
+      setJsonDraft(JSON.stringify(merged, null, 2));
     } catch {
-      setJsonDraft('{}');
+      setJsonDraft(JSON.stringify(getPageContentDefaults(slug), null, 2));
     } finally {
       setLoading(false);
     }
@@ -79,6 +81,7 @@ export function PageContentAdminPanel({ embedded = false }: Props) {
 
   const meta = VITRINE_PAGE_SLUGS.find((p) => p.slug === activeSlug);
   const hints = PAGE_CONTENT_FIELD_HINTS[activeSlug] ?? [];
+  const hasDefaults = Object.keys(getPageContentDefaults(activeSlug)).length > 0;
 
   return (
     <motion.section
@@ -174,6 +177,12 @@ export function PageContentAdminPanel({ embedded = false }: Props) {
       {hints.length > 0 && (
         <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
           Clés fréquentes : {hints.join(', ')}
+        </p>
+      )}
+
+      {hasDefaults && (
+        <p className="text-xs text-emerald-700 dark:text-emerald-400 mb-2">
+          Valeurs par défaut préchargées — modifiez puis Enregistrer pour personnaliser en base.
         </p>
       )}
 

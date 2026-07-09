@@ -56,7 +56,11 @@ export const PAGE_CONTENT_FIELD_HINTS: Record<string, string[]> = {
   'pourquoi-visiter': ['hero_title', 'hero_subtitle', 'intro_text', 'benefit_1_title', 'benefit_1_desc'],
   'pourquoi-exposer': ['hero_title', 'hero_subtitle', 'intro_text', 'reason_1_title', 'reason_1_desc'],
   'infos-pratiques': ['hero_title', 'dates', 'horaires', 'adresse', 'acces'],
-  'espaces-sib': ['hero_title', 'hero_subtitle', 'space_1_name', 'space_1_desc'],
+  'espaces-sib': [
+    'hero_badge', 'hero_title', 'hero_subtitle',
+    'espace_1_title', 'espace_1_desc', 'espaces_json',
+    'cta_title', 'cta_text', 'cta_button',
+  ],
   editions: ['hero_title', 'hero_subtitle', 'timeline_intro'],
   nouveautes: ['hero_title', 'hero_subtitle', 'intro_text'],
   'secteurs-activites': ['hero_title', 'hero_subtitle', 'intro_text'],
