@@ -4,6 +4,7 @@
  */
 
 const SIB_CDN = 'https://sib.ma/backend/uploads';
+const SIB_MA_ASSETS = 'https://www.sib.ma/assets/images/bg';
 
 export type SalonCmsFields = {
   tagline: string;
@@ -174,11 +175,20 @@ export const APK_DEFAULT_IMAGE_PREVIEWS: Record<string, string> = {
   sib: `${SIB_CDN}/ALW_4646_e80870e56f_86f40519c5.jpg`,
   sir: `${SIB_CDN}/4_9d2cb5a776.png`,
   sip: `${SIB_CDN}/1_a559ea5363.png`,
-  btp: '/sib-ma/static/section_01.jpg',
+  btp: `${SIB_MA_ASSETS}/section_01.jpg`,
   sie: `${SIB_CDN}/3_c9f5820a94.png`,
   hero_bg: `${SIB_CDN}/ALW_4646_e80870e56f_86f40519c5.jpg`,
-  sib_partners_banner: '/sib-ma/static/banner.jpg',
+  sib_partners_banner: `${SIB_MA_ASSETS}/banner.jpg`,
+  sir_partners_banner: `${SIB_CDN}/4_9d2cb5a776.png`,
+  sip_partners_banner: `${SIB_CDN}/1_a559ea5363.png`,
+  btp_partners_banner: `${SIB_MA_ASSETS}/section_02.jpg`,
+  sie_partners_banner: `${SIB_CDN}/3_c9f5820a94.png`,
 };
+
+/** URL d’aperçu par slot image APK (admin + web). */
+export function getApkDefaultImageUrl(slot: string): string {
+  return APK_DEFAULT_IMAGE_PREVIEWS[slot] ?? '';
+}
 
 export const APK_DEFAULT_PAYMENT = {
   vipPriceEur: 700,

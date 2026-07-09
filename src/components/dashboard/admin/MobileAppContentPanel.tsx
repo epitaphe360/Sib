@@ -13,10 +13,10 @@ import {
   type MobileAppContent,
 } from '../../../services/mobileAppContentService';
 import {
-  APK_DEFAULT_IMAGE_PREVIEWS,
   APK_DEFAULT_SALON_PARTNERS,
   APK_DEFAULT_SALON_STATS,
   APK_SALON_STAT_KEYS,
+  getApkDefaultImageUrl,
   SALON_CMS_FIELD_KEYS,
   partnersBannerSlot,
   type SalonCmsFields,
@@ -60,6 +60,7 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploadingSlot, setUploadingSlot] = useState<string | null>(null);
+  const [brokenPreviewSlots, setBrokenPreviewSlots] = useState<Set<string>>(new Set());
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const load = useCallback(async () => {
@@ -67,6 +68,7 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
     setLoadError(null);
     try {
       setContent(await fetchMobileAppContent());
+      setBrokenPreviewSlots(new Set());
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Impossible de charger le contenu APK';
       setLoadError(message);
@@ -149,7 +151,11 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
   const getSalonFieldValue = (salonKey: string, field: keyof SalonCmsFields) =>
     content.salonStats?.[salonKey]?.[field] ?? APK_DEFAULT_SALON_STATS[salonKey]?.[field] ?? '';
 
-  const getImagePreviewUrl = (slot: string) => content.images[slot]?.trim() || APK_DEFAULT_IMAGE_PREVIEWS[slot] || '';
+  const getImagePreviewUrl = (slot: string) => {
+    const customUrl = content.images[slot]?.trim();
+    if (customUrl && !brokenPreviewSlots.has(slot)) return customUrl;
+    return getApkDefaultImageUrl(slot);
+  };
 
   const handleSave = async () => {
     if (loadError) {
@@ -405,7 +411,16 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
                     )}
                   </p>
                   {previewUrl ? (
-                    <img src={previewUrl} alt={label} className="w-full h-24 object-cover rounded-lg mb-2" />
+                    <img
+                      src={previewUrl}
+                      alt={label}
+                      className="w-full h-24 object-cover rounded-lg mb-2"
+                      onError={() => {
+                        if (customUrl) {
+                          setBrokenPreviewSlots((prev) => new Set(prev).add(key));
+                        }
+                      }}
+                    />
                   ) : (
                     <div className="w-full h-24 rounded-lg bg-neutral-100 dark:bg-neutral-800 mb-2 flex items-center justify-center text-xs text-neutral-400">
                       Aperçu indisponible

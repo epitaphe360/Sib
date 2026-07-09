@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   APK_DEFAULT_SALON_PARTNERS,
+  getApkDefaultImageUrl,
   mergeApkSalonPartners,
   partnersBannerSlot,
   type SalonPartnersCms,
@@ -32,7 +33,8 @@ function resolvePartners(
   const bannerSlot = partnersBannerSlot(salonKey);
   const bannerUrl =
     content.images[bannerSlot]?.trim() ||
-    (salonKey === 'sib' ? '/sib-ma/static/banner.jpg' : null);
+    getApkDefaultImageUrl(bannerSlot) ||
+    null;
 
   return { partners, bannerUrl, displayMode };
 }
