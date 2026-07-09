@@ -1,5 +1,8 @@
 # Build APK local (Windows) -- evite la limite de 260 caracteres de chemin
 # Usage: cd apps/mobile; .\scripts\build-apk.ps1
+# Demo:   cd apps/mobile; .\scripts\build-apk.ps1 -Demo
+
+param([switch]$Demo)
 
 $ErrorActionPreference = "Stop"
 $mobile = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
@@ -30,8 +33,12 @@ if (-not $env:EXPO_PUBLIC_SUPABASE_URL -or -not $env:EXPO_PUBLIC_SUPABASE_ANON_K
   throw ".env incomplete: EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY required"
 }
 
-# Production store — quick-login désactivé (activer preview: $env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN='true')
-$env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN = if ($env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN) { $env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN } else { "false" }
+# Production store — quick-login désactivé (-Demo pour APK client avec comptes test)
+if ($Demo) {
+  $env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN = "true"
+} elseif ($env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN -ne "true") {
+  $env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN = "false"
+}
 $env:EXPO_PUBLIC_PAYMENT_ENABLED = if ($env:EXPO_PUBLIC_PAYMENT_ENABLED) { $env:EXPO_PUBLIC_PAYMENT_ENABLED } else { "true" }
 $apkSuffix = if ($env:EXPO_PUBLIC_ENABLE_QUICK_LOGIN -eq "true") { "-release-demo" } else { "-release" }
 $apkName = "UrbaEvent-$version$apkSuffix.apk"

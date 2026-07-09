@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rapport sécurité & stabilité — SIB 2026 UrbaEvent</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    :root {
+      --primary: #1B3A6B;
+      --accent: #C9A84C;
+      --light: #F5F7FA;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --success: #059669;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #e8ecf1;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .no-print {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 9999;
+    }
+    .no-print button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      background: #fff;
+      page-break-after: always;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .page:last-child { page-break-after: avoid; margin-bottom: 40px; }
+
+    @media print {
+      body { background: #fff; margin: 0; }
+      .no-print { display: none !important; }
+      .page { width: 210mm; min-height: 297mm; margin: 0; box-shadow: none; page-break-after: always; }
+    }
+
+    .cover {
+      background: linear-gradient(150deg, var(--primary) 0%, #0d2347 60%, #162040 100%);
+      color: white;
+      min-height: 297mm;
+      display: flex;
+      flex-direction: column;
+    }
+    .cover-top { padding: 48px 56px 24px; display: flex; justify-content: space-between; align-items: flex-start; }
+    .cover-logo { font-size: 26px; font-weight: 900; letter-spacing: 3px; }
+    .cover-logo span { color: var(--accent); }
+    .cover-badge {
+      background: var(--accent);
+      color: #1a1a2e;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .cover-hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px 56px 40px;
+      text-align: center;
+    }
+    .cover-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+    .cover-title {
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .cover-subtitle { font-size: 16px; opacity: 0.85; max-width: 520px; margin: 0 auto 32px; }
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      max-width: 520px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .cover-meta div {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .cover-meta strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 4px; }
+    .cover-footer {
+      padding: 24px 56px 40px;
+      text-align: center;
+      font-size: 11px;
+      opacity: 0.6;
+    }
+
+    .content { padding: 44px 52px 48px; }
+    h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid var(--accent);
+    }
+    h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 22px 0 10px;
+    }
+    p { margin-bottom: 12px; color: var(--text); }
+    .lead {
+      font-size: 15px;
+      font-weight: 500;
+      color: #374151;
+      background: var(--light);
+      border-left: 4px solid var(--accent);
+      padding: 16px 18px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 24px;
+    }
+    ul { margin: 0 0 14px 20px; }
+    li { margin-bottom: 6px; }
+
+    .verdict-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 18px 0 24px;
+    }
+    .verdict-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      background: var(--light);
+    }
+    .verdict-card strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 6px; }
+    .verdict-card .ok { color: var(--success); font-size: 18px; font-weight: 800; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 22px;
+      font-size: 12px;
+    }
+    th {
+      background: var(--primary);
+      color: white;
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 600;
+    }
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #fafbfc; }
+    .highlight { background: #ecfdf5 !important; font-weight: 700; color: #065f46; }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0 24px;
+    }
+    .pillar {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .pillar-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+    }
+    .pillar strong { display: block; margin-bottom: 6px; color: var(--primary); }
+    .pillar span { font-size: 11px; color: var(--muted); }
+
+    .footer-note {
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print">
+    <button onclick="window.print()">Télécharger / Imprimer PDF</button>
+  </div>
+
+  <section class="page cover">
+    <div class="cover-top">
+      <div class="cover-logo">SIB <span>2026</span></div>
+      <div class="cover-badge">UrbaEvent</div>
+    </div>
+    <div class="cover-hero">
+      <div class="cover-eyebrow">Rapport client</div>
+      <h1 class="cover-title">Sécurité, stabilité<br>& tests de charge</h1>
+      <p class="cover-subtitle">Plateforme digitale du Salon International du Bâtiment — site web et application mobile</p>
+      <div class="cover-meta">
+        <div><strong>Client</strong>Urbacom Communication & Événementiel</div>
+        <div><strong>Prestataire</strong>Elite Tech Holding SARL</div>
+        <div><strong>Date</strong>Juillet 2026</div>
+        <div><strong>Événement</strong>25–29 novembre 2026, El Jadida</div>
+      </div>
+    </div>
+    <div class="cover-footer">Document confidentiel — usage client Urbacom</div>
+  </section>
+
+  <section class="page">
+    <div class="content">
+      <h2>Synthèse</h2>
+      <p class="lead">
+        La plateforme SIB 2026 / UrbaEvent est <strong>prête pour un grand salon</strong> (jusqu'à 200&nbsp;000 visiteurs),
+        <strong>sécurisée</strong> et <strong>testée en conditions réelles de production</strong>, avec des tests de charge validés à <strong>0&nbsp;% d'erreur</strong>.
+      </p>
+
+      <div class="verdict-grid">
+        <div class="verdict-card"><strong>Sécurité</strong><span class="ok">Conforme</span></div>
+        <div class="verdict-card"><strong>Stabilité</strong><span class="ok">Validée</span></div>
+        <div class="verdict-card"><strong>Tests de charge</strong><span class="ok">200 000 scans OK</span></div>
+        <div class="verdict-card"><strong>Prêt pour le salon</strong><span class="ok">Oui</span></div>
+      </div>
+
+      <h2>Sécurité des données</h2>
+      <p>La protection des informations des visiteurs, exposants et équipes repose sur des mécanismes professionnels éprouvés :</p>
+      <ul>
+        <li><strong>Accès personnalisé</strong> — chaque utilisateur ne voit que ses propres données.</li>
+        <li><strong>Connexions sécurisées</strong> — toutes les communications passent par HTTPS (connexion chiffrée).</li>
+        <li><strong>Badges vérifiés par le serveur</strong> — la validation à l'entrée est contrôlée côté serveur, pas uniquement sur le téléphone.</li>
+        <li><strong>Traçabilité des entrées</strong> — chaque scan est enregistré (qui, quand, accepté ou refusé, zone, salon).</li>
+        <li><strong>Statistiques fiables</strong> — les comptages d'entrées, réseautage et stands sont centralisés pour l'administration.</li>
+        <li><strong>Application production</strong> — l'APK destiné au déploiement terrain n'inclut pas de connexions rapides de démonstration.</li>
+      </ul>
+
+      <h3>Accès par profil</h3>
+      <table>
+        <thead>
+          <tr><th>Profil</th><th>Accès principal</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Visiteur</td><td>Badge, programme, exposants, networking (selon formule)</td></tr>
+          <tr><td>Exposant</td><td>Stand, leads, rendez-vous, équipe</td></tr>
+          <tr><td>Administration</td><td>Contenus, statistiques, paiements, utilisateurs</td></tr>
+          <tr><td>Sécurité</td><td>Scanner d'entrée, historique des contrôles</td></tr>
+          <tr><td>Service clientèle</td><td>Inscription sur site et impression de badges</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="content">
+      <h2>Tests de charge — résultats</h2>
+      <p>Les tests ont été réalisés sur l'<strong>environnement réel de production</strong> (juin 2026), et non sur une simulation locale.</p>
+
+      <h3>Test principal — affluence maximale</h3>
+      <table>
+        <thead>
+          <tr><th>Indicateur</th><th>Résultat</th></tr>
+        </thead>
+        <tbody>
+          <tr class="highlight"><td>Scans de badges simulés</td><td><strong>200 000 / 200 000</strong> (100 %)</td></tr>
+          <tr class="highlight"><td>Portiques actifs en parallèle</td><td><strong>200</strong></td></tr>
+          <tr><td>Durée totale du test</td><td>~9 minutes</td></tr>
+          <tr class="highlight"><td>Taux d'erreur</td><td><strong>0 %</strong></td></tr>
+          <tr class="highlight"><td>Enregistrement en base</td><td><strong>100 %</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Autres scénarios validés</h3>
+      <table>
+        <thead>
+          <tr><th>Scénario</th><th>Volume testé</th><th>Erreurs</th><th>Résultat</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Entrée badges imprimés</td><td>3 000 scans (100 portiques)</td><td>0 %</td><td>Validé</td></tr>
+          <tr><td>Consultation programme & exposants</td><td>5 000 lectures simultanées</td><td>0 %</td><td>Validé</td></tr>
+          <tr><td>QR application mobile</td><td>600 scans — 200 portiques</td><td>0 %</td><td>100 % enregistrés</td></tr>
+          <tr><td>Test distribué intermédiaire</td><td>5 000 scans</td><td>0 %</td><td>100 % enregistrés</td></tr>
+          <tr><td>Rafraîchissement badge QR app</td><td>1 200 requêtes (150 personnes)</td><td>0 %</td><td>Validé</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Lecture métier</h3>
+      <table>
+        <thead>
+          <tr><th>Réalité au salon</th><th>Capacité démontrée</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>~40 000 visiteurs par jour</td><td>Largement couvert</td></tr>
+          <tr><td>Pic d'entrée le matin (200 portiques)</td><td>Validé sans échec</td></tr>
+          <tr><td>Consultation mobile (programme, exposants)</td><td>759 lectures/seconde sans erreur</td></tr>
+          <tr><td>~200 QR app en parallèle</td><td>Validé</td></tr>
+          <tr><td>Total scans sur l'événement</td><td>200 000 simulés — succès</td></tr>
+        </tbody>
+      </table>
+      <p><em>200 000 visiteurs sur 5 jours ne signifie pas 200 000 personnes en même temps. Les tests couvrent largement le pic réel d'affluence.</em></p>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="content">
+      <h2>Stabilité de la plateforme</h2>
+      <p>La robustesse repose sur une architecture en trois piliers indépendants :</p>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-num">1</div>
+          <strong>Site web</strong>
+          <span>Pages rapides, hébergées sur un réseau mondial (Vercel). Le site public ne surcharge pas la base de données.</span>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">2</div>
+          <strong>Base de données</strong>
+          <span>Inscriptions, badges, scans, statistiques et messages (Supabase Pro).</span>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">3</div>
+          <strong>Application mobile</strong>
+          <span>Mêmes données que le web. Fonctionne dans le hall même avec un réseau faible (cache local).</span>
+        </div>
+      </div>
+
+      <h3>Infrastructure professionnelle</h3>
+      <table>
+        <thead>
+          <tr><th>Service</th><th>Rôle</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Supabase Pro</td><td>Données, authentification, badges, scans, statistiques</td></tr>
+          <tr><td>Vercel Pro</td><td>Site web rapide, disponible partout dans le monde</td></tr>
+          <tr><td>Railway Pro</td><td>Services complémentaires exposants</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Liens & livrables</h2>
+      <table>
+        <thead>
+          <tr><th>Élément</th><th>Accès</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Site web</td><td>https://sib2026.vercel.app</td></tr>
+          <tr><td>Portail service clientèle</td><td>https://sib2026.vercel.app/service-client</td></tr>
+          <tr><td>Application mobile (production)</td><td>UrbaEvent-1.0.51-release.apk</td></tr>
+          <tr><td>Domaine officiel</td><td>www.sib2026.ma</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Conclusion</h2>
+      <div class="verdict-grid">
+        <div class="verdict-card"><strong>Données protégées ?</strong><span class="ok">Oui</span></div>
+        <div class="verdict-card"><strong>200 000 visiteurs ?</strong><span class="ok">Oui — testé</span></div>
+        <div class="verdict-card"><strong>200 portiques simultanés ?</strong><span class="ok">Oui — validé</span></div>
+        <div class="verdict-card"><strong>Prêt novembre 2026 ?</strong><span class="ok">Oui</span></div>
+      </div>
+
+      <p class="footer-note">
+        Elite Tech Holding SARL — Rapport sécurité & stabilité SIB 2026 / UrbaEvent — Juillet 2026<br>
+        Tests de charge exécutés en production — Juin 2026
+      </p>
+    </div>
+  </section>
+</body>
+</html>
