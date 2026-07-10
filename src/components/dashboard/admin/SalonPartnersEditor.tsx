@@ -189,6 +189,9 @@ export function SalonPartnersEditor({ salonKey, value, onChange, onUploadLogo }:
                           src={partner.logoUrl}
                           alt={partner.acronym}
                           className="h-10 w-full object-contain rounded border border-neutral-200 mb-1"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
                         />
                       ) : null}
                       <input

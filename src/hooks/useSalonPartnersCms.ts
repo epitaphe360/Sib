@@ -4,6 +4,7 @@ import {
   getApkDefaultImageUrl,
   mergeApkSalonPartners,
   partnersBannerSlot,
+  resolveApkImageUrl,
   type SalonPartnersCms,
 } from '../config/mobileAppDefaultContent';
 import {
@@ -32,7 +33,9 @@ function resolvePartners(
   const displayMode = partners.displayMode === 'list' ? 'list' : 'banner';
   const bannerSlot = partnersBannerSlot(salonKey);
   const bannerUrl =
-    content.images[bannerSlot]?.trim() ||
+    (content.images[bannerSlot]?.trim()
+      ? resolveApkImageUrl(content.images[bannerSlot]!.trim())
+      : '') ||
     getApkDefaultImageUrl(bannerSlot) ||
     null;
 

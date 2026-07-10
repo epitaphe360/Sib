@@ -3,8 +3,9 @@
  * Aligné sur apps/mobile (urbaCatalog, salonPartners, salons.ts)
  */
 
+import { resolveHomeImage } from './sibMaRemoteUrls';
+
 const SIB_CDN = 'https://sib.ma/backend/uploads';
-const SIB_MA_ASSETS = 'https://www.sib.ma/assets/images/bg';
 
 export type SalonCmsFields = {
   tagline: string;
@@ -171,23 +172,42 @@ export const APK_DEFAULT_SALON_PARTNERS: Record<string, SalonPartnersCms> = {
   },
 };
 
+/** Base publique pour les chemins relatifs (/sib-ma/static/…) hors navigateur. */
+export const APK_PREVIEW_ASSET_BASE = 'https://sib2026.vercel.app';
+
 export const APK_DEFAULT_IMAGE_PREVIEWS: Record<string, string> = {
   sib: `${SIB_CDN}/ALW_4646_e80870e56f_86f40519c5.jpg`,
   sir: `${SIB_CDN}/4_9d2cb5a776.png`,
   sip: `${SIB_CDN}/1_a559ea5363.png`,
-  btp: `${SIB_MA_ASSETS}/section_01.jpg`,
+  /** sib.ma/assets/.../section_01.jpg renvoie du HTML — assets locaux Vercel */
+  btp: '/sib-ma/static/section_01.jpg',
   sie: `${SIB_CDN}/3_c9f5820a94.png`,
   hero_bg: `${SIB_CDN}/ALW_4646_e80870e56f_86f40519c5.jpg`,
-  sib_partners_banner: `${SIB_MA_ASSETS}/banner.jpg`,
+  /** sib.ma/assets/.../banner.jpg renvoie du HTML — assets locaux Vercel */
+  sib_partners_banner: '/sib-ma/static/banner.jpg',
   sir_partners_banner: `${SIB_CDN}/4_9d2cb5a776.png`,
   sip_partners_banner: `${SIB_CDN}/1_a559ea5363.png`,
-  btp_partners_banner: `${SIB_MA_ASSETS}/section_02.jpg`,
+  btp_partners_banner: '/sib-ma/static/section_02.jpg',
   sie_partners_banner: `${SIB_CDN}/3_c9f5820a94.png`,
 };
 
+/** Résout un chemin relatif (/sib-ma/…) ou une URL absolue (y compris sib.ma/bg cassées). */
+export function resolveApkImageUrl(raw: string, baseUrl?: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return '';
+  if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('/mockup/') || trimmed.startsWith('/sib-ma/')) {
+    return resolveHomeImage(trimmed);
+  }
+  const base = (
+    baseUrl ??
+    (typeof window !== 'undefined' ? window.location.origin : APK_PREVIEW_ASSET_BASE)
+  ).replace(/\/$/, '');
+  return `${base}${trimmed.startsWith('/') ? trimmed : `/${trimmed}`}`;
+}
+
 /** URL d’aperçu par slot image APK (admin + web). */
-export function getApkDefaultImageUrl(slot: string): string {
-  return APK_DEFAULT_IMAGE_PREVIEWS[slot] ?? '';
+export function getApkDefaultImageUrl(slot: string, baseUrl?: string): string {
+  return resolveApkImageUrl(APK_DEFAULT_IMAGE_PREVIEWS[slot] ?? '', baseUrl);
 }
 
 export const APK_DEFAULT_PAYMENT = {

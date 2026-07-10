@@ -1,4 +1,5 @@
 import { ROUTES } from '../lib/routes';
+import { resolveHomeImage } from './sibMaRemoteUrls';
 
 export type BannerKey = 'urbaevent' | 'ministry_egide';
 
@@ -48,9 +49,11 @@ export function getBannerDefinition(key: BannerKey): BannerDefinition | undefine
 }
 
 export function getBannerDefaultSrc(key: BannerKey): string {
-  return getBannerDefinition(key)?.defaultSrc ?? '/banners/urbaevent-banner.svg';
+  const raw = getBannerDefinition(key)?.defaultSrc ?? '/banners/urbaevent-banner.svg';
+  return resolveHomeImage(raw);
 }
 
 export function getBannerFallbackSrc(key: BannerKey): string {
-  return getBannerDefinition(key)?.fallbackSrc ?? '/banners/urbaevent-banner.jpg';
+  const raw = getBannerDefinition(key)?.fallbackSrc ?? '/banners/urbaevent-banner.jpg';
+  return resolveHomeImage(raw);
 }

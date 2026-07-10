@@ -56,20 +56,48 @@ const MOCKUP_TO_CDN: Record<string, string> = {
   '/mockup/timeline-5.webp': sibMaUpload('parc_exposition_eljadida_f4a9052968.png'),
 };
 
-/** Fichiers /sib-ma/static/* locaux invalides → CDN officiel sib.ma */
+/** www.sib.ma/assets/images/bg/* — plusieurs fichiers renvoient du HTML (404 soft). */
+const SIB_MA_BG_BROKEN: Record<string, string> = {
+  'hero.jpg': sibMaUpload('parc_exposition_eljadida_f4a9052968.png'),
+  'banner.jpg': sibMaUpload('ALW_4646_e80870e56f_86f40519c5.jpg'),
+  'section_01.jpg': sibMaUpload('7_7474f5a087.png'),
+  'home.jpg': sibMaUpload('ALW_4646_e80870e56f_86f40519c5.jpg'),
+};
+
+/** Résout un fichier assets/images/bg de sib.ma vers le CDN si l’URL statique est cassée. */
+export function resolveSibMaBgAsset(filename: string): string {
+  const key = filename.replace(/^.*\//, '');
+  if (key in SIB_MA_BG_BROKEN) return SIB_MA_BG_BROKEN[key];
+  if (key === 'section_02.jpg') return 'https://www.sib.ma/assets/images/bg/section_02.jpg';
+  return `https://www.sib.ma/assets/images/bg/${key}`;
+}
+
+/** Fichiers /sib-ma/static/* locaux → CDN officiel sib.ma */
 const SIB_MA_STATIC: Record<string, string> = {
   '/sib-ma/static/hero.jpg': sibMaUpload('parc_exposition_eljadida_f4a9052968.png'),
   '/sib-ma/static/home.jpg': sibMaUpload('ALW_4646_e80870e56f_86f40519c5.jpg'),
   '/sib-ma/static/banner.jpg': sibMaUpload('ALW_4646_e80870e56f_86f40519c5.jpg'),
   '/sib-ma/static/section_01.jpg': sibMaUpload('7_7474f5a087.png'),
+  '/sib-ma/static/section_02.jpg': resolveSibMaBgAsset('section_02.jpg'),
 };
 
-/** Résout un chemin /mockup/* ou /sib-ma/* vers l’URL CDN officielle. */
+/** Résout un chemin /mockup/*, /sib-ma/* ou URL sib.ma vers l’URL CDN officielle. */
 export function resolveHomeImage(path: string): string {
-  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  if (!path?.trim()) return path;
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    if (path.includes('www.sib.ma/assets/images/bg/')) {
+      const filename = path.split('/').pop() ?? '';
+      return resolveSibMaBgAsset(filename);
+    }
+    return path;
+  }
   if (path in MOCKUP_TO_CDN) return MOCKUP_TO_CDN[path];
   if (path in SIB_MA_STATIC) return SIB_MA_STATIC[path];
-  if (path.startsWith('/sib-ma/')) return sibMaUpload(path);
+  if (path.startsWith('/sib-ma/static/')) {
+    const filename = path.split('/').pop() ?? '';
+    return resolveSibMaBgAsset(filename);
+  }
+  if (path.startsWith('/sib-ma/')) return sibMaUpload(path.replace(/^\/sib-ma\//, ''));
   return path;
 }
 

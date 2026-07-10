@@ -4,9 +4,10 @@ import { toast } from 'sonner';
 import { Button } from '../../ui/Button';
 import { SalonPartnersEditor } from './SalonPartnersEditor';
 import {
-  APK_DEFAULT_IMAGE_PREVIEWS,
   APK_DEFAULT_SALON_PARTNERS,
+  getApkDefaultImageUrl,
   partnersBannerSlot,
+  resolveApkImageUrl,
   type SalonPartnersCms,
 } from '../../../config/mobileAppDefaultContent';
 import {
@@ -26,6 +27,7 @@ export function SalonPartnersCmsPanel({ embedded = false }: { embedded?: boolean
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploadingBanner, setUploadingBanner] = useState(false);
+  const [bannerPreviewBroken, setBannerPreviewBroken] = useState(false);
   const bannerRef = useRef<HTMLInputElement | null>(null);
 
   const load = useCallback(async () => {
@@ -33,6 +35,7 @@ export function SalonPartnersCmsPanel({ embedded = false }: { embedded?: boolean
     setLoadError(null);
     try {
       setContent(await fetchMobileAppContent());
+      setBannerPreviewBroken(false);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Impossible de charger les sponsors';
       setLoadError(message);
@@ -106,7 +109,11 @@ export function SalonPartnersCmsPanel({ embedded = false }: { embedded?: boolean
   };
 
   const bannerSlot = partnersBannerSlot(WEB_SALON_KEY);
-  const bannerPreview = content.images[bannerSlot]?.trim() || APK_DEFAULT_IMAGE_PREVIEWS[bannerSlot] || '';
+  const customBannerUrl = content.images[bannerSlot]?.trim();
+  const bannerPreview =
+    customBannerUrl && !bannerPreviewBroken
+      ? resolveApkImageUrl(customBannerUrl)
+      : getApkDefaultImageUrl(bannerSlot);
   const partners = getSalonPartners();
 
   if (loading) {
@@ -188,7 +195,14 @@ export function SalonPartnersCmsPanel({ embedded = false }: { embedded?: boolean
             Mode bannière : une image unique remplace la liste sur l’accueil (si aucun logo individuel n’est défini).
           </p>
           {bannerPreview ? (
-            <img src={bannerPreview} alt="Aperçu bannière sponsors" className="max-h-40 rounded-lg border object-contain" />
+            <img
+              src={bannerPreview}
+              alt="Aperçu bannière sponsors"
+              className="max-h-40 rounded-lg border object-contain"
+              onError={() => {
+                if (customBannerUrl) setBannerPreviewBroken(true);
+              }}
+            />
           ) : null}
           <input
             ref={bannerRef}

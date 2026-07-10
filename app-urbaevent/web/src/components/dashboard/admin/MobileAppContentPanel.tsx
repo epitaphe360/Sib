@@ -17,6 +17,7 @@ import {
   APK_DEFAULT_SALON_STATS,
   APK_SALON_STAT_KEYS,
   getApkDefaultImageUrl,
+  resolveApkImageUrl,
   SALON_CMS_FIELD_KEYS,
   partnersBannerSlot,
   type SalonCmsFields,
@@ -153,7 +154,7 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
 
   const getImagePreviewUrl = (slot: string) => {
     const customUrl = content.images[slot]?.trim();
-    if (customUrl && !brokenPreviewSlots.has(slot)) return customUrl;
+    if (customUrl && !brokenPreviewSlots.has(slot)) return resolveApkImageUrl(customUrl);
     return getApkDefaultImageUrl(slot);
   };
 
