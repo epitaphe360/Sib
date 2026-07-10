@@ -72,6 +72,7 @@ export function PageContentAdminPanel({ embedded = false }: Props) {
     try {
       await savePageContent(activeSlug, parsed);
       toast.success('Page enregistrée');
+      await loadSlug(activeSlug);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Erreur enregistrement');
     } finally {

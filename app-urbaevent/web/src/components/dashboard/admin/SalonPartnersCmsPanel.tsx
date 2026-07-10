@@ -142,6 +142,12 @@ export function SalonPartnersCmsPanel({ embedded = false }: { embedded?: boolean
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 max-w-2xl">
             Source unique partagée : accueil web (iframe), page Présentation et application mobile.
             Après modification, rafraîchissez la page publique (Ctrl+F5).
+            {content.updatedAt ? (
+              <span className="block mt-1 text-neutral-400">
+                Dernière sauvegarde en base : {new Date(content.updatedAt).toLocaleString('fr-FR')}
+                {content.version ? ` · version ${content.version}` : ''}
+              </span>
+            ) : null}
           </p>
         </div>
         <Button onClick={() => void handleSave()} disabled={saving || Boolean(loadError)} size="sm">

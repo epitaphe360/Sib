@@ -217,6 +217,12 @@ export function MobileAppContentPanel({ embedded = false }: { embedded?: boolean
           <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl">
             Tout le contenu visible dans l’APK (textes salon, présentation, sponsors, photos, paiement).
             Enregistrez puis tirez vers le bas sur l’accueil APK pour actualiser.
+            {content.updatedAt ? (
+              <span className="block mt-1 text-xs text-neutral-400">
+                Dernière sauvegarde en base : {new Date(content.updatedAt).toLocaleString('fr-FR')}
+                {content.version ? ` · version ${content.version}` : ''}
+              </span>
+            ) : null}
           </p>
         </div>
         <div className="flex gap-2">
