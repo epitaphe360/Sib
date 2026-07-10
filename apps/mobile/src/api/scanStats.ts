@@ -63,10 +63,9 @@ export function formatScanStatNumber(value: number): string {
 }
 
 /** Filtre salon : SIB inclut les lignes legacy sans salon_id. */
-function applySalonFilter<T extends { or: (filters: string) => T; eq: (col: string, val: string) => T }>(
-  query: T,
-  salonId?: string,
-): T {
+function withSalonFilter<
+  Q extends { or: (filters: string) => Q; eq: (col: string, val: string) => Q },
+>(query: Q, salonId?: string): Q {
   if (!salonId) return query;
   if (salonId === 'sib') return query.or('salon_id.eq.sib,salon_id.is.null');
   return query.eq('salon_id', salonId);
@@ -93,7 +92,7 @@ export async function fetchAdminScanList(
 }
 
 async function fetchEntryList(limit: number, salonId?: string): Promise<AdminScanListItem[]> {
-  let query = supabase
+  const base = supabase
     .from('access_logs')
     .select('id, user_id, user_name, user_type, zone, accessed_at, salon_name, status')
     .eq('status', 'granted')
@@ -101,8 +100,12 @@ async function fetchEntryList(limit: number, salonId?: string): Promise<AdminSca
     .order('accessed_at', { ascending: false })
     .limit(Math.min(limit * 4, 600));
 
-  query = applySalonFilter(query, salonId);
-  const { data, error } = await query;
+  const { data, error } =
+    salonId === 'sib'
+      ? await base.or('salon_id.eq.sib,salon_id.is.null')
+      : salonId
+        ? await base.eq('salon_id', salonId)
+        : await base;
   if (error) throw error;
 
   const seen = new Set<string>();
@@ -127,14 +130,14 @@ async function fetchEntryList(limit: number, salonId?: string): Promise<AdminSca
 }
 
 async function fetchControllerList(limit: number, salonId?: string): Promise<AdminScanListItem[]> {
-  let query = supabase
-    .from('access_logs')
-    .select('id, user_name, zone, accessed_at, salon_name, status, reason, scanned_by')
-    .order('accessed_at', { ascending: false })
-    .limit(limit);
-
-  query = applySalonFilter(query, salonId);
-  const { data, error } = await query;
+  const { data, error } = await withSalonFilter(
+    supabase
+      .from('access_logs')
+      .select('id, user_name, zone, accessed_at, salon_name, status, reason, scanned_by')
+      .order('accessed_at', { ascending: false })
+      .limit(limit),
+    salonId,
+  );
   if (error) throw error;
 
   const scannerIds = [...new Set((data ?? []).map((r) => r.scanned_by).filter(Boolean))] as string[];
@@ -155,14 +158,14 @@ async function fetchControllerList(limit: number, salonId?: string): Promise<Adm
 }
 
 async function fetchNetworkingList(limit: number, salonId?: string): Promise<AdminScanListItem[]> {
-  let query = supabase
-    .from('connections')
-    .select('id, requester_id, addressee_id, status, created_at, salon_id, salon_name')
-    .order('created_at', { ascending: false })
-    .limit(limit);
-
-  query = applySalonFilter(query, salonId);
-  const { data, error } = await query;
+  const { data, error } = await withSalonFilter(
+    supabase
+      .from('connections')
+      .select('id, requester_id, addressee_id, status, created_at, salon_id, salon_name')
+      .order('created_at', { ascending: false })
+      .limit(limit),
+    salonId,
+  );
   if (error) throw error;
 
   const userIds = new Set<string>();
@@ -192,14 +195,14 @@ async function fetchNetworkingList(limit: number, salonId?: string): Promise<Adm
 }
 
 async function fetchStandList(limit: number, salonId?: string): Promise<AdminScanListItem[]> {
-  let query = supabase
-    .from('exhibitor_leads')
-    .select('id, exhibitor_user_id, visitor_user_id, badge_code, scanned_at, salon_id, salon_name')
-    .order('scanned_at', { ascending: false })
-    .limit(limit);
-
-  query = applySalonFilter(query, salonId);
-  const { data, error } = await query;
+  const { data, error } = await withSalonFilter(
+    supabase
+      .from('exhibitor_leads')
+      .select('id, exhibitor_user_id, visitor_user_id, badge_code, scanned_at, salon_id, salon_name')
+      .order('scanned_at', { ascending: false })
+      .limit(limit),
+    salonId,
+  );
   if (error) throw error;
 
   const userIds = new Set<string>();

@@ -44,7 +44,8 @@ const ACCOUNTS = [
   { email: 'exhibitor-9m@test.sib2026.ma', password: 'Demo2026!', type: 'exhibitor', name: 'Exposant Demo' },
   { email: 'partner-museum@test.sib2026.ma', password: 'Demo2026!', type: 'partner', name: 'Partenaire Demo' },
   { email: 'admin@sib.com', password: 'Demo2026!', type: 'admin', name: 'Admin SIB' },
-  { email: 'service-clientele@sib.com', password: 'Service2026!', type: 'security', name: 'Sécurité SIB' },
+  { email: 'service-clientele@sib.com', password: 'Service2026!', type: 'service_client', name: 'Service Clientèle' },
+  { email: 'security-controleur@test.sib2026.ma', password: 'Demo2026!', type: 'security', name: 'Contrôleur Accès' },
 ];
 
 async function upsertUser(acc) {

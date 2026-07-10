@@ -23,7 +23,7 @@ const SERVICE_ACCOUNT = {
   email: 'service-clientele@sib.com',
   password: 'Service2026!',
   name: 'Service Clientèle',
-  type: 'security',  // Utilise le type 'security' existant dans l'enum DB
+  type: 'service_client',
 };
 
 async function addSecurityToEnum() {

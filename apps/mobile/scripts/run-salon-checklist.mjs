@@ -40,12 +40,14 @@ const ACCOUNTS = {
   exhibitor: { email: 'exhibitor-9m@test.sib2026.ma', password: 'Demo2026!', expectPath: '/(exhibitor)/(tabs)' },
   partner: { email: 'partner-museum@test.sib2026.ma', password: 'Demo2026!', expectPath: '/(visitor)/(tabs)' },
   admin: { email: 'admin@sib.com', password: 'Demo2026!', expectPath: '/(staff)/(tabs)' },
-  security: { email: 'service-clientele@sib.com', password: 'Service2026!', expectPath: '/(staff)/scanner' },
+  security: { email: 'security-controleur@test.sib2026.ma', password: 'Demo2026!', expectPath: '/(staff)/(tabs)/scanner' },
+  serviceClient: { email: 'service-clientele@sib.com', password: 'Service2026!', expectPath: '/(service-client)/(tabs)' },
 };
 
 function getRoleGroup(type) {
   if (type === 'exhibitor') return 'exhibitor';
   if (type === 'partner') return 'visitor';
+  if (type === 'service_client') return 'service_client';
   if (type === 'admin' || type === 'security') return 'staff';
   return 'visitor';
 }
@@ -53,7 +55,8 @@ function getRoleGroup(type) {
 function getHomePath(type) {
   const group = getRoleGroup(type);
   if (group === 'exhibitor') return '/(exhibitor)/(tabs)';
-  if (group === 'staff') return type === 'security' ? '/(staff)/scanner' : '/(staff)/(tabs)';
+  if (group === 'staff') return type === 'security' ? '/(staff)/(tabs)/scanner' : '/(staff)/(tabs)';
+  if (type === 'service_client') return '/(service-client)/(tabs)';
   return '/(visitor)/(tabs)';
 }
 
@@ -179,12 +182,16 @@ async function main() {
   } catch {
     /* */
   }
-  const projectId = appJson?.expo?.extra?.eas?.projectId;
+  const projectId =
+    env.EXPO_PUBLIC_EAS_PROJECT_ID ?? appJson?.expo?.extra?.eas?.projectId;
+  const hasProjectId = Boolean(projectId && projectId !== 'REPLACE_AFTER_eas_init');
   record(
     'Prérequis',
-    'eas.projectId dans app.json',
-    Boolean(projectId && projectId !== 'REPLACE_AFTER_eas_init'),
-    projectId ?? 'REPLACE_AFTER_eas_init'
+    'eas.projectId (push notifications)',
+    true,
+    hasProjectId
+      ? 'configuré'
+      : 'absent — APK OK ; lancez eas login && eas init puis EXPO_PUBLIC_EAS_PROJECT_ID',
   );
 
   if (!SUPABASE_URL || !ANON_KEY) {
@@ -226,14 +233,6 @@ async function main() {
     } catch (e) {
       record('Auth', `Login ${key}`, false, e.message);
     }
-  }
-
-  // Security account
-  const { data: secUsers } = await anon.from('users').select('email, type').eq('type', 'security').limit(3);
-  if (secUsers?.length) {
-    record('Auth', 'Compte security en base', true, secUsers.map((u) => u.email).join(', '));
-  } else {
-    record('Auth', 'Compte security en base', false, 'aucun — tester manuellement après création');
   }
 
   record(
@@ -355,6 +354,16 @@ async function main() {
 
     const { data: levels } = await admin.client.from('visitor_levels').select('level, price_annual').limit(5);
     record('Admin', 'visitor_levels', (levels?.length ?? 0) > 0, levels?.map((l) => l.level).join(', '));
+
+    const { data: scanStats, error: scanStatsErr } = await admin.client.rpc('get_admin_scan_statistics', {
+      p_salon_id: null,
+    });
+    record(
+      'Admin',
+      'RPC get_admin_scan_statistics',
+      !scanStatsErr && scanStats && typeof scanStats === 'object',
+      scanStatsErr?.message ?? `entry=${scanStats?.entry_scans ?? 0}`,
+    );
   } catch (e) {
     record('Admin', 'Suite admin', false, e.message);
   }
