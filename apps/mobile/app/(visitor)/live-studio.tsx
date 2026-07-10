@@ -75,9 +75,9 @@ export default function LiveStudioScreen() {
     <Screen style={styles.flex}>
       <View style={[styles.header, { paddingTop: insets.top + spacing.sm }]}>
         <Pressable onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={styles.backText}>← Retour</Text>
+          <Text style={styles.backText}>{t('live.back')}</Text>
         </Pressable>
-        <Text style={styles.headerTitle}>Live Studio</Text>
+        <Text style={styles.headerTitle}>{t('live.title')}</Text>
         <View style={{ width: 60 }} />
       </View>
 
@@ -85,19 +85,19 @@ export default function LiveStudioScreen() {
         <View style={styles.liveSection}>
           <View style={styles.liveBadge}>
             <Text style={styles.liveDot}>●</Text>
-            <Text style={styles.liveLabel}>EN DIRECT</Text>
+            <Text style={styles.liveLabel}>{t('live.onAir')}</Text>
           </View>
           {liveSessions.map((s) => (
-            <SessionCard key={s.id} session={s} onPress={() => openStream(s)} isLive lc={lc} />
+            <SessionCard key={s.id} session={s} onPress={() => openStream(s)} isLive lc={lc} t={t} />
           ))}
         </View>
       )}
 
       {upcomingSessions.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Prochainement</Text>
+          <Text style={styles.sectionTitle}>{t('live.upcoming')}</Text>
           {upcomingSessions.map((s) => (
-            <SessionCard key={s.id} session={s} onPress={() => openStream(s)} isLive={false} lc={lc} />
+            <SessionCard key={s.id} session={s} onPress={() => openStream(s)} isLive={false} lc={lc} t={t} />
           ))}
         </View>
       )}
@@ -117,7 +117,19 @@ export default function LiveStudioScreen() {
   );
 }
 
-function SessionCard({ session, onPress, isLive, lc }: { session: LiveSession; onPress: () => void; isLive: boolean; lc: string }) {
+function SessionCard({
+  session,
+  onPress,
+  isLive,
+  lc,
+  t,
+}: {
+  session: LiveSession;
+  onPress: () => void;
+  isLive: boolean;
+  lc: string;
+  t: (key: string) => string;
+}) {
   const startTime = session.startTime ? new Date(session.startTime).toLocaleTimeString(lc, { hour: '2-digit', minute: '2-digit' }) : '';
 
   return (
@@ -126,7 +138,7 @@ function SessionCard({ session, onPress, isLive, lc }: { session: LiveSession; o
         <View style={styles.sessionHeader}>
           <Text style={styles.sessionTitle}>{session.title}</Text>
           {isLive ? (
-            <Text style={styles.liveChip}>LIVE</Text>
+            <Text style={styles.liveChip}>{t('live.chipLive')}</Text>
           ) : (
             <Text style={styles.timeChip}>{startTime}</Text>
           )}
@@ -142,7 +154,7 @@ function SessionCard({ session, onPress, isLive, lc }: { session: LiveSession; o
         ) : null}
         <View style={styles.watchCtaRow}>
           <AppIcon name={isLive ? 'play-outline' : 'notifications-outline'} size={14} color={colors.primary} />
-          <Text style={styles.watchCta}>{isLive ? 'Regarder en direct' : 'Ouvrir'}</Text>
+          <Text style={styles.watchCta}>{isLive ? t('live.watchLive') : t('live.open')}</Text>
         </View>
       </Card>
     </Pressable>

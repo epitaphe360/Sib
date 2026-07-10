@@ -49,8 +49,10 @@ export default function PaymentGatewayScreen() {
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(vipDefaults.priceEur);
   const [currency, setCurrency] = useState('EUR');
+  const [pricingFallback, setPricingFallback] = useState(false);
 
   const load = useCallback(async () => {
+    setPricingFallback(false);
     try {
       const pricing = await fetchVipPassPricing();
       setAmount(pricing.price);
@@ -58,6 +60,7 @@ export default function PaymentGatewayScreen() {
     } catch {
       setAmount(vipDefaults.priceEur);
       setCurrency(vipDefaults.currency);
+      setPricingFallback(true);
     }
     if (!id || !user) return;
     try {
@@ -178,6 +181,9 @@ export default function PaymentGatewayScreen() {
           <Text style={styles.summaryLabel}>Pass VIP {SALON_INFO.name}</Text>
           <Text style={styles.summaryPrice}>{amount} {currency}</Text>
           <Text style={styles.summaryDesc}>Accès premium · Conférences exclusives · Salon VIP</Text>
+          {pricingFallback ? (
+            <Text style={styles.pricingFallback}>{t('payment.pricingFallback')}</Text>
+          ) : null}
         </View>
 
         <Text style={styles.sectionTitle}>{t('payment.gateway.chooseMethod')}</Text>
@@ -247,6 +253,13 @@ const styles = StyleSheet.create({
   summaryLabel: { color: colors.gold, fontFamily: fonts.bodyBold, fontSize: 14, letterSpacing: 1, textTransform: 'uppercase', marginBottom: spacing.xs },
   summaryPrice: { color: '#fff', fontFamily: fonts.display, fontSize: 40, marginBottom: spacing.xs },
   summaryDesc: { color: 'rgba(255,255,255,0.7)', fontFamily: fonts.body, fontSize: 13, textAlign: 'center' },
+  pricingFallback: {
+    color: colors.warning,
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: spacing.sm,
+  },
   sectionTitle: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.text, marginBottom: spacing.sm },
   methodCard: { marginBottom: spacing.sm, padding: spacing.md },
   methodCardInner: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, padding: 0 },

@@ -168,27 +168,3 @@ export async function bookAppointment(params: {
     throw new Error(result?.error ?? result?.error_message ?? 'Réservation impossible');
   }
 }
-
-/** @deprecated use bookAppointment */
-export async function createAppointment(params: {
-  visitorId: string;
-  exhibitorId: string;
-  timeSlotId: string;
-  message?: string;
-  visitorLevel?: string;
-}): Promise<void> {
-  const { data, error } = await supabase.rpc('create_appointment_atomic', {
-    p_visitor_id: params.visitorId,
-    p_exhibitor_id: params.exhibitorId,
-    p_time_slot_id: params.timeSlotId,
-    p_visitor_level: params.visitorLevel ?? 'free',
-    p_message: params.message ?? '',
-  });
-
-  if (error) throw error;
-
-  const row = Array.isArray(data) ? data[0] : data;
-  if (row && typeof row === 'object' && 'success' in row && !row.success) {
-    throw new Error((row as { error_message?: string }).error_message ?? 'Réservation impossible');
-  }
-}

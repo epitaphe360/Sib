@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { buildStaticParticipantQR, fetchVisitorBadgeForLead } from '../../../src/api/badgeLookup';
 import { startConversation } from '../../../src/api/chat';
@@ -110,7 +110,7 @@ export default function ExhibitorContactDetailScreen() {
                       const conversationId = await startConversation(user.id, visitorUserId);
                       router.push(`/(exhibitor)/messages/${conversationId}` as never);
                     } catch (e) {
-                      alert(e instanceof Error ? e.message : t('common.error'));
+                      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
                     } finally {
                       setActionLoading(false);
                     }

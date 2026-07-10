@@ -130,7 +130,7 @@ export default function VisitorNetworkingScreen({ embedded = false, refreshKey =
       Alert.alert(t('common.ok'), t('networking.requestSent'));
       await load();
     } catch (e) {
-      Alert.alert(t('common.error'), e instanceof Error ? e.message : 'Erreur');
+      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
     }
   };
 
@@ -139,7 +139,7 @@ export default function VisitorNetworkingScreen({ embedded = false, refreshKey =
       await respondConnection(id, accept ? 'accepted' : 'rejected');
       await load();
     } catch (e) {
-      Alert.alert(t('common.error'), e instanceof Error ? e.message : 'Erreur');
+      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
     }
   };
 

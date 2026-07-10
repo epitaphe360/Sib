@@ -22,21 +22,21 @@ function routeFromNotification(
         router.push('/(visitor)/appointments' as never);
       }
       break;
-    case 'messages':
-      if (group === 'exhibitor') {
+    case 'messages': {
+      const conversationId = data.conversationId ? String(data.conversationId) : null;
+      if (conversationId) {
+        if (group === 'exhibitor') {
+          router.push(`/(exhibitor)/messages/${conversationId}` as never);
+        } else {
+          router.push(`/(visitor)/messages/${conversationId}` as never);
+        }
+      } else if (group === 'exhibitor') {
         router.push('/(exhibitor)/(tabs)/messages' as never);
       } else {
         router.push('/(visitor)/messages' as never);
       }
-      if (data.conversationId) {
-        const id = String(data.conversationId);
-        if (group === 'exhibitor') {
-          router.push(`/(exhibitor)/messages/${id}` as never);
-        } else {
-          router.push(`/(visitor)/messages/${id}` as never);
-        }
-      }
       break;
+    }
     case 'networking':
       if (group === 'visitor') {
         router.push('/(visitor)/networking' as never);

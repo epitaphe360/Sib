@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { getPrintHistory, getPrintStats, recordPrint, type PrintRecord } from '../lib/printHistory';
 import { lookupBadgeByEmail, lookupBadgeByQRData } from '../api/badgeLookup';
 import { A4_SHEET_WIDTH, BadgeA4Bifold } from '../components/BadgeA4Bifold';
@@ -105,19 +105,14 @@ export function PrintStationContent() {
             <Text style={styles.stats}>
               {t('printStation.statsToday')}: {getPrintStats(history).today} · {t('printStation.statsTotal')}: {getPrintStats(history).total}
             </Text>
-            <FlatList
-              data={history}
-              keyExtractor={(h) => h.id}
-              scrollEnabled={false}
-              renderItem={({ item }) => (
-                <View style={styles.histRow}>
-                  <Text style={styles.histName}>{item.fullName}</Text>
-                  <Text style={styles.histMeta}>
-                    {item.badgeCode} · {new Date(item.printedAt).toLocaleString(locale === 'ar' ? 'ar-MA' : locale === 'en' ? 'en-US' : 'fr-FR')}
-                  </Text>
-                </View>
-              )}
-            />
+            {history.map((item) => (
+              <View key={item.id} style={styles.histRow}>
+                <Text style={styles.histName}>{item.fullName}</Text>
+                <Text style={styles.histMeta}>
+                  {item.badgeCode} · {new Date(item.printedAt).toLocaleString(locale === 'ar' ? 'ar-MA' : locale === 'en' ? 'en-US' : 'fr-FR')}
+                </Text>
+              </View>
+            ))}
           </>
         ) : (
           <>
@@ -138,14 +133,14 @@ export function PrintStationContent() {
                   returnKeyType="next"
                 />
                 <Input
-                  label="Prénom (email entreprise partagé)"
+                  label={t('printStation.firstNameSharedEmail')}
                   value={firstName}
                   onChangeText={setFirstName}
                   autoCapitalize="words"
                   returnKeyType="next"
                 />
                 <Input
-                  label="Nom (email entreprise partagé)"
+                  label={t('printStation.lastNameSharedEmail')}
                   value={lastName}
                   onChangeText={setLastName}
                   autoCapitalize="words"

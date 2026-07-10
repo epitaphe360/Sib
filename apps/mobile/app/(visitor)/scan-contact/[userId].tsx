@@ -2,6 +2,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Linking,
   ScrollView,
   StyleSheet,
@@ -183,7 +184,7 @@ export default function ScanContactDetailScreen() {
                       const conversationId = await startConversation(user.id, profile.id);
                       router.push(`/(visitor)/messages/${conversationId}` as never);
                     } catch (e) {
-                      alert(e instanceof Error ? e.message : t('common.error'));
+                      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
                     } finally {
                       setMsgLoading(false);
                     }

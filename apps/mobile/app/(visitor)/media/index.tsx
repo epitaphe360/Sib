@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { fetchPublishedMedia, getMediaTypeLabel, type MediaItem } from '../../../src/api/media';
-import { Chip, EmptyState, Screen, ScreenTitle } from '../../../src/components/ui';
+import { Chip, EmptyState, PrimaryButton, Screen, ScreenTitle } from '../../../src/components/ui';
 import { SkeletonList } from '../../../src/components/Skeleton';
 import { useI18n } from '../../../src/i18n/I18nProvider';
 import { colors, fonts, radius, spacing } from '../../../src/theme';
@@ -16,6 +16,7 @@ export default function MediaLibraryScreen() {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [type, setType] = useState('');
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 400);
@@ -23,18 +24,28 @@ export default function MediaLibraryScreen() {
   }, [search]);
 
   const load = useCallback(async () => {
+    setLoadError(null);
     try {
       setItems(await fetchPublishedMedia(debouncedSearch, type));
-    } catch { /* silently ignore */ } finally {
+    } catch (e) {
+      setLoadError(e instanceof Error ? e.message : t('media.loadError'));
+      setItems([]);
+    } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, type]);
+  }, [debouncedSearch, type, t]);
 
   useEffect(() => { load(); }, [load]);
 
   return (
     <Screen style={styles.flex}>
       <ScreenTitle title={t('media.title')} subtitle={t('media.subtitle')} />
+      <PrimaryButton
+        label={t('media.openLiveStudio')}
+        variant="outline"
+        onPress={() => router.push('/(visitor)/live-studio' as never)}
+      />
+      {loadError ? <EmptyState message={loadError} /> : null}
       <TextInput
         style={styles.search}
         placeholder={t('media.search')}

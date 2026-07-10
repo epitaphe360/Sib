@@ -97,8 +97,10 @@ export async function registerForEvent(params: {
 
   if (error) throw error;
 
-  // Incrémenter le compteur
-  try { await supabase.rpc('increment_event_registered', { p_event_id: params.eventId }); } catch { /* ignore */ }
+  const { error: incError } = await supabase.rpc('increment_event_registered', { p_event_id: params.eventId });
+  if (incError) {
+    console.warn('[eventRegistration] increment_event_registered:', incError.message);
+  }
 
   return mapReg(data as Record<string, unknown>);
 }
@@ -119,7 +121,10 @@ export async function cancelEventRegistration(registrationId: string): Promise<v
   if (error) throw error;
 
   if (reg?.event_id) {
-    try { await supabase.rpc('decrement_event_registered', { p_event_id: reg.event_id }); } catch { /* ignore */ }
+    const { error: decError } = await supabase.rpc('decrement_event_registered', { p_event_id: reg.event_id });
+    if (decError) {
+      console.warn('[eventRegistration] decrement_event_registered:', decError.message);
+    }
   }
 }
 

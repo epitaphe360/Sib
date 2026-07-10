@@ -51,7 +51,7 @@ export default function NewAppointmentScreen() {
     if (!user || !selectedId || !selectedSlot) return;
 
     if (!permissions.canScheduleMeetings || !limits.canScheduleMeeting) {
-      Alert.alert('Forfait', getPermissionErrorMessage(user.type, user.visitorLevel, 'meeting'));
+      Alert.alert(t('networking.planLimit'), getPermissionErrorMessage(user.type, user.visitorLevel, 'meeting'));
       return;
     }
 
@@ -64,10 +64,10 @@ export default function NewAppointmentScreen() {
         message: message.trim() || undefined,
       });
       Alert.alert(t('appointments.booked.title'), t('appointments.booked.body'), [
-        { text: 'OK', onPress: () => router.back() },
+        { text: t('common.ok'), onPress: () => router.back() },
       ]);
     } catch (e) {
-      Alert.alert('Erreur', e instanceof Error ? e.message : 'Réservation impossible');
+      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('appointments.bookError'));
     } finally {
       setLoading(false);
     }

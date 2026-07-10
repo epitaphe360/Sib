@@ -15,6 +15,7 @@ export default function StaffUsersScreen() {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [rows, setRows] = useState<Awaited<ReturnType<typeof fetchUsersForAdmin>>>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -26,9 +27,13 @@ export default function StaffUsersScreen() {
 
   const load = useCallback(async () => {
     if (user?.type !== 'admin') return;
+    setLoadError(null);
     try {
       setRows(await fetchUsersForAdmin(debouncedSearch.trim() || undefined));
-    } catch { /* silently ignore */ } finally {
+    } catch (e) {
+      setLoadError(getErrorMessage(e));
+      setRows([]);
+    } finally {
       setLoading(false);
     }
   }, [user, debouncedSearch]);
@@ -65,6 +70,7 @@ export default function StaffUsersScreen() {
       <ScreenTitle title={t('admin.users.title')} subtitle={t('admin.users.subtitle')} />
       <Input label={t('admin.users.search')} value={search} onChangeText={handleSearchChange} />
       <PrimaryButton label={t('admin.users.searchBtn')} onPress={load} />
+      {loadError ? <EmptyState message={loadError} /> : null}
       {loading ? <SkeletonList rows={5} /> : (
         <FlatList
           style={styles.flex}

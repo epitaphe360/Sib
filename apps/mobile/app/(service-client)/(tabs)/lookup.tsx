@@ -38,7 +38,10 @@ export default function LookupScreen() {
         setResults(found);
         setResult(found.length === 1 ? found[0] : found.length === 0 ? list[0] ?? null : null);
         if (found.length > 1) {
-          Alert.alert('Plusieurs résultats', `${found.length} visiteurs avec cet email — touchez la bonne personne.`);
+          Alert.alert(
+            t('lookup.multipleResultsTitle'),
+            t('lookup.multipleResultsBody', { count: String(found.length) }),
+          );
         }
       } else {
         const r = await lookupParticipant(query.trim());
@@ -136,14 +139,14 @@ export default function LookupScreen() {
           onSubmitEditing={search}
         />
         <Input
-          label="Prénom (si email entreprise partagé)"
+          label={t('lookup.firstNameSharedEmail')}
           value={firstName}
           onChangeText={setFirstName}
           autoCapitalize="words"
           returnKeyType="next"
         />
         <Input
-          label="Nom (si email entreprise partagé)"
+          label={t('lookup.lastNameSharedEmail')}
           value={lastName}
           onChangeText={setLastName}
           autoCapitalize="words"
@@ -154,7 +157,7 @@ export default function LookupScreen() {
 
         {results.length > 1 && (
           <View style={styles.multiResults}>
-            <Text style={styles.multiTitle}>Sélectionnez le visiteur :</Text>
+            <Text style={styles.multiTitle}>{t('lookup.selectVisitor')}</Text>
             {results.map((r) => (
               <SecondaryButton
                 key={r.userId ?? r.email}

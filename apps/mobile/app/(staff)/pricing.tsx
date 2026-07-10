@@ -25,25 +25,28 @@ export default function StaffPricingScreen() {
   const save = async () => {
     const n = Number.parseFloat(price.replace(',', '.'));
     if (!Number.isFinite(n) || n <= 0) {
-      Alert.alert('Erreur', 'Montant invalide');
+      Alert.alert(t('common.error'), t('staff.vipPrice.invalidAmount'));
       return;
     }
     try {
       await updateVipPrice(n);
       setCurrent(n);
-      Alert.alert('Enregistré', 'Tarif VIP mis à jour sur le site et l\'app');
+      Alert.alert(t('staff.vipPrice.savedTitle'), t('staff.vipPrice.savedBody'));
     } catch (e) {
-      Alert.alert('Erreur', e instanceof Error ? e.message : 'Sauvegarde impossible');
+      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('staff.vipPrice.saveError'));
     }
   };
 
   return (
     <Screen>
       <ScrollView keyboardShouldPersistTaps="handled">
-        <ScreenTitle title="Tarif Pass VIP" subtitle={`Actuel : ${current} EUR`} />
-        <Input label="Nouveau prix (EUR)" value={price} onChangeText={setPrice} keyboardType="decimal-pad" />
+        <ScreenTitle
+          title={t('staff.vipPrice.title')}
+          subtitle={t('staff.vipPrice.subtitle', { current: String(current) })}
+        />
+        <Input label={t('staff.vipPrice.newLabel')} value={price} onChangeText={setPrice} keyboardType="decimal-pad" />
         <PrimaryButton label={t('common.save')} onPress={save} />
-        <Text style={styles.hint}>Appliqué aux niveaux premium et vip (visitor_levels).</Text>
+        <Text style={styles.hint}>{t('staff.vipPrice.hint')}</Text>
       </ScrollView>
     </Screen>
   );

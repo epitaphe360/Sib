@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { fetchNetworkingContactProfiles } from './contactProfiles';
 import { fetchScannerNames } from './visitorScans';
 
 /** Portails de scan — listes séparées, sans mélange entre tables. */
@@ -176,8 +177,8 @@ async function fetchNetworkingList(limit: number, salonId?: string): Promise<Adm
 
   let names = new Map<string, string>();
   if (userIds.size) {
-    const { data: users } = await supabase.from('users').select('id, name').in('id', [...userIds]);
-    names = new Map((users ?? []).map((u) => [u.id as string, (u.name as string) || '']));
+    const profiles = await fetchNetworkingContactProfiles([...userIds]);
+    names = new Map([...profiles.entries()].map(([id, p]) => [id, p.name]));
   }
 
   return (data ?? []).map((row) => {
@@ -213,8 +214,8 @@ async function fetchStandList(limit: number, salonId?: string): Promise<AdminSca
 
   let names = new Map<string, string>();
   if (userIds.size) {
-    const { data: users } = await supabase.from('users').select('id, name').in('id', [...userIds]);
-    names = new Map((users ?? []).map((u) => [u.id as string, (u.name as string) || '']));
+    const profiles = await fetchNetworkingContactProfiles([...userIds]);
+    names = new Map([...profiles.entries()].map(([id, p]) => [id, p.name]));
   }
 
   return (data ?? []).map((row) => ({

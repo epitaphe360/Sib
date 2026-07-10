@@ -84,9 +84,9 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
     setEmailSending(true);
     try {
       await requestBadgeByEmail(user.id);
-      alert(t('badge.emailSent'));
+      Alert.alert(t('common.ok'), t('badge.emailSent'));
     } catch (e) {
-      alert(e instanceof Error ? e.message : t('common.error'));
+      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
     } finally {
       setEmailSending(false);
     }

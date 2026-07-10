@@ -16,18 +16,23 @@ export default function VisitorInvoicesScreen() {
   const { t, locale } = useI18n();
   const [items, setItems] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const isFreeVisitor =
     user?.type === 'visitor' && normalizeVisitorPass(user.visitorLevel) === 'free';
 
   const load = useCallback(async () => {
     if (!user || isFreeVisitor) return;
+    setLoadError(null);
     try {
       setItems(await fetchInvoicesForUser(user.id));
-    } catch { /* silently ignore */ } finally {
+    } catch (e) {
+      setLoadError(e instanceof Error ? e.message : t('invoices.loadError'));
+      setItems([]);
+    } finally {
       setLoading(false);
     }
-  }, [user, isFreeVisitor]);
+  }, [user, isFreeVisitor, t]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -51,6 +56,7 @@ export default function VisitorInvoicesScreen() {
   return (
     <Screen style={styles.flex}>
       <ScreenTitle title={t('invoices.title')} subtitle={t('invoices.subtitle')} />
+      {loadError ? <EmptyState message={loadError} /> : null}
       <FlatList
         style={styles.flex}
         data={items}

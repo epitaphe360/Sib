@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { fetchZoneCapacities, subscribeZoneCapacity } from '../../src/api/gates';
-import { Screen, ScreenTitle } from '../../src/components/ui';
+import { EmptyState, Screen, ScreenTitle } from '../../src/components/ui';
 import { AppIcon } from '../../src/components/AppIcon';
 import type { ZoneCapacity } from '../../src/types';
 import { useI18n } from '../../src/i18n/I18nProvider';
@@ -9,23 +9,30 @@ import { localeCode } from '../../src/lib/locale';
 import { colors, fonts, radius, shadows, spacing } from '../../src/theme';
 
 export default function ZoneCapacityScreen() {
-  const { locale } = useI18n();
+  const { t, locale } = useI18n();
   const [zones, setZones] = useState<ZoneCapacity[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
   const loadVersionRef = useRef(0);
 
   const load = useCallback(async () => {
     const version = ++loadVersionRef.current;
+    setLoadError(null);
     try {
       const data = await fetchZoneCapacities();
       if (version === loadVersionRef.current) {
         setZones(data);
         setLastUpdate(new Date());
       }
-    } catch { /* silently ignore */ }
-  }, []);
+    } catch (e) {
+      if (version === loadVersionRef.current) {
+        setLoadError(e instanceof Error ? e.message : t('staff.zoneCapacity.loadError'));
+        setZones([]);
+      }
+    }
+  }, [t]);
 
   useEffect(() => {
     load();
@@ -47,7 +54,13 @@ export default function ZoneCapacityScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={async () => { setRefreshing(true); await load(); setRefreshing(false); }} />}
       >
-        <ScreenTitle title="Capacité zones" subtitle={`Dernière màj : ${lastUpdate.toLocaleTimeString(localeCode(locale))}`} />
+        <ScreenTitle
+          title={t('staff.zoneCapacity.title')}
+          subtitle={t('staff.zoneCapacity.subtitle', {
+            time: lastUpdate.toLocaleTimeString(localeCode(locale)),
+          })}
+        />
+        {loadError ? <EmptyState message={loadError} /> : null}
 
         <View style={styles.totalCard}>
           <Text style={styles.totalLabel}>Affluence totale</Text>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { fetchCollaborators, fetchOwnerContext } from '../../src/api/team';
 import { A4_SHEET_WIDTH, BadgeA4Bifold } from '../../src/components/BadgeA4Bifold';
 import { PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
@@ -72,17 +72,12 @@ export default function TeamPrintScreen() {
       <ScrollView contentContainerStyle={styles.scroll}>
         <ScreenTitle title={t('team.printTitle')} subtitle={t('team.printSubtitle')} />
         <PrimaryButton label={t('team.printAll')} onPress={printAll} loading={printing} variant="gold" />
-        <FlatList
-          data={badges}
-          keyExtractor={(b) => b.id}
-          scrollEnabled={false}
-          renderItem={({ item }) => (
-            <View style={styles.row}>
-              <Text style={styles.name}>{item.fullName}</Text>
-              <PrimaryButton label={t('badge.printA4')} onPress={() => printOne(item)} />
-            </View>
-          )}
-        />
+        {badges.map((item) => (
+          <View key={item.id} style={styles.row}>
+            <Text style={styles.name}>{item.fullName}</Text>
+            <PrimaryButton label={t('badge.printA4')} onPress={() => printOne(item)} />
+          </View>
+        ))}
         <View ref={previewRef} collapsable={false} style={styles.hiddenPrintPreview} pointerEvents="none">
           {activeBadge ? (
             <BadgeA4Bifold badge={activeBadge} previewScale={false} />

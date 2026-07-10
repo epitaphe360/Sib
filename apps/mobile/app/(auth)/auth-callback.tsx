@@ -141,9 +141,7 @@ export default function AuthCallbackScreen() {
         const raw = e instanceof Error ? e.message : t('auth.magic.callbackError');
         const lower = raw.toLowerCase();
         if (lower.includes('invalid') || lower.includes('expired') || lower.includes('expir')) {
-          setError(
-            'Ce lien a déjà été utilisé ou a expiré. Demandez un nouveau lien (un seul clic), puis ouvrez-le dans Chrome si Gmail bloque l’app.',
-          );
+          setError(t('auth.magic.linkExpired'));
         } else {
           setError(raw);
         }
