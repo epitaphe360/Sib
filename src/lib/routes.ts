@@ -210,7 +210,7 @@ export const ROUTES = {
   HALL_MAP: '/map',
   CATALOG: '/catalog',
   ADMIN_PRESS_ACCREDITATIONS: '/admin/press-accreditations',
-  ADMIN_SESSION_CHECKIN: '/security/scanner',
+  ADMIN_SESSION_CHECKIN: '/admin/session-checkin',
   ADMIN_SESSION_REGISTRATIONS: '/admin/session-registrations',
   ADMIN_SCAN_MONITORING: '/admin/scan-monitoring',
   ADMIN_CREDENTIALS: '/admin/credentials',

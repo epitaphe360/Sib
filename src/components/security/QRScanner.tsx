@@ -21,7 +21,7 @@ import {
   ACCESS_LEVELS,
   QRCodePayload
 } from '../../services/qrCodeService';
-import { getZones, ControlZone } from '../../services/zonesService';
+import { getZonesDB, ControlZone } from '../../services/zonesService';
 
 interface ScanResult {
   valid: boolean;
@@ -40,14 +40,17 @@ export default function QRScanner() {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const resultTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Charger les zones depuis le service (localStorage)
+  // Charger les zones depuis Supabase (cache localStorage pour hors-ligne)
   useEffect(() => {
-    const loadedZones = getZones();
-    setZones(loadedZones);
-    // Si la zone sélectionnée n'existe plus, prendre la première
-    if (!loadedZones.find(z => z.id === selectedZone)) {
-      setSelectedZone(loadedZones[0]?.id ?? '');
-    }
+    let cancelled = false;
+    getZonesDB().then((loadedZones) => {
+      if (cancelled) return;
+      setZones(loadedZones);
+      setSelectedZone((prev) =>
+        loadedZones.find((z) => z.id === prev) ? prev : (loadedZones[0]?.id ?? ''),
+      );
+    });
+    return () => { cancelled = true; };
   }, []);
 
   // Zones disponibles pour la sélection

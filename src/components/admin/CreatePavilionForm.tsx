@@ -17,7 +17,7 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { motion } from 'framer-motion';
-import { apiService } from '../../services/apiService';
+import { addAdminPavilion } from '../../services/pavilionService';
 
 // Zod validation schema
 const pavilionSchema = z.object({
@@ -187,18 +187,15 @@ export default function CreatePavilionForm() {
     setErrors({});
 
     try {
-      const finalPavilionData = {
+      await addAdminPavilion({
         name: data.name,
         theme: data.theme,
         description: data.description || '',
         objectives: pavilionData.objectives.filter(o => o.trim() !== ''),
         features: pavilionData.features.filter(f => f.trim() !== ''),
-        target_audience: pavilionData.targetAudience.filter(t => t.trim() !== ''), // Match DB schema
-        demo_programs: demoPrograms, // Match DB schema
-        status: 'active'
-      };
-
-      await apiService.create('pavilions', finalPavilionData);
+        targetAudience: pavilionData.targetAudience.filter(t => t.trim() !== ''),
+        demoPrograms,
+      });
 
       navigate(ROUTES.ADMIN_PAVILIONS);
     } catch (error) {

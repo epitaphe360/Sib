@@ -27,28 +27,9 @@ import { Badge } from '../../components/ui/Badge';
 import { motion } from 'framer-motion';
 import { useFilterSearch } from '../../hooks/useFilterSearch';
 import { toast } from 'sonner';
+import { fetchAdminPavilions, saveAdminPavilions, type AdminPavilion } from '../../services/pavilionService';
 
-// Define Pavilion type locally since the table doesn't exist in Supabase schema
-interface Pavilion {
-  id: string;
-  name: string;
-  subtitle?: string;
-  shortDescription?: string;
-  theme: string;
-  description: string;
-  objectives?: string[];
-  features?: string[];
-  targetAudience?: string[];
-  exhibitors?: number;
-  visitors?: number;
-  conferences?: number;
-  created_at: string;
-  updated_at?: string;
-  demoPrograms?: DemoProgram[];
-  totalPrograms?: number;
-  totalCapacity?: number;
-  totalRegistered?: number;
-}
+type Pavilion = AdminPavilion;
 
 interface DemoProgram {
   id: string;
@@ -81,87 +62,7 @@ export default function PavillonsPage() {
       setIsLoading(true);
       setError(null);
       try {
-        // Static pavilions data - the pavilions table doesn't exist in the database yet
-        // This provides sample data for the UI until the table is created
-        const staticPavilions: Pavilion[] = [
-          {
-            id: '1',
-            name: 'Digitalisation Bâtiment',
-            subtitle: 'Automatisation et Numérisation',
-            shortDescription: "Technologies numériques transformant l'écosystème bâtiment",
-            theme: 'digitalization',
-            description: 'Découvrez les dernières innovations en matière de transformation numérique pour les bâtiments.',
-            objectives: ['Améliorer l\'efficacité opérationnelle', 'Réduire les temps d\'attente', 'Optimiser la gestion des ressources'],
-            features: ['Solutions IoT BTP', 'Systèmes de gestion automatisée', 'Intégration des systèmes d\'information'],
-            targetAudience: ['Autorités du Bâtiment', 'Opérateurs de Terminaux', 'Développeurs de Solutions'],
-            exhibitors: 8,
-            visitors: 450,
-            conferences: 3,
-            created_at: new Date().toISOString(),
-            demoPrograms: [],
-            totalPrograms: 3,
-            totalCapacity: 155,
-            totalRegistered: 115,
-          },
-          {
-            id: '2',
-            name: 'Développement Durable Bâtiment',
-            subtitle: 'Solutions Écologiques et Durables',
-            shortDescription: 'Innovations vertes pour une industrie du bâtiment responsable',
-            theme: 'sustainability',
-            description: 'Solutions écologiques et durables pour l\'industrie du bâtiment.',
-            objectives: ['Réduire l\'empreinte carbone', 'Promouvoir les énergies renouvelables', 'Optimiser la gestion des déchets'],
-            features: ['Énergies renouvelables', 'Systèmes de recyclage', 'Monitoring environnemental'],
-            targetAudience: ['Gestionnaires de Bâtiments', 'Experts Environnementaux', 'Régulateurs'],
-            exhibitors: 6,
-            visitors: 320,
-            conferences: 2,
-            created_at: new Date().toISOString(),
-            demoPrograms: [],
-            totalPrograms: 2,
-            totalCapacity: 120,
-            totalRegistered: 88,
-          },
-          {
-            id: '3',
-            name: 'Sécurité Chantier',
-            subtitle: 'Surveillance et Contrôle Avancés',
-            shortDescription: 'Technologies de sécurité avancées pour les infrastructures BTP',
-            theme: 'security',
-            description: 'Technologies de sécurité avancées pour les bâtiments et terminaux.',
-            objectives: ['Renforcer la sécurité des infrastructures', 'Prévenir les incidents', 'Améliorer la surveillance'],
-            features: ['Vidéosurveillance intelligente', 'Contrôle d\'accès biométrique', 'Systèmes d\'alerte précoce'],
-            targetAudience: ['Responsables Sécurité', 'Autorités du Bâtiment', 'Forces de l\'Ordre'],
-            exhibitors: 5,
-            visitors: 280,
-            conferences: 2,
-            created_at: new Date().toISOString(),
-            demoPrograms: [],
-            totalPrograms: 2,
-            totalCapacity: 100,
-            totalRegistered: 72,
-          },
-          {
-            id: '4',
-            name: 'Innovation & R&D',
-            subtitle: 'Technologies Émergentes',
-            shortDescription: 'Les technologies de demain pour les bâtiments d\'aujourd\'hui',
-            theme: 'innovation',
-            description: 'Les technologies de demain pour les bâtiments d\'aujourd\'hui.',
-            objectives: ['Promouvoir la R&D bâtiment', 'Encourager les startups', 'Accélérer l\'innovation'],
-            features: ['Intelligence Artificielle', 'Blockchain bâtiment', 'Robotique et automatisation'],
-            targetAudience: ['Chercheurs', 'Startups Tech', 'Investisseurs'],
-            exhibitors: 10,
-            visitors: 520,
-            conferences: 4,
-            created_at: new Date().toISOString(),
-            demoPrograms: [],
-            totalPrograms: 4,
-            totalCapacity: 200,
-            totalRegistered: 160,
-          },
-        ];
-        setPavilions(staticPavilions);
+        setPavilions(await fetchAdminPavilions());
       } catch (err) {
         console.error('Error fetching pavilions:', err);
         setError('Failed to load pavilions. Please try again later.');
@@ -270,20 +171,29 @@ export default function PavillonsPage() {
     }
   };
 
-  const handleDeletePavilion = (pavilionId: string) => {
-    // Implémentation de la suppression
-    setPavilions(prev => prev.filter(p => p.id !== pavilionId));
-    setShowDeleteConfirm(null);
-    toast.success('Pavillon supprimé avec succès');
+  const handleDeletePavilion = async (pavilionId: string) => {
+    const next = pavilions.filter(p => p.id !== pavilionId);
+    try {
+      await saveAdminPavilions(next);
+      setPavilions(next);
+      setShowDeleteConfirm(null);
+      toast.success('Pavillon supprimé avec succès');
+    } catch {
+      toast.error('Erreur lors de la suppression du pavillon');
+    }
   };
 
-  const handleSaveEdit = (updatedPavilion: Pavilion) => {
-    setPavilions(prev =>
-      prev.map(p => p.id === updatedPavilion.id ? updatedPavilion : p)
-    );
-    setShowEditModal(false);
-    setEditingPavilion(null);
-    toast.success('Pavillon modifié avec succès');
+  const handleSaveEdit = async (updatedPavilion: Pavilion) => {
+    const next = pavilions.map(p => p.id === updatedPavilion.id ? updatedPavilion : p);
+    try {
+      await saveAdminPavilions(next);
+      setPavilions(next);
+      setShowEditModal(false);
+      setEditingPavilion(null);
+      toast.success('Pavillon modifié avec succès');
+    } catch {
+      toast.error('Erreur lors de la sauvegarde du pavillon');
+    }
   };
 
   const themeOptions = [

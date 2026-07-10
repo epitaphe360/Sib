@@ -15,7 +15,8 @@ import {
 } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { apiService } from '../../services/apiService';
+import { SupabaseService } from '../../services/supabaseService';
+import { toast } from 'sonner';
 
 interface FormErrors {
   email?: string;
@@ -119,7 +120,14 @@ export default function CreateUserPage() {
         }
       };
 
-      await apiService.create('users', finalUserData);
+      await SupabaseService.createUser({
+        email: finalUserData.email,
+        name: finalUserData.name,
+        type: finalUserData.type as 'visitor' | 'exhibitor' | 'partner' | 'admin',
+        status: finalUserData.status,
+        profile: finalUserData.profile,
+      });
+      toast.success('Utilisateur créé avec succès');
       navigate(ROUTES.ADMIN_USERS);
     } catch (error: unknown) {
       console.error('Erreur lors de la création de l\'utilisateur:', error);
